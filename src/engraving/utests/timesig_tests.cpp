@@ -34,7 +34,6 @@
 static const QString TIMESIG_DATA_DIR("timesig_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class TimesigTests : public ::testing::Test
 {

@@ -43,7 +43,7 @@ using namespace mu;
 //    stepOffset   - This value changes the staff line step numbering.
 //
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   StaffLines
 //---------------------------------------------------------

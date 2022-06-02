@@ -135,7 +135,7 @@ using namespace mu;
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   local defines for debug output
 //---------------------------------------------------------

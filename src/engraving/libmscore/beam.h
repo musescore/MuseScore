@@ -29,9 +29,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace Ms {
 class ChordRest;
 class MuseScoreView;
 class Chord;

@@ -41,7 +41,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace Quantize {
 ReducedFraction quantValueToFraction(MidiOperations::QuantValue quantValue)
 {

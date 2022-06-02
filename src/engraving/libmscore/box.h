@@ -31,7 +31,7 @@
 #include "measurebase.h"
 #include "property.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ Box
 ///    virtual base class for frames "boxes"

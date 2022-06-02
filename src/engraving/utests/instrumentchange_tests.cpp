@@ -39,7 +39,6 @@
 static const QString INSTRUMENTCHANGE_DATA_DIR("instrumentchange_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class InstrumentChangeTests : public ::testing::Test
 {
@@ -114,7 +113,7 @@ TEST_F(InstrumentChangeTests, testMixer)
     Segment* s = m->first(SegmentType::ChordRest);
     InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
     int idx = score->staff(0)->channel(s->tick(), 0);
-    Channel* c = score->staff(0)->part()->instrument(s->tick())->channel(idx);
+    InstrChannel* c = score->staff(0)->part()->instrument(s->tick())->channel(idx);
     MidiPatch* mp = new MidiPatch;
     mp->bank = 0;
     mp->drum = false;

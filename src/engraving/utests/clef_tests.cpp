@@ -33,7 +33,6 @@
 static const QString CLEF_DATA_DIR("clef_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class ClefTests : public ::testing::Test
 {

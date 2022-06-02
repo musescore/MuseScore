@@ -27,7 +27,7 @@
 
 #include "../iengravingelementsprovider.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class EngravingItem;
 }
@@ -43,22 +43,22 @@ public:
     void printStatistic(const std::string& title) override;
 
     // register
-    void reg(const Ms::EngravingObject* e) override;
-    void unreg(const Ms::EngravingObject* e) override;
+    void reg(const mu::engraving::EngravingObject* e) override;
+    void unreg(const mu::engraving::EngravingObject* e) override;
     const EngravingObjectList& elements() const override;
 
     // debug draw
-    void select(const Ms::EngravingObject* e, bool arg) override;
-    bool isSelected(const Ms::EngravingObject* e) const override;
-    async::Channel<const Ms::EngravingObject*, bool> selectChanged() const override;
+    void select(const mu::engraving::EngravingObject* e, bool arg) override;
+    bool isSelected(const mu::engraving::EngravingObject* e) const override;
+    async::Channel<const mu::engraving::EngravingObject*, bool> selectChanged() const override;
 
-    void checkTree(Ms::Score* score);
+    void checkTree(mu::engraving::Score* score);
 
 private:
 
-    void checkObjectTree(const Ms::EngravingObject* obj);
-    void dumpTree(const Ms::EngravingItem* item, int& level);
-    void dumpTreeTree(const Ms::EngravingObject* obj, int& level);
+    void checkObjectTree(const mu::engraving::EngravingObject* obj);
+    void dumpTree(const mu::engraving::EngravingItem* item, int& level);
+    void dumpTreeTree(const mu::engraving::EngravingObject* obj, int& level);
 
     struct ObjectStatistic
     {
@@ -71,7 +71,7 @@ private:
     EngravingObjectList m_elements;
 
     EngravingObjectList m_selected;
-    async::Channel<const Ms::EngravingObject*, bool> m_selectChanged;
+    async::Channel<const mu::engraving::EngravingObject*, bool> m_selectChanged;
 };
 }
 

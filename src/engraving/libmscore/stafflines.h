@@ -27,7 +27,7 @@
 
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 //-------------------------------------------------------------------
 //   @@ StaffLines
 ///    The StaffLines class is the graphic representation of a staff,

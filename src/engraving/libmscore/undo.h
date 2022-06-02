@@ -64,7 +64,7 @@
 #include "spanner.h"
 #include "bracket.h"
 
-namespace Ms {
+namespace mu::engraving {
 class ElementList;
 class EngravingItem;
 class Instrument;
@@ -85,7 +85,7 @@ class MeasureBase;
 class Dynamic;
 class Selection;
 class Text;
-class Channel;
+class InstrChannel;
 class Tuplet;
 class KeySig;
 class TimeSig;
@@ -702,13 +702,13 @@ public:
 class ChangePatch : public UndoCommand
 {
     Score* score;
-    Channel* channel;
+    InstrChannel* channel;
     MidiPatch patch;
 
     void flip(EditData*) override;
 
 public:
-    ChangePatch(Score* s, Channel* c, const MidiPatch* pt)
+    ChangePatch(Score* s, InstrChannel* c, const MidiPatch* pt)
         : score(s), channel(c), patch(*pt) {}
     UNDO_NAME("ChangePatch")
     UNDO_CHANGED_OBJECTS({ score });
@@ -720,13 +720,13 @@ public:
 
 class SetUserBankController : public UndoCommand
 {
-    Channel* channel;
+    InstrChannel* channel;
     bool val;
 
     void flip(EditData*) override;
 
 public:
-    SetUserBankController(Channel* c, bool v)
+    SetUserBankController(InstrChannel* c, bool v)
         : channel(c), val(v) {}
     UNDO_NAME("SetUserBankController")
 };
@@ -1085,14 +1085,14 @@ public:
 
 class ChangeNoteEventList : public UndoCommand
 {
-    Ms::Note* note;
+    mu::engraving::Note* note;
     NoteEventList newEvents;
     PlayEventType newPetype;
 
     void flip(EditData*) override;
 
 public:
-    ChangeNoteEventList(Ms::Note* n, NoteEventList& ne)
+    ChangeNoteEventList(mu::engraving::Note* n, NoteEventList& ne)
         : note(n), newEvents(ne), newPetype(PlayEventType::User) {}
     UNDO_NAME("ChangeNoteEventList")
     UNDO_CHANGED_OBJECTS({ note });
@@ -1104,14 +1104,14 @@ public:
 
 class ChangeChordPlayEventType : public UndoCommand
 {
-    Ms::Chord* chord;
-    Ms::PlayEventType petype;
+    mu::engraving::Chord* chord;
+    mu::engraving::PlayEventType petype;
     std::vector<NoteEventList> events;
 
     void flip(EditData*) override;
 
 public:
-    ChangeChordPlayEventType(Chord* c, Ms::PlayEventType pet)
+    ChangeChordPlayEventType(Chord* c, mu::engraving::PlayEventType pet)
         : chord(c), petype(pet)
     {
         events = c->getNoteEventLists();
@@ -1140,7 +1140,7 @@ public:
     UNDO_CHANGED_OBJECTS({ is });
 };
 
-extern void updateNoteLines(Segment*, Ms::track_idx_t track);
+extern void updateNoteLines(Segment*, mu::engraving::track_idx_t track);
 
 //---------------------------------------------------------
 //   SwapCR

@@ -42,17 +42,17 @@ AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementReposi
 
 void AppearanceSettingsModel::createProperties()
 {
-    m_leadingSpace = buildPropertyItem(Ms::Pid::LEADING_SPACE);
-    m_barWidth = buildPropertyItem(Ms::Pid::USER_STRETCH);
-    m_minimumDistance = buildPropertyItem(Ms::Pid::MIN_DISTANCE);
-    m_color = buildPropertyItem(Ms::Pid::COLOR);
-    m_arrangeOrder = buildPropertyItem(Ms::Pid::Z);
+    m_leadingSpace = buildPropertyItem(mu::engraving::Pid::LEADING_SPACE);
+    m_barWidth = buildPropertyItem(mu::engraving::Pid::USER_STRETCH);
+    m_minimumDistance = buildPropertyItem(mu::engraving::Pid::MIN_DISTANCE);
+    m_color = buildPropertyItem(mu::engraving::Pid::COLOR);
+    m_arrangeOrder = buildPropertyItem(mu::engraving::Pid::Z);
 
-    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_horizontalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 }

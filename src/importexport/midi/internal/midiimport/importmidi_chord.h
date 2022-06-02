@@ -27,7 +27,7 @@
 
 #include <map>
 
-namespace Ms {
+namespace mu::engraving {
 class Tie;
 class TimeSigMap;
 

@@ -49,59 +49,59 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
 
 void TextSettingsModel::createProperties()
 {
-    m_fontFamily = buildPropertyItem(Ms::Pid::FONT_FACE);
-    m_fontStyle = buildPropertyItem(Ms::Pid::FONT_STYLE);
-    m_fontSize = buildPropertyItem(Ms::Pid::FONT_SIZE);
+    m_fontFamily = buildPropertyItem(mu::engraving::Pid::FONT_FACE);
+    m_fontStyle = buildPropertyItem(mu::engraving::Pid::FONT_STYLE);
+    m_fontSize = buildPropertyItem(mu::engraving::Pid::FONT_SIZE);
 
-    m_horizontalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_horizontalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
     });
-    m_verticalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_verticalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
     });
 
-    m_isSizeSpatiumDependent = buildPropertyItem(Ms::Pid::SIZE_SPATIUM_DEPENDENT);
+    m_isSizeSpatiumDependent = buildPropertyItem(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT);
 
-    m_frameType = buildPropertyItem(Ms::Pid::FRAME_TYPE, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_frameType = buildPropertyItem(mu::engraving::Pid::FRAME_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         updateFramePropertiesAvailability();
     });
 
-    m_frameBorderColor = buildPropertyItem(Ms::Pid::FRAME_FG_COLOR);
-    m_frameHighlightColor = buildPropertyItem(Ms::Pid::FRAME_BG_COLOR);
-    m_frameThickness = buildPropertyItem(Ms::Pid::FRAME_WIDTH);
-    m_frameMargin = buildPropertyItem(Ms::Pid::FRAME_PADDING);
-    m_frameCornerRadius = buildPropertyItem(Ms::Pid::FRAME_ROUND);
+    m_frameBorderColor = buildPropertyItem(mu::engraving::Pid::FRAME_FG_COLOR);
+    m_frameHighlightColor = buildPropertyItem(mu::engraving::Pid::FRAME_BG_COLOR);
+    m_frameThickness = buildPropertyItem(mu::engraving::Pid::FRAME_WIDTH);
+    m_frameMargin = buildPropertyItem(mu::engraving::Pid::FRAME_PADDING);
+    m_frameCornerRadius = buildPropertyItem(mu::engraving::Pid::FRAME_ROUND);
 
-    m_textType = buildPropertyItem(Ms::Pid::TEXT_STYLE);
-    m_textPlacement = buildPropertyItem(Ms::Pid::PLACEMENT);
-    m_textScriptAlignment = buildPropertyItem(Ms::Pid::TEXT_SCRIPT_ALIGN);
+    m_textType = buildPropertyItem(mu::engraving::Pid::TEXT_STYLE);
+    m_textPlacement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
+    m_textScriptAlignment = buildPropertyItem(mu::engraving::Pid::TEXT_SCRIPT_ALIGN);
 }
 
 void TextSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::TEXT);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::TEXT);
 }
 
 void TextSettingsModel::loadProperties()
 {
     loadPropertyItem(m_fontFamily, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toString() == Ms::TextBase::UNDEFINED_FONT_FAMILY
+        return elementPropertyValue.toString() == mu::engraving::TextBase::UNDEFINED_FONT_FAMILY
                ? QVariant() : elementPropertyValue.toString();
     });
 
     m_fontFamily->setIsEnabled(true);
 
     loadPropertyItem(m_fontStyle, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt() == static_cast<int>(Ms::FontStyle::Undefined)
+        return elementPropertyValue.toInt() == static_cast<int>(mu::engraving::FontStyle::Undefined)
                ? QVariant() : elementPropertyValue.toInt();
     });
 
     m_fontStyle->setIsEnabled(true);
 
     loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt() == Ms::TextBase::UNDEFINED_FONT_SIZE
+        return elementPropertyValue.toInt() == mu::engraving::TextBase::UNDEFINED_FONT_SIZE
                ? QVariant() : elementPropertyValue.toInt();
     });
 
@@ -130,7 +130,7 @@ void TextSettingsModel::loadProperties()
     loadPropertyItem(m_textType);
     loadPropertyItem(m_textPlacement);
     loadPropertyItem(m_textScriptAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt() == static_cast<int>(Ms::VerticalAlignment::AlignUndefined)
+        return elementPropertyValue.toInt() == static_cast<int>(mu::engraving::VerticalAlignment::AlignUndefined)
                ? QVariant() : elementPropertyValue.toInt();
     });
 

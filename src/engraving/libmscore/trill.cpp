@@ -43,7 +43,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   trillTable
 //    must be in sync with Trill::Type

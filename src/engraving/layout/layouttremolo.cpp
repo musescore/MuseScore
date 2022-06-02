@@ -26,7 +26,6 @@
 #include "libmscore/stem.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   extendedStemLenWithTwoNotesTremolo

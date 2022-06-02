@@ -29,7 +29,7 @@
 #include "context/iglobalcontext.h"
 #include "ui/iuiconfiguration.h"
 
-namespace Ms {
+namespace mu::engraving {
 class TimeSig;
 
 //---------------------------------------------------------
@@ -63,6 +63,6 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(Ms::TimeSignaturePropertiesDialog)
+Q_DECLARE_METATYPE(mu::engraving::TimeSignaturePropertiesDialog)
 
 #endif // MU_PALETTE_TIMESIGNATUREPROPERTIESDIALOG_H

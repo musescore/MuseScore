@@ -26,7 +26,7 @@
 #include "inotationundostack.h"
 #include "igetscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class MasterScore;
 class UndoStack;
@@ -40,11 +40,11 @@ public:
     NotationUndoStack(IGetScore* getScore, async::Notification notationChanged);
 
     bool canUndo() const override;
-    void undo(Ms::EditData*) override;
+    void undo(mu::engraving::EditData*) override;
     async::Notification undoNotification() const override;
 
     bool canRedo() const override;
-    void redo(Ms::EditData*) override;
+    void redo(mu::engraving::EditData*) override;
     async::Notification redoNotification() const override;
 
     void prepareChanges() override;
@@ -65,9 +65,9 @@ private:
 
     bool isStackClean() const;
 
-    Ms::Score* score() const;
-    Ms::MasterScore* masterScore() const;
-    Ms::UndoStack* undoStack() const;
+    mu::engraving::Score* score() const;
+    mu::engraving::MasterScore* masterScore() const;
+    mu::engraving::UndoStack* undoStack() const;
 
     IGetScore* m_getScore = nullptr;
 

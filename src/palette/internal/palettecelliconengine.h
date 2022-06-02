@@ -54,14 +54,14 @@ public:
         bool colorsInversionEnabled = false;
     };
 
-    static void paintPaletteElement(void* context, Ms::EngravingItem* element);
+    static void paintPaletteElement(void* context, mu::engraving::EngravingItem* element);
 
 private:
     void paintCell(draw::Painter& painter, const RectF& rect, bool selected, bool current) const;
     void paintBackground(draw::Painter& painter, const RectF& rect, bool selected, bool current) const;
-    void paintActionIcon(draw::Painter& painter, const RectF& rect, Ms::EngravingItem* element) const;
+    void paintActionIcon(draw::Painter& painter, const RectF& rect, mu::engraving::EngravingItem* element) const;
     qreal paintStaff(draw::Painter& painter, const RectF& rect, qreal spatium) const;
-    void paintScoreElement(draw::Painter& painter, Ms::EngravingItem* element, qreal spatium, bool alignToStaff) const;
+    void paintScoreElement(draw::Painter& painter, mu::engraving::EngravingItem* element, qreal spatium, bool alignToStaff) const;
 
     PaletteCellConstPtr m_cell;
     qreal m_extraMag = 1.0;

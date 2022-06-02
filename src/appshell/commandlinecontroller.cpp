@@ -330,7 +330,7 @@ void CommandLineController::apply()
 
     if (application()->runMode() == IApplication::RunMode::Converter) {
         project::MigrationOptions migration;
-        migration.appVersion = Ms::MSCVERSION;
+        migration.appVersion = mu::engraving::MSCVERSION;
 
         //! NOTE Don't ask about migration in convert mode
         migration.isAskAgain = false;

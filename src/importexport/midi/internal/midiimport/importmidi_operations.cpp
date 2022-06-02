@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 MidiOperations::Data midiImportOperations;
 
 namespace MidiOperations {

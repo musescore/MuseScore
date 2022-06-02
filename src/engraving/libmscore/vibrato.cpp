@@ -41,7 +41,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   vibratoTable
 //    must be in sync with Vibrato::Type

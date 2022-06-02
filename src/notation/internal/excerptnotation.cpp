@@ -28,7 +28,7 @@
 
 using namespace mu::notation;
 
-ExcerptNotation::ExcerptNotation(Ms::Excerpt* excerpt)
+ExcerptNotation::ExcerptNotation(mu::engraving::Excerpt* excerpt)
     : Notation(), m_excerpt(excerpt)
 {
     m_name = excerpt ? excerpt->name() : QString();
@@ -68,7 +68,7 @@ void ExcerptNotation::fillWithDefaultInfo()
         return;
     }
 
-    Ms::Score* excerptScore = m_excerpt->excerptScore();
+    mu::engraving::Score* excerptScore = m_excerpt->excerptScore();
 
     auto setText = [&excerptScore](TextStyleType textType, const QString& text) {
         TextBase* textBox = excerptScore->getText(textType);
@@ -91,7 +91,7 @@ void ExcerptNotation::fillWithDefaultInfo()
     excerptScore->doLayout();
 }
 
-Ms::Excerpt* ExcerptNotation::excerpt() const
+mu::engraving::Excerpt* ExcerptNotation::excerpt() const
 {
     return m_excerpt;
 }
@@ -120,7 +120,7 @@ void ExcerptNotation::setName(const QString& name)
         return;
     }
 
-    Ms::Text* excerptTitle = score()->getText(Ms::TextStyleType::INSTRUMENT_EXCERPT);
+    mu::engraving::Text* excerptTitle = score()->getText(mu::engraving::TextStyleType::INSTRUMENT_EXCERPT);
     if (!excerptTitle) {
         return;
     }
@@ -143,6 +143,6 @@ IExcerptNotationPtr ExcerptNotation::clone() const
         return nullptr;
     }
 
-    Ms::Excerpt* copy = new Ms::Excerpt(*m_excerpt);
+    mu::engraving::Excerpt* copy = new mu::engraving::Excerpt(*m_excerpt);
     return std::make_shared<ExcerptNotation>(copy);
 }

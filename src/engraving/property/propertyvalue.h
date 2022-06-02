@@ -34,7 +34,7 @@
 
 #include "global/logstream.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Groups;
 class TDuration;
 }

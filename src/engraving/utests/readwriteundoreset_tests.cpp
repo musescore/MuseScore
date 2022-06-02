@@ -30,7 +30,6 @@
 static const QString RWUNDORESET_DATA_DIR("readwriteundoreset_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class ReadWriteUndoResetTests : public ::testing::Test
 {

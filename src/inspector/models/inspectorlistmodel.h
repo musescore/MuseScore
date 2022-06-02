@@ -54,7 +54,7 @@ private:
 
     void listenSelectionChanged();
 
-    void setElementList(const QList<Ms::EngravingItem*>& selectedElementList,
+    void setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
                         notation::SelectionState selectionState = notation::SelectionState::NONE);
 
     void buildModelsForEmptySelection();

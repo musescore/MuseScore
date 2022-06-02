@@ -25,7 +25,7 @@
 
 #include "textlinebase.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class XmlWriter;
 class Volta;
@@ -102,6 +102,6 @@ public:
 };
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Volta::Type);
+Q_DECLARE_METATYPE(mu::engraving::Volta::Type);
 
 #endif

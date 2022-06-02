@@ -10,7 +10,7 @@ class TabDomNodeHack;
 class TabDomElementHack;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class IGPDomBuilder
 {
 public:

@@ -39,29 +39,29 @@ NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepository
 
 void NoteheadSettingsModel::createProperties()
 {
-    m_isHeadHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const Ms::Pid pid, const QVariant& isHeadHidden) {
+    m_isHeadHidden = buildPropertyItem(mu::engraving::Pid::VISIBLE, [this](const mu::engraving::Pid pid, const QVariant& isHeadHidden) {
         onPropertyValueChanged(pid, !isHeadHidden.toBool());
     });
 
-    m_isHeadSmall = buildPropertyItem(Ms::Pid::SMALL);
-    m_hasHeadParentheses = buildPropertyItem(Ms::Pid::HEAD_HAS_PARENTHESES);
-    m_headDirection = buildPropertyItem(Ms::Pid::MIRROR_HEAD);
-    m_headGroup = buildPropertyItem(Ms::Pid::HEAD_GROUP);
-    m_headType = buildPropertyItem(Ms::Pid::HEAD_TYPE);
-    m_dotPosition = buildPropertyItem(Ms::Pid::DOT_POSITION);
+    m_isHeadSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
+    m_hasHeadParentheses = buildPropertyItem(mu::engraving::Pid::HEAD_HAS_PARENTHESES);
+    m_headDirection = buildPropertyItem(mu::engraving::Pid::MIRROR_HEAD);
+    m_headGroup = buildPropertyItem(mu::engraving::Pid::HEAD_GROUP);
+    m_headType = buildPropertyItem(mu::engraving::Pid::HEAD_TYPE);
+    m_dotPosition = buildPropertyItem(mu::engraving::Pid::DOT_POSITION);
 
-    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_horizontalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 }
 
 void NoteheadSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::NOTEHEAD);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::NOTEHEAD);
 }
 
 void NoteheadSettingsModel::loadProperties()

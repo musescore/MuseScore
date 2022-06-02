@@ -25,7 +25,7 @@
 
 #include "palette.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 class XMLReader;
 }
@@ -38,8 +38,8 @@ struct PaletteTree
     void insert(size_t idx, PalettePtr palette);
     void append(PalettePtr palette);
 
-    bool read(Ms::XmlReader&);
-    void write(Ms::XmlWriter&) const;
+    bool read(mu::engraving::XmlReader&);
+    void write(mu::engraving::XmlWriter&) const;
 
     void retranslate();
 };

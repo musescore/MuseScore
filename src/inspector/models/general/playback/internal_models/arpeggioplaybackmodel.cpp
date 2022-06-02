@@ -38,12 +38,12 @@ ArpeggioPlaybackModel::ArpeggioPlaybackModel(QObject* parent, IElementRepository
 
 void ArpeggioPlaybackModel::createProperties()
 {
-    m_stretch = buildPropertyItem(Ms::Pid::TIME_STRETCH);
+    m_stretch = buildPropertyItem(mu::engraving::Pid::TIME_STRETCH);
 }
 
 void ArpeggioPlaybackModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::ARPEGGIO);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::ARPEGGIO);
 }
 
 void ArpeggioPlaybackModel::loadProperties()

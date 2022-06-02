@@ -26,7 +26,7 @@
 #include "types/bytearray.h"
 #include <QString>
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class XmlReader;
 class MStyle;
@@ -36,19 +36,19 @@ namespace mu::engraving::compat {
 class ReadStyleHook
 {
 public:
-    ReadStyleHook(Ms::Score* score, const ByteArray& scoreData, const QString& completeBaseName);
+    ReadStyleHook(mu::engraving::Score* score, const ByteArray& scoreData, const QString& completeBaseName);
 
     void setupDefaultStyle();
 
-    void readStyleTag(Ms::XmlReader& e);
+    void readStyleTag(mu::engraving::XmlReader& e);
 
     static int styleDefaultByMscVersion(const int mscVer);
-    static void setupDefaultStyle(Ms::Score* score);
-    static void readStyleTag(Ms::Score* score, Ms::XmlReader& e);
-    static bool readStyleProperties(Ms::MStyle* style, Ms::XmlReader& e);
+    static void setupDefaultStyle(mu::engraving::Score* score);
+    static void readStyleTag(mu::engraving::Score* score, mu::engraving::XmlReader& e);
+    static bool readStyleProperties(mu::engraving::MStyle* style, mu::engraving::XmlReader& e);
 
 private:
-    Ms::Score* m_score = nullptr;
+    mu::engraving::Score* m_score = nullptr;
     const ByteArray& m_scoreData;
     const QString& m_completeBaseName;
 };

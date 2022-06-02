@@ -192,8 +192,8 @@ void TransposeDialog::apply()
 
 Key TransposeDialog::firstPitchedStaffKey() const
 {
-    Ms::staff_idx_t startStaffIdx = 0;
-    Ms::staff_idx_t endStaffIdx   = 0;
+    mu::engraving::staff_idx_t startStaffIdx = 0;
+    mu::engraving::staff_idx_t endStaffIdx   = 0;
     Fraction startTick = Fraction(0, 1);
     INotationSelectionRangePtr range = selection()->range();
 
@@ -219,7 +219,7 @@ Key TransposeDialog::firstPitchedStaffKey() const
                     int diff = staff->part()->instrument(startTick)->transpose().chromatic;
 
                     if (diff) {
-                        key = Ms::transposeKey(key, diff, staff->part()->preferSharpFlat());
+                        key = mu::engraving::transposeKey(key, diff, staff->part()->preferSharpFlat());
                     }
                 }
 

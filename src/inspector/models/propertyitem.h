@@ -42,7 +42,7 @@ class PropertyItem : public QObject
     Q_PROPERTY(bool isModified READ isModified NOTIFY isModifiedChanged)
 
 public:
-    explicit PropertyItem(const Ms::Pid propertyId, QObject* parent = nullptr);
+    explicit PropertyItem(const mu::engraving::Pid propertyId, QObject* parent = nullptr);
 
     void fillValues(const QVariant& currentValue, const QVariant& defaultValue);
     void updateCurrentValue(const QVariant& currentValue);
@@ -50,7 +50,7 @@ public:
     Q_INVOKABLE void resetToDefault();
     Q_INVOKABLE void applyToStyle();
 
-    Ms::Pid propertyId() const;
+    mu::engraving::Pid propertyId() const;
     QVariant value() const;
     QVariant defaultValue() const;
     bool isUndefined() const;
@@ -59,7 +59,7 @@ public:
     bool isStyled() const;
     bool isModified() const;
 
-    void setStyleId(const Ms::Sid styleId);
+    void setStyleId(const mu::engraving::Sid styleId);
 
 public slots:
     void setValue(const QVariant& value);
@@ -76,12 +76,12 @@ signals:
     void isVisibleChanged(bool isVisible);
     void isModifiedChanged(bool isModified);
 
-    void propertyModified(Ms::Pid propertyId, QVariant newValue);
-    void applyToStyleRequested(Ms::Sid styledId, QVariant newStyleValue);
+    void propertyModified(mu::engraving::Pid propertyId, QVariant newValue);
+    void applyToStyleRequested(mu::engraving::Sid styledId, QVariant newStyleValue);
 
 private:
-    Ms::Pid m_propertyId = Ms::Pid::END;
-    Ms::Sid m_styleId = Ms::Sid::NOSTYLE;
+    mu::engraving::Pid m_propertyId = mu::engraving::Pid::END;
+    mu::engraving::Sid m_styleId = mu::engraving::Sid::NOSTYLE;
 
     QVariant m_defaultValue;
     QVariant m_currentValue;

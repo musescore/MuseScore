@@ -36,13 +36,13 @@ MarkerSettingsModel::MarkerSettingsModel(QObject* parent, IElementRepositoryServ
 
 void MarkerSettingsModel::createProperties()
 {
-    m_type = buildPropertyItem(Ms::Pid::MARKER_TYPE);
-    m_label = buildPropertyItem(Ms::Pid::LABEL);
+    m_type = buildPropertyItem(mu::engraving::Pid::MARKER_TYPE);
+    m_label = buildPropertyItem(mu::engraving::Pid::LABEL);
 }
 
 void MarkerSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::MARKER);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::MARKER);
 }
 
 void MarkerSettingsModel::loadProperties()

@@ -26,7 +26,7 @@
 #include "importmidi_operation.h"
 #include "../midishared/midifile.h"
 
-namespace Ms {
+namespace mu::engraving {
 class ReducedFraction;
 class InstrumentTemplate;
 

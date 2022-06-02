@@ -28,7 +28,7 @@
 #include "staff.h"
 #include "stafftextbase.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   StaffText
 //---------------------------------------------------------

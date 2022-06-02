@@ -27,7 +27,7 @@
 #include "mscore.h"
 #include "durationtype.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Page;
 class System;

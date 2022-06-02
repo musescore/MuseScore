@@ -38,30 +38,30 @@ StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementReposito
 
 void StaffTypeSettingsModel::createProperties()
 {
-    m_isSmall = buildPropertyItem(Ms::Pid::SMALL);
-    m_verticalOffset = buildPropertyItem(Ms::Pid::STAFF_YOFFSET);
-    m_scale = buildPropertyItem(Ms::Pid::MAG, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_isSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
+    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::STAFF_YOFFSET);
+    m_scale = buildPropertyItem(mu::engraving::Pid::MAG, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
     });
 
-    m_lineCount = buildPropertyItem(Ms::Pid::STAFF_LINES); // int
-    m_lineDistance = buildPropertyItem(Ms::Pid::LINE_DISTANCE);
-    m_stepOffset = buildPropertyItem(Ms::Pid::STEP_OFFSET); // int
-    m_isInvisible = buildPropertyItem(Ms::Pid::STAFF_INVISIBLE);
-    m_color = buildPropertyItem(Ms::Pid::STAFF_COLOR);
+    m_lineCount = buildPropertyItem(mu::engraving::Pid::STAFF_LINES); // int
+    m_lineDistance = buildPropertyItem(mu::engraving::Pid::LINE_DISTANCE);
+    m_stepOffset = buildPropertyItem(mu::engraving::Pid::STEP_OFFSET); // int
+    m_isInvisible = buildPropertyItem(mu::engraving::Pid::STAFF_INVISIBLE);
+    m_color = buildPropertyItem(mu::engraving::Pid::STAFF_COLOR);
 
-    m_noteheadSchemeType = buildPropertyItem(Ms::Pid::HEAD_SCHEME);
-    m_isStemless = buildPropertyItem(Ms::Pid::STAFF_STEMLESS);
-    m_shouldShowBarlines = buildPropertyItem(Ms::Pid::STAFF_SHOW_BARLINES);
-    m_shouldShowLedgerLines = buildPropertyItem(Ms::Pid::STAFF_SHOW_LEDGERLINES);
-    m_shouldGenerateClefs = buildPropertyItem(Ms::Pid::STAFF_GEN_CLEF);
-    m_shouldGenerateTimeSignatures = buildPropertyItem(Ms::Pid::STAFF_GEN_TIMESIG);
-    m_shouldGenerateKeySignatures = buildPropertyItem(Ms::Pid::STAFF_GEN_KEYSIG);
+    m_noteheadSchemeType = buildPropertyItem(mu::engraving::Pid::HEAD_SCHEME);
+    m_isStemless = buildPropertyItem(mu::engraving::Pid::STAFF_STEMLESS);
+    m_shouldShowBarlines = buildPropertyItem(mu::engraving::Pid::STAFF_SHOW_BARLINES);
+    m_shouldShowLedgerLines = buildPropertyItem(mu::engraving::Pid::STAFF_SHOW_LEDGERLINES);
+    m_shouldGenerateClefs = buildPropertyItem(mu::engraving::Pid::STAFF_GEN_CLEF);
+    m_shouldGenerateTimeSignatures = buildPropertyItem(mu::engraving::Pid::STAFF_GEN_TIMESIG);
+    m_shouldGenerateKeySignatures = buildPropertyItem(mu::engraving::Pid::STAFF_GEN_KEYSIG);
 }
 
 void StaffTypeSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::STAFFTYPE_CHANGE);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::STAFFTYPE_CHANGE);
 }
 
 void StaffTypeSettingsModel::loadProperties()

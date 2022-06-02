@@ -4,7 +4,7 @@
 
 #include "global/log.h"
 
-namespace Ms {
+namespace mu::engraving {
 std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(QDomNode* trackNode)
 {
     static const std::set<QString> sUnused = {

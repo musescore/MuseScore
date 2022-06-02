@@ -7,7 +7,7 @@
 
 #include "inoteproperty.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GPNote
 {
 public:

@@ -29,7 +29,7 @@
 #include "ipaletteconfiguration.h"
 #include "iengravingconfiguration.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Accidental;
 class Clef;
 

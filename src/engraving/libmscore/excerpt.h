@@ -29,7 +29,7 @@
 #include "types/types.h"
 #include "mscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 class MasterScore;
 class Part;

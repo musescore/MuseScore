@@ -38,12 +38,12 @@ SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryServ
 
 void SpacerSettingsModel::createProperties()
 {
-    m_spacerHeight = buildPropertyItem(Ms::Pid::SPACE);
+    m_spacerHeight = buildPropertyItem(mu::engraving::Pid::SPACE);
 }
 
 void SpacerSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::SPACER);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::SPACER);
 }
 
 void SpacerSettingsModel::loadProperties()

@@ -54,8 +54,8 @@ mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const
     int height = std::lrint(pageSizeInch.height() * CANVAS_DPI);
 
     QImage image(width, height, QImage::Format_ARGB32_Premultiplied);
-    image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / Ms::INCH));
-    image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / Ms::INCH));
+    image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
+    image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
 
     const bool TRANSPARENT_BACKGROUND = options.value(OptionKey::TRANSPARENT_BACKGROUND, Val(false)).toBool();
     image.fill(TRANSPARENT_BACKGROUND ? Qt::transparent : Qt::white);

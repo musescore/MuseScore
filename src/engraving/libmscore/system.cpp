@@ -63,7 +63,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   ~SysStaff
 //---------------------------------------------------------
@@ -633,8 +633,8 @@ void System::addBrackets(const LayoutContext& ctx, Measure* measure)
 //   Returns the bracket if it got created, else NULL
 //---------------------------------------------------------
 
-Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, size_t column, staff_idx_t staffIdx,
-                               std::vector<Ms::Bracket*>& bl,
+Bracket* System::createBracket(const LayoutContext& ctx, mu::engraving::BracketItem* bi, size_t column, staff_idx_t staffIdx,
+                               std::vector<mu::engraving::Bracket*>& bl,
                                Measure* measure)
 {
     size_t nstaves = _staves.size();

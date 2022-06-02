@@ -30,9 +30,8 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
-ReadContext::ReadContext(Ms::Score* score)
+ReadContext::ReadContext(mu::engraving::Score* score)
     : m_score(score)
 {
 }
@@ -53,12 +52,12 @@ ReadContext::~ReadContext()
     }
 }
 
-void ReadContext::setScore(Ms::Score* score)
+void ReadContext::setScore(mu::engraving::Score* score)
 {
     m_score = score;
 }
 
-Ms::Score* ReadContext::score() const
+mu::engraving::Score* ReadContext::score() const
 {
     return m_score;
 }
@@ -103,22 +102,22 @@ mu::engraving::compat::DummyElement* ReadContext::dummy() const
     return m_score->dummy();
 }
 
-Ms::TimeSigMap* ReadContext::sigmap()
+mu::engraving::TimeSigMap* ReadContext::sigmap()
 {
     return m_score->sigmap();
 }
 
-Ms::Staff* ReadContext::staff(int n)
+mu::engraving::Staff* ReadContext::staff(int n)
 {
     return m_score->staff(n);
 }
 
-void ReadContext::appendStaff(Ms::Staff* staff)
+void ReadContext::appendStaff(mu::engraving::Staff* staff)
 {
     m_score->appendStaff(staff);
 }
 
-void ReadContext::addSpanner(Ms::Spanner* s)
+void ReadContext::addSpanner(mu::engraving::Spanner* s)
 {
     m_score->addSpanner(s);
 }
@@ -128,7 +127,7 @@ bool ReadContext::undoStackActive() const
     return m_score->undoStack()->active();
 }
 
-bool ReadContext::isSameScore(const Ms::EngravingObject* obj) const
+bool ReadContext::isSameScore(const mu::engraving::EngravingObject* obj) const
 {
     return obj->score() == m_score;
 }
@@ -139,7 +138,7 @@ void ReadContext::initLinks(const ReadContext& ctx)
     m_staffLinkedElements = ctx.m_staffLinkedElements;
 }
 
-void ReadContext::addLink(Ms::Staff* staff, Ms::LinkedObjects* link, const Ms::Location& location)
+void ReadContext::addLink(mu::engraving::Staff* staff, mu::engraving::LinkedObjects* link, const mu::engraving::Location& location)
 {
     int staffIndex = static_cast<int>(staff->idx());
     const bool isMasterScore = staff->score()->isMaster();
@@ -147,7 +146,7 @@ void ReadContext::addLink(Ms::Staff* staff, Ms::LinkedObjects* link, const Ms::L
         staffIndex *= -1;
     }
 
-    std::vector<std::pair<Ms::LinkedObjects*, Ms::Location> >& staffLinks = m_staffLinkedElements[staffIndex];
+    std::vector<std::pair<mu::engraving::LinkedObjects*, mu::engraving::Location> >& staffLinks = m_staffLinkedElements[staffIndex];
     if (!isMasterScore) {
         if (!staffLinks.empty()
             && (link->mainElement()->score() != staffLinks.front().first->mainElement()->score())
@@ -160,7 +159,7 @@ void ReadContext::addLink(Ms::Staff* staff, Ms::LinkedObjects* link, const Ms::L
     staffLinks.push_back(std::make_pair(link, location));
 }
 
-Ms::LinkedObjects* ReadContext::getLink(bool isMasterScore, const Ms::Location& location, int localIndexDiff)
+mu::engraving::LinkedObjects* ReadContext::getLink(bool isMasterScore, const mu::engraving::Location& location, int localIndexDiff)
 {
     int staffIndex = location.staff();
     if (!isMasterScore) {
@@ -168,7 +167,7 @@ Ms::LinkedObjects* ReadContext::getLink(bool isMasterScore, const Ms::Location& 
     }
 
     const int localIndex = m_linksIndexer.assignLocalIndex(location) + localIndexDiff;
-    std::vector<std::pair<Ms::LinkedObjects*, Ms::Location> >& staffLinks = m_staffLinkedElements[staffIndex];
+    std::vector<std::pair<mu::engraving::LinkedObjects*, mu::engraving::Location> >& staffLinks = m_staffLinkedElements[staffIndex];
 
     if (!staffLinks.empty() && staffLinks.back().second == location) {
         // This element potentially affects local index for "main"
@@ -199,7 +198,7 @@ Ms::LinkedObjects* ReadContext::getLink(bool isMasterScore, const Ms::Location& 
     return nullptr;
 }
 
-std::map<int, std::vector<std::pair<Ms::LinkedObjects*, Ms::Location> > >& ReadContext::staffLinkedElements()
+std::map<int, std::vector<std::pair<mu::engraving::LinkedObjects*, mu::engraving::Location> > >& ReadContext::staffLinkedElements()
 {
     return m_staffLinkedElements;
 }

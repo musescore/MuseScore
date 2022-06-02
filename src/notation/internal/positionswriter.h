@@ -31,7 +31,7 @@ namespace mu::framework {
 class XmlWriter;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -60,13 +60,13 @@ public:
 
 private:
     qreal pngDpiResolution() const;
-    QHash<void*, int> elementIds(const Ms::Score* score) const;
+    QHash<void*, int> elementIds(const mu::engraving::Score* score) const;
 
-    void writeElementsPositions(framework::XmlWriter& writer, const Ms::Score* score) const;
-    void writeSegmentsPositions(framework::XmlWriter& writer, const Ms::Score* score) const;
-    void writeMeasuresPositions(framework::XmlWriter& writer, const Ms::Score* score) const;
+    void writeElementsPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeSegmentsPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeMeasuresPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
 
-    void writeEventsPositions(framework::XmlWriter& writer, const Ms::Score* score) const;
+    void writeEventsPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
 
     ElementType m_elementType = ElementType::SEGMENT;
 };

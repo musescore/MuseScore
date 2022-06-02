@@ -35,7 +35,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace MidiTuplet {
 void addElementToTuplet(int voice,
                         const ReducedFraction& onTime,

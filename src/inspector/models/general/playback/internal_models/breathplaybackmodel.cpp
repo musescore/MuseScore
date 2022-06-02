@@ -38,12 +38,12 @@ BreathPlaybackModel::BreathPlaybackModel(QObject* parent, IElementRepositoryServ
 
 void BreathPlaybackModel::createProperties()
 {
-    m_pauseTime = buildPropertyItem(Ms::Pid::PAUSE);
+    m_pauseTime = buildPropertyItem(mu::engraving::Pid::PAUSE);
 }
 
 void BreathPlaybackModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::BREATH);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::BREATH);
 }
 
 void BreathPlaybackModel::loadProperties()

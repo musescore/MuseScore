@@ -321,13 +321,13 @@ std::string MscMetaReader::cutXmlTags(const std::string& str) const
     return fin;
 }
 
-QString MscMetaReader::readText(XmlReader& xmlReader) const
+QString MscMetaReader::readText(mu::framework::XmlReader& xmlReader) const
 {
     std::string str = xmlReader.readString(framework::XmlReader::IncludeChildElements);
     return formatFromXml(str);
 }
 
-QString MscMetaReader::readMetaTagText(XmlReader& xmlReader) const
+QString MscMetaReader::readMetaTagText(mu::framework::XmlReader& xmlReader) const
 {
     return QString::fromStdString(xmlReader.readString());
 }

@@ -30,7 +30,7 @@ namespace mu::engraving {
 class Factory;
 }
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   SpacerType
 //---------------------------------------------------------

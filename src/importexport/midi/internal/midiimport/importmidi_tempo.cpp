@@ -32,7 +32,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace MidiTempo {
 ReducedFraction time2Tick(double time, double ticksPerSec)
 {

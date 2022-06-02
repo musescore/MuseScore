@@ -25,7 +25,7 @@
 
 #include "libmscore/engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MScore;
 class MasterScore;
 class Score;
@@ -37,19 +37,19 @@ class Score;
 class MTest
 {
 protected:
-    Ms::MScore* mscore;
+    mu::engraving::MScore* mscore;
     QString root;       // root path of test source
 
     MTest();
-    Ms::MasterScore* readScore(const QString& name);
+    mu::engraving::MasterScore* readScore(const QString& name);
     MasterScore* readCreatedScore(const QString& name);
-    bool saveScore(Ms::Score*, const QString& name) const;
+    bool saveScore(mu::engraving::Score*, const QString& name) const;
 
     bool compareFiles(const QString& saveName, const QString& compareWith) const;
-    bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWith) const;
+    bool saveCompareScore(mu::engraving::Score*, const QString& saveName, const QString& compareWith) const;
 
-    bool saveMusicXml(Ms::MasterScore*, const QString& name);
-    bool saveCompareMusicXmlScore(Ms::MasterScore*, const QString& saveName, const QString& compareWith);
+    bool saveMusicXml(mu::engraving::MasterScore*, const QString& name);
+    bool saveCompareMusicXmlScore(mu::engraving::MasterScore*, const QString& saveName, const QString& compareWith);
 
     void initMTest(const QString& root);
 

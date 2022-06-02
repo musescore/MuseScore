@@ -43,7 +43,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   keydiff2Interval
 //    keysig -   -7(Cb) - +7(C#)
@@ -717,10 +717,10 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
     if (concertPitch()) {
         v.flip();
         newTpc1 = newTpc;
-        newTpc2 = Ms::transposeTpc(newTpc, v, true);
+        newTpc2 = mu::engraving::transposeTpc(newTpc, v, true);
     } else {
         newPitch += v.chromatic;
-        newTpc1 = Ms::transposeTpc(newTpc, v, true);
+        newTpc1 = mu::engraving::transposeTpc(newTpc, v, true);
         newTpc2 = newTpc;
     }
 

@@ -29,7 +29,7 @@
 #include "engraving/libmscore/sig.h"
 #include "engraving/compat/midi/event.h"
 
-namespace Ms {
+namespace mu::engraving {
 const int MIDI_CHANNEL = 16;
 
 //---------------------------------------------------------

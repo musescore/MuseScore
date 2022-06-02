@@ -32,78 +32,78 @@ inline mpe::PitchClass pitchClassFromTpc(const int tpc)
 {
     switch (tpc) {
     // C
-    case Ms::TPC_D_BB:
-    case Ms::TPC_C:
-    case Ms::TPC_B_S:
-    case Ms::TPC_A_SSS:
+    case mu::engraving::TPC_D_BB:
+    case mu::engraving::TPC_C:
+    case mu::engraving::TPC_B_S:
+    case mu::engraving::TPC_A_SSS:
         return mpe::PitchClass::C;
-    case Ms::TPC_E_BBB:
-    case Ms::TPC_D_B:
-    case Ms::TPC_C_S:
-    case Ms::TPC_B_SS:
+    case mu::engraving::TPC_E_BBB:
+    case mu::engraving::TPC_D_B:
+    case mu::engraving::TPC_C_S:
+    case mu::engraving::TPC_B_SS:
         return mpe::PitchClass::C_sharp;
 
     // D
-    case Ms::TPC_F_BBB:
-    case Ms::TPC_E_BB:
-    case Ms::TPC_D:
-    case Ms::TPC_C_SS:
-    case Ms::TPC_B_SSS:
+    case mu::engraving::TPC_F_BBB:
+    case mu::engraving::TPC_E_BB:
+    case mu::engraving::TPC_D:
+    case mu::engraving::TPC_C_SS:
+    case mu::engraving::TPC_B_SSS:
         return mpe::PitchClass::D;
-    case Ms::TPC_F_BB:
-    case Ms::TPC_E_B:
-    case Ms::TPC_D_S:
-    case Ms::TPC_C_SSS:
+    case mu::engraving::TPC_F_BB:
+    case mu::engraving::TPC_E_B:
+    case mu::engraving::TPC_D_S:
+    case mu::engraving::TPC_C_SSS:
         return mpe::PitchClass::D_sharp;
 
     // E
-    case Ms::TPC_G_BBB:
-    case Ms::TPC_F_B:
-    case Ms::TPC_E:
-    case Ms::TPC_D_SS:
+    case mu::engraving::TPC_G_BBB:
+    case mu::engraving::TPC_F_B:
+    case mu::engraving::TPC_E:
+    case mu::engraving::TPC_D_SS:
         return mpe::PitchClass::E;
 
     // F
-    case Ms::TPC_G_BB:
-    case Ms::TPC_F:
-    case Ms::TPC_E_S:
-    case Ms::TPC_D_SSS:
+    case mu::engraving::TPC_G_BB:
+    case mu::engraving::TPC_F:
+    case mu::engraving::TPC_E_S:
+    case mu::engraving::TPC_D_SSS:
         return mpe::PitchClass::F;
-    case Ms::TPC_A_BBB:
-    case Ms::TPC_G_B:
-    case Ms::TPC_F_S:
-    case Ms::TPC_E_SS:
+    case mu::engraving::TPC_A_BBB:
+    case mu::engraving::TPC_G_B:
+    case mu::engraving::TPC_F_S:
+    case mu::engraving::TPC_E_SS:
         return mpe::PitchClass::F_sharp;
 
     // G
-    case Ms::TPC_A_BB:
-    case Ms::TPC_G:
-    case Ms::TPC_F_SS:
-    case Ms::TPC_E_SSS:
+    case mu::engraving::TPC_A_BB:
+    case mu::engraving::TPC_G:
+    case mu::engraving::TPC_F_SS:
+    case mu::engraving::TPC_E_SSS:
         return mpe::PitchClass::G;
-    case Ms::TPC_B_BBB:
-    case Ms::TPC_A_B:
-    case Ms::TPC_G_S:
-    case Ms::TPC_F_SSS:
+    case mu::engraving::TPC_B_BBB:
+    case mu::engraving::TPC_A_B:
+    case mu::engraving::TPC_G_S:
+    case mu::engraving::TPC_F_SSS:
         return mpe::PitchClass::G_sharp;
 
     // A
-    case Ms::TPC_C_BBB:
-    case Ms::TPC_B_BB:
-    case Ms::TPC_A:
-    case Ms::TPC_G_SS:
+    case mu::engraving::TPC_C_BBB:
+    case mu::engraving::TPC_B_BB:
+    case mu::engraving::TPC_A:
+    case mu::engraving::TPC_G_SS:
         return mpe::PitchClass::A;
-    case Ms::TPC_C_BB:
-    case Ms::TPC_B_B:
-    case Ms::TPC_A_S:
-    case Ms::TPC_G_SSS:
+    case mu::engraving::TPC_C_BB:
+    case mu::engraving::TPC_B_B:
+    case mu::engraving::TPC_A_S:
+    case mu::engraving::TPC_G_SSS:
         return mpe::PitchClass::A_sharp;
 
     // B
-    case Ms::TPC_D_BBB:
-    case Ms::TPC_C_B:
-    case Ms::TPC_B:
-    case Ms::TPC_A_SS:
+    case mu::engraving::TPC_D_BBB:
+    case mu::engraving::TPC_C_B:
+    case mu::engraving::TPC_B:
+    case mu::engraving::TPC_A_SS:
         return mpe::PitchClass::B;
 
     default:
@@ -111,7 +111,8 @@ inline mpe::PitchClass pitchClassFromTpc(const int tpc)
     }
 }
 
-inline mpe::octave_t actualOctave(const int nominalOctave, const mpe::PitchClass nominalPitchClass, const Ms::AccidentalVal accidental)
+inline mpe::octave_t actualOctave(const int nominalOctave, const mpe::PitchClass nominalPitchClass,
+                                  const mu::engraving::AccidentalVal accidental)
 {
     int shift = static_cast<int>(nominalPitchClass) - static_cast<int>(accidental);
 
@@ -133,7 +134,7 @@ inline mpe::pitch_level_t notePitchLevel(const int noteTpc, const int noteOctave
 {
     mpe::PitchClass pitchClass = pitchClassFromTpc(noteTpc);
 
-    return mpe::pitchLevel(pitchClass, actualOctave(noteOctave, pitchClass, Ms::tpc2alter(noteTpc)));
+    return mpe::pitchLevel(pitchClass, actualOctave(noteOctave, pitchClass, mu::engraving::tpc2alter(noteTpc)));
 }
 }
 

@@ -78,9 +78,9 @@ EngravingItem* NotationSelection::element() const
 std::vector<EngravingItem*> NotationSelection::elements() const
 {
     std::vector<EngravingItem*> els;
-    std::vector<Ms::EngravingItem*> list = score()->selection().elements();
+    std::vector<mu::engraving::EngravingItem*> list = score()->selection().elements();
     els.reserve(list.size());
-    for (Ms::EngravingItem* e : list) {
+    for (mu::engraving::EngravingItem* e : list) {
         els.push_back(e);
     }
     return els;
@@ -106,7 +106,7 @@ mu::RectF NotationSelection::canvasBoundingRect() const
         return RectF();
     }
 
-    if (const Ms::EngravingItem* element = score()->selection().element()) {
+    if (const mu::engraving::EngravingItem* element = score()->selection().element()) {
         return element->canvasBoundingRect();
     }
 
@@ -124,7 +124,7 @@ INotationSelectionRangePtr NotationSelection::range() const
     return m_range;
 }
 
-Ms::Score* NotationSelection::score() const
+mu::engraving::Score* NotationSelection::score() const
 {
     return m_getScore->score();
 }

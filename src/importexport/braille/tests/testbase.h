@@ -25,7 +25,7 @@
 
 #include "libmscore/engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MScore;
 class MasterScore;
 class Score;
@@ -37,17 +37,17 @@ class Score;
 class MTest
 {
 protected:
-    Ms::MScore* mscore;
+    mu::engraving::MScore* mscore;
     QString root;       // root path of test source
 
     MTest();
-    Ms::MasterScore* readScore(const QString& name);
-    bool saveScore(Ms::Score*, const QString& name) const;
+    mu::engraving::MasterScore* readScore(const QString& name);
+    bool saveScore(mu::engraving::Score*, const QString& name) const;
 
     bool compareFiles(const QString& saveName, const QString& compareWith) const;
-    bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWith) const;
+    bool saveCompareScore(mu::engraving::Score*, const QString& saveName, const QString& compareWith) const;
 
-    bool saveBraille(Ms::MasterScore*, const QString& name);
+    bool saveBraille(mu::engraving::MasterScore*, const QString& name);
     bool saveCompareBrailleScore(MasterScore* score, const QString& saveName, const QString& compareWith);
 
     void initMTest(const QString& root);

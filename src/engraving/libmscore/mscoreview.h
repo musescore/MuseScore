@@ -27,7 +27,7 @@
 
 #include "infrastructure/draw/painter.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 class Score;
 class Slur;

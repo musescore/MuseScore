@@ -47,7 +47,7 @@ using namespace mu::io;
 using namespace mu::engraving;
 using namespace mu::iex::braille;
 
-namespace Ms {
+namespace mu::engraving {
 MTest::MTest()
 {
     MScore::testMode = true;

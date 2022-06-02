@@ -34,7 +34,7 @@ namespace mu::engraving::compat {
 class ReadChordListHook;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 class XmlReader;
 class ChordList;

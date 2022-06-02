@@ -30,7 +30,7 @@
 #include "libmscore/tuplet.h"
 #include "importmidi_fraction.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace Swing {
 class SwingDetector
 {

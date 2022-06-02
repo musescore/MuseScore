@@ -42,7 +42,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   nextChordRest
 //    return next Chord or Rest

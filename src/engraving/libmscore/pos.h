@@ -25,7 +25,7 @@
 
 #include "sig.h"
 
-namespace Ms {
+namespace mu::engraving {
 class TempoMap;
 class TimeSigMap;
 class XmlWriter;

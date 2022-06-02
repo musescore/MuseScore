@@ -8,7 +8,7 @@
 #include "gpdommodel.h"
 #include "inoteproperty.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GP67DomBuilder : public IGPDomBuilder
 {
 public:

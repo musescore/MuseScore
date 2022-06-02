@@ -48,7 +48,7 @@
 using namespace mu;
 using namespace mu::io;
 using namespace mu::palette;
-using namespace Ms;
+using namespace mu::engraving;
 
 Palette::Palette(Type t, QObject* parent)
     : QObject(parent), m_type(t)
@@ -137,7 +137,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, q
     return cell;
 }
 
-PaletteCellPtr Palette::appendActionIcon(Ms::ActionIconType type, actions::ActionCode code)
+PaletteCellPtr Palette::appendActionIcon(mu::engraving::ActionIconType type, actions::ActionCode code)
 {
     const ui::UiAction& action = actionsRegister()->action(code);
     auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
@@ -307,7 +307,7 @@ bool Palette::read(XmlReader& e)
 
 QByteArray Palette::toMimeData() const
 {
-    return Ms::toMimeData(this);
+    return mu::engraving::toMimeData(this);
 }
 
 void Palette::write(XmlWriter& xml) const
@@ -344,7 +344,7 @@ void Palette::write(XmlWriter& xml) const
 
 PalettePtr Palette::fromMimeData(const QByteArray& data)
 {
-    return Ms::fromMimeData<Palette>(data, "Palette");
+    return mu::engraving::fromMimeData<Palette>(data, "Palette");
 }
 
 bool Palette::readFromFile(const QString& p)

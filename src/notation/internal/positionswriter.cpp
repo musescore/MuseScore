@@ -42,7 +42,7 @@ constexpr std::string_view ELEMENT_TAG("elements");
 constexpr std::string_view ELEMENTS_TAG("elements");
 constexpr std::string_view EVENTS_TAG("events");
 
-static void writeElementPosition(XmlWriter& writer, const std::string& id, const mu::PointF& pos, const mu::PointF& sPos,
+static void writeElementPosition(mu::framework::XmlWriter& writer, const std::string& id, const mu::PointF& pos, const mu::PointF& sPos,
                                  page_idx_t pageIndex)
 {
     writer.writeStartElement(ELEMENT_TAG);
@@ -55,7 +55,7 @@ static void writeElementPosition(XmlWriter& writer, const std::string& id, const
     writer.writeEndElement();
 }
 
-static void writeEventPosition(XmlWriter& writer, const std::string& id, int time)
+static void writeEventPosition(mu::framework::XmlWriter& writer, const std::string& id, int time)
 {
     writer.writeStartElement(EVENTS_TAG);
     writer.writeAttribute("elid", id);
@@ -63,9 +63,10 @@ static void writeEventPosition(XmlWriter& writer, const std::string& id, int tim
     writer.writeEndElement();
 }
 
-static void writeMeasureEvents(XmlWriter& writer, Measure* m, int offset, const QHash<void*, int>& segments)
+static void writeMeasureEvents(mu::framework::XmlWriter& writer, Measure* m, int offset, const QHash<void*, int>& segments)
 {
-    for (Ms::Segment* s = m->first(Ms::SegmentType::ChordRest); s; s = s->next(Ms::SegmentType::ChordRest)) {
+    for (mu::engraving::Segment* s = m->first(mu::engraving::SegmentType::ChordRest); s;
+         s = s->next(mu::engraving::SegmentType::ChordRest)) {
         int tick = s->tick().ticks() + offset;
         int id = segments[(void*)s];
         int time = lrint(m->score()->repeatList().utick2utime(tick) * 1000);
@@ -96,7 +97,7 @@ mu::Ret PositionsWriter::write(INotationPtr notation, Device& destinationDevice,
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Ms::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = notation->elements()->msScore();
 
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
@@ -104,7 +105,7 @@ mu::Ret PositionsWriter::write(INotationPtr notation, Device& destinationDevice,
 
     QHash<void*, int> segments;
 
-    XmlWriter writer(&destinationDevice);
+    mu::framework::XmlWriter writer(&destinationDevice);
 
     writer.writeStartDocument();
     writer.writeStartElement(SCORE_TAG);
@@ -138,18 +139,18 @@ ProgressChannel PositionsWriter::progress() const
 
 qreal PositionsWriter::pngDpiResolution() const
 {
-    return (imagesExportConfiguration()->exportPngDpiResolution() / Ms::DPI) * 12.0;
+    return (imagesExportConfiguration()->exportPngDpiResolution() / mu::engraving::DPI) * 12.0;
 }
 
-QHash<void*, int> PositionsWriter::elementIds(const Ms::Score* score) const
+QHash<void*, int> PositionsWriter::elementIds(const mu::engraving::Score* score) const
 {
     QHash<void*, int> elementIds;
 
     int id = 0;
     if (m_elementType == ElementType::SEGMENT) {
         Measure* m = score->firstMeasureMM();
-        for (Ms::Segment* s = (m ? m->first(Ms::SegmentType::ChordRest) : nullptr);
-             s; s = s->next1MM(Ms::SegmentType::ChordRest)) {
+        for (mu::engraving::Segment* s = (m ? m->first(mu::engraving::SegmentType::ChordRest) : nullptr);
+             s; s = s->next1MM(mu::engraving::SegmentType::ChordRest)) {
             elementIds[(void*)s] = id++;
         }
     } else {
@@ -161,7 +162,7 @@ QHash<void*, int> PositionsWriter::elementIds(const Ms::Score* score) const
     return elementIds;
 }
 
-void PositionsWriter::writeElementsPositions(XmlWriter& writer, const Ms::Score* score) const
+void PositionsWriter::writeElementsPositions(mu::framework::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     writer.writeStartElement(ELEMENTS_TAG);
 
@@ -177,16 +178,16 @@ void PositionsWriter::writeElementsPositions(XmlWriter& writer, const Ms::Score*
     writer.writeEndElement();
 }
 
-void PositionsWriter::writeSegmentsPositions(XmlWriter& writer, const Ms::Score* score) const
+void PositionsWriter::writeSegmentsPositions(mu::framework::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     int id = 0;
     qreal ndpi = pngDpiResolution();
 
     Measure* measure = score->firstMeasureMM();
-    for (Ms::Segment* segment = (measure ? measure->first(Ms::SegmentType::ChordRest) : nullptr);
-         segment; segment = segment->next1MM(Ms::SegmentType::ChordRest)) {
+    for (mu::engraving::Segment* segment = (measure ? measure->first(mu::engraving::SegmentType::ChordRest) : nullptr);
+         segment; segment = segment->next1MM(mu::engraving::SegmentType::ChordRest)) {
         qreal sx = 0;
-        size_t tracks = score->nstaves() * Ms::VOICES;
+        size_t tracks = score->nstaves() * mu::engraving::VOICES;
         for (size_t track = 0; track < tracks; track++) {
             EngravingItem* e = segment->element(static_cast<int>(track));
             if (e) {
@@ -209,7 +210,7 @@ void PositionsWriter::writeSegmentsPositions(XmlWriter& writer, const Ms::Score*
     }
 }
 
-void PositionsWriter::writeMeasuresPositions(XmlWriter& writer, const Ms::Score* score) const
+void PositionsWriter::writeMeasuresPositions(mu::framework::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     int id = 0;
     qreal ndpi = pngDpiResolution();
@@ -229,7 +230,7 @@ void PositionsWriter::writeMeasuresPositions(XmlWriter& writer, const Ms::Score*
     }
 }
 
-void PositionsWriter::writeEventsPositions(XmlWriter& writer, const Ms::Score* score) const
+void PositionsWriter::writeEventsPositions(mu::framework::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     QHash<void*, int> elementIds = this->elementIds(score);
 
@@ -237,7 +238,7 @@ void PositionsWriter::writeEventsPositions(XmlWriter& writer, const Ms::Score* s
 
     score->masterScore()->setExpandRepeats(true);
 
-    for (const Ms::RepeatSegment* repeatSegment : score->repeatList()) {
+    for (const mu::engraving::RepeatSegment* repeatSegment : score->repeatList()) {
         int startTick = repeatSegment->tick;
         int endTick = startTick + repeatSegment->len();
         int tickOffset = repeatSegment->utick - repeatSegment->tick;

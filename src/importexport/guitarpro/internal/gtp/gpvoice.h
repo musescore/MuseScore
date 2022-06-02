@@ -5,7 +5,7 @@
 
 #include "gpbeat.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GPVoice
 {
 public:

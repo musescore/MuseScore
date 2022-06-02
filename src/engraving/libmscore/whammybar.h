@@ -25,7 +25,7 @@
 
 #include "chordtextlinebase.h"
 
-namespace Ms {
+namespace mu::engraving {
 class WhammyBar;
 
 //---------------------------------------------------------

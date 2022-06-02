@@ -29,9 +29,9 @@ class StaffRW
 {
 public:
 
-    static void readStaff(Ms::Score* score, Ms::XmlReader&, ReadContext& ctx);
-    static void writeStaff(const Ms::Staff* staff, Ms::XmlWriter& xml, Ms::MeasureBase* measureStart, Ms::MeasureBase* measureEnd,
-                           staff_idx_t staffStart, staff_idx_t staffIdx, bool selectionOnly);
+    static void readStaff(mu::engraving::Score* score, mu::engraving::XmlReader&, ReadContext& ctx);
+    static void writeStaff(const mu::engraving::Staff* staff, mu::engraving::XmlWriter& xml, mu::engraving::MeasureBase* measureStart,
+                           mu::engraving::MeasureBase* measureEnd, staff_idx_t staffStart, staff_idx_t staffIdx, bool selectionOnly);
 };
 }
 

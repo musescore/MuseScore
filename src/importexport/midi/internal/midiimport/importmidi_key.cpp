@@ -39,7 +39,7 @@
 
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 namespace MidiKey {
 class KeyData
 {

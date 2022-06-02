@@ -27,7 +27,7 @@
 #include "infrastructure/draw/geometry.h"
 #include "libmscore/score.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlReader;
 class EngravingItem;
 class Accidental;
@@ -55,30 +55,31 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    static Ms::Score::FileError read206(Ms::MasterScore* masterScore, Ms::XmlReader& e, ReadContext& ctx);
+    static mu::engraving::Score::FileError read206(mu::engraving::MasterScore* masterScore, mu::engraving::XmlReader& e, ReadContext& ctx);
 
-    static Ms::EngravingItem* readArticulation(Ms::EngravingItem*, Ms::XmlReader&, const ReadContext& ctx);
-    static void readAccidental206(Ms::Accidental*, Ms::XmlReader&);
-    static void readTextStyle206(Ms::MStyle* style, Ms::XmlReader& e, std::map<QString, std::map<Ms::Sid, PropertyValue> >& excessStyles);
-    static void readTextLine206(Ms::XmlReader& e, const ReadContext& ctx, Ms::TextLineBase* tlb);
-    static void readTrill206(Ms::XmlReader& e, Ms::Trill* t);
-    static void readHairpin206(Ms::XmlReader& e, const ReadContext& ctx, Ms::Hairpin* h);
-    static void readSlur206(Ms::XmlReader& e, ReadContext& ctx, Ms::Slur* s);
-    static void readTie206(Ms::XmlReader& e, ReadContext& ctx, Ms::Tie* t);
+    static mu::engraving::EngravingItem* readArticulation(mu::engraving::EngravingItem*, mu::engraving::XmlReader&, const ReadContext& ctx);
+    static void readAccidental206(mu::engraving::Accidental*, mu::engraving::XmlReader&);
+    static void readTextStyle206(mu::engraving::MStyle* style, mu::engraving::XmlReader& e, std::map<QString, std::map<mu::engraving::Sid,
+                                                                                                                       PropertyValue> >& excessStyles);
+    static void readTextLine206(mu::engraving::XmlReader& e, const ReadContext& ctx, mu::engraving::TextLineBase* tlb);
+    static void readTrill206(mu::engraving::XmlReader& e, mu::engraving::Trill* t);
+    static void readHairpin206(mu::engraving::XmlReader& e, const ReadContext& ctx, mu::engraving::Hairpin* h);
+    static void readSlur206(mu::engraving::XmlReader& e, ReadContext& ctx, mu::engraving::Slur* s);
+    static void readTie206(mu::engraving::XmlReader& e, ReadContext& ctx, mu::engraving::Tie* t);
 
-    static bool readNoteProperties206(Ms::Note* note, Ms::XmlReader& e, ReadContext& ctx);
-    static bool readDurationProperties206(Ms::XmlReader& e, const ReadContext& ctx, Ms::DurationElement* de);
-    static bool readTupletProperties206(Ms::XmlReader& e, const ReadContext& ctx, Ms::Tuplet* t);
-    static bool readChordRestProperties206(Ms::XmlReader& e, ReadContext& ctx, Ms::ChordRest* cr);
-    static bool readChordProperties206(Ms::XmlReader& e, ReadContext& ctx, Ms::Chord* ch);
+    static bool readNoteProperties206(mu::engraving::Note* note, mu::engraving::XmlReader& e, ReadContext& ctx);
+    static bool readDurationProperties206(mu::engraving::XmlReader& e, const ReadContext& ctx, mu::engraving::DurationElement* de);
+    static bool readTupletProperties206(mu::engraving::XmlReader& e, const ReadContext& ctx, mu::engraving::Tuplet* t);
+    static bool readChordRestProperties206(mu::engraving::XmlReader& e, ReadContext& ctx, mu::engraving::ChordRest* cr);
+    static bool readChordProperties206(mu::engraving::XmlReader& e, ReadContext& ctx, mu::engraving::Chord* ch);
 
-    static Ms::SymId articulationNames2SymId206(const AsciiString& s);
+    static mu::engraving::SymId articulationNames2SymId206(const AsciiString& s);
 
-    static Ms::NoteHeadGroup convertHeadGroup(int i);
+    static mu::engraving::NoteHeadGroup convertHeadGroup(int i);
 
 private:
-    static bool readScore206(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx);
-    static void readPart206(Ms::Part* part, Ms::XmlReader& e, ReadContext& ctx);
+    static bool readScore206(mu::engraving::Score* score, mu::engraving::XmlReader& e, ReadContext& ctx);
+    static void readPart206(mu::engraving::Part* part, mu::engraving::XmlReader& e, ReadContext& ctx);
 };
 }
 

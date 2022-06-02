@@ -45,7 +45,7 @@ using namespace mu::engraving;
 #define TAB_DEFAULT_LINE_SP   (1.5)
 #define TAB_RESTSYMBDISPL     2.0
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   StaffTypeTablature
 //---------------------------------------------------------

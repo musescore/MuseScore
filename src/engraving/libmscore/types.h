@@ -37,7 +37,7 @@
  * \namespace Ms .
  */
 
-namespace Ms {
+namespace mu::engraving {
 #ifdef SCRIPT_INTERFACE
 Q_NAMESPACE
 #endif
@@ -559,10 +559,10 @@ Q_ENUM_NS(HarmonyType);
 #endif
 } // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::NoteType);
+Q_DECLARE_METATYPE(mu::engraving::NoteType);
 
-Q_DECLARE_METATYPE(Ms::PlayEventType);
+Q_DECLARE_METATYPE(mu::engraving::PlayEventType);
 
-Q_DECLARE_METATYPE(Ms::AccidentalType);
+Q_DECLARE_METATYPE(mu::engraving::AccidentalType);
 
 #endif

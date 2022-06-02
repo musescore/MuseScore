@@ -41,7 +41,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const dynamic_level_t nominalDynamicLevel,
+void PlaybackEventsRenderer::render(const mu::engraving::EngravingItem* item, const dynamic_level_t nominalDynamicLevel,
                                     const ArticulationType persistentArticulationApplied,
                                     const ArticulationsProfilePtr profile,
                                     PlaybackEventsMap& result) const
@@ -49,7 +49,8 @@ void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const dynamic
     render(item, 0, nominalDynamicLevel, persistentArticulationApplied, profile, result);
 }
 
-void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const int tickPositionOffset, const dynamic_level_t nominalDynamicLevel,
+void PlaybackEventsRenderer::render(const mu::engraving::EngravingItem* item, const int tickPositionOffset,
+                                    const dynamic_level_t nominalDynamicLevel,
                                     const ArticulationType persistentArticulationApplied, const ArticulationsProfilePtr profile,
                                     PlaybackEventsMap& result) const
 {
@@ -59,14 +60,15 @@ void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const int tic
         return;
     }
 
-    if (item->type() == Ms::ElementType::CHORD) {
-        renderNoteEvents(Ms::toChord(item), tickPositionOffset, nominalDynamicLevel, persistentArticulationApplied, profile, result);
-    } else if (item->type() == Ms::ElementType::REST) {
-        renderRestEvents(Ms::toRest(item), tickPositionOffset, result);
+    if (item->type() == mu::engraving::ElementType::CHORD) {
+        renderNoteEvents(mu::engraving::toChord(
+                             item), tickPositionOffset, nominalDynamicLevel, persistentArticulationApplied, profile, result);
+    } else if (item->type() == mu::engraving::ElementType::REST) {
+        renderRestEvents(mu::engraving::toRest(item), tickPositionOffset, result);
     }
 }
 
-void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const mpe::timestamp_t actualTimestamp,
+void PlaybackEventsRenderer::render(const mu::engraving::EngravingItem* item, const mpe::timestamp_t actualTimestamp,
                                     const mpe::duration_t actualDuration, const mpe::dynamic_level_t actualDynamicLevel,
                                     const ArticulationType persistentArticulationApplied, const ArticulationsProfilePtr profile,
                                     PlaybackEventsMap& result) const
@@ -77,35 +79,35 @@ void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const mpe::ti
         return;
     }
 
-    if (item->type() == Ms::ElementType::CHORD) {
-        const Ms::Chord* chord = Ms::toChord(item);
+    if (item->type() == mu::engraving::ElementType::CHORD) {
+        const mu::engraving::Chord* chord = mu::engraving::toChord(item);
 
-        for (const Ms::Note* note : chord->notes()) {
+        for (const mu::engraving::Note* note : chord->notes()) {
             renderFixedNoteEvent(note, actualTimestamp, actualDuration,
                                  actualDynamicLevel, persistentArticulationApplied, profile, result[actualTimestamp]);
         }
-    } else if (item->type() == Ms::ElementType::NOTE) {
-        renderFixedNoteEvent(Ms::toNote(item), actualTimestamp, actualDuration,
+    } else if (item->type() == mu::engraving::ElementType::NOTE) {
+        renderFixedNoteEvent(mu::engraving::toNote(item), actualTimestamp, actualDuration,
                              actualDynamicLevel, persistentArticulationApplied, profile, result[actualTimestamp]);
-    } else if (item->type() == Ms::ElementType::REST) {
-        renderRestEvents(Ms::toRest(item), 0, result);
+    } else if (item->type() == mu::engraving::ElementType::REST) {
+        renderRestEvents(mu::engraving::toRest(item), 0, result);
     }
 }
 
-void PlaybackEventsRenderer::renderMetronome(const Ms::Score* score, const int positionTick, const int durationTicks,
+void PlaybackEventsRenderer::renderMetronome(const mu::engraving::Score* score, const int positionTick, const int durationTicks,
                                              const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(score) {
         return;
     }
 
-    Ms::BeatType beatType = score->tick2beatType(Ms::Fraction::fromTicks(positionTick));
+    mu::engraving::BeatType beatType = score->tick2beatType(mu::engraving::Fraction::fromTicks(positionTick));
 
-    if (beatType == Ms::BeatType::SUBBEAT) {
+    if (beatType == mu::engraving::BeatType::SUBBEAT) {
         return;
     }
 
-    Ms::TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(positionTick).timesig();
+    mu::engraving::TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(positionTick).timesig();
     int ticksPerBeat = timeSignatureFraction.ticks() / timeSignatureFraction.numerator();
 
     BeatsPerSecond bps = score->tempomap()->tempo(positionTick);
@@ -118,7 +120,7 @@ void PlaybackEventsRenderer::renderMetronome(const Ms::Score* score, const int p
         timestamp_t eventTimestamp = timestampFromTicks(score, positionTick + ticksPositionOffset + i * ticksPerBeat);
 
         pitch_level_t eventPitchLevel = pitchLevel(PitchClass::A, 4);
-        if (beatType == Ms::BeatType::DOWNBEAT && i == 0) {
+        if (beatType == mu::engraving::BeatType::DOWNBEAT && i == 0) {
             eventPitchLevel = pitchLevel(PitchClass::B, 4);
         }
 
@@ -131,7 +133,7 @@ void PlaybackEventsRenderer::renderMetronome(const Ms::Score* score, const int p
     }
 }
 
-void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int tickPositionOffset,
+void PlaybackEventsRenderer::renderNoteEvents(const mu::engraving::Chord* chord, const int tickPositionOffset,
                                               const mpe::dynamic_level_t nominalDynamicLevel,
                                               const ArticulationType persistentArticulationApplied,
                                               const mpe::ArticulationsProfilePtr profile, PlaybackEventsMap& result) const
@@ -143,10 +145,10 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int 
     int chordPosTick = chord->tick().ticks() + tickPositionOffset;
     int chordDurationTicks = chord->durationTypeTicks().ticks();
 
-    const Ms::Score* score = chord->score();
+    const mu::engraving::Score* score = chord->score();
 
     BeatsPerSecond bps = score->tempomap()->tempo(chordPosTick);
-    Ms::TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(chordPosTick).timesig();
+    mu::engraving::TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(chordPosTick).timesig();
 
     static ArticulationMap articulations;
 
@@ -166,7 +168,7 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int 
     renderArticulations(chord, ctx, result[ctx.nominalTimestamp]);
 }
 
-void PlaybackEventsRenderer::renderFixedNoteEvent(const Ms::Note* note, const mpe::timestamp_t actualTimestamp,
+void PlaybackEventsRenderer::renderFixedNoteEvent(const mu::engraving::Note* note, const mpe::timestamp_t actualTimestamp,
                                                   const mpe::duration_t actualDuration,
                                                   const mpe::dynamic_level_t actualDynamicLevel,
                                                   const mpe::ArticulationType persistentArticulationApplied,
@@ -186,7 +188,8 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Ms::Note* note, const mp
     result.emplace_back(buildFixedNoteEvent(note, actualTimestamp, actualDuration, actualDynamicLevel, articulations));
 }
 
-void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, const int tickPositionOffset, mpe::PlaybackEventsMap& result) const
+void PlaybackEventsRenderer::renderRestEvents(const mu::engraving::Rest* rest, const int tickPositionOffset,
+                                              mpe::PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(rest) {
         return;
@@ -202,7 +205,8 @@ void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, const int ti
     result[nominalTimestamp].emplace_back(mpe::RestEvent(nominalTimestamp, nominalDuration, static_cast<voice_layer_idx_t>(rest->voice())));
 }
 
-void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const
+void PlaybackEventsRenderer::renderArticulations(const mu::engraving::Chord* chord, const RenderingContext& ctx,
+                                                 mpe::PlaybackEventList& result) const
 {
     if (renderChordArticulations(chord, ctx, result)) {
         return;
@@ -211,7 +215,7 @@ void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, const R
     renderNoteArticulations(chord, ctx, result);
 }
 
-bool PlaybackEventsRenderer::renderChordArticulations(const Ms::Chord* chord, const RenderingContext& ctx,
+bool PlaybackEventsRenderer::renderChordArticulations(const mu::engraving::Chord* chord, const RenderingContext& ctx,
                                                       mpe::PlaybackEventList& result) const
 {
     for (const auto& pair : ctx.commonArticulations) {
@@ -241,10 +245,10 @@ bool PlaybackEventsRenderer::renderChordArticulations(const Ms::Chord* chord, co
     return false;
 }
 
-void PlaybackEventsRenderer::renderNoteArticulations(const Ms::Chord* chord, const RenderingContext& ctx,
+void PlaybackEventsRenderer::renderNoteArticulations(const mu::engraving::Chord* chord, const RenderingContext& ctx,
                                                      mpe::PlaybackEventList& result) const
 {
-    for (const Ms::Note* note : chord->notes()) {
+    for (const mu::engraving::Note* note : chord->notes()) {
         if (!isNotePlayable(note)) {
             continue;
         }

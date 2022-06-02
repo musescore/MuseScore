@@ -30,7 +30,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_inner.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace Meter {
 bool isSimple(const ReducedFraction& barFraction)       // 2/2, 3/4, 4/4, ...
 {
@@ -416,7 +416,7 @@ collectDurations(const std::map<ReducedFraction, Node>& nodes,
         }
         const auto tupletRatio = findTupletRatio(it1->first, it2->first, tupletsInBar);
         const auto duration = tupletRatio * (it2->first - it1->first);
-        auto list = Ms::toDurationList(duration.fraction(), useDots, 1, printRestRemains);
+        auto list = mu::engraving::toDurationList(duration.fraction(), useDots, 1, printRestRemains);
         for (const auto& dur : list) {
             resultDurations.push_back({ tupletRatio, dur });
         }
@@ -433,7 +433,7 @@ bool badLevelCondition(int startLevelDiff, int endLevelDiff, int tol)
 int noteCount(const ReducedFraction& duration,
               bool useDots)
 {
-    return int(Ms::toDurationList(duration.fraction(), useDots, 1, false).size());
+    return int(mu::engraving::toDurationList(duration.fraction(), useDots, 1, false).size());
 }
 
 bool isLessNoteCount(const ReducedFraction& t1,

@@ -24,7 +24,7 @@
 
 #include "libmscore/musescoreCore.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   QmlPlugin
 //---------------------------------------------------------

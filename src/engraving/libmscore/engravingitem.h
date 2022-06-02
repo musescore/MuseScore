@@ -45,7 +45,7 @@ class Factory;
 class AccessibleItem;
 }
 
-namespace Ms {
+namespace mu::engraving {
 #ifdef Q_OS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
 #else
@@ -254,7 +254,7 @@ public:
 
     EngravingItem& operator=(const EngravingItem&) = delete;
     //@ create a copy of the element
-    Q_INVOKABLE virtual Ms::EngravingItem* clone() const = 0;
+    Q_INVOKABLE virtual mu::engraving::EngravingItem* clone() const = 0;
     virtual EngravingItem* linkedClone();
 
     void deleteLater();
@@ -708,6 +708,6 @@ extern bool elementLessThan(const EngravingItem* const, const EngravingItem* con
 extern void collectElements(void* data, EngravingItem* e);
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::ElementType);
+Q_DECLARE_METATYPE(mu::engraving::ElementType);
 
 #endif

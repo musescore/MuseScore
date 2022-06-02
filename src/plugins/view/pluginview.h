@@ -31,7 +31,7 @@
 #include "modularity/ioc.h"
 #include "io/path.h"
 
-namespace Ms {
+namespace mu::engraving {
 class QmlPlugin;
 }
 
@@ -64,7 +64,7 @@ private:
 
     void destroyView();
 
-    Ms::QmlPlugin* m_qmlPlugin = nullptr;
+    mu::engraving::QmlPlugin* m_qmlPlugin = nullptr;
     QQmlComponent* m_component = nullptr;
     QQuickView* m_view = nullptr;
 };

@@ -28,7 +28,7 @@
 #include "infrastructure/draw/color.h"
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Spanner;
 
 //---------------------------------------------------------

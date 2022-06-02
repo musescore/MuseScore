@@ -31,7 +31,6 @@
 #include "realfn.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
 VerticalGapData::VerticalGapData(MStyle* style, bool first, System* sys, Staff* st, SysStaff* sst, Spacer* nextSpacer, qreal y)
     : _fixedHeight(first), style(style), system(sys), sysStaff(sst), staff(st)

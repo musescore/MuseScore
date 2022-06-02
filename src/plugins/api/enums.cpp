@@ -22,7 +22,7 @@
 
 #include "enums.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   Enum::Enum

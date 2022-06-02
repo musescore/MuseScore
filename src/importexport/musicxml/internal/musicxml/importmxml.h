@@ -28,7 +28,7 @@
 #include "musicxml.h" // for the creditwords definition
 #include "musicxmlsupport.h"
 
-namespace Ms {
+namespace mu::engraving {
 Score::FileError importMusicXMLfromBuffer(Score* score, const QString&, QIODevice* dev);
 } // namespace Ms
 #endif

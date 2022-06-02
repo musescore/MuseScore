@@ -37,8 +37,8 @@ static mu::testing::SuiteEnvironment engraving_se(
 },
     []() {
     LOGI() << "engraving tests suite post init";
-    Ms::MScore::noGui = true;
+    mu::engraving::MScore::noGui = true;
 
-    new Ms::MuseScoreCore();
+    new mu::engraving::MuseScoreCore();
 }
     );

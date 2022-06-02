@@ -26,14 +26,14 @@
 
 using namespace mu::engraving;
 
-void SymbolsMetaParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
+void SymbolsMetaParser::doParse(const mu::engraving::EngravingItem* item, const RenderingContext& ctx,
                                 mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == Ms::ElementType::ARTICULATION) {
+    IF_ASSERT_FAILED(item->type() == mu::engraving::ElementType::ARTICULATION) {
         return;
     }
 
-    const Ms::Articulation* articulationSymbol = Ms::toArticulation(item);
+    const mu::engraving::Articulation* articulationSymbol = mu::engraving::toArticulation(item);
 
     if (!articulationSymbol->playArticulation()) {
         return;
@@ -42,338 +42,338 @@ void SymbolsMetaParser::doParse(const Ms::EngravingItem* item, const RenderingCo
     mpe::ArticulationTypeSet types;
 
     switch (articulationSymbol->symId()) {
-    case Ms::SymId::articAccentAbove:
-    case Ms::SymId::articAccentBelow:
+    case mu::engraving::SymId::articAccentAbove:
+    case mu::engraving::SymId::articAccentBelow:
         types.emplace(mpe::ArticulationType::Accent);
         break;
-    case Ms::SymId::articAccentStaccatoAbove:
-    case Ms::SymId::articAccentStaccatoBelow:
+    case mu::engraving::SymId::articAccentStaccatoAbove:
+    case mu::engraving::SymId::articAccentStaccatoBelow:
         types.emplace(mpe::ArticulationType::Accent);
         types.emplace(mpe::ArticulationType::Staccato);
         break;
-    case Ms::SymId::articLaissezVibrerAbove:
-    case Ms::SymId::articLaissezVibrerBelow:
+    case mu::engraving::SymId::articLaissezVibrerAbove:
+    case mu::engraving::SymId::articLaissezVibrerBelow:
         types.emplace(mpe::ArticulationType::LaissezVibrer);
         break;
-    case Ms::SymId::articMarcatoAbove:
-    case Ms::SymId::articMarcatoBelow:
+    case mu::engraving::SymId::articMarcatoAbove:
+    case mu::engraving::SymId::articMarcatoBelow:
         types.emplace(mpe::ArticulationType::Marcato);
         break;
-    case Ms::SymId::articMarcatoStaccatoAbove:
-    case Ms::SymId::articMarcatoStaccatoBelow:
+    case mu::engraving::SymId::articMarcatoStaccatoAbove:
+    case mu::engraving::SymId::articMarcatoStaccatoBelow:
         types.emplace(mpe::ArticulationType::Marcato);
         types.emplace(mpe::ArticulationType::Staccato);
         break;
-    case Ms::SymId::articMarcatoTenutoAbove:
-    case Ms::SymId::articMarcatoTenutoBelow:
+    case mu::engraving::SymId::articMarcatoTenutoAbove:
+    case mu::engraving::SymId::articMarcatoTenutoBelow:
         types.emplace(mpe::ArticulationType::Marcato);
         types.emplace(mpe::ArticulationType::Tenuto);
         break;
-    case Ms::SymId::articSoftAccentAbove:
-    case Ms::SymId::articSoftAccentBelow:
+    case mu::engraving::SymId::articSoftAccentAbove:
+    case mu::engraving::SymId::articSoftAccentBelow:
         types.emplace(mpe::ArticulationType::SoftAccent);
         break;
-    case Ms::SymId::articSoftAccentStaccatoAbove:
-    case Ms::SymId::articSoftAccentStaccatoBelow:
+    case mu::engraving::SymId::articSoftAccentStaccatoAbove:
+    case mu::engraving::SymId::articSoftAccentStaccatoBelow:
         types.emplace(mpe::ArticulationType::SoftAccent);
         types.emplace(mpe::ArticulationType::Staccato);
         break;
-    case Ms::SymId::articSoftAccentTenutoAbove:
-    case Ms::SymId::articSoftAccentTenutoBelow:
+    case mu::engraving::SymId::articSoftAccentTenutoAbove:
+    case mu::engraving::SymId::articSoftAccentTenutoBelow:
         types.emplace(mpe::ArticulationType::SoftAccent);
         types.emplace(mpe::ArticulationType::Tenuto);
         break;
-    case Ms::SymId::articSoftAccentTenutoStaccatoAbove:
-    case Ms::SymId::articSoftAccentTenutoStaccatoBelow:
+    case mu::engraving::SymId::articSoftAccentTenutoStaccatoAbove:
+    case mu::engraving::SymId::articSoftAccentTenutoStaccatoBelow:
         types.emplace(mpe::ArticulationType::SoftAccent);
         types.emplace(mpe::ArticulationType::Tenuto);
         types.emplace(mpe::ArticulationType::Staccato);
         break;
-    case Ms::SymId::articStaccatissimoAbove:
-    case Ms::SymId::articStaccatissimoBelow:
-    case Ms::SymId::articStaccatissimoStrokeAbove:
-    case Ms::SymId::articStaccatissimoStrokeBelow:
-    case Ms::SymId::articStaccatissimoWedgeAbove:
-    case Ms::SymId::articStaccatissimoWedgeBelow:
+    case mu::engraving::SymId::articStaccatissimoAbove:
+    case mu::engraving::SymId::articStaccatissimoBelow:
+    case mu::engraving::SymId::articStaccatissimoStrokeAbove:
+    case mu::engraving::SymId::articStaccatissimoStrokeBelow:
+    case mu::engraving::SymId::articStaccatissimoWedgeAbove:
+    case mu::engraving::SymId::articStaccatissimoWedgeBelow:
         types.emplace(mpe::ArticulationType::Staccatissimo);
         break;
-    case Ms::SymId::articStaccatoAbove:
-    case Ms::SymId::articStaccatoBelow:
+    case mu::engraving::SymId::articStaccatoAbove:
+    case mu::engraving::SymId::articStaccatoBelow:
         types.emplace(mpe::ArticulationType::Staccato);
         break;
-    case Ms::SymId::articTenutoAbove:
-    case Ms::SymId::articTenutoBelow:
+    case mu::engraving::SymId::articTenutoAbove:
+    case mu::engraving::SymId::articTenutoBelow:
         types.emplace(mpe::ArticulationType::Tenuto);
         break;
-    case Ms::SymId::articTenutoStaccatoAbove:
-    case Ms::SymId::articTenutoStaccatoBelow:
+    case mu::engraving::SymId::articTenutoStaccatoAbove:
+    case mu::engraving::SymId::articTenutoStaccatoBelow:
         types.emplace(mpe::ArticulationType::Tenuto);
         types.emplace(mpe::ArticulationType::Staccato);
         break;
-    case Ms::SymId::articTenutoAccentAbove:
-    case Ms::SymId::articTenutoAccentBelow:
+    case mu::engraving::SymId::articTenutoAccentAbove:
+    case mu::engraving::SymId::articTenutoAccentBelow:
         types.emplace(mpe::ArticulationType::Tenuto);
         types.emplace(mpe::ArticulationType::Accent);
         break;
-    case Ms::SymId::dynamicSforzando:
-    case Ms::SymId::dynamicSforzando1:
-    case Ms::SymId::dynamicSforzandoPianissimo:
-    case Ms::SymId::dynamicSforzandoPiano:
-    case Ms::SymId::dynamicSforzato:
-    case Ms::SymId::dynamicSforzatoFF:
-    case Ms::SymId::dynamicSforzatoPiano:
+    case mu::engraving::SymId::dynamicSforzando:
+    case mu::engraving::SymId::dynamicSforzando1:
+    case mu::engraving::SymId::dynamicSforzandoPianissimo:
+    case mu::engraving::SymId::dynamicSforzandoPiano:
+    case mu::engraving::SymId::dynamicSforzato:
+    case mu::engraving::SymId::dynamicSforzatoFF:
+    case mu::engraving::SymId::dynamicSforzatoPiano:
         types.emplace(mpe::ArticulationType::Subito);
         break;
-    case Ms::SymId::guitarFadeIn:
+    case mu::engraving::SymId::guitarFadeIn:
         types.emplace(mpe::ArticulationType::FadeIn);
         break;
-    case Ms::SymId::guitarVolumeSwell:
+    case mu::engraving::SymId::guitarVolumeSwell:
         types.emplace(mpe::ArticulationType::VolumeSwell);
         break;
-    case Ms::SymId::guitarFadeOut:
+    case mu::engraving::SymId::guitarFadeOut:
         types.emplace(mpe::ArticulationType::FadeOut);
         break;
-    case Ms::SymId::stringsHalfHarmonic:
-    case Ms::SymId::stringsHarmonic:
+    case mu::engraving::SymId::stringsHalfHarmonic:
+    case mu::engraving::SymId::stringsHarmonic:
         types.emplace(mpe::ArticulationType::Harmonic);
         break;
-    case Ms::SymId::stringsMuteOn:
-    case Ms::SymId::elecMute:
-    case Ms::SymId::handbellsMutedMartellato:
-    case Ms::SymId::brassMuteHalfClosed:
-    case Ms::SymId::brassMuteClosed:
-    case Ms::SymId::brassHarmonMuteStemHalfRight:
-    case Ms::SymId::brassHarmonMuteStemHalfLeft:
-    case Ms::SymId::brassHarmonMuteClosed:
+    case mu::engraving::SymId::stringsMuteOn:
+    case mu::engraving::SymId::elecMute:
+    case mu::engraving::SymId::handbellsMutedMartellato:
+    case mu::engraving::SymId::brassMuteHalfClosed:
+    case mu::engraving::SymId::brassMuteClosed:
+    case mu::engraving::SymId::brassHarmonMuteStemHalfRight:
+    case mu::engraving::SymId::brassHarmonMuteStemHalfLeft:
+    case mu::engraving::SymId::brassHarmonMuteClosed:
         types.emplace(mpe::ArticulationType::Mute);
         break;
-    case Ms::SymId::brassHarmonMuteStemOpen:
-    case Ms::SymId::brassMuteOpen:
-    case Ms::SymId::guitarHalfOpenPedal:
-    case Ms::SymId::guitarOpenPedal:
-    case Ms::SymId::vocalMouthOpen:
-    case Ms::SymId::vocalMouthSlightlyOpen:
-    case Ms::SymId::vocalMouthWideOpen:
-    case Ms::SymId::windOpenHole:
-    case Ms::SymId::elecUnmute:
-    case Ms::SymId::stringsMuteOff:
+    case mu::engraving::SymId::brassHarmonMuteStemOpen:
+    case mu::engraving::SymId::brassMuteOpen:
+    case mu::engraving::SymId::guitarHalfOpenPedal:
+    case mu::engraving::SymId::guitarOpenPedal:
+    case mu::engraving::SymId::vocalMouthOpen:
+    case mu::engraving::SymId::vocalMouthSlightlyOpen:
+    case mu::engraving::SymId::vocalMouthWideOpen:
+    case mu::engraving::SymId::windOpenHole:
+    case mu::engraving::SymId::elecUnmute:
+    case mu::engraving::SymId::stringsMuteOff:
         types.emplace(mpe::ArticulationType::Open);
         break;
 
-    case Ms::SymId::pluckedLeftHandPizzicato:
+    case mu::engraving::SymId::pluckedLeftHandPizzicato:
         types.emplace(mpe::ArticulationType::Pizzicato);
         break;
-    case Ms::SymId::pluckedSnapPizzicatoAbove:
-    case Ms::SymId::pluckedSnapPizzicatoBelow:
+    case mu::engraving::SymId::pluckedSnapPizzicatoAbove:
+    case mu::engraving::SymId::pluckedSnapPizzicatoBelow:
         types.emplace(mpe::ArticulationType::SnapPizzicato);
         break;
-    case Ms::SymId::stringsUpBow:
+    case mu::engraving::SymId::stringsUpBow:
         types.emplace(mpe::ArticulationType::UpBow);
         break;
-    case Ms::SymId::stringsDownBow:
+    case mu::engraving::SymId::stringsDownBow:
         types.emplace(mpe::ArticulationType::DownBow);
         break;
-    case Ms::SymId::stringsJeteAbove:
-    case Ms::SymId::stringsJeteBelow:
+    case mu::engraving::SymId::stringsJeteAbove:
+    case mu::engraving::SymId::stringsJeteBelow:
         types.emplace(mpe::ArticulationType::Jete);
         break;
-    case Ms::SymId::noteheadXWhole:
-    case Ms::SymId::noteheadXOrnate:
-    case Ms::SymId::noteheadXBlack:
-    case Ms::SymId::noteheadXDoubleWhole:
-    case Ms::SymId::noteheadWholeWithX:
-    case Ms::SymId::noteheadVoidWithX:
+    case mu::engraving::SymId::noteheadXWhole:
+    case mu::engraving::SymId::noteheadXOrnate:
+    case mu::engraving::SymId::noteheadXBlack:
+    case mu::engraving::SymId::noteheadXDoubleWhole:
+    case mu::engraving::SymId::noteheadWholeWithX:
+    case mu::engraving::SymId::noteheadVoidWithX:
         types.emplace(mpe::ArticulationType::CrossNote);
         break;
-    case Ms::SymId::noteheadCircleSlash:
-    case Ms::SymId::noteheadCircledBlack:
-    case Ms::SymId::noteheadCircledHalf:
-    case Ms::SymId::noteheadCircledBlackLarge:
-    case Ms::SymId::noteheadCircledDoubleWhole:
-    case Ms::SymId::noteheadCircledDoubleWholeLarge:
-    case Ms::SymId::noteheadCircledHalfLarge:
-    case Ms::SymId::noteheadCircledWhole:
-    case Ms::SymId::noteheadCircledWholeLarge:
+    case mu::engraving::SymId::noteheadCircleSlash:
+    case mu::engraving::SymId::noteheadCircledBlack:
+    case mu::engraving::SymId::noteheadCircledHalf:
+    case mu::engraving::SymId::noteheadCircledBlackLarge:
+    case mu::engraving::SymId::noteheadCircledDoubleWhole:
+    case mu::engraving::SymId::noteheadCircledDoubleWholeLarge:
+    case mu::engraving::SymId::noteheadCircledHalfLarge:
+    case mu::engraving::SymId::noteheadCircledWhole:
+    case mu::engraving::SymId::noteheadCircledWholeLarge:
         types.emplace(mpe::ArticulationType::CircleNote);
         break;
-    case Ms::SymId::noteheadDiamondBlack:
-    case Ms::SymId::noteheadDiamondBlackOld:
-    case Ms::SymId::noteheadDiamondBlackWide:
-    case Ms::SymId::noteheadDiamondDoubleWhole:
-    case Ms::SymId::noteheadDiamondHalfWide:
-    case Ms::SymId::noteheadDiamondDoubleWholeOld:
-    case Ms::SymId::noteheadDiamondWhole:
-    case Ms::SymId::noteheadDiamondWholeOld:
-    case Ms::SymId::noteheadDiamondHalf:
-    case Ms::SymId::noteheadDiamondHalfFilled:
-    case Ms::SymId::noteheadDiamondHalfOld:
+    case mu::engraving::SymId::noteheadDiamondBlack:
+    case mu::engraving::SymId::noteheadDiamondBlackOld:
+    case mu::engraving::SymId::noteheadDiamondBlackWide:
+    case mu::engraving::SymId::noteheadDiamondDoubleWhole:
+    case mu::engraving::SymId::noteheadDiamondHalfWide:
+    case mu::engraving::SymId::noteheadDiamondDoubleWholeOld:
+    case mu::engraving::SymId::noteheadDiamondWhole:
+    case mu::engraving::SymId::noteheadDiamondWholeOld:
+    case mu::engraving::SymId::noteheadDiamondHalf:
+    case mu::engraving::SymId::noteheadDiamondHalfFilled:
+    case mu::engraving::SymId::noteheadDiamondHalfOld:
         types.emplace(mpe::ArticulationType::DiamondNote);
         break;
-    case Ms::SymId::noteheadTriangleDownBlack:
-    case Ms::SymId::noteheadTriangleDownDoubleWhole:
-    case Ms::SymId::noteheadTriangleDownHalf:
-    case Ms::SymId::noteheadTriangleDownWhite:
-    case Ms::SymId::noteheadTriangleDownWhole:
-    case Ms::SymId::noteheadTriangleLeftBlack:
-    case Ms::SymId::noteheadTriangleLeftWhite:
-    case Ms::SymId::noteheadTriangleRightBlack:
-    case Ms::SymId::noteheadTriangleRightWhite:
-    case Ms::SymId::noteheadTriangleRoundDownBlack:
-    case Ms::SymId::noteheadTriangleRoundDownWhite:
-    case Ms::SymId::noteheadTriangleUpBlack:
-    case Ms::SymId::noteheadTriangleUpDoubleWhole:
-    case Ms::SymId::noteheadTriangleUpHalf:
-    case Ms::SymId::noteheadTriangleUpRightBlack:
-    case Ms::SymId::noteheadTriangleUpRightWhite:
-    case Ms::SymId::noteheadTriangleUpWhite:
-    case Ms::SymId::noteheadTriangleUpWhole:
+    case mu::engraving::SymId::noteheadTriangleDownBlack:
+    case mu::engraving::SymId::noteheadTriangleDownDoubleWhole:
+    case mu::engraving::SymId::noteheadTriangleDownHalf:
+    case mu::engraving::SymId::noteheadTriangleDownWhite:
+    case mu::engraving::SymId::noteheadTriangleDownWhole:
+    case mu::engraving::SymId::noteheadTriangleLeftBlack:
+    case mu::engraving::SymId::noteheadTriangleLeftWhite:
+    case mu::engraving::SymId::noteheadTriangleRightBlack:
+    case mu::engraving::SymId::noteheadTriangleRightWhite:
+    case mu::engraving::SymId::noteheadTriangleRoundDownBlack:
+    case mu::engraving::SymId::noteheadTriangleRoundDownWhite:
+    case mu::engraving::SymId::noteheadTriangleUpBlack:
+    case mu::engraving::SymId::noteheadTriangleUpDoubleWhole:
+    case mu::engraving::SymId::noteheadTriangleUpHalf:
+    case mu::engraving::SymId::noteheadTriangleUpRightBlack:
+    case mu::engraving::SymId::noteheadTriangleUpRightWhite:
+    case mu::engraving::SymId::noteheadTriangleUpWhite:
+    case mu::engraving::SymId::noteheadTriangleUpWhole:
         types.emplace(mpe::ArticulationType::TriangleNote);
         break;
-    case Ms::SymId::brassScoop:
+    case mu::engraving::SymId::brassScoop:
         types.emplace(mpe::ArticulationType::Scoop);
         break;
-    case Ms::SymId::brassPlop:
+    case mu::engraving::SymId::brassPlop:
         types.emplace(mpe::ArticulationType::Plop);
         break;
-    case Ms::SymId::brassFallLipLong:
-    case Ms::SymId::brassFallLipMedium:
-    case Ms::SymId::brassFallLipShort:
-    case Ms::SymId::brassFallRoughLong:
-    case Ms::SymId::brassFallRoughMedium:
-    case Ms::SymId::brassFallRoughShort:
+    case mu::engraving::SymId::brassFallLipLong:
+    case mu::engraving::SymId::brassFallLipMedium:
+    case mu::engraving::SymId::brassFallLipShort:
+    case mu::engraving::SymId::brassFallRoughLong:
+    case mu::engraving::SymId::brassFallRoughMedium:
+    case mu::engraving::SymId::brassFallRoughShort:
         types.emplace(mpe::ArticulationType::QuickFall);
         break;
-    case Ms::SymId::brassFallSmoothLong:
-    case Ms::SymId::brassFallSmoothMedium:
-    case Ms::SymId::brassFallSmoothShort:
+    case mu::engraving::SymId::brassFallSmoothLong:
+    case mu::engraving::SymId::brassFallSmoothMedium:
+    case mu::engraving::SymId::brassFallSmoothShort:
         types.emplace(mpe::ArticulationType::Fall);
         break;
-    case Ms::SymId::brassDoitLong:
-    case Ms::SymId::brassDoitMedium:
-    case Ms::SymId::brassDoitShort:
+    case mu::engraving::SymId::brassDoitLong:
+    case mu::engraving::SymId::brassDoitMedium:
+    case mu::engraving::SymId::brassDoitShort:
         types.emplace(mpe::ArticulationType::Doit);
         break;
-    case Ms::SymId::brassBend:
+    case mu::engraving::SymId::brassBend:
         types.emplace(mpe::ArticulationType::Bend);
         break;
-    case Ms::SymId::dynamicCrescendoHairpin:
+    case mu::engraving::SymId::dynamicCrescendoHairpin:
         types.emplace(mpe::ArticulationType::Crescendo);
         break;
-    case Ms::SymId::dynamicDiminuendoHairpin:
+    case mu::engraving::SymId::dynamicDiminuendoHairpin:
         types.emplace(mpe::ArticulationType::Decrescendo);
         break;
-    case Ms::SymId::ornamentUpPrall:
+    case mu::engraving::SymId::ornamentUpPrall:
         types.emplace(mpe::ArticulationType::UpPrall);
         break;
-    case Ms::SymId::ornamentPrallDown:
+    case mu::engraving::SymId::ornamentPrallDown:
         types.emplace(mpe::ArticulationType::PrallDown);
         break;
-    case Ms::SymId::ornamentPrallUp:
+    case mu::engraving::SymId::ornamentPrallUp:
         types.emplace(mpe::ArticulationType::PrallUp);
         break;
-    case Ms::SymId::ornamentLinePrall:
+    case mu::engraving::SymId::ornamentLinePrall:
         types.emplace(mpe::ArticulationType::LinePrall);
         break;
-    case Ms::SymId::ornamentPrallMordent:
+    case mu::engraving::SymId::ornamentPrallMordent:
         types.emplace(mpe::ArticulationType::PrallMordent);
         break;
-    case Ms::SymId::ornamentUpMordent:
+    case mu::engraving::SymId::ornamentUpMordent:
         types.emplace(mpe::ArticulationType::UpMordent);
         break;
-    case Ms::SymId::ornamentMordent:
+    case mu::engraving::SymId::ornamentMordent:
         types.emplace(mpe::ArticulationType::LowerMordent);
         break;
-    case Ms::SymId::ornamentDownMordent:
+    case mu::engraving::SymId::ornamentDownMordent:
         types.emplace(mpe::ArticulationType::DownMordent);
         break;
-    case Ms::SymId::ornamentTurn:
-    case Ms::SymId::brassJazzTurn:
+    case mu::engraving::SymId::ornamentTurn:
+    case mu::engraving::SymId::brassJazzTurn:
         types.emplace(mpe::ArticulationType::Turn);
         break;
-    case Ms::SymId::ornamentTurnInverted:
-    case Ms::SymId::ornamentTurnSlash:
+    case mu::engraving::SymId::ornamentTurnInverted:
+    case mu::engraving::SymId::ornamentTurnSlash:
         types.emplace(mpe::ArticulationType::InvertedTurn);
         break;
-    case Ms::SymId::ornamentTrill:
-        if (articulationSymbol->ornamentStyle() == Ms::OrnamentStyle::DEFAULT) {
+    case mu::engraving::SymId::ornamentTrill:
+        if (articulationSymbol->ornamentStyle() == mu::engraving::OrnamentStyle::DEFAULT) {
             types.emplace(mpe::ArticulationType::Trill);
         } else {
             types.emplace(mpe::ArticulationType::TrillBaroque);
         }
         break;
-    case Ms::SymId::ornamentShortTrill:
+    case mu::engraving::SymId::ornamentShortTrill:
         types.emplace(mpe::ArticulationType::UpperMordent);
         break;
-    case Ms::SymId::ornamentTremblement:
-    case Ms::SymId::ornamentTremblementCouperin:
+    case mu::engraving::SymId::ornamentTremblement:
+    case mu::engraving::SymId::ornamentTremblementCouperin:
         types.emplace(mpe::ArticulationType::Tremblement);
         break;
-    case Ms::SymId::graceNoteAcciaccaturaStemDown:
-    case Ms::SymId::graceNoteAcciaccaturaStemUp:
-    case Ms::SymId::graceNoteSlashStemDown:
-    case Ms::SymId::graceNoteSlashStemUp:
+    case mu::engraving::SymId::graceNoteAcciaccaturaStemDown:
+    case mu::engraving::SymId::graceNoteAcciaccaturaStemUp:
+    case mu::engraving::SymId::graceNoteSlashStemDown:
+    case mu::engraving::SymId::graceNoteSlashStemUp:
         types.emplace(mpe::ArticulationType::Acciaccatura);
         break;
-    case Ms::SymId::graceNoteAppoggiaturaStemDown:
-    case Ms::SymId::graceNoteAppoggiaturaStemUp:
+    case mu::engraving::SymId::graceNoteAppoggiaturaStemDown:
+    case mu::engraving::SymId::graceNoteAppoggiaturaStemUp:
         types.emplace(mpe::ArticulationType::PreAppoggiatura);
         break;
-    case Ms::SymId::glissandoUp:
-    case Ms::SymId::glissandoDown:
+    case mu::engraving::SymId::glissandoUp:
+    case mu::engraving::SymId::glissandoDown:
         types.emplace(mpe::ArticulationType::DiscreteGlissando);
         break;
-    case Ms::SymId::wiggleArpeggiatoDown:
-    case Ms::SymId::wiggleArpeggiatoDownArrow:
+    case mu::engraving::SymId::wiggleArpeggiatoDown:
+    case mu::engraving::SymId::wiggleArpeggiatoDownArrow:
         types.emplace(mpe::ArticulationType::ArpeggioDown);
         break;
-    case Ms::SymId::wiggleArpeggiatoUp:
-    case Ms::SymId::wiggleArpeggiatoUpArrow:
+    case mu::engraving::SymId::wiggleArpeggiatoUp:
+    case mu::engraving::SymId::wiggleArpeggiatoUpArrow:
         types.emplace(mpe::ArticulationType::ArpeggioUp);
         break;
-    case Ms::SymId::wiggleArpeggiatoDownSwash:
+    case mu::engraving::SymId::wiggleArpeggiatoDownSwash:
         types.emplace(mpe::ArticulationType::ArpeggioStraightDown);
         break;
-    case Ms::SymId::wiggleArpeggiatoUpSwash:
+    case mu::engraving::SymId::wiggleArpeggiatoUpSwash:
         types.emplace(mpe::ArticulationType::ArpeggioStraightUp);
         break;
-    case Ms::SymId::wiggleVibratoLargeFaster:
-    case Ms::SymId::wiggleVibratoLargeFasterStill:
-    case Ms::SymId::wiggleVibratoLargeFastest:
-    case Ms::SymId::wiggleVibratoLargeSlow:
-    case Ms::SymId::wiggleVibratoLargeSlower:
-    case Ms::SymId::wiggleVibratoLargeSlowest:
-    case Ms::SymId::wiggleVibratoLargestFast:
-    case Ms::SymId::wiggleVibratoLargestFaster:
-    case Ms::SymId::wiggleVibratoLargestFasterStill:
-    case Ms::SymId::wiggleVibratoLargestFastest:
-    case Ms::SymId::wiggleVibratoLargestSlow:
-    case Ms::SymId::wiggleVibratoLargestSlowest:
-    case Ms::SymId::wiggleVibratoMediumFast:
-    case Ms::SymId::wiggleVibratoMediumFaster:
-    case Ms::SymId::wiggleVibratoMediumFasterStill:
-    case Ms::SymId::wiggleVibratoMediumFastest:
-    case Ms::SymId::wiggleVibratoMediumSlow:
-    case Ms::SymId::wiggleVibratoMediumSlowest:
-    case Ms::SymId::wiggleVibratoSmallFast:
-    case Ms::SymId::wiggleVibratoSmallFaster:
-    case Ms::SymId::wiggleVibratoSmallFasterStill:
-    case Ms::SymId::wiggleVibratoSmallFastest:
-    case Ms::SymId::wiggleVibratoSmallSlow:
-    case Ms::SymId::wiggleVibratoSmallSlower:
-    case Ms::SymId::wiggleVibratoSmallSlowest:
-    case Ms::SymId::wiggleVibratoSmallestFast:
-    case Ms::SymId::wiggleVibratoSmallestFaster:
-    case Ms::SymId::wiggleVibratoSmallestFasterStill:
-    case Ms::SymId::wiggleVibratoSmallestFastest:
-    case Ms::SymId::wiggleVibratoSmallestSlow:
-    case Ms::SymId::wiggleVibratoSmallestSlower:
-    case Ms::SymId::wiggleVibratoSmallestSlowest:
-    case Ms::SymId::wiggleVibratoStart:
-    case Ms::SymId::wiggleVibratoLargeFast:
-    case Ms::SymId::wiggleVibrato:
+    case mu::engraving::SymId::wiggleVibratoLargeFaster:
+    case mu::engraving::SymId::wiggleVibratoLargeFasterStill:
+    case mu::engraving::SymId::wiggleVibratoLargeFastest:
+    case mu::engraving::SymId::wiggleVibratoLargeSlow:
+    case mu::engraving::SymId::wiggleVibratoLargeSlower:
+    case mu::engraving::SymId::wiggleVibratoLargeSlowest:
+    case mu::engraving::SymId::wiggleVibratoLargestFast:
+    case mu::engraving::SymId::wiggleVibratoLargestFaster:
+    case mu::engraving::SymId::wiggleVibratoLargestFasterStill:
+    case mu::engraving::SymId::wiggleVibratoLargestFastest:
+    case mu::engraving::SymId::wiggleVibratoLargestSlow:
+    case mu::engraving::SymId::wiggleVibratoLargestSlowest:
+    case mu::engraving::SymId::wiggleVibratoMediumFast:
+    case mu::engraving::SymId::wiggleVibratoMediumFaster:
+    case mu::engraving::SymId::wiggleVibratoMediumFasterStill:
+    case mu::engraving::SymId::wiggleVibratoMediumFastest:
+    case mu::engraving::SymId::wiggleVibratoMediumSlow:
+    case mu::engraving::SymId::wiggleVibratoMediumSlowest:
+    case mu::engraving::SymId::wiggleVibratoSmallFast:
+    case mu::engraving::SymId::wiggleVibratoSmallFaster:
+    case mu::engraving::SymId::wiggleVibratoSmallFasterStill:
+    case mu::engraving::SymId::wiggleVibratoSmallFastest:
+    case mu::engraving::SymId::wiggleVibratoSmallSlow:
+    case mu::engraving::SymId::wiggleVibratoSmallSlower:
+    case mu::engraving::SymId::wiggleVibratoSmallSlowest:
+    case mu::engraving::SymId::wiggleVibratoSmallestFast:
+    case mu::engraving::SymId::wiggleVibratoSmallestFaster:
+    case mu::engraving::SymId::wiggleVibratoSmallestFasterStill:
+    case mu::engraving::SymId::wiggleVibratoSmallestFastest:
+    case mu::engraving::SymId::wiggleVibratoSmallestSlow:
+    case mu::engraving::SymId::wiggleVibratoSmallestSlower:
+    case mu::engraving::SymId::wiggleVibratoSmallestSlowest:
+    case mu::engraving::SymId::wiggleVibratoStart:
+    case mu::engraving::SymId::wiggleVibratoLargeFast:
+    case mu::engraving::SymId::wiggleVibrato:
         types.emplace(mpe::ArticulationType::Vibrato);
         break;
-    case Ms::SymId::wiggleVibratoWide:
+    case mu::engraving::SymId::wiggleVibratoWide:
         types.emplace(mpe::ArticulationType::WideVibrato);
         break;
     default:

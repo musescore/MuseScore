@@ -29,11 +29,11 @@
 
 using namespace mu::engraving;
 using namespace mu::accessibility;
-using namespace Ms;
+using namespace mu::engraving;
 
 bool AccessibleItem::enabled = true;
 
-AccessibleItem::AccessibleItem(Ms::EngravingItem* e, Role role)
+AccessibleItem::AccessibleItem(mu::engraving::EngravingItem* e, Role role)
     : m_element(e), m_role(role)
 {
 }
@@ -53,7 +53,7 @@ AccessibleItem::~AccessibleItem()
     m_element = nullptr;
 }
 
-AccessibleItem* AccessibleItem::clone(Ms::EngravingItem* e) const
+AccessibleItem* AccessibleItem::clone(mu::engraving::EngravingItem* e) const
 {
     return new AccessibleItem(e, m_role);
 }
@@ -78,7 +78,7 @@ AccessibleRoot* AccessibleItem::accessibleRoot() const
         return nullptr;
     }
 
-    Ms::Score* score = m_element->score();
+    mu::engraving::Score* score = m_element->score();
     if (!score) {
         return nullptr;
     }
@@ -87,7 +87,7 @@ AccessibleRoot* AccessibleItem::accessibleRoot() const
     return dynamic_cast<AccessibleRoot*>(rootItem->accessible());
 }
 
-const Ms::EngravingItem* AccessibleItem::element() const
+const mu::engraving::EngravingItem* AccessibleItem::element() const
 {
     return m_element;
 }
@@ -104,7 +104,7 @@ void AccessibleItem::notifyAboutFocus(bool focused)
 
 const IAccessible* AccessibleItem::accessibleParent() const
 {
-    Ms::EngravingObject* p = m_element->parent();
+    mu::engraving::EngravingObject* p = m_element->parent();
     if (!p || !p->isEngravingItem()) {
         return nullptr;
     }
@@ -118,7 +118,7 @@ size_t AccessibleItem::accessibleChildCount() const
     size_t count = 0;
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
-            AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
+            AccessibleItem* access = mu::engraving::toEngravingItem(obj)->accessible();
             if (access && access->registered()) {
                 ++count;
             }
@@ -133,7 +133,7 @@ const IAccessible* AccessibleItem::accessibleChild(size_t i) const
     size_t count = 0;
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
-            AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
+            AccessibleItem* access = mu::engraving::toEngravingItem(obj)->accessible();
             if (access && access->registered()) {
                 if (count == i) {
                     return access;
@@ -194,9 +194,9 @@ QVariant AccessibleItem::accessibleValueStepSize() const
 
 void AccessibleItem::accessibleSelection(int selectionIndex, int* startOffset, int* endOffset) const
 {
-    Ms::TextCursor* textCursor = this->textCursor();
+    mu::engraving::TextCursor* textCursor = this->textCursor();
     if (selectionIndex == 0 && textCursor && textCursor->hasSelection()) {
-        Ms::TextCursor::Range selectionRange = textCursor->selectionRange();
+        mu::engraving::TextCursor::Range selectionRange = textCursor->selectionRange();
         *startOffset = selectionRange.startPosition;
         *endOffset = selectionRange.endPosition;
     } else {
@@ -207,7 +207,7 @@ void AccessibleItem::accessibleSelection(int selectionIndex, int* startOffset, i
 
 int AccessibleItem::accessibleSelectionCount() const
 {
-    Ms::TextCursor* textCursor = this->textCursor();
+    mu::engraving::TextCursor* textCursor = this->textCursor();
     if (!textCursor) {
         return 0;
     }
@@ -217,7 +217,7 @@ int AccessibleItem::accessibleSelectionCount() const
 
 int AccessibleItem::accessibleCursorPosition() const
 {
-    Ms::TextCursor* textCursor = this->textCursor();
+    mu::engraving::TextCursor* textCursor = this->textCursor();
     if (!textCursor) {
         return 0;
     }
@@ -231,7 +231,7 @@ QString AccessibleItem::accessibleText(int startOffset, int endOffset) const
         return QString();
     }
 
-    Ms::TextCursor* textCursor = new Ms::TextCursor(Ms::toTextBase(m_element));
+    mu::engraving::TextCursor* textCursor = new mu::engraving::TextCursor(mu::engraving::toTextBase(m_element));
     auto startCoord = textCursor->positionToLocalCoord(startOffset);
     if (startCoord.first == mu::nidx || startCoord.second == mu::nidx) {
         return QString();
@@ -239,7 +239,8 @@ QString AccessibleItem::accessibleText(int startOffset, int endOffset) const
 
     textCursor->setRow(startCoord.first);
     textCursor->setColumn(startCoord.second);
-    textCursor->movePosition(Ms::TextCursor::MoveOperation::Right, Ms::TextCursor::MoveMode::KeepAnchor, endOffset - startOffset);
+    textCursor->movePosition(mu::engraving::TextCursor::MoveOperation::Right, mu::engraving::TextCursor::MoveMode::KeepAnchor,
+                             endOffset - startOffset);
 
     textCursor->setSelectLine(startCoord.first);
     textCursor->setSelectColumn(startCoord.second);
@@ -258,7 +259,7 @@ QString AccessibleItem::accessibleTextAtOffset(int offset, TextBoundaryType boun
 
     QString result;
 
-    Ms::TextCursor* textCursor = new Ms::TextCursor(Ms::toTextBase(m_element));
+    mu::engraving::TextCursor* textCursor = new mu::engraving::TextCursor(mu::engraving::toTextBase(m_element));
     auto startCoord = textCursor->positionToLocalCoord(offset);
     if (startCoord.first == mu::nidx || startCoord.second == mu::nidx) {
         return QString();
@@ -270,21 +271,21 @@ QString AccessibleItem::accessibleTextAtOffset(int offset, TextBoundaryType boun
     switch (boundaryType) {
     case CharBoundary: {
         *startOffset = textCursor->currentPosition();
-        textCursor->movePosition(Ms::TextCursor::MoveOperation::Right, Ms::TextCursor::MoveMode::KeepAnchor);
+        textCursor->movePosition(mu::engraving::TextCursor::MoveOperation::Right, mu::engraving::TextCursor::MoveMode::KeepAnchor);
         *endOffset = textCursor->currentPosition();
         break;
     }
     case WordBoundary: {
-        textCursor->movePosition(Ms::TextCursor::MoveOperation::WordLeft, Ms::TextCursor::MoveMode::MoveAnchor);
+        textCursor->movePosition(mu::engraving::TextCursor::MoveOperation::WordLeft, mu::engraving::TextCursor::MoveMode::MoveAnchor);
         *startOffset = textCursor->currentPosition();
-        textCursor->movePosition(Ms::TextCursor::MoveOperation::NextWord, Ms::TextCursor::MoveMode::KeepAnchor);
+        textCursor->movePosition(mu::engraving::TextCursor::MoveOperation::NextWord, mu::engraving::TextCursor::MoveMode::KeepAnchor);
         *endOffset = textCursor->currentPosition();
         break;
     }
     case LineBoundary: {
-        textCursor->movePosition(Ms::TextCursor::MoveOperation::StartOfLine, Ms::TextCursor::MoveMode::MoveAnchor);
+        textCursor->movePosition(mu::engraving::TextCursor::MoveOperation::StartOfLine, mu::engraving::TextCursor::MoveMode::MoveAnchor);
         *startOffset = textCursor->currentPosition();
-        textCursor->movePosition(Ms::TextCursor::MoveOperation::EndOfLine, Ms::TextCursor::MoveMode::KeepAnchor);
+        textCursor->movePosition(mu::engraving::TextCursor::MoveOperation::EndOfLine, mu::engraving::TextCursor::MoveMode::KeepAnchor);
         *endOffset = textCursor->currentPosition();
         break;
     }
@@ -308,7 +309,7 @@ int AccessibleItem::accessibleCharacterCount() const
         return 0;
     }
 
-    Ms::TextBase* text = Ms::toTextBase(m_element);
+    mu::engraving::TextBase* text = mu::engraving::toTextBase(m_element);
     return text->plainText().length();
 }
 
@@ -374,6 +375,6 @@ TextCursor* AccessibleItem::textCursor() const
         return nullptr;
     }
 
-    Ms::TextBase* text = Ms::toTextBase(m_element);
+    mu::engraving::TextBase* text = mu::engraving::toTextBase(m_element);
     return text ? text->cursor() : nullptr;
 }

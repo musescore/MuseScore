@@ -36,7 +36,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   fingeringStyle
 //---------------------------------------------------------

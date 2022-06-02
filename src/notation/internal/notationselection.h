@@ -26,7 +26,7 @@
 
 #include "igetscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -57,7 +57,7 @@ public:
     void onElementHit(EngravingItem*);
 
 private:
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
     EngravingItem* m_lastElementHit;
 
     IGetScore* m_getScore = nullptr;

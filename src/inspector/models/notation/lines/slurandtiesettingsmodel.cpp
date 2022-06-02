@@ -39,12 +39,12 @@ SlurAndTieSettingsModel::SlurAndTieSettingsModel(QObject* parent, IElementReposi
 {
     if (elementType == ElementType::Slur) {
         setModelType(InspectorModelType::TYPE_SLUR);
-        setElementType(Ms::ElementType::SLUR);
+        setElementType(mu::engraving::ElementType::SLUR);
         setTitle(qtrc("inspector", "Slur"));
         setIcon(IconCode::NOTE_SLUR);
     } else {
         setModelType(InspectorModelType::TYPE_TIE);
-        setElementType(Ms::ElementType::TIE);
+        setElementType(mu::engraving::ElementType::TIE);
         setTitle(qtrc("inspector", "Tie"));
         setIcon(IconCode::NOTE_TIE);
     }
@@ -76,8 +76,8 @@ QVariantList SlurAndTieSettingsModel::possibleLineStyles() const
 
 void SlurAndTieSettingsModel::createProperties()
 {
-    m_lineStyle = buildPropertyItem(Ms::Pid::SLUR_STYLE_TYPE);
-    m_direction = buildPropertyItem(Ms::Pid::SLUR_DIRECTION);
+    m_lineStyle = buildPropertyItem(mu::engraving::Pid::SLUR_STYLE_TYPE);
+    m_direction = buildPropertyItem(mu::engraving::Pid::SLUR_DIRECTION);
 }
 
 void SlurAndTieSettingsModel::loadProperties()

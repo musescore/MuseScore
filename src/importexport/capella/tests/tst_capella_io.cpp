@@ -26,7 +26,7 @@
 
 static const QString CAPELLA_DIR("data/");
 
-using namespace Ms;
+using namespace mu::engraving;
 
 //---------------------------------------------------------
 //   TestCapellaIO

@@ -47,17 +47,17 @@ mu::Ret NotationMidiWriter::write(INotationPtr notation, io::Device& destination
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Ms::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = notation->elements()->msScore();
 
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Ms::ExportMidi exportMidi(score);
+    mu::engraving::ExportMidi exportMidi(score);
 
     bool isPlayRepeatsEnabled = notationConfiguration()->isPlayRepeatsEnabled();
     bool isMidiExportRpns = midiImportExportConfiguration()->isMidiExportRpns();
-    Ms::SynthesizerState synthesizerState = score->synthesizerState();
+    mu::engraving::SynthesizerState synthesizerState = score->synthesizerState();
 
     bool ok = exportMidi.write(&destinationDevice, isPlayRepeatsEnabled, isMidiExportRpns, synthesizerState);
 

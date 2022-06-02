@@ -36,7 +36,7 @@ namespace mu::engraving {
 class LayoutContext;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class Staff;
 class StaffLines;
 class Clef;
@@ -125,7 +125,7 @@ class System final : public EngravingItem
 
     size_t getBracketsColumnsCount();
     void setBracketsXPosition(const qreal xOffset);
-    Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, size_t column, staff_idx_t staffIdx,
+    Bracket* createBracket(const mu::engraving::LayoutContext& ctx, mu::engraving::BracketItem* bi, size_t column, staff_idx_t staffIdx,
                            std::vector<Bracket*>& bl, Measure* measure);
 
     qreal systemNamesWidth();

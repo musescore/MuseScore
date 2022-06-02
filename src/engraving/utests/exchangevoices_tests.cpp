@@ -33,7 +33,6 @@
 static const QString EXCHVOICES_DATA_DIR("exchangevoices_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class ExchangevoicesTests : public ::testing::Test
 {
@@ -97,7 +96,7 @@ TEST_F(ExchangevoicesTests, undoChangeVoice)
     for (Segment* s = score->firstSegment(SegmentType::ChordRest); s; s = s->next1()) {
         ChordRest* cr = static_cast<ChordRest*>(s->element(0));
         if (cr && cr->type() == ElementType::CHORD) {
-            Ms::Chord* c = static_cast<Ms::Chord*>(cr);
+            mu::engraving::Chord* c = static_cast<mu::engraving::Chord*>(cr);
             score->select(c->downNote(), SelectType::ADD);
         }
     }

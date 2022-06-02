@@ -25,7 +25,7 @@
 
 #include "measurenumberbase.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   MeasureNumber
 //---------------------------------------------------------

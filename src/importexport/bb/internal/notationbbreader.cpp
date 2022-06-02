@@ -24,14 +24,14 @@
 #include "libmscore/masterscore.h"
 #include "engraving/engravingerrors.h"
 
-namespace Ms {
+namespace mu::engraving {
 extern Score::FileError importBB(MasterScore*, const QString& name);
 }
 
 using namespace mu::iex::bb;
 
-mu::Ret NotationBBReader::read(Ms::MasterScore* score, const io::path_t& path, const Options&)
+mu::Ret NotationBBReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
 {
-    Ms::Score::FileError err = Ms::importBB(score, path.toQString());
+    mu::engraving::Score::FileError err = mu::engraving::importBB(score, path.toQString());
     return mu::engraving::scoreFileErrorToRet(err, path);
 }

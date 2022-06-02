@@ -31,7 +31,6 @@
 static const QString ALL_ELEMENTS_DATA_DIR("all_elements_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   TestTreeModel

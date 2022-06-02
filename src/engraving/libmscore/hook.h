@@ -25,7 +25,7 @@
 
 #include "symbol.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 
 class Hook final : public Symbol

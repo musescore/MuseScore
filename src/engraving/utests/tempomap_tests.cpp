@@ -46,7 +46,7 @@ protected:
 TEST_F(TempoMapTests, DEFAULT_TEMPO)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "default_tempo/default_tempo.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "default_tempo/default_tempo.mscx");
 
     ASSERT_TRUE(score);
 
@@ -54,7 +54,7 @@ TEST_F(TempoMapTests, DEFAULT_TEMPO)
     BeatsPerSecond expectedTempo = Constants::defaultTempo;
 
     // [WHEN] We request score's tempomap it should contain only 1 value, which is our expected tempo
-    const Ms::TempoMap* tempoMap = score->tempomap();
+    const mu::engraving::TempoMap* tempoMap = score->tempomap();
     EXPECT_EQ(tempoMap->size(), 1);
 
     // [THEN] Applied tempo matches our expectations
@@ -71,7 +71,7 @@ TEST_F(TempoMapTests, DEFAULT_TEMPO)
 TEST_F(TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "custom_tempo_80_bpm/custom_tempo_80_bpm.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "custom_tempo_80_bpm/custom_tempo_80_bpm.mscx");
 
     ASSERT_TRUE(score);
 
@@ -79,7 +79,7 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
     BeatsPerSecond expectedTempo = BeatsPerSecond::fromBPM(BeatsPerMinute(80.f));
 
     // [WHEN] We request score's tempomap it should contain only 1 value, which is our expected tempo
-    const Ms::TempoMap* tempoMap = score->tempomap();
+    const mu::engraving::TempoMap* tempoMap = score->tempomap();
     EXPECT_EQ(tempoMap->size(), 1);
 
     // [THEN] Applied tempo matches with our expectations
@@ -96,7 +96,8 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
 TEST_F(TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 80 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "absolute_tempo_80_to_120_bpm/absolute_tempo_80_to_120_bpm.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        TEMPOMAP_TEST_FILES_DIR + "absolute_tempo_80_to_120_bpm/absolute_tempo_80_to_120_bpm.mscx");
 
     ASSERT_TRUE(score);
 
@@ -107,7 +108,7 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
     };
 
     // [WHEN] We request score's tempomap its size matches with our expectations
-    const Ms::TempoMap* tempoMap = score->tempomap();
+    const mu::engraving::TempoMap* tempoMap = score->tempomap();
     EXPECT_EQ(tempoMap->size(), expectedTempoMap.size());
 
     // [THEN] Applied tempo matches with our expectations
@@ -125,7 +126,7 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
 TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score
+    mu::engraving::Score* score
         = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "gradual_tempo_change_accelerando/gradual_tempo_change_accelerando.mscx");
 
     ASSERT_TRUE(score);
@@ -137,7 +138,7 @@ TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
     };
 
     // [WHEN] We request score's tempomap its size matches with our expectations
-    const Ms::TempoMap* tempoMap = score->tempomap();
+    const mu::engraving::TempoMap* tempoMap = score->tempomap();
     EXPECT_FALSE(tempoMap->empty());
 
     // [THEN] Applied tempo matches with our expectations
@@ -155,7 +156,7 @@ TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
 TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_RALLENTANDO)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score
+    mu::engraving::Score* score
         = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "gradual_tempo_change_rallentando/gradual_tempo_change_rallentando.mscx");
 
     ASSERT_TRUE(score);
@@ -167,7 +168,7 @@ TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_RALLENTANDO)
     };
 
     // [WHEN] We request score's tempomap its size matches with our expectations
-    const Ms::TempoMap* tempoMap = score->tempomap();
+    const mu::engraving::TempoMap* tempoMap = score->tempomap();
     EXPECT_FALSE(tempoMap->empty());
 
     // [THEN] Applied tempo matches with our expectations

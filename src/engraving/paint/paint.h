@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 }
 
@@ -37,8 +37,8 @@ namespace mu::engraving {
 class Paint
 {
 public:
-    static void paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* element);
-    static void paintElements(mu::draw::Painter& painter, const std::vector<Ms::EngravingItem*>& elements, bool isPrinting);
+    static void paintElement(mu::draw::Painter& painter, const mu::engraving::EngravingItem* element);
+    static void paintElements(mu::draw::Painter& painter, const std::vector<mu::engraving::EngravingItem*>& elements, bool isPrinting);
 };
 }
 

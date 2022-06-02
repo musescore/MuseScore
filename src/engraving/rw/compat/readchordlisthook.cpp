@@ -28,9 +28,9 @@
 #include "log.h"
 
 using namespace mu::engraving::compat;
-using namespace Ms;
+using namespace mu::engraving;
 
-ReadChordListHook::ReadChordListHook(Ms::Score* score)
+ReadChordListHook::ReadChordListHook(mu::engraving::Score* score)
     : m_score(score)
 {
     if (m_score) {
@@ -38,7 +38,7 @@ ReadChordListHook::ReadChordListHook(Ms::Score* score)
     }
 }
 
-void ReadChordListHook::read(Ms::XmlReader& e)
+void ReadChordListHook::read(mu::engraving::XmlReader& e)
 {
     if (!m_score) {
         return;

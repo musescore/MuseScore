@@ -40,7 +40,7 @@ using GroupNodes = std::vector<GroupNode>;
 }
 
 //! NOTE compat
-namespace Ms {
+namespace mu::engraving {
 using GroupNode = mu::engraving::GroupNode;
 using GroupNodes = mu::engraving::GroupNodes;
 }

@@ -58,7 +58,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace Ms;
+
 //---------------------------------------------------------
 //   CmdStateLocker
 //---------------------------------------------------------
@@ -72,7 +72,7 @@ public:
     ~CmdStateLocker() { m_score->cmdState().unlock(); }
 };
 
-Layout::Layout(Ms::Score* score)
+Layout::Layout(mu::engraving::Score* score)
     : m_score(score)
 {
 }

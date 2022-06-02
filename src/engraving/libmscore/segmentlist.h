@@ -25,7 +25,7 @@
 
 #include "segment.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Segment;
 
 //---------------------------------------------------------

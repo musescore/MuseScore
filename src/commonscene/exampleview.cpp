@@ -42,7 +42,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 ExampleView::ExampleView(QWidget* parent)
     : QFrame(parent)
 {
@@ -228,7 +228,7 @@ void ExampleView::dragLeaveEvent(QDragLeaveEvent*)
 struct MoveContext
 {
     PointF pos;
-    Ms::Score* score = nullptr;
+    mu::engraving::Score* score = nullptr;
 };
 
 static void moveElement(void* data, EngravingItem* e)

@@ -32,7 +32,7 @@
 #include "project/iprojectcreator.h"
 #include "project/inotationwritersregister.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -85,7 +85,7 @@ private:
                                       const std::string& scoreFileName);
     static Ret doExportScoreTranspose(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
 
-    static RetVal<QByteArray> scorePartJson(Ms::Score* score, const std::string& fileName);
+    static RetVal<QByteArray> scorePartJson(mu::engraving::Score* score, const std::string& fileName);
 
     static RetVal<notation::TransposeOptions> parseTransposeOptions(const std::string& optionsJson);
     static Ret applyTranspose(const notation::INotationPtr notation, const std::string& optionsJson);

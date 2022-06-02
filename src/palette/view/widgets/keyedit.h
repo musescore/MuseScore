@@ -34,7 +34,7 @@ class PaletteWidget;
 class PaletteScrollArea;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class KeySig;
 class KeyEditor : public QWidget, Ui::KeyEdit
 {

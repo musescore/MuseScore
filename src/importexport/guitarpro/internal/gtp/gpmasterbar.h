@@ -3,7 +3,7 @@
 
 #include "gpbar.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GPMasterBar
 {
 public:

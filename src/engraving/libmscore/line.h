@@ -26,7 +26,7 @@
 #include "infrastructure/draw/color.h"
 #include "spanner.h"
 
-namespace Ms {
+namespace mu::engraving {
 class SLine;
 class System;
 

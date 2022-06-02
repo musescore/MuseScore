@@ -4,7 +4,7 @@
 #include "gpdommodel.h"
 #include "gp67dombuilder.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GP7DomBuilder : public GP67DomBuilder
 {
 public:

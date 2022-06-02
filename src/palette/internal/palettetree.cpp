@@ -38,7 +38,7 @@ void PaletteTree::append(PalettePtr palette)
     palettes.emplace_back(palette);
 }
 
-bool PaletteTree::read(Ms::XmlReader& e)
+bool PaletteTree::read(mu::engraving::XmlReader& e)
 {
     while (e.readNextStartElement()) {
         const AsciiString tag(e.name());
@@ -54,7 +54,7 @@ bool PaletteTree::read(Ms::XmlReader& e)
     return true;
 }
 
-void PaletteTree::write(Ms::XmlWriter& xml) const
+void PaletteTree::write(mu::engraving::XmlWriter& xml) const
 {
     xml.startObject("PaletteBox"); // for compatibility with old palettes file format
 

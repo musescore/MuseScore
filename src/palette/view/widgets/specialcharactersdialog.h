@@ -35,7 +35,7 @@ namespace mu::palette {
 class PaletteWidget;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class TextBase;
 class SpecialCharactersDialog : public QDialog, public Ui::SpecialCharactersDialog
 {
@@ -68,6 +68,6 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(Ms::SpecialCharactersDialog)
+Q_DECLARE_METATYPE(mu::engraving::SpecialCharactersDialog)
 
 #endif // MU_PALETTE_SPECIALCHARACTERSDIALOG_H

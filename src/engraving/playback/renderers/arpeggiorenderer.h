@@ -25,7 +25,7 @@
 
 #include "renderbase.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 }
 
@@ -35,13 +35,13 @@ class ArpeggioRenderer : public RenderBase<ArpeggioRenderer>
 public:
     static const mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
-                         mpe::PlaybackEventList& result);
+    static void doRender(const mu::engraving::EngravingItem* item, const mpe::ArticulationType preferredType,
+                         const RenderingContext& context, mpe::PlaybackEventList& result);
 
 private:
     static bool isDirectionUp(const mpe::ArticulationType type);
     static mpe::msecs_t timestampOffsetStep(const RenderingContext& context);
-    static std::map<mpe::pitch_level_t, NominalNoteCtx> arpeggioNotes(const Ms::Chord* chord, const RenderingContext& ctx);
+    static std::map<mpe::pitch_level_t, NominalNoteCtx> arpeggioNotes(const mu::engraving::Chord* chord, const RenderingContext& ctx);
 };
 }
 

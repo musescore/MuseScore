@@ -34,7 +34,7 @@ namespace mu::engraving::compat {
 class Read206;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 class Staff;
 class Score;
@@ -177,7 +177,7 @@ public:
     bool hasDrumStaff() const;
 
     void updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval = false);
-    const Channel* harmonyChannel() const;
+    const InstrChannel* harmonyChannel() const;
 
     const Part* masterPart() const;
     Part* masterPart();

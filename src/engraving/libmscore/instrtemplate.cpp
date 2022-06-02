@@ -43,7 +43,7 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 std::vector<InstrumentGroup*> instrumentGroups;
 std::vector<MidiArticulation> articulation;                 // global articulations
 std::vector<InstrumentGenre*> instrumentGenres;
@@ -395,12 +395,12 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     for (const NamedEventList& a : midiActions) {
         a.write(xml, "MidiAction");
     }
-    for (const Channel& a : channel) {
+    for (const InstrChannel& a : channel) {
         a.write(xml, nullptr);
     }
     for (const MidiArticulation& ma : articulation) {
         bool isGlobal = false;
-        for (const MidiArticulation& ga : Ms::articulation) {
+        for (const MidiArticulation& ga : mu::engraving::articulation) {
             if (ma == ga) {
                 isGlobal = true;
                 break;
@@ -543,7 +543,7 @@ void InstrumentTemplate::read(XmlReader& e)
             a.read(e);
             midiActions.push_back(a);
         } else if (tag == "Channel" || tag == "channel") {
-            Channel a;
+            InstrChannel a;
             a.read(e, nullptr);
             channel.push_back(a);
         } else if (tag == "Articulation") {
@@ -603,10 +603,10 @@ void InstrumentTemplate::read(XmlReader& e)
         }
     }
     if (channel.empty()) {
-        Channel a;
+        InstrChannel a;
         a.setChorus(0);
         a.setReverb(0);
-        a.setName(Channel::DEFAULT_NAME);
+        a.setName(InstrChannel::DEFAULT_NAME);
         a.setProgram(0);
         a.setBank(0);
         a.setVolume(90);

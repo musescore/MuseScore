@@ -30,7 +30,7 @@
 #include <QtCore/qobjectdefs.h>
 #include <QtCore/qscopedpointer.h>
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 }
 
@@ -85,7 +85,7 @@ public:
     void setResolution(int dpi);
     int resolution() const;
 
-    void setElement(const Ms::EngravingItem* e);
+    void setElement(const mu::engraving::EngravingItem* e);
 
 protected:
     QPaintEngine* paintEngine() const;

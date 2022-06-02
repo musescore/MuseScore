@@ -27,7 +27,7 @@
 #include "engraving/rw/xml.h"
 #include "musicxmlfonthandler.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   MScoreTextToMXML
 //---------------------------------------------------------

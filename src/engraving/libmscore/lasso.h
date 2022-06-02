@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Lasso
 //---------------------------------------------------------

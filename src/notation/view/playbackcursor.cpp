@@ -52,7 +52,7 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
         return {};
     }
 
-    const Ms::Score* score = m_notation->elements()->msScore();
+    const mu::engraving::Score* score = m_notation->elements()->msScore();
 
     Fraction tick = Fraction::fromTicks(_tick);
 
@@ -61,22 +61,22 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
         return {};
     }
 
-    Ms::System* system = measure->system();
+    mu::engraving::System* system = measure->system();
     if (!system) {
         return {};
     }
 
     qreal x = 0.0;
-    Ms::Segment* s = nullptr;
-    for (s = measure->first(Ms::SegmentType::ChordRest); s;) {
+    mu::engraving::Segment* s = nullptr;
+    for (s = measure->first(mu::engraving::SegmentType::ChordRest); s;) {
         Fraction t1 = s->tick();
         int x1 = s->canvasPos().x();
         qreal x2 = 0.0;
         Fraction t2;
 
-        Ms::Segment* ns = s->next(Ms::SegmentType::ChordRest);
+        mu::engraving::Segment* ns = s->next(mu::engraving::SegmentType::ChordRest);
         while (ns && !ns->visible()) {
-            ns = ns->next(Ms::SegmentType::ChordRest);
+            ns = ns->next(mu::engraving::SegmentType::ChordRest);
         }
 
         if (ns) {
@@ -85,7 +85,7 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
         } else {
             t2 = measure->endTick();
             // measure->width is not good enough because of courtesy keysig, timesig
-            Ms::Segment* seg = measure->findSegment(Ms::SegmentType::EndBarLine, measure->tick() + measure->ticks());
+            mu::engraving::Segment* seg = measure->findSegment(mu::engraving::SegmentType::EndBarLine, measure->tick() + measure->ticks());
             if (seg) {
                 x2 = seg->canvasPos().x();
             } else {
@@ -109,8 +109,8 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
     double y = system->staffYpage(0) + system->page()->pos().y();
     double _spatium = score->spatium();
 
-    qreal mag = _spatium / Ms::SPATIUM20;
-    double w  = _spatium * 2.0 + score->scoreFont()->width(Ms::SymId::noteheadBlack, mag);
+    qreal mag = _spatium / mu::engraving::SPATIUM20;
+    double w  = _spatium * 2.0 + score->scoreFont()->width(mu::engraving::SymId::noteheadBlack, mag);
     double h  = 6 * _spatium;
     //
     // set cursor height for whole system
@@ -118,7 +118,7 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
     double y2 = 0.0;
 
     for (size_t i = 0; i < score->nstaves(); ++i) {
-        Ms::SysStaff* ss = system->staff(i);
+        mu::engraving::SysStaff* ss = system->staff(i);
         if (!ss->show() || !score->staff(i)->show()) {
             continue;
         }

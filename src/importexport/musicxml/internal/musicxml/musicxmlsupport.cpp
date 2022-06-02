@@ -32,7 +32,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 NoteList::NoteList()
 {
     for (int i = 0; i < MAX_STAVES; ++i) {

@@ -1,4 +1,4 @@
 #include "gpdommodel.h"
 
-namespace Ms {
+namespace mu::engraving {
 }

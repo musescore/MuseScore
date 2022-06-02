@@ -59,7 +59,7 @@ const InstrumentGroupList& InstrumentsRepository::groups() const
 const ScoreOrderList& InstrumentsRepository::orders() const
 {
     static ScoreOrderList list;
-    list = ScoreOrderList(Ms::instrumentOrders.begin(), Ms::instrumentOrders.end());
+    list = ScoreOrderList(mu::engraving::instrumentOrders.begin(), mu::engraving::instrumentOrders.end());
     return list;
 }
 
@@ -70,19 +70,19 @@ void InstrumentsRepository::load()
     m_instrumentTemplates.clear();
     m_genres.clear();
     m_groups.clear();
-    Ms::clearInstrumentTemplates();
+    mu::engraving::clearInstrumentTemplates();
 
     for (const io::path_t& filePath: configuration()->instrumentListPaths()) {
-        if (!Ms::loadInstrumentTemplates(filePath.toQString())) {
+        if (!mu::engraving::loadInstrumentTemplates(filePath.toQString())) {
             LOGE() << "Could not load instruments from " << filePath.toQString() << "!";
         }
     }
 
-    for (const InstrumentGenre* genre : Ms::instrumentGenres) {
+    for (const InstrumentGenre* genre : mu::engraving::instrumentGenres) {
         m_genres << genre;
     }
 
-    for (const InstrumentGroup* group : Ms::instrumentGroups) {
+    for (const InstrumentGroup* group : mu::engraving::instrumentGroups) {
         m_groups << group;
 
         for (InstrumentTemplate* templ : group->instrumentTemplates) {

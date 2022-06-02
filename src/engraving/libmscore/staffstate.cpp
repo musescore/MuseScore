@@ -34,7 +34,7 @@
 using namespace mu;
 using namespace mu::draw;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   StaffState
 //---------------------------------------------------------

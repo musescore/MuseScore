@@ -45,7 +45,7 @@ using namespace mu::notation;
 using namespace mu::palette;
 using namespace mu::ui;
 
-namespace Ms {
+namespace mu::engraving {
 static constexpr SymId commonScoreSymbols[] = {
     SymId::accidentalFlat,
     SymId::accidentalNatural,

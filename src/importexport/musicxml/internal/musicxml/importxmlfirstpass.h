@@ -27,7 +27,7 @@
 #include "libmscore/interval.h"
 #include "musicxmlsupport.h"
 
-namespace Ms {
+namespace mu::engraving {
 typedef QMap<QString, VoiceDesc> VoiceList;
 //using Intervals = std::map<Fraction, Interval>;
 

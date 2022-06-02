@@ -33,23 +33,23 @@ public:
 
     void init(const QString& defaultStyleFilePath, const QString& partStyleFilePath);
 
-    static const Ms::MStyle& baseStyle();
+    static const mu::engraving::MStyle& baseStyle();
 
     static bool isHasDefaultStyle();
-    static const Ms::MStyle& defaultStyle();
+    static const mu::engraving::MStyle& defaultStyle();
 
-    static const Ms::MStyle* defaultStyleForParts();
+    static const mu::engraving::MStyle* defaultStyleForParts();
 
-    static const Ms::MStyle& resolveStyleDefaults(const int defaultsVersion);
+    static const mu::engraving::MStyle& resolveStyleDefaults(const int defaultsVersion);
 
 private:
     DefaultStyle() = default;
 
-    static bool doLoadStyle(Ms::MStyle* style, const QString& filePath);
+    static bool doLoadStyle(mu::engraving::MStyle* style, const QString& filePath);
 
-    Ms::MStyle m_baseStyle; // builtin initial style
-    Ms::MStyle* m_defaultStyle; // builtin modified by preferences
-    Ms::MStyle* m_defaultStyleForParts = nullptr;
+    mu::engraving::MStyle m_baseStyle; // builtin initial style
+    mu::engraving::MStyle* m_defaultStyle; // builtin modified by preferences
+    mu::engraving::MStyle* m_defaultStyleForParts = nullptr;
 };
 }
 

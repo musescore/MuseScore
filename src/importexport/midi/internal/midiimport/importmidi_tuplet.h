@@ -24,7 +24,7 @@
 
 #include "importmidi_fraction.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MidiChord;
 class MidiNote;
 class TimeSigMap;

@@ -31,7 +31,7 @@
 
 #include "libmscore/drumset.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   EditDrumsetDialog
 //---------------------------------------------------------
@@ -79,6 +79,6 @@ private:
 };
 } // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::EditDrumsetDialog)
+Q_DECLARE_METATYPE(mu::engraving::EditDrumsetDialog)
 
 #endif // MU_PALETTE_EDITDRUMSETDIALOG_H

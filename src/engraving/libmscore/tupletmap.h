@@ -25,7 +25,7 @@
 
 #include <list>
 
-namespace Ms {
+namespace mu::engraving {
 class Tuplet;
 
 //---------------------------------------------------------

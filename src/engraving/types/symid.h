@@ -40,7 +40,7 @@ enum class SmuflAnchorId {
 }
 
 //! NOTE compat
-namespace Ms {
+namespace mu::engraving {
 using SymId = mu::engraving::SymId;
 using SymIdList = mu::engraving::SymIdList;
 using SmuflAnchorId = mu::engraving::SmuflAnchorId;

@@ -25,7 +25,7 @@
 
 #include "pitch.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   PitchList
 //    return pitch offset at tick position (ottava)

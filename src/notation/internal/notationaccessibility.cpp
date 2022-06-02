@@ -54,12 +54,12 @@ NotationAccessibility::NotationAccessibility(const Notation* notation)
     });
 }
 
-const Ms::Score* NotationAccessibility::score() const
+const mu::engraving::Score* NotationAccessibility::score() const
 {
     return m_getScore->score();
 }
 
-const Ms::Selection* NotationAccessibility::selection() const
+const mu::engraving::Selection* NotationAccessibility::selection() const
 {
     return &score()->selection();
 }
@@ -136,7 +136,7 @@ void NotationAccessibility::setAccessibilityInfo(const QString& info)
 
 QString NotationAccessibility::rangeAccessibilityInfo() const
 {
-    const Ms::Segment* endSegment = selection()->endSegment();
+    const mu::engraving::Segment* endSegment = selection()->endSegment();
 
     if (!endSegment) {
         endSegment = score()->lastSegment();

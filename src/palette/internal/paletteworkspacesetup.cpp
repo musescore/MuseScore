@@ -42,7 +42,7 @@ static PaletteTreePtr readPalette(const ByteArray& data)
     ByteArray ba = ByteArray::fromRawData(data.constData(), data.size());
     Buffer buf(&ba);
     buf.open(IODevice::ReadOnly);
-    Ms::XmlReader reader(&buf);
+    mu::engraving::XmlReader reader(&buf);
 
     while (!reader.atEnd()) {
         reader.readNextStartElement();
@@ -61,7 +61,7 @@ static void writePalette(const PaletteTreePtr& tree, QByteArray& data)
 {
     Buffer buf;
     buf.open(IODevice::WriteOnly);
-    Ms::XmlWriter writer(&buf);
+    mu::engraving::XmlWriter writer(&buf);
     tree->write(writer);
     data = buf.data().toQByteArray();
 }

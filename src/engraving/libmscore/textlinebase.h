@@ -29,7 +29,7 @@
 #include "line.h"
 #include "property.h"
 
-namespace Ms {
+namespace mu::engraving {
 class TextLineBase;
 class EngravingItem;
 class Text;

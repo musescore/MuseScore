@@ -27,7 +27,7 @@
 #include <vector>
 #include <QtGlobal>
 
-namespace Ms {
+namespace mu::engraving {
 class Note;
 class Harmony;
 class XmlWriter;

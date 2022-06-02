@@ -39,7 +39,7 @@
 using namespace mu;
 using namespace mu::palette;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   PaletteTreeModel::PaletteTreeModel
 //---------------------------------------------------------

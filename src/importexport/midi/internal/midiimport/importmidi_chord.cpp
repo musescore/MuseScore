@@ -32,7 +32,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace MChord {
 bool isGrandStaffProgram(int program)
 {

@@ -44,7 +44,6 @@
 static const QString MEASURE_DATA_DIR("measure_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class MeasureTests : public ::testing::Test
 {

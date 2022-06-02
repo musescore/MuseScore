@@ -31,7 +31,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/text.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   Score::newCursor
@@ -61,18 +61,18 @@ void Score::addText(const QString& type, const QString& txt)
         score()->insertMeasure(ElementType::VBOX, measure);
         measure = score()->first();
     }
-    Ms::TextStyleType tid = Ms::TextStyleType::DEFAULT;
+    mu::engraving::TextStyleType tid = mu::engraving::TextStyleType::DEFAULT;
     if (type == "title") {
-        tid = Ms::TextStyleType::TITLE;
+        tid = mu::engraving::TextStyleType::TITLE;
     } else if (type == "subtitle") {
-        tid = Ms::TextStyleType::SUBTITLE;
+        tid = mu::engraving::TextStyleType::SUBTITLE;
     } else if (type == "composer") {
-        tid = Ms::TextStyleType::COMPOSER;
+        tid = mu::engraving::TextStyleType::COMPOSER;
     } else if (type == "lyricist") {
-        tid = Ms::TextStyleType::POET;
+        tid = mu::engraving::TextStyleType::POET;
     }
 
-    Ms::Text* text = mu::engraving::Factory::createText(measure, tid);
+    mu::engraving::Text* text = mu::engraving::Factory::createText(measure, tid);
     text->setParent(measure);
     text->setXmlText(txt);
     score()->undoAddElement(text);
@@ -82,14 +82,14 @@ void Score::addText(const QString& type, const QString& txt)
 //   defaultInstrTemplate
 //---------------------------------------------------------
 
-static const Ms::InstrumentTemplate* defaultInstrTemplate()
+static const mu::engraving::InstrumentTemplate* defaultInstrTemplate()
 {
-    static Ms::InstrumentTemplate defaultInstrument;
+    static mu::engraving::InstrumentTemplate defaultInstrument;
     if (defaultInstrument.channel.empty()) {
-        Ms::Channel a;
+        mu::engraving::InstrChannel a;
         a.setChorus(0);
         a.setReverb(0);
-        a.setName(Ms::Channel::DEFAULT_NAME);
+        a.setName(mu::engraving::InstrChannel::DEFAULT_NAME);
         a.setBank(0);
         a.setVolume(90);
         a.setPan(0);
@@ -150,7 +150,7 @@ void Score::appendPartByMusicXmlId(const QString& instrumentMusicXmlId)
 
 Segment* Score::firstSegment()
 {
-    return wrap<Segment>(score()->firstSegment(Ms::SegmentType::All), Ownership::SCORE);
+    return wrap<Segment>(score()->firstSegment(mu::engraving::SegmentType::All), Ownership::SCORE);
 }
 
 //---------------------------------------------------------

@@ -76,7 +76,7 @@ void EngravingModule::registerResources()
 
 void EngravingModule::registerUiTypes()
 {
-    Ms::MScore::registerUiTypes();
+    mu::engraving::MScore::registerUiTypes();
 }
 
 void EngravingModule::onInit(const framework::IApplication::RunMode&)
@@ -88,31 +88,32 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
                                    s_configuration->partStyleFilePath());
 #endif
 
-    Ms::MScore::init();     // initialize libmscore
+    mu::engraving::MScore::init();     // initialize libmscore
 
-    Ms::MScore::setNudgeStep(0.1); // cursor key (default 0.1)
-    Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
-    Ms::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
+    mu::engraving::MScore::setNudgeStep(0.1); // cursor key (default 0.1)
+    mu::engraving::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
+    mu::engraving::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
 
     AccessibleItem::enabled = false;
-    Ms::gpaletteScore = compat::ScoreAccess::createMasterScore();
+    mu::engraving::gpaletteScore = compat::ScoreAccess::createMasterScore();
     AccessibleItem::enabled = true;
-    if (Ms::EngravingObject::elementsProvider()) {
-        Ms::EngravingObject::elementsProvider()->unreg(Ms::gpaletteScore);
+    if (mu::engraving::EngravingObject::elementsProvider()) {
+        mu::engraving::EngravingObject::elementsProvider()->unreg(mu::engraving::gpaletteScore);
     }
 
-    Ms::gpaletteScore->setStyle(DefaultStyle::baseStyle());
+    mu::engraving::gpaletteScore->setStyle(DefaultStyle::baseStyle());
 
-    Ms::gpaletteScore->style().set(Ms::Sid::MusicalTextFont, QString("Leland Text"));
-    Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontByName("Leland");
-    Ms::gpaletteScore->setScoreFont(scoreFont);
-    Ms::gpaletteScore->setNoteHeadWidth(scoreFont->width(Ms::SymId::noteheadBlack, Ms::gpaletteScore->spatium()) / Ms::SPATIUM20);
+    mu::engraving::gpaletteScore->style().set(mu::engraving::Sid::MusicalTextFont, QString("Leland Text"));
+    mu::engraving::ScoreFont* scoreFont = mu::engraving::ScoreFont::fontByName("Leland");
+    mu::engraving::gpaletteScore->setScoreFont(scoreFont);
+    mu::engraving::gpaletteScore->setNoteHeadWidth(scoreFont->width(mu::engraving::SymId::noteheadBlack,
+                                                                    mu::engraving::gpaletteScore->spatium()) / mu::engraving::SPATIUM20);
 
     //! NOTE And some initialization in the `Notation::init()`
 }
 
 void EngravingModule::onDestroy()
 {
-    delete Ms::gpaletteScore;
-    Ms::gpaletteScore = nullptr;
+    delete mu::engraving::gpaletteScore;
+    mu::engraving::gpaletteScore = nullptr;
 }

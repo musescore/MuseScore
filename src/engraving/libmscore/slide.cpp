@@ -28,7 +28,7 @@ using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Slide
 //---------------------------------------------------------

@@ -37,9 +37,9 @@ bool PaletteRootModel::paletteEnabled() const
     return true;
 }
 
-Ms::PaletteProvider* PaletteRootModel::paletteProvider_property() const
+mu::engraving::PaletteProvider* PaletteRootModel::paletteProvider_property() const
 {
-    return dynamic_cast<Ms::PaletteProvider*>(paletteProvider().get());
+    return dynamic_cast<mu::engraving::PaletteProvider*>(paletteProvider().get());
 }
 
 bool PaletteRootModel::needShowShadowOverlay() const

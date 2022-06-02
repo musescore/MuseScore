@@ -27,7 +27,7 @@
 #include "ret.h"
 #include "io/path.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MasterScore;
 }
 
@@ -43,7 +43,7 @@ public:
 
     virtual ~INotationReader() = default;
 
-    virtual Ret read(Ms::MasterScore* score, const io::path_t& path, const Options& options = Options()) = 0;
+    virtual Ret read(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options()) = 0;
 };
 
 using INotationReaderPtr = std::shared_ptr<INotationReader>;

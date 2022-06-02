@@ -187,7 +187,7 @@ void NotationViewInputController::zoomToPageWidth()
         return;
     }
 
-    qreal pageWidth = notationStyle()->styleValue(Ms::Sid::pageWidth).toDouble() * Ms::DPI;
+    qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI;
 
     qreal scale = m_view->width() / pageWidth;
     setScaling(scale);
@@ -200,8 +200,8 @@ void NotationViewInputController::zoomToWholePage()
         return;
     }
 
-    qreal pageWidth = notationStyle()->styleValue(Ms::Sid::pageWidth).toDouble() * Ms::DPI;
-    qreal pageHeight = notationStyle()->styleValue(Ms::Sid::pageHeight).toDouble() * Ms::DPI;
+    qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI;
+    qreal pageHeight = notationStyle()->styleValue(mu::engraving::Sid::pageHeight).toDouble() * mu::engraving::DPI;
 
     qreal pageWidthScale = m_view->width() / pageWidth;
     qreal pageHeightScale = m_view->height() / pageHeight;
@@ -219,8 +219,8 @@ void NotationViewInputController::zoomToTwoPages()
 
     qreal viewWidth = m_view->width();
     qreal viewHeight = m_view->height();
-    qreal pageWidth = notationStyle()->styleValue(Ms::Sid::pageWidth).toDouble() * Ms::DPI;
-    qreal pageHeight = notationStyle()->styleValue(Ms::Sid::pageHeight).toDouble() * Ms::DPI;
+    qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI;
+    qreal pageHeight = notationStyle()->styleValue(mu::engraving::Sid::pageHeight).toDouble() * mu::engraving::DPI;
 
     qreal pageHeightScale = 0.0;
     qreal pageWidthScale = 0.0;
@@ -392,12 +392,13 @@ void NotationViewInputController::endOfScore()
     if (!notation) {
         return;
     }
-    Ms::MeasureBase* lastMeasure = notation->elements()->msScore()->lastMeasureMM();
+    mu::engraving::MeasureBase* lastMeasure = notation->elements()->msScore()->lastMeasureMM();
     auto lmRect = lastMeasure->canvasBoundingRect();
     auto scale = m_view->currentScaling();
     qreal desiredX = std::max(-notationScreenPadding, lmRect.right() + notationScreenPadding - m_view->width() / scale);
     qreal desiredY
-        = std::max(-notationScreenPadding, lmRect.bottom() + lastMeasure->score()->styleD(Ms::Sid::spatium) * 5 - m_view->height() / scale);
+        = std::max(-notationScreenPadding, lmRect.bottom() + lastMeasure->score()->styleD(
+                       mu::engraving::Sid::spatium) * 5 - m_view->height() / scale);
     auto offset = m_view->toLogical(QPoint());
     m_view->moveCanvas(offset.x() - desiredX, offset.y() - desiredY);
 }

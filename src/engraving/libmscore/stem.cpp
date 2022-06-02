@@ -37,7 +37,6 @@
 using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
-using namespace Ms;
 
 static const ElementStyle stemStyle {
     { Sid::stemWidth, Pid::LINE_WIDTH }

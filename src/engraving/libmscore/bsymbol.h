@@ -27,7 +27,7 @@
 
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ BSymbol
 ///    base class for Symbol and Image

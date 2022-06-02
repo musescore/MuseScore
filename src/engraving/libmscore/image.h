@@ -33,7 +33,7 @@ class Pixmap;
 class SvgRenderer;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class ImageStoreItem;
 
 enum class ImageType : char {

@@ -31,7 +31,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 static const uchar gmOnMsg[] = {
     0x7e,         // Non-Real Time header
     0x7f,         // ID of target device (7f = all devices)

@@ -81,10 +81,10 @@ void NotationStyle::applyToAllParts()
         return;
     }
 
-    Ms::MStyle style = m_getScore->score()->style();
+    mu::engraving::MStyle style = m_getScore->score()->style();
 
-    for (Ms::Excerpt* excerpt : score()->masterScore()->excerpts()) {
-        excerpt->excerptScore()->undo(new Ms::ChangeStyle(excerpt->excerptScore(), style));
+    for (mu::engraving::Excerpt* excerpt : score()->masterScore()->excerpts()) {
+        excerpt->excerptScore()->undo(new mu::engraving::ChangeStyle(excerpt->excerptScore(), style));
         excerpt->excerptScore()->update();
     }
 }
@@ -143,7 +143,7 @@ bool NotationStyle::saveStyle(const mu::io::path_t& path)
     return score()->saveStyle(path.toQString());
 }
 
-Ms::Score* NotationStyle::score() const
+mu::engraving::Score* NotationStyle::score() const
 {
     return m_getScore->score();
 }

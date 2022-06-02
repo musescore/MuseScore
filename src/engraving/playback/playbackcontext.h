@@ -27,7 +27,7 @@
 
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Segment;
 class Dynamic;
 class PlayTechAnnotation;
@@ -44,20 +44,20 @@ public:
     mpe::dynamic_level_t appliableDynamicLevel(const int nominalPositionTick) const;
     mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const;
 
-    void update(const ID partId, const Ms::Score* score);
+    void update(const ID partId, const mu::engraving::Score* score);
     void clear();
 
-    mpe::DynamicLevelMap dynamicLevelMap(const Ms::Score* score) const;
+    mpe::DynamicLevelMap dynamicLevelMap(const mu::engraving::Score* score) const;
 
 private:
     mpe::dynamic_level_t nominalDynamicLevel(const int positionTick) const;
 
-    void updateDynamicMap(const Ms::Dynamic* dynamic, const Ms::Segment* segment, const int segmentPositionTick);
-    void updatePlayTechMap(const Ms::PlayTechAnnotation* annotation, const int segmentPositionTick);
-    void applyDynamicToNextSegment(const Ms::Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel);
+    void updateDynamicMap(const mu::engraving::Dynamic* dynamic, const mu::engraving::Segment* segment, const int segmentPositionTick);
+    void updatePlayTechMap(const mu::engraving::PlayTechAnnotation* annotation, const int segmentPositionTick);
+    void applyDynamicToNextSegment(const mu::engraving::Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel);
 
-    void handleSpanners(const ID partId, const Ms::Score* score);
-    void handleAnnotations(const ID partId, const Ms::Segment* segment, const int segmentPositionTick);
+    void handleSpanners(const ID partId, const mu::engraving::Score* score);
+    void handleAnnotations(const ID partId, const mu::engraving::Segment* segment, const int segmentPositionTick);
 
     void removeDynamicData(const int from, const int to);
     void removePlayTechniqueData(const int from, const int to);

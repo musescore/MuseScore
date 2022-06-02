@@ -49,7 +49,7 @@ using namespace mu::engraving;
 
 static const QString EDIT_DRUMSET_DIALOG_NAME("EditDrumsetDialog");
 
-namespace Ms {
+namespace mu::engraving {
 enum Column : char {
     PITCH, NOTE, SHORTCUT, NAME
 };
@@ -145,7 +145,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     const Measure* measure = toMeasure(context.element);
 
     if (measure && context.staff) {
-        Ms::Instrument* instrument = context.staff->part()->instrument(measure->tick());
+        mu::engraving::Instrument* instrument = context.staff->part()->instrument(measure->tick());
         m_instrumentKey.instrumentId = instrument->id();
         m_instrumentKey.partId = context.staff->part()->id();
         m_instrumentKey.tick = measure->tick();

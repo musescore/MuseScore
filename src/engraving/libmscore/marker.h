@@ -25,7 +25,7 @@
 
 #include "text.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ Marker
 //
@@ -99,6 +99,6 @@ struct MarkerTypeItem {
 extern const std::vector<MarkerTypeItem> markerTypeTable;
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Marker::Type);
+Q_DECLARE_METATYPE(mu::engraving::Marker::Type);
 
 #endif

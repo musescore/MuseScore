@@ -64,7 +64,7 @@ public:
     static ClefType fromXml(const AsciiString& tag, ClefType def);
 
     static QString toUserName(DynamicType v);
-    static Ms::SymId symId(DynamicType v);
+    static mu::engraving::SymId symId(DynamicType v);
     static DynamicType dynamicType(SymId v);
     static DynamicType dynamicType(const AsciiString& string);
     static QString toXml(DynamicType v);

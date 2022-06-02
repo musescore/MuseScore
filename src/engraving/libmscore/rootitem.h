@@ -26,15 +26,15 @@
 
 #include "compat/dummyelement.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
 namespace mu::engraving {
-class RootItem : public Ms::EngravingItem
+class RootItem : public mu::engraving::EngravingItem
 {
 public:
-    RootItem(Ms::Score* score);
+    RootItem(mu::engraving::Score* score);
     ~RootItem() override;
 
     compat::DummyElement* dummy() const;
@@ -42,15 +42,15 @@ public:
 
     EngravingObject* scanParent() const override;
 
-    Ms::EngravingItem* clone() const override { return nullptr; }
-    mu::engraving::PropertyValue getProperty(Ms::Pid) const override { return mu::engraving::PropertyValue(); }
-    bool setProperty(Ms::Pid, const mu::engraving::PropertyValue&) override { return false; }
+    mu::engraving::EngravingItem* clone() const override { return nullptr; }
+    mu::engraving::PropertyValue getProperty(mu::engraving::Pid) const override { return mu::engraving::PropertyValue(); }
+    bool setProperty(mu::engraving::Pid, const mu::engraving::PropertyValue&) override { return false; }
 
 private:
 
     mu::engraving::AccessibleItem* createAccessible() override;
 
-    Ms::Score* m_score = nullptr;
+    mu::engraving::Score* m_score = nullptr;
     compat::DummyElement* m_dummy = nullptr;
 };
 }

@@ -32,7 +32,7 @@
 #include "compat/dummyelement.h"
 #include "linksindexer.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class TimeSigMap;
 class Staff;
@@ -59,11 +59,11 @@ class ReadContext
 {
 public:
 
-    ReadContext(Ms::Score* score);
+    ReadContext(mu::engraving::Score* score);
     ~ReadContext();
 
-    void setScore(Ms::Score* score);
-    Ms::Score* score() const;
+    void setScore(mu::engraving::Score* score);
+    mu::engraving::Score* score() const;
 
     bool pasteMode() const { return _pasteMode; }
     void setPasteMode(bool v) { _pasteMode = v; }
@@ -81,20 +81,20 @@ public:
 
     mu::engraving::compat::DummyElement* dummy() const;
 
-    Ms::TimeSigMap* sigmap();
-    Ms::Staff* staff(int n);
+    mu::engraving::TimeSigMap* sigmap();
+    mu::engraving::Staff* staff(int n);
 
-    void appendStaff(Ms::Staff* staff);
-    void addSpanner(Ms::Spanner* s);
+    void appendStaff(mu::engraving::Staff* staff);
+    void addSpanner(mu::engraving::Spanner* s);
 
     bool undoStackActive() const;
 
-    bool isSameScore(const Ms::EngravingObject* obj) const;
+    bool isSameScore(const mu::engraving::EngravingObject* obj) const;
 
     void initLinks(const ReadContext& ctx);
-    void addLink(Ms::Staff* staff, Ms::LinkedObjects* link, const Ms::Location& location);
-    Ms::LinkedObjects* getLink(bool isMasterScore, const Ms::Location& location, int localIndexDiff);
-    std::map<int, std::vector<std::pair<Ms::LinkedObjects*, Ms::Location> > >& staffLinkedElements();
+    void addLink(mu::engraving::Staff* staff, mu::engraving::LinkedObjects* link, const mu::engraving::Location& location);
+    mu::engraving::LinkedObjects* getLink(bool isMasterScore, const mu::engraving::Location& location, int localIndexDiff);
+    std::map<int, std::vector<std::pair<mu::engraving::LinkedObjects*, mu::engraving::Location> > >& staffLinkedElements();
 
     bool hasAccidental = false; // used for userAccidental backward compatibility
 
@@ -110,64 +110,64 @@ public:
     int trackOffset() const { return _trackOffset; }
     void setTrack(track_idx_t val) { _track = val; }
 
-    Ms::Location location(bool forceAbsFrac = false) const;
-    void fillLocation(Ms::Location&, bool forceAbsFrac = false) const;
-    void setLocation(const Ms::Location&);   // sets a new reading point, taking into account its type (absolute or relative).
+    mu::engraving::Location location(bool forceAbsFrac = false) const;
+    void fillLocation(mu::engraving::Location&, bool forceAbsFrac = false) const;
+    void setLocation(const mu::engraving::Location&);   // sets a new reading point, taking into account its type (absolute or relative).
 
-    void setCurrentMeasure(Ms::Measure* m) { _curMeasure = m; }
-    Ms::Measure* currentMeasure() const { return _curMeasure; }
-    void setLastMeasure(Ms::Measure* m) { _lastMeasure = m; }
-    Ms::Measure* lastMeasure() const { return _lastMeasure; }
+    void setCurrentMeasure(mu::engraving::Measure* m) { _curMeasure = m; }
+    mu::engraving::Measure* currentMeasure() const { return _curMeasure; }
+    void setLastMeasure(mu::engraving::Measure* m) { _lastMeasure = m; }
+    mu::engraving::Measure* lastMeasure() const { return _lastMeasure; }
     void setCurrentMeasureIndex(int idx) { _curMeasureIdx = idx; }
     int currentMeasureIndex() const { return _curMeasureIdx; }
 
-    void addBeam(Ms::Beam* s);
-    Ms::Beam* findBeam(int id) const { return mu::value(_beams, id, nullptr); }
+    void addBeam(mu::engraving::Beam* s);
+    mu::engraving::Beam* findBeam(int id) const { return mu::value(_beams, id, nullptr); }
 
-    void addTuplet(Ms::Tuplet* s);
-    Ms::Tuplet* findTuplet(int id) const { return mu::value(_tuplets, id, nullptr); }
-    std::unordered_map<int, Ms::Tuplet*>& tuplets() { return _tuplets; }
+    void addTuplet(mu::engraving::Tuplet* s);
+    mu::engraving::Tuplet* findTuplet(int id) const { return mu::value(_tuplets, id, nullptr); }
+    std::unordered_map<int, mu::engraving::Tuplet*>& tuplets() { return _tuplets; }
     void checkTuplets();
 
-    void removeSpanner(const Ms::Spanner*);
-    void addSpanner(int id, Ms::Spanner*);
-    Ms::Spanner* findSpanner(int id);
+    void removeSpanner(const mu::engraving::Spanner*);
+    void addSpanner(int id, mu::engraving::Spanner*);
+    mu::engraving::Spanner* findSpanner(int id);
 
-    int spannerId(const Ms::Spanner*);        // returns spanner id, allocates new one if none exists
+    int spannerId(const mu::engraving::Spanner*);        // returns spanner id, allocates new one if none exists
 
-    void addSpannerValues(const Ms::SpannerValues& sv) { _spannerValues.push_back(sv); }
-    const Ms::SpannerValues* spannerValues(int id) const;
+    void addSpannerValues(const mu::engraving::SpannerValues& sv) { _spannerValues.push_back(sv); }
+    const mu::engraving::SpannerValues* spannerValues(int id) const;
 
-    void addConnectorInfoLater(std::unique_ptr<Ms::ConnectorInfoReader> c) { _pendingConnectors.push_back(std::move(c)); }   // add connector info to be checked after calling checkConnectors()
+    void addConnectorInfoLater(std::unique_ptr<mu::engraving::ConnectorInfoReader> c) { _pendingConnectors.push_back(std::move(c)); }   // add connector info to be checked after calling checkConnectors()
     void checkConnectors();
     void reconnectBrokenConnectors();
 
-    Ms::Interval transpose() const { return _transpose; }
+    mu::engraving::Interval transpose() const { return _transpose; }
     void setTransposeChromatic(int8_t v) { _transpose.chromatic = v; }
     void setTransposeDiatonic(int8_t v) { _transpose.diatonic = v; }
 
-    std::map<int, Ms::LinkedObjects*>& linkIds() { return _elinks; }
+    std::map<int, mu::engraving::LinkedObjects*>& linkIds() { return _elinks; }
     TracksMap& tracks() { return _tracks; }
 
     TextStyleType addUserTextStyle(const QString& name);
     TextStyleType lookupUserTextStyle(const QString& name) const;
     void clearUserTextStyles() { userTextStyles.clear(); }
 
-    std::list<std::pair<Ms::EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
+    std::list<std::pair<mu::engraving::EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
 
 private:
 
-    void addConnectorInfo(std::unique_ptr<Ms::ConnectorInfoReader>);
-    void removeConnector(const Ms::ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
+    void addConnectorInfo(std::unique_ptr<mu::engraving::ConnectorInfoReader>);
+    void removeConnector(const mu::engraving::ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
 
-    Ms::Score* m_score = nullptr;
+    mu::engraving::Score* m_score = nullptr;
 
     bool _pasteMode = false;  // modifies read behaviour on paste operation
 
     bool m_ignoreVersionError = false;
 
-    std::map<int /*staffIndex*/, std::vector<std::pair<Ms::LinkedObjects*, Ms::Location> > > m_staffLinkedElements; // one list per staff
-    Ms::LinksIndexer m_linksIndexer;
+    std::map<int /*staffIndex*/, std::vector<std::pair<mu::engraving::LinkedObjects*, mu::engraving::Location> > > m_staffLinkedElements; // one list per staff
+    mu::engraving::LinksIndexer m_linksIndexer;
 
     Fraction _tick             { Fraction(0, 1) };
     Fraction _tickOffset       { Fraction(0, 1) };
@@ -176,27 +176,27 @@ private:
     track_idx_t _track = 0;
     int _trackOffset = 0;
 
-    Ms::Measure* _curMeasure = nullptr;
-    Ms::Measure* _lastMeasure = nullptr;
+    mu::engraving::Measure* _curMeasure = nullptr;
+    mu::engraving::Measure* _lastMeasure = nullptr;
     int _curMeasureIdx = 0;
 
-    std::unordered_map<int, Ms::Beam*> _beams;
-    std::unordered_map<int, Ms::Tuplet*> _tuplets;
+    std::unordered_map<int, mu::engraving::Beam*> _beams;
+    std::unordered_map<int, mu::engraving::Tuplet*> _tuplets;
 
-    std::list<Ms::SpannerValues> _spannerValues;
-    std::list<std::pair<int, Ms::Spanner*> > _spanner;
+    std::list<mu::engraving::SpannerValues> _spannerValues;
+    std::list<std::pair<int, mu::engraving::Spanner*> > _spanner;
 
-    std::vector<std::unique_ptr<Ms::ConnectorInfoReader> > _connectors;
-    std::vector<std::unique_ptr<Ms::ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
+    std::vector<std::unique_ptr<mu::engraving::ConnectorInfoReader> > _connectors;
+    std::vector<std::unique_ptr<mu::engraving::ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
 
-    Ms::Interval _transpose;
+    mu::engraving::Interval _transpose;
 
-    std::map<int, Ms::LinkedObjects*> _elinks;   // for reading old files (< 3.01)
+    std::map<int, mu::engraving::LinkedObjects*> _elinks;   // for reading old files (< 3.01)
     TracksMap _tracks;
 
-    std::list<Ms::TextStyleMap> userTextStyles;
+    std::list<mu::engraving::TextStyleMap> userTextStyles;
 
-    std::list<std::pair<Ms::EngravingItem*, mu::PointF> > _fixOffsets;
+    std::list<std::pair<mu::engraving::EngravingItem*, mu::PointF> > _fixOffsets;
 };
 }
 

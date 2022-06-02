@@ -30,7 +30,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------
 //   setVoicing
 ///   sets the voicing and dirty flag if the passed

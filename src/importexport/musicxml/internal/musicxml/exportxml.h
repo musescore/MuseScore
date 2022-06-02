@@ -28,7 +28,7 @@
 
 class QIODevice;
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 
 bool saveMxl(Score*, QIODevice*);

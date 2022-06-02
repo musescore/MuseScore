@@ -25,7 +25,7 @@
 
 #include <map>
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 ///  PitchList
 ///  List of note pitch offsets

@@ -57,7 +57,7 @@ class TextLineSettingsModel : public AbstractInspectorModel
 
 public:
     explicit TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository,
-                                   Ms::ElementType elementType = Ms::ElementType::TEXTLINE);
+                                   mu::engraving::ElementType elementType = mu::engraving::ElementType::TEXTLINE);
 
     PropertyItem* isLineVisible() const;
     PropertyItem* allowDiagonal() const;
@@ -98,7 +98,7 @@ protected:
         ui::IconCode::Code icon = ui::IconCode::Code::NONE;
         QString title;
 
-        HookTypeInfo(Ms::HookType type, ui::IconCode::Code icon, const QString& title)
+        HookTypeInfo(mu::engraving::HookType type, ui::IconCode::Code icon, const QString& title)
             : type(static_cast<int>(type)), icon(icon), title(title)
         {
         }

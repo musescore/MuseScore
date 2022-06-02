@@ -36,12 +36,12 @@ ClefSettingsModel::ClefSettingsModel(QObject* parent, IElementRepositoryService*
 
 void ClefSettingsModel::createProperties()
 {
-    m_shouldShowCourtesy = buildPropertyItem(Ms::Pid::SHOW_COURTESY);
+    m_shouldShowCourtesy = buildPropertyItem(mu::engraving::Pid::SHOW_COURTESY);
 }
 
 void ClefSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::CLEF);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::CLEF);
 }
 
 void ClefSettingsModel::loadProperties()

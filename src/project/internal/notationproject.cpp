@@ -86,7 +86,7 @@ static bool isStandardTag(const QString& tag)
     return standardTags.contains(tag);
 }
 
-static void setupScoreMetaTags(Ms::MasterScore* masterScore, const ProjectCreateOptions& projectOptions)
+static void setupScoreMetaTags(mu::engraving::MasterScore* masterScore, const ProjectCreateOptions& projectOptions)
 {
     if (!projectOptions.title.isEmpty()) {
         masterScore->setMetaTag(WORK_TITLE_TAG, projectOptions.title);
@@ -207,8 +207,8 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     // Load style if present
     if (!stylePath.empty()) {
         m_engravingProject->masterScore()->loadStyle(stylePath.toQString());
-        if (!Ms::MScore::lastError.isEmpty()) {
-            LOGE() << Ms::MScore::lastError;
+        if (!mu::engraving::MScore::lastError.isEmpty()) {
+            LOGE() << mu::engraving::MScore::lastError;
         }
     }
 
@@ -247,16 +247,16 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     }
 
     // Read(import) master score
-    Ms::ScoreLoad sl;
+    mu::engraving::ScoreLoad sl;
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
-    Ms::MasterScore* score = m_engravingProject->masterScore();
+    mu::engraving::MasterScore* score = m_engravingProject->masterScore();
     Ret ret = scoreReader->read(score, path, options);
     if (!ret) {
         return ret;
     }
 
-    if (!Ms::MScore::lastError.isEmpty()) {
-        LOGE() << Ms::MScore::lastError;
+    if (!mu::engraving::MScore::lastError.isEmpty()) {
+        LOGE() << mu::engraving::MScore::lastError;
     }
 
     // Setup master score
@@ -268,8 +268,8 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     // Load style if present
     if (!stylePath.empty()) {
         score->loadStyle(stylePath.toQString());
-        if (!Ms::MScore::lastError.isEmpty()) {
-            LOGE() << Ms::MScore::lastError;
+        if (!mu::engraving::MScore::lastError.isEmpty()) {
+            LOGE() << mu::engraving::MScore::lastError;
         }
     }
 
@@ -302,7 +302,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     setPath(projectOptions.title.isEmpty() ? scoreDefaultTitle() : projectOptions.title);
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
-    Ms::MasterScore* masterScore = m_engravingProject->masterScore();
+    mu::engraving::MasterScore* masterScore = m_engravingProject->masterScore();
     setupScoreMetaTags(masterScore, projectOptions);
 
     // Setup new master score
@@ -335,7 +335,7 @@ mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions
     if (ret) {
         setPath(projectOptions.title.isEmpty() ? scoreDefaultTitle() : projectOptions.title);
 
-        Ms::MasterScore* masterScore = m_masterNotation->masterScore();
+        mu::engraving::MasterScore* masterScore = m_masterNotation->masterScore();
         setupScoreMetaTags(masterScore, projectOptions);
 
         m_masterNotation->undoStack()->lock();
@@ -705,7 +705,7 @@ bool NotationProject::isNewlyCreated() const
 
 void NotationProject::markAsNewlyCreated()
 {
-    Ms::MasterScore* masterScore = m_masterNotation->masterScore();
+    mu::engraving::MasterScore* masterScore = m_masterNotation->masterScore();
     masterScore->setNewlyCreated(true);
 
     QString title = masterScore->metaTag(WORK_TITLE_TAG);
@@ -735,7 +735,7 @@ ProjectMeta NotationProject::metaInfo() const
 {
     TRACEFUNC;
 
-    Ms::MasterScore* score = m_masterNotation->masterScore();
+    mu::engraving::MasterScore* score = m_masterNotation->masterScore();
 
     ProjectMeta meta;
     auto allTags = score->metaTags();
@@ -788,10 +788,10 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
         tags[tag] = meta.additionalTags[tag].toString();
     }
 
-    Ms::MasterScore* score = m_masterNotation->masterScore();
+    mu::engraving::MasterScore* score = m_masterNotation->masterScore();
     if (undoable) {
         m_masterNotation->undoStack()->prepareChanges();
-        score->undo(new Ms::ChangeMetaTags(score, tags));
+        score->undo(new mu::engraving::ChangeMetaTags(score, tags));
         m_masterNotation->undoStack()->commitChanges();
     } else {
         score->setMetaTags(tags);

@@ -33,7 +33,7 @@
 using namespace mu;
 using namespace mu::draw;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   addHorizontalSpacing
 //    This methods creates "walls". They are represented by
@@ -111,7 +111,7 @@ qreal Shape::minHorizontalDistance(const Shape& a, Score* score) const
             const EngravingItem* item1 = r1.toItem;
             qreal ay1 = r1.top();
             qreal ay2 = r1.bottom();
-            bool intersection = Ms::intersects(ay1, ay2, by1, by2, verticalClearance);
+            bool intersection = mu::engraving::intersects(ay1, ay2, by1, by2, verticalClearance);
             double padding = 0;
             KerningType kerningType = KerningType::NON_KERNING;
             if (item1 && item2) {
@@ -158,7 +158,7 @@ qreal Shape::minVerticalDistance(const Shape& a) const
             }
             qreal ax1 = r1.left();
             qreal ax2 = r1.right();
-            if (Ms::intersects(ax1, ax2, bx1, bx2, 0.0)) {
+            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, 0.0)) {
                 dist = qMax(dist, r1.bottom() - r2.top());
             }
         }

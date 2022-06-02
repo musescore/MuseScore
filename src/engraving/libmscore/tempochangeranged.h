@@ -26,7 +26,7 @@
 #include "chordtextlinebase.h"
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class TempoChangeRangedSegment;
 class TempoChangeRanged : public ChordTextLineBase
 {

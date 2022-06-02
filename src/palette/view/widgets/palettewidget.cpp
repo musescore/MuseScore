@@ -69,7 +69,6 @@ using namespace mu::palette;
 using namespace mu::engraving;
 using namespace mu::framework;
 using namespace mu::draw;
-using namespace Ms;
 
 PaletteWidget::PaletteWidget(QWidget* parent)
     : QWidget(parent)
@@ -175,7 +174,7 @@ PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& n
     return cell;
 }
 
-PaletteCellPtr PaletteWidget::appendActionIcon(Ms::ActionIconType type, actions::ActionCode code)
+PaletteCellPtr PaletteWidget::appendActionIcon(mu::engraving::ActionIconType type, actions::ActionCode code)
 {
     PaletteCellPtr cell = m_palette->appendActionIcon(type, code);
 

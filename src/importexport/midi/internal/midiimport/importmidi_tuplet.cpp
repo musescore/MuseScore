@@ -34,7 +34,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace MidiTuplet {
 const std::map<int, TupletLimits>& tupletsLimits()
 {

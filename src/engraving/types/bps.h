@@ -64,7 +64,7 @@ struct BeatsPerSecond // beats per second
 }
 
 //! NOTE compat
-namespace Ms {
+namespace mu::engraving {
 using BeatsPerMinute = mu::engraving::BeatsPerMinute;
 using BeatsPerSecond = mu::engraving::BeatsPerSecond;
 }

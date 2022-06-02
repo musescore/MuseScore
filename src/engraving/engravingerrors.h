@@ -105,28 +105,28 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
     return mu::Ret(static_cast<int>(err), text.toStdString());
 }
 
-inline Err scoreFileErrorToErr(Ms::Score::FileError err)
+inline Err scoreFileErrorToErr(mu::engraving::Score::FileError err)
 {
     switch (err) {
-    case Ms::Score::FileError::FILE_NO_ERROR:       return Err::NoError;
-    case Ms::Score::FileError::FILE_ERROR:          return Err::FileUnknownError;
-    case Ms::Score::FileError::FILE_NOT_FOUND:      return Err::FileNotFound;
-    case Ms::Score::FileError::FILE_OPEN_ERROR:     return Err::FileOpenError;
-    case Ms::Score::FileError::FILE_BAD_FORMAT:     return Err::FileBadFormat;
-    case Ms::Score::FileError::FILE_UNKNOWN_TYPE:   return Err::FileUnknownType;
-    case Ms::Score::FileError::FILE_NO_ROOTFILE:    return Err::FileBadFormat;
-    case Ms::Score::FileError::FILE_TOO_OLD:        return Err::FileTooOld;
-    case Ms::Score::FileError::FILE_TOO_NEW:        return Err::FileTooNew;
-    case Ms::Score::FileError::FILE_OLD_300_FORMAT: return Err::FileOld300Format;
-    case Ms::Score::FileError::FILE_CORRUPTED:      return Err::FileCorrupted;
-    case Ms::Score::FileError::FILE_CRITICALLY_CORRUPTED: return Err::FileCriticalCorrupted;
-    case Ms::Score::FileError::FILE_USER_ABORT:      return Err::UserAbort;
-    case Ms::Score::FileError::FILE_IGNORE_ERROR:    return Err::IgnoreError;
+    case mu::engraving::Score::FileError::FILE_NO_ERROR:       return Err::NoError;
+    case mu::engraving::Score::FileError::FILE_ERROR:          return Err::FileUnknownError;
+    case mu::engraving::Score::FileError::FILE_NOT_FOUND:      return Err::FileNotFound;
+    case mu::engraving::Score::FileError::FILE_OPEN_ERROR:     return Err::FileOpenError;
+    case mu::engraving::Score::FileError::FILE_BAD_FORMAT:     return Err::FileBadFormat;
+    case mu::engraving::Score::FileError::FILE_UNKNOWN_TYPE:   return Err::FileUnknownType;
+    case mu::engraving::Score::FileError::FILE_NO_ROOTFILE:    return Err::FileBadFormat;
+    case mu::engraving::Score::FileError::FILE_TOO_OLD:        return Err::FileTooOld;
+    case mu::engraving::Score::FileError::FILE_TOO_NEW:        return Err::FileTooNew;
+    case mu::engraving::Score::FileError::FILE_OLD_300_FORMAT: return Err::FileOld300Format;
+    case mu::engraving::Score::FileError::FILE_CORRUPTED:      return Err::FileCorrupted;
+    case mu::engraving::Score::FileError::FILE_CRITICALLY_CORRUPTED: return Err::FileCriticalCorrupted;
+    case mu::engraving::Score::FileError::FILE_USER_ABORT:      return Err::UserAbort;
+    case mu::engraving::Score::FileError::FILE_IGNORE_ERROR:    return Err::IgnoreError;
     }
     return Err::FileUnknownError;
 }
 
-inline Ret scoreFileErrorToRet(Ms::Score::FileError err, const io::path_t& filePath)
+inline Ret scoreFileErrorToRet(mu::engraving::Score::FileError err, const io::path_t& filePath)
 {
     return make_ret(scoreFileErrorToErr(err), filePath);
 }

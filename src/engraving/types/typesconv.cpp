@@ -27,9 +27,8 @@
 
 #include "log.h"
 
-using namespace mu::engraving;
 using namespace mu;
-using namespace Ms;
+using namespace mu::engraving;
 
 template<typename T>
 struct Item

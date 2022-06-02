@@ -1,4 +1,4 @@
 #include "gpmastertracks.h"
 
-namespace Ms {
+namespace mu::engraving {
 }

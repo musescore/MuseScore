@@ -25,7 +25,7 @@
 
 #include "libmscore/text.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   MScoreTextToMXML
 //---------------------------------------------------------

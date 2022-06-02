@@ -23,7 +23,7 @@
 #include "elementgroup.h"
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 void SingleElementGroup::startDrag(EditData& ed)
 {
     e->startDrag(ed);

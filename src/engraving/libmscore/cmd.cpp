@@ -98,7 +98,7 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
@@ -348,7 +348,7 @@ ElementTypeSet Score::changedTypes() const
         return empty;
     }
 
-    const Ms::UndoMacro* actualMacro = undoStack()->current();
+    const mu::engraving::UndoMacro* actualMacro = undoStack()->current();
 
     if (!actualMacro) {
         actualMacro = undoStack()->last();
@@ -655,11 +655,11 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
                 if (styleB(Sid::concertPitch)) {
                     v.flip();
                     ntpc1 = ntpc;
-                    ntpc2 = Ms::transposeTpc(ntpc, v, true);
+                    ntpc2 = mu::engraving::transposeTpc(ntpc, v, true);
                 } else {
                     npitch += v.chromatic;
                     ntpc2 = ntpc;
-                    ntpc1 = Ms::transposeTpc(ntpc, v, true);
+                    ntpc1 = mu::engraving::transposeTpc(ntpc, v, true);
                 }
             }
         } else {   //special case for octave

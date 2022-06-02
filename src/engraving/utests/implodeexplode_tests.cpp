@@ -33,7 +33,6 @@
 static const QString IMPLODEEXP_DATA_DIR("implode_explode_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class ImplodeExplodeTests : public ::testing::Test
 {

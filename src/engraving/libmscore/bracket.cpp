@@ -42,7 +42,7 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::draw;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Bracket
 //---------------------------------------------------------

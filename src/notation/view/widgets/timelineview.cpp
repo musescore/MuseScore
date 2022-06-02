@@ -40,7 +40,7 @@ public:
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         setObjectName("TimelineAdapter");
 
-        m_msTimeline = new Ms::Timeline(this);
+        m_msTimeline = new mu::engraving::Timeline(this);
     }
 
     void updateView()
@@ -72,7 +72,7 @@ private:
     bool handleMouseEvent(QMouseEvent* event)
     {
         QPoint pos = event ? event->pos() : QPoint();
-        Ms::TRowLabels* labelsColumn = m_msTimeline->labelsColumn();
+        mu::engraving::TRowLabels* labelsColumn = m_msTimeline->labelsColumn();
 
         if (m_msTimeline->geometry().contains(pos)) {
             event->setLocalPos(m_msTimeline->mapFrom(this, pos));
@@ -85,7 +85,7 @@ private:
         return false;
     }
 
-    Ms::Timeline* m_msTimeline = nullptr;
+    mu::engraving::Timeline* m_msTimeline = nullptr;
 };
 }
 

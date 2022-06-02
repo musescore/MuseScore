@@ -40,7 +40,6 @@
 static const QString COPYPASTE_DATA_DIR("copypaste_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class CopyPasteTests : public ::testing::Test
 {
@@ -202,7 +201,7 @@ void CopyPasteTests::copypastevoice(const char* idx, int voice)
     // create a range selection on 2 and 3 beat of first measure
     SegmentType segTypeCR = SegmentType::ChordRest;
     Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
-    score->select(static_cast<Ms::Chord*>(s->element(voice))->notes().at(0));
+    score->select(static_cast<mu::engraving::Chord*>(s->element(voice))->notes().at(0));
     s = s->next(SegmentType::ChordRest);
     score->select(s->element(voice), SelectType::RANGE);
 
@@ -238,7 +237,7 @@ TEST_F(CopyPasteTests, copypaste2Voice)
 
     // select 2 chord rests at the start of the first measure
     Segment* s = m1->first(SegmentType::ChordRest);
-    score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
+    score->select(static_cast<mu::engraving::Chord*>(s->element(0))->notes().at(0));
     s = s->next(SegmentType::ChordRest);
     score->select(s->element(0), SelectType::RANGE);
 
@@ -273,7 +272,7 @@ TEST_F(CopyPasteTests, copypaste2Voice5)
     // create a range selection from 2 eighth note to the end of first measure
     SegmentType segTypeCR = SegmentType::ChordRest;
     Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
-    score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
+    score->select(static_cast<mu::engraving::Chord*>(s->element(0))->notes().at(0));
 
     s = m1->last()->prev(SegmentType::ChordRest);
     score->select(s->element(0), SelectType::RANGE);
@@ -313,7 +312,7 @@ TEST_F(CopyPasteTests, copypaste2Voice6)
     // create a range selection from 2nd eighth note to the end of first measure
     SegmentType segTypeCR = SegmentType::ChordRest;
     Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
-    score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
+    score->select(static_cast<mu::engraving::Chord*>(s->element(0))->notes().at(0));
 
     s = m1->last()->prev(SegmentType::ChordRest);
     score->select(s->element(1), SelectType::RANGE);
@@ -593,7 +592,7 @@ TEST_F(CopyPasteTests, DISABLED_copypastetremolo)
     // create a range selection on 2nd to 3rd beat (voice 1) of first measure
     SegmentType segTypeCR = SegmentType::ChordRest;
     Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
-    score->select(static_cast<Ms::Chord*>(s->element(1))->notes().at(0));
+    score->select(static_cast<mu::engraving::Chord*>(s->element(1))->notes().at(0));
     s = s->next1(segTypeCR);
     score->select(s->element(1), SelectType::RANGE);
 
@@ -613,7 +612,7 @@ TEST_F(CopyPasteTests, DISABLED_copypastetremolo)
 
     // create a range selection on 2nd to 4th beat (voice 0) of first measure
     s = m1->first(segTypeCR)->next1(segTypeCR);
-    score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
+    score->select(static_cast<mu::engraving::Chord*>(s->element(0))->notes().at(0));
     s = s->next1(segTypeCR)->next1(segTypeCR);
     score->select(s->element(0), SelectType::RANGE);
 

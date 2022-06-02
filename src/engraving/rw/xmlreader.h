@@ -35,7 +35,7 @@ namespace mu::engraving {
 class ReadContext;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class XmlReader : public mu::XmlStreamReader
 {
 public:

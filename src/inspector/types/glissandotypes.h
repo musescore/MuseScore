@@ -30,7 +30,7 @@ class GlissandoTypes
     Q_GADGET
 
 public:
-    //! NOTE: must be in sync with Ms::GlissandoStyle
+    //! NOTE: must be in sync with mu::engraving::GlissandoStyle
     enum class Style {
         STYLE_CHROMATIC = 0,
         STYLE_WHITE_KEYS,

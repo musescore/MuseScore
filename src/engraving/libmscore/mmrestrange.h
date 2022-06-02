@@ -26,7 +26,7 @@
 #include "measurenumberbase.h"
 #include "property.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   MMRestRange
 //---------------------------------------------------------

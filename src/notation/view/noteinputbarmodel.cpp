@@ -440,8 +440,8 @@ std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
             result.insert(articulation->symId());
         }
 
-        result = Ms::flipArticulations(result, Ms::PlacementV::ABOVE);
-        return Ms::splitArticulations(result);
+        result = mu::engraving::flipArticulations(result, mu::engraving::PlacementV::ABOVE);
+        return mu::engraving::splitArticulations(result);
     };
 
     std::set<SymbolId> result;

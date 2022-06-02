@@ -1,4 +1,4 @@
 #include "gpaudiotrack.h"
 
-namespace Ms {
+namespace mu::engraving {
 }

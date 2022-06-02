@@ -63,7 +63,7 @@ using namespace mu::engraving;
 #define DUMP_CLEFS(s)
 #endif
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Staff
 //---------------------------------------------------------
@@ -1504,7 +1504,7 @@ std::list<Staff*> Staff::staffList() const
 
 Staff* Staff::primaryStaff() const
 {
-    const Ms::LinkedObjects* linkedElements = links();
+    const mu::engraving::LinkedObjects* linkedElements = links();
     if (!linkedElements) {
         return nullptr;
     }

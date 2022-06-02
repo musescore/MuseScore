@@ -40,7 +40,6 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace mu::palette;
-using namespace Ms;
 
 DrumsetPalette::DrumsetPalette(QWidget* parent)
     : PaletteScrollArea(nullptr, parent)

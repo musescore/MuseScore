@@ -42,11 +42,11 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 extern Score::FileError importBB(MasterScore* score, const QString& name);
 }
 
-namespace Ms {
+namespace mu::engraving {
 MTest::MTest()
 {
     MScore::testMode = true;

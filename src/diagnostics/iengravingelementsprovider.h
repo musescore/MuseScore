@@ -26,12 +26,12 @@
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingObject;
 }
 
 namespace mu::diagnostics {
-using EngravingObjectList = std::unordered_set<const Ms::EngravingObject*>;
+using EngravingObjectList = std::unordered_set<const mu::engraving::EngravingObject*>;
 class IEngravingElementsProvider : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IEngravingElementsProvider)
@@ -43,14 +43,14 @@ public:
     virtual void printStatistic(const std::string& title) = 0;
 
     // register
-    virtual void reg(const Ms::EngravingObject* e) = 0;
-    virtual void unreg(const Ms::EngravingObject* e) = 0;
+    virtual void reg(const mu::engraving::EngravingObject* e) = 0;
+    virtual void unreg(const mu::engraving::EngravingObject* e) = 0;
     virtual const EngravingObjectList& elements() const = 0;
 
     // debug draw
-    virtual void select(const Ms::EngravingObject* e, bool arg) = 0;
-    virtual bool isSelected(const Ms::EngravingObject* e) const = 0;
-    virtual async::Channel<const Ms::EngravingObject*, bool> selectChanged() const = 0;
+    virtual void select(const mu::engraving::EngravingObject* e, bool arg) = 0;
+    virtual bool isSelected(const mu::engraving::EngravingObject* e) const = 0;
+    virtual async::Channel<const mu::engraving::EngravingObject*, bool> selectChanged() const = 0;
 };
 }
 

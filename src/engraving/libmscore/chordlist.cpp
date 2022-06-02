@@ -40,7 +40,7 @@
 using namespace mu;
 using namespace mu::io;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   HChord
 //---------------------------------------------------------
