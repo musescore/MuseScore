@@ -460,7 +460,7 @@ MasterScore* MasterScore::clone()
     WriteContext writeCtx;
     XmlWriter xml(&buffer);
     xml.setContext(&writeCtx);
-    xml.writeStartDocument();
+    xml.startDocument();
 
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
 

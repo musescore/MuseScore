@@ -28,6 +28,7 @@
 #include <string>
 #include <string_view>
 
+#include "bytearray.h"
 #include "global/logstream.h"
 
 namespace mu {
@@ -92,7 +93,9 @@ public:
 
     String(const char* str) { *this = fromUtf8(str); }
     String& operator=(const char* str) { *this = fromUtf8(str); return *this; }
+
     static String fromUtf8(const char* str);
+    ByteArray toUtf8() const;
 
     static String fromStdString(const std::string& str);
     std::string toStdString() const;
@@ -133,11 +136,6 @@ public:
     QLatin1String toQLatin1String() const { return QLatin1String(m_data, static_cast<int>(m_size)); }
 //#endif
 
-    const char* ascii() const;
-    size_t size() const;
-    bool empty() const;
-    AsciiChar at(size_t i) const;
-
     inline bool operator ==(const AsciiString& s) const { return m_size == s.m_size && std::memcmp(m_data, s.m_data, m_size) == 0; }
     inline bool operator !=(const AsciiString& s) const { return !this->operator ==(s); }
     inline bool operator ==(const char* s) const
@@ -155,6 +153,12 @@ public:
         }
         return std::memcmp(m_data, s.m_data, m_size) < 0;
     }
+
+    const char* ascii() const;
+    size_t size() const;
+    bool empty() const;
+    AsciiChar at(size_t i) const;
+    bool contains(char ch) const;
 
     int toInt(bool* ok = nullptr) const;
     double toDouble(bool* ok = nullptr) const;

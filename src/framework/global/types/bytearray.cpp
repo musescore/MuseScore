@@ -131,6 +131,11 @@ void ByteArray::truncate(size_t pos)
     resize(pos);
 }
 
+void ByteArray::clear()
+{
+    resize(0);
+}
+
 ByteArray& ByteArray::insert(size_t pos, uint8_t b)
 {
     if (pos > m_size) {
@@ -174,16 +179,21 @@ void ByteArray::push_back(uint8_t b)
     insert(m_size, b);
 }
 
-void ByteArray::push_back(const ByteArray& other)
+void ByteArray::push_back(const uint8_t* b, size_t len)
 {
     detachRawDataIfNeed();
 
-    uint8_t* nbyte = new uint8_t[m_size + other.m_size + 1];
-    nbyte[m_size + other.m_size] = 0;
+    uint8_t* nbyte = new uint8_t[m_size + len + 1];
+    nbyte[m_size + len] = 0;
     std::memcpy(nbyte, m_data.get(), m_size);
-    std::memcpy(&nbyte[m_size], other.m_data.get(), other.m_size);
+    std::memcpy(&nbyte[m_size], b, len);
     m_data.reset(nbyte);
-    m_size += other.m_size;
+    m_size += len;
+}
+
+void ByteArray::push_back(const ByteArray& ba)
+{
+    push_back(ba.constData(), ba.size());
 }
 
 uint8_t ByteArray::operator[](size_t pos) const

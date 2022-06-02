@@ -93,7 +93,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    xml.writeStartDocument();
+    xml.startDocument();
     element->write(xml);
     xml.flush();
     buffer.close();
@@ -101,9 +101,6 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     //
     // read element
     //
-
-    std::cout << buffer.data().constData() << "\n";
-    std::cout << std::flush;
 
     XmlReader e(buffer.data());
     e.readNextStartElement();

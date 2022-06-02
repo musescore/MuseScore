@@ -51,7 +51,7 @@ public:
     const std::vector<std::pair<const EngravingObject*, QString> >& elements() const { return _elements; }
     void setRecordElements(bool record) { _recordElements = record; }
 
-    void startObject(const QString&);
+    void startObject(const QString& name);
     void endObject();
 
     void startObject(const EngravingObject* se, const QString& attributes = QString());
