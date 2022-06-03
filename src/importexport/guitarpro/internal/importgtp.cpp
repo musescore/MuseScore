@@ -3106,7 +3106,6 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io)
     //      album
     //      copyright
 
-    score->setNewlyCreated(true);
     delete gp;
 
     return Score::FileError::FILE_NO_ERROR;

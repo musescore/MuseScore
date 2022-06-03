@@ -121,15 +121,13 @@ void TestBrailleIO::initTestCase()
 }
 
 //---------------------------------------------------------
-//   fixupScore -- do required fixups after MusicXML import
-//   see mscore/file.cpp MuseScore::readScore(Score* score, QString name)
+//   fixupScore -- do required fixups after reading/importing score
 //---------------------------------------------------------
 
 static void fixupScore(MasterScore* score)
 {
     score->connectTies();
     score->masterScore()->rebuildMidiMapping();
-    score->setNewlyCreated(false);
     score->setSaved(false);
 }
 

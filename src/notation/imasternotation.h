@@ -39,7 +39,6 @@ class IMasterNotation
 public:
     virtual INotationPtr notation() = 0;
 
-    virtual bool isNewlyCreated() const = 0;
     virtual ValNt<bool> needSave() const = 0;
 
     virtual IExcerptNotationPtr newExcerptBlankNotation() const = 0;
