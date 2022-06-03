@@ -41,6 +41,7 @@ class MScore;
 //   QmlPlugin
 //   @@ MuseScore
 //   @P title                QString           the title of this plugin
+//   @P menuPath             QString           where the plugin is placed in menu
 //   @P filePath             QString           source file path, without the file name (read only)
 //   @P version              QString           version of this plugin
 //   @P description          QString           human readable description, displayed in Plugin Manager
@@ -79,37 +80,40 @@ public slots:
     virtual void endCmd(const QMap<QString, QVariant>&) = 0;
 
 signals:
-    void close();
+    void closeRequested();
 
 public:
     QmlPlugin(QQuickItem* parent = 0);
 
-    void setTitle(const QString& s) { _title = s; }
-    QString title() const { return _title; }
-    void setVersion(const QString& s) { _version = s; }
-    QString version() const { return _version; }
-    void setDescription(const QString& s) { _description = s; }
-    QString description() const { return _description; }
-    void setFilePath(const QString s) { _filePath = s; }
-    QString filePath() const { return _filePath; }
-    void setThumbnailName(const QString& s) { _thumbnailName = s; }
-    QString thumbnailName() const { return _thumbnailName; }
-    void setCategoryCode(const QString& s) { _categoryCode = s; }
-    QString categoryCode() const { return _categoryCode; }
-
-    void setPluginType(const QString& s) { _pluginType = s; }
-    QString pluginType() const { return _pluginType; }
-    void setRequiresScore(bool b) { _requiresScore = b; }
-    bool requiresScore() const { return _requiresScore; }
+    void setMenuPath(const QString& s);
+    QString menuPath() const;
+    void setTitle(const QString& s);
+    QString title() const;
+    void setVersion(const QString& s);
+    QString version() const;
+    void setDescription(const QString& s);
+    QString description() const;
+    void setFilePath(const QString s);
+    QString filePath() const;
+    void setThumbnailName(const QString& s);
+    QString thumbnailName() const;
+    void setCategoryCode(const QString& s);
+    QString categoryCode() const;
+    void setPluginType(const QString& s);
+    QString pluginType() const;
+    void setDockArea(const QString& s);
+    QString dockArea() const;
+    void setRequiresScore(bool b);
+    bool requiresScore() const;
 
     virtual void runPlugin() = 0;
 
-    int division() const { return Constant::division; }
-    int mscoreVersion() const { return mu::engraving::version(); }
-    int mscoreMajorVersion() const { return majorVersion(); }
-    int mscoreMinorVersion() const { return minorVersion(); }
-    int mscoreUpdateVersion() const { return patchVersion(); }
-    qreal mscoreDPI() const { return DPI; }
+    int division() const;
+    int mscoreVersion() const;
+    int mscoreMajorVersion() const;
+    int mscoreMinorVersion() const;
+    int mscoreUpdateVersion() const;
+    qreal mscoreDPI() const;
 };
 } // namespace Ms
 #endif

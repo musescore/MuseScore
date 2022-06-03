@@ -314,7 +314,7 @@ FractionWrapper* PluginAPI::fraction(int num, int den) const
 
 void PluginAPI::quit()
 {
-    emit close();
+    emit closeRequested();
 }
 
 //---------------------------------------------------------

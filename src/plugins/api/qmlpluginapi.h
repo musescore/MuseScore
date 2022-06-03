@@ -81,6 +81,8 @@ class PluginAPI : public mu::engraving::QmlPlugin
     INJECT(plugins, mu::context::IGlobalContext, context)
 
     /** Path where the plugin is placed in menu */
+    Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
+    /** Title of this plugin */
     Q_PROPERTY(QString title READ title WRITE setTitle)
     /** Source file path, without the file name (read only) */
     Q_PROPERTY(QString filePath READ filePath)
@@ -120,7 +122,7 @@ class PluginAPI : public mu::engraving::QmlPlugin
 
     // Should be initialized in qmlpluginapi.cpp
     /// Contains mu::engraving::ElementType enumeration values
-    DECLARE_API_ENUM(Elemnet,          elementTypeEnum,        mu::engraving::ElementType)
+    DECLARE_API_ENUM(Element,          elementTypeEnum,        mu::engraving::ElementType)
     /// Contains mu::engraving::AccidentalType enumeration values
     DECLARE_API_ENUM(Accidental,       accidentalTypeEnum,     mu::engraving::AccidentalType)
     /// Contains mu::engraving::BeamMode enumeration values
