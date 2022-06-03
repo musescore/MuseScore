@@ -115,7 +115,7 @@ void Fermata::write(XmlWriter& xml) const
         LOGD("%s not written", typeName());
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("subtype", SymNames::nameForSymId(_symId));
     writeProperty(xml, Pid::TIME_STRETCH);
     writeProperty(xml, Pid::PLAY);
@@ -124,7 +124,7 @@ void Fermata::write(XmlWriter& xml) const
         writeProperty(xml, Pid::OFFSET);
     }
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

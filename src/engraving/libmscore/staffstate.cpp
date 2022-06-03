@@ -63,13 +63,13 @@ StaffState::~StaffState()
 
 void StaffState::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("subtype", int(_staffStateType));
     if (staffStateType() == StaffStateType::INSTRUMENT) {
         _instrument->write(xml, nullptr);
     }
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

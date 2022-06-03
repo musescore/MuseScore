@@ -44,48 +44,28 @@ XmlWriter::~XmlWriter()
     }
 }
 
-//---------------------------------------------------------
-//   startObject
-//    <mops>
-//---------------------------------------------------------
-
-void XmlWriter::startObject(const QString& s)
+void XmlWriter::startElementRaw(const QString& s)
 {
-    XmlStreamWriter::writeStartElement(s);
+    XmlStreamWriter::startElementRaw(s);
 }
 
-//---------------------------------------------------------
-//   startObject
-//    <mops attribute="value">
-//---------------------------------------------------------
-
-void XmlWriter::startObject(const EngravingObject* se, const QString& attributes)
+void XmlWriter::startElement(const AsciiString& name, const Attributes& attrs)
 {
-    startObject(se->typeName(), se, attributes);
+    XmlStreamWriter::startElement(name, attrs);
 }
 
-//---------------------------------------------------------
-//   startObject
-//    <mops attribute="value">
-//---------------------------------------------------------
-
-void XmlWriter::startObject(const QString& name, const EngravingObject* se, const QString& attributes)
+void XmlWriter::startElement(const EngravingObject* se, const Attributes& attrs)
 {
-    XmlStreamWriter::writeStartElement(name, attributes);
+    startElement(se->typeName(), se, attrs);
+}
+
+void XmlWriter::startElement(const AsciiString& name, const EngravingObject* se, const Attributes& attrs)
+{
+    XmlStreamWriter::startElement(name, attrs);
 
     if (_recordElements) {
         _elements.emplace_back(se, name);
     }
-}
-
-//---------------------------------------------------------
-//   endObject
-//    </mops>
-//---------------------------------------------------------
-
-void XmlWriter::endObject()
-{
-    XmlStreamWriter::writeEndElement();
 }
 
 //---------------------------------------------------------

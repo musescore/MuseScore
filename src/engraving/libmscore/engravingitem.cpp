@@ -893,7 +893,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
                 Staff* linkedStaff = toStaff(s->links()->mainElement());
                 loc.setStaff(static_cast<int>(linkedStaff->idx()));
             }
-            xml.startObject("linked");
+            xml.startElement("linked");
             if (!me->score()->isMaster()) {
                 if (me->score() == score()) {
                     xml.tag("score", "same");
@@ -912,7 +912,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
             }
             const int indexDiff = ctx->lidLocalIndex(_links->lid()) - guessedLocalIndex;
             xml.tag("indexDiff", indexDiff, 0);
-            xml.endObject();       // </linked>
+            xml.endElement();       // </linked>
         }
     }
     if ((xml.context()->writeTrack() || track() != xml.context()->curTrack())
@@ -1086,9 +1086,9 @@ bool EngravingItem::readProperties(XmlReader& e)
 
 void EngravingItem::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -1270,7 +1270,7 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.context()->setClipboardmode(true);
-    xml.startObject("EngravingItem");
+    xml.startElement("EngravingItem");
     if (isNote()) {
         xml.tag("duration", toNote(this)->chord()->ticks());
     }
@@ -1278,7 +1278,7 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
         xml.tag("dragOffset", dragOffset);
     }
     write(xml);
-    xml.endObject();
+    xml.endElement();
     buffer.close();
     return buffer.data();
 }

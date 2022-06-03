@@ -194,11 +194,11 @@ std::vector<mu::PointF> Spacer::gripsPositions(const EditData&) const
 
 void Spacer::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("subtype", int(_spacerType));
     EngravingItem::writeProperties(xml);
     xml.tag("space", _gap.val() / spatium());
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -96,16 +96,16 @@ static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
 //   write
 //---------------------------------------------------------
 
-void NamedEventList::write(XmlWriter& xml, const QString& n) const
+void NamedEventList::write(XmlWriter& xml, const AsciiString& n) const
 {
-    xml.startObject(QString("%1 name=\"%2\"").arg(n, name));
+    xml.startElement(n, { { "name", name } });
     if (!descr.isEmpty()) {
         xml.tag("descr", descr);
     }
     for (const MidiCoreEvent& e : events) {
         midi_event_write(e, xml);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -280,9 +280,9 @@ void StaffName::read(XmlReader& e)
 void Instrument::write(XmlWriter& xml, const Part* part) const
 {
     if (_id.isEmpty()) {
-        xml.startObject("Instrument");
+        xml.startElement("Instrument");
     } else {
-        xml.startObject(QString("Instrument id=\"%1\"").arg(_id));
+        xml.startElement("Instrument", { { "id", _id } });
     }
     _longNames.write(xml, "longName");
     _shortNames.write(xml, "shortName");
@@ -353,7 +353,7 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
     for (const InstrChannel* a : _channel) {
         a->write(xml, part);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 QString Instrument::recognizeInstrumentId() const
@@ -812,9 +812,9 @@ void InstrChannel::setUserBankController(bool val)
 void InstrChannel::write(XmlWriter& xml, const Part* part) const
 {
     if (_name.isEmpty() || _name == DEFAULT_NAME) {
-        xml.startObject("Channel");
+        xml.startElement("Channel");
     } else {
-        xml.startObject(QString("Channel name=\"%1\"").arg(_name));
+        xml.startElement("Channel", { { "name", _name } });
     }
     if (!_descr.isEmpty()) {
         xml.tag("descr", _descr);
@@ -872,7 +872,7 @@ void InstrChannel::write(XmlWriter& xml, const Part* part) const
     for (const MidiArticulation& a : articulation) {
         a.write(xml);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -1243,16 +1243,16 @@ int Instrument::channelIdx(const QString& s) const
 void MidiArticulation::write(XmlWriter& xml) const
 {
     if (name.isEmpty()) {
-        xml.startObject("Articulation");
+        xml.startElement("Articulation");
     } else {
-        xml.startObject(QString("Articulation name=\"%1\"").arg(name));
+        xml.startElement("Articulation", { { "name", name } });
     }
     if (!descr.isEmpty()) {
         xml.tag("descr", descr);
     }
     xml.tag("velocity", velocity);
     xml.tag("gateTime", gateTime);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

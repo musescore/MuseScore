@@ -226,10 +226,10 @@ void Marker::read(XmlReader& e)
 
 void Marker::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     TextBase::writeProperties(xml);
     xml.tag("label", _label);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

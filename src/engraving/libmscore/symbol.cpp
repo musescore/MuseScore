@@ -132,13 +132,13 @@ void Symbol::draw(mu::draw::Painter* painter) const
 
 void Symbol::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("name", SymNames::nameForSymId(_sym));
     if (_scoreFont) {
         xml.tag("font", _scoreFont->name());
     }
     BSymbol::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -261,12 +261,12 @@ void FSymbol::draw(mu::draw::Painter* painter) const
 
 void FSymbol::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("font",     _font.family());
     xml.tag("fontsize", _font.pointSizeF());
     xml.tag("code",     _code);
     BSymbol::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

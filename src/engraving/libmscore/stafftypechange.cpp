@@ -66,12 +66,12 @@ StaffTypeChange::~StaffTypeChange()
 
 void StaffTypeChange::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     if (m_staffType) {
         m_staffType->write(xml);
     }
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -595,12 +595,12 @@ void Bracket::write(XmlWriter& xml) const
     case BracketType::LINE:
     {
         const char* type = bracketTypeName(_bi->bracketType());
-        xml.startObject(this, QString("type=\"%1\"").arg(type));
+        xml.startElement(this, { { "type", type } });
         isStartTag = true;
     }
     break;
     case BracketType::NORMAL:
-        xml.startObject(this);
+        xml.startElement(this);
         isStartTag = true;
         break;
     case BracketType::NO_BRACKET:
@@ -614,7 +614,7 @@ void Bracket::write(XmlWriter& xml) const
 
         EngravingItem::writeProperties(xml);
 
-        xml.endObject();
+        xml.endElement();
     }
 }
 

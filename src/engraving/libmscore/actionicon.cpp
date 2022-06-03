@@ -77,12 +77,12 @@ void ActionIcon::setFontSize(qreal size)
 
 void ActionIcon::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("subtype", int(m_actionType));
     if (!m_actionCode.empty()) {
         xml.tag("action", QString::fromStdString(m_actionCode));
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 void ActionIcon::read(XmlReader& e)

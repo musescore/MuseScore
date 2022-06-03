@@ -203,11 +203,11 @@ Shape MeasureRepeat::shape() const
 
 void MeasureRepeat::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperty(xml, Pid::SUBTYPE);
     Rest::writeProperties(xml);
     el().write(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

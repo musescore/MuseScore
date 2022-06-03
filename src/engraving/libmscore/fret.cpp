@@ -598,7 +598,7 @@ void FretDiagram::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
 
     // Write properties first and only once
     for (Pid p : pids) {
@@ -613,12 +613,12 @@ void FretDiagram::write(XmlWriter& xml) const
     // Lowercase f indicates new writing format
     // TODO: in the next score format version (4) use only write new + props and discard
     // the compatibility writing.
-    xml.startObject("fretDiagram");
+    xml.startElement("fretDiagram");
     writeNew(xml);
-    xml.endObject();
+    xml.endElement();
 
     writeOld(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -693,7 +693,7 @@ void FretDiagram::writeOld(XmlWriter& xml) const
             continue;
         }
 
-        xml.startObject(QString("string no=\"%1\"").arg(i));
+        xml.startElement("string", { { "no", i } });
 
         if (m.exists()) {
             xml.tag("marker", FretItem::markerToChar(m.mtype).unicode());
@@ -710,7 +710,7 @@ void FretDiagram::writeOld(XmlWriter& xml) const
             xml.tag("dot", barreFret);
         }
 
-        xml.endObject();
+        xml.endElement();
     }
 
     if (barreFret > 0) {
@@ -743,7 +743,7 @@ void FretDiagram::writeNew(XmlWriter& xml) const
         }
 
         // Start the string writing
-        xml.startObject(QString("string no=\"%1\"").arg(i));
+        xml.startElement("string", { { "no", i } });
 
         // Write marker
         if (m.exists()) {
@@ -758,7 +758,7 @@ void FretDiagram::writeNew(XmlWriter& xml) const
             }
         }
 
-        xml.endObject();
+        xml.endElement();
     }
 
     for (int f = 1; f <= _frets; ++f) {
@@ -1278,7 +1278,7 @@ void FretDiagram::scanElements(void* data, void (* func)(void*, EngravingItem*),
 void FretDiagram::writeMusicXML(XmlWriter& xml) const
 {
     LOGD("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
-    xml.startObject("frame");
+    xml.startElement("frame");
     xml.tag("frame-strings", _strings);
     xml.tag("frame-frets", frets());
     if (fretOffset() > 0) {
@@ -1305,10 +1305,10 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
         }
 
         if (marker(i).exists() && marker(i).mtype == FretMarkerType::CIRCLE) {
-            xml.startObject("frame-note");
+            xml.startElement("frame-note");
             xml.tag("string", mxmlString);
             xml.tag("fret", "0");
-            xml.endObject();
+            xml.endElement();
         }
         // Markers may exists alongside with dots
         // Write dots
@@ -1316,7 +1316,7 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
             if (!d.exists()) {
                 continue;
             }
-            xml.startObject("frame-note");
+            xml.startElement("frame-note");
             xml.tag("string", mxmlString);
             xml.tag("fret", d.fret + fretOffset());
             // TODO: write fingerings
@@ -1330,28 +1330,28 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
                 xml.tagE("barre type=\"stop\"");
                 bEnds.erase(std::remove(bEnds.begin(), bEnds.end(), d.fret), bEnds.end());
             }
-            xml.endObject();
+            xml.endElement();
         }
 
         // Write unwritten barres
         for (int j : bStarts) {
-            xml.startObject("frame-note");
+            xml.startElement("frame-note");
             xml.tag("string", mxmlString);
             xml.tag("fret", j);
             xml.tagE("barre type=\"start\"");
-            xml.endObject();
+            xml.endElement();
         }
 
         for (int j : bEnds) {
-            xml.startObject("frame-note");
+            xml.startElement("frame-note");
             xml.tag("string", mxmlString);
             xml.tag("fret", j);
             xml.tagE("barre type=\"stop\"");
-            xml.endObject();
+            xml.endElement();
         }
     }
 
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

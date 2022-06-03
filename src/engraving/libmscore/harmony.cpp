@@ -267,7 +267,7 @@ void Harmony::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperty(xml, Pid::HARMONY_TYPE);
     if (_leftParen) {
         xml.tagE("leftParen");
@@ -313,7 +313,7 @@ void Harmony::write(XmlWriter& xml) const
         for (const HDegree& hd : _degreeList) {
             HDegreeType tp = hd.type();
             if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
-                xml.startObject("degree");
+                xml.startElement("degree");
                 xml.tag("degree-value", hd.value());
                 xml.tag("degree-alter", hd.alter());
                 switch (tp) {
@@ -329,7 +329,7 @@ void Harmony::write(XmlWriter& xml) const
                 default:
                     break;
                 }
-                xml.endObject();
+                xml.endElement();
             }
         }
     } else {
@@ -344,7 +344,7 @@ void Harmony::write(XmlWriter& xml) const
     if (_rightParen) {
         xml.tagE("rightParen");
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

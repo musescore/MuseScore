@@ -1183,12 +1183,12 @@ void Slur::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     if (xml.context()->clipboardmode()) {
         xml.tag("stemArr", calcStemArrangement(startElement(), endElement()));
     }
     SlurTie::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

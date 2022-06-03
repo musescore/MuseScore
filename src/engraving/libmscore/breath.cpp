@@ -102,11 +102,11 @@ void Breath::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperty(xml, Pid::SYMBOL);
     writeProperty(xml, Pid::PAUSE);
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

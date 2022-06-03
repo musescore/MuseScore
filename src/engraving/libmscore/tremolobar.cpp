@@ -125,14 +125,14 @@ void TremoloBar::draw(mu::draw::Painter* painter) const
 
 void TremoloBar::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperty(xml, Pid::MAG);
     writeProperty(xml, Pid::LINE_WIDTH);
     writeProperty(xml, Pid::PLAY);
     for (const PitchValue& v : m_points) {
         xml.tagE(TConv::toXml(v));
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

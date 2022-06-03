@@ -48,14 +48,13 @@ public:
     XmlWriter(mu::io::IODevice* dev);
     ~XmlWriter();
 
-    const std::vector<std::pair<const EngravingObject*, QString> >& elements() const { return _elements; }
+    const std::vector<std::pair<const EngravingObject*, AsciiString> >& elements() const { return _elements; }
     void setRecordElements(bool record) { _recordElements = record; }
 
-    void startObject(const QString& name);
-    void endObject();
-
-    void startObject(const EngravingObject* se, const QString& attributes = QString());
-    void startObject(const QString& name, const EngravingObject* se, const QString& attributes = QString());
+    void startElementRaw(const QString& name);
+    void startElement(const AsciiString& name, const Attributes& attrs = {});
+    void startElement(const EngravingObject* se, const Attributes& attrs = {});
+    void startElement(const AsciiString& name, const EngravingObject* se, const Attributes& attrs = {});
 
     void tagE(const QString&);
 
@@ -109,7 +108,7 @@ public:
     static QString xmlString(ushort c);
 
 private:
-    std::vector<std::pair<const EngravingObject*, QString> > _elements;
+    std::vector<std::pair<const EngravingObject*, AsciiString> > _elements;
     bool _recordElements = false;
 
     mutable mu::engraving::WriteContext* m_context = nullptr;

@@ -47,17 +47,17 @@ void Drumset::save(XmlWriter& xml) const
         if (!isValid(i)) {
             continue;
         }
-        xml.startObject(QString("Drum pitch=\"%1\"").arg(i));
+        xml.startElement("Drum", { { "pitch", i } });
         const NoteHeadGroup nh = noteHead(i);
         //write custom as Normal notehead group + noteheads tag to keep compatibility with 2.X versions
         const NoteHeadGroup saveNHValue = (nh == NoteHeadGroup::HEAD_CUSTOM) ? NoteHeadGroup::HEAD_NORMAL : nh;
         xml.tag("head", TConv::toXml(saveNHValue));
         if (nh == NoteHeadGroup::HEAD_CUSTOM) {
-            xml.startObject("noteheads");
+            xml.startElement("noteheads");
             for (int j = 0; j < int(NoteHeadType::HEAD_TYPES); j++) {
                 xml.tag(TConv::toXml(NoteHeadType(j)), SymNames::nameForSymId(noteHeads(i, NoteHeadType(j))));
             }
-            xml.endObject();
+            xml.endElement();
         }
         xml.tag("line", line(i));
         xml.tag("voice", voice(i));
@@ -86,20 +86,20 @@ void Drumset::save(XmlWriter& xml) const
         }
         auto vs = variants(i);
         if (!vs.empty()) {
-            xml.startObject("variants");
+            xml.startElement("variants");
             for (const auto& v : qAsConst(vs)) {
-                xml.startObject(QString("variant pitch=\"%1\"").arg(v.pitch));
+                xml.startElement("variant", { { "pitch", v.pitch } });
                 if (!v.articulationName.isEmpty()) {
                     xml.tag("articulation", v.articulationName);
                 }
                 if (v.tremolo != TremoloType::INVALID_TREMOLO) {
                     xml.tag("tremolo", Tremolo::type2name(v.tremolo));
                 }
-                xml.endObject();
+                xml.endElement();
             }
-            xml.endObject();
+            xml.endElement();
         }
-        xml.endObject();
+        xml.endElement();
     }
 }
 

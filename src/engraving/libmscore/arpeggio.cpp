@@ -91,7 +91,7 @@ void Arpeggio::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     EngravingItem::writeProperties(xml);
     writeProperty(xml, Pid::ARPEGGIO_TYPE);
     if (_userLen1 != 0.0) {
@@ -105,7 +105,7 @@ void Arpeggio::write(XmlWriter& xml) const
     }
     writeProperty(xml, Pid::PLAY);
     writeProperty(xml, Pid::TIME_STRETCH);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

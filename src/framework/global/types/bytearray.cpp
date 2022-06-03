@@ -95,6 +95,11 @@ const uint8_t* ByteArray::constData() const
     return m_data.get();
 }
 
+const char* ByteArray::constChar() const
+{
+    return reinterpret_cast<const char*>(constData());
+}
+
 size_t ByteArray::size() const
 {
     return m_size;

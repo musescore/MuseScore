@@ -143,7 +143,7 @@ void StaffRW::writeStaff(const mu::engraving::Staff* staff, mu::engraving::XmlWr
                          staff_idx_t staffStart, staff_idx_t staffIdx,
                          bool selectionOnly)
 {
-    xml.startObject(staff, QString("id=\"%1\"").arg(static_cast<int>(staffIdx + 1 - staffStart)));
+    xml.startElement(staff, { { "id", static_cast<int>(staffIdx + 1 - staffStart) } });
 
     xml.context()->setCurTick(measureStart->tick());
     xml.context()->setTickDiff(xml.context()->curTick());
@@ -164,5 +164,5 @@ void StaffRW::writeStaff(const mu::engraving::Staff* staff, mu::engraving::XmlWr
         writeMeasure(xml, m, staffIdx, writeSystemElements, forceTimeSig);
     }
 
-    xml.endObject();
+    xml.endElement();
 }
