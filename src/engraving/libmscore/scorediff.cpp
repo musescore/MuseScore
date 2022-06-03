@@ -796,10 +796,18 @@ ScoreDiff::ScoreDiff(Score* s1, Score* s2, bool textDiffOnly)
 static void makeDiffs(const QString& mscx1, const QString& mscx2, const XmlWriter& xml1, const XmlWriter& xml2,
                       const std::vector<TextDiff>& textDiffs, std::vector<BaseDiff*>& diffs)
 {
+    auto toElements = [](const std::vector<std::pair<const EngravingObject*, AsciiString> >& els) {
+        std::vector<std::pair<const EngravingObject*, QString> > qels;
+        for (const std::pair<const EngravingObject*, AsciiString>& p : els) {
+            qels.push_back(std::make_pair(p.first, QString(p.second.ascii())));
+        }
+        return qels;
+    };
+
     TextDiffParser p1(0);
-    p1.makeDiffs(mscx1, xml1.elements(), textDiffs, diffs);
+    p1.makeDiffs(mscx1, toElements(xml1.elements()), textDiffs, diffs);
     TextDiffParser p2(1);
-    p2.makeDiffs(mscx2, xml2.elements(), textDiffs, diffs);
+    p2.makeDiffs(mscx2, toElements(xml2.elements()), textDiffs, diffs);
 
     std::stable_sort(diffs.begin(), diffs.end(), lineNumberSort);
 

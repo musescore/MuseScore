@@ -527,9 +527,9 @@ void TextLineBase::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

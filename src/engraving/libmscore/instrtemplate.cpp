@@ -297,7 +297,7 @@ InstrumentTemplate& InstrumentTemplate::operator=(const InstrumentTemplate& temp
 
 void InstrumentTemplate::write(XmlWriter& xml) const
 {
-    xml.startObject(QString("Instrument id=\"%1\"").arg(id));
+    xml.startElement("Instrument",  { { "id", id } });
     longNames.write(xml, "longName");
     shortNames.write(xml, "shortName");
 
@@ -413,7 +413,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     if (family) {
         xml.tag("family", family->id);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -423,14 +423,14 @@ void InstrumentTemplate::write(XmlWriter& xml) const
 
 void InstrumentTemplate::write1(XmlWriter& xml) const
 {
-    xml.startObject(QString("Instrument id=\"%1\"").arg(id));
+    xml.startElement("Instrument", { { "id", id } });
     longNames.write(xml, "longName");
     shortNames.write(xml, "shortName");
     if (longNames.size() > 1) {
         xml.tag("trackName", trackName);
     }
     xml.tag("description", description);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -887,9 +887,9 @@ void InstrumentTemplate::linkGenre(const QString& genre)
 
 void InstrumentGenre::write(XmlWriter& xml) const
 {
-    xml.startObject(QString("Genre id=\"%1\"").arg(id));
+    xml.startElement("Genre", { { "id", id } });
     xml.tag("name", name);
-    xml.endObject();
+    xml.endElement();
 }
 
 void InstrumentGenre::write1(XmlWriter& xml) const
@@ -912,9 +912,9 @@ void InstrumentGenre::read(XmlReader& e)
 
 void InstrumentFamily::write(XmlWriter& xml) const
 {
-    xml.startObject(QString("Family id=\"%1\"").arg(id));
+    xml.startElement("Family", { { "id", id } });
     xml.tag("name", name);
-    xml.endObject();
+    xml.endElement();
 }
 
 void InstrumentFamily::write1(XmlWriter& xml) const

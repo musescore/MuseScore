@@ -1493,7 +1493,7 @@ void Beam::write(XmlWriter& xml) const
     if (_elements.empty()) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     EngravingItem::writeProperties(xml);
 
     writeProperty(xml, Pid::STEM_DIRECTION);
@@ -1509,7 +1509,7 @@ void Beam::write(XmlWriter& xml) const
             xml.startElement("Fragment");
             xml.tag("y1", f->py1[idx] / _spatium);
             xml.tag("y2", f->py2[idx] / _spatium);
-            xml.endObject();
+            xml.endElement();
         }
     }
 
@@ -1523,7 +1523,7 @@ void Beam::write(XmlWriter& xml) const
         }
     }
 
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

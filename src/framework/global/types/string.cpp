@@ -55,6 +55,17 @@ String::String()
     m_data = std::make_shared<std::u16string>();
 }
 
+String::String(const char16_t* str)
+{
+    m_data = std::make_shared<std::u16string>(str);
+}
+
+String& String::operator=(const char16_t* str)
+{
+    m_data = std::make_shared<std::u16string>(str);
+    return *this;
+}
+
 String String::fromUtf8(const char* str)
 {
     String s;
@@ -67,6 +78,29 @@ ByteArray String::toUtf8() const
     std::string str;
     UtfCodec::utf16to8(std::u16string_view(*m_data.get()), str);
     return ByteArray(reinterpret_cast<const uint8_t*>(str.c_str()), str.size());
+}
+
+ByteArray String::toAscii(bool* ok) const
+{
+    ByteArray ba;
+    ba.resize(size());
+
+    if (ok) {
+        *ok = true;
+    }
+
+    for (size_t i = 0; i < size(); ++i) {
+        char16_t ch = m_data->at(i);
+        if (ch > 0xff) {
+            ba[i] = '?';
+            if (ok) {
+                *ok = false;
+            }
+        } else {
+            ba[i] = static_cast<uint8_t>(ch);
+        }
+    }
+    return ba;
 }
 
 String String::fromStdString(const std::string& str)

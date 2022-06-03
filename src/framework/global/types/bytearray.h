@@ -46,6 +46,7 @@ public:
 
     uint8_t* data();
     const uint8_t* constData() const;
+    const char* constChar() const; // data as char*
     size_t size() const;
     bool empty() const;
 

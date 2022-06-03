@@ -2247,9 +2247,9 @@ void TextBase::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperties(xml, true, true);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

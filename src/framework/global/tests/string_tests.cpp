@@ -46,7 +46,7 @@ TEST_F(Global_Types_StringTests, String_Construct)
 
     {
         //! GIVEN Some string
-        String str = "123abc";
+        String str = u"123abc";
         //! DO Get size
         size_t size = str.size();
         //! CHECK
@@ -55,7 +55,7 @@ TEST_F(Global_Types_StringTests, String_Construct)
 
     {
         //! GIVEN Some string on cyrilic (not ASCII)
-        String str = "привет!";
+        String str = u"привет!";
         //! DO Get size
         size_t size = str.size();
         //! CHECK
@@ -113,7 +113,7 @@ TEST_F(Global_Types_StringTests, String_Access)
 {
     {
         //! GIVEN Some String
-        String str = "123abcПыф";
+        String str = u"123abcПыф";
         //! DO
         Char c0 = str.at(0);
         //! CHECK

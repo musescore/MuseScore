@@ -415,7 +415,7 @@ void Glissando::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     if (_showText && !_text.isEmpty()) {
         xml.tag("text", _text);
     }
@@ -428,7 +428,7 @@ void Glissando::write(XmlWriter& xml) const
     }
 
     SLine::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -764,7 +764,7 @@ Fraction Staff::currentKeyTick(const Fraction& tick) const
 
 void Staff::write(XmlWriter& xml) const
 {
-    xml.startObject(this, QString("id=\"%1\"").arg(idx() + 1));
+    xml.startElement(this, { { "id", idx() + 1 } });
 
     if (links()) {
         Score* s = masterScore();
@@ -836,7 +836,7 @@ void Staff::write(XmlWriter& xml) const
     writeProperty(xml, Pid::PLAYBACK_VOICE2);
     writeProperty(xml, Pid::PLAYBACK_VOICE3);
     writeProperty(xml, Pid::PLAYBACK_VOICE4);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

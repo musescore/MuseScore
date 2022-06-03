@@ -149,7 +149,7 @@ void TimeSig::setDenominatorString(const QString& a)
 
 void TimeSig::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperty(xml, Pid::TIMESIG_TYPE);
     EngravingItem::writeProperties(xml);
 
@@ -167,7 +167,7 @@ void TimeSig::write(XmlWriter& xml) const
     writeProperty(xml, Pid::SHOW_COURTESY);
     writeProperty(xml, Pid::SCALE);
 
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

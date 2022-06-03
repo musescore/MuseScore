@@ -523,28 +523,26 @@ void ScoreOrder::write(mu::engraving::XmlWriter& xml) const
         return;
     }
 
-    xml.startObject(QString("Order id=\"%1\"").arg(id));
+    xml.startElement("Order", { { "id", id } });
     xml.tag("name", name);
 
     for (const auto& p : instrumentMap) {
-        xml.startObject(QString("instrument id=\"%1\"").arg(p.first));
+        xml.startElement("instrument", { { "id", p.first } });
         xml.tag(QString("family id=\"%1\"").arg(p.second.id), p.second.name);
-        xml.endObject();
+        xml.endElement();
     }
 
     QString section { "" };
     for (const ScoreGroup& sg : groups) {
         if (sg.section != section) {
             if (!section.isEmpty()) {
-                xml.endObject();
+                xml.endElement();
             }
             if (!sg.section.isEmpty()) {
-                xml.startObject(QString(
-                                    "section id=\"%1\" brackets=\"%2\" barLineSpan=\"%3\" thinBrackets=\"%4\"")
-                                .arg(sg.section,
-                                     sg.bracket ? "true" : "false",
-                                     sg.barLineSpan ? "true" : "false",
-                                     sg.thinBracket ? "true" : "false"));
+                xml.startElement("section", { { "id", sg.section },
+                                     { "brackets", sg.bracket ? "true" : "false" },
+                                     { "barLineSpan", sg.barLineSpan ? "true" : "false" },
+                                     { "thinBrackets", sg.thinBracket ? "true" : "false" } });
             }
             section = sg.section;
         }
@@ -559,9 +557,9 @@ void ScoreOrder::write(mu::engraving::XmlWriter& xml) const
         }
     }
     if (!section.isEmpty()) {
-        xml.endObject();
+        xml.endElement();
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

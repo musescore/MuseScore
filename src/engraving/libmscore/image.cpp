@@ -324,7 +324,7 @@ void Image::write(XmlWriter& xml) const
         relativeFilePath = _linkPath;
     }
 
-    xml.startObject(this);
+    xml.startElement(this);
     BSymbol::writeProperties(xml);
     // keep old "path" tag, for backward compatibility and because it is used elsewhere
     // (for instance by Box:read(), Measure:read(), Note:read(), ...)
@@ -336,7 +336,7 @@ void Image::write(XmlWriter& xml) const
     writeProperty(xml, Pid::LOCK_ASPECT_RATIO);
     writeProperty(xml, Pid::SIZE_IS_SPATIUM);
 
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

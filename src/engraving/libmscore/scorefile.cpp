@@ -107,7 +107,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         }
     }
 
-    xml.startObject(this);
+    xml.startElement(this);
 
     if (excerpt()) {
         Excerpt* e = excerpt();
@@ -181,7 +181,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     if (!systemObjectStaves.empty()) {
         // write which staves currently have system objects above them
-        xml.startObject("SystemObjects");
+        xml.startElement("SystemObjects");
         for (Staff* s : systemObjectStaves) {
             // TODO: when we add more granularity to system object display, construct this string per staff
             QString sysObjForStaff = "barNumbers=\"false\"";
@@ -189,7 +189,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
             // (also, the code to display bar numbers on system staves other than the first currently does not exist!)
             xml.tagE(QString("Instance staffId=\"%1\" %2").arg(s->idx() + 1).arg(sysObjForStaff));
         }
-        xml.endObject();
+        xml.endElement();
     }
 
     xml.context()->setCurTrack(0);
@@ -244,7 +244,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     hook.onWriteExcerpts302(this, xml, selectionOnly);
 
-    xml.endObject();
+    xml.endElement();
 
     if (unhide) {
         endCmd(true);
@@ -450,7 +450,7 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTi
             xml.tagE("voice");
             ++lastTrackWritten;
         }
-        xml.startObject("voice");
+        xml.startElement("voice");
         xml.context()->setCurTick(startTick);
         xml.context()->setCurTrack(track);
         ++lastTrackWritten;
@@ -695,7 +695,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
         }
 
         if (voiceTagWritten) {
-            xml.endObject();       // </voice>
+            xml.endElement();       // </voice>
         }
     }
 }

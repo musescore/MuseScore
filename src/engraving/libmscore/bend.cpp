@@ -360,14 +360,14 @@ void Bend::draw(mu::draw::Painter* painter) const
 
 void Bend::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     for (const PitchValue& v : m_points) {
         xml.tagE(TConv::toXml(v));
     }
     writeStyledProperties(xml);
     writeProperty(xml, Pid::PLAY);
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

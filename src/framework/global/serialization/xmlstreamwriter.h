@@ -41,7 +41,7 @@ public:
     XmlStreamWriter(const XmlStreamWriter&) = delete;
     XmlStreamWriter& operator=(const XmlStreamWriter&) = delete;
 
-    using Value = std::variant<int, int64_t, double, const char*, AsciiString, String>;
+    using Value = std::variant<int, int64_t, size_t, double, const char*, AsciiString, String>;
     using Attribute = std::pair<AsciiString, Value>;
     using Attributes = std::vector<Attribute>;
 
@@ -52,11 +52,11 @@ public:
     void writeDoctype(const QString& type);
 
     void startElement(const AsciiString& name, const Attributes& attrs = {});
+    void startElement(const String& name, const Attributes& attrs = {});
+
     void endElement();
 
-    void writeStartElement(const QString& name);
     void writeStartElement(const QString& name, const QString& attributes);
-    void writeEndElement();
 
     void writeElement(const QString& name, const QString& val);
     void writeElement(const QString& name, int val);
@@ -71,6 +71,9 @@ public:
     void writeElement(const QString& nameWithAttributes);
 
     void writeComment(const QString& text);
+
+protected:
+    void startElementRaw(const QString& name);
 
 private:
 

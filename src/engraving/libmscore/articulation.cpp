@@ -187,7 +187,7 @@ void Articulation::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     if (!_channelName.isEmpty()) {
         xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
     }
@@ -199,7 +199,7 @@ void Articulation::write(XmlWriter& xml) const
         writeProperty(xml, spp.pid);
     }
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

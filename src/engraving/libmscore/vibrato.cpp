@@ -243,14 +243,14 @@ void Vibrato::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("subtype", vibratoTypeName());
     writeProperty(xml, Pid::PLAY);
     for (const StyledProperty& spp : *styledProperties()) {
         writeProperty(xml, spp.pid);
     }
     SLine::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -112,11 +112,11 @@ void TempoChangeRanged::read(XmlReader& reader)
 
 void TempoChangeRanged::write(XmlWriter& writer) const
 {
-    writer.startObject(this);
+    writer.startElement(this);
     writeProperty(writer, Pid::TEMPO_CHANGE_TYPE);
     writeProperty(writer, Pid::TEMPO_EASING_METHOD);
     TextLineBase::writeProperties(writer);
-    writer.endObject();
+    writer.endElement();
 }
 
 LineSegment* TempoChangeRanged::createLineSegment(System* parent)

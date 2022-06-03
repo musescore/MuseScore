@@ -38,17 +38,18 @@ void SynthesizerState::write(XmlWriter& xml, bool force /* = false */) const
         return;
     }
 
-    xml.startObject("Synthesizer");
+    xml.startElement("Synthesizer");
     for (const SynthesizerGroup& g : *this) {
         if (!g.name().isEmpty()) {
-            xml.startObject(g.name());
+            QByteArray ba = g.name().toLatin1();
+            xml.startElement(ba.constData());
             for (const IdValue& v : g) {
                 xml.tag(QString("val id=\"%1\"").arg(v.id), v.data);
             }
-            xml.endObject();
+            xml.endElement();
         }
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

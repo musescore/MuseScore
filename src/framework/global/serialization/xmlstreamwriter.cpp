@@ -100,19 +100,21 @@ void XmlStreamWriter::writeDoctype(const QString& type)
 
 void XmlStreamWriter::writeValue(const Value& v)
 {
-    //std::variant<int, int64_t, double, const char*, AsciiString, String>;
+    // int, int64_t, size_t, double, const char*, AsciiString, String;
     switch (v.index()) {
     case 0: m_impl->stream << std::get<int>(v);
         break;
     case 1: m_impl->stream << std::get<int64_t>(v);
         break;
-    case 2: m_impl->stream << std::get<double>(v);
+    case 2: m_impl->stream << std::get<size_t>(v);
         break;
-    case 3: m_impl->stream << std::get<const char*>(v);
+    case 3: m_impl->stream << std::get<double>(v);
         break;
-    case 4: m_impl->stream << std::get<AsciiString>(v);
+    case 4: m_impl->stream << std::get<const char*>(v);
         break;
-    case 5: m_impl->stream << std::get<String>(v);
+    case 5: m_impl->stream << std::get<AsciiString>(v);
+        break;
+    case 6: m_impl->stream << std::get<String>(v);
         break;
     default:
         LOGI() << "index: " << v.index();
@@ -121,7 +123,7 @@ void XmlStreamWriter::writeValue(const Value& v)
     }
 }
 
-void XmlStreamWriter::startElement(const AsciiString& name, const Attributes &attrs)
+void XmlStreamWriter::startElement(const AsciiString& name, const Attributes& attrs)
 {
     IF_ASSERT_FAILED(!name.contains(' ')) {
     }
@@ -137,22 +139,24 @@ void XmlStreamWriter::startElement(const AsciiString& name, const Attributes &at
     m_impl->stack.push_back(name.ascii());
 }
 
+void XmlStreamWriter::startElement(const String& name, const Attributes& attrs)
+{
+    ByteArray ba = name.toAscii();
+    startElement(AsciiString(ba.constChar(), ba.size()), attrs);
+}
+
+void XmlStreamWriter::startElementRaw(const QString& name)
+{
+    m_impl->putLevel();
+    m_impl->stream << '<' << name << '>' << '\n';
+    m_impl->stack.push_back(name.split(' ')[0].toStdString());
+}
+
 void XmlStreamWriter::endElement()
 {
     m_impl->putLevel();
     m_impl->stream << "</" << mu::takeLast(m_impl->stack) << '>' << '\n';
     flush();
-}
-
-void XmlStreamWriter::writeStartElement(const QString& name)
-{
-//    IF_ASSERT_FAILED(!name.contains(" ")) {
-//        int k = -1;
-//    }
-
-    m_impl->putLevel();
-    m_impl->stream << '<' << name << '>' << '\n';
-    m_impl->stack.push_back(name.split(' ')[0].toStdString());
 }
 
 void XmlStreamWriter::writeStartElement(const QString& name, const QString& attributes)
@@ -164,11 +168,6 @@ void XmlStreamWriter::writeStartElement(const QString& name, const QString& attr
     }
     m_impl->stream << '>' << '\n';
     m_impl->stack.push_back(name.toStdString());
-}
-
-void XmlStreamWriter::writeEndElement()
-{
-    endElement();
 }
 
 void XmlStreamWriter::writeElement(const QString& name, const QString& val)

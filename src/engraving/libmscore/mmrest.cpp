@@ -220,10 +220,10 @@ RectF MMRest::numberRect() const
 
 void MMRest::write(XmlWriter& xml) const
 {
-    xml.startObject("Rest"); // for compatibility, see also Measure::readVoice()
+    xml.startElement("Rest"); // for compatibility, see also Measure::readVoice()
     ChordRest::writeProperties(xml);
     el().write(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

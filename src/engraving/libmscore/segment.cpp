@@ -949,9 +949,9 @@ void Segment::write(XmlWriter& xml) const
     if (_extraLeadingSpace.isZero()) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("leadingSpace", _extraLeadingSpace.val());
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
