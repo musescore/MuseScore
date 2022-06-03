@@ -42,7 +42,7 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, std::shared_ptr<ui::IUiCon
     //! NOTE Without a parent on MacOS with FullScreen, the popup is shown on another virtual Desktop.
     //! With parent on WinOS not work transparent background.
 
-    m_view = new QQuickView(engine, nullptr);
+    m_view = new QQuickView(engine, parentWindow());
     m_view->setObjectName("PopupWindow_QQuickView");
 
     m_view->setResizeMode(QQuickView::SizeRootObjectToView);
