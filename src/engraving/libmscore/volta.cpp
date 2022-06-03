@@ -194,10 +194,10 @@ bool Volta::readProperties(XmlReader& e)
 
 void Volta::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     TextLineBase::writeProperties(xml);
     xml.tag("endings", TConv::toXml(_endings));
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

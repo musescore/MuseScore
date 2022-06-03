@@ -324,15 +324,15 @@ bool MStyle::write(IODevice* device)
 {
     XmlWriter xml(device);
     xml.startDocument();
-    xml.startObject("museScore version=\"" MSC_VERSION "\"");
+    xml.startElement("museScore", { { "version", MSC_VERSION } });
     save(xml, false);
-    xml.endObject();
+    xml.endElement();
     return true;
 }
 
 void MStyle::save(XmlWriter& xml, bool optimize)
 {
-    xml.startObject("Style");
+    xml.startElement("Style");
 
     for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
         Sid idx = st.styleIdx();
@@ -365,7 +365,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
     }
 
     xml.tag("Spatium", value(Sid::spatium).toReal() / DPMM);
-    xml.endObject();
+    xml.endElement();
 }
 
 // ====================================================

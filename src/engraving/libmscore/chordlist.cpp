@@ -454,7 +454,7 @@ void ChordToken::write(XmlWriter& xml) const
         xml.tag("name", s);
     }
     writeRenderList(xml, renderList, "render");
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -1644,7 +1644,7 @@ void ChordDescription::write(XmlWriter& xml) const
         xml.tag("degree", s);
     }
     writeRenderList(xml, renderList, "render");
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -1793,7 +1793,7 @@ void ChordList::write(XmlWriter& xml) const
                 }
             }
         }
-        xml.endObject();
+        xml.endElement();
         ++fontIdx;
     }
     if (_autoAdjust) {
@@ -1913,10 +1913,11 @@ bool ChordList::write(IODevice* device) const
 {
     XmlWriter xml(device);
     xml.startDocument();
-    xml.startObject("museScore version=\"" MSC_VERSION "\"");
+    xml.startElement("museScore", { { "version", MSC_VERSION } });
 
     write(xml);
-    xml.endObject();
+
+    xml.endElement();
 
     return true;
 }

@@ -1392,7 +1392,7 @@ void Note::draw(mu::draw::Painter* painter) const
 
 void Note::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     EngravingItem::writeProperties(xml);
 
     if (_accidental) {
@@ -1419,11 +1419,11 @@ void Note::write(XmlWriter& xml) const
         _tieBack->writeSpannerEnd(xml, this, track());
     }
     if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.empty()) {
-        xml.startObject("Events");
+        xml.startElement("Events");
         for (const NoteEvent& e : _playEvents) {
             e.write(xml);
         }
-        xml.endObject();
+        xml.endElement();
     }
     for (Pid id : { Pid::PITCH, Pid::TPC1, Pid::TPC2, Pid::SMALL, Pid::MIRROR_HEAD, Pid::DOT_POSITION,
                     Pid::HEAD_SCHEME, Pid::HEAD_GROUP, Pid::VELO_OFFSET, Pid::PLAY, Pid::TUNING, Pid::FRET, Pid::STRING,
@@ -1438,7 +1438,7 @@ void Note::write(XmlWriter& xml) const
         e->writeSpannerEnd(xml, this, track());
     }
 
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

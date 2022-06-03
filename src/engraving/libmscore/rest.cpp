@@ -927,7 +927,7 @@ void Rest::write(XmlWriter& xml) const
         return;
     }
     writeBeam(xml);
-    xml.startObject(this);
+    xml.startElement(this);
     writeStyledProperties(xml);
     ChordRest::writeProperties(xml);
     el().write(xml);
@@ -944,7 +944,7 @@ void Rest::write(XmlWriter& xml) const
             dot->write(xml);
         }
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -543,11 +543,11 @@ bool Page::isOdd() const
 
 void Page::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     foreach (System* system, _systems) {
         system->write(xml);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

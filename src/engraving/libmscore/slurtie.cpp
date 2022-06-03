@@ -349,7 +349,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
         return;
     }
 
-    xml.startObject(this, QString("no=\"%1\"").arg(no));
+    xml.startElement(this, { { "no", no } });
 
     qreal _spatium = score()->spatium();
     if (!ups(Grip::START).off.isNull()) {
@@ -365,7 +365,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
         xml.tag("o4", ups(Grip::END).off / _spatium);
     }
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

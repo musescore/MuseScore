@@ -234,7 +234,7 @@ void Dynamic::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperty(xml, Pid::DYNAMIC_TYPE);
     writeProperty(xml, Pid::VELOCITY);
     writeProperty(xml, Pid::DYNAMIC_RANGE);
@@ -245,7 +245,7 @@ void Dynamic::write(XmlWriter& xml) const
     }
 
     TextBase::writeProperties(xml, dynamicType() == DynamicType::OTHER);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

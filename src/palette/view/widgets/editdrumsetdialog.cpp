@@ -701,9 +701,9 @@ void EditDrumsetDialog::save()
     valueChanged();    //save last changes in name
     XmlWriter xml(&f);
     xml.startDocument();
-    xml.startObject("museScore version=\"" MSC_VERSION "\"");
+    xml.startElement("museScore", { { "version", MSC_VERSION } });
     m_editedDrumset.save(xml);
-    xml.endObject();
+    xml.endElement();
     if (f.error() != File::NoError) {
         QString s = mu::qtrc("palette", "Write File failed: %1").arg(QString::fromStdString(f.errorString()));
         interactive()->error(mu::trc("palette", "Write Drumset"), s.toStdString());

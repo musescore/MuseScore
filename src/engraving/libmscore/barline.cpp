@@ -784,7 +784,7 @@ Fraction BarLine::playTick() const
 
 void BarLine::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
 
     writeProperty(xml, Pid::BARLINE_TYPE);
     writeProperty(xml, Pid::BARLINE_SPAN);
@@ -795,7 +795,7 @@ void BarLine::write(XmlWriter& xml) const
         e->write(xml);
     }
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

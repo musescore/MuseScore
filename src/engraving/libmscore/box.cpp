@@ -207,9 +207,9 @@ std::vector<PointF> VBox::gripsPositions(const EditData&) const
 
 void Box::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

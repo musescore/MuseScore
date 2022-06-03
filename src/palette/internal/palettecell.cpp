@@ -237,12 +237,22 @@ void PaletteCell::write(XmlWriter& xml) const
 
     // using attributes for `custom` and `visible` properties instead of nested tags
     // for pre-3.3 version compatibility
-    xml.startObject(QString("Cell")
-                    + (!name.isEmpty() ? " name=\"" + XmlWriter::xmlString(name) + "\"" : "")
-                    + (custom ? " custom=\"1\"" : "")
-                    + (!visible ? " visible=\"0\"" : "")
-                    + (untranslatedElement ? " trElement=\"1\"" : "")
-                    );
+    XmlWriter::Attributes cellAttrs;
+    if (!name.isEmpty()) {
+        cellAttrs.push_back({ "name", XmlWriter::xmlString(name) });
+    }
+    if (custom) {
+        cellAttrs.push_back({ "custom", "1" });
+    }
+    if (!visible) {
+        cellAttrs.push_back({ "visible", "0" });
+    }
+
+    if (untranslatedElement) {
+        cellAttrs.push_back({ "trElement", "1" });
+    }
+
+    xml.startElement("Cell", cellAttrs);
 
     if (drawStaff) {
         xml.tag("staff", drawStaff);
@@ -265,7 +275,7 @@ void PaletteCell::write(XmlWriter& xml) const
     } else {
         element->write(xml);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 PaletteCellPtr PaletteCell::fromMimeData(const QByteArray& data)

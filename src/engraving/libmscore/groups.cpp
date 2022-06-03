@@ -213,12 +213,12 @@ const Groups& Groups::endings(const Fraction& f)
 
 void Groups::write(XmlWriter& xml) const
 {
-    xml.startObject("Groups");
+    xml.startElement("Groups");
     for (const GroupNode& n : m_nodes) {
         xml.tagE(QString("Node pos=\"%1\" action=\"%2\"")
                  .arg(n.pos).arg(n.action));
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

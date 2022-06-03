@@ -79,6 +79,14 @@ TextStream& TextStream::operator<<(int64_t val)
     return *this;
 }
 
+TextStream& TextStream::operator<<(size_t val)
+{
+    std::stringstream ss;
+    ss << val;
+    write(ss.str().c_str(), ss.str().size());
+    return *this;
+}
+
 TextStream& TextStream::operator<<(const char* s)
 {
     write(s, std::strlen(s));

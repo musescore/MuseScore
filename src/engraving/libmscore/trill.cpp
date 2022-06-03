@@ -386,7 +386,7 @@ void Trill::write(XmlWriter& xml) const
     if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("subtype", trillTypeName());
     writeProperty(xml, Pid::PLAY);
     writeProperty(xml, Pid::ORNAMENT_STYLE);
@@ -395,7 +395,7 @@ void Trill::write(XmlWriter& xml) const
     if (_accidental) {
         _accidental->write(xml);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

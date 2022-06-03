@@ -212,15 +212,15 @@ void MscWriter::writeContainer(const std::vector<QString>& paths)
     buf.open(IODevice::WriteOnly);
     XmlStreamWriter xml(&buf);
     xml.startDocument();
-    xml.writeStartElement("container");
-    xml.writeStartElement("rootfiles");
+    xml.startElement("container");
+    xml.startElement("rootfiles");
 
     for (const QString& f : paths) {
         xml.writeElement(QString("rootfile full-path=\"%1\"").arg(f));
     }
 
-    xml.writeEndElement();
-    xml.writeEndElement();
+    xml.endElement();
+    xml.endElement();
     xml.flush();
 
     addFileData("META-INF/container.xml", data);

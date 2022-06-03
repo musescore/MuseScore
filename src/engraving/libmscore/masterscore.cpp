@@ -461,11 +461,11 @@ MasterScore* MasterScore::clone()
     xml.setContext(&writeCtx);
     xml.startDocument();
 
-    xml.startObject("museScore version=\"" MSC_VERSION "\"");
+    xml.startElement("museScore", { { "version", MSC_VERSION } });
 
     compat::WriteScoreHook hook;
     write(xml, false, hook);
-    xml.endObject();
+    xml.endElement();
 
     buffer.close();
 

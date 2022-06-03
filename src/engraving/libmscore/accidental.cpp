@@ -283,13 +283,13 @@ void Accidental::read(XmlReader& e)
 
 void Accidental::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
     writeProperty(xml, Pid::ACCIDENTAL_ROLE);
     writeProperty(xml, Pid::SMALL);
     writeProperty(xml, Pid::ACCIDENTAL_TYPE);
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

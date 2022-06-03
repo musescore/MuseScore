@@ -835,16 +835,13 @@ ByteArray Selection::staffMimeData() const
 
     Fraction ticks  = tickEnd() - tickStart();
     int staves = static_cast<int>(staffEnd() - staffStart());
-    if (!MScore::testMode) {
-        xml.startObject(QString("StaffList version=\"" MSC_VERSION "\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(
-                            tickStart().ticks()).arg(ticks.ticks()).arg(staffStart()).arg(staves));
-    } else {
-        xml.startObject(QString("StaffList version=\"2.00\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"")
-                        .arg(tickStart().ticks())
-                        .arg(ticks.ticks())
-                        .arg(staffStart())
-                        .arg(staves));
-    }
+
+    xml.startElement("StaffList", { { "version", (MScore::testMode ? "2.00" : MSC_VERSION) },
+                         { "tick", tickStart().ticks() },
+                         { "len", ticks.ticks() },
+                         { "staff", staffStart() },
+                         { "staves", staves } });
+
     Segment* seg1 = _startSegment;
     Segment* seg2 = _endSegment;
 
@@ -852,7 +849,7 @@ ByteArray Selection::staffMimeData() const
         track_idx_t startTrack = staffIdx * VOICES;
         track_idx_t endTrack   = startTrack + VOICES;
 
-        xml.startObject(QString("Staff id=\"%1\"").arg(staffIdx));
+        xml.startElement("Staff", { { "id", staffIdx } });
 
         Staff* staff = _score->staff(staffIdx);
         Part* part = staff->part();
@@ -863,7 +860,7 @@ ByteArray Selection::staffMimeData() const
         if (interval.diatonic) {
             xml.tag("transposeDiatonic", interval.diatonic);
         }
-        xml.startObject("voiceOffset");
+        xml.startElement("voiceOffset");
         for (voice_idx_t voice = 0; voice < VOICES; voice++) {
             if (hasElementInTrack(seg1, seg2, startTrack + voice)
                 && xml.context()->canWriteVoice(voice)) {
@@ -871,13 +868,13 @@ ByteArray Selection::staffMimeData() const
                 xml.tag(QString("voice id=\"%1\"").arg(voice), offset.ticks());
             }
         }
-        xml.endObject();     // </voiceOffset>
+        xml.endElement();     // </voiceOffset>
         xml.context()->setCurTrack(startTrack);
         _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, false);
-        xml.endObject();
+        xml.endElement();
     }
 
-    xml.endObject();
+    xml.endElement();
     return buffer.data();
 }
 
@@ -1054,8 +1051,10 @@ ByteArray Selection::symbolListMimeData() const
         map.insert(std::pair<qint64, MapData>(((qint64)track << 32) + seg->tick().ticks(), mapData));
     }
 
-    xml.startObject(QString("SymbolList version=\"" MSC_VERSION "\" fromtrack=\"%1\" totrack=\"%2\"")
-                    .arg(topTrack).arg(bottomTrack));
+    xml.startElement("SymbolList", { { "version", MSC_VERSION },
+                         { "fromtrack", topTrack },
+                         { "totrack", bottomTrack } });
+
     // scan the map, outputting elements each with a relative <track> tag on track change,
     // a relative tick and the number of CR segments to skip
     track_idx_t currTrack = mu::nidx;
@@ -1111,7 +1110,7 @@ ByteArray Selection::symbolListMimeData() const
         iter->second.e->write(xml);
     }
 
-    xml.endObject();
+    xml.endElement();
     buffer.close();
     return buffer.data();
 }

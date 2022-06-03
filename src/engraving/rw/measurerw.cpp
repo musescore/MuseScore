@@ -555,9 +555,9 @@ void MeasureRW::writeMeasure(const mu::engraving::Measure* measure, XmlWriter& x
     }
     if (measure->_len != measure->m_timesig) {
         // this is an irregular measure
-        xml.startObject(measure, QString("len=\"%1/%2\"").arg(measure->_len.numerator()).arg(measure->_len.denominator()));
+        xml.startElement(measure, { { "len", measure->_len.toString() } });
     } else {
-        xml.startObject(measure);
+        xml.startElement(measure);
     }
 
     xml.context()->setCurTick(measure->tick());
@@ -643,5 +643,5 @@ void MeasureRW::writeMeasure(const mu::engraving::Measure* measure, XmlWriter& x
         measure->score()->writeSegments(xml, strack, etrack, measure->first(), measure->last()->next1(), writeSystemElements, forceTimeSig);
     }
 
-    xml.endObject();
+    xml.endElement();
 }

@@ -1140,7 +1140,7 @@ void Chord::write(XmlWriter& xml) const
         c->write(xml);
     }
     writeBeam(xml);
-    xml.startObject(this);
+    xml.startElement(this);
     ChordRest::writeProperties(xml);
     for (const Articulation* a : _articulations) {
         a->write(xml);
@@ -1200,7 +1200,7 @@ void Chord::write(XmlWriter& xml) const
     for (EngravingItem* e : el()) {
         e->write(xml);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

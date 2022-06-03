@@ -42,11 +42,11 @@ Revision::Revision()
 
 void Revision::write(XmlWriter& xml) const
 {
-    xml.startObject("Revision");
+    xml.startElement("Revision");
     xml.tag("id",   _id);
     xml.tag("date", _dateTime.toString());
     xml.tag("diff", _diff);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -91,11 +91,12 @@ public:
 
     String();
 
-    String(const char* str) { *this = fromUtf8(str); }
-    String& operator=(const char* str) { *this = fromUtf8(str); return *this; }
+    String(const char16_t* str);
+    String& operator=(const char16_t* str);
 
     static String fromUtf8(const char* str);
     ByteArray toUtf8() const;
+    ByteArray toAscii(bool* ok = nullptr) const;
 
     static String fromStdString(const std::string& str);
     std::string toStdString() const;
@@ -127,6 +128,8 @@ public:
     constexpr AsciiString() = default;
     constexpr AsciiString(const char* str)
         : m_size(str ? std::char_traits<char>::length(str) : 0), m_data(str) {}
+    constexpr AsciiString(const char* str, size_t size)
+        : m_size(size), m_data(str) {}
 
 //#ifndef NO_QT_SUPPORT
     AsciiString(const QLatin1String& str)

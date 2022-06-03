@@ -64,10 +64,10 @@ void PlayTechAnnotation::layout()
 
 void PlayTechAnnotation::write(XmlWriter& writer) const
 {
-    writer.startObject(this);
+    writer.startElement(this);
     writeProperty(writer, Pid::PLAY_TECH_TYPE);
     StaffTextBase::writeProperties(writer);
-    writer.endObject();
+    writer.endElement();
 }
 
 void PlayTechAnnotation::read(XmlReader& reader)
