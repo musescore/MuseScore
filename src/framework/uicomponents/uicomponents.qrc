@@ -38,8 +38,6 @@
         <file>qml/MuseScore/UiComponents/StyledDialogView.qml</file>
         <file>qml/MuseScore/UiComponents/Border.qml</file>
         <file>qml/MuseScore/UiComponents/NavigationFocusBorder.qml</file>
-        <file>qml/MuseScore/UiComponents/StyledMenu.qml</file>
-        <file>qml/MuseScore/UiComponents/StyledMenuItem.qml</file>
         <file>qml/MuseScore/UiComponents/MenuButton.qml</file>
         <file>qml/MuseScore/UiComponents/FilePicker.qml</file>
         <file>qml/MuseScore/UiComponents/ValueList.qml</file>
@@ -54,7 +52,6 @@
         <file>qml/MuseScore/UiComponents/StyledDropdown.qml</file>
         <file>qml/MuseScore/UiComponents/internal/DropdownItem.qml</file>
         <file>qml/MuseScore/UiComponents/VisibilityBox.qml</file>
-        <file>qml/MuseScore/UiComponents/MenuMetrics.qml</file>
         <file>qml/MuseScore/UiComponents/PageIndicator.qml</file>
         <file>qml/MuseScore/UiComponents/StyledListView.qml</file>
         <file>qml/MuseScore/UiComponents/StyledGridView.qml</file>
@@ -68,5 +65,8 @@
         <file>qml/MuseScore/UiComponents/internal/PopupContent.qml</file>
         <file>qml/MuseScore/UiComponents/internal/StyledDropdownLoader.qml</file>
         <file>qml/MuseScore/UiComponents/internal/StyledDropdownView.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/StyledMenuItem.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/StyledMenu.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/MenuMetrics.qml</file>
     </qresource>
 </RCC>

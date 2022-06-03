@@ -65,7 +65,7 @@ PopupView::PopupView(QQuickItem* parent)
     m_closeController->init();
 
     m_closeController->closeNotification().onNotify(this, [this]() {
-        close();
+        close(true);
     });
 }
 
@@ -91,6 +91,11 @@ void PopupView::setParentItem(QQuickItem* parent)
     }
 
     QObject::setParent(parent);
+
+    if (m_closeController) {
+        m_closeController->setParentItem(parent);
+    }
+
     emit parentItemChanged();
 }
 
@@ -154,6 +159,7 @@ void PopupView::beforeShow()
 void PopupView::open()
 {
     if (isOpened()) {
+        repositionWindowIfNeed();
         return;
     }
 
@@ -184,7 +190,7 @@ void PopupView::open()
     resolveNavigationParentControl();
 
     QScreen* screen = resolveScreen();
-    m_window->show(screen, m_globalPos.toPoint(), m_openPolicy != OpenPolicy::NoActivateFocus);
+    m_window->show(screen, viewGeometry(), m_openPolicy != OpenPolicy::NoActivateFocus);
 
     m_globalPos = QPointF(); // invalidate
 
@@ -202,10 +208,10 @@ void PopupView::open()
 void PopupView::onHidden()
 {
     emit isOpenedChanged();
-    emit closed();
+    emit closed(m_forceClosed);
 }
 
-void PopupView::close()
+void PopupView::close(bool force)
 {
     if (!isOpened()) {
         return;
@@ -219,6 +225,7 @@ void PopupView::close()
 
     qApp->removeEventFilter(this);
 
+    m_forceClosed = force;
     m_window->close();
 
     activateNavigationParentControl();
@@ -580,37 +587,37 @@ void PopupView::updatePosition()
     }
 
     QRectF anchorRect = anchorGeometry();
-    QRectF popupRect(m_globalPos, contentItem()->size());
+    QRectF viewRect = viewGeometry();
 
     setOpensUpward(false);
 
-    auto movePos = [this, &popupRect](qreal x, qreal y) {
+    auto movePos = [this, &viewRect](qreal x, qreal y) {
         m_globalPos.setX(x);
         m_globalPos.setY(y);
 
-        popupRect.moveTopLeft(m_globalPos);
+        viewRect.moveTopLeft(m_globalPos);
     };
 
-    if (popupRect.left() < anchorRect.left()) {
+    if (viewRect.left() < anchorRect.left()) {
         // move to the right to an area that doesn't fit
-        movePos(m_globalPos.x() + anchorRect.left() - popupRect.left(), m_globalPos.y());
+        movePos(m_globalPos.x() + anchorRect.left() - viewRect.left(), m_globalPos.y());
     }
 
-    if (popupRect.bottom() > anchorRect.bottom()) {
-        qreal newY = parentTopLeft.y() - popupRect.height();
+    if (viewRect.bottom() > anchorRect.bottom()) {
+        qreal newY = parentTopLeft.y() - viewRect.height();
         if (anchorRect.top() < newY) {
             // move to the top of the parent
             movePos(m_globalPos.x(), newY);
             setOpensUpward(true);
         } else {
             // move to the right of the parent and move to top to an area that doesn't fit
-            movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()) + padding());
+            movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()) + padding());
         }
     }
 
-    if (popupRect.right() > anchorRect.right()) {
+    if (viewRect.right() > anchorRect.right()) {
         // move to the left to an area that doesn't fit
-        movePos(m_globalPos.x() - (popupRect.right() - anchorRect.right()), m_globalPos.y());
+        movePos(m_globalPos.x() - (viewRect.right() - anchorRect.right()), m_globalPos.y());
     }
 
     if (!showArrow()) {
@@ -636,6 +643,11 @@ void PopupView::updateContentPosition()
             contentItem()->setY(-padding());
         }
     }
+}
+
+QRect PopupView::viewGeometry() const
+{
+    return QRect(m_globalPos.toPoint(), contentItem()->size().toSize());
 }
 
 QRectF PopupView::anchorGeometry() const

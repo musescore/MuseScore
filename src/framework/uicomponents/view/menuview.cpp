@@ -38,6 +38,11 @@ MenuView::MenuView(QQuickItem* parent)
     setShowArrow(false);
 }
 
+int MenuView::viewVerticalMargin() const
+{
+    return 4;
+}
+
 Qt::AlignmentFlag MenuView::cascadeAlign() const
 {
     return m_cascadeAlign;
@@ -74,57 +79,66 @@ void MenuView::updatePosition()
     }
 
     QRectF anchorRect = anchorGeometry();
-    QRectF popupRect(m_globalPos, QSize(contentWidth() + padding() * 2, contentHeight() + padding() * 2));
+    QRectF viewRect = viewGeometry();
 
     setOpensUpward(false);
     setCascadeAlign(Qt::AlignmentFlag::AlignRight);
 
-    auto movePos = [this, &popupRect](qreal x, qreal y) {
+    auto movePos = [this, &viewRect](qreal x, qreal y) {
         m_globalPos.setX(x);
         m_globalPos.setY(y);
 
-        popupRect.moveTopLeft(m_globalPos);
+        viewRect.moveTopLeft(m_globalPos);
     };
 
     const QQuickItem* parentMenuContentItem = this->parentMenuContentItem();
     bool isCascade = parentMenuContentItem != nullptr;
 
-    if (popupRect.left() < anchorRect.left()) {
-        // move to the right to an area that doesn't fit
-        movePos(m_globalPos.x() + anchorRect.left() - popupRect.left(), m_globalPos.y());
+    if (isCascade) {
+        movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - parent->height() - viewVerticalMargin());
     }
 
-    if (popupRect.bottom() > anchorRect.bottom()) {
+    if (viewRect.left() < anchorRect.left()) {
+        // move to the right to an area that doesn't fit
+        movePos(m_globalPos.x() + anchorRect.left() - viewRect.left(), m_globalPos.y());
+    }
+
+    if (viewRect.bottom() > anchorRect.bottom()) {
         if (isCascade) {
             // move to the top to an area that doesn't fit
-            movePos(m_globalPos.x(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()));
+            movePos(m_globalPos.x(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()));
         } else {
-            qreal newY = parentTopLeft.y() - popupRect.height();
+            qreal newY = parentTopLeft.y() - viewRect.height();
             if (anchorRect.top() < newY) {
                 // move to the top of the parent
                 movePos(m_globalPos.x(), newY);
                 setOpensUpward(true);
             } else {
                 // move to the right of the parent and move to top to an area that doesn't fit
-                movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()));
+                movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()));
             }
         }
     }
 
     Qt::AlignmentFlag parentCascadeAlign = this->parentCascadeAlign(parentMenuContentItem);
-    if (popupRect.right() > anchorRect.right() || parentCascadeAlign != Qt::AlignmentFlag::AlignRight) {
+    if (viewRect.right() > anchorRect.right() || parentCascadeAlign != Qt::AlignmentFlag::AlignRight) {
         if (isCascade) {
             // move to the right of the parent
-            movePos(parentTopLeft.x() - popupRect.width() + padding() * 2, m_globalPos.y());
+            movePos(parentTopLeft.x() - viewRect.width() + padding() * 2, m_globalPos.y());
             setCascadeAlign(Qt::AlignmentFlag::AlignLeft);
         } else {
             // move to the left to an area that doesn't fit
-            movePos(m_globalPos.x() - (popupRect.right() - anchorRect.right()) + padding() * 2, m_globalPos.y());
+            movePos(m_globalPos.x() - (viewRect.right() - anchorRect.right()) + padding() * 2, m_globalPos.y());
         }
     }
 
     // remove padding for arrow
     movePos(m_globalPos.x() - padding(), m_globalPos.y());
+}
+
+QRect MenuView::viewGeometry() const
+{
+    return QRect(m_globalPos.toPoint(), QSize(contentWidth() + padding() * 2, contentHeight() + padding() * 2));
 }
 
 Qt::AlignmentFlag MenuView::parentCascadeAlign(const QQuickItem* parent) const

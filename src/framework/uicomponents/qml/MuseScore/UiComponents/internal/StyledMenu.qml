@@ -27,8 +27,6 @@ import QtQuick.Window 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-import "internal"
-
 MenuView {
     id: root
 
@@ -38,28 +36,8 @@ MenuView {
 
     signal handleMenuItem(string itemId)
 
-    x: {
-        switch(preferredAlign) {
-        case Qt.AlignLeft:
-            return -contentWidth + padding
-        case Qt.AlignHCenter:
-            return -contentWidth / 2 + padding
-        case Qt.AlignRight:
-            return 0
-        }
-
-        return 0
-    }
-
-    y: parent.height
-
     property alias width: content.width
     property alias height: content.height
-
-    contentWidth: menuMetrics.itemWidth
-    contentHeight: content.contentBodyHeight
-
-    openPolicy: PopupView.NoActivateFocus
 
     signal loaded()
 
@@ -72,8 +50,8 @@ MenuView {
         return focused
     }
 
-    onModelChanged: {
-        menuMetrics.calculate(model)
+    function calculateSize() {
+        root.menuMetrics.calculate(model)
 
         //! NOTE: Due to the fact that the view has a dynamic delegate,
         //  the height calculation occurs with an error
@@ -96,11 +74,26 @@ MenuView {
 
         var anchorItemHeight = Boolean(root.anchorItem) ? root.anchorItem.height : (Screen.desktopAvailableHeight - padding * 2)
 
+        root.contentWidth = root.menuMetrics.itemWidth
         root.contentHeight = Math.min(itemHeight * itemsCount + sepCount * prv.separatorHeight +
                                       prv.viewVerticalMargin * 2, anchorItemHeight)
 
-        root.loaded()
+        x = 0
+        y = parent.height
     }
+
+    onAboutToClose: function(closeEvent) {
+        closeSubMenu()
+    }
+
+    function closeSubMenu() {
+        if (root.subMenuLoader.isMenuOpened) {
+            root.subMenuLoader.close()
+        }
+    }
+
+    property var subMenuLoader: null
+    property MenuMetrics menuMetrics: MenuMetrics {}
 
     contentItem: PopupContent {
         id: content
@@ -124,8 +117,8 @@ MenuView {
 
         navigationSection.onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.Escape) {
-                if (prv.showedSubMenu) {
-                    prv.showedSubMenu.close()
+                if (root.subMenuLoader.isMenuOpened) {
+                    root.subMenuLoader.close()
                 } else {
                     root.close()
                 }
@@ -137,10 +130,71 @@ MenuView {
             section: content.navigationSection
             direction: NavigationPanel.Vertical
             order: 1
+
+            onNavigationEvent: function(event) {
+                switch (event.type) {
+                case NavigationEvent.Right:
+                    var selectedItem = prv.selectedItem()
+                    if (!Boolean(selectedItem) || !selectedItem.hasSubMenu) {
+                        return
+                    }
+
+                    //! NOTE Go to submenu if shown
+                    selectedItem.openSubMenuRequested(false)
+
+                    event.accepted = true
+
+                    break
+                case NavigationEvent.Left:
+                    if (root.subMenuLoader.isMenuOpened) {
+                        root.subMenuLoader.close()
+                        event.accepted = true
+                        return
+                    }
+
+                    //! NOTE Go to parent item
+                    if (root.navigationParentControl) {
+                        root.navigationParentControl.requestActive()
+                    }
+
+                    root.close()
+                    break
+                case NavigationEvent.Up:
+                case NavigationEvent.Down:
+                    if (root.subMenuLoader.isMenuOpened) {
+                        root.subMenuLoader.close()
+                    }
+
+                    break
+                }
+            }
         }
 
         onCloseRequested: {
             root.close()
+        }
+
+        Component.onCompleted: {
+            var menuLoaderComponent = Qt.createComponent("../StyledMenuLoader.qml");
+            root.subMenuLoader = menuLoaderComponent.createObject(root)
+            root.subMenuLoader.menuAnchorItem = root.anchorItem
+
+            root.subMenuLoader.handleMenuItem.connect(function(itemId) {
+                Qt.callLater(root.handleMenuItem, itemId)
+                root.subMenuLoader.close()
+            })
+
+            root.subMenuLoader.opened.connect(function(itemId) {
+                root.closePolicy = PopupView.NoAutoClose
+            })
+
+            root.subMenuLoader.closed.connect(function(force) {
+                root.closePolicy = PopupView.CloseOnPressOutsideParent
+
+                if (force) {
+                    root.close(true)
+                }
+            })
         }
 
         StyledListView {
@@ -157,10 +211,8 @@ MenuView {
             QtObject {
                 id: prv
 
-                property var showedSubMenu: null
-
                 readonly property int separatorHeight: 1
-                readonly property int viewVerticalMargin: 4
+                readonly property int viewVerticalMargin: root.viewVerticalMargin()
 
                 function focusOnFirstEnabled() {
                     for (var i = 0; i < view.count; ++i) {
@@ -175,19 +227,25 @@ MenuView {
                 }
 
                 function focusOnSelected() {
+                    var item = selectedItem()
+                    if (Boolean(item)) {
+                        item.navigation.requestActive()
+                        return true
+                    }
+
+                    return false
+                }
+
+                function selectedItem() {
                     for (var i = 0; i < view.count; ++i) {
                         var loader = view.itemAtIndex(i)
                         if (loader && !loader.isSeparator && loader.item && loader.item.isSelected) {
-                            loader.item.navigation.requestActive()
-                            return true
+                            return loader.item
                         }
                     }
-                    return false
-                }
-            }
 
-            MenuMetrics {
-                id: menuMetrics
+                    return null
+                }
             }
 
             delegate: Loader {
@@ -200,7 +258,7 @@ MenuView {
 
                 onLoaded: {
                     loader.item.modelData = Qt.binding(() => (itemData))
-                    loader.item.width = Qt.binding(() => (menuMetrics.itemWidth))
+                    loader.item.width = Qt.binding(() => ( Boolean(root.menuMetrics) ? root.menuMetrics.itemWidth : 0 ))
                     if (Boolean(loader.item.navigation)) {
                         loader.item.navigation.panel = content.navigationPanel
                     }
@@ -220,41 +278,37 @@ MenuView {
                         navigation.panel: content.navigationPanel
                         navigation.row: model.index
 
-                        iconAndCheckMarkMode: menuMetrics.iconAndCheckMarkMode
+                        iconAndCheckMarkMode: Boolean(root.menuMetrics) ? root.menuMetrics.iconAndCheckMarkMode : StyledMenuItem.None
 
-                        reserveSpaceForShortcutsOrSubmenuIndicator:
-                            menuMetrics.hasItemsWithShortcut || menuMetrics.hasItemsWithSubmenu
+                        reserveSpaceForShortcutsOrSubmenuIndicator: Boolean(root.menuMetrics) ?
+                                                                        (root.menuMetrics.hasItemsWithShortcut || root.menuMetrics.hasItemsWithSubmenu) : false
 
                         padding: root.padding
 
-                        onOpenSubMenuRequested: function(menu) {
-                            if (prv.showedSubMenu){
-                                if (prv.showedSubMenu === menu) {
+                        subMenuShowed: root.subMenuLoader.isMenuOpened && root.subMenuLoader.parent === item
+
+                        onOpenSubMenuRequested: function(byHover) {
+                            if (!hasSubMenu) {
+                                if (byHover) {
+                                    root.subMenuLoader.close()
+                                }
+
+                                return
+                            }
+
+                            if (!byHover) {
+                                if (subMenuShowed) {
+                                    root.subMenuLoader.close()
                                     return
-                                } else {
-                                    prv.showedSubMenu.close()
                                 }
                             }
 
-                            menu.toggleOpened()
+                            root.subMenuLoader.parent = item
+                            root.subMenuLoader.open(subMenuItems)
                         }
 
-                        onSubMenuShowed: function(menu) {
-                            root.closePolicy = PopupView.NoAutoClose
-                            prv.showedSubMenu = menu
-                        }
-
-                        onSubMenuClosed: {
-                            root.closePolicy = PopupView.CloseOnPressOutsideParent
-                            prv.showedSubMenu = null
-
-                            if (!root.activeFocus) {
-                                root.forceActiveFocus()
-                            }
-
-                            if (!item.activeFocus) {
-                                item.forceActiveFocus()
-                            }
+                        onCloseSubMenuRequested: {
+                            root.subMenuLoader.close()
                         }
 
                         onHandleMenuItem: function(itemId) {
@@ -262,14 +316,6 @@ MenuView {
                             view.update()
 
                             root.handleMenuItem(itemId)
-                        }
-
-                        onRequestParentItemActive: {
-                            if (root.navigationParentControl) {
-                                root.navigationParentControl.requestActive()
-                            }
-
-                            root.close()
                         }
                     }
                 }

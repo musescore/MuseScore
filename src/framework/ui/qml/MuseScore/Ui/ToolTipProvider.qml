@@ -25,49 +25,74 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Item {
-
     id: root
 
     property var provider: ui.tooltip
 
     anchors.fill: parent
 
-    QtObject {
-        id: prv
+    Loader {
+        id: toolTipLoader
 
-        property var showedToolTip: null
-    }
+        active: false
 
-    Component {
-        id: toolTipComp
+        sourceComponent: StyledToolTip {
+            onClosed: {
+                Qt.callLater(unloadToolTip)
+            }
+        }
 
-        StyledToolTip {}
+        function loadToolTip() {
+            toolTipLoader.active = true
+        }
+
+        function unloadToolTip() {
+            toolTipLoader.active = false
+        }
+
+        function open(parent, title, description, shortcut) {
+            loadToolTip()
+
+            update(parent, title, description, shortcut)
+
+            var toolTip = toolTipLoader.item
+            toolTip.open()
+        }
+
+        function close() {
+            var toolTip = toolTipLoader.item
+            if (!Boolean(toolTip)) {
+                return
+            }
+
+            toolTip.close()
+        }
+
+        function update(parent, title, description, shortcut) {
+            var toolTip = toolTipLoader.item
+            if (!Boolean(toolTip)) {
+                return
+            }
+
+            toolTip.parent = parent
+            toolTip.title = title
+            toolTip.description = description
+            toolTip.shortcut = shortcut
+
+            toolTip.calculateSize()
+        }
     }
 
     Connections {
         target: root.provider
 
         function onShowToolTip(parent, title, description, shortcut) {
-
-            onHideToolTip()
-
-            var toolTip = toolTipComp.createObject(parent)
-            toolTip.title = title
-            toolTip.description = description
-            toolTip.shortcut = shortcut
-
-            toolTip.closed.connect(function() {
-                prv.showedToolTip.destroy()
-                prv.showedToolTip = null
-            })
-
-            prv.showedToolTip = toolTip
-            toolTip.toggleOpened()
+            toolTipLoader.open(parent, title, description, shortcut)
         }
 
         function onHideToolTip() {
-            if (prv.showedToolTip) {
-                prv.showedToolTip.close()
+            if (toolTipLoader.active) {
+                toolTipLoader.close()
             }
         }
     }
