@@ -39,26 +39,6 @@ struct XmlStreamWriter::Impl {
             stream << ' ';
         }
     }
-
-    template<typename T>
-    void write(const QString& name, T val)
-    {
-        QString ename(QString(name).split(' ')[0]);
-        putLevel();
-        stream << '<' << name << '>';
-        stream << val;
-        stream << "</" << ename << '>' << '\n';
-    }
-
-    template<typename T>
-    void write(const AsciiString& name, T val)
-    {
-        QString ename(QString(name.toQLatin1String()).split(' ')[0]);
-        putLevel();
-        stream << '<' << name << '>';
-        stream << val;
-        stream << "</" << ename << '>' << '\n';
-    }
 };
 
 XmlStreamWriter::XmlStreamWriter()
@@ -98,23 +78,70 @@ void XmlStreamWriter::writeDoctype(const QString& type)
     m_impl->stream << "<!DOCTYPE " << type << '>' << '\n';
 }
 
+QString XmlStreamWriter::escapeSymbol(ushort c)
+{
+    switch (c) {
+    case '<':
+        return QLatin1String("&lt;");
+    case '>':
+        return QLatin1String("&gt;");
+    case '&':
+        return QLatin1String("&amp;");
+    case '\"':
+        return QLatin1String("&quot;");
+    default:
+        // ignore invalid characters in xml 1.0
+        if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D)) {
+            return QString();
+        }
+        return QString(QChar(c));
+    }
+}
+
+QString XmlStreamWriter::escapeString(const QString& s)
+{
+    QString escaped;
+    escaped.reserve(s.size());
+    for (int i = 0; i < s.size(); ++i) {
+        ushort c = s.at(i).unicode();
+        escaped += escapeSymbol(c);
+    }
+    return escaped;
+}
+
+String XmlStreamWriter::escapeString(const String& s)
+{
+    //! TODO
+    return String::fromQString(escapeString(s.toQString()));
+}
+
+String XmlStreamWriter::escapeString(const AsciiString& s)
+{
+    //! TODO
+    return String::fromQString(escapeString(QString(s.ascii())));
+}
+
 void XmlStreamWriter::writeValue(const Value& v)
 {
-    // int, int64_t, size_t, double, const char*, AsciiString, String;
+    // int, unsigned int, int64_t, size_t, double, const char*, AsciiString, String;
     switch (v.index()) {
-    case 0: m_impl->stream << std::get<int>(v);
+    case 0:
         break;
-    case 1: m_impl->stream << std::get<int64_t>(v);
+    case 1: m_impl->stream << std::get<int>(v);
         break;
-    case 2: m_impl->stream << std::get<size_t>(v);
+    case 2: m_impl->stream << std::get<unsigned int>(v);
         break;
-    case 3: m_impl->stream << std::get<double>(v);
+    case 3: m_impl->stream << std::get<int64_t>(v);
         break;
-    case 4: m_impl->stream << std::get<const char*>(v);
+    case 4: m_impl->stream << std::get<size_t>(v);
         break;
-    case 5: m_impl->stream << std::get<AsciiString>(v);
+    case 5: m_impl->stream << std::get<double>(v);
         break;
-    case 6: m_impl->stream << std::get<String>(v);
+    case 6: m_impl->stream << escapeString(AsciiString(std::get<const char*>(v)));
+        break;
+    case 7: m_impl->stream << escapeString(std::get<AsciiString>(v));
+        break;
+    case 8: m_impl->stream << escapeString(std::get<String>(v));
         break;
     default:
         LOGI() << "index: " << v.index();
@@ -159,64 +186,77 @@ void XmlStreamWriter::endElement()
     flush();
 }
 
-void XmlStreamWriter::writeStartElement(const QString& name, const QString& attributes)
+// <element attr="value" />
+void XmlStreamWriter::element(const AsciiString& name, const Attributes& attrs)
 {
+    IF_ASSERT_FAILED(!name.contains(' ')) {
+    }
+
     m_impl->putLevel();
     m_impl->stream << '<' << name;
-    if (!attributes.isEmpty()) {
-        m_impl->stream << ' ' << attributes;
+    for (const Attribute& a : attrs) {
+        m_impl->stream << ' ' << a.first << '=' << '\"';
+        writeValue(a.second);
+        m_impl->stream << '\"';
     }
-    m_impl->stream << '>' << '\n';
-    m_impl->stack.push_back(name.toStdString());
+    m_impl->stream << "/>\n";
 }
 
-void XmlStreamWriter::writeElement(const QString& name, const QString& val)
+void XmlStreamWriter::element(const AsciiString& name, const Value& body)
 {
-    m_impl->write<const QString&>(name, val);
+    IF_ASSERT_FAILED(!name.contains(' ')) {
+    }
+
+    m_impl->putLevel();
+    m_impl->stream << '<' << name << '>';
+    writeValue(body);
+    m_impl->stream << "</" << name << '>' << '\n';
 }
 
-void XmlStreamWriter::writeElement(const QString& name, int val)
+void XmlStreamWriter::element(const AsciiString& name, const Attributes& attrs, const Value& body)
 {
-    m_impl->write<int>(name, val);
+    IF_ASSERT_FAILED(!name.contains(' ')) {
+    }
+
+    m_impl->putLevel();
+    m_impl->stream << '<' << name;
+    for (const Attribute& a : attrs) {
+        m_impl->stream << ' ' << a.first << '=' << '\"';
+        writeValue(a.second);
+        m_impl->stream << '\"';
+    }
+    m_impl->stream << ">";
+    writeValue(body);
+    m_impl->stream << "</" << name << '>' << '\n';
 }
 
-void XmlStreamWriter::writeElement(const AsciiString& name, const char* val)
-{
-    m_impl->write<const char*>(name, val);
-}
-
-void XmlStreamWriter::writeElement(const AsciiString& name, const AsciiString& val)
-{
-    m_impl->write<const AsciiString&>(name, val);
-}
-
-void XmlStreamWriter::writeElement(const AsciiString& name, const QString& val)
-{
-    m_impl->write<const QString&>(name, val);
-}
-
-void XmlStreamWriter::writeElement(const AsciiString& name, int val)
-{
-    m_impl->write<int>(name, val);
-}
-
-void XmlStreamWriter::writeElement(const AsciiString& name, int64_t val)
-{
-    m_impl->write<int64_t>(name, val);
-}
-
-void XmlStreamWriter::writeElement(const AsciiString& name, double val)
-{
-    m_impl->write<double>(name, val);
-}
-
-void XmlStreamWriter::writeElement(const QString& nameWithAttributes)
+void XmlStreamWriter::elementRaw(const QString& nameWithAttributes, const Value& body)
 {
     m_impl->putLevel();
-    m_impl->stream << '<' << nameWithAttributes << "/>\n";
+    if (body.index() == 0) {
+        m_impl->stream << '<' << nameWithAttributes << "/>\n";
+    } else {
+        QString ename(QString(nameWithAttributes).split(' ')[0]);
+        m_impl->stream << '<' << nameWithAttributes << '>';
+        writeValue(body);
+        m_impl->stream << "</" << ename << '>' << '\n';
+    }
 }
 
-void XmlStreamWriter::writeComment(const QString& text)
+void XmlStreamWriter::elementStringRaw(const QString& nameWithAttributes, const QString& body)
+{
+    m_impl->putLevel();
+    if (body.isEmpty()) {
+        m_impl->stream << '<' << nameWithAttributes << "/>\n";
+    } else {
+        QString ename(QString(nameWithAttributes).split(' ')[0]);
+        m_impl->stream << '<' << nameWithAttributes << '>';
+        m_impl->stream << body;
+        m_impl->stream << "</" << ename << '>' << '\n';
+    }
+}
+
+void XmlStreamWriter::comment(const String& text)
 {
     m_impl->putLevel();
     m_impl->stream << "<!-- " << text << " -->\n";

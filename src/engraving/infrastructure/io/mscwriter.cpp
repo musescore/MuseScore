@@ -216,7 +216,7 @@ void MscWriter::writeContainer(const std::vector<QString>& paths)
     xml.startElement("rootfiles");
 
     for (const QString& f : paths) {
-        xml.writeElement(QString("rootfile full-path=\"%1\"").arg(f));
+        xml.element("rootfile", { { "full-path", f } });
     }
 
     xml.endElement();

@@ -94,6 +94,13 @@ public:
     String(const char16_t* str);
     String& operator=(const char16_t* str);
 
+    bool operator ==(const String& s) const { return *m_data.get() == *s.m_data.get(); }
+    bool operator !=(const String& s) const { return !operator ==(s); }
+
+    size_t size() const;
+    bool empty() const;
+    Char at(size_t i) const;
+
     static String fromUtf8(const char* str);
     ByteArray toUtf8() const;
     ByteArray toAscii(bool* ok = nullptr) const;
@@ -107,10 +114,6 @@ public:
     static String fromQString(const QString& str);
     QString toQString() const;
 //#endif
-
-    size_t size() const;
-    bool empty() const;
-    Char at(size_t i) const;
 
 private:
     std::shared_ptr<std::u16string> m_data;

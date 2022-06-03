@@ -130,7 +130,7 @@ void TremoloBar::write(XmlWriter& xml) const
     writeProperty(xml, Pid::LINE_WIDTH);
     writeProperty(xml, Pid::PLAY);
     for (const PitchValue& v : m_points) {
-        xml.tagE(TConv::toXml(v));
+        xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
     }
     xml.endElement();
 }

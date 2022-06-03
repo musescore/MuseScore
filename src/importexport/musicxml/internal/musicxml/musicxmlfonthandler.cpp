@@ -199,7 +199,7 @@ void MScoreTextToMXML::writeTextFragments(const std::list<TextFragment>& fr, Xml
     for (const TextFragment& f : fr) {
         newFormat = f.format;
         QString formatAttr = updateFormat();
-        xml.tag(tagname + (firstTime ? attribs : "") + formatAttr, f.text);
+        xml.tagRaw(tagname + (firstTime ? attribs : "") + formatAttr, f.text);
         firstTime = false;
     }
 }

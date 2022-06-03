@@ -344,9 +344,9 @@ void Pos::setFrame(unsigned pos)
 void Pos::write(XmlWriter& xml, const char* name) const
 {
     if (_type == TType::TICKS) {
-        xml.tagE(QString("%1 tick=\"%2\"").arg(name).arg(_tick));
+        xml.tag(name, { { "tick", _tick } });
     } else {
-        xml.tagE(QString("%1 frame=\"%2\"").arg(name).arg(_frame));
+        xml.tag(name, { { "frame", _frame } });
     }
 }
 
@@ -425,9 +425,9 @@ void Pos::dump(int /*n*/) const
 void PosLen::write(XmlWriter& xml, const char* name) const
 {
     if (type() == TType::TICKS) {
-        xml.tagE(QString("%1 tick=\"%2\" len=\"%3\"").arg(name).arg(tick()).arg(_lenTick));
+        xml.tag(name, { { "tick", tick() }, { "len", _lenTick } });
     } else {
-        xml.tagE(QString("%1 sample=\"%2\" len=\"%3\"").arg(name).arg(frame()).arg(_lenFrame));
+        xml.tag(name, { { "sample", frame() }, { "len", _lenFrame } });
     }
 }
 

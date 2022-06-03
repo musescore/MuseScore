@@ -59,30 +59,25 @@ static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
 {
     switch (e.type()) {
     case ME_NOTEON:
-        xml.tagE(QString("note-on  channel=\"%1\" pitch=\"%2\" velo=\"%3\"")
-                 .arg(e.channel()).arg(e.pitch()).arg(e.velo()));
+        xml.tag("note-on", { { "channel", e.channel() }, { "pitch", e.pitch() }, { "velo", e.velo() } });
         break;
 
     case ME_NOTEOFF:
-        xml.tagE(QString("note-off  channel=\"%1\" pitch=\"%2\" velo=\"%3\"")
-                 .arg(e.channel()).arg(e.pitch()).arg(e.velo()));
+        xml.tag("note-off", { { "channel", e.channel() }, { "pitch", e.pitch() }, { "velo", e.velo() } });
         break;
 
     case ME_CONTROLLER:
         if (e.controller() == CTRL_PROGRAM) {
             if (e.channel() == 0) {
-                xml.tagE(QString("program value=\"%1\"").arg(e.value()));
+                xml.tag("program", { { "value", e.value() } });
             } else {
-                xml.tagE(QString("program channel=\"%1\" value=\"%2\"")
-                         .arg(e.channel()).arg(e.value()));
+                xml.tag("program", { { "channel", e.channel() }, { "value", e.value() } });
             }
         } else {
             if (e.channel() == 0) {
-                xml.tagE(QString("controller ctrl=\"%1\" value=\"%2\"")
-                         .arg(e.controller()).arg(e.value()));
+                xml.tag("controller", { { "ctrl", e.controller() }, { "value", e.value() } });
             } else {
-                xml.tagE(QString("controller channel=\"%1\" ctrl=\"%2\" value=\"%3\"")
-                         .arg(e.channel()).arg(e.controller()).arg(e.value()));
+                xml.tag("controller", { { "channel", e.channel() }, { "ctrl", e.controller() }, { "value", e.value() } });
             }
         }
         break;
@@ -317,22 +312,19 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
         ClefTypeList ct = _clefType[i];
         if (ct._concertClef == ct._transposingClef) {
             if (ct._concertClef != ClefType::G) {
-                QString tag = TConv::toXml(ct._concertClef);
                 if (i) {
-                    xml.tag(QString("clef staff=\"%1\"").arg(i + 1), tag);
+                    xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
                 } else {
-                    xml.tag("clef", tag);
+                    xml.tag("clef", TConv::toXml(ct._concertClef));
                 }
             }
         } else {
-            QString tag1 = TConv::toXml(ct._concertClef);
-            QString tag2 = TConv::toXml(ct._transposingClef);
             if (i) {
-                xml.tag(QString("concertClef staff=\"%1\"").arg(i + 1), tag1);
-                xml.tag(QString("transposingClef staff=\"%1\"").arg(i + 1), tag2);
+                xml.tag("concertClef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
+                xml.tag("transposingClef", { { "staff", i + 1 } }, TConv::toXml(ct._transposingClef));
             } else {
-                xml.tag("concertClef", tag1);
-                xml.tag("transposingClef", tag2);
+                xml.tag("concertClef", TConv::toXml(ct._concertClef));
+                xml.tag("transposingClef", TConv::toXml(ct._transposingClef));
             }
         }
     }

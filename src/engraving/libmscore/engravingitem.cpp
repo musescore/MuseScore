@@ -885,7 +885,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         }
         Location loc = Location::positionForElement(this);
         if (me == this) {
-            xml.tagE("linkedMain");
+            xml.tag("linkedMain");
             int index = ctx->assignLocalIndex(loc);
             ctx->setLidLocalIndex(_links->lid(), index);
         } else {
@@ -923,7 +923,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         xml.tag("track", t);
     }
     if (xml.context()->writePosition()) {
-        xml.tag(Pid::POSITION, rtick());
+        xml.tagProperty(Pid::POSITION, rtick());
     }
     if (_tag != 0x1) {
         for (int i = 1; i < MAX_TAGS; i++) {
@@ -1272,10 +1272,10 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
     xml.context()->setClipboardmode(true);
     xml.startElement("EngravingItem");
     if (isNote()) {
-        xml.tag("duration", toNote(this)->chord()->ticks());
+        xml.tagFraction("duration", toNote(this)->chord()->ticks());
     }
     if (!dragOffset.isNull()) {
-        xml.tag("dragOffset", dragOffset);
+        xml.tagPoint("dragOffset", dragOffset);
     }
     write(xml);
     xml.endElement();

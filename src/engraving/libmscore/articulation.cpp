@@ -189,7 +189,7 @@ void Articulation::write(XmlWriter& xml) const
     }
     xml.startElement(this);
     if (!_channelName.isEmpty()) {
-        xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
+        xml.tag("channe", { { "name", _channelName } });
     }
     writeProperty(xml, Pid::DIRECTION);
     xml.tag("subtype", SymNames::nameForSymId(_symId));

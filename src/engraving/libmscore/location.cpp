@@ -70,7 +70,7 @@ void Location::write(XmlWriter& xml) const
     xml.tag("staves", _staff, relDefaults._staff);
     xml.tag("voices", _voice, relDefaults._voice);
     xml.tag("measures", _measure, relDefaults._measure);
-    xml.tag("fractions", _frac.reduced(), relDefaults._frac);
+    xml.tagFraction("fractions", _frac.reduced(), relDefaults._frac);
     xml.tag("grace", _graceIndex, relDefaults._graceIndex);
     xml.tag("notes", _note, relDefaults._note);
     xml.endElement();

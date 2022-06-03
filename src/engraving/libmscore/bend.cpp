@@ -362,7 +362,7 @@ void Bend::write(XmlWriter& xml) const
 {
     xml.startElement(this);
     for (const PitchValue& v : m_points) {
-        xml.tagE(TConv::toXml(v));
+        xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
     }
     writeStyledProperties(xml);
     writeProperty(xml, Pid::PLAY);

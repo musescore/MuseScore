@@ -334,7 +334,7 @@ void Palette::write(XmlWriter& xml) const
 
     for (PaletteCellPtr cell : m_cells) {
         if (!cell) { // from old palette, not sure if it is still needed
-            xml.tagE("Cell");
+            xml.tag("Cell");
             continue;
         }
         cell->write(xml);

@@ -457,7 +457,7 @@ void KeySig::write(XmlWriter& xml) const
         for (const CustDef& cd : _sig.customKeyDefs()) {
             xml.startElement("CustDef");
             xml.tag("sym", SymNames::nameForSymId(cd.sym));
-            xml.tag("def", cd);
+            xml.tag("def", { { "degree", cd.degree }, { "xAlt", cd.xAlt }, { "octAlt", cd.octAlt } });
             xml.endElement();
         }
     } else {
