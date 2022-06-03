@@ -353,16 +353,16 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 
     qreal _spatium = score()->spatium();
     if (!ups(Grip::START).off.isNull()) {
-        xml.tag("o1", ups(Grip::START).off / _spatium);
+        xml.tagPoint("o1", ups(Grip::START).off / _spatium);
     }
     if (!ups(Grip::BEZIER1).off.isNull()) {
-        xml.tag("o2", ups(Grip::BEZIER1).off / _spatium);
+        xml.tagPoint("o2", ups(Grip::BEZIER1).off / _spatium);
     }
     if (!ups(Grip::BEZIER2).off.isNull()) {
-        xml.tag("o3", ups(Grip::BEZIER2).off / _spatium);
+        xml.tagPoint("o3", ups(Grip::BEZIER2).off / _spatium);
     }
     if (!ups(Grip::END).off.isNull()) {
-        xml.tag("o4", ups(Grip::END).off / _spatium);
+        xml.tagPoint("o4", ups(Grip::END).off / _spatium);
     }
     EngravingItem::writeProperties(xml);
     xml.endElement();

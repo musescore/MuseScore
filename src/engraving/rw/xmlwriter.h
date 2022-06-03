@@ -38,8 +38,7 @@
 
 namespace mu::engraving {
 class WriteContext;
-
-class XmlWriter : public mu::XmlStreamWriter
+class XmlWriter : public XmlStreamWriter
 {
 public:
     XmlWriter() = default;
@@ -54,57 +53,30 @@ public:
     void startElement(const EngravingObject* se, const Attributes& attrs = {});
     void startElement(const AsciiString& name, const EngravingObject* se, const Attributes& attrs = {});
 
-    void tagE(const QString&);
+    void tag(const AsciiString& name, const Attributes& attrs = {});
+    void tag(const AsciiString& name, const Value& body);
+    void tag(const AsciiString& name, const Value& val, const Value& def);
+    void tag(const AsciiString& name, const Attributes& attrs, const Value& body);
+    void tagRaw(const QString& elementWithAttrs, const Value& body = Value());
 
-    void tag(Pid id, const PropertyValue& data, const PropertyValue& def = PropertyValue());
-    void tagProperty(const mu::AsciiString&, const PropertyValue& data, const PropertyValue& def = PropertyValue());
-    void tagProperty(const mu::AsciiString& name, P_TYPE type, const PropertyValue& data);
+    void tagProperty(Pid id, const PropertyValue& data, const PropertyValue& def = PropertyValue());
+    void tagProperty(const AsciiString&, const PropertyValue& data, const PropertyValue& def = PropertyValue());
 
-    void tag(const mu::AsciiString& name, const mu::AsciiString& v);
-    void tag(const mu::AsciiString& name, const QString& v);
-    void tag(const char* name, const QString& v) { tag(mu::AsciiString(name), v); }
-    void tag(const char* name, const QString& v, const QString& d)
-    {
-        if (v == d) {
-            return;
-        }
-        tag(mu::AsciiString(name), v);
-    }
-
-    void tag(const QString& name, const QString& val);
-    void tag(const QString& name, int val);
-
-    void tag(const mu::AsciiString& name, const Fraction& v, const Fraction& def = Fraction());
-    void tag(const char* name, const CustDef& cd);
-
-#define DECLARE_TAG(T) \
-    void tag(const mu::AsciiString& name, T val); \
-    void tag(const char* name, T val) { \
-        tag(mu::AsciiString(name), val); \
-    } \
-    void tag(const mu::AsciiString& name, T val, T def); \
-    void tag(const char* name,  T val, T def) { \
-        tag(mu::AsciiString(name), val, def); \
-    } \
-
-    DECLARE_TAG(bool)
-    DECLARE_TAG(int)
-    DECLARE_TAG(double)
-    DECLARE_TAG(const char*)
-
-    void tag(const mu::AsciiString& name, const mu::PointF& v);
-
-    void comment(const QString&);
+    void tagFraction(const AsciiString& name, const Fraction& v, const Fraction& def = Fraction());
+    void tagPoint(const AsciiString& name, const mu::PointF& v);
 
     void writeXml(const QString&, QString s);
+
+    void comment(const String& text);
 
     WriteContext* context() const;
     void setContext(WriteContext* context);
 
     static QString xmlString(const QString&);
-    static QString xmlString(ushort c);
 
 private:
+    void tagProperty(const AsciiString& name, P_TYPE type, const PropertyValue& data);
+
     std::vector<std::pair<const EngravingObject*, AsciiString> > _elements;
     bool _recordElements = false;
 

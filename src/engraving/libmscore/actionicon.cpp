@@ -80,7 +80,7 @@ void ActionIcon::write(XmlWriter& xml) const
     xml.startElement(this);
     xml.tag("subtype", int(m_actionType));
     if (!m_actionCode.empty()) {
-        xml.tag("action", QString::fromStdString(m_actionCode));
+        xml.tag("action", String::fromStdString(m_actionCode));
     }
     xml.endElement();
 }

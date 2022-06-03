@@ -215,8 +215,7 @@ void Groups::write(XmlWriter& xml) const
 {
     xml.startElement("Groups");
     for (const GroupNode& n : m_nodes) {
-        xml.tagE(QString("Node pos=\"%1\" action=\"%2\"")
-                 .arg(n.pos).arg(n.action));
+        xml.tag("Node", { { "pos", n.pos }, { "action", n.action } });
     }
     xml.endElement();
 }

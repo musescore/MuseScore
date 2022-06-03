@@ -231,7 +231,7 @@ bool PaletteCell::read(XmlReader& e)
 void PaletteCell::write(XmlWriter& xml) const
 {
     if (!element) {
-        xml.tagE("Cell");
+        xml.tag("Cell");
         return;
     }
 

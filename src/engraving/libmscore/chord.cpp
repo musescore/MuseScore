@@ -1149,28 +1149,28 @@ void Chord::write(XmlWriter& xml) const
     case NoteType::NORMAL:
         break;
     case NoteType::ACCIACCATURA:
-        xml.tagE("acciaccatura");
+        xml.tag("acciaccatura");
         break;
     case NoteType::APPOGGIATURA:
-        xml.tagE("appoggiatura");
+        xml.tag("appoggiatura");
         break;
     case NoteType::GRACE4:
-        xml.tagE("grace4");
+        xml.tag("grace4");
         break;
     case NoteType::GRACE16:
-        xml.tagE("grace16");
+        xml.tag("grace16");
         break;
     case NoteType::GRACE32:
-        xml.tagE("grace32");
+        xml.tag("grace32");
         break;
     case NoteType::GRACE8_AFTER:
-        xml.tagE("grace8after");
+        xml.tag("grace8after");
         break;
     case NoteType::GRACE16_AFTER:
-        xml.tagE("grace16after");
+        xml.tag("grace16after");
         break;
     case NoteType::GRACE32_AFTER:
-        xml.tagE("grace32after");
+        xml.tag("grace32after");
         break;
     default:
         break;

@@ -244,11 +244,11 @@ void Ambitus::setBottomTpc(int val)
 void Ambitus::write(XmlWriter& xml) const
 {
     xml.startElement(this);
-    xml.tag(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
-    xml.tag(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
-    xml.tag(Pid::MIRROR_HEAD, int(_dir),           int(DIR_DEFAULT));
+    xml.tagProperty(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
+    xml.tagProperty(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
+    xml.tagProperty(Pid::MIRROR_HEAD, int(_dir),           int(DIR_DEFAULT));
     xml.tag("hasLine",    _hasLine, true);
-    xml.tag(Pid::LINE_WIDTH_SPATIUM, _lineWidth, LINEWIDTH_DEFAULT);
+    xml.tagProperty(Pid::LINE_WIDTH_SPATIUM, _lineWidth, LINEWIDTH_DEFAULT);
     xml.tag("topPitch",   _topPitch);
     xml.tag("topTpc",     _topTpc);
     xml.tag("bottomPitch", _bottomPitch);

@@ -270,7 +270,7 @@ void Harmony::write(XmlWriter& xml) const
     xml.startElement(this);
     writeProperty(xml, Pid::HARMONY_TYPE);
     if (_leftParen) {
-        xml.tagE("leftParen");
+        xml.tag("leftParen");
     }
     if (_rootTpc != Tpc::TPC_INVALID || _baseTpc != Tpc::TPC_INVALID) {
         int rRootTpc = _rootTpc;
@@ -342,7 +342,7 @@ void Harmony::write(XmlWriter& xml) const
     //Pid::PLAY, Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION
     //written by the above function call because they are part of element style
     if (_rightParen) {
-        xml.tagE("rightParen");
+        xml.tag("rightParen");
     }
     xml.endElement();
 }

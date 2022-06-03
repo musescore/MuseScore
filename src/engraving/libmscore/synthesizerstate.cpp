@@ -44,7 +44,7 @@ void SynthesizerState::write(XmlWriter& xml, bool force /* = false */) const
             QByteArray ba = g.name().toLatin1();
             xml.startElement(ba.constData());
             for (const IdValue& v : g) {
-                xml.tag(QString("val id=\"%1\"").arg(v.id), v.data);
+                xml.tag("val", { { "id", v.id } }, v.data);
             }
             xml.endElement();
         }

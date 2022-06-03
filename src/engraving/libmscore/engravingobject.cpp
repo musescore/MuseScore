@@ -550,7 +550,7 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
         p = PropertyValue(p1 / q);
         d = PropertyValue();
     }
-    xml.tag(pid, p, d);
+    xml.tagProperty(pid, p, d);
 }
 
 //---------------------------------------------------------

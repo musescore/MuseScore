@@ -754,7 +754,7 @@ void FretDiagram::writeNew(XmlWriter& xml) const
         for (auto const& d : allDots) {
             if (d.exists()) {
                 // TODO: write fingering
-                xml.tag(QString("dot fret=\"%1\"").arg(d.fret), FretItem::dotTypeToName(d.dtype));
+                xml.tag("dot", { { "fret", d.fret } }, FretItem::dotTypeToName(d.dtype));
             }
         }
 
@@ -767,7 +767,7 @@ void FretDiagram::writeNew(XmlWriter& xml) const
             continue;
         }
 
-        xml.tag(QString("barre start=\"%1\" end=\"%2\"").arg(b.startString).arg(b.endString), f);
+        xml.tag("barre", { { "start", b.startString }, { "end", b.endString } }, f);
     }
 }
 
@@ -1323,11 +1323,11 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
 
             // Also write barre if it starts at this dot
             if (std::find(bStarts.begin(), bStarts.end(), d.fret) != bStarts.end()) {
-                xml.tagE("barre type=\"start\"");
+                xml.tag("barre", { { "type", "start" } });
                 bStarts.erase(std::remove(bStarts.begin(), bStarts.end(), d.fret), bStarts.end());
             }
             if (std::find(bEnds.begin(), bEnds.end(), d.fret) != bEnds.end()) {
-                xml.tagE("barre type=\"stop\"");
+                xml.tag("barre", { { "type", "stop" } });
                 bEnds.erase(std::remove(bEnds.begin(), bEnds.end(), d.fret), bEnds.end());
             }
             xml.endElement();
@@ -1338,7 +1338,7 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
             xml.startElement("frame-note");
             xml.tag("string", mxmlString);
             xml.tag("fret", j);
-            xml.tagE("barre type=\"start\"");
+            xml.tag("barre", { { "type", "start" } });
             xml.endElement();
         }
 
@@ -1346,7 +1346,7 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
             xml.startElement("frame-note");
             xml.tag("string", mxmlString);
             xml.tag("fret", j);
-            xml.tagE("barre type=\"stop\"");
+            xml.tag("barre", { { "type", "stop" } });
             xml.endElement();
         }
     }

@@ -85,21 +85,7 @@ static T findTypeBySymId(const std::vector<Item<T> >& cont, const SymId& v, T de
 }
 
 template<typename T>
-static QString findXmlTagByType(const std::vector<Item<T> >& cont, const T& v)
-{
-    auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
-        return i.type == v;
-    });
-
-    IF_ASSERT_FAILED(it != cont.cend()) {
-        static QString dummy;
-        return dummy;
-    }
-    return it->xml.toQLatin1String();
-}
-
-template<typename T>
-static AsciiString findXmlTagByTypeAscii(const std::vector<Item<T> >& cont, const T& v)
+static AsciiString findXmlTagByType(const std::vector<Item<T> >& cont, const T& v)
 {
     auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
         return i.type == v;
@@ -191,8 +177,8 @@ AlignV TConv::fromXml(const AsciiString& tag, AlignV def)
 QString TConv::toXml(Align v)
 {
     QStringList sl;
-    sl << findXmlTagByType<AlignH>(ALIGN_H, v.horizontal);
-    sl << findXmlTagByType<AlignV>(ALIGN_V, v.vertical);
+    sl << findXmlTagByType<AlignH>(ALIGN_H, v.horizontal).ascii();
+    sl << findXmlTagByType<AlignV>(ALIGN_V, v.vertical).ascii();
     return sl.join(",");
 }
 
@@ -235,7 +221,7 @@ QString TConv::toUserName(Orientation v)
     return findUserNameByType<Orientation>(ORIENTATION, v);
 }
 
-QString TConv::toXml(Orientation v)
+AsciiString TConv::toXml(Orientation v)
 {
     return findXmlTagByType<Orientation>(ORIENTATION, v);
 }
@@ -260,7 +246,7 @@ QString TConv::toUserName(NoteHeadType v)
 
 AsciiString TConv::toXml(NoteHeadType v)
 {
-    return findXmlTagByTypeAscii<NoteHeadType>(NOTEHEAD_TYPES, v);
+    return findXmlTagByType<NoteHeadType>(NOTEHEAD_TYPES, v);
 }
 
 NoteHeadType TConv::fromXml(const AsciiString& tag, NoteHeadType def)
@@ -286,7 +272,7 @@ QString TConv::toUserName(NoteHeadScheme v)
     return findUserNameByType<NoteHeadScheme>(NOTEHEAD_SCHEMES, v);
 }
 
-QString TConv::toXml(NoteHeadScheme v)
+AsciiString TConv::toXml(NoteHeadScheme v)
 {
     return findXmlTagByType<NoteHeadScheme>(NOTEHEAD_SCHEMES, v);
 }
@@ -386,7 +372,7 @@ QString TConv::toUserName(NoteHeadGroup v)
     return findUserNameByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v);
 }
 
-QString TConv::toXml(NoteHeadGroup v)
+AsciiString TConv::toXml(NoteHeadGroup v)
 {
     return findXmlTagByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v);
 }
@@ -441,7 +427,7 @@ QString TConv::toUserName(ClefType v)
     return findUserNameByType<ClefType>(CLEF_TYPES, v);
 }
 
-QString TConv::toXml(ClefType v)
+AsciiString TConv::toXml(ClefType v)
 {
     return findXmlTagByType<ClefType>(CLEF_TYPES, v);
 }
@@ -596,7 +582,7 @@ DynamicType TConv::dynamicType(const AsciiString& tag)
     return DynamicType::OTHER;
 }
 
-QString TConv::toXml(DynamicType v)
+AsciiString TConv::toXml(DynamicType v)
 {
     return findXmlTagByType<DynamicType>(DYNAMIC_TYPES, v);
 }
@@ -640,7 +626,7 @@ QString TConv::toUserName(DynamicSpeed v)
     return findUserNameByType<DynamicSpeed>(DYNAMIC_SPEEDS, v);
 }
 
-QString TConv::toXml(DynamicSpeed v)
+AsciiString TConv::toXml(DynamicSpeed v)
 {
     return findXmlTagByType<DynamicSpeed>(DYNAMIC_SPEEDS, v);
 }
@@ -693,7 +679,7 @@ QString TConv::toUserName(KeyMode v)
     return findUserNameByType<KeyMode>(KEY_MODES, v);
 }
 
-QString TConv::toXml(KeyMode v)
+AsciiString TConv::toXml(KeyMode v)
 {
     return findXmlTagByType<KeyMode>(KEY_MODES, v);
 }
@@ -774,7 +760,7 @@ QString TConv::toUserName(TextStyleType v)
     return findUserNameByType<TextStyleType>(TEXTSTYLE_TYPES, v);
 }
 
-QString TConv::toXml(TextStyleType v)
+AsciiString TConv::toXml(TextStyleType v)
 {
     return findXmlTagByType<TextStyleType>(TEXTSTYLE_TYPES, v);
 }
@@ -942,7 +928,7 @@ QString TConv::toUserName(ChangeMethod v)
     return findUserNameByType<ChangeMethod>(CHANGE_METHODS, v);
 }
 
-QString TConv::toXml(ChangeMethod v)
+AsciiString TConv::toXml(ChangeMethod v)
 {
     return findXmlTagByType<ChangeMethod>(CHANGE_METHODS, v);
 }
@@ -1005,7 +991,7 @@ QString TConv::toUserName(DurationType v)
     return findUserNameByType<DurationType>(DURATION_TYPES, v);
 }
 
-QString TConv::toXml(DurationType v)
+AsciiString TConv::toXml(DurationType v)
 {
     return findXmlTagByType<DurationType>(DURATION_TYPES, v);
 }
@@ -1033,7 +1019,7 @@ static const std::vector<Item<PlayingTechniqueType> > PLAY_TECH_TYPES = {
     { PlayingTechniqueType::Overdrive,           "overdrive" }
 };
 
-QString TConv::toXml(PlayingTechniqueType v)
+AsciiString TConv::toXml(PlayingTechniqueType v)
 {
     return findXmlTagByType<PlayingTechniqueType>(PLAY_TECH_TYPES, v);
 }
@@ -1058,7 +1044,7 @@ static const std::vector<Item<TempoChangeType> > TEMPO_CHANGE_TYPES = {
     { TempoChangeType::Stringendo, "stringendo" }
 };
 
-QString TConv::toXml(TempoChangeType v)
+AsciiString TConv::toXml(TempoChangeType v)
 {
     return findXmlTagByType<TempoChangeType>(TEMPO_CHANGE_TYPES, v);
 }
@@ -1073,7 +1059,7 @@ static const std::vector<Item<OrnamentStyle> > ORNAMENTSTYLE_TYPES = {
     { OrnamentStyle::DEFAULT, "default" }
 };
 
-QString TConv::toXml(OrnamentStyle v)
+AsciiString TConv::toXml(OrnamentStyle v)
 {
     return findXmlTagByType<OrnamentStyle>(ORNAMENTSTYLE_TYPES, v);
 }
@@ -1088,7 +1074,7 @@ static const std::vector<Item<PlacementV> > PLACEMENTV_TYPES = {
     { PlacementV::BELOW, "below" }
 };
 
-QString TConv::toXml(PlacementV v)
+AsciiString TConv::toXml(PlacementV v)
 {
     return findXmlTagByType<PlacementV>(PLACEMENTV_TYPES, v);
 }
@@ -1104,7 +1090,7 @@ static const std::vector<Item<PlacementH> > PLACEMENTH_TYPES = {
     { PlacementH::CENTER, "right" }
 };
 
-QString TConv::toXml(PlacementH v)
+AsciiString TConv::toXml(PlacementH v)
 {
     return findXmlTagByType<PlacementH>(PLACEMENTH_TYPES, v);
 }
@@ -1121,7 +1107,7 @@ static const std::vector<Item<TextPlace> > TEXTPLACE_TYPES = {
     { TextPlace::LEFT, "left" }
 };
 
-QString TConv::toXml(TextPlace v)
+AsciiString TConv::toXml(TextPlace v)
 {
     return findXmlTagByType<TextPlace>(TEXTPLACE_TYPES, v);
 }
@@ -1160,7 +1146,7 @@ static const std::vector<Item<DirectionV> > DIRECTIONV_TYPES = {
     { DirectionV::DOWN, "down" }
 };
 
-QString TConv::toXml(DirectionV v)
+AsciiString TConv::toXml(DirectionV v)
 {
     return findXmlTagByType<DirectionV>(DIRECTIONV_TYPES, v);
 }
@@ -1191,7 +1177,7 @@ static const std::vector<Item<DirectionH> > DIRECTIONH_TYPES = {
     { DirectionH::LEFT, "left" }
 };
 
-QString TConv::toXml(DirectionH v)
+AsciiString TConv::toXml(DirectionH v)
 {
     return findXmlTagByType<DirectionH>(DIRECTIONH_TYPES, v);
 }
@@ -1223,7 +1209,7 @@ static const std::vector<Item<LayoutBreakType> > LAYOUTBREAK_TYPES = {
     { LayoutBreakType::NOBREAK, "nobreak" }
 };
 
-QString TConv::toXml(LayoutBreakType v)
+AsciiString TConv::toXml(LayoutBreakType v)
 {
     return findXmlTagByType<LayoutBreakType>(LAYOUTBREAK_TYPES, v);
 }
@@ -1238,7 +1224,7 @@ static const std::vector<Item<VeloType> > VELO_TYPES = {
     { VeloType::USER_VAL, "user" }
 };
 
-QString TConv::toXml(VeloType v)
+AsciiString TConv::toXml(VeloType v)
 {
     return findXmlTagByType<VeloType>(VELO_TYPES, v);
 }
@@ -1259,7 +1245,7 @@ static const std::vector<Item<BeamMode> > BEAMMODE_TYPES = {
     { BeamMode::INVALID, "invalid" }
 };
 
-QString TConv::toXml(BeamMode v)
+AsciiString TConv::toXml(BeamMode v)
 {
     return findXmlTagByType<BeamMode>(BEAMMODE_TYPES, v);
 }
@@ -1292,7 +1278,7 @@ static const std::vector<Item<GlissandoStyle> > GLISSANDOSTYLE_TYPES = {
     { GlissandoStyle::CHROMATIC, "chromatic" }
 };
 
-QString TConv::toXml(GlissandoStyle v)
+AsciiString TConv::toXml(GlissandoStyle v)
 {
     return findXmlTagByType<GlissandoStyle>(GLISSANDOSTYLE_TYPES, v);
 }
@@ -1329,7 +1315,7 @@ static const std::vector<Item<BarLineType> > BARLINE_TYPES = {
     { BarLineType::DOUBLE_HEAVY, "double-heavy" }
 };
 
-QString TConv::toXml(BarLineType v)
+AsciiString TConv::toXml(BarLineType v)
 {
     return findXmlTagByType<BarLineType>(BARLINE_TYPES, v);
 }

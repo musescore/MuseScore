@@ -822,8 +822,7 @@ void Staff::write(XmlWriter& xml) const
         size_t b = i->bracketSpan();
         size_t c = i->column();
         if (a != BracketType::NO_BRACKET || b > 0) {
-            xml.tagE(QString("bracket type=\"%1\" span=\"%2\" col=\"%3\"").arg(static_cast<int>(a)).arg(static_cast<int>(b)).arg(static_cast
-                                                                                                                                 <int>(c)));
+            xml.tag("bracket", { { "type", static_cast<int>(a) }, { "span", b }, { "col", c } });
         }
     }
 
