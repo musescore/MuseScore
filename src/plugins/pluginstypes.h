@@ -40,7 +40,7 @@ struct PluginInfo
     QUrl detailsUrl;
     QString name;
     QString description;
-    QString category;
+    QString categoryCode;
     bool enabled = false;
     bool hasUpdate = false;
     QVersionNumber version;
@@ -50,7 +50,7 @@ struct PluginInfo
     bool operator==(const PluginInfo& other) const { return other.codeKey == codeKey; }
 };
 
-using PluginInfoList = QList<PluginInfo>;
+using PluginInfoMap = std::map<CodeKey, PluginInfo>;
 }
 
 #endif // MU_PLUGINS_IPLUGINSCONFIGURATION_H

@@ -25,11 +25,13 @@
 
 #include <QQuickView>
 
-#include "plugins/pluginstypes.h"
-
-#include "framework/ui/iuiengine.h"
-#include "modularity/ioc.h"
 #include "io/path.h"
+
+#include "modularity/ioc.h"
+#include "framework/ui/iuiengine.h"
+#include "ipluginsconfiguration.h"
+
+#include "plugins/pluginstypes.h"
 
 namespace mu::engraving {
 class QmlPlugin;
@@ -44,6 +46,7 @@ class PluginView : public QObject
     Q_OBJECT
 
     INJECT(plugins, ui::IUiEngine, uiEngine)
+    INJECT(plugins, IPluginsConfiguration, configuration)
 
 public:
     PluginView(const QUrl& url, QObject* parent = nullptr);
@@ -52,6 +55,8 @@ public:
     QString name() const;
     QString description() const;
     QVersionNumber version() const;
+    QString thumbnailName() const;
+    QString categoryCode() const;
 
     void run();
 
@@ -61,6 +66,8 @@ signals:
 private:
     QQmlEngine* engine() const;
     QString pluginName() const;
+
+    bool pluginHasUi() const;
 
     void destroyView();
 

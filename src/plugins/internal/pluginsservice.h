@@ -47,8 +47,10 @@ public:
 
     void reloadPlugins() override;
 
-    mu::RetVal<PluginInfoList> plugins(PluginsStatus status = PluginsStatus::All) const override;
+    mu::RetVal<PluginInfoMap> plugins(PluginsStatus status = PluginsStatus::All) const override;
     async::Notification pluginsChanged() const override;
+
+    CategoryInfoMap categories() const override;
 
     Ret setEnable(const CodeKey& codeKey, bool enable) override;
 
@@ -64,14 +66,14 @@ private:
     const IPluginsConfiguration::PluginsConfigurationHash& pluginsConfiguration() const;
     void setPluginsConfiguration(const IPluginsConfiguration::PluginsConfigurationHash& pluginsConfiguration);
 
-    PluginInfoList readPlugins() const;
+    PluginInfoMap readPlugins() const;
     io::paths_t scanFileSystemForPlugins() const;
 
     PluginInfo& pluginInfo(const CodeKey& codeKey);
 
     void registerShortcuts();
 
-    mutable PluginInfoList m_plugins;
+    mutable PluginInfoMap m_plugins;
     async::Notification m_pluginsChanged;
     async::Channel<PluginInfo> m_pluginChanged;
 };

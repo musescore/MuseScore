@@ -35,6 +35,12 @@ PluginView::PluginView(const QUrl& url, QObject* parent)
 {
     m_component = new QQmlComponent(engine(), url);
     m_qmlPlugin = qobject_cast<mu::engraving::QmlPlugin*>(m_component->create());
+
+    connect(m_qmlPlugin, &mu::engraving::QmlPlugin::closeRequested, [this]() {
+        if (m_view && m_view->isVisible()) {
+            m_view->close();
+        }
+    });
 }
 
 PluginView::~PluginView()
@@ -56,14 +62,22 @@ QQmlEngine* PluginView::engine() const
     return uiEngine()->qmlEngine();
 }
 
+bool PluginView::pluginHasUi() const
+{
+    IF_ASSERT_FAILED(m_qmlPlugin) {
+        return false;
+    }
+
+    return m_qmlPlugin->pluginType() == "dialog";
+}
+
 QString PluginView::name() const
 {
     IF_ASSERT_FAILED(m_qmlPlugin) {
         return QString();
     }
 
-    QString menuPath = m_qmlPlugin->menuPath();
-    return menuPath.mid(menuPath.lastIndexOf(".") + 1);
+    return m_qmlPlugin->title();
 }
 
 QString PluginView::description() const
@@ -84,9 +98,32 @@ QVersionNumber PluginView::version() const
     return QVersionNumber::fromString(m_qmlPlugin->version());
 }
 
+QString PluginView::thumbnailName() const
+{
+    IF_ASSERT_FAILED(m_qmlPlugin) {
+        return QString();
+    }
+
+    return m_qmlPlugin->thumbnailName();
+}
+
+QString PluginView::categoryCode() const
+{
+    IF_ASSERT_FAILED(m_qmlPlugin) {
+        return QString();
+    }
+
+    return m_qmlPlugin->categoryCode();
+}
+
 void PluginView::run()
 {
     IF_ASSERT_FAILED(m_qmlPlugin && m_component) {
+        return;
+    }
+
+    if (!pluginHasUi()) {
+        m_qmlPlugin->runPlugin();
         return;
     }
 
@@ -94,6 +131,7 @@ void PluginView::run()
     m_view = new QQuickView(engine(), nullptr);
     m_view->setContent(QUrl(), m_component, m_qmlPlugin);
     m_view->setTitle(name());
+    m_view->setColor(configuration()->viewBackgroundColor());
     m_view->setResizeMode(QQuickView::SizeRootObjectToView);
 
     // TODO: Can't use new `connect` syntax because the QQuickView::closing
@@ -104,5 +142,4 @@ void PluginView::run()
     connect(m_view, SIGNAL(closing(QQuickCloseEvent*)), this, SIGNAL(finished()));
 
     m_qmlPlugin->runPlugin();
-    m_view->show();
 }
