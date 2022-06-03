@@ -276,7 +276,6 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
     }
 
     score->setSaved(true);
-    score->setNewlyCreated(true);
 
     score->checkChordList();
 
@@ -438,15 +437,6 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         mu::engraving::ScoreLoad sl;
         score->doLayout();
     }
-}
-
-bool MasterNotation::isNewlyCreated() const
-{
-    IF_ASSERT_FAILED(masterScore()) {
-        return true;
-    }
-
-    return masterScore()->isNewlyCreated();
 }
 
 mu::ValNt<bool> MasterNotation::needSave() const

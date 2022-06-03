@@ -194,8 +194,11 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
                 err = doRead(score, e, ctx);
             }
 
-            score->setNewlyCreated(false);
             score->setExcerptsChanged(false);
+
+            // don't autosave (as long as there's no change to the score)
+            score->setAutosaveDirty(false);
+
             return err;
         } else {
             e.unknown();
