@@ -137,7 +137,7 @@ FocusScope {
 
                     for (var i = 0; i < categories.length; ++i) {
                         var category = categories[i]
-                        result.push({ "text": category, "value": category })
+                        result.push({ "text": category.title, "value": category.code })
                     }
 
                     model = result

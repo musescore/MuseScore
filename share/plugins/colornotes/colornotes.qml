@@ -26,7 +26,8 @@ import MuseScore 3.0
 MuseScore {
       version:  "3.5"
       description: qsTr("This plugin colors notes in the selection depending on their pitch as per the Boomwhackers convention")
-      menuPath: "Plugins.Notes.Color Notes"
+      title: "Color Notes"
+      categoryCode: "color-notes"
 
       property variant colors : [ // "#rrggbb" with rr, gg, and bb being the hex values for red, green, and blue, respectively
                "#e21c48", // C
@@ -91,7 +92,5 @@ MuseScore {
             console.log("hello colornotes");
 
             applyToNotesInSelection(colorNote)
-
-            Qt.quit();
       }
 }

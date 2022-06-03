@@ -29,7 +29,8 @@
 #include "excerpt.h"
 #include "libmscore/masterscore.h"
 
-#include "log.h"
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
 
 namespace mu::engraving {
 class InstrumentTemplate;
@@ -51,6 +52,9 @@ extern Selection* selectionWrap(mu::engraving::Selection* select);
 class Score : public mu::engraving::PluginAPI::ScoreElement
 {
     Q_OBJECT
+
+    INJECT(plugins, mu::context::IGlobalContext, context)
+
     /** Composer of the score, as taken from the score properties (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QString composer READ composer)
     /** Duration of score in seconds (read only).\n \since MuseScore 3.2 */
@@ -227,7 +231,7 @@ public:
      * \param rollback If true, reverts all the changes
      * made since the last startCmd() invocation.
      */
-    Q_INVOKABLE void endCmd(bool rollback = false) { score()->endCmd(rollback); }
+    Q_INVOKABLE void endCmd(bool rollback = false);
 
     /**
      * Create PlayEvents for all notes based on ornamentation.
@@ -248,6 +252,10 @@ public:
 
     static const mu::engraving::InstrumentTemplate* instrTemplateFromName(const QString& name);   // used by PluginAPI::newScore()
     /// \endcond
+
+private:
+    mu::notation::INotationPtr notation() const;
+    mu::notation::INotationUndoStackPtr undoStack() const;
 };
 } // namespace PluginAPI
 } // namespace Ms

@@ -57,6 +57,8 @@ public:
 
     virtual const PluginsConfigurationHash& pluginsConfiguration() const = 0;
     virtual mu::Ret setPluginsConfiguration(const PluginsConfigurationHash& configuration) = 0;
+
+    virtual QColor viewBackgroundColor() const = 0;
 };
 }
 
