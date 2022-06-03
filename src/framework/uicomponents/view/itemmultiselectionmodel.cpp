@@ -60,14 +60,22 @@ QList<int> ItemMultiSelectionModel::selectedRows() const
 void ItemMultiSelectionModel::select(const QModelIndex& index)
 {
     Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
-    bool modifiersAllowed = m_allowedModifiers & modifiers;
 
+    //! NOTE: always treat simultaneously pressed Ctrl and Shift as Ctrl
+    if (modifiers.testFlag(Qt::ShiftModifier) && modifiers.testFlag(Qt::ControlModifier)) {
+        modifiers = Qt::ControlModifier;
+    }
+
+    bool modifiersAllowed = m_allowedModifiers & modifiers;
     QModelIndex startIndex = index;
-    if (modifiers == Qt::ShiftModifier && hasSelection() && modifiersAllowed) {
-        startIndex = selectedIndexes().last();
-    } else if (modifiers == Qt::ControlModifier && isSelected(index) && modifiersAllowed) {
-        QItemSelectionModel::select(index, SelectionFlag::Deselect);
-        return;
+
+    if (modifiersAllowed) {
+        if (modifiers == Qt::ShiftModifier && hasSelection()) {
+            startIndex = selectedIndexes().last();
+        } else if (modifiers == Qt::ControlModifier && isSelected(index)) {
+            QItemSelectionModel::select(index, SelectionFlag::Deselect);
+            return;
+        }
     }
 
     QSet<QModelIndex> uniqueIndexes;
