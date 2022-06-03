@@ -21,8 +21,6 @@
  */
 #include "navigationsection.h"
 
-#include <algorithm>
-
 #include <QQuickWindow>
 #include <QApplication>
 
@@ -79,7 +77,7 @@ bool NavigationSection::enabled() const
     QWindow* topWindow = application()->focusWindow();
 
     if (sectionWindow && (topWindow != sectionWindow)) {
-        return false;
+        return type() == INavigationSection::Type::Exclusive;
     }
 
     bool enbl = false;

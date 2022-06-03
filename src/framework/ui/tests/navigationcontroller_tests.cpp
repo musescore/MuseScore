@@ -297,6 +297,39 @@ TEST_F(NavigationControllerTests, FirstActiveOnNextSectionOnFocusedWindow)
     delete sect2;
 }
 
+TEST_F(NavigationControllerTests, FirstActiveOnNextSectionExclusive)
+{
+    //! CASE Nothing active, and we call next section (F6)
+
+    //! [GIVEN] Two section, not active
+    Section* sect1 = make_section(1, 2, 3);
+    Section* sect2 = make_section(2, 2, 3);
+
+    m_controller->reg(sect1->section);
+    m_controller->reg(sect2->section);
+
+    //! [GIVEN] Section 2 is exclusive, not on focus window
+    //!         we have this behavior for menus and dropdowns
+    sect2->section->setType(NavigationSection::Exclusive);
+
+    QQuickWindow* newFocusWindow = new QQuickWindow();
+    ON_CALL(*m_applicationMock, focusWindow()).WillByDefault(Return(newFocusWindow));
+
+    //! [WHEN] Send action `nav-next-section` (usually F6)
+    m_dispatcher->dispatch("nav-next-section");
+
+    //! [THEN] The second section, the first panel, the first control must be activated
+    EXPECT_TRUE(sect2->section->active());
+    EXPECT_TRUE(sect2->panels[0]->panel->active());
+    EXPECT_TRUE(sect2->panels[0]->controls[0]->control->active());
+
+    //! [THEN] The second section must not be activated
+    EXPECT_FALSE(sect1->section->active());
+
+    delete sect1;
+    delete sect2;
+}
+
 TEST_F(NavigationControllerTests, FirstActiveOnNextSectionNonMainWindow)
 {
     //! CASE Nothing active, and we call next section (F6)

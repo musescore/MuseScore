@@ -41,13 +41,18 @@ ListItemBlank {
     }
 
     property int iconAndCheckMarkMode: StyledMenuItem.ShowOne
-    property bool reserveSpaceForShortcutsOrSubmenuIndicator: itemPrv.hasShortcuts || itemPrv.hasSubMenu
+    property bool reserveSpaceForShortcutsOrSubmenuIndicator: itemPrv.hasShortcuts || root.hasSubMenu
 
     property int padding: 0
 
+    property bool subMenuShowed: false
+    property bool hasSubMenu: Boolean(modelData) && Boolean(modelData.subitems) && modelData.subitems.length > 0
+    property var subMenuItems: hasSubMenu ? modelData.subitems : null
+
     signal handleMenuItem(string itemId)
 
-    signal openSubMenuRequested(var menu)
+    signal openSubMenuRequested(bool byHover)
+    signal closeSubMenuRequested()
     signal subMenuShowed(var menu)
     signal subMenuClosed()
 
@@ -58,7 +63,7 @@ ListItemBlank {
     hoverHitColor: ui.theme.accentColor
     enabled: (Boolean(modelData) && modelData.enabled !== undefined) ? Boolean(modelData.enabled) : true // default true
 
-    isSelected: Boolean(itemPrv.showedSubMenu) || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.highlight
+    isSelected: subMenuShowed || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.highlight
 
     navigation.name: Boolean(itemPrv.id) ? itemPrv.id : titleLabel.text
     navigation.accessible.role: MUAccessible.MenuItem
@@ -74,54 +79,12 @@ ListItemBlank {
             text += " " + itemPrv.shortcuts
         }
 
-        if (itemPrv.hasSubMenu) {
+        if (root.hasSubMenu) {
             text += " " + qsTrc("appshell", "menu")
         }
 
         return Utils.removeAmpersands(text)
     }
-
-    navigation.onNavigationEvent: function(event) {
-        switch (event.type) {
-        case NavigationEvent.Right:
-            if (!itemPrv.hasSubMenu) {
-                return
-            }
-
-            //! NOTE Go to submenu if shown
-            if (!itemPrv.showedSubMenu) {
-                itemPrv.showSubMenu()
-            }
-
-            var focused = itemPrv.showedSubMenu.requestFocus()
-
-            event.accepted = true
-            if (!focused) {
-                root.forceActiveFocus()
-            }
-
-            break
-        case NavigationEvent.Left:
-            if (itemPrv.showedSubMenu) {
-                itemPrv.closeSubMenu()
-                event.accepted = true
-                return
-            }
-
-            //! NOTE Go to parent item
-            requestParentItemActive()
-            break
-        case NavigationEvent.Up:
-        case NavigationEvent.Down:
-            if (itemPrv.showedSubMenu) {
-                itemPrv.closeSubMenu()
-            }
-
-            break
-        }
-    }
-
-    navigation.onTriggered: root.clicked(null)
 
     QtObject {
         id: itemPrv
@@ -133,9 +96,6 @@ ListItemBlank {
         property bool hasShortcuts: Boolean(modelData) && Boolean(modelData.shortcuts)
         property string shortcuts: hasShortcuts ? modelData.shortcuts : ""
 
-        property bool hasSubMenu: Boolean(modelData) && Boolean(modelData.subitems) && modelData.subitems.length > 0
-        property var showedSubMenu: null
-
         property bool isCheckable: Boolean(modelData) && Boolean(modelData.checkable)
         property bool isChecked: isCheckable && Boolean(modelData.checked)
 
@@ -143,45 +103,6 @@ ListItemBlank {
         property bool isSelected: isSelectable && Boolean(modelData.selected)
 
         property bool hasIcon: Boolean(modelData) && Boolean(modelData.icon) && modelData.icon !== IconCode.NONE
-
-        function showSubMenu() {
-            if (itemPrv.showedSubMenu) {
-                return
-            }
-
-            var menuComponent = Qt.createComponent("StyledMenu.qml");
-            var menu = menuComponent.createObject(root)
-            menu.x = root.width
-            menu.y = 0
-
-            menu.model = modelData.subitems
-            menu.anchorItem = root.menuAnchorItem
-
-            menu.handleMenuItem.connect(function(itemId) {
-                Qt.callLater(root.handleMenuItem, itemId)
-                menu.close()
-            })
-
-            menu.closed.connect(function() {
-                itemPrv.showedSubMenu = null
-                menu.destroy()
-                subMenuClosed()
-            })
-
-            menu.opened.connect(function() {
-                itemPrv.showedSubMenu = menu
-                subMenuShowed(menu)
-            })
-
-            root.openSubMenuRequested(menu)
-        }
-
-        function closeSubMenu() {
-            if (itemPrv.showedSubMenu) {
-                itemPrv.showedSubMenu.activateParentOnClose = false
-                itemPrv.showedSubMenu.close()
-            }
-        }
     }
 
     function calculatedLeftPartWidth() {
@@ -286,47 +207,20 @@ ListItemBlank {
             id: submenuIndicator
             Layout.alignment: Qt.AlignRight
             width: 16
-            iconCode: itemPrv.hasSubMenu ? IconCode.SMALL_ARROW_RIGHT : IconCode.NONE
+            iconCode: root.hasSubMenu ? IconCode.SMALL_ARROW_RIGHT : IconCode.NONE
             visible: !isEmpty || (root.reserveSpaceForShortcutsOrSubmenuIndicator && !shortcutsLabel.visible)
         }
     }
 
     onHovered: function(isHovered, mouseX, mouseY) {
-        if (!itemPrv.hasSubMenu) {
-            return
-        }
-
         if (isHovered) {
-            itemPrv.showSubMenu()
-        } else {
-            if (!Boolean(itemPrv.showedSubMenu)) {
-                return
-            }
-
-            var mouseGlobalPos = mapToGlobal(Qt.point(mouseX, mouseY))
-            var showedSubMenuGlobalPos = itemPrv.showedSubMenu.contentItem.mapToGlobal(0, 0)
-
-            var eps = 8
-            var subMenuWidth = itemPrv.showedSubMenu.width
-            var subMenuHeight = itemPrv.showedSubMenu.height
-
-            var isHoveredOnShowedSubMenu = (showedSubMenuGlobalPos.x < mouseGlobalPos.x + eps && mouseGlobalPos.x - eps < showedSubMenuGlobalPos.x + subMenuWidth)
-                    && (showedSubMenuGlobalPos.y < mouseGlobalPos.y + eps && mouseGlobalPos.y - eps < showedSubMenuGlobalPos.y + subMenuHeight)
-
-            if (isHoveredOnShowedSubMenu) {
-                return
-            }
-
-            itemPrv.closeSubMenu()
+            root.openSubMenuRequested(true)
         }
     }
 
     onClicked: {
-        if (itemPrv.hasSubMenu) {
-            itemPrv.showSubMenu()
-
-            itemPrv.showedSubMenu.requestFocus()
-
+        if (root.hasSubMenu) {
+            root.openSubMenuRequested(false)
             return
         }
 
