@@ -36,8 +36,8 @@ PluginView::PluginView(const QUrl& url, QObject* parent)
     m_component = new QQmlComponent(engine(), url);
     m_qmlPlugin = qobject_cast<mu::engraving::QmlPlugin*>(m_component->create());
 
-    connect(m_qmlPlugin, &mu::engraving::QmlPlugin::close, [this]() {
-        if (m_view->isVisible()) {
+    connect(m_qmlPlugin, &mu::engraving::QmlPlugin::closeRequested, [this]() {
+        if (m_view && m_view->isVisible()) {
             m_view->close();
         }
     });
@@ -122,6 +122,11 @@ void PluginView::run()
         return;
     }
 
+    if (!pluginHasUi()) {
+        m_qmlPlugin->runPlugin();
+        return;
+    }
+
     destroyView();
     m_view = new QQuickView(engine(), nullptr);
     m_view->setContent(QUrl(), m_component, m_qmlPlugin);
@@ -135,10 +140,6 @@ void PluginView::run()
     // type, which is not allowed for the new `connect` syntax.
     //connect(m_view, &QQuickView::closing, this, &PluginView::finished);
     connect(m_view, SIGNAL(closing(QQuickCloseEvent*)), this, SIGNAL(finished()));
-
-    if (pluginHasUi()) {
-        m_view->show();
-    }
 
     m_qmlPlugin->runPlugin();
 }
