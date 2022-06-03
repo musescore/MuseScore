@@ -168,7 +168,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
 
     if (!ticks().isZero() && (!actualDurationType().fraction().isValid()
                               || (actualDurationType().fraction() != ticks()))) {
-        xml.tag("duration", ticks());
+        xml.tagFraction("duration", ticks());
         //xml.tagE("duration z=\"%d\" n=\"%d\"", ticks().numerator(), ticks().denominator());
     }
 

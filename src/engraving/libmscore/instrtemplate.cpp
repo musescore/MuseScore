@@ -315,33 +315,30 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     }
     for (staff_idx_t i = 0; i < staffCount; ++i) {
         if (clefTypes[i]._concertClef == clefTypes[i]._transposingClef) {
-            QString tag = TConv::toXml(clefTypes[i]._concertClef);
             if (i) {
-                xml.tag(QString("clef staff=\"%1\"").arg(i + 1), tag);
+                xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(clefTypes[i]._concertClef));
             } else {
-                xml.tag("clef", tag);
+                xml.tag("clef", TConv::toXml(clefTypes[i]._concertClef));
             }
         } else {
-            QString tag1 = TConv::toXml(clefTypes[i]._concertClef);
-            QString tag2 = TConv::toXml(clefTypes[i]._transposingClef);
             if (i) {
-                xml.tag(QString("concertClef staff=\"%1\"").arg(i + 1), tag1);
-                xml.tag(QString("transposingClef staff=\"%1\"").arg(i + 1), tag2);
+                xml.tag("concertClef", { { "staff", i + 1 } }, TConv::toXml(clefTypes[i]._concertClef));
+                xml.tag("transposingClef", { { "staff", i + 1 } }, TConv::toXml(clefTypes[i]._transposingClef));
             } else {
-                xml.tag("concertClef", tag1);
-                xml.tag("transposingClef", tag2);
+                xml.tag("concertClef", TConv::toXml(clefTypes[i]._concertClef));
+                xml.tag("transposingClef", TConv::toXml(clefTypes[i]._transposingClef));
             }
         }
         if (staffLines[i] != 5) {
             if (i) {
-                xml.tag(QString("stafflines staff=\"%1\"").arg(i + 1), staffLines[i]);
+                xml.tag("stafflines", { { "staff", i + 1 } }, staffLines[i]);
             } else {
                 xml.tag("stafflines", staffLines[i]);
             }
         }
         if (smallStaff[i]) {
             if (i) {
-                xml.tag(QString("smallStaff staff=\"%1\"").arg(i + 1), smallStaff[i]);
+                xml.tag("smallStaff", { { "staff", i + 1 } }, smallStaff[i]);
             } else {
                 xml.tag("smallStaff", smallStaff[i]);
             }
@@ -349,21 +346,21 @@ void InstrumentTemplate::write(XmlWriter& xml) const
 
         if (bracket[i] != BracketType::NO_BRACKET) {
             if (i) {
-                xml.tag(QString("bracket staff=\"%1\"").arg(i + 1), int(bracket[i]));
+                xml.tag("bracket", { { "staff", i + 1 } }, int(bracket[i]));
             } else {
                 xml.tag("bracket", int(bracket[i]));
             }
         }
         if (bracketSpan[i] != 0) {
             if (i) {
-                xml.tag(QString("bracketSpan staff=\"%1\"").arg(i + 1), bracketSpan[i]);
+                xml.tag("bracketSpan", { { "staff", i + 1 } }, bracketSpan[i]);
             } else {
                 xml.tag("bracketSpan", bracketSpan[i]);
             }
         }
         if (barlineSpan[i]) {
             if (i) {
-                xml.tag(QString("barlineSpan staff=\"%1\"").arg(i + 1), barlineSpan[i]);
+                xml.tag("barlineSpan", { { "staff", i + 1 } }, barlineSpan[i]);
             } else {
                 xml.tag("barlineSpan", barlineSpan[i]);
             }

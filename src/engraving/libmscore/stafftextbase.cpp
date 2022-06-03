@@ -59,17 +59,17 @@ void StaffTextBase::write(XmlWriter& xml) const
     for (const ChannelActions& s : _channelActions) {
         int channel = s.channel;
         for (const QString& name : qAsConst(s.midiActionNames)) {
-            xml.tagE(QString("MidiAction channel=\"%1\" name=\"%2\"").arg(channel).arg(name));
+            xml.tag("MidiAction", { { "channel", channel }, { "name", name } });
         }
     }
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         if (!_channelNames[voice].isEmpty()) {
-            xml.tagE(QString("channelSwitch voice=\"%1\" name=\"%2\"").arg(voice).arg(_channelNames[voice]));
+            xml.tag("channelSwitch", { { "voice", voice }, { "name", _channelNames[voice] } });
         }
     }
     if (_setAeolusStops) {
         for (int i = 0; i < 4; ++i) {
-            xml.tag(QString("aeolus group=\"%1\"").arg(i), aeolusStops[i]);
+            xml.tag("aeolus", { { "group", i } }, aeolusStops[i]);
         }
     }
     if (swing()) {
@@ -82,10 +82,10 @@ void StaffTextBase::write(XmlWriter& xml) const
             swingUnit = DurationType::V_ZERO;
         }
         int swingRatio = swingParameters().swingRatio;
-        xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(TConv::toXml(swingUnit)).arg(swingRatio));
+        xml.tag("swing", { { "unit", TConv::toXml(swingUnit) }, { "ratio", swingRatio } });
     }
     if (capo() != 0) {
-        xml.tagE(QString("capo fretId=\"%1\"").arg(capo()));
+        xml.tag("capo", { { "fretId", capo() } });
     }
     TextBase::writeProperties(xml);
 

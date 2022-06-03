@@ -865,7 +865,7 @@ ByteArray Selection::staffMimeData() const
             if (hasElementInTrack(seg1, seg2, startTrack + voice)
                 && xml.context()->canWriteVoice(voice)) {
                 Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
-                xml.tag(QString("voice id=\"%1\"").arg(voice), offset.ticks());
+                xml.tag("voice", { { "id", voice } }, offset.ticks());
             }
         }
         xml.endElement();     // </voiceOffset>

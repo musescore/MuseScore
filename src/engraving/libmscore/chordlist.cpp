@@ -1787,9 +1787,9 @@ void ChordList::write(XmlWriter& xml) const
             const ChordSymbol& s = p.second;
             if (s.fontIdx == fontIdx) {
                 if (s.code.isNull()) {
-                    xml.tagE(QString("sym name=\"%1\" value=\"%2\"").arg(s.name, s.value));
+                    xml.tag("sym", { { "name", s.name }, { "value", s.value } });
                 } else {
-                    xml.tagE(QString("sym name=\"%1\" code=\"0x%2\"").arg(s.name).arg(s.code.unicode(), 0, 16));
+                    xml.tag("sym", { { "name", s.name }, { "code", QString("%1").arg(s.code.unicode(), 0, 16) } });
                 }
             }
         }
@@ -1797,7 +1797,7 @@ void ChordList::write(XmlWriter& xml) const
         ++fontIdx;
     }
     if (_autoAdjust) {
-        xml.tagE(QString("autoAdjust mag=\"%1\" adjust=\"%2\"").arg(_nmag).arg(_nadjust));
+        xml.tag("autoAdjust", { { "mag", _nmag }, { "adjust", _nadjust } });
     }
     for (const ChordToken& t : chordTokenList) {
         t.write(xml);

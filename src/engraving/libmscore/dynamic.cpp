@@ -365,7 +365,7 @@ void Dynamic::setDynamicType(const QString& tag)
 {
     int n = sizeof(dynList) / sizeof(*dynList);
     for (int i = 0; i < n; ++i) {
-        if (TConv::toXml(DynamicType(i)) == tag || dynList[i].text == tag) {
+        if (TConv::toXml(DynamicType(i)).ascii() == tag || dynList[i].text == tag) {
             setDynamicType(DynamicType(i));
             setXmlText(QString::fromUtf8(dynList[i].text));
             return;
@@ -383,7 +383,7 @@ QString Dynamic::dynamicText(DynamicType t)
 
 QString Dynamic::subtypeName() const
 {
-    return TConv::toXml(dynamicType());
+    return TConv::toXml(dynamicType()).ascii();
 }
 
 //---------------------------------------------------------

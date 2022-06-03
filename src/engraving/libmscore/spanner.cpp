@@ -1472,7 +1472,7 @@ bool Spanner::readProperties(XmlReader& e)
 void Spanner::writeProperties(XmlWriter& xml) const
 {
     if (xml.context()->clipboardmode()) {
-        xml.tag("ticks_f", ticks());
+        xml.tagFraction("ticks_f", ticks());
     }
     EngravingItem::writeProperties(xml);
 }

@@ -528,7 +528,7 @@ void ScoreOrder::write(XmlWriter& xml) const
 
     for (const auto& p : instrumentMap) {
         xml.startElement("instrument", { { "id", p.first } });
-        xml.tag(QString("family id=\"%1\"").arg(p.second.id), p.second.name);
+        xml.tag("family", { { "id", p.second.id } }, p.second.name);
         xml.endElement();
     }
 
@@ -547,13 +547,13 @@ void ScoreOrder::write(XmlWriter& xml) const
             section = sg.section;
         }
         if (sg.family == SOLOISTS_ID) {
-            xml.tagE("soloists");
+            xml.tag("soloists");
         } else if (sg.unsorted.isNull()) {
             xml.tag("family", sg.family);
         } else if (sg.unsorted.isEmpty()) {
-            xml.tagE("unsorted");
+            xml.tag("unsorted");
         } else {
-            xml.tagE(QString("unsorted group=\"%1\"").arg(sg.unsorted));
+            xml.tag("unsorted", { { "group", sg.unsorted } });
         }
     }
     if (!section.isEmpty()) {

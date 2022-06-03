@@ -1294,7 +1294,7 @@ void SLine::writeProperties(XmlWriter& xml) const
     if (!endElement()) {
         ((Spanner*)this)->computeEndElement();                    // HACK
         if (!endElement()) {
-            xml.tag("ticks", ticks());
+            xml.tagFraction("ticks", ticks());
         }
     }
     Spanner::writeProperties(xml);
@@ -1346,8 +1346,8 @@ void SLine::writeProperties(XmlWriter& xml) const
         // so we probably don't need to duplicate it here
         // see https://musescore.org/en/node/286848
         //if (seg->propertyFlags(Pid::OFFSET) & PropertyFlags::UNSTYLED)
-        xml.tag("offset", seg->offset() / _spatium);
-        xml.tag("off2", seg->userOff2() / _spatium);
+        xml.tagPoint("offset", seg->offset() / _spatium);
+        xml.tagPoint("off2", seg->userOff2() / _spatium);
         seg->writeProperty(xml, Pid::MIN_DISTANCE);
         seg->EngravingItem::writeProperties(xml);
         xml.endElement();

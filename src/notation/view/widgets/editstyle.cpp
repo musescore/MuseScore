@@ -1700,15 +1700,15 @@ void EditStyle::setSwingParams(bool checked)
     if (!checked) {
         return;
     }
-    QVariant val;
+    QString val;
     if (swingOff->isChecked()) {
-        val = TConv::toXml(DurationType::V_ZERO);
+        val = TConv::toXml(DurationType::V_ZERO).ascii();
         swingBox->setEnabled(false);
     } else if (swingEighth->isChecked()) {
-        val = TConv::toXml(DurationType::V_EIGHTH);
+        val = TConv::toXml(DurationType::V_EIGHTH).ascii();
         swingBox->setEnabled(true);
     } else if (swingSixteenth->isChecked()) {
-        val = TConv::toXml(DurationType::V_16TH);
+        val = TConv::toXml(DurationType::V_16TH).ascii();
         swingBox->setEnabled(true);
     }
 

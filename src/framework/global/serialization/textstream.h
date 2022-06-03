@@ -41,6 +41,7 @@ public:
 
     TextStream& operator<<(char ch);
     TextStream& operator<<(int val);
+    TextStream& operator<<(unsigned int val);
     TextStream& operator<<(double val);
     TextStream& operator<<(int64_t val);
     TextStream& operator<<(size_t val);

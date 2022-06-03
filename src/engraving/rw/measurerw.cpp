@@ -567,7 +567,7 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
     }
     if (writeSystemElements) {
         if (measure->repeatStart()) {
-            xml.tagE("startRepeat");
+            xml.tag("startRepeat");
         }
         if (measure->repeatEnd()) {
             xml.tag("endRepeat", measure->m_repeatCount);
