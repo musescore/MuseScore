@@ -230,8 +230,8 @@ inline auto values(const Map& m) -> std::vector<typename Map::mapped_type>
     return result;
 }
 
-template<typename Map, typename V, typename K>
-inline K key(const Map& m, const V& v, const K& def)
+template<typename Map>
+inline const typename Map::key_type& key(const Map& m, const typename Map::mapped_type& v, const typename Map::key_type& def = {})
 {
     for (const auto& p : m) {
         if (p.second == v) {
@@ -241,31 +241,8 @@ inline K key(const Map& m, const V& v, const K& def)
     return def;
 }
 
-template<typename Map, typename V>
-inline auto key(const Map& m, const V& v) -> typename Map::key_type
-{
-    for (const auto& p : m) {
-        if (p.second == v) {
-            return p.first;
-        }
-    }
-    typename Map::key_type def {};
-    return def;
-}
-
-template<typename Map, typename K>
-inline auto value(const Map& m, const K& k) -> typename Map::mapped_type
-{
-    auto it = m.find(k);
-    if (it != m.end()) {
-        return it->second;
-    }
-    typename Map::mapped_type def {};
-    return def;
-}
-
-template<typename Map, typename K, typename V>
-inline auto value(const Map& m, const K& k, const V& def) -> typename Map::mapped_type
+template<typename Map>
+inline const typename Map::mapped_type& value(const Map& m, const typename Map::key_type& k, const typename Map::mapped_type& def = {})
 {
     auto it = m.find(k);
     if (it != m.end()) {
