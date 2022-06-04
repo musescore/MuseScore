@@ -45,7 +45,7 @@ Item {
         width: parent.width
         height: childrenRect.height
 
-        spacing: 4
+        spacing: 12
 
         NoteExpandableBlank {
             id: noteSection
@@ -55,6 +55,8 @@ Item {
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_NOTE) : null
         }
 
+        SeparatorLine { anchors.margins: -12 }
+
         ArpeggioExpandableBlank {
             id:arpeggioSection
             navigation.panel: root.navigationPanel
@@ -62,6 +64,8 @@ Item {
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_ARPEGGIO) : null
         }
+
+        SeparatorLine { anchors.margins: -12 }
 
         FermataExpandableBlank {
             id: fermataSection
@@ -71,6 +75,8 @@ Item {
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_FERMATA) : null
         }
 
+        SeparatorLine { anchors.margins: -12 }
+
         PausesExpandableBlank {
             id: pausesSection
             navigation.panel: root.navigationPanel
@@ -78,6 +84,8 @@ Item {
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_BREATH) : null
         }
+
+        SeparatorLine { anchors.margins: -12 }
 
         GlissandoExpandableBlank {
             navigation.panel: root.navigationPanel
