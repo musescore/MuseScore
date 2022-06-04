@@ -12,6 +12,7 @@ class VstAdvancedHandler : public IAdvancedComponentHandler
     DECLARE_FUNKNOWN_METHODS
 public:
     VstAdvancedHandler(async::Notification notifier);
+    virtual ~VstAdvancedHandler() = default;
 
     Steinberg::tresult setDirty(Steinberg::TBool state) override;
     Steinberg::tresult requestOpenEditor(Steinberg::FIDString name) override;
@@ -26,7 +27,7 @@ class VstComponentHandler : public IComponentHandler
     DECLARE_FUNKNOWN_METHODS
 public:
     VstComponentHandler();
-    ~VstComponentHandler() = default;
+    virtual ~VstComponentHandler() = default;
 
     async::Channel<PluginParamId, PluginParamValue> pluginParamChanged() const;
     async::Notification pluginParamsChanged() const;
