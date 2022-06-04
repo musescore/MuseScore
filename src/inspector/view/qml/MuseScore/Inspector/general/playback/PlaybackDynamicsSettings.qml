@@ -44,7 +44,7 @@ Item {
 
         width: parent.width
 
-        spacing: 4
+        spacing: 12
 
         DynamicsExpandableBlank {
             id: dynamicSection
@@ -53,6 +53,8 @@ Item {
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_DYNAMIC) : null
         }
+
+        SeparatorLine { anchors.margins: -12 }
 
         HairpinsExpandableBlank {
             navigation.panel: root.navigationPanel
