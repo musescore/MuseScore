@@ -58,21 +58,27 @@ public:
 
     RepeatSegment(int playbackCount);
 
-    void addMeasure(Measure const* const);
-    void addMeasures(Measure const* const);
-    bool containsMeasure(Measure const* const) const;
     bool isEmpty() const;
     int len() const;
-    void popMeasure();
 
     Measure const* firstMeasure() const { return m_measureList.empty() ? nullptr : m_measureList.front(); }
     Measure const* lastMeasure() const { return m_measureList.empty() ? nullptr : m_measureList.back(); }
 
+    /// The general measure list of this repeat segment
     const std::vector<const Measure*>& measureList() const;
 
-    friend class RepeatList;
+    /// The measure list per staff, taking measure repeats into account
+    const std::vector<const Measure*>& measureList(staff_idx_t staffIdx) const;
+
 private:
+    friend class RepeatList;
+
+    bool addMeasure(const Measure* measure);
+    void addMeasure(const Measure* measure, staff_idx_t staffIdx);
+    void popMeasure();
+
     std::vector<const Measure*> m_measureList;
+    std::unordered_map<staff_idx_t, std::vector<const Measure*> > m_measureLists;
 };
 
 //---------------------------------------------------------
@@ -100,8 +106,6 @@ public:
 
     std::vector<RepeatSegment*>::const_iterator findRepeatSegmentFromUTick(int utick) const;
 
-    const Measure* playbackMeasure(staff_idx_t staffIdx, const Measure* measure) const;
-
 private:
     void unwind();
     void flatten();
@@ -116,6 +120,12 @@ private:
                      Volta const** const activeVolta, RepeatListElement const** const startRepeatReference) const;
 
     void updateMeasureRepeatsMapping();
+    const Measure* playbackMeasure(staff_idx_t staffIdx, const Measure* measure) const;
+
+    void addMeasureToRepeatSegment(RepeatSegment* segment, const Measure* measure);
+
+    /// Adds all measures up to and including measure to the repeat segment
+    void addUpToMeasureToRepeatSegment(RepeatSegment* segment, const Measure* measure);
 
     Score* m_score = nullptr;
     mutable unsigned m_idx1, m_idx2; // cached values

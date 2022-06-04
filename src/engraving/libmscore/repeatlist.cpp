@@ -48,46 +48,27 @@ RepeatSegment::RepeatSegment(int playbackCount)
 {
 }
 
-void RepeatSegment::addMeasure(Measure const* const m)
+bool RepeatSegment::addMeasure(const Measure* measure)
 {
-    if (m != nullptr) {
-        if (m_measureList.empty()) {
-            tick = m->tick().ticks();
-        }
-        if ((m_measureList.empty()) || (m_measureList.back() != m)) {
-            m_measureList.push_back(m);
-        }
+    IF_ASSERT_FAILED(measure) {
+        return false;
     }
-}
 
-/// \brief Expands or clips my measureList up to m (including m)
-void RepeatSegment::addMeasures(Measure const* const m)
-{
-    if (!m_measureList.empty()) {
-        // Add up to the current measure, final measure is added outside of this condition
-        Measure const* lastMeasure = m_measureList.back()->nextMeasure();
-        if (lastMeasure && (lastMeasure->tick() < m->tick())) {     // Ensure provided reference is later than current last
-            while (lastMeasure != m) {
-                m_measureList.push_back(lastMeasure);
-                lastMeasure = lastMeasure->nextMeasure();
-            }
-        }
-        //else { // Possibly clip compared to current last measure }
-        while (!m_measureList.empty() && (m_measureList.back()->tick() >= m->tick())) {
-            m_measureList.pop_back();
-        }
+    if (m_measureList.empty()) {
+        tick = measure->tick().ticks();
     }
-    addMeasure(m);
-}
 
-bool RepeatSegment::containsMeasure(Measure const* const m) const
-{
-    for (Measure const* const measure : m_measureList) {
-        if (measure == m) {
-            return true;
-        }
+    if (m_measureList.empty() || m_measureList.back() != measure) {
+        m_measureList.push_back(measure);
+        return true;
     }
+
     return false;
+}
+
+void RepeatSegment::addMeasure(const Measure* measure, staff_idx_t staffIdx)
+{
+    m_measureLists[staffIdx].push_back(measure);
 }
 
 bool RepeatSegment::isEmpty() const
@@ -104,12 +85,21 @@ void RepeatSegment::popMeasure()
 {
     if (!m_measureList.empty()) {
         m_measureList.pop_back();
+
+        for (auto& [staffIdx, list] : m_measureLists) {
+            list.pop_back();
+        }
     }
 }
 
 const std::vector<const Measure*>& RepeatSegment::measureList() const
 {
     return m_measureList;
+}
+
+const std::vector<const Measure*>& RepeatSegment::measureList(staff_idx_t staffIdx) const
+{
+    return mu::value(m_measureLists, staffIdx, m_measureList);
 }
 
 //---------------------------------------------------------
@@ -155,14 +145,14 @@ void RepeatList::update(bool expand)
         return;
     }
 
+    if (m_scoreChanged) {
+        updateMeasureRepeatsMapping();
+    }
+
     if (expand) {
         unwind();
     } else {
         flatten();
-    }
-
-    if (m_scoreChanged) {
-        updateMeasureRepeatsMapping();
     }
 
     m_scoreChanged = false;
@@ -295,7 +285,7 @@ void RepeatList::flatten()
 
     RepeatSegment* s = new RepeatSegment(1);
     do {
-        s->addMeasure(m);
+        addMeasureToRepeatSegment(s, m);
         m = m->nextMeasure();
     } while (m);
     push_back(s);
@@ -797,12 +787,12 @@ void RepeatList::unwind()
         forceFinalRepeat = false;
 
         rs = new RepeatSegment(playbackCount);
-        rs->addMeasure((*repeatListElementIt)->measure);
+        addMeasureToRepeatSegment(rs, (*repeatListElementIt)->measure);
         ++repeatListElementIt;
 
         while (repeatListElementIt != sectionIt->cend()) {
             if (rs) {
-                rs->addMeasures((*repeatListElementIt)->measure);
+                addUpToMeasureToRepeatSegment(rs, (*repeatListElementIt)->measure);
             }
             switch ((*repeatListElementIt)->repeatListElementType) {
             case RepeatListElementType::SECTION_BREAK: {
@@ -829,7 +819,7 @@ void RepeatList::unwind()
                         rs = nullptr;                   // end of score, but will still encounter section break, notify it
                     } else {
                         rs = new RepeatSegment(playbackCount);
-                        rs->addMeasure(possibleNextMeasure);
+                        addMeasureToRepeatSegment(rs, possibleNextMeasure);
                     }
                 }
                 // else { take the volta, it's already set as activeVolta, so just continue }
@@ -840,7 +830,7 @@ void RepeatList::unwind()
             case RepeatListElementType::REPEAT_START: {
                 if (rs == nullptr) {               // Sent here by an end-repeat
                     rs = new RepeatSegment(playbackCount);
-                    rs->addMeasure((*repeatListElementIt)->measure);
+                    addMeasureToRepeatSegment(rs, (*repeatListElementIt)->measure);
                 } else {
                     int desiredPlaybackCount = (forceFinalRepeat) ? (*repeatListElementIt)->getRepeatCount() : 1;
                     if (rs->playbackCount != desiredPlaybackCount) {
@@ -851,7 +841,7 @@ void RepeatList::unwind()
                         }
                         playbackCount = desiredPlaybackCount;
                         rs = new RepeatSegment(playbackCount);
-                        rs->addMeasure((*repeatListElementIt)->measure);
+                        addMeasureToRepeatSegment(rs, (*repeatListElementIt)->measure);
                     }
                     startRepeatReference = *repeatListElementIt;
                 }
@@ -974,7 +964,7 @@ void RepeatList::unwind()
 
                             // We've arrived at the target marker
                             rs = new RepeatSegment(playbackCount);
-                            rs->addMeasure((*repeatListElementIt)->measure);
+                            addMeasureToRepeatSegment(rs, (*repeatListElementIt)->measure);
                         }                         // End of jump execution
                     }
                 }
@@ -1003,7 +993,7 @@ void RepeatList::unwind()
 
                         // We've arrived at the target marker
                         rs = new RepeatSegment(playbackCount);
-                        rs->addMeasure((*repeatListElementIt)->measure);
+                        addMeasureToRepeatSegment(rs, (*repeatListElementIt)->measure);
 
                         continueAt.first = m_rlElements.cend(); // Clear this reference - processed
                     } else { // Nowhere to go to, break out of this section loop and onto the next section
@@ -1030,23 +1020,6 @@ void RepeatList::unwind()
 
     updateTempo();
     m_expanded = true;
-}
-
-const Measure* RepeatList::playbackMeasure(staff_idx_t staffIdx, const Measure* measure) const
-{
-    auto staffMappingIt = m_measureRepeatsMapping.find(staffIdx);
-    if (staffMappingIt == m_measureRepeatsMapping.cend()) {
-        return measure;
-    }
-
-    const MeasureRepeatsStaffMapping& staffMapping = staffMappingIt->second;
-
-    auto playbackMeasureIt = staffMapping.find(measure);
-    if (playbackMeasureIt == staffMapping.cend()) {
-        return measure;
-    }
-
-    return playbackMeasureIt->second;
 }
 
 void RepeatList::updateMeasureRepeatsMapping()
@@ -1076,5 +1049,50 @@ void RepeatList::updateMeasureRepeatsMapping()
             }
         }
     }
+}
+
+const Measure* RepeatList::playbackMeasure(staff_idx_t staffIdx, const Measure* measure) const
+{
+    auto staffMappingIt = m_measureRepeatsMapping.find(staffIdx);
+    if (staffMappingIt == m_measureRepeatsMapping.cend()) {
+        return measure;
+    }
+
+    const MeasureRepeatsStaffMapping& staffMapping = staffMappingIt->second;
+
+    auto playbackMeasureIt = staffMapping.find(measure);
+    if (playbackMeasureIt == staffMapping.cend()) {
+        return measure;
+    }
+
+    return playbackMeasureIt->second;
+}
+
+void RepeatList::addMeasureToRepeatSegment(RepeatSegment* segment, const Measure* measure)
+{
+    if (!segment->addMeasure(measure)) {
+        return;
+    }
+
+    size_t nstaves = m_score->nstaves();
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        segment->addMeasure(playbackMeasure(staffIdx, measure), staffIdx);
+    }
+}
+
+void RepeatList::addUpToMeasureToRepeatSegment(RepeatSegment* segment, const Measure* measure)
+{
+    if (segment->isEmpty()) {
+        addMeasureToRepeatSegment(segment, measure);
+        return;
+    }
+
+    const Measure* lastMeasure = segment->lastMeasure()->nextMeasure();
+    while (lastMeasure && lastMeasure->tick() <= measure->tick()) {
+        addMeasureToRepeatSegment(segment, lastMeasure);
+        lastMeasure = lastMeasure->nextMeasure();
+    }
+
+    assert(segment->lastMeasure() == measure);
 }
 }

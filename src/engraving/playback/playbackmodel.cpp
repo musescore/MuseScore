@@ -244,25 +244,27 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
             continue;
         }
 
-        for (const Measure* measure : repeatSegment->measureList()) {
-            int measureStartTick = measure->tick().ticks();
-            int measureEndTick = measure->endTick().ticks();
+        const auto& measureList = repeatSegment->measureList();
 
-            if (measureStartTick > tickTo || measureEndTick <= tickFrom) {
+        for (const Staff* staff : m_score->staves()) {
+            ID partId = staff->part()->id();
+
+            if (changedPartIdSet.find(partId) == changedPartIdSet.cend()) {
                 continue;
             }
 
-            for (const Staff* staff : m_score->staves()) {
-                ID partId = staff->part()->id();
+            const staff_idx_t staffIdx = staff->idx();
+            const auto& staffMeasureList = repeatSegment->measureList(staffIdx);
 
-                if (changedPartIdSet.find(partId) == changedPartIdSet.cend()) {
-                    continue;
-                }
+            assert(staffMeasureList.size() == measureList.size());
 
-                const mu::engraving::Measure* playbackMeasure = repeatList().playbackMeasure(staff->idx(), measure);
-                int measureTicksOffset = repeatTickOffset + (measure->tick().ticks() - playbackMeasure->tick().ticks());
+            for (size_t i = 0; i < measureList.size(); ++i) {
+                const Measure* measure = measureList.at(i);
+                const Measure* staffMeasure = staffMeasureList.at(i);
 
-                for (mu::engraving::Segment* segment = playbackMeasure->first(); segment; segment = segment->next()) {
+                int measureTicksOffset = repeatTickOffset + (measure->tick().ticks() - staffMeasure->tick().ticks());
+
+                for (Segment* segment = staffMeasure->first(); segment; segment = segment->next()) {
                     if (!segment->isChordRestType()) {
                         continue;
                     }
@@ -274,9 +276,9 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                         continue;
                     }
 
-                    for (voice_idx_t voice = 0; voice < mu::engraving::VOICES; ++voice) {
-                        track_idx_t track = staff->idx() * mu::engraving::VOICES + voice;
-                        const mu::engraving::EngravingItem* item = segment->element(track);
+                    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+                        track_idx_t track = staffIdx * VOICES + voice;
+                        const EngravingItem* item = segment->element(track);
 
                         if (!item || !item->isChordRest() || !item->part()) {
                             continue;
@@ -304,6 +306,15 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                         collectChangesTracks(trackId, trackChanges);
                     }
                 }
+            }
+        }
+
+        for (const Measure* measure : measureList) {
+            int measureStartTick = measure->tick().ticks();
+            int measureEndTick = measure->endTick().ticks();
+
+            if (measureStartTick > tickTo || measureEndTick <= tickFrom) {
+                continue;
             }
 
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {

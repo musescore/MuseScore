@@ -572,6 +572,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::MEASURE_REPEAT:
         _elist[track] = el;
         setEmpty(false);
+        score()->setPlaylistDirty();
         break;
 
     case ElementType::TEMPO_TEXT:
@@ -736,8 +737,10 @@ void Segment::remove(EngravingItem* el)
     }
     break;
 
-    case ElementType::MMREST:
     case ElementType::MEASURE_REPEAT:
+        score()->setPlaylistDirty();
+    // FALLTHROUGH
+    case ElementType::MMREST:
         _elist[track] = 0;
         break;
 
