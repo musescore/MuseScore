@@ -41,6 +41,8 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/editstringdata.h
     ${CMAKE_CURRENT_LIST_DIR}/editpitch.cpp
     ${CMAKE_CURRENT_LIST_DIR}/editpitch.h
+    ${CMAKE_CURRENT_LIST_DIR}/exampleview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/exampleview.h
     ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.h
     ${CMAKE_CURRENT_LIST_DIR}/pagesettings.cpp

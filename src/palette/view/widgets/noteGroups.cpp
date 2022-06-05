@@ -33,6 +33,8 @@
 
 #include "translation.h"
 
+using namespace mu::notation;
+
 namespace mu::engraving {
 Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chords)
 {
