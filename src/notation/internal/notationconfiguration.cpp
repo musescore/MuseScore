@@ -594,7 +594,7 @@ std::string NotationConfiguration::notationRevision() const
 
 int NotationConfiguration::notationDivision() const
 {
-    return mu::engraving::Constant::division;
+    return mu::engraving::Constants::division;
 }
 
 ValCh<framework::Orientation> NotationConfiguration::canvasOrientation() const

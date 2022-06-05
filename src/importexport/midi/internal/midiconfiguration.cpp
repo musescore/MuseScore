@@ -35,7 +35,7 @@ static const Settings::Key EXPORTRPNS_KEY("iex_midi", "io/midi/exportRPNs");
 
 void MidiConfiguration::init()
 {
-    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(mu::engraving::Constant::division / 4));
+    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(mu::engraving::Constants::division / 4));
     settings()->setDefaultValue(EXPORTRPNS_KEY, Val(false));
 }
 
