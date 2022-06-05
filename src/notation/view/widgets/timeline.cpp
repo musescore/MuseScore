@@ -51,7 +51,9 @@
 
 #include "log.h"
 
-namespace mu::engraving {
+using namespace mu::notation;
+using namespace mu::engraving;
+
 //---------------------------------------------------------
 //   TRowLabels
 //---------------------------------------------------------
@@ -760,22 +762,13 @@ Timeline::Timeline(QSplitter* splitter)
     connect(_rowNames, &TRowLabels::swapMeta, this, &Timeline::swapMeta);
     connect(this, &Timeline::moved, _rowNames, &TRowLabels::mouseOver);
 
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t1(tr("Tempo"), &mu::engraving::Timeline::tempoMeta, true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t2(tr("Time Signature"), &mu::engraving::Timeline::timeMeta, true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t3(tr("Rehearsal Mark"), &mu::engraving::Timeline::rehearsalMeta,
-                                                                          true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t4(tr("Key Signature"), &mu::engraving::Timeline::keyMeta, true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t5(tr("Barlines"), &mu::engraving::Timeline::barlineMeta, true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t6(tr("Jumps and Markers"), &mu::engraving::Timeline::jumpMarkerMeta,
-                                                                          true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t7(tr("Measures"), &mu::engraving::Timeline::measureMeta, true);
-    _metas.push_back(t1);
-    _metas.push_back(t2);
-    _metas.push_back(t3);
-    _metas.push_back(t4);
-    _metas.push_back(t5);
-    _metas.push_back(t6);
-    _metas.push_back(t7);
+    _metas.push_back({ tr("Tempo"), &Timeline::tempoMeta, true });
+    _metas.push_back({ tr("Time Signature"), &Timeline::timeMeta, true });
+    _metas.push_back({ tr("Rehearsal Mark"), &Timeline::rehearsalMeta, true });
+    _metas.push_back({ tr("Key Signature"), &Timeline::keyMeta, true });
+    _metas.push_back({ tr("Barlines"), &Timeline::barlineMeta, true });
+    _metas.push_back({ tr("Jumps and Markers"), &Timeline::jumpMarkerMeta, true });
+    _metas.push_back({ tr("Measures"), &Timeline::measureMeta, true });
 
     std::tuple<QGraphicsItem*, int, QColor> ohi(nullptr, -1, QColor());
     _oldHoverInfo = ohi;
@@ -1967,7 +1960,7 @@ void Timeline::drawSelection()
 
     std::set<std::tuple<Measure*, int, ElementType> > metaLabelsSet;
 
-    mu::notation::INotationSelectionPtr selection = interaction()->selection();
+    INotationSelectionPtr selection = interaction()->selection();
 
     for (EngravingItem* element : selection->elements()) {
         if (element->tick() == Fraction(-1, 1)) {
@@ -2536,23 +2529,13 @@ void Timeline::changeEvent(QEvent* event)
     QGraphicsView::changeEvent(event);
     if (event->type() == QEvent::LanguageChange) {
         _metas.clear();
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t1(tr("Tempo"), &mu::engraving::Timeline::tempoMeta, true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t2(tr("Time Signature"), &mu::engraving::Timeline::timeMeta,
-                                                                              true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t3(tr("Rehearsal Mark"), &mu::engraving::Timeline::rehearsalMeta,
-                                                                              true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t4(tr("Key Signature"), &mu::engraving::Timeline::keyMeta, true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t5(tr("Barlines"), &mu::engraving::Timeline::barlineMeta, true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t6(tr("Jumps and Markers"),
-                                                                              &mu::engraving::Timeline::jumpMarkerMeta, true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t7(tr("Measures"), &mu::engraving::Timeline::measureMeta, true);
-        _metas.push_back(t1);
-        _metas.push_back(t2);
-        _metas.push_back(t3);
-        _metas.push_back(t4);
-        _metas.push_back(t5);
-        _metas.push_back(t6);
-        _metas.push_back(t7);
+        _metas.push_back({ tr("Tempo"), &Timeline::tempoMeta, true });
+        _metas.push_back({ tr("Time Signature"), &Timeline::timeMeta, true });
+        _metas.push_back({ tr("Rehearsal Mark"), &Timeline::rehearsalMeta, true });
+        _metas.push_back({ tr("Key Signature"), &Timeline::keyMeta, true });
+        _metas.push_back({ tr("Barlines"), &Timeline::barlineMeta, true });
+        _metas.push_back({ tr("Jumps and Markers"), &Timeline::jumpMarkerMeta, true });
+        _metas.push_back({ tr("Measures"), &Timeline::measureMeta, true });
 
         updateGridFull();
     }
@@ -2611,7 +2594,7 @@ void Timeline::updateGridFromCmdState()
 //   Timeline::setNotation
 //---------------------------------------------------------
 
-void Timeline::setNotation(mu::notation::INotationPtr notation)
+void Timeline::setNotation(INotationPtr notation)
 {
     m_notation = notation;
 
@@ -2647,7 +2630,7 @@ void Timeline::updateView()
     TRACEFUNC;
 
     //! FIXME
-    mu::RectF canvas;        // = QRectF(_cv->matrix().inverted().mapRect(_cv->geometry()));
+    RectF canvas;        // = QRectF(_cv->matrix().inverted().mapRect(_cv->geometry()));
 
     // Find visible elements in timeline
     QPainterPath visiblePainterPath = QPainterPath();
@@ -2675,11 +2658,11 @@ void Timeline::updateView()
                     if (!score()->staff(staff)->show()) {
                         continue;
                     }
-                    mu::RectF staveRect = mu::RectF(system->canvasBoundingRect().left(),
-                                                    system->staffCanvasYpage(staff),
-                                                    system->width(),
-                                                    system->staff(staff)->bbox().height());
-                    mu::RectF showRect = mmrestMeasure->canvasBoundingRect().intersected(staveRect);
+                    RectF staveRect = RectF(system->canvasBoundingRect().left(),
+                                            system->staffCanvasYpage(staff),
+                                            system->width(),
+                                            system->staff(staff)->bbox().height());
+                    RectF showRect = mmrestMeasure->canvasBoundingRect().intersected(staveRect);
 
                     if (canvas.intersects(showRect)) {
                         visiblePainterPath.addRect(getMeasureRect(measureIndex, static_cast<int>(staff), numMetas));
@@ -2692,11 +2675,11 @@ void Timeline::updateView()
                 if (!score()->staff(staff)->show()) {
                     continue;
                 }
-                mu::RectF staveRect = mu::RectF(system->canvasBoundingRect().left(),
-                                                system->staffCanvasYpage(staff),
-                                                system->width(),
-                                                system->staff(staff)->bbox().height());
-                mu::RectF showRect = mmrestMeasure->canvasBoundingRect().intersected(staveRect);
+                RectF staveRect = RectF(system->canvasBoundingRect().left(),
+                                        system->staffCanvasYpage(staff),
+                                        system->width(),
+                                        system->staff(staff)->bbox().height());
+                RectF showRect = mmrestMeasure->canvasBoundingRect().intersected(staveRect);
 
                 if (canvas.intersects(showRect)) {
                     visiblePainterPath.addRect(getMeasureRect(measureIndex, static_cast<int>(staff), numMetas));
@@ -2713,11 +2696,11 @@ void Timeline::updateView()
             if (!score()->staff(staff)->show()) {
                 continue;
             }
-            mu::RectF staveRect = mu::RectF(system->canvasBoundingRect().left(),
-                                            system->staffCanvasYpage(staff),
-                                            system->width(),
-                                            system->staff(staff)->bbox().height());
-            mu::RectF showRect = currMeasure->canvasBoundingRect().intersected(staveRect);
+            RectF staveRect = RectF(system->canvasBoundingRect().left(),
+                                    system->staffCanvasYpage(staff),
+                                    system->width(),
+                                    system->staff(staff)->bbox().height());
+            RectF showRect = currMeasure->canvasBoundingRect().intersected(staveRect);
 
             if (canvas.intersects(showRect)) {
                 visiblePainterPath.addRect(getMeasureRect(measureIndex, static_cast<int>(staff), numMetas));
@@ -3208,7 +3191,7 @@ QString Timeline::cursorIsOn(const QPoint& cursorPos)
 
 const TimelineTheme& Timeline::activeTheme() const
 {
-    if (uiConfiguration()->currentTheme().codeKey == mu::ui::DARK_THEME_CODE) {
+    if (uiConfiguration()->currentTheme().codeKey == ui::DARK_THEME_CODE) {
         return _darkTheme;
     }
 
@@ -3236,12 +3219,12 @@ void Timeline::requestInstrumentDialog()
     dispatcher()->dispatch("instruments");
 }
 
-mu::notation::INotationInteractionPtr Timeline::interaction() const
+INotationInteractionPtr Timeline::interaction() const
 {
     return m_notation ? m_notation->interaction() : nullptr;
 }
 
-mu::engraving::Score* Timeline::score() const
+Score* Timeline::score() const
 {
     return m_notation ? m_notation->elements()->msScore() : nullptr;
 }
@@ -3249,5 +3232,4 @@ mu::engraving::Score* Timeline::score() const
 TRowLabels* Timeline::labelsColumn() const
 {
     return _rowNames;
-}
 }
