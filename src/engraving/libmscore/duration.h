@@ -74,5 +74,5 @@ private:
     Fraction _duration;
     Tuplet* _tuplet;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

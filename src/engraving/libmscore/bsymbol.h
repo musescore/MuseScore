@@ -74,5 +74,5 @@ private:
     std::vector<EngravingItem*> _leafs;
     Align _align;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

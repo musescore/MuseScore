@@ -119,6 +119,6 @@ inline static bool intersects(qreal a, qreal b, qreal c, qreal d, qreal vertical
     }
     return (b + verticalClearance > c) && (a < d + verticalClearance);
 }
-} // namespace Ms
+} // namespace mu::engraving
 
 #endif

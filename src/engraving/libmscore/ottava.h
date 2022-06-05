@@ -136,6 +136,6 @@ public:
     QString accessibleInfo() const override;
     static const char* ottavaTypeName(OttavaType type);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

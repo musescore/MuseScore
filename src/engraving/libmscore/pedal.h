@@ -73,5 +73,5 @@ public:
 
     friend class PedalLine;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -57,5 +57,5 @@ private:
     NoteDot(Note* parent);
     NoteDot(Rest* parent);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

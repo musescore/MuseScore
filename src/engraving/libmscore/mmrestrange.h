@@ -50,6 +50,6 @@ public:
 
     void setXmlText(const QString&) override;
 };
-} // namespace Ms
+} // namespace mu::engraving
 
 #endif

@@ -120,5 +120,5 @@ private:
 
     ImageType imageType = ImageType::NONE;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

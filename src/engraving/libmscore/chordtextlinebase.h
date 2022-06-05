@@ -40,6 +40,6 @@ protected:
 public:
     ChordTextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

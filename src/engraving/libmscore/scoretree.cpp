@@ -703,4 +703,4 @@ void Score::dumpScoreTree()
 {
     _dumpScoreTree(this, 0);
 }
-}  // namespace Ms
+} // namespace mu::engraving

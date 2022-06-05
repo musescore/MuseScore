@@ -69,5 +69,5 @@ public:
 
     friend class PalmMuteLine;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

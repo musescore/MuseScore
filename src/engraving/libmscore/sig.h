@@ -167,5 +167,5 @@ public:
     unsigned raster2(unsigned tick, int raster) const;      // round up
     int rasterStep(unsigned tick, int raster) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

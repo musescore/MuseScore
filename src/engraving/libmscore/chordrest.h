@@ -211,5 +211,5 @@ public:
 
     void undoAddAnnotation(EngravingItem*);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

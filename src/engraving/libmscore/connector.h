@@ -156,5 +156,5 @@ public:
 
     void write();
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

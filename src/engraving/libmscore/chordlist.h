@@ -306,5 +306,5 @@ private:
     void read(XmlReader&);
     void write(XmlWriter& xml) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

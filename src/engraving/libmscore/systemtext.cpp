@@ -67,4 +67,4 @@ void SystemText::layout()
     TextBase::layout();
     autoplaceSegmentElement();
 }
-} // namespace Ms
+} // namespace mu::engraving

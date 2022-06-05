@@ -1679,5 +1679,5 @@ public:
     UNDO_NAME("ChangeScoreOrder")
     UNDO_CHANGED_OBJECTS({ score });
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -108,6 +108,6 @@ public:
 
     static QString dynamicText(DynamicType t);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

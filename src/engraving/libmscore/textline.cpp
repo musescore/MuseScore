@@ -380,4 +380,4 @@ SpannerSegment* TextLine::layoutSystem(System* system)
 
     return tls;
 }
-}     // namespace Ms
+} // namespace mu::engraving

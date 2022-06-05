@@ -50,5 +50,5 @@ public:
     //! @p straight: whether to use straight flags
     static SymId symIdForHookIndex(int index, bool straight);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

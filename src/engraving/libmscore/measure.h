@@ -407,5 +407,5 @@ private:
     double m_layoutStretch = 1.0;
     bool _isWidthLocked = false;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

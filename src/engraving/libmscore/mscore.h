@@ -348,6 +348,6 @@ static constexpr int limit(int val, int min, int max)
     }
     return val;
 }
-} // namespace Ms
+} // namespace mu::engraving
 
 #endif

@@ -201,5 +201,5 @@ public:
     void setOldWidth(qreal n) { m_oldWidth = n; }
     qreal oldWidth() const { return m_oldWidth; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

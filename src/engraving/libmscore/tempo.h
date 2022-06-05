@@ -98,5 +98,5 @@ public:
     void setRelTempo(BeatsPerSecond val);
     BeatsPerSecond relTempo() const { return _relTempo; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

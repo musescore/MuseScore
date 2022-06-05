@@ -43,5 +43,5 @@ public:
     StaffText* clone() const override { return new StaffText(*this); }
     void layout() override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

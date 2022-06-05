@@ -63,5 +63,5 @@ private:
     SymIdList m_restSyms; // stores symbols when using old-style rests
     qreal m_symsWidth;    // width of symbols with spacing when using old-style
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

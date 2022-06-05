@@ -52,5 +52,5 @@ public:
     Tuplet* findNew(Tuplet* o);
     void add(Tuplet* _o, Tuplet* _n) { map.push_back(Tuplet2(_o, _n)); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -188,5 +188,5 @@ public:
     void layout() override;
     void add(EngravingItem*) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

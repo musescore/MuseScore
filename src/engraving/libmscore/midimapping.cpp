@@ -375,4 +375,4 @@ void MasterScore::updateMidiMapping(InstrChannel* channel, Part* part, int midiP
         mm._part = part->masterPart();
     }
 }
-} // namespace Ms
+} // namespace mu::engraving

@@ -183,5 +183,5 @@ extern InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const b
 extern InstrumentTemplate* guessTemplateByNameData(const std::list<QString>& nameDataList);
 extern InstrumentGroup* searchInstrumentGroup(const QString& name);
 extern ClefType defaultClef(int patch);
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -50,5 +50,5 @@ public:
     void read(XmlReader&);
     void write(XmlWriter&) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

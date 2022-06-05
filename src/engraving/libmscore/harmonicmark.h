@@ -67,5 +67,5 @@ private:
 
     QString m_text;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

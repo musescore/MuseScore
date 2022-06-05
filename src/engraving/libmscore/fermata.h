@@ -103,5 +103,5 @@ protected:
     void added() override;
     void removed() override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

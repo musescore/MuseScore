@@ -132,5 +132,5 @@ private:
 
     Ranges estimateRanges() const;                // scan staff up to next section break and update range pitches
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

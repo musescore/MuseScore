@@ -122,4 +122,4 @@ void SpannerMap::dump() const
 }
 
 #endif
-}     // namespace Ms
+} // namespace mu::engraving

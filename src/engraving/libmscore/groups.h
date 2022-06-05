@@ -83,6 +83,6 @@ struct NoteGroup {
     Fraction timeSig;
     Groups endings;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

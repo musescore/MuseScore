@@ -222,5 +222,5 @@ private:
 
     static constexpr std::array _maxSlopes = { 1, 2, 3, 4, 5, 6, 7 };
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

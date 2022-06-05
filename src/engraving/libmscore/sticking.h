@@ -50,5 +50,5 @@ public:
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

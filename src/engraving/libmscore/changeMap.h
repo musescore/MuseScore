@@ -100,5 +100,5 @@ public:
 
     static int interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& tick);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

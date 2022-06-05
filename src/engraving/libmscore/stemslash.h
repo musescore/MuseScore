@@ -49,5 +49,5 @@ public:
     void layout() override;
     Chord* chord() const { return (Chord*)explicitParent(); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

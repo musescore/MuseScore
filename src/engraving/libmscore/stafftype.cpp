@@ -1439,4 +1439,4 @@ qreal StaffType::spatium(Score* score) const
 {
     return score->spatium() * (isSmall() ? score->styleD(Sid::smallStaffMag) : 1.0) * userMag();
 }
-} // namespace Ms
+} // namespace mu::engraving

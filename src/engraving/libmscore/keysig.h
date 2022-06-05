@@ -106,5 +106,5 @@ public:
 };
 
 extern const char* keyNames[];
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -127,4 +127,4 @@ void SystemDivider::read(XmlReader& e)
     }
     Symbol::read(e);
 }
-}  // namespace Ms
+} // namespace mu::engraving

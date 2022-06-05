@@ -557,7 +557,7 @@ Q_ENUM_NS(PlayEventType);
 Q_ENUM_NS(AccidentalType);
 Q_ENUM_NS(HarmonyType);
 #endif
-} // namespace Ms
+} // namespace mu::engraving
 
 Q_DECLARE_METATYPE(mu::engraving::NoteType);
 

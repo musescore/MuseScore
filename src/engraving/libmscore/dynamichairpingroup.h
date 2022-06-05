@@ -77,6 +77,6 @@ public:
 
     static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged);
 };
-} // namespace Ms
+} // namespace mu::engraving
 
 #endif

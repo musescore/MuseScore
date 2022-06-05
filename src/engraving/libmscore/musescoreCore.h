@@ -57,5 +57,5 @@ public:
                                    const QString& /*withFilename*/ = "") { Q_UNUSED(considerInCurrentSession); return 0; }
     std::vector<MasterScore*>& scores() { return scoreList; }
 };
-} // namespace Ms
+} // namespace mu::engraving
 #endif

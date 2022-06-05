@@ -161,5 +161,5 @@ void swap(Listener<Data>& l1, Listener<Data>& l2)
     l1.setNotifier(n2);
     l2.setNotifier(n1);
 }
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

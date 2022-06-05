@@ -508,6 +508,6 @@ inline bool isTextNavigationKey(int key, Qt::KeyboardModifiers modifiers)
 
     return navigationKeys.find(key) != navigationKeys.end();
 }
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

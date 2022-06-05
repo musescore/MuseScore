@@ -50,5 +50,5 @@ public:
     Note* endNote() const { return _endNote; }
     LineSegment* createLineSegment(System* parent) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -1445,4 +1445,4 @@ void Tuplet::addMissingElements()
              missingElementsDuration.numerator(), missingElementsDuration.denominator());
     }
 }
-}  // namespace Ms
+} // namespace mu::engraving

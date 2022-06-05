@@ -76,5 +76,5 @@ public:
     void setInstrument(const Instrument&& i) { *_instrument = i; }
     Segment* segment() { return (Segment*)explicitParent(); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -99,5 +99,5 @@ public:
     void setFont(const mu::draw::Font& f);
     void setCode(int val) { _code = val; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif
