@@ -32,7 +32,7 @@ namespace mu::engraving {
 class WriteContext
 {
 public:
-    int assignLocalIndex(const mu::engraving::Location& mainElementLocation);
+    int assignLocalIndex(const Location& mainElementLocation);
     void setLidLocalIndex(int lid, int localIndex);
     int lidLocalIndex(int lid) const;
 
@@ -60,12 +60,12 @@ public:
     void setWriteTrack(bool v) { _writeTrack= v; }
     void setWritePosition(bool v) { _writePosition = v; }
 
-    void setFilter(mu::engraving::SelectionFilter f) { _filter = f; }
-    bool canWrite(const mu::engraving::EngravingItem*) const;
+    void setFilter(SelectionFilter f) { _filter = f; }
+    bool canWrite(const EngravingItem*) const;
     bool canWriteVoice(track_idx_t track) const;
 
 private:
-    mu::engraving::LinksIndexer m_linksIndexer;
+    LinksIndexer m_linksIndexer;
     std::map<int, int> m_lidLocalIndices;
 
     Fraction _curTick    { 0, 1 };           // used to optimize output
@@ -79,7 +79,7 @@ private:
     bool _writeTrack     { false };
     bool _writePosition  { false };
 
-    mu::engraving::SelectionFilter _filter;
+    SelectionFilter _filter;
 };
 }
 

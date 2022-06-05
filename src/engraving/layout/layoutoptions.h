@@ -53,22 +53,22 @@ struct LayoutOptions
     qreal maxFretShiftAbove = 0;
     qreal maxFretShiftBelow = 0;
 
-    mu::engraving::VerticalAlignRange verticalAlignRange = mu::engraving::VerticalAlignRange::SEGMENT;
+    VerticalAlignRange verticalAlignRange = VerticalAlignRange::SEGMENT;
 
     bool isMode(LayoutMode m) const { return mode == m; }
     bool isLinearMode() const { return mode == LayoutMode::LINE || mode == LayoutMode::HORIZONTAL_FIXED; }
 
-    void updateFromStyle(const mu::engraving::MStyle& style)
+    void updateFromStyle(const MStyle& style)
     {
-        loWidth = style.styleD(mu::engraving::Sid::pageWidth) * mu::engraving::DPI;
-        loHeight = style.styleD(mu::engraving::Sid::pageHeight) * mu::engraving::DPI;
+        loWidth = style.styleD(Sid::pageWidth) * DPI;
+        loHeight = style.styleD(Sid::pageHeight) * DPI;
 
-        firstSystemIndent = style.styleB(mu::engraving::Sid::enableIndentationOnFirstSystem);
+        firstSystemIndent = style.styleB(Sid::enableIndentationOnFirstSystem);
 
-        maxFretShiftAbove = style.styleMM(mu::engraving::Sid::maxFretShiftAbove);
-        maxFretShiftBelow = style.styleMM(mu::engraving::Sid::maxFretShiftBelow);
+        maxFretShiftAbove = style.styleMM(Sid::maxFretShiftAbove);
+        maxFretShiftBelow = style.styleMM(Sid::maxFretShiftBelow);
 
-        verticalAlignRange = mu::engraving::VerticalAlignRange(style.styleI(mu::engraving::Sid::autoplaceVerticalAlignRange));
+        verticalAlignRange = VerticalAlignRange(style.styleI(Sid::autoplaceVerticalAlignRange));
     }
 };
 }

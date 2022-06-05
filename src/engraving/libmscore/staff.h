@@ -37,9 +37,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
 class InstrumentTemplate;
 class XmlWriter;
 class Part;
@@ -114,7 +111,7 @@ private:
     ChangeMap _velocityMultiplications;         ///< cached value
     PitchList _pitchOffsets;        ///< cached value
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Staff(Part* parent);
     Staff(const Staff& staff);
 
@@ -290,9 +287,9 @@ public:
     void undoSetColor(const mu::draw::Color& val);
     void insertTime(const Fraction&, const Fraction& len);
 
-    mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     BracketType innerBracket() const;
 

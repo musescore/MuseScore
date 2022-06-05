@@ -27,9 +27,10 @@
 
 #include "config.h"
 
+using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
-void WriteScoreHook::onWriteStyle302(mu::engraving::Score* score, mu::engraving::XmlWriter& xml)
+void WriteScoreHook::onWriteStyle302(Score* score, XmlWriter& xml)
 {
     bool isWriteStyle = false;
     //! NOTE Write the style to the score file if the compatibility define is set
@@ -43,7 +44,7 @@ void WriteScoreHook::onWriteStyle302(mu::engraving::Score* score, mu::engraving:
     }
 
     //! NOTE If the test mode, because the tests have not yet been adapted to the new format
-    if (mu::engraving::MScore::testMode) {
+    if (MScore::testMode) {
         isWriteStyle = true;
     }
 
@@ -52,7 +53,7 @@ void WriteScoreHook::onWriteStyle302(mu::engraving::Score* score, mu::engraving:
     }
 }
 
-void WriteScoreHook::onWriteExcerpts302(mu::engraving::Score* score, mu::engraving::XmlWriter& xml, bool selectionOnly)
+void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, bool selectionOnly)
 {
     bool isWriteExcerpts = false;
     //! NOTE Write the Excerpts to the score file if the compatibility define is set
@@ -63,8 +64,8 @@ void WriteScoreHook::onWriteExcerpts302(mu::engraving::Score* score, mu::engravi
     if (isWriteExcerpts) {
         if (score->isMaster()) {
             if (!selectionOnly) {
-                mu::engraving::MasterScore* mScore = static_cast<mu::engraving::MasterScore*>(score);
-                for (const mu::engraving::Excerpt* excerpt : mScore->excerpts()) {
+                MasterScore* mScore = static_cast<MasterScore*>(score);
+                for (const Excerpt* excerpt : mScore->excerpts()) {
                     if (excerpt->excerptScore() != score) {
                         excerpt->excerptScore()->write(xml, selectionOnly, *this); // recursion write
                     }

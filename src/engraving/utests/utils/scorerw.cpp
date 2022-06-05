@@ -45,7 +45,7 @@ QString ScoreRW::rootPath()
 MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
 {
     io::path_t path = isAbsolutePath ? name : (rootPath() + "/" + name);
-    MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
     std::string suffix = io::suffix(path);
 
@@ -70,7 +70,7 @@ MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
     return score;
 }
 
-bool ScoreRW::saveScore(mu::engraving::Score* score, const QString& name)
+bool ScoreRW::saveScore(Score* score, const QString& name)
 {
     File file(name);
     if (file.exists()) {

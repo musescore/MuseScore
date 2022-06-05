@@ -27,9 +27,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
 class Chord;
 
 enum class ArpeggioType : char {
@@ -54,7 +51,7 @@ class Arpeggio final : public EngravingItem
 
     bool _hidden = false;   // set in layout, will skip draw if true
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Arpeggio(Chord* parent);
 
     void symbolLine(SymId start, SymId fill);
@@ -115,9 +112,9 @@ public:
     qreal Stretch() const { return _stretch; }
     void setStretch(qreal val) { _stretch = val; }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
     // TODO: add a grip for moving the entire arpeggio

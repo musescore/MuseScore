@@ -36,7 +36,7 @@ using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
 DummyElement::DummyElement(EngravingObject* parent)
-    : mu::engraving::EngravingItem(mu::engraving::ElementType::DUMMY, parent)
+    : EngravingItem(ElementType::DUMMY, parent)
 {
 }
 
@@ -82,42 +82,42 @@ RootItem* DummyElement::rootItem()
     return m_root;
 }
 
-mu::engraving::Page* DummyElement::page()
+Page* DummyElement::page()
 {
     return m_page;
 }
 
-mu::engraving::System* DummyElement::system()
+System* DummyElement::system()
 {
     return m_system;
 }
 
-mu::engraving::Measure* DummyElement::measure()
+Measure* DummyElement::measure()
 {
     return m_measure;
 }
 
-mu::engraving::Segment* DummyElement::segment()
+Segment* DummyElement::segment()
 {
     return m_segment;
 }
 
-mu::engraving::Chord* DummyElement::chord()
+Chord* DummyElement::chord()
 {
     return m_chord;
 }
 
-mu::engraving::Note* DummyElement::note()
+Note* DummyElement::note()
 {
     return m_note;
 }
 
-mu::engraving::EngravingItem* DummyElement::clone() const
+EngravingItem* DummyElement::clone() const
 {
     return nullptr;
 }
 
 AccessibleItem* DummyElement::createAccessible()
 {
-    return new mu::engraving::AccessibleItem(this, accessibility::IAccessible::Panel);
+    return new AccessibleItem(this, accessibility::IAccessible::Panel);
 }

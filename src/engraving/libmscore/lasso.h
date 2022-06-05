@@ -35,7 +35,7 @@ namespace mu::engraving {
 
 class Lasso : public EngravingItem
 {
-    INJECT(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(engraving, IEngravingConfiguration, engravingConfiguration)
 
 public:
     Lasso(Score*);

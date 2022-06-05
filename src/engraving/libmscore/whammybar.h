@@ -59,7 +59,7 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;
 };
 } // namespace mu::engraving

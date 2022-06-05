@@ -1641,22 +1641,22 @@ void SpannerSegment::autoplaceSpannerSegment()
 
 QString SpannerSegment::formatBarsAndBeats() const
 {
-    const mu::engraving::Spanner* spanner = this->spanner();
+    const Spanner* spanner = this->spanner();
 
     if (!spanner) {
         return EngravingItem::formatBarsAndBeats();
     }
 
-    const mu::engraving::Segment* endSegment = spanner->endSegment();
+    const Segment* endSegment = spanner->endSegment();
 
     if (!endSegment) {
-        endSegment = score()->lastSegment()->prev1MM(mu::engraving::SegmentType::ChordRest);
+        endSegment = score()->lastSegment()->prev1MM(SegmentType::ChordRest);
     }
 
-    if (endSegment->tick() != score()->lastSegment()->prev1MM(mu::engraving::SegmentType::ChordRest)->tick()
+    if (endSegment->tick() != score()->lastSegment()->prev1MM(SegmentType::ChordRest)->tick()
         && spanner->type() != ElementType::SLUR
         && spanner->type() != ElementType::TIE) {
-        endSegment = endSegment->prev1MM(mu::engraving::SegmentType::ChordRest);
+        endSegment = endSegment->prev1MM(SegmentType::ChordRest);
     }
 
     return formatStartBarsAndBeats(spanner->startSegment()) + " " + formatEndBarsAndBeats(endSegment);

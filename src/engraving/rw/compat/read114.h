@@ -37,7 +37,7 @@ public:
     //   read114
     //    import old version <= 1.3 files
     //---------------------------------------------------------
-    static mu::engraving::Score::FileError read114(mu::engraving::MasterScore* masterScore, mu::engraving::XmlReader& e, ReadContext& ctx);
+    static Score::FileError read114(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
 };
 }
 

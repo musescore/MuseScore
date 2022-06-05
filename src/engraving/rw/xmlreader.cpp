@@ -339,7 +339,7 @@ engraving::ReadContext* XmlReader::context() const
     return m_context;
 }
 
-void XmlReader::setContext(mu::engraving::ReadContext* context)
+void XmlReader::setContext(ReadContext* context)
 {
     if (m_context && m_selfContext) {
         delete m_context;

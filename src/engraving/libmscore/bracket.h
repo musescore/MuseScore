@@ -29,10 +29,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
-class MuseScoreView;
 class System;
 enum class BracketType : signed char;
 
@@ -58,7 +54,7 @@ class Bracket final : public EngravingItem
     qreal _magx;
     Measure* _measure = nullptr;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Bracket(EngravingItem* parent);
 
 public:
@@ -115,11 +111,11 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& v, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
     int gripsCount() const override { return 1; }

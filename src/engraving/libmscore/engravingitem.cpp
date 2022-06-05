@@ -233,9 +233,9 @@ EngravingItemList EngravingItem::childrenItems() const
     return list;
 }
 
-mu::engraving::AccessibleItem* EngravingItem::createAccessible()
+AccessibleItem* EngravingItem::createAccessible()
 {
-    return new mu::engraving::AccessibleItem(this);
+    return new AccessibleItem(this);
 }
 
 //---------------------------------------------------------
@@ -1995,7 +1995,7 @@ EngravingItem* EngravingItem::prevSegmentElement()
     return score()->firstElement();
 }
 
-mu::engraving::AccessibleItem* EngravingItem::accessible() const
+AccessibleItem* EngravingItem::accessible() const
 {
     return m_accessible;
 }
@@ -2454,13 +2454,13 @@ std::pair<int, float> EngravingItem::barbeat() const
     int beat = 0;
     int ticks = 0;
 
-    const mu::engraving::TimeSigMap* timeSigMap = score()->sigmap();
-    int ticksB = mu::engraving::ticks_beat(timeSigMap->timesig(0).timesig().denominator());
+    const TimeSigMap* timeSigMap = score()->sigmap();
+    int ticksB = ticks_beat(timeSigMap->timesig(0).timesig().denominator());
 
     if (parent->type() == ElementType::SEGMENT) {
-        const mu::engraving::Segment* segment = static_cast<const mu::engraving::Segment*>(parent);
+        const Segment* segment = static_cast<const Segment*>(parent);
         timeSigMap->tickValues(segment->tick().ticks(), &bar, &beat, &ticks);
-        ticksB = mu::engraving::ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
+        ticksB = ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
     } else if (parent->type() == ElementType::MEASURE) {
         const Measure* measure = static_cast<const Measure*>(parent);
         bar = measure->no();

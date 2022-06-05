@@ -57,7 +57,7 @@ class Tremolo final : public EngravingItem
     int _lines;         // derived from _subtype
     TremoloStyle _style { TremoloStyle::DEFAULT };
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Tremolo(Chord* parent);
     Tremolo(const Tremolo&);
 
@@ -129,9 +129,9 @@ public:
 
     bool customStyleApplicable() const;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 };
 } // namespace mu::engraving

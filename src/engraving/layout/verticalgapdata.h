@@ -31,9 +31,7 @@ class System;
 class SysStaff;
 class Staff;
 class Spacer;
-}
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   VerticalStretchData
 //    helper class for spreading staves over a page
@@ -53,13 +51,12 @@ private:
     void  updateFactor(qreal factor);
 
 public:
-    mu::engraving::MStyle* style { nullptr };
-    mu::engraving::System* system { nullptr };
-    mu::engraving::SysStaff* sysStaff { nullptr };
-    mu::engraving::Staff* staff { nullptr };
+    MStyle* style { nullptr };
+    System* system { nullptr };
+    SysStaff* sysStaff { nullptr };
+    Staff* staff { nullptr };
 
-    VerticalGapData(mu::engraving::MStyle* style, bool first, mu::engraving::System* sys, mu::engraving::Staff* st,
-                    mu::engraving::SysStaff* sst, mu::engraving::Spacer* nextSpacer, qreal y);
+    VerticalGapData(MStyle* style, bool first, System* sys, Staff* st, SysStaff* sst, Spacer* nextSpacer, qreal y);
 
     void addSpaceBetweenSections();
     void addSpaceAroundVBox(bool above);

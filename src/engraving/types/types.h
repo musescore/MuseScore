@@ -532,7 +532,7 @@ enum class PlayingTechniqueType {
     Overdrive
 };
 
-enum class TempoTechniqueType {
+enum class TempoChangeType {
     Undefined = -1,
     Accelerando,
     Allargando,
@@ -639,53 +639,5 @@ struct std::hash<mu::engraving::InstrumentTrackId>
         return h1 ^ (h2 << 1);
     }
 };
-
-//! NOTE compat
-namespace mu::engraving {
-using OrnamentStyle = mu::engraving::OrnamentStyle;
-using AlignV = mu::engraving::AlignV;
-using AlignH = mu::engraving::AlignH;
-using Align = mu::engraving::Align;
-using PlacementV = mu::engraving::PlacementV;
-using PlacementH = mu::engraving::PlacementH;
-using DirectionV = mu::engraving::DirectionV;
-using DirectionH = mu::engraving::DirectionH;
-using Orientation = mu::engraving::Orientation;
-using LayoutBreakType = mu::engraving::LayoutBreakType;
-using VeloType = mu::engraving::VeloType;
-using BeamMode = mu::engraving::BeamMode;
-using TextPlace = mu::engraving::TextPlace;
-using GlissandoStyle = mu::engraving::GlissandoStyle;
-using BarLineType = mu::engraving::BarLineType;
-using NoteHeadType = mu::engraving::NoteHeadType;
-using NoteHeadScheme = mu::engraving::NoteHeadScheme;
-using NoteHeadGroup = mu::engraving::NoteHeadGroup;
-using ClefType = mu::engraving::ClefType;
-using DynamicType = mu::engraving::DynamicType;
-using DynamicRange = mu::engraving::DynamicRange;
-using DynamicSpeed = mu::engraving::DynamicSpeed;
-using HookType = mu::engraving::HookType;
-using KeyMode = mu::engraving::KeyMode;
-using TextStyleType = mu::engraving::TextStyleType;
-using ChangeMethod = mu::engraving::ChangeMethod;
-using ChangeDirection = mu::engraving::ChangeDirection;
-using AccidentalRole = mu::engraving::AccidentalRole;
-using DurationType = mu::engraving::DurationType;
-using DurationTypeWithDots = mu::engraving::DurationTypeWithDots;
-using PlayingTechniqueType = mu::engraving::PlayingTechniqueType;
-using TempoChangeType = mu::engraving::TempoTechniqueType;
-using InstrumentTrackId = mu::engraving::InstrumentTrackId;
-using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
-using FermataType = mu::engraving::FermataType;
-using ChordLineType = mu::engraving::ChordLineType;
-using SlurStyleType = mu::engraving::SlurStyleType;
-using staff_idx_t = mu::engraving::staff_idx_t;
-using track_idx_t = mu::engraving::track_idx_t;
-using TracksMap = mu::engraving::TracksMap;
-using voice_idx_t = mu::engraving::voice_idx_t;
-using system_idx_t = mu::engraving::system_idx_t;
-using part_idx_t = mu::engraving::part_idx_t;
-using page_idx_t = mu::engraving::page_idx_t;
-}
 
 #endif // MU_ENGRAVING_TYPES_H

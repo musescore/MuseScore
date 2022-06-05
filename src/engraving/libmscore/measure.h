@@ -197,11 +197,11 @@ public:
     bool isIrregular() const { return m_timesig != _len; }
 
     int size() const { return m_segments.size(); }
-    mu::engraving::Segment* first() const { return m_segments.first(); }
+    Segment* first() const { return m_segments.first(); }
     Segment* first(SegmentType t) const { return m_segments.first(t); }
     Segment* firstEnabled() const { return m_segments.first(ElementFlag::ENABLED); }
 
-    mu::engraving::Segment* last() const { return m_segments.last(); }
+    Segment* last() const { return m_segments.last(); }
     Segment* lastEnabled() const { return m_segments.last(ElementFlag::ENABLED); }
     SegmentList& segments() { return m_segments; }
     const SegmentList& segments() const { return m_segments; }
@@ -299,9 +299,9 @@ public:
     void setPlaybackCount(int val) { m_playbackCount = val; }
     mu::RectF staffabbox(staff_idx_t staffIdx) const;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     bool hasMMRest() const { return m_mmRest != 0; }
     bool isMMRest() const { return m_mmRestCount > 0; }
@@ -367,8 +367,8 @@ public:
 
 private:
     double _squeezableSpace = 0;
-    friend class mu::engraving::Factory;
-    friend class mu::engraving::rw::MeasureRW;
+    friend class Factory;
+    friend class rw::MeasureRW;
 
     Measure(System* parent = 0);
     Measure(const Measure&);

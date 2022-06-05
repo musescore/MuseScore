@@ -59,12 +59,12 @@ private:
     Syllabic _syllabic;
     LyricsLine* _separator;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Lyrics(ChordRest* parent);
     Lyrics(const Lyrics&);
 
     bool isMelisma() const;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     bool alwaysKernable() const override { return true; }
 
@@ -114,9 +114,9 @@ public:
     using EngravingObject::undoChangeProperty;
     void paste(EditData& ed, const QString& txt) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 };
 
 //---------------------------------------------------------
@@ -143,7 +143,7 @@ public:
     Lyrics* nextLyrics() const { return _nextLyrics; }
     bool isEndMelisma() const { return lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
     SpannerSegment* layoutSystem(System*) override;
 };
 

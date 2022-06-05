@@ -753,7 +753,7 @@ void TextBase::paste(EditData& ed, const QString& txt)
     QString token;
     QString sym;
     bool symState = false;
-    mu::engraving::CharFormat format = *static_cast<TextEditData*>(ed.getData(this).get())->cursor()->format();
+    CharFormat format = *static_cast<TextEditData*>(ed.getData(this).get())->cursor()->format();
 
     score()->startCmd();
     for (int i = 0; i < txt.length(); i++) {
@@ -894,7 +894,7 @@ bool TextBase::deleteSelectedText(EditData& ed)
             if (!_cursor->movePosition(TextCursor::MoveOperation::Left)) {
                 break;
             }
-            mu::engraving::TextCursor undoCursor(*_cursor);
+            TextCursor undoCursor(*_cursor);
             // can't rely on the cursor's current format as it doesn't preserve the special font "ScoreText"
             undoCursor.setFormat(*_layout[_cursor->row()].formatAt(static_cast<int>(_cursor->column())));
             score()->undo(new RemoveText(&undoCursor, QString(_cursor->currentCharacter())), &ed);
@@ -916,8 +916,7 @@ void ChangeTextProperties::restoreSelection()
     tc.text()->cursor()->setColumn(tc.column());
 }
 
-ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, mu::engraving::Pid propId, const PropertyValue& propVal,
-                                           PropertyFlags flags_)
+ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Pid propId, const PropertyValue& propVal, PropertyFlags flags_)
     : TextEditUndoCommand(*tc)
 {
     propertyId = propId;

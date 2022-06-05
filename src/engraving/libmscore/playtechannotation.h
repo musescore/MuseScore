@@ -43,9 +43,9 @@ private:
     void write(XmlWriter& writer) const override;
     void read(XmlReader& reader) override;
 
-    mu::engraving::PropertyValue getProperty(Pid id) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& val) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& val) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     PlayingTechniqueType m_techniqueType = PlayingTechniqueType::Undefined;
 };

@@ -55,31 +55,31 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    static mu::engraving::Score::FileError read206(mu::engraving::MasterScore* masterScore, mu::engraving::XmlReader& e, ReadContext& ctx);
+    static Score::FileError read206(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
 
-    static mu::engraving::EngravingItem* readArticulation(mu::engraving::EngravingItem*, mu::engraving::XmlReader&, const ReadContext& ctx);
-    static void readAccidental206(mu::engraving::Accidental*, mu::engraving::XmlReader&);
-    static void readTextStyle206(mu::engraving::MStyle* style, mu::engraving::XmlReader& e, std::map<QString, std::map<mu::engraving::Sid,
-                                                                                                                       PropertyValue> >& excessStyles);
-    static void readTextLine206(mu::engraving::XmlReader& e, const ReadContext& ctx, mu::engraving::TextLineBase* tlb);
-    static void readTrill206(mu::engraving::XmlReader& e, mu::engraving::Trill* t);
-    static void readHairpin206(mu::engraving::XmlReader& e, const ReadContext& ctx, mu::engraving::Hairpin* h);
-    static void readSlur206(mu::engraving::XmlReader& e, ReadContext& ctx, mu::engraving::Slur* s);
-    static void readTie206(mu::engraving::XmlReader& e, ReadContext& ctx, mu::engraving::Tie* t);
+    static EngravingItem* readArticulation(EngravingItem*, XmlReader&, const ReadContext& ctx);
+    static void readAccidental206(Accidental*, XmlReader&);
+    static void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Sid,
+                                                                                         PropertyValue> >& excessStyles);
+    static void readTextLine206(XmlReader& e, const ReadContext& ctx, TextLineBase* tlb);
+    static void readTrill206(XmlReader& e, Trill* t);
+    static void readHairpin206(XmlReader& e, const ReadContext& ctx, Hairpin* h);
+    static void readSlur206(XmlReader& e, ReadContext& ctx, Slur* s);
+    static void readTie206(XmlReader& e, ReadContext& ctx, Tie* t);
 
-    static bool readNoteProperties206(mu::engraving::Note* note, mu::engraving::XmlReader& e, ReadContext& ctx);
-    static bool readDurationProperties206(mu::engraving::XmlReader& e, const ReadContext& ctx, mu::engraving::DurationElement* de);
-    static bool readTupletProperties206(mu::engraving::XmlReader& e, const ReadContext& ctx, mu::engraving::Tuplet* t);
-    static bool readChordRestProperties206(mu::engraving::XmlReader& e, ReadContext& ctx, mu::engraving::ChordRest* cr);
-    static bool readChordProperties206(mu::engraving::XmlReader& e, ReadContext& ctx, mu::engraving::Chord* ch);
+    static bool readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx);
+    static bool readDurationProperties206(XmlReader& e, const ReadContext& ctx, DurationElement* de);
+    static bool readTupletProperties206(XmlReader& e, const ReadContext& ctx, Tuplet* t);
+    static bool readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRest* cr);
+    static bool readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch);
 
-    static mu::engraving::SymId articulationNames2SymId206(const AsciiString& s);
+    static SymId articulationNames2SymId206(const AsciiString& s);
 
-    static mu::engraving::NoteHeadGroup convertHeadGroup(int i);
+    static NoteHeadGroup convertHeadGroup(int i);
 
 private:
-    static bool readScore206(mu::engraving::Score* score, mu::engraving::XmlReader& e, ReadContext& ctx);
-    static void readPart206(mu::engraving::Part* part, mu::engraving::XmlReader& e, ReadContext& ctx);
+    static bool readScore206(Score* score, XmlReader& e, ReadContext& ctx);
+    static void readPart206(Part* part, XmlReader& e, ReadContext& ctx);
 };
 }
 

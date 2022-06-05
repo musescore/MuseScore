@@ -46,9 +46,9 @@ public:
 
     float tempoChangeFactor() const;
 
-    mu::engraving::PropertyValue getProperty(Pid id) const override;
-    bool setProperty(Pid id, const mu::engraving::PropertyValue& val) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
+    PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid id, const PropertyValue& val) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid id) const override;
 
 protected:

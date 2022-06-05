@@ -196,7 +196,7 @@ Fraction Dynamic::velocityChangeLength() const
         break;
     }
 
-    return Fraction::fromTicks(int(ratio * (speedMult * double(Constant::division))));
+    return Fraction::fromTicks(int(ratio * (speedMult * double(Constants::division))));
 }
 
 //---------------------------------------------------------

@@ -45,9 +45,4 @@ public:
 using IFileInfoProviderPtr = std::shared_ptr<IFileInfoProvider>;
 }
 
-//! NOTE compat
-namespace mu::engraving {
-using IFileInfoProviderPtr = mu::engraving::IFileInfoProviderPtr;
-}
-
 #endif // MU_ENGRAVING_IFILEINFOPROVIDER_H

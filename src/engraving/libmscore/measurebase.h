@@ -112,10 +112,10 @@ public:
     void setPrev(MeasureBase* e) { _prev = e; }
     MeasureBase* top() const;
 
-    mu::engraving::Measure* nextMeasure() const;
-    mu::engraving::Measure* prevMeasure() const;
-    mu::engraving::Measure* nextMeasureMM() const;
-    mu::engraving::Measure* prevMeasureMM() const;
+    Measure* nextMeasure() const;
+    Measure* prevMeasure() const;
+    Measure* nextMeasureMM() const;
+    Measure* prevMeasureMM() const;
 
     virtual void write(XmlWriter&) const override = 0;
     virtual void write(XmlWriter&, staff_idx_t, bool, bool) const = 0;
@@ -154,9 +154,9 @@ public:
 
     qreal pause() const;
 
-    mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     void clearElements();
     ElementList takeElements();

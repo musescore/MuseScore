@@ -34,11 +34,11 @@ const ArticulationTypeSet& GlissandosRenderer::supportedTypes()
     return types;
 }
 
-void GlissandosRenderer::doRender(const mu::engraving::EngravingItem* item, const mpe::ArticulationType type,
+void GlissandosRenderer::doRender(const EngravingItem* item, const mpe::ArticulationType type,
                                   const RenderingContext& context,
                                   mpe::PlaybackEventList& result)
 {
-    const mu::engraving::Note* note = mu::engraving::toNote(item);
+    const Note* note = toNote(item);
 
     IF_ASSERT_FAILED(note) {
         return;
@@ -51,8 +51,7 @@ void GlissandosRenderer::doRender(const mu::engraving::EngravingItem* item, cons
     }
 }
 
-void GlissandosRenderer::renderDiscreteGlissando(const mu::engraving::Note* note, const RenderingContext& context,
-                                                 mpe::PlaybackEventList& result)
+void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result)
 {
     const mpe::ArticulationAppliedData& articulationData = context.commonArticulations.at(ArticulationType::DiscreteGlissando);
     int stepsCount = pitchStepsCount(articulationData.meta.overallPitchChangesRange);
@@ -77,8 +76,7 @@ void GlissandosRenderer::renderDiscreteGlissando(const mu::engraving::Note* note
     }
 }
 
-void GlissandosRenderer::renderContinuousGlissando(const mu::engraving::Note* note, const RenderingContext& context,
-                                                   mpe::PlaybackEventList& result)
+void GlissandosRenderer::renderContinuousGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result)
 {
     if (!isNotePlayable(note)) {
         return;

@@ -151,7 +151,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     if (pageNumberOffset()) {
         xml.tag("page-offset", pageNumberOffset());
     }
-    xml.tag("Division", Constant::division);
+    xml.tag("Division", Constants::division);
     xml.context()->setCurTrack(mu::nidx);
 
     hook.onWriteStyle302(this, xml);
@@ -373,7 +373,7 @@ bool Score::saveStyle(const QString& name)
 //extern QString revision;
 static QString revision;
 
-bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook)
+bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook)
 {
     WriteContext ctx;
     return writeScore(f, msczFormat, onlySelection, hook, ctx);

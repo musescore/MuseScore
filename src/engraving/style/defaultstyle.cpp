@@ -71,7 +71,7 @@ void DefaultStyle::init(const QString& defaultStyleFilePath, const QString& part
     }
 }
 
-bool DefaultStyle::doLoadStyle(mu::engraving::MStyle* style, const QString& filePath)
+bool DefaultStyle::doLoadStyle(MStyle* style, const QString& filePath)
 {
     File file(filePath);
     if (!file.open(IODevice::ReadOnly)) {
@@ -84,7 +84,7 @@ bool DefaultStyle::doLoadStyle(mu::engraving::MStyle* style, const QString& file
 
 // Static
 
-const mu::engraving::MStyle& DefaultStyle::baseStyle()
+const MStyle& DefaultStyle::baseStyle()
 {
     return instance()->m_baseStyle;
 }
@@ -97,7 +97,7 @@ bool DefaultStyle::isHasDefaultStyle()
     return false;
 }
 
-const mu::engraving::MStyle& DefaultStyle::defaultStyle()
+const MStyle& DefaultStyle::defaultStyle()
 {
     if (instance()->m_defaultStyle) {
         return *instance()->m_defaultStyle;

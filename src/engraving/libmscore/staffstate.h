@@ -47,7 +47,7 @@ class StaffState final : public EngravingItem
 
     Instrument* _instrument { nullptr };
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     StaffState(EngravingItem* parent);
     StaffState(const StaffState&);
 

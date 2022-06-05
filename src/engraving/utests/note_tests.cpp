@@ -57,70 +57,70 @@ class NoteTests : public ::testing::Test
 TEST_F(NoteTests, note)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScore();
-    mu::engraving::Chord* chord = Factory::createChord(score->dummy()->segment());
+    Chord* chord = Factory::createChord(score->dummy()->segment());
     Note* note = Factory::createNote(chord);
     chord->add(note);
 
     // pitch
     note->setPitch(33);
     note->setTpcFromPitch();
-    Note* n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    Note* n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->pitch(), 33);
     delete n;
 
     // tpc
     note->setTpc1(22);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->tpc1(), 22);
     delete n;
 
     note->setTpc1(23);
     note->setTpc2(23);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->tpc2(), 23);
     delete n;
 
     // small
     note->setSmall(true);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_TRUE(n->isSmall());
     delete n;
 
     // mirror
     note->setUserMirror(DirectionH::LEFT);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->userMirror(), DirectionH::LEFT);
     delete n;
 
     note->setUserMirror(DirectionH::RIGHT);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->userMirror(), DirectionH::RIGHT);
     delete n;
 
     note->setUserMirror(DirectionH::AUTO);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->userMirror(), DirectionH::AUTO);
     delete n;
 
     // dot position
     note->setUserDotPosition(DirectionV::UP);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::UP));
     delete n;
 
     note->setUserDotPosition(DirectionV::DOWN);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::DOWN));
     delete n;
 
     note->setUserDotPosition(DirectionV::AUTO);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::AUTO));
     delete n;
     // headGroup
     for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
         note->setHeadGroup(NoteHeadGroup(i));
-        n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+        n = toNote(ScoreRW::writeReadElement(note));
         EXPECT_EQ(int(n->headGroup()), i);
         delete n;
     }
@@ -128,49 +128,49 @@ TEST_F(NoteTests, note)
     // headType
     for (int i = 0; i < int(NoteHeadType::HEAD_TYPES); ++i) {
         note->setHeadType(NoteHeadType(i));
-        n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+        n = toNote(ScoreRW::writeReadElement(note));
         EXPECT_EQ(int(n->headType()), i);
         delete n;
     }
 
     // velo offset
     note->setVeloOffset(71);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->veloOffset(), 71);
     delete n;
 
     // tuning
     note->setTuning(1.3);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->tuning(), 1.3);
     delete n;
 
     // fret
     note->setFret(9);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->fret(), 9);
     delete n;
 
     // string
     note->setString(3);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->string(), 3);
     delete n;
 
     // ghost
     note->setGhost(true);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_TRUE(n->ghost());
     delete n;
 
     // velo type
     note->setVeloType(VeloType::USER_VAL);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->veloType(), VeloType::USER_VAL);
     delete n;
 
     note->setVeloType(VeloType::OFFSET_VAL);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->veloType(), VeloType::OFFSET_VAL);
     delete n;
 
@@ -180,69 +180,69 @@ TEST_F(NoteTests, note)
 
     // pitch
     note->setProperty(Pid::PITCH, 32);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->pitch(), 32);
     delete n;
 
     // tpc
     note->setProperty(Pid::TPC1, 21);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->tpc1(), 21);
     delete n;
 
     note->setProperty(Pid::TPC1, 22);
     note->setProperty(Pid::TPC2, 22);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->tpc2(), 22);
     delete n;
 
     // small
     note->setProperty(Pid::SMALL, false);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_TRUE(!n->isSmall());
     delete n;
 
     note->setProperty(Pid::SMALL, true);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_TRUE(n->isSmall());
     delete n;
 
     // mirror
     note->setProperty(Pid::MIRROR_HEAD, int(DirectionH::LEFT));
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->userMirror(), DirectionH::LEFT);
     delete n;
 
     note->setProperty(Pid::MIRROR_HEAD, int(DirectionH::RIGHT));
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->userMirror(), DirectionH::RIGHT);
     delete n;
 
     note->setProperty(Pid::MIRROR_HEAD, int(DirectionH::AUTO));
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->userMirror(), DirectionH::AUTO);
     delete n;
 
     // dot position
     note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(DirectionV(DirectionV::UP)));
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::UP));
     delete n;
 
     note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(DirectionV(DirectionV::DOWN)));
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::DOWN));
     delete n;
 
     note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(DirectionV(DirectionV::AUTO)));
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::AUTO));
     delete n;
 
     // headGroup
     for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
         note->setProperty(Pid::HEAD_GROUP, i);
-        n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+        n = toNote(ScoreRW::writeReadElement(note));
         EXPECT_EQ(int(n->headGroup()), i);
         delete n;
     }
@@ -250,54 +250,54 @@ TEST_F(NoteTests, note)
     // headType
     for (int i = 0; i < int(NoteHeadType::HEAD_TYPES); ++i) {
         note->setProperty(Pid::HEAD_TYPE, i);
-        n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+        n = toNote(ScoreRW::writeReadElement(note));
         EXPECT_EQ(int(n->headType()), i);
         delete n;
     }
 
     // velo offset
     note->setProperty(Pid::VELO_OFFSET, 38);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->veloOffset(), 38);
     delete n;
 
     // tuning
     note->setProperty(Pid::TUNING, 2.4);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->tuning(), 2.4);
     delete n;
 
     // fret
     note->setProperty(Pid::FRET, 7);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->fret(), 7);
     delete n;
 
     // string
     note->setProperty(Pid::STRING, 4);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->string(), 4);
     delete n;
 
     // ghost
     note->setProperty(Pid::GHOST, false);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_TRUE(!n->ghost());
     delete n;
 
     note->setProperty(Pid::GHOST, true);
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_TRUE(n->ghost());
     delete n;
 
     // velo type
     note->setProperty(Pid::VELO_TYPE, int(VeloType::USER_VAL));
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->veloType(), VeloType::USER_VAL);
     delete n;
 
     note->setProperty(Pid::VELO_TYPE, int(VeloType::OFFSET_VAL));
-    n = static_cast<Note*>(ScoreRW::writeReadElement(note));
+    n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_EQ(n->veloType(), VeloType::OFFSET_VAL);
     delete n;
 
@@ -315,21 +315,21 @@ TEST_F(NoteTests, grace)
 {
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + "grace.mscx");
     score->doLayout();
-    mu::engraving::Chord* chord = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+    Chord* chord = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     Note* note = chord->upNote();
 
     // create
     score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::division / 2);
-    mu::engraving::Chord* gc = chord->graceNotes().front();
+    Chord* gc = chord->graceNotes().front();
     Note* gn = gc->notes().front();
-//      Note* n = static_cast<Note*>(ScoreRW::writeReadElement(gn));
+//      Note* n = toNote(ScoreRW::writeReadElement(gn));
 //      QCOMPARE(n->noteType(), NoteType::APPOGGIATURA);
 //      delete n;
 
     // tie
     score->select(gn);
     score->cmdAddTie();
-//      n = static_cast<Note*>(ScoreRW::writeReadElement(gn));
+//      n = toNote(ScoreRW::writeReadElement(gn));
 //      QVERIFY(n->tieFor() != 0);
 //      delete n;
 
@@ -341,7 +341,7 @@ TEST_F(NoteTests, grace)
     tr->setTrack(gc->track());
     score->undoAddElement(tr);
     score->endCmd();
-//      mu::engraving::Chord* c = static_cast<mu::engraving::Chord*>(ScoreRW::writeReadElement(gc));
+//      Chord* c = static_cast<Chord*>(ScoreRW::writeReadElement(gc));
 //      QVERIFY(c->tremolo() != 0);
 //      delete c;
 
@@ -353,7 +353,7 @@ TEST_F(NoteTests, grace)
     ar->setTrack(gc->track());
     score->undoAddElement(ar);
     score->endCmd();
-//      c = static_cast<mu::engraving::Chord*>(ScoreRW::writeReadElement(gc));
+//      c = static_cast<Chord*>(ScoreRW::writeReadElement(gc));
 //      QVERIFY(c->articulations().size() == 1);
 //      delete c;
 
@@ -501,11 +501,11 @@ TEST_F(NoteTests, alteredUnison)
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + "altered-unison.mscx");
     Measure* m = score->firstMeasure();
     Chord* c = m->findChord(Fraction(0, 1), 0);
-    EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == mu::engraving::AccidentalType::FLAT);
-    EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == mu::engraving::AccidentalType::NATURAL);
+    EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == AccidentalType::FLAT);
+    EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == AccidentalType::NATURAL);
     c = m->findChord(Fraction(1, 4), 0);
-    EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == mu::engraving::AccidentalType::NATURAL);
-    EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == mu::engraving::AccidentalType::SHARP);
+    EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == AccidentalType::NATURAL);
+    EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == AccidentalType::SHARP);
 }
 
 //---------------------------------------------------------

@@ -44,7 +44,7 @@ public:
 
     Segment* segment() const { return (Segment*)explicitParent(); }
     void layout() override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     void setType(Type type);
     Type type() const { return _type; }

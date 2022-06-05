@@ -31,13 +31,14 @@
 #include "log.h"
 
 using namespace mu::io;
+using namespace mu::engraving;
 
-mu::engraving::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePath, ByteArray* msczData)
+Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePath, ByteArray* msczData)
 {
     File mscxFile(mscxFilePath);
     if (!mscxFile.open(IODevice::ReadOnly)) {
         LOGE() << "failed open file: " << mscxFilePath;
-        return mu::engraving::Score::FileError::FILE_OPEN_ERROR;
+        return Score::FileError::FILE_OPEN_ERROR;
     }
 
     ByteArray mscxData = mscxFile.readAll();
@@ -51,31 +52,30 @@ mu::engraving::Score::FileError mu::engraving::compat::mscxToMscz(const QString&
     writer.open();
     writer.writeScoreFile(mscxData);
 
-    return mu::engraving::Score::FileError::FILE_NO_ERROR;
+    return Score::FileError::FILE_NO_ERROR;
 }
 
-mu::engraving::Score::FileError mu::engraving::compat::loadMsczOrMscx(mu::engraving::MasterScore* score, const QString& path,
-                                                                      bool ignoreVersionError)
+Score::FileError mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const QString& path, bool ignoreVersionError)
 {
     ByteArray msczData;
     if (path.endsWith(".mscx", Qt::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
-        mu::engraving::Score::FileError err = mscxToMscz(path, &msczData);
-        if (err != mu::engraving::Score::FileError::FILE_NO_ERROR) {
+        Score::FileError err = mscxToMscz(path, &msczData);
+        if (err != Score::FileError::FILE_NO_ERROR) {
             return err;
         }
     } else if (path.endsWith(".mscz", Qt::CaseInsensitive)) {
         File msczFile(path);
         if (!msczFile.open(IODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;
-            return mu::engraving::Score::FileError::FILE_OPEN_ERROR;
+            return Score::FileError::FILE_OPEN_ERROR;
         }
 
         msczData = msczFile.readAll();
     } else {
         LOGE() << "unknown type, path: " << path;
-        return mu::engraving::Score::FileError::FILE_UNKNOWN_TYPE;
+        return Score::FileError::FILE_UNKNOWN_TYPE;
     }
 
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
@@ -91,31 +91,31 @@ mu::engraving::Score::FileError mu::engraving::compat::loadMsczOrMscx(mu::engrav
 
     ScoreReader scoreReader;
     engraving::Err err = scoreReader.loadMscz(score, reader, ignoreVersionError);
-    return err == Err::NoError ? mu::engraving::Score::FileError::FILE_NO_ERROR : mu::engraving::Score::FileError::FILE_ERROR;
+    return err == Err::NoError ? Score::FileError::FILE_NO_ERROR : Score::FileError::FILE_ERROR;
 }
 
-mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const QString& path, bool ignoreVersionError)
+Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const QString& path, bool ignoreVersionError)
 {
     ByteArray msczData;
     QString filePath = path;
     if (path.endsWith(".mscx", Qt::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
-        mu::engraving::Score::FileError err = mscxToMscz(path, &msczData);
-        if (err != mu::engraving::Score::FileError::FILE_NO_ERROR) {
+        Score::FileError err = mscxToMscz(path, &msczData);
+        if (err != Score::FileError::FILE_NO_ERROR) {
             return scoreFileErrorToErr(err);
         }
     } else if (path.endsWith(".mscz", Qt::CaseInsensitive)) {
         File msczFile(path);
         if (!msczFile.open(IODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;
-            return scoreFileErrorToErr(mu::engraving::Score::FileError::FILE_OPEN_ERROR);
+            return scoreFileErrorToErr(Score::FileError::FILE_OPEN_ERROR);
         }
 
         msczData = msczFile.readAll();
     } else {
         LOGE() << "unknown type, path: " << path;
-        return scoreFileErrorToErr(mu::engraving::Score::FileError::FILE_UNKNOWN_TYPE);
+        return scoreFileErrorToErr(Score::FileError::FILE_UNKNOWN_TYPE);
     }
 
     project->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));

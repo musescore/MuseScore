@@ -80,14 +80,14 @@ class ChangeTextProperties : public TextEditUndoCommand
 {
     QString xmlText;
     Pid propertyId;
-    mu::engraving::PropertyValue propertyVal;
+    PropertyValue propertyVal;
     FontStyle existingStyle;
     PropertyFlags flags;
 
     void restoreSelection();
 
 public:
-    ChangeTextProperties(const TextCursor* tc, mu::engraving::Pid propId, const mu::engraving::PropertyValue& propVal, PropertyFlags flags);
+    ChangeTextProperties(const TextCursor* tc, Pid propId, const PropertyValue& propVal, PropertyFlags flags);
     void undo(EditData*) override;
     void redo(EditData*) override;
 };

@@ -96,7 +96,7 @@ TEST_F(ExchangevoicesTests, undoChangeVoice)
     for (Segment* s = score->firstSegment(SegmentType::ChordRest); s; s = s->next1()) {
         ChordRest* cr = static_cast<ChordRest*>(s->element(0));
         if (cr && cr->type() == ElementType::CHORD) {
-            mu::engraving::Chord* c = static_cast<mu::engraving::Chord*>(cr);
+            Chord* c = toChord(cr);
             score->select(c->downNote(), SelectType::ADD);
         }
     }

@@ -2014,13 +2014,13 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
 
 void Measure::write(XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig) const
 {
-    mu::engraving::rw::MeasureRW::MeasureRW::writeMeasure(this, xml, staff, writeSystemElements, forceTimeSig);
+    rw::MeasureRW::writeMeasure(this, xml, staff, writeSystemElements, forceTimeSig);
 }
 
 void Measure::read(XmlReader& xml)
 {
     ReadContext ctx(score());
-    mu::engraving::rw::MeasureRW::readMeasure(this, xml, ctx, 0);
+    rw::MeasureRW::readMeasure(this, xml, ctx, 0);
 }
 
 //---------------------------------------------------------

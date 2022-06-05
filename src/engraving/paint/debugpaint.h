@@ -32,9 +32,7 @@
 namespace mu::engraving {
 class EngravingItem;
 class Page;
-}
 
-namespace mu::engraving {
 class PaintDebugger;
 class DebugPaint
 {
@@ -42,11 +40,10 @@ class DebugPaint
     INJECT_STATIC(engraving, diagnostics::IEngravingElementsProvider, elementsProvider)
 
 public:
-    static void paintElementDebug(mu::draw::Painter& painter, const mu::engraving::EngravingItem* element,
-                                  std::shared_ptr<PaintDebugger>& debugger);
-    static void paintElementsDebug(mu::draw::Painter& painter, const std::vector<mu::engraving::EngravingItem*>& elements);
+    static void paintElementDebug(mu::draw::Painter& painter, const EngravingItem* element, std::shared_ptr<PaintDebugger>& debugger);
+    static void paintElementsDebug(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements);
 
-    static void paintPageDebug(mu::draw::Painter& painter, const mu::engraving::Page* page);
+    static void paintPageDebug(mu::draw::Painter& painter, const Page* page);
 };
 }
 

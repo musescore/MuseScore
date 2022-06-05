@@ -1000,9 +1000,9 @@ SwingParameters Staff::swing(const Fraction& tick) const
     DurationType unit = TConv::fromXml(ba.constData(), DurationType::V_INVALID);
     int swingRatio = score()->styleI(Sid::swingRatio);
     if (unit == DurationType::V_EIGHTH) {
-        swingUnit = Constant::division / 2;
+        swingUnit = Constants::division / 2;
     } else if (unit == DurationType::V_16TH) {
-        swingUnit = Constant::division / 4;
+        swingUnit = Constants::division / 4;
     } else if (unit == DurationType::V_ZERO) {
         swingUnit = 0;
     }
@@ -1504,7 +1504,7 @@ std::list<Staff*> Staff::staffList() const
 
 Staff* Staff::primaryStaff() const
 {
-    const mu::engraving::LinkedObjects* linkedElements = links();
+    const LinkedObjects* linkedElements = links();
     if (!linkedElements) {
         return nullptr;
     }

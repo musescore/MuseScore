@@ -411,7 +411,7 @@ const char* Factory::name(ElementType type)
     return elementNames[int(type)].name.ascii();
 }
 
-const char* Factory::userName(mu::engraving::ElementType type)
+const char* Factory::userName(ElementType type)
 {
     return elementNames[int(type)].userName;
 }
@@ -488,7 +488,7 @@ MAKE_ITEM_IMPL(Breath, Segment)
 
 CREATE_ITEM_IMPL(Chord, ElementType::CHORD, Segment, isAccessibleEnabled)
 
-mu::engraving::Chord* Factory::copyChord(const mu::engraving::Chord& src, bool link)
+Chord* Factory::copyChord(const Chord& src, bool link)
 {
     Chord* copy = new Chord(src, link);
     copy->setAccessibleEnabled(src.accessibleEnabled());
@@ -546,7 +546,7 @@ CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Note, isAccessibleEnabled)
 CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Rest, isAccessibleEnabled)
 COPY_ITEM_IMPL(NoteDot)
 
-mu::engraving::Page* Factory::createPage(RootItem * parent, bool isAccessibleEnabled)
+Page* Factory::createPage(RootItem * parent, bool isAccessibleEnabled)
 {
     Page* page = new Page(parent);
     page->setAccessibleEnabled(isAccessibleEnabled);
@@ -554,7 +554,7 @@ mu::engraving::Page* Factory::createPage(RootItem * parent, bool isAccessibleEna
     return page;
 }
 
-mu::engraving::Rest* Factory::createRest(mu::engraving::Segment* parent, bool isAccessibleEnabled)
+Rest* Factory::createRest(Segment* parent, bool isAccessibleEnabled)
 {
     Rest* r = new Rest(parent);
     r->setAccessibleEnabled(isAccessibleEnabled);
@@ -562,7 +562,7 @@ mu::engraving::Rest* Factory::createRest(mu::engraving::Segment* parent, bool is
     return r;
 }
 
-mu::engraving::Rest* Factory::createRest(mu::engraving::Segment* parent, const mu::engraving::TDuration& t, bool isAccessibleEnabled)
+Rest* Factory::createRest(Segment* parent, const TDuration& t, bool isAccessibleEnabled)
 {
     Rest* r = new Rest(parent, t);
     r->setAccessibleEnabled(isAccessibleEnabled);
@@ -570,7 +570,7 @@ mu::engraving::Rest* Factory::createRest(mu::engraving::Segment* parent, const m
     return r;
 }
 
-mu::engraving::Rest* Factory::copyRest(const mu::engraving::Rest& src, bool link)
+Rest* Factory::copyRest(const Rest& src, bool link)
 {
     Rest* copy = new Rest(src, link);
     copy->setAccessibleEnabled(src.accessibleEnabled());
@@ -578,7 +578,7 @@ mu::engraving::Rest* Factory::copyRest(const mu::engraving::Rest& src, bool link
     return copy;
 }
 
-mu::engraving::Segment* Factory::createSegment(mu::engraving::Measure* parent, bool isAccessibleEnabled)
+Segment* Factory::createSegment(Measure* parent, bool isAccessibleEnabled)
 {
     Segment* s = new Segment(parent);
     s->setAccessibleEnabled(isAccessibleEnabled);
@@ -586,8 +586,7 @@ mu::engraving::Segment* Factory::createSegment(mu::engraving::Measure* parent, b
     return s;
 }
 
-mu::engraving::Segment* Factory::createSegment(mu::engraving::Measure* parent, mu::engraving::SegmentType type,
-                                               const mu::engraving::Fraction& t, bool isAccessibleEnabled)
+Segment* Factory::createSegment(Measure* parent, SegmentType type, const Fraction& t, bool isAccessibleEnabled)
 {
     Segment* s = new Segment(parent, type, t);
     s->setAccessibleEnabled(isAccessibleEnabled);
@@ -627,7 +626,7 @@ CREATE_ITEM_IMPL(StaffState, ElementType::STAFF_STATE, EngravingItem, isAccessib
 CREATE_ITEM_IMPL(StaffTypeChange, ElementType::STAFFTYPE_CHANGE, MeasureBase, isAccessibleEnabled)
 MAKE_ITEM_IMPL(StaffTypeChange, MeasureBase)
 
-StaffText* Factory::createStaffText(Segment * parent, mu::engraving::TextStyleType textStyleType, bool isAccessibleEnabled)
+StaffText* Factory::createStaffText(Segment * parent, TextStyleType textStyleType, bool isAccessibleEnabled)
 {
     StaffText* staffText = new StaffText(parent, textStyleType);
     staffText->setAccessibleEnabled(isAccessibleEnabled);
@@ -640,7 +639,7 @@ CREATE_ITEM_IMPL(RehearsalMark, ElementType::REHEARSAL_MARK, Segment, isAccessib
 CREATE_ITEM_IMPL(Stem, ElementType::STEM, Chord, isAccessibleEnabled)
 COPY_ITEM_IMPL(Stem)
 
-mu::engraving::StemSlash* Factory::createStemSlash(mu::engraving::Chord * parent, bool isAccessibleEnabled)
+StemSlash* Factory::createStemSlash(Chord * parent, bool isAccessibleEnabled)
 {
     StemSlash* s = new StemSlash(parent);
     s->setAccessibleEnabled(isAccessibleEnabled);
@@ -650,7 +649,7 @@ mu::engraving::StemSlash* Factory::createStemSlash(mu::engraving::Chord * parent
 
 COPY_ITEM_IMPL(StemSlash)
 
-mu::engraving::System* Factory::createSystem(mu::engraving::Page * parent, bool isAccessibleEnabled)
+System* Factory::createSystem(Page * parent, bool isAccessibleEnabled)
 {
     System* s = new System(parent);
     s->setAccessibleEnabled(isAccessibleEnabled);
@@ -658,8 +657,7 @@ mu::engraving::System* Factory::createSystem(mu::engraving::Page * parent, bool 
     return s;
 }
 
-mu::engraving::SystemText* Factory::createSystemText(mu::engraving::Segment* parent, mu::engraving::TextStyleType textStyleType,
-                                                     bool isAccessibleEnabled)
+SystemText* Factory::createSystemText(Segment* parent, TextStyleType textStyleType, bool isAccessibleEnabled)
 {
     SystemText* systemText = new SystemText(parent, textStyleType);
     systemText->setAccessibleEnabled(isAccessibleEnabled);
@@ -669,8 +667,8 @@ mu::engraving::SystemText* Factory::createSystemText(mu::engraving::Segment* par
 
 CREATE_ITEM_IMPL(InstrumentChange, ElementType::INSTRUMENT_CHANGE, Segment, isAccessibleEnabled)
 
-mu::engraving::InstrumentChange* Factory::createInstrumentChange(mu::engraving::Segment * parent, const Instrument& instrument,
-                                                                 bool isAccessibleEnabled)
+InstrumentChange* Factory::createInstrumentChange(Segment * parent, const Instrument& instrument,
+                                                  bool isAccessibleEnabled)
 {
     InstrumentChange* instrumentChange = new InstrumentChange(instrument, parent);
     instrumentChange->setAccessibleEnabled(isAccessibleEnabled);
@@ -682,8 +680,8 @@ CREATE_ITEM_IMPL(Sticking, ElementType::STICKING, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(Fingering, ElementType::FINGERING, Note, isAccessibleEnabled)
 
-mu::engraving::Fingering* Factory::createFingering(mu::engraving::Note * parent, mu::engraving::TextStyleType textStyleType,
-                                                   bool isAccessibleEnabled)
+Fingering* Factory::createFingering(Note * parent, TextStyleType textStyleType,
+                                    bool isAccessibleEnabled)
 {
     Fingering* fingering = new Fingering(parent, textStyleType);
     fingering->setAccessibleEnabled(isAccessibleEnabled);
@@ -695,7 +693,7 @@ CREATE_ITEM_IMPL(Harmony, ElementType::HARMONY, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(TempoText, ElementType::TEMPO_TEXT, Segment, isAccessibleEnabled)
 
-mu::engraving::Text* Factory::createText(mu::engraving::EngravingItem * parent, TextStyleType tid, bool isAccessibleEnabled)
+Text* Factory::createText(EngravingItem * parent, TextStyleType tid, bool isAccessibleEnabled)
 {
     Text* t = new Text(parent, tid);
     t->setAccessibleEnabled(isAccessibleEnabled);
@@ -742,7 +740,7 @@ CREATE_ITEM_IMPL(LetRing, ElementType::LET_RING, EngravingItem, isAccessibleEnab
 
 CREATE_ITEM_IMPL(Marker, ElementType::MARKER, EngravingItem, isAccessibleEnabled)
 
-mu::engraving::Marker* Factory::createMarker(mu::engraving::EngravingItem * parent, TextStyleType tid, bool isAccessibleEnabled)
+Marker* Factory::createMarker(EngravingItem * parent, TextStyleType tid, bool isAccessibleEnabled)
 {
     Marker* m = new Marker(parent, tid);
     m->setAccessibleEnabled(isAccessibleEnabled);
@@ -772,7 +770,7 @@ CREATE_ITEM_IMPL(MMRest, ElementType::MMREST, EngravingItem, isAccessibleEnabled
 
 CREATE_ITEM_IMPL(VBox, ElementType::VBOX, System, isAccessibleEnabled)
 
-mu::engraving::VBox* Factory::createVBox(const ElementType& type, System * parent, bool isAccessibleEnabled)
+VBox* Factory::createVBox(const ElementType& type, System * parent, bool isAccessibleEnabled)
 {
     VBox* b = new VBox(type, parent);
     b->setAccessibleEnabled(isAccessibleEnabled);

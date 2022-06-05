@@ -27,20 +27,18 @@
 
 namespace mu::engraving {
 class Note;
-}
 
-namespace mu::engraving {
 class GlissandosRenderer : public RenderBase<GlissandosRenderer>
 {
 public:
     static const mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const mu::engraving::EngravingItem* item, const mpe::ArticulationType type, const RenderingContext& context,
+    static void doRender(const EngravingItem* item, const mpe::ArticulationType type, const RenderingContext& context,
                          mpe::PlaybackEventList& result);
 
 private:
-    static void renderDiscreteGlissando(const mu::engraving::Note* note, const RenderingContext& context, mpe::PlaybackEventList& result);
-    static void renderContinuousGlissando(const mu::engraving::Note* note, const RenderingContext& context, mpe::PlaybackEventList& result);
+    static void renderDiscreteGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result);
+    static void renderContinuousGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result);
 };
 }
 

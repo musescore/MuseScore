@@ -1043,29 +1043,29 @@ PlayingTechniqueType TConv::fromXml(const AsciiString& tag, PlayingTechniqueType
     return findTypeByXmlTag<PlayingTechniqueType>(PLAY_TECH_TYPES, tag, def);
 }
 
-static const std::vector<Item<TempoTechniqueType> > TEMPO_CHANGE_TYPES = {
-    { TempoTechniqueType::Undefined, "undefined" },
-    { TempoTechniqueType::Accelerando, "accelerando" },
-    { TempoTechniqueType::Allargando, "allargando" },
-    { TempoTechniqueType::Calando, "calando" },
-    { TempoTechniqueType::Lentando, "lentando" },
-    { TempoTechniqueType::Morendo, "morendo" },
-    { TempoTechniqueType::Precipitando, "precipitando" },
-    { TempoTechniqueType::Rallentando, "rallentando" },
-    { TempoTechniqueType::Ritardando, "ritardando" },
-    { TempoTechniqueType::Smorzando, "smorzando" },
-    { TempoTechniqueType::Sostenuto, "sostenuto" },
-    { TempoTechniqueType::Stringendo, "stringendo" }
+static const std::vector<Item<TempoChangeType> > TEMPO_CHANGE_TYPES = {
+    { TempoChangeType::Undefined, "undefined" },
+    { TempoChangeType::Accelerando, "accelerando" },
+    { TempoChangeType::Allargando, "allargando" },
+    { TempoChangeType::Calando, "calando" },
+    { TempoChangeType::Lentando, "lentando" },
+    { TempoChangeType::Morendo, "morendo" },
+    { TempoChangeType::Precipitando, "precipitando" },
+    { TempoChangeType::Rallentando, "rallentando" },
+    { TempoChangeType::Ritardando, "ritardando" },
+    { TempoChangeType::Smorzando, "smorzando" },
+    { TempoChangeType::Sostenuto, "sostenuto" },
+    { TempoChangeType::Stringendo, "stringendo" }
 };
 
-QString TConv::toXml(TempoTechniqueType v)
+QString TConv::toXml(TempoChangeType v)
 {
-    return findXmlTagByType<TempoTechniqueType>(TEMPO_CHANGE_TYPES, v);
+    return findXmlTagByType<TempoChangeType>(TEMPO_CHANGE_TYPES, v);
 }
 
-TempoTechniqueType TConv::fromXml(const AsciiString& tag, TempoTechniqueType def)
+TempoChangeType TConv::fromXml(const AsciiString& tag, TempoChangeType def)
 {
-    return findTypeByXmlTag<TempoTechniqueType>(TEMPO_CHANGE_TYPES, tag, def);
+    return findTypeByXmlTag<TempoChangeType>(TEMPO_CHANGE_TYPES, tag, def);
 }
 
 static const std::vector<Item<OrnamentStyle> > ORNAMENTSTYLE_TYPES = {

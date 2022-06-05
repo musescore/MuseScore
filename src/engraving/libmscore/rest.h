@@ -90,10 +90,10 @@ public:
     qreal rightEdge() const override;
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
+    PropertyValue getProperty(Pid propertyId) const override;
     void undoChangeDotsVisible(bool v);
 
     EngravingItem* nextElement() override;
@@ -115,7 +115,7 @@ protected:
 
 private:
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Rest(Segment* parent);
     Rest(Segment* parent, const TDuration&);
 

@@ -34,9 +34,6 @@
 
 namespace mu::engraving {
 class LayoutContext;
-}
-
-namespace mu::engraving {
 class Staff;
 class StaffLines;
 class Clef;
@@ -115,7 +112,7 @@ class System final : public EngravingItem
     qreal _distance                { 0.0 };     /// temp. variable used during layout
     qreal _systemHeight            { 0.0 };
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     System(Page* parent);
 
     staff_idx_t firstVisibleSysStaff() const;
@@ -125,12 +122,12 @@ class System final : public EngravingItem
 
     size_t getBracketsColumnsCount();
     void setBracketsXPosition(const qreal xOffset);
-    Bracket* createBracket(const mu::engraving::LayoutContext& ctx, mu::engraving::BracketItem* bi, size_t column, staff_idx_t staffIdx,
-                           std::vector<Bracket*>& bl, Measure* measure);
+    Bracket* createBracket(const LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx, std::vector<Bracket*>& bl,
+                           Measure* measure);
 
     qreal systemNamesWidth();
-    qreal layoutBrackets(const mu::engraving::LayoutContext& ctx);
-    qreal totalBracketOffset(const mu::engraving::LayoutContext& ctx);
+    qreal layoutBrackets(const LayoutContext& ctx);
+    qreal totalBracketOffset(const LayoutContext& ctx);
 
 public:
 
@@ -158,17 +155,17 @@ public:
 
     Page* page() const { return (Page*)explicitParent(); }
 
-    void layoutSystem(const mu::engraving::LayoutContext& ctx, qreal xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
+    void layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
 
     void setMeasureHeight(qreal height);
     void layoutBracketsVertical();
     void layoutInstrumentNames();
 
-    void addBrackets(const mu::engraving::LayoutContext& ctx, Measure* measure);
+    void addBrackets(const LayoutContext& ctx, Measure* measure);
 
-    void layout2(const mu::engraving::LayoutContext& ctx);                       ///< Called after Measure layout.
+    void layout2(const LayoutContext& ctx); ///< Called after Measure layout.
     void restoreLayout2();
-    void clear();                         ///< Clear measure list.
+    void clear(); ///< Clear measure list.
 
     mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
     std::vector<SysStaff*>& staves() { return _staves; }
@@ -185,7 +182,7 @@ public:
 
     int y2staff(qreal y) const;
     staff_idx_t searchStaff(qreal y, staff_idx_t preferredStaff = mu::nidx, qreal spacingFactor = 0.5) const;
-    void setInstrumentNames(const mu::engraving::LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
+    void setInstrumentNames(const LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 

@@ -38,15 +38,15 @@ class AccessibleItem : public accessibility::IAccessible
     INJECT_STATIC(engraving, accessibility::IAccessibilityController, accessibilityController)
 
 public:
-    AccessibleItem(mu::engraving::EngravingItem* e, Role role = Role::ElementOnScore);
+    AccessibleItem(EngravingItem* e, Role role = Role::ElementOnScore);
     virtual ~AccessibleItem();
-    virtual AccessibleItem* clone(mu::engraving::EngravingItem* e) const;
+    virtual AccessibleItem* clone(EngravingItem* e) const;
 
     virtual void setup();
 
     AccessibleRoot* accessibleRoot() const;
 
-    const mu::engraving::EngravingItem* element() const;
+    const EngravingItem* element() const;
 
     bool registered() const;
 
@@ -85,11 +85,11 @@ public:
     static bool enabled;
 
 private:
-    mu::engraving::TextCursor* textCursor() const;
+    TextCursor* textCursor() const;
 
 protected:
 
-    mu::engraving::EngravingItem* m_element = nullptr;
+    EngravingItem* m_element = nullptr;
     bool m_registred = false;
 
     Role m_role = Role::ElementOnScore;

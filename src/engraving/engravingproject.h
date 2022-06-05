@@ -45,9 +45,7 @@
 namespace mu::engraving {
 class MasterScore;
 class MStyle;
-}
 
-namespace mu::engraving {
 class EngravingProject : public std::enable_shared_from_this<EngravingProject>
 {
     INJECT(engraving, diagnostics::IEngravingElementsProvider, engravingElementsProvider)
@@ -56,7 +54,7 @@ public:
     ~EngravingProject();
 
     static std::shared_ptr<EngravingProject> create();
-    static std::shared_ptr<EngravingProject> create(const mu::engraving::MStyle& style);
+    static std::shared_ptr<EngravingProject> create(const MStyle& style);
 
     IFileInfoProviderPtr fileInfoProvider() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
@@ -66,22 +64,22 @@ public:
 
     bool readOnly() const;
 
-    mu::engraving::MasterScore* masterScore() const;
+    MasterScore* masterScore() const;
     Err setupMasterScore(bool forceMode);
 
-    Err loadMscz(const mu::engraving::MscReader& msc, bool ignoreVersionError);
-    bool writeMscz(mu::engraving::MscWriter& writer, bool onlySelection, bool createThumbnail);
+    Err loadMscz(const MscReader& msc, bool ignoreVersionError);
+    bool writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail);
 
 private:
-    friend class mu::engraving::MasterScore;
+    friend class MasterScore;
 
     EngravingProject() = default;
 
-    void init(const mu::engraving::MStyle& style);
+    void init(const MStyle& style);
 
-    Err doSetupMasterScore(mu::engraving::MasterScore* score, bool forceMode);
+    Err doSetupMasterScore(MasterScore* score, bool forceMode);
 
-    mu::engraving::MasterScore* m_masterScore = nullptr;
+    MasterScore* m_masterScore = nullptr;
 };
 
 using EngravingProjectPtr = std::shared_ptr<EngravingProject>;

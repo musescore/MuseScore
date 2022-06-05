@@ -105,7 +105,7 @@ class MasterScore : public Score
 
     qreal m_widthOfSegmentCell = 3;
 
-    std::weak_ptr<mu::engraving::EngravingProject> m_project;
+    std::weak_ptr<EngravingProject> m_project;
 
     // FIXME: Move to EngravingProject
     // We can't yet, because m_project is not set on every MasterScore
@@ -119,18 +119,18 @@ class MasterScore : public Score
     void removeDeletedMidiMapping();
     int updateMidiMapping();
 
-    friend class mu::engraving::EngravingProject;
-    friend class mu::engraving::compat::ScoreAccess;
-    friend class mu::engraving::compat::Read114;
-    friend class mu::engraving::compat::Read206;
-    friend class mu::engraving::compat::Read302;
-    friend class mu::engraving::Read400;
+    friend class EngravingProject;
+    friend class compat::ScoreAccess;
+    friend class compat::Read114;
+    friend class compat::Read206;
+    friend class compat::Read302;
+    friend class Read400;
 
-    MasterScore(std::weak_ptr<mu::engraving::EngravingProject> project  = std::weak_ptr<mu::engraving::EngravingProject>());
-    MasterScore(const MStyle&, std::weak_ptr<mu::engraving::EngravingProject> project  = std::weak_ptr<mu::engraving::EngravingProject>());
+    MasterScore(std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
+    MasterScore(const MStyle&, std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
 
-    bool writeMscz(mu::engraving::MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
-    bool exportPart(mu::engraving::MscWriter& mscWriter, Score* partScore);
+    bool writeMscz(MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
+    bool exportPart(MscWriter& mscWriter, Score* partScore);
 
 public:
 
@@ -140,7 +140,7 @@ public:
     Score* createScore();
     Score* createScore(const MStyle& s);
 
-    std::weak_ptr<mu::engraving::EngravingProject> project() const { return m_project; }
+    std::weak_ptr<EngravingProject> project() const { return m_project; }
 
     bool isMaster() const override { return true; }
     bool readOnly() const override { return _readOnly; }
@@ -236,7 +236,7 @@ public:
     qreal widthOfSegmentCell() const { return m_widthOfSegmentCell; }
 };
 
-extern mu::engraving::MasterScore* gpaletteScore;
+extern MasterScore* gpaletteScore;
 }
 
 #endif // MU_ENGRAVING_MASTERSCORE_H

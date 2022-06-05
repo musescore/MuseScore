@@ -33,7 +33,7 @@
 
 using namespace mu::engraving;
 
-void Paint::paintElement(mu::draw::Painter& painter, const mu::engraving::EngravingItem* element)
+void Paint::paintElement(mu::draw::Painter& painter, const EngravingItem* element)
 {
     if (element->skipDraw()) {
         return;
@@ -48,7 +48,7 @@ void Paint::paintElement(mu::draw::Painter& painter, const mu::engraving::Engrav
 
 void Paint::paintElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements, bool isPrinting)
 {
-    std::vector<mu::engraving::EngravingItem*> sortedElements(elements.begin(), elements.end());
+    std::vector<EngravingItem*> sortedElements(elements.begin(), elements.end());
 
     std::sort(sortedElements.begin(), sortedElements.end(), mu::engraving::elementLessThan);
 

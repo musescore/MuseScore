@@ -31,14 +31,12 @@
 
 namespace mu::engraving {
 class EngravingItem;
-}
 
-namespace mu::engraving {
 class Paint
 {
 public:
-    static void paintElement(mu::draw::Painter& painter, const mu::engraving::EngravingItem* element);
-    static void paintElements(mu::draw::Painter& painter, const std::vector<mu::engraving::EngravingItem*>& elements, bool isPrinting);
+    static void paintElement(mu::draw::Painter& painter, const EngravingItem* element);
+    static void paintElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements, bool isPrinting);
 };
 }
 

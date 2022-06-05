@@ -39,7 +39,7 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-Err ScoreReader::loadMscz(mu::engraving::MasterScore* masterScore, const mu::engraving::MscReader& mscReader, bool ignoreVersionError)
+Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, bool ignoreVersionError)
 {
     TRACEFUNC;
 

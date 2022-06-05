@@ -308,10 +308,10 @@ class TextBase : public EngravingItem
     QString stripText(bool, bool, bool) const;
     Sid offsetSid() const;
 
-    static QString getHtmlStartTag(qreal, qreal&, const QString&, QString&, mu::engraving::FontStyle, mu::engraving::VerticalAlignment);
-    static QString getHtmlEndTag(mu::engraving::FontStyle, mu::engraving::VerticalAlignment);
+    static QString getHtmlStartTag(qreal, qreal&, const QString&, QString&, FontStyle, VerticalAlignment);
+    static QString getHtmlEndTag(FontStyle, VerticalAlignment);
 
-    mu::engraving::AccessibleItem* createAccessible() override;
+    AccessibleItem* createAccessible() override;
 
     void notifyAboutTextCursorChanged();
     void notifyAboutTextInserted(int startPosition, int endPosition, const QString& text);
@@ -329,8 +329,8 @@ protected:
     void layoutEdit();
     void createLayout();
     void insertSym(EditData& ed, SymId id);
-    void prepareFormat(const QString& token, mu::engraving::TextCursor& cursor);
-    bool prepareFormat(const QString& token, mu::engraving::CharFormat& format);
+    void prepareFormat(const QString& token, TextCursor& cursor);
+    bool prepareFormat(const QString& token, CharFormat& format);
 
     virtual void commitText();
 
@@ -432,10 +432,10 @@ public:
     mu::draw::Font font() const;
     mu::draw::FontMetrics fontMetrics() const;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& v, PropertyFlags ps) override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
+    PropertyValue propertyDefault(Pid id) const override;
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
     Pid propertyId(const QStringRef& xmlName) const override;
     Sid getPropertyStyle(Pid) const override;
     void styleChanged() override;

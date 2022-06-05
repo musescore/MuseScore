@@ -270,10 +270,10 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 
     cmdCreateTuplet(destinationChordRest, tuplet);
 
-    const std::vector<mu::engraving::DurationElement*>& elements = tuplet->elements();
-    mu::engraving::DurationElement* elementForSelect = nullptr;
+    const std::vector<DurationElement*>& elements = tuplet->elements();
+    DurationElement* elementForSelect = nullptr;
     if (!elements.empty()) {
-        mu::engraving::DurationElement* firstElement = elements.front();
+        DurationElement* firstElement = elements.front();
         if (firstElement->isRest()) {
             elementForSelect = firstElement;
         } else if (elements.size() > 1) {
@@ -4279,7 +4279,7 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
                             nn->setTpc2(on->tpc1());
                         } else {
                             v.flip();
-                            nn->setTpc2(mu::engraving::transposeTpc(nn->tpc1(), v, true));
+                            nn->setTpc2(transposeTpc(nn->tpc1(), v, true));
                         }
 
                         if (on->tieFor()) {

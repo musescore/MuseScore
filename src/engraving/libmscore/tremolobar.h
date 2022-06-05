@@ -60,9 +60,9 @@ public:
     const PitchValues& points() const { return m_points; }
     void setPoints(const PitchValues& p) { m_points = p; }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     qreal userMag() const { return m_userMag; }
     void setUserMag(qreal m) { m_userMag = m; }
@@ -75,7 +75,7 @@ public:
 
 private:
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     TremoloBar(EngravingItem* parent);
 
     TremoloBarType parseTremoloBarTypeFromCurve(const PitchValues& curve) const;

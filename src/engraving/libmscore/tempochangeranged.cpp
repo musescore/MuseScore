@@ -179,7 +179,7 @@ PropertyValue TempoChangeRanged::getProperty(Pid id) const
     }
 }
 
-bool TempoChangeRanged::setProperty(Pid id, const mu::engraving::PropertyValue& val)
+bool TempoChangeRanged::setProperty(Pid id, const PropertyValue& val)
 {
     switch (id) {
     case Pid::TEMPO_CHANGE_TYPE:

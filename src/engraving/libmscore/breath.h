@@ -27,9 +27,7 @@
 
 namespace mu::engraving {
 class Factory;
-}
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   BreathType
 //---------------------------------------------------------
@@ -50,7 +48,7 @@ class Breath final : public EngravingItem
     qreal _pause;
     SymId _symId;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Breath(Segment* parent);
 
     bool sameVoiceKerningLimited() const override { return true; }
@@ -74,9 +72,9 @@ public:
     void read(XmlReader&) override;
     mu::PointF pagePos() const override;        ///< position in page coordinates
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;

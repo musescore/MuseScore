@@ -269,7 +269,7 @@ void StaffName::read(XmlReader& e)
     _name = e.readXml();
     if (_name.startsWith("<html>")) {
         // compatibility to old html implementation:
-        _name = mu::engraving::HtmlParser::parse(_name);
+        _name = HtmlParser::parse(_name);
     }
 }
 

@@ -41,11 +41,11 @@ struct VoiceColorKey {
     Color color;
 };
 
-static VoiceColorKey voiceColorKeys[mu::engraving::VOICES];
+static VoiceColorKey voiceColorKeys[VOICES];
 
 void EngravingConfiguration::init()
 {
-    Color defaultVoiceColors[mu::engraving::VOICES] {
+    Color defaultVoiceColors[VOICES] {
         "#0065BF",
         "#007F00",
         "#C53F00",
@@ -57,7 +57,7 @@ void EngravingConfiguration::init()
         m_scoreInversionChanged.notify();
     });
 
-    for (mu::engraving::voice_idx_t voice = 0; voice < mu::engraving::VOICES; ++voice) {
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
 
         settings()->setDefaultValue(key, Val(defaultVoiceColors[voice].toQColor()));

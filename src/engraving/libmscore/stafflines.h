@@ -39,7 +39,7 @@ class StaffLines final : public EngravingItem
     qreal lw { 0.0 };
     std::vector<mu::LineF> lines;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     StaffLines(Measure* parent);
 
 public:

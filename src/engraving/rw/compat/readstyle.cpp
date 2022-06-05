@@ -50,7 +50,7 @@ static int readStyleDefaultsVersion(MasterScore* score, const ByteArray& scoreDa
     return ReadStyleHook::styleDefaultByMscVersion(score->mscVersion());
 }
 
-ReadStyleHook::ReadStyleHook(mu::engraving::Score* score, const ByteArray& scoreData, const QString& completeBaseName)
+ReadStyleHook::ReadStyleHook(Score* score, const ByteArray& scoreData, const QString& completeBaseName)
     : m_score(score), m_scoreData(scoreData), m_completeBaseName(completeBaseName)
 {
 }
@@ -97,7 +97,7 @@ void ReadStyleHook::setupDefaultStyle()
     m_score->style().setDefaultStyleVersion(defaultsVersion);
 }
 
-void ReadStyleHook::setupDefaultStyle(mu::engraving::Score* score)
+void ReadStyleHook::setupDefaultStyle(Score* score)
 {
     IF_ASSERT_FAILED(!score->isMaster()) {
         return;
@@ -108,18 +108,18 @@ void ReadStyleHook::setupDefaultStyle(mu::engraving::Score* score)
     score->style().setDefaultStyleVersion(defaultsVersion);
 }
 
-void ReadStyleHook::readStyleTag(mu::engraving::XmlReader& e)
+void ReadStyleHook::readStyleTag(XmlReader& e)
 {
     readStyleTag(m_score, e);
 }
 
-void ReadStyleHook::readStyleTag(mu::engraving::Score* score, mu::engraving::XmlReader& e)
+void ReadStyleHook::readStyleTag(Score* score, XmlReader& e)
 {
     ReadChordListHook clhook(score);
     score->style().read(e, &clhook);
 }
 
-bool ReadStyleHook::readStyleProperties(mu::engraving::MStyle* style, mu::engraving::XmlReader& e)
+bool ReadStyleHook::readStyleProperties(MStyle* style, XmlReader& e)
 {
     return style->readProperties(e);
 }

@@ -42,9 +42,9 @@ public:
 
     MMRestRange* clone() const override { return new MMRestRange(*this); }
 
-    mu::engraving::PropertyValue getProperty(Pid id) const override;
-    bool setProperty(Pid id, const mu::engraving::PropertyValue& val) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid id, const PropertyValue& val) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     bool readProperties(XmlReader&) override;
 

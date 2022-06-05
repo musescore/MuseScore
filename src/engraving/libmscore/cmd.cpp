@@ -348,7 +348,7 @@ ElementTypeSet Score::changedTypes() const
         return empty;
     }
 
-    const mu::engraving::UndoMacro* actualMacro = undoStack()->current();
+    const UndoMacro* actualMacro = undoStack()->current();
 
     if (!actualMacro) {
         actualMacro = undoStack()->last();

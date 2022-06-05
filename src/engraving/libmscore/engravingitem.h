@@ -206,7 +206,7 @@ public:
 
 class EngravingItem : public EngravingObject
 {
-    INJECT_STATIC(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(engraving, IEngravingConfiguration, engravingConfiguration)
 
     mutable mu::RectF _bbox;  ///< Bounding box relative to _pos + _offset
     qreal _mag;                     ///< standard magnification (derived value)
@@ -220,7 +220,7 @@ class EngravingItem : public EngravingObject
     ///< valid after call to layout()
     uint _tag;                    ///< tag bitmask
 
-    mu::engraving::AccessibleItem* m_accessible = nullptr;
+    AccessibleItem* m_accessible = nullptr;
     bool m_accessibleEnabled = false;
 
     bool m_colorsInversionEnabled = true;
@@ -235,10 +235,10 @@ protected:
     mu::draw::Color _color;                ///< element color attribute
     bool _skipDraw{ false };
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
     EngravingItem(const EngravingItem&);
-    virtual mu::engraving::AccessibleItem* createAccessible();
+    virtual AccessibleItem* createAccessible();
     virtual KerningType doComputeKerningType(const EngravingItem*) const { return KerningType::KERNING; }
 
 public:
@@ -254,7 +254,7 @@ public:
 
     EngravingItem& operator=(const EngravingItem&) = delete;
     //@ create a copy of the element
-    Q_INVOKABLE virtual mu::engraving::EngravingItem* clone() const = 0;
+    Q_INVOKABLE virtual EngravingItem* clone() const = 0;
     virtual EngravingItem* linkedClone();
 
     void deleteLater();
@@ -557,11 +557,11 @@ public:
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
     bool addToSkyline() const { return !(_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)); }
 
-    mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
     virtual EngravingItem* propertyDelegate(Pid) { return 0; }     // return Spanner for SpannerSegment for some properties
 
@@ -589,7 +589,7 @@ public:
     virtual EngravingItem* nextSegmentElement();    //< Used for navigation
     virtual EngravingItem* prevSegmentElement();    //< next-element and prev-element command
 
-    mu::engraving::AccessibleItem* accessible() const;
+    AccessibleItem* accessible() const;
     virtual QString accessibleInfo() const;           //< used to populate the status bar
     virtual QString screenReaderInfo() const          //< by default returns accessibleInfo, but can be overridden
     {
@@ -647,7 +647,7 @@ enum class EditDataType : signed char {
 
 struct PropertyData {
     Pid id;
-    mu::engraving::PropertyValue data;
+    PropertyValue data;
     PropertyFlags f;
 };
 
@@ -706,7 +706,7 @@ public:
 
 extern bool elementLessThan(const EngravingItem* const, const EngravingItem* const);
 extern void collectElements(void* data, EngravingItem* e);
-}     // namespace Ms
+} // mu::engraving
 
 Q_DECLARE_METATYPE(mu::engraving::ElementType);
 

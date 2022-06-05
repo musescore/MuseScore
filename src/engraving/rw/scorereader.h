@@ -34,14 +34,14 @@ class ScoreReader
 public:
     ScoreReader() = default;
 
-    Err loadMscz(mu::engraving::MasterScore* score, const mu::engraving::MscReader& mscReader, bool ignoreVersionError);
+    Err loadMscz(MasterScore* score, const MscReader& mscReader, bool ignoreVersionError);
 
 private:
 
-    friend class mu::engraving::MasterScore;
+    friend class MasterScore;
 
-    Err read(mu::engraving::MasterScore* score, mu::engraving::XmlReader&, ReadContext& ctx, compat::ReadStyleHook* styleHook = nullptr);
-    Err doRead(mu::engraving::MasterScore* score, mu::engraving::XmlReader& e, ReadContext& ctx);
+    Err read(MasterScore* score, XmlReader&, ReadContext& ctx, compat::ReadStyleHook* styleHook = nullptr);
+    Err doRead(MasterScore* score, XmlReader& e, ReadContext& ctx);
 };
 }
 
