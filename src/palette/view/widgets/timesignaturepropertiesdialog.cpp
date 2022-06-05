@@ -33,7 +33,6 @@
 #include "engraving/libmscore/part.h"
 #include "engraving/libmscore/scorefont.h"
 
-#include "commonscene/exampleview.h"
 #include "ui/view/musicalsymbolcodes.h"
 #include "ui/view/widgetstatestore.h"
 

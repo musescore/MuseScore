@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __EXAMPLEVIEW_H__
-#define __EXAMPLEVIEW_H__
+#ifndef MU_NOTATION_EXAMPLEVIEW_H
+#define MU_NOTATION_EXAMPLEVIEW_H
 
 #include <QTransform>
 #include <QStateMachine>
@@ -41,35 +41,37 @@ class Score;
 class Note;
 class Chord;
 class ActionIcon;
+}
 
-class ExampleView : public QFrame, public MuseScoreView
+namespace mu::notation {
+class ExampleView : public QFrame, public engraving::MuseScoreView
 {
     Q_OBJECT
 
-    INJECT(commonscene, mu::ui::IUiConfiguration, uiConfiguration)
-    INJECT(commonscene, mu::notation::INotationConfiguration, notationConfiguration)
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
+    INJECT(notation, notation::INotationConfiguration, notationConfiguration)
 
 public:
     ExampleView(QWidget* parent = 0);
     ~ExampleView();
     void resetMatrix();
     void layoutChanged() override;
-    void dataChanged(const mu::RectF&) override;
+    void dataChanged(const RectF&) override;
     void updateAll() override;
-    void adjustCanvasPosition(const EngravingItem* el, int staff = -1) override;
-    void setScore(Score*) override;
+    void adjustCanvasPosition(const engraving::EngravingItem* el, int staff = -1) override;
+    void setScore(engraving::Score*) override;
     void removeScore() override;
 
-    void changeEditElement(EngravingItem*) override;
+    void changeEditElement(engraving::EngravingItem*) override;
     void setDropRectangle(const mu::RectF&) override;
-    void cmdAddSlur(Note* firstNote, Note* lastNote);
-    void drawBackground(mu::draw::Painter*, const mu::RectF&) const override;
+    void cmdAddSlur(engraving::Note* firstNote, Note* lastNote);
+    void drawBackground(draw::Painter*, const RectF&) const override;
     void dragExampleView(QMouseEvent* ev);
-    const mu::Rect geometry() const override { return mu::Rect(QFrame::geometry()); }
+    const Rect geometry() const override { return Rect(QFrame::geometry()); }
 
 signals:
     void noteClicked(Note*);
-    void beamPropertyDropped(Chord*, ActionIcon*);
+    void beamPropertyDropped(Chord*, engraving::ActionIcon*);
 
 private:
     void drawElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& el);
@@ -99,10 +101,6 @@ private:
     double m_defaultScaling = 0;
 };
 
-//---------------------------------------------------------
-//   DragTransitionExampleView
-//---------------------------------------------------------
-
 class DragTransitionExampleView : public QEventTransition
 {
     ExampleView* canvas;
@@ -114,5 +112,6 @@ public:
     DragTransitionExampleView(ExampleView* c)
         : QEventTransition(c, QEvent::MouseMove), canvas(c) {}
 };
-} // namespace Ms
-#endif
+}
+
+#endif // MU_NOTATION_EXAMPLEVIEW_H

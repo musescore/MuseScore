@@ -35,14 +35,14 @@
 #include "libmscore/chord.h"
 #include "libmscore/factory.h"
 
-#include "commonscenetypes.h"
+#include "commonscene/commonscenetypes.h"
 
 #include "log.h"
 
 using namespace mu;
+using namespace mu::notation;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 ExampleView::ExampleView(QWidget* parent)
     : QFrame(parent)
 {
@@ -452,5 +452,4 @@ void ExampleView::constraintCanvas(int* dxx)
     }
 
     *dxx = dx;
-}
 }

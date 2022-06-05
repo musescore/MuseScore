@@ -26,8 +26,6 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/commonscenemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commonscenemodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/exampleview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/exampleview.h
     ${CMAKE_CURRENT_LIST_DIR}/commonscenetypes.h
     )
 
