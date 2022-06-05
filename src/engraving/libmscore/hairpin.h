@@ -74,7 +74,7 @@ public:
     void layout() override;
     Shape shape() const override;
 
-    int gripsCount() const override { return 4; }
+    int gripsCount() const override;
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
