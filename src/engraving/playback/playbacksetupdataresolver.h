@@ -27,13 +27,11 @@
 
 namespace mu::engraving {
 class Instrument;
-}
 
-namespace mu::engraving {
 class PlaybackSetupDataResolver
 {
 public:
-    void resolveSetupData(const mu::engraving::Instrument* instrument, mpe::PlaybackSetupData& result) const;
+    void resolveSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const;
     void resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const;
 };
 }

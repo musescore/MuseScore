@@ -64,7 +64,7 @@ public:
     static ClefType fromXml(const AsciiString& tag, ClefType def);
 
     static QString toUserName(DynamicType v);
-    static mu::engraving::SymId symId(DynamicType v);
+    static SymId symId(DynamicType v);
     static DynamicType dynamicType(SymId v);
     static DynamicType dynamicType(const AsciiString& string);
     static QString toXml(DynamicType v);
@@ -111,8 +111,8 @@ public:
     static QString toXml(PlayingTechniqueType v);
     static PlayingTechniqueType fromXml(const AsciiString& tag, PlayingTechniqueType def);
 
-    static QString toXml(TempoTechniqueType v);
-    static TempoTechniqueType fromXml(const AsciiString& tag, TempoTechniqueType def);
+    static QString toXml(TempoChangeType v);
+    static TempoChangeType fromXml(const AsciiString& tag, TempoChangeType def);
 
     static QString toXml(OrnamentStyle v);
     static OrnamentStyle fromXml(const AsciiString& str, OrnamentStyle def);

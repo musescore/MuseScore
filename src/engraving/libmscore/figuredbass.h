@@ -27,9 +27,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
 class Segment;
 
 /*---------------------------------------------------------
@@ -217,9 +214,9 @@ public:
     QString           normalizedText() const;
     QString           displayText() const { return _displayText; }
 
-    mu::engraving::PropertyValue  getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue  propertyDefault(Pid) const override;
+    PropertyValue  getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue  propertyDefault(Pid) const override;
 };
 
 //---------------------------------------------------------
@@ -255,7 +252,7 @@ class FiguredBass final : public TextBase
                                                 // under the same note)
     qreal _printedLineLength;                   // the length of lines actually printed (i.e. continuation lines)
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     FiguredBass(Segment* parent = 0);
     FiguredBass(const FiguredBass&);
 
@@ -314,9 +311,9 @@ public:
     qreal             additionalContLineX(qreal pagePosY) const;  // returns the X coord (in page coord) of cont. line at pagePosY, if any
     FiguredBass* nextFiguredBass() const;                         // returns next *adjacent* f.b. item, if any
 
-    mu::engraving::PropertyValue  getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue  propertyDefault(Pid) const override;
+    PropertyValue  getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue  propertyDefault(Pid) const override;
 
     void appendItem(FiguredBassItem* item) { items.push_back(item); }
 };

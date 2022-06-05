@@ -44,7 +44,7 @@ class RemoveTests : public ::testing::Test
 //---------------------------------------------------------
 
 struct StaffCheckData {
-    mu::engraving::staff_idx_t staffIdx;
+    staff_idx_t staffIdx;
     bool staffHasElements;
 };
 
@@ -62,7 +62,7 @@ static void inStaff(void* staffCheckData, EngravingItem* e)
     }
 }
 
-static bool staffHasElements(Score* score, mu::engraving::staff_idx_t staffIdx)
+static bool staffHasElements(Score* score, staff_idx_t staffIdx)
 {
     for (auto i = score->spannerMap().cbegin(); i != score->spannerMap().cend(); ++i) {
         Spanner* s = i->second;

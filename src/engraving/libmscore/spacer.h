@@ -28,9 +28,7 @@
 
 namespace mu::engraving {
 class Factory;
-}
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   SpacerType
 //---------------------------------------------------------
@@ -51,7 +49,7 @@ class Spacer final : public EngravingItem
 
     mu::PainterPath path;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Spacer(Measure* parent);
     Spacer(const Spacer&);
 
@@ -84,9 +82,9 @@ public:
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 };
 } // namespace mu::engraving
 #endif

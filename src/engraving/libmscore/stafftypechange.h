@@ -38,7 +38,7 @@ class StaffTypeChange final : public EngravingItem
     bool m_ownsStaffType = false;
     qreal lw;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     StaffTypeChange(MeasureBase* parent = 0);
     StaffTypeChange(const StaffTypeChange&);
 
@@ -59,9 +59,9 @@ public:
 
     Measure* measure() const { return toMeasure(explicitParent()); }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 };
 } // namespace mu::engraving
 

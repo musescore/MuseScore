@@ -35,9 +35,9 @@ public:
 
     static QString rootPath();
 
-    static mu::engraving::MasterScore* readScore(const QString& path, bool isAbsolutePath = false);
-    static bool saveScore(mu::engraving::Score* score, const QString& name);
-    static mu::engraving::EngravingItem* writeReadElement(mu::engraving::EngravingItem* element);
+    static MasterScore* readScore(const QString& path, bool isAbsolutePath = false);
+    static bool saveScore(Score* score, const QString& name);
+    static EngravingItem* writeReadElement(EngravingItem* element);
     static bool saveMimeData(ByteArray mimeData, const QString& saveName);
 };
 }

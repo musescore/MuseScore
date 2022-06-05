@@ -27,7 +27,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-void ChordLineMetaParser::doParse(const mu::engraving::EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
+void ChordLineMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item) {
         return;
@@ -37,7 +37,7 @@ void ChordLineMetaParser::doParse(const mu::engraving::EngravingItem* item, cons
         return;
     }
 
-    const mu::engraving::ChordLine* chordLine = mu::engraving::toChordLine(item);
+    const ChordLine* chordLine = toChordLine(item);
 
     ArticulationType type = chordLineArticulationType(chordLine->chordLineType());
 

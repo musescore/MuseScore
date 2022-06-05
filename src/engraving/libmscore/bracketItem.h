@@ -28,9 +28,7 @@
 
 namespace mu::engraving {
 class Factory;
-}
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   BracketItem
 //---------------------------------------------------------
@@ -42,17 +40,17 @@ class BracketItem final : public EngravingItem
     size_t _bracketSpan = 0;
     Staff* _staff = nullptr;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
 
     BracketItem(EngravingItem* parent);
     BracketItem(EngravingItem* parent, BracketType a, int b);
 
 public:
-    mu::engraving::EngravingItem* clone() const override;
+    EngravingItem* clone() const override;
 
-    mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     size_t bracketSpan() const { return _bracketSpan; }
     BracketType bracketType() const { return _bracketType; }

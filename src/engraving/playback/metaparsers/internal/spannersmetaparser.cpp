@@ -32,14 +32,13 @@
 
 using namespace mu::engraving;
 
-void SpannersMetaParser::doParse(const mu::engraving::EngravingItem* item, const RenderingContext& ctx,
-                                 mpe::ArticulationMap& result)
+void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->isSpanner()) {
         return;
     }
 
-    const mu::engraving::Spanner* spanner = mu::engraving::toSpanner(item);
+    const Spanner* spanner = toSpanner(item);
 
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
 
@@ -48,52 +47,52 @@ void SpannersMetaParser::doParse(const mu::engraving::EngravingItem* item, const
     int overallDurationTicks = spanner->ticks().ticks();
 
     switch (spanner->type()) {
-    case mu::engraving::ElementType::SLUR:
+    case ElementType::SLUR:
         type = mpe::ArticulationType::Legato;
         break;
-    case mu::engraving::ElementType::PEDAL:
+    case ElementType::PEDAL:
         type = mpe::ArticulationType::Pedal;
         break;
-    case mu::engraving::ElementType::LET_RING:
+    case ElementType::LET_RING:
         type = mpe::ArticulationType::LaissezVibrer;
         break;
-    case mu::engraving::ElementType::PALM_MUTE: {
+    case ElementType::PALM_MUTE: {
         type = mpe::ArticulationType::Mute;
         break;
     }
-    case mu::engraving::ElementType::TRILL: {
-        const mu::engraving::Trill* trill = mu::engraving::toTrill(spanner);
+    case ElementType::TRILL: {
+        const Trill* trill = toTrill(spanner);
 
         if (!trill->playArticulation()) {
             return;
         }
 
-        if (trill->trillType() == mu::engraving::Trill::Type::TRILL_LINE) {
+        if (trill->trillType() == Trill::Type::TRILL_LINE) {
             type = mpe::ArticulationType::Trill;
-        } else if (trill->trillType() == mu::engraving::Trill::Type::UPPRALL_LINE) {
+        } else if (trill->trillType() == Trill::Type::UPPRALL_LINE) {
             type = mpe::ArticulationType::UpPrall;
-        } else if (trill->trillType() == mu::engraving::Trill::Type::DOWNPRALL_LINE) {
+        } else if (trill->trillType() == Trill::Type::DOWNPRALL_LINE) {
             type = mpe::ArticulationType::PrallDown;
-        } else if (trill->trillType() == mu::engraving::Trill::Type::PRALLPRALL_LINE) {
+        } else if (trill->trillType() == Trill::Type::PRALLPRALL_LINE) {
             type = mpe::ArticulationType::LinePrall;
         }
         overallDurationTicks = ctx.nominalDurationTicks;
         break;
     }
-    case mu::engraving::ElementType::GLISSANDO: {
-        const mu::engraving::Glissando* glissando = mu::engraving::toGlissando(spanner);
+    case ElementType::GLISSANDO: {
+        const Glissando* glissando = toGlissando(spanner);
         if (!glissando->playGlissando()) {
             break;
         }
 
-        mu::engraving::Note* startNote = mu::engraving::toNote(glissando->startElement());
-        mu::engraving::Note* endNote = mu::engraving::toNote(glissando->endElement());
+        Note* startNote = toNote(glissando->startElement());
+        Note* endNote = toNote(glissando->endElement());
 
         if (!startNote || !endNote) {
             break;
         }
 
-        if (glissando->glissandoStyle() == mu::engraving::GlissandoStyle::PORTAMENTO) {
+        if (glissando->glissandoStyle() == GlissandoStyle::PORTAMENTO) {
             type = mpe::ArticulationType::ContinuousGlissando;
         } else {
             type = mpe::ArticulationType::DiscreteGlissando;
@@ -105,9 +104,8 @@ void SpannersMetaParser::doParse(const mu::engraving::EngravingItem* item, const
         mpe::PitchClass startNotePitchClass = pitchClassFromTpc(startNoteTpc);
         mpe::PitchClass endNotePitchClass = pitchClassFromTpc(endNoteTpc);
 
-        mpe::octave_t startNoteOctave
-            = actualOctave(startNote->playingOctave(), startNotePitchClass, mu::engraving::tpc2alter(startNoteTpc));
-        mpe::octave_t endNoteOctave = actualOctave(endNote->playingOctave(), endNotePitchClass, mu::engraving::tpc2alter(endNoteTpc));
+        mpe::octave_t startNoteOctave = actualOctave(startNote->playingOctave(), startNotePitchClass, tpc2alter(startNoteTpc));
+        mpe::octave_t endNoteOctave = actualOctave(endNote->playingOctave(), endNotePitchClass, tpc2alter(endNoteTpc));
 
         overallPitchRange = mpe::pitchLevelDiff(endNotePitchClass, endNoteOctave, startNotePitchClass, startNoteOctave);
 

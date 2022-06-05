@@ -30,9 +30,7 @@
 
 namespace mu::engraving {
 class Factory;
-}
 
-namespace mu::engraving {
 class ChordRest;
 class Segment;
 class Measure;
@@ -95,7 +93,7 @@ class Articulation final : public EngravingItem
     OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
     bool _playArticulation;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Articulation(ChordRest* parent);
 
     void draw(mu::draw::Painter*) const override;
@@ -132,9 +130,9 @@ public:
 
     std::vector<mu::LineF> dragAnchorLines() const override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
     Sid getPropertyStyle(Pid id) const override;
 

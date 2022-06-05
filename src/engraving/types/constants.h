@@ -33,9 +33,4 @@ struct Constants
 };
 }
 
-//! NOTE compat
-namespace mu::engraving {
-using Constant = mu::engraving::Constants;
-}
-
 #endif // MU_ENGRAVING_CONSTANTS_H

@@ -37,9 +37,7 @@
 namespace mu::engraving {
 class Groups;
 class TDuration;
-}
 
-namespace mu::engraving {
 enum class P_TYPE {
     UNDEFINED = 0,
     // Base
@@ -244,8 +242,8 @@ public:
     PropertyValue(PlayingTechniqueType v)
         : m_type(P_TYPE::PLAYTECH_TYPE), m_data(make_data<PlayingTechniqueType>(v)) {}
 
-    PropertyValue(TempoTechniqueType v)
-        : m_type(P_TYPE::TEMPOCHANGE_TYPE), m_data(make_data<TempoTechniqueType>(v)) {}
+    PropertyValue(TempoChangeType v)
+        : m_type(P_TYPE::TEMPOCHANGE_TYPE), m_data(make_data<TempoChangeType>(v)) {}
 
     PropertyValue(SlurStyleType v)
         : m_type(P_TYPE::SLUR_STYLE_TYPE), m_data(make_data<SlurStyleType>(v)) {}

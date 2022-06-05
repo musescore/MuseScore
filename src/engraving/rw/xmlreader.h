@@ -33,9 +33,7 @@
 
 namespace mu::engraving {
 class ReadContext;
-}
 
-namespace mu::engraving {
 class XmlReader : public mu::XmlStreamReader
 {
 public:
@@ -88,8 +86,8 @@ public:
     // for reading old files (< 3.01)
     void setOffsetLines(qint64 val) { _offsetLines = val; }
 
-    mu::engraving::ReadContext* context() const;
-    void setContext(mu::engraving::ReadContext* context);
+    ReadContext* context() const;
+    void setContext(ReadContext* context);
 
 private:
     QString docName;    // used for error reporting
@@ -98,7 +96,7 @@ private:
 
     void htmlToString(int level, QString*);
 
-    mutable mu::engraving::ReadContext* m_context = nullptr;
+    mutable ReadContext* m_context = nullptr;
     mutable bool m_selfContext = false;
 };
 }

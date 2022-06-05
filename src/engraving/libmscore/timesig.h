@@ -70,7 +70,7 @@ class TimeSig final : public EngravingItem
     bool _showCourtesySig;
     bool _largeParentheses;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     TimeSig(Segment* parent = 0);
 
     bool neverKernable() const override { return true; }
@@ -126,9 +126,9 @@ public:
 
     void setFrom(const TimeSig*);
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
     const Groups& groups() const { return _groups; }

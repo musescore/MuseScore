@@ -262,10 +262,4 @@ inline Spatium operator*(qreal a, const Spatium& b)
 }
 }
 
-//! NOTE compat
-namespace mu::engraving {
-using Spatium = mu::engraving::Spatium;
-using Millimetre = mu::engraving::Millimetre;
-}
-
 #endif //MU_ENGRAVING_DIMENSION_H

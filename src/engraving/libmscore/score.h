@@ -392,9 +392,9 @@ public:
 
 private:
 
-    friend class mu::engraving::compat::Read302;
-    friend class mu::engraving::Read400;
-    friend class mu::engraving::Layout;
+    friend class compat::Read302;
+    friend class Read400;
+    friend class Layout;
 
     static std::set<Score*> validScores;
     int _linkId { 0 };
@@ -461,9 +461,9 @@ private:
 
     qreal _noteHeadWidth { 0.0 };         // cached value
 
-    mu::engraving::RootItem* m_rootItem = nullptr;
-    mu::engraving::Layout m_layout;
-    mu::engraving::LayoutOptions m_layoutOptions;
+    RootItem* m_rootItem = nullptr;
+    Layout m_layout;
+    LayoutOptions m_layoutOptions;
 
     mu::async::Channel<EngravingItem*> m_elementDestroyed;
 
@@ -559,8 +559,8 @@ public:
 
     void dumpScoreTree();  // for debugging purposes
 
-    mu::engraving::RootItem* rootItem() const { return m_rootItem; }
-    mu::engraving::compat::DummyElement* dummy() const { return m_rootItem->dummy(); }
+    RootItem* rootItem() const { return m_rootItem; }
+    compat::DummyElement* dummy() const { return m_rootItem->dummy(); }
 
     ShadowNote& shadowNote() const;
 
@@ -600,7 +600,7 @@ public:
     void cmdToggleTie();
     static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
     void cmdAddOttava(OttavaType);
-    std::vector<mu::engraving::Hairpin*> addHairpins(HairpinType);
+    std::vector<Hairpin*> addHairpins(HairpinType);
     void addNoteLine();
     void padToggle(Pad p, const EditData& ed);
     void cmdAddPitch(const EditData&, int note, bool addFlag, bool insert);
@@ -646,10 +646,9 @@ public:
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
-    void write(XmlWriter&, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
-    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
-    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook,
-                    mu::engraving::WriteContext& ctx);
+    void write(XmlWriter&, bool onlySelection, compat::WriteScoreHook& hook);
+    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook);
+    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, WriteContext& ctx);
 
     bool read400(XmlReader& e);
     bool readScore400(XmlReader& e);
@@ -691,8 +690,8 @@ public:
     void undoChangeUserMirror(Note*, DirectionH);
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
     void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType st, bool forInstrumentChange = false);
-    bool undoPropertyChanged(EngravingItem* e, Pid t, const mu::engraving::PropertyValue& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
-    void undoPropertyChanged(EngravingObject*, Pid, const mu::engraving::PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
+    bool undoPropertyChanged(EngravingItem* e, Pid t, const PropertyValue& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
+    void undoPropertyChanged(EngravingObject*, Pid, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
     virtual UndoStack* undoStack() const;
     void undo(UndoCommand*, EditData* = 0) const;
     void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false);
@@ -700,11 +699,10 @@ public:
     void undoAddBracket(Staff* staff, int level, BracketType type, size_t span);
     void undoRemoveBracket(Bracket*);
     void undoInsertTime(const Fraction& tick, const Fraction& len);
-    void undoChangeStyleVal(Sid idx, const mu::engraving::PropertyValue& v);
+    void undoChangeStyleVal(Sid idx, const PropertyValue& v);
     void undoChangePageNumberOffset(int po);
 
-    void updateInstrumentChangeTranspositions(mu::engraving::KeySigEvent& key, mu::engraving::Staff* staff,
-                                              const mu::engraving::Fraction& tick);
+    void updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff, const Fraction& tick);
 
     Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
@@ -739,7 +737,7 @@ public:
     bool toggleArticulation(EngravingItem*, Articulation* atr);
     void toggleAccidental(AccidentalType, const EditData& ed);
     void changeAccidental(AccidentalType);
-    void changeAccidental(Note* oNote, mu::engraving::AccidentalType);
+    void changeAccidental(Note* oNote, AccidentalType);
 
     void addElement(EngravingItem*);
     void removeElement(EngravingItem*);
@@ -870,7 +868,7 @@ public:
     MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
     EngravingItem* getScoreElementOfMeasureBase(MeasureBase*) const;
 
-    int fileDivision(int t) const { return static_cast<int>(((qint64)t * Constant::division + _fileDivision / 2) / _fileDivision); }
+    int fileDivision(int t) const { return static_cast<int>(((qint64)t * Constants::division + _fileDivision / 2) / _fileDivision); }
     void setFileDivision(int t) { _fileDivision = t; }
 
     bool dirty() const;
@@ -905,7 +903,7 @@ public:
     bool loadStyle(const QString&, bool ign = false, const bool overlap = false);
     bool saveStyle(const QString&);
 
-    const mu::engraving::PropertyValue& styleV(Sid idx) const { return style().styleV(idx); }
+    const PropertyValue& styleV(Sid idx) const { return style().styleV(idx); }
     Spatium  styleS(Sid idx) const { return style().styleS(idx); }
     Millimetre styleMM(Sid idx) const { return style().styleMM(idx); }
     QString styleSt(Sid idx) const { return style().styleSt(idx); }
@@ -913,7 +911,7 @@ public:
     qreal styleD(Sid idx) const { return style().styleD(idx); }
     int styleI(Sid idx) const { return style().styleI(idx); }
 
-    void setStyleValue(Sid sid, const mu::engraving::PropertyValue& value) { style().set(sid, value); }
+    void setStyleValue(Sid sid, const PropertyValue& value) { style().set(sid, value); }
     QString getTextStyleUserName(TextStyleType tid);
     qreal spatium() const { return styleD(Sid::spatium); }
     void setSpatium(qreal v) { setStyleValue(Sid::spatium, v); }
@@ -1029,10 +1027,10 @@ public:
     MeasureBase* first() const;
     MeasureBase* firstMM() const;
     MeasureBase* last()  const;
-    mu::engraving::Measure* firstMeasure() const;
-    mu::engraving::Measure* firstMeasureMM() const;
-    mu::engraving::Measure* lastMeasure() const;
-    mu::engraving::Measure* lastMeasureMM() const;
+    Measure* firstMeasure() const;
+    Measure* firstMeasureMM() const;
+    Measure* lastMeasure() const;
+    Measure* lastMeasureMM() const;
     MeasureBase* measure(int idx) const;
     Measure* crMeasure(int idx) const;
 
@@ -1111,18 +1109,18 @@ public:
     const std::list<MuseScoreView*>& getViewer() const { return viewer; }
 
     //! NOTE Layout
-    const mu::engraving::LayoutOptions& layoutOptions() const { return m_layoutOptions; }
-    void setLayoutMode(mu::engraving::LayoutMode lm) { m_layoutOptions.mode = lm; }
+    const LayoutOptions& layoutOptions() const { return m_layoutOptions; }
+    void setLayoutMode(LayoutMode lm) { m_layoutOptions.mode = lm; }
     void setShowVBox(bool v) { m_layoutOptions.showVBox = v; }
 
     // temporary methods
-    bool isLayoutMode(mu::engraving::LayoutMode lm) const { return m_layoutOptions.isMode(lm); }
-    mu::engraving::LayoutMode layoutMode() const { return m_layoutOptions.mode; }
-    bool floatMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::FLOAT); }
-    bool pageMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::PAGE); }
-    bool lineMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::LINE); }
-    bool systemMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::SYSTEM); }
-    bool horizontalFixedMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::HORIZONTAL_FIXED); }
+    bool isLayoutMode(LayoutMode lm) const { return m_layoutOptions.isMode(lm); }
+    LayoutMode layoutMode() const { return m_layoutOptions.mode; }
+    bool floatMode() const { return m_layoutOptions.isMode(LayoutMode::FLOAT); }
+    bool pageMode() const { return m_layoutOptions.isMode(LayoutMode::PAGE); }
+    bool lineMode() const { return m_layoutOptions.isMode(LayoutMode::LINE); }
+    bool systemMode() const { return m_layoutOptions.isMode(LayoutMode::SYSTEM); }
+    bool horizontalFixedMode() const { return m_layoutOptions.isMode(LayoutMode::HORIZONTAL_FIXED); }
     bool linearMode() const { return lineMode() || horizontalFixedMode(); }
     // ----
 
@@ -1140,8 +1138,8 @@ public:
         bool addToAllScores = true;
     };
 
-    mu::engraving::MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
-                                              const InsertMeasureOptions& options = InsertMeasureOptions());
+    MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
+                               const InsertMeasureOptions& options = InsertMeasureOptions());
 
     Audio* audio() const { return _audio; }
     void setAudio(Audio* a) { _audio = a; }
@@ -1229,9 +1227,9 @@ public:
 
     void switchToPageMode();
 
-    mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     virtual QQueue<MidiInputEvent>* midiInputQueue();
     virtual std::list<MidiInputEvent>& activeMidiPitches();

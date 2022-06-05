@@ -65,7 +65,7 @@ TEST_F(SpannersTests, spanners01)
     EXPECT_TRUE(msr);
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
     EXPECT_TRUE(seg);
-    mu::engraving::Chord* chord = static_cast<mu::engraving::Chord*>(seg->element(0));
+    Chord* chord = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     Note* note  = chord->upNote();
@@ -82,7 +82,7 @@ TEST_F(SpannersTests, spanners01)
     EXPECT_TRUE(msr);
     seg   = msr->first();
     EXPECT_TRUE(seg);
-    chord = static_cast<mu::engraving::Chord*>(seg->element(0));     // voice 0 of staff 0
+    chord = static_cast<Chord*>(seg->element(0));     // voice 0 of staff 0
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     note  = chord->upNote();
@@ -99,7 +99,7 @@ TEST_F(SpannersTests, spanners01)
     EXPECT_TRUE(msr);
     seg   = msr->first();
     EXPECT_TRUE(seg);
-    chord = static_cast<mu::engraving::Chord*>(seg->element(4));     // voice 0 of staff 1
+    chord = static_cast<Chord*>(seg->element(4));     // voice 0 of staff 1
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     note  = chord->upNote();
@@ -116,7 +116,7 @@ TEST_F(SpannersTests, spanners01)
     EXPECT_TRUE(msr);
     seg   = msr->first();
     EXPECT_TRUE(seg);
-    chord = static_cast<mu::engraving::Chord*>(seg->element(0));     // voice 0 of staff 0
+    chord = static_cast<Chord*>(seg->element(0));     // voice 0 of staff 0
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     note  = chord->upNote();
@@ -133,7 +133,7 @@ TEST_F(SpannersTests, spanners01)
     EXPECT_TRUE(msr);
     seg   = msr->first();
     EXPECT_TRUE(seg);
-    chord = static_cast<mu::engraving::Chord*>(seg->element(0));     // voice 0 of staff 0
+    chord = static_cast<Chord*>(seg->element(0));     // voice 0 of staff 0
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     note  = chord->upNote();
@@ -181,7 +181,7 @@ TEST_F(SpannersTests, spanners03)
     EXPECT_TRUE(msr);
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
     EXPECT_TRUE(seg);
-    mu::engraving::Chord* chord = static_cast<mu::engraving::Chord*>(seg->element(0));
+    Chord* chord = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     Note* note  = chord->upNote();
@@ -194,7 +194,7 @@ TEST_F(SpannersTests, spanners03)
 
     // GLISSANDO FROM AFTER-GRACE TO BEFORE-GRACE OF NEXT CHORD
     // go to last after-grace of chord and drop a glissando on it
-    mu::engraving::Chord* grace = chord->graceNotesAfter().back();
+    Chord* grace = chord->graceNotesAfter().back();
     EXPECT_TRUE(grace);
     EXPECT_EQ(grace->type(), ElementType::CHORD);
     note              = grace->upNote();
@@ -208,7 +208,7 @@ TEST_F(SpannersTests, spanners03)
     // go to next chord
     seg               = seg->nextCR(0);
     EXPECT_TRUE(seg);
-    chord             = static_cast<mu::engraving::Chord*>(seg->element(0));
+    chord             = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     note              = chord->upNote();
@@ -222,7 +222,7 @@ TEST_F(SpannersTests, spanners03)
     // go to next chord
     seg               = seg->nextCR(0);
     EXPECT_TRUE(seg);
-    chord             = static_cast<mu::engraving::Chord*>(seg->element(0));
+    chord             = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord && chord->type() == ElementType::CHORD);
     // go to its last before-grace note
     grace             = chord->graceNotesBefore().back();
@@ -312,7 +312,7 @@ TEST_F(SpannersTests, spanners06)
     EXPECT_TRUE(msr);
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
     EXPECT_TRUE(seg);
-    mu::engraving::Chord* chord = static_cast<mu::engraving::Chord*>(seg->element(0));
+    Chord* chord = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord && chord->type() == ElementType::CHORD);
     Note* note  = chord->upNote();
     EXPECT_TRUE(note);
@@ -344,7 +344,7 @@ TEST_F(SpannersTests, spanners07)
     EXPECT_TRUE(msr);
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
     EXPECT_TRUE(seg);
-    mu::engraving::Chord* chord = static_cast<mu::engraving::Chord*>(seg->element(0));
+    Chord* chord = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord && chord->type() == ElementType::CHORD);
     Note* note  = chord->upNote();
     EXPECT_TRUE(note);

@@ -41,231 +41,218 @@ class Factory
 {
 public:
 
-    static mu::engraving::ElementType name2type(const AsciiString& name, bool silent = false);
-    static const char* name(mu::engraving::ElementType type);
-    static const char* userName(mu::engraving::ElementType type);
+    static ElementType name2type(const AsciiString& name, bool silent = false);
+    static const char* name(ElementType type);
+    static const char* userName(ElementType type);
 
-    static mu::engraving::EngravingItem* createItem(mu::engraving::ElementType type, mu::engraving::EngravingItem* parent,
-                                                    bool isAccessibleEnabled = true);
-    static mu::engraving::EngravingItem* createItemByName(const AsciiString& name, mu::engraving::EngravingItem* parent,
-                                                          bool isAccessibleEnabled = true);
+    static EngravingItem* createItem(ElementType type, EngravingItem* parent, bool isAccessibleEnabled = true);
+    static EngravingItem* createItemByName(const AsciiString& name, EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Accidental* createAccidental(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Accidental> makeAccidental(mu::engraving::EngravingItem* parent);
+    static Accidental* createAccidental(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Accidental> makeAccidental(EngravingItem* parent);
 
-    static mu::engraving::Ambitus* createAmbitus(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Ambitus> makeAmbitus(mu::engraving::Segment* parent);
+    static Ambitus* createAmbitus(Segment* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Ambitus> makeAmbitus(Segment* parent);
 
-    static mu::engraving::Arpeggio* createArpeggio(mu::engraving::Chord* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Arpeggio> makeArpeggio(mu::engraving::Chord* parent);
+    static Arpeggio* createArpeggio(Chord* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Arpeggio> makeArpeggio(Chord* parent);
 
-    static mu::engraving::Articulation* createArticulation(mu::engraving::ChordRest* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Articulation> makeArticulation(mu::engraving::ChordRest* parent);
+    static Articulation* createArticulation(ChordRest* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Articulation> makeArticulation(ChordRest* parent);
 
-    static mu::engraving::BarLine* createBarLine(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::BarLine* copyBarLine(const mu::engraving::BarLine& src);
-    static std::shared_ptr<mu::engraving::BarLine> makeBarLine(mu::engraving::Segment* parent);
+    static BarLine* createBarLine(Segment* parent, bool isAccessibleEnabled = true);
+    static BarLine* copyBarLine(const BarLine& src);
+    static std::shared_ptr<BarLine> makeBarLine(Segment* parent);
 
-    static mu::engraving::Beam* createBeam(mu::engraving::System* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Beam> makeBeam(mu::engraving::System* parent);
+    static Beam* createBeam(System* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Beam> makeBeam(System* parent);
 
-    static mu::engraving::Bend* createBend(mu::engraving::Note* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Bend> makeBend(mu::engraving::Note* parent);
+    static Bend* createBend(Note* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Bend> makeBend(Note* parent);
 
-    static mu::engraving::Bracket* createBracket(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Bracket> makeBracket(mu::engraving::EngravingItem* parent);
-    static mu::engraving::BracketItem* createBracketItem(mu::engraving::EngravingItem* parent);
-    static mu::engraving::BracketItem* createBracketItem(mu::engraving::EngravingItem* parent, mu::engraving::BracketType a, int b);
+    static Bracket* createBracket(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Bracket> makeBracket(EngravingItem* parent);
+    static BracketItem* createBracketItem(EngravingItem* parent);
+    static BracketItem* createBracketItem(EngravingItem* parent, BracketType a, int b);
 
-    static mu::engraving::Breath* createBreath(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Breath> makeBreath(mu::engraving::Segment* parent);
+    static Breath* createBreath(Segment* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Breath> makeBreath(Segment* parent);
 
-    static mu::engraving::Chord* createChord(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Chord* copyChord(const mu::engraving::Chord& src, bool link = false);
-    static std::shared_ptr<mu::engraving::Chord> makeChord(mu::engraving::Segment* parent);
+    static Chord* createChord(Segment* parent, bool isAccessibleEnabled = true);
+    static Chord* copyChord(const Chord& src, bool link = false);
+    static std::shared_ptr<Chord> makeChord(Segment* parent);
 
-    static mu::engraving::ChordLine* createChordLine(mu::engraving::Chord* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::ChordLine* copyChordLine(const mu::engraving::ChordLine& src);
-    static std::shared_ptr<mu::engraving::ChordLine> makeChordLine(mu::engraving::Chord* parent);
+    static ChordLine* createChordLine(Chord* parent, bool isAccessibleEnabled = true);
+    static ChordLine* copyChordLine(const ChordLine& src);
+    static std::shared_ptr<ChordLine> makeChordLine(Chord* parent);
 
-    static mu::engraving::Slide* createSlide(mu::engraving::Chord* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Slide* copySlide(const mu::engraving::Slide& src);
-    static std::shared_ptr<mu::engraving::Slide> makeSlide(mu::engraving::Chord* parent);
+    static Slide* createSlide(Chord* parent, bool isAccessibleEnabled = true);
+    static Slide* copySlide(const Slide& src);
+    static std::shared_ptr<Slide> makeSlide(Chord* parent);
 
-    static mu::engraving::Clef* createClef(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Clef* copyClef(const mu::engraving::Clef& src);
-    static std::shared_ptr<mu::engraving::Clef> makeClef(mu::engraving::Segment* parent);
+    static Clef* createClef(Segment* parent, bool isAccessibleEnabled = true);
+    static Clef* copyClef(const Clef& src);
+    static std::shared_ptr<Clef> makeClef(Segment* parent);
 
-    static mu::engraving::Fermata* createFermata(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Fermata> makeFermata(mu::engraving::EngravingItem* parent);
+    static Fermata* createFermata(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Fermata> makeFermata(EngravingItem* parent);
 
-    static mu::engraving::FiguredBass* createFiguredBass(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::FiguredBass> makeFiguredBass(mu::engraving::Segment* parent);
+    static FiguredBass* createFiguredBass(Segment* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<FiguredBass> makeFiguredBass(Segment* parent);
 
-    static mu::engraving::FretDiagram* createFretDiagram(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::FretDiagram* copyFretDiagram(const mu::engraving::FretDiagram& src);
-    static std::shared_ptr<mu::engraving::FretDiagram> makeFretDiagram(mu::engraving::Segment* parent);
+    static FretDiagram* createFretDiagram(Segment* parent, bool isAccessibleEnabled = true);
+    static FretDiagram* copyFretDiagram(const FretDiagram& src);
+    static std::shared_ptr<FretDiagram> makeFretDiagram(Segment* parent);
 
-    static mu::engraving::KeySig* createKeySig(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::KeySig* copyKeySig(const mu::engraving::KeySig& src);
-    static std::shared_ptr<mu::engraving::KeySig> makeKeySig(mu::engraving::Segment* parent);
+    static KeySig* createKeySig(Segment* parent, bool isAccessibleEnabled = true);
+    static KeySig* copyKeySig(const KeySig& src);
+    static std::shared_ptr<KeySig> makeKeySig(Segment* parent);
 
-    static mu::engraving::LayoutBreak* createLayoutBreak(mu::engraving::MeasureBase* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::LayoutBreak* copyLayoutBreak(const mu::engraving::LayoutBreak& src);
-    static std::shared_ptr<mu::engraving::LayoutBreak> makeLayoutBreak(mu::engraving::MeasureBase* parent);
+    static LayoutBreak* createLayoutBreak(MeasureBase* parent, bool isAccessibleEnabled = true);
+    static LayoutBreak* copyLayoutBreak(const LayoutBreak& src);
+    static std::shared_ptr<LayoutBreak> makeLayoutBreak(MeasureBase* parent);
 
-    static mu::engraving::Lyrics* createLyrics(mu::engraving::ChordRest* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Lyrics* copyLyrics(const mu::engraving::Lyrics& src);
+    static Lyrics* createLyrics(ChordRest* parent, bool isAccessibleEnabled = true);
+    static Lyrics* copyLyrics(const Lyrics& src);
 
-    static mu::engraving::Measure* createMeasure(mu::engraving::System* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Measure* copyMeasure(const mu::engraving::Measure& src);
+    static Measure* createMeasure(System* parent, bool isAccessibleEnabled = true);
+    static Measure* copyMeasure(const Measure& src);
 
-    static mu::engraving::MeasureRepeat* createMeasureRepeat(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::MeasureRepeat* copyMeasureRepeat(const mu::engraving::MeasureRepeat& src);
+    static MeasureRepeat* createMeasureRepeat(Segment* parent, bool isAccessibleEnabled = true);
+    static MeasureRepeat* copyMeasureRepeat(const MeasureRepeat& src);
 
-    static mu::engraving::Note* createNote(mu::engraving::Chord* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Note* copyNote(const mu::engraving::Note& src, bool link = false);
-    static std::shared_ptr<mu::engraving::Note> makeNote(mu::engraving::Chord* parent);
+    static Note* createNote(Chord* parent, bool isAccessibleEnabled = true);
+    static Note* copyNote(const Note& src, bool link = false);
+    static std::shared_ptr<Note> makeNote(Chord* parent);
 
-    static mu::engraving::NoteDot* createNoteDot(mu::engraving::Note* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::NoteDot* createNoteDot(mu::engraving::Rest* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::NoteDot* copyNoteDot(const mu::engraving::NoteDot& src);
+    static NoteDot* createNoteDot(Note* parent, bool isAccessibleEnabled = true);
+    static NoteDot* createNoteDot(Rest* parent, bool isAccessibleEnabled = true);
+    static NoteDot* copyNoteDot(const NoteDot& src);
 
-    static mu::engraving::Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
+    static Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Rest* createRest(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Rest* createRest(mu::engraving::Segment* parent, const mu::engraving::TDuration& t,
-                                           bool isAccessibleEnabled = true);
-    static mu::engraving::Rest* copyRest(const mu::engraving::Rest& src, bool link = false);
-    static mu::engraving::MMRest* createMMRest(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Rest* createRest(Segment* parent, bool isAccessibleEnabled = true);
+    static Rest* createRest(Segment* parent, const TDuration& t, bool isAccessibleEnabled = true);
+    static Rest* copyRest(const Rest& src, bool link = false);
+    static MMRest* createMMRest(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Segment* createSegment(mu::engraving::Measure* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Segment* createSegment(mu::engraving::Measure* parent, mu::engraving::SegmentType type,
-                                                 const mu::engraving::Fraction& t, bool isAccessibleEnabled = true);
+    static Segment* createSegment(Measure* parent, bool isAccessibleEnabled = true);
+    static Segment* createSegment(Measure* parent, SegmentType type, const Fraction& t, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Slur* createSlur(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Slur> makeSlur(mu::engraving::EngravingItem* parent);
+    static Slur* createSlur(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Slur> makeSlur(EngravingItem* parent);
 
-    static mu::engraving::Spacer* createSpacer(mu::engraving::Measure* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Spacer> makeSpacer(mu::engraving::Measure* parent);
+    static Spacer* createSpacer(Measure* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Spacer> makeSpacer(Measure* parent);
 
-    static mu::engraving::Staff* createStaff(mu::engraving::Part* parent);
+    static Staff* createStaff(Part* parent);
 
-    static mu::engraving::StaffLines* createStaffLines(mu::engraving::Measure* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::StaffLines* copyStaffLines(const mu::engraving::StaffLines& src);
+    static StaffLines* createStaffLines(Measure* parent, bool isAccessibleEnabled = true);
+    static StaffLines* copyStaffLines(const StaffLines& src);
 
-    static mu::engraving::StaffState* createStaffState(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static StaffState* createStaffState(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::StaffTypeChange* createStaffTypeChange(mu::engraving::MeasureBase* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::StaffTypeChange> makeStaffTypeChange(mu::engraving::MeasureBase* parent);
+    static StaffTypeChange* createStaffTypeChange(MeasureBase* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<StaffTypeChange> makeStaffTypeChange(MeasureBase* parent);
 
-    static mu::engraving::StaffText* createStaffText(mu::engraving::Segment* parent,
-                                                     mu::engraving::TextStyleType textStyleType = TextStyleType::STAFF,
-                                                     bool isAccessibleEnabled = true);
+    static StaffText* createStaffText(Segment* parent, TextStyleType textStyleType = TextStyleType::STAFF, bool isAccessibleEnabled = true);
 
-    static mu::engraving::RehearsalMark* createRehearsalMark(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
+    static RehearsalMark* createRehearsalMark(Segment* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Stem* createStem(mu::engraving::Chord* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Stem* copyStem(const mu::engraving::Stem& src);
+    static Stem* createStem(Chord* parent, bool isAccessibleEnabled = true);
+    static Stem* copyStem(const Stem& src);
 
-    static mu::engraving::StemSlash* createStemSlash(mu::engraving::Chord* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::StemSlash* copyStemSlash(const mu::engraving::StemSlash& src);
+    static StemSlash* createStemSlash(Chord* parent, bool isAccessibleEnabled = true);
+    static StemSlash* copyStemSlash(const StemSlash& src);
 
-    static mu::engraving::System* createSystem(mu::engraving::Page* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::SystemText* createSystemText(mu::engraving::Segment* parent,
-                                                       mu::engraving::TextStyleType textStyleType = mu::engraving::TextStyleType::SYSTEM,
-                                                       bool isAccessibleEnabled = true);
+    static System* createSystem(Page* parent, bool isAccessibleEnabled = true);
+    static SystemText* createSystemText(Segment* parent, TextStyleType textStyleType = TextStyleType::SYSTEM,
+                                        bool isAccessibleEnabled = true);
 
-    static mu::engraving::InstrumentChange* createInstrumentChange(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::InstrumentChange* createInstrumentChange(mu::engraving::Segment* parent,
-                                                                   const mu::engraving::Instrument& instrument,
-                                                                   bool isAccessibleEnabled = true);
+    static InstrumentChange* createInstrumentChange(Segment* parent, bool isAccessibleEnabled = true);
+    static InstrumentChange* createInstrumentChange(Segment* parent, const Instrument& instrument, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Sticking* createSticking(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
+    static Sticking* createSticking(Segment* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Fingering* createFingering(mu::engraving::Note* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Fingering* createFingering(mu::engraving::Note* parent, mu::engraving::TextStyleType textStyleType,
-                                                     bool isAccessibleEnabled = true);
+    static Fingering* createFingering(Note* parent, bool isAccessibleEnabled = true);
+    static Fingering* createFingering(Note* parent, TextStyleType textStyleType, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Harmony* createHarmony(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
+    static Harmony* createHarmony(Segment* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::TempoText* createTempoText(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
+    static TempoText* createTempoText(Segment* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Text* createText(mu::engraving::EngravingItem* parent,
-                                           mu::engraving::TextStyleType tid = mu::engraving::TextStyleType::DEFAULT,
-                                           bool isAccessibleEnabled = true);
-    static mu::engraving::Text* copyText(const mu::engraving::Text& src);
+    static Text* createText(EngravingItem* parent, TextStyleType tid = TextStyleType::DEFAULT, bool isAccessibleEnabled = true);
+    static Text* copyText(const Text& src);
 
-    static mu::engraving::Tie* createTie(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Tie* copyTie(const mu::engraving::Tie& src);
+    static Tie* createTie(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Tie* copyTie(const Tie& src);
 
-    static mu::engraving::TimeSig* createTimeSig(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::TimeSig* copyTimeSig(const mu::engraving::TimeSig& src);
-    static std::shared_ptr<mu::engraving::TimeSig> makeTimeSig(mu::engraving::Segment* parent);
+    static TimeSig* createTimeSig(Segment* parent, bool isAccessibleEnabled = true);
+    static TimeSig* copyTimeSig(const TimeSig& src);
+    static std::shared_ptr<TimeSig> makeTimeSig(Segment* parent);
 
-    static mu::engraving::Tremolo* createTremolo(mu::engraving::Chord* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Tremolo* copyTremolo(const mu::engraving::Tremolo& src);
-    static std::shared_ptr<mu::engraving::Tremolo> makeTremolo(mu::engraving::Chord* parent);
+    static Tremolo* createTremolo(Chord* parent, bool isAccessibleEnabled = true);
+    static Tremolo* copyTremolo(const Tremolo& src);
+    static std::shared_ptr<Tremolo> makeTremolo(Chord* parent);
 
-    static mu::engraving::TremoloBar* createTremoloBar(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::TremoloBar> makeTremoloBar(mu::engraving::EngravingItem* parent);
+    static TremoloBar* createTremoloBar(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<TremoloBar> makeTremoloBar(EngravingItem* parent);
 
-    static mu::engraving::Tuplet* createTuplet(mu::engraving::Measure* parent, bool isAccessibleEnabled = true);
-    static mu::engraving::Tuplet* copyTuplet(const mu::engraving::Tuplet& src);
+    static Tuplet* createTuplet(Measure* parent, bool isAccessibleEnabled = true);
+    static Tuplet* copyTuplet(const Tuplet& src);
 
-    static mu::engraving::Hairpin* createHairpin(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Hairpin> makeHairpin(mu::engraving::Segment* parent);
+    static Hairpin* createHairpin(Segment* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Hairpin> makeHairpin(Segment* parent);
 
-    static mu::engraving::Glissando* createGlissando(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<mu::engraving::Glissando> makeGlissando(mu::engraving::EngravingItem* parent);
+    static Glissando* createGlissando(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Glissando> makeGlissando(EngravingItem* parent);
 
-    static mu::engraving::Jump* createJump(mu::engraving::Measure* parent, bool isAccessibleEnabled = true);
+    static Jump* createJump(Measure* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Trill* createTrill(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Trill* createTrill(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Vibrato* createVibrato(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Vibrato* createVibrato(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::TextLine* createTextLine(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static TextLine* createTextLine(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Ottava* createOttava(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Ottava* createOttava(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::LetRing* createLetRing(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static LetRing* createLetRing(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Marker* createMarker(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Marker* createMarker(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Marker* createMarker(mu::engraving::EngravingItem* parent, TextStyleType tid, bool isAccessibleEnabled = true);
+    static Marker* createMarker(EngravingItem* parent, TextStyleType tid, bool isAccessibleEnabled = true);
 
-    static mu::engraving::TempoChangeRanged* createTempoChangeRanged(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static TempoChangeRanged* createTempoChangeRanged(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::PalmMute* createPalmMute(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static PalmMute* createPalmMute(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::WhammyBar* createWhammyBar(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static WhammyBar* createWhammyBar(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Rasgueado* createRasgueado(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Rasgueado* createRasgueado(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::HarmonicMark* createHarmonicMark(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static HarmonicMark* createHarmonicMark(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Volta* createVolta(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Volta* createVolta(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Pedal* createPedal(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Pedal* createPedal(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Dynamic* createDynamic(mu::engraving::Segment* parent, bool isAccessibleEnabled = true);
+    static Dynamic* createDynamic(Segment* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::Harmony* createHarmony(mu::engraving::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Harmony* createHarmony(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::VBox* createVBox(mu::engraving::System* parent, bool isAccessibleEnabled = true);
+    static VBox* createVBox(System* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::VBox* createVBox(const mu::engraving::ElementType& type, mu::engraving::System* parent,
-                                           bool isAccessibleEnabled = true);
+    static VBox* createVBox(const ElementType& type, System* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::HBox* createHBox(mu::engraving::System* parent, bool isAccessibleEnabled = true);
+    static HBox* createHBox(System* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::TBox* createTBox(mu::engraving::System* parent, bool isAccessibleEnabled = true);
+    static TBox* createTBox(System* parent, bool isAccessibleEnabled = true);
 
-    static mu::engraving::FBox* createFBox(mu::engraving::System* parent, bool isAccessibleEnabled = true);
+    static FBox* createFBox(System* parent, bool isAccessibleEnabled = true);
 
 private:
-    static mu::engraving::EngravingItem* doCreateItem(mu::engraving::ElementType type, mu::engraving::EngravingItem* parent);
+    static EngravingItem* doCreateItem(ElementType type, EngravingItem* parent);
 };
 }
 

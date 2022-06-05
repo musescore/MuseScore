@@ -821,12 +821,12 @@ class ChangeStyleVal : public UndoCommand
 {
     Score* score;
     Sid idx;
-    mu::engraving::PropertyValue value;
+    PropertyValue value;
 
     void flip(EditData*) override;
 
 public:
-    ChangeStyleVal(Score* s, Sid i, const mu::engraving::PropertyValue& v)
+    ChangeStyleVal(Score* s, Sid i, const PropertyValue& v)
         : score(s), idx(i), value(v) {}
     UNDO_NAME("ChangeStyleVal")
     UNDO_CHANGED_OBJECTS({ score });
@@ -1085,14 +1085,14 @@ public:
 
 class ChangeNoteEventList : public UndoCommand
 {
-    mu::engraving::Note* note;
+    Note* note;
     NoteEventList newEvents;
     PlayEventType newPetype;
 
     void flip(EditData*) override;
 
 public:
-    ChangeNoteEventList(mu::engraving::Note* n, NoteEventList& ne)
+    ChangeNoteEventList(Note* n, NoteEventList& ne)
         : note(n), newEvents(ne), newPetype(PlayEventType::User) {}
     UNDO_NAME("ChangeNoteEventList")
     UNDO_CHANGED_OBJECTS({ note });
@@ -1104,14 +1104,14 @@ public:
 
 class ChangeChordPlayEventType : public UndoCommand
 {
-    mu::engraving::Chord* chord;
-    mu::engraving::PlayEventType petype;
+    Chord* chord;
+    PlayEventType petype;
     std::vector<NoteEventList> events;
 
     void flip(EditData*) override;
 
 public:
-    ChangeChordPlayEventType(Chord* c, mu::engraving::PlayEventType pet)
+    ChangeChordPlayEventType(Chord* c, PlayEventType pet)
         : chord(c), petype(pet)
     {
         events = c->getNoteEventLists();
@@ -1140,7 +1140,7 @@ public:
     UNDO_CHANGED_OBJECTS({ is });
 };
 
-extern void updateNoteLines(Segment*, mu::engraving::track_idx_t track);
+extern void updateNoteLines(Segment*, track_idx_t track);
 
 //---------------------------------------------------------
 //   SwapCR
@@ -1186,17 +1186,17 @@ class ChangeProperty : public UndoCommand
 protected:
     EngravingObject* element;
     Pid id;
-    mu::engraving::PropertyValue property;
+    PropertyValue property;
     PropertyFlags flags;
 
     void flip(EditData*) override;
 
 public:
-    ChangeProperty(EngravingObject* e, Pid i, const mu::engraving::PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
+    ChangeProperty(EngravingObject* e, Pid i, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
         : element(e), id(i), property(v), flags(ps) {}
     Pid getId() const { return id; }
     EngravingObject* getElement() const { return element; }
-    mu::engraving::PropertyValue data() const { return property; }
+    PropertyValue data() const { return property; }
     UNDO_NAME("ChangeProperty")
     UNDO_CHANGED_OBJECTS({ element });
 
@@ -1218,7 +1218,7 @@ class ChangeBracketProperty : public ChangeProperty
     void flip(EditData*) override;
 
 public:
-    ChangeBracketProperty(Staff* s, size_t l, Pid i, const mu::engraving::PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
+    ChangeBracketProperty(Staff* s, size_t l, Pid i, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
         : ChangeProperty(nullptr, i, v, ps), staff(s), level(l) {}
     UNDO_NAME("ChangeBracketProperty")
     UNDO_CHANGED_OBJECTS({ staff });
@@ -1233,7 +1233,7 @@ class ChangeTextLineProperty : public ChangeProperty
     void flip(EditData*) override;
 
 public:
-    ChangeTextLineProperty(EngravingObject* e, mu::engraving::PropertyValue v)
+    ChangeTextLineProperty(EngravingObject* e, PropertyValue v)
         : ChangeProperty(e, Pid::SYSTEM_FLAG, v, PropertyFlags::NOSTYLE) {}
     UNDO_NAME("ChangeTextLineProperty")
 };

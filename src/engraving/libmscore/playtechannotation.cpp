@@ -95,7 +95,7 @@ PropertyValue PlayTechAnnotation::getProperty(Pid id) const
     }
 }
 
-bool PlayTechAnnotation::setProperty(Pid propertyId, const mu::engraving::PropertyValue& val)
+bool PlayTechAnnotation::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::PLAY_TECH_TYPE:

@@ -127,7 +127,7 @@ public:
 
     struct Context
     {
-        mu::engraving::SynthesizerState synthState;
+        SynthesizerState synthState;
         bool metronome{ true };
         bool renderHarmony{ false };
 

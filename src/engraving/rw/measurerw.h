@@ -29,12 +29,11 @@ class MeasureRW
 {
 public:
 
-    static void readMeasure(mu::engraving::Measure* measure, mu::engraving::XmlReader& xml, ReadContext& ctx, int staffIdx);
-    static void writeMeasure(const mu::engraving::Measure* measure, mu::engraving::XmlWriter& xml, staff_idx_t staff,
-                             bool writeSystemElements, bool forceTimeSig);
+    static void readMeasure(Measure* measure, XmlReader& xml, ReadContext& ctx, int staffIdx);
+    static void writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig);
 
 private:
-    static void readVoice(mu::engraving::Measure* measure, mu::engraving::XmlReader& e, ReadContext& ctx, int staffIdx, bool irregular);
+    static void readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int staffIdx, bool irregular);
 };
 }
 

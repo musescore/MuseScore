@@ -32,9 +32,7 @@ class Segment;
 class Dynamic;
 class PlayTechAnnotation;
 class Score;
-}
 
-namespace mu::engraving {
 using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
 using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;
 
@@ -44,20 +42,20 @@ public:
     mpe::dynamic_level_t appliableDynamicLevel(const int nominalPositionTick) const;
     mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const;
 
-    void update(const ID partId, const mu::engraving::Score* score);
+    void update(const ID partId, const Score* score);
     void clear();
 
-    mpe::DynamicLevelMap dynamicLevelMap(const mu::engraving::Score* score) const;
+    mpe::DynamicLevelMap dynamicLevelMap(const Score* score) const;
 
 private:
     mpe::dynamic_level_t nominalDynamicLevel(const int positionTick) const;
 
-    void updateDynamicMap(const mu::engraving::Dynamic* dynamic, const mu::engraving::Segment* segment, const int segmentPositionTick);
-    void updatePlayTechMap(const mu::engraving::PlayTechAnnotation* annotation, const int segmentPositionTick);
-    void applyDynamicToNextSegment(const mu::engraving::Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel);
+    void updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick);
+    void updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick);
+    void applyDynamicToNextSegment(const Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel);
 
-    void handleSpanners(const ID partId, const mu::engraving::Score* score);
-    void handleAnnotations(const ID partId, const mu::engraving::Segment* segment, const int segmentPositionTick);
+    void handleSpanners(const ID partId, const Score* score);
+    void handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick);
 
     void removeDynamicData(const int from, const int to);
     void removePlayTechniqueData(const int from, const int to);

@@ -29,41 +29,41 @@
 
 namespace mu::engraving {
 struct DynamicTransition {
-    mu::engraving::DynamicType from = mu::engraving::DynamicType::OTHER;
-    mu::engraving::DynamicType to = mu::engraving::DynamicType::OTHER;
+    DynamicType from = DynamicType::OTHER;
+    DynamicType to = DynamicType::OTHER;
 
     bool isValid() const
     {
-        return from != mu::engraving::DynamicType::OTHER && to != mu::engraving::DynamicType::OTHER;
+        return from != DynamicType::OTHER && to != DynamicType::OTHER;
     }
 };
 
-inline mpe::dynamic_level_t dynamicLevelFromType(const mu::engraving::DynamicType type,
+inline mpe::dynamic_level_t dynamicLevelFromType(const DynamicType type,
                                                  const mpe::dynamic_level_t defLevel = mpe::dynamicLevelFromType(mpe::DynamicType::Natural))
 {
-    static const std::unordered_map<mu::engraving::DynamicType, mpe::dynamic_level_t> DYNAMIC_LEVELS = {
-        { mu::engraving::DynamicType::PPPPPP, mpe::dynamicLevelFromType(mpe::DynamicType::pppppp) },
-        { mu::engraving::DynamicType::PPPPP, mpe::dynamicLevelFromType(mpe::DynamicType::ppppp) },
-        { mu::engraving::DynamicType::PPPP, mpe::dynamicLevelFromType(mpe::DynamicType::pppp) },
-        { mu::engraving::DynamicType::PPP, mpe::dynamicLevelFromType(mpe::DynamicType::ppp) },
-        { mu::engraving::DynamicType::PP, mpe::dynamicLevelFromType(mpe::DynamicType::pp) },
-        { mu::engraving::DynamicType::P, mpe::dynamicLevelFromType(mpe::DynamicType::p) },
-        { mu::engraving::DynamicType::MP, mpe::dynamicLevelFromType(mpe::DynamicType::mp) },
-        { mu::engraving::DynamicType::MF, mpe::dynamicLevelFromType(mpe::DynamicType::mf) },
-        { mu::engraving::DynamicType::F, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
-        { mu::engraving::DynamicType::FF, mpe::dynamicLevelFromType(mpe::DynamicType::ff) },
-        { mu::engraving::DynamicType::FFF, mpe::dynamicLevelFromType(mpe::DynamicType::fff) },
-        { mu::engraving::DynamicType::FFFF, mpe::dynamicLevelFromType(mpe::DynamicType::ffff) },
-        { mu::engraving::DynamicType::FFFFF, mpe::dynamicLevelFromType(mpe::DynamicType::fffff) },
-        { mu::engraving::DynamicType::FFFFFF, mpe::dynamicLevelFromType(mpe::DynamicType::ffffff) },
-        { mu::engraving::DynamicType::SF, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
-        { mu::engraving::DynamicType::SFZ, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
-        { mu::engraving::DynamicType::SFF, mpe::dynamicLevelFromType(mpe::DynamicType::ff) },
-        { mu::engraving::DynamicType::SFFZ, mpe::dynamicLevelFromType(mpe::DynamicType::ff) },
-        { mu::engraving::DynamicType::RFZ, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
-        { mu::engraving::DynamicType::RF, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
-        { mu::engraving::DynamicType::FZ, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
-        { mu::engraving::DynamicType::N, mpe::dynamicLevelFromType(mpe::DynamicType::ppppppppp) }
+    static const std::unordered_map<DynamicType, mpe::dynamic_level_t> DYNAMIC_LEVELS = {
+        { DynamicType::PPPPPP, mpe::dynamicLevelFromType(mpe::DynamicType::pppppp) },
+        { DynamicType::PPPPP, mpe::dynamicLevelFromType(mpe::DynamicType::ppppp) },
+        { DynamicType::PPPP, mpe::dynamicLevelFromType(mpe::DynamicType::pppp) },
+        { DynamicType::PPP, mpe::dynamicLevelFromType(mpe::DynamicType::ppp) },
+        { DynamicType::PP, mpe::dynamicLevelFromType(mpe::DynamicType::pp) },
+        { DynamicType::P, mpe::dynamicLevelFromType(mpe::DynamicType::p) },
+        { DynamicType::MP, mpe::dynamicLevelFromType(mpe::DynamicType::mp) },
+        { DynamicType::MF, mpe::dynamicLevelFromType(mpe::DynamicType::mf) },
+        { DynamicType::F, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
+        { DynamicType::FF, mpe::dynamicLevelFromType(mpe::DynamicType::ff) },
+        { DynamicType::FFF, mpe::dynamicLevelFromType(mpe::DynamicType::fff) },
+        { DynamicType::FFFF, mpe::dynamicLevelFromType(mpe::DynamicType::ffff) },
+        { DynamicType::FFFFF, mpe::dynamicLevelFromType(mpe::DynamicType::fffff) },
+        { DynamicType::FFFFFF, mpe::dynamicLevelFromType(mpe::DynamicType::ffffff) },
+        { DynamicType::SF, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
+        { DynamicType::SFZ, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
+        { DynamicType::SFF, mpe::dynamicLevelFromType(mpe::DynamicType::ff) },
+        { DynamicType::SFFZ, mpe::dynamicLevelFromType(mpe::DynamicType::ff) },
+        { DynamicType::RFZ, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
+        { DynamicType::RF, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
+        { DynamicType::FZ, mpe::dynamicLevelFromType(mpe::DynamicType::f) },
+        { DynamicType::N, mpe::dynamicLevelFromType(mpe::DynamicType::ppppppppp) }
     };
 
     auto search = DYNAMIC_LEVELS.find(type);
@@ -75,8 +75,8 @@ inline mpe::dynamic_level_t dynamicLevelFromType(const mu::engraving::DynamicTyp
     return defLevel;
 }
 
-inline mpe::dynamic_level_t dynamicLevelRangeByTypes(const mu::engraving::DynamicType dynamicTypeFrom,
-                                                     const mu::engraving::DynamicType dynamicTypeTo,
+inline mpe::dynamic_level_t dynamicLevelRangeByTypes(const DynamicType dynamicTypeFrom,
+                                                     const DynamicType dynamicTypeTo,
                                                      const mpe::dynamic_level_t nominalDynamicLevelFrom,
                                                      const mpe::dynamic_level_t nominalDynamicLevelTo, const bool isCrescendo)
 {
@@ -99,48 +99,48 @@ inline mpe::dynamic_level_t dynamicLevelRangeByTypes(const mu::engraving::Dynami
     return dynamicLevelTo - dynamicLevelFrom;
 }
 
-inline bool isOrdinaryDynamicType(const mu::engraving::DynamicType type)
+inline bool isOrdinaryDynamicType(const DynamicType type)
 {
-    static const std::set<mu::engraving::DynamicType> ORDINARY_DYNAMIC_TYPES = {
-        mu::engraving::DynamicType::PPPPPP,
-        mu::engraving::DynamicType::PPPPP,
-        mu::engraving::DynamicType::PPPP,
-        mu::engraving::DynamicType::PPP,
-        mu::engraving::DynamicType::PP,
-        mu::engraving::DynamicType::P,
-        mu::engraving::DynamicType::MP,
-        mu::engraving::DynamicType::MF,
-        mu::engraving::DynamicType::F,
-        mu::engraving::DynamicType::FF,
-        mu::engraving::DynamicType::FFF,
-        mu::engraving::DynamicType::FFFF,
-        mu::engraving::DynamicType::FFFFF,
-        mu::engraving::DynamicType::FFFFFF
+    static const std::set<DynamicType> ORDINARY_DYNAMIC_TYPES = {
+        DynamicType::PPPPPP,
+        DynamicType::PPPPP,
+        DynamicType::PPPP,
+        DynamicType::PPP,
+        DynamicType::PP,
+        DynamicType::P,
+        DynamicType::MP,
+        DynamicType::MF,
+        DynamicType::F,
+        DynamicType::FF,
+        DynamicType::FFF,
+        DynamicType::FFFF,
+        DynamicType::FFFFF,
+        DynamicType::FFFFFF
     };
 
     return ORDINARY_DYNAMIC_TYPES.find(type) != ORDINARY_DYNAMIC_TYPES.cend();
 }
 
-inline bool isSingleNoteDynamicType(const mu::engraving::DynamicType type)
+inline bool isSingleNoteDynamicType(const DynamicType type)
 {
-    static const std::set<mu::engraving::DynamicType> SINGLE_NOTE_DYNAMIC_TYPES = {
-        mu::engraving::DynamicType::SF,
-        mu::engraving::DynamicType::SFZ,
-        mu::engraving::DynamicType::SFFZ,
-        mu::engraving::DynamicType::RFZ,
-        mu::engraving::DynamicType::RF
+    static const std::set<DynamicType> SINGLE_NOTE_DYNAMIC_TYPES = {
+        DynamicType::SF,
+        DynamicType::SFZ,
+        DynamicType::SFFZ,
+        DynamicType::RFZ,
+        DynamicType::RF
     };
 
     return SINGLE_NOTE_DYNAMIC_TYPES.find(type) != SINGLE_NOTE_DYNAMIC_TYPES.cend();
 }
 
-inline const DynamicTransition& dynamicTransitionFromType(const mu::engraving::DynamicType type)
+inline const DynamicTransition& dynamicTransitionFromType(const DynamicType type)
 {
-    static const std::unordered_map<mu::engraving::DynamicType, DynamicTransition> DYNAMIC_TRANSITIONS = {
-        { mu::engraving::DynamicType::FP, { mu::engraving::DynamicType::F, mu::engraving::DynamicType::P } },
-        { mu::engraving::DynamicType::PF, { mu::engraving::DynamicType::P, mu::engraving::DynamicType::F } },
-        { mu::engraving::DynamicType::SFP, { mu::engraving::DynamicType::F, mu::engraving::DynamicType::P } },
-        { mu::engraving::DynamicType::SFPP, { mu::engraving::DynamicType::F, mu::engraving::DynamicType::PP } }
+    static const std::unordered_map<DynamicType, DynamicTransition> DYNAMIC_TRANSITIONS = {
+        { DynamicType::FP, { DynamicType::F, DynamicType::P } },
+        { DynamicType::PF, { DynamicType::P, DynamicType::F } },
+        { DynamicType::SFP, { DynamicType::F, DynamicType::P } },
+        { DynamicType::SFPP, { DynamicType::F, DynamicType::PP } }
     };
 
     auto search = DYNAMIC_TRANSITIONS.find(type);
@@ -152,22 +152,22 @@ inline const DynamicTransition& dynamicTransitionFromType(const mu::engraving::D
     return empty;
 }
 
-inline mpe::ArticulationType articulationFromPlayTechType(const mu::engraving::PlayingTechniqueType technique)
+inline mpe::ArticulationType articulationFromPlayTechType(const PlayingTechniqueType technique)
 {
-    static const std::unordered_map<mu::engraving::PlayingTechniqueType, mpe::ArticulationType> PLAYING_TECH_TYPES = {
-        { mu::engraving::PlayingTechniqueType::Undefined, mpe::ArticulationType::Undefined },
-        { mu::engraving::PlayingTechniqueType::Natural, mpe::ArticulationType::Standard },
-        { mu::engraving::PlayingTechniqueType::Pizzicato, mpe::ArticulationType::Pizzicato },
-        { mu::engraving::PlayingTechniqueType::Open, mpe::ArticulationType::Open },
-        { mu::engraving::PlayingTechniqueType::Mute, mpe::ArticulationType::Mute },
-        { mu::engraving::PlayingTechniqueType::Tremolo, mpe::ArticulationType::Tremolo64th },
-        { mu::engraving::PlayingTechniqueType::Detache, mpe::ArticulationType::Detache },
-        { mu::engraving::PlayingTechniqueType::Martele, mpe::ArticulationType::Martele },
-        { mu::engraving::PlayingTechniqueType::ColLegno, mpe::ArticulationType::ColLegno },
-        { mu::engraving::PlayingTechniqueType::SulPonticello, mpe::ArticulationType::SulPont },
-        { mu::engraving::PlayingTechniqueType::SulTasto, mpe::ArticulationType::SulTasto },
-        { mu::engraving::PlayingTechniqueType::Distortion, mpe::ArticulationType::Distortion },
-        { mu::engraving::PlayingTechniqueType::Overdrive, mpe::ArticulationType::Overdrive }
+    static const std::unordered_map<PlayingTechniqueType, mpe::ArticulationType> PLAYING_TECH_TYPES = {
+        { PlayingTechniqueType::Undefined, mpe::ArticulationType::Undefined },
+        { PlayingTechniqueType::Natural, mpe::ArticulationType::Standard },
+        { PlayingTechniqueType::Pizzicato, mpe::ArticulationType::Pizzicato },
+        { PlayingTechniqueType::Open, mpe::ArticulationType::Open },
+        { PlayingTechniqueType::Mute, mpe::ArticulationType::Mute },
+        { PlayingTechniqueType::Tremolo, mpe::ArticulationType::Tremolo64th },
+        { PlayingTechniqueType::Detache, mpe::ArticulationType::Detache },
+        { PlayingTechniqueType::Martele, mpe::ArticulationType::Martele },
+        { PlayingTechniqueType::ColLegno, mpe::ArticulationType::ColLegno },
+        { PlayingTechniqueType::SulPonticello, mpe::ArticulationType::SulPont },
+        { PlayingTechniqueType::SulTasto, mpe::ArticulationType::SulTasto },
+        { PlayingTechniqueType::Distortion, mpe::ArticulationType::Distortion },
+        { PlayingTechniqueType::Overdrive, mpe::ArticulationType::Overdrive }
     };
 
     auto search = PLAYING_TECH_TYPES.find(technique);

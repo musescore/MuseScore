@@ -226,7 +226,7 @@ EngravingObjectList Measure::scanChildren() const
         }
     }
 
-    const std::multimap<int, mu::engraving::Spanner*>& spannerMap = score()->spanner();
+    const std::multimap<int, Spanner*>& spannerMap = score()->spanner();
     int start_tick = tick().ticks();
     for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
         Spanner* s = i->second;
@@ -273,7 +273,7 @@ EngravingObjectList Segment::scanChildren() const
     }
 
     if (segmentType() == SegmentType::ChordRest) {
-        const std::multimap<int, mu::engraving::Spanner*>& spannerMap = score()->spanner();
+        const std::multimap<int, Spanner*>& spannerMap = score()->spanner();
         int start_tick = tick().ticks();
         for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
             Spanner* s = i->second;
@@ -333,7 +333,7 @@ EngravingObjectList ChordRest::scanChildren() const
         children.push_back(element);
     }
 
-    const std::multimap<int, mu::engraving::Spanner*>& spannerMap = score()->spanner();
+    const std::multimap<int, Spanner*>& spannerMap = score()->spanner();
     int start_tick = tick().ticks();
     for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
         Spanner* s = i->second;

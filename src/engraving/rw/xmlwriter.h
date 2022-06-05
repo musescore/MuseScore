@@ -38,9 +38,7 @@
 
 namespace mu::engraving {
 class WriteContext;
-}
 
-namespace mu::engraving {
 class XmlWriter : public mu::XmlStreamWriter
 {
 public:
@@ -58,10 +56,9 @@ public:
 
     void tagE(const QString&);
 
-    void tag(Pid id, const mu::engraving::PropertyValue& data, const mu::engraving::PropertyValue& def = mu::engraving::PropertyValue());
-    void tagProperty(const mu::AsciiString&, const mu::engraving::PropertyValue& data,
-                     const mu::engraving::PropertyValue& def = mu::engraving::PropertyValue());
-    void tagProperty(const mu::AsciiString& name, mu::engraving::P_TYPE type, const mu::engraving::PropertyValue& data);
+    void tag(Pid id, const PropertyValue& data, const PropertyValue& def = PropertyValue());
+    void tagProperty(const mu::AsciiString&, const PropertyValue& data, const PropertyValue& def = PropertyValue());
+    void tagProperty(const mu::AsciiString& name, P_TYPE type, const PropertyValue& data);
 
     void tag(const mu::AsciiString& name, const mu::AsciiString& v);
     void tag(const mu::AsciiString& name, const QString& v);
@@ -101,8 +98,8 @@ public:
 
     void writeXml(const QString&, QString s);
 
-    mu::engraving::WriteContext* context() const;
-    void setContext(mu::engraving::WriteContext* context);
+    WriteContext* context() const;
+    void setContext(WriteContext* context);
 
     static QString xmlString(const QString&);
     static QString xmlString(ushort c);
@@ -111,7 +108,7 @@ private:
     std::vector<std::pair<const EngravingObject*, AsciiString> > _elements;
     bool _recordElements = false;
 
-    mutable mu::engraving::WriteContext* m_context = nullptr;
+    mutable WriteContext* m_context = nullptr;
     mutable bool m_selfContext = false;
 };
 }

@@ -30,9 +30,7 @@
 
 namespace mu::engraving {
 class Factory;
-}
 
-namespace mu::engraving {
 class Chord;
 
 //---------------------------------------------------------
@@ -53,7 +51,7 @@ protected:
     qreal _lengthY;
     const int _initialLength = 2;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
 
     ChordLine(Chord* parent, const ElementType& type = ElementType::CHORDLINE);
     ChordLine(const ChordLine&);
@@ -80,9 +78,9 @@ public:
 
     QString accessibleInfo() const override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }

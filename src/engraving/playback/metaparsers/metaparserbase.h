@@ -30,14 +30,12 @@
 
 namespace mu::engraving {
 class EngravingItem;
-}
 
-namespace mu::engraving {
 template<class T>
 class MetaParserBase
 {
 public:
-    static void parse(const mu::engraving::EngravingItem* item, const RenderingContext& context, mpe::ArticulationMap& result)
+    static void parse(const EngravingItem* item, const RenderingContext& context, mpe::ArticulationMap& result)
     {
         IF_ASSERT_FAILED(item) {
             return;

@@ -25,15 +25,13 @@
 namespace mu::engraving {
 class ChordRest;
 class DurationElement;
-}
 
-namespace mu::engraving {
 class LayoutTuplets
 {
 public:
-    static void layout(mu::engraving::DurationElement* de);
-    static bool isTopTuplet(mu::engraving::ChordRest* cr);
-    static bool notTopTuplet(mu::engraving::ChordRest* cr);
+    static void layout(DurationElement* de);
+    static bool isTopTuplet(ChordRest* cr);
+    static bool notTopTuplet(ChordRest* cr);
 };
 }
 

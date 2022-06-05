@@ -86,7 +86,7 @@ HarmonicMark::HarmonicMark(EngravingItem* parent)
     resetProperty(Pid::END_TEXT);
 }
 
-bool HarmonicMark::setProperty(Pid propertyId, const mu::engraving::PropertyValue& value)
+bool HarmonicMark::setProperty(Pid propertyId, const PropertyValue& value)
 {
     if (propertyId == Pid::BEGIN_TEXT) {
         m_text = value.toString();

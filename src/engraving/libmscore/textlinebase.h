@@ -65,7 +65,7 @@ public:
 
     Shape shape() const override;
 
-    bool setProperty(Pid id, const mu::engraving::PropertyValue& v) override;
+    bool setProperty(Pid id, const PropertyValue& v) override;
 };
 
 //---------------------------------------------------------
@@ -118,8 +118,8 @@ public:
 
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
-    mu::engraving::PropertyValue getProperty(Pid id) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
     Pid propertyId(const QStringRef& xmlName) const override;
 };
 } // namespace mu::engraving

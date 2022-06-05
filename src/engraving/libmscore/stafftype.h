@@ -185,7 +185,7 @@ static const int STAFF_GROUP_NAME_MAX_LENGTH   = 32;
 
 class StaffType
 {
-    INJECT_STATIC(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(engraving, IEngravingConfiguration, engravingConfiguration)
 
     friend class TabDurationSymbol;
 

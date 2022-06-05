@@ -27,15 +27,13 @@
 
 namespace mu::engraving {
 class XmlReader;
-}
 
-namespace mu::engraving {
 class Read400
 {
 public:
 
-    static bool read400(mu::engraving::Score* score, mu::engraving::XmlReader& e, ReadContext& ctx);
-    static bool readScore400(mu::engraving::Score* score, mu::engraving::XmlReader& e, ReadContext& ctx);
+    static bool read400(Score* score, XmlReader& e, ReadContext& ctx);
+    static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
 };
 }
 

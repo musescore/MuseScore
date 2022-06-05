@@ -1266,7 +1266,7 @@ void Segment::clearAnnotations()
 //    specifically intended to be called from QML plugins
 //---------------------------------------------------------
 
-mu::engraving::EngravingItem* Segment::elementAt(track_idx_t track) const
+EngravingItem* Segment::elementAt(track_idx_t track) const
 {
     EngravingItem* e = track < _elist.size() ? _elist[track] : 0;
     return e;
@@ -2508,9 +2508,9 @@ qreal Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
         return 0;
     }
 
-    mu::engraving::SkylineLine north = staffSystem->skyline().north();
+    SkylineLine north = staffSystem->skyline().north();
     int topOffset = INT_MAX;
-    for (mu::engraving::SkylineSegment segment: north) {
+    for (SkylineSegment segment: north) {
         Segment* seg = prev1enabled();
         if (!seg) {
             continue;
@@ -2541,9 +2541,9 @@ qreal Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
         return 0;
     }
 
-    mu::engraving::SkylineLine south = staffSystem->skyline().south();
+    SkylineLine south = staffSystem->skyline().south();
     int bottomOffset = INT_MIN;
-    for (mu::engraving::SkylineSegment segment: south) {
+    for (SkylineSegment segment: south) {
         Segment* seg = prev1enabled();
         if (!seg) {
             continue;

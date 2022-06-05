@@ -44,8 +44,8 @@ class OrnamentsRenderer : public RenderBase<OrnamentsRenderer>
 public:
     static const mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const mu::engraving::EngravingItem* item, const mpe::ArticulationType preferredType,
-                         const RenderingContext& context, mpe::PlaybackEventList& result);
+    static void doRender(const EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
+                         mpe::PlaybackEventList& result);
 
 private:
     static void convert(const mpe::ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result);

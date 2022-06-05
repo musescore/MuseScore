@@ -28,13 +28,11 @@
 
 namespace mu::engraving {
 class Score;
-}
 
-namespace mu::engraving {
-class RootItem : public mu::engraving::EngravingItem
+class RootItem : public EngravingItem
 {
 public:
-    RootItem(mu::engraving::Score* score);
+    RootItem(Score* score);
     ~RootItem() override;
 
     compat::DummyElement* dummy() const;
@@ -42,15 +40,15 @@ public:
 
     EngravingObject* scanParent() const override;
 
-    mu::engraving::EngravingItem* clone() const override { return nullptr; }
-    mu::engraving::PropertyValue getProperty(mu::engraving::Pid) const override { return mu::engraving::PropertyValue(); }
-    bool setProperty(mu::engraving::Pid, const mu::engraving::PropertyValue&) override { return false; }
+    EngravingItem* clone() const override { return nullptr; }
+    PropertyValue getProperty(Pid) const override { return PropertyValue(); }
+    bool setProperty(Pid, const PropertyValue&) override { return false; }
 
 private:
 
-    mu::engraving::AccessibleItem* createAccessible() override;
+    AccessibleItem* createAccessible() override;
 
-    mu::engraving::Score* m_score = nullptr;
+    Score* m_score = nullptr;
     compat::DummyElement* m_dummy = nullptr;
 };
 }

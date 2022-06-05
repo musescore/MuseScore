@@ -35,20 +35,17 @@ class Staff;
 class MStyle;
 class Measure;
 class Chord;
-}
 
-namespace mu::engraving {
 class LayoutChords
 {
 public:
 
-    static void layoutChords1(mu::engraving::Score* score, mu::engraving::Segment* segment, staff_idx_t staffIdx);
-    static qreal layoutChords2(std::vector<mu::engraving::Note*>& notes, bool up);
-    static void layoutChords3(const mu::engraving::MStyle& style, std::vector<mu::engraving::Note*>&, const mu::engraving::Staff*,
-                              mu::engraving::Segment*);
-    static void updateGraceNotes(mu::engraving::Measure* measure);
-    static void repositionGraceNotesAfter(mu::engraving::Segment* segment);
-    static void appendGraceNotes(mu::engraving::Chord* chord);
+    static void layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx);
+    static qreal layoutChords2(std::vector<Note*>& notes, bool up);
+    static void layoutChords3(const MStyle& style, std::vector<Note*>&, const Staff*, Segment*);
+    static void updateGraceNotes(Measure* measure);
+    static void repositionGraceNotesAfter(Segment* segment);
+    static void appendGraceNotes(Chord* chord);
 };
 }
 

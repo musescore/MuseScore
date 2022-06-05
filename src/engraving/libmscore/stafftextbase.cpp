@@ -42,7 +42,7 @@ namespace mu::engraving {
 StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, TextStyleType tid, ElementFlags flags)
     : TextBase(type, parent, tid, flags)
 {
-    setSwingParameters(Constant::division / 2, 60);
+    setSwingParameters(Constants::division / 2, 60);
 }
 
 //---------------------------------------------------------
@@ -74,9 +74,9 @@ void StaffTextBase::write(XmlWriter& xml) const
     }
     if (swing()) {
         DurationType swingUnit;
-        if (swingParameters().swingUnit == Constant::division / 2) {
+        if (swingParameters().swingUnit == Constants::division / 2) {
             swingUnit = DurationType::V_EIGHTH;
-        } else if (swingParameters().swingUnit == Constant::division / 4) {
+        } else if (swingParameters().swingUnit == Constants::division / 4) {
             swingUnit = DurationType::V_16TH;
         } else {
             swingUnit = DurationType::V_ZERO;
@@ -161,9 +161,9 @@ bool StaffTextBase::readProperties(XmlReader& e)
         DurationType swingUnit = TConv::fromXml(e.asciiAttribute("unit"), DurationType::V_INVALID);
         int unit = 0;
         if (swingUnit == DurationType::V_EIGHTH) {
-            unit = Constant::division / 2;
+            unit = Constants::division / 2;
         } else if (swingUnit == DurationType::V_16TH) {
-            unit = Constant::division / 4;
+            unit = Constants::division / 4;
         } else if (swingUnit == DurationType::V_ZERO) {
             unit = 0;
         }

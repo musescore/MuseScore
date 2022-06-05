@@ -84,7 +84,7 @@ class Beam final : public EngravingItem
     qreal _slope             { 0.0 };
     std::vector<int> _notes;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Beam(System* parent);
     Beam(const Beam&);
 
@@ -186,17 +186,17 @@ public:
     bool userModified() const;
     void setUserModified(bool val);
 
-    mu::engraving::PairF beamPos() const;
-    void setBeamPos(const mu::engraving::PairF& bp);
+    PairF beamPos() const;
+    void setBeamPos(const PairF& bp);
 
     qreal beamDist() const { return _beamDist; }
 
     inline const mu::PointF startAnchor() const { return _startAnchor; }
     inline const mu::PointF endAnchor() const { return _endAnchor; }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     bool isGrace() const { return _isGrace; }    // for debugger
     bool cross() const { return _cross; }

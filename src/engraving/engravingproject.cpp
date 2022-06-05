@@ -38,7 +38,7 @@ std::shared_ptr<EngravingProject> EngravingProject::create()
     return p;
 }
 
-std::shared_ptr<EngravingProject> EngravingProject::create(const mu::engraving::MStyle& style)
+std::shared_ptr<EngravingProject> EngravingProject::create(const MStyle& style)
 {
     std::shared_ptr<EngravingProject> p = std::shared_ptr<EngravingProject>(new EngravingProject());
     p->init(style);
@@ -50,9 +50,9 @@ EngravingProject::~EngravingProject()
     delete m_masterScore;
 }
 
-void EngravingProject::init(const mu::engraving::MStyle& style)
+void EngravingProject::init(const MStyle& style)
 {
-    m_masterScore = new mu::engraving::MasterScore(style, weak_from_this());
+    m_masterScore = new MasterScore(style, weak_from_this());
 }
 
 IFileInfoProviderPtr EngravingProject::fileInfoProvider() const
@@ -90,23 +90,23 @@ Err EngravingProject::setupMasterScore(bool forceMode)
     return err;
 }
 
-Err EngravingProject::doSetupMasterScore(mu::engraving::MasterScore* score, bool forceMode)
+Err EngravingProject::doSetupMasterScore(MasterScore* score, bool forceMode)
 {
     TRACEFUNC;
 
     score->createPaddingTable();
     score->connectTies();
 
-    for (mu::engraving::Part* p : score->parts()) {
+    for (Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
     }
 
     score->rebuildMidiMapping();
     score->setSoloMute();
 
-    for (mu::engraving::Score* s : score->scoreList()) {
+    for (Score* s : score->scoreList()) {
         s->setPlaylistDirty();
-        s->addLayoutFlags(mu::engraving::LayoutFlag::FIX_PITCH_VELO);
+        s->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
         s->setLayoutAll();
     }
 
@@ -122,7 +122,7 @@ Err EngravingProject::doSetupMasterScore(mu::engraving::MasterScore* score, bool
     return Err::NoError;
 }
 
-mu::engraving::MasterScore* EngravingProject::masterScore() const
+MasterScore* EngravingProject::masterScore() const
 {
     return m_masterScore;
 }
@@ -132,14 +132,14 @@ Err EngravingProject::loadMscz(const MscReader& msc, bool ignoreVersionError)
     TRACEFUNC;
 
     engravingElementsProvider()->clearStatistic();
-    mu::engraving::MScore::setError(mu::engraving::MsError::MS_NO_ERROR);
+    MScore::setError(MsError::MS_NO_ERROR);
     ScoreReader scoreReader;
     Err err = scoreReader.loadMscz(m_masterScore, msc, ignoreVersionError);
     engravingElementsProvider()->printStatistic("=== Load ===");
     return err;
 }
 
-bool EngravingProject::writeMscz(mu::engraving::MscWriter& writer, bool onlySelection, bool createThumbnail)
+bool EngravingProject::writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail)
 {
     bool ok = m_masterScore->writeMscz(writer, onlySelection, createThumbnail);
     if (ok && !onlySelection) {

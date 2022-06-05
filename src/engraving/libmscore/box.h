@@ -94,9 +94,9 @@ public:
     void setAutoSizeEnabled(const bool val) { _isAutoSizeEnabled = val; }
     void copyValues(Box* origin);
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     QString accessibleExtraInfo() const override;
 
@@ -136,9 +136,9 @@ public:
     bool createSystemHeader() const { return _createSystemHeader; }
     void setCreateSystemHeader(bool val) { _createSystemHeader = val; }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 };
@@ -160,7 +160,7 @@ public:
     qreal minHeight() const;
     qreal maxHeight() const;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
     void layout() override;
 
     void startEditDrag(EditData&) override;

@@ -184,8 +184,8 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
     }
 
     staff_idx_t staffIndex = staff->idx();
-    mu::engraving::Fraction startTick = staff->score()->firstMeasure()->tick();
-    mu::engraving::Fraction endTick = staff->score()->lastMeasure()->tick();
+    Fraction startTick = staff->score()->firstMeasure()->tick();
+    Fraction endTick = staff->score()->lastMeasure()->tick();
 
     // update tracks
     staff->setVoiceVisible(voiceIndex, visible);
@@ -575,12 +575,11 @@ static void processLinkedClone(EngravingItem* ne, Score* score, track_idx_t stra
     ne->setScore(score);
 }
 
-static mu::engraving::MeasureBase* cloneMeasure(mu::engraving::MeasureBase* mb, mu::engraving::Score* score,
-                                                const mu::engraving::Score* oscore,
-                                                const std::vector<staff_idx_t>& sourceStavesIndexes,
-                                                const TracksMap& trackList, TieMap& tieMap)
+static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* oscore,
+                                 const std::vector<staff_idx_t>& sourceStavesIndexes,
+                                 const TracksMap& trackList, TieMap& tieMap)
 {
-    mu::engraving::MeasureBase* nmb = nullptr;
+    MeasureBase* nmb = nullptr;
 
     if (mb->isHBox()) {
         nmb = Factory::createHBox(score->dummy()->system());

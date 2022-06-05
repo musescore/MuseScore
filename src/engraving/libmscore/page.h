@@ -32,9 +32,6 @@
 namespace mu::engraving {
 class RootItem;
 class Factory;
-}
-
-namespace mu::engraving {
 class System;
 class Text;
 class Measure;
@@ -57,8 +54,8 @@ class Page final : public EngravingItem
 
     void doRebuildBspTree();
 
-    friend class mu::engraving::Factory;
-    Page(mu::engraving::RootItem* parent);
+    friend class Factory;
+    Page(RootItem* parent);
 
     QString replaceTextMacros(const QString&) const;
     void drawHeaderFooter(mu::draw::Painter*, int area, const QString&) const;

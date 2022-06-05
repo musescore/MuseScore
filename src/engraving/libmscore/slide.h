@@ -28,9 +28,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
 class Chord;
 
 //---------------------------------------------------------
@@ -53,7 +50,7 @@ class Slide final : public ChordLine
 
 public:
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
 
     Slide* clone() const override { return new Slide(*this); }
 

@@ -578,7 +578,7 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
 
 void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& ctx)
 {
-    mu::engraving::Score* score = ctx.score();
+    Score* score = ctx.score();
     ctx.prevMeasure = ctx.curMeasure;
     ctx.curMeasure  = ctx.nextMeasure;
     if (!ctx.curMeasure) {

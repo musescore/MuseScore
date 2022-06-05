@@ -28,10 +28,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
-class MuseScoreView;
 class Segment;
 
 static const int MIN_BARLINE_FROMTO_DIST        = 2;
@@ -76,7 +72,7 @@ class BarLine final : public EngravingItem
     mutable qreal y2;
     ElementList _el;          ///< fermata or other articulations
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     BarLine(Segment* parent);
     BarLine(const BarLine&);
 
@@ -148,11 +144,11 @@ public:
 
     int subtype() const override { return int(_barLineType); }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
     static qreal layoutWidth(Score*, BarLineType);

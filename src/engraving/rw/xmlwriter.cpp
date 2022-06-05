@@ -404,7 +404,7 @@ void XmlWriter::writeXml(const QString& name, QString s)
     writeElement(name, s);
 }
 
-mu::engraving::WriteContext* XmlWriter::context() const
+WriteContext* XmlWriter::context() const
 {
     if (!m_context) {
         m_context = new engraving::WriteContext();

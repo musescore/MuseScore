@@ -31,7 +31,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-void PlaybackSetupDataResolver::resolveSetupData(const mu::engraving::Instrument* instrument, mpe::PlaybackSetupData& result) const
+void PlaybackSetupDataResolver::resolveSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const
 {
     if (KeyboardsSetupDataResolver::isAbleToResolve(instrument)) {
         KeyboardsSetupDataResolver::resolve(instrument, result);

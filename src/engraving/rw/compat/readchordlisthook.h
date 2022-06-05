@@ -34,13 +34,13 @@ namespace mu::engraving::compat {
 class ReadChordListHook
 {
 public:
-    ReadChordListHook(mu::engraving::Score* score);
+    ReadChordListHook(Score* score);
 
-    void read(mu::engraving::XmlReader& e);
+    void read(XmlReader& e);
     void validate();
 
 private:
-    mu::engraving::Score* m_score = nullptr;
+    Score* m_score = nullptr;
     bool m_chordListTag = false;
     QString m_oldChordDescriptionFile;
 };

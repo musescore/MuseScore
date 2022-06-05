@@ -150,7 +150,7 @@ TimeSig* MCursor::addTimeSig(const Fraction& f)
 void MCursor::createScore(const QString& /*name*/)
 {
     delete _score;
-    _score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    _score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
     // TODO: set path/filename
     NOT_IMPLEMENTED;
     move(0, Fraction(0, 1));

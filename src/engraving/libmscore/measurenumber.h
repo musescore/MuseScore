@@ -38,7 +38,7 @@ public:
 
     virtual MeasureNumber* clone() const override { return new MeasureNumber(*this); }
 
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue propertyDefault(Pid id) const override;
 };
 } // namespace mu::engraving
 

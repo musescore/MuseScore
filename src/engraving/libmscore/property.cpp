@@ -464,7 +464,7 @@ QString propertyUserName(Pid id)
 //    propertyFromString
 //---------------------------------------------------------
 
-PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString)
+PropertyValue propertyFromString(P_TYPE type, QString)
 {
     switch (type) {
     case P_TYPE::BEAM_MODE:

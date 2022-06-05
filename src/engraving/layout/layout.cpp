@@ -72,7 +72,7 @@ public:
     ~CmdStateLocker() { m_score->cmdState().unlock(); }
 };
 
-Layout::Layout(mu::engraving::Score* score)
+Layout::Layout(Score* score)
     : m_score(score)
 {
 }

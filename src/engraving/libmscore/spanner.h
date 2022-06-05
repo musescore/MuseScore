@@ -101,11 +101,11 @@ public:
 
     void spatiumChanged(qreal ov, qreal nv) override;
 
-    mu::engraving::PropertyValue getProperty(Pid id) const override;
-    bool setProperty(Pid id, const mu::engraving::PropertyValue& v) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid id, const PropertyValue& v) override;
+    PropertyValue propertyDefault(Pid id) const override;
     virtual EngravingItem* propertyDelegate(Pid) override;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
     Sid getPropertyStyle(Pid id) const override;
@@ -247,10 +247,10 @@ public:
     virtual void removeUnmanaged();
     virtual void insertTimeUnmanaged(const Fraction& tick, const Fraction& len);
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
-    virtual void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+    virtual void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     void computeStartElement();
     void computeEndElement();

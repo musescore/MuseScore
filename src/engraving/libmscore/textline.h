@@ -62,7 +62,7 @@ public:
     TextLine(const TextLine&);
     ~TextLine() {}
 
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     SpannerSegment* layoutSystem(System*) override;
 
     TextLine* clone() const override { return new TextLine(*this); }
@@ -73,8 +73,8 @@ public:
     void initStyle();
 
     LineSegment* createLineSegment(System* parent) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
 };
 } // namespace mu::engraving
 #endif

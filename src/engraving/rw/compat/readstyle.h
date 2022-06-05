@@ -36,19 +36,19 @@ namespace mu::engraving::compat {
 class ReadStyleHook
 {
 public:
-    ReadStyleHook(mu::engraving::Score* score, const ByteArray& scoreData, const QString& completeBaseName);
+    ReadStyleHook(Score* score, const ByteArray& scoreData, const QString& completeBaseName);
 
     void setupDefaultStyle();
 
-    void readStyleTag(mu::engraving::XmlReader& e);
+    void readStyleTag(XmlReader& e);
 
     static int styleDefaultByMscVersion(const int mscVer);
-    static void setupDefaultStyle(mu::engraving::Score* score);
-    static void readStyleTag(mu::engraving::Score* score, mu::engraving::XmlReader& e);
-    static bool readStyleProperties(mu::engraving::MStyle* style, mu::engraving::XmlReader& e);
+    static void setupDefaultStyle(Score* score);
+    static void readStyleTag(Score* score, XmlReader& e);
+    static bool readStyleProperties(MStyle* style, XmlReader& e);
 
 private:
-    mu::engraving::Score* m_score = nullptr;
+    Score* m_score = nullptr;
     const ByteArray& m_scoreData;
     const QString& m_completeBaseName;
 };

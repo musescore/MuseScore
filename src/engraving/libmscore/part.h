@@ -83,7 +83,7 @@ class Part final : public EngravingObject
 
     PreferSharpFlat _preferSharpFlat = PreferSharpFlat::DEFAULT;
 
-    friend class mu::engraving::compat::Read206;
+    friend class compat::Read206;
 
 public:
     Part(Score* score = nullptr);
@@ -167,8 +167,8 @@ public:
 
     bool isVisible() const;
 
-    mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
 
     int lyricCount() const;
     int harmonyCount() const;

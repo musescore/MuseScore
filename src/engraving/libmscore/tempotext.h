@@ -68,9 +68,9 @@ public:
     static QString duration2tempoTextString(const TDuration dur);
     static QString duration2userName(const TDuration t);
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
     QString accessibleInfo() const override;
 
 protected:
@@ -78,7 +78,7 @@ protected:
     void removed() override;
     void commitText() override;
 
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     void updateScore();
     void updateTempo();
