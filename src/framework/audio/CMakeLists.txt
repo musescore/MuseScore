@@ -104,6 +104,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiostream.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/eventaudiosource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/eventaudiosource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/externalaudiosource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/externalaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sinesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sinesource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/noisesource.cpp

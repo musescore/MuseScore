@@ -807,6 +807,18 @@ void PlaybackController::subscribeOnAudioParamsChanges()
 
 void PlaybackController::setupSequenceTracks()
 {
+    AudioOutputParams outParams;
+    AudioInputParams inParams;
+    QFile *file;
+    file = new QFile();
+    file->setFileName(QDir::homePath() + QString("/mscoretest.wav"));
+    if(file->exists()) {
+        playback()->tracks()->addTrack(m_currentSequenceId,"TEST",file,{std::move(inParams), std::move(outParams)});
+    }
+
+
+
+
     m_trackIdMap.clear();
 
     if (!masterNotationParts()) {

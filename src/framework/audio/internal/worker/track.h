@@ -199,7 +199,7 @@ struct SoundTrack : public Track
             return false;
         }
 
-        m_ioDevice->close();
+        //m_ioDevice->close();
         m_ioDevice = newDevice;
         playbackDataChanged.send(std::move(newDevice));
 

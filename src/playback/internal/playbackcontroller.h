@@ -42,7 +42,7 @@
 
 #include "../iplaybackcontroller.h"
 #include "../iplaybackconfiguration.h"
-
+#include <QDir>
 namespace mu::playback {
 class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable
 {
