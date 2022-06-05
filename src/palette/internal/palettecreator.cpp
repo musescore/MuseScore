@@ -1313,25 +1313,25 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
         }
     }
 
-    static const std::map<TempoTechniqueType, const char*> DEFAULT_TEMPO_CHANGE = {
-        { TempoTechniqueType::Accelerando, QT_TRANSLATE_NOOP("palette", "accel.") },
-        { TempoTechniqueType::Allargando, QT_TRANSLATE_NOOP("palette", "allarg.") },
-        { TempoTechniqueType::Rallentando, QT_TRANSLATE_NOOP("palette", "rall.") },
-        { TempoTechniqueType::Ritardando, QT_TRANSLATE_NOOP("palette", "rit.") },
+    static const std::map<TempoChangeType, const char*> DEFAULT_TEMPO_CHANGE = {
+        { TempoChangeType::Accelerando, QT_TRANSLATE_NOOP("palette", "accel.") },
+        { TempoChangeType::Allargando, QT_TRANSLATE_NOOP("palette", "allarg.") },
+        { TempoChangeType::Rallentando, QT_TRANSLATE_NOOP("palette", "rall.") },
+        { TempoChangeType::Ritardando, QT_TRANSLATE_NOOP("palette", "rit.") },
     };
 
-    static const std::map<TempoTechniqueType, const char*> MASTER_TEMPO_CHANGE = {
-        { TempoTechniqueType::Accelerando, QT_TRANSLATE_NOOP("palette", "accel.") },
-        { TempoTechniqueType::Allargando, QT_TRANSLATE_NOOP("palette", "allarg.") },
-        { TempoTechniqueType::Calando, QT_TRANSLATE_NOOP("palette", "calando") },
-        { TempoTechniqueType::Lentando, QT_TRANSLATE_NOOP("palette", "lentando") },
-        { TempoTechniqueType::Morendo, QT_TRANSLATE_NOOP("palette", "morendo") },
-        { TempoTechniqueType::Precipitando, QT_TRANSLATE_NOOP("palette", "precipitando") },
-        { TempoTechniqueType::Rallentando, QT_TRANSLATE_NOOP("palette", "rall.") },
-        { TempoTechniqueType::Ritardando, QT_TRANSLATE_NOOP("palette", "rit.") },
-        { TempoTechniqueType::Smorzando, QT_TRANSLATE_NOOP("palette", "smorz.") },
-        { TempoTechniqueType::Sostenuto, QT_TRANSLATE_NOOP("palette", "sost.") },
-        { TempoTechniqueType::Stringendo, QT_TRANSLATE_NOOP("palette", "string.") }
+    static const std::map<TempoChangeType, const char*> MASTER_TEMPO_CHANGE = {
+        { TempoChangeType::Accelerando, QT_TRANSLATE_NOOP("palette", "accel.") },
+        { TempoChangeType::Allargando, QT_TRANSLATE_NOOP("palette", "allarg.") },
+        { TempoChangeType::Calando, QT_TRANSLATE_NOOP("palette", "calando") },
+        { TempoChangeType::Lentando, QT_TRANSLATE_NOOP("palette", "lentando") },
+        { TempoChangeType::Morendo, QT_TRANSLATE_NOOP("palette", "morendo") },
+        { TempoChangeType::Precipitando, QT_TRANSLATE_NOOP("palette", "precipitando") },
+        { TempoChangeType::Rallentando, QT_TRANSLATE_NOOP("palette", "rall.") },
+        { TempoChangeType::Ritardando, QT_TRANSLATE_NOOP("palette", "rit.") },
+        { TempoChangeType::Smorzando, QT_TRANSLATE_NOOP("palette", "smorz.") },
+        { TempoChangeType::Sostenuto, QT_TRANSLATE_NOOP("palette", "sost.") },
+        { TempoChangeType::Stringendo, QT_TRANSLATE_NOOP("palette", "string.") }
     };
 
     for (const auto& pair : defaultPalette ? DEFAULT_TEMPO_CHANGE : MASTER_TEMPO_CHANGE) {

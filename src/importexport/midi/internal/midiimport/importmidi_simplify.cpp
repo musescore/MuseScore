@@ -189,7 +189,7 @@ void shortenDrumNote(
         }
         if (next != chords.end()) {
             const auto len = ReducedFraction::fromTicks(
-                Constant::division) / 8;                             // 1/32
+                Constants::division) / 8;                             // 1/32
             auto newOffTime = it->first + len;
             if (next->second.isInTuplet) {
                 const auto& tuplet = next->second.tuplet->second;

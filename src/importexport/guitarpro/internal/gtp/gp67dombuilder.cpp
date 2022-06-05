@@ -957,7 +957,7 @@ void GP67DomBuilder::readBeatXProperties(const QDomNode& propertiesNode, GPBeat*
 
         if (propertyId == 687931393 || propertyId == 687935489) {
             // arpeggio/brush ticks
-            beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / mu::engraving::Constant::division);
+            beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / mu::engraving::Constants::division);
         }
 
         propertyNode = propertyNode.nextSibling();

@@ -137,7 +137,7 @@ bool QmlPlugin::requiresScore() const
 
 int QmlPlugin::division() const
 {
-    return Constant::division;
+    return Constants::division;
 }
 
 int QmlPlugin::mscoreVersion() const
