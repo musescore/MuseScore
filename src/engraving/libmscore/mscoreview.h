@@ -84,6 +84,6 @@ private:
     EngravingItem* elementAt(const mu::PointF& p) const;
     const std::vector<EngravingItem*> elementsNear(const mu::PointF& pos) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

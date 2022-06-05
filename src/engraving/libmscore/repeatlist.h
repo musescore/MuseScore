@@ -113,5 +113,5 @@ public:
 
     std::vector<RepeatSegment*>::const_iterator findRepeatSegmentFromUTick(int utick) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

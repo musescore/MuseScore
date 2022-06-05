@@ -88,5 +88,5 @@ protected:
     qreal _relative;
     bool _isRelative;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

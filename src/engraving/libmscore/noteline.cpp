@@ -45,4 +45,4 @@ LineSegment* NoteLine::createLineSegment(System* parent)
     seg->setTrack(track());
     return seg;
 }
-}     // namespace Ms
+} // namespace mu::engraving

@@ -52,5 +52,5 @@ public:
 
     QString accessibleInfo() const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -57,6 +57,6 @@ public:
     void dump() const;
 #endif
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

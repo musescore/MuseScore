@@ -88,5 +88,5 @@ public:
 
 // Segment* begin(SegmentList& l) { return l.first(); }
 // Segment* end(SegmentList&) { return 0; }
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

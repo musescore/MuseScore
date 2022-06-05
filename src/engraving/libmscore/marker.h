@@ -97,7 +97,7 @@ struct MarkerTypeItem {
 };
 
 extern const std::vector<MarkerTypeItem> markerTypeTable;
-}     // namespace Ms
+} // namespace mu::engraving
 
 Q_DECLARE_METATYPE(mu::engraving::Marker::Type);
 

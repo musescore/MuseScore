@@ -44,6 +44,6 @@ private:
     friend class mu::engraving::Factory;
     Text(EngravingItem* parent, TextStyleType tid = TextStyleType::DEFAULT);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

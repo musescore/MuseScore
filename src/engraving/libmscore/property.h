@@ -405,6 +405,6 @@ extern bool propertyLink(Pid id);
 extern Pid propertyId(const QString& name);
 extern Pid propertyId(const QStringRef& name);
 extern QString propertyUserName(Pid);
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

@@ -95,5 +95,5 @@ extern int step2pitch(int step);
 extern Segment* skipTuplet(Tuplet* tuplet);
 extern SymIdList timeSigSymIdsFromString(const QString&);
 extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

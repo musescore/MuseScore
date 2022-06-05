@@ -86,5 +86,5 @@ private:
     mu::PointF m_notePos;
     qreal m_noteWidth;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -132,5 +132,5 @@ private:
 
     bool sameVoiceKerningLimited() const override { return true; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -189,5 +189,5 @@ public:
     // TODO: do we need instruments info in parts at all?
     friend void readPart206(Part*, XmlReader&);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

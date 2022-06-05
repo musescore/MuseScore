@@ -96,6 +96,6 @@ public:
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

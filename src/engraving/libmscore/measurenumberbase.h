@@ -55,6 +55,6 @@ public:
 private:
     PlacementH m_placementH = PlacementH::LEFT;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

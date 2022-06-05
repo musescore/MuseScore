@@ -320,7 +320,7 @@ public:
 
     void appendItem(FiguredBassItem* item) { items.push_back(item); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::Modifier);
 Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::Parenthesis);

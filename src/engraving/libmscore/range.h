@@ -108,5 +108,5 @@ public:
 
     friend class TrackList;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

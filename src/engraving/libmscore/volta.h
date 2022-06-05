@@ -100,7 +100,7 @@ public:
 
     QString accessibleInfo() const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 Q_DECLARE_METATYPE(mu::engraving::Volta::Type);
 

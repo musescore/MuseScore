@@ -138,5 +138,5 @@ public:
 
     bool operator==(const PosLen& s) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -105,5 +105,5 @@ public:
 
 extern Drumset* smDrumset;
 extern void initDrumset();
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

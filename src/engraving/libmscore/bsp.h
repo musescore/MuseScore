@@ -103,5 +103,5 @@ public:
     virtual ~BspTreeVisitor() {}
     virtual void visit(std::list<EngravingItem*>* items) = 0;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

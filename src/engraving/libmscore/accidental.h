@@ -141,7 +141,7 @@ public:
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);
-}     // namespace Ms
+} // namespace mu::engraving
 
 Q_DECLARE_METATYPE(mu::engraving::AccidentalRole);
 

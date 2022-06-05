@@ -89,5 +89,5 @@ private:
 
     mu::PolygonF m_polygon;                    // computed by layout
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

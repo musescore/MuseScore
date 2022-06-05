@@ -2651,4 +2651,4 @@ Fraction Segment::shortestChordRest() const
     }
     return shortest;
 }
-}           // namespace Ms
+} // namespace mu::engraving

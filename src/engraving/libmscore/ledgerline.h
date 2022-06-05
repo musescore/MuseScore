@@ -70,5 +70,5 @@ public:
     bool readProperties(XmlReader&) override;
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -42,5 +42,5 @@ public:
     int nextClefTick(int tick) const;
     int currentClefTick(int tick) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

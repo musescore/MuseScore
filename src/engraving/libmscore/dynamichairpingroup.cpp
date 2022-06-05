@@ -216,4 +216,4 @@ void DynamicNearHairpinsDragGroup::endDrag(EditData& ed)
     dynamic->endDrag(ed);
     dynamic->triggerLayout();
 }
-} // namespace Ms
+} // namespace mu::engraving

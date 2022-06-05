@@ -95,6 +95,6 @@ struct ScoreOrder
 
     void updateInstruments(const Score* score);
 };
-} // namespace Ms
+} // namespace mu::engraving
 
 #endif

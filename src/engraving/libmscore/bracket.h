@@ -129,5 +129,5 @@ public:
 
     void setSelected(bool f) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

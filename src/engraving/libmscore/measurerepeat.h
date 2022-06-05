@@ -80,5 +80,5 @@ private:
     qreal m_numberPos;
     SymId m_symId;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

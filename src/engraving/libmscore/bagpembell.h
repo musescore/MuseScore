@@ -81,5 +81,5 @@ public:
     static BagpipeNoteInfo BagpipeNoteInfoList[];
     noteList getNoteList() const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

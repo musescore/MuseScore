@@ -52,5 +52,5 @@ public:
 private:
     Type _type = Type::Main;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

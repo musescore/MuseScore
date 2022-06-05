@@ -59,6 +59,6 @@ public:
     Segment* segment() const override { return nullptr; }
     System* system() const { return (System*)explicitParent(); }
 };
-} // namespace Ms
+} // namespace mu::engraving
 
 #endif

@@ -71,5 +71,5 @@ public:
 
     bool placeMultiple() const override { return false; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

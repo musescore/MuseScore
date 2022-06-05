@@ -53,5 +53,5 @@ public:
     Grip defaultGrip() const override { return Grip(7); }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -64,5 +64,5 @@ public:
     qreal XfromY(const qreal y) const { return EvalX(tFromY(y)); }
     void timeList(const int nbNotes, const int duration, std::vector<int>* times) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

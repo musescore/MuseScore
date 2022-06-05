@@ -318,5 +318,5 @@ public:
     void triggerLayout() const override;
     void triggerLayout(const Fraction& tick);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

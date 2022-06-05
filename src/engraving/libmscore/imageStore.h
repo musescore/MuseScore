@@ -90,5 +90,5 @@ public:
 };
 
 extern ImageStore imageStore;       // this is the global imageStore
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

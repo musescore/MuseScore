@@ -245,5 +245,5 @@ public:
 
 typedef std::vector<System*>::iterator iSystem;
 typedef std::vector<System*>::const_iterator ciSystem;
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

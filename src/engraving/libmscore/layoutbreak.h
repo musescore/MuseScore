@@ -95,6 +95,6 @@ private:
     bool _firstSystemIndentation;
     LayoutBreakType _layoutBreakType;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif
