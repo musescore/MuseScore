@@ -33,9 +33,10 @@
 
 #include "translation.h"
 
+using namespace mu::palette;
 using namespace mu::notation;
+using namespace mu::engraving;
 
-namespace mu::engraving {
 Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chords)
 {
     MCursor c;
@@ -218,5 +219,4 @@ void NoteGroups::updateBeams(Chord* chord, BeamMode m)
     view8->update();
     view16->update();
     view32->update();
-}
 }
