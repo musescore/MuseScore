@@ -514,16 +514,15 @@ void HairpinSegment::draw(mu::draw::Painter* painter) const
     using namespace mu::draw;
     TextLineBaseSegment::draw(painter);
 
-    Color color = curColor(hairpin()->visible(), hairpin()->lineColor());
-    double w = hairpin()->lineWidth();
-    if (staff()) {
-        w *= staff()->staffMag(hairpin()->tick());
-    }
-
-    Pen pen(color, w);
-    painter->setPen(pen);
-
     if (drawCircledTip) {
+        Color color = curColor(hairpin()->visible(), hairpin()->lineColor());
+        double w = hairpin()->lineWidth();
+        if (staff()) {
+            w *= staff()->staffMag(hairpin()->tick());
+        }
+
+        Pen pen(color, w);
+        painter->setPen(pen);
         painter->setBrush(BrushStyle::NoBrush);
         painter->drawEllipse(circledTip, circledTipRadius, circledTipRadius);
     }
