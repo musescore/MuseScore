@@ -69,15 +69,15 @@ protected:
 TEST_F(PlaybackEventsRendererTests, SingleNote_TenutoAccent)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tenuto_accent/tenuto_accent.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tenuto_accent/tenuto_accent.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
@@ -116,15 +116,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_TenutoAccent)
 TEST_F(PlaybackEventsRendererTests, SingleNote_NoArticulations)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_no_articulations/no_articulations.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_no_articulations/no_articulations.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
@@ -161,15 +161,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_NoArticulations)
 TEST_F(PlaybackEventsRendererTests, Rest)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "whole_measure_rest/whole_measure_rest.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "whole_measure_rest/whole_measure_rest.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* rest = firstSegment->nextChordRest(0);
+    ChordRest* rest = firstSegment->nextChordRest(0);
     ASSERT_TRUE(rest);
 
     // [WHEN] Request to render the rest
@@ -195,16 +195,16 @@ TEST_F(PlaybackEventsRendererTests, Rest)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_trill_default_tempo/single_note_trill_default_tempo.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected trill disclosure
@@ -253,16 +253,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Unexpandable_Trill)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_unexpandable_trill/single_note_unexpandable_trill.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected trill disclosure
@@ -289,16 +289,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Unexpandable_Trill)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_trill_baroque/single_note_trill_baroque.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected trill disclosure
@@ -356,16 +356,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_regular_turn/single_note_regular_turn.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -416,16 +416,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_inverted_turn/single_note_inverted_turn.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -477,16 +477,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_inverted_turn_slash_variation/single_note_inverted_turn_slash_variation.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -537,16 +537,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_upper_mordent/single_note_upper_mordent.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -610,16 +610,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_lower_mordent/single_note_lower_mordent.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -683,16 +683,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
 TEST_F(PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_discrete_glissando/two_notes_discrete_glissando.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected glissando disclosure
@@ -744,16 +744,16 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
 TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score
+    Score* score
         = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_continuous_glissando/two_notes_continuous_glissando.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected glissando disclosure
@@ -806,16 +806,16 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 TEST_F(PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_continuous_glissando_no_play/two_notes_continuous_glissando_no_play.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected glissando disclosure
@@ -867,16 +867,16 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_acciaccatura/single_note_acciaccatura.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -934,16 +934,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
 TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_multi_acciaccatura/single_note_multi_acciaccatura.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1004,16 +1004,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score
+    Score* score
         = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_appoggiatura_post/single_note_appoggiatura_post.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1071,16 +1071,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
 TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_multi_appoggiatura_post/single_note_multi_appoggiatura_post.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1141,15 +1141,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio/chord_arpeggio.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio/chord_arpeggio.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1203,15 +1203,15 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Up)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_up/chord_arpeggio_up.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_up/chord_arpeggio_up.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1265,15 +1265,15 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Up)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Down)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_down/chord_arpeggio_down.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_down/chord_arpeggio_down.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1327,16 +1327,16 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Down)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_straight_down/chord_arpeggio_straight_down.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1390,16 +1390,16 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(
+    Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_straight_up/chord_arpeggio_straight_up.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1454,15 +1454,15 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_bracket/chord_arpeggio_bracket.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_bracket/chord_arpeggio_bracket.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1516,15 +1516,15 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
 TEST_F(PlaybackEventsRendererTests, Single_Note_Tremolo)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tremolo/single_note_tremolo.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tremolo/single_note_tremolo.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1580,15 +1580,15 @@ TEST_F(PlaybackEventsRendererTests, Single_Note_Tremolo)
 TEST_F(PlaybackEventsRendererTests, Single_Chord_Tremolo)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_chord_tremolo/single_chord_tremolo.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_chord_tremolo/single_chord_tremolo.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1646,15 +1646,15 @@ TEST_F(PlaybackEventsRendererTests, Single_Chord_Tremolo)
 TEST_F(PlaybackEventsRendererTests, Two_Chords_Tremolo)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_chords_tremolo/two_chords_tremolo.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_chords_tremolo/two_chords_tremolo.mscx");
 
-    mu::engraving::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
+    ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure

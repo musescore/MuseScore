@@ -1506,14 +1506,14 @@ private:
     struct StyleValue {
         Sid _idx;
         mu::AsciiString _name;         // xml name for read()/write()
-        mu::engraving::PropertyValue _defaultValue;
+        PropertyValue _defaultValue;
 
     public:
         Sid  styleIdx() const { return _idx; }
         int idx() const { return int(_idx); }
         const mu::AsciiString& name() const { return _name; }
-        mu::engraving::P_TYPE valueType() const { return _defaultValue.type(); }
-        const mu::engraving::PropertyValue& defaultValue() const { return _defaultValue; }
+        P_TYPE valueType() const { return _defaultValue.type(); }
+        const PropertyValue& defaultValue() const { return _defaultValue; }
     };
 
     static const std::array<StyleValue, size_t(Sid::STYLES)> styleValues;

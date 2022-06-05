@@ -169,7 +169,7 @@ void InputState::update(Selection& selection)
                 }
 
                 articulationsIds = mu::engraving::splitArticulations(articulationsIds);
-                articulationsIds = mu::engraving::flipArticulations(articulationsIds, mu::engraving::PlacementV::ABOVE);
+                articulationsIds = mu::engraving::flipArticulations(articulationsIds, PlacementV::ABOVE);
                 for (const SymId& articulationSymbolId: articulationsIds) {
                     if (std::find(articulationSymbolIds.begin(), articulationSymbolIds.end(),
                                   articulationSymbolId) == articulationSymbolIds.end()) {
@@ -183,7 +183,7 @@ void InputState::update(Selection& selection)
                 for (Articulation* artic: n->chord()->articulations()) {
                     articulationsIds.insert(artic->symId());
                 }
-                articulationSymbolIds = mu::engraving::flipArticulations(articulationsIds, mu::engraving::PlacementV::ABOVE);
+                articulationSymbolIds = mu::engraving::flipArticulations(articulationsIds, PlacementV::ABOVE);
 
                 n1 = n;
             }

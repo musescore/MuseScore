@@ -43,9 +43,9 @@ public:
 
     void write(XmlWriter&) const override;
 
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue getProperty(Pid) const override;
+    PropertyValue propertyDefault(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
+    PropertyValue getProperty(Pid) const override;
 
     Shape shape() const override;
 

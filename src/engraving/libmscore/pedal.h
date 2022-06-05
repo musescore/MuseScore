@@ -69,7 +69,7 @@ public:
     void write(XmlWriter& xml) const override;
 
     LineSegment* createLineSegment(System* parent) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
 
     friend class PedalLine;
 };

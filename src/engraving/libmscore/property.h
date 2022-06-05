@@ -396,10 +396,10 @@ enum class Pid {
     END
 };
 
-extern mu::engraving::PropertyValue readProperty(Pid type, XmlReader& e);
-extern mu::engraving::PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value);
-extern QString propertyToString(Pid, const mu::engraving::PropertyValue& value, bool mscx);
-extern mu::engraving::P_TYPE propertyType(Pid);
+extern PropertyValue readProperty(Pid type, XmlReader& e);
+extern PropertyValue propertyFromString(P_TYPE type, QString value);
+extern QString propertyToString(Pid, const PropertyValue& value, bool mscx);
+extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
 extern Pid propertyId(const QString& name);

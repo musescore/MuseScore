@@ -33,12 +33,8 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
-class XmlWriter;
-class MuseScoreView;
 class Segment;
+class XmlWriter;
 
 static const int NO_CLEF = -1000;
 
@@ -101,7 +97,7 @@ class Clef final : public EngravingItem
 
     ClefTypeList _clefTypes { ClefType::INVALID };
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Clef(Segment* parent);
 
     bool neverKernable() const override { return true; }
@@ -145,9 +141,9 @@ public:
     void setClefType(const ClefTypeList& ctl) { _clefTypes = ctl; }
     void spatiumChanged(qreal oldValue, qreal newValue) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;

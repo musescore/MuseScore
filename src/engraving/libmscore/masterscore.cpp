@@ -328,7 +328,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     return true;
 }
 
-bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partScore)
+bool MasterScore::exportPart(MscWriter& mscWriter, Score* partScore)
 {
     // Write excerpt style as main
     {

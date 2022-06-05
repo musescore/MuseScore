@@ -81,8 +81,8 @@ public:
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 
-    mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
 
     static constexpr qreal DEFAULT_FONT_SIZE = 16.0;
 

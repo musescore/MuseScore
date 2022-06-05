@@ -84,7 +84,7 @@ bool ScoreOrder::operator!=(const ScoreOrder& order) const
     return !(*this == order);
 }
 
-bool ScoreOrder::readBoolAttribute(mu::engraving::XmlReader& reader, const char* attrName, bool defvalue)
+bool ScoreOrder::readBoolAttribute(XmlReader& reader, const char* attrName, bool defvalue)
 {
     if (!reader.hasAttribute(attrName)) {
         return defvalue;
@@ -103,7 +103,7 @@ bool ScoreOrder::readBoolAttribute(mu::engraving::XmlReader& reader, const char*
 //   readInstrument
 //---------------------------------------------------------
 
-void ScoreOrder::readInstrument(mu::engraving::XmlReader& reader)
+void ScoreOrder::readInstrument(XmlReader& reader)
 {
     QString instrumentId { reader.attribute("id") };
     if (!mu::engraving::searchTemplate(instrumentId)) {
@@ -127,7 +127,7 @@ void ScoreOrder::readInstrument(mu::engraving::XmlReader& reader)
 //   readSoloists
 //---------------------------------------------------------
 
-void ScoreOrder::readSoloists(mu::engraving::XmlReader& reader, const QString section)
+void ScoreOrder::readSoloists(XmlReader& reader, const QString section)
 {
     reader.skipCurrentElement();
     if (hasGroup(SOLOISTS_ID)) {
@@ -143,7 +143,7 @@ void ScoreOrder::readSoloists(mu::engraving::XmlReader& reader, const QString se
 //   readSection
 //---------------------------------------------------------
 
-void ScoreOrder::readSection(mu::engraving::XmlReader& reader)
+void ScoreOrder::readSection(XmlReader& reader)
 {
     QString sectionId { reader.attribute("id") };
     bool barLineSpan = readBoolAttribute(reader, "barLineSpan", true);
@@ -473,7 +473,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 //   read
 //---------------------------------------------------------
 
-void ScoreOrder::read(mu::engraving::XmlReader& reader)
+void ScoreOrder::read(XmlReader& reader)
 {
     id = reader.attribute("id");
     const QString sectionId { "" };
@@ -517,7 +517,7 @@ void ScoreOrder::read(mu::engraving::XmlReader& reader)
 //   write
 //---------------------------------------------------------
 
-void ScoreOrder::write(mu::engraving::XmlWriter& xml) const
+void ScoreOrder::write(XmlWriter& xml) const
 {
     if (!isValid()) {
         return;

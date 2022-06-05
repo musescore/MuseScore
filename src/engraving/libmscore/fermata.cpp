@@ -386,20 +386,20 @@ qreal Fermata::mag() const
 FermataType Fermata::fermataType() const
 {
     static const std::unordered_map<SymId, FermataType> FERMATA_TYPES = {
-        { mu::engraving::SymId::fermataAbove, FermataType::Normal },
-        { mu::engraving::SymId::fermataBelow, FermataType::Normal },
-        { mu::engraving::SymId::fermataLongAbove, FermataType::Long },
-        { mu::engraving::SymId::fermataLongBelow, FermataType::Long },
-        { mu::engraving::SymId::fermataLongHenzeAbove, FermataType::LongHenze },
-        { mu::engraving::SymId::fermataLongHenzeBelow, FermataType::LongHenze },
-        { mu::engraving::SymId::fermataVeryLongAbove, FermataType::VeryLong },
-        { mu::engraving::SymId::fermataVeryLongBelow, FermataType::VeryLong },
-        { mu::engraving::SymId::fermataShortHenzeAbove, FermataType::ShortHenze },
-        { mu::engraving::SymId::fermataShortHenzeBelow, FermataType::ShortHenze },
-        { mu::engraving::SymId::fermataVeryShortAbove, FermataType::VeryShort },
-        { mu::engraving::SymId::fermataVeryShortBelow, FermataType::VeryShort },
-        { mu::engraving::SymId::fermataShortAbove, FermataType::Short },
-        { mu::engraving::SymId::fermataShortBelow, FermataType::Short },
+        { SymId::fermataAbove, FermataType::Normal },
+        { SymId::fermataBelow, FermataType::Normal },
+        { SymId::fermataLongAbove, FermataType::Long },
+        { SymId::fermataLongBelow, FermataType::Long },
+        { SymId::fermataLongHenzeAbove, FermataType::LongHenze },
+        { SymId::fermataLongHenzeBelow, FermataType::LongHenze },
+        { SymId::fermataVeryLongAbove, FermataType::VeryLong },
+        { SymId::fermataVeryLongBelow, FermataType::VeryLong },
+        { SymId::fermataShortHenzeAbove, FermataType::ShortHenze },
+        { SymId::fermataShortHenzeBelow, FermataType::ShortHenze },
+        { SymId::fermataVeryShortAbove, FermataType::VeryShort },
+        { SymId::fermataVeryShortBelow, FermataType::VeryShort },
+        { SymId::fermataShortAbove, FermataType::Short },
+        { SymId::fermataShortBelow, FermataType::Short },
     };
 
     auto search = FERMATA_TYPES.find(symId());

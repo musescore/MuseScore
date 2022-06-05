@@ -61,13 +61,13 @@ ArticulationType PlaybackContext::persistentArticulationType(const int nominalPo
     return mpe::ArticulationType::Standard;
 }
 
-void PlaybackContext::update(const ID partId, const mu::engraving::Score* score)
+void PlaybackContext::update(const ID partId, const Score* score)
 {
-    for (const mu::engraving::RepeatSegment* repeatSegment : score->repeatList()) {
+    for (const RepeatSegment* repeatSegment : score->repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
-        for (const mu::engraving::Measure* measure : repeatSegment->measureList()) {
-            for (mu::engraving::Segment* segment = measure->first(); segment; segment = segment->next()) {
+        for (const Measure* measure : repeatSegment->measureList()) {
+            for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                 int segmentStartTick = segment->tick().ticks() + tickPositionOffset;
 
                 handleAnnotations(partId, segment, segmentStartTick);
@@ -84,7 +84,7 @@ void PlaybackContext::clear()
     m_playTechniquesMap.clear();
 }
 
-DynamicLevelMap PlaybackContext::dynamicLevelMap(const mu::engraving::Score* score) const
+DynamicLevelMap PlaybackContext::dynamicLevelMap(const Score* score) const
 {
     DynamicLevelMap result;
 
@@ -110,10 +110,9 @@ dynamic_level_t PlaybackContext::nominalDynamicLevel(const int positionTick) con
     return search->second;
 }
 
-void PlaybackContext::updateDynamicMap(const mu::engraving::Dynamic* dynamic, const mu::engraving::Segment* segment,
-                                       const int segmentPositionTick)
+void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick)
 {
-    const mu::engraving::DynamicType type = dynamic->dynamicType();
+    const DynamicType type = dynamic->dynamicType();
     if (isOrdinaryDynamicType(type)) {
         m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(type);
         return;
@@ -137,18 +136,18 @@ void PlaybackContext::updateDynamicMap(const mu::engraving::Dynamic* dynamic, co
     applyDynamicToNextSegment(segment, dynamicLevelFromType(transition.to));
 }
 
-void PlaybackContext::updatePlayTechMap(const mu::engraving::PlayTechAnnotation* annotation, const int segmentPositionTick)
+void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick)
 {
-    const mu::engraving::PlayingTechniqueType type = annotation->techniqueType();
+    const PlayingTechniqueType type = annotation->techniqueType();
 
-    if (type == mu::engraving::PlayingTechniqueType::Undefined) {
+    if (type == PlayingTechniqueType::Undefined) {
         return;
     }
 
     m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
 }
 
-void PlaybackContext::applyDynamicToNextSegment(const mu::engraving::Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel)
+void PlaybackContext::applyDynamicToNextSegment(const Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel)
 {
     if (!currentSegment->next()) {
         return;
@@ -158,10 +157,10 @@ void PlaybackContext::applyDynamicToNextSegment(const mu::engraving::Segment* cu
     m_dynamicsMap[nextSegmentPositionTick] = dynamicLevel;
 }
 
-void PlaybackContext::handleSpanners(const ID partId, const mu::engraving::Score* score)
+void PlaybackContext::handleSpanners(const ID partId, const Score* score)
 {
     for (const auto& pair : score->spanner()) {
-        const mu::engraving::Spanner* spanner = pair.second;
+        const Spanner* spanner = pair.second;
 
         if (!spanner->isHairpin()) {
             continue;
@@ -180,10 +179,10 @@ void PlaybackContext::handleSpanners(const ID partId, const mu::engraving::Score
             continue;
         }
 
-        const mu::engraving::Hairpin* hairpin = mu::engraving::toHairpin(spanner);
+        const Hairpin* hairpin = toHairpin(spanner);
 
-        mu::engraving::DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
-        mu::engraving::DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
+        DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
+        DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
 
         dynamic_level_t nominalLevelFrom = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(spannerFrom));
         dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevel(spannerTo));
@@ -205,9 +204,9 @@ void PlaybackContext::handleSpanners(const ID partId, const mu::engraving::Score
     }
 }
 
-void PlaybackContext::handleAnnotations(const ID partId, const mu::engraving::Segment* segment, const int segmentPositionTick)
+void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick)
 {
-    for (const mu::engraving::EngravingItem* annotation : segment->annotations()) {
+    for (const EngravingItem* annotation : segment->annotations()) {
         if (!annotation || !annotation->part()) {
             continue;
         }
@@ -217,12 +216,12 @@ void PlaybackContext::handleAnnotations(const ID partId, const mu::engraving::Se
         }
 
         if (annotation->isDynamic()) {
-            updateDynamicMap(mu::engraving::toDynamic(annotation), segment, segmentPositionTick);
+            updateDynamicMap(toDynamic(annotation), segment, segmentPositionTick);
             return;
         }
 
         if (annotation->isPlayTechAnnotation()) {
-            updatePlayTechMap(mu::engraving::toPlayTechAnnotation(annotation), segmentPositionTick);
+            updatePlayTechMap(toPlayTechAnnotation(annotation), segmentPositionTick);
             return;
         }
     }

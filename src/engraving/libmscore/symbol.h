@@ -64,8 +64,8 @@ public:
     void read(XmlReader&) override;
     void layout() override;
 
-    mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
 
     qreal baseLine() const override { return 0.0; }
     virtual Segment* segment() const { return (Segment*)explicitParent(); }

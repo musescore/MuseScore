@@ -33,10 +33,10 @@ class Read302
 {
 public:
 
-    static mu::engraving::Score::FileError read302(mu::engraving::MasterScore* masterScore, mu::engraving::XmlReader& e, ReadContext& ctx);
+    static Score::FileError read302(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
 
 private:
-    static bool readScore302(mu::engraving::Score* score, mu::engraving::XmlReader& e, ReadContext& ctx);
+    static bool readScore302(Score* score, XmlReader& e, ReadContext& ctx);
 };
 }
 

@@ -35,7 +35,7 @@ namespace mu::engraving {
 
 class StaffText final : public StaffTextBase
 {
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue propertyDefault(Pid id) const override;
 
 public:
     StaffText(Segment* parent = 0, TextStyleType = TextStyleType::STAFF);

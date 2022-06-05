@@ -28,9 +28,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
 class Segment;
 
 //---------------------------------------------------------------------------------------
@@ -46,7 +43,7 @@ class KeySig final : public EngravingItem
     bool _hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
     KeySigEvent _sig;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     KeySig(Segment* = 0);
     KeySig(const KeySig&);
 
@@ -94,9 +91,9 @@ public:
     void setForInstrumentChange(bool forInstrumentChange) { _sig.setForInstrumentChange(forInstrumentChange); }
     bool forInstrumentChange() const { return _sig.forInstrumentChange(); }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;

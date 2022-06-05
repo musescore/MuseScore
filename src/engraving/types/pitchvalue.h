@@ -102,10 +102,4 @@ inline PitchValues pitchValuesFromQVariant(const QVariant& var)
 #endif
 }
 
-//! NOTE compat
-namespace mu::engraving {
-using PitchValue = mu::engraving::PitchValue;
-using PitchValues = mu::engraving::PitchValues;
-}
-
 #endif // MU_ENGRAVING_PITCHVALUE_H

@@ -51,23 +51,23 @@ class MStyle
 public:
     MStyle() = default;
 
-    const mu::engraving::PropertyValue& styleV(Sid idx) const { return value(idx); }
+    const PropertyValue& styleV(Sid idx) const { return value(idx); }
     Spatium styleS(Sid idx) const
     {
-        Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::SPATIUM);
+        Q_ASSERT(MStyle::valueType(idx) == P_TYPE::SPATIUM);
         return value(idx).value<Spatium>();
     }
 
-    Millimetre styleMM(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::SPATIUM); return valueMM(idx); }
-    QString  styleSt(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::STRING); return value(idx).toString(); }
-    bool     styleB(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::BOOL); return value(idx).toBool(); }
-    qreal    styleD(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::REAL); return value(idx).toReal(); }
+    Millimetre styleMM(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::SPATIUM); return valueMM(idx); }
+    QString  styleSt(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::STRING); return value(idx).toString(); }
+    bool     styleB(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::BOOL); return value(idx).toBool(); }
+    qreal    styleD(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::REAL); return value(idx).toReal(); }
     int      styleI(Sid idx) const { /* can be int or enum, so no assert */ return value(idx).toInt(); }
 
-    const mu::engraving::PropertyValue& value(Sid idx) const;
+    const PropertyValue& value(Sid idx) const;
     Millimetre valueMM(Sid idx) const;
 
-    void set(Sid idx, const mu::engraving::PropertyValue& v);
+    void set(Sid idx, const PropertyValue& v);
 
     bool isDefault(Sid idx) const;
     void setDefaultStyleVersion(const int defaultsVersion);
@@ -80,21 +80,21 @@ public:
 
     void precomputeValues();
 
-    static mu::engraving::P_TYPE valueType(const Sid);
+    static P_TYPE valueType(const Sid);
     static const char* valueName(const Sid);
     static Sid styleIdx(const QString& name);
 
 private:
 
-    friend class mu::engraving::compat::ReadStyleHook;
+    friend class compat::ReadStyleHook;
 
-    void read(XmlReader& e, mu::engraving::compat::ReadChordListHook* readChordListHook);
+    void read(XmlReader& e, compat::ReadChordListHook* readChordListHook);
 
     bool readProperties(XmlReader&);
     bool readStyleValCompat(XmlReader&);
     bool readTextStyleValCompat(XmlReader&);
 
-    std::array<mu::engraving::PropertyValue, size_t(Sid::STYLES)> m_values;
+    std::array<PropertyValue, size_t(Sid::STYLES)> m_values;
     std::array<Millimetre, size_t(Sid::STYLES)> m_precomputedValues;
 };
 } // namespace mu::engraving

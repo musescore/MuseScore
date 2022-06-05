@@ -41,9 +41,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
 class Tie;
 class Chord;
 class NoteEvent;
@@ -230,7 +227,7 @@ private:
 
     QString _fretString;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Note(Chord* ch = 0);
     Note(const Note&, bool link = false);
 
@@ -378,8 +375,8 @@ public:
     bool play() const { return _play; }
     void setPlay(bool val) { _play = val; }
 
-    mu::engraving::Tie* tieFor() const { return _tieFor; }
-    mu::engraving::Tie* tieBack() const { return _tieBack; }
+    Tie* tieFor() const { return _tieFor; }
+    Tie* tieBack() const { return _tieBack; }
     void setTieFor(Tie* t) { _tieFor = t; }
     void setTieBack(Tie* t) { _tieBack = t; }
     Note* firstTiedNote() const;
@@ -467,9 +464,9 @@ public:
     void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     bool mark() const { return _mark; }
     void setMark(bool v) const { _mark = v; }

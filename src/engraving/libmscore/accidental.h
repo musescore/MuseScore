@@ -37,9 +37,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
 class Note;
 enum class AccidentalVal : signed char;
 
@@ -80,7 +77,7 @@ class Accidental final : public EngravingItem
     AccidentalBracket _bracket     { AccidentalBracket::NONE };
     AccidentalRole _role           { AccidentalRole::AUTO };
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
 
     Accidental(EngravingItem* parent);
 
@@ -125,9 +122,9 @@ public:
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
     static AccidentalVal subtype2value(AccidentalType);               // return effective pitch offset

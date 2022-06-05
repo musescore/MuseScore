@@ -36,7 +36,7 @@ class StemSlash final : public EngravingItem
 {
     mu::LineF line;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     StemSlash(Chord* parent = 0);
 
 public:

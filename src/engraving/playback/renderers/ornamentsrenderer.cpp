@@ -204,17 +204,17 @@ const ArticulationTypeSet& OrnamentsRenderer::supportedTypes()
     return types;
 }
 
-void OrnamentsRenderer::doRender(const mu::engraving::EngravingItem* item, const ArticulationType preferredType,
+void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationType preferredType,
                                  const RenderingContext& context,
                                  mpe::PlaybackEventList& result)
 {
-    const mu::engraving::Chord* chord = mu::engraving::toChord(item);
+    const Chord* chord = toChord(item);
 
     IF_ASSERT_FAILED(chord) {
         return;
     }
 
-    for (const mu::engraving::Note* note : chord->notes()) {
+    for (const Note* note : chord->notes()) {
         if (!isNotePlayable(note)) {
             continue;
         }

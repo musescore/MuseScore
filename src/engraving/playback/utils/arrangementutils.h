@@ -31,7 +31,7 @@
 #include "types/constants.h"
 
 namespace mu::engraving {
-inline mpe::timestamp_t timestampFromTicks(const mu::engraving::Score* score, const int tick)
+inline mpe::timestamp_t timestampFromTicks(const Score* score, const int tick)
 {
     return score->repeatList().utick2utime(tick) * 1000;
 }
@@ -43,10 +43,10 @@ inline mpe::duration_t durationFromTicks(const qreal beatsPerSecond, const int d
     return (beatsNumber / beatsPerSecond) * 1000;
 }
 
-static constexpr int CROTCHET_TICKS = mu::engraving::Constant::division;
-static constexpr int QUAVER_TICKS = mu::engraving::Constant::division / 2;
-static constexpr int SEMIQUAVER_TICKS = mu::engraving::Constant::division / 4;
-static constexpr int DEMISEMIQUAVER_TICKS = mu::engraving::Constant::division / 8;
+static constexpr int CROTCHET_TICKS = Constants::division;
+static constexpr int QUAVER_TICKS = Constants::division / 2;
+static constexpr int SEMIQUAVER_TICKS = Constants::division / 4;
+static constexpr int DEMISEMIQUAVER_TICKS = Constants::division / 8;
 
 static constexpr qreal PRESTISSIMO_BPS_BOUND = 200 /*bpm*/ / 60.f /*secs*/;
 static constexpr qreal PRESTO_BPS_BOUND = 168 /*bpm*/ / 60.f /*secs*/;

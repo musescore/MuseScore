@@ -28,14 +28,12 @@
 
 namespace mu::engraving {
 enum class Pid : int;
-}
 
-namespace mu::engraving {
 class RootItem;
 }
 
 namespace mu::engraving::compat {
-class DummyElement : public mu::engraving::EngravingItem
+class DummyElement : public EngravingItem
 {
 public:
     DummyElement(EngravingObject* parent);
@@ -44,28 +42,28 @@ public:
     void init();
 
     RootItem* rootItem();
-    mu::engraving::Page* page();
-    mu::engraving::System* system();
-    mu::engraving::Measure* measure();
-    mu::engraving::Segment* segment();
-    mu::engraving::Chord* chord();
-    mu::engraving::Note* note();
+    Page* page();
+    System* system();
+    Measure* measure();
+    Segment* segment();
+    Chord* chord();
+    Note* note();
 
-    mu::engraving::EngravingItem* clone() const override;
+    EngravingItem* clone() const override;
 
-    mu::engraving::PropertyValue getProperty(mu::engraving::Pid) const override { return mu::engraving::PropertyValue(); }
-    bool setProperty(mu::engraving::Pid, const mu::engraving::PropertyValue&) override { return false; }
+    PropertyValue getProperty(Pid) const override { return PropertyValue(); }
+    bool setProperty(Pid, const PropertyValue&) override { return false; }
 
 private:
-    mu::engraving::AccessibleItem* createAccessible() override;
+    AccessibleItem* createAccessible() override;
 
     RootItem* m_root = nullptr;
-    mu::engraving::Page* m_page = nullptr;
-    mu::engraving::System* m_system = nullptr;
-    mu::engraving::Measure* m_measure = nullptr;
-    mu::engraving::Segment* m_segment = nullptr;
-    mu::engraving::Chord* m_chord = nullptr;
-    mu::engraving::Note* m_note = nullptr;
+    Page* m_page = nullptr;
+    System* m_system = nullptr;
+    Measure* m_measure = nullptr;
+    Segment* m_segment = nullptr;
+    Chord* m_chord = nullptr;
+    Note* m_note = nullptr;
 };
 }
 

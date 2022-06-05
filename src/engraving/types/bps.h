@@ -63,10 +63,4 @@ struct BeatsPerSecond // beats per second
 };
 }
 
-//! NOTE compat
-namespace mu::engraving {
-using BeatsPerMinute = mu::engraving::BeatsPerMinute;
-using BeatsPerSecond = mu::engraving::BeatsPerSecond;
-}
-
 #endif // MU_ENGRAVING_BPS_H

@@ -30,9 +30,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
 class StringData;
 class Chord;
 
@@ -164,7 +161,7 @@ class FretDiagram final : public EngravingItem
     qreal markerSize;
     int _numPos;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     FretDiagram(Segment* parent = nullptr);
     FretDiagram(const FretDiagram&);
 
@@ -239,7 +236,7 @@ public:
 
     Harmony* harmony() const { return _harmony; }
 
-    void init(mu::engraving::StringData*, Chord*);
+    void init(StringData*, Chord*);
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
 
@@ -249,9 +246,9 @@ public:
     void endEditDrag(EditData& editData) override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     qreal userMag() const { return _userMag; }
     void setUserMag(qreal m) { _userMag = m; }

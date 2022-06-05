@@ -72,10 +72,10 @@ struct ScoreOrder
     bool operator==(const ScoreOrder& order) const;
     bool operator!=(const ScoreOrder& order) const;
 
-    bool readBoolAttribute(mu::engraving::XmlReader& reader, const char* name, bool defValue);
-    void readInstrument(mu::engraving::XmlReader& reader);
-    void readSoloists(mu::engraving::XmlReader& reader, const QString section);
-    void readSection(mu::engraving::XmlReader& reader);
+    bool readBoolAttribute(XmlReader& reader, const char* name, bool defValue);
+    void readInstrument(XmlReader& reader);
+    void readSoloists(XmlReader& reader, const QString section);
+    void readSection(XmlReader& reader);
     bool hasGroup(const QString& id, const QString& group=QString()) const;
 
     bool isValid() const;
@@ -90,8 +90,8 @@ struct ScoreOrder
 
     void setBracketsAndBarlines(Score* score);
 
-    void read(mu::engraving::XmlReader& reader);
-    void write(mu::engraving::XmlWriter& xml) const;
+    void read(XmlReader& reader);
+    void write(XmlWriter& xml) const;
 
     void updateInstruments(const Score* score);
 };

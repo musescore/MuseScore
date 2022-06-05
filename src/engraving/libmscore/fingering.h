@@ -48,7 +48,7 @@ public:
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     QString accessibleInfo() const override;
 };

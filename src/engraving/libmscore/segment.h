@@ -29,9 +29,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
 class Measure;
 class Segment;
 class ChordRest;
@@ -78,7 +75,7 @@ class Segment final : public EngravingItem
     std::vector<qreal> _dotPosX;          // size = staves
     qreal m_spacing{ 0 };
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Segment(Measure* m = 0);
     Segment(Measure*, SegmentType, const Fraction&);
     Segment(const Segment&);
@@ -141,7 +138,7 @@ public:
 
     // a variant of the above function, specifically designed to be called from QML
     //@ returns the element at track 'track' (null if none)
-    mu::engraving::EngravingItem* elementAt(track_idx_t track) const;
+    EngravingItem* elementAt(track_idx_t track) const;
 
     const std::vector<EngravingItem*>& elist() const { return _elist; }
     std::vector<EngravingItem*>& elist() { return _elist; }
@@ -213,9 +210,9 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     bool operator<(const Segment&) const;
     bool operator>(const Segment&) const;

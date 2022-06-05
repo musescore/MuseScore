@@ -27,9 +27,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace mu::engraving {
 class Note;
 class Rest;
 
@@ -53,7 +50,7 @@ public:
     EngravingItem* elementBase() const override;
 
 private:
-    friend class mu::engraving::Factory;
+    friend class Factory;
     NoteDot(Note* parent);
     NoteDot(Rest* parent);
 };

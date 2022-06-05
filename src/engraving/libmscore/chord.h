@@ -116,7 +116,7 @@ class Chord final : public ChordRest
 
     std::vector<Articulation*> _articulations;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Chord(Segment* parent = 0);
     Chord(const Chord&, bool link = false);
 
@@ -243,9 +243,9 @@ public:
     Hook* hook() const { return _hook; }
 
     //@ add an element to the Chord
-    Q_INVOKABLE void add(mu::engraving::EngravingItem*) override;
+    Q_INVOKABLE void add(EngravingItem*) override;
     //@ remove the element from the Chord
-    Q_INVOKABLE void remove(mu::engraving::EngravingItem*) override;
+    Q_INVOKABLE void remove(EngravingItem*) override;
 
     Note* selectedNote() const;
     void layout() override;
@@ -290,9 +290,9 @@ public:
     void crossMeasureSetup(bool on) override;
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     void reset() override;
 
@@ -311,8 +311,8 @@ public:
     QString accessibleExtraInfo() const override;
 
     Shape shape() const override;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& newValue);
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& newValue, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue& newValue);
+    void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
 };
 } // namespace mu::engraving
 #endif

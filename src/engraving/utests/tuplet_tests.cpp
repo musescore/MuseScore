@@ -105,7 +105,7 @@ void TupletTests::tuplet(const char* p1, const char* p2)
 
     Segment* s = m2->first(SegmentType::ChordRest);
     EXPECT_TRUE(s != 0);
-    mu::engraving::Chord* c = toChord(s->element(0));
+    Chord* c = toChord(s->element(0));
     EXPECT_TRUE(c != 0);
 
     EXPECT_TRUE(createTuplet(3, c));

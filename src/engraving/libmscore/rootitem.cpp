@@ -55,7 +55,7 @@ EngravingObject* RootItem::scanParent() const
     return m_score->scanParent();
 }
 
-mu::engraving::AccessibleItem* RootItem::createAccessible()
+AccessibleItem* RootItem::createAccessible()
 {
     return new AccessibleRoot(this);
 }

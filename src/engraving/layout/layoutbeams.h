@@ -29,23 +29,21 @@ class Score;
 class Measure;
 class Chord;
 class ChordRest;
-}
 
-namespace mu::engraving {
 class LayoutContext;
 class LayoutBeams
 {
 public:
 
-    static bool isTopBeam(mu::engraving::ChordRest* cr);
-    static bool notTopBeam(mu::engraving::ChordRest* cr);
-    static void createBeams(mu::engraving::Score* score, LayoutContext& lc, mu::engraving::Measure* measure);
-    static void restoreBeams(mu::engraving::Measure* m);
-    static void breakCrossMeasureBeams(const LayoutContext& ctx, mu::engraving::Measure* measure);
-    static void respace(const std::vector<mu::engraving::ChordRest*>& elements);
+    static bool isTopBeam(ChordRest* cr);
+    static bool notTopBeam(ChordRest* cr);
+    static void createBeams(Score* score, LayoutContext& lc, Measure* measure);
+    static void restoreBeams(Measure* m);
+    static void breakCrossMeasureBeams(const LayoutContext& ctx, Measure* measure);
+    static void respace(const std::vector<ChordRest*>& elements);
 
 private:
-    static void beamGraceNotes(mu::engraving::Score* score, mu::engraving::Chord* mainNote, bool after);
+    static void beamGraceNotes(Score* score, Chord* mainNote, bool after);
 };
 }
 

@@ -67,7 +67,7 @@ public:
     void read(const Segment* fs, const Segment* ls);
     bool write(Score*, const Fraction&) const;
 
-    void appendGap(const Fraction&, mu::engraving::Score* score);
+    void appendGap(const Fraction&, Score* score);
     bool truncate(const Fraction&);
     void dump() const;
 };

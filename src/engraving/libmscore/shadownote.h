@@ -41,7 +41,7 @@ namespace mu::engraving {
 
 class ShadowNote final : public EngravingItem
 {
-    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(notation, IEngravingConfiguration, engravingConfiguration)
 
     Fraction m_tick;
     int m_lineIndex;

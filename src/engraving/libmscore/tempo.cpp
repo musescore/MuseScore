@@ -124,7 +124,7 @@ void TempoMap::normalize()
             e->second.tempo = tempo;
         }
         int delta = e->first - tick;
-        time += qreal(delta) / (Constant::division * tempo.val * _relTempo.val);
+        time += qreal(delta) / (Constants::division * tempo.val * _relTempo.val);
         time += e->second.pause;
         e->second.time = time;
         tick  = e->first;
@@ -294,7 +294,7 @@ qreal TempoMap::tick2time(int tick, int* sn) const
     if (sn) {
         *sn = _tempoSN;
     }
-    time += delta / (Constant::division * tempo.val * _relTempo.val);
+    time += delta / (Constants::division * tempo.val * _relTempo.val);
     return time;
 }
 
@@ -324,7 +324,7 @@ int TempoMap::time2tick(qreal time, int* sn) const
         tempo = e->second.tempo;
     }
     delta = time - delta;
-    tick += lrint(delta * _relTempo.val * Constant::division * tempo.val);
+    tick += lrint(delta * _relTempo.val * Constants::division * tempo.val);
     if (sn) {
         *sn = _tempoSN;
     }

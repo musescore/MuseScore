@@ -65,7 +65,7 @@ class Slur final : public SlurTie
     void slurPosChord(SlurPos*);
     int _sourceStemArrangement = -1;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Slur(EngravingItem* parent);
     Slur(const Slur&);
 

@@ -30,7 +30,7 @@
 using namespace mu::engraving::compat;
 using namespace mu::engraving;
 
-ReadChordListHook::ReadChordListHook(mu::engraving::Score* score)
+ReadChordListHook::ReadChordListHook(Score* score)
     : m_score(score)
 {
     if (m_score) {
@@ -38,7 +38,7 @@ ReadChordListHook::ReadChordListHook(mu::engraving::Score* score)
     }
 }
 
-void ReadChordListHook::read(mu::engraving::XmlReader& e)
+void ReadChordListHook::read(XmlReader& e)
 {
     if (!m_score) {
         return;

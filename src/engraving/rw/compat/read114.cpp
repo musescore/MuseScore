@@ -600,7 +600,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
         const AsciiString tag(e.name());
 
         if (tag == "html-data") {
-            auto htmlDdata = mu::engraving::HtmlParser::parse(e.readXml());
+            auto htmlDdata = HtmlParser::parse(e.readXml());
             htmlDdata.replace(" ", "");
             fing->setPlainText(htmlDdata);
         } else if (tag == "subtype") {

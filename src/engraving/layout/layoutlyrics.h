@@ -27,15 +27,13 @@
 namespace mu::engraving {
 class Score;
 class System;
-}
 
-namespace mu::engraving {
 class LayoutLyrics
 {
 public:
     LayoutLyrics() = default;
 
-    static void layoutLyrics(const LayoutOptions& options, const mu::engraving::Score* score, mu::engraving::System* system);
+    static void layoutLyrics(const LayoutOptions& options, const Score* score, System* system);
 };
 }
 #endif // MU_ENGRAVING_LAYOUTLYRICS_H

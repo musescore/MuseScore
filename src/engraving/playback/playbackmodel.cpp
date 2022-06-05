@@ -45,7 +45,7 @@ static const std::string METRONOME_INSTRUMENT_ID("metronome");
 
 const InstrumentTrackId PlaybackModel::METRONOME_TRACK_ID = { 999, METRONOME_INSTRUMENT_ID };
 
-void PlaybackModel::load(mu::engraving::Score* score)
+void PlaybackModel::load(Score* score)
 {
     if (!score || score->measures()->empty() || !score->lastMeasure()) {
         return;
@@ -56,7 +56,7 @@ void PlaybackModel::load(mu::engraving::Score* score)
     auto changesChannel = score->changesChannel();
     changesChannel.resetOnReceive(this);
 
-    changesChannel.onReceive(this, [this](const mu::engraving::ScoreChangesRange& range) {
+    changesChannel.onReceive(this, [this](const ScoreChangesRange& range) {
         TickBoundaries tickRange = tickBoundaries(range);
         TrackBoundaries trackRange = trackBoundaries(range);
 
@@ -131,7 +131,7 @@ const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrac
         return search->second;
     }
 
-    const mu::engraving::Part* part = m_score ? m_score->partById(trackId.partId.toUint64()) : nullptr;
+    const Part* part = m_score ? m_score->partById(trackId.partId.toUint64()) : nullptr;
 
     if (!part) {
         static PlaybackData empty;
@@ -148,7 +148,7 @@ const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, co
     return resolveTrackPlaybackData(idKey(partId, instrumentId));
 }
 
-void PlaybackModel::triggerEventsForItem(const mu::engraving::EngravingItem* item)
+void PlaybackModel::triggerEventsForItem(const EngravingItem* item)
 {
     IF_ASSERT_FAILED(item) {
         return;
@@ -167,7 +167,7 @@ void PlaybackModel::triggerEventsForItem(const mu::engraving::EngravingItem* ite
 
     int utick = repeatList().tick2utick(item->tick().ticks());
     timestamp_t actualTimestamp = timestampFromTicks(item->score(), utick);
-    duration_t actualDuration = mu::engraving::MScore::defaultPlayDuration;
+    duration_t actualDuration = MScore::defaultPlayDuration;
     dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
 
     const PlaybackContext& ctx = m_playbackCtxMap[trackId];
@@ -204,7 +204,7 @@ void PlaybackModel::update(const int tickFrom, const int tickTo, const track_idx
 
 void PlaybackModel::updateSetupData()
 {
-    for (const mu::engraving::Part* part : m_score->parts()) {
+    for (const Part* part : m_score->parts()) {
         for (const auto& pair : part->instruments()) {
             InstrumentTrackId trackId = idKey(part->id(), pair.second->id().toStdString());
 
@@ -221,7 +221,7 @@ void PlaybackModel::updateSetupData()
 
 void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t trackTo)
 {
-    for (const mu::engraving::Part* part : m_score->parts()) {
+    for (const Part* part : m_score->parts()) {
         if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
             continue;
         }
@@ -241,7 +241,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
 {
     std::set<ID> changedPartIdSet = m_score->partIdsFromRange(trackFrom, trackTo);
 
-    for (const mu::engraving::RepeatSegment* repeatSegment : repeatList()) {
+    for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
         int repeatStartTick = repeatSegment->tick;
         int repeatEndTick = repeatStartTick + repeatSegment->len();
@@ -250,7 +250,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
             continue;
         }
 
-        for (const mu::engraving::Measure* measure : repeatSegment->measureList()) {
+        for (const Measure* measure : repeatSegment->measureList()) {
             int measureStartTick = measure->tick().ticks();
             int measureEndTick = measure->endTick().ticks();
 
@@ -258,7 +258,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                 continue;
             }
 
-            for (mu::engraving::Segment* segment = measure->first(); segment; segment = segment->next()) {
+            for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                 if (!segment->isChordRestType()) {
                     continue;
                 }
@@ -270,7 +270,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                     continue;
                 }
 
-                for (const mu::engraving::EngravingItem* item : segment->elist()) {
+                for (const EngravingItem* item : segment->elist()) {
                     if (!item || !item->isChordRest() || !item->part()) {
                         continue;
                     }
@@ -310,14 +310,14 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
     }
 }
 
-bool PlaybackModel::hasToReloadTracks(const std::unordered_set<mu::engraving::ElementType>& changedTypes) const
+bool PlaybackModel::hasToReloadTracks(const std::unordered_set<ElementType>& changedTypes) const
 {
-    static const std::unordered_set<mu::engraving::ElementType> REQUIRED_TYPES = {
-        mu::engraving::ElementType::PLAYTECH_ANNOTATION, mu::engraving::ElementType::DYNAMIC, mu::engraving::ElementType::HAIRPIN,
-        mu::engraving::ElementType::HAIRPIN_SEGMENT
+    static const std::unordered_set<ElementType> REQUIRED_TYPES = {
+        ElementType::PLAYTECH_ANNOTATION, ElementType::DYNAMIC, ElementType::HAIRPIN,
+        ElementType::HAIRPIN_SEGMENT
     };
 
-    for (const mu::engraving::ElementType type : REQUIRED_TYPES) {
+    for (const ElementType type : REQUIRED_TYPES) {
         if (changedTypes.find(type) == changedTypes.cend()) {
             continue;
         }
@@ -328,15 +328,15 @@ bool PlaybackModel::hasToReloadTracks(const std::unordered_set<mu::engraving::El
     return false;
 }
 
-bool PlaybackModel::hasToReloadScore(const std::unordered_set<mu::engraving::ElementType>& changedTypes) const
+bool PlaybackModel::hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const
 {
-    static const std::unordered_set<mu::engraving::ElementType> REQUIRED_TYPES = {
-        mu::engraving::ElementType::TEMPO_RANGED_CHANGE, mu::engraving::ElementType::TEMPO_RANGED_CHANGE_SEGMENT,
-        mu::engraving::ElementType::TEMPO_TEXT,
-        mu::engraving::ElementType::LAYOUT_BREAK, mu::engraving::ElementType::FERMATA
+    static const std::unordered_set<ElementType> REQUIRED_TYPES = {
+        ElementType::TEMPO_RANGED_CHANGE, ElementType::TEMPO_RANGED_CHANGE_SEGMENT,
+        ElementType::TEMPO_TEXT,
+        ElementType::LAYOUT_BREAK, ElementType::FERMATA
     };
 
-    for (const mu::engraving::ElementType type : REQUIRED_TYPES) {
+    for (const ElementType type : REQUIRED_TYPES) {
         if (changedTypes.find(type) == changedTypes.cend()) {
             continue;
         }
@@ -362,7 +362,7 @@ void PlaybackModel::clearExpiredTracks()
             continue;
         }
 
-        const mu::engraving::Part* part = m_score->partById(it->first.partId.toUint64());
+        const Part* part = m_score->partById(it->first.partId.toUint64());
 
         if (!part || !part->instruments().contains(it->first.instrumentId)) {
             m_trackRemoved.send(it->first);
@@ -376,7 +376,7 @@ void PlaybackModel::clearExpiredTracks()
 
 void PlaybackModel::clearExpiredContexts(const track_idx_t trackFrom, const track_idx_t trackTo)
 {
-    for (const mu::engraving::Part* part : m_score->parts()) {
+    for (const Part* part : m_score->parts()) {
         if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
             continue;
         }
@@ -393,7 +393,7 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
     timestamp_t timestampFrom = timestampFromTicks(m_score, tickFrom);
     timestamp_t timestampTo = timestampFromTicks(m_score, tickTo);
 
-    for (const mu::engraving::Part* part : m_score->parts()) {
+    for (const Part* part : m_score->parts()) {
         if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
             continue;
         }
@@ -464,12 +464,12 @@ void PlaybackModel::removeEvents(const InstrumentTrackId& trackId, const mpe::ti
     }
 }
 
-PlaybackModel::TrackBoundaries PlaybackModel::trackBoundaries(const mu::engraving::ScoreChangesRange& changesRange) const
+PlaybackModel::TrackBoundaries PlaybackModel::trackBoundaries(const ScoreChangesRange& changesRange) const
 {
     TrackBoundaries result;
 
-    result.trackFrom = mu::engraving::staff2track(changesRange.staffIdxFrom, 0);
-    result.trackTo = mu::engraving::staff2track(changesRange.staffIdxTo, mu::engraving::VOICES);
+    result.trackFrom = staff2track(changesRange.staffIdxFrom, 0);
+    result.trackTo = staff2track(changesRange.staffIdxTo, VOICES);
 
     if (hasToReloadScore(changesRange.changedTypes) || !changesRange.isValidBoundary()) {
         result.trackFrom = 0;
@@ -479,7 +479,7 @@ PlaybackModel::TrackBoundaries PlaybackModel::trackBoundaries(const mu::engravin
     return result;
 }
 
-PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const mu::engraving::ScoreChangesRange& changesRange) const
+PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRange& changesRange) const
 {
     TickBoundaries result;
 
@@ -489,7 +489,7 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const mu::engraving:
     if (hasToReloadTracks(changesRange.changedTypes)
         || hasToReloadScore(changesRange.changedTypes)
         || !changesRange.isValidBoundary()) {
-        const mu::engraving::Measure* lastMeasure = m_score->lastMeasure();
+        const Measure* lastMeasure = m_score->lastMeasure();
         result.tickFrom = 0;
         result.tickTo = lastMeasure ? lastMeasure->endTick().ticks() : 0;
     }
@@ -497,12 +497,12 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const mu::engraving:
     return result;
 }
 
-const mu::engraving::RepeatList& PlaybackModel::repeatList() const
+const RepeatList& PlaybackModel::repeatList() const
 {
     return m_score->repeatList();
 }
 
-InstrumentTrackId PlaybackModel::idKey(const mu::engraving::EngravingItem* item) const
+InstrumentTrackId PlaybackModel::idKey(const EngravingItem* item) const
 {
     return { item->part()->id(),
              item->part()->instrumentId(item->tick()).toStdString() };

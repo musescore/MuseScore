@@ -38,7 +38,7 @@ using namespace mu::engraving;
 
 static const mu::draw::Color DEBUG_ELTREE_SELECTED_COLOR(164, 0, 0);
 
-void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const mu::engraving::EngravingItem* item,
+void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingItem* item,
                                    std::shared_ptr<PaintDebugger>& debugger)
 {
     // Elements tree
@@ -67,7 +67,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const mu::engravi
     debugger->restorePenColor();
 }
 
-void DebugPaint::paintElementsDebug(mu::draw::Painter& painter, const std::vector<mu::engraving::EngravingItem*>& elements)
+void DebugPaint::paintElementsDebug(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements)
 {
     // Setup debug provider
     auto originalProvider = painter.provider();

@@ -43,7 +43,7 @@ struct RenderingContext {
     int nominalDurationTicks = 0;
 
     BeatsPerSecond beatsPerSecond = 0;
-    mu::engraving::TimeSigFrac timeSignatureFraction;
+    TimeSigFrac timeSignatureFraction;
 
     mpe::ArticulationType persistentArticulation = mpe::ArticulationType::Undefined;
     mpe::ArticulationMap commonArticulations;
@@ -57,7 +57,7 @@ struct RenderingContext {
                               const int posTick,
                               const int durationTicks,
                               const BeatsPerSecond& bps,
-                              const mu::engraving::TimeSigFrac& timeSig,
+                              const TimeSigFrac& timeSig,
                               const mpe::ArticulationType persistentArticulationType,
                               const mpe::ArticulationMap& articulations,
                               const mpe::ArticulationsProfilePtr profilePtr)
@@ -83,21 +83,21 @@ struct RenderingContext {
     }
 };
 
-inline bool isNotePlayable(const mu::engraving::Note* note)
+inline bool isNotePlayable(const Note* note)
 {
     if (!note->play()) {
         return false;
     }
 
-    const mu::engraving::Tie* tie = note->tieBack();
+    const Tie* tie = note->tieBack();
 
     if (tie) {
         if (!tie->startNote() || !tie->endNote()) {
             return false;
         }
 
-        const mu::engraving::Chord* firstChord = tie->startNote()->chord();
-        const mu::engraving::Chord* lastChord = tie->endNote()->chord();
+        const Chord* firstChord = tie->startNote()->chord();
+        const Chord* lastChord = tie->endNote()->chord();
 
         return !firstChord->containsEqualArticulations(lastChord)
                || !firstChord->containsEqualTremolo(lastChord);
@@ -106,7 +106,7 @@ inline bool isNotePlayable(const mu::engraving::Note* note)
     return true;
 }
 
-inline mpe::duration_t noteNominalDuration(const mu::engraving::Note* note, const RenderingContext& ctx)
+inline mpe::duration_t noteNominalDuration(const Note* note, const RenderingContext& ctx)
 {
     return durationFromTicks(ctx.beatsPerSecond.val, note->playTicks());
 }
@@ -120,7 +120,7 @@ struct NominalNoteCtx {
 
     RenderingContext chordCtx;
 
-    explicit NominalNoteCtx(const mu::engraving::Note* note, const RenderingContext& ctx)
+    explicit NominalNoteCtx(const Note* note, const RenderingContext& ctx)
         : voiceIdx(note->voice()),
         timestamp(ctx.nominalTimestamp),
         duration(noteNominalDuration(note, ctx)),
@@ -139,7 +139,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
                           ctx.chordCtx.commonArticulations);
 }
 
-inline mpe::NoteEvent buildNoteEvent(const mu::engraving::Note* note, const RenderingContext& ctx)
+inline mpe::NoteEvent buildNoteEvent(const Note* note, const RenderingContext& ctx)
 {
     return mpe::NoteEvent(ctx.nominalTimestamp,
                           noteNominalDuration(note, ctx),
@@ -161,7 +161,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t
                           ctx.chordCtx.commonArticulations);
 }
 
-inline mpe::NoteEvent buildFixedNoteEvent(const mu::engraving::Note* note, const mpe::timestamp_t actualTimestamp,
+inline mpe::NoteEvent buildFixedNoteEvent(const Note* note, const mpe::timestamp_t actualTimestamp,
                                           const mpe::duration_t actualDuration, const mpe::dynamic_level_t actualDynamicLevel,
                                           const mpe::ArticulationMap& articulations)
 {

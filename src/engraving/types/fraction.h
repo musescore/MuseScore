@@ -233,9 +233,9 @@ public:
             return -1;
         }
 
-        // Constant::division     - ticks per quarter note
-        // Constant::division * 4 - ticks per whole note
-        // result: rounded (Constant::division * 4 * m_numerator * 1.0 / m_denominator) value
+        // Constants::division     - ticks per quarter note
+        // Constants::division * 4 - ticks per whole note
+        // result: rounded (Constants::division * 4 * m_numerator * 1.0 / m_denominator) value
         const int sgn = (m_numerator < 0) ? -1 : 1;
         const auto result = sgn * (static_cast<int_least64_t>(sgn * m_numerator) * Constants::division * 4 + (m_denominator / 2))
                             / m_denominator;
@@ -263,11 +263,6 @@ public:
 
 inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
 inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
-}
-
-//! NOTE compat
-namespace mu::engraving {
-using Fraction = mu::engraving::Fraction;
 }
 
 #endif // MU_ENGRAVING_FRACTION_H

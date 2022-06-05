@@ -546,8 +546,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
     }
 }
 
-void MeasureRW::writeMeasure(const mu::engraving::Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements,
-                             bool forceTimeSig)
+void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig)
 {
     if (MScore::debugMode) {
         const int mno = measure->no() + 1;

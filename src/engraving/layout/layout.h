@@ -28,16 +28,14 @@ namespace mu::engraving {
 class Score;
 class System;
 class Tremolo;
-}
 
-namespace mu::engraving {
 class LayoutContext;
 class Layout
 {
 public:
-    Layout(mu::engraving::Score* score);
+    Layout(Score* score);
 
-    void doLayoutRange(const LayoutOptions& options, const mu::engraving::Fraction&, const mu::engraving::Fraction&);
+    void doLayoutRange(const LayoutOptions& options, const Fraction&, const Fraction&);
 
 private:
 
@@ -48,7 +46,7 @@ private:
 
     void doLayout(const LayoutOptions& options, LayoutContext& lc);
 
-    mu::engraving::Score* m_score = nullptr;
+    Score* m_score = nullptr;
 };
 }
 

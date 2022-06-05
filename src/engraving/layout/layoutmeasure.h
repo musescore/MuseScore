@@ -28,9 +28,7 @@ namespace mu::engraving {
 class Score;
 class Measure;
 class MeasureBase;
-}
 
-namespace mu::engraving {
 class LayoutContext;
 class LayoutContext;
 class LayoutMeasure
@@ -42,10 +40,9 @@ public:
 
 private:
 
-    static void createMMRest(const LayoutOptions& options, mu::engraving::Score* score, mu::engraving::Measure* firstMeasure,
-                             mu::engraving::Measure* lastMeasure, const mu::engraving::Fraction& len);
+    static void createMMRest(const LayoutOptions& options, Score* score, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
 
-    static int adjustMeasureNo(LayoutContext& lc, mu::engraving::MeasureBase* m);
+    static int adjustMeasureNo(LayoutContext& lc, MeasureBase* m);
 };
 }
 

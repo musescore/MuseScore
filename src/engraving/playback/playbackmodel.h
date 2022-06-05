@@ -47,15 +47,13 @@ class EngravingItem;
 class Segment;
 class Instrument;
 class RepeatList;
-}
 
-namespace mu::engraving {
 class PlaybackModel : public async::Asyncable
 {
     INJECT(engraving, mpe::IArticulationProfilesRepository, profilesRepository)
 
 public:
-    void load(mu::engraving::Score* score);
+    void load(Score* score);
     void reload();
 
     async::Notification dataChanged() const;
@@ -67,7 +65,7 @@ public:
 
     const mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
     const mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId);
-    void triggerEventsForItem(const mu::engraving::EngravingItem* item);
+    void triggerEventsForItem(const EngravingItem* item);
 
     async::Channel<InstrumentTrackId> trackAdded() const;
     async::Channel<InstrumentTrackId> trackRemoved() const;
@@ -89,7 +87,7 @@ private:
         track_idx_t trackTo = mu::nidx;
     };
 
-    InstrumentTrackId idKey(const mu::engraving::EngravingItem* item) const;
+    InstrumentTrackId idKey(const EngravingItem* item) const;
     InstrumentTrackId idKey(const ID& partId, const std::string& instrumentId) const;
     InstrumentTrackIdSet existingTrackIdSet() const;
 
@@ -100,8 +98,8 @@ private:
     void updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);
 
-    bool hasToReloadTracks(const std::unordered_set<mu::engraving::ElementType>& changedTypes) const;
-    bool hasToReloadScore(const std::unordered_set<mu::engraving::ElementType>& changedTypes) const;
+    bool hasToReloadTracks(const std::unordered_set<ElementType>& changedTypes) const;
+    bool hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const;
 
     bool containsTrack(const InstrumentTrackId& trackId) const;
     void clearExpiredTracks();
@@ -112,12 +110,12 @@ private:
 
     void removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom, const mpe::timestamp_t timestampTo);
 
-    TrackBoundaries trackBoundaries(const mu::engraving::ScoreChangesRange& changesRange) const;
-    TickBoundaries tickBoundaries(const mu::engraving::ScoreChangesRange& changesRange) const;
+    TrackBoundaries trackBoundaries(const ScoreChangesRange& changesRange) const;
+    TickBoundaries tickBoundaries(const ScoreChangesRange& changesRange) const;
 
-    const mu::engraving::RepeatList& repeatList() const;
+    const RepeatList& repeatList() const;
 
-    mu::engraving::Score* m_score = nullptr;
+    Score* m_score = nullptr;
     bool m_expandRepeats = true;
 
     PlaybackEventsRenderer m_renderer;

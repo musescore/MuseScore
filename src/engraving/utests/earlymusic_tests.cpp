@@ -54,7 +54,7 @@ TEST_F(EarlymusicTests, earlymusic01)
     EXPECT_TRUE(msr);
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
     EXPECT_TRUE(seg);
-    mu::engraving::Chord* chord = static_cast<mu::engraving::Chord*>(seg->element(0));
+    Chord* chord = toChord(seg->element(0));
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     EXPECT_EQ(chord->crossMeasure(), CrossMeasure::UNKNOWN);

@@ -301,7 +301,7 @@ public:
 
 private:
 
-    friend class mu::engraving::compat::ReadChordListHook;
+    friend class compat::ReadChordListHook;
 
     void read(XmlReader&);
     void write(XmlWriter& xml) const;

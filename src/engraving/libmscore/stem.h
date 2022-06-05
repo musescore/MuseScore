@@ -54,9 +54,9 @@ public:
     bool readProperties(XmlReader&) override;
 
     void reset() override;
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     staff_idx_t vStaffIdx() const override;
 
@@ -84,7 +84,7 @@ public:
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
 private:
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Stem(Chord* parent = 0);
 
     mu::LineF m_line;
