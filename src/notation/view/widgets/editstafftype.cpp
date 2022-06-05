@@ -626,7 +626,7 @@ void EditStaffType::tabStemThroughCompatibility(bool checked)
 void EditStaffType::updatePreview()
 {
     setFromDlg();
-    mu::engraving::ExampleView* preview = nullptr;
+    ExampleView* preview = nullptr;
     if (staffType.group() == mu::engraving::StaffGroup::TAB) {
         preview = tabPreview;
     } else if (staffType.group() == mu::engraving::StaffGroup::STANDARD) {
