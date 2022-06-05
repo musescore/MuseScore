@@ -313,7 +313,7 @@ bool isPowerOfTwo(unsigned int x)
 
 bool isSimpleNoteDuration(const ReducedFraction& duration)
 {
-    const auto division = ReducedFraction::fromTicks(Constant::division);
+    const auto division = ReducedFraction::fromTicks(Constants::division);
     auto div = (duration > division) ? duration / division : division / duration;
     if (div > ReducedFraction(0, 1)) {
         div.reduce();
