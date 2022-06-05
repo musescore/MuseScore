@@ -350,7 +350,7 @@ inline Segment* Segment::prevEnabled() const
     }
     return ps;
 }
-}     // namespace Ms
+} // namespace mu::engraving
 
 Q_DECLARE_METATYPE(mu::engraving::SegmentType);
 

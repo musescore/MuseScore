@@ -77,5 +77,5 @@ public:
         })->offtime();
     }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

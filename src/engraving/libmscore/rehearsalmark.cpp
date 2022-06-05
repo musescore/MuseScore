@@ -135,4 +135,4 @@ engraving::PropertyValue RehearsalMark::propertyDefault(Pid id) const
         return TextBase::propertyDefault(id);
     }
 }
-} // namespace Ms
+} // namespace mu::engraving

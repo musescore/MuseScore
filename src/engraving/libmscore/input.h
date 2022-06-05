@@ -147,5 +147,5 @@ public:
     static Note* note(EngravingItem*);
     static ChordRest* chordRest(EngravingItem*);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

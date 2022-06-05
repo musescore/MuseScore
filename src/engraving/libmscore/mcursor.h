@@ -60,5 +60,5 @@ public:
     void setScore(MasterScore* s) { _score = s; }
     void setTimeSig(Fraction f) { _sig = f; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

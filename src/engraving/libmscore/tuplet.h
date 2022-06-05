@@ -165,5 +165,5 @@ public:
     void sanitizeTuplet();
     void addMissingElements();
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

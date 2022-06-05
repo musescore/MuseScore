@@ -122,6 +122,6 @@ public:
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     Pid propertyId(const QStringRef& xmlName) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

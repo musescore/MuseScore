@@ -103,7 +103,7 @@ void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool
                           const TimeSigFrac& nominal, int maxDots);
 void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, const Fraction& rtickStart,
                                const TimeSigFrac& nominal, int maxDots);
-}     // namespace Ms
+} // namespace mu::engraving
 
 Q_DECLARE_METATYPE(mu::engraving::TDuration);
 

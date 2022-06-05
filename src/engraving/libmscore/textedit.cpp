@@ -963,4 +963,4 @@ void ChangeTextProperties::redo(EditData*)
         cursor().text()->setProperty(propertyId, propertyVal);
     }
 }
-}  // namespace Ms
+} // namespace mu::engraving

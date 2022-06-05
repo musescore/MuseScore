@@ -101,5 +101,5 @@ public:
     mu::RectF tbbox();                             // tight bounding box, excluding white space
     Fraction endTick() const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

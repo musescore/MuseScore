@@ -77,6 +77,6 @@ public:
     mu::RectF drag(EditData& ed) override;
     void endDrag(EditData& ed) override;
 };
-} // namespace Ms
+} // namespace mu::engraving
 
 #endif

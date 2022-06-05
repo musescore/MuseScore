@@ -526,5 +526,5 @@ public:
 
     bool isGrace() const { return noteType() != NoteType::NORMAL; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

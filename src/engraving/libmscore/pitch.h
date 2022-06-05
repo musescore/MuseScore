@@ -38,5 +38,5 @@ public:
     int pitchOffset(int tick) const;
     void setPitchOffset(int tick, int offset) { insert_or_assign(tick, offset); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

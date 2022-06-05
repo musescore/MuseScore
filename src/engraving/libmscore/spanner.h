@@ -294,5 +294,5 @@ public:
     friend class SpannerSegment;
     using EngravingObject::undoChangeProperty;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

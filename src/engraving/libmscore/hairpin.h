@@ -163,7 +163,7 @@ public:
         return _hairpinType == HairpinType::CRESC_LINE || _hairpinType == HairpinType::DECRESC_LINE;
     }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 Q_DECLARE_METATYPE(mu::engraving::HairpinType);
 

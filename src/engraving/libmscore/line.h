@@ -148,5 +148,5 @@ public:
 
     friend class LineSegment;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

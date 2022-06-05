@@ -261,7 +261,7 @@ public:
 
     friend class FretUndoData;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 Q_DECLARE_METATYPE(mu::engraving::FretDiagram*)
 

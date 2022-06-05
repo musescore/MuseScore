@@ -359,4 +359,4 @@ void ShapeElement::dump() const
 }
 
 #endif
-} // namespace Ms
+} // namespace mu::engraving

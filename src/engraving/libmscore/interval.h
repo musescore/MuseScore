@@ -42,5 +42,5 @@ struct Interval {
     bool operator!=(const Interval& a) const { return diatonic != a.diatonic || chromatic != a.chromatic; }
     bool operator==(const Interval& a) const { return diatonic == a.diatonic && chromatic == a.chromatic; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -177,5 +177,5 @@ public:
 
     void doAutoplace();
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

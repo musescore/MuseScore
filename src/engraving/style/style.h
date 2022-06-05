@@ -97,6 +97,6 @@ private:
     std::array<mu::engraving::PropertyValue, size_t(Sid::STYLES)> m_values;
     std::array<Millimetre, size_t(Sid::STYLES)> m_precomputedValues;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif // MU_ENGRAVING_STYLE_H

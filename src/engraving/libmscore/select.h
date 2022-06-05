@@ -248,5 +248,5 @@ public:
     void extendRangeSelection(ChordRest* cr);
     void extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick, const Fraction& etick);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

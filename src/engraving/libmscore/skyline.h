@@ -112,6 +112,6 @@ public:
     void paint(mu::draw::Painter& painter, qreal lineWidth) const;
     void dump(const char*, bool north = false) const;
 };
-} // namespace Ms
+} // namespace mu::engraving
 
 #endif

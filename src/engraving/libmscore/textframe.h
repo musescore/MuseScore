@@ -68,5 +68,5 @@ public:
 private:
     Text* m_text = nullptr;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -172,6 +172,6 @@ public:
 
     static const std::vector<BarLineTableItem> barLineTable;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

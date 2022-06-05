@@ -29,5 +29,5 @@ class ChordRest;
 extern int pitch2y(int pitch, int enh, int clefOffset, int key, int& prefix, const char* tversatz);
 extern ChordRest* nextChordRest(ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
 extern ChordRest* prevChordRest(ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

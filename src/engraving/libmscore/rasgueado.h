@@ -62,5 +62,5 @@ public:
     mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

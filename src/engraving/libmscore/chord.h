@@ -314,5 +314,5 @@ public:
     void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& newValue);
     void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& newValue, PropertyFlags ps) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

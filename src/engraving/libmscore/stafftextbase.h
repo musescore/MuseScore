@@ -80,5 +80,5 @@ public:
     bool swing() const { return _swing; }
     int capo() const { return _capo; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -39,5 +39,5 @@ public:
     Tie* findNew(Tie* o) const { return (Tie*)(ElementMap::findNew((EngravingItem*)o)); }
     void add(Tie* _o, Tie* _n) { ElementMap::add((EngravingItem*)_o, (EngravingItem*)_n); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

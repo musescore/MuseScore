@@ -41,5 +41,5 @@ public:
     SystemText* clone() const override { return new SystemText(*this); }
     Segment* segment() const { return (Segment*)explicitParent(); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

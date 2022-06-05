@@ -163,5 +163,5 @@ struct Interval;
 enum class PreferSharpFlat : char;
 extern Key transposeKey(Key oldKey, const Interval&, PreferSharpFlat prefer = PreferSharpFlat(0));
 extern Interval calculateInterval(Key key1, Key key2);
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

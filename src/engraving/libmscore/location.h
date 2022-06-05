@@ -99,5 +99,5 @@ public:
     bool operator==(const Location& other) const;
     bool operator!=(const Location& other) const { return !(*this == other); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

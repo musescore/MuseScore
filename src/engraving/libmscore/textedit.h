@@ -184,6 +184,6 @@ public:
         : SplitJoinText(tc) {}
     UNDO_NAME("JoinText");
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

@@ -177,5 +177,5 @@ public:
     QString rawDiff(bool skipEqual = true) const;
     QString userDiff() const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

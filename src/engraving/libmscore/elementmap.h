@@ -39,5 +39,5 @@ public:
     EngravingItem* findNew(EngravingItem* o) const;
     void add(EngravingItem* o, EngravingItem* n);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

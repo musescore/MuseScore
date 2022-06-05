@@ -39,4 +39,4 @@ void SingleElementGroup::endDrag(EditData& ed)
     e->endDrag(ed);
     e->triggerLayout();
 }
-} // namespace Ms
+} // namespace mu::engraving

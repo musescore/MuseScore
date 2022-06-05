@@ -354,4 +354,4 @@ qreal SkylineLine::max() const
     }
     return val;
 }
-} // namespace Ms
+} // namespace mu::engraving

@@ -814,4 +814,4 @@ void Score::globalInsertChord(const Position& pos)
         }
     }
 }
-} // namespace Ms
+} // namespace mu::engraving

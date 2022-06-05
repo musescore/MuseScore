@@ -86,5 +86,5 @@ public:
     int         adjustBanjo5thFret(int fret) const;
     bool        isFiveStringBanjo() const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -110,5 +110,5 @@ static SynthesizerState defaultState = {
       },
     }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

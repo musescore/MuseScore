@@ -93,5 +93,5 @@ public:
 };
 
 extern const char* scorelineNames[];
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

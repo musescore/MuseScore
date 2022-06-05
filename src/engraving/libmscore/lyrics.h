@@ -168,5 +168,5 @@ public:
     LyricsLine* lyricsLine() const { return toLyricsLine(spanner()); }
     Lyrics* lyrics() const { return lyricsLine()->lyrics(); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

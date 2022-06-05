@@ -75,5 +75,5 @@ public:
     Revision* trunk() { return _trunk; }
     void write(XmlWriter&) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

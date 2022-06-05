@@ -147,6 +147,6 @@ public:
 
 class Spanner;
 extern bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>& pitchOffsets);
-} // namespace Ms
+} // namespace mu::engraving
 
 #endif

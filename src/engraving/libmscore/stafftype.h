@@ -469,5 +469,5 @@ public:
     bool isRepeat() const { return _repeat; }
     void setRepeat(bool val) { _repeat = val; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

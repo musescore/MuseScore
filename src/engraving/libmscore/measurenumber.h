@@ -40,6 +40,6 @@ public:
 
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

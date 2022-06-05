@@ -80,5 +80,5 @@ public:
     bool hasFlag() const;
     SymId flagSym() const;
 };
-} // namespace Ms
+} // namespace mu::engraving
 #endif

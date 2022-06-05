@@ -62,5 +62,5 @@ public:
     void setNote(Note* note) { _note = note; }
     Note* note() const { return _note; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

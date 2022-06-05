@@ -90,5 +90,5 @@ public:
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif
