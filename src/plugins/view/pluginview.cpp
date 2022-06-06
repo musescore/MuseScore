@@ -141,5 +141,7 @@ void PluginView::run()
     //connect(m_view, &QQuickView::closing, this, &PluginView::finished);
     connect(m_view, SIGNAL(closing(QQuickCloseEvent*)), this, SIGNAL(finished()));
 
+    m_view->show();
+
     m_qmlPlugin->runPlugin();
 }
