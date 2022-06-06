@@ -55,7 +55,7 @@ public:
     virtual void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) = 0;
     virtual void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) = 0;
     virtual void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) = 0;
-    virtual void setStaffType(const ID& staffId, StaffType type) = 0;
+    virtual void setStaffType(const ID& staffId, StaffTypeId type) = 0;
     virtual void setStaffConfig(const ID& staffId, const StaffConfig& config) = 0;
 
     virtual void removeParts(const IDList& partsIds) = 0;
