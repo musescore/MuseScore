@@ -30,7 +30,7 @@
 #include "libmscore/tuplet.h"
 #include "importmidi_fraction.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace Swing {
 class SwingDetector
 {
@@ -255,4 +255,4 @@ void detectSwing(Staff* staff, MidiOperations::Swing swingType)
     }
 }
 } // namespace Swing
-} // namespace Ms
+} // namespace mu::iex::midi

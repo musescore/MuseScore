@@ -39,7 +39,7 @@
 
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MidiKey {
 class KeyData
 {
@@ -184,4 +184,4 @@ void recognizeMainKeySig(QList<MTrack>& tracks)
     }
 }
 } // namespace MidiKey
-} // namespace Ms
+} // namespace mu::iex::midi

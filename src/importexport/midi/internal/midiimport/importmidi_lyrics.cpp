@@ -36,7 +36,9 @@
 
 #include <set>
 
-namespace mu::engraving {
+using namespace mu::engraving;
+
+namespace mu::iex::midi {
 namespace MidiLyrics {
 const std::string META_PREFIX = "@";
 const std::string TEXT_PREFIX = "@T";
@@ -53,8 +55,7 @@ bool isLyricText(const std::string& text)
 
 bool isLyricEvent(const MidiEvent& e)
 {
-    return e.type() == ME_META && (e.metaType() == META_TEXT
-                                   || e.metaType() == META_LYRIC);
+    return e.type() == ME_META && (e.metaType() == META_TEXT || e.metaType() == META_LYRIC);
 }
 
 std::multimap<ReducedFraction, std::string>
@@ -353,4 +354,4 @@ QList<std::string> makeLyricsListForUI()
     return list;
 }
 } // namespace MidiLyrics
-} // namespace Ms
+} // namespace mu::iex::midi

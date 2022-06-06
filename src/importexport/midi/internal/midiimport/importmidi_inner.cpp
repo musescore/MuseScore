@@ -29,7 +29,7 @@
 
 #include "engraving/libmscore/durationtype.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 MTrack::MTrack()
     : program(0)
     , staff(nullptr)
@@ -299,4 +299,4 @@ double durationCount(const QList<std::pair<ReducedFraction, TDuration> >& durati
     return count;
 }
 } // namespace MidiDuration
-} // namespace Ms
+} // namespace mu::iex::midi

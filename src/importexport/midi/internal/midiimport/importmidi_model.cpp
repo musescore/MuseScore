@@ -27,7 +27,7 @@
 #include "importmidi_clef.h"
 #include "libmscore/instrtemplate.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 class TracksModel::Column
 {
 public:
@@ -1263,4 +1263,4 @@ bool TracksModel::isColumnValid(int column) const
 {
     return column >= 0 && column < (int)_columns.size();
 }
-} // namespace Ms
+} // namespace mu::iex::midi

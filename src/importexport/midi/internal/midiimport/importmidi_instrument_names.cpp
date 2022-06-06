@@ -22,7 +22,7 @@
 
 #include "importmidi_instrument_names.h"
 
-using namespace mu::engraving;
+using namespace mu::iex::midi;
 
 static constexpr MidiInstrument minstr[] = {
     // Piano

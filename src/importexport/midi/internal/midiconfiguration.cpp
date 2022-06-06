@@ -61,5 +61,5 @@ void MidiConfiguration::setIsMidiExportRpns(bool exportRpns) const
 
 void MidiConfiguration::setMidiImportOperationsFile(const mu::io::path_t& filePath) const
 {
-    mu::engraving::midiImportOperations.setOperationsFile(filePath.toQString());
+    midiImportOperations.setOperationsFile(filePath.toQString());
 }

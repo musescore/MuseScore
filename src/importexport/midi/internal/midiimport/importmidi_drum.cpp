@@ -31,7 +31,7 @@
 #include "engraving/libmscore/drumset.h"
 #include "engraving/libmscore/staff.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MidiDrum {
 #ifdef QT_DEBUG
 
@@ -219,4 +219,4 @@ void setStaffBracketForDrums(QList<MTrack>& tracks)
     setBracket(firstDrumStaff, counter);
 }
 } // namespace MidiDrum
-} // namespace Ms
+} // namespace mu::iex::midi

@@ -30,7 +30,9 @@ namespace mu::engraving {
 class Segment;
 class ChordRest;
 class Staff;
+}
 
+namespace mu::iex::midi {
 namespace MidiTie {
 bool isTiedFor(const Segment* seg, mu::engraving::track_idx_t strack, mu::engraving::voice_idx_t voice);
 bool isTiedBack(const Segment* seg, mu::engraving::track_idx_t strack, mu::engraving::voice_idx_t voice);
@@ -55,6 +57,6 @@ private:
 bool areTiesConsistent(const Staff* staff);
 #endif
 } // namespace MidiTie
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_TIE_H

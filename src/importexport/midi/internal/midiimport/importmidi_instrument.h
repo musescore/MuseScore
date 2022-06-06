@@ -28,6 +28,9 @@ class QString;
 
 namespace mu::engraving {
 class Score;
+}
+
+namespace mu::iex::midi {
 class MTrack;
 
 namespace MidiInstr {
@@ -41,6 +44,6 @@ void createInstruments(Score* score, QList<MTrack>& tracks);
 
 extern void instrumentTemplatesChanged();
 } // namespace MidiInstr
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_INSTRUMENT_H

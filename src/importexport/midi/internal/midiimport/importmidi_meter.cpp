@@ -30,7 +30,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_inner.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace Meter {
 bool isSimple(const ReducedFraction& barFraction)       // 2/2, 3/4, 4/4, ...
 {
@@ -568,4 +568,4 @@ toDurationList(const ReducedFraction& startTickInBar,
     return collectDurations(nodes, tupletsInBar, useDots, printRestRemains);
 }
 } // namespace Meter
-} // namespace Ms
+} // namespace mu::iex::midi

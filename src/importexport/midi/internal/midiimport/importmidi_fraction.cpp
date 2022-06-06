@@ -25,7 +25,7 @@
 #include <limits>
 #include <QtGlobal>
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 #ifdef QT_DEBUG
 
 //---------------------------------------------------------------------------------------
@@ -377,4 +377,4 @@ ReducedFraction toMuseScoreTicks(int tick, int oldDivision, bool isDivisionInTps
 #endif
     return ReducedFraction::fromTicks(tmp / oldDivision + integral * Constants::division);
 }
-} // namespace Ms
+} // namespace mu::iex::midi

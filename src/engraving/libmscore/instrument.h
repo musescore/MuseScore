@@ -35,7 +35,7 @@
 #include "interval.h"
 #include "clef.h"
 
-#include "compat/midi/event.h"
+#include "compat/midi/midicoreevent.h"
 
 namespace mu::engraving {
 class InstrumentTemplate;
