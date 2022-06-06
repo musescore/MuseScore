@@ -21,17 +21,18 @@
  */
 #include "notationbwwreader.h"
 
-#include "libmscore/masterscore.h"
+#include "libmscore/score.h"
 #include "engraving/engravingerrors.h"
 
-namespace mu::engraving {
+using namespace mu::iex::bww;
+using namespace mu::engraving;
+
+namespace mu::iex::bww {
 extern Score::FileError importBww(MasterScore*, const QString& name);
 }
 
-using namespace mu::iex::bww;
-
-mu::Ret NotationBwwReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
+mu::Ret NotationBwwReader::read(MasterScore* score, const io::path_t& path, const Options&)
 {
-    mu::engraving::Score::FileError err = mu::engraving::importBww(score, path.toQString());
-    return mu::engraving::scoreFileErrorToRet(err, path);
+    Score::FileError err = importBww(score, path.toQString());
+    return scoreFileErrorToRet(err, path);
 }
