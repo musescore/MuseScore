@@ -21,17 +21,25 @@
  */
 #include "musedatareader.h"
 
+#include "musedata.h"
+
 #include "libmscore/masterscore.h"
 #include "engraving/engravingerrors.h"
 
-namespace mu::engraving {
-extern Score::FileError importMuseData(MasterScore*, const QString& name);
-}
-
 using namespace mu::iex::musedata;
+using namespace mu::engraving;
 
-mu::Ret MuseDataReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
+mu::Ret MuseDataReader::read(MasterScore* score, const io::path_t& path, const Options&)
 {
-    mu::engraving::Score::FileError err = mu::engraving::importMuseData(score, path.toQString());
-    return mu::engraving::scoreFileErrorToRet(err, path);
+    if (!QFileInfo::exists(path.toQString())) {
+        return make_ret(Err::FileNotFound, path);
+    }
+
+    MuseData md(score);
+    if (!md.read(path.toQString())) {
+        return make_ret(Err::FileUnknownError, path);
+    }
+
+    md.convert();
+    return make_ok();
 }
