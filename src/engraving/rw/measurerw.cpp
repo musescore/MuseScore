@@ -46,6 +46,7 @@
 #include "../libmscore/keysig.h"
 #include "../libmscore/stafftext.h"
 #include "../libmscore/ambitus.h"
+#include "../libmscore/textlinebase.h"
 #include "../libmscore/dynamic.h"
 
 #include "../libmscore/score.h"
@@ -626,8 +627,7 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
                 || (et == ElementType::JUMP)
                 || (et == ElementType::MARKER)
                 || (et == ElementType::TEMPO_TEXT)
-                || (et == ElementType::VOLTA)
-                || (et == ElementType::TEXTLINE && e->systemFlag())) {
+                || isSystemTextLine(e)) {
                 writeSystem = (e->staffIdx() == staff); // always show these on appropriate staves
             }
         }

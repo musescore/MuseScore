@@ -985,6 +985,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     std::vector<Spanner*> ottavas;
     std::vector<Spanner*> pedal;
     std::vector<Spanner*> voltas;
+    std::vector<Spanner*> tempoChangeLines;
 
     for (auto interval : spanners) {
         Spanner* sp = interval.value;
@@ -1001,12 +1002,15 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                 voltas.push_back(sp);
             } else if (sp->isHairpin()) {
                 hairpins.push_back(sp);
+            } else if (sp->isGradualTempoChange()) {
+                tempoChangeLines.push_back(sp);
             } else if (!sp->isSlur() && !sp->isVolta()) {      // slurs are already
                 spanner.push_back(sp);
             }
         }
     }
     processLines(system, hairpins, false);
+    processLines(system, tempoChangeLines, false);
     processLines(system, spanner, false);
 
     //-------------------------------------------------------------

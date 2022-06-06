@@ -5136,18 +5136,19 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
     // linking:
     //
 
+    bool isSystemLine = isSystemTextLine(element);
+
     if ((et == ElementType::REHEARSAL_MARK)
         || (et == ElementType::SYSTEM_TEXT)
         || (et == ElementType::TRIPLET_FEEL)
         || (et == ElementType::JUMP)
         || (et == ElementType::MARKER)
         || (et == ElementType::TEMPO_TEXT)
-        || (et == ElementType::VOLTA)
-        || ((et == ElementType::TEXTLINE) && element->systemFlag())
+        || isSystemLine
         ) {
         std::list<Staff* > staffList;
 
-        if (ctrlModifier && (et == ElementType::VOLTA || et == ElementType::TEXTLINE)) {
+        if (ctrlModifier && isSystemLine) {
             element->setSystemFlag(false);
             staffList.push_back(element->staff());
         } else {
@@ -5182,7 +5183,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 ne->setTrack(staffIdx * VOICES + element->voice());
             }
 
-            if (et == ElementType::VOLTA || (et == ElementType::TEXTLINE)) {
+            if (isSystemLine) {
                 Spanner* nsp = toSpanner(ne);
                 Spanner* sp = toSpanner(element);
                 staff_idx_t staffIdx1 = sp->track() / VOICES;
