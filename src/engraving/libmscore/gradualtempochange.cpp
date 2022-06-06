@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "tempochangeranged.h"
+#include "gradualtempochange.h"
 
 #include "log.h"
 
@@ -67,8 +67,22 @@ static const ElementStyle tempoSegmentStyle {
     { Sid::tempoMinDistance, Pid::MIN_DISTANCE }
 };
 
-TempoChangeRanged::TempoChangeRanged(EngravingItem* parent)
-    : ChordTextLineBase(ElementType::TEMPO_RANGED_CHANGE, parent)
+static const std::unordered_map<GradualTempoChangeType, double> DEFAULT_FACTORS_MAP {
+    { GradualTempoChangeType::Accelerando, 1.33 },
+    { GradualTempoChangeType::Allargando, 0.75 },
+    { GradualTempoChangeType::Calando, 0.5 },
+    { GradualTempoChangeType::Lentando, 0.75 },
+    { GradualTempoChangeType::Morendo, 0.5 },
+    { GradualTempoChangeType::Precipitando, 1.15 },
+    { GradualTempoChangeType::Rallentando, 0.75 },
+    { GradualTempoChangeType::Ritardando, 0.75 },
+    { GradualTempoChangeType::Smorzando, 0.5 },
+    { GradualTempoChangeType::Sostenuto, 0.95 },
+    { GradualTempoChangeType::Stringendo, 1.5 }
+};
+
+GradualTempoChange::GradualTempoChange(EngravingItem* parent)
+    : ChordTextLineBase(ElementType::GRADUAL_TEMPO_CHANGE, parent)
 {
     initElementStyle(&tempoStyle);
     resetProperty(Pid::LINE_VISIBLE);
@@ -81,12 +95,12 @@ TempoChangeRanged::TempoChangeRanged(EngravingItem* parent)
     resetProperty(Pid::END_TEXT);
 }
 
-TempoChangeRanged* TempoChangeRanged::clone() const
+GradualTempoChange* GradualTempoChange::clone() const
 {
-    return new TempoChangeRanged(*this);
+    return new GradualTempoChange(*this);
 }
 
-void TempoChangeRanged::read(XmlReader& reader)
+void GradualTempoChange::read(XmlReader& reader)
 {
     while (reader.readNextStartElement()) {
         const AsciiString tag(reader.name());
@@ -104,89 +118,83 @@ void TempoChangeRanged::read(XmlReader& reader)
             continue;
         }
 
+        if (readProperty(tag, reader, Pid::TEMPO_CHANGE_FACTOR)) {
+            continue;
+        }
+
         if (!TextLineBase::readProperties(reader)) {
             reader.unknown();
         }
     }
 }
 
-void TempoChangeRanged::write(XmlWriter& writer) const
+void GradualTempoChange::write(XmlWriter& writer) const
 {
     writer.startElement(this);
     writeProperty(writer, Pid::TEMPO_CHANGE_TYPE);
     writeProperty(writer, Pid::TEMPO_EASING_METHOD);
+    writeProperty(writer, Pid::TEMPO_CHANGE_FACTOR);
     TextLineBase::writeProperties(writer);
     writer.endElement();
 }
 
-LineSegment* TempoChangeRanged::createLineSegment(System* parent)
+LineSegment* GradualTempoChange::createLineSegment(System* parent)
 {
-    TempoChangeRangedSegment* lineSegment = new TempoChangeRangedSegment(this, parent);
+    GradualTempoChangeSegment* lineSegment = new GradualTempoChangeSegment(this, parent);
     lineSegment->setTrack(track());
     lineSegment->initElementStyle(&tempoSegmentStyle);
     return lineSegment;
 }
 
-TempoChangeType TempoChangeRanged::tempoChangeType() const
+GradualTempoChangeType GradualTempoChange::tempoChangeType() const
 {
     return m_tempoChangeType;
 }
 
-ChangeMethod TempoChangeRanged::easingMethod() const
+ChangeMethod GradualTempoChange::easingMethod() const
 {
     return m_tempoEasingMethod;
 }
 
-void TempoChangeRanged::setTempoChangeType(const TempoChangeType type)
+void GradualTempoChange::setTempoChangeType(const GradualTempoChangeType type)
 {
     m_tempoChangeType = type;
 }
 
-float TempoChangeRanged::tempoChangeFactor() const
+double GradualTempoChange::tempoChangeFactor() const
 {
-    static const std::unordered_map<TempoChangeType, float> FACTORS_MAP = {
-        { TempoChangeType::Accelerando, 1.25 },
-        { TempoChangeType::Allargando, 0.75 },
-        { TempoChangeType::Calando, 0.5 },
-        { TempoChangeType::Lentando, 0.75 },
-        { TempoChangeType::Morendo, 0.5 },
-        { TempoChangeType::Precipitando, 1.15 },
-        { TempoChangeType::Rallentando, 0.75 },
-        { TempoChangeType::Ritardando, 0.75 },
-        { TempoChangeType::Smorzando, 0.5 },
-        { TempoChangeType::Sostenuto, 0.95 },
-        { TempoChangeType::Stringendo, 1.5 }
-    };
-
-    auto search = FACTORS_MAP.find(m_tempoChangeType);
-
-    if (search != FACTORS_MAP.cend()) {
-        return search->second;
+    if (m_tempoChangeFactor.has_value()) {
+        return m_tempoChangeFactor.value();
     }
 
-    return 1.f;
+    return mu::value(DEFAULT_FACTORS_MAP, m_tempoChangeType, 1.0);
 }
 
-PropertyValue TempoChangeRanged::getProperty(Pid id) const
+PropertyValue GradualTempoChange::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::TEMPO_CHANGE_TYPE:
         return m_tempoChangeType;
     case Pid::TEMPO_EASING_METHOD:
         return m_tempoEasingMethod;
+    case Pid::TEMPO_CHANGE_FACTOR:
+        return tempoChangeFactor();
     default:
         return TextLineBase::getProperty(id);
     }
 }
 
-bool TempoChangeRanged::setProperty(Pid id, const PropertyValue& val)
+bool GradualTempoChange::setProperty(Pid id, const PropertyValue& val)
 {
     switch (id) {
     case Pid::TEMPO_CHANGE_TYPE:
-        m_tempoChangeType = TempoChangeType(val.toInt());
+        m_tempoChangeType = GradualTempoChangeType(val.toInt());
         break;
     case Pid::TEMPO_EASING_METHOD:
         m_tempoEasingMethod = ChangeMethod(val.toInt());
+        break;
+    case Pid::TEMPO_CHANGE_FACTOR:
+        m_tempoChangeFactor = val.toReal();
         break;
     default:
         if (!TextLineBase::setProperty(id, val)) {
@@ -199,7 +207,7 @@ bool TempoChangeRanged::setProperty(Pid id, const PropertyValue& val)
     return true;
 }
 
-PropertyValue TempoChangeRanged::propertyDefault(Pid propertyId) const
+PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ALIGN:
@@ -233,16 +241,18 @@ PropertyValue TempoChangeRanged::propertyDefault(Pid propertyId) const
         return TextPlace::AUTO;
 
     case Pid::TEMPO_CHANGE_TYPE:
-        return TempoChangeType::Undefined;
+        return GradualTempoChangeType::Undefined;
     case Pid::TEMPO_EASING_METHOD:
         return ChangeMethod::NORMAL;
+    case Pid::TEMPO_CHANGE_FACTOR:
+        return mu::value(DEFAULT_FACTORS_MAP, m_tempoChangeType, 1.0);
 
     default:
         return TextLineBase::propertyDefault(propertyId);
     }
 }
 
-Sid TempoChangeRanged::getPropertyStyle(Pid id) const
+Sid GradualTempoChange::getPropertyStyle(Pid id) const
 {
     switch (id) {
     case Pid::PLACEMENT:
@@ -271,17 +281,17 @@ Sid TempoChangeRanged::getPropertyStyle(Pid id) const
     return TextLineBase::getPropertyStyle(id);
 }
 
-void TempoChangeRanged::added()
+void GradualTempoChange::added()
 {
     requestToRebuildTempo();
 }
 
-void TempoChangeRanged::removed()
+void GradualTempoChange::removed()
 {
     requestToRebuildTempo();
 }
 
-void TempoChangeRanged::requestToRebuildTempo()
+void GradualTempoChange::requestToRebuildTempo()
 {
     IF_ASSERT_FAILED(score()) {
         return;
@@ -290,28 +300,28 @@ void TempoChangeRanged::requestToRebuildTempo()
     score()->setUpTempoMap();
 }
 
-TempoChangeRangedSegment::TempoChangeRangedSegment(TempoChangeRanged* annotation, System* parent)
-    : TextLineBaseSegment(ElementType::TEMPO_RANGED_CHANGE_SEGMENT, annotation, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+GradualTempoChangeSegment::GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent)
+    : TextLineBaseSegment(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, annotation, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
-TempoChangeRangedSegment* TempoChangeRangedSegment::clone() const
+GradualTempoChangeSegment* GradualTempoChangeSegment::clone() const
 {
-    return new TempoChangeRangedSegment(*this);
+    return new GradualTempoChangeSegment(*this);
 }
 
-TempoChangeRanged* TempoChangeRangedSegment::tempoChange() const
+GradualTempoChange* GradualTempoChangeSegment::tempoChange() const
 {
-    return static_cast<TempoChangeRanged*>(spanner());
+    return static_cast<GradualTempoChange*>(spanner());
 }
 
-void TempoChangeRangedSegment::layout()
+void GradualTempoChangeSegment::layout()
 {
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }
 
-void TempoChangeRangedSegment::endEdit(EditData& editData)
+void GradualTempoChangeSegment::endEdit(EditData& editData)
 {
     IF_ASSERT_FAILED(tempoChange()) {
         return;
@@ -321,7 +331,7 @@ void TempoChangeRangedSegment::endEdit(EditData& editData)
     tempoChange()->requestToRebuildTempo();
 }
 
-void TempoChangeRangedSegment::added()
+void GradualTempoChangeSegment::added()
 {
     IF_ASSERT_FAILED(tempoChange()) {
         return;
@@ -330,7 +340,7 @@ void TempoChangeRangedSegment::added()
     tempoChange()->requestToRebuildTempo();
 }
 
-void TempoChangeRangedSegment::removed()
+void GradualTempoChangeSegment::removed()
 {
     IF_ASSERT_FAILED(tempoChange()) {
         return;

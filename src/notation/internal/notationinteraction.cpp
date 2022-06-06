@@ -1086,7 +1086,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
         return dragMeasureAnchorElement(pos);
     case ElementType::PEDAL:
     case ElementType::LET_RING:
-    case ElementType::TEMPO_RANGED_CHANGE:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     case ElementType::PALM_MUTE:
     case ElementType::OTTAVA:
@@ -1192,7 +1192,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::TRILL:
     case ElementType::PEDAL:
     case ElementType::LET_RING:
-    case ElementType::TEMPO_RANGED_CHANGE:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     case ElementType::PALM_MUTE:
     case ElementType::HAIRPIN:

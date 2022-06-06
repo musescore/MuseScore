@@ -2167,7 +2167,7 @@ void Score::cmdFlip()
                    || e->isTextLineSegment()
                    || e->isPedalSegment()
                    || e->isLetRingSegment()
-                   || e->isTempoChangeRanged()
+                   || e->isGradualTempoChange()
                    || e->isPalmMuteSegment()
                    || e->isFermata()
                    || e->isLyrics()
@@ -2621,7 +2621,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::PEDAL_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::LET_RING_SEGMENT:
-    case ElementType::TEMPO_RANGED_CHANGE_SEGMENT:
+    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
     case ElementType::PALM_MUTE_SEGMENT:
     case ElementType::WHAMMY_BAR_SEGMENT:
     case ElementType::RASGUEADO_SEGMENT:

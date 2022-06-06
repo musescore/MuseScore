@@ -20,31 +20,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TEMPORANGEDCHANGEANNOTATION_H
-#define MU_ENGRAVING_TEMPORANGEDCHANGEANNOTATION_H
+#ifndef MU_ENGRAVING_GRADUALTEMPOCHANGE_H
+#define MU_ENGRAVING_GRADUALTEMPOCHANGE_H
+
+#include <optional>
 
 #include "chordtextlinebase.h"
 #include "types/types.h"
 
 namespace mu::engraving {
-class TempoChangeRangedSegment;
-class TempoChangeRanged : public ChordTextLineBase
+class GradualTempoChangeSegment;
+class GradualTempoChange : public ChordTextLineBase
 {
 public:
-    TempoChangeRanged(EngravingItem* parent);
+    GradualTempoChange(EngravingItem* parent);
 
-    TempoChangeRanged* clone() const override;
+    GradualTempoChange* clone() const override;
 
     void read(XmlReader& reader) override;
     void write(XmlWriter& writer) const override;
 
     LineSegment* createLineSegment(System* parent) override;
 
-    TempoChangeType tempoChangeType() const;
+    GradualTempoChangeType tempoChangeType() const;
     ChangeMethod easingMethod() const;
-    void setTempoChangeType(const TempoChangeType type);
+    void setTempoChangeType(const GradualTempoChangeType type);
 
-    float tempoChangeFactor() const;
+    double tempoChangeFactor() const;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid id, const PropertyValue& val) override;
@@ -58,28 +60,29 @@ protected:
 private:
     void requestToRebuildTempo();
 
-    TempoChangeType m_tempoChangeType = TempoChangeType::Undefined;
+    GradualTempoChangeType m_tempoChangeType = GradualTempoChangeType::Undefined;
     ChangeMethod m_tempoEasingMethod = ChangeMethod::NORMAL;
+    std::optional<float> m_tempoChangeFactor;
 
-    friend class TempoChangeRangedSegment;
+    friend class GradualTempoChangeSegment;
 };
 
-class TempoChangeRangedSegment : public TextLineBaseSegment
+class GradualTempoChangeSegment : public TextLineBaseSegment
 {
 public:
-    TempoChangeRangedSegment(TempoChangeRanged* annotation, System* parent);
+    GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent);
 
-    TempoChangeRangedSegment* clone() const override;
+    GradualTempoChangeSegment* clone() const override;
 
-    TempoChangeRanged* tempoChange() const;
+    GradualTempoChange* tempoChange() const;
 
     void layout() override;
     void endEdit(EditData& editData) override;
     void added() override;
     void removed() override;
 
-    friend class TempoChangeRanged;
+    friend class GradualTempoChange;
 };
 }
 
-#endif // MU_ENGRAVING_TEMPORANGEDCHANGEANNOTATION_H
+#endif // MU_ENGRAVING_GRADUALTEMPOCHANGE_H
