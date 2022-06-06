@@ -32,7 +32,7 @@
 
 #include "log.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MChord {
 bool isGrandStaffProgram(int program)
 {
@@ -678,4 +678,4 @@ void setBarIndexes(
 #endif
 }
 } // namespace MChord
-} // namespace Ms
+} // namespace mu::iex::midi

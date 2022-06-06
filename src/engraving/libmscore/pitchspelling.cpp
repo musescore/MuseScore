@@ -33,8 +33,6 @@
 #include "part.h"
 #include "utils.h"
 
-#include "compat/midi/event.h"
-
 #include "log.h"
 
 namespace mu::engraving {

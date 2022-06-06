@@ -35,7 +35,9 @@
 
 #include "log.h"
 
-namespace mu::engraving {
+using namespace mu::engraving;
+
+namespace mu::iex::midi {
 namespace MidiTuplet {
 void addElementToTuplet(int voice,
                         const ReducedFraction& onTime,
@@ -141,4 +143,4 @@ bool haveTupletsEnoughElements(const Staff* staff)
 
 #endif
 } // namespace MidiTuplet
-} // namespace Ms
+} // namespace mu::iex::midi

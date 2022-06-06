@@ -36,7 +36,7 @@
 
 #include "log.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MidiTie {
 static bool isTied(const Segment* seg, track_idx_t strack, voice_idx_t voice,
                    mu::engraving::Tie* (Note::* tieFunc)() const)
@@ -150,4 +150,4 @@ bool areTiesConsistent(const Staff* staff)
 
 #endif
 } // namespace MidiTie
-} // namespace Ms
+} // namespace mu::iex::midi

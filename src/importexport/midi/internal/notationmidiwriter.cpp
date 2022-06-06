@@ -29,6 +29,7 @@ using namespace mu::iex::midi;
 using namespace mu::io;
 using namespace mu::project;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 std::vector<INotationWriter::UnitType> NotationMidiWriter::supportedUnitTypes() const
 {
@@ -47,17 +48,17 @@ mu::Ret NotationMidiWriter::write(INotationPtr notation, io::Device& destination
         return make_ret(Ret::Code::UnknownError);
     }
 
-    mu::engraving::Score* score = notation->elements()->msScore();
+    Score* score = notation->elements()->msScore();
 
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    mu::engraving::ExportMidi exportMidi(score);
+    ExportMidi exportMidi(score);
 
     bool isPlayRepeatsEnabled = notationConfiguration()->isPlayRepeatsEnabled();
     bool isMidiExportRpns = midiImportExportConfiguration()->isMidiExportRpns();
-    mu::engraving::SynthesizerState synthesizerState = score->synthesizerState();
+    SynthesizerState synthesizerState = score->synthesizerState();
 
     bool ok = exportMidi.write(&destinationDevice, isPlayRepeatsEnabled, isMidiExportRpns, synthesizerState);
 

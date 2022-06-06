@@ -34,7 +34,7 @@
 #include "thirdparty/beatroot/BeatTracker.h"
 #include "libmscore/mscore.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MidiBeat {
 int beatsInBar(const ReducedFraction& barFraction)
 {
@@ -514,4 +514,4 @@ void setTimeSignature(TimeSigMap* sigmap)
     updateFirstLastBeats(data->humanBeatData, timeSig);
 }
 } // namespace MidiBeat
-} // namespace Ms
+} // namespace mu::iex::midi

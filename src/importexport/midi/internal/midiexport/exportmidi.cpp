@@ -33,9 +33,11 @@
 #include "libmscore/repeatlist.h"
 #include "libmscore/synthesizerstate.h"
 
+#include "engraving/compat/midi/event.h"
+
 #include "log.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 //---------------------------------------------------------
 //   writeHeader
 //---------------------------------------------------------

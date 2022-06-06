@@ -32,7 +32,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/durationtype.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MidiVoice {
 // no more than VOICES
 
@@ -1118,4 +1118,4 @@ bool separateVoices(std::multimap<int, MTrack>& tracks, const TimeSigMap* sigmap
     return changed;
 }
 } // namespace MidiVoice
-} // namespace Ms
+} // namespace mu::iex::midi

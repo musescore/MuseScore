@@ -30,14 +30,16 @@
 namespace mu::engraving {
 class Tie;
 class TimeSigMap;
+}
 
+namespace mu::iex::midi {
 class MidiNote
 {
 public:
     int pitch = 0;
     int velo = 0;
     ReducedFraction offTime;
-    Tie* tie = nullptr;
+    engraving::Tie* tie = nullptr;
     bool staccato = false;
     bool isInTuplet = false;
     // for offTime quantization
@@ -145,7 +147,7 @@ findChordsForTimeRange(
 
 void setBarIndexes(
     std::multimap<ReducedFraction, MidiChord>& chords, const ReducedFraction& basicQuant, const ReducedFraction& lastTick,
-    const TimeSigMap* sigmap);
+    const engraving::TimeSigMap* sigmap);
 
 #ifdef QT_DEBUG
 
@@ -158,6 +160,6 @@ bool areBarIndexesSet(const std::multimap<ReducedFraction, MidiChord>& chords);
 
 #endif
 } // namespace MChord
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_CHORD_H

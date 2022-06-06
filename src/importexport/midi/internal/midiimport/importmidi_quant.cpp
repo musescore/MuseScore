@@ -41,7 +41,7 @@
 
 #include "log.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace Quantize {
 ReducedFraction quantValueToFraction(MidiOperations::QuantValue quantValue)
 {
@@ -1513,4 +1513,4 @@ void quantizeChords(
     removeUselessTupletReferences(chords);
 }
 } // namespace Quantize
-} // namespace Ms
+} // namespace mu::iex::midi

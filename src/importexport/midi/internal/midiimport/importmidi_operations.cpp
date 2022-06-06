@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 MidiOperations::Data midiImportOperations;
 
 namespace MidiOperations {
@@ -324,4 +324,4 @@ void Data::setOperationsFile(const QString& fileName)
     }
 }
 } // namespace MidiOperations
-} // namespace Ms
+} // namespace mu::iex::midi

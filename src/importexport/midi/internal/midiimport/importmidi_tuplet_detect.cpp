@@ -29,7 +29,7 @@
 
 #include <set>
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MidiTuplet {
 bool isTupletAllowed(const TupletInfo& tupletInfo)
 {
@@ -425,4 +425,4 @@ std::vector<TupletInfo> detectTuplets(
     return tuplets;
 }
 } // namespace MidiTuplet
-} // namespace Ms
+} // namespace mu::iex::midi

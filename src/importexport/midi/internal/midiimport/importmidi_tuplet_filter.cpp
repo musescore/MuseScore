@@ -29,7 +29,7 @@
 
 #include <set>
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MidiTuplet {
 bool isMoreTupletVoicesAllowed(int voicesInUse, int availableVoices)
 {
@@ -450,7 +450,7 @@ bool validateSelectedTuplets(Iter beginIt,
             bool isFirstChord = (tuplet.firstChordIndex == 0 && it == tuplet.chords.begin());
             const auto fit = usedChords.find(&*(it->second));
             if (fit == usedChords.end()) {
-                usedChords.insert({ &*(it->second), isFirstChord ? 1 : VOICES });
+                usedChords.insert({ &*(it->second), isFirstChord ? 1 : engraving::VOICES });
             } else {
                 if (!isFirstChord) {
                     return false;
@@ -784,4 +784,4 @@ void filterTuplets(std::vector<TupletInfo>& tuplets,
     std::swap(tuplets, newTuplets);
 }
 } // namespace MidiTuplet
-} // namespace Ms
+} // namespace mu::iex::midi

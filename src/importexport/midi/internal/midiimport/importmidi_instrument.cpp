@@ -36,7 +36,9 @@
 
 namespace mu::engraving {
 extern std::vector<InstrumentGroup*> instrumentGroups;
+}
 
+namespace mu::iex::midi {
 namespace MidiInstr {
 QString instrumentName(MidiType type, int program, bool isDrumTrack)
 {
@@ -533,4 +535,4 @@ QString msInstrName(int trackIndex)
     return "";
 }
 } // namespace MidiInstr
-} // namespace Ms
+} // namespace mu::iex::midi

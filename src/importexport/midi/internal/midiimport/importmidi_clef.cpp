@@ -45,7 +45,7 @@
 
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MidiClef {
 class AveragePitch
 {
@@ -514,4 +514,4 @@ void createClefs(Staff* staff, int indexOfOperation, bool isDrumTrack)
 #endif
 }
 } // namespace MidiClef
-} // namespace Ms
+} // namespace mu::iex::midi

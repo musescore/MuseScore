@@ -26,12 +26,9 @@
 #include <vector>
 #include <QIODevice>
 
-#include "engraving/libmscore/sig.h"
-#include "engraving/compat/midi/event.h"
+#include "../midishared/midievent.h"
 
-namespace mu::engraving {
-const int MIDI_CHANNEL = 16;
-
+namespace mu::iex::midi {
 //---------------------------------------------------------
 //   MidiType
 //---------------------------------------------------------
