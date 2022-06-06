@@ -27,6 +27,7 @@
 #include <QList>
 
 #include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "ishortcutsregister.h"
 #include "ishortcutscontroller.h"
@@ -55,8 +56,9 @@ signals:
     void shortcutsChanged();
     void activeChanged();
 
-private:
-    void loadShortcuts();
+protected:
+    virtual void doLoadShortcuts();
+    virtual void doActivate(const QString& key);
 
     QStringList m_shortcuts;
 };
