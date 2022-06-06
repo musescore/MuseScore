@@ -34,6 +34,8 @@
 
 // From XF Format Specifications V 2.01 (January 13, 1999, YAMAHA CORPORATION)
 
+using namespace mu::engraving;
+
 namespace mu::iex::midi {
 namespace MidiChordName {
 int readFirstHalf(uchar byte)

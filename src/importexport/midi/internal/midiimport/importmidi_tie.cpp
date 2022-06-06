@@ -36,6 +36,8 @@
 
 #include "log.h"
 
+using namespace mu::engraving;
+
 namespace mu::iex::midi {
 namespace MidiTie {
 static bool isTied(const Segment* seg, track_idx_t strack, voice_idx_t voice,

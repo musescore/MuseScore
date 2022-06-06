@@ -280,7 +280,7 @@ std::string fromUchar(const uchar* text)
 } // namespace MidiCharset
 
 namespace MidiBar {
-ReducedFraction findBarStart(const ReducedFraction& time, const TimeSigMap* sigmap)
+ReducedFraction findBarStart(const ReducedFraction& time, const engraving::TimeSigMap* sigmap)
 {
     int barIndex, beat, tick;
     sigmap->tickValues(time.ticks(), &barIndex, &beat, &tick);
@@ -288,7 +288,7 @@ ReducedFraction findBarStart(const ReducedFraction& time, const TimeSigMap* sigm
 }
 } // namespace MidiBar
 namespace MidiDuration {
-double durationCount(const QList<std::pair<ReducedFraction, TDuration> >& durations)
+double durationCount(const QList<std::pair<ReducedFraction, engraving::TDuration> >& durations)
 {
     double count = durations.size();
     for (const auto& d: durations) {

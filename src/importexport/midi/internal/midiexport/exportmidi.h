@@ -60,7 +60,7 @@ private:
     public:
         engraving::TempoMap* tempomapWithPauses = nullptr;
 
-        void calculate(const Score* s);
+        void calculate(const engraving::Score* s);
         inline int addPauseTicks(int utick) const { return utick + this->offsetAtUTick(utick); }
     };
 

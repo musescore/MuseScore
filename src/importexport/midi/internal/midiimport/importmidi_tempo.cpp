@@ -32,6 +32,8 @@
 
 #include "log.h"
 
+using namespace mu::engraving;
+
 namespace mu::iex::midi {
 namespace MidiTempo {
 ReducedFraction time2Tick(double time, double ticksPerSec)

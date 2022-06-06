@@ -1077,7 +1077,7 @@ void findTuplets(
     std::multimap<ReducedFraction, MidiChord>& chords,
     const ReducedFraction& basicQuant,
     std::multimap<ReducedFraction, TupletData>& tupletEvents,
-    const TimeSigMap* sigmap,
+    const engraving::TimeSigMap* sigmap,
     int barIndex)
 {
     if (chords.empty() || startBarChordIt == endBarChordIt) {
@@ -1143,7 +1143,7 @@ void findTuplets(
 void setAllTupletOffTimes(
     std::multimap<ReducedFraction, TupletData>& tupletEvents,
     std::multimap<ReducedFraction, MidiChord>& chords,
-    const TimeSigMap* sigmap)
+    const engraving::TimeSigMap* sigmap)
 {
     for (auto& chordEvent: chords) {
         MidiChord& chord = chordEvent.second;
@@ -1169,7 +1169,7 @@ void setAllTupletOffTimes(
 void findAllTuplets(
     std::multimap<ReducedFraction, TupletData>& tuplets,
     std::multimap<ReducedFraction, MidiChord>& chords,
-    const TimeSigMap* sigmap,
+    const engraving::TimeSigMap* sigmap,
     const ReducedFraction& basicQuant)
 {
     if (chords.empty()) {
