@@ -89,6 +89,14 @@ void TextLineBaseSegment::setSelected(bool f)
 //   draw
 //---------------------------------------------------------
 
+static std::vector<double> distributedDashPattern(double dash, double gap, double lineLength)
+{
+    int numPairs = std::max(1.0, lineLength / (dash + gap));
+    double newGap = (lineLength - dash * (numPairs + 1)) / numPairs;
+
+    return { dash, newGap };
+}
+
 void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
@@ -116,82 +124,88 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     // color for line (text color comes from the text properties)
     Color color = curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
-    double textlineLineWidth = tl->lineWidth();
-    if (staff()) {
-        textlineLineWidth *= mag();
-    }
+    double lineWidth = tl->lineWidth() * mag();
 
-    Pen pen(color, textlineLineWidth);
-    Pen solidPen(color, textlineLineWidth);
+    const Pen solidPen(color, lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
+    Pen pen(solidPen);
+
+    double dash, gap;
 
     switch (tl->lineStyle()) {
     case LineType::SOLID:
         break;
     case LineType::DASHED:
-        pen.setDashPattern({ tl->dashLineLen(), tl->dashGapLen() });
+        dash = tl->dashLineLen(), gap = tl->dashGapLen();
         break;
     case LineType::DOTTED:
-        pen.setDashPattern({ 0.01, 1.99 });
+        dash = 0.01, gap = 1.99;
         pen.setCapStyle(PenCapStyle::RoundCap); // round dots
         break;
     }
 
-    //Draw lines
+    const bool isNonSolid = tl->lineStyle() != LineType::SOLID;
+
+    // Draw lines
     if (twoLines) { // hairpins
+        if (isNonSolid) {
+            pen.setDashPattern({ dash, gap });
+        }
+
         painter->setPen(pen);
         painter->drawLines(&points[0], 1);
         painter->drawLines(&points[2], 1);
         return;
     }
 
-    int start = 0;
-    int end = npoints;
-    //draw centered hooks as solid
-    painter->setPen(solidPen);
-    if (tl->beginHookType() == HookType::HOOK_90T && (isSingleType() || isBeginType())) {
-        painter->drawLines(&points[0], 1);
-        start++;
-    }
-    if (tl->endHookType() == HookType::HOOK_90T && (isSingleType() || isEndType())) {
-        painter->drawLines(&points[npoints - 1], 1);
-        end--;
-    }
-    //draw rest of line as regular
-    //calculate new gap
-    if (tl->lineStyle() == LineType::DASHED) {
-        double adjustedLineLength = lineLength / textlineLineWidth;
-        double dash = tl->dashLineLen();
-        double gap = tl->dashGapLen();
-        int numPairs;
-        double newGap = 0;
-        std::vector<double> nDashes { dash, newGap };
-        if (tl->beginHookType() == HookType::HOOK_45 || tl->beginHookType() == HookType::HOOK_90) {
-            double absD
-                = sqrt(PointF::dotProduct(points[start + 1] - points[start], points[start + 1] - points[start])) / textlineLineWidth;
-            numPairs = std::max(double(1), absD / (dash + gap));
-            nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
-            pen.setDashPattern(nDashes);
-            painter->setPen(pen);
-            painter->drawLine(points[start + 1], points[start]);
-            start++;
+    int start = 0, end = npoints;
+
+    // Draw begin hook, if it needs to be drawn separately
+    if (isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
+        bool isTHook = tl->beginHookType() == HookType::HOOK_90T;
+
+        if (isNonSolid || isTHook) {
+            const PointF& p1 = points[start++];
+            const PointF& p2 = points[start++];
+
+            if (isTHook) {
+                painter->setPen(solidPen);
+            } else {
+                double hookLength = sqrt(PointF::dotProduct(p2 - p1, p2 - p1));
+                pen.setDashPattern(distributedDashPattern(dash, gap, hookLength / lineWidth));
+                painter->setPen(pen);
+            }
+
+            painter->drawLine(p1, p2);
         }
-        if (tl->endHookType() == HookType::HOOK_45 || tl->endHookType() == HookType::HOOK_90) {
-            double absD = sqrt(PointF::dotProduct(points[end] - points[end - 1], points[end] - points[end - 1])) / textlineLineWidth;
-            numPairs = std::max(double(1), absD / (dash + gap));
-            nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
-            pen.setDashPattern(nDashes);
-            painter->setPen(pen);
-            painter->drawLines(&points[end - 1], 1);
-            end--;
-        }
-        numPairs = std::max(double(1), adjustedLineLength / (dash + gap));
-        nDashes[1] = (adjustedLineLength - dash * (numPairs + 1)) / numPairs;
-        pen.setDashPattern(nDashes);
     }
+
+    // Draw end hook, if it needs to be drawn separately
+    if (isSingleEndType() && tl->endHookType() != HookType::NONE) {
+        bool isTHook = tl->endHookType() == HookType::HOOK_90T;
+
+        if (isNonSolid || isTHook) {
+            const PointF& p1 = points[--end];
+            const PointF& p2 = points[--end];
+
+            if (isTHook) {
+                painter->setPen(solidPen);
+            } else {
+                double hookLength = sqrt(PointF::dotProduct(p2 - p1, p2 - p1));
+                pen.setDashPattern(distributedDashPattern(dash, gap, hookLength / lineWidth));
+                painter->setPen(pen);
+            }
+
+            painter->drawLine(p1, p2);
+        }
+    }
+
+    // Draw the rest
+    if (isNonSolid) {
+        pen.setDashPattern(distributedDashPattern(dash, gap, lineLength / lineWidth));
+    }
+
     painter->setPen(pen);
-    for (int i = start; i < end; ++i) {
-        painter->drawLines(&points[i], 1);
-    }
+    painter->drawPolyline(&points[start], end - start);
 }
 
 //---------------------------------------------------------
@@ -213,7 +227,7 @@ Shape TextLineBaseSegment::shape() const
         shape.add(RectF(points[0], points[1]).normalized().adjusted(-lw2, -lw2, lw2, lw2));
         shape.add(RectF(points[3], points[2]).normalized().adjusted(-lw2, -lw2, lw2, lw2));
     } else if (textLineBase()->lineVisible()) {
-        for (int i = 0; i < npoints; ++i) {
+        for (int i = 0; i < npoints - 1; ++i) {
             shape.add(RectF(points[i], points[i + 1]).normalized().adjusted(-lw2, -lw2, lw2, lw2));
         }
     }
@@ -240,6 +254,29 @@ bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
+
+// Extends lines to fill the corner between them.
+// Assumes that l1p2 == l2p1 is the intersection between the lines.
+// If checkAngle is false, assumes that the lines are perpendicular,
+// and some calculations are saved.
+static inline void extendLines(const PointF& l1p1, PointF& l1p2, PointF& l2p1, const PointF& l2p2, double lineWidth, bool checkAngle)
+{
+    PointF l1UnitVector = (l1p2 - l1p1).normalized();
+    PointF l2UnitVector = (l2p1 - l2p2).normalized();
+
+    double addedLength = lineWidth * 0.5;
+
+    if (checkAngle) {
+        double angle = M_PI - acos(PointF::dotProduct(l1UnitVector, l2UnitVector));
+
+        if (angle <= M_PI_2) {
+            addedLength *= tan(0.5 * angle);
+        }
+    }
+
+    l1p2 += l1UnitVector * addedLength;
+    l2p1 += l2UnitVector * addedLength;
+}
 
 void TextLineBaseSegment::layout()
 {
@@ -327,8 +364,8 @@ void TextLineBaseSegment::layout()
 
     // diagonal line with no text or hooks - just use the basic rectangle for line
     if (_text->empty() && _endText->empty() && pp2.y() != 0
-        && tl->beginHookType() == HookType::NONE
-        && tl->endHookType() == HookType::NONE) {
+        && (!isSingleBeginType() || tl->beginHookType() == HookType::NONE)
+        && (!isSingleEndType() || tl->endHookType() == HookType::NONE)) {
         npoints = 1;     // 2 points, but only one line must be drawn
         points[0] = pp1;
         points[1] = pp2;
@@ -400,52 +437,74 @@ void TextLineBaseSegment::layout()
     if (tl->lineVisible() || !score()->printing()) {
         pp1 = PointF(l, 0.0);
 
-        double beginHookWidth;
-        double endHookWidth;
+        double beginHookHeight = tl->beginHookHeight().val() * _spatium;
+        double endHookHeight = tl->endHookHeight().val() * _spatium;
+        double beginHookWidth = 0.0;
+        double endHookWidth = 0.0;
 
         if (tl->beginHookType() == HookType::HOOK_45) {
-            beginHookWidth = fabs(tl->beginHookHeight().val() * _spatium * .4);
+            beginHookWidth = fabs(beginHookHeight * .4);
             pp1.rx() += beginHookWidth;
-        } else {
-            beginHookWidth = 0;
         }
 
         if (tl->endHookType() == HookType::HOOK_45) {
-            endHookWidth = fabs(tl->endHookHeight().val() * _spatium * .4);
+            endHookWidth = fabs(endHookHeight * .4);
             pp2.rx() -= endHookWidth;
-        } else {
-            endHookWidth = 0;
         }
 
         // don't draw backwards lines (or hooks) if text is longer than nominal line length
-        bool backwards = !_text->empty() && pp1.x() > pp2.x() && !tl->diagonal();
-
-        if ((tl->beginHookType() != HookType::NONE) && (isSingleType() || isBeginType())) {
-            double hh = tl->beginHookHeight().val() * _spatium;
-            if (tl->beginHookType() == HookType::HOOK_90T) {
-                points[npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() - hh);
-            }
-            points[npoints] = PointF(pp1.x() - beginHookWidth, pp1.y() + hh);
-            ++npoints;
-            points[npoints] = pp1;
+        if (!_text->empty() && pp1.x() > pp2.x() && !tl->diagonal()) {
+            return;
         }
-        if (!backwards) {
-            points[npoints] = pp1;
-            ++npoints;
-            points[npoints] = pp2;
-            lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
-            // painter->drawLine(LineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
 
-            if ((tl->endHookType() != HookType::NONE) && (isSingleType() || isEndType())) {
-                ++npoints;
-                double hh = tl->endHookHeight().val() * _spatium;
-                // painter->drawLine(LineF(pp2.x(), pp2.y(), pp2.x() + endHookWidth, pp2.y() + hh));
-                points[npoints] = PointF(pp2.x() + endHookWidth, pp2.y() + hh);
-                if (tl->endHookType() == HookType::HOOK_90T) {
-                    points[++npoints] = PointF(pp2.x() + endHookWidth, pp2.y() - hh);
+        if (isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
+            // We use the term "endpoint" for the point that does not touch the main line.
+            const PointF& beginHookEndpoint = points[npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() + beginHookHeight);
+
+            if (tl->beginHookType() == HookType::HOOK_90T) {
+                // A T-hook needs to be drawn separately, so we add an extra point
+                points[npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() - beginHookHeight);
+            } else if (tl->lineStyle() != LineType::SOLID) {
+                // For non-solid lines, we also draw the hook separately,
+                // so that we can distribute the dashes/dots for each linepiece individually
+                PointF& beginHookStartpoint = points[npoints++] = pp1;
+
+                if (tl->lineStyle() == LineType::DASHED) {
+                    // For dashes lines, we extend the lines somewhat,
+                    // so that the corner between them gets filled
+                    bool checkAngle = tl->beginHookType() == HookType::HOOK_45 || tl->diagonal();
+                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->lineWidth() * mag(), checkAngle);
                 }
             }
         }
+
+        points[npoints++] = pp1;
+        PointF& pp22 = points[npoints++] = pp2; // Keep a reference so that we can modify later
+
+        if (isSingleEndType() && tl->endHookType() != HookType::NONE) {
+            const PointF endHookEndpoint = PointF(pp2.x() + endHookWidth, pp2.y() + endHookHeight);
+
+            if (tl->endHookType() == HookType::HOOK_90T) {
+                // A T-hook needs to be drawn separately, so we add an extra point
+                points[npoints++] = PointF(pp2.x() + endHookWidth, pp2.y() - endHookHeight);
+            } else if (tl->lineStyle() != LineType::SOLID) {
+                // For non-solid lines, we also draw the hook separately,
+                // so that we can distribute the dashes/dots for each linepiece individually
+                PointF& endHookStartpoint = points[npoints++] = pp2;
+
+                if (tl->lineStyle() == LineType::DASHED) {
+                    bool checkAngle = tl->endHookType() == HookType::HOOK_45 || tl->diagonal();
+
+                    // For dashes lines, we extend the lines somewhat,
+                    // so that the corner between them gets filled
+                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->lineWidth() * mag(), checkAngle);
+                }
+            }
+
+            points[npoints++] = endHookEndpoint;
+        }
+
+        lineLength = sqrt(PointF::dotProduct(pp22 - pp1, pp22 - pp1));
     }
 }
 

@@ -92,6 +92,13 @@ public:
         m_y /= len;
     }
 
+    inline PointX<T> normalized() const
+    {
+        PointX<T> copy = *this;
+        copy.normalize();
+        return copy;
+    }
+
 #ifndef NO_QT_SUPPORT
     static PointX<T> fromQPointF(const QPointF& p) { return PointX<T>(p.x(), p.y()); }
     inline QPointF toQPointF() const { return QPointF(m_x, m_y); }
