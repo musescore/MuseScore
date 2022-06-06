@@ -223,7 +223,7 @@ public:
 
     static Marker* createMarker(EngravingItem* parent, TextStyleType tid, bool isAccessibleEnabled = true);
 
-    static TempoChangeRanged* createTempoChangeRanged(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static GradualTempoChange* createGradualTempoChange(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static PalmMute* createPalmMute(EngravingItem* parent, bool isAccessibleEnabled = true);
 

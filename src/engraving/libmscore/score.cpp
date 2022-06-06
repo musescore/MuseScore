@@ -89,7 +89,7 @@
 #include "system.h"
 #include "tempo.h"
 #include "tempotext.h"
-#include "tempochangeranged.h"
+#include "gradualtempochange.h"
 #include "text.h"
 #include "tie.h"
 #include "tiemap.h"
@@ -567,11 +567,11 @@ void Score::setUpTempoMap()
 
     for (const auto& pair : spanner()) {
         const Spanner* spannerItem = pair.second;
-        if (!spannerItem || !spannerItem->isTempoChangeRanged()) {
+        if (!spannerItem || !spannerItem->isGradualTempoChange()) {
             continue;
         }
 
-        const TempoChangeRanged* tempoChange = toTempoChangeRanged(spannerItem);
+        const GradualTempoChange* tempoChange = toGradualTempoChange(spannerItem);
         if (!tempoChange) {
             continue;
         }
@@ -1565,7 +1565,7 @@ void Score::addElement(EngravingItem* element)
     case ElementType::TEXTLINE:
     case ElementType::HAIRPIN:
     case ElementType::LET_RING:
-    case ElementType::TEMPO_RANGED_CHANGE:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::PALM_MUTE:
     case ElementType::WHAMMY_BAR:
     case ElementType::RASGUEADO:
@@ -1723,7 +1723,7 @@ void Score::removeElement(EngravingItem* element)
     case ElementType::VIBRATO:
     case ElementType::PEDAL:
     case ElementType::LET_RING:
-    case ElementType::TEMPO_RANGED_CHANGE:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::PALM_MUTE:
     case ElementType::WHAMMY_BAR:
     case ElementType::RASGUEADO:

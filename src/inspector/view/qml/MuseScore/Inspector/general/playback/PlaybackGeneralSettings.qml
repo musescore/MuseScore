@@ -95,11 +95,13 @@ Item {
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_GLISSANDO) : null
         }
 
-        TempoRangedChangeBlank {
+        SeparatorLine { anchors.margins: -12 }
+
+        GradualTempoChangeBlank {
             navigation.panel: root.navigationPanel
             navigation.row: glissandoSection.navigationRowEnd + 1
 
-            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_TEMPO_RANGED_CHANGE) : null
+            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_GRADUAL_TEMPO_CHANGE) : null
         }
     }
 }

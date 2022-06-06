@@ -288,7 +288,7 @@ void XmlWriter::tagProperty(const AsciiString& name, P_TYPE type, const Property
         element(name, TConv::toXml(data.value<PlayingTechniqueType>()));
     } break;
     case P_TYPE::TEMPOCHANGE_TYPE: {
-        element(name, TConv::toXml(data.value<TempoChangeType>()));
+        element(name, TConv::toXml(data.value<GradualTempoChangeType>()));
     } break;
     default: {
         UNREACHABLE; //! TODO

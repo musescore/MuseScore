@@ -653,7 +653,7 @@ EngravingItem* Score::nextElement()
         case ElementType::TRILL_SEGMENT:
         case ElementType::VIBRATO_SEGMENT:
         case ElementType::LET_RING_SEGMENT:
-        case ElementType::TEMPO_RANGED_CHANGE_SEGMENT:
+        case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
         case ElementType::PALM_MUTE_SEGMENT:
         case ElementType::WHAMMY_BAR_SEGMENT:
         case ElementType::RASGUEADO_SEGMENT:

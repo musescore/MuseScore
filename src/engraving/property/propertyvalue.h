@@ -242,8 +242,8 @@ public:
     PropertyValue(PlayingTechniqueType v)
         : m_type(P_TYPE::PLAYTECH_TYPE), m_data(make_data<PlayingTechniqueType>(v)) {}
 
-    PropertyValue(TempoChangeType v)
-        : m_type(P_TYPE::TEMPOCHANGE_TYPE), m_data(make_data<TempoChangeType>(v)) {}
+    PropertyValue(GradualTempoChangeType v)
+        : m_type(P_TYPE::TEMPOCHANGE_TYPE), m_data(make_data<GradualTempoChangeType>(v)) {}
 
     PropertyValue(SlurStyleType v)
         : m_type(P_TYPE::SLUR_STYLE_TYPE), m_data(make_data<SlurStyleType>(v)) {}

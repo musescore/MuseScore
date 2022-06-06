@@ -114,7 +114,7 @@
 #include "libmscore/textframe.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/letring.h"
-#include "libmscore/tempochangeranged.h"
+#include "libmscore/gradualtempochange.h"
 #include "libmscore/palmmute.h"
 #include "libmscore/whammybar.h"
 #include "libmscore/rasgueado.h"
@@ -3983,7 +3983,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
             || el->type() == ElementType::PEDAL || el->type() == ElementType::TEXTLINE
             || el->type() == ElementType::LET_RING || el->type() == ElementType::PALM_MUTE
             || el->type() == ElementType::WHAMMY_BAR || el->type() == ElementType::RASGUEADO
-            || el->type() == ElementType::HARMONIC_MARK || el->type() == ElementType::TEMPO_RANGED_CHANGE) {
+            || el->type() == ElementType::HARMONIC_MARK || el->type() == ElementType::GRADUAL_TEMPO_CHANGE) {
             // handle elements derived from SLine
             // find the system containing the first linesegment
             const SLine* sl = static_cast<const SLine*>(el);
@@ -5743,8 +5743,8 @@ static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t et
                 case ElementType::LET_RING:
                     exp->textLine(toLetRing(e), sstaff, seg->tick());
                     break;
-                case ElementType::TEMPO_RANGED_CHANGE:
-                    exp->textLine(toTempoChangeRanged(e), sstaff, seg->tick());
+                case ElementType::GRADUAL_TEMPO_CHANGE:
+                    exp->textLine(toGradualTempoChange(e), sstaff, seg->tick());
                     break;
                 case ElementType::PALM_MUTE:
                     exp->textLine(toPalmMute(e), sstaff, seg->tick());

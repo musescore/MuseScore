@@ -19,22 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_TEMPORANGEDCHANGESETTINGSMODEL_H
-#define MU_INSPECTOR_TEMPORANGEDCHANGESETTINGSMODEL_H
 
-#include "textlinesettingsmodel.h"
+#include "gradualtempochangesettingsmodel.h"
 
-namespace mu::inspector {
-class TempoRangedChangeSettingsModel : public TextLineSettingsModel
+using namespace mu::inspector;
+using namespace mu::engraving;
+
+GradualTempoChangeSettingsModel::GradualTempoChangeSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : TextLineSettingsModel(parent, repository, ElementType::GRADUAL_TEMPO_CHANGE)
 {
-    Q_OBJECT
+    setModelType(InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE);
+    setTitle(qtrc("inspector", "Tempo change"));
 
-public:
-    explicit TempoRangedChangeSettingsModel(QObject* parent, IElementRepositoryService* repository);
-
-private:
-    void createProperties() override;
-};
+    createProperties();
 }
 
-#endif // MU_INSPECTOR_TEMPORANGEDCHANGESETTINGSMODEL_H
+void GradualTempoChangeSettingsModel::createProperties()
+{
+    TextLineSettingsModel::createProperties();
+
+    isLineVisible()->setIsVisible(true);
+    placement()->setIsVisible(true);
+}

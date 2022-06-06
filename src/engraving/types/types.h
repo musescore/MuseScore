@@ -532,7 +532,7 @@ enum class PlayingTechniqueType {
     Overdrive
 };
 
-enum class TempoChangeType {
+enum class GradualTempoChangeType {
     Undefined = -1,
     Accelerando,
     Allargando,

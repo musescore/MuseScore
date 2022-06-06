@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_TEMPORANGEDCHANGEPLAYBACKMODEL_H
-#define MU_INSPECTOR_TEMPORANGEDCHANGEPLAYBACKMODEL_H
+#ifndef MU_INSPECTOR_GRADUALTEMPOCHANGEPLAYBACKMODEL_H
+#define MU_INSPECTOR_GRADUALTEMPOCHANGEPLAYBACKMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
 namespace mu::inspector {
-class TempoRangedChangePlaybackModel : public AbstractInspectorModel
+class GradualTempoChangePlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
@@ -33,7 +33,7 @@ class TempoRangedChangePlaybackModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * tempoEasingMethod READ tempoEasingMethod CONSTANT)
 
 public:
-    explicit TempoRangedChangePlaybackModel(QObject* parent, IElementRepositoryService* repository);
+    explicit GradualTempoChangePlaybackModel(QObject* parent, IElementRepositoryService* repository);
 
     PropertyItem* tempoChangeFactor() const;
     PropertyItem* tempoEasingMethod() const;
@@ -51,4 +51,4 @@ private:
 };
 }
 
-#endif // MU_INSPECTOR_TEMPORANGEDCHANGEPLAYBACKMODEL_H
+#endif // MU_INSPECTOR_GRADUALTEMPOCHANGEPLAYBACKMODEL_H
