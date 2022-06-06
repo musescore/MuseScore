@@ -34,10 +34,10 @@
 
 using namespace mu::notation;
 using namespace mu::ui;
+using namespace mu::engraving;
 
 static const QString STAFF_TEXT_PROPERTIES_DIALOG_NAME("StaffTextPropertiesDialog");
 
-namespace mu::engraving {
 //---------------------------------------------------------
 // initChannelCombo
 //---------------------------------------------------------
@@ -68,7 +68,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     const INotationPtr notation = globalContext()->currentNotation();
     const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
     EngravingItem* element = interaction ? interaction->hitElementContext().element : nullptr;
-    StaffTextBase* st = element && element->isStaffTextBase() ? mu::engraving::toStaffTextBase(element) : nullptr;
+    StaffTextBase* st = element && element->isStaffTextBase() ? toStaffTextBase(element) : nullptr;
 
     if (!st) {
         return;
@@ -556,5 +556,4 @@ void StaffTextPropertiesDialog::saveValues()
     score->updateCapo();
     score->updateSwing();
     score->setPlaylistDirty();
-}
 }

@@ -149,7 +149,7 @@ void NotationModule::resolveImports()
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<TupletDialog>("TupletDialog")));
 
         ir->registerUri(Uri("musescore://notation/stafftextproperties"),
-                        ContainerMeta(ContainerType::QWidgetDialog, mu::engraving::StaffTextPropertiesDialog::static_metaTypeId()));
+                        ContainerMeta(ContainerType::QWidgetDialog, StaffTextPropertiesDialog::static_metaTypeId()));
 
         ir->registerUri(Uri("musescore://notation/parts"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/PartsDialog.qml"));
@@ -196,7 +196,7 @@ void NotationModule::registerUiTypes()
     qRegisterMetaType<EditStaff>("EditStaff");
     qRegisterMetaType<SelectNoteDialog>("SelectNoteDialog");
     qRegisterMetaType<SelectDialog>("SelectDialog");
-    qRegisterMetaType<mu::engraving::StaffTextPropertiesDialog>("StaffTextPropertiesDialog");
+    qRegisterMetaType<StaffTextPropertiesDialog>("StaffTextPropertiesDialog");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 
