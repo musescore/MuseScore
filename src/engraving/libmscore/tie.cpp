@@ -555,17 +555,24 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
             }
         }
         shoulderHeightMax = 4 / 3; // at max ties will be 1sp tall
-        // are the endpoints within the staff?
-        if (line > 0 && line < (lines - 1) * 2) {
-            // ENDPOINTS ////////////////////////////////
-            // Each line position in the staff has a set endpoint Y location
-            qreal newAnchor;
-            if (isUp) {
-                newAnchor = floor(line / 2) + ((line & 1) ? staffLineOffset : -staffLineOffset);
-            } else {
-                newAnchor = floor((line + 1) / 2) + ((line & 1) ? -staffLineOffset : staffLineOffset);
-            }
 
+        // ENDPOINTS ////////////////////////////////
+        // Each line position in the staff has a set endpoint Y location
+        qreal newAnchor;
+        if (isUp) {
+            newAnchor = floor(line / 2.0) + ((line & 1) ? staffLineOffset : -staffLineOffset);
+        } else {
+            newAnchor = floor((line + 1) / 2.0) + ((line & 1) ? -staffLineOffset : staffLineOffset);
+        }
+
+        // are the endpoints within the staff?
+        bool endpointsInStaff = endpointYsp >= -staffLineOffset && endpointYsp <= (lines - 1) + staffLineOffset;
+        // are the endpoints outside, but still close enough to need height adjustment?
+        int lastLine = (lines - 1) * 2;
+        bool downTieAbove = !isUp && line >= -2 && line < 0;
+        bool upTieBelow = isUp && line > lastLine && line <= lastLine + 2;
+
+        if (endpointsInStaff || downTieAbove || upTieBelow) {
             // TIE APOGEE ///////////////////////////////
             // Constrain tie height to avoid staff line collisions
             if (line & 1) {
@@ -586,9 +593,8 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
                 shoulderHeightMax = 4 * (1 - (staffLineOffset * 2) - (tieThicknessSp / 2)) / 3;
                 shoulderHeightMax *= (ld / spatium());
             }
-
-            setAutoAdjust(PointF(0, (newAnchor - endpointYsp) * ld));
         }
+        setAutoAdjust(PointF(0, (newAnchor - endpointYsp) * ld));
     }
 }
 
