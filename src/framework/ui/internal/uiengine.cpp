@@ -31,10 +31,6 @@
 #include "config.h"
 #include "log.h"
 
-namespace mu::engraving {
-extern QString mscoreGlobalShare; //! FIXME Need to remove global variable
-}
-
 using namespace mu::ui;
 
 UiEngine* UiEngine::instance()
