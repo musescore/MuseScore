@@ -28,6 +28,7 @@ MuseScore {
     description: "Apply various temperaments and tunings"
     pluginType: "dialog"
     categoryCode: "playback"
+    thumbnailName: "modal_tuning.png"
 
     width: 860
     height: 722

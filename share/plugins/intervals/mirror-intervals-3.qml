@@ -27,6 +27,7 @@ MuseScore {
     description: "Mirrors (inverts) intervals about a given pivot note"
     pluginType: "dialog"
     categoryCode: "composing-arranging-tools"
+    thumbnailName: "mirror_intervals.png"
 
     width: 300
     height: 124

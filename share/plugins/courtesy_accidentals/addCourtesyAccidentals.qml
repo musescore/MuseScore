@@ -27,6 +27,7 @@ MuseScore {
       title: "Add Courtesy Accidentals"
       requiresScore: true
       categoryCode: "composing-arranging-tools"
+      thumbnailName: "accidentals.png"
 
       // configuration
       // This has changed for MuseScore v3

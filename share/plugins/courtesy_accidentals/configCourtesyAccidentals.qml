@@ -30,6 +30,7 @@ MuseScore {
     title: "Configure Courtesy Accidentals"
     categoryCode: "composing-arranging-tools"
     pluginType: "dialog"
+    thumbnailName: "accidentals.png"
 
     requiresScore: true
 
