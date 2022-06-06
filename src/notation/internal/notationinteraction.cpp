@@ -853,7 +853,13 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
     m_editData.modifiers = QGuiApplication::keyboardModifiers();
 
     for (EngravingItem* e : m_dragData.elements) {
-        if (!isDraggable(e)) {
+        bool draggable = isDraggable(e);
+
+        if (!draggable && e->isSpanner()) {
+            draggable = isDraggable(toSpanner(e)->frontSegment());
+        }
+
+        if (!draggable) {
             continue;
         }
 
