@@ -115,8 +115,8 @@ using ClefType = mu::engraving::ClefType;
 using ClefTypeList = mu::engraving::ClefTypeList;
 using BracketType = mu::engraving::BracketType;
 using StaffGroup = mu::engraving::StaffGroup;
-using StaffType = mu::engraving::StaffTypes;
-using StaffTypePreset = mu::engraving::StaffType;
+using StaffType = mu::engraving::StaffType;
+using StaffTypeId = mu::engraving::StaffTypes;
 using StaffName = mu::engraving::StaffName;
 using StaffNameList = mu::engraving::StaffNameList;
 using MidiArticulation = mu::engraving::MidiArticulation;
@@ -439,7 +439,7 @@ struct StaffConfig
     bool mergeMatchingRests = false;
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     ClefTypeList clefTypeList;
-    StaffTypePreset staffType;
+    engraving::StaffType staffType;
 
     bool operator==(const StaffConfig& conf) const
     {
@@ -528,17 +528,17 @@ struct ScoreConfig
     bool isMarkIrregularMeasures = false;
 };
 
-inline QString staffTypeToString(StaffType type)
+inline QString staffTypeToString(StaffTypeId type)
 {
-    const mu::engraving::StaffType* preset = mu::engraving::StaffType::preset(type);
+    const StaffType* preset = StaffType::preset(type);
     return preset ? preset->name() : QString();
 }
 
-inline QList<StaffType> allStaffTypes()
+inline QList<StaffTypeId> allStaffTypes()
 {
-    QList<StaffType> result;
+    QList<StaffTypeId> result;
 
-    for (const mu::engraving::StaffType& preset: mu::engraving::StaffType::presets()) {
+    for (const StaffType& preset: StaffType::presets()) {
         result << preset.type();
     }
 
