@@ -260,6 +260,22 @@ void TextLineBaseSegment::layout()
         _offset2.setY(0);
     }
 
+    auto alignText = [tl](Text* text) {
+        switch (text->align().vertical) {
+        case AlignV::TOP:
+            text->movePosY(-tl->lineWidth() / 2);
+            break;
+        case AlignV::VCENTER:
+            break;
+        case AlignV::BOTTOM:
+            text->movePosY(tl->lineWidth() / 2);
+            break;
+        case AlignV::BASELINE:
+            text->movePosY(tl->lineWidth() / 2);
+            break;
+        }
+    };
+
     switch (spannerSegmentType()) {
     case SpannerSegmentType::SINGLE:
     case SpannerSegmentType::BEGIN:
@@ -283,6 +299,10 @@ void TextLineBaseSegment::layout()
     _text->setPlacement(PlacementV::ABOVE);
     _text->setTrack(track());
     _text->layout();
+    if ((isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
+        || (!isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
+        alignText(_text);
+    }
 
     if ((isSingleType() || isEndType())) {
         _endText->setXmlText(tl->endText());
@@ -294,6 +314,10 @@ void TextLineBaseSegment::layout()
         _endText->setPlacement(PlacementV::ABOVE);
         _endText->setTrack(track());
         _endText->layout();
+
+        if (tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO) {
+            alignText(_endText);
+        }
     } else {
         _endText->setXmlText(u"");
     }
@@ -325,9 +349,8 @@ void TextLineBaseSegment::layout()
     double l = 0.0;
     if (!_text->empty()) {
         double textlineTextDistance = _spatium * .5;
-        if (((isSingleType() || isBeginType())
-             && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
-            || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == TextPlace::LEFT))) {
+        if ((isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
+            || (!isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
             l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
         }
 
@@ -366,7 +389,7 @@ void TextLineBaseSegment::layout()
     }
     // set end text position and extend bbox
     if (!_endText->empty()) {
-        _endText->setPos(bbox().right(), 0);
+        _endText->movePosX(bbox().right());
         bbox() |= _endText->bbox().translated(_endText->pos());
     }
 
