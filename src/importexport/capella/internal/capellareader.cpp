@@ -23,24 +23,25 @@
 
 #include "io/path.h"
 
-#include "libmscore/masterscore.h"
+#include "libmscore/score.h"
 #include "engraving/engravingerrors.h"
 
-namespace mu::engraving {
+using namespace mu::iex::capella;
+using namespace mu::engraving;
+
+namespace mu::iex::capella {
 extern Score::FileError importCapella(MasterScore*, const QString& name);
 extern Score::FileError importCapXml(MasterScore*, const QString& name);
 }
 
-using namespace mu::iex::capella;
-
-mu::Ret CapellaReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
+mu::Ret CapellaReader::read(MasterScore* score, const io::path_t& path, const Options&)
 {
-    mu::engraving::Score::FileError err = mu::engraving::Score::FileError::FILE_UNKNOWN_TYPE;
+    Score::FileError err = Score::FileError::FILE_UNKNOWN_TYPE;
     std::string suffix = mu::io::suffix(path);
     if (suffix == "cap") {
-        err = mu::engraving::importCapella(score, path.toQString());
+        err = importCapella(score, path.toQString());
     } else if (suffix == "capx") {
-        err = mu::engraving::importCapXml(score, path.toQString());
+        err = importCapXml(score, path.toQString());
     }
-    return mu::engraving::scoreFileErrorToRet(err, path);
+    return scoreFileErrorToRet(err, path);
 }

@@ -37,8 +37,9 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::capella {
 //---------------------------------------------------------
 //   capxReadFont
 //---------------------------------------------------------
