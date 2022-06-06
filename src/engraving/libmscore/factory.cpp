@@ -37,7 +37,7 @@
 #include "noteline.h"
 #include "trill.h"
 #include "letring.h"
-#include "tempochangeranged.h"
+#include "gradualtempochange.h"
 #include "vibrato.h"
 #include "palmmute.h"
 #include "whammybar.h"
@@ -169,7 +169,7 @@ static const ElementName elementNames[] = {
     { ElementType::OTTAVA_SEGMENT,       "OttavaSegment",        QT_TRANSLATE_NOOP("elementName", "Ottava segment") },
     { ElementType::TRILL_SEGMENT,        "TrillSegment",         QT_TRANSLATE_NOOP("elementName", "Trill segment") },
     { ElementType::LET_RING_SEGMENT,     "LetRingSegment",       QT_TRANSLATE_NOOP("elementName", "Let ring segment") },
-    { ElementType::TEMPO_RANGED_CHANGE_SEGMENT,     "TempoChangeRangedSegment",       QT_TRANSLATE_NOOP("elementName", "Tempo change ranged segment") },
+    { ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, "GradualTempoChangeSegment", QT_TRANSLATE_NOOP("elementName", "Gradual tempo change segment") },
     { ElementType::VIBRATO_SEGMENT,      "VibratoSegment",       QT_TRANSLATE_NOOP("elementName", "Vibrato segment") },
     { ElementType::PALM_MUTE_SEGMENT,    "PalmMuteSegment",      QT_TRANSLATE_NOOP("elementName", "Palm mute segment") },
     { ElementType::WHAMMY_BAR_SEGMENT,   "WhammyBarSegment",     QT_TRANSLATE_NOOP("elementName", "Whammy bar segment") },
@@ -199,7 +199,7 @@ static const ElementName elementNames[] = {
     { ElementType::PEDAL,                "Pedal",                QT_TRANSLATE_NOOP("elementName", "Pedal") },
     { ElementType::TRILL,                "Trill",                QT_TRANSLATE_NOOP("elementName", "Trill") },
     { ElementType::LET_RING,             "LetRing",              QT_TRANSLATE_NOOP("elementName", "Let ring") },
-    { ElementType::TEMPO_RANGED_CHANGE,  "TempoChangeRanged",    QT_TRANSLATE_NOOP("elementName", "Tempo changed ranged") },
+    { ElementType::GRADUAL_TEMPO_CHANGE, "GradualTempoChange",   QT_TRANSLATE_NOOP("elementName", "Gradual tempo change") },
     { ElementType::VIBRATO,              "Vibrato",              QT_TRANSLATE_NOOP("elementName", "Vibrato") },
     { ElementType::PALM_MUTE,            "PalmMute",             QT_TRANSLATE_NOOP("elementName", "Palm mute") },
     { ElementType::WHAMMY_BAR,           "WhammyBar",            QT_TRANSLATE_NOOP("elementName", "Whammy bar") },
@@ -252,7 +252,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::NOTELINE:          return new NoteLine(parent);
     case ElementType::TRILL:             return new Trill(parent);
     case ElementType::LET_RING:          return new LetRing(parent);
-    case ElementType::TEMPO_RANGED_CHANGE: return new TempoChangeRanged(parent);
+    case ElementType::GRADUAL_TEMPO_CHANGE: return new GradualTempoChange(parent);
     case ElementType::VIBRATO:           return new Vibrato(parent);
     case ElementType::PALM_MUTE:         return new PalmMute(parent);
     case ElementType::WHAMMY_BAR:        return new WhammyBar(parent);
@@ -346,7 +346,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::OTTAVA_SEGMENT:
     case ElementType::TRILL_SEGMENT:
     case ElementType::LET_RING_SEGMENT:
-    case ElementType::TEMPO_RANGED_CHANGE_SEGMENT:
+    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
     case ElementType::VIBRATO_SEGMENT:
     case ElementType::PALM_MUTE_SEGMENT:
     case ElementType::WHAMMY_BAR_SEGMENT:
@@ -748,7 +748,7 @@ Marker* Factory::createMarker(EngravingItem * parent, TextStyleType tid, bool is
     return m;
 }
 
-CREATE_ITEM_IMPL(TempoChangeRanged, ElementType::TEMPO_RANGED_CHANGE, EngravingItem, isAccessibleEnabled)
+CREATE_ITEM_IMPL(GradualTempoChange, ElementType::GRADUAL_TEMPO_CHANGE, EngravingItem, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(PalmMute, ElementType::PALM_MUTE, EngravingItem, isAccessibleEnabled)
 

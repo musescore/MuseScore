@@ -111,8 +111,8 @@ public:
     static AsciiString toXml(PlayingTechniqueType v);
     static PlayingTechniqueType fromXml(const AsciiString& tag, PlayingTechniqueType def);
 
-    static AsciiString toXml(TempoChangeType v);
-    static TempoChangeType fromXml(const AsciiString& tag, TempoChangeType def);
+    static AsciiString toXml(GradualTempoChangeType v);
+    static GradualTempoChangeType fromXml(const AsciiString& tag, GradualTempoChangeType def);
 
     static AsciiString toXml(OrnamentStyle v);
     static OrnamentStyle fromXml(const AsciiString& str, OrnamentStyle def);

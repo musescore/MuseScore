@@ -580,7 +580,7 @@ void Score::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:
     case ElementType::LET_RING:
-    case ElementType::TEMPO_RANGED_CHANGE:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     {
         Spanner* sp = toSpanner(info->connector());

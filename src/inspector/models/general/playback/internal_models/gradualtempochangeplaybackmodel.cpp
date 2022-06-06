@@ -20,33 +20,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "temporangedchangeplaybackmodel.h"
+#include "gradualtempochangeplaybackmodel.h"
 
 #include "engraving/types/types.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-TempoRangedChangePlaybackModel::TempoRangedChangePlaybackModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository, ElementType::TEMPO_RANGED_CHANGE)
+GradualTempoChangePlaybackModel::GradualTempoChangePlaybackModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository, ElementType::GRADUAL_TEMPO_CHANGE)
 {
     setTitle(qtrc("inspector", "Tempo change"));
-    setModelType(InspectorModelType::TYPE_TEMPO_RANGED_CHANGE);
+    setModelType(InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE);
 
     createProperties();
 }
 
-PropertyItem* TempoRangedChangePlaybackModel::tempoChangeFactor() const
+PropertyItem* GradualTempoChangePlaybackModel::tempoChangeFactor() const
 {
     return m_tempoChangeFactor;
 }
 
-PropertyItem* TempoRangedChangePlaybackModel::tempoEasingMethod() const
+PropertyItem* GradualTempoChangePlaybackModel::tempoEasingMethod() const
 {
     return m_tempoEasingMethod;
 }
 
-QVariantList TempoRangedChangePlaybackModel::possibleEasingMethods() const
+QVariantList GradualTempoChangePlaybackModel::possibleEasingMethods() const
 {
     QVariantList methods {
         object(ChangeMethod::NORMAL, qtrc("inspector", "Normal")),
@@ -57,7 +57,7 @@ QVariantList TempoRangedChangePlaybackModel::possibleEasingMethods() const
     return methods;
 }
 
-void TempoRangedChangePlaybackModel::createProperties()
+void GradualTempoChangePlaybackModel::createProperties()
 {
     m_tempoChangeFactor = buildPropertyItem(Pid::TEMPO_CHANGE_FACTOR, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
@@ -66,7 +66,7 @@ void TempoRangedChangePlaybackModel::createProperties()
     m_tempoEasingMethod = buildPropertyItem(Pid::TEMPO_EASING_METHOD);
 }
 
-void TempoRangedChangePlaybackModel::loadProperties()
+void GradualTempoChangePlaybackModel::loadProperties()
 {
     loadPropertyItem(m_tempoChangeFactor, [](const QVariant& elementPropertyValue) -> QVariant {
         return static_cast<int>(DataFormatter::roundDouble(elementPropertyValue.toDouble() * 100.0));
@@ -75,7 +75,7 @@ void TempoRangedChangePlaybackModel::loadProperties()
     loadPropertyItem(m_tempoEasingMethod);
 }
 
-void TempoRangedChangePlaybackModel::resetProperties()
+void GradualTempoChangePlaybackModel::resetProperties()
 {
     m_tempoChangeFactor->resetToDefault();
     m_tempoEasingMethod->resetToDefault();

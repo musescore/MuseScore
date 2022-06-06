@@ -40,7 +40,7 @@
 #include "libmscore/staff.h"
 #include "types/symid.h"
 #include "libmscore/tempotext.h"
-#include "libmscore/tempochangeranged.h"
+#include "libmscore/gradualtempochange.h"
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
@@ -1056,7 +1056,7 @@ void GPConverter::addTempoMap()
     };
 
     int measureIdx = 0;
-    TempoChangeRanged* _lastTempoChangeRanged = nullptr;
+    GradualTempoChange* _lastGradualTempoChange = nullptr;
     int previousTempo = -1;
 
     for (auto m = _score->firstMeasure(); m; m = m->nextMeasure()) {
@@ -1074,25 +1074,25 @@ void GPConverter::addTempoMap()
             segment->add(tt);
             _score->setTempo(tick, tt->tempo());
 
-            if (_lastTempoChangeRanged) {
-                _lastTempoChangeRanged->setTick2(tick);
+            if (_lastGradualTempoChange) {
+                _lastGradualTempoChange->setTick2(tick);
                 if (realTemp > previousTempo) {
-                    _lastTempoChangeRanged->setTempoChangeType(TempoChangeType::Accelerando);
-                    _lastTempoChangeRanged->setBeginText("accel");
+                    _lastGradualTempoChange->setTempoChangeType(GradualTempoChangeType::Accelerando);
+                    _lastGradualTempoChange->setBeginText("accel");
                 } else {
-                    _lastTempoChangeRanged->setTempoChangeType(TempoChangeType::Rallentando);
-                    _lastTempoChangeRanged->setBeginText("rall");
+                    _lastGradualTempoChange->setTempoChangeType(GradualTempoChangeType::Rallentando);
+                    _lastGradualTempoChange->setBeginText("rall");
                 }
 
-                _score->addElement(_lastTempoChangeRanged);
-                _lastTempoChangeRanged = nullptr;
+                _score->addElement(_lastGradualTempoChange);
+                _lastGradualTempoChange = nullptr;
             }
 
             if (tempIt->second.linear) {
-                TempoChangeRanged* tempoChangeRanged = Factory::createTempoChangeRanged(segment);
-                tempoChangeRanged->setTick(tick);
-                tempoChangeRanged->setTrack(0);
-                _lastTempoChangeRanged = tempoChangeRanged;
+                GradualTempoChange* tempoChange = Factory::createGradualTempoChange(segment);
+                tempoChange->setTick(tick);
+                tempoChange->setTrack(0);
+                _lastGradualTempoChange = tempoChange;
             }
 
             previousTempo = realTemp;

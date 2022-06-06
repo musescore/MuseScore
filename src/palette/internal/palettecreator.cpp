@@ -55,7 +55,7 @@
 #include "libmscore/keysig.h"
 #include "libmscore/layoutbreak.h"
 #include "libmscore/letring.h"
-#include "libmscore/tempochangeranged.h"
+#include "libmscore/gradualtempochange.h"
 #include "libmscore/marker.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
@@ -1313,29 +1313,29 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
         }
     }
 
-    static const std::map<TempoChangeType, const char*> DEFAULT_TEMPO_CHANGE = {
-        { TempoChangeType::Accelerando, QT_TRANSLATE_NOOP("palette", "accel.") },
-        { TempoChangeType::Allargando, QT_TRANSLATE_NOOP("palette", "allarg.") },
-        { TempoChangeType::Rallentando, QT_TRANSLATE_NOOP("palette", "rall.") },
-        { TempoChangeType::Ritardando, QT_TRANSLATE_NOOP("palette", "rit.") },
+    static const std::map<GradualTempoChangeType, const char*> DEFAULT_TEMPO_CHANGE = {
+        { GradualTempoChangeType::Accelerando, QT_TRANSLATE_NOOP("palette", "accel.") },
+        { GradualTempoChangeType::Allargando, QT_TRANSLATE_NOOP("palette", "allarg.") },
+        { GradualTempoChangeType::Rallentando, QT_TRANSLATE_NOOP("palette", "rall.") },
+        { GradualTempoChangeType::Ritardando, QT_TRANSLATE_NOOP("palette", "rit.") },
     };
 
-    static const std::map<TempoChangeType, const char*> MASTER_TEMPO_CHANGE = {
-        { TempoChangeType::Accelerando, QT_TRANSLATE_NOOP("palette", "accel.") },
-        { TempoChangeType::Allargando, QT_TRANSLATE_NOOP("palette", "allarg.") },
-        { TempoChangeType::Calando, QT_TRANSLATE_NOOP("palette", "calando") },
-        { TempoChangeType::Lentando, QT_TRANSLATE_NOOP("palette", "lentando") },
-        { TempoChangeType::Morendo, QT_TRANSLATE_NOOP("palette", "morendo") },
-        { TempoChangeType::Precipitando, QT_TRANSLATE_NOOP("palette", "precipitando") },
-        { TempoChangeType::Rallentando, QT_TRANSLATE_NOOP("palette", "rall.") },
-        { TempoChangeType::Ritardando, QT_TRANSLATE_NOOP("palette", "rit.") },
-        { TempoChangeType::Smorzando, QT_TRANSLATE_NOOP("palette", "smorz.") },
-        { TempoChangeType::Sostenuto, QT_TRANSLATE_NOOP("palette", "sost.") },
-        { TempoChangeType::Stringendo, QT_TRANSLATE_NOOP("palette", "string.") }
+    static const std::map<GradualTempoChangeType, const char*> MASTER_TEMPO_CHANGE = {
+        { GradualTempoChangeType::Accelerando, QT_TRANSLATE_NOOP("palette", "accel.") },
+        { GradualTempoChangeType::Allargando, QT_TRANSLATE_NOOP("palette", "allarg.") },
+        { GradualTempoChangeType::Calando, QT_TRANSLATE_NOOP("palette", "calando") },
+        { GradualTempoChangeType::Lentando, QT_TRANSLATE_NOOP("palette", "lentando") },
+        { GradualTempoChangeType::Morendo, QT_TRANSLATE_NOOP("palette", "morendo") },
+        { GradualTempoChangeType::Precipitando, QT_TRANSLATE_NOOP("palette", "precipitando") },
+        { GradualTempoChangeType::Rallentando, QT_TRANSLATE_NOOP("palette", "rall.") },
+        { GradualTempoChangeType::Ritardando, QT_TRANSLATE_NOOP("palette", "rit.") },
+        { GradualTempoChangeType::Smorzando, QT_TRANSLATE_NOOP("palette", "smorz.") },
+        { GradualTempoChangeType::Sostenuto, QT_TRANSLATE_NOOP("palette", "sost.") },
+        { GradualTempoChangeType::Stringendo, QT_TRANSLATE_NOOP("palette", "string.") }
     };
 
     for (const auto& pair : defaultPalette ? DEFAULT_TEMPO_CHANGE : MASTER_TEMPO_CHANGE) {
-        auto item = makeElement<TempoChangeRanged>(gpaletteScore);
+        auto item = makeElement<GradualTempoChange>(gpaletteScore);
         item->setTempoChangeType(pair.first);
         item->setBeginText(pair.second);
         sp->appendElement(item, pair.second, 1.3)->yoffset = 0.4;

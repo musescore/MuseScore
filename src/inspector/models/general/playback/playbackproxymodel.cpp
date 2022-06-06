@@ -28,7 +28,7 @@
 #include "internal_models/glissandoplaybackmodel.h"
 #include "internal_models/dynamicplaybackmodel.h"
 #include "internal_models/hairpinplaybackmodel.h"
-#include "internal_models/temporangedchangeplaybackmodel.h"
+#include "internal_models/gradualtempochangeplaybackmodel.h"
 
 using namespace mu::inspector;
 
@@ -43,7 +43,7 @@ PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryServic
         new GlissandoPlaybackModel(this, repository),
         new DynamicPlaybackModel(this, repository),
         new HairpinPlaybackModel(this, repository),
-        new TempoRangedChangePlaybackModel(this, repository)
+        new GradualTempoChangePlaybackModel(this, repository)
     };
 
     setModels(models);
@@ -57,7 +57,7 @@ bool PlaybackProxyModel::hasGeneralSettings() const
         InspectorModelType::TYPE_FERMATA,
         InspectorModelType::TYPE_BREATH,
         InspectorModelType::TYPE_GLISSANDO,
-        InspectorModelType::TYPE_TEMPO_RANGED_CHANGE
+        InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE
     };
 
     return !isGropEmpty(generalGroup);
