@@ -26,6 +26,8 @@ import MuseScore.UiComponents 1.0
 FlatButton {
     id: root
 
+    signal scrollRequested()
+
     width: 22
     height: parent.height
 
@@ -63,5 +65,29 @@ FlatButton {
             navigationCtrl: root.navigation
             drawOutsideParent: false
         }
+    }
+
+    mouseArea.preventStealing: true
+    mouseArea.pressAndHoldInterval: 200
+
+    mouseArea.onClicked: { root.scrollRequested() }
+    mouseArea.onPressAndHold: { timer.running = true }
+    mouseArea.onReleased: { timer.running = false }
+
+    onEnabledChanged: {
+        // If the button becomes disabled, the mouse area does not emit the
+        // `released` signal anymore, so we'll stop the repeat timer here.
+        if (!enabled) {
+            timer.running = false
+        }
+    }
+
+    Timer {
+        id: timer
+
+        interval: 100
+        repeat: true
+
+        onTriggered: { root.scrollRequested() }
     }
 }
