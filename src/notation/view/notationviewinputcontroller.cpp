@@ -542,10 +542,8 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
         return false;
     }
 
-    bool hitElementSelected = ctx.hitElement->selected();
-
-    if (ctx.event->modifiers() & Qt::ControlModifier) {
-        return !hitElementSelected;
+    if (!ctx.hitElement->selected()) {
+        return true;
     }
 
     INotationSelectionPtr selection = viewInteraction()->selection();
@@ -554,7 +552,7 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
         return !selection->range()->containsPoint(ctx.logicClickPos);
     }
 
-    return !hitElementSelected;
+    return false;
 }
 
 void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
@@ -635,8 +633,9 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
             }
 
             if (viewInteraction()->isGripEditStarted() && !viewInteraction()->isDragStarted()) {
-                EngravingItem* selectedElement = viewInteraction()->selection()->element();
-                startDragElements(selectedElement->type(), selectedElement->offset());
+                const EngravingItem* selectedElement = viewInteraction()->selection()->element();
+                ElementType type = selectedElement ? selectedElement->type() : ElementType::INVALID;
+                startDragElements(type, selectedElement->offset());
             }
 
             DragMode mode = DragMode::BothXY;
@@ -668,6 +667,10 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
 void NotationViewInputController::startDragElements(ElementType elementsType, const PointF& elementsOffset)
 {
+    if (elementsType == ElementType::INVALID) {
+        return;
+    }
+
     std::vector<EngravingItem*> elements = viewInteraction()->selection()->elements();
     if (elements.empty()) {
         return;
