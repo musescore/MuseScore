@@ -512,12 +512,11 @@ int SpecialCharactersDialog::static_metaTypeId()
 //---------------------------------------------------------
 
 static constexpr int unicodeAccidentals[] = { //better size and alignment, so put these first
-    0x266d,      // flat
-    0x266e,      // natural
-    0x266f       // sharp
-    // not supported in most fonts
-    // 0x1d12b,   // double flat
-    // 0x1d12a    // double sharp
+    0x1d12b, // double flat
+    0x266d, // flat
+    0x266e, // natural
+    0x266f, // sharp
+    0x1d12a // double sharp
 };
 
 static constexpr int commonTextSymbols[] = {
