@@ -30,8 +30,6 @@
 #include "notation/notationtypes.h"
 
 namespace mu::notation {
-class ScoreView;
-
 //---------------------------------------------------------
 //   EditStaffType
 //---------------------------------------------------------
