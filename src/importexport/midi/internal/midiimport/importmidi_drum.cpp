@@ -89,7 +89,7 @@ void splitDrumVoices(std::multimap<int, MTrack>& tracks)
         if (chords.empty()) {
             continue;
         }
-        const Drumset* const drumset = mtrack.mtrack->drumTrack() ? smDrumset : 0;
+        const engraving::Drumset* const drumset = mtrack.mtrack->drumTrack() ? engraving::smDrumset : 0;
         if (!drumset) {
             continue;
         }
@@ -135,7 +135,7 @@ MTrack& getNewTrack(std::map<int, MTrack>& newTracks,
         // not very efficient way but it's more safe for possible
         // future additions of new fields in MTrack
         newTrack.chords.clear();
-        newTrack.name = smDrumset->name(pitch);
+        newTrack.name = engraving::smDrumset->name(pitch);
 
         Q_ASSERT(newTrack.tuplets.empty());
     }
@@ -184,10 +184,10 @@ void splitDrumTracks(std::multimap<int, MTrack>& tracks)
     }
 }
 
-void setBracket(Staff*& staff, int& counter)
+void setBracket(engraving::Staff*& staff, int& counter)
 {
     if (staff && counter > 1) {
-        staff->setBracketType(0, BracketType::NORMAL);
+        staff->setBracketType(0, engraving::BracketType::NORMAL);
         staff->setBracketSpan(0, counter);
     }
     if (counter) {
@@ -201,7 +201,7 @@ void setBracket(Staff*& staff, int& counter)
 void setStaffBracketForDrums(QList<MTrack>& tracks)
 {
     int counter = 0;
-    Staff* firstDrumStaff = nullptr;
+    engraving::Staff* firstDrumStaff = nullptr;
     int opIndex = -1;
 
     for (const MTrack& track: tracks) {

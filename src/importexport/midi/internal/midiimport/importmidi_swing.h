@@ -30,7 +30,7 @@ class Staff;
 
 namespace mu::iex::midi {
 namespace Swing {
-void detectSwing(Staff* staff, MidiOperations::Swing swingType);
+void detectSwing(engraving::Staff* staff, MidiOperations::Swing swingType);
 } // namespace Swing
 } // namespace mu::iex::midi
 

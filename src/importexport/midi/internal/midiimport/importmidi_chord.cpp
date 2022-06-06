@@ -86,7 +86,7 @@ findFirstChordInRange(const std::multimap<ReducedFraction, MidiChord>& chords,
 
 const ReducedFraction& minAllowedDuration()
 {
-    const static auto minDuration = ReducedFraction::fromTicks(Constants::division) / 32;
+    const static auto minDuration = ReducedFraction::fromTicks(engraving::Constants::division) / 32;
     return minDuration;
 }
 
@@ -642,7 +642,7 @@ void setBarIndexes(
     std::multimap<ReducedFraction, MidiChord>& chords,
     const ReducedFraction& basicQuant,
     const ReducedFraction& lastTick,
-    const TimeSigMap* sigmap)
+    const engraving::TimeSigMap* sigmap)
 {
     if (chords.empty()) {
         return;

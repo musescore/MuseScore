@@ -41,6 +41,8 @@
 
 #include "log.h"
 
+using namespace mu::engraving;
+
 namespace mu::iex::midi {
 namespace Quantize {
 ReducedFraction quantValueToFraction(MidiOperations::QuantValue quantValue)

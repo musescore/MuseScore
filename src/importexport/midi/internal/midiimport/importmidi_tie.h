@@ -34,8 +34,8 @@ class Staff;
 
 namespace mu::iex::midi {
 namespace MidiTie {
-bool isTiedFor(const Segment* seg, mu::engraving::track_idx_t strack, mu::engraving::voice_idx_t voice);
-bool isTiedBack(const Segment* seg, mu::engraving::track_idx_t strack, mu::engraving::voice_idx_t voice);
+bool isTiedFor(const engraving::Segment* seg, mu::engraving::track_idx_t strack, mu::engraving::voice_idx_t voice);
+bool isTiedBack(const engraving::Segment* seg, mu::engraving::track_idx_t strack, mu::engraving::voice_idx_t voice);
 
 class TieStateMachine
 {
@@ -45,7 +45,7 @@ public:
         UNTIED, TIED_FOR, TIED_BOTH, TIED_BACK
     };
 
-    void addSeg(const Segment* seg, mu::engraving::track_idx_t strack);
+    void addSeg(const engraving::Segment* seg, mu::engraving::track_idx_t strack);
     State state() const { return state_; }
 
 private:
@@ -54,7 +54,7 @@ private:
 };
 
 #ifdef QT_DEBUG
-bool areTiesConsistent(const Staff* staff);
+bool areTiesConsistent(const engraving::Staff* staff);
 #endif
 } // namespace MidiTie
 } // namespace mu::iex::midi

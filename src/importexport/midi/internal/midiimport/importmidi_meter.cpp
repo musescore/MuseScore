@@ -313,7 +313,7 @@ bool isPowerOfTwo(unsigned int x)
 
 bool isSimpleNoteDuration(const ReducedFraction& duration)
 {
-    const auto division = ReducedFraction::fromTicks(Constants::division);
+    const auto division = ReducedFraction::fromTicks(engraving::Constants::division);
     auto div = (duration > division) ? duration / division : division / duration;
     if (div > ReducedFraction(0, 1)) {
         div.reduce();
@@ -400,13 +400,13 @@ ReducedFraction findTupletRatio(const ReducedFraction& startPos,
     return tupletRatio;
 }
 
-QList<std::pair<ReducedFraction, TDuration> >
+QList<std::pair<ReducedFraction, engraving::TDuration> >
 collectDurations(const std::map<ReducedFraction, Node>& nodes,
                  const std::vector<MidiTuplet::TupletData>& tupletsInBar,
                  bool useDots,
                  bool printRestRemains)
 {
-    QList<std::pair<ReducedFraction, TDuration> > resultDurations;
+    QList<std::pair<ReducedFraction, engraving::TDuration> > resultDurations;
 
     for (auto it1 = nodes.begin(); it1 != nodes.end(); ++it1) {
         auto it2 = it1;
@@ -505,7 +505,7 @@ int adjustEdgeLevelIfTuplet(const Meter::MaxLevel& splitPoint,
 // tol - max allowed difference between start/end level of duration and split point level
 //    1 for notes, 0 for rests
 
-QList<std::pair<ReducedFraction, TDuration> >
+QList<std::pair<ReducedFraction, engraving::TDuration> >
 toDurationList(const ReducedFraction& startTickInBar,
                const ReducedFraction& endTickInBar,
                const ReducedFraction& barFraction,
@@ -516,7 +516,7 @@ toDurationList(const ReducedFraction& startTickInBar,
 {
     if (startTickInBar < ReducedFraction(0, 1)
         || endTickInBar <= startTickInBar || endTickInBar > barFraction) {
-        return QList<std::pair<ReducedFraction, TDuration> >();
+        return QList<std::pair<ReducedFraction, engraving::TDuration> >();
     }
 
     const auto divInfo = divisionInfo(barFraction, tupletsInBar);    // metric structure of bar

@@ -37,6 +37,8 @@
 
 #include "log.h"
 
+using namespace mu::engraving;
+
 namespace mu::iex::midi {
 //---------------------------------------------------------
 //   writeHeader
