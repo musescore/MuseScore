@@ -49,7 +49,7 @@
 
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::bb {
 //---------------------------------------------------------
 //   BBTrack
 //---------------------------------------------------------
@@ -387,7 +387,6 @@ bool BBFile::read(const QString& name)
 
 //---------------------------------------------------------
 //   importBB
-//    return true on success
 //---------------------------------------------------------
 
 Score::FileError importBB(MasterScore* score, const QString& name)

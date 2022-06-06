@@ -42,7 +42,7 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::bb {
 extern Score::FileError importBB(MasterScore* score, const QString& name);
 }
 
@@ -64,7 +64,7 @@ MasterScore* MTest::readScore(const QString& name)
     if (suffix == "mscz" || suffix == "mscx") {
         rv = compat::loadMsczOrMscx(score, path, false);
     } else if (suffix == "sgu") {
-        rv = importBB(score, path);
+        rv = iex::bb::importBB(score, path);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
