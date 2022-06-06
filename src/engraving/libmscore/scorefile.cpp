@@ -575,7 +575,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
                         || (et == ElementType::MARKER)
                         || (et == ElementType::TEMPO_TEXT)
                         || (et == ElementType::VOLTA)
-                        || (et == ElementType::TEXTLINE)) {
+                        || (et == ElementType::GRADUAL_TEMPO_CHANGE)) {
                         writeSystem = (e1->track() == track); // always show these on appropriate staves
                     }
                 }

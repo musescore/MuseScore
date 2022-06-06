@@ -82,11 +82,12 @@ static const std::unordered_map<GradualTempoChangeType, double> DEFAULT_FACTORS_
 };
 
 GradualTempoChange::GradualTempoChange(EngravingItem* parent)
-    : ChordTextLineBase(ElementType::GRADUAL_TEMPO_CHANGE, parent)
+    : TextLineBase(ElementType::GRADUAL_TEMPO_CHANGE, parent, ElementFlag::SYSTEM)
 {
     initElementStyle(&tempoStyle);
-    resetProperty(Pid::LINE_VISIBLE);
+    setAnchor(Anchor::MEASURE);
 
+    resetProperty(Pid::LINE_VISIBLE);
     resetProperty(Pid::BEGIN_TEXT_PLACE);
     resetProperty(Pid::BEGIN_TEXT);
     resetProperty(Pid::CONTINUE_TEXT_PLACE);
@@ -301,7 +302,8 @@ void GradualTempoChange::requestToRebuildTempo()
 }
 
 GradualTempoChangeSegment::GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent)
-    : TextLineBaseSegment(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, annotation, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextLineBaseSegment(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, annotation, parent,
+                          ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
 }
 
