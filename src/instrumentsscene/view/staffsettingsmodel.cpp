@@ -133,7 +133,7 @@ int StaffSettingsModel::staffType() const
 
 void StaffSettingsModel::setStaffType(int type)
 {
-    auto type_ = static_cast<StaffType>(type);
+    auto type_ = static_cast<StaffTypeId>(type);
 
     if (m_type == type_ || !notationParts()) {
         return;

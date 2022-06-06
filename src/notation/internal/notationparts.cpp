@@ -453,7 +453,7 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
     notifyAboutStaffChanged(staff);
 }
 
-void NotationParts::setStaffType(const ID& staffId, StaffType type)
+void NotationParts::setStaffType(const ID& staffId, StaffTypeId type)
 {
     TRACEFUNC;
 
@@ -920,7 +920,7 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, co
         Staff* staff = engraving::Factory::createStaff(part);
         const mu::engraving::StaffType* staffType = templ.staffTypePreset;
         if (!staffType) {
-            staffType = mu::engraving::StaffType::preset(StaffType::STANDARD);
+            staffType = mu::engraving::StaffType::preset(StaffTypeId::STANDARD);
         }
         initStaff(staff, templ, staffType, staffIndex);
 
