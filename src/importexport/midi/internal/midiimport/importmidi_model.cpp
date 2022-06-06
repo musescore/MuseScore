@@ -220,8 +220,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
             {
                 const int instrIndex = _opers.msInstrIndex.value(trackIndex);
                 const auto& trackInstrList = _opers.msInstrList.value(trackIndex);
-                const InstrumentTemplate* instr = (trackInstrList.empty())
-                                                  ? nullptr : trackInstrList[instrIndex];
+                const engraving::InstrumentTemplate* instr = (trackInstrList.empty())
+                                                             ? nullptr : trackInstrList[instrIndex];
                 return instrName(instr);
             }
 
@@ -234,14 +234,14 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
             {
                 auto list = QStringList();
                 const auto& trackInstrList = _opers.msInstrList.value(trackIndex);
-                for (const InstrumentTemplate* instr: trackInstrList) {
+                for (const engraving::InstrumentTemplate* instr: trackInstrList) {
                     list.append(instrName(instr));
                 }
                 return list;
             }
 
         private:
-            static QString instrName(const InstrumentTemplate* instr)
+            static QString instrName(const engraving::InstrumentTemplate* instr)
             {
                 if (!instr) {
                     return "-";
@@ -712,8 +712,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
             }
             const int instrIndex = _opers.msInstrIndex.value(trackIndex);
             const auto& trackInstrList = _opers.msInstrList.value(trackIndex);
-            const InstrumentTemplate* instr = (trackInstrList.empty())
-                                              ? nullptr : trackInstrList[instrIndex];
+            const engraving::InstrumentTemplate* instr = (trackInstrList.empty())
+                                                         ? nullptr : trackInstrList[instrIndex];
             if (instr && !MidiClef::hasGFclefs(instr)) {
                 return false;
             }

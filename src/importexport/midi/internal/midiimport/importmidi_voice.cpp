@@ -32,6 +32,8 @@
 #include "libmscore/mscore.h"
 #include "libmscore/durationtype.h"
 
+using namespace mu::engraving;
+
 namespace mu::iex::midi {
 namespace MidiVoice {
 // no more than VOICES

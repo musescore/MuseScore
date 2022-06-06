@@ -38,7 +38,7 @@ int tupletVoiceLimit()
     const int currentTrack = midiImportOperations.currentTrack();
     const size_t allowedVoices = MidiVoice::toIntVoiceCount(opers.maxVoiceCount.value(currentTrack));
 
-    Q_ASSERT_X(allowedVoices <= VOICES,
+    Q_ASSERT_X(allowedVoices <= engraving::VOICES,
                "MidiTuplet::tupletVoiceLimit",
                "Allowed voice count exceeds MuseScore voice limit");
 
