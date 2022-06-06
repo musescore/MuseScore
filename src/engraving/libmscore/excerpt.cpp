@@ -479,8 +479,8 @@ static bool scoreContainsSpanner(const Score* score, Spanner* spanner)
 
 static void cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_idx_t dstTrack2)
 {
-    // don’t clone voltas for track != 0
-    if (((s->isVolta() || s->isTextLine()) && s->systemFlag()) && s->track() != 0) {
+    // don’t clone system lines for track != 0
+    if (isSystemTextLine(s) && s->track() != 0) {
         return;
     }
 
@@ -952,7 +952,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
         track_idx_t dstTrack  = mu::nidx;
         track_idx_t dstTrack2 = mu::nidx;
 
-        if ((s->isVolta() || s->isTextLine()) && s->systemFlag()) {
+        if (isSystemTextLine(s)) {
             //always export voltas to first staff in part
             dstTrack  = 0;
             dstTrack2 = 0;
@@ -1191,7 +1191,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
         staff_idx_t staffIdx = s->staffIdx();
         track_idx_t dstTrack = mu::nidx;
         track_idx_t dstTrack2 = mu::nidx;
-        if (!((s->isVolta() || s->isTextLine()) && s->systemFlag())) {
+        if (!isSystemTextLine(s)) {
             //export other spanner if staffidx matches
             if (srcStaffIdx == staffIdx) {
                 dstTrack = dstStaffIdx * VOICES + s->voice();
@@ -1393,9 +1393,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         track_idx_t dstTrack = mu::nidx;
         track_idx_t dstTrack2 = mu::nidx;
 
-        bool isSystemLine = (s->isVolta() || (s->isTextLine() && s->systemFlag()));
-
-        if (isSystemLine) {
+        if (isSystemTextLine(s)) {
             if (!scoreContainsSpanner(score, s)) {
                 dstTrack = s->track();
                 dstTrack2 = s->track2();

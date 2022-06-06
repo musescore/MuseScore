@@ -121,6 +121,11 @@ public:
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
 };
+
+inline bool isSystemTextLine(const EngravingItem* element)
+{
+    return element && element->isTextLineBase() && element->systemFlag();
+}
 } // namespace mu::engraving
 
 #endif

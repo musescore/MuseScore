@@ -505,8 +505,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
     }
     spanner->eraseSpannerSegments();
 
-    ElementType et = spanner->type();
-    bool ctrlModifier = (et == ElementType::VOLTA || et == ElementType::TEXTLINE) && spanner->systemFlag() && !systemStavesOnly;
+    bool ctrlModifier = isSystemTextLine(spanner) && !systemStavesOnly;
     undoAddElement(spanner, ctrlModifier);
     select(spanner, SelectType::SINGLE, 0);
 }
