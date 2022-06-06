@@ -719,6 +719,7 @@ void NotationActionController::toggleAccidental(AccidentalType type)
         noteInput->setAccidental(type);
     } else {
         interaction->addAccidentalToSelection(type);
+        playSelectedElement();
     }
 }
 
