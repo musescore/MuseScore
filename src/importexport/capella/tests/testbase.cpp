@@ -42,7 +42,7 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::capella {
 extern Score::FileError importCapella(MasterScore*, const QString& name);
 extern Score::FileError importCapXml(MasterScore*, const QString& name);
 }
@@ -65,10 +65,10 @@ MasterScore* MTest::readScore(const QString& name)
     if (suffix == "mscz" || suffix == "mscx") {
         rv = compat::loadMsczOrMscx(score, path, false);
     } else if (suffix == "cap") {
-        rv = importCapella(score, path);
+        rv = iex::capella::importCapella(score, path);
         score->setMetaTag("originalFormat", suffix);
     } else if (suffix == "capx") {
-        rv = importCapXml(score, path);
+        rv = iex::capella::importCapXml(score, path);
         score->setMetaTag("originalFormat", suffix);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
