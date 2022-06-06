@@ -46,9 +46,9 @@
 
 #include "log.h"
 
+using namespace mu::iex::musedata;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   musicalAttribute
 //---------------------------------------------------------
@@ -748,23 +748,4 @@ void MuseData::convert()
         Part* part = (score->parts())[pn];
         readPart(parts[pn], part);
     }
-}
-
-//---------------------------------------------------------
-//   importMuseData
-//    return true on success
-//---------------------------------------------------------
-
-Score::FileError importMuseData(MasterScore* score, const QString& name)
-{
-    if (!QFileInfo::exists(name)) {
-        return Score::FileError::FILE_NOT_FOUND;
-    }
-    MuseData md(score);
-    if (!md.read(name)) {
-        return Score::FileError::FILE_ERROR;
-    }
-    md.convert();
-    return Score::FileError::FILE_NO_ERROR;
-}
 }
