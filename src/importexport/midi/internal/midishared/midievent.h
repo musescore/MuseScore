@@ -19,22 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef IMPORTMIDI_CLEF_H
-#define IMPORTMIDI_CLEF_H
 
-#include "engraving/types/types.h"
+#ifndef MIDISHARED_MIDIEVENT_H
+#define MIDISHARED_MIDIEVENT_H
 
-namespace mu::engraving {
-class Staff;
-class InstrumentTemplate;
-}
+#include "engraving/compat/midi/midicoreevent.h"
 
 namespace mu::iex::midi {
-namespace MidiClef {
-bool hasGFclefs(const InstrumentTemplate* templ);
-void createClefs(Staff* staff, int indexOfOperation, bool isDrumTrack);
-ClefType clefTypeFromAveragePitch(int averagePitch);
-} // namespace MidiClef
-} // namespace mu::iex::midi
+class MidiEvent : public engraving::MidiCoreEvent
+{
+protected:
+    uchar* _edata { nullptr }; // always zero terminated (_data[_len] == 0; )
+    int _len { 0 };
+    int _metaType { 0 };
 
-#endif // IMPORTMIDI_CLEF_H
+public:
+    MidiEvent() {}
+    MidiEvent(uchar t, uchar c, uchar a, uchar b)
+        : MidiCoreEvent(t, c, a, b), _edata(0), _len(0) {}
+
+    const uchar* edata() const { return _edata; }
+    void setEData(uchar* d) { _edata = d; }
+    int len() const { return _len; }
+    void setLen(int l) { _len = l; }
+    int metaType() const { return _metaType; }
+    void setMetaType(int v) { _metaType = v; }
+};
+}
+
+#endif

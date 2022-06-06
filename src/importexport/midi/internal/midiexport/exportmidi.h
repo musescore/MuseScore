@@ -31,7 +31,9 @@ namespace mu::engraving {
 class Score;
 class TempoMap;
 class SynthesizerState;
+}
 
+namespace mu::iex::midi {
 //---------------------------------------------------------
 //   ExportMidi
 //---------------------------------------------------------
@@ -39,11 +41,11 @@ class SynthesizerState;
 class ExportMidi
 {
 public:
-    ExportMidi(Score* s) { m_score = s; }
+    ExportMidi(engraving::Score* s) { m_score = s; }
     bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs);
     bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs);
-    bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState);
-    bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState);
+    bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState& synthState);
+    bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState& synthState);
 
 private:
     //---------------------------------------------------
@@ -56,7 +58,7 @@ private:
         int offsetAtUTick(int utick) const;
 
     public:
-        TempoMap* tempomapWithPauses = nullptr;
+        engraving::TempoMap* tempomapWithPauses = nullptr;
 
         void calculate(const Score* s);
         inline int addPauseTicks(int utick) const { return utick + this->offsetAtUTick(utick); }
@@ -66,7 +68,7 @@ private:
 
     QFile m_file;
     MidiFile m_midiFile;
-    Score* m_score = nullptr;
+    engraving::Score* m_score = nullptr;
     PauseMap m_pauseMap;
 };
 }

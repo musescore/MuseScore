@@ -26,8 +26,11 @@
 #include <QList>
 
 namespace mu::engraving {
-class ReducedFraction;
 class TDuration;
+}
+
+namespace mu::iex::midi {
+class ReducedFraction;
 
 namespace MidiTuplet {
 struct TupletData;
@@ -72,11 +75,11 @@ std::vector<ReducedFraction> divisionsOfBarForTuplets(const ReducedFraction& bar
 
 // duration and all tuplets should belong to the same voice
 // nested tuplets are not allowed
-QList<std::pair<ReducedFraction, TDuration> >
+QList<std::pair<ReducedFraction, engraving::TDuration> >
 toDurationList(const ReducedFraction& startTickInBar, const ReducedFraction& endTickInBar, const ReducedFraction& barFraction,
                const std::vector<MidiTuplet::TupletData>& tupletsInBar, DurationType durationType, bool useDots,
                bool printRestRemains = true);
 } // namespace Meter
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_METER_H

@@ -26,7 +26,7 @@
 #include <map>
 #include <list>
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 class ReducedFraction;
 class MidiChord;
 
@@ -71,6 +71,6 @@ bool haveOverlappingVoices(
 
 #endif
 } // namespace MidiTuplet
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_TUPLET_VOICE_H

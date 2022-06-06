@@ -26,7 +26,7 @@
 
 #include <set>
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 // all enums below should have default indexes like 0, 1, 2...
 // text names for enum items are in TracksModel class
 
@@ -78,6 +78,6 @@ enum class TimeSigDenominator {
     _32
 };
 } // namespace MidiOperations
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_OPERATION_H

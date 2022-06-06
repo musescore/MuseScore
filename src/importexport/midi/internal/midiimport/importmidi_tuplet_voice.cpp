@@ -30,7 +30,7 @@
 
 #include <set>
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MidiTuplet {
 int tupletVoiceLimit()
 {
@@ -923,4 +923,4 @@ void assignVoices(
 #endif
 }
 } // namespace MidiTuplet
-} // namespace Ms
+} // namespace mu::iex::midi

@@ -40,6 +40,15 @@
 
 namespace mu::engraving {
 enum class Key;
+class Staff;
+class Score;
+class TDuration;
+class DurationElement;
+class Measure;
+class KeyList;
+}
+
+namespace mu::iex::midi {
 struct MidiTimeSig;
 
 namespace Meter {
@@ -76,15 +85,9 @@ MidiOperations::TimeSigNumerator fractionNumeratorToUserValue(int n);
 MidiOperations::TimeSigDenominator fractionDenominatorToUserValue(int z);
 } // namespace Meter
 
-class Staff;
-class Score;
 class MidiTrack;
-class DurationElement;
 class MidiChord;
 class MidiEvent;
-class TDuration;
-class Measure;
-class KeyList;
 
 class MTrack
 {
@@ -94,7 +97,7 @@ public:                 // chords store tuplet iterators, so we need to copy cla
     MTrack& operator=(MTrack other);
 
     int program;
-    Staff* staff;
+    engraving::Staff* staff;
     const MidiTrack* mtrack;
     QString name;
     bool hasKey;
@@ -111,12 +114,12 @@ public:                 // chords store tuplet iterators, so we need to copy cla
     void processPendingNotes(QList<MidiChord>& midiChords, int voice, const ReducedFraction& startChordTickFrac,
                              const ReducedFraction& nextChordTick);
     void processMeta(int tick, const MidiEvent& mm);
-    void fillGapWithRests(Score* score, int voice, const ReducedFraction& startChordTickFrac, const ReducedFraction& restLength,
-                          track_idx_t track);
-    QList<std::pair<ReducedFraction, TDuration> >
-    toDurationList(const Measure* measure, int voice, const ReducedFraction& startTick, const ReducedFraction& len,
+    void fillGapWithRests(engraving::Score* score, int voice, const ReducedFraction& startChordTickFrac, const ReducedFraction& restLength,
+                          engraving::track_idx_t track);
+    QList<std::pair<ReducedFraction, engraving::TDuration> >
+    toDurationList(const engraving::Measure* measure, int voice, const ReducedFraction& startTick, const ReducedFraction& len,
                    Meter::DurationType durationType);
-    void createKeys(Key defaultKey, const mu::engraving::KeyList& allKeyList);
+    void createKeys(engraving::Key defaultKey, const engraving::KeyList& allKeyList);
     void updateTupletsFromChords();
 
 private:
@@ -153,12 +156,12 @@ std::string fromUchar(const uchar* text);
 } // namespace MidiCharset
 
 namespace MidiBar {
-ReducedFraction findBarStart(const ReducedFraction& time, const TimeSigMap* sigmap);
+ReducedFraction findBarStart(const ReducedFraction& time, const engraving::TimeSigMap* sigmap);
 } // namespace MidiBar
 
 namespace MidiDuration {
-double durationCount(const QList<std::pair<ReducedFraction, TDuration> >& durations);
+double durationCount(const QList<std::pair<ReducedFraction, engraving::TDuration> >& durations);
 } // namespace MidiDuration
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_INNER_H

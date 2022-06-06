@@ -32,7 +32,7 @@
 
 #include "log.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MidiTempo {
 ReducedFraction time2Tick(double time, double ticksPerSec)
 {
@@ -173,4 +173,4 @@ void setTempo(const std::multimap<int, MTrack>& tracks, Score* score)
     }
 }
 } // namespace MidiTempo
-} // namespace Ms
+} // namespace mu::iex::midi

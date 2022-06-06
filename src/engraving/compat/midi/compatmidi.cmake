@@ -21,6 +21,7 @@
 set(COMPAT_MIDI_SRC
     ${CMAKE_CURRENT_LIST_DIR}/event.cpp
     ${CMAKE_CURRENT_LIST_DIR}/event.h
+    ${CMAKE_CURRENT_LIST_DIR}/midicoreevent.h
     ${CMAKE_CURRENT_LIST_DIR}/midipatch.h
     )
 

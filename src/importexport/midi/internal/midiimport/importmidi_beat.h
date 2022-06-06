@@ -32,7 +32,9 @@ class MidiChord;
 class MTrack;
 class ReducedFraction;
 class Score;
+}
 
+namespace mu::iex::midi {
 namespace MidiBeat {
 void removeEvery2ndBeat(std::set<ReducedFraction>& beatSet);
 void findBeatLocations(
@@ -41,6 +43,6 @@ void findBeatLocations(
 void adjustChordsToBeats(std::multimap<int, MTrack>& tracks);
 void setTimeSignature(TimeSigMap* sigmap);
 } // namespace MidiBeat
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_BEAT_H

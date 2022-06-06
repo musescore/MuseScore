@@ -25,7 +25,7 @@
 
 #include <QString>
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 struct MidiInstrument {
     int type;
     int hbank, lbank, patch;

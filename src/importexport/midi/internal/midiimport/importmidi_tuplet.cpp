@@ -34,7 +34,7 @@
 
 #include "log.h"
 
-namespace mu::engraving {
+namespace mu::iex::midi {
 namespace MidiTuplet {
 const std::map<int, TupletLimits>& tupletsLimits()
 {
@@ -1248,4 +1248,4 @@ void findAllTuplets(
 #endif
 }
 } // namespace MidiTuplet
-} // namespace Ms
+} // namespace mu::iex::midi
