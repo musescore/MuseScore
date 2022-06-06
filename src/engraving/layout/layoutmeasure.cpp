@@ -33,6 +33,7 @@
 #include "libmscore/lyrics.h"
 #include "libmscore/marker.h"
 #include "libmscore/part.h"
+#include "libmscore/textlinebase.h"
 
 #include "layout.h"
 #include "layoutcontext.h"
@@ -461,7 +462,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     for (auto i : sl) {
         Spanner* s = i.value;
         // break for first measure of volta or textline and first measure *after* volta
-        if ((s->isVolta() || s->isTextLine()) && (s->tick() == m->tick() || s->tick2() == m->tick())) {
+        if ((s->isVolta() || s->isGradualTempoChange() || s->isTextLine()) && (s->tick() == m->tick() || s->tick2() == m->tick())) {
             return true;
         }
     }
