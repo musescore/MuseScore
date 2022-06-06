@@ -536,7 +536,7 @@ void MsScWriter::doTriplet(mu::engraving::Chord* cr, StartStop triplet)
 }
 } // namespace Bww
 
-namespace mu::engraving {
+namespace mu::iex::bww {
 //---------------------------------------------------------
 //   importBww
 //---------------------------------------------------------
@@ -570,4 +570,4 @@ Score::FileError importBww(MasterScore* score, const QString& path)
     LOGD("Score::importBww() done");
     return Score::FileError::FILE_NO_ERROR;        // OK
 }
-} // namespace Ms
+}
