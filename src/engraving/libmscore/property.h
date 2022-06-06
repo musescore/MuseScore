@@ -392,6 +392,7 @@ enum class Pid {
     PLAY_TECH_TYPE,
     TEMPO_CHANGE_TYPE,
     TEMPO_EASING_METHOD,
+    TEMPO_CHANGE_FACTOR,
 
     END
 };

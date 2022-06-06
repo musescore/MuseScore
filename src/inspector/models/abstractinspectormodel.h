@@ -120,6 +120,7 @@ public:
         TYPE_DYNAMIC,
         TYPE_TUPLET,
         TYPE_TEXT_LINE,
+        TYPE_GRADUAL_TEMPO_CHANGE,
         TYPE_INSTRUMENT_NAME
     };
     Q_ENUM(InspectorModelType)

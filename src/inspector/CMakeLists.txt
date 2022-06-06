@@ -78,6 +78,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/hairpinplaybackmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/noteplaybackmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/noteplaybackmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/gradualtempochangeplaybackmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/measures/measuressettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/measures/measuressettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreappearancesettingsmodel.cpp
@@ -142,6 +144,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/palmmutesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/textlinesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/textlinesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/gradualtempochangesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/gradualtempochangesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/jumps/jumpsettingsmodel.cpp

@@ -2037,7 +2037,7 @@ void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
     case ElementType::TRILL:
     case ElementType::TEXTLINE:
     case ElementType::LET_RING:
-    case ElementType::TEMPO_RANGED_CHANGE:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     case ElementType::PALM_MUTE:
     case ElementType::WHAMMY_BAR:

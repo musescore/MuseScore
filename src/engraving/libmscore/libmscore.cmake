@@ -349,6 +349,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/whammybar.h
     ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.h
-    ${CMAKE_CURRENT_LIST_DIR}/tempochangeranged.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tempochangeranged.h
+    ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.h
 )

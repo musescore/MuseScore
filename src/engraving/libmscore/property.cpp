@@ -390,8 +390,9 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::PLAY_TECH_TYPE,          true,  "playTechType",          P_TYPE::PLAYTECH_TYPE,  DUMMY_QT_TR_NOOP("propertyName", "playing technique type") },
 
-    { Pid::TEMPO_CHANGE_TYPE,       true,  "tempoChangeType",       P_TYPE::TEMPOCHANGE_TYPE,  DUMMY_QT_TR_NOOP("propertyName", "tempo ranged change type") },
+    { Pid::TEMPO_CHANGE_TYPE,       true,  "tempoChangeType",       P_TYPE::TEMPOCHANGE_TYPE,  DUMMY_QT_TR_NOOP("propertyName", "gradual tempo change type") },
     { Pid::TEMPO_EASING_METHOD,     true,  "tempoEasingMethod",     P_TYPE::CHANGE_METHOD,  DUMMY_QT_TR_NOOP("propertyName", "tempo easing method") },
+    { Pid::TEMPO_CHANGE_FACTOR,     true,  "tempoChangeFactor",     P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "tempo change factor") },
 
     { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
@@ -579,7 +580,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::PLAYTECH_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementAsciiText(), PlayingTechniqueType::Natural));
     case P_TYPE::TEMPOCHANGE_TYPE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), TempoChangeType::Undefined));
+        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), GradualTempoChangeType::Undefined));
     default:
         ASSERT_X("unhandled PID type");
         break;
