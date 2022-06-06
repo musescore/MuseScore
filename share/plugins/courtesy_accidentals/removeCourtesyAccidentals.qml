@@ -26,6 +26,7 @@ MuseScore {
       description: "This plugin removes courtesy accidentals"
       title: "Remove Courtesy Accidentals"
       categoryCode: "composing-arranging-tools"
+      thumbnailName: "accidentals.png"
 
       //pluginType: "dock"
       requiresScore: true

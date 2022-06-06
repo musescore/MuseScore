@@ -5,6 +5,6 @@
         <file>qml/MuseScore/Plugins/internal/PluginItem.qml</file>
         <file>qml/MuseScore/Plugins/internal/PluginsListView.qml</file>
         <file>qml/MuseScore/Plugins/internal/EnablePanel.qml</file>
-        <file>qml/MuseScore/Plugins/internal/placeholders/placeholder.jpeg</file>
+        <file>qml/MuseScore/Plugins/internal/resources/placeholder.png</file>
     </qresource>
 </RCC>
