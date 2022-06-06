@@ -252,8 +252,8 @@ void TextLineBaseSegment::layout()
     }
 
     // adjust Y pos to staffType offset
-    if (staffType()) {
-        movePosY(staffType()->yoffset().val() * spatium());
+    if (const StaffType* st = staffType()) {
+        movePosY(st->yoffset().val() * spatium());
     }
 
     if (!tl->diagonal()) {
@@ -268,10 +268,7 @@ void TextLineBaseSegment::layout()
         _text->setSize(tl->beginFontSize());
         _text->setOffset(tl->beginTextOffset() * mag());
         _text->setAlign(tl->beginTextAlign());
-        _text->setBold(tl->beginFontStyle() & FontStyle::Bold);
-        _text->setItalic(tl->beginFontStyle() & FontStyle::Italic);
-        _text->setUnderline(tl->beginFontStyle() & FontStyle::Underline);
-        _text->setStrike(tl->beginFontStyle() & FontStyle::Strike);
+        _text->setFontStyle(tl->beginFontStyle());
         break;
     case SpannerSegmentType::MIDDLE:
     case SpannerSegmentType::END:
@@ -280,10 +277,7 @@ void TextLineBaseSegment::layout()
         _text->setSize(tl->continueFontSize());
         _text->setOffset(tl->continueTextOffset() * mag());
         _text->setAlign(tl->continueTextAlign());
-        _text->setBold(tl->continueFontStyle() & FontStyle::Bold);
-        _text->setItalic(tl->continueFontStyle() & FontStyle::Italic);
-        _text->setUnderline(tl->continueFontStyle() & FontStyle::Underline);
-        _text->setStrike(tl->continueFontStyle() & FontStyle::Strike);
+        _text->setFontStyle(tl->continueFontStyle());
         break;
     }
     _text->setPlacement(PlacementV::ABOVE);
@@ -296,10 +290,7 @@ void TextLineBaseSegment::layout()
         _endText->setSize(tl->endFontSize());
         _endText->setOffset(tl->endTextOffset());
         _endText->setAlign(tl->endTextAlign());
-        _endText->setBold(tl->endFontStyle() & FontStyle::Bold);
-        _endText->setItalic(tl->endFontStyle() & FontStyle::Italic);
-        _endText->setUnderline(tl->endFontStyle() & FontStyle::Underline);
-        _endText->setStrike(tl->endFontStyle() & FontStyle::Strike);
+        _endText->setFontStyle(tl->endFontStyle());
         _endText->setPlacement(PlacementV::ABOVE);
         _endText->setTrack(track());
         _endText->layout();
@@ -312,8 +303,8 @@ void TextLineBaseSegment::layout()
 
     // diagonal line with no text or hooks - just use the basic rectangle for line
     if (_text->empty() && _endText->empty() && pp2.y() != 0
-        && textLineBase()->beginHookType() == HookType::NONE
-        && textLineBase()->endHookType() == HookType::NONE) {
+        && tl->beginHookType() == HookType::NONE
+        && tl->endHookType() == HookType::NONE) {
         npoints = 1;     // 2 points, but only one line must be drawn
         points[0] = pp1;
         points[1] = pp2;
@@ -327,7 +318,7 @@ void TextLineBaseSegment::layout()
 
     double x1 = std::min(0.0, pp2.x());
     double x2 = std::max(0.0, pp2.x());
-    double y0 = -textLineBase()->lineWidth();
+    double y0 = -tl->lineWidth();
     double y1 = std::min(0.0, pp2.y()) + y0;
     double y2 = std::max(0.0, pp2.y()) - y0;
 
@@ -339,10 +330,11 @@ void TextLineBaseSegment::layout()
             || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == TextPlace::LEFT))) {
             l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
         }
+
         double h = _text->height();
-        if (textLineBase()->beginTextPlace() == TextPlace::ABOVE) {
+        if (tl->beginTextPlace() == TextPlace::ABOVE) {
             y1 = std::min(y1, -h);
-        } else if (textLineBase()->beginTextPlace() == TextPlace::BELOW) {
+        } else if (tl->beginTextPlace() == TextPlace::BELOW) {
             y2 = std::max(y2, h);
         } else {
             y1 = std::min(y1, -h * .5);
@@ -351,8 +343,8 @@ void TextLineBaseSegment::layout()
         x2 = std::max(x2, _text->width());
     }
 
-    if (textLineBase()->endHookType() != HookType::NONE) {
-        double h = pp2.y() + textLineBase()->endHookHeight().val() * _spatium;
+    if (tl->endHookType() != HookType::NONE) {
+        double h = pp2.y() + tl->endHookHeight().val() * _spatium;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -360,8 +352,8 @@ void TextLineBaseSegment::layout()
         }
     }
 
-    if (textLineBase()->beginHookType() != HookType::NONE) {
-        double h = textLineBase()->beginHookHeight().val() * _spatium;
+    if (tl->beginHookType() != HookType::NONE) {
+        double h = tl->beginHookHeight().val() * _spatium;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
