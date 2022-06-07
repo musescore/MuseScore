@@ -143,6 +143,8 @@ private:
     void fillUncompletedMeasure(const Context& ctx);
     void fillHarmonicMarksMap();
     int getStringNumberFor(Note* pNote, int pitch) const;
+    void fillTuplet();
+    bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
 
     Score* _score;
     std::unique_ptr<GPDomModel> _gpDom;
@@ -170,7 +172,18 @@ private:
     std::vector<Vibrato*> _vibratos;
     std::vector<Ottava*> _ottavas;
     Volta* _lastVolta = nullptr;
-    Tuplet* _lastTuplet = nullptr;
+
+    struct NextTupletInfo {
+        Fraction ratio;
+        Fraction duration;                // duration of all current elements
+        std::vector<ChordRest*> elements; // elements that will be added to tuplet
+        track_idx_t track;
+        Tuplet* tuplet = nullptr;
+        Measure* measure = nullptr;
+        int lowestBase = LOWEST_BASE;     // expected denominator
+        static constexpr int LOWEST_BASE = 1024;
+    } m_nextTupletInfo;
+
     Hairpin* _lastHairpin = nullptr;
     Ottava* _lastOttava = nullptr;
     Measure* _lastMeasure = nullptr;
