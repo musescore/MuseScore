@@ -243,8 +243,6 @@ MuseScore {
       function addAcc() {
             console.log("start add courtesy accidentals");
 
-            //curScore.startCmd();
-
              if (typeof curScore === 'undefined' || curScore == null) {
                    console.log("error: no score!");
                    quit();
@@ -254,8 +252,6 @@ MuseScore {
             var startStaff;
             var endStaff;
             var endTick;
-
-             curScore.startCmd()
 
             var cursor = curScore.newCursor();
             cursor.rewind(1);
@@ -301,21 +297,19 @@ MuseScore {
                   curStartStaff = curEndStaff;
             }
 
-            //curScore.doLayout();
-            //curScore.endCmd();
-
             console.log("end add courtesy accidentals");
-
-            curScore.endCmd()
-            quit()
       }
 
       onRun: {
-            if(mscoreMajorVersion == 3 && mscoreMinorVersion == 0
-            && mscoreUpdateVersion < 5) {
-                  versionError.open();
-            } else {
-                  addAcc();
-            }
+          if(mscoreMajorVersion == 3 && mscoreMinorVersion == 0
+                  && mscoreUpdateVersion < 5) {
+              versionError.open();
+          } else {
+              curScore.startCmd()
+              addAcc()
+              curScore.endCmd()
+
+              quit()
+          }
       }
 }
