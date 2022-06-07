@@ -35,6 +35,7 @@ enum class Err {
     NoteOrRestIsNotSelected = 1050,
     NoteOrFiguredBassIsNotSelected,
     MeasureIsNotSelected,
+    SelectCompleteTupletOrTremolo,
     EmptySelection,
 };
 
@@ -54,6 +55,9 @@ inline Ret make_ret(Err err)
         break;
     case Err::MeasureIsNotSelected:
         text = trc("notation", "No measure selected: Please select a measure and retry");
+        break;
+    case Err::SelectCompleteTupletOrTremolo:
+        text = trc("notation", "Please select the complete tuplet/tremolo and retry the command");
         break;
     case Err::EmptySelection:
         text = trc("notation", "The selection is empty");
