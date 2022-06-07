@@ -632,7 +632,7 @@ EditStyle::EditStyle(QWidget* parent)
     };
     for (mu::engraving::SymId id : ids) {
         const QString& un = SymNames::translatedUserNameForSymId(id);
-        AsciiString n = SymNames::nameForSymId(id);
+        AsciiStringView n = SymNames::nameForSymId(id);
         dividerLeftSym->addItem(un,  QVariant(QString(n.toQLatin1String())));
         dividerRightSym->addItem(un, QVariant(QString(n.toQLatin1String())));
     }

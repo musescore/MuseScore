@@ -41,12 +41,12 @@ class Factory
 {
 public:
 
-    static ElementType name2type(const AsciiString& name, bool silent = false);
+    static ElementType name2type(const AsciiStringView& name, bool silent = false);
     static const char* name(ElementType type);
     static const char* userName(ElementType type);
 
     static EngravingItem* createItem(ElementType type, EngravingItem* parent, bool isAccessibleEnabled = true);
-    static EngravingItem* createItemByName(const AsciiString& name, EngravingItem* parent, bool isAccessibleEnabled = true);
+    static EngravingItem* createItemByName(const AsciiStringView& name, EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static Accidental* createAccidental(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Accidental> makeAccidental(EngravingItem* parent);

@@ -73,7 +73,7 @@ public:
     static bool readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRest* cr);
     static bool readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch);
 
-    static SymId articulationNames2SymId206(const AsciiString& s);
+    static SymId articulationNames2SymId206(const AsciiStringView& s);
 
     static NoteHeadGroup convertHeadGroup(int i);
 

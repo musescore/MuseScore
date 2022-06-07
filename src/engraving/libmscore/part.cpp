@@ -153,7 +153,7 @@ Part* Part::masterPart()
 
 bool Part::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "Staff") {
         Staff* staff = Factory::createStaff(this);
         score()->appendStaff(staff);

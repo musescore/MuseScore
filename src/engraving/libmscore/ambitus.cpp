@@ -286,7 +286,7 @@ void Ambitus::read(XmlReader& e)
 
 bool Ambitus::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "head") {
         readProperty(e, Pid::HEAD_GROUP);
     } else if (tag == "headType") {

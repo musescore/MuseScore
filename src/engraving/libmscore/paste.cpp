@@ -169,7 +169,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
 
             while (e.readNextStartElement()) {
                 pasted = true;
-                const AsciiString tag(e.name());
+                const AsciiStringView tag(e.name());
 
                 if (tag == "transposeChromatic") {
                     e.context()->setTransposeChromatic(static_cast<int8_t>(e.readInt()));
@@ -809,7 +809,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
             if (done) {
                 break;
             }
-            const AsciiString tag(e.name());
+            const AsciiStringView tag(e.name());
 
             if (tag == "trackOffset") {
                 destTrack = startTrack + e.readInt();
@@ -1083,7 +1083,7 @@ static bool canPasteStaff(XmlReader& reader, const Fraction& scale)
 {
     if (scale != Fraction(1, 1)) {
         while (reader.readNext() && reader.tokenType() != XmlReader::TokenType::EndDocument) {
-            AsciiString tag(reader.name());
+            AsciiStringView tag(reader.name());
             int len = reader.intAttribute("len", 0);
             if (len && !TDuration(Fraction::fromTicks(len) * scale).isValid()) {
                 return false;

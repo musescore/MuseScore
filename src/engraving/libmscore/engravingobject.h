@@ -267,9 +267,9 @@ public:
     void setPropertyFlags(Pid, PropertyFlags);
 
     virtual Sid getPropertyStyle(Pid) const;
-    bool readProperty(const mu::AsciiString&, XmlReader&, Pid);
+    bool readProperty(const mu::AsciiStringView&, XmlReader&, Pid);
     void readProperty(XmlReader&, Pid);
-    bool readStyledProperty(XmlReader& e, const mu::AsciiString& tag);
+    bool readStyledProperty(XmlReader& e, const mu::AsciiStringView& tag);
 
     virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode);
 

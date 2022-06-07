@@ -782,7 +782,7 @@ void FretDiagram::read(XmlReader& e)
     bool haveReadNew = false;
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
 
         // Check for new format fret diagram
         if (haveReadNew) {
@@ -809,7 +809,7 @@ void FretDiagram::read(XmlReader& e)
         } else if (tag == "string") {
             int no = e.intAttribute("no");
             while (e.readNextStartElement()) {
-                const AsciiString t(e.name());
+                const AsciiStringView t(e.name());
                 if (t == "dot") {
                     setDot(no, e.readInt());
                 } else if (t == "marker") {
@@ -855,12 +855,12 @@ void FretDiagram::read(XmlReader& e)
 void FretDiagram::readNew(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
 
         if (tag == "string") {
             int no = e.intAttribute("no");
             while (e.readNextStartElement()) {
-                const AsciiString t(e.name());
+                const AsciiStringView t(e.name());
                 if (t == "dot") {
                     int fret = e.intAttribute("fret", 0);
                     FretDotType dtype = FretItem::nameToDotType(e.readElementText());

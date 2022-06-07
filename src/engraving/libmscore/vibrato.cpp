@@ -262,7 +262,7 @@ void Vibrato::read(XmlReader& e)
     eraseSpannerSegments();
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             setVibratoType(e.readElementText());
         } else if (tag == "play") {

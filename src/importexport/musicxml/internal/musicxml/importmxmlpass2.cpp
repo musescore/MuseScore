@@ -697,7 +697,7 @@ static QString text2syms(const QString& t)
     while (in != "") {
         // try to find the largest match possible
         int maxMatch = qMin(in.size(), maxStringSize);
-        AsciiString sym;
+        AsciiStringView sym;
         while (maxMatch > 0) {
             QString toBeMatched = in.left(maxMatch);
             if (map.contains(toBeMatched)) {

@@ -180,7 +180,7 @@ void TimeSig::read(XmlReader& e)
     bool old = false;
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
 
         if (tag == "den") {
             old = true;

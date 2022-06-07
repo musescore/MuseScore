@@ -217,7 +217,7 @@ void MeasureRepeat::write(XmlWriter& xml) const
 void MeasureRepeat::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             setNumMeasures(e.readInt());
         } else if (!Rest::readProperties(e)) {

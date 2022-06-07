@@ -350,7 +350,7 @@ void Image::read(XmlReader& e)
     }
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "autoScale") {
             readProperty(e, Pid::AUTOSCALE);
         } else if (tag == "size") {

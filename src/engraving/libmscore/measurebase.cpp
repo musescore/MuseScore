@@ -627,7 +627,7 @@ void MeasureBase::writeProperties(XmlWriter& xml) const
 
 bool MeasureBase::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "LayoutBreak") {
         LayoutBreak* lb = Factory::createLayoutBreak(this);
         lb->read(e);

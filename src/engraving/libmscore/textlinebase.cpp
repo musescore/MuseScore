@@ -580,7 +580,7 @@ void TextLineBase::writeProperties(XmlWriter& xml) const
 
 bool TextLineBase::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     for (Pid i : TextLineBasePropertyId) {
         if (readProperty(tag, e, i)) {
             setPropertyFlags(i, PropertyFlags::UNSTYLED);

@@ -809,7 +809,7 @@ void BarLine::read(XmlReader& e)
     resetProperty(Pid::BARLINE_SPAN_TO);
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             setBarLineType(TConv::fromXml(e.readElementAsciiText(), BarLineType::NORMAL));
         } else if (tag == "span") {

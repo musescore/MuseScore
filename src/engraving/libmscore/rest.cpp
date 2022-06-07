@@ -954,7 +954,7 @@ void Rest::write(XmlWriter& xml) const
 void Rest::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "Symbol") {
             Symbol* s = new Symbol(this);
             s->setTrack(track());

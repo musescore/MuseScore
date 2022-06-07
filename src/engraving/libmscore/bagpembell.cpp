@@ -381,7 +381,7 @@ void BagpipeEmbellishment::write(XmlWriter& xml) const
 void BagpipeEmbellishment::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             _embelType = e.readInt();
         } else {

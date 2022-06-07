@@ -31,11 +31,11 @@
 
 namespace mu::engraving {
 struct SymNames {
-    static AsciiString nameForSymId(SymId id);
+    static AsciiStringView nameForSymId(SymId id);
     static const char* userNameForSymId(SymId id);
     static QString translatedUserNameForSymId(SymId id);
 
-    static SymId symIdByName(const AsciiString& name, SymId def = SymId::noSym);
+    static SymId symIdByName(const AsciiStringView& name, SymId def = SymId::noSym);
     static SymId symIdByName(const QString& name, SymId def = SymId::noSym);
     static SymId symIdByOldName(const QString& oldName);
     static SymId symIdByUserName(const QString& userName);
@@ -43,11 +43,11 @@ struct SymNames {
 private:
     static void loadNameToSymIdHash();
 
-    static const std::array<AsciiString, size_t(SymId::lastSym) + 1> s_symNames;
+    static const std::array<AsciiStringView, size_t(SymId::lastSym) + 1> s_symNames;
     static const std::array<const char*, size_t(SymId::lastSym) + 1> s_symUserNames;
 
     //! Will be initialized when first used
-    static std::map<AsciiString, SymId> s_nameToSymIdHash;
+    static std::map<AsciiStringView, SymId> s_nameToSymIdHash;
     static const std::unordered_map<QString, SymId> s_oldNameToSymIdHash;
 };
 }

@@ -255,7 +255,7 @@ void Dynamic::write(XmlWriter& xml) const
 void Dynamic::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag = e.name();
+        const AsciiStringView tag = e.name();
         if (tag == "subtype") {
             setDynamicType(e.readElementText());
         } else if (tag == "velocity") {

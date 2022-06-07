@@ -209,7 +209,7 @@ void InstrumentChange::write(XmlWriter& xml) const
 void InstrumentChange::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "Instrument") {
             _instrument->read(e, part());
         } else if (tag == "init") {

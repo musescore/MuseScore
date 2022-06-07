@@ -41,8 +41,8 @@ public:
     XmlStreamWriter(const XmlStreamWriter&) = delete;
     XmlStreamWriter& operator=(const XmlStreamWriter&) = delete;
 
-    using Value = std::variant<std::monostate, int, unsigned int, int64_t, size_t, double, const char*, AsciiString, String>;
-    using Attribute = std::pair<AsciiString, Value>;
+    using Value = std::variant<std::monostate, int, unsigned int, int64_t, size_t, double, const char*, AsciiStringView, String>;
+    using Attribute = std::pair<AsciiStringView, Value>;
     using Attributes = std::vector<Attribute>;
 
     void setDevice(io::IODevice* dev);
@@ -51,18 +51,18 @@ public:
     void startDocument();
     void writeDoctype(const QString& type);
 
-    void startElement(const AsciiString& name, const Attributes& attrs = {});
+    void startElement(const AsciiStringView& name, const Attributes& attrs = {});
     void startElement(const String& name, const Attributes& attrs = {});
     void endElement();
 
-    void element(const AsciiString& name, const Attributes& attrs = {});                // <element attr="value" />
-    void element(const AsciiString& name, const Value& body);                           // <element>body</element>
-    void element(const AsciiString& name, const Attributes& attrs, const Value& body);  // <element attr="value" >body</element>
+    void element(const AsciiStringView& name, const Attributes& attrs = {});                // <element attr="value" />
+    void element(const AsciiStringView& name, const Value& body);                           // <element>body</element>
+    void element(const AsciiStringView& name, const Attributes& attrs, const Value& body);  // <element attr="value" >body</element>
 
     void comment(const String& text);
 
     static QString escapeSymbol(ushort c);
-    static String escapeString(const AsciiString& s);
+    static String escapeString(const AsciiStringView& s);
     static String escapeString(const String& s);
     static QString escapeString(const QString& s);
 

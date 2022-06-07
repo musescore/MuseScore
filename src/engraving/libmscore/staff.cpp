@@ -857,7 +857,7 @@ void Staff::read(XmlReader& e)
 
 bool Staff::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "StaffType") {
         StaffType st;
         st.read(e);
