@@ -246,8 +246,6 @@ MuseScore {
       function removeAcc() {
             console.log("start remove courtesy accidentals");
 
-            //curScore.startCmd();
-
              if (typeof curScore === 'undefined' || curScore == null) {
                    console.log("error: no score!");
                    quit();
@@ -298,19 +296,19 @@ MuseScore {
                   curStartStaff = curEndStaff;
             }
 
-            //curScore.endCmd();
-            //curScore.doLayout();
-
             console.log("end remove courtesy accidentals");
-            quit();
       }
 
       onRun: {
-            if(mscoreMajorVersion == 3 && mscoreMinorVersion == 0
-            && mscoreUpdateVersion < 5) {
-                  versionError.open();
-            } else {
-                  removeAcc();
-            }
+          if(mscoreMajorVersion == 3 && mscoreMinorVersion == 0
+                  && mscoreUpdateVersion < 5) {
+              versionError.open()
+          } else {
+              curScore.startCmd()
+              removeAcc()
+              curScore.endCmd()
+
+              quit()
+          }
       }
 }
