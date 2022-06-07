@@ -2468,7 +2468,7 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
         endEditElement();
     }
 
-    select({ toEl }, SelectType::SINGLE);
+    select({ toEl }, SelectType::REPLACE);
     resetHitElementContext();
     showItem(toEl);
 
