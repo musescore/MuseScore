@@ -115,7 +115,7 @@ void Arpeggio::write(XmlWriter& xml) const
 void Arpeggio::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             _arpeggioType = ArpeggioType(e.readInt());
         } else if (tag == "userLen1") {

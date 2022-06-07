@@ -158,7 +158,7 @@ void Volta::read(XmlReader& e)
     eraseSpannerSegments();
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "endings") {
             QString s = e.readElementText();
             _endings = TConv::fromXml(s, std::vector<int>());

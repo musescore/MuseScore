@@ -79,7 +79,7 @@ void BSymbol::writeProperties(XmlWriter& xml) const
 
 bool BSymbol::readProperties(XmlReader& e)
 {
-    const AsciiString tag = e.name();
+    const AsciiStringView tag = e.name();
 
     if (EngravingItem::readProperties(e)) {
         return true;

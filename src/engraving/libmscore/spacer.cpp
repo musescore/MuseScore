@@ -208,7 +208,7 @@ void Spacer::write(XmlWriter& xml) const
 void Spacer::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             _spacerType = SpacerType(e.readInt());
         } else if (tag == "space") {

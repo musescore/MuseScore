@@ -120,7 +120,7 @@ TextStream& TextStream::operator<<(const ByteArray& b)
     return *this;
 }
 
-TextStream& TextStream::operator<<(const AsciiString& s)
+TextStream& TextStream::operator<<(const AsciiStringView& s)
 {
     write(s.ascii(), s.size());
     return *this;

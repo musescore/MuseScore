@@ -91,7 +91,7 @@ static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
 //   write
 //---------------------------------------------------------
 
-void NamedEventList::write(XmlWriter& xml, const AsciiString& n) const
+void NamedEventList::write(XmlWriter& xml, const AsciiStringView& n) const
 {
     xml.startElement(n, { { "name", name } });
     if (!descr.isEmpty()) {
@@ -111,7 +111,7 @@ void NamedEventList::read(XmlReader& e)
 {
     name = e.attribute("name");
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "program") {
             MidiCoreEvent ev(ME_CONTROLLER, 0, CTRL_PROGRAM, e.intAttribute("value", 0));
             events.push_back(ev);
@@ -436,7 +436,7 @@ void Instrument::read(XmlReader& e, Part* part)
     _channel.clear();         // remove default channel
     _id = e.attribute("id");
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "singleNoteDynamics") {
             _singleNoteDynamics = e.readBool();
             readSingleNoteDynamics = true;
@@ -468,7 +468,7 @@ void Instrument::read(XmlReader& e, Part* part)
 
 bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "longName") {
         StaffName name;
         name.read(e);
@@ -883,7 +883,7 @@ void InstrChannel::read(XmlReader& e, Part* part)
     int midiChannel = -1;
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "program") {
             _program = e.intAttribute("value", -1);
             if (_program == -1) {
@@ -1255,7 +1255,7 @@ void MidiArticulation::read(XmlReader& e)
 {
     name = e.attribute("name");
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "velocity") {
             QString text(e.readElementText());
             if (text.endsWith("%")) {

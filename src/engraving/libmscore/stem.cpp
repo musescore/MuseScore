@@ -235,7 +235,7 @@ void Stem::read(XmlReader& e)
 
 bool Stem::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
 
     if (readProperty(tag, e, Pid::USER_LEN)) {
     } else if (readStyledProperty(e, tag)) {

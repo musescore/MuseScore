@@ -115,7 +115,7 @@ void StaffTextBase::read(XmlReader& e)
 
 bool StaffTextBase::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
 
     if (tag == "MidiAction") {
         int channel = e.intAttribute("channel", 0);

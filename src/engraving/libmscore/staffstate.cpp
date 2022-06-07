@@ -79,7 +79,7 @@ void StaffState::write(XmlWriter& xml) const
 void StaffState::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             _staffStateType = StaffStateType(e.readInt());
         } else if (tag == "Instrument") {

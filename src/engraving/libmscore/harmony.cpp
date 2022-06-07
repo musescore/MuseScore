@@ -354,7 +354,7 @@ void Harmony::write(XmlWriter& xml) const
 void Harmony::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "base") {
             setBaseTpc(e.readInt());
         } else if (tag == "baseCase") {
@@ -374,7 +374,7 @@ void Harmony::read(XmlReader& e)
             int degreeAlter = 0;
             QString degreeType = "";
             while (e.readNextStartElement()) {
-                const AsciiString t(e.name());
+                const AsciiStringView t(e.name());
                 if (t == "degree-value") {
                     degreeValue = e.readInt();
                 } else if (t == "degree-alter") {

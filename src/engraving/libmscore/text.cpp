@@ -54,7 +54,7 @@ Text::Text(EngravingItem* parent, TextStyleType tid)
 void Text::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "style") {
             TextStyleType s = TConv::fromXml(e.readElementAsciiText(), TextStyleType::DEFAULT);
             if (TextStyleType::TUPLET == s) {  // ugly hack for compatibility

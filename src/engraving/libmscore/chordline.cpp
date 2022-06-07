@@ -161,14 +161,14 @@ void ChordLine::read(XmlReader& e)
 {
     path = PainterPath();
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "Path") {
             path = PainterPath();
             PointF curveTo;
             PointF p1;
             int state = 0;
             while (e.readNextStartElement()) {
-                const AsciiString nextTag(e.name());
+                const AsciiStringView nextTag(e.name());
                 if (nextTag == "Element") {
                     int type = e.intAttribute("type");
                     qreal x  = e.doubleAttribute("x");

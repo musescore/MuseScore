@@ -2312,7 +2312,7 @@ static constexpr std::array<Pid, 18> TextBasePropertyId { {
 
 bool TextBase::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     for (Pid i : TextBasePropertyId) {
         if (readProperty(tag, e, i)) {
             return true;

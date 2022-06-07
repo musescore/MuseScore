@@ -571,7 +571,7 @@ void Tremolo::write(XmlWriter& xml) const
 void Tremolo::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             setTremoloType(e.readElementText());
         }

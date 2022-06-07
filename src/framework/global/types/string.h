@@ -120,30 +120,28 @@ private:
 };
 
 // ============================
-// AsciiString (ASCII)
+// AsciiStringView (ASCII)
+// Be carefully!!, this class just hold pointer to string (no copy), so source string should be present, while use view
 // ============================
-class AsciiString
+class AsciiStringView
 {
 public:
 
     static const size_t npos = static_cast<size_t>(-1);
 
-    constexpr AsciiString() = default;
-    constexpr AsciiString(const char* str)
+    constexpr AsciiStringView() = default;
+    constexpr AsciiStringView(const char* str)
         : m_size(str ? std::char_traits<char>::length(str) : 0), m_data(str) {}
-    constexpr AsciiString(const char* str, size_t size)
+    constexpr AsciiStringView(const char* str, size_t size)
         : m_size(size), m_data(str) {}
 
 //#ifndef NO_QT_SUPPORT
-    AsciiString(const QLatin1String& str)
-        : m_size(str.size()), m_data(str.latin1()) {}
-
-    static AsciiString fromQLatin1String(const QLatin1String& str) { return AsciiString(str); }
+    static AsciiStringView fromQLatin1String(const QLatin1String& str) { return AsciiStringView(str.latin1(), str.size()); }
     QLatin1String toQLatin1String() const { return QLatin1String(m_data, static_cast<int>(m_size)); }
 //#endif
 
-    inline bool operator ==(const AsciiString& s) const { return m_size == s.m_size && std::memcmp(m_data, s.m_data, m_size) == 0; }
-    inline bool operator !=(const AsciiString& s) const { return !this->operator ==(s); }
+    inline bool operator ==(const AsciiStringView& s) const { return m_size == s.m_size && std::memcmp(m_data, s.m_data, m_size) == 0; }
+    inline bool operator !=(const AsciiStringView& s) const { return !this->operator ==(s); }
     inline bool operator ==(const char* s) const
     {
         size_t sz = (s ? std::char_traits<char>::length(s) : 0);
@@ -152,7 +150,7 @@ public:
 
     inline bool operator !=(const char* s) const { return !this->operator ==(s); }
 
-    inline bool operator <(const AsciiString& s) const
+    inline bool operator <(const AsciiStringView& s) const
     {
         if (m_size != s.m_size) {
             return m_size < s.m_size;
@@ -176,12 +174,12 @@ private:
 }
 
 // ============================
-// AsciiString (ASCII)
+// AsciiStringView (ASCII)
 // ============================
-inline bool operator ==(const char* s1, const mu::AsciiString& s2) { return s2 == s1; }
-inline bool operator !=(const char* s1, const mu::AsciiString& s2) { return s2 != s1; }
+inline bool operator ==(const char* s1, const mu::AsciiStringView& s2) { return s2 == s1; }
+inline bool operator !=(const char* s1, const mu::AsciiStringView& s2) { return s2 != s1; }
 
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::AsciiString& str)
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::AsciiStringView& str)
 {
     s << str.ascii();
     return s;

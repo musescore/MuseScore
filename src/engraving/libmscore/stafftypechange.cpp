@@ -81,7 +81,7 @@ void StaffTypeChange::write(XmlWriter& xml) const
 void StaffTypeChange::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "StaffType") {
             StaffType* st = new StaffType();
             st->read(e);

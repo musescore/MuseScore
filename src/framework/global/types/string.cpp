@@ -154,24 +154,24 @@ Char String::at(size_t i) const
 }
 
 // ============================
-// AsciiString
+// AsciiStringView
 // ============================
-const char* AsciiString::ascii() const
+const char* AsciiStringView::ascii() const
 {
     return m_data;
 }
 
-size_t AsciiString::size() const
+size_t AsciiStringView::size() const
 {
     return m_size;
 }
 
-bool AsciiString::empty() const
+bool AsciiStringView::empty() const
 {
     return m_size == 0;
 }
 
-AsciiChar AsciiString::at(size_t i) const
+AsciiChar AsciiStringView::at(size_t i) const
 {
     IF_ASSERT_FAILED(i < size()) {
         return AsciiChar();
@@ -179,7 +179,7 @@ AsciiChar AsciiString::at(size_t i) const
     return AsciiChar(m_data[i]);
 }
 
-bool AsciiString::contains(char ch) const
+bool AsciiStringView::contains(char ch) const
 {
     for (size_t i = 0; i < m_size; ++i) {
         if (m_data[i] == ch) {
@@ -189,7 +189,7 @@ bool AsciiString::contains(char ch) const
     return false;
 }
 
-int AsciiString::toInt(bool* ok) const
+int AsciiStringView::toInt(bool* ok) const
 {
     const char* currentLoc = setlocale(LC_NUMERIC, "C");
     char* end = nullptr;
@@ -202,7 +202,7 @@ int AsciiString::toInt(bool* ok) const
     return v;
 }
 
-double AsciiString::toDouble(bool* ok) const
+double AsciiStringView::toDouble(bool* ok) const
 {
     const char* currentLoc = setlocale(LC_NUMERIC, "C");
     char* end = nullptr;

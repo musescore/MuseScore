@@ -38,59 +38,59 @@ public:
 
     static QString toXml(Align v);
     static Align fromXml(const QString& str, Align def);
-    static AlignH fromXml(const AsciiString& str, AlignH def);
-    static AlignV fromXml(const AsciiString& str, AlignV def);
+    static AlignH fromXml(const AsciiStringView& str, AlignH def);
+    static AlignV fromXml(const AsciiStringView& str, AlignV def);
 
     static QString toUserName(SymId v);
-    static AsciiString toXml(SymId v);
-    static SymId fromXml(const AsciiString& tag, SymId def);
+    static AsciiStringView toXml(SymId v);
+    static SymId fromXml(const AsciiStringView& tag, SymId def);
 
     static QString toUserName(Orientation v);
-    static AsciiString toXml(Orientation v);
-    static Orientation fromXml(const AsciiString& tag, Orientation def);
+    static AsciiStringView toXml(Orientation v);
+    static Orientation fromXml(const AsciiStringView& tag, Orientation def);
 
     static QString toUserName(NoteHeadType v);
-    static AsciiString toXml(NoteHeadType v);
-    static NoteHeadType fromXml(const AsciiString& tag, NoteHeadType def);
+    static AsciiStringView toXml(NoteHeadType v);
+    static NoteHeadType fromXml(const AsciiStringView& tag, NoteHeadType def);
     static QString toUserName(NoteHeadScheme v);
-    static AsciiString toXml(NoteHeadScheme v);
-    static NoteHeadScheme fromXml(const AsciiString& tag, NoteHeadScheme def);
+    static AsciiStringView toXml(NoteHeadScheme v);
+    static NoteHeadScheme fromXml(const AsciiStringView& tag, NoteHeadScheme def);
     static QString toUserName(NoteHeadGroup v);
-    static AsciiString toXml(NoteHeadGroup v);
-    static NoteHeadGroup fromXml(const AsciiString& tag, NoteHeadGroup def);
+    static AsciiStringView toXml(NoteHeadGroup v);
+    static NoteHeadGroup fromXml(const AsciiStringView& tag, NoteHeadGroup def);
 
     static QString toUserName(ClefType v);
-    static AsciiString toXml(ClefType v);
-    static ClefType fromXml(const AsciiString& tag, ClefType def);
+    static AsciiStringView toXml(ClefType v);
+    static ClefType fromXml(const AsciiStringView& tag, ClefType def);
 
     static QString toUserName(DynamicType v);
     static SymId symId(DynamicType v);
     static DynamicType dynamicType(SymId v);
-    static DynamicType dynamicType(const AsciiString& string);
-    static AsciiString toXml(DynamicType v);
-    static DynamicType fromXml(const AsciiString& tag, DynamicType def);
+    static DynamicType dynamicType(const AsciiStringView& string);
+    static AsciiStringView toXml(DynamicType v);
+    static DynamicType fromXml(const AsciiStringView& tag, DynamicType def);
     static QString toUserName(DynamicRange v);
     static QString toXml(DynamicRange v);
-    static DynamicRange fromXml(const AsciiString& tag, DynamicRange def);
+    static DynamicRange fromXml(const AsciiStringView& tag, DynamicRange def);
     static QString toUserName(DynamicSpeed v);
-    static AsciiString toXml(DynamicSpeed v);
-    static DynamicSpeed fromXml(const AsciiString& tag, DynamicSpeed def);
+    static AsciiStringView toXml(DynamicSpeed v);
+    static DynamicSpeed fromXml(const AsciiStringView& tag, DynamicSpeed def);
 
     static QString toUserName(HookType v);
     static QString toXml(HookType v);
-    static HookType fromXml(const AsciiString& tag, HookType def);
+    static HookType fromXml(const AsciiStringView& tag, HookType def);
 
     static QString toUserName(KeyMode v);
-    static AsciiString toXml(KeyMode v);
-    static KeyMode fromXml(const AsciiString& tag, KeyMode def);
+    static AsciiStringView toXml(KeyMode v);
+    static KeyMode fromXml(const AsciiStringView& tag, KeyMode def);
 
     static QString toUserName(TextStyleType v);
-    static AsciiString toXml(TextStyleType v);
-    static TextStyleType fromXml(const AsciiString& tag, TextStyleType def);
+    static AsciiStringView toXml(TextStyleType v);
+    static TextStyleType fromXml(const AsciiStringView& tag, TextStyleType def);
 
     static QString toUserName(ChangeMethod v);
-    static AsciiString toXml(ChangeMethod v);
-    static ChangeMethod fromXml(const AsciiString& tag, ChangeMethod def);
+    static AsciiStringView toXml(ChangeMethod v);
+    static ChangeMethod fromXml(const AsciiStringView& tag, ChangeMethod def);
     static std::map<int /*positionTick*/, int> easingValueCurve(const int ticksDuration, const int stepsCount, const int amplitude,
                                                                 const ChangeMethod method);
     static std::map<int /*positionTick*/, double> easingValueCurve(const int ticksDuration, const int stepsCount, const double amplitude,
@@ -99,51 +99,51 @@ public:
     static QString toXml(const PitchValue& v);
 
     static QString toXml(AccidentalRole v);
-    static AccidentalRole fromXml(const AsciiString& tag, AccidentalRole def);
+    static AccidentalRole fromXml(const AsciiStringView& tag, AccidentalRole def);
 
     static QString toXml(BeatsPerSecond v);
-    static BeatsPerSecond fromXml(const AsciiString& tag, BeatsPerSecond def);
+    static BeatsPerSecond fromXml(const AsciiStringView& tag, BeatsPerSecond def);
 
     static QString toUserName(DurationType v);
-    static AsciiString toXml(DurationType v);
-    static DurationType fromXml(const AsciiString& tag, DurationType def);
+    static AsciiStringView toXml(DurationType v);
+    static DurationType fromXml(const AsciiStringView& tag, DurationType def);
 
-    static AsciiString toXml(PlayingTechniqueType v);
-    static PlayingTechniqueType fromXml(const AsciiString& tag, PlayingTechniqueType def);
+    static AsciiStringView toXml(PlayingTechniqueType v);
+    static PlayingTechniqueType fromXml(const AsciiStringView& tag, PlayingTechniqueType def);
 
-    static AsciiString toXml(GradualTempoChangeType v);
-    static GradualTempoChangeType fromXml(const AsciiString& tag, GradualTempoChangeType def);
+    static AsciiStringView toXml(GradualTempoChangeType v);
+    static GradualTempoChangeType fromXml(const AsciiStringView& tag, GradualTempoChangeType def);
 
-    static AsciiString toXml(OrnamentStyle v);
-    static OrnamentStyle fromXml(const AsciiString& str, OrnamentStyle def);
+    static AsciiStringView toXml(OrnamentStyle v);
+    static OrnamentStyle fromXml(const AsciiStringView& str, OrnamentStyle def);
 
-    static AsciiString toXml(PlacementV v);
-    static PlacementV fromXml(const AsciiString& str, PlacementV def);
-    static AsciiString toXml(PlacementH v);
-    static PlacementH fromXml(const AsciiString& str, PlacementH def);
+    static AsciiStringView toXml(PlacementV v);
+    static PlacementV fromXml(const AsciiStringView& str, PlacementV def);
+    static AsciiStringView toXml(PlacementH v);
+    static PlacementH fromXml(const AsciiStringView& str, PlacementH def);
 
-    static AsciiString toXml(TextPlace v);
-    static TextPlace fromXml(const AsciiString& str, TextPlace def);
+    static AsciiStringView toXml(TextPlace v);
+    static TextPlace fromXml(const AsciiStringView& str, TextPlace def);
 
-    static AsciiString toXml(DirectionV v);
-    static DirectionV fromXml(const AsciiString& str, DirectionV def);
-    static AsciiString toXml(DirectionH v);
-    static DirectionH fromXml(const AsciiString& str, DirectionH def);
+    static AsciiStringView toXml(DirectionV v);
+    static DirectionV fromXml(const AsciiStringView& str, DirectionV def);
+    static AsciiStringView toXml(DirectionH v);
+    static DirectionH fromXml(const AsciiStringView& str, DirectionH def);
 
-    static AsciiString toXml(LayoutBreakType v);
-    static LayoutBreakType fromXml(const AsciiString& str, LayoutBreakType def);
+    static AsciiStringView toXml(LayoutBreakType v);
+    static LayoutBreakType fromXml(const AsciiStringView& str, LayoutBreakType def);
 
-    static AsciiString toXml(VeloType v);
-    static VeloType fromXml(const AsciiString& str, VeloType def);
+    static AsciiStringView toXml(VeloType v);
+    static VeloType fromXml(const AsciiStringView& str, VeloType def);
 
-    static AsciiString toXml(BeamMode v);
-    static BeamMode fromXml(const AsciiString& str, BeamMode def);
+    static AsciiStringView toXml(BeamMode v);
+    static BeamMode fromXml(const AsciiStringView& str, BeamMode def);
 
-    static AsciiString toXml(GlissandoStyle v);
-    static GlissandoStyle fromXml(const AsciiString& str, GlissandoStyle def);
+    static AsciiStringView toXml(GlissandoStyle v);
+    static GlissandoStyle fromXml(const AsciiStringView& str, GlissandoStyle def);
 
-    static AsciiString toXml(BarLineType v);
-    static BarLineType fromXml(const AsciiString& str, BarLineType def);
+    static AsciiStringView toXml(BarLineType v);
+    static BarLineType fromXml(const AsciiStringView& str, BarLineType def);
 };
 }
 

@@ -46,7 +46,7 @@ void StaffRW::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
 
     if (staff == 0) {
         while (e.readNextStartElement()) {
-            const AsciiString tag(e.name());
+            const AsciiStringView tag(e.name());
 
             if (tag == "Measure") {
                 Measure* measure = Factory::createMeasure(ctx.dummy()->system());
@@ -90,7 +90,7 @@ void StaffRW::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
     } else {
         Measure* measure = score->firstMeasure();
         while (e.readNextStartElement()) {
-            const AsciiString tag(e.name());
+            const AsciiStringView tag(e.name());
 
             if (tag == "Measure") {
                 if (measure == 0) {

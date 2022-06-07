@@ -68,7 +68,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 
     while (e.readNextStartElement()) {
         ctx.setTrack(mu::nidx);
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "Staff") {
             StaffRW::readStaff(score, e, ctx);
         } else if (tag == "Omr") {
@@ -268,7 +268,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 Score::FileError Read302::read302(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "programVersion") {
             masterScore->setMscoreVersion(e.readElementText());
         } else if (tag == "programRevision") {

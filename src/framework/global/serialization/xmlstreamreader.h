@@ -79,7 +79,7 @@ public:
     void skipCurrentElement();
     TokenType readNext();
     TokenType tokenType() const;
-    AsciiString tokenString() const;
+    AsciiStringView tokenString() const;
 
     inline bool isStartDocument() const { return tokenType() == StartDocument; }
     inline bool isEndDocument() const { return tokenType() == EndDocument; }
@@ -88,18 +88,18 @@ public:
     inline bool isCharacters() const { return tokenType() == Characters; }
     bool isWhitespace() const;
 
-    AsciiString name() const;
+    AsciiStringView name() const;
 
     QString attribute(const char* name) const;
-    AsciiString asciiAttribute(const char* name) const;
+    AsciiStringView asciiAttribute(const char* name) const;
     bool hasAttribute(const char* name) const;
     std::vector<Attribute> attributes() const;
 
     QString readElementText();
     QString text() const;
 
-    AsciiString readElementAsciiText();
-    AsciiString asciiText() const;
+    AsciiStringView readElementAsciiText();
+    AsciiStringView asciiText() const;
 
     int64_t lineNumber() const;
     int64_t columnNumber() const;

@@ -44,12 +44,12 @@ QByteArray toMimeData(T* t)
 }
 
 template<class T>
-std::shared_ptr<T> fromMimeData(const QByteArray& data, const AsciiString& tagName)
+std::shared_ptr<T> fromMimeData(const QByteArray& data, const AsciiStringView& tagName)
 {
     XmlReader e(data);
     e.context()->setPasteMode(true);
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == tagName) {
             std::shared_ptr<T> t(new T);
             if (!t->read(e)) {

@@ -103,7 +103,7 @@ GradualTempoChange* GradualTempoChange::clone() const
 void GradualTempoChange::read(XmlReader& reader)
 {
     while (reader.readNextStartElement()) {
-        const AsciiString tag(reader.name());
+        const AsciiStringView tag(reader.name());
 
         if (readProperty(tag, reader, Pid::LINE_WIDTH)) {
             setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);

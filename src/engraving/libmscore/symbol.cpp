@@ -66,7 +66,7 @@ Symbol::Symbol(const Symbol& s)
 //   symName
 //---------------------------------------------------------
 
-AsciiString Symbol::symName() const
+AsciiStringView Symbol::symName() const
 {
     return SymNames::nameForSymId(_sym);
 }
@@ -149,7 +149,7 @@ void Symbol::read(XmlReader& e)
 {
     PointF pos;
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "name") {
             QString val(e.readElementText());
             SymId symId = SymNames::symIdByName(val);
@@ -276,7 +276,7 @@ void FSymbol::write(XmlWriter& xml) const
 void FSymbol::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "font") {
             _font.setFamily(e.readElementText());
         } else if (tag == "fontsize") {

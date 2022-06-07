@@ -248,7 +248,7 @@ bool Palette::read(XmlReader& e)
     m_name = e.attribute("name");
     m_type = Type::Unknown;
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "gridWidth") {
             m_gridSize.setWidth(e.readDouble());
         } else if (tag == "gridHeight") {
@@ -378,7 +378,7 @@ bool Palette::readFromFile(const QString& p)
                 break;
             }
             while (e.readNextStartElement()) {
-                const AsciiString tag(e.name());
+                const AsciiStringView tag(e.name());
 
                 if (tag == "rootfile") {
                     if (rootfile.isEmpty()) {

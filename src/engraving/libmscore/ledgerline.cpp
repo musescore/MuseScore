@@ -146,7 +146,7 @@ void LedgerLine::writeProperties(XmlWriter& xml) const
 
 bool LedgerLine::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
 
     if (tag == "lineWidth") {
         _width = e.readDouble() * spatium();

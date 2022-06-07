@@ -89,7 +89,7 @@ public:
     EngravingObject* scanParent() const override;
 
     QString subtypeUserName() const;
-    void setSubtype(const mu::AsciiString& s);
+    void setSubtype(const mu::AsciiStringView& s);
     void setAccidentalType(AccidentalType t) { _accidentalType = t; }
 
     AccidentalType accidentalType() const { return _accidentalType; }
@@ -129,9 +129,9 @@ public:
 
     static AccidentalVal subtype2value(AccidentalType);               // return effective pitch offset
     static SymId subtype2symbol(AccidentalType);
-    static mu::AsciiString subtype2name(AccidentalType);
+    static mu::AsciiStringView subtype2name(AccidentalType);
     static AccidentalType value2subtype(AccidentalVal);
-    static AccidentalType name2subtype(const mu::AsciiString&);
+    static AccidentalType name2subtype(const mu::AsciiStringView&);
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
 
     QString accessibleInfo() const override;

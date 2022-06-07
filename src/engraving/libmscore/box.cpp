@@ -253,7 +253,7 @@ void Box::read(XmlReader& e)
 
 bool Box::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "height") {
         _boxHeight = Spatium(e.readDouble());
     } else if (tag == "width") {
@@ -708,7 +708,7 @@ void HBox::writeProperties(XmlWriter& xml) const
 
 bool HBox::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     if (readProperty(tag, e, Pid::CREATE_SYSTEM_HEADER)) {
     } else if (Box::readProperties(e)) {
     } else {

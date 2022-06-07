@@ -1547,7 +1547,7 @@ void Note::read(XmlReader& e)
 
 bool Note::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
 
     if (tag == "pitch") {
         _pitch = e.readInt();
@@ -1628,7 +1628,7 @@ bool Note::readProperties(XmlReader& e)
     } else if (tag == "Events") {
         _playEvents.clear();        // remove default event
         while (e.readNextStartElement()) {
-            const AsciiString t(e.name());
+            const AsciiStringView t(e.name());
             if (t == "Event") {
                 NoteEvent ne;
                 ne.read(e);
