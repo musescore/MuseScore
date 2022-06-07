@@ -117,8 +117,8 @@ void ChordArticulationsParser::parseSpanners(const Chord* chord, const Rendering
 
 void ChordArticulationsParser::parseArticulationSymbols(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    for (const Articulation* artic : chord->articulations()) {
-        SymbolsMetaParser::parse(artic, ctx, result);
+    for (const Articulation* articulation : chord->articulations()) {
+        SymbolsMetaParser::parse(articulation, ctx, result);
     }
 }
 
