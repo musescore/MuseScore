@@ -1706,7 +1706,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
     }
 
     instrument.setMidiActions(templ->midiActions);
-    instrument.setArticulation(templ->articulation);
+    instrument.setArticulation(templ->midiArticulations);
     instrument._channel.clear();
 
     for (const InstrChannel& c : templ->channel) {

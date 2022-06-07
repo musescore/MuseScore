@@ -45,7 +45,7 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 std::vector<InstrumentGroup*> instrumentGroups;
-std::vector<MidiArticulation> articulation;                 // global articulations
+std::vector<MidiArticulation> midiArticulations;            // global articulations
 std::vector<InstrumentGenre*> instrumentGenres;
 std::vector<InstrumentFamily*> instrumentFamilies;
 std::vector<ScoreOrder> instrumentOrders;
@@ -111,7 +111,7 @@ InstrumentGroup* searchInstrumentGroup(const QString& name)
 
 static MidiArticulation searchArticulation(const QString& name)
 {
-    for (MidiArticulation a : articulation) {
+    for (MidiArticulation a : midiArticulations) {
         if (a.name == name) {
             return a;
         }
@@ -163,7 +163,8 @@ void InstrumentGroup::read(XmlReader& e)
             InstrumentTemplate* t = searchTemplate(sid);
             if (t == 0) {
                 t = new InstrumentTemplate;
-                t->articulation.insert(t->articulation.end(), articulation.begin(), articulation.end());             // init with global articulation
+                // init with global articulation
+                t->midiArticulations.insert(t->midiArticulations.end(), midiArticulations.begin(), midiArticulations.end());
                 t->sequenceOrder = static_cast<int>(instrumentTemplates.size());
                 instrumentTemplates.push_back(t);
             }
@@ -395,9 +396,9 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     for (const InstrChannel& a : channel) {
         a.write(xml, nullptr);
     }
-    for (const MidiArticulation& ma : articulation) {
+    for (const MidiArticulation& ma : midiArticulations) {
         bool isGlobal = false;
-        for (const MidiArticulation& ga : mu::engraving::articulation) {
+        for (const MidiArticulation& ga : mu::engraving::midiArticulations) {
             if (ma == ga) {
                 isGlobal = true;
                 break;
@@ -546,16 +547,16 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "Articulation") {
             MidiArticulation a;
             a.read(e);
-            size_t n = articulation.size();
+            size_t n = midiArticulations.size();
             size_t i;
             for (i = 0; i < n; ++i) {
-                if (articulation[i].name == a.name) {
-                    articulation[i] = a;
+                if (midiArticulations[i].name == a.name) {
+                    midiArticulations[i] = a;
                     break;
                 }
             }
             if (i == n) {
-                articulation.push_back(a);
+                midiArticulations.push_back(a);
             }
         } else if (tag == "stafftype") {
             int staffIdx = readStaffIdx(e);
@@ -657,7 +658,7 @@ void clearInstrumentTemplates()
     instrumentGenres.clear();
     qDeleteAll(instrumentFamilies);
     instrumentFamilies.clear();
-    articulation.clear();
+    midiArticulations.clear();
     instrumentOrders.clear();
 }
 
@@ -691,7 +692,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                     QString name(e.attribute("name"));
                     MidiArticulation a = searchArticulation(name);
                     a.read(e);
-                    articulation.push_back(a);
+                    midiArticulations.push_back(a);
                 } else if (tag == "Genre") {
                     QString idGenre(e.attribute("id"));
                     InstrumentGenre* genre = searchInstrumentGenre(idGenre);
