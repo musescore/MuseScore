@@ -116,7 +116,7 @@ void Breath::write(XmlWriter& xml) const
 void Breath::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {                 // obsolete
             switch (e.readInt()) {
             case 0:

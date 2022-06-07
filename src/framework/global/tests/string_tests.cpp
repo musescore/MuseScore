@@ -133,7 +133,7 @@ TEST_F(Global_Types_StringTests, String_Access)
 TEST_F(Global_Types_StringTests, AsciiString_Construct)
 {
     //! GIVEN Some ASCII String
-    AsciiString str("123abc");
+    AsciiStringView str("123abc");
     //! DO
     size_t size = str.size();
     //! CHECK
@@ -148,7 +148,7 @@ TEST_F(Global_Types_StringTests, AsciiString_Construct)
 TEST_F(Global_Types_StringTests, AsciiString_Convert)
 {
     //! GIVEN Some ASCII String
-    AsciiString str("123abc");
+    AsciiStringView str("123abc");
     //! DO
     QLatin1String qstr = str.toQLatin1String();
     //! CHECK
@@ -160,10 +160,10 @@ TEST_F(Global_Types_StringTests, AsciiString_Compare)
 {
     {
         //! GIVEN Some ASCII Strings
-        AsciiString str1("123abc");
-        AsciiString str2("123abc");
-        AsciiString str3("abc123");
-        AsciiString str4("abc");
+        AsciiStringView str1("123abc");
+        AsciiStringView str2("123abc");
+        AsciiStringView str3("abc123");
+        AsciiStringView str4("abc");
 
         //! CHECK
         EXPECT_TRUE(str1 == str2);
@@ -181,10 +181,10 @@ TEST_F(Global_Types_StringTests, AsciiString_Compare)
 
     {
         //! GIVEN Some ASCII Strings
-        AsciiString str1("02");
-        AsciiString str2("20");
-        AsciiString str3("22");
-        AsciiString str4("002");
+        AsciiStringView str1("02");
+        AsciiStringView str2("20");
+        AsciiStringView str3("22");
+        AsciiStringView str4("002");
 
         //! CHECK
         EXPECT_TRUE(str1 < str2);
@@ -197,7 +197,7 @@ TEST_F(Global_Types_StringTests, AsciiString_ToInt)
 {
     {
         //! GIVEN Some string
-        AsciiString s("2");
+        AsciiStringView s("2");
         //! DO
         bool ok = false;
         int v = s.toInt(&ok);
@@ -208,7 +208,7 @@ TEST_F(Global_Types_StringTests, AsciiString_ToInt)
 
     {
         //! GIVEN Some string
-        AsciiString s("20");
+        AsciiStringView s("20");
         //! DO
         bool ok = false;
         int v = s.toInt(&ok);
@@ -219,7 +219,7 @@ TEST_F(Global_Types_StringTests, AsciiString_ToInt)
 
     {
         //! GIVEN Some string
-        AsciiString s("02");
+        AsciiStringView s("02");
         //! DO
         bool ok = false;
         int v = s.toInt(&ok);
@@ -230,7 +230,7 @@ TEST_F(Global_Types_StringTests, AsciiString_ToInt)
 
     {
         //! GIVEN Some string
-        AsciiString s(" 2");
+        AsciiStringView s(" 2");
         //! DO
         bool ok = false;
         int v = s.toInt(&ok);
@@ -241,7 +241,7 @@ TEST_F(Global_Types_StringTests, AsciiString_ToInt)
 
     {
         //! GIVEN Some string
-        AsciiString s("ab");
+        AsciiStringView s("ab");
         //! DO
         bool ok = false;
         int v = s.toInt(&ok);
@@ -255,7 +255,7 @@ TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
 {
     {
         //! GIVEN Some string
-        AsciiString s("2");
+        AsciiStringView s("2");
         //! DO
         bool ok = false;
         double v = s.toDouble(&ok);
@@ -266,7 +266,7 @@ TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
 
     {
         //! GIVEN Some string
-        AsciiString s("2.1");
+        AsciiStringView s("2.1");
         //! DO
         bool ok = false;
         double v = s.toDouble(&ok);
@@ -277,7 +277,7 @@ TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
 
     {
         //! GIVEN Some string
-        AsciiString s("2,1");
+        AsciiStringView s("2,1");
         //! DO
         bool ok = false;
         double v = s.toDouble(&ok);
@@ -288,7 +288,7 @@ TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
 
     {
         //! GIVEN Some string
-        AsciiString s("ab");
+        AsciiStringView s("ab");
         //! DO
         bool ok = false;
         double v = s.toDouble(&ok);

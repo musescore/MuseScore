@@ -35,7 +35,7 @@ using namespace mu::io;
 using namespace mu::palette;
 using namespace mu::workspace;
 
-static const AsciiString PALETTE_XML_TAG("PaletteBox");
+static const AsciiStringView PALETTE_XML_TAG("PaletteBox");
 
 static PaletteTreePtr readPalette(const ByteArray& data)
 {

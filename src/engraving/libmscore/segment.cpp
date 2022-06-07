@@ -961,7 +961,7 @@ void Segment::write(XmlWriter& xml) const
 void Segment::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
 
         if (tag == "subtype") {
             e.skipCurrentElement();

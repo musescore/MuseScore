@@ -129,7 +129,7 @@ void Pedal::read(XmlReader& e)
         e.context()->addSpanner(e.intAttribute("id", -1), this);
     }
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (readStyledProperty(e, tag)) {
         } else if (!TextLineBase::readProperties(e)) {
             e.unknown();

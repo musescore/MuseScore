@@ -33,7 +33,7 @@ namespace mu::engraving {
 void NoteEvent::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "pitch") {
             _pitch = e.readInt();
         } else if (tag == "ontime") {

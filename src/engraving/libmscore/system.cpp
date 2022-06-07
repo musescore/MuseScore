@@ -1429,7 +1429,7 @@ void System::write(XmlWriter& xml) const
 void System::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "SystemDivider") {
             SystemDivider* sd = new SystemDivider(this);
             sd->read(e);

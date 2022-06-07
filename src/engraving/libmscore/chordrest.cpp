@@ -206,7 +206,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
 
 bool ChordRest::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
 
     if (tag == "durationType") {
         setDurationType(TConv::fromXml(e.readElementAsciiText(), DurationType::V_QUARTER));

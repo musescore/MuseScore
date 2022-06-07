@@ -366,7 +366,7 @@ void StaffType::read(XmlReader& e)
     }
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "name") {
             setXmlName(e.readElementText());
         } else if (tag == "lines") {
@@ -1077,7 +1077,7 @@ bool TablatureFretFont::read(XmlReader& e)
     defPitch    = 9.0;
     defYOffset  = 0.0;
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
 
         int val = e.intAttribute("value");
 
@@ -1133,7 +1133,7 @@ bool TablatureFretFont::read(XmlReader& e)
 bool TablatureDurationFont::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
 
         if (tag == "family") {
             family = e.readElementText();
@@ -1253,7 +1253,7 @@ bool StaffType::readConfigFile(const QString& fileName)
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
             while (e.readNextStartElement()) {
-                const AsciiString tag(e.name());
+                const AsciiStringView tag(e.name());
                 if (tag == "fretFont") {
                     TablatureFretFont ff;
                     if (ff.read(e)) {

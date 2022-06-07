@@ -115,7 +115,7 @@ String XmlStreamWriter::escapeString(const String& s)
     return String::fromQString(escapeString(s.toQString()));
 }
 
-String XmlStreamWriter::escapeString(const AsciiString& s)
+String XmlStreamWriter::escapeString(const AsciiStringView& s)
 {
     //! TODO
     return String::fromQString(escapeString(QString(s.ascii())));
@@ -137,9 +137,9 @@ void XmlStreamWriter::writeValue(const Value& v)
         break;
     case 5: m_impl->stream << std::get<double>(v);
         break;
-    case 6: m_impl->stream << escapeString(AsciiString(std::get<const char*>(v)));
+    case 6: m_impl->stream << escapeString(AsciiStringView(std::get<const char*>(v)));
         break;
-    case 7: m_impl->stream << escapeString(std::get<AsciiString>(v));
+    case 7: m_impl->stream << escapeString(std::get<AsciiStringView>(v));
         break;
     case 8: m_impl->stream << escapeString(std::get<String>(v));
         break;
@@ -150,7 +150,7 @@ void XmlStreamWriter::writeValue(const Value& v)
     }
 }
 
-void XmlStreamWriter::startElement(const AsciiString& name, const Attributes& attrs)
+void XmlStreamWriter::startElement(const AsciiStringView& name, const Attributes& attrs)
 {
     IF_ASSERT_FAILED(!name.contains(' ')) {
     }
@@ -169,7 +169,7 @@ void XmlStreamWriter::startElement(const AsciiString& name, const Attributes& at
 void XmlStreamWriter::startElement(const String& name, const Attributes& attrs)
 {
     ByteArray ba = name.toAscii();
-    startElement(AsciiString(ba.constChar(), ba.size()), attrs);
+    startElement(AsciiStringView(ba.constChar(), ba.size()), attrs);
 }
 
 void XmlStreamWriter::startElementRaw(const QString& name)
@@ -187,7 +187,7 @@ void XmlStreamWriter::endElement()
 }
 
 // <element attr="value" />
-void XmlStreamWriter::element(const AsciiString& name, const Attributes& attrs)
+void XmlStreamWriter::element(const AsciiStringView& name, const Attributes& attrs)
 {
     IF_ASSERT_FAILED(!name.contains(' ')) {
     }
@@ -202,7 +202,7 @@ void XmlStreamWriter::element(const AsciiString& name, const Attributes& attrs)
     m_impl->stream << "/>\n";
 }
 
-void XmlStreamWriter::element(const AsciiString& name, const Value& body)
+void XmlStreamWriter::element(const AsciiStringView& name, const Value& body)
 {
     IF_ASSERT_FAILED(!name.contains(' ')) {
     }
@@ -213,7 +213,7 @@ void XmlStreamWriter::element(const AsciiString& name, const Value& body)
     m_impl->stream << "</" << name << '>' << '\n';
 }
 
-void XmlStreamWriter::element(const AsciiString& name, const Attributes& attrs, const Value& body)
+void XmlStreamWriter::element(const AsciiStringView& name, const Attributes& attrs, const Value& body)
 {
     IF_ASSERT_FAILED(!name.contains(' ')) {
     }

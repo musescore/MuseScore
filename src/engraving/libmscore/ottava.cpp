@@ -320,7 +320,7 @@ void Ottava::read(XmlReader& e)
 
 bool Ottava::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "subtype") {
         QString s = e.readElementText();
         bool ok;

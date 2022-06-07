@@ -1197,7 +1197,7 @@ void Slur::write(XmlWriter& xml) const
 
 bool Slur::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "stemArr") {
         _sourceStemArrangement = e.readInt();
         return true;

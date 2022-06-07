@@ -796,9 +796,9 @@ ScoreDiff::ScoreDiff(Score* s1, Score* s2, bool textDiffOnly)
 static void makeDiffs(const QString& mscx1, const QString& mscx2, const XmlWriter& xml1, const XmlWriter& xml2,
                       const std::vector<TextDiff>& textDiffs, std::vector<BaseDiff*>& diffs)
 {
-    auto toElements = [](const std::vector<std::pair<const EngravingObject*, AsciiString> >& els) {
+    auto toElements = [](const std::vector<std::pair<const EngravingObject*, AsciiStringView> >& els) {
         std::vector<std::pair<const EngravingObject*, QString> > qels;
-        for (const std::pair<const EngravingObject*, AsciiString>& p : els) {
+        for (const std::pair<const EngravingObject*, AsciiStringView>& p : els) {
             qels.push_back(std::make_pair(p.first, QString(p.second.ascii())));
         }
         return qels;

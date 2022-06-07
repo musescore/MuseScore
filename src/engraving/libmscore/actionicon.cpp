@@ -88,7 +88,7 @@ void ActionIcon::write(XmlWriter& xml) const
 void ActionIcon::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "action") {
             m_actionCode = e.readElementText().toStdString();
         } else if (tag == "subtype") {

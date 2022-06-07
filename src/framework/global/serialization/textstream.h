@@ -49,7 +49,7 @@ public:
     TextStream& operator<<(const std::string& s);
     TextStream& operator<<(const QString& s);
     TextStream& operator<<(const ByteArray& b);
-    TextStream& operator<<(const AsciiString& s);
+    TextStream& operator<<(const AsciiStringView& s);
     TextStream& operator<<(const String& s);
 
 private:

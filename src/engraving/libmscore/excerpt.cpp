@@ -213,7 +213,7 @@ void Excerpt::read(XmlReader& e)
 {
     const std::vector<Part*>& pl = m_masterScore->parts();
     while (e.readNextStartElement()) {
-        const AsciiString tag = e.name();
+        const AsciiStringView tag = e.name();
         if (tag == "name" || tag == "title") {
             m_name = e.readElementText().trimmed();
         } else if (tag == "part") {

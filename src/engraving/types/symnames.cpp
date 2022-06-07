@@ -28,9 +28,9 @@
 using namespace mu;
 using namespace mu::engraving;
 
-std::map<AsciiString, SymId> SymNames::s_nameToSymIdHash = {};
+std::map<AsciiStringView, SymId> SymNames::s_nameToSymIdHash = {};
 
-AsciiString SymNames::nameForSymId(SymId id)
+AsciiStringView SymNames::nameForSymId(SymId id)
 {
     return s_symNames.at(size_t(id));
 }
@@ -45,7 +45,7 @@ QString SymNames::translatedUserNameForSymId(SymId id)
     return mu::qtrc("symUserNames", userNameForSymId(id));
 }
 
-SymId SymNames::symIdByName(const AsciiString& name, SymId def)
+SymId SymNames::symIdByName(const AsciiStringView& name, SymId def)
 {
     if (s_nameToSymIdHash.empty()) {
         loadNameToSymIdHash();
@@ -56,7 +56,7 @@ SymId SymNames::symIdByName(const AsciiString& name, SymId def)
 SymId SymNames::symIdByName(const QString& name, SymId def)
 {
     QByteArray ba = name.toLatin1();
-    return symIdByName(AsciiString(ba.constData()), def);
+    return symIdByName(AsciiStringView(ba.constData()), def);
 }
 
 SymId SymNames::symIdByOldName(const QString& oldName)
@@ -87,7 +87,7 @@ void SymNames::loadNameToSymIdHash()
     }
 }
 
-constexpr const std::array<AsciiString, size_t(SymId::lastSym) + 1> SymNames::s_symNames { {
+constexpr const std::array<AsciiStringView, size_t(SymId::lastSym) + 1> SymNames::s_symNames { {
     "noSym",
 
     // DO NOT edit the SMuFL standard symbol names (see below) manually!

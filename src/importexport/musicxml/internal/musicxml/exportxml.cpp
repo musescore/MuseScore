@@ -3906,7 +3906,7 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff)
 
     // do not output a "type" element for whole measure rest
     if (d.type() != DurationType::V_MEASURE) {
-        AsciiString s = TConv::toXml(d.type());
+        AsciiStringView s = TConv::toXml(d.type());
         int dots  = rest->dots();
         if (rest->isSmall()) {
             _xml.tag("type", { { "size", "cue" } }, s);
@@ -5019,7 +5019,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
 
 void ExportMusicXml::symbol(Symbol const* const sym, staff_idx_t staff)
 {
-    AsciiString name = SymNames::nameForSymId(sym->sym());
+    AsciiStringView name = SymNames::nameForSymId(sym->sym());
     QString mxmlName = "";
     if (name == "keyboardPedalPed") {
         mxmlName = "pedal type=\"start\"";

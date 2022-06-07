@@ -49,7 +49,7 @@ void XmlWriter::startElementRaw(const QString& s)
     XmlStreamWriter::startElementRaw(s);
 }
 
-void XmlWriter::startElement(const AsciiString& name, const Attributes& attrs)
+void XmlWriter::startElement(const AsciiStringView& name, const Attributes& attrs)
 {
     XmlStreamWriter::startElement(name, attrs);
 }
@@ -59,7 +59,7 @@ void XmlWriter::startElement(const EngravingObject* se, const Attributes& attrs)
     startElement(se->typeName(), se, attrs);
 }
 
-void XmlWriter::startElement(const AsciiString& name, const EngravingObject* se, const Attributes& attrs)
+void XmlWriter::startElement(const AsciiStringView& name, const EngravingObject* se, const Attributes& attrs)
 {
     XmlStreamWriter::startElement(name, attrs);
 
@@ -68,17 +68,17 @@ void XmlWriter::startElement(const AsciiString& name, const EngravingObject* se,
     }
 }
 
-void XmlWriter::tag(const AsciiString& name, const Attributes& attrs)
+void XmlWriter::tag(const AsciiStringView& name, const Attributes& attrs)
 {
     XmlStreamWriter::element(name, attrs);
 }
 
-void XmlWriter::tag(const AsciiString& name, const Value& body)
+void XmlWriter::tag(const AsciiStringView& name, const Value& body)
 {
     XmlStreamWriter::element(name, body);
 }
 
-void XmlWriter::tag(const AsciiString& name, const Value& val, const Value& def)
+void XmlWriter::tag(const AsciiStringView& name, const Value& val, const Value& def)
 {
     if (val == def) {
         return;
@@ -86,7 +86,7 @@ void XmlWriter::tag(const AsciiString& name, const Value& val, const Value& def)
     tag(name, val);
 }
 
-void XmlWriter::tag(const AsciiString& name, const Attributes& attrs, const Value& body)
+void XmlWriter::tag(const AsciiStringView& name, const Attributes& attrs, const Value& body)
 {
     XmlStreamWriter::element(name, attrs, body);
 }
@@ -138,7 +138,7 @@ void XmlWriter::tagProperty(Pid id, const PropertyValue& val, const PropertyValu
     }
 }
 
-void XmlWriter::tagProperty(const AsciiString& name, const PropertyValue& val, const PropertyValue& def)
+void XmlWriter::tagProperty(const AsciiStringView& name, const PropertyValue& val, const PropertyValue& def)
 {
     if (val == def) {
         return;
@@ -147,7 +147,7 @@ void XmlWriter::tagProperty(const AsciiString& name, const PropertyValue& val, c
     tagProperty(name, val.type(), val);
 }
 
-void XmlWriter::tagProperty(const AsciiString& name, P_TYPE type, const PropertyValue& data)
+void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const PropertyValue& data)
 {
     switch (type) {
     case P_TYPE::UNDEFINED:
@@ -297,12 +297,12 @@ void XmlWriter::tagProperty(const AsciiString& name, P_TYPE type, const Property
     }
 }
 
-void XmlWriter::tagPoint(const AsciiString& name, const mu::PointF& p)
+void XmlWriter::tagPoint(const AsciiStringView& name, const mu::PointF& p)
 {
     tag(name, { { "x", p.x() }, { "y", p.y() } });
 }
 
-void XmlWriter::tagFraction(const AsciiString& name, const Fraction& v, const Fraction& def)
+void XmlWriter::tagFraction(const AsciiStringView& name, const Fraction& v, const Fraction& def)
 {
     if (v == def) {
         return;

@@ -471,7 +471,7 @@ void FiguredBassItem::write(XmlWriter& xml) const
 void FiguredBassItem::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
 
         if (tag == "brackets") {
             parenth[0] = (Parenthesis)e.intAttribute("b0");
@@ -1103,7 +1103,7 @@ void FiguredBass::read(XmlReader& e)
     QString normalizedText;
     int idx = 0;
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "ticks") {
             setTicks(e.readFraction());
         } else if (tag == "onNote") {
@@ -1583,7 +1583,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t trac
 bool FiguredBassFont::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
 
         if (tag == "family") {
             family = e.readElementText();
@@ -1623,7 +1623,7 @@ bool FiguredBassFont::read(XmlReader& e)
                 return false;
             }
             while (e.readNextStartElement()) {
-                const AsciiString t(e.name());
+                const AsciiStringView t(e.name());
                 if (t == "simple") {
                     displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SIMPLE)]
                         = e.readElementText()[0];

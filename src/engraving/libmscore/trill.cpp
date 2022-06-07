@@ -407,7 +407,7 @@ void Trill::read(XmlReader& e)
     eraseSpannerSegments();
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             setTrillType(e.readElementText());
         } else if (tag == "Accidental") {

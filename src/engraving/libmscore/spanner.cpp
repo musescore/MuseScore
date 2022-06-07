@@ -1455,7 +1455,7 @@ static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, con
 
 bool Spanner::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     if (e.context()->pasteMode()) {
         if (tag == "ticks_f") {
             setTicks(e.readFraction());

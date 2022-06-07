@@ -49,7 +49,7 @@ bool Read400::read400(Score* score, XmlReader& e, ReadContext& ctx)
 
     if (e.name() == "museScore") {
         while (e.readNextStartElement()) {
-            const AsciiString tag(e.name());
+            const AsciiStringView tag(e.name());
             if (tag == "programVersion") {
                 e.skipCurrentElement();
             } else if (tag == "programRevision") {
@@ -89,7 +89,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
     std::vector<int> sysStaves;
     while (e.readNextStartElement()) {
         e.context()->setTrack(mu::nidx);
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "Staff") {
             StaffRW::readStaff(score, e, ctx);
         } else if (tag == "Omr") {

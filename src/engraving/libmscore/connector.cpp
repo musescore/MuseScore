@@ -382,13 +382,13 @@ void ConnectorInfoWriter::write()
 bool ConnectorInfoReader::read()
 {
     XmlReader& e = *_reader;
-    const AsciiString name(e.asciiAttribute("type"));
+    const AsciiStringView name(e.asciiAttribute("type"));
     _type = Factory::name2type(name);
 
     e.context()->fillLocation(_currentLoc);
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
 
         if (tag == "prev") {
             readEndpointLocation(_prevLoc);
@@ -421,7 +421,7 @@ void ConnectorInfoReader::readEndpointLocation(Location& l)
 {
     XmlReader& e = *_reader;
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "location") {
             l = Location::relative();
             l.read(e);

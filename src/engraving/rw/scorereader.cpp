@@ -210,7 +210,7 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
 Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "programVersion") {
             score->setMscoreVersion(e.readElementText());
         } else if (tag == "programRevision") {

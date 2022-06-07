@@ -101,7 +101,7 @@ using namespace mu::engraving;
 
 struct ElementName {
     ElementType type;
-    AsciiString name;
+    AsciiStringView name;
     const char* userName;
 };
 
@@ -383,7 +383,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     return 0;
 }
 
-EngravingItem* Factory::createItemByName(const AsciiString& name, EngravingItem* parent, bool isAccessibleEnabled)
+EngravingItem* Factory::createItemByName(const AsciiStringView& name, EngravingItem* parent, bool isAccessibleEnabled)
 {
     ElementType type = name2type(name, isAccessibleEnabled);
     if (type == ElementType::INVALID) {
@@ -393,7 +393,7 @@ EngravingItem* Factory::createItemByName(const AsciiString& name, EngravingItem*
     return createItem(type, parent, isAccessibleEnabled);
 }
 
-ElementType Factory::name2type(const AsciiString& name, bool silent)
+ElementType Factory::name2type(const AsciiStringView& name, bool silent)
 {
     for (int i = 0; i < int(ElementType::MAXTYPE); ++i) {
         if (name == elementNames[i].name) {

@@ -141,7 +141,7 @@ void Jump::layout()
 void Jump::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "jumpTo") {
             _jumpTo = e.readElementText();
         } else if (tag == "playUntil") {

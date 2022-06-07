@@ -106,7 +106,7 @@ int MStyle::defaultStyleVersion() const
 
 bool MStyle::readProperties(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
 
     for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
         Sid idx = t.styleIdx();
@@ -176,7 +176,7 @@ bool MStyle::readProperties(XmlReader& e)
 
 bool MStyle::readStyleValCompat(XmlReader& e)
 {
-    const AsciiString tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "tempoOffset") {   // pre-3.0-beta
         const qreal x = e.doubleAttribute("x", 0.0);
         const qreal y = e.doubleAttribute("y", 0.0);
@@ -285,7 +285,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
     TRACEFUNC;
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
 
         if (tag == "TextStyle") {
             //readTextStyle206(this, e);        // obsolete
@@ -344,7 +344,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         }
         P_TYPE type = st.valueType();
         if (P_TYPE::SPATIUM == type) {
-            xml.tag(st.name().toQLatin1String(), value(idx).value<Spatium>().val());
+            xml.tag(st.name(), value(idx).value<Spatium>().val());
         } else if (P_TYPE::DIRECTION_V == type) {
             xml.tag(st.name(), int(value(idx).value<DirectionV>()));
         } else if (P_TYPE::ALIGN == type) {
@@ -360,7 +360,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             if (val.isEnum()) {
                 val = val.value<int>();
             }
-            xml.tagProperty(st.name().toQLatin1String(), val);
+            xml.tagProperty(st.name(), val);
         }
     }
 
@@ -389,7 +389,7 @@ const char* MStyle::valueName(const Sid i)
 Sid MStyle::styleIdx(const QString& name)
 {
     QByteArray ba = name.toLatin1();
-    for (StyleDef::StyleValue st : StyleDef::styleValues) {
+    for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
         if (st.name() == ba.constData()) {
             return st.styleIdx();
         }

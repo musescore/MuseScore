@@ -41,7 +41,7 @@ void PaletteTree::append(PalettePtr palette)
 bool PaletteTree::read(mu::engraving::XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "Palette") {
             PalettePtr p = std::make_shared<Palette>();
             p->read(e);

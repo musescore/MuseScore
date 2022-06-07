@@ -206,7 +206,7 @@ XmlStreamReader::TokenType XmlStreamReader::tokenType() const
     return m_token;
 }
 
-AsciiString XmlStreamReader::tokenString() const
+AsciiStringView XmlStreamReader::tokenString() const
 {
     switch (m_token) {
     case TokenType::NoToken: return "NoToken";
@@ -220,7 +220,7 @@ AsciiString XmlStreamReader::tokenString() const
     case TokenType::DTD: return "DTD";
     case TokenType::Unknown: return "Unknown";
     }
-    return AsciiString();
+    return AsciiStringView();
 }
 
 bool XmlStreamReader::isWhitespace() const
@@ -240,9 +240,9 @@ void XmlStreamReader::skipCurrentElement()
     }
 }
 
-AsciiString XmlStreamReader::name() const
+AsciiStringView XmlStreamReader::name() const
 {
-    return (m_xml->node && m_xml->node->ToElement()) ? m_xml->node->Value() : AsciiString();
+    return (m_xml->node && m_xml->node->ToElement()) ? m_xml->node->Value() : AsciiStringView();
 }
 
 QString XmlStreamReader::attribute(const char* name) const
@@ -258,15 +258,15 @@ QString XmlStreamReader::attribute(const char* name) const
     return e->Attribute(name);
 }
 
-AsciiString XmlStreamReader::asciiAttribute(const char* name) const
+AsciiStringView XmlStreamReader::asciiAttribute(const char* name) const
 {
     if (m_token != TokenType::StartElement) {
-        return AsciiString();
+        return AsciiStringView();
     }
 
     XMLElement* e = m_xml->node->ToElement();
     if (!e) {
-        return AsciiString();
+        return AsciiStringView();
     }
     return e->Attribute(name);
 }
@@ -336,14 +336,14 @@ QString XmlStreamReader::text() const
     return QString();
 }
 
-AsciiString XmlStreamReader::readElementAsciiText()
+AsciiStringView XmlStreamReader::readElementAsciiText()
 {
     if (isStartElement()) {
-        AsciiString result;
+        AsciiStringView result;
         while (1) {
             switch (readNext()) {
             case Characters:
-                result = AsciiString(m_xml->node->Value());
+                result = AsciiStringView(m_xml->node->Value());
                 break;
             case EndElement:
                 return result;
@@ -356,15 +356,15 @@ AsciiString XmlStreamReader::readElementAsciiText()
             }
         }
     }
-    return AsciiString();
+    return AsciiStringView();
 }
 
-AsciiString XmlStreamReader::asciiText() const
+AsciiStringView XmlStreamReader::asciiText() const
 {
     if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {
         return m_xml->node->Value();
     }
-    return AsciiString();
+    return AsciiStringView();
 }
 
 int64_t XmlStreamReader::lineNumber() const

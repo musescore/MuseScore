@@ -445,7 +445,7 @@ void Glissando::read(XmlReader& e)
 
     _showText = false;
     while (e.readNextStartElement()) {
-        const AsciiString tag = e.name();
+        const AsciiStringView tag = e.name();
         if (tag == "text") {
             _showText = true;
             readProperty(e, Pid::GLISS_TEXT);

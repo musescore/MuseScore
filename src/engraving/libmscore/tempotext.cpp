@@ -95,7 +95,7 @@ void TempoText::write(XmlWriter& xml) const
 void TempoText::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "tempo") {
             setTempo(TConv::fromXml(e.readElementAsciiText(), Constants::defaultTempo));
         } else if (tag == "followText") {

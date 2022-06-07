@@ -73,7 +73,7 @@ void PlayTechAnnotation::write(XmlWriter& writer) const
 void PlayTechAnnotation::read(XmlReader& reader)
 {
     while (reader.readNextStartElement()) {
-        const AsciiString tag(reader.name());
+        const AsciiStringView tag(reader.name());
 
         if (readProperty(tag, reader, Pid::PLAY_TECH_TYPE)) {
             continue;

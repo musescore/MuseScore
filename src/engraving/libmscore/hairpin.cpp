@@ -725,7 +725,7 @@ void Hairpin::read(XmlReader& e)
     eraseSpannerSegments();
 
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             setHairpinType(HairpinType(e.readInt()));
         } else if (readStyledProperty(e, tag)) {

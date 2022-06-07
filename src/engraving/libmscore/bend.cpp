@@ -377,7 +377,7 @@ void Bend::write(XmlWriter& xml) const
 void Bend::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
 
         if (readStyledProperty(e, tag)) {
         } else if (tag == "point") {

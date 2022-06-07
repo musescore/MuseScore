@@ -81,7 +81,7 @@ void StringData::read(XmlReader& e)
 {
     stringTable.clear();
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "frets") {
             _frets = e.readInt();
         } else if (tag == "string") {

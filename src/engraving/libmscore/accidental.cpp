@@ -258,7 +258,7 @@ Accidental::Accidental(EngravingItem* parent)
 void Accidental::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const AsciiString tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "bracket") {
             int i = e.readInt();
             if (i == 0 || i == 1 || i == 2) {
@@ -324,7 +324,7 @@ AccidentalVal Accidental::subtype2value(AccidentalType st)
 //   subtype2name
 //---------------------------------------------------------
 
-AsciiString Accidental::subtype2name(AccidentalType st)
+AsciiStringView Accidental::subtype2name(AccidentalType st)
 {
     return SymNames::nameForSymId(accList[int(st)].sym);
 }
@@ -342,7 +342,7 @@ SymId Accidental::subtype2symbol(AccidentalType st)
 //   name2subtype
 //---------------------------------------------------------
 
-AccidentalType Accidental::name2subtype(const AsciiString& tag)
+AccidentalType Accidental::name2subtype(const AsciiStringView& tag)
 {
     SymId symId = SymNames::symIdByName(tag);
     if (symId == SymId::noSym) {
@@ -363,7 +363,7 @@ AccidentalType Accidental::name2subtype(const AsciiString& tag)
 //   setSubtype
 //---------------------------------------------------------
 
-void Accidental::setSubtype(const AsciiString& tag)
+void Accidental::setSubtype(const AsciiStringView& tag)
 {
     setAccidentalType(name2subtype(tag));
 }
