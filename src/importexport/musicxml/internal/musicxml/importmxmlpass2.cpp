@@ -494,7 +494,7 @@ static Instrument createInstrument(const MusicXMLInstrument& mxmlInstr, const In
         instr.setTranspose(Interval());
     } else {
         // set articulations to default (global articulations)
-        instr.setArticulation(articulation);
+        instr.setArticulation(midiArticulations);
         // set default program
         instr.channel(0)->setProgram(mxmlInstr.midiProgram >= 0 ? mxmlInstr.midiProgram : 0);
     }

@@ -109,7 +109,7 @@ public:
     StringData stringData;
 
     std::list<NamedEventList> midiActions;
-    std::vector<MidiArticulation> articulation;
+    std::vector<MidiArticulation> midiArticulations;
     std::vector<InstrChannel> channel;
     std::list<InstrumentGenre*> genres;       //; list of genres this instrument belongs to
     InstrumentFamily* family = nullptr;   //; family the instrument belongs to
@@ -169,7 +169,7 @@ struct InstrumentIndex {
 
 extern std::vector<InstrumentGenre*> instrumentGenres;
 extern std::vector<InstrumentFamily*> instrumentFamilies;
-extern std::vector<MidiArticulation> articulation;
+extern std::vector<MidiArticulation> midiArticulations;
 extern std::vector<InstrumentGroup*> instrumentGroups;
 extern std::vector<ScoreOrder> instrumentOrders;
 extern void clearInstrumentTemplates();
