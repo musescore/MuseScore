@@ -97,6 +97,7 @@ private:
     void changeVoice(int voiceIndex);
 
     void cutSelection();
+    void repeatSelection();
     void addTie();
     void chordTie();
     void addSlur();

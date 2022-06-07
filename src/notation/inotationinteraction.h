@@ -156,6 +156,7 @@ public:
     virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex) = 0;
 
     virtual void copySelection() = 0;
+    virtual mu::Ret repeatSelection() = 0;
     virtual void copyLyrics() = 0;
     virtual void pasteSelection(const Fraction& scale = Fraction(1, 1)) = 0;
     virtual void swapSelection() = 0;
@@ -210,7 +211,6 @@ public:
     virtual void fillSelectionWithSlashes() = 0;
     virtual void replaceSelectedNotesWithSlashes() = 0;
 
-    virtual void repeatSelection() = 0;
     virtual void changeEnharmonicSpelling(bool both) = 0;
     virtual void spellPitches() = 0;
     virtual void regroupNotesAndRests() = 0;
