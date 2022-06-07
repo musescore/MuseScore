@@ -77,13 +77,25 @@ void NotationAccessibility::setMapToScreenFunc(const AccessibleMapToScreenFunc& 
 
 void NotationAccessibility::setEnabled(bool enabled)
 {
-    auto accessibleRootItem = score()->rootItem()->accessible()->accessibleRoot();
-    accessibleRootItem->setEnabled(enabled);
-    updateAccessibleState(accessibleRootItem);
+    std::vector<AccessibleRoot*> roots {
+        score()->rootItem()->accessible()->accessibleRoot(),
+        score()->dummy()->rootItem()->accessible()->accessibleRoot()
+    };
 
-    auto accessibleDummyItem = score()->dummy()->rootItem()->accessible()->accessibleRoot();
-    accessibleDummyItem->setEnabled(enabled);
-    updateAccessibleState(accessibleRootItem);
+    EngravingItem* selectedElement = selection()->element();
+
+    for (AccessibleRoot* root : roots) {
+        root->setEnabled(enabled);
+
+        if (!enabled) {
+            root->setFocusedElement(nullptr);
+            continue;
+        }
+
+        if (selectedElement && selectedElement->accessible()->accessibleRoot() == root) {
+            root->setFocusedElement(selectedElement->accessible());
+        }
+    }
 }
 
 void NotationAccessibility::updateAccessibilityInfo()
@@ -106,21 +118,6 @@ void NotationAccessibility::updateAccessibilityInfo()
     newAccessibilityInfo = newAccessibilityInfo.simplified();
 
     setAccessibilityInfo(newAccessibilityInfo);
-}
-
-void NotationAccessibility::updateAccessibleState(engraving::AccessibleRoot* root)
-{
-    if (!root->enabled()) {
-        root->setFocusedElement(nullptr);
-        return;
-    }
-
-    EngravingItem* element = selection()->element();
-    if (!element) {
-        return;
-    }
-
-    root->setFocusedElement(element->accessible());
 }
 
 void NotationAccessibility::setAccessibilityInfo(const QString& info)
