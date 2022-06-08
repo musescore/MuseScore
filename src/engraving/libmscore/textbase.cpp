@@ -956,13 +956,18 @@ void TextBlock::layout(TextBase* t)
     _lineSpacing *= t->textLineSpacing();
 
     qreal rx = 0;
-    if (t->align() == AlignH::RIGHT) {
-        rx = layoutWidth - _bbox.right();
-    } else if (t->align() == AlignH::HCENTER) {
-        rx = (layoutWidth - (_bbox.left() + _bbox.right())) * .5;
-    } else { // Align::LEFT
+    switch (t->align().horizontal) {
+    case AlignH::LEFT:
         rx = -_bbox.left();
+        break;
+    case AlignH::HCENTER:
+        rx = (layoutWidth - (_bbox.left() + _bbox.right())) * .5;
+        break;
+    case AlignH::RIGHT:
+        rx = layoutWidth - _bbox.right();
+        break;
     }
+
     rx += lm;
     for (TextFragment& f : _fragments) {
         f.pos.rx() += rx;
