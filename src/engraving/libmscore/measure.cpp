@@ -4242,6 +4242,25 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
                 w -= std::max(ns->minHorizontalCollidingDistance(ns->next()), double(score()->styleMM(Sid::clefKeyRightMargin)));
             }
 
+            // Adjust the spacing for cross-staff beams situations
+            if (s->isChordRestType() && ns->isChordRestType()) {
+                CrossStaffContent thisCS = s->crossStaffContent();
+                CrossStaffContent nextCS = ns->crossStaffContent();
+                bool thisIsDown = thisCS.movedDown;
+                bool thisIsUp = thisCS.movedUp;
+                bool nextIsDown = nextCS.movedDown;
+                bool nextIsUp = nextCS.movedUp;
+                double displacement = score()->noteHeadWidth() - score()->styleMM(Sid::stemWidth);
+                if ((thisIsDown && !nextIsDown) || (nextIsUp && !thisIsUp)) {
+                    w += displacement;
+                    _squeezableSpace -= score()->noteHeadWidth();
+                }
+                if ((thisIsUp && !nextIsUp) || (nextIsDown && !thisIsDown)) {
+                    w -= displacement;
+                    _squeezableSpace -= score()->noteHeadWidth();
+                }
+            }
+
             // look back for collisions with previous segments
             // this is time consuming (ca. +5%) and probably requires more optimization
             if (s == fs) {     // don't let the second segment cross measure start (not covered by the loop below)

@@ -57,6 +57,12 @@ class System;
 //   @P tick            int               midi tick position (read only)
 //------------------------------------------------------------------------
 
+struct CrossStaffContent
+{
+    bool movedUp = false;
+    bool movedDown = false;
+};
+
 class Segment final : public EngravingItem
 {
     SegmentType _segmentType { SegmentType::Invalid };
@@ -287,6 +293,7 @@ public:
     bool isMMRestSegment() const;
 
     Fraction shortestChordRest() const;
+    CrossStaffContent crossStaffContent() const;
 
     EngravingItem* preAppendedItem(int track) { return _preAppendedItems[track]; }
     void preAppend(EngravingItem* item, int track) { _preAppendedItems[track] = item; }
