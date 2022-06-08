@@ -31,12 +31,66 @@
 
 using namespace mu;
 
+// Helpers
+
+static int toInt_helper(const char* str, bool* ok, int base)
+{
+    if (!str) {
+        return 0;
+    }
+    const char* currentLoc = setlocale(LC_NUMERIC, "C");
+    char* end = nullptr;
+    long int v = static_cast<int>(std::strtol(str, &end, base));
+    setlocale(LC_NUMERIC, currentLoc);
+    if (ok) {
+        size_t sz = std::strlen(end);
+        *ok = sz != std::strlen(str);
+    }
+    return v;
+}
+
+static double toDouble_helper(const char* str, bool* ok)
+{
+    if (!str) {
+        return 0.0;
+    }
+    const char* currentLoc = setlocale(LC_NUMERIC, "C");
+    char* end = nullptr;
+    double v = std::strtod(str, &end);
+    setlocale(LC_NUMERIC, currentLoc);
+    if (ok) {
+        size_t sz = std::strlen(end);
+        *ok = sz != std::strlen(str);
+    }
+    return v;
+}
+
+static void ltrim_helper(std::u16string& s)
+{
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](char16_t ch) {
+        return !std::isspace(ch);
+    }));
+}
+
+static void rtrim_helper(std::u16string& s)
+{
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](char16_t ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
+static void trim_helper(std::u16string& s)
+{
+    ltrim_helper(s);
+    rtrim_helper(s);
+}
+
 // ============================
 // Char
 // ============================
-char Char::ascii(bool* ok) const
+char Char::toAscii(char16_t c, bool* ok)
 {
-    if (m_ch > 0xff) {
+    if (c > 0xff) {
         if (ok) {
             *ok = false;
         }
@@ -45,8 +99,18 @@ char Char::ascii(bool* ok) const
         if (ok) {
             *ok = true;
         }
-        return static_cast<char>(m_ch);
+        return static_cast<char>(c);
     }
+}
+
+char16_t Char::fromAscii(char c)
+{
+    return static_cast<char16_t>(c);
+}
+
+char Char::toAscii(bool* ok) const
+{
+    return toAscii(m_ch);
 }
 
 // ============================
@@ -76,6 +140,12 @@ String::String(const char16_t* str)
     m_data = std::make_shared<std::u16string>(str);
 }
 
+String::String(const Char& ch)
+{
+    m_data = std::make_shared<std::u16string>();
+    *m_data.get() += ch.unicode();
+}
+
 const std::u16string& String::constStr() const
 {
     return *m_data.get();
@@ -85,6 +155,25 @@ std::u16string& String::mutStr()
 {
     detach();
     return *m_data.get();
+}
+
+void String::reserve(size_t i)
+{
+    mutStr().reserve(i);
+}
+
+bool String::operator ==(const AsciiStringView& s) const
+{
+    if (size() != s.size()) {
+        return false;
+    }
+
+    for (size_t i = 0; i < s.size(); ++i) {
+        if (at(i).toAscii() != s.at(i).ascii()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void String::detach()
@@ -106,15 +195,33 @@ String& String::operator=(const char16_t* str)
     return *this;
 }
 
-String& String::operator +=(const String& s)
+String& String::operator +=(const char16_t* s)
+{
+    mutStr() += s;
+    return *this;
+}
+
+String& String::append(Char ch)
+{
+    mutStr() += ch.unicode();
+    return *this;
+}
+
+String& String::append(const String& s)
 {
     mutStr() += s.constStr();
     return *this;
 }
 
-String& String::operator +=(const char16_t* s)
+String& String::prepend(Char ch)
 {
-    mutStr() += s;
+    mutStr() = ch.unicode() + constStr();
+    return *this;
+}
+
+String& String::prepend(const String& s)
+{
+    mutStr() = s.constStr() + constStr();
     return *this;
 }
 
@@ -132,6 +239,18 @@ ByteArray String::toUtf8() const
     return ByteArray(reinterpret_cast<const uint8_t*>(str.c_str()), str.size());
 }
 
+String String::fromAscii(const char* str)
+{
+    size_t sz = std::strlen(str);
+    String s;
+    s.m_data->resize(sz);
+    std::u16string& data = *s.m_data.get();
+    for (size_t i = 0; i < sz; ++i) {
+        data[i] = Char::fromAscii(str[i]);
+    }
+    return s;
+}
+
 ByteArray String::toAscii(bool* ok) const
 {
     ByteArray ba;
@@ -143,7 +262,7 @@ ByteArray String::toAscii(bool* ok) const
 
     for (size_t i = 0; i < size(); ++i) {
         bool cok = false;
-        char ch = Char(m_data->at(i)).ascii(&cok);
+        char ch = Char::toAscii(m_data->at(i), &cok);
         if (!cok && ok) {
             *ok = false;
         }
@@ -194,6 +313,11 @@ bool String::empty() const
     return m_data->empty();
 }
 
+void String::clear()
+{
+    m_data->clear();
+}
+
 Char String::at(size_t i) const
 {
     IF_ASSERT_FAILED(i < size()) {
@@ -214,12 +338,12 @@ bool String::startsWith(const AsciiStringView& str, CaseSensitivity cs) const
     }
 
     for (size_t i = 0; i < str.size(); ++i) {
-        if (Char(m_data->at(i)).ascii() == str.at(i).ascii()) {
+        if (Char(m_data->at(i)).toAscii() == str.at(i).ascii()) {
             continue;
         }
 
         if (cs == CaseInsensitive) {
-            if (AsciiChar::toLower(Char(m_data->at(i)).ascii()) == AsciiChar::toLower(str.at(i).ascii())) {
+            if (AsciiChar::toLower(Char(m_data->at(i)).toAscii()) == AsciiChar::toLower(str.at(i).ascii())) {
                 continue;
             }
         }
@@ -238,12 +362,12 @@ bool String::endsWith(const AsciiStringView& str, CaseSensitivity cs) const
 
     size_t start = size() - str.size();
     for (size_t i = 0; i < str.size(); ++i) {
-        if (Char(m_data->at(start + i)).ascii() == str.at(i).ascii()) {
+        if (Char(m_data->at(start + i)).toAscii() == str.at(i).ascii()) {
             continue;
         }
 
         if (cs == CaseInsensitive) {
-            if (AsciiChar::toLower(Char(m_data->at(start + i)).ascii()) == AsciiChar::toLower(str.at(i).ascii())) {
+            if (AsciiChar::toLower(Char(m_data->at(start + i)).toAscii()) == AsciiChar::toLower(str.at(i).ascii())) {
                 continue;
             }
         }
@@ -286,6 +410,61 @@ String String::mid(size_t pos, size_t count) const
     String s;
     s.mutStr() = constStr().substr(pos, count);
     return s;
+}
+
+String String::trimmed() const
+{
+    String s = *this;
+    trim_helper(s.mutStr());
+    return s;
+}
+
+String String::toXmlEscaped(char16_t c)
+{
+    switch (c) {
+    case u'<':
+        return String(u"&lt;");
+    case u'>':
+        return String(u"&gt;");
+    case u'&':
+        return String(u"&amp;");
+    case u'\"':
+        return String(u"&quot;");
+    default:
+        // ignore invalid characters in xml 1.0
+        if ((c < 0x0020 && c != 0x0009 && c != 0x000A && c != 0x000D)) {
+            return String();
+        }
+        return String(Char(c));
+    }
+}
+
+String String::toXmlEscaped(const String& s)
+{
+    String escaped;
+    escaped.reserve(s.size());
+    for (size_t i = 0; i < s.size(); ++i) {
+        char16_t c = s.at(i).unicode();
+        escaped += toXmlEscaped(c);
+    }
+    return escaped;
+}
+
+String String::toXmlEscaped() const
+{
+    return toXmlEscaped(*this);
+}
+
+int String::toInt(bool* ok, int base) const
+{
+    ByteArray ba = toUtf8();
+    return toInt_helper(ba.constChar(), ok, base);
+}
+
+double String::toDouble(bool* ok) const
+{
+    ByteArray ba = toUtf8();
+    return toDouble_helper(ba.constChar(), ok);
 }
 
 // ============================
@@ -338,28 +517,12 @@ bool AsciiStringView::contains(char ch) const
     return false;
 }
 
-int AsciiStringView::toInt(bool* ok) const
+int AsciiStringView::toInt(bool* ok, int base) const
 {
-    const char* currentLoc = setlocale(LC_NUMERIC, "C");
-    char* end = nullptr;
-    long int v = static_cast<int>(std::strtol(m_data, &end, 10));
-    setlocale(LC_NUMERIC, currentLoc);
-    if (ok) {
-        size_t sz = std::strlen(end);
-        *ok = sz != m_size;
-    }
-    return v;
+    return toInt_helper(m_data, ok, base);
 }
 
 double AsciiStringView::toDouble(bool* ok) const
 {
-    const char* currentLoc = setlocale(LC_NUMERIC, "C");
-    char* end = nullptr;
-    double v = std::strtod(m_data, &end);
-    setlocale(LC_NUMERIC, currentLoc);
-    if (ok) {
-        size_t sz = std::strlen(end);
-        *ok = sz != m_size;
-    }
-    return v;
+    return toDouble_helper(m_data, ok);
 }

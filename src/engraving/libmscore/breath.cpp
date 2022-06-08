@@ -131,7 +131,7 @@ void Breath::read(XmlReader& e)
                 break;
             }
         } else if (tag == "symbol") {
-            _symId = SymNames::symIdByName(e.readElementAsciiText());
+            _symId = SymNames::symIdByName(e.readAsciiText());
         } else if (tag == "pause") {
             _pause = e.readDouble();
         } else if (!EngravingItem::readProperties(e)) {

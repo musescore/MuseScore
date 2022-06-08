@@ -107,6 +107,17 @@ TEST_F(Global_Types_StringTests, String_Convert)
         //! CHECK
         EXPECT_EQ(sstr, sstr_origin);
     }
+
+    {
+        //! GIVEN Some ASCII string
+        AsciiStringView ascii = "123abc";
+        //! DO
+        String str = String::fromAscii(ascii.ascii());
+        //! CHECK
+        EXPECT_EQ(str.size(), 6);
+        EXPECT_EQ(str.at(0), u'1');
+        EXPECT_EQ(str.at(3), u'a');
+    }
 }
 
 TEST_F(Global_Types_StringTests, String_Compare)
@@ -236,6 +247,36 @@ TEST_F(Global_Types_StringTests, String_SubStr)
         String newStr = str.mid(2);
         //! CHECK
         EXPECT_EQ(newStr, u"3abc");
+    }
+}
+
+TEST_F(Global_Types_StringTests, String_Trimmed)
+{
+    {
+        //! GIVEN Some String
+        String str = u" 123abc";
+        //! DO
+        String newStr = str.trimmed();
+        //! CHECK
+        EXPECT_EQ(newStr, u"123abc");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"123abc ";
+        //! DO
+        String newStr = str.trimmed();
+        //! CHECK
+        EXPECT_EQ(newStr, u"123abc");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"  123abc  ";
+        //! DO
+        String newStr = str.trimmed();
+        //! CHECK
+        EXPECT_EQ(newStr, u"123abc");
     }
 }
 

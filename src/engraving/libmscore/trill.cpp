@@ -409,7 +409,7 @@ void Trill::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            setTrillType(e.readElementText());
+            setTrillType(e.readText());
         } else if (tag == "Accidental") {
             _accidental = Factory::createAccidental(this);
             _accidental->read(e);

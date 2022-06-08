@@ -44,12 +44,12 @@ void PageFormat::read206(XmlReader& e)
 {
     qreal _oddRightMargin  = 0.0;
     qreal _evenRightMargin = 0.0;
-    QString type;
+    AsciiStringView type;
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "page-margins") {
-            type = e.attribute("type", "both");
+            type = e.asciiAttribute("type", "both");
             qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());

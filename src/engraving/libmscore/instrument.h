@@ -84,8 +84,8 @@ public:
 //---------------------------------------------------------
 
 struct NamedEventList {
-    QString name;
-    QString descr;
+    String name;
+    String descr;
     std::vector<MidiCoreEvent> events;
 
     void write(XmlWriter&, const AsciiStringView& name) const;

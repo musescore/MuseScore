@@ -322,7 +322,7 @@ bool Ottava::readProperties(XmlReader& e)
 {
     const AsciiStringView tag(e.name());
     if (tag == "subtype") {
-        QString s = e.readElementText();
+        QString s = e.readText();
         bool ok;
         int idx = s.toInt(&ok);
         if (!ok) {

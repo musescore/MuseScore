@@ -25,6 +25,7 @@
 #include "draw/brush.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "factory.h"
 #include "utils.h"
@@ -561,27 +562,6 @@ void Bracket::setSelected(bool f)
 }
 
 //---------------------------------------------------------
-//   Bracket::bracketTypeName
-//---------------------------------------------------------
-
-const char* Bracket::bracketTypeName(BracketType type)
-{
-    switch (type) {
-    case BracketType::BRACE:
-        return "Brace";
-    case BracketType::NORMAL:
-        return "Normal";
-    case BracketType::SQUARE:
-        return "Square";
-    case BracketType::LINE:
-        return "Line";
-    case BracketType::NO_BRACKET:
-        return "NoBracket";
-    }
-    Q_UNREACHABLE();
-}
-
-//---------------------------------------------------------
 //   Bracket::write
 //    used only for palettes
 //---------------------------------------------------------
@@ -594,8 +574,7 @@ void Bracket::write(XmlWriter& xml) const
     case BracketType::SQUARE:
     case BracketType::LINE:
     {
-        const char* type = bracketTypeName(_bi->bracketType());
-        xml.startElement(this, { { "type", type } });
+        xml.startElement(this, { { "type", TConv::toXml(_bi->bracketType()) } });
         isStartTag = true;
     }
     break;
@@ -625,22 +604,8 @@ void Bracket::write(XmlWriter& xml) const
 
 void Bracket::read(XmlReader& e)
 {
-    QString t(e.attribute("type", "Normal"));
     _bi = Factory::createBracketItem(score()->dummy());
-
-    if (t == "Normal") {
-        _bi->setBracketType(BracketType::NORMAL);
-    } else if (t == "Akkolade") { //compatibility, not used anymore
-        _bi->setBracketType(BracketType::BRACE);
-    } else if (t == "Brace") {
-        _bi->setBracketType(BracketType::BRACE);
-    } else if (t == "Square") {
-        _bi->setBracketType(BracketType::SQUARE);
-    } else if (t == "Line") {
-        _bi->setBracketType(BracketType::LINE);
-    } else {
-        LOGD("unknown brace type <%s>", qPrintable(t));
-    }
+    _bi->setBracketType(TConv::fromXml(e.asciiAttribute("type"), BracketType::NORMAL));
 
     while (e.readNextStartElement()) {
         if (e.name() == "level") {

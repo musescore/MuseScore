@@ -61,10 +61,9 @@ public:
 
     void comment(const String& text);
 
-    static QString escapeSymbol(ushort c);
+    static String escapeSymbol(char16_t c);
     static String escapeString(const AsciiStringView& s);
     static String escapeString(const String& s);
-    static QString escapeString(const QString& s);
 
 protected:
     void startElementRaw(const QString& name);

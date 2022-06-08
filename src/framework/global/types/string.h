@@ -45,16 +45,18 @@ struct AsciiChar
 public:
     AsciiChar() = default;
     explicit AsciiChar(char c)
-        : ch(c) {}
+        : m_ch(c) {}
 
-    inline char ascii() const noexcept { return ch; }
-    inline char16_t unicode() const noexcept { return char16_t(ch); }
+    inline char ascii() const noexcept { return m_ch; }
+    inline char16_t unicode() const noexcept { return char16_t(m_ch); }
+    inline char toLower() const { return toLower(m_ch); }
+    inline char toUpper() const { return toUpper(m_ch); }
 
     static char toLower(char ch);
     static char toUpper(char ch);
 
 private:
-    char ch = 0;
+    char m_ch = 0;
 };
 
 // ============================
@@ -78,7 +80,10 @@ public:
     inline bool operator !=(AsciiChar c) const { return !operator ==(c); }
 
     inline char16_t unicode() const { return m_ch; }
-    inline char ascii(bool* ok = nullptr) const;
+    inline char toAscii(bool* ok = nullptr) const;
+
+    static char toAscii(char16_t c, bool* ok = nullptr);
+    static char16_t fromAscii(char c);
 
 private:
     char16_t m_ch = 0;
@@ -106,19 +111,40 @@ public:
     static const size_t npos = static_cast<size_t>(-1);
 
     String();
-
     String(const char16_t* str);
+    String(const Char& ch);
+
     String& operator=(const char16_t* str);
+    void reserve(size_t i);
+
+    operator QString() const {
+        return this->toQString();
+    }
 
     inline bool operator ==(const String& s) const { return constStr() == s.constStr(); }
     inline bool operator !=(const String& s) const { return !operator ==(s); }
+    bool operator ==(const AsciiStringView& s) const;
+    inline bool operator !=(const AsciiStringView& s) const { return !operator ==(s); }
+
     inline bool operator <(const String& s) const { return constStr() < s.constStr(); }
 
-    String& operator +=(const String& s);
+    inline String& operator +=(const String& s) { return append(s); }
     String& operator +=(const char16_t* s);
+    inline String& operator +=(char16_t s) { return append(s); }
+
+    inline String operator+(const mu::String& s) const { mu::String t(*this); t += s; return t; }
+    inline String operator+(const char16_t* s) const { mu::String t(*this); t += s; return t; }
+    inline String operator+(char16_t s) const { mu::String t(*this); t += s; return t; }
+
+    String& append(Char ch);
+    String& append(const String& s);
+    String& prepend(Char ch);
+    String& prepend(const String& s);
 
     static String fromUtf8(const char* str);
     ByteArray toUtf8() const;
+
+    static String fromAscii(const char* str);
     ByteArray toAscii(bool* ok = nullptr) const;
 
     static String fromStdString(const std::string& str);
@@ -133,6 +159,8 @@ public:
 
     size_t size() const;
     bool empty() const;
+    inline bool isEmpty() const { return empty(); }
+    void clear();
     Char at(size_t i) const;
     bool contains(const Char& ch) const;
 
@@ -144,6 +172,13 @@ public:
     String& replace(const String& before, const String& after);
 
     String mid(size_t pos, size_t count = npos) const;
+    String trimmed() const;
+    String toXmlEscaped() const;
+    static String toXmlEscaped(const String& str);
+    static String toXmlEscaped(char16_t c);
+
+    int toInt(bool* ok = nullptr, int base = 10) const;
+    double toDouble(bool* ok = nullptr) const;
 
 private:
     const std::u16string& constStr() const;
@@ -205,13 +240,16 @@ public:
     AsciiChar at(size_t i) const;
     bool contains(char ch) const;
 
-    int toInt(bool* ok = nullptr) const;
+    int toInt(bool* ok = nullptr, int base = 10) const;
     double toDouble(bool* ok = nullptr) const;
 
 private:
     size_t m_size = 0;
     const char* m_data = nullptr;
 };
+
+inline String operator+(char16_t s1, const String& s2) { String t(s1); t += s2; return t; }
+inline String operator+(const char16_t* s1, const String& s2) { String t(s1); t += s2; return t; }
 }
 
 // ============================
@@ -219,9 +257,6 @@ private:
 // ============================
 inline bool operator ==(const char16_t* s1, const mu::String& s2) { return s2 == s1; }
 inline bool operator !=(const char16_t* s1, const mu::String& s2) { return s2 != s1; }
-inline const mu::String operator+(const mu::String& s1, const mu::String& s2) { mu::String t(s1); t += s2; return t; }
-inline const mu::String operator+(const mu::String& s1, const char16_t* s2) { mu::String t(s1); t += s2; return t; }
-inline const mu::String operator+(const char16_t* s1, const mu::String& s2) { mu::String t(s1); t += s2; return t; }
 
 inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::String& str)
 {

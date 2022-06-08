@@ -56,7 +56,7 @@ void Text::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "style") {
-            TextStyleType s = TConv::fromXml(e.readElementAsciiText(), TextStyleType::DEFAULT);
+            TextStyleType s = TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT);
             if (TextStyleType::TUPLET == s) {  // ugly hack for compatibility
                 continue;
             }

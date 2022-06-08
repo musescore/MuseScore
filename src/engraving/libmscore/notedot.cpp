@@ -94,9 +94,9 @@ void NoteDot::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "name") {      // obsolete
-            e.readElementText();
+            e.readText();
         } else if (e.name() == "subtype") {     // obsolete
-            e.readElementText();
+            e.readText();
         } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }

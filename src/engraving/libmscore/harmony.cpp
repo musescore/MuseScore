@@ -362,13 +362,13 @@ void Harmony::read(XmlReader& e)
         } else if (tag == "extension") {
             setId(e.readInt());
         } else if (tag == "name") {
-            _textName = e.readElementText();
+            _textName = e.readText();
         } else if (tag == "root") {
             setRootTpc(e.readInt());
         } else if (tag == "rootCase") {
             _rootCase = static_cast<NoteCaseType>(e.readInt());
         } else if (tag == "function") {
-            _function = e.readElementText();
+            _function = e.readText();
         } else if (tag == "degree") {
             int degreeValue = 0;
             int degreeAlter = 0;
@@ -380,7 +380,7 @@ void Harmony::read(XmlReader& e)
                 } else if (t == "degree-alter") {
                     degreeAlter = e.readInt();
                 } else if (t == "degree-type") {
-                    degreeType = e.readElementText();
+                    degreeType = e.readText();
                 } else {
                     e.unknown();
                 }

@@ -140,7 +140,7 @@ bool Lyrics::readProperties(XmlReader& e)
     if (tag == "no") {
         _no = e.readInt();
     } else if (tag == "syllabic") {
-        QString val(e.readElementText());
+        QString val(e.readText());
         if (val == "single") {
             _syllabic = Syllabic::SINGLE;
         } else if (val == "begin") {

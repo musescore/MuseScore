@@ -66,7 +66,7 @@ void SynthesizerState::read(XmlReader& e)
         while (e.readNextStartElement()) {
             if (e.name() == "val") {
                 int id = e.intAttribute("id");
-                group.push_back(IdValue(id, e.readElementText()));
+                group.push_back(IdValue(id, e.readText()));
             } else {
                 e.unknown();
             }

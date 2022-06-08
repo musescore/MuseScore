@@ -734,7 +734,7 @@ void Hairpin::read(XmlReader& e)
         } else if (tag == "veloChange") {
             _veloChange = e.readInt();
         } else if (tag == "dynType") {
-            _dynRange = TConv::fromXml(e.readElementAsciiText(), DynamicRange::STAFF);
+            _dynRange = TConv::fromXml(e.readAsciiText(), DynamicRange::STAFF);
         } else if (tag == "useTextLine") {        // obsolete
             e.readInt();
             if (hairpinType() == HairpinType::CRESC_HAIRPIN) {
@@ -745,7 +745,7 @@ void Hairpin::read(XmlReader& e)
         } else if (tag == "singleNoteDynamics") {
             _singleNoteDynamics = e.readBool();
         } else if (tag == "veloChangeMethod") {
-            _veloChangeMethod = TConv::fromXml(e.readElementAsciiText(), ChangeMethod::NORMAL);
+            _veloChangeMethod = TConv::fromXml(e.readAsciiText(), ChangeMethod::NORMAL);
         } else if (!TextLineBase::readProperties(e)) {
             e.unknown();
         }

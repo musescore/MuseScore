@@ -42,7 +42,7 @@ void Audio::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "path") {
-            _path = e.readElementText();
+            _path = e.readText();
         } else {
             e.unknown();
         }

@@ -115,7 +115,7 @@ void ScoreOrder::readInstrument(XmlReader& reader)
         if (reader.name() == "family") {
             InstrumentOverwrite io;
             io.id = reader.attribute("id");
-            io.name = qtrc("OrderXML", reader.readElementText().toUtf8().data());
+            io.name = qtrc("OrderXML", reader.readText());
             instrumentMap.insert({ instrumentId, io });
         } else {
             reader.unknown();
@@ -151,7 +151,7 @@ void ScoreOrder::readSection(XmlReader& reader)
     while (reader.readNextStartElement()) {
         if (reader.name() == "family") {
             ScoreGroup sg;
-            sg.family = reader.readElementText().toUtf8().data();
+            sg.family = reader.readText();
             sg.section = sectionId;
             sg.bracket = true;
             sg.barLineSpan = barLineSpan;
@@ -200,7 +200,7 @@ bool ScoreOrder::hasGroup(const QString& familyId, const QString& group) const
 
 bool ScoreOrder::isValid() const
 {
-    return !id.isEmpty();
+    return !id.empty();
 }
 
 //---------------------------------------------------------
@@ -209,16 +209,16 @@ bool ScoreOrder::isValid() const
 
 bool ScoreOrder::isCustom() const
 {
-    return id == QString("custom");
+    return id == String(u"custom");
 }
 
 //---------------------------------------------------------
 //   getName
 //---------------------------------------------------------
 
-QString ScoreOrder::getName() const
+String ScoreOrder::getName() const
 {
-    return customized ? qtrc("OrderXML", "%1 (Customized)").arg(name) : name;
+    return customized ? String::fromQString(qtrc("OrderXML", "%1 (Customized)").arg(name)) : name;
 }
 
 //---------------------------------------------------------
@@ -292,7 +292,7 @@ ScoreGroup ScoreOrder::getGroup(const QString family, const QString instrumentGr
 //   instrumentSortingIndex
 //---------------------------------------------------------
 
-int ScoreOrder::instrumentSortingIndex(const QString& instrumentId, bool isSoloist) const
+int ScoreOrder::instrumentSortingIndex(const String& instrumentId, bool isSoloist) const
 {
     static const QString SoloistsGroup("<soloists>");
     static const QString UnsortedGroup("<unsorted>");
@@ -310,7 +310,7 @@ int ScoreOrder::instrumentSortingIndex(const QString& instrumentId, bool isSoloi
         return 0;
     }
 
-    QString family = mu::contains(instrumentMap, instrumentId) ? instrumentMap.at(instrumentId).id : ii.instrTemplate->familyId();
+    String family = mu::contains(instrumentMap, instrumentId) ? instrumentMap.at(instrumentId).id : ii.instrTemplate->familyId();
 
     size_t index = groups.size();
 
@@ -479,14 +479,14 @@ void ScoreOrder::read(XmlReader& reader)
     const QString sectionId { "" };
     while (reader.readNextStartElement()) {
         if (reader.name() == "name") {
-            name = qtrc("OrderXML", reader.readElementText().toUtf8().data());
+            name = qtrc("OrderXML", reader.readText());
         } else if (reader.name() == "section") {
             readSection(reader);
         } else if (reader.name() == "instrument") {
             readInstrument(reader);
         } else if (reader.name() == "family") {
             ScoreGroup sg;
-            sg.family = reader.readElementText().toUtf8().data();
+            sg.family = reader.readText();
             sg.section = sectionId;
             sg.bracket = false;
             sg.barLineSpan = false;

@@ -1339,3 +1339,56 @@ BarLineType TConv::fromXml(const AsciiStringView& tag, BarLineType def)
 
     return def;
 }
+
+static const std::vector<Item<TremoloType> > TREMOLO_TYPES = {
+    { TremoloType::R8, "r8" },
+    { TremoloType::R16, "r16" },
+    { TremoloType::R32, "r32" },
+    { TremoloType::R64, "r64" },
+    { TremoloType::C8, "c8" },
+    { TremoloType::C16, "c16" },
+    { TremoloType::C32, "c32" },
+    { TremoloType::C64, "c64" },
+    { TremoloType::BUZZ_ROLL, "buzzroll" },
+};
+
+AsciiStringView TConv::toXml(TremoloType v)
+{
+    return findXmlTagByType<TremoloType>(TREMOLO_TYPES, v);
+}
+
+TremoloType TConv::fromXml(const AsciiStringView& tag, TremoloType def)
+{
+    return findTypeByXmlTag<TremoloType>(TREMOLO_TYPES, tag, def);
+}
+
+static const std::vector<Item<BracketType> > BRACKET_TYPES = {
+    { BracketType::NORMAL, "Normal" },
+    { BracketType::BRACE, "Brace" },
+    { BracketType::SQUARE, "Square" },
+    { BracketType::LINE, "Line" },
+    { BracketType::NO_BRACKET, "NoBracket" }
+};
+
+AsciiStringView TConv::toXml(BracketType v)
+{
+    return findXmlTagByType<BracketType>(BRACKET_TYPES, v);
+}
+
+BracketType TConv::fromXml(const AsciiStringView& tag, BracketType def)
+{
+    auto it = std::find_if(BRACKET_TYPES.cbegin(), BRACKET_TYPES.cend(), [tag](const Item<BracketType>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != BRACKET_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+    if (tag == "Akkolade") {
+        return BracketType::BRACE;
+    }
+
+    return def;
+}

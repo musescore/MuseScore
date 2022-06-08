@@ -72,7 +72,7 @@ private:
 
     void loadOrders();
 
-    int resolveInstrumentSequenceNumber(const QString& instrumentId) const;
+    int resolveInstrumentSequenceNumber(const String& instrumentId) const;
     void updateInstrumentsOrder();
     void sortInstruments(ItemList& instruments);
     void insertInstrument(ItemList& instruments, InstrumentItem* newInstrument);

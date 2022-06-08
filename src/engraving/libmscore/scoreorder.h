@@ -50,8 +50,8 @@ struct ScoreGroup
 
 struct InstrumentOverwrite
 {
-    QString id;
-    QString name;
+    String id;
+    String name;
 };
 
 //---------------------------------------------------------
@@ -60,9 +60,9 @@ struct InstrumentOverwrite
 
 struct ScoreOrder
 {
-    QString id { QString() };
-    QString name { QString() };
-    std::map<QString, InstrumentOverwrite> instrumentMap;
+    String id;
+    String name;
+    std::map<String, InstrumentOverwrite> instrumentMap;
     std::vector<ScoreGroup> groups;
     bool customized = false;
 
@@ -80,11 +80,11 @@ struct ScoreOrder
 
     bool isValid() const;
     bool isCustom() const;
-    QString getName() const;
+    String getName() const;
     QString getFamilyName(const InstrumentTemplate* instrTemplate, bool soloist) const;
     ScoreGroup newUnsortedGroup(const QString group, const QString section) const;
     ScoreGroup getGroup(const QString family, const QString instrumentGroup) const;
-    int instrumentSortingIndex(const QString& instrumentId, bool isSoloist) const;
+    int instrumentSortingIndex(const String& instrumentId, bool isSoloist) const;
     bool isScoreOrder(const std::list<int>& indices) const;
     bool isScoreOrder(const Score* score) const;
 

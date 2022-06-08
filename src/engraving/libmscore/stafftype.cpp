@@ -368,7 +368,7 @@ void StaffType::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            setXmlName(e.readElementText());
+            setXmlName(e.readText());
         } else if (tag == "lines") {
             setLines(e.readInt());
         } else if (tag == "lineDistance") {
@@ -393,7 +393,7 @@ void StaffType::read(XmlReader& e)
         } else if (tag == "timesig") {
             setGenTimesig(e.readInt());
         } else if (tag == "noteheadScheme") {
-            setNoteHeadScheme(TConv::fromXml(e.readElementAsciiText(), NoteHeadScheme::HEAD_NORMAL));
+            setNoteHeadScheme(TConv::fromXml(e.readAsciiText(), NoteHeadScheme::HEAD_NORMAL));
         } else if (tag == "keysig") {
             _genKeysig = e.readInt();
         } else if (tag == "ledgerlines") {
@@ -405,13 +405,13 @@ void StaffType::read(XmlReader& e)
         } else if (tag == "durations") {
             setGenDurations(e.readBool());
         } else if (tag == "durationFontName") {
-            setDurationFontName(e.readElementText());
+            setDurationFontName(e.readText());
         } else if (tag == "durationFontSize") {
             setDurationFontSize(e.readDouble());
         } else if (tag == "durationFontY") {
             setDurationFontUserY(e.readDouble());
         } else if (tag == "fretFontName") {
-            setFretFontName(e.readElementText());
+            setFretFontName(e.readText());
         } else if (tag == "fretFontSize") {
             setFretFontSize(e.readDouble());
         } else if (tag == "fretFontY") {
@@ -1082,9 +1082,9 @@ bool TablatureFretFont::read(XmlReader& e)
         int val = e.intAttribute("value");
 
         if (tag == "family") {
-            family = e.readElementText();
+            family = e.readText();
         } else if (tag == "displayName") {
-            displayName = e.readElementText();
+            displayName = e.readText();
         } else if (tag == "defaultPitch") {
             defPitch = e.readDouble();
         } else if (tag == "defaultYOffset") {
@@ -1092,7 +1092,7 @@ bool TablatureFretFont::read(XmlReader& e)
         } else if (tag == "mark") {
             QString sval = e.attribute("value");
             int num  = e.intAttribute("number", 1);
-            QString txt(e.readElementText());
+            QString txt(e.readText());
             if (sval.size() < 1) {
                 return false;
             }
@@ -1112,7 +1112,7 @@ bool TablatureFretFont::read(XmlReader& e)
             }
         } else if (tag == "fret") {
             bool bLetter = e.intAttribute("letter");
-            QString txt(e.readElementText());
+            QString txt(e.readText());
             if (bLetter) {
                 if (val >= 0 && val < NUM_OF_LETTERFRETS) {
                     displayLetter[val] = txt[0];
@@ -1136,9 +1136,9 @@ bool TablatureDurationFont::read(XmlReader& e)
         const AsciiStringView tag(e.name());
 
         if (tag == "family") {
-            family = e.readElementText();
+            family = e.readText();
         } else if (tag == "displayName") {
-            displayName = e.readElementText();
+            displayName = e.readText();
         } else if (tag == "defaultPitch") {
             defPitch = e.readDouble();
         } else if (tag == "defaultYOffset") {
@@ -1150,7 +1150,7 @@ bool TablatureDurationFont::read(XmlReader& e)
         } else if (tag == "stemWidth") {
             gridStemWidth = e.readDouble();
         } else if (tag == "zeroBeamValue") {
-            QString val(e.readElementText());
+            QString val(e.readText());
             if (val == "longa") {
                 zeroBeamLevel = DurationType::V_LONG;
             } else if (val == "brevis") {
@@ -1182,7 +1182,7 @@ bool TablatureDurationFont::read(XmlReader& e)
             }
         } else if (tag == "duration") {
             QString val = e.attribute("value");
-            QString txt(e.readElementText());
+            QString txt(e.readText());
             QChar chr = txt[0];
             if (val == "longa") {
                 displayValue[int(TabVal::VAL_LONGA)] = chr;

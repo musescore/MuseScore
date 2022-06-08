@@ -3274,7 +3274,7 @@ QString Note::accessibleInfo() const
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
+        pitchName = qtrc("drumset", drumset->name(pitch()));
     } else if (staff()->isTabStaff(tick())) {
         pitchName
             = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false), QString::number(string() + 1), QString::number(fret()));
@@ -3301,7 +3301,7 @@ QString Note::screenReaderInfo() const
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         pitchName = chord()->noStem() ? QObject::tr("Beat Slash") : QObject::tr("Rhythm Slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
+        pitchName = qtrc("drumset", drumset->name(pitch()));
     } else if (staff()->isTabStaff(tick())) {
         pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(true), QString::number(string() + 1), QString::number(fret()));
     } else {

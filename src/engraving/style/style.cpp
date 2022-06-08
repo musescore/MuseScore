@@ -113,35 +113,35 @@ bool MStyle::readProperties(XmlReader& e)
         if (t.name() == tag) {
             P_TYPE type = t.valueType();
             if (P_TYPE::SPATIUM == type) {
-                set(idx, Spatium(e.readElementText().toDouble()));
+                set(idx, Spatium(e.readDouble()));
             } else if (P_TYPE::REAL == type) {
-                set(idx, e.readElementText().toDouble());
+                set(idx, e.readDouble());
             } else if (P_TYPE::BOOL == type) {
-                set(idx, bool(e.readElementText().toInt()));
+                set(idx, bool(e.readInt()));
             } else if (P_TYPE::INT == type) {
-                set(idx, e.readElementText().toInt());
+                set(idx, e.readInt());
             } else if (P_TYPE::DIRECTION_V == type) {
-                set(idx, DirectionV(e.readElementText().toInt()));
+                set(idx, DirectionV(e.readInt()));
             } else if (P_TYPE::STRING == type) {
-                set(idx, e.readElementText());
+                set(idx, e.readText().toQString());
             } else if (P_TYPE::ALIGN == type) {
-                Align align = TConv::fromXml(e.readElementText(), Align());
+                Align align = TConv::fromXml(e.readText(), Align());
                 set(idx, align);
             } else if (P_TYPE::POINT == type) {
                 qreal x = e.doubleAttribute("x", 0.0);
                 qreal y = e.doubleAttribute("y", 0.0);
                 set(idx, PointF(x, y));
-                e.readElementText();
+                e.readText();
             } else if (P_TYPE::SIZE == type) {
                 qreal x = e.doubleAttribute("w", 0.0);
                 qreal y = e.doubleAttribute("h", 0.0);
                 set(idx, SizeF(x, y));
-                e.readElementText();
+                e.readText();
             } else if (P_TYPE::SCALE == type) {
                 qreal sx = e.doubleAttribute("w", 0.0);
                 qreal sy = e.doubleAttribute("h", 0.0);
                 set(idx, ScaleF(sx, sy));
-                e.readElementText();
+                e.readText();
             } else if (P_TYPE::COLOR == type) {
                 mu::draw::Color c;
                 c.setRed(e.intAttribute("r"));
@@ -149,13 +149,13 @@ bool MStyle::readProperties(XmlReader& e)
                 c.setBlue(e.intAttribute("b"));
                 c.setAlpha(e.intAttribute("a", 255));
                 set(idx, c);
-                e.readElementText();
+                e.readText();
             } else if (P_TYPE::PLACEMENT_V == type) {
-                set(idx, PlacementV(e.readElementText().toInt()));
+                set(idx, PlacementV(e.readText().toInt()));
             } else if (P_TYPE::PLACEMENT_H == type) {
-                set(idx, PlacementH(e.readElementText().toInt()));
+                set(idx, PlacementH(e.readText().toInt()));
             } else if (P_TYPE::HOOK_TYPE == type) {
-                set(idx, HookType(e.readElementText().toInt()));
+                set(idx, HookType(e.readText().toInt()));
             } else {
                 ASSERT_X("unhandled type " + QString::number(int(type)));
             }
@@ -183,7 +183,7 @@ bool MStyle::readStyleValCompat(XmlReader& e)
         const PointF val(x, y);
         set(Sid::tempoPosAbove, val);
         set(Sid::tempoPosBelow, val);
-        e.readElementText();
+        e.readText();
         return true;
     }
     if (readTextStyleValCompat(e)) {
@@ -229,7 +229,7 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
         return false;
     }
 
-    const bool readVal = bool(e.readElementText().toInt());
+    const bool readVal = bool(e.readText().toInt());
     const PropertyValue& val = value(sid);
     FontStyle newFontStyle = val.isValid() ? FontStyle(val.toInt()) : FontStyle::Normal;
     if (readVal) {
@@ -289,7 +289,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
 
         if (tag == "TextStyle") {
             //readTextStyle206(this, e);        // obsolete
-            e.readElementText();
+            e.readText();
         } else if (tag == "ottavaHook") {             // obsolete, for 3.0dev bw. compatibility, should be removed in final release
             qreal y = qAbs(e.readDouble());
             set(Sid::ottavaHookAbove, y);

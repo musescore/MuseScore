@@ -264,7 +264,7 @@ void Vibrato::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            setVibratoType(e.readElementText());
+            setVibratoType(e.readText());
         } else if (tag == "play") {
             setPlayArticulation(e.readBool());
         } else if (!SLine::readProperties(e)) {

@@ -54,31 +54,17 @@ public:
 
     void unknown();
 
-    // attribute helper routines:
-    QString attribute(const char* s) const { return mu::XmlStreamReader::attribute(s).toQString(); }
-    QString attribute(const char* s, const QString&) const;
-    int intAttribute(const char* s) const;
-    int intAttribute(const char* s, int _default) const;
-    double doubleAttribute(const char* s) const;
-    double doubleAttribute(const char* s, double _default) const;
-    bool hasAttribute(const char* s) const;
-
-    // helper routines based on readElementText():
-    int readInt() { return readElementText().toInt(); }
-    int readInt(bool* ok) { return readElementText().toInt(ok); }
-    int readIntHex() { return readElementText().toInt(0, 16); }
-    double readDouble() { return readElementText().toDouble(); }
-    qlonglong readLongLong() { return readElementText().toLongLong(); }
-
+    bool readBool() { return XmlStreamReader::readInt(); }
+    double readDouble(bool* ok = nullptr) { return XmlStreamReader::readDouble(ok); }
     double readDouble(double min, double max);
-    bool readBool();
+
     mu::PointF readPoint();
     mu::SizeF readSize();
     mu::ScaleF readScale();
     mu::RectF readRect();
     mu::draw::Color readColor();
     Fraction readFraction();
-    QString readXml();
+    String readXml();
 
     void setDocName(const QString& s) { docName = s; }
     QString getDocName() const { return docName; }
@@ -90,12 +76,11 @@ public:
     void setContext(ReadContext* context);
 
 private:
+
+    void htmlToString(int level, String*);
+
     QString docName;    // used for error reporting
-
     qint64 _offsetLines = 0;
-
-    void htmlToString(int level, QString*);
-
     mutable ReadContext* m_context = nullptr;
     mutable bool m_selfContext = false;
 };

@@ -78,9 +78,9 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
 
     bool irregular;
     if (e.hasAttribute("len")) {
-        QStringList sl = e.attribute("len").split('/');
+        StringList sl = e.attribute("len").split(u'/');
         if (sl.size() == 2) {
-            measure->_len = Fraction(sl[0].toInt(), sl[1].toInt());
+            measure->_len = Fraction(sl.at(0).toInt(), sl.at(1).toInt());
         } else {
             LOGD("illegal measure size <%s>", qPrintable(e.attribute("len")));
         }

@@ -251,8 +251,8 @@ struct ChordSymbol {
 //---------------------------------------------------------
 
 struct ChordFont {
-    QString family;
-    QString fontClass;
+    String family;
+    String fontClass;
     qreal mag;
 };
 

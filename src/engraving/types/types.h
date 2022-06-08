@@ -615,6 +615,17 @@ struct InstrumentTrackId {
     }
 };
 
+// Tremolo subtypes:
+enum class TremoloType : signed char {
+    INVALID_TREMOLO = -1,
+    R8 = 0, R16, R32, R64, BUZZ_ROLL,    // one note tremolo (repeat)
+    C8, C16, C32, C64       // two note tremolo (change)
+};
+
+enum class BracketType : signed char {
+    NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
+};
+
 using InstrumentTrackIdSet = std::unordered_set<InstrumentTrackId>;
 
 using staff_idx_t = size_t;

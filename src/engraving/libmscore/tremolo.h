@@ -26,16 +26,10 @@
 #include "durationtype.h"
 #include "symbol.h"
 #include "infrastructure/draw/painterpath.h"
+#include "types/types.h"
 
 namespace mu::engraving {
 class Chord;
-
-// Tremolo subtypes:
-enum class TremoloType : signed char {
-    INVALID_TREMOLO = -1,
-    R8 = 0, R16, R32, R64, BUZZ_ROLL,    // one note tremolo (repeat)
-    C8, C16, C32, C64       // two note tremolo (change)
-};
 
 // only applicable to minim two-note tremolo in non-TAB staves
 enum class TremoloStyle : signed char {
@@ -78,11 +72,6 @@ public:
     QString subtypeName() const override;
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-
-    QString tremoloTypeName() const;
-    void setTremoloType(const QString& s);
-    static TremoloType name2Type(const QString& s);
-    static QString type2name(TremoloType t);
 
     void setTremoloType(TremoloType t);
     TremoloType tremoloType() const { return _tremoloType; }

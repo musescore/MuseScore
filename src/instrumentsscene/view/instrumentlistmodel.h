@@ -111,8 +111,8 @@ private:
 
     void init(const QString& genreId, const QString& groupId);
 
-    QString resolveInstrumentGroupId(const QString& instrumentId) const;
-    void focusOnInstrument(const QString& instrumentId);
+    QString resolveInstrumentGroupId(const String& instrumentId) const;
+    void focusOnInstrument(const String& instrumentId);
 
     void loadGenres();
     void loadGroups();

@@ -35,7 +35,7 @@ struct XmlStreamReader::Xml {
     XMLDocument doc;
     XMLNode* node = nullptr;
     XMLError err;
-    QString customErr;
+    String customErr;
 };
 
 XmlStreamReader::XmlStreamReader()
@@ -183,7 +183,7 @@ void XmlStreamReader::tryParseEntity(Xml* xml)
         if (list.size() == 3) {
             String name = list.at(1);
             String val = list.at(2);
-            m_entities[u"&" + name + u";"] = val.mid(1, val.size() - 2);
+            m_entities[u'&' + name + u';'] = val.mid(1, val.size() - 2);
         } else {
             LOGW() << "unknown ENTITY: " << val;
         }
@@ -245,6 +245,19 @@ AsciiStringView XmlStreamReader::name() const
     return (m_xml->node && m_xml->node->ToElement()) ? m_xml->node->Value() : AsciiStringView();
 }
 
+bool XmlStreamReader::hasAttribute(const char* name) const
+{
+    if (m_token != TokenType::StartElement) {
+        return false;
+    }
+
+    XMLElement* e = m_xml->node->ToElement();
+    if (!e) {
+        return false;
+    }
+    return e->FindAttribute(name) != nullptr;
+}
+
 String XmlStreamReader::attribute(const char* name) const
 {
     if (m_token != TokenType::StartElement) {
@@ -256,6 +269,11 @@ String XmlStreamReader::attribute(const char* name) const
         return String();
     }
     return String(e->Attribute(name));
+}
+
+String XmlStreamReader::attribute(const char* name, const String& def) const
+{
+    return hasAttribute(name) ? attribute(name) : def;
 }
 
 AsciiStringView XmlStreamReader::asciiAttribute(const char* name) const
@@ -271,17 +289,29 @@ AsciiStringView XmlStreamReader::asciiAttribute(const char* name) const
     return e->Attribute(name);
 }
 
-bool XmlStreamReader::hasAttribute(const char* name) const
+AsciiStringView XmlStreamReader::asciiAttribute(const char* name, const AsciiStringView& def) const
 {
-    if (m_token != TokenType::StartElement) {
-        return false;
-    }
+    return hasAttribute(name) ? asciiAttribute(name) : def;
+}
 
-    XMLElement* e = m_xml->node->ToElement();
-    if (!e) {
-        return false;
-    }
-    return e->FindAttribute(name) != nullptr;
+int XmlStreamReader::intAttribute(const char* name) const
+{
+    return asciiAttribute(name).toInt();
+}
+
+int XmlStreamReader::intAttribute(const char* name, int def) const
+{
+    return hasAttribute(name) ? intAttribute(name) : def;
+}
+
+double XmlStreamReader::doubleAttribute(const char* name) const
+{
+    return asciiAttribute(name).toDouble();
+}
+
+double XmlStreamReader::doubleAttribute(const char* name, double def) const
+{
+    return hasAttribute(name) ? doubleAttribute(name) : def;
 }
 
 std::vector<XmlStreamReader::Attribute> XmlStreamReader::attributes() const
@@ -305,7 +335,23 @@ std::vector<XmlStreamReader::Attribute> XmlStreamReader::attributes() const
     return attrs;
 }
 
-QString XmlStreamReader::readElementText()
+String XmlStreamReader::text() const
+{
+    if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {
+        return nodeValue(m_xml);
+    }
+    return String();
+}
+
+AsciiStringView XmlStreamReader::asciiText() const
+{
+    if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {
+        return m_xml->node->Value();
+    }
+    return AsciiStringView();
+}
+
+String XmlStreamReader::readText()
 {
     if (isStartElement()) {
         String result;
@@ -315,7 +361,7 @@ QString XmlStreamReader::readElementText()
                 result = nodeValue(m_xml);
                 break;
             case EndElement:
-                return result.toQString();
+                return result;
             case Comment:
                 break;
             case StartElement:
@@ -325,18 +371,10 @@ QString XmlStreamReader::readElementText()
             }
         }
     }
-    return QString();
+    return String();
 }
 
-QString XmlStreamReader::text() const
-{
-    if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {
-        return nodeValue(m_xml).toQString();
-    }
-    return QString();
-}
-
-AsciiStringView XmlStreamReader::readElementAsciiText()
+AsciiStringView XmlStreamReader::readAsciiText()
 {
     if (isStartElement()) {
         AsciiStringView result;
@@ -359,12 +397,16 @@ AsciiStringView XmlStreamReader::readElementAsciiText()
     return AsciiStringView();
 }
 
-AsciiStringView XmlStreamReader::asciiText() const
+int XmlStreamReader::readInt(bool* ok, int base)
 {
-    if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {
-        return m_xml->node->Value();
-    }
-    return AsciiStringView();
+    AsciiStringView s = readAsciiText();
+    return s.toInt(ok, base);
+}
+
+double XmlStreamReader::readDouble(bool* ok)
+{
+    AsciiStringView s = readAsciiText();
+    return s.toDouble(ok);
 }
 
 int64_t XmlStreamReader::lineNumber() const
@@ -396,15 +438,15 @@ bool XmlStreamReader::isError() const
     return error() != NoError;
 }
 
-QString XmlStreamReader::errorString() const
+String XmlStreamReader::errorString() const
 {
-    if (!m_xml->customErr.isEmpty()) {
+    if (!m_xml->customErr.empty()) {
         return m_xml->customErr;
     }
-    return m_xml->doc.ErrorStr();
+    return String::fromUtf8(m_xml->doc.ErrorStr());
 }
 
-void XmlStreamReader::raiseError(const QString& message)
+void XmlStreamReader::raiseError(const String& message)
 {
-    m_xml->customErr = !message.isEmpty() ? message : "CustomError";
+    m_xml->customErr = message;
 }
