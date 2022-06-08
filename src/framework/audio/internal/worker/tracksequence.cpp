@@ -124,7 +124,7 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
     trackPtr->setPlaybackData(device);
     trackPtr->setInputParams(requiredParams.in);
     trackPtr->setOutputParams(requiredParams.out);
-    trackPtr->inputHandler = std::make_shared<ExternalAudioSource>(trackPtr->id,device);
+    trackPtr->inputHandler = std::make_shared<ExternalAudioSource>(trackPtr->id, device);
     trackPtr->outputHandler = mixer()->addChannel(newId, trackPtr->inputHandler).val;
 
     //TODO create AudioSource and MixerChannel
