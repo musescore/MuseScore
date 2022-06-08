@@ -1254,6 +1254,8 @@ public:
     const PaddingTable& paddingTable() const { return _paddingTable; }
     double minimumPaddingUnit() const { return _minimumPaddingUnit; }
 
+    void autoUpdateSpatium();
+
     friend class ChangeSynthesizerState;
     friend class Chord;
 };
