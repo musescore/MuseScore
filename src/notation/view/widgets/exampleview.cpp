@@ -243,23 +243,23 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
 {
     event->acceptProposedAction();
 
-    if (!m_dragElement || m_dragElement->isActionIcon()) {
+    if (!m_dragElement || !m_dragElement->isActionIcon()) {
         return;
     }
 
+    EngravingItem* newDropTarget = nullptr;
+
     PointF position = m_matrix.inverted().map(PointF::fromQPointF(event->posF()));
     std::vector<EngravingItem*> el = elementsAt(position);
-    bool found = false;
-    for (const EngravingItem* e : el) {
+
+    for (EngravingItem* e : el) {
         if (e->type() == ElementType::NOTE) {
-            setDropTarget(const_cast<EngravingItem*>(e));
-            found = true;
+            newDropTarget = e;
             break;
         }
     }
-    if (!found) {
-        setDropTarget(0);
-    }
+
+    setDropTarget(newDropTarget);
 
     MoveContext ctx{ position, m_score };
     m_dragElement->scanElements(&ctx, moveElement, false);
@@ -299,34 +299,17 @@ void ExampleView::dropEvent(QDropEvent* event)
         return;
     }
 
-    if (m_dragElement->isActionIcon()) {
+    if (!m_dragElement->isActionIcon()) {
         delete m_dragElement;
-        m_dragElement = 0;
+        m_dragElement = nullptr;
         return;
     }
 
     foreach (EngravingItem* e, elementsAt(position)) {
         if (e->type() == ElementType::NOTE) {
-            ActionIcon* icon = static_cast<ActionIcon*>(m_dragElement);
-            Chord* chord = static_cast<Note*>(e)->chord();
+            ActionIcon* icon = toActionIcon(m_dragElement);
+            Chord* chord = toNote(e)->chord();
             emit beamPropertyDropped(chord, icon);
-            switch (icon->actionType()) {
-            case ActionIconType::BEAM_JOIN:
-                chord->setBeamMode(BeamMode::AUTO);
-                break;
-            case ActionIconType::BEAM_BREAK_LEFT:
-                chord->setBeamMode(BeamMode::BEGIN);
-                break;
-            case ActionIconType::BEAM_BREAK_INNER_8TH:
-                chord->setBeamMode(BeamMode::BEGIN32);
-                break;
-            case ActionIconType::BEAM_BREAK_INNER_16TH:
-                chord->setBeamMode(BeamMode::BEGIN64);
-                break;
-            default:
-                break;
-            }
-            score()->doLayout();
             break;
         }
     }
@@ -344,7 +327,7 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
 
     foreach (EngravingItem* e, elementsAt(position)) {
         if (e->type() == ElementType::NOTE) {
-            emit noteClicked(static_cast<Note*>(e));
+            emit noteClicked(toNote(e));
             break;
         }
     }

@@ -153,7 +153,7 @@ void NoteGroups::noteClicked(Note* note)
     Chord* chord = note->chord();
     if (chord->beamMode() == BeamMode::AUTO) {
         updateBeams(chord, BeamMode::BEGIN);
-    } else if (chord->beamMode() == BeamMode::BEGIN) {
+    } else {
         updateBeams(chord, BeamMode::AUTO);
     }
 }
