@@ -245,7 +245,45 @@ void TextBase::insertText(EditData& ed, const QString& s)
 
 bool TextBase::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Qt::Key_Shift || ed.key == Qt::Key_Escape) {
+    static QSet<int> functionKeys = {
+        Qt::Key_F1,
+        Qt::Key_F2,
+        Qt::Key_F3,
+        Qt::Key_F4,
+        Qt::Key_F5,
+        Qt::Key_F6,
+        Qt::Key_F7,
+        Qt::Key_F8,
+        Qt::Key_F9,
+        Qt::Key_F10,
+        Qt::Key_F11,
+        Qt::Key_F12,
+        Qt::Key_F13,
+        Qt::Key_F14,
+        Qt::Key_F15,
+        Qt::Key_F16,
+        Qt::Key_F17,
+        Qt::Key_F18,
+        Qt::Key_F19,
+        Qt::Key_F20,
+        Qt::Key_F21,
+        Qt::Key_F22,
+        Qt::Key_F23,
+        Qt::Key_F24,
+        Qt::Key_F25,
+        Qt::Key_F26,
+        Qt::Key_F27,
+        Qt::Key_F28,
+        Qt::Key_F29,
+        Qt::Key_F30,
+        Qt::Key_F31,
+        Qt::Key_F32,
+        Qt::Key_F33,
+        Qt::Key_F34,
+        Qt::Key_F35
+    };
+
+    if (ed.key == Qt::Key_Shift || ed.key == Qt::Key_Escape || functionKeys.contains(ed.key)) {
         return false;
     }
 
