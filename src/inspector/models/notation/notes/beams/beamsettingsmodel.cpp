@@ -99,6 +99,14 @@ void BeamSettingsModel::resetProperties()
     setIsBeamHeightLocked(false);
 }
 
+void BeamSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadPropertyItem(m_featheringHeightLeft, formatDoubleFunc);
+    loadPropertyItem(m_featheringHeightRight, formatDoubleFunc);
+
+    updateFeatheringMode(m_featheringHeightLeft->value().toDouble(), m_featheringHeightRight->value().toDouble());
+}
+
 void BeamSettingsModel::forceHorizontal()
 {
     onPropertyValueChanged(mu::engraving::Pid::BEAM_NO_SLOPE, true);

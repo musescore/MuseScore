@@ -595,6 +595,16 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Join beams"),
              IconCode::Code::BEAM_JOIN
              ),
+    UiAction("beam-feathered-slower",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Feathered beam, slower"),
+             IconCode::Code::BEAM_FEATHERING_RIGHT
+             ),
+    UiAction("beam-feathered-faster",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Feathered beam, faster"),
+             IconCode::Code::BEAM_FEATHERING_LEFT
+             ),
     UiAction("add-brackets",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Add brackets to accidental"),
