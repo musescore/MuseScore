@@ -265,9 +265,9 @@ void Accidental::read(XmlReader& e)
                 _bracket = AccidentalBracket(i);
             }
         } else if (tag == "subtype") {
-            setSubtype(e.readElementAsciiText());
+            setSubtype(e.readAsciiText());
         } else if (tag == "role") {
-            _role = TConv::fromXml(e.readElementAsciiText(), AccidentalRole::AUTO);
+            _role = TConv::fromXml(e.readAsciiText(), AccidentalRole::AUTO);
         } else if (tag == "small") {
             m_isSmall = e.readInt();
         } else if (EngravingItem::readProperties(e)) {

@@ -59,11 +59,11 @@ void Revision::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "id") {
-            _id = e.readElementText();
+            _id = e.readText();
         } else if (tag == "diff") {
-            _diff = e.readElementText();
+            _diff = e.readText();
         } else if (tag == "date") {
-            _dateTime = QDateTime::fromString(e.readElementText());
+            _dateTime = QDateTime::fromString(e.readText());
         } else {
             e.unknown();
         }

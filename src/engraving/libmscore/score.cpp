@@ -5194,7 +5194,7 @@ QString Score::getTextStyleUserName(TextStyleType tid)
 
 QString Score::name() const
 {
-    return _excerpt ? _excerpt->name() : QString();
+    return _excerpt ? _excerpt->name() : String();
 }
 
 //---------------------------------------------------------

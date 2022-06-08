@@ -150,7 +150,7 @@ std::set<int> findAllPitches(const MTrack& track)
 void findNotEmptyDrumPitches(std::set<int>& drumPitches, const InstrumentTemplate* templ)
 {
     for (int i = 0; i != DRUM_INSTRUMENTS; ++i) {
-        if (!templ->drumset->name(i).isEmpty()) {
+        if (!templ->drumset->name(i).empty()) {
             drumPitches.insert(i);
         }
     }
@@ -169,7 +169,7 @@ bool hasNotDefinedDrumPitch(const std::set<int>& trackPitches, const std::set<in
     return hasNotDefinedPitch;
 }
 
-const InstrumentTemplate* findInstrument(const QString& groupId, const QString& instrId)
+static const InstrumentTemplate* findInstrument(const String& groupId, const String& instrId)
 {
     const InstrumentTemplate* instr = nullptr;
 
@@ -260,27 +260,27 @@ std::vector<const InstrumentTemplate*> findInstrumentsForProgram(const MTrack& t
         // so we will find the most matching instrument
 
         if (program == 55) {             // GM "Orchestra Hit" sound
-            auto instr = findInstrument("electronic-instruments", "brass-synthesizer");
+            auto instr = findInstrument(u"electronic-instruments", u"brass-synthesizer");
             if (instr) {
                 suitableTemplates.push_back(instr);
             }
         } else if (program == 110) {          // GM "Fiddle" sound
-            auto instr = findInstrument("strings", "violin");
+            auto instr = findInstrument(u"strings", u"violin");
             if (instr) {
                 suitableTemplates.push_back(instr);
             }
         } else if (program >= 80 && program <= 103) {
             const InstrumentTemplate* instr = nullptr;
             if (track.mtrack->drumTrack()) {
-                instr = findInstrument("electronic-instruments", "percussion-synthesizer");
+                instr = findInstrument(u"electronic-instruments", u"percussion-synthesizer");
             } else {
-                instr = findInstrument("electronic-instruments", "effect-synth");
+                instr = findInstrument(u"electronic-instruments", u"effect-synth");
             }
             if (instr) {
                 suitableTemplates.push_back(instr);               // generic synth
             }
         } else if (program >= 112 && program <= 127) {
-            auto instr = findInstrument("unpitched-percussion", "snare-drum");
+            auto instr = findInstrument(u"unpitched-percussion", u"snare-drum");
             if (instr) {
                 suitableTemplates.push_back(instr);               // 1-line percussion staff
             }
@@ -288,11 +288,11 @@ std::vector<const InstrumentTemplate*> findInstrumentsForProgram(const MTrack& t
             // slightly improve slap bass match:
             // match to the instruments with program 33
             // instead of 35 according to the algorithm below
-            auto instr = findInstrument("plucked-strings", "electric-bass");
+            auto instr = findInstrument(u"plucked-strings", u"electric-bass");
             if (instr) {
                 suitableTemplates.push_back(instr);
             }
-            instr = findInstrument("plucked-strings", "5-string-electric-bass");
+            instr = findInstrument(u"plucked-strings", u"5-string-electric-bass");
             if (instr) {
                 suitableTemplates.push_back(instr);
             }

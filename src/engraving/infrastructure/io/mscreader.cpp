@@ -472,9 +472,9 @@ ByteArray MscReader::XmlFileReader::fileData(const QString& fileName) const
                 continue;
             }
 
-            QString cdata = xml.readElementText();
-            QByteArray ba = cdata.trimmed().toUtf8();
-            return ByteArray(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
+            String cdata = xml.readText();
+            ByteArray ba = cdata.trimmed().toUtf8();
+            return ba;
         }
     }
 

@@ -456,22 +456,22 @@ void StaffTextPropertiesDialog::channelItemChanged(QTreeWidgetItem* item, QTreeW
     for (const NamedEventList& e : part->instrument(tick)->midiActions()) {
         QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
         QString name = e.name;
-        if (e.name.isEmpty()) {
+        if (e.name.empty()) {
             name = InstrChannel::DEFAULT_NAME;
         }
-        ti->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
+        ti->setText(0, qtrc("InstrumentsXML", name));
         ti->setData(0, Qt::UserRole, name);
-        ti->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
+        ti->setText(1, qtrc("InstrumentsXML", e.descr));
     }
     for (const NamedEventList& e : channel->midiActions) {
         QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
         QString name = e.name;
-        if (e.name.isEmpty()) {
+        if (e.name.empty()) {
             name = InstrChannel::DEFAULT_NAME;
         }
-        ti->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
+        ti->setText(0, qtrc("InstrumentsXML", name));
         ti->setData(0, Qt::UserRole, name);
-        ti->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
+        ti->setText(1, qtrc("InstrumentsXML", e.descr));
     }
     for (const ChannelActions& ca : m_staffText->channelActions()) {
         if (ca.channel == channelIdx) {

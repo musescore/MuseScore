@@ -221,9 +221,9 @@ void TimeSig::read(XmlReader& e)
         } else if (tag == "stretchD") {
             _stretch.setDenominator(e.readInt());
         } else if (tag == "textN") {
-            setNumeratorString(e.readElementText());
+            setNumeratorString(e.readText());
         } else if (tag == "textD") {
-            setDenominatorString(e.readElementText());
+            setDenominatorString(e.readText());
         } else if (tag == "Groups") {
             _groups.read(e);
         } else if (readStyledProperty(e, tag)) {

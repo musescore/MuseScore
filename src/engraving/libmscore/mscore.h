@@ -136,15 +136,6 @@ static constexpr int VISUAL_INVALID_STRING_INDEX = -100;
 static constexpr ID INVALID_ID = 0;
 
 //---------------------------------------------------------
-//   BracketType
-//    System Brackets
-//---------------------------------------------------------
-
-enum class BracketType : signed char {
-    NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
-};
-
-//---------------------------------------------------------
 //   TransposeDirection
 //---------------------------------------------------------
 

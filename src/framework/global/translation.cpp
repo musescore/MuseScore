@@ -33,3 +33,16 @@ QString mu::qtrc(const char* context, const char* key, const char* disambiguatio
 {
     return QCoreApplication::translate(context, key, disambiguation, n);
 }
+
+QString mu::qtrc(const char* context, const String& key, const char* disambiguation, int n)
+{
+    ByteArray utf8 = key.toUtf8();
+    return QCoreApplication::translate(context, utf8.constChar(), disambiguation, n);
+}
+
+QString mu::qtrc(const char* context, const String& key, const String& disambiguation, int n)
+{
+    ByteArray keyutf8 = key.toUtf8();
+    ByteArray disutf8 = disambiguation.toUtf8();
+    return QCoreApplication::translate(context, keyutf8.constChar(), disutf8.empty() ? nullptr : disutf8.constChar(), n);
+}

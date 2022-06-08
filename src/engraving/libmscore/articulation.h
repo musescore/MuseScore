@@ -118,8 +118,8 @@ public:
     void setSymId(SymId id);
     int subtype() const override;
     QString typeUserName() const override;
-    const char* articulationName() const;    // type-name of articulation; used for midi rendering
-    static const char* symId2ArticulationName(SymId symId);
+    String articulationName() const;    // type-name of articulation; used for midi rendering
+    static String symId2ArticulationName(SymId symId);
 
     void layout() override;
     bool layoutCloseToNote() const;

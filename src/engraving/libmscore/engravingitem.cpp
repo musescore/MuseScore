@@ -996,7 +996,7 @@ bool EngravingItem::readProperties(XmlReader& e)
                 const AsciiStringView ntag(e.name());
 
                 if (ntag == "score") {
-                    QString val(e.readElementText());
+                    QString val(e.readText());
                     if (val == "same") {
                         linkedIsMaster = score()->isMaster();
                     }
@@ -1064,7 +1064,7 @@ bool EngravingItem::readProperties(XmlReader& e)
     } else if (tag == "voice") {
         setVoice(e.readInt());
     } else if (tag == "tag") {
-        QString val(e.readElementText());
+        QString val(e.readText());
         for (int i = 1; i < MAX_TAGS; i++) {
             if (score()->layerTags()[i] == val) {
                 _tag = 1 << i;

@@ -170,7 +170,7 @@ void InstrumentListModel::init(const QString& genreId, const QString& groupId)
     loadInstruments();
 }
 
-QString InstrumentListModel::resolveInstrumentGroupId(const QString& instrumentId) const
+QString InstrumentListModel::resolveInstrumentGroupId(const String& instrumentId) const
 {
     for (const InstrumentTemplate* templ : repository()->instrumentTemplates()) {
         if (templ->id == instrumentId) {
@@ -181,7 +181,7 @@ QString InstrumentListModel::resolveInstrumentGroupId(const QString& instrumentI
     return NONE_GROUP_ID;
 }
 
-void InstrumentListModel::focusOnInstrument(const QString& instrumentId)
+void InstrumentListModel::focusOnInstrument(const String& instrumentId)
 {
     TRACEFUNC;
 

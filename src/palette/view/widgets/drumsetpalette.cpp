@@ -143,7 +143,7 @@ void DrumsetPalette::updateDrumset()
         int shortcutCode = m_drumset->shortcut(pitch);
         QString shortcut = shortcutCode != 0 ? QChar(shortcutCode) : QString();
 
-        m_drumPalette->appendElement(chord, mu::qtrc("drumset", m_drumset->name(pitch).toUtf8().data()), 1.0, shortcut);
+        m_drumPalette->appendElement(chord, mu::qtrc("drumset", m_drumset->name(pitch)), 1.0, shortcut);
     }
 
     noteInput->setDrumNote(selectedDrumNote());

@@ -39,9 +39,9 @@ namespace mu::engraving {
 
 class Jump final : public TextBase
 {
-    QString _jumpTo;
-    QString _playUntil;
-    QString _continueAt;
+    String _jumpTo;
+    String _playUntil;
+    String _continueAt;
     bool _playRepeats;
 
 public:
@@ -103,10 +103,10 @@ public:
 
 struct JumpTypeTableItem {
     Jump::Type type;
-    const char* text;
-    const char* jumpTo;
-    const char* playUntil;
-    const char* continueAt;
+    AsciiStringView text;
+    AsciiStringView jumpTo;
+    AsciiStringView playUntil;
+    AsciiStringView continueAt;
     QString userText;
 };
 

@@ -67,7 +67,6 @@ public:
     BracketItem* bracketItem() const { return _bi; }
 
     BracketType bracketType() const { return _bi->bracketType(); }
-    static const char* bracketTypeName(BracketType type);
 
     size_t firstStaff() const { return _firstStaff; }
     size_t lastStaff() const { return _lastStaff; }

@@ -503,11 +503,11 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue::fromValue(e.readFraction());
 
     case P_TYPE::SYMID:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), SymId::noSym));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), SymId::noSym));
     case P_TYPE::COLOR:
         return PropertyValue::fromValue(e.readColor());
     case P_TYPE::ORNAMENT_STYLE:
-        return PropertyValue::fromValue(TConv::fromXml(e.readElementAsciiText(), OrnamentStyle::DEFAULT));
+        return PropertyValue::fromValue(TConv::fromXml(e.readAsciiText(), OrnamentStyle::DEFAULT));
     case P_TYPE::POINT:
         return PropertyValue::fromValue(e.readPoint());
     case P_TYPE::SCALE:
@@ -515,56 +515,56 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::SIZE:
         return PropertyValue::fromValue(e.readSize());
     case P_TYPE::STRING:
-        return PropertyValue(e.readElementText());
+        return PropertyValue(e.readText());
 
     case P_TYPE::ALIGN:
-        return PropertyValue(TConv::fromXml(e.readElementText(), Align()));
+        return PropertyValue(TConv::fromXml(e.readText(), Align()));
     case P_TYPE::PLACEMENT_V:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), PlacementV::ABOVE));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), PlacementV::ABOVE));
     case P_TYPE::PLACEMENT_H:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), PlacementH::LEFT));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), PlacementH::LEFT));
     case P_TYPE::TEXT_PLACE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), TextPlace::AUTO));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), TextPlace::AUTO));
     case P_TYPE::DIRECTION_V:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), DirectionV::AUTO));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), DirectionV::AUTO));
     case P_TYPE::DIRECTION_H:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), DirectionH::AUTO));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), DirectionH::AUTO));
     case P_TYPE::ORIENTATION:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), Orientation::VERTICAL));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), Orientation::VERTICAL));
 
     case P_TYPE::LAYOUTBREAK_TYPE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), LayoutBreakType::NOBREAK));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), LayoutBreakType::NOBREAK));
     case P_TYPE::VELO_TYPE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), VeloType::OFFSET_VAL));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), VeloType::OFFSET_VAL));
     case P_TYPE::GLISS_STYLE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), GlissandoStyle::CHROMATIC));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), GlissandoStyle::CHROMATIC));
     case P_TYPE::BARLINE_TYPE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), BarLineType::NORMAL));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
 
     case P_TYPE::NOTEHEAD_TYPE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), NoteHeadType::HEAD_AUTO));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), NoteHeadType::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_SCHEME:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), NoteHeadScheme::HEAD_AUTO));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), NoteHeadScheme::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_GROUP:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), NoteHeadGroup::HEAD_NORMAL));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), NoteHeadGroup::HEAD_NORMAL));
 
     case P_TYPE::CLEF_TYPE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), ClefType::G));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), ClefType::G));
 
     case P_TYPE::DYNAMIC_TYPE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), DynamicType::OTHER));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), DynamicType::OTHER));
 
     case P_TYPE::HOOK_TYPE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), HookType::NONE));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), HookType::NONE));
 
     case P_TYPE::KEY_MODE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), KeyMode::NONE));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), KeyMode::NONE));
 
     case P_TYPE::TEXT_STYLE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), TextStyleType::DEFAULT));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT));
 
     case P_TYPE::CHANGE_METHOD:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), ChangeMethod::NORMAL));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), ChangeMethod::NORMAL));
 
     case P_TYPE::BEAM_MODE:
         return PropertyValue(int(0));
@@ -578,9 +578,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue();
 
     case P_TYPE::PLAYTECH_TYPE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), PlayingTechniqueType::Natural));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), PlayingTechniqueType::Natural));
     case P_TYPE::TEMPOCHANGE_TYPE:
-        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), GradualTempoChangeType::Undefined));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), GradualTempoChangeType::Undefined));
     default:
         ASSERT_X("unhandled PID type");
         break;
@@ -601,13 +601,13 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
 
     switch (id) {
     case Pid::SYSTEM_BRACKET:         // system bracket type
-        return Bracket::bracketTypeName(BracketType(value.toInt()));
+        return TConv::toXml(BracketType(value.toInt())).toQLatin1String();
     case Pid::ACCIDENTAL_TYPE:
         return Accidental::subtype2name(AccidentalType(value.toInt())).toQLatin1String();
     case Pid::OTTAVA_TYPE:
         return Ottava::ottavaTypeName(OttavaType(value.toInt()));
     case Pid::TREMOLO_TYPE:
-        return Tremolo::type2name(TremoloType(value.toInt()));
+        return TConv::toXml(TremoloType(value.toInt())).toQLatin1String();
     case Pid::TRILL_TYPE:
         return Trill::type2name(Trill::Type(value.toInt()));
     case Pid::VIBRATO_TYPE:

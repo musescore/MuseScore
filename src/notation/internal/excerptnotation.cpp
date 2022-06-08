@@ -31,7 +31,7 @@ using namespace mu::notation;
 ExcerptNotation::ExcerptNotation(mu::engraving::Excerpt* excerpt)
     : Notation(), m_excerpt(excerpt)
 {
-    m_name = excerpt ? excerpt->name() : QString();
+    m_name = excerpt ? excerpt->name().toQString() : QString();
 }
 
 ExcerptNotation::~ExcerptNotation()
@@ -103,7 +103,7 @@ bool ExcerptNotation::isEmpty() const
 
 QString ExcerptNotation::name() const
 {
-    return m_excerpt ? m_excerpt->name() : m_name;
+    return m_excerpt ? m_excerpt->name().toQString() : m_name;
 }
 
 void ExcerptNotation::setName(const QString& name)

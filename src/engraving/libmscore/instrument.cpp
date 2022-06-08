@@ -96,7 +96,7 @@ static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
 void NamedEventList::write(XmlWriter& xml, const AsciiStringView& n) const
 {
     xml.startElement(n, { { "name", name } });
-    if (!descr.isEmpty()) {
+    if (!descr.empty()) {
         xml.tag("descr", descr);
     }
     for (const MidiCoreEvent& e : events) {
@@ -126,7 +126,7 @@ void NamedEventList::read(XmlReader& e)
             events.push_back(ev);
             e.skipCurrentElement();
         } else if (tag == "descr") {
-            descr = e.readElementText();
+            descr = e.readText();
         } else {
             e.unknown();
         }
@@ -480,7 +480,7 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
         name.read(e);
         _shortNames.push_back(name);
     } else if (tag == "trackName") {
-        _trackName = e.readElementText();
+        _trackName = e.readText();
     } else if (tag == "minPitch") {      // obsolete
         _minPitchP = _minPitchA = e.readInt();
     } else if (tag == "maxPitch") {       // obsolete
@@ -501,7 +501,7 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
     } else if (tag == "transposeDiatonic") {
         _transpose.diatonic = e.readInt();
     } else if (tag == "instrumentId") {
-        _instrumentId = e.readElementText();
+        _instrumentId = e.readText();
     } else if (tag == "useDrumset") {
         _useDrumset = e.readInt();
         if (_useDrumset) {
@@ -537,14 +537,14 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
         _channel.push_back(a);
     } else if (tag == "clef") {           // sets both transposing and concert clef
         int idx = e.intAttribute("staff", 1) - 1;
-        ClefType ct = TConv::fromXml(e.readElementAsciiText(), ClefType::G);
+        ClefType ct = TConv::fromXml(e.readAsciiText(), ClefType::G);
         setClefType(idx, ClefTypeList(ct, ct));
     } else if (tag == "concertClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        setClefType(idx, ClefTypeList(TConv::fromXml(e.readElementAsciiText(), ClefType::G), clefType(idx)._transposingClef));
+        setClefType(idx, ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G), clefType(idx)._transposingClef));
     } else if (tag == "transposingClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        setClefType(idx, ClefTypeList(clefType(idx)._concertClef, TConv::fromXml(e.readElementAsciiText(), ClefType::G)));
+        setClefType(idx, ClefTypeList(clefType(idx)._concertClef, TConv::fromXml(e.readAsciiText(), ClefType::G)));
     } else {
         return false;
     }
@@ -938,9 +938,9 @@ void InstrChannel::read(XmlReader& e, Part* part)
             a.read(e);
             midiActions.push_back(a);
         } else if (tag == "synti") {
-            _synti = e.readElementText();
+            _synti = e.readText();
         } else if (tag == "descr") {
-            _descr = e.readElementText();
+            _descr = e.readText();
         } else if (tag == "color") {
             _color = e.readInt();
         } else if (tag == "mute") {
@@ -1259,19 +1259,19 @@ void MidiArticulation::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "velocity") {
-            QString text(e.readElementText());
+            QString text(e.readText());
             if (text.endsWith("%")) {
                 text = text.left(text.size() - 1);
             }
             velocity = text.toInt();
         } else if (tag == "gateTime") {
-            QString text(e.readElementText());
+            QString text(e.readText());
             if (text.endsWith("%")) {
                 text = text.left(text.size() - 1);
             }
             gateTime = text.toInt();
         } else if (tag == "descr") {
-            descr = e.readElementText();
+            descr = e.readText();
         } else {
             e.unknown();
         }
@@ -1791,7 +1791,7 @@ void Instrument::updateInstrumentId()
                     if (bestMatchStrength == perfectMatchStrength) {
                         break; // stop looking for matches
                     }
-                } else if ((matchStrength == bestMatchStrength) && (it->id.length() < fallback.length())) {
+                } else if ((matchStrength == bestMatchStrength) && (it->id.size() < fallback.size())) {
                     // Update fallback ID because we've found a shorter one that is equally good.
                     // Shorter IDs tend to correspond to more generic instruments (e.g. "piano"
                     // vs. "grand-piano") so it's better to use a shorter one if unsure.

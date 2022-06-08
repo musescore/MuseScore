@@ -160,7 +160,7 @@ void Volta::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "endings") {
-            QString s = e.readElementText();
+            QString s = e.readText();
             _endings = TConv::fromXml(s, std::vector<int>());
         } else if (readStyledProperty(e, tag)) {
         } else if (!readProperties(e)) {

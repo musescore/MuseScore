@@ -365,9 +365,9 @@ void Image::read(XmlReader& e)
             //    sp if size is spatium
             _sizeIsSpatium = e.readBool();
         } else if (tag == "path") {
-            _storePath = e.readElementText();
+            _storePath = e.readText();
         } else if (tag == "linkPath") {
-            _linkPath = e.readElementText();
+            _linkPath = e.readText();
         } else if (tag == "subtype") {    // obsolete
             e.skipCurrentElement();
         } else if (!BSymbol::readProperties(e)) {

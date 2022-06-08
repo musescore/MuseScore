@@ -257,15 +257,15 @@ void Dynamic::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "subtype") {
-            setDynamicType(e.readElementText());
+            setDynamicType(e.readText().toQString());
         } else if (tag == "velocity") {
             _velocity = e.readInt();
         } else if (tag == "dynType") {
-            _dynRange = TConv::fromXml(e.readElementAsciiText(), DynamicRange::STAFF);
+            _dynRange = TConv::fromXml(e.readAsciiText(), DynamicRange::STAFF);
         } else if (tag == "veloChange") {
             _changeInVelocity = e.readInt();
         } else if (tag == "veloChangeSpeed") {
-            _velChangeSpeed = TConv::fromXml(e.readElementAsciiText(), DynamicSpeed::NORMAL);
+            _velChangeSpeed = TConv::fromXml(e.readAsciiText(), DynamicSpeed::NORMAL);
         } else if (!TextBase::readProperties(e)) {
             e.unknown();
         }

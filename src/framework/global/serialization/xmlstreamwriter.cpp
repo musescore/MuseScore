@@ -78,47 +78,19 @@ void XmlStreamWriter::writeDoctype(const QString& type)
     m_impl->stream << "<!DOCTYPE " << type << '>' << '\n';
 }
 
-QString XmlStreamWriter::escapeSymbol(ushort c)
+String XmlStreamWriter::escapeSymbol(char16_t c)
 {
-    switch (c) {
-    case '<':
-        return QLatin1String("&lt;");
-    case '>':
-        return QLatin1String("&gt;");
-    case '&':
-        return QLatin1String("&amp;");
-    case '\"':
-        return QLatin1String("&quot;");
-    default:
-        // ignore invalid characters in xml 1.0
-        if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D)) {
-            return QString();
-        }
-        return QString(QChar(c));
-    }
-}
-
-QString XmlStreamWriter::escapeString(const QString& s)
-{
-    QString escaped;
-    escaped.reserve(s.size());
-    for (int i = 0; i < s.size(); ++i) {
-        ushort c = s.at(i).unicode();
-        escaped += escapeSymbol(c);
-    }
-    return escaped;
+    return String::toXmlEscaped(c);
 }
 
 String XmlStreamWriter::escapeString(const String& s)
 {
-    //! TODO
-    return String::fromQString(escapeString(s.toQString()));
+    return String::toXmlEscaped(s);
 }
 
 String XmlStreamWriter::escapeString(const AsciiStringView& s)
 {
-    //! TODO
-    return String::fromQString(escapeString(QString(s.ascii())));
+    return String::toXmlEscaped(String::fromUtf8(s.ascii()));
 }
 
 void XmlStreamWriter::writeValue(const Value& v)

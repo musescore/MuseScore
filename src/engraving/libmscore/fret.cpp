@@ -863,13 +863,13 @@ void FretDiagram::readNew(XmlReader& e)
                 const AsciiStringView t(e.name());
                 if (t == "dot") {
                     int fret = e.intAttribute("fret", 0);
-                    FretDotType dtype = FretItem::nameToDotType(e.readElementText());
+                    FretDotType dtype = FretItem::nameToDotType(e.readText());
                     setDot(no, fret, true, dtype);
                 } else if (t == "marker") {
-                    FretMarkerType mtype = FretItem::nameToMarkerType(e.readElementText());
+                    FretMarkerType mtype = FretItem::nameToMarkerType(e.readText());
                     setMarker(no, mtype);
                 } else if (t == "fingering") {
-                    e.readElementText();
+                    e.readText();
                     /*setFingering(no, e.readInt()); NOTE:JT todo */
                 } else {
                     e.unknown();

@@ -104,7 +104,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "LayerTag") {
             int id = e.intAttribute("id");
             const QString& t = e.attribute("tag");
-            QString val(e.readElementText());
+            QString val(e.readText());
             if (id >= 0 && id < 32) {
                 score->_layerTags[id] = t;
                 score->_layerTagComments[id] = val;
@@ -112,7 +112,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Layer") {
             Layer layer;
             layer.name = e.attribute("name");
-            layer.tags = e.attribute("mask").toUInt();
+            layer.tags = static_cast<uint>(e.intAttribute("mask"));
             score->_layer.push_back(layer);
             e.readNext();
         } else if (tag == "currentLayer") {
@@ -141,18 +141,18 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag("copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
-            score->setMetaTag("movementNumber", e.readElementText());
+            score->setMetaTag("movementNumber", e.readText());
         } else if (tag == "movement-title") {
-            score->setMetaTag("movementTitle", e.readElementText());
+            score->setMetaTag("movementTitle", e.readText());
         } else if (tag == "work-number") {
-            score->setMetaTag("workNumber", e.readElementText());
+            score->setMetaTag("workNumber", e.readText());
         } else if (tag == "work-title") {
-            score->setMetaTag("workTitle", e.readElementText());
+            score->setMetaTag("workTitle", e.readText());
         } else if (tag == "source") {
-            score->setMetaTag("source", e.readElementText());
+            score->setMetaTag("source", e.readText());
         } else if (tag == "metaTag") {
             QString name = e.attribute("name");
-            score->setMetaTag(name, e.readElementText());
+            score->setMetaTag(name, e.readText());
         } else if (tag == "Order") {
             ScoreOrder order;
             order.read(e);
@@ -202,12 +202,12 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
             // Since version 400, the Excerpts is stored in a separate file
             e.skipCurrentElement();
         } else if (tag == "name") {
-            QString n = e.readElementText();
+            QString n = e.readText();
             if (!score->isMaster()) {     //ignore the name if it's not a child score
                 score->excerpt()->setName(n);
             }
         } else if (tag == "layoutMode") {
-            QString s = e.readElementText();
+            QString s = e.readText();
             if (s == "line") {
                 score->setLayoutMode(LayoutMode::LINE);
             } else if (s == "system") {

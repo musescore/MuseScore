@@ -140,9 +140,9 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         const AsciiStringView tag(e.name());
 
         if (tag == "name") {
-            name = e.readElementText();
+            name = e.readText();
         } else if (tag == "family") {
-            family = e.readElementText();
+            family = e.readText();
         } else if (tag == "size") {
             size = e.readDouble();
         } else if (tag == "bold") {
@@ -168,9 +168,9 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         } else if (tag == "anchor") {     // obsolete
             e.skipCurrentElement();
         } else if (tag == "halign") {
-            align.horizontal = TConv::fromXml(e.readElementAsciiText(), AlignH::LEFT);
+            align.horizontal = TConv::fromXml(e.readAsciiText(), AlignH::LEFT);
         } else if (tag == "valign") {
-            align.vertical = TConv::fromXml(e.readElementAsciiText(), AlignV::TOP);
+            align.vertical = TConv::fromXml(e.readAsciiText(), AlignV::TOP);
         } else if (tag == "xoffset") {
             qreal xo = e.readDouble();
             if (offsetType == OffsetType::ABS) {
@@ -186,7 +186,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         } else if (tag == "rxoffset" || tag == "ryoffset") {         // obsolete
             e.readDouble();
         } else if (tag == "offsetType") {
-            const QString& val(e.readElementText());
+            const QString& val(e.readText());
             OffsetType ot = OffsetType::ABS;
             if (val == "spatium" || val == "1") {
                 ot = OffsetType::SPATIUM;
@@ -227,7 +227,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         } else if (tag == "systemFlag") {
             systemFlag = e.readInt();
         } else if (tag == "placement") {
-            QString value(e.readElementText());
+            QString value(e.readText());
             if (value == "above") {
                 placement = PlacementV::ABOVE;
             } else if (value == "below") {
@@ -424,7 +424,7 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e)
                 a->setBracket(AccidentalBracket(i));
             }
         } else if (tag == "subtype") {
-            QString text = e.readElementText();
+            QString text = e.readText();
             const static std::map<QString, AccidentalType> accMap = {
                 { "none",               AccidentalType::NONE },
                 { "sharp",              AccidentalType::SHARP },
@@ -630,11 +630,11 @@ static void readDrumset206(Drumset* ds, XmlReader& e)
                     while (e.readNextStartElement()) {
                         const AsciiStringView taga(e.name());
                         if (taga == "articulation") {
-                            AsciiStringView oldArticulationName = e.readElementAsciiText();
+                            AsciiStringView oldArticulationName = e.readAsciiText();
                             SymId oldId = Read206::articulationNames2SymId206(oldArticulationName);
                             div.articulationName = Articulation::symId2ArticulationName(oldId);
                         } else if (taga == "tremolo") {
-                            div.tremolo = Tremolo::name2Type(e.readElementText());
+                            div.tremolo = TConv::fromXml(e.readAsciiText(), TremoloType::INVALID_TREMOLO);
                         }
                     }
                     ds->drum(pitch).addVariant(div);
@@ -1229,12 +1229,12 @@ static bool readTextProperties206(XmlReader& e, const ReadContext& ctx, TextBase
         t->readProperty(e, Pid::FRAME_BG_COLOR);
     } else if (tag == "halign") {
         Align align = t->align();
-        align.horizontal = TConv::fromXml(e.readElementAsciiText(), AlignH::LEFT);
+        align.horizontal = TConv::fromXml(e.readAsciiText(), AlignH::LEFT);
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else if (tag == "valign") {
         Align align = t->align();
-        align.vertical = TConv::fromXml(e.readElementAsciiText(), AlignV::TOP);
+        align.vertical = TConv::fromXml(e.readAsciiText(), AlignV::TOP);
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else if (tag == "pos") {
@@ -1378,7 +1378,7 @@ static void readMarker(Marker* m, XmlReader& e, const ReadContext& ctx)
     while (tctx.reader().readNextStartElement()) {
         const AsciiStringView tag(tctx.reader().name());
         if (tag == "label") {
-            QString s(tctx.reader().readElementText());
+            QString s(tctx.reader().readText());
             m->setLabel(s);
             mt = m->markerType(s);
         } else if (!readTextProperties206(tctx.reader(), ctx, m)) {
@@ -1399,11 +1399,11 @@ static void readDynamic(Dynamic* d, XmlReader& e, const ReadContext& ctx)
     while (tctx.reader().readNextStartElement()) {
         const AsciiStringView tag = tctx.reader().name();
         if (tag == "subtype") {
-            d->setDynamicType(tctx.reader().readElementText());
+            d->setDynamicType(tctx.reader().readText());
         } else if (tag == "velocity") {
             d->setVelocity(tctx.reader().readInt());
         } else if (tag == "dynType") {
-            d->setDynRange(TConv::fromXml(tctx.reader().readElementAsciiText(), DynamicRange::STAFF));
+            d->setDynRange(TConv::fromXml(tctx.reader().readAsciiText(), DynamicRange::STAFF));
         } else if (!readTextProperties206(tctx.reader(), ctx, d)) {
             tctx.reader().unknown();
         }
@@ -1462,7 +1462,7 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e, const ReadContext& ctx)
             readText206(e, ctx, _verseNumber, lyrics);
             _verseNumber->setParent(lyrics);
         } else if (tag == "style") {
-            e.readElementText();          // ignore style
+            e.readText();          // ignore style
         } else if (!lyrics->readProperties(e)) {
             e.unknown();
         }
@@ -1524,7 +1524,7 @@ bool Read206::readTupletProperties206(XmlReader& e, const ReadContext& ctx, Tupl
     } else if (tag == "p2") {
         de->setProperty(Pid::P2, PropertyValue::fromValue(e.readPoint() * ctx.spatium()));
     } else if (tag == "baseNote") {
-        de->setBaseLen(TDuration(TConv::fromXml(e.readElementAsciiText(), DurationType::V_INVALID)));
+        de->setBaseLen(TDuration(TConv::fromXml(e.readAsciiText(), DurationType::V_INVALID)));
     } else if (tag == "Number") {
         Text* _number = Factory::createText(de);
         de->setNumber(_number);
@@ -1553,7 +1553,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
     const AsciiStringView tag(e.name());
 
     if (tag == "durationType") {
-        ch->setDurationType(TConv::fromXml(e.readElementAsciiText(), DurationType::V_QUARTER));
+        ch->setDurationType(TConv::fromXml(e.readAsciiText(), DurationType::V_QUARTER));
         if (ch->actualDurationType().type() != DurationType::V_MEASURE) {
             if (ctx.mscVersion() < 112 && (ch->type() == ElementType::REST)
                 &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
@@ -1578,7 +1578,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
             }
         }
     } else if (tag == "BeamMode") {
-        BeamMode bm = TConv::fromXml(e.readElementAsciiText(), BeamMode::AUTO);
+        BeamMode bm = TConv::fromXml(e.readAsciiText(), BeamMode::AUTO);
         ch->setBeamMode(bm);
     } else if (tag == "Articulation") {
         EngravingItem* el = readArticulation(ch, e, ctx);
@@ -2009,7 +2009,7 @@ static void readVolta206(XmlReader& e, const ReadContext& ctx, Volta* volta)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "endings") {
-            QString s = e.readElementText();
+            QString s = e.readText();
             QStringList sl = s.split(",", Qt::SkipEmptyParts);
             volta->endings().clear();
             for (const QString& l : qAsConst(sl)) {
@@ -2048,7 +2048,7 @@ static void readOttava(XmlReader& e, const ReadContext& ctx, Ottava* ottava)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            QString s = e.readElementText();
+            QString s = e.readText();
             bool ok;
             int idx = s.toInt(&ok);
             if (!ok) {
@@ -2120,7 +2120,7 @@ void Read206::readTrill206(XmlReader& e, Trill* t)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            t->setTrillType(e.readElementText());
+            t->setTrillType(e.readText());
         } else if (tag == "Accidental") {
             Accidental* _accidental = Factory::createAccidental(t);
             readAccidental206(_accidental, e);
@@ -2192,7 +2192,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            QString s = e.readElementText();
+            QString s = e.readText();
             if (s[0].isDigit()) {
                 int oldType = s.toInt();
                 sym = articulationNames[oldType].id;
@@ -2281,7 +2281,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
         } else if (tag == "direction") {
             useDefaultPlacement = false;
             if (!el || el->isFermata()) {
-                direction = TConv::fromXml(e.readElementAsciiText(), DirectionV::AUTO);
+                direction = TConv::fromXml(e.readAsciiText(), DirectionV::AUTO);
             } else {
                 el->readProperties(e);
             }
@@ -2402,9 +2402,9 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
 
     bool irregular;
     if (e.hasAttribute("len")) {
-        QStringList sl = e.attribute("len").split('/');
+        StringList sl = e.attribute("len").split(u'/');
         if (sl.size() == 2) {
-            m->setTicks(Fraction(sl[0].toInt(), sl[1].toInt()));
+            m->setTicks(Fraction(sl.at(0).toInt(), sl.at(1).toInt()));
         } else {
             LOGD("illegal measure size <%s>", qPrintable(e.attribute("len")));
         }
@@ -2439,7 +2439,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
                 if (t == "subtype") {
-                    bl->setBarLineType(TConv::fromXml(e.readElementAsciiText(), BarLineType::NORMAL));
+                    bl->setBarLineType(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
                 } else if (t == "customSubtype") {                          // obsolete
                     e.readInt();
                 } else if (t == "span") {
@@ -2873,7 +2873,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             segment = m->getSegment(SegmentType::BeginBarLine, m->tick());
             BarLine* barLine = Factory::createBarLine(segment);
             barLine->setTrack(ctx.track());
-            barLine->setBarLineType(TConv::fromXml(e.readElementAsciiText(), BarLineType::NORMAL));
+            barLine->setBarLineType(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
             Tuplet* tuplet = Factory::createTuplet(m);
@@ -3203,7 +3203,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "LayerTag") {
             int id = e.intAttribute("id");
             const QString& t = e.attribute("tag");
-            QString val(e.readElementText());
+            QString val(e.readText());
             if (id >= 0 && id < 32) {
                 score->layerTags()[id] = t;
                 score->layerTagComments()[id] = val;
@@ -3211,7 +3211,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Layer") {
             Layer layer;
             layer.name = e.attribute("name");
-            layer.tags = e.attribute("mask").toUInt();
+            layer.tags = static_cast<uint>(e.intAttribute("mask"));
             score->layer().push_back(layer);
             e.readNext();
         } else if (tag == "currentLayer") {
@@ -3250,18 +3250,18 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             score->setMetaTag("copyright", text->xmlText());
             delete text;
         } else if (tag == "movement-number") {
-            score->setMetaTag("movementNumber", e.readElementText());
+            score->setMetaTag("movementNumber", e.readText());
         } else if (tag == "movement-title") {
-            score->setMetaTag("movementTitle", e.readElementText());
+            score->setMetaTag("movementTitle", e.readText());
         } else if (tag == "work-number") {
-            score->setMetaTag("workNumber", e.readElementText());
+            score->setMetaTag("workNumber", e.readText());
         } else if (tag == "work-title") {
-            score->setMetaTag("workTitle", e.readElementText());
+            score->setMetaTag("workTitle", e.readText());
         } else if (tag == "source") {
-            score->setMetaTag("source", e.readElementText());
+            score->setMetaTag("source", e.readText());
         } else if (tag == "metaTag") {
             QString name = e.attribute("name");
-            score->setMetaTag(name, e.readElementText());
+            score->setMetaTag(name, e.readText());
         } else if (tag == "Part") {
             Part* part = new Part(score);
             Read206::readPart206(part, e, ctx);
@@ -3326,12 +3326,12 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "PageList") {
             e.skipCurrentElement();
         } else if (tag == "name") {
-            QString n = e.readElementText();
+            QString n = e.readText();
             if (!score->isMaster()) {                 //ignore the name if it's not a child score
                 score->excerpt()->setName(n);
             }
         } else if (tag == "layoutMode") {
-            QString s = e.readElementText();
+            QString s = e.readText();
             if (s == "line") {
                 score->setLayoutMode(LayoutMode::LINE);
             } else if (s == "system") {
@@ -3376,9 +3376,9 @@ Score::FileError Read206::read206(mu::engraving::MasterScore* masterScore, XmlRe
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "programVersion") {
-            masterScore->setMscoreVersion(e.readElementText());
+            masterScore->setMscoreVersion(e.readText());
         } else if (tag == "programRevision") {
-            masterScore->setMscoreRevision(e.readIntHex());
+            masterScore->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
             if (!readScore206(masterScore, e, ctx)) {
                 return Score::FileError::FILE_BAD_FORMAT;

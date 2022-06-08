@@ -210,7 +210,7 @@ void Marker::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "label") {
-            QString s(e.readElementText());
+            QString s(e.readText());
             setLabel(s);
             mt = markerType(s);
         } else if (!TextBase::readProperties(e)) {

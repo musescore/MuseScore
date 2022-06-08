@@ -314,7 +314,7 @@ void EditDrumsetDialog::updatePitchesList()
             QString s(QChar(m_editedDrumset.shortcut(i)));
             item->setText(Column::SHORTCUT, s);
         }
-        item->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(i).toUtf8().constData()));
+        item->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(i)));
         item->setData(Column::PITCH, Qt::UserRole, i);
     }
     pitchList->sortItems(3, Qt::SortOrder::DescendingOrder);
@@ -334,7 +334,7 @@ void EditDrumsetDialog::refreshPitchesList()
             QString s(QChar(m_editedDrumset.shortcut(pitch)));
             item->setText(Column::SHORTCUT, s);
         }
-        item->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
+        item->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(pitch)));
         item->setData(0, Qt::UserRole, pitch);
     }
 }
@@ -508,7 +508,7 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
             m_editedDrumset.drum(pitch).shortcut = "ABCDEFG"[shortcut->currentIndex()];
         }
         m_editedDrumset.drum(pitch).stemDirection = DirectionV(stemDirection->currentIndex());
-        previous->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
+        previous->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(pitch)));
     }
     if (current == 0) {
         return;
@@ -520,7 +520,7 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
     noteHead->blockSignals(true);
 
     int pitch = current->data(0, Qt::UserRole).toInt();
-    name->setText(mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
+    name->setText(mu::qtrc("drumset", m_editedDrumset.name(pitch)));
     staffLine->setValue(m_editedDrumset.line(pitch));
     voice->setCurrentIndex(m_editedDrumset.voice(pitch));
     stemDirection->setCurrentIndex(int(m_editedDrumset.stemDirection(pitch)));
@@ -627,7 +627,7 @@ void EditDrumsetDialog::updateExample()
     Stem* stem = Factory::createStem(chord.get());
     stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * gpaletteScore->spatium()));
     chord->add(stem);
-    drumNote->appendElement(chord, mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
+    drumNote->appendElement(chord, mu::qtrc("drumset", m_editedDrumset.name(pitch)));
 }
 
 //---------------------------------------------------------

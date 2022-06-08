@@ -262,9 +262,9 @@ bool Palette::read(XmlReader& e)
         } else if (tag == "drumPalette") { // obsolete
             e.skipCurrentElement();
         } else if (tag == "type") {
-            QByteArray ba = e.readElementText().toLatin1();
+            ByteArray ba = e.readText().toAscii();
             bool ok = true;
-            const int t = QMetaEnum::fromType<Type>().keyToValue(ba.constData(), &ok);
+            const int t = QMetaEnum::fromType<Type>().keyToValue(ba.constChar(), &ok);
             if (ok) {
                 m_type = Type(t);
             }
@@ -386,7 +386,7 @@ bool Palette::readFromFile(const QString& p)
                     }
                     e.readNext();
                 } else if (tag == "file") {
-                    images.append(e.readElementText());
+                    images.append(e.readText());
                 } else {
                     e.unknown();
                 }
