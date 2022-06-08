@@ -254,27 +254,22 @@ void System::adjustStavesNumber(size_t nstaves)
 }
 
 //---------------------------------------------------------
-//   systemNamesWidth
+//   instrumentNamesWidth
 //---------------------------------------------------------
 
-qreal System::systemNamesWidth()
+qreal System::instrumentNamesWidth()
 {
-    qreal instrumentNameOffset = score()->styleMM(Sid::instrumentNameOffset);
-
     qreal namesWidth = 0.0;
 
-    for (const Part* part : score()->parts()) {
-        for (staff_idx_t staffIdx = firstSysStaffOfPart(part); staffIdx <= lastSysStaffOfPart(part); ++staffIdx) {
-            SysStaff* staff = this->staff(staffIdx);
-            if (!staff) {
-                continue;
-            }
+    for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+        const SysStaff* staff = this->staff(staffIdx);
+        if (!staff) {
+            continue;
+        }
 
-            for (InstrumentName* name : qAsConst(staff->instrumentNames)) {
-                name->layout();
-                qreal width = name->width() + instrumentNameOffset;
-                namesWidth = qMax(namesWidth, width);
-            }
+        for (InstrumentName* name : staff->instrumentNames) {
+            name->layout();
+            namesWidth = std::max(namesWidth, name->width());
         }
     }
 
@@ -327,7 +322,7 @@ qreal System::layoutBrackets(const LayoutContext& ctx)
 
     qreal bd = score()->styleMM(Sid::bracketDistance);
     if (!_brackets.empty()) {
-        for (int w : bracketWidth) {
+        for (qreal w : bracketWidth) {
             totalBracketWidth += w + bd;
         }
     }
@@ -341,6 +336,9 @@ qreal System::layoutBrackets(const LayoutContext& ctx)
 
 qreal System::totalBracketOffset(const LayoutContext& ctx)
 {
+    // TODO: This trick doesn't work
+    // just toggling the style setting does nothing, so this method
+    // will return the same result as a plain call to layoutBrackets.
     bool hideEmptyStaves = score()->styleB(Sid::hideEmptyStaves);
     score()->setStyleValue(Sid::hideEmptyStaves, false);
 
@@ -368,7 +366,7 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
     //---------------------------------------------------
     //  find x position of staves
     //---------------------------------------------------
-    qreal maxNamesWidth = systemNamesWidth();
+    qreal maxNamesWidth = instrumentNamesWidth();
 
     if (isFirstSystem && firstSystemIndent) {
         maxNamesWidth = qMax(maxNamesWidth, styleP(Sid::firstSystemIndentationValue) * mag());
@@ -377,14 +375,15 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
     qreal maxBracketsWidth = totalBracketOffset(ctx);
     qreal bracketsWidth = layoutBrackets(ctx);
     qreal bracketWidthDifference = maxBracketsWidth - bracketsWidth;
-    if (maxNamesWidth == 0.0) {
+
+    if (qFuzzyIsNull(maxNamesWidth)) {
         if (score()->styleB(Sid::alignSystemToMargin)) {
             _leftMargin = bracketWidthDifference;
         } else {
             _leftMargin = maxBracketsWidth;
         }
     } else {
-        _leftMargin = maxNamesWidth + bracketWidthDifference + instrumentNameOffset;
+        _leftMargin = maxNamesWidth + instrumentNameOffset + bracketsWidth;
     }
 
     int nVisible = 0;
@@ -422,22 +421,17 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
 
     for (SysStaff* s : qAsConst(_staves)) {
         for (InstrumentName* t : qAsConst(s->instrumentNames)) {
-            // reset align layout
-            Align originAlign = t->align();
-            t->setAlign(Align(AlignH::LEFT, originAlign.vertical));
             t->layout();
-            t->setAlign(originAlign);
 
             switch (t->align().horizontal) {
             case AlignH::LEFT:
-                t->rxpos() = 0 - bracketsWidth;
+                t->rxpos() = 0;
                 break;
             case AlignH::HCENTER:
-                t->rxpos() = (maxNamesWidth - t->width()) / 2 - bracketsWidth;
+                t->rxpos() = maxNamesWidth * .5;
                 break;
             case AlignH::RIGHT:
-            default:
-                t->rxpos() = maxNamesWidth - t->width() - bracketsWidth;
+                t->rxpos() = maxNamesWidth;
                 break;
             }
         }
