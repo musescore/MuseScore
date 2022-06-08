@@ -1448,6 +1448,7 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
         staff->spatiumChanged(oldValue, newValue);
     }
     _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
+    createPaddingTable();
 }
 
 //---------------------------------------------------------
@@ -5567,6 +5568,39 @@ void Score::createPaddingTable()
 
     // Temporary hack, because some padding is already constructed inside the lyrics themselves.
     _paddingTable[ElementType::BAR_LINE][ElementType::LYRICS] = 0.0 * spatium();
+}
+
+//--------------------------------------------------------
+// setAutoSpatium()
+// Reduces the spatium size as necessary to accomodate all
+// staves in the page. Caution: the spatium is expressed in
+// DPI, page dimensions in inches, staff sizes in mm.
+//--------------------------------------------------------
+void Score::autoUpdateSpatium()
+{
+    static constexpr double breathingSpace = 2.5; // allow breathing space between staves
+    static constexpr double minStaffHeight = 2.0; // never make staff smaller than 2.0 mm
+    static constexpr double maxStaffHeight = 7.0; // never make staff bigger than 7.0 mm (default value)
+
+    double availableHeight = (styleD(Sid::pageHeight) - styleD(Sid::pageOddTopMargin) - styleD(Sid::pageOddBottomMargin)) * DPI; // convert from inches to DPI
+    double titleHeight = (!measures()->empty() && measures()->first()->isVBox()) ? measures()->first()->height() : 0.0;
+    availableHeight -= titleHeight;
+    double totalNeededSpaces = 4 * _staves.size() * breathingSpace;
+    double targetSpatium = availableHeight / totalNeededSpaces;
+
+    double resultingStaffHeight = 4 * targetSpatium / DPI * INCH; // conversion from DPI to mm
+    resultingStaffHeight = round(resultingStaffHeight * 10) / 10; // round to nearest 0.1 mm
+    if (resultingStaffHeight > maxStaffHeight) {
+        return;
+    }
+    if (resultingStaffHeight < minStaffHeight) {
+        resultingStaffHeight = minStaffHeight;
+    }
+
+    targetSpatium = (resultingStaffHeight / 4) * DPI / INCH;
+
+    setSpatium(targetSpatium);
+    createPaddingTable();
 }
 
 UndoStack* Score::undoStack() const { return _masterScore->undoStack(); }
