@@ -193,8 +193,8 @@ PalettePtr PaletteCreator::newBeamPalette()
     sp->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_16TH, "beam-break-inner-16th");
     sp->appendActionIcon(ActionIconType::BEAM_JOIN, "beam-join");
 
-    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_SLOWER, "beam-feathered-slower");
-    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_FASTER, "beam-feathered-faster");
+    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_DECELERATE, "beam-feathered-decelerate");
+    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_ACCELERATE, "beam-feathered-accelerate");
 
     return sp;
 }
