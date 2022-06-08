@@ -432,6 +432,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
     }
 
     score->setUpTempoMap();
+    score->autoUpdateSpatium();
 
     {
         mu::engraving::ScoreLoad sl;
