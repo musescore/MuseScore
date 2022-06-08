@@ -159,6 +159,7 @@ public:
 
     void copySelection() override;
     void copyLyrics() override;
+    Ret repeatSelection() override;
     void pasteSelection(const Fraction& scale = Fraction(1, 1)) override;
     void swapSelection() override;
     void deleteSelection() override;
@@ -211,7 +212,6 @@ public:
 
     void fillSelectionWithSlashes() override;
     void replaceSelectedNotesWithSlashes() override;
-    void repeatSelection() override;
     void changeEnharmonicSpelling(bool) override;
     void spellPitches() override;
     void regroupNotesAndRests() override;

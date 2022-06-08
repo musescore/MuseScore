@@ -401,7 +401,7 @@ void NotationActionController::init()
     registerAction("pitch-up-diatonic", &Interaction::movePitch, MoveDirection::Up, PitchMode::DIATONIC, PlayMode::PlayNote);
     registerAction("pitch-down-diatonic", &Interaction::movePitch, MoveDirection::Down, PitchMode::DIATONIC, PlayMode::PlayNote);
 
-    registerAction("repeat-sel", &Interaction::repeatSelection);
+    registerAction("repeat-sel", &Controller::repeatSelection);
 
     registerAction("add-trill", &Interaction::toggleArticulation, mu::engraving::SymId::ornamentTrill);
     registerAction("add-up-bow", &Interaction::toggleArticulation, mu::engraving::SymId::stringsUpBow);
@@ -944,6 +944,20 @@ void NotationActionController::cutSelection()
     }
     interaction->copySelection();
     interaction->deleteSelection();
+}
+
+void NotationActionController::repeatSelection()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    Ret ret = interaction->repeatSelection();
+
+    if (!ret && !ret.text().empty()) {
+        interactive()->error("", ret.text());
+    }
 }
 
 void NotationActionController::pasteSelection(PastingType type)

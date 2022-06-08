@@ -21,11 +21,14 @@
  */
 #include "notationselection.h"
 
+#include <QMimeData>
+
 #include "libmscore/masterscore.h"
 #include "libmscore/segment.h"
 #include "libmscore/measure.h"
 
 #include "notationselectionrange.h"
+#include "notationerrors.h"
 
 #include "log.h"
 
@@ -52,9 +55,17 @@ SelectionState NotationSelection::state() const
     return score()->selection().state();
 }
 
-bool NotationSelection::canCopy() const
+mu::Ret NotationSelection::canCopy() const
 {
-    return score()->selection().canCopy();
+    if (isNone()) {
+        return make_ret(Err::EmptySelection);
+    }
+
+    if (!score()->selection().canCopy()) {
+        return make_ret(Err::SelectCompleteTupletOrTremolo);
+    }
+
+    return make_ok();
 }
 
 QMimeData* NotationSelection::mimeData() const
