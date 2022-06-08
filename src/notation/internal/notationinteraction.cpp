@@ -1416,8 +1416,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
 
         auto isEntryDrumStaff = [score]() {
             const mu::engraving::InputState& is = score->inputState();
-            mu::engraving::Staff* staff = score->staff(is.track() / mu::engraving::VOICES);
-            return staff->staffType(is.tick())->group() == mu::engraving::StaffGroup::PERCUSSION;
+            const mu::engraving::Staff* staff = score->staff(is.track() / mu::engraving::VOICES);
+            return staff ? staff->staffType(is.tick())->group() == mu::engraving::StaffGroup::PERCUSSION : false;
         };
 
         if (isEntryDrumStaff() && element->isChord()) {
