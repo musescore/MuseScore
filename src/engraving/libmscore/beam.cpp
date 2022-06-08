@@ -1786,8 +1786,8 @@ bool Beam::acceptDrop(EditData& data) const
 
     if (e->isActionIcon()) {
         ActionIconType type = toActionIcon(e)->actionType();
-        return type == ActionIconType::BEAM_FEATHERED_SLOWER
-               || type == ActionIconType::BEAM_FEATHERED_FASTER;
+        return type == ActionIconType::BEAM_FEATHERED_DECELERATE
+               || type == ActionIconType::BEAM_FEATHERED_ACCELERATE;
     }
 
     return false;
@@ -1805,9 +1805,9 @@ EngravingItem* Beam::drop(EditData& data)
 
     ActionIcon* e = toActionIcon(data.dropElement);
 
-    if (e->actionType() == ActionIconType::BEAM_FEATHERED_SLOWER) {
+    if (e->actionType() == ActionIconType::BEAM_FEATHERED_DECELERATE) {
         setAsFeathered(true /*slower*/);
-    } else if (e->actionType() == ActionIconType::BEAM_FEATHERED_FASTER) {
+    } else if (e->actionType() == ActionIconType::BEAM_FEATHERED_ACCELERATE) {
         setAsFeathered(false /*slower*/);
     }
 

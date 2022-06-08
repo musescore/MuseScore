@@ -43,8 +43,8 @@ public:
 
     enum class FeatheringMode {
         FEATHERING_NONE = 0,
-        FEATHERING_LEFT,
-        FEATHERING_RIGHT
+        FEATHERED_DECELERATE,
+        FEATHERED_ACCELERATE
     };
 
     Q_ENUM(Mode)
