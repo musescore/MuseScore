@@ -2651,4 +2651,29 @@ Fraction Segment::shortestChordRest() const
     }
     return shortest;
 }
+
+CrossStaffContent Segment::crossStaffContent() const
+{
+    CrossStaffContent crossStaffContent;
+    for (EngravingItem* el : elist()) {
+        if (el && el->isChordRest()) {
+            if (toChordRest(el)->staffMove() == 0 && !toChordRest(el)->isFullMeasureRest()) {
+                crossStaffContent.movedDown = false;
+                crossStaffContent.movedUp = false;
+                break;
+            }
+            if (toChordRest(el)->staffMove() > 0 && toChordRest(el)->beam()) {
+                crossStaffContent.movedDown = true;
+            }
+            if (toChordRest(el)->staffMove() < 0 && toChordRest(el)->beam()) {
+                crossStaffContent.movedUp = true;
+            }
+        }
+    }
+    if (crossStaffContent.movedUp && crossStaffContent.movedDown) { // If this segment contains both up and down cross-staff, we don't correct for it
+        crossStaffContent.movedUp = false;
+        crossStaffContent.movedDown = false;
+    }
+    return crossStaffContent;
+}
 } // namespace mu::engraving
