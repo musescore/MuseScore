@@ -645,7 +645,7 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
         Instrument* instrument = i->second;
         int t = i->first;
         _instruments.erase(i++);
-        _instruments[t + len.ticks()] = instrument;
+        il[t + len.ticks()] = instrument;
     }
     _instruments.insert(il.begin(), il.end());
 }
