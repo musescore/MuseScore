@@ -47,7 +47,6 @@ ExampleView::ExampleView(QWidget* parent)
     : QFrame(parent)
 {
     m_score = nullptr;
-    setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     resetMatrix();
     m_backgroundPixmap = nullptr;
@@ -191,146 +190,14 @@ void ExampleView::paintEvent(QPaintEvent* event)
     drawElements(painter, ell);
 }
 
-void ExampleView::dragEnterEvent(QDragEnterEvent* event)
-{
-    const QMimeData* d = event->mimeData();
-    if (d->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
-        event->acceptProposedAction();
-
-        QByteArray a = d->data(mu::commonscene::MIME_SYMBOL_FORMAT);
-
-// LOGD("ExampleView::dragEnterEvent Symbol: <%s>", a.data());
-
-        XmlReader e(ByteArray::fromQByteArrayNoCopy(a));
-        PointF dragOffset;
-        Fraction duration;      // dummy
-        ElementType type = EngravingItem::readType(e, &dragOffset, &duration);
-
-        m_dragElement = Factory::createItem(type, m_score->dummy());
-        if (m_dragElement) {
-            m_dragElement->resetExplicitParent();
-            m_dragElement->read(e);
-            m_dragElement->layout();
-        }
-        return;
-    }
-}
-
-void ExampleView::dragLeaveEvent(QDragLeaveEvent*)
-{
-    if (m_dragElement) {
-        delete m_dragElement;
-        m_dragElement = 0;
-    }
-    setDropTarget(0);
-}
-
-struct MoveContext
-{
-    PointF pos;
-    mu::engraving::Score* score = nullptr;
-};
-
-static void moveElement(void* data, EngravingItem* e)
-{
-    MoveContext* ctx = (MoveContext*)data;
-    ctx->score->addRefresh(e->canvasBoundingRect());
-    e->setPos(ctx->pos);
-    ctx->score->addRefresh(e->canvasBoundingRect());
-}
-
-void ExampleView::dragMoveEvent(QDragMoveEvent* event)
-{
-    event->acceptProposedAction();
-
-    if (!m_dragElement || !m_dragElement->isActionIcon()) {
-        return;
-    }
-
-    EngravingItem* newDropTarget = nullptr;
-
-    PointF position = m_matrix.inverted().map(PointF::fromQPointF(event->posF()));
-    std::vector<EngravingItem*> el = elementsAt(position);
-
-    for (EngravingItem* e : el) {
-        if (e->type() == ElementType::NOTE) {
-            newDropTarget = e;
-            break;
-        }
-    }
-
-    setDropTarget(newDropTarget);
-
-    MoveContext ctx{ position, m_score };
-    m_dragElement->scanElements(&ctx, moveElement, false);
-    m_score->update();
-    return;
-}
-
-void ExampleView::setDropTarget(const EngravingItem* el)
-{
-    if (m_dropTarget != el) {
-        if (m_dropTarget) {
-            m_dropTarget->setDropTarget(false);
-            m_dropTarget = 0;
-        }
-        m_dropTarget = el;
-        if (m_dropTarget) {
-            m_dropTarget->setDropTarget(true);
-        }
-    }
-    if (!m_dropAnchor.isNull()) {
-        QRectF r;
-        r.setTopLeft(m_dropAnchor.p1());
-        r.setBottomRight(m_dropAnchor.p2());
-        m_dropAnchor = QLineF();
-    }
-    if (m_dropRectangle.isValid()) {
-        m_dropRectangle = QRectF();
-    }
-    update();
-}
-
-void ExampleView::dropEvent(QDropEvent* event)
-{
-    PointF position = m_matrix.inverted().map(PointF::fromQPointF(event->posF()));
-
-    if (!m_dragElement) {
-        return;
-    }
-
-    if (!m_dragElement->isActionIcon()) {
-        delete m_dragElement;
-        m_dragElement = nullptr;
-        return;
-    }
-
-    foreach (EngravingItem* e, elementsAt(position)) {
-        if (e->type() == ElementType::NOTE) {
-            ActionIcon* icon = toActionIcon(m_dragElement);
-            Chord* chord = toNote(e)->chord();
-            emit beamPropertyDropped(chord, icon);
-            break;
-        }
-    }
-
-    event->acceptProposedAction();
-    delete m_dragElement;
-    m_dragElement = nullptr;
-    setDropTarget(nullptr);
-}
-
 void ExampleView::mousePressEvent(QMouseEvent* event)
 {
-    PointF position = m_matrix.inverted().map(PointF::fromQPointF(event->pos()));
-    m_moveStartPoint = position;
+    m_moveStartPoint = toLogical(event->pos());
+}
 
-    foreach (EngravingItem* e, elementsAt(position)) {
-        if (e->type() == ElementType::NOTE) {
-            emit noteClicked(toNote(e));
-            break;
-        }
-    }
+PointF ExampleView::toLogical(const QPointF& point)
+{
+    return m_matrix.inverted().map(PointF::fromQPointF(point));
 }
 
 QSize ExampleView::sizeHint() const
