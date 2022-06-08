@@ -34,7 +34,7 @@
 namespace mu::engraving {
 class ReadContext;
 
-class XmlReader : public mu::XmlStreamReader
+class XmlReader : public XmlStreamReader
 {
 public:
 
@@ -55,7 +55,7 @@ public:
     void unknown();
 
     // attribute helper routines:
-    QString attribute(const char* s) const { return mu::XmlStreamReader::attribute(s); }
+    QString attribute(const char* s) const { return mu::XmlStreamReader::attribute(s).toQString(); }
     QString attribute(const char* s, const QString&) const;
     int intAttribute(const char* s) const;
     int intAttribute(const char* s, int _default) const;

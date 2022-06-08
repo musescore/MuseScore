@@ -22,6 +22,8 @@
 #include "string.h"
 #include <cstring>
 #include <cstdlib>
+#include <locale>
+#include <cctype>
 
 #include "global/thirdparty/utfcpp-3.2.1/utf8.h"
 
@@ -32,6 +34,20 @@ using namespace mu;
 // ============================
 // Char
 // ============================
+char Char::ascii(bool* ok) const
+{
+    if (m_ch > 0xff) {
+        if (ok) {
+            *ok = false;
+        }
+        return '?';
+    } else {
+        if (ok) {
+            *ok = true;
+        }
+        return static_cast<char>(m_ch);
+    }
+}
 
 // ============================
 // UtfCodec
@@ -60,9 +76,45 @@ String::String(const char16_t* str)
     m_data = std::make_shared<std::u16string>(str);
 }
 
+const std::u16string& String::constStr() const
+{
+    return *m_data.get();
+}
+
+std::u16string& String::mutStr()
+{
+    detach();
+    return *m_data.get();
+}
+
+void String::detach()
+{
+    if (!m_data) {
+        return;
+    }
+
+    if (m_data.use_count() == 1) {
+        return;
+    }
+
+    m_data = std::make_shared<std::u16string>(*m_data);
+}
+
 String& String::operator=(const char16_t* str)
 {
     m_data = std::make_shared<std::u16string>(str);
+    return *this;
+}
+
+String& String::operator +=(const String& s)
+{
+    mutStr() += s.constStr();
+    return *this;
+}
+
+String& String::operator +=(const char16_t* s)
+{
+    mutStr() += s;
     return *this;
 }
 
@@ -90,15 +142,12 @@ ByteArray String::toAscii(bool* ok) const
     }
 
     for (size_t i = 0; i < size(); ++i) {
-        char16_t ch = m_data->at(i);
-        if (ch > 0xff) {
-            ba[i] = '?';
-            if (ok) {
-                *ok = false;
-            }
-        } else {
-            ba[i] = static_cast<uint8_t>(ch);
+        bool cok = false;
+        char ch = Char(m_data->at(i)).ascii(&cok);
+        if (!cok && ok) {
+            *ok = false;
         }
+        ba[i] = static_cast<uint8_t>(ch);
     }
     return ba;
 }
@@ -151,6 +200,106 @@ Char String::at(size_t i) const
         return Char();
     }
     return Char(m_data->at(i));
+}
+
+bool String::contains(const Char& ch) const
+{
+    return constStr().find(ch.unicode()) != std::u16string::npos;
+}
+
+bool String::startsWith(const AsciiStringView& str, CaseSensitivity cs) const
+{
+    if (str.size() > size()) {
+        return false;
+    }
+
+    for (size_t i = 0; i < str.size(); ++i) {
+        if (Char(m_data->at(i)).ascii() == str.at(i).ascii()) {
+            continue;
+        }
+
+        if (cs == CaseInsensitive) {
+            if (AsciiChar::toLower(Char(m_data->at(i)).ascii()) == AsciiChar::toLower(str.at(i).ascii())) {
+                continue;
+            }
+        }
+
+        return false;
+    }
+
+    return true;
+}
+
+bool String::endsWith(const AsciiStringView& str, CaseSensitivity cs) const
+{
+    if (str.size() > size()) {
+        return false;
+    }
+
+    size_t start = size() - str.size();
+    for (size_t i = 0; i < str.size(); ++i) {
+        if (Char(m_data->at(start + i)).ascii() == str.at(i).ascii()) {
+            continue;
+        }
+
+        if (cs == CaseInsensitive) {
+            if (AsciiChar::toLower(Char(m_data->at(start + i)).ascii()) == AsciiChar::toLower(str.at(i).ascii())) {
+                continue;
+            }
+        }
+
+        return false;
+    }
+
+    return true;
+}
+
+StringList String::split(const Char& ch) const
+{
+    StringList out;
+    std::size_t current, previous = 0;
+    current = constStr().find(ch.unicode());
+    while (current != std::string::npos) {
+        String sub = mid(previous, current - previous);
+        out.push_back(std::move(sub));
+        previous = current + 1;
+        current = constStr().find(ch.unicode(), previous);
+    }
+    String sub = mid(previous, current - previous);
+    out.push_back(std::move(sub));
+
+    return out;
+}
+
+String& String::replace(const String& before, const String& after)
+{
+    size_t start_pos = 0;
+    while ((start_pos = m_data->find(before.constStr(), start_pos)) != std::string::npos) {
+        m_data->replace(start_pos, before.size(), after.constStr());
+        start_pos += after.size(); // Handles case where 'after' is a substring of 'before'
+    }
+    return *this;
+}
+
+String String::mid(size_t pos, size_t count) const
+{
+    String s;
+    s.mutStr() = constStr().substr(pos, count);
+    return s;
+}
+
+// ============================
+// AsciiStringView
+// ============================
+
+char AsciiChar::toLower(char ch)
+{
+    return static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+}
+
+char AsciiChar::toUpper(char ch)
+{
+    return static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
 }
 
 // ============================
