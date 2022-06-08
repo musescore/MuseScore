@@ -142,8 +142,11 @@ bool SlurSegment::isEditAllowed(EditData& ed) const
         return true;
     }
 
-    if (!((ed.modifiers & Qt::ShiftModifier)
-          && (isSingleType() || (isBeginType() && ed.curGrip == Grip::START) || (isEndType() && ed.curGrip == Grip::END)))) {
+    const bool moveStart = ed.curGrip == Grip::START;
+    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::DRAG;
+
+    if (!((ed.modifiers & Qt::ShiftModifier) && (isSingleType()
+                                                 || (isBeginType() && moveStart) || (isEndType() && moveEnd)))) {
         return false;
     }
 
@@ -293,7 +296,8 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
     spanner()->layout();
     if (spanner()->spannerSegments().size() != segments) {
         const std::vector<SpannerSegment*>& ss = spanner()->spannerSegments();
-        SlurSegment* newSegment = toSlurSegment(ed.curGrip == Grip::END ? ss.back() : ss.front());
+        const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::DRAG;
+        SlurSegment* newSegment = toSlurSegment(moveEnd ? ss.back() : ss.front());
         ed.view()->changeEditElement(newSegment);
         triggerLayout();
     }
