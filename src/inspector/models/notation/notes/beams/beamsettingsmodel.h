@@ -78,6 +78,7 @@ protected:
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
+    void updatePropertiesOnNotationChanged() override;
 
 private:
     void updateBeamHeight(const qreal& x, const qreal& y);
