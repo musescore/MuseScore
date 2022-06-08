@@ -43,6 +43,7 @@
 #include "../iplaybackcontroller.h"
 #include "../iplaybackconfiguration.h"
 #include <QDir>
+#include <QFileDialog>
 namespace mu::playback {
 class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable
 {
@@ -54,7 +55,7 @@ class PlaybackController : public IPlaybackController, public actions::Actionabl
 
 public:
     void init();
-
+    void loadMedia();
     bool isPlayAllowed() const override;
     async::Notification isPlayAllowedChanged() const override;
 

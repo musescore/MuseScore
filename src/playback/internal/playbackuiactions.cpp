@@ -28,6 +28,12 @@ using namespace mu::ui;
 using namespace mu::actions;
 
 const UiActionList PlaybackUiActions::m_mainActions = {
+    UiAction("loadmedia",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Load media"),
+             QT_TRANSLATE_NOOP("action", "Load external media"),
+             IconCode::Code::LOADMEDIA
+             ),
     UiAction("play",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Play"),
@@ -174,6 +180,7 @@ const mu::ui::ToolConfig& PlaybackUiActions::defaultPlaybackToolConfig()
     static ToolConfig config;
     if (!config.isValid()) {
         config.items = {
+            { "loadmedia", true },
             { "rewind", true },
             { "play", true },
             { "loop", true },

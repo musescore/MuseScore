@@ -35,6 +35,7 @@ using namespace mu::audio;
 using namespace mu::actions;
 using namespace mu::engraving;
 
+static const ActionCode LOADMEDIA_CODE("loadmedia");
 static const ActionCode PLAY_CODE("play");
 static const ActionCode STOP_CODE("stop");
 static const ActionCode REWIND_CODE("rewind");
@@ -49,6 +50,8 @@ static const ActionCode REPEAT_CODE("repeat");
 
 void PlaybackController::init()
 {
+
+    dispatcher()->reg(this, LOADMEDIA_CODE, this, &PlaybackController::loadMedia);
     dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
     dispatcher()->reg(this, STOP_CODE, this, &PlaybackController::pause);
     dispatcher()->reg(this, REWIND_CODE, this, &PlaybackController::rewind);
@@ -85,6 +88,44 @@ void PlaybackController::init()
     });
 
     m_needRewindBeforePlay = true;
+}
+
+void PlaybackController::loadMedia()
+{
+    QString fileName=QFileDialog::getOpenFileName(nullptr,"Select:","","(*.wav)");
+
+    AudioOutputParams outParams;
+    outParams.muted=true;
+    AudioInputParams inParams;
+    InstrumentTrackId instrumentTrackId;
+    instrumentTrackId.partId=998;
+    instrumentTrackId.instrumentId="external-wave";
+    removeTrack(instrumentTrackId);
+    QFile *file;
+    file = new QFile();
+    file->setFileName(fileName);
+    if(file->exists()) {
+        playback()->tracks()->addTrack(m_currentSequenceId,"WAVE",file,{std::move(inParams), std::move(outParams)})
+                .onResolve(this, [this,instrumentTrackId](const TrackId trackId, const AudioParams& appliedParams) {
+
+            m_trackIdMap.insert({instrumentTrackId, trackId });
+
+            audioSettings()->setTrackInputParams(instrumentTrackId, appliedParams.in);
+            audioSettings()->setTrackOutputParams(instrumentTrackId, appliedParams.out);
+
+            updateMuteStates();
+
+
+    })
+    .onReject(this, [](int code, const std::string& msg) {
+        LOGE() << "can't add a new track, code: [" << code << "] " << msg;
+    });
+
+
+    }
+
+
+
 }
 
 void PlaybackController::updateCurrentTempo()
@@ -320,7 +361,6 @@ void PlaybackController::togglePlay()
         LOGW() << "playback not allowed";
         return;
     }
-
     interaction()->endEditElement();
 
     if (isPlaying()) {
@@ -453,7 +493,6 @@ void PlaybackController::setCurrentPlaybackStatus(PlaybackStatus status)
     if (m_currentPlaybackStatus == status) {
         return;
     }
-
     m_currentPlaybackStatus = status;
     m_isPlayingChanged.notify();
 }
@@ -479,6 +518,7 @@ void PlaybackController::toggleMetronome()
     notifyActionCheckedChanged(METRONOME_CODE);
 
     setTrackActivity(notationPlayback()->metronomeTrackId(), !metronomeEnabled);
+    setTrackActivity({{998},{"external-wave"}}, !metronomeEnabled);
 }
 
 void PlaybackController::toggleMidiInput()
@@ -622,7 +662,6 @@ void PlaybackController::setCurrentTick(const tick_t tick)
     m_currentTick = tick;
     m_playbackPositionChanged.notify();
 }
-
 void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const std::string& title)
 {
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
@@ -642,7 +681,6 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
     }
 
     uint64_t notationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
-
     playback()->tracks()->addTrack(m_currentSequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
     .onResolve(this, [this, instrumentTrackId, notationPlaybackKey](const TrackId trackId, const AudioParams& appliedParams) {
         //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
@@ -707,7 +745,7 @@ InstrumentTrackIdSet PlaybackController::availableInstrumentTracks() const
 void PlaybackController::removeNonExistingTracks()
 {
     for (const InstrumentTrackId& instrumentTrackId : availableInstrumentTracks()) {
-        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
+        if ((instrumentTrackId == notationPlayback()->metronomeTrackId()) || instrumentTrackId.partId == 998) {
             continue;
         }
 
@@ -807,19 +845,11 @@ void PlaybackController::subscribeOnAudioParamsChanges()
 
 void PlaybackController::setupSequenceTracks()
 {
-    AudioOutputParams outParams;
-    AudioInputParams inParams;
-    QFile *file;
-    file = new QFile();
-    file->setFileName(QDir::homePath() + QString("/mscoretest.wav"));
-    if(file->exists()) {
-        playback()->tracks()->addTrack(m_currentSequenceId,"TEST",file,{std::move(inParams), std::move(outParams)});
-    }
-
-
-
-
     m_trackIdMap.clear();
+
+
+
+
 
     if (!masterNotationParts()) {
         return;
@@ -841,6 +871,7 @@ void PlaybackController::setupSequenceTracks()
         if (!part) {
             return;
         }
+
 
         addTrack(instrumentTrackId, part->partName().toStdString());
     });
@@ -873,6 +904,7 @@ void PlaybackController::setupSequencePlayer()
 
     playback()->player()->playbackPositionMsecs().onReceive(this, [this, cursor = std::move(cursorType)]
                                                             (const TrackSequenceId id, const audio::msecs_t& msecs) {
+
         if (m_currentSequenceId != id) {
             return;
         }

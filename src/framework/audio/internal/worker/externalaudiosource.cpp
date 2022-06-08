@@ -13,14 +13,15 @@ ExternalAudioSource::ExternalAudioSource(const TrackId trackId, const io::Device
     m_sampleRate = m_wav.sampleRate;
     m_channels = m_wav.channels;
 
+
 }
+
 bool ExternalAudioSource::isActive() const
 {
     return m_active;
 }
 void ExternalAudioSource::setIsActive(const bool active)
 {
-     LOGI() << active;
      m_active = active;
 }
 void ExternalAudioSource::setSampleRate(unsigned int sampleRate)
@@ -41,12 +42,9 @@ async::Channel<unsigned int> ExternalAudioSource::audioChannelsCountChanged() co
 samples_t ExternalAudioSource::process(float* buffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
-
-
-
-    drwav_read_pcm_frames_f32(&m_wav, samplesPerChannel,buffer);
-
-    return samplesPerChannel;
+    if(m_active)
+        return drwav_read_pcm_frames_f32(&m_wav, samplesPerChannel,buffer);
+    return 0;
 
 }
 
@@ -54,16 +52,13 @@ void ExternalAudioSource::seek(const msecs_t newPositionMsecs)  {
     drwav_init_memory(&m_wav, b.constData(),b.size(),NULL);
     drwav_read_pcm_frames_f32(&m_wav, newPositionMsecs/1000 * m_wav.sampleRate, nullptr);
 
-
-
-
 }
 
 void ExternalAudioSource::applyInputParams(const AudioInputParams& requiredParams)
 {
-        if(m_params == requiredParams) {
-            return;
-        }
+    if(m_params == requiredParams) {
+        return;
+    }
     m_params = requiredParams;
     m_paramsChanges.send(m_params);
 
