@@ -87,10 +87,10 @@ NoteGroups::NoteGroups(QWidget* parent)
     iconPalette->setGridSize(27, 40);
     iconPalette->setDrawGrid(true);
 
-    iconPalette->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam-32");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam-64");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_JOIN, "beam-join");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_LEFT, "beam-break-left");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_8TH, "beam-break-inner-8th");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_16TH, "beam-break-inner-16th");
 
     iconPalette->setReadOnly(true);
     iconPalette->setApplyingElementsDisabled(true);
@@ -161,16 +161,16 @@ void NoteGroups::noteClicked(Note* note)
 void NoteGroups::beamPropertyDropped(Chord* chord, ActionIcon* icon)
 {
     switch (icon->actionType()) {
-    case ActionIconType::BEAM_START:
-        updateBeams(chord, BeamMode::BEGIN);
-        break;
-    case ActionIconType::BEAM_MID:
+    case ActionIconType::BEAM_JOIN:
         updateBeams(chord, BeamMode::AUTO);
         break;
-    case ActionIconType::BEAM_BEGIN_32:
+    case ActionIconType::BEAM_BREAK_LEFT:
+        updateBeams(chord, BeamMode::BEGIN);
+        break;
+    case ActionIconType::BEAM_BREAK_INNER_8TH:
         updateBeams(chord, BeamMode::BEGIN32);
         break;
-    case ActionIconType::BEAM_BEGIN_64:
+    case ActionIconType::BEAM_BREAK_INNER_16TH:
         updateBeams(chord, BeamMode::BEGIN64);
         break;
     default:

@@ -1808,12 +1808,12 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE16_AFTER)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE32_AFTER)
            || (noteType() == NoteType::NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_START)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_MID)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_NONE)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_32)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_64)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_AUTO)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_NONE)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_LEFT)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_INNER_8TH)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_INNER_16TH)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_JOIN)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::PARENTHESES)
            || (type == ElementType::SYMBOL)
            || (type == ElementType::CLEF)
@@ -1935,12 +1935,12 @@ EngravingItem* Note::drop(EditData& data)
         case ActionIconType::GRACE32_AFTER:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, Constants::division / 8);
             break;
-        case ActionIconType::BEAM_START:
-        case ActionIconType::BEAM_MID:
-        case ActionIconType::BEAM_NONE:
-        case ActionIconType::BEAM_BEGIN_32:
-        case ActionIconType::BEAM_BEGIN_64:
         case ActionIconType::BEAM_AUTO:
+        case ActionIconType::BEAM_NONE:
+        case ActionIconType::BEAM_BREAK_LEFT:
+        case ActionIconType::BEAM_BREAK_INNER_8TH:
+        case ActionIconType::BEAM_BREAK_INNER_16TH:
+        case ActionIconType::BEAM_JOIN:
             return ch->drop(data);
             break;
         case ActionIconType::PARENTHESES:
