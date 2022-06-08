@@ -13,6 +13,8 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/keycanvas.h
     ${CMAKE_CURRENT_LIST_DIR}/noteGroups.h
     ${CMAKE_CURRENT_LIST_DIR}/noteGroups.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/notegroupsexampleview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/notegroupsexampleview.h
     ${CMAKE_CURRENT_LIST_DIR}/symboldialog.h
     ${CMAKE_CURRENT_LIST_DIR}/symboldialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/specialcharactersdialog.cpp
