@@ -91,7 +91,7 @@ void PlaybackController::init()
 
 void PlaybackController::loadMedia()
 {
-    QString fileName=QFileDialog::getOpenFileName(nullptr,"Select:", "", "(*.wav)");
+    QString fileName=QFileDialog::getOpenFileName(nullptr, "Select:", "", "(*.wav)");
 
     AudioOutputParams outParams;
     outParams.muted=true;
@@ -104,27 +104,19 @@ void PlaybackController::loadMedia()
     file = new QFile();
     file->setFileName(fileName);
     if (file->exists()) {
-        playback()->tracks()->addTrack(m_currentSequenceId, "WAVE", file, {std::move(inParams), std::move(outParams)})
+        playback()->tracks()->addTrack(m_currentSequenceId, "WAVE", file, { std::move(inParams), std::move(outParams) })
         .onResolve(this, [this, instrumentTrackId](const TrackId trackId, const AudioParams& appliedParams) {
-
-            m_trackIdMap.insert({instrumentTrackId, trackId});
+            m_trackIdMap.insert({ instrumentTrackId, trackId });
 
             audioSettings()->setTrackInputParams(instrumentTrackId, appliedParams.in);
             audioSettings()->setTrackOutputParams(instrumentTrackId, appliedParams.out);
 
             updateMuteStates();
-
-
-    })
+        })
         .onReject(this, [](int code, const std::string& msg) {
             LOGE() << "can't add a new track, code: [" << code << "] " << msg;
-    });
-
-
+        });
     }
-
-
-
 }
 
 void PlaybackController::updateCurrentTempo()
@@ -360,6 +352,7 @@ void PlaybackController::togglePlay()
         LOGW() << "playback not allowed";
         return;
     }
+
     interaction()->endEditElement();
 
     if (isPlaying()) {
@@ -845,7 +838,6 @@ void PlaybackController::subscribeOnAudioParamsChanges()
 void PlaybackController::setupSequenceTracks()
 {
     m_trackIdMap.clear();
-
 
     if (!masterNotationParts()) {
         return;

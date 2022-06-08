@@ -33,6 +33,7 @@
 #include "sequenceio.h"
 #include "audioengine.h"
 #include "audioerrors.h"
+
 using namespace mu;
 using namespace mu::async;
 using namespace mu::audio;
@@ -94,6 +95,7 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
     trackPtr->outputHandler = mixer()->addChannel(newId, trackPtr->inputHandler).val;
     trackPtr->setInputParams(requiredParams.in);
     trackPtr->setOutputParams(requiredParams.out);
+
     m_trackAboutToBeAdded.send(trackPtr);
     m_tracks.emplace(newId, trackPtr);
     m_trackAdded.send(newId);
