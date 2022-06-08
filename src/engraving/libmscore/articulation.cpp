@@ -139,7 +139,7 @@ bool Articulation::readProperties(XmlReader& e)
     const AsciiStringView tag(e.name());
 
     if (tag == "subtype") {
-        AsciiStringView s = e.readElementAsciiText();
+        AsciiStringView s = e.readAsciiText();
         SymId id = SymNames::symIdByName(s);
         if (id == SymId::noSym) {
             id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
@@ -451,7 +451,7 @@ Articulation::AnchorGroup Articulation::anchorGroup(SymId symId)
 //   symId2ArticulationName
 //---------------------------------------------------------
 
-const char* Articulation::symId2ArticulationName(SymId symId)
+String Articulation::symId2ArticulationName(SymId symId)
 {
     switch (symId) {
     case SymId::articStaccatissimoAbove:
@@ -460,58 +460,58 @@ const char* Articulation::symId2ArticulationName(SymId symId)
     case SymId::articStaccatissimoStrokeBelow:
     case SymId::articStaccatissimoWedgeAbove:
     case SymId::articStaccatissimoWedgeBelow:
-        return "staccatissimo";
+        return u"staccatissimo";
 
     case SymId::articStaccatoAbove:
     case SymId::articStaccatoBelow:
-        return "staccato";
+        return u"staccato";
 
     case SymId::articAccentStaccatoAbove:
     case SymId::articAccentStaccatoBelow:
-        return "sforzatoStaccato";
+        return u"sforzatoStaccato";
 
     case SymId::articMarcatoStaccatoAbove:
     case SymId::articMarcatoStaccatoBelow:
-        return "marcatoStaccato";
+        return u"marcatoStaccato";
 
     case SymId::articTenutoStaccatoAbove:
     case SymId::articTenutoStaccatoBelow:
-        return "portato";
+        return u"portato";
 
     case SymId::articTenutoAccentAbove:
     case SymId::articTenutoAccentBelow:
-        return "sforzatoTenuto";
+        return u"sforzatoTenuto";
 
     case SymId::articMarcatoTenutoAbove:
     case SymId::articMarcatoTenutoBelow:
-        return "marcatoTenuto";
+        return u"marcatoTenuto";
 
     case SymId::articTenutoAbove:
     case SymId::articTenutoBelow:
-        return "tenuto";
+        return u"tenuto";
 
     case SymId::articMarcatoAbove:
     case SymId::articMarcatoBelow:
-        return "marcato";
+        return u"marcato";
 
     case SymId::articAccentAbove:
     case SymId::articAccentBelow:
-        return "sforzato";
+        return u"sforzato";
 
     case SymId::brassMuteOpen:
-        return "open";
+        return u"open";
 
     case SymId::brassMuteClosed:
-        return "closed";
+        return u"closed";
 
     case SymId::stringsHarmonic:
-        return "harmonic";
+        return u"harmonic";
 
     case SymId::ornamentMordent:
-        return "mordent";
+        return u"mordent";
 
     default:
-        return "---";
+        return u"---";
     }
 }
 
@@ -531,7 +531,7 @@ Pid Articulation::propertyId(const QStringRef& xmlName) const
 //   articulationName
 //---------------------------------------------------------
 
-const char* Articulation::articulationName() const
+String Articulation::articulationName() const
 {
     return symId2ArticulationName(_symId);
 }

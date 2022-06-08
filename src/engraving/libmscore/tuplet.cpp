@@ -927,7 +927,7 @@ bool Tuplet::readProperties(XmlReader& e)
     } else if (tag == "p2") {
         _p2 = e.readPoint() * score()->spatium();
     } else if (tag == "baseNote") {
-        _baseLen = TDuration(TConv::fromXml(e.readElementAsciiText(), DurationType::V_INVALID));
+        _baseLen = TDuration(TConv::fromXml(e.readAsciiText(), DurationType::V_INVALID));
     } else if (tag == "baseDots") {
         _baseLen.setDots(e.readInt());
     } else if (tag == "Number") {

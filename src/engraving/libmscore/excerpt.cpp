@@ -215,7 +215,7 @@ void Excerpt::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "name" || tag == "title") {
-            m_name = e.readElementText().trimmed();
+            m_name = e.readText().trimmed();
         } else if (tag == "part") {
             size_t partIdx = static_cast<size_t>(e.readInt());
             if (partIdx >= pl.size()) {
@@ -305,12 +305,12 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
     VBox* titleFramePart = toVBox(measure);
     titleFramePart->copyValues(titleFrameScore);
-    QString partLabel = excerpt->name();
-    if (!partLabel.isEmpty()) {
+    String partLabel = excerpt->name();
+    if (!partLabel.empty()) {
         Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
         txt->setPlainText(partLabel);
         measure->add(txt);
-        score->setMetaTag("partName", partLabel);
+        score->setMetaTag("partName", partLabel.toQString());
     }
 
     // initial layout of score
@@ -1450,12 +1450,13 @@ QString Excerpt::formatName(const QString& partName, const std::vector<Excerpt*>
 
     for (Excerpt* e : excerptList) {
         // if <partName> already exists, change <partName> to <partName 1>
-        if (e->name().compare(name) == 0) {
-            e->setName(e->name() + " 1");
+        QString excName = e->name().toQString();
+        if (excName.compare(name) == 0) {
+            e->setName(excName + " 1");
         }
 
         QRegularExpression regex("^(.+)\\s\\d+$");
-        QRegularExpressionMatch match = regex.match(e->name());
+        QRegularExpressionMatch match = regex.match(excName);
         if (match.hasMatch() && match.capturedTexts()[1] == name) {
             count++;
         }

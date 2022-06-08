@@ -194,7 +194,7 @@ bool PaletteCell::read(XmlReader& e)
         } else if (s == "mag") {
             mag = e.readDouble();
         } else if (s == "tag") {
-            tag = e.readElementText();
+            tag = e.readText();
         }
         // added on palettes rework
         // TODO: remove or leave to switch from using attributes later?

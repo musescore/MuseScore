@@ -132,7 +132,7 @@ void InstrumentsPanelContextMenuModel::setInstrumentsOrder(const actions::Action
         return;
     }
 
-    QString newOrderId = args.arg<QString>(0);
+    String newOrderId = String::fromQString(args.arg<QString>(0));
 
     for (const ScoreOrder& order : m_orders) {
         if (order.id == newOrderId) {

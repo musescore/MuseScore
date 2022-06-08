@@ -20,11 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __AUDIO_H__
-#define __AUDIO_H__
+#ifndef MU_ENGRAVING_AUDIO_H
+#define MU_ENGRAVING_AUDIO_H
 
-#include <QString>
 #include "types/bytearray.h"
+#include "types/string.h"
 
 namespace mu::engraving {
 class XmlWriter;
@@ -36,19 +36,19 @@ class XmlReader;
 
 class Audio
 {
-    QString _path;
-    mu::ByteArray _data;
+    String _path;
+    ByteArray _data;
 
 public:
     Audio();
-    const QString& path() const { return _path; }
-    void setPath(const QString& s) { _path = s; }
-    const mu::ByteArray& data() const { return _data; }
-    mu::ByteArray data() { return _data; }
-    void setData(const mu::ByteArray& ba) { _data = ba; }
+    const String& path() const { return _path; }
+    void setPath(const String& s) { _path = s; }
+    const ByteArray& data() const { return _data; }
+    ByteArray data() { return _data; }
+    void setData(const ByteArray& ba) { _data = ba; }
 
     void read(XmlReader&);
     void write(XmlWriter&) const;
 };
 } // namespace mu::engraving
-#endif
+#endif // MU_ENGRAVING_AUDIO_H

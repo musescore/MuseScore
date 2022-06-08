@@ -28,6 +28,7 @@
 #include "draw/brush.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "layout/layouttremolo.h"
 
@@ -573,7 +574,7 @@ void Tremolo::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            setTremoloType(e.readElementText());
+            setTremoloType(TConv::fromXml(e.readAsciiText(), TremoloType::INVALID_TREMOLO));
         }
         // Style needs special handling other than readStyledProperty()
         // to avoid calling customStyleApplicable() in setProperty(),
@@ -586,75 +587,6 @@ void Tremolo::read(XmlReader& e)
             e.unknown();
         }
     }
-}
-
-//---------------------------------------------------------
-//   tremoloTypeName
-//---------------------------------------------------------
-
-QString Tremolo::tremoloTypeName() const
-{
-    return type2name(tremoloType());
-}
-
-//---------------------------------------------------------
-//   setTremoloType
-//---------------------------------------------------------
-
-void Tremolo::setTremoloType(const QString& s)
-{
-    setTremoloType(name2Type(s));
-}
-
-//---------------------------------------------------------
-//   type2Name
-//---------------------------------------------------------
-
-QString Tremolo::type2name(TremoloType t)
-{
-    switch (t) {
-    case TremoloType::R8:  return QString("r8");
-    case TremoloType::R16: return QString("r16");
-    case TremoloType::R32: return QString("r32");
-    case TremoloType::R64: return QString("r64");
-    case TremoloType::C8:  return QString("c8");
-    case TremoloType::C16: return QString("c16");
-    case TremoloType::C32: return QString("c32");
-    case TremoloType::C64: return QString("c64");
-    case TremoloType::BUZZ_ROLL: return QString("buzzroll");
-    default:
-        break;
-    }
-    return QString("??");
-}
-
-//---------------------------------------------------------
-//   nameToType
-//---------------------------------------------------------
-
-TremoloType Tremolo::name2Type(const QString& s)
-{
-    TremoloType t = TremoloType::INVALID_TREMOLO;
-    if (s == "r8") {
-        t = TremoloType::R8;
-    } else if (s == "r16") {
-        t = TremoloType::R16;
-    } else if (s == "r32") {
-        t = TremoloType::R32;
-    } else if (s == "r64") {
-        t = TremoloType::R64;
-    } else if (s == "c8") {
-        t = TremoloType::C8;
-    } else if (s == "c16") {
-        t = TremoloType::C16;
-    } else if (s == "c32") {
-        t = TremoloType::C32;
-    } else if (s == "c64") {
-        t = TremoloType::C64;
-    } else if (s == "buzzroll") {
-        t = TremoloType::BUZZ_ROLL;
-    }
-    return t;
 }
 
 //---------------------------------------------------------

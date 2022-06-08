@@ -151,7 +151,7 @@ void Symbol::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            QString val(e.readElementText());
+            QString val(e.readText());
             SymId symId = SymNames::symIdByName(val);
             if (val != "noSym" && symId == SymId::noSym) {
                 // if symbol name not found, fall back to user names
@@ -165,7 +165,7 @@ void Symbol::read(XmlReader& e)
             }
             setSym(symId);
         } else if (tag == "font") {
-            _scoreFont = ScoreFont::fontByName(e.readElementText());
+            _scoreFont = ScoreFont::fontByName(e.readText());
         } else if (tag == "Symbol") {
             Symbol* s = new Symbol(this);
             s->read(e);
@@ -278,7 +278,7 @@ void FSymbol::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "font") {
-            _font.setFamily(e.readElementText());
+            _font.setFamily(e.readText());
         } else if (tag == "fontsize") {
             _font.setPointSizeF(e.readDouble());
         } else if (tag == "code") {

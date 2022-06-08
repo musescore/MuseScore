@@ -91,10 +91,10 @@ void Jump::setJumpType(Type t)
 {
     for (const JumpTypeTableItem& p : jumpTypeTable) {
         if (p.type == t) {
-            setXmlText(p.text);
-            setJumpTo(p.jumpTo);
-            setPlayUntil(p.playUntil);
-            setContinueAt(p.continueAt);
+            setXmlText(p.text.ascii());
+            setJumpTo(p.jumpTo.ascii());
+            setPlayUntil(p.playUntil.ascii());
+            setContinueAt(p.continueAt.ascii());
             initTextStyleType(TextStyleType::REPEAT_RIGHT);
             break;
         }
@@ -143,11 +143,11 @@ void Jump::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "jumpTo") {
-            _jumpTo = e.readElementText();
+            _jumpTo = e.readText();
         } else if (tag == "playUntil") {
-            _playUntil = e.readElementText();
+            _playUntil = e.readText();
         } else if (tag == "continueAt") {
-            _continueAt = e.readElementText();
+            _continueAt = e.readText();
         } else if (tag == "playRepeats") {
             _playRepeats = e.readBool();
         } else if (!TextBase::readProperties(e)) {

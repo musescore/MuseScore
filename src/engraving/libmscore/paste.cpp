@@ -125,7 +125,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
             e.unknown();
             break;
         }
-        QString version = e.attribute("version", "NONE");
+        QString version = e.attribute("version", u"NONE");
         if (!MScore::testMode) {
             if (version != MSC_VERSION) {
                 LOGD("pasteStaff: bad version");
@@ -157,7 +157,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
             e.context()->setTransposeChromatic(0);
             e.context()->setTransposeDiatonic(0);
 
-            int srcStaffIdx = e.attribute("id", "0").toInt();
+            int srcStaffIdx = e.intAttribute("id", 0);
             e.context()->setTrack(srcStaffIdx * static_cast<int>(VOICES));
             e.context()->setTrackOffset(static_cast<int>((dstStaff - staffStart) * VOICES));
             size_t dstStaffIdx = e.context()->track() / VOICES;
@@ -182,7 +182,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                         if (e.name() != "voice") {
                             e.unknown();
                         }
-                        voice_idx_t voiceId = static_cast<voice_idx_t>(e.attribute("id", "-1").toInt());
+                        voice_idx_t voiceId = static_cast<voice_idx_t>(e.intAttribute("id", -1));
                         Q_ASSERT(voiceId < VOICES);
                         voiceOffset[voiceId] = e.readInt();
                     }
@@ -800,7 +800,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
             e.unknown();
             break;
         }
-        QString version = e.attribute("version", "NONE");
+        QString version = e.attribute("version", u"NONE");
         if (version != MSC_VERSION) {
             break;
         }
@@ -1089,7 +1089,7 @@ static bool canPasteStaff(XmlReader& reader, const Fraction& scale)
                 return false;
             }
             if (tag == "durationType") {
-                if (!TDuration(TDuration(TConv::fromXml(reader.readElementAsciiText(),
+                if (!TDuration(TDuration(TConv::fromXml(reader.readAsciiText(),
                                                         DurationType::V_INVALID)).fraction() * scale).isValid()) {
                     return false;
                 }

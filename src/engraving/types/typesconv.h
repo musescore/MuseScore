@@ -144,6 +144,12 @@ public:
 
     static AsciiStringView toXml(BarLineType v);
     static BarLineType fromXml(const AsciiStringView& str, BarLineType def);
+
+    static AsciiStringView toXml(TremoloType v);
+    static TremoloType fromXml(const AsciiStringView& str, TremoloType def);
+
+    static AsciiStringView toXml(BracketType v);
+    static BracketType fromXml(const AsciiStringView& str, BracketType def);
 };
 }
 

@@ -61,8 +61,8 @@ public:
 class InstrumentFamily
 {
 public:
-    QString id;
-    QString name;
+    String id;
+    String name;
 
     InstrumentFamily() {}
     void write(XmlWriter& xml) const;
@@ -82,7 +82,7 @@ public:
     ~InstrumentTemplate();
     InstrumentTemplate& operator=(const InstrumentTemplate&);
 
-    QString id;
+    String id;
     QString trackName;
     StaffNameList longNames;     ///< shown on first system
     StaffNameList shortNames;    ///< shown on followup systems
@@ -130,12 +130,12 @@ public:
     void write1(XmlWriter& xml) const;
     void read(XmlReader&);
     ClefTypeList clefType(staff_idx_t staffIdx) const;
-    QString familyId() const;
+    String familyId() const;
     bool containsGenre(const QString& genreId) const;
 
 private:
     void init(const InstrumentTemplate&);
-    void setPitchRange(const QString& s, char* a, char* b) const;
+    void setPitchRange(const String& s, char* a, char* b) const;
     void linkGenre(const QString&);
 };
 
@@ -174,9 +174,9 @@ extern std::vector<InstrumentGroup*> instrumentGroups;
 extern std::vector<ScoreOrder> instrumentOrders;
 extern void clearInstrumentTemplates();
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
-extern InstrumentTemplate* searchTemplate(const QString& name);
+extern InstrumentTemplate* searchTemplate(const String& name);
 extern InstrumentIndex searchTemplateIndexForTrackName(const QString& trackName);
-extern InstrumentIndex searchTemplateIndexForId(const QString& id);
+extern InstrumentIndex searchTemplateIndexForId(const String& id);
 extern InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId);
 extern InstrumentTemplate* searchTemplateForInstrNameList(const std::list<QString>& nameList);
 extern InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const bool useDrumKit = false);

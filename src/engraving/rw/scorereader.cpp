@@ -212,9 +212,9 @@ Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "programVersion") {
-            score->setMscoreVersion(e.readElementText());
+            score->setMscoreVersion(e.readText());
         } else if (tag == "programRevision") {
-            score->setMscoreRevision(e.readIntHex());
+            score->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
             if (!Read400::readScore400(score, e, ctx)) {
                 if (e.error() == XmlStreamReader::CustomError) {

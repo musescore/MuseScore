@@ -334,10 +334,10 @@ void HChord::add(const std::vector<HDegree>& degreeList)
 //   readRenderList
 //---------------------------------------------------------
 
-static void readRenderList(QString val, std::list<RenderAction>& renderList)
+static void readRenderList(String val, std::list<RenderAction>& renderList)
 {
     renderList.clear();
-    QStringList sl = val.split(" ", Qt::SkipEmptyParts);
+    QStringList sl = val.toQString().split(" ", Qt::SkipEmptyParts);
     for (const QString& s : qAsConst(sl)) {
         if (s.startsWith("m:")) {
             QStringList ssl = s.split(":", Qt::SkipEmptyParts);
@@ -422,9 +422,9 @@ void ChordToken::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            names += e.readElementText();
+            names << e.readText().toQString();
         } else if (tag == "render") {
-            readRenderList(e.readElementText(), renderList);
+            readRenderList(e.readText().toQString(), renderList);
         }
     }
 }
@@ -1603,17 +1603,17 @@ void ChordDescription::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            QString n = e.readElementText();
+            String n = e.readText();
             // stack names for this file on top of the list
-            names.insert(ni++, n);
+            names.insert(ni++, n.toQString());
         } else if (tag == "xml") {
-            xmlKind = e.readElementText();
+            xmlKind = e.readText().toQString();
         } else if (tag == "degree") {
-            xmlDegrees.append(e.readElementText());
+            xmlDegrees.append(e.readText().toQString());
         } else if (tag == "voicing") {
-            chord = HChord(e.readElementText());
+            chord = HChord(e.readText().toQString());
         } else if (tag == "render") {
-            readRenderList(e.readElementText(), renderList);
+            readRenderList(e.readText(), renderList);
             renderListGenerated = false;
         } else {
             e.unknown();
@@ -1677,9 +1677,9 @@ void ChordList::read(XmlReader& e)
         const AsciiStringView tag(e.name());
         if (tag == "font") {
             ChordFont f;
-            f.family = e.attribute("family", "default");
-            if (f.family == "MuseJazz") {
-                f.family = "MuseJazz Text";
+            f.family = e.attribute("family", u"default");
+            if (f.family == u"MuseJazz") {
+                f.family = u"MuseJazz Text";
             }
             f.mag    = 1.0;
             f.fontClass = e.attribute("class");
@@ -1762,11 +1762,11 @@ void ChordList::read(XmlReader& e)
             // add to list
             insert({ id, cd });
         } else if (tag == "renderRoot") {
-            readRenderList(e.readElementText(), renderListRoot);
+            readRenderList(e.readText(), renderListRoot);
         } else if (tag == "renderFunction") {
-            readRenderList(e.readElementText(), renderListFunction);
+            readRenderList(e.readText(), renderListFunction);
         } else if (tag == "renderBase") {
-            readRenderList(e.readElementText(), renderListBase);
+            readRenderList(e.readText(), renderListBase);
         } else {
             e.unknown();
         }

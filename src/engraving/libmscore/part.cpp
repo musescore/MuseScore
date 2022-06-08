@@ -106,7 +106,7 @@ QString Part::familyId() const
     }
 
     InstrumentIndex ii = searchTemplateIndexForId(instrumentId());
-    return ii.instrTemplate && ii.instrTemplate->family ? ii.instrTemplate->family->id : QString();
+    return ii.instrTemplate && ii.instrTemplate->family ? ii.instrTemplate->family->id : String();
 }
 
 //---------------------------------------------------------
@@ -163,20 +163,20 @@ bool Part::readProperties(XmlReader& e)
         instr->read(e, this);
         setInstrument(instr, Fraction(-1, 1));
     } else if (tag == "name") {
-        instrument()->setLongName(e.readElementText());
+        instrument()->setLongName(e.readText());
     } else if (tag == "color") {
         _color = e.readInt();
     } else if (tag == "shortName") {
-        instrument()->setShortName(e.readElementText());
+        instrument()->setShortName(e.readText());
     } else if (tag == "trackName") {
-        _partName = e.readElementText();
+        _partName = e.readText();
     } else if (tag == "show") {
         _show = e.readInt();
     } else if (tag == "soloist") {
         _soloist = e.readInt();
     } else if (tag == "preferSharpFlat") {
         _preferSharpFlat
-            =e.readElementText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS;
+            =e.readText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS;
     } else {
         return false;
     }

@@ -81,7 +81,7 @@ static InstrumentGenre* searchInstrumentGenre(const QString& genre)
 //   searchInstrumentFamily
 //---------------------------------------------------------
 
-static InstrumentFamily* searchInstrumentFamily(const QString& name)
+static InstrumentFamily* searchInstrumentFamily(const String& name)
 {
     for (InstrumentFamily* fam : instrumentFamilies) {
         if (fam->id == name) {
@@ -153,7 +153,7 @@ static TraitType traitTypeFromString(const QString& str)
 void InstrumentGroup::read(XmlReader& e)
 {
     id       = e.attribute("id");
-    name     = qtrc("InstrumentsXML", e.attribute("name").toUtf8().data());
+    name     = qtrc("InstrumentsXML", e.attribute("name"));
     extended = e.intAttribute("extended", 0);
 
     while (e.readNextStartElement()) {
@@ -170,7 +170,7 @@ void InstrumentGroup::read(XmlReader& e)
             }
             t->read(e);
         } else if (tag == "ref") {
-            InstrumentTemplate* ttt = searchTemplate(e.readElementText());
+            InstrumentTemplate* ttt = searchTemplate(e.readText());
             if (ttt) {
                 InstrumentTemplate* t = new InstrumentTemplate(*ttt);
                 instrumentTemplates.push_back(t);
@@ -178,7 +178,7 @@ void InstrumentGroup::read(XmlReader& e)
                 LOGD("instrument reference not found <%s>", e.text().toUtf8().data());
             }
         } else if (tag == "name") {
-            name = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
+            name = qtrc("InstrumentsXML", e.readAsciiText().ascii());
         } else if (tag == "extended") {
             extended = e.readInt();
         } else {
@@ -435,10 +435,10 @@ void InstrumentTemplate::write1(XmlWriter& xml) const
 //   read
 //---------------------------------------------------------
 
-static QString translateInstrumentName(const QString& instrumentId, const QString& nameType, const QString& text)
+static QString translateInstrumentName(const String& instrumentId, const String& nameType, const String& text)
 {
-    QString disambiguation = instrumentId + '|' + nameType;
-    return qtrc("InstrumentsXML", text.toUtf8().data(), disambiguation.toUtf8().data());
+    String disambiguation = instrumentId + u'|' + nameType;
+    return qtrc("InstrumentsXML", text, disambiguation);
 }
 
 void InstrumentTemplate::read(XmlReader& e)
@@ -456,7 +456,7 @@ void InstrumentTemplate::read(XmlReader& e)
                     break;
                 }
             }
-            longNames.push_back(StaffName(translateInstrumentName(id, "longName", e.readElementText()), pos));
+            longNames.push_back(StaffName(translateInstrumentName(id, u"longName", e.readText()), pos));
         } else if (tag == "shortName" || tag == "short-name") {     // "short-name" is obsolete
             int pos = e.intAttribute("pos", 0);
             for (std::list<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
@@ -465,11 +465,11 @@ void InstrumentTemplate::read(XmlReader& e)
                     break;
                 }
             }
-            shortNames.push_back(StaffName(translateInstrumentName(id, "shortName", e.readElementText()), pos));
+            shortNames.push_back(StaffName(translateInstrumentName(id, u"shortName", e.readText()), pos));
         } else if (tag == "trackName") {
-            trackName = translateInstrumentName(id, "trackName", e.readElementText());
+            trackName = translateInstrumentName(id, u"trackName", e.readText());
         } else if (tag == "description") {
-            description = translateInstrumentName(id, "description", e.readElementText());
+            description = translateInstrumentName(id, u"description", e.readText());
         } else if (tag == "extended") {
             extended = e.readInt();
         } else if (tag == "staves") {
@@ -479,15 +479,15 @@ void InstrumentTemplate::read(XmlReader& e)
 //                        barlineSpan[i] = true;
         } else if (tag == "clef") {             // sets both transposing and concert clef
             int idx = readStaffIdx(e);
-            ClefType ct = TConv::fromXml(e.readElementAsciiText(), ClefType::G);
+            ClefType ct = TConv::fromXml(e.readAsciiText(), ClefType::G);
             clefTypes[idx]._concertClef = ct;
             clefTypes[idx]._transposingClef = ct;
         } else if (tag == "concertClef") {
             int idx = readStaffIdx(e);
-            clefTypes[idx]._concertClef = TConv::fromXml(e.readElementAsciiText(), ClefType::G);
+            clefTypes[idx]._concertClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
         } else if (tag == "transposingClef") {
             int idx = readStaffIdx(e);
-            clefTypes[idx]._transposingClef = TConv::fromXml(e.readElementAsciiText(), ClefType::G);
+            clefTypes[idx]._transposingClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
         } else if (tag == "stafflines") {
             int idx = readStaffIdx(e);
             staffLines[idx] = e.readInt();
@@ -507,9 +507,9 @@ void InstrumentTemplate::read(XmlReader& e)
                 barlineSpan[idx + i] = true;
             }
         } else if (tag == "aPitchRange") {
-            setPitchRange(e.readElementText(), &minPitchA, &maxPitchA);
+            setPitchRange(e.readText(), &minPitchA, &maxPitchA);
         } else if (tag == "pPitchRange") {
-            setPitchRange(e.readElementText(), &minPitchP, &maxPitchP);
+            setPitchRange(e.readText(), &minPitchP, &maxPitchP);
         } else if (tag == "transposition") {      // obsolete
             int i = e.readInt();
             transpose.chromatic = i;
@@ -520,7 +520,7 @@ void InstrumentTemplate::read(XmlReader& e)
             transpose.diatonic = e.readInt();
         } else if (tag == "traitName") {
             trait.type = traitTypeFromString(e.attribute("type"));
-            QString traitName = translateInstrumentName(id, "traitName", e.readElementText());
+            QString traitName = translateInstrumentName(id, u"traitName", e.readText());
             trait.isDefault = traitName.contains("*");
             trait.isHiddenOnScore = traitName.contains("(") && traitName.contains(")");
             trait.name = traitName.remove("*").remove("(").remove(")");
@@ -560,8 +560,8 @@ void InstrumentTemplate::read(XmlReader& e)
             }
         } else if (tag == "stafftype") {
             int staffIdx = readStaffIdx(e);
-            QString xmlPresetName = e.attribute("staffTypePreset", "");
-            QString stfGroup = e.readElementText();
+            QString xmlPresetName = e.attribute("staffTypePreset");
+            QString stfGroup = e.readText();
             if (stfGroup == "percussion") {
                 staffGroup = StaffGroup::PERCUSSION;
             } else if (stfGroup == "tablature") {
@@ -580,7 +580,7 @@ void InstrumentTemplate::read(XmlReader& e)
                 staffLines[staffIdx] = staffTypePreset->lines();
             }
         } else if (tag == "init") {
-            QString val(e.readElementText());
+            QString val(e.readText());
             InstrumentTemplate* ttt = searchTemplate(val);
             if (ttt) {
                 init(*ttt);
@@ -588,11 +588,11 @@ void InstrumentTemplate::read(XmlReader& e)
                 LOGD("InstrumentTemplate:: init instrument <%s> not found", qPrintable(val));
             }
         } else if (tag == "musicXMLid") {
-            musicXMLid = e.readElementText();
+            musicXMLid = e.readText();
         } else if (tag == "family") {
-            family = searchInstrumentFamily(e.readElementText());
+            family = searchInstrumentFamily(e.readText());
         } else if (tag == "genre") {
-            QString val(e.readElementText());
+            QString val(e.readText());
             linkGenre(val);
         } else if (tag == "singleNoteDynamics") {
             singleNoteDynamics = e.readBool();
@@ -618,7 +618,7 @@ void InstrumentTemplate::read(XmlReader& e)
     if (description.isEmpty() && !longNames.empty()) {
         description = longNames.front().name();
     }
-    if (id.isEmpty()) {
+    if (id.empty()) {
         id = trackName.toLower().replace(" ", "-");
     }
 
@@ -631,16 +631,16 @@ void InstrumentTemplate::read(XmlReader& e)
 //   setPitchRange
 //---------------------------------------------------------
 
-void InstrumentTemplate::setPitchRange(const QString& s, char* a, char* b) const
+void InstrumentTemplate::setPitchRange(const String& s, char* a, char* b) const
 {
-    QStringList sl = s.split("-");
+    StringList sl = s.split(u'-');
     if (sl.size() != 2) {
         *a = 0;
         *b = 127;
         return;
     }
-    *a = sl[0].toInt();
-    *b = sl[1].toInt();
+    *a = sl.at(0).toInt();
+    *b = sl.at(1).toInt();
 }
 
 //---------------------------------------------------------
@@ -727,7 +727,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
 //   searchTemplate
 //---------------------------------------------------------
 
-InstrumentTemplate* searchTemplate(const QString& name)
+InstrumentTemplate* searchTemplate(const String& name)
 {
     for (InstrumentGroup* g : instrumentGroups) {
         for (InstrumentTemplate* it : g->instrumentTemplates) {
@@ -817,11 +817,11 @@ InstrumentTemplate* guessTemplateByNameData(const std::list<QString>& nameDataLi
 
     for (const QString& name : nameDataList) {
         if (name.contains("drum", Qt::CaseInsensitive)) {
-            return searchTemplate("drumset");
+            return searchTemplate(u"drumset");
         }
 
         if (name.contains("piano", Qt::CaseInsensitive)) {
-            return searchTemplate("piano");
+            return searchTemplate(u"piano");
         }
     }
 
@@ -852,7 +852,7 @@ InstrumentIndex searchTemplateIndexForTrackName(const QString& trackName)
 //   searchTemplateIndexForId
 //---------------------------------------------------------
 
-InstrumentIndex searchTemplateIndexForId(const QString& id)
+InstrumentIndex searchTemplateIndexForId(const String& id)
 {
     int instIndex = 0;
     int grpIndex = 0;
@@ -901,7 +901,7 @@ void InstrumentGenre::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            name = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
+            name = qtrc("InstrumentsXML", e.readText());
         } else {
             e.unknown();
         }
@@ -926,7 +926,7 @@ void InstrumentFamily::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            name = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
+            name = qtrc("InstrumentsXML", e.readText());
         } else {
             e.unknown();
         }
@@ -945,9 +945,9 @@ ClefTypeList InstrumentTemplate::clefType(staff_idx_t staffIdx) const
     return clefTypes[0];
 }
 
-QString InstrumentTemplate::familyId() const
+String InstrumentTemplate::familyId() const
 {
-    return family ? family->id : QString();
+    return family ? family->id : String();
 }
 
 bool InstrumentTemplate::containsGenre(const QString& genreId) const

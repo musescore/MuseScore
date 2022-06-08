@@ -27,6 +27,7 @@
 
 #include "types/fraction.h"
 #include "types/types.h"
+#include "types/string.h"
 #include "mscore.h"
 
 namespace mu::engraving {
@@ -49,7 +50,7 @@ public:
     Score* excerptScore() const { return m_excerptScore; }
     void setExcerptScore(Score* s);
 
-    QString name() const { return m_name; }
+    String name() const { return m_name; }
     void setName(const QString& title) { m_name = title; }
 
     std::vector<Part*>& parts() { return m_parts; }
@@ -90,7 +91,7 @@ private:
 
     MasterScore* m_masterScore = nullptr;
     Score* m_excerptScore = nullptr;
-    QString m_name;
+    String m_name;
     std::vector<Part*> m_parts;
     TracksMap m_tracksMapping;
 };

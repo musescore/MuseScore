@@ -90,23 +90,30 @@ public:
 
     AsciiStringView name() const;
 
-    String attribute(const char* name) const;
-    AsciiStringView asciiAttribute(const char* name) const;
     bool hasAttribute(const char* name) const;
+    String attribute(const char* name) const;
+    String attribute(const char* name, const String& def) const;
+    AsciiStringView asciiAttribute(const char* name) const;
+    AsciiStringView asciiAttribute(const char* name, const AsciiStringView& def) const;
+    int intAttribute(const char* name) const;
+    int intAttribute(const char* name, int def) const;
+    double doubleAttribute(const char* name) const;
+    double doubleAttribute(const char* name, double def) const;
     std::vector<Attribute> attributes() const;
 
-    QString readElementText();
-    QString text() const;
-
-    AsciiStringView readElementAsciiText();
+    String text() const;
     AsciiStringView asciiText() const;
+    String readText();
+    AsciiStringView readAsciiText();
+    int readInt(bool* ok = nullptr, int base = 10);
+    double readDouble(bool* ok = nullptr);
 
     int64_t lineNumber() const;
     int64_t columnNumber() const;
     Error error() const;
     bool isError() const;
-    QString errorString() const;
-    void raiseError(const QString& message = QString());
+    String errorString() const;
+    void raiseError(const String& message);
 
 private:
     struct Xml;

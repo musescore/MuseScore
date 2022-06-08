@@ -493,7 +493,7 @@ void KeySig::read(XmlReader& e)
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
                 if (t == "sym") {
-                    QString val(e.readElementText());
+                    QString val(e.readText());
                     bool valid;
                     SymId id = SymId(val.toInt(&valid));
                     if (!valid) {
@@ -548,7 +548,7 @@ void KeySig::read(XmlReader& e)
             e.readInt();
             _sig.setCustom(true);
         } else if (tag == "mode") {
-            QString m(e.readElementText());
+            QString m(e.readText());
             if (m == "none") {
                 _sig.setMode(KeyMode::NONE);
             } else if (m == "major") {

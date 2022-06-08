@@ -299,9 +299,9 @@ void Clef::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "concertClefType") {
-            _clefTypes._concertClef = TConv::fromXml(e.readElementAsciiText(), ClefType::G);
+            _clefTypes._concertClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
         } else if (tag == "transposingClefType") {
-            _clefTypes._transposingClef = TConv::fromXml(e.readElementAsciiText(), ClefType::G);
+            _clefTypes._transposingClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
         } else if (tag == "showCourtesyClef") {
             _showCourtesy = e.readInt();
         } else if (tag == "forInstrumentChange") {

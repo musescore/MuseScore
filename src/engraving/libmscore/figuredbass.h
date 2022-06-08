@@ -224,13 +224,13 @@ public:
 //---------------------------------------------------------
 
 struct FiguredBassFont {
-    QString family;
-    QString displayName;
+    String family;
+    String displayName;
     qreal defPitch;
     qreal defLineHeight;
-    QChar displayAccidental[int(FiguredBassItem::Modifier::NUMOF)];
-    QChar displayParenthesis[int(FiguredBassItem::Parenthesis::NUMOF)];
-    QChar displayDigit[int(FiguredBassItem::Style::NUMOF)][10][int(FiguredBassItem::Combination::NUMOF)];
+    Char displayAccidental[int(FiguredBassItem::Modifier::NUMOF)];
+    Char displayParenthesis[int(FiguredBassItem::Parenthesis::NUMOF)];
+    Char displayDigit[int(FiguredBassItem::Style::NUMOF)][10][int(FiguredBassItem::Combination::NUMOF)];
 
     bool read(XmlReader&);
 };
