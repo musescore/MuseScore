@@ -40,7 +40,7 @@ public:
     bool isRange() const override;
     SelectionState state() const override;
 
-    bool canCopy() const override;
+    Ret canCopy() const override;
     QMimeData* mimeData() const override;
 
     EngravingItem* element() const override;

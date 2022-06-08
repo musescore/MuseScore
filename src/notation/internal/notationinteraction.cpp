@@ -29,6 +29,7 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QKeyEvent>
+#include <QMimeData>
 
 #include "defer.h"
 #include "ptrutils.h"
@@ -3248,6 +3249,56 @@ void NotationInteraction::copySelection()
     }
 }
 
+mu::Ret NotationInteraction::repeatSelection()
+{
+    const mu::engraving::Selection& selection = score()->selection();
+    if (score()->noteEntryMode() && selection.isSingle()) {
+        EngravingItem* el = selection.element();
+        if (el && el->type() == ElementType::NOTE && !score()->inputState().endOfScore()) {
+            startEdit();
+            Chord* c = toNote(el)->chord();
+            for (Note* note : c->notes()) {
+                mu::engraving::NoteVal nval = note->noteVal();
+                score()->addPitch(nval, note != c->notes()[0]);
+            }
+            apply();
+        }
+    }
+
+    if (!selection.isRange()) {
+        ChordRest* cr = score()->getSelectedChordRest();
+        if (!cr) {
+            return make_ret(Err::EmptySelection);
+        }
+        score()->select(cr, SelectType::RANGE);
+    }
+
+    Ret ret = m_selection->canCopy();
+    if (!ret) {
+        return ret;
+    }
+
+    mu::engraving::XmlReader xml(selection.mimeData());
+    xml.context()->setPasteMode(true);
+    track_idx_t dStaff = selection.staffStart();
+    mu::engraving::Segment* endSegment = selection.endSegment();
+
+    if (endSegment && endSegment->segmentType() != mu::engraving::SegmentType::ChordRest) {
+        endSegment = endSegment->next1(mu::engraving::SegmentType::ChordRest);
+    }
+    if (endSegment && endSegment->element(dStaff * mu::engraving::VOICES)) {
+        EngravingItem* e = endSegment->element(dStaff * mu::engraving::VOICES);
+        if (e) {
+            startEdit();
+            ChordRest* cr = toChordRest(e);
+            score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
+            apply();
+        }
+    }
+
+    return ret;
+}
+
 void NotationInteraction::copyLyrics()
 {
     QString text = score()->extractLyrics();
@@ -3889,48 +3940,6 @@ void NotationInteraction::replaceSelectedNotesWithSlashes()
     startEdit();
     score()->cmdSlashRhythm();
     apply();
-}
-
-void NotationInteraction::repeatSelection()
-{
-    const mu::engraving::Selection& selection = score()->selection();
-    if (score()->noteEntryMode() && selection.isSingle()) {
-        EngravingItem* el = selection.element();
-        if (el && el->type() == ElementType::NOTE && !score()->inputState().endOfScore()) {
-            startEdit();
-            Chord* c = toNote(el)->chord();
-            for (Note* note : c->notes()) {
-                mu::engraving::NoteVal nval = note->noteVal();
-                score()->addPitch(nval, note != c->notes()[0]);
-            }
-            apply();
-        }
-        return;
-    }
-    if (!selection.isRange()) {
-        ChordRest* cr = score()->getSelectedChordRest();
-        if (!cr) {
-            return;
-        }
-        score()->select(cr, SelectType::RANGE);
-    }
-    mu::engraving::XmlReader xml(selection.mimeData());
-    xml.context()->setPasteMode(true);
-    track_idx_t dStaff = selection.staffStart();
-    mu::engraving::Segment* endSegment = selection.endSegment();
-
-    if (endSegment && endSegment->segmentType() != mu::engraving::SegmentType::ChordRest) {
-        endSegment = endSegment->next1(mu::engraving::SegmentType::ChordRest);
-    }
-    if (endSegment && endSegment->element(dStaff * mu::engraving::VOICES)) {
-        EngravingItem* e = endSegment->element(dStaff * mu::engraving::VOICES);
-        if (e) {
-            startEdit();
-            ChordRest* cr = toChordRest(e);
-            score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
-            apply();
-        }
-    }
 }
 
 void NotationInteraction::changeEnharmonicSpelling(bool both)
