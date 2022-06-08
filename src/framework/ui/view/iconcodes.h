@@ -371,7 +371,7 @@ public:
         INSERT_ONE_MEASURE = 0xF432,
 
         CROSS_STAFF_BEAMING = 0xF43D,
-        LOADMEDIA= 0xF43D,
+        LOADMEDIA = 0xEF23,
         NONE = 0xFFFF
     };
 

@@ -91,18 +91,19 @@ void PlaybackController::init()
 
 void PlaybackController::loadMedia()
 {
-    QString fileName=QFileDialog::getOpenFileName(nullptr, "Select:", "", "(*.wav)");
+    QString filterextension = QString("(*.wav)");
+    QString filter = qtrc("wav", "WAVE Sounds files") + filterextension;
+    io::path_t fileName = interactive()->selectOpeningFile("External wave file", QString(""), filter);
 
+    QFile* file = new QFile();
+    file->setFileName(fileName.toQString());
     AudioOutputParams outParams;
-    outParams.muted=true;
+    outParams.muted=false;
     AudioInputParams inParams;
     InstrumentTrackId instrumentTrackId;
     instrumentTrackId.partId=998;
     instrumentTrackId.instrumentId="external-wave";
     removeTrack(instrumentTrackId);
-    QFile* file;
-    file = new QFile();
-    file->setFileName(fileName);
     if (file->exists()) {
         playback()->tracks()->addTrack(m_currentSequenceId, "WAVE", file, { std::move(inParams), std::move(outParams) })
         .onResolve(this, [this, instrumentTrackId](const TrackId trackId, const AudioParams& appliedParams) {
@@ -485,6 +486,7 @@ void PlaybackController::setCurrentPlaybackStatus(PlaybackStatus status)
     if (m_currentPlaybackStatus == status) {
         return;
     }
+
     m_currentPlaybackStatus = status;
     m_isPlayingChanged.notify();
 }
@@ -673,6 +675,7 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
     }
 
     uint64_t notationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
+
     playback()->tracks()->addTrack(m_currentSequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
     .onResolve(this, [this, instrumentTrackId, notationPlaybackKey](const TrackId trackId, const AudioParams& appliedParams) {
         //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)

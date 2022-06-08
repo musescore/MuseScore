@@ -203,6 +203,7 @@ void MixerChannelItem::subscribeOnAudioSignalChanges(AudioSignalChanges&& audioS
         if (muted()) {
             return;
         }
+
         if (newValue.pressure < MIN_DISPLAYED_DBFS) {
             setAudioChannelVolumePressure(audioChNum, MIN_DISPLAYED_DBFS);
         } else if (newValue.pressure > MAX_DISPLAYED_DBFS) {
