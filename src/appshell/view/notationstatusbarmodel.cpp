@@ -187,18 +187,16 @@ void NotationStatusBarModel::load()
     m_currentZoomType = notationConfiguration()->defaultZoomType();
 
     context()->currentNotationChanged().onNotify(this, [this]() {
-        if (!notation()) {
-            return;
-        }
-
         emit currentViewModeChanged();
         emit availableViewModeListChanged();
         emit zoomEnabledChanged();
 
-        notation()->notationChanged().onNotify(this, [this]() {
-            emit currentViewModeChanged();
-            emit availableViewModeListChanged();
-        });
+        if (notation()) {
+            notation()->notationChanged().onNotify(this, [this]() {
+                emit currentViewModeChanged();
+                emit availableViewModeListChanged();
+            });
+        }
 
         listenChangesInAccessibility();
     });
@@ -258,6 +256,10 @@ void NotationStatusBarModel::setCurrentViewMode(const QString& modeCode)
 
 MenuItemList NotationStatusBarModel::makeAvailableZoomList()
 {
+    if (!notation()) {
+        return {};
+    }
+
     MenuItemList result;
 
     int currZoomPercentage = currentZoomPercentage();
