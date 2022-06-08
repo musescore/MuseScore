@@ -33,12 +33,12 @@ public:
     enum class Mode {
         MODE_INVALID = -1,
         MODE_AUTO,
-        MODE_BEGIN,
-        MODE_MID,
-        MODE_END,
         MODE_NONE,
+        MODE_BEGIN,
         MODE_BEGIN32,
-        MODE_BEGIN64
+        MODE_BEGIN64,
+        MODE_MID,
+        MODE_END
     };
 
     enum class FeatheringMode {

@@ -187,12 +187,13 @@ PalettePtr PaletteCreator::newBeamPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    sp->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
-    sp->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
-    sp->appendActionIcon(ActionIconType::BEAM_NONE, "no-beam");
-    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam-32");
-    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam-64");
-    sp->appendActionIcon(ActionIconType::BEAM_AUTO, "auto-beam");
+    sp->appendActionIcon(ActionIconType::BEAM_AUTO, "beam-auto");
+    sp->appendActionIcon(ActionIconType::BEAM_NONE, "beam-none");
+    sp->appendActionIcon(ActionIconType::BEAM_BREAK_LEFT, "beam-break-left");
+    sp->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_8TH, "beam-break-inner-8th");
+    sp->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_16TH, "beam-break-inner-16th");
+    sp->appendActionIcon(ActionIconType::BEAM_JOIN, "beam-join");
+
     sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_SLOWER, "fbeam1");
     sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_FASTER, "fbeam2");
 

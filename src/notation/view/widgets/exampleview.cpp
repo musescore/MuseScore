@@ -311,16 +311,16 @@ void ExampleView::dropEvent(QDropEvent* event)
             Chord* chord = static_cast<Note*>(e)->chord();
             emit beamPropertyDropped(chord, icon);
             switch (icon->actionType()) {
-            case ActionIconType::BEAM_START:
-                chord->setBeamMode(BeamMode::BEGIN);
-                break;
-            case ActionIconType::BEAM_MID:
+            case ActionIconType::BEAM_JOIN:
                 chord->setBeamMode(BeamMode::AUTO);
                 break;
-            case ActionIconType::BEAM_BEGIN_32:
+            case ActionIconType::BEAM_BREAK_LEFT:
+                chord->setBeamMode(BeamMode::BEGIN);
+                break;
+            case ActionIconType::BEAM_BREAK_INNER_8TH:
                 chord->setBeamMode(BeamMode::BEGIN32);
                 break;
-            case ActionIconType::BEAM_BEGIN_64:
+            case ActionIconType::BEAM_BREAK_INNER_16TH:
                 chord->setBeamMode(BeamMode::BEGIN64);
                 break;
             default:
