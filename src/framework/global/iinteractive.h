@@ -40,44 +40,65 @@ public:
 
     // question
     enum class Button {
-        NoButton,
-        Ok,
-        Save,
-        SaveAll,
-        DontSave,
-        Open,
-        Yes,
-        YesToAll,
-        No,
-        NoToAll,
-        Abort,
-        Retry,
-        Ignore,
-        Close,
-        Cancel,
-        Discard,
-        Help,
-        Apply,
-        Reset,
-        Continue,
+        NoButton          = 0x0000000,
+        Ok                = 0x0000001,
+        Continue          = 0x0000002,
+        RestoreDefaults   = 0x0000004,
+        Reset             = 0x0000008,
+        Apply             = 0x0000010,
+        Help              = 0x0000020,
+        Discard           = 0x0000040,
+        Cancel            = 0x0000080,
+        Close             = 0x0000100,
+        Ignore            = 0x0000200,
+        Retry             = 0x0000400,
+        Abort             = 0x0000800,
+        NoToAll           = 0x0001000,
+        No                = 0x0002000,
+        YesToAll          = 0x0004000,
+        Yes               = 0x0008000,
+        Open              = 0x0010000,
+        DontSave          = 0x0020000,
+        SaveAll           = 0x0040000,
+        Save              = 0x0080000,
+        Next              = 0x0100000,
+        Back              = 0x0200000,
+        Select            = 0x0400000,
+        Clear             = 0x0800000,
+        Done              = 0x1000000,
 
-        CustomButton
+        CustomButton      = 0x0100000,
     };
     using Buttons = std::vector<Button>;
+
+    enum ButtonRole { // Keep updated with ButtonRole in buttonboxmodel.h
+        AcceptRole,
+        RejectRole,
+        DestructiveRole,
+        ResetRole,
+        ApplyRole,
+        RetryRole,
+        HelpRole,
+        ContinueRole,
+        BackRole,
+        CustomRole
+    };
 
     struct ButtonData {
         int btn = int(Button::CustomButton);
         std::string text;
         bool accent = false;
+        bool leftSide = false;
+        ButtonRole role = ButtonRole::CustomRole;
 
         ButtonData(int btn, const std::string& text)
             : btn(btn), text(text) {}
         ButtonData(Button btn, const std::string& text)
             : btn(int(btn)), text(text) {}
-        ButtonData(int btn, const std::string& text, bool accent)
-            : btn(btn), text(text), accent(accent) {}
-        ButtonData(Button btn, const std::string& text, bool accent)
-            : btn(int(btn)), text(text), accent(accent) {}
+        ButtonData(int btn, const std::string& text, bool accent, bool leftSide = false, ButtonRole role = ButtonRole::CustomRole)
+            : btn(btn), text(text), accent(accent), leftSide(leftSide), role(role) {}
+        ButtonData(Button btn, const std::string& text, bool accent, bool leftSide = false, ButtonRole role = ButtonRole::CustomRole)
+            : btn(int(btn)), text(text), accent(accent), leftSide(leftSide), role(role) {}
     };
     using ButtonDatas = std::vector<ButtonData>;
 

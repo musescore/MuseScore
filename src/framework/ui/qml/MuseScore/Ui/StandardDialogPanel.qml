@@ -39,7 +39,8 @@ RowLayout {
 
     property alias withDontShowAgainCheckBox: dontShowAgainCheckBox.visible
 
-    property var buttons: []
+    property int buttons: 0
+    property var customButtons
     property int defaultButtonId: 0
 
     property alias navigation: navPanel
@@ -47,23 +48,12 @@ RowLayout {
     signal clicked(int buttonId, bool showAgain)
 
     function focusOnFirst() {
-        var btn = root.firstFocusBtn()
+        var btn = buttons.accentButton()
         btn.navigation.requestActive()
     }
 
     function readInfo() {
         accessibleInfo.readInfo()
-    }
-
-    function firstFocusBtn() {
-        var btn = null
-        for (var i = buttons.count - 1; i >= 0; --i) {
-            btn = buttons.itemAtIndex(i)
-            if (btn.accentButton) {
-                break;
-            }
-        }
-        return btn;
     }
 
     function standardIcon(type) {
@@ -193,39 +183,56 @@ RowLayout {
             }
         }
 
-        ListView {
+        ButtonBox {
             id: buttons
+
             anchors.right: parent.right
-            spacing: 12
 
-            width: contentWidth
-            height: contentHeight
-            contentHeight: 30
+            buttons: root.buttons
+            customButtons: {
+                if (!root.customButtons) {
+                    return
+                }
 
-            model: root.buttons
-            orientation: Qt.Horizontal
-            interactive: false
+                var result = []
+                for (var i = 0; i < root.customButtons.length; i++) {
+                    var customButton = root.customButtons[i]
 
-            delegate: FlatButton {
-                navigation.panel: navPanel
-                navigation.column: model.index
+                    const button = Qt.createQmlObject('
+                                    import MuseScore.UiComponents 1.0
 
-                //! NOTE See description about AccessibleItem { id: accessibleInfo }
-                accessible.ignored: this === root.firstFocusBtn()
-                navigation.onActiveChanged: {
-                    if (!navigation.active) {
-                        accessible.ignored = false
-                        accessible.focused = true
-                        accessibleInfo.resetFocus()
+                                    ButtonBoxItem {
+                                    }', buttons)
+                    button.text = customButton.text
+                    button.buttonRole = customButton.role
+                    button.isAccent = customButton.isAccent
+                    button.isLeftSide = customButton.isLeftSide
+
+                    const buttonId = customButton.buttonId;
+                    button.clicked.connect(function() {
+                        root.clicked(buttonId, !dontShowAgainCheckBox.checked)
+                    })
+
+                    result.push(button)
+                }
+                return result
+            }
+
+            separationGap: false
+
+            delegateProperties: { //! NOTE See description about AccessibleItem { id: accessibleInfo }
+                "accessible.ignored" : true,
+                "navigation.onActiveChanged": function(item) {
+                    if (!item.navigation.active) {
+                        item.accessible.ignored = false
+                        accessibleInfo.ignored = true
                     }
                 }
+            }
+            navigationPanel: navPanel
 
-                text: modelData.title
-                accentButton: Boolean(modelData.accent)
-
-                onClicked: {
-                    root.clicked(modelData.buttonId, !dontShowAgainCheckBox.checked)
-                }
+            onStandardButtonClicked: function(type) {
+                root.clicked(type, !dontShowAgainCheckBox.checked)
             }
         }
     }

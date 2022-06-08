@@ -40,8 +40,9 @@ StyledDialogView {
 
     property alias withDontShowAgainCheckBox: mainPanel.withDontShowAgainCheckBox
 
-    property var buttons: [ { "buttonId": 1, "title": qsTrc("global", "OK"), "accent": true } ]
-    property alias defaultButtonId: mainPanel.defaultButtonId
+    property int buttons: 0
+    property var customButtons
+    property alias defaultButtonId: content.defaultButtonId
 
     QtObject {
         id: toggleDetailsButton
@@ -82,7 +83,9 @@ StyledDialogView {
     Column {
         id: content
 
-        width: mainPanel.width
+        navigation.section: root.navigationSection
+        buttons: root.buttons
+        customButtons: root.customButtons
 
         spacing: 16
 
