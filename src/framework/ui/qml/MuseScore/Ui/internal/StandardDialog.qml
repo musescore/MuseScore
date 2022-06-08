@@ -38,7 +38,8 @@ StyledDialogView {
 
     property alias withDontShowAgainCheckBox: content.withDontShowAgainCheckBox
 
-    property var buttons: [ { "buttonId": 1, "title": qsTrc("global", "OK") } ]
+    property int buttons: 0
+    property var customButtons
     property alias defaultButtonId: content.defaultButtonId
 
     contentWidth: content.implicitWidth
@@ -56,6 +57,7 @@ StyledDialogView {
 
         navigation.section: root.navigationSection
         buttons: root.buttons
+        customButtons: root.customButtons
 
         onClicked: function(buttonId, showAgain) {
             root.ret = { "errcode": 0, "value": { "buttonId": buttonId, "showAgain": showAgain}}
