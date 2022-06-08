@@ -178,21 +178,21 @@ void XmlStreamReader::tryParseEntity(Xml* xml)
 
     const char* str = xml->node->Value();
     if (std::strncmp(str, ENTITY, 6) == 0) {
-        QString val(str);
-        QStringList list = val.split(' ');
-        if (list.length() == 3) {
-            QString name = list.at(1);
-            QString val = list.at(2);
-            m_entities["&" + name + ";"] = val.mid(1, val.size() - 2);
+        String val(str);
+        StringList list = val.split(' ');
+        if (list.size() == 3) {
+            String name = list.at(1);
+            String val = list.at(2);
+            m_entities[u"&" + name + u";"] = val.mid(1, val.size() - 2);
         } else {
             LOGW() << "unknown ENTITY: " << val;
         }
     }
 }
 
-QString XmlStreamReader::nodeValue(Xml* xml) const
+String XmlStreamReader::nodeValue(Xml* xml) const
 {
-    QString str = xml->node->Value();
+    String str = String::fromUtf8(xml->node->Value());
     if (!m_entities.empty()) {
         for (const auto& p : m_entities) {
             str.replace(p.first, p.second);
@@ -245,17 +245,17 @@ AsciiStringView XmlStreamReader::name() const
     return (m_xml->node && m_xml->node->ToElement()) ? m_xml->node->Value() : AsciiStringView();
 }
 
-QString XmlStreamReader::attribute(const char* name) const
+String XmlStreamReader::attribute(const char* name) const
 {
     if (m_token != TokenType::StartElement) {
-        return QString();
+        return String();
     }
 
     XMLElement* e = m_xml->node->ToElement();
     if (!e) {
-        return QString();
+        return String();
     }
-    return e->Attribute(name);
+    return String(e->Attribute(name));
 }
 
 AsciiStringView XmlStreamReader::asciiAttribute(const char* name) const
@@ -308,14 +308,14 @@ std::vector<XmlStreamReader::Attribute> XmlStreamReader::attributes() const
 QString XmlStreamReader::readElementText()
 {
     if (isStartElement()) {
-        QString result;
+        String result;
         while (1) {
             switch (readNext()) {
             case Characters:
-                result.append(nodeValue(m_xml));
+                result = nodeValue(m_xml);
                 break;
             case EndElement:
-                return result;
+                return result.toQString();
             case Comment:
                 break;
             case StartElement:
@@ -331,7 +331,7 @@ QString XmlStreamReader::readElementText()
 QString XmlStreamReader::text() const
 {
     if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {
-        return nodeValue(m_xml);
+        return nodeValue(m_xml).toQString();
     }
     return QString();
 }

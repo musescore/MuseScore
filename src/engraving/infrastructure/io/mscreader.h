@@ -25,6 +25,7 @@
 #include <QString>
 #include "io/iodevice.h"
 #include "mscio.h"
+#include "types/string.h"
 
 namespace mu {
 class ZipReader;
@@ -83,7 +84,7 @@ private:
         //! it may happen that we are not reading a container (a directory with a certain structure),
         //! but only one file among others (`.mscx` from MU 3.x)
         virtual bool isContainer() const = 0;
-        virtual QStringList fileList() const = 0;
+        virtual StringList fileList() const = 0;
         virtual ByteArray fileData(const QString& fileName) const = 0;
     };
 
@@ -94,7 +95,7 @@ private:
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
-        QStringList fileList() const override;
+        StringList fileList() const override;
         ByteArray fileData(const QString& fileName) const override;
     private:
         io::IODevice* m_device = nullptr;
@@ -108,7 +109,7 @@ private:
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
-        QStringList fileList() const override;
+        StringList fileList() const override;
         ByteArray fileData(const QString& fileName) const override;
     private:
         QString m_rootPath;
@@ -120,7 +121,7 @@ private:
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
-        QStringList fileList() const override;
+        StringList fileList() const override;
         ByteArray fileData(const QString& fileName) const override;
     private:
         io::IODevice* m_device = nullptr;

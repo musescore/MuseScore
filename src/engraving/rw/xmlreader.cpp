@@ -267,7 +267,7 @@ void XmlReader::htmlToString(int level, QString* s)
 {
     *s += QString("<%1").arg(name().toQLatin1String());
     for (const Attribute& a : attributes()) {
-        *s += QString(" %1=\"%2\"").arg(a.name, a.value);
+        *s += QString(" %1=\"%2\"").arg(a.name.ascii(), a.value.toQString());
     }
     *s += ">";
     ++level;

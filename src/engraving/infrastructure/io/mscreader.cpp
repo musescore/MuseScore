@@ -143,11 +143,11 @@ ByteArray MscReader::readScoreFile() const
     QString mscxFileName = mainFileName();
     ByteArray data = fileData(mscxFileName);
     if (data.empty() && reader()->isContainer()) {
-        QStringList files = reader()->fileList();
-        for (const QString& name : files) {
+        StringList files = reader()->fileList();
+        for (const String& name : files) {
             // mscx file in the root dir
-            if (!name.contains("/") && name.endsWith(".mscx", Qt::CaseInsensitive)) {
-                mscxFileName = name;
+            if (!name.contains('/') && name.endsWith(".mscx", mu::CaseInsensitive)) {
+                mscxFileName = name.toQString();
                 break;
             }
         }
@@ -164,10 +164,10 @@ std::vector<QString> MscReader::excerptNames() const
     }
 
     std::vector<QString> names;
-    QStringList files = reader()->fileList();
-    for (const QString& filePath : files) {
-        if (filePath.startsWith("Excerpts/") && filePath.endsWith(".mscx", Qt::CaseInsensitive)) {
-            names.push_back(FileInfo(filePath).completeBaseName());
+    StringList files = reader()->fileList();
+    for (const String& filePath : files) {
+        if (filePath.startsWith("Excerpts/") && filePath.endsWith(".mscx", mu::CaseInsensitive)) {
+            names.push_back(FileInfo(filePath.toQString()).completeBaseName());
         }
     }
     return names;
@@ -208,10 +208,10 @@ std::vector<QString> MscReader::imageFileNames() const
     }
 
     std::vector<QString> names;
-    QStringList files = reader()->fileList();
-    for (const QString& filePath : files) {
+    StringList files = reader()->fileList();
+    for (const String& filePath : files) {
         if (filePath.startsWith("Pictures/")) {
-            names.push_back(FileInfo(filePath).fileName());
+            names.push_back(FileInfo(filePath.toQString()).fileName());
         }
     }
     return names;
@@ -285,13 +285,13 @@ bool MscReader::ZipFileReader::isContainer() const
     return true;
 }
 
-QStringList MscReader::ZipFileReader::fileList() const
+StringList MscReader::ZipFileReader::fileList() const
 {
     IF_ASSERT_FAILED(m_zip) {
-        return QStringList();
+        return StringList();
     }
 
-    QStringList files;
+    StringList files;
     std::vector<ZipReader::FileInfo> fileInfoList = m_zip->fileInfoList();
     if (m_zip->status() != ZipReader::NoError) {
         LOGD() << "failed read meta, status: " << m_zip->status();
@@ -299,7 +299,7 @@ QStringList MscReader::ZipFileReader::fileList() const
 
     for (const ZipReader::FileInfo& fi : fileInfoList) {
         if (fi.isFile) {
-            files << fi.filePath;
+            files << String::fromQString(fi.filePath);
         }
     }
 
@@ -354,14 +354,14 @@ bool MscReader::DirReader::isContainer() const
     return FileInfo::exists(m_rootPath + "/META-INF/container.xml");
 }
 
-QStringList MscReader::DirReader::fileList() const
+StringList MscReader::DirReader::fileList() const
 {
-    QStringList files;
+    StringList files;
     QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories;
     QDirIterator it(m_rootPath, QStringList(), QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Readable | QDir::Files, flags);
 
     while (it.hasNext()) {
-        QString filePath = it.next();
+        String filePath = String::fromQString(it.next());
         files << filePath.mid(m_rootPath.length() + 1);
     }
 
@@ -415,13 +415,13 @@ bool MscReader::XmlFileReader::isContainer() const
     return true;
 }
 
-QStringList MscReader::XmlFileReader::fileList() const
+StringList MscReader::XmlFileReader::fileList() const
 {
     if (!m_device) {
-        return QStringList();
+        return StringList();
     }
 
-    QStringList files;
+    StringList files;
 
     m_device->seek(0);
     XmlStreamReader xml(m_device);
@@ -437,7 +437,7 @@ QStringList MscReader::XmlFileReader::fileList() const
                 continue;
             }
 
-            QString fileName = xml.attribute("name");
+            String fileName = xml.attribute("name");
             files << fileName;
             xml.skipCurrentElement();
         }
@@ -466,8 +466,8 @@ ByteArray MscReader::XmlFileReader::fileData(const QString& fileName) const
                 continue;
             }
 
-            QString file = xml.attribute("name");
-            if (file != fileName) {
+            String file = xml.attribute("name");
+            if (file.toQString() != fileName) {
                 xml.skipCurrentElement();
                 continue;
             }
