@@ -26,7 +26,13 @@
 #include "log.h"
 
 #include "modularity/ioc.h"
+
+#if defined(Q_OS_MACOS)
+#include "internal/platform/macos/macosshortcutsinstancemodel.h"
+#else
 #include "internal/shortcutsinstancemodel.h"
+#endif
+
 #include "internal/shortcutsregister.h"
 #include "internal/shortcutscontroller.h"
 #include "internal/midiremote.h"
@@ -75,7 +81,12 @@ void ShortcutsModule::registerResources()
 
 void ShortcutsModule::registerUiTypes()
 {
+#if defined(Q_OS_MACOS)
+    qmlRegisterType<MacOSShortcutsInstanceModel>("MuseScore.Shortcuts", 1, 0, "ShortcutsInstanceModel");
+#else
     qmlRegisterType<ShortcutsInstanceModel>("MuseScore.Shortcuts", 1, 0, "ShortcutsInstanceModel");
+#endif
+
     qmlRegisterType<ShortcutsModel>("MuseScore.Shortcuts", 1, 0, "ShortcutsModel");
     qmlRegisterType<EditShortcutModel>("MuseScore.Shortcuts", 1, 0, "EditShortcutModel");
     qmlRegisterType<MidiDeviceMappingModel>("MuseScore.Shortcuts", 1, 0, "MidiDeviceMappingModel");
