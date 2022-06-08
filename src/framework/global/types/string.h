@@ -32,6 +32,11 @@
 #include "global/logstream.h"
 
 namespace mu {
+enum CaseSensitivity {
+    CaseInsensitive = 0,
+    CaseSensitive = 1
+};
+
 // ============================
 // AsciiChar (ASCII)
 // ============================
@@ -44,6 +49,9 @@ public:
 
     inline char ascii() const noexcept { return ch; }
     inline char16_t unicode() const noexcept { return char16_t(ch); }
+
+    static char toLower(char ch);
+    static char toUpper(char ch);
 
 private:
     char ch = 0;
@@ -58,16 +66,22 @@ public:
 
     Char() = default;
     Char(char16_t c)
-        : ch(c) {}
+        : m_ch(c) {}
     Char(AsciiChar c)
-        : ch(c.unicode()) {}
+        : m_ch(c.unicode()) {}
 
-    inline bool operator ==(Char c) const { return ch == c.ch; }
-    inline bool operator ==(char16_t c) const { return ch == c; }
-    inline bool operator ==(AsciiChar c) const { return ch == c.unicode(); }
+    inline bool operator ==(Char c) const { return m_ch == c.m_ch; }
+    inline bool operator !=(Char c) const { return !operator ==(c); }
+    inline bool operator ==(char16_t c) const { return m_ch == c; }
+    inline bool operator !=(char16_t c) const { return !operator ==(c); }
+    inline bool operator ==(AsciiChar c) const { return m_ch == c.unicode(); }
+    inline bool operator !=(AsciiChar c) const { return !operator ==(c); }
+
+    inline char16_t unicode() const { return m_ch; }
+    inline char ascii(bool* ok = nullptr) const;
 
 private:
-    char16_t ch = 0;
+    char16_t m_ch = 0;
 };
 
 // ============================
@@ -83,6 +97,8 @@ public:
 // ============================
 // String (UTF-16)
 // ============================
+class StringList;
+class AsciiStringView;
 class String
 {
 public:
@@ -94,12 +110,12 @@ public:
     String(const char16_t* str);
     String& operator=(const char16_t* str);
 
-    bool operator ==(const String& s) const { return *m_data.get() == *s.m_data.get(); }
-    bool operator !=(const String& s) const { return !operator ==(s); }
+    inline bool operator ==(const String& s) const { return constStr() == s.constStr(); }
+    inline bool operator !=(const String& s) const { return !operator ==(s); }
+    inline bool operator <(const String& s) const { return constStr() < s.constStr(); }
 
-    size_t size() const;
-    bool empty() const;
-    Char at(size_t i) const;
+    String& operator +=(const String& s);
+    String& operator +=(const char16_t* s);
 
     static String fromUtf8(const char* str);
     ByteArray toUtf8() const;
@@ -115,8 +131,33 @@ public:
     QString toQString() const;
 //#endif
 
+    size_t size() const;
+    bool empty() const;
+    Char at(size_t i) const;
+    bool contains(const Char& ch) const;
+
+    //! NOTE Now implemented only compare with ASCII
+    bool startsWith(const AsciiStringView& str, CaseSensitivity cs = CaseSensitive) const;
+    bool endsWith(const AsciiStringView& str, CaseSensitivity cs = CaseSensitive) const;
+
+    StringList split(const Char& ch) const;
+    String& replace(const String& before, const String& after);
+
+    String mid(size_t pos, size_t count = npos) const;
+
 private:
+    const std::u16string& constStr() const;
+    std::u16string& mutStr();
+    void detach();
+
     std::shared_ptr<std::u16string> m_data;
+};
+
+class StringList : public std::vector<String>
+{
+public:
+
+    StringList& operator <<(const String& s) { push_back(s); return *this; }
 };
 
 // ============================
@@ -171,6 +212,21 @@ private:
     size_t m_size = 0;
     const char* m_data = nullptr;
 };
+}
+
+// ============================
+// String (UTF-16)
+// ============================
+inline bool operator ==(const char16_t* s1, const mu::String& s2) { return s2 == s1; }
+inline bool operator !=(const char16_t* s1, const mu::String& s2) { return s2 != s1; }
+inline const mu::String operator+(const mu::String& s1, const mu::String& s2) { mu::String t(s1); t += s2; return t; }
+inline const mu::String operator+(const mu::String& s1, const char16_t* s2) { mu::String t(s1); t += s2; return t; }
+inline const mu::String operator+(const char16_t* s1, const mu::String& s2) { mu::String t(s1); t += s2; return t; }
+
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::String& str)
+{
+    s << str.toUtf8().constChar();
+    return s;
 }
 
 // ============================

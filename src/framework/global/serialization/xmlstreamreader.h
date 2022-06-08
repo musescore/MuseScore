@@ -59,8 +59,8 @@ public:
 
     struct Attribute
     {
-        QString name;
-        QString value;
+        AsciiStringView name;
+        String value;
     };
 
     XmlStreamReader();
@@ -90,7 +90,7 @@ public:
 
     AsciiStringView name() const;
 
-    QString attribute(const char* name) const;
+    String attribute(const char* name) const;
     AsciiStringView asciiAttribute(const char* name) const;
     bool hasAttribute(const char* name) const;
     std::vector<Attribute> attributes() const;
@@ -112,12 +112,12 @@ private:
     struct Xml;
 
     void tryParseEntity(Xml* xml);
-    QString nodeValue(Xml* xml) const;
+    String nodeValue(Xml* xml) const;
 
     Xml* m_xml = nullptr;
     TokenType m_token = TokenType::NoToken;
 
-    std::map<QString, QString> m_entities;
+    std::map<String, String> m_entities;
 };
 }
 
