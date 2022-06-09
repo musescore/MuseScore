@@ -318,6 +318,36 @@ TEST_F(Global_Types_StringTests, String_StartEndWith)
     }
 }
 
+TEST_F(Global_Types_StringTests, String_Args)
+{
+    {
+        //! GIVEN Some String
+        String str = u"{%1}, [%2]";
+        //! DO
+        String newStr = str.arg(u"123").arg(u"abc");
+        //! CHECK
+        EXPECT_EQ(newStr, u"{123}, [abc]");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"{%1}, [%2], {%1}";
+        //! DO
+        String newStr = str.arg(u"123").arg(u"abc");
+        //! CHECK
+        EXPECT_EQ(newStr, u"{123}, [abc], {123}");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"{%1}, [%2]";
+        //! DO
+        String newStr = str.arg(u"123", u"abc");
+        //! CHECK
+        EXPECT_EQ(newStr, u"{123}, [abc]");
+    }
+}
+
 TEST_F(Global_Types_StringTests, AsciiString_Construct)
 {
     //! GIVEN Some ASCII String

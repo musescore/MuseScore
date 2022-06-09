@@ -86,6 +86,8 @@ public:
     static char toAscii(char16_t c, bool* ok = nullptr);
     static char16_t fromAscii(char c);
 
+    static bool isDigit(char16_t c);
+
 private:
     char16_t m_ch = 0;
 };
@@ -143,7 +145,7 @@ public:
     static String fromUtf8(const char* str);
     ByteArray toUtf8() const;
 
-    static String fromAscii(const char* str);
+    static String fromAscii(const char* str, size_t size = mu::nidx);
     ByteArray toAscii(bool* ok = nullptr) const;
 
     static String fromStdString(const std::string& str);
@@ -170,11 +172,14 @@ public:
     StringList split(const Char& ch) const;
     String& replace(const String& before, const String& after);
 
+    String arg(const String& val) const;
+    String arg(const String& val1, const String& val2) const;
+    String arg(const String& val1, const String& val2, const String& val3) const;
+
     String mid(size_t pos, size_t count = mu::nidx) const;
     String left(size_t n) const;
 
     String trimmed() const;
-    String simplified() const;
     String toXmlEscaped() const;
     static String toXmlEscaped(const String& str);
     static String toXmlEscaped(char16_t c);
@@ -182,10 +187,13 @@ public:
     int toInt(bool* ok = nullptr, int base = 10) const;
     double toDouble(bool* ok = nullptr) const;
 
+    static String number(int n);
+
 private:
     const std::u16string& constStr() const;
     std::u16string& mutStr();
     void detach();
+    void doArgs(std::u16string& out, const std::vector<std::u16string_view>& args) const;
 
     std::shared_ptr<std::u16string> m_data;
 };

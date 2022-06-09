@@ -238,7 +238,7 @@ void TimeSig::read(XmlReader& e)
 
     // HACK: handle time signatures from scores before 3.5 differently on some special occasions.
     // See https://musescore.org/node/308139.
-    QString version = mscoreVersion();
+    QString version = e.context()->mscoreVersion();
     if (!version.isEmpty() && (version >= "3.0") && (version < "3.5")) {
         if ((_timeSigType == TimeSigType::NORMAL) && !_numeratorString.isEmpty() && _denominatorString.isEmpty()) {
             if (_numeratorString == QString::number(_sig.numerator())) {
