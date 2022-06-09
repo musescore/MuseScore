@@ -85,7 +85,7 @@ InspectorPropertyView {
                 StyledIconLabel {
                     anchors.centerIn: parent
                     iconCode: modelData["iconCode"] ?? IconCode.NONE
-                    font.pixelSize: 30
+                    font.pixelSize: 32
                 }
 
                 onClicked: {
