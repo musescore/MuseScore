@@ -235,6 +235,8 @@ public:
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;
     const StaffType* constStaffType(const Fraction&) const;
     const StaffType* staffTypeForElement(const EngravingItem*) const;
+    bool isStaffTypeStartFrom(const Fraction& = Fraction(0, 1)) const;
+    void moveStaffType(const Fraction& from, const Fraction& to);
     StaffType* staffType(const Fraction&);
     StaffType* setStaffType(const Fraction&, const StaffType&);
     void removeStaffType(const Fraction&);
