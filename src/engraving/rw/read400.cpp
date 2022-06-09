@@ -43,7 +43,7 @@ using namespace mu::engraving::rw;
 bool Read400::read400(Score* score, XmlReader& e, ReadContext& ctx)
 {
     if (!e.readNextStartElement()) {
-        LOGD("%s: xml file is empty", qPrintable(e.getDocName()));
+        LOGD("%s: xml file is empty", qPrintable(e.docName()));
         return false;
     }
 
@@ -65,7 +65,7 @@ bool Read400::read400(Score* score, XmlReader& e, ReadContext& ctx)
             }
         }
     } else {
-        LOGD("%s: invalid structure of xml file", qPrintable(e.getDocName()));
+        LOGD("%s: invalid structure of xml file", qPrintable(e.docName()));
         return false;
     }
 
@@ -222,7 +222,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
     ctx.reconnectBrokenConnectors();
     if (e.error() != XmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
-             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
+             qPrintable(e.docName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
         if (e.error() == XmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {

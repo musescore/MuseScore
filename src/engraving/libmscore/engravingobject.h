@@ -221,7 +221,7 @@ public:
     inline ElementType type() const { return m_type; }
     inline bool isType(ElementType t) const { return t == m_type; }
     const char* typeName() const;
-    virtual QString typeUserName() const;
+    virtual String typeUserName() const;
 
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);

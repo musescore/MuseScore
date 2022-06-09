@@ -110,8 +110,7 @@ char16_t Char::fromAscii(char c)
 
 char Char::toAscii(bool* ok) const
 {
-    UNUSED(ok);
-    return toAscii(m_ch);
+    return toAscii(m_ch, ok);
 }
 
 // ============================
@@ -413,11 +412,20 @@ String String::mid(size_t pos, size_t count) const
     return s;
 }
 
+String String::left(size_t n) const
+{
+    return mid(0, n);
+}
+
 String String::trimmed() const
 {
     String s = *this;
     trim_helper(s.mutStr());
     return s;
+}
+
+String String::simplified() const
+{
 }
 
 String String::toXmlEscaped(char16_t c)
@@ -510,12 +518,17 @@ AsciiChar AsciiStringView::at(size_t i) const
 
 bool AsciiStringView::contains(char ch) const
 {
+    return indexOf(ch) != mu::nidx;
+}
+
+size_t AsciiStringView::indexOf(char ch) const
+{
     for (size_t i = 0; i < m_size; ++i) {
         if (m_data[i] == ch) {
-            return true;
+            return i;
         }
     }
-    return false;
+    return mu::nidx;
 }
 
 int AsciiStringView::toInt(bool* ok, int base) const

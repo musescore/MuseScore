@@ -778,7 +778,7 @@ const char* EngravingObject::typeName() const
     return Factory::name(type());
 }
 
-QString EngravingObject::typeUserName() const
+String EngravingObject::typeUserName() const
 {
     return qtrc("elementName", Factory::userName(type()));
 }

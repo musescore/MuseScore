@@ -353,7 +353,7 @@ public:
     void setPlainText(const QString& t) { setXmlText(plainToXmlText(t)); }
     virtual void setXmlText(const QString&);
     QString xmlText() const;
-    QString plainText() const;
+    String plainText() const;
     void resetFormatting();
 
     void insertText(EditData&, const QString&);

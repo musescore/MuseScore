@@ -305,7 +305,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
         }
     }
 
-    const QString name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyText() : element->typeUserName();
+    const String name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyText() : element->typeUserName();
 
     return std::make_shared<PaletteCell>(element, name);
 }

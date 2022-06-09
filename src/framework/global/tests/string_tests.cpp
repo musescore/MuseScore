@@ -248,6 +248,15 @@ TEST_F(Global_Types_StringTests, String_SubStr)
         //! CHECK
         EXPECT_EQ(newStr, u"3abc");
     }
+
+    {
+        //! GIVEN Some String
+        String str = u"123abc";
+        //! DO
+        String newStr = str.left(2);
+        //! CHECK
+        EXPECT_EQ(newStr, u"12");
+    }
 }
 
 TEST_F(Global_Types_StringTests, String_Trimmed)

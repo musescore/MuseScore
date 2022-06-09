@@ -1319,7 +1319,7 @@ private:
 
 void TextReaderContext206::copyProperties(XmlReader& original, XmlReader& derived)
 {
-    derived.setDocName(original.getDocName());
+    derived.setDocName(original.docName());
     derived.setContext(original.context());
 }
 
@@ -3345,7 +3345,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     }
     if (e.error() != XmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
-             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
+             qPrintable(e.docName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
         MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
             e.name().ascii());
         return false;
