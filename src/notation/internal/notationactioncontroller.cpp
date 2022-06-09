@@ -851,7 +851,8 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         return;
     }
 
-    EngravingItem* selectedElement = interaction->selection()->element();
+    const EngravingItem* selectedElement = interaction->selection()->element();
+    bool playChord = false;
 
     switch (direction) {
     case MoveDirection::Up:
@@ -878,12 +879,14 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->nudge(direction, quickly);
         } else {
             interaction->moveSelection(direction, quickly ? MoveSelectionType::Measure : MoveSelectionType::Chord);
+            playChord = true;
         }
         break;
     case MoveDirection::Undefined:
         break;
     }
-    playSelectedElement(false);
+
+    playSelectedElement(playChord);
 }
 
 void NotationActionController::moveWithinChord(MoveDirection direction)
