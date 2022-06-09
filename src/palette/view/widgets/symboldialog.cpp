@@ -64,7 +64,7 @@ void SymbolDialog::createSymbols()
     for (auto name : (*mu::smuflRanges())[range]) {
         SymId id = SymNames::symIdByName(name);
         if (search->text().isEmpty()
-            || SymNames::translatedUserNameForSymId(id).contains(search->text(), Qt::CaseInsensitive)) {
+            || SymNames::translatedUserNameForSymId(id).toQString().contains(search->text(), Qt::CaseInsensitive)) {
             auto s = std::make_shared<Symbol>(gpaletteScore->dummy());
             s->setSym(SymId(id), f);
             m_symbolsWidget->appendElement(s, SymNames::translatedUserNameForSymId(SymId(id)));

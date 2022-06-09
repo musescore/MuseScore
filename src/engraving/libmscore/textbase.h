@@ -436,7 +436,6 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
     void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
-    Pid propertyId(const QStringRef& xmlName) const override;
     Sid getPropertyStyle(Pid) const override;
     void styleChanged() override;
     void editInsertText(TextCursor*, const QString&);

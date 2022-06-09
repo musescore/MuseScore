@@ -88,8 +88,8 @@ public:
     // Score Tree functions
     EngravingObject* scanParent() const override;
 
-    QString subtypeUserName() const;
-    void setSubtype(const mu::AsciiStringView& s);
+    String subtypeUserName() const;
+    void setSubtype(const AsciiStringView& s);
     void setAccidentalType(AccidentalType t) { _accidentalType = t; }
 
     AccidentalType accidentalType() const { return _accidentalType; }
@@ -125,7 +125,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
     static AccidentalVal subtype2value(AccidentalType);               // return effective pitch offset
     static SymId subtype2symbol(AccidentalType);

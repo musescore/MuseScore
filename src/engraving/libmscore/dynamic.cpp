@@ -564,18 +564,6 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
 }
 
 //---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid Dynamic::propertyId(const QStringRef& name) const
-{
-    if (name == propertyName(Pid::DYNAMIC_TYPE)) {
-        return Pid::DYNAMIC_TYPE;
-    }
-    return TextBase::propertyId(name);
-}
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

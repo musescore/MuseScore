@@ -115,7 +115,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
     // TODO: add a grip for moving the entire arpeggio
     bool needStartEditingAfterSelecting() const override { return true; }

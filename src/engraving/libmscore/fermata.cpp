@@ -351,18 +351,6 @@ void Fermata::resetProperty(Pid id)
 }
 
 //---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid Fermata::propertyId(const QStringRef& xmlName) const
-{
-    if (xmlName == "subtype") {
-        return Pid::SYMBOL;
-    }
-    return EngravingItem::propertyId(xmlName);
-}
-
-//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 

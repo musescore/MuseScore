@@ -550,18 +550,6 @@ PropertyValue Trill::propertyDefault(Pid propertyId) const
 }
 
 //---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid Trill::propertyId(const QStringRef& name) const
-{
-    if (name == "subtype") {
-        return Pid::TRILL_TYPE;
-    }
-    return SLine::propertyId(name);
-}
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

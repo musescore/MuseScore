@@ -692,18 +692,6 @@ PropertyValue Tremolo::propertyDefault(Pid propertyId) const
 }
 
 //---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid Tremolo::propertyId(const QStringRef& name) const
-{
-    if (name == "subtype") {
-        return Pid::TREMOLO_TYPE;
-    }
-    return EngravingItem::propertyId(name);
-}
-
-//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 

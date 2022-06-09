@@ -554,15 +554,6 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
 }
 
 //---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid EngravingObject::propertyId(const QStringRef& xmlName) const
-{
-    return mu::engraving::propertyId(xmlName);
-}
-
-//---------------------------------------------------------
 //   readStyledProperty
 //---------------------------------------------------------
 

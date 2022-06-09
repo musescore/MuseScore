@@ -310,7 +310,7 @@ int AccessibleItem::accessibleCharacterCount() const
     }
 
     TextBase* text = toTextBase(m_element);
-    return text->plainText().length();
+    return static_cast<int>(text->plainText().size());
 }
 
 bool AccessibleItem::accessibleState(State st) const

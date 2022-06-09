@@ -342,18 +342,6 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
     }
 }
 
-//---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid LayoutBreak::propertyId(const QStringRef& name) const
-{
-    if (name == propertyName(Pid::LAYOUT_BREAK)) {
-        return Pid::LAYOUT_BREAK;
-    }
-    return EngravingItem::propertyId(name);
-}
-
 void LayoutBreak::added()
 {
     IF_ASSERT_FAILED(score()) {
