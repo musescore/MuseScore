@@ -51,6 +51,8 @@ MenuView {
     }
 
     function calculateSize() {
+        var menuMetricsComponent = Qt.createComponent("MenuMetrics.qml");
+        root.menuMetrics = menuMetricsComponent.createObject(root)
         root.menuMetrics.calculate(model)
 
         //! NOTE: Due to the fact that the view has a dynamic delegate,
@@ -93,7 +95,7 @@ MenuView {
     }
 
     property var subMenuLoader: null
-    property MenuMetrics menuMetrics: MenuMetrics {}
+    property MenuMetrics menuMetrics: null
 
     contentItem: PopupContent {
         id: content
