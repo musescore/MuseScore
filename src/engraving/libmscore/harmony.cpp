@@ -26,6 +26,7 @@
 #include <QRegularExpression>
 
 #include "containers.h"
+#include "translation.h"
 #include "draw/fontmetrics.h"
 #include "draw/brush.h"
 #include "draw/pen.h"
@@ -2074,13 +2075,13 @@ void Harmony::setHarmonyType(HarmonyType val)
 //   typeUserName
 //---------------------------------------------------------
 
-QString Harmony::typeUserName() const
+String Harmony::typeUserName() const
 {
     switch (_harmonyType) {
     case HarmonyType::ROMAN:
-        return QObject::tr("Roman numeral");
+        return qtrc("engraving", "Roman numeral");
     case HarmonyType::NASHVILLE:
-        return QObject::tr("Nashville number");
+        return qtrc("engraving", "Nashville number");
     case HarmonyType::STANDARD:
         break;
     }

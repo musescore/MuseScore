@@ -206,7 +206,7 @@ void Articulation::write(XmlWriter& xml) const
 //   typeUserName
 //---------------------------------------------------------
 
-QString Articulation::typeUserName() const
+String Articulation::typeUserName() const
 {
     return SymNames::translatedUserNameForSymId(symId());
 }

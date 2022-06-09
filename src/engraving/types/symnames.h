@@ -33,7 +33,7 @@ namespace mu::engraving {
 struct SymNames {
     static AsciiStringView nameForSymId(SymId id);
     static const char* userNameForSymId(SymId id);
-    static QString translatedUserNameForSymId(SymId id);
+    static String translatedUserNameForSymId(SymId id);
 
     static SymId symIdByName(const AsciiStringView& name, SymId def = SymId::noSym);
     static SymId symIdByName(const QString& name, SymId def = SymId::noSym);

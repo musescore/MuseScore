@@ -226,7 +226,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     e.context()->reconnectBrokenConnectors();
     if (e.error() != XmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
-             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
+             qPrintable(e.docName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
         if (e.error() == XmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {
