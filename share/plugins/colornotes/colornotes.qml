@@ -28,6 +28,7 @@ MuseScore {
       description: qsTr("This plugin colors notes in the selection depending on their pitch as per the Boomwhackers convention")
       title: "Color Notes"
       categoryCode: "color-notes"
+      thumbnailName: "color_notes.png"
 
       property variant colors : [ // "#rrggbb" with rr, gg, and bb being the hex values for red, green, and blue, respectively
                "#e21c48", // C

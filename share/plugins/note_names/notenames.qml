@@ -23,6 +23,7 @@ MuseScore {
    description: "This plugin names notes as per your language setting"
    title: "Note Names"
    categoryCode: "composing-arranging-tools"
+   thumbnailName: "note_names.png"
 
    // Small note name size is fraction of the full font size.
    property real fontSizeMini: 0.7;

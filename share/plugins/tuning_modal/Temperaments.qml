@@ -24,10 +24,11 @@ import FileIO 3.0
 
 MuseScore {
     version: "3.3.2"
-    title: "Temperaments"
+    title: "Modal Temperaments"
     description: "Apply various temperaments and tunings"
     pluginType: "dialog"
     categoryCode: "playback"
+    thumbnailName: "modal_tuning.png"
 
     width: 900
     height: 722
