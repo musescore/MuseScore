@@ -6645,12 +6645,16 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
     //       currently exported as a two staff part ...
     for (size_t i = 0; i < staves; i++) {
         Staff* st = part->staff(i);
-        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1))) {
+        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !st->show()) {
+            XmlWriter::Attributes attributes;
             if (staves > 1) {
-                xml.startElement("staff-details", { { "number", i + 1 } });
-            } else {
-                xml.startElement("staff-details");
+                attributes.push_back({ "number", i + 1 });
             }
+            if (!st->show()) {
+                attributes.push_back({ "print-object", "no" });
+            }
+            xml.startElement("staff-details", attributes);
+
             xml.tag("staff-lines", st->lines(Fraction(0, 1)));
             if (st->isTabStaff(Fraction(0, 1)) && instrument->stringData()) {
                 std::vector<instrString> l = instrument->stringData()->stringList();
