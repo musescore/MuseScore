@@ -342,8 +342,8 @@ EngravingItem* Marker::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Marker::accessibleInfo() const
+String Marker::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), markerTypeUserName());
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), markerTypeUserName());
 }
 }

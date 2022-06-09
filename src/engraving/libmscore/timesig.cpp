@@ -559,26 +559,26 @@ EngravingItem* TimeSig::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString TimeSig::accessibleInfo() const
+String TimeSig::accessibleInfo() const
 {
-    QString timeSigString;
+    String timeSigString;
     switch (timeSigType()) {
     case TimeSigType::FOUR_FOUR:
-        timeSigString = qtrc("symUserNames", "Common time");
+        timeSigString = mtrc("symUserNames", "Common time");
         break;
     case TimeSigType::ALLA_BREVE:
-        timeSigString = qtrc("symUserNames", "Cut time");
+        timeSigString = mtrc("symUserNames", "Cut time");
         break;
     case TimeSigType::CUT_BACH:
-        timeSigString = qtrc("symUserNames", "Cut time (Bach)");
+        timeSigString = mtrc("symUserNames", "Cut time (Bach)");
         break;
     case TimeSigType::CUT_TRIPLE:
-        timeSigString = qtrc("symUserNames", "Cut triple time (9/8)");
+        timeSigString = mtrc("symUserNames", "Cut triple time (9/8)");
         break;
     default:
-        timeSigString = qtrc("engraving", "%1/%2 time").arg(QString::number(numerator()), QString::number(denominator()));
+        timeSigString = mtrc("engraving", "%1/%2 time").arg(numerator(), denominator());
     }
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), timeSigString);
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), timeSigString);
 }
 
 //---------------------------------------------------------

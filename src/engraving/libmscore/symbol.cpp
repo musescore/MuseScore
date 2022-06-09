@@ -75,9 +75,9 @@ AsciiStringView Symbol::symName() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Symbol::accessibleInfo() const
+String Symbol::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), SymNames::userNameForSymId(_sym));
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), String::fromUtf8(SymNames::userNameForSymId(_sym)));
 }
 
 //---------------------------------------------------------

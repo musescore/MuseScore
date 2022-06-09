@@ -518,13 +518,13 @@ EngravingItem* Clef::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Clef::accessibleInfo() const
+String Clef::accessibleInfo() const
 {
     ClefType type = clefType();
     if (type == ClefType::INVALID) {
-        return QString();
+        return String();
     }
-    return qtrc("engraving", TConv::toUserName(clefType()).toUtf8().constData());
+    return mtrc("engraving", TConv::toUserName(clefType()).toUtf8().constData());
 }
 
 //---------------------------------------------------------

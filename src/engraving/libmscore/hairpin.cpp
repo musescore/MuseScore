@@ -24,6 +24,7 @@
 
 #include <cmath>
 
+#include "translation.h"
 #include "draw/transform.h"
 #include "draw/pen.h"
 #include "style/style.h"
@@ -901,18 +902,18 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Hairpin::accessibleInfo() const
+String Hairpin::accessibleInfo() const
 {
-    QString rez = TextLineBase::accessibleInfo();
+    String rez = TextLineBase::accessibleInfo();
     switch (hairpinType()) {
     case HairpinType::CRESC_HAIRPIN:
-        rez += ": " + QObject::tr("Crescendo");
+        rez += u": " + mtrc("engraving", "Crescendo");
         break;
     case HairpinType::DECRESC_HAIRPIN:
-        rez += ": " + QObject::tr("Decrescendo");
+        rez += u": " + mtrc("engraving", "Decrescendo");
         break;
     default:
-        rez += ": " + QObject::tr("Custom");
+        rez += u": " + mtrc("engraving", "Custom");
     }
     return rez;
 }

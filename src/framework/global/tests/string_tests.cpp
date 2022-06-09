@@ -208,7 +208,7 @@ TEST_F(Global_Types_StringTests, String_Replace)
     }
 }
 
-TEST_F(Global_Types_StringTests, String_Modify)
+TEST_F(Global_Types_StringTests, String_PlusAssign)
 {
     {
         //! GIVEN Some String
@@ -226,6 +226,18 @@ TEST_F(Global_Types_StringTests, String_Modify)
         str += u"Пыф";
         //! CHECK
         EXPECT_EQ(str, u"123abcПыф");
+    }
+}
+
+TEST_F(Global_Types_StringTests, String_Truncate)
+{
+    {
+        //! GIVEN Some String
+        String str = u"123abc";
+        //! DO
+        str.truncate(3);
+        //! CHECK
+        EXPECT_EQ(str, u"123");
     }
 }
 

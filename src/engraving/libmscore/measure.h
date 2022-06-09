@@ -327,7 +327,7 @@ public:
 
     EngravingItem* nextElementStaff(staff_idx_t staff);
     EngravingItem* prevElementStaff(staff_idx_t staff);
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 
     void addSystemHeader(bool firstSystem);
     void addSystemTrailer(Measure* nm);

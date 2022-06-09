@@ -22,6 +22,7 @@
 
 #include "fret.h"
 
+#include "translation.h"
 #include "draw/fontmetrics.h"
 #include "draw/brush.h"
 #include "rw/xml.h"
@@ -1453,10 +1454,15 @@ void FretDiagram::endEditDrag(EditData& editData)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString FretDiagram::accessibleInfo() const
+String FretDiagram::accessibleInfo() const
 {
-    QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->harmonyName()) : QObject::tr("without chord symbol");
-    return QString("%1 %2").arg(typeUserName(), chordName);
+    String chordName;
+    if (_harmony) {
+        chordName = mtrc("engraving", "with chord symbol %1").arg(_harmony->harmonyName());
+    } else {
+        chordName = mtrc("engraving", "without chord symbol");
+    }
+    return String("%1 %2").arg(typeUserName(), chordName);
 }
 
 //---------------------------------------------------------

@@ -589,7 +589,7 @@ public:
     virtual EngravingItem* prevSegmentElement();    //< next-element and prev-element command
 
     AccessibleItem* accessible() const;
-    virtual QString accessibleInfo() const;
+    virtual String accessibleInfo() const;
     virtual QString screenReaderInfo() const { return accessibleInfo(); }
     //  if the screen-reader needs a special string (see note for example)
     // used to return info that will be appended to accessibleInfo

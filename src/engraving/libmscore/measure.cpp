@@ -3197,9 +3197,9 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Measure::accessibleInfo() const
+String Measure::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), QString::number(no() + 1));
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), QString::number(no() + 1));
 }
 
 //-----------------------------------------------------------------------------

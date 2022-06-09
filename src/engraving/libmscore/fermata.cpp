@@ -403,9 +403,9 @@ FermataType Fermata::fermataType() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Fermata::accessibleInfo() const
+String Fermata::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
 }
 
 void Fermata::added()

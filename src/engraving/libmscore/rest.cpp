@@ -25,6 +25,7 @@
 #include <cmath>
 #include <set>
 
+#include "translation.h"
 #include "containers.h"
 #include "style/style.h"
 #include "rw/xml.h"
@@ -847,10 +848,10 @@ void Rest::setAccent(bool flag)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Rest::accessibleInfo() const
+String Rest::accessibleInfo() const
 {
-    QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-    return QObject::tr("%1; Duration: %2; %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
+    String voice = mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1);
+    return mtrc("engraving", "%1; Duration: %2; %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
 }
 
 //---------------------------------------------------------

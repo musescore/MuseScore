@@ -2092,9 +2092,9 @@ String Harmony::typeUserName() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Harmony::accessibleInfo() const
+String Harmony::accessibleInfo() const
 {
-    return QString("%1: %2").arg(typeUserName(), harmonyName());
+    return String("%1: %2").arg(typeUserName(), harmonyName());
 }
 
 //---------------------------------------------------------
