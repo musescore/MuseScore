@@ -88,13 +88,16 @@ public:
 //#endif
 
 private:
+    using Data = std::vector<uint8_t>;
+    struct RawData {
+        const uint8_t* data = nullptr;
+        size_t size = 0;
+    };
 
-    void detachRawDataIfNeed();
+    void detach();
 
-    std::shared_ptr<uint8_t> m_data;
-    const uint8_t* m_rawData = nullptr;
-    size_t m_size = 0;
-    size_t m_buffer_size = 0;
+    std::shared_ptr<Data> m_data;
+    RawData m_raw;
 };
 }
 
