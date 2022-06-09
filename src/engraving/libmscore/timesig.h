@@ -129,7 +129,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
     const Groups& groups() const { return _groups; }
     void setGroups(const Groups& e) { _groups = e; }

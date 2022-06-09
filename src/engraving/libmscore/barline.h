@@ -147,7 +147,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
