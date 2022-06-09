@@ -29,7 +29,7 @@ class ExternalAudioSource : public ITrackAudioInput, public async::Asyncable
 {
 public:
     ExternalAudioSource();
-    explicit ExternalAudioSource(const TrackId trackId, const io::Device*);
+    explicit ExternalAudioSource(const TrackId trackId, io::Device*);
 
     bool isActive() const override;
     void setIsActive(const bool active) override;

@@ -23,12 +23,12 @@
 using namespace mu;
 using namespace mu::audio;
 
-ExternalAudioSource::ExternalAudioSource(const TrackId trackId, const io::Device* playbackData)
+ExternalAudioSource::ExternalAudioSource(const TrackId trackId, io::Device* playbackData)
     : m_trackId(trackId), m_playbackData(playbackData)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    (const_cast<io::Device*>(playbackData))->open(mu::io::Device::ReadOnly);
-    b = (const_cast<io::Device*>(playbackData))->readAll();
+    playbackData->open(mu::io::Device::ReadOnly);
+    b = playbackData->readAll();
 
     drwav_init_memory(&m_wav, b.constData(), b.size(), nullptr);
     if (m_wav.fmt.bitsPerSample != 32) {
