@@ -17,7 +17,7 @@ endif()
 if (CC_IS_GCC)
     message(STATUS "Using Compiler GCC ${CMAKE_CXX_COMPILER_VERSION}")
 
-    set(CMAKE_CXX_FLAGS_DEBUG   "-g")
+    set(CMAKE_CXX_FLAGS_DEBUG   "-g") #-fsanitize=address -fno-omit-frame-pointer
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
     if (TRY_BUILD_SHARED_LIBS_IN_DEBUG AND BUILD_IS_DEBUG)
