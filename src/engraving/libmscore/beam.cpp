@@ -742,8 +742,14 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
 
     qreal verticalOffset = 0;
     int upValue = overallUp ? -1 : 1;
-    qreal startOffsetX = startChord->up() && !_tab ? -(startChord->stem()->lineWidth().val() * startChord->mag()) : 0.0;
-    qreal endOffsetX = endChord->up() || _tab ? 0.0 : endChord->stem()->lineWidth().val() * endChord->mag();
+    qreal startOffsetX = 0.0;
+    qreal endOffsetX = 0.0;
+    if (startChord->stem()) {
+        startOffsetX = startChord->up() && !_tab ? -(startChord->stem()->lineWidth().val() * startChord->mag()) : 0.0;
+    }
+    if (endChord->stem()) {
+        endOffsetX = endChord->up() || _tab ? 0.0 : endChord->stem()->lineWidth().val() * endChord->mag();
+    }
     qreal startX = posStart.x() + startOffsetX;
     qreal endX = posEnd.x() + endOffsetX;
     int beamsBelow = 0; // how many beams below level 0?
@@ -892,7 +898,7 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
     int upValue = chord->up() ? -1 : 1;
     qreal verticalOffset = 0;
 
-    qreal stemWidth = chord->stem()->lineWidth().val() * chord->mag();
+    qreal stemWidth = chord->stem() ? chord->stem()->lineWidth().val() * chord->mag() : 0;
     qreal startOffsetX = 0;
     if (!_tab) {
         if (isBefore && !chord->up()) {
