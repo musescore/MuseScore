@@ -2126,9 +2126,7 @@ void InsertRemoveMeasures::removeMeasures()
         // remember clefs at the end of previous measure
         const auto clefs = getCourtesyClefs(toMeasure(fm));
 
-        if (score->firstMeasure()) {
-            score->insertTime(tick1, -(tick2 - tick1));
-        }
+        score->insertTime(tick1, -(tick2 - tick1));
 
         // Restore clefs that were backed up. Events for them could be lost
         // as a result of the recent insertTime() call.
