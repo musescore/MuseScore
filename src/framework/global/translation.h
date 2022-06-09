@@ -31,6 +31,9 @@ std::string trc(const char* context, const char* key, const char* disambiguation
 QString qtrc(const char* context, const char* key, const char* disambiguation = nullptr, int n = -1);
 QString qtrc(const char* context, const String& key, const char* disambiguation = nullptr, int n = -1);
 QString qtrc(const char* context, const String& key, const String& disambiguation, int n = -1);
+
+String mtrc(const char* context, const char* key, const char* disambiguation = nullptr, int n = -1);
+String mtrc(const char* context, const String& key, const char* disambiguation = nullptr, int n = -1);
 }
 
 #endif // MU_FRAMEWORK_TRANSLATION_H

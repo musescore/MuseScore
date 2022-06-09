@@ -50,7 +50,7 @@ public:
 
     PropertyValue propertyDefault(Pid id) const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 };
 } // namespace mu::engraving
 #endif

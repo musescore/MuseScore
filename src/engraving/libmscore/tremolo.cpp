@@ -622,9 +622,9 @@ QString Tremolo::subtypeName() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Tremolo::accessibleInfo() const
+String Tremolo::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), subtypeName());
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), subtypeName());
 }
 
 //---------------------------------------------------------

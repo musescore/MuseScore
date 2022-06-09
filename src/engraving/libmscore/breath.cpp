@@ -255,7 +255,7 @@ EngravingItem* Breath::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Breath::accessibleInfo() const
+String Breath::accessibleInfo() const
 {
     return SymNames::translatedUserNameForSymId(_symId);
 }

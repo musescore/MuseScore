@@ -652,8 +652,8 @@ bool Accidental::setProperty(Pid propertyId, const PropertyValue& v)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Accidental::accessibleInfo() const
+String Accidental::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), Accidental::subtypeUserName());
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), Accidental::subtypeUserName());
 }
 }

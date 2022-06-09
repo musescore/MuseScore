@@ -410,11 +410,11 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString ChordLine::accessibleInfo() const
+String ChordLine::accessibleInfo() const
 {
-    QString rez = EngravingItem::accessibleInfo();
+    String rez = EngravingItem::accessibleInfo();
     if (chordLineType() != ChordLineType::NOTYPE) {
-        rez = QString("%1: %2").arg(rez, scorelineNames[static_cast<int>(chordLineType()) - 1]);
+        rez = String("%1: %2").arg(rez, String::fromUtf8(scorelineNames[static_cast<int>(chordLineType()) - 1]));
     }
     return rez;
 }

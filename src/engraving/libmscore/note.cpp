@@ -3252,38 +3252,38 @@ void Note::setScore(Score* s)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Note::accessibleInfo() const
+String Note::accessibleInfo() const
 {
     if (!chord() || !staff()) {
-        return QString();
+        return String();
     }
 
-    QString duration = chord()->durationUserName();
-    QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-    QString pitchName;
-    QString onofftime;
+    String duration = chord()->durationUserName();
+    String voice = mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1);
+    String pitchName;
+    String onofftime;
     if (!_playEvents.empty()) {
         int on = _playEvents[0].ontime();
         int off = _playEvents[0].offtime();
         if (on != 0 || off != NoteEvent::NOTE_LENGTH) {
-            onofftime = QObject::tr(" (on %1‰ off %2‰)").arg(on).arg(off);
+            onofftime = mtrc("engraving", " (on %1‰ off %2‰)").arg(on, off);
         }
     }
 
     const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
-        pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
+        pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = qtrc("drumset", drumset->name(pitch()));
+        pitchName = mtrc("engraving", drumset->name(pitch()));
     } else if (staff()->isTabStaff(tick())) {
-        pitchName
-            = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false), QString::number(string() + 1), QString::number(fret()));
+        pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
+                    .arg(tpcUserName(false), String::number(string() + 1), String::number(fret()));
     } else {
         pitchName = tpcUserName(false);
     }
 
-    return QObject::tr("%1; Pitch: %2; Duration: %3%4%5").arg(noteTypeUserName(), pitchName, duration, onofftime,
-                                                              (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+    return mtrc("engraving", "%1; Pitch: %2; Duration: %3%4%5")
+           .arg(noteTypeUserName(), pitchName, duration, onofftime, (chord()->isGrace() ? u"" : String("; %1").arg(voice)));
 }
 
 //---------------------------------------------------------

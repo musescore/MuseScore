@@ -347,7 +347,7 @@ EngravingItem* SpannerSegment::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString SpannerSegment::accessibleInfo() const
+String SpannerSegment::accessibleInfo() const
 {
     return spanner()->accessibleInfo();
 }

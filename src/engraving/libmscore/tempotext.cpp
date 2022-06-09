@@ -26,7 +26,7 @@
 #include <unordered_map>
 
 #include "containers.h"
-
+#include "translation.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 #include "types/constants.h"
@@ -483,15 +483,15 @@ QString TempoText::duration2userName(const TDuration t)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString TempoText::accessibleInfo() const
+String TempoText::accessibleInfo() const
 {
     TDuration t1;
     TDuration t2;
     int len1;
     int len2;
     QString text = plainText();
-    QString firstPart = text.split(" = ").first();
-    QString secondPart = text.split(" = ").back();
+    String firstPart = text.split(" = ").front();
+    String secondPart = text.split(" = ").back();
     int x1 = findTempoDuration(firstPart, len1, t1);
     int x2 = -1;
     if (_relative) {
@@ -499,15 +499,17 @@ QString TempoText::accessibleInfo() const
     }
 
     if (x1 != -1) {
-        QString dots1;
-        QString dots2;
+        String dots1;
+        String dots2;
         dots1 = duration2userName(t1);
         if (x2 != -1) {
             dots2 = duration2userName(t2);
-            return QString("%1: %2 %3 = %4 %5").arg(EngravingItem::accessibleInfo(), dots1, QObject::tr("note"), dots2,
-                                                    QObject::tr("note"));
+            return String("%1: %2 %3 = %4 %5").arg(EngravingItem::accessibleInfo(),
+                                                   dots1, mtrc("engraving", "note"),
+                                                   dots2, mtrc("engraving", "note"));
         } else {
-            return QString("%1: %2 %3 = %4").arg(EngravingItem::accessibleInfo(), dots1, QObject::tr("note"), secondPart);
+            return String("%1: %2 %3 = %4").arg(EngravingItem::accessibleInfo(),
+                                                dots1, mtrc("engraving", "note"), secondPart);
         }
     } else {
         return TextBase::accessibleInfo();

@@ -804,24 +804,24 @@ EngravingItem* KeySig::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString KeySig::accessibleInfo() const
+String KeySig::accessibleInfo() const
 {
-    QString keySigType;
+    String keySigType;
     if (isAtonal()) {
-        return QString("%1: %2").arg(EngravingItem::accessibleInfo(), qtrc("MuseScore", keyNames[15]));
+        return String("%1: %2").arg(EngravingItem::accessibleInfo(), mtrc("engraving", keyNames[15]));
     } else if (isCustom()) {
-        return QObject::tr("%1: Custom").arg(EngravingItem::accessibleInfo());
+        return mtrc("engraving", "%1: Custom").arg(EngravingItem::accessibleInfo());
     }
 
     if (key() == Key::C) {
-        return QString("%1: %2").arg(EngravingItem::accessibleInfo(), qtrc("MuseScore", keyNames[14]));
+        return String("%1: %2").arg(EngravingItem::accessibleInfo(), mtrc("engraving", keyNames[14]));
     }
     int keyInt = static_cast<int>(key());
     if (keyInt < 0) {
-        keySigType = qtrc("MuseScore", keyNames[(7 + keyInt) * 2 + 1]);
+        keySigType = mtrc("engraving", keyNames[(7 + keyInt) * 2 + 1]);
     } else {
-        keySigType = qtrc("MuseScore", keyNames[(keyInt - 1) * 2]);
+        keySigType = mtrc("engraving", keyNames[(keyInt - 1) * 2]);
     }
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), keySigType);
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), keySigType);
 }
 }

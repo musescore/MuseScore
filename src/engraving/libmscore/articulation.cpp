@@ -666,9 +666,9 @@ bool Articulation::isOrnament(int subtype)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Articulation::accessibleInfo() const
+String Articulation::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
 }
 
 //---------------------------------------------------------

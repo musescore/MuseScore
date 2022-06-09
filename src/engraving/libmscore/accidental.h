@@ -133,7 +133,7 @@ public:
     static AccidentalType name2subtype(const mu::AsciiStringView&);
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);

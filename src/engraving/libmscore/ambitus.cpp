@@ -22,6 +22,7 @@
 
 #include "ambitus.h"
 
+#include "translation.h"
 #include "draw/pen.h"
 #include "rw/compat/read206.h"
 #include "rw/xml.h"
@@ -855,14 +856,12 @@ EngravingItem* Ambitus::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Ambitus::accessibleInfo() const
+String Ambitus::accessibleInfo() const
 {
-    return QObject::tr("%1; Top pitch: %2%3; Bottom pitch: %4%5").arg(EngravingItem::accessibleInfo(),
-                                                                      tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO,
-                                                                               false),
-                                                                      QString::number(topOctave()),
-                                                                      tpc2name(bottomTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO,
-                                                                               false),
-                                                                      QString::number(bottomOctave()));
+    return mtrc("engraving", "%1; Top pitch: %2%3; Bottom pitch: %4%5")
+           .arg(EngravingItem::accessibleInfo(), tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false),
+                String::number(topOctave()), tpc2name(bottomTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false),
+                String::number(bottomOctave())
+                );
 }
 }
