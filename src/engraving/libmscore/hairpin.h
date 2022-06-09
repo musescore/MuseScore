@@ -156,7 +156,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
     bool isLineType() const
     {
         return _hairpinType == HairpinType::CRESC_LINE || _hairpinType == HairpinType::DECRESC_LINE;

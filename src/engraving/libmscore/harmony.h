@@ -224,7 +224,7 @@ public:
     qreal xShapeOffset() const;
 
     String typeUserName() const override;
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
     QString generateScreenReaderInfo() const;
     QString screenReaderInfo() const override;
 

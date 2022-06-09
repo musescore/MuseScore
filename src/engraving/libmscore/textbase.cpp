@@ -2584,9 +2584,9 @@ QString TextBase::escape(QString s)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString TextBase::accessibleInfo() const
+String TextBase::accessibleInfo() const
 {
-    QString rez;
+    String rez;
     switch (textStyleType()) {
     case TextStyleType::TITLE:
     case TextStyleType::SUBTITLE:
@@ -2601,12 +2601,12 @@ QString TextBase::accessibleInfo() const
         rez = EngravingItem::accessibleInfo();
         break;
     }
-    QString s = plainText().toQString().simplified();
-    if (s.length() > 20) {
+    String s = plainText().toQString().simplified();
+    if (s.size() > 20) {
         s.truncate(20);
-        s += "…";
+        s += u"…";
     }
-    return QString("%1: %2").arg(rez, s);
+    return String("%1: %2").arg(rez, s);
 }
 
 //---------------------------------------------------------

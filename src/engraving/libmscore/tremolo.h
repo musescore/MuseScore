@@ -111,7 +111,7 @@ public:
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
     void styleChanged() override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 
     TremoloStyle style() const { return _style; }
     void setStyle(TremoloStyle v) { _style = v; }

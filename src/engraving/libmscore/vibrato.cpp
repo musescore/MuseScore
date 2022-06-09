@@ -415,8 +415,8 @@ void Vibrato::undoSetVibratoType(Type val)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Vibrato::accessibleInfo() const
+String Vibrato::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), vibratoTypeUserName());
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), vibratoTypeUserName());
 }
 }

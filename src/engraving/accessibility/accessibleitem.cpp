@@ -157,7 +157,7 @@ QString AccessibleItem::accessibleName() const
     QString barsAndBeats = m_element->formatBarsAndBeats();
 
     return QString("%1%2%3").arg(!staffInfo.isEmpty() ? (staffInfo + "; ") : "")
-           .arg(m_element->accessibleInfo())
+           .arg(m_element->accessibleInfo().toQString())
            .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "");
 }
 

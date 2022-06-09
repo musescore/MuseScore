@@ -65,7 +65,7 @@ public:
 
     Shape shape() const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 
     bool placeMultiple() const override { return numMeasures() == 1; }     // prevent overlapping additions with range selection
 

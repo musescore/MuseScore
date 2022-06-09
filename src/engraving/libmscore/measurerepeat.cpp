@@ -21,6 +21,8 @@
  */
 
 #include "measurerepeat.h"
+
+#include "translation.h"
 #include "draw/pen.h"
 #include "rw/xml.h"
 #include "barline.h"
@@ -292,9 +294,9 @@ Fraction MeasureRepeat::ticks() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString MeasureRepeat::accessibleInfo() const
+String MeasureRepeat::accessibleInfo() const
 {
-    return QObject::tr("%1; Duration: %2 measure(s)").arg(EngravingItem::accessibleInfo()).arg(numMeasures());
+    return mtrc("engraving", "%1; Duration: %2 measure(s)").arg(EngravingItem::accessibleInfo()).arg(numMeasures());
 }
 
 //---------------------------------------------------------

@@ -95,7 +95,7 @@ public:
     bool play() const { return _play; }
     void setPlay(bool val) { _play = val; }
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 
 protected:
     void added() override;

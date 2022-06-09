@@ -1988,7 +1988,7 @@ AccessibleItem* EngravingItem::accessible() const
     return m_accessible;
 }
 
-QString EngravingItem::accessibleInfo() const
+String EngravingItem::accessibleInfo() const
 {
     return EngravingItem::typeUserName();
 }

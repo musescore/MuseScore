@@ -567,20 +567,20 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Dynamic::accessibleInfo() const
+String Dynamic::accessibleInfo() const
 {
-    QString s;
+    String s;
 
     if (dynamicType() == DynamicType::OTHER) {
         s = plainText().toQString().simplified();
-        if (s.length() > 20) {
+        if (s.size() > 20) {
             s.truncate(20);
-            s += "…";
+            s += u"…";
         }
     } else {
         s = TConv::toUserName(dynamicType());
     }
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), s);
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
 
 //---------------------------------------------------------

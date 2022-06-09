@@ -253,8 +253,8 @@ public:
     qreal userMag() const { return _userMag; }
     void setUserMag(qreal m) { _userMag = m; }
 
-    virtual QString accessibleInfo() const override;
-    virtual QString screenReaderInfo() const override;
+    String accessibleInfo() const override;
+    QString screenReaderInfo() const override;
 
     friend class FretUndoData;
 };

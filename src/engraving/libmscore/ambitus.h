@@ -107,7 +107,7 @@ public:
     void      setTrack(track_idx_t val) override;
     void      write(XmlWriter&) const override;
     bool      readProperties(XmlReader&) override;
-    QString   accessibleInfo() const override;
+    String    accessibleInfo() const override;
 
     void remove(EngravingItem*) override;
 

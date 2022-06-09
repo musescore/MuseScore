@@ -293,8 +293,8 @@ EngravingItem* Jump::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Jump::accessibleInfo() const
+String Jump::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), this->jumpTypeUserName());
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), this->jumpTypeUserName());
 }
 }

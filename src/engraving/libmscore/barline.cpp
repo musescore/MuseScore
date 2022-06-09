@@ -1572,9 +1572,9 @@ EngravingItem* BarLine::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString BarLine::accessibleInfo() const
+String BarLine::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), BarLine::userTypeName(barLineType()));
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), BarLine::userTypeName(barLineType()));
 }
 
 //---------------------------------------------------------
