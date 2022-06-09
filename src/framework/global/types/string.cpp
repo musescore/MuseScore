@@ -113,6 +113,11 @@ char Char::toAscii(bool* ok) const
     return toAscii(m_ch, ok);
 }
 
+bool Char::isDigit(char16_t c)
+{
+    return c >= u'0' && c <= u'9';
+}
+
 // ============================
 // UtfCodec
 // ============================
@@ -239,13 +244,13 @@ ByteArray String::toUtf8() const
     return ByteArray(reinterpret_cast<const uint8_t*>(str.c_str()), str.size());
 }
 
-String String::fromAscii(const char* str)
+String String::fromAscii(const char* str, size_t size)
 {
-    size_t sz = std::strlen(str);
+    size = (size == mu::nidx) ? std::strlen(str) : size;
     String s;
-    s.m_data->resize(sz);
+    s.m_data->resize(size);
     std::u16string& data = *s.m_data.get();
-    for (size_t i = 0; i < sz; ++i) {
+    for (size_t i = 0; i < size; ++i) {
         data[i] = Char::fromAscii(str[i]);
     }
     return s;
@@ -405,6 +410,72 @@ String& String::replace(const String& before, const String& after)
     return *this;
 }
 
+void String::doArgs(std::u16string& out, const std::vector<std::u16string_view>& args) const
+{
+    const std::u16string& str = constStr();
+    const std::u16string_view view(str);
+    std::vector<std::u16string_view> parts;
+
+    {
+        std::size_t current, previous = 0;
+        current = view.find(u'%');
+        while (current != std::string::npos) {
+            std::u16string_view sub = view.substr(previous, current - previous);
+            parts.push_back(std::move(sub));
+            previous = current + 1;
+            current = view.find(u'%', previous);
+        }
+        std::u16string_view sub = view.substr(previous, current - previous);
+        parts.push_back(std::move(sub));
+    }
+
+    {
+        for (const std::u16string_view& p : parts) {
+            if (p.empty()) {
+                continue;
+            }
+
+            char16_t first = p.at(0);
+            if (!Char::isDigit(first)) {
+                out += p;
+            } else {
+                size_t idx = first - 49;
+                if (idx < args.size()) {
+                    out += args.at(idx);
+                    out.append(p.cbegin() + 1, p.cend());
+                } else {
+                    out.push_back(u'%');
+                    out.push_back(first - 1);
+                    out.append(p.cbegin() + 1, p.cend());
+                }
+            }
+        }
+    }
+}
+
+String String::arg(const String& val) const
+{
+    String s;
+    doArgs(s.mutStr(), { std::u16string_view(val.constStr()) });
+    return s;
+}
+
+String String::arg(const String& val1, const String& val2) const
+{
+    String s;
+    doArgs(s.mutStr(), { std::u16string_view(val1.constStr()), std::u16string_view(val2.constStr()) });
+    return s;
+}
+
+String String::arg(const String& val1, const String& val2, const String& val3) const
+{
+    String s;
+    doArgs(s.mutStr(), { std::u16string_view(val1.constStr()),
+                         std::u16string_view(val2.constStr()),
+                         std::u16string_view(val3.constStr()) });
+    return s;
+}
+
 String String::mid(size_t pos, size_t count) const
 {
     String s;
@@ -422,10 +493,6 @@ String String::trimmed() const
     String s = *this;
     trim_helper(s.mutStr());
     return s;
-}
-
-String String::simplified() const
-{
 }
 
 String String::toXmlEscaped(char16_t c)
@@ -468,6 +535,12 @@ int String::toInt(bool* ok, int base) const
 {
     ByteArray ba = toUtf8();
     return toInt_helper(ba.constChar(), ok, base);
+}
+
+String String::number(int n)
+{
+    std::string s = std::to_string(n);
+    return fromAscii(s.c_str());
 }
 
 double String::toDouble(bool* ok) const

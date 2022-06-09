@@ -589,17 +589,11 @@ public:
     virtual EngravingItem* prevSegmentElement();    //< next-element and prev-element command
 
     AccessibleItem* accessible() const;
-    virtual QString accessibleInfo() const;           //< used to populate the status bar
-    virtual QString screenReaderInfo() const          //< by default returns accessibleInfo, but can be overridden
-    {
-        return accessibleInfo();
-    }
-
+    virtual QString accessibleInfo() const;
+    virtual QString screenReaderInfo() const { return accessibleInfo(); }
     //  if the screen-reader needs a special string (see note for example)
-    virtual QString accessibleExtraInfo() const        // used to return info that will be appended to accessibleInfo
-    {
-        return QString();                              // and passed only to the screen-reader
-    }
+    // used to return info that will be appended to accessibleInfo
+    virtual QString accessibleExtraInfo() const { return QString(); }
 
     virtual void triggerLayout() const;
     virtual void triggerLayoutAll() const;
