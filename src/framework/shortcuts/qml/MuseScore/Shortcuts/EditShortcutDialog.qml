@@ -69,13 +69,30 @@ Dialog {
 
             spacing: 20
 
+            RowLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 8
+
+                StyledIconLabel {
+                    iconCode: model.currentShortcut["icon"]
+                    font: ui.theme.iconsFont
+
+                    visible: !isEmpty
+                }
+
+                StyledTextLabel {
+                    text: model.currentShortcut["title"]
+                    font: ui.theme.bodyBoldFont
+
+                    visible: !isEmpty
+                }
+            }
+
             StyledTextLabel {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 width: parent.width
-                text: qsTrc("shortcuts", "Define keyboard shortcut")
-                horizontalAlignment: Text.AlignLeft
-                font:ui.theme.headerBoldFont
+                text: qsTrc("shortcuts", "Press a key or sequence of keys to assign a shortcut to this function.")
             }
 
             Column {

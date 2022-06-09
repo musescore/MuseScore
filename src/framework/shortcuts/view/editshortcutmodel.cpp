@@ -67,6 +67,11 @@ void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList&
     m_originSequence = originShortcutMap.value("sequence").toString();
 
     emit originSequenceChanged(originSequenceInNativeFormat());
+
+    if (m_currentShortcut != originShortcut) {
+        m_currentShortcut = originShortcut;
+        emit currentShortcutChanged(m_currentShortcut);
+    }
 }
 
 void EditShortcutModel::clear()
@@ -173,4 +178,9 @@ void EditShortcutModel::addToOriginSequence()
 QString EditShortcutModel::inputtedSequence() const
 {
     return m_inputtedSequence.toString();
+}
+
+QVariant EditShortcutModel::currentShortcut() const
+{
+    return m_currentShortcut;
 }

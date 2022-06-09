@@ -148,8 +148,11 @@ QVariant ShortcutsModel::currentShortcut() const
 
     const Shortcut& sc = m_shortcuts.at(index.row());
 
+    const UiAction& action = this->action(sc.action);
+
     QVariantMap obj;
-    obj["title"] = actionTitle(sc.action);
+    obj["title"] = action.title;
+    obj["icon"] = static_cast<int>(action.iconCode);
     obj["sequence"] = QString::fromStdString(sc.sequencesAsString());
     obj["context"] = QString::fromStdString(sc.context);
     return obj;

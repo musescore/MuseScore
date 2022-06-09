@@ -37,6 +37,7 @@ class EditShortcutModel : public QObject
     Q_PROPERTY(QString inputtedSequence READ inputtedSequenceInNativeFormat NOTIFY inputtedSequenceChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY inputtedSequenceChanged)
     Q_PROPERTY(bool canApplyInputtedSequence READ canApplyInputtedSequence NOTIFY inputtedSequenceChanged)
+    Q_PROPERTY(QVariant currentShortcut READ currentShortcut NOTIFY currentShortcutChanged)
 
 public:
     explicit EditShortcutModel(QObject* parent = nullptr);
@@ -45,6 +46,7 @@ public:
     QString inputtedSequenceInNativeFormat() const;
     QString errorMessage() const;
     bool canApplyInputtedSequence() const;
+    QVariant currentShortcut() const;
 
     Q_INVOKABLE void load(const QVariant& shortcut, const QVariantList& allShortcuts);
     Q_INVOKABLE void clear();
@@ -61,6 +63,8 @@ signals:
 
     void applyNewSequenceRequested(const QString& newSequence);
 
+    void currentShortcutChanged(const QVariant& shortcut);
+
 private:
     QString inputtedSequence() const;
 
@@ -70,6 +74,7 @@ private:
     QKeySequence m_inputtedSequence;
     QString m_originSequence;
     QString m_errorMessage;
+    QVariant m_currentShortcut;
 };
 }
 
