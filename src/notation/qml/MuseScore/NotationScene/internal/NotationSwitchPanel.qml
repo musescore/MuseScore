@@ -147,7 +147,7 @@ Rectangle {
 
                 icon: IconCode.CHEVRON_LEFT
 
-                onClicked: {
+                onScrollRequested: {
                     notationsView.scrollLeft()
                 }
             }
@@ -164,7 +164,7 @@ Rectangle {
 
                 icon: IconCode.CHEVRON_RIGHT
 
-                onClicked: {
+                onScrollRequested: {
                     notationsView.scrollRight()
                 }
             }
