@@ -110,6 +110,7 @@ char16_t Char::fromAscii(char c)
 
 char Char::toAscii(bool* ok) const
 {
+    UNUSED(ok);
     return toAscii(m_ch);
 }
 
