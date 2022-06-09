@@ -1579,18 +1579,6 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
 }
 
 //---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid EngravingItem::propertyId(const QStringRef& name) const
-{
-    if (name == "pos" || name == "offset") {
-        return Pid::OFFSET;
-    }
-    return EngravingObject::propertyId(name);
-}
-
-//---------------------------------------------------------
 //   custom
 //    check if property is != default
 //---------------------------------------------------------

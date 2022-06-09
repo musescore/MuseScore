@@ -403,18 +403,6 @@ PropertyValue Vibrato::propertyDefault(Pid propertyId) const
 }
 
 //---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid Vibrato::propertyId(const QStringRef& name) const
-{
-    if (name == "subtype") {
-        return Pid::VIBRATO_TYPE;
-    }
-    return SLine::propertyId(name);
-}
-
-//---------------------------------------------------------
 //   undoSetVibratoType
 //---------------------------------------------------------
 

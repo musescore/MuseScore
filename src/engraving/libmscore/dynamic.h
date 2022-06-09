@@ -98,7 +98,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 

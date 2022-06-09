@@ -155,7 +155,6 @@ public:
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
     QString accessibleInfo() const override;
     bool isLineType() const
