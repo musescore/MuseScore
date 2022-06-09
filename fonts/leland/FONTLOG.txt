@@ -33,11 +33,26 @@ https://musescore.com/contact
 Change log
 ----------
 
-20 February 2022 (Martin Keary & Simon Smith) Leland Version 0.75
+9 May 2022 (Martin Keary & Simon Smith) Leland Version 0.76
+- Leland
+  - Added:
+    - Harp pedal symbols (E680-E683)
+  - Modified:
+    - Opening and closing parentheses (E0F5, E0F6)
+    - Individual notes (E1D3-E1E6)
+    - Tremolos (E220-E22A) - now centered on x=0
+    - Accidental parentheses (E26A, E26B, and derived ligatures)
+- Leland Text
+  - Added:
+    - Quarter note (crotchet) stem up (E1D5)
+    - Eighth note (quaver) stem up (E1D7)
+    - Beamed groups of notes (E1F0-E20A)
 
+20 February 2022 (Martin Keary & Simon Smith) Leland Version 0.75
 - Leland
   - Added:
     - Single stroke caesura (E4D7)
+    - Quilisma (EA20)
   - Modified:
     - Null notehead (E0A5) - width information added
     - Laissez vibrer above and below (E4BA, E4BB)
