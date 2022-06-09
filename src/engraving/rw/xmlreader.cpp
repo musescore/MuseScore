@@ -220,9 +220,6 @@ String XmlReader::readXml()
 {
     static int count = 0;
     ++count;
-    if (count == 6) {
-        int k = -1;
-    }
 
     String s;
     int level = 1;
