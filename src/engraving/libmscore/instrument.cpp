@@ -1791,7 +1791,7 @@ void Instrument::updateInstrumentId()
                     if (bestMatchStrength == perfectMatchStrength) {
                         break; // stop looking for matches
                     }
-                } else if ((matchStrength == bestMatchStrength) && (it->id.size() < fallback.size())) {
+                } else if ((matchStrength == bestMatchStrength) && (static_cast<int>(it->id.size()) < fallback.size())) {
                     // Update fallback ID because we've found a shorter one that is equally good.
                     // Shorter IDs tend to correspond to more generic instruments (e.g. "piano"
                     // vs. "grand-piano") so it's better to use a shorter one if unsure.
