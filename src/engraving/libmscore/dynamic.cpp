@@ -572,7 +572,7 @@ QString Dynamic::accessibleInfo() const
     QString s;
 
     if (dynamicType() == DynamicType::OTHER) {
-        s = plainText().simplified();
+        s = plainText().toQString().simplified();
         if (s.length() > 20) {
             s.truncate(20);
             s += "…";
@@ -592,7 +592,7 @@ QString Dynamic::screenReaderInfo() const
     QString s;
 
     if (dynamicType() == DynamicType::OTHER) {
-        s = plainText().simplified();
+        s = plainText().toQString().simplified();
     } else {
         s = TConv::toUserName(dynamicType());
     }

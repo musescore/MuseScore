@@ -841,9 +841,4 @@ PropertyValue EngravingObject::styleValue(Pid pid, Sid sid) const
         return score()->styleV(sid);
     }
 }
-
-QString EngravingObject::mscoreVersion() const
-{
-    return score()->masterScore()->mscoreVersion();
-}
 }
