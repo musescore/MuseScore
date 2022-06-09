@@ -171,7 +171,8 @@ void Tremolo::setTremoloType(TremoloType t)
         _lines = 1;
         break;
     }
-    computeShape();
+
+    styleChanged();
 }
 
 //---------------------------------------------------------
@@ -587,6 +588,21 @@ void Tremolo::read(XmlReader& e)
             e.unknown();
         }
     }
+}
+
+TDuration Tremolo::durationType() const
+{
+    return _durationType;
+}
+
+void Tremolo::setDurationType(TDuration d)
+{
+    if (_durationType == d) {
+        return;
+    }
+
+    _durationType = d;
+    styleChanged();
 }
 
 //---------------------------------------------------------
