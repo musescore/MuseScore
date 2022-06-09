@@ -222,7 +222,7 @@ public:
     bool showNut() const { return _showNut; }
     void setShowNut(bool val) { _showNut = val; }
 
-    QString harmonyText() const { return _harmony ? _harmony->plainText() : QString(); }
+    String harmonyText() const { return _harmony ? _harmony->plainText() : String(); }
     qreal centerX() const;
     void setHarmony(QString harmonyText);
 

@@ -20,11 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "xml.h"
-
-#include "libmscore/property.h"
+#include "xmlwriter.h"
 
 #include "types/typesconv.h"
+#include "rw/writecontext.h"
+#include "libmscore/engravingitem.h"
+#include "libmscore/property.h"
 
 #include "log.h"
 

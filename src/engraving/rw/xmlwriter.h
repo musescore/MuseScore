@@ -27,16 +27,12 @@
 
 #include "containers.h"
 #include "io/iodevice.h"
-
-#include "infrastructure/draw/color.h"
-#include "libmscore/connector.h"
-#include "libmscore/stafftype.h"
-#include "libmscore/interval.h"
-#include "libmscore/engravingitem.h"
-
 #include "serialization/xmlstreamwriter.h"
 
+#include "libmscore/property.h"
+
 namespace mu::engraving {
+class EngravingObject;
 class WriteContext;
 class XmlWriter : public XmlStreamWriter
 {

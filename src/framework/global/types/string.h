@@ -28,6 +28,7 @@
 #include <string>
 #include <string_view>
 
+#include "containers.h"
 #include "bytearray.h"
 #include "global/logstream.h"
 
@@ -108,8 +109,6 @@ class String
 {
 public:
 
-    static const size_t npos = static_cast<size_t>(-1);
-
     String();
     String(const char16_t* str);
     String(const Char& ch);
@@ -132,9 +131,9 @@ public:
     String& operator +=(const char16_t* s);
     inline String& operator +=(char16_t s) { return append(s); }
 
-    inline String operator+(const mu::String& s) const { mu::String t(*this); t += s; return t; }
-    inline String operator+(const char16_t* s) const { mu::String t(*this); t += s; return t; }
-    inline String operator+(char16_t s) const { mu::String t(*this); t += s; return t; }
+    inline String operator+(const mu::String& s) const { String t(*this); t += s; return t; }
+    inline String operator+(const char16_t* s) const { String t(*this); t += s; return t; }
+    inline String operator+(char16_t s) const { String t(*this); t += s; return t; }
 
     String& append(Char ch);
     String& append(const String& s);
@@ -171,8 +170,11 @@ public:
     StringList split(const Char& ch) const;
     String& replace(const String& before, const String& after);
 
-    String mid(size_t pos, size_t count = npos) const;
+    String mid(size_t pos, size_t count = mu::nidx) const;
+    String left(size_t n) const;
+
     String trimmed() const;
+    String simplified() const;
     String toXmlEscaped() const;
     static String toXmlEscaped(const String& str);
     static String toXmlEscaped(char16_t c);
@@ -202,8 +204,6 @@ public:
 class AsciiStringView
 {
 public:
-
-    static const size_t npos = static_cast<size_t>(-1);
 
     constexpr AsciiStringView() = default;
     constexpr AsciiStringView(const char* str)
@@ -239,6 +239,7 @@ public:
     bool empty() const;
     AsciiChar at(size_t i) const;
     bool contains(char ch) const;
+    size_t indexOf(char ch) const;
 
     int toInt(bool* ok = nullptr, int base = 10) const;
     double toDouble(bool* ok = nullptr) const;
@@ -275,5 +276,9 @@ inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::AsciiStri
     s << str.ascii();
     return s;
 }
+
+#ifndef muPrintable
+#  define muPrintable(string) string.toUtf8().constChar()
+#endif
 
 #endif // MU_GLOBAL_STRING_H

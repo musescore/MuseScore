@@ -40,7 +40,7 @@ const char* SymNames::userNameForSymId(SymId id)
     return s_symUserNames.at(size_t(id));
 }
 
-QString SymNames::translatedUserNameForSymId(SymId id)
+String SymNames::translatedUserNameForSymId(SymId id)
 {
     return mu::qtrc("symUserNames", userNameForSymId(id));
 }

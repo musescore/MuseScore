@@ -68,7 +68,7 @@ public:
     void setSymId(SymId id) { _symId  = id; }
     FermataType fermataType() const;
     int subtype() const override;
-    QString typeUserName() const override;
+    String typeUserName() const override;
 
     void layout() override;
 
