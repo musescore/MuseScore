@@ -296,7 +296,7 @@ void Accidental::write(XmlWriter& xml) const
 //   subTypeUserName
 //---------------------------------------------------------
 
-QString Accidental::subtypeUserName() const
+String Accidental::subtypeUserName() const
 {
     return SymNames::translatedUserNameForSymId(symbol());
 }
@@ -646,18 +646,6 @@ bool Accidental::setProperty(Pid propertyId, const PropertyValue& v)
     }
     triggerLayout();
     return true;
-}
-
-//---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid Accidental::propertyId(const QStringRef& xmlName) const
-{
-    if (xmlName == propertyName(Pid::ACCIDENTAL_TYPE)) {
-        return Pid::ACCIDENTAL_TYPE;
-    }
-    return EngravingItem::propertyId(xmlName);
 }
 
 //---------------------------------------------------------

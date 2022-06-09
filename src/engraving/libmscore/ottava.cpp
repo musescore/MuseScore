@@ -446,18 +446,6 @@ PropertyValue Ottava::propertyDefault(Pid pid) const
 }
 
 //---------------------------------------------------------
-//   Ottava::propertyId
-//---------------------------------------------------------
-
-Pid Ottava::propertyId(const QStringRef& name) const
-{
-    if (name == propertyName(Pid::OTTAVA_TYPE)) {
-        return Pid::OTTAVA_TYPE;
-    }
-    return TextLineBase::propertyId(name);
-}
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

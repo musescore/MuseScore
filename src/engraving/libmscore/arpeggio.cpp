@@ -778,16 +778,4 @@ engraving::PropertyValue Arpeggio::propertyDefault(Pid propertyId) const
     }
     return EngravingItem::propertyDefault(propertyId);
 }
-
-//---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid Arpeggio::propertyId(const QStringRef& name) const
-{
-    if (name == "subtype") {
-        return Pid::ARPEGGIO_TYPE;
-    }
-    return EngravingItem::propertyId(name);
-}
 }

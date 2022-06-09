@@ -475,18 +475,4 @@ PropertyValue ChordLine::propertyDefault(Pid pid) const
     }
     return EngravingItem::propertyDefault(pid);
 }
-
-//---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid ChordLine::propertyId(const QStringRef& name) const
-{
-    if (name == "subtype") {
-        return Pid::CHORD_LINE_TYPE;
-    } else if (name == "straight") {
-        return Pid::CHORD_LINE_STRAIGHT;
-    }
-    return EngravingItem::propertyId(name);
-}
 }

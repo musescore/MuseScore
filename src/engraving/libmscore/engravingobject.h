@@ -254,8 +254,6 @@ public:
 
     virtual void reset();                       // reset all properties & position to default
 
-    virtual Pid propertyId(const QStringRef& xmlName) const;
-
     virtual void initElementStyle(const ElementStyle*);
     virtual const ElementStyle* styledProperties() const { return _elementStyle; }
 

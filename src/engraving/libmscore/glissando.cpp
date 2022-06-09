@@ -766,16 +766,4 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     }
     return SLine::propertyDefault(propertyId);
 }
-
-//---------------------------------------------------------
-//   Glissando::propertyId
-//---------------------------------------------------------
-
-Pid Glissando::propertyId(const QStringRef& name) const
-{
-    if (name == propertyName(Pid::GLISS_TYPE)) {
-        return Pid::GLISS_TYPE;
-    }
-    return SLine::propertyId(name);
-}
 }

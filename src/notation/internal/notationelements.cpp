@@ -107,7 +107,7 @@ mu::engraving::RehearsalMark* NotationElements::rehearsalMark(const std::string&
             }
 
             mu::engraving::RehearsalMark* rehearsalMark = static_cast<mu::engraving::RehearsalMark*>(element);
-            QString rehearsalMarkName = rehearsalMark->plainText().toLower();
+            QString rehearsalMarkName = rehearsalMark->plainText().toQString().toLower();
             if (rehearsalMarkName.startsWith(qname)) {
                 return rehearsalMark;
             }

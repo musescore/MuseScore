@@ -81,7 +81,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return _straight ? 1 : static_cast<int>(path.elementCount()); }

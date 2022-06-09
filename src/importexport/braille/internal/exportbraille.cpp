@@ -2085,7 +2085,8 @@ QString ExportBrailleImpl::brailleFingeringAfter(Fingering* fingering)
     QString result = QString();
     if (fingering->textStyleType() == TextStyleType::FINGERING
         || fingering->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
-        for (QChar c : fingering->plainText()) {
+        QString plainText = fingering->plainText();
+        for (QChar c : plainText) {
             if (c == QChar('0')) {
                 result += BRAILLE_FINGERING_OPEN;
             }
@@ -2484,7 +2485,7 @@ QString ExportBrailleImpl::brailleMarker(Marker* marker)
     case Marker::Type::TOCODASYM:
         return BRAILLE_TOCODA;
     case Marker::Type::USER:
-        return QString(">") + TextToUEBBraille().braille(marker->plainText().toLower()) + QString("> ");
+        return QString(">") + TextToUEBBraille().braille(marker->plainText().toQString().toLower()) + QString("> ");
     }
     return QString();
 }
@@ -2505,7 +2506,7 @@ QString ExportBrailleImpl::brailleJump(Jump* jump)
     case Jump::Type::DS:
         return BRAILLE_DAL_SEGNO;
     case Jump::Type::USER:
-        return QString(">") + TextToUEBBraille().braille(jump->plainText().toLower()) + QString("> ");
+        return QString(">") + TextToUEBBraille().braille(jump->plainText().toQString().toLower()) + QString("> ");
     case Jump::Type::DC_AL_DBLCODA:
     case Jump::Type::DS_AL_DBLCODA:
     case Jump::Type::DSS:

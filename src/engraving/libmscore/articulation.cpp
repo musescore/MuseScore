@@ -516,18 +516,6 @@ String Articulation::symId2ArticulationName(SymId symId)
 }
 
 //---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid Articulation::propertyId(const QStringRef& xmlName) const
-{
-    if (xmlName == "subtype") {
-        return Pid::SYMBOL;
-    }
-    return EngravingItem::propertyId(xmlName);
-}
-
-//---------------------------------------------------------
 //   articulationName
 //---------------------------------------------------------
 
