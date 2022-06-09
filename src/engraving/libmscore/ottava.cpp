@@ -449,9 +449,9 @@ PropertyValue Ottava::propertyDefault(Pid pid) const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Ottava::accessibleInfo() const
+String Ottava::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), ottavaDefault[static_cast<int>(ottavaType())].name);
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), String::fromUtf8(ottavaDefault[static_cast<int>(ottavaType())].name));
 }
 
 //---------------------------------------------------------

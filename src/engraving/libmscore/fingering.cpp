@@ -22,6 +22,7 @@
 
 #include "fingering.h"
 
+#include "translation.h"
 #include "rw/xml.h"
 
 #include "score.h"
@@ -272,13 +273,13 @@ bool Fingering::edit(EditData& ed)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Fingering::accessibleInfo() const
+String Fingering::accessibleInfo() const
 {
-    QString rez = EngravingItem::accessibleInfo();
+    String rez = EngravingItem::accessibleInfo();
     if (textStyleType() == TextStyleType::STRING_NUMBER) {
-        rez += " " + QObject::tr("String number");
+        rez += u' ' + mtrc("engraving", "String number");
     }
-    return QString("%1: %2").arg(rez, plainText());
+    return String("%1: %2").arg(rez, plainText());
 }
 
 //---------------------------------------------------------

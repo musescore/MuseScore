@@ -410,6 +410,11 @@ String& String::replace(const String& before, const String& after)
     return *this;
 }
 
+void String::truncate(size_t position)
+{
+    mutStr().resize(position);
+}
+
 void String::doArgs(std::u16string& out, const std::vector<std::u16string_view>& args) const
 {
     const std::u16string& str = constStr();
@@ -473,6 +478,27 @@ String String::arg(const String& val1, const String& val2, const String& val3) c
     doArgs(s.mutStr(), { std::u16string_view(val1.constStr()),
                          std::u16string_view(val2.constStr()),
                          std::u16string_view(val3.constStr()) });
+    return s;
+}
+
+String String::arg(const String& val1, const String& val2, const String& val3, const String& val4) const
+{
+    String s;
+    doArgs(s.mutStr(), { std::u16string_view(val1.constStr()),
+                         std::u16string_view(val2.constStr()),
+                         std::u16string_view(val3.constStr()),
+                         std::u16string_view(val4.constStr()) });
+    return s;
+}
+
+String String::arg(const String& val1, const String& val2, const String& val3, const String& val4, const String& val5) const
+{
+    String s;
+    doArgs(s.mutStr(), { std::u16string_view(val1.constStr()),
+                         std::u16string_view(val2.constStr()),
+                         std::u16string_view(val3.constStr()),
+                         std::u16string_view(val4.constStr()),
+                         std::u16string_view(val5.constStr()) });
     return s;
 }
 

@@ -156,7 +156,7 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
     QString accessibleExtraInfo() const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }

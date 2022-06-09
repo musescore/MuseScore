@@ -410,9 +410,9 @@ void Volta::setTempo() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Volta::accessibleInfo() const
+String Volta::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), text());
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), text());
 }
 
 //---------------------------------------------------------

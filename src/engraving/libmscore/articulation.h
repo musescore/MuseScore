@@ -159,7 +159,7 @@ public:
     QString channelName() const { return _channelName; }
     void setChannelName(const QString& s) { _channelName = s; }
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 
     bool isDouble() const;
     bool isTenuto() const;

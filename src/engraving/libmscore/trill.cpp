@@ -553,8 +553,8 @@ PropertyValue Trill::propertyDefault(Pid propertyId) const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Trill::accessibleInfo() const
+String Trill::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), trillTypeUserName());
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), trillTypeUserName());
 }
 }

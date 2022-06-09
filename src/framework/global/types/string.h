@@ -171,10 +171,17 @@ public:
 
     StringList split(const Char& ch) const;
     String& replace(const String& before, const String& after);
+    void truncate(size_t position);
 
     String arg(const String& val) const;
     String arg(const String& val1, const String& val2) const;
     String arg(const String& val1, const String& val2, const String& val3) const;
+    String arg(const String& val1, const String& val2, const String& val3, const String& val4) const;
+    String arg(const String& val1, const String& val2, const String& val3, const String& val4, const String& val5) const;
+
+    String arg(int val) const { return arg(number(val)); }
+    String arg(int val1, int val2) const { return arg(number(val1), number(val2)); }
+    String arg(int val1, int val2, int val3) const { return arg(number(val1), number(val2), number(val3)); }
 
     String mid(size_t pos, size_t count = mu::nidx) const;
     String left(size_t n) const;

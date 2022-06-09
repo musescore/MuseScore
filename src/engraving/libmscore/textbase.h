@@ -417,10 +417,10 @@ public:
     static QString unEscape(QString s);
     static QString escape(QString s);
 
-    virtual QString accessibleInfo() const override;
-    virtual QString screenReaderInfo() const override;
+    String accessibleInfo() const override;
+    QString screenReaderInfo() const override;
 
-    virtual int subtype() const override;
+    int subtype() const override;
     virtual QString subtypeName() const override;
 
     std::list<TextFragment> fragmentList() const;   // for MusicXML formatted export
