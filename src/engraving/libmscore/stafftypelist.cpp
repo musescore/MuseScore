@@ -116,6 +116,18 @@ bool StaffTypeList::removeStaffType(const Fraction& tick)
     return true;
 }
 
+bool StaffTypeList::isStaffTypeStartFrom(const Fraction& tick) const
+{
+    return staffTypeChanges.find(tick.ticks()) != staffTypeChanges.end();
+}
+
+void StaffTypeList::moveStaffType(const Fraction& from, const Fraction& to)
+{
+    StaffType tmp = staffType(from);
+    removeStaffType(from);
+    setStaffType(to, tmp);
+}
+
 //---------------------------------------------------------
 //   staffTypeRange
 //---------------------------------------------------------

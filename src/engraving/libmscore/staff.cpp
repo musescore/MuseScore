@@ -1196,6 +1196,17 @@ const StaffType* Staff::staffTypeForElement(const EngravingItem* e) const
     return &_staffTypeList.staffType(e->tick());
 }
 
+bool Staff::isStaffTypeStartFrom(const Fraction& tick) const
+{
+    return _staffTypeList.isStaffTypeStartFrom(tick);
+}
+
+void Staff::moveStaffType(const Fraction& from, const Fraction& to)
+{
+    _staffTypeList.moveStaffType(from, to);
+    staffTypeListChanged(from);
+}
+
 //---------------------------------------------------------
 //   staffTypeListChanged
 //    Signal that the staffTypeList has changed at
