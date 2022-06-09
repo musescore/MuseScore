@@ -89,9 +89,8 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
     case rDescription:
         return plugin.description;
     case rThumbnailUrl:
-        //! TODO
         if (plugin.thumbnailUrl.isEmpty()) {
-            return "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder.jpeg";
+            return "qrc:/qml/MuseScore/Plugins/internal/resources/placeholder.png";
         }
 
         return plugin.thumbnailUrl;
