@@ -223,7 +223,7 @@ public:
     mu::PointF calculateBoundingRect();
     qreal xShapeOffset() const;
 
-    QString typeUserName() const override;
+    String typeUserName() const override;
     QString accessibleInfo() const override;
     QString generateScreenReaderInfo() const;
     QString screenReaderInfo() const override;

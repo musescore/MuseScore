@@ -2525,7 +2525,7 @@ void TextBase::resetFormatting()
 //    return plain text with symbols
 //---------------------------------------------------------
 
-QString TextBase::plainText() const
+String TextBase::plainText() const
 {
     QString s;
 

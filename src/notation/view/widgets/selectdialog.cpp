@@ -47,7 +47,7 @@ SelectDialog::SelectDialog(QWidget* parent)
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     m_element = contextItem(globalContext()->currentNotation()->interaction());
-    type->setText(qApp->translate("elementName", m_element->typeUserName().toUtf8()));
+    type->setText(qtrc("elementName", m_element->typeUserName()));
 
     switch (m_element->type()) {
     case ElementType::ACCIDENTAL:

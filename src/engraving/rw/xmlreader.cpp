@@ -130,14 +130,15 @@ Fraction XmlReader::readFraction()
     Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
     int z = intAttribute("z", 0);
     int n = intAttribute("n", 1);
-    const QString& s(readText());
-    if (!s.isEmpty()) {
-        int i = s.indexOf('/');
-        if (i == -1) {
+    AsciiStringView s = readAsciiText();
+    if (!s.empty()) {
+        size_t i = s.indexOf('/');
+        if (i == mu::nidx) {
             return Fraction::fromTicks(s.toInt());
         } else {
-            z = s.leftRef(i).toInt();
-            n = s.midRef(i + 1).toInt();
+            String str = String::fromAscii(s.ascii());
+            z = str.left(i).toInt();
+            n = str.mid(i + 1).toInt();
         }
     }
     return Fraction(z, n);
@@ -153,10 +154,11 @@ void XmlReader::unknown()
     if (XmlStreamReader::error()) {
         LOGD("%s ", qPrintable(errorString()));
     }
-    if (!docName.isEmpty()) {
-        LOGD("tag in <%s> line %ld col %lld: %s", qPrintable(docName), lineNumber() + _offsetLines, columnNumber(), name().ascii());
+    if (!m_docName.isEmpty()) {
+        LOGD("tag in <%s> line %ld col %lld: %s", qPrintable(m_docName.toUtf8().constChar()), lineNumber() + m_offsetLines,
+             columnNumber(), name().ascii());
     } else {
-        LOGD("line %lld col %ld: %s", lineNumber() + _offsetLines, columnNumber(), name().ascii());
+        LOGD("line %lld col %ld: %s", lineNumber() + m_offsetLines, columnNumber(), name().ascii());
     }
     skipCurrentElement();
 }
@@ -218,9 +220,6 @@ void XmlReader::htmlToString(int level, String* s)
 
 String XmlReader::readXml()
 {
-    static int count = 0;
-    ++count;
-
     String s;
     int level = 1;
     for (XmlStreamReader::TokenType t = readNext(); t != XmlStreamReader::EndElement; t = readNext()) {
@@ -243,7 +242,6 @@ String XmlReader::readXml()
             return s;
         }
     }
-    LOGI() << count << "| " << s;
     return s;
 }
 

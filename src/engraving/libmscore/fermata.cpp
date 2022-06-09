@@ -145,7 +145,7 @@ int Fermata::subtype() const
 //   typeUserName
 //---------------------------------------------------------
 
-QString Fermata::typeUserName() const
+String Fermata::typeUserName() const
 {
     return SymNames::translatedUserNameForSymId(symId());
 }
