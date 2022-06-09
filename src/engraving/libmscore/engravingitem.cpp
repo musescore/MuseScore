@@ -1988,10 +1988,6 @@ AccessibleItem* EngravingItem::accessible() const
     return m_accessible;
 }
 
-//---------------------------------------------------------
-//   accessibleInfo
-//---------------------------------------------------------
-
 QString EngravingItem::accessibleInfo() const
 {
     return EngravingItem::typeUserName();

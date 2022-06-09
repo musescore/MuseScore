@@ -121,7 +121,7 @@ void Lyrics::read(XmlReader& e)
     if (!isStyled(Pid::OFFSET) && !e.context()->pasteMode()) {
         // fix offset for pre-3.1 scores
         // 3.0: y offset was meaningless if autoplace is set
-        QString version = mscoreVersion();
+        QString version = e.context()->mscoreVersion();
         if (autoplace() && !version.isEmpty() && version < "3.1") {
             PointF off = propertyDefault(Pid::OFFSET).value<PointF>();
             ryoffset() = off.y();

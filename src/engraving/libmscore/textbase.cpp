@@ -2601,7 +2601,7 @@ QString TextBase::accessibleInfo() const
         rez = EngravingItem::accessibleInfo();
         break;
     }
-    QString s = plainText().simplified();
+    QString s = plainText().toQString().simplified();
     if (s.length() > 20) {
         s.truncate(20);
         s += "…";
@@ -2631,7 +2631,7 @@ QString TextBase::screenReaderInfo() const
         rez = EngravingItem::accessibleInfo();
         break;
     }
-    QString s = plainText().simplified();
+    QString s = plainText().toQString().simplified();
     return QString("%1: %2").arg(rez, s);
 }
 
