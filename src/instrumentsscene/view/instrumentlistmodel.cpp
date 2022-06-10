@@ -152,8 +152,13 @@ QStringList InstrumentListModel::groups() const
 {
     QStringList result;
 
-    for (const InstrumentGroup* group: m_groups) {
-        result << group->name;
+    if (m_groups.isEmpty()) {
+        std::string title = mu::trc("mscore", "No results found.");
+        result << QString::fromStdString(title);
+    } else {
+        for (const InstrumentGroup* group: m_groups) {
+            result << group->name;
+        }
     }
 
     return result;

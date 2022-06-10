@@ -143,7 +143,13 @@ void TemplatesModel::setVisibleCategories(const QStringList& titles)
         currentCategory = m_currentCategory;
     }
 
-    m_visibleCategoriesTitles = titles;
+    if (titles.isEmpty()) {
+        std::string title = mu::trc("mscore", "No results found.");
+        m_visibleCategoriesTitles = QStringList { QString::fromStdString(title) };
+    } else {
+        m_visibleCategoriesTitles = titles;
+    }
+
     emit categoriesChanged();
 
     setCurrentCategory(currentCategory);
