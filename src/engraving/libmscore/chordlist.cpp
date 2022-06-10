@@ -1973,7 +1973,7 @@ void ChordList::checkChordList(const MStyle& style)
             read("chords.xml");
         }
 
-        read(style.value(Sid::chordDescriptionFile).toString());
+        read(style.value(Sid::chordDescriptionFile).value<String>());
     }
 }
 

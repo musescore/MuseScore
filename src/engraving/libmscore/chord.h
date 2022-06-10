@@ -308,7 +308,7 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* lastElementBeforeSegment();
     EngravingItem* prevSegmentElement() override;
-    QString accessibleExtraInfo() const override;
+    String accessibleExtraInfo() const override;
 
     Shape shape() const override;
     void undoChangeProperty(Pid id, const PropertyValue& newValue);

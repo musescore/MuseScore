@@ -123,11 +123,11 @@ engraving::PropertyValue ActionIcon::getProperty(Pid pid) const
     return EngravingItem::getProperty(pid);
 }
 
-bool ActionIcon::setProperty(Pid pid, const engraving::PropertyValue& v)
+bool ActionIcon::setProperty(Pid pid, const PropertyValue& v)
 {
     switch (pid) {
     case Pid::ACTION:
-        m_actionCode = v.toString().toStdString();
+        m_actionCode = v.value<String>().toStdString();
         triggerLayout();
         break;
     default:

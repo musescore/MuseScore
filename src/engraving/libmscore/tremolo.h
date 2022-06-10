@@ -69,7 +69,7 @@ public:
     void setParent(Chord* ch);
 
     int subtype() const override { return static_cast<int>(_tremoloType); }
-    QString subtypeName() const override;
+    String subtypeName() const override;
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 

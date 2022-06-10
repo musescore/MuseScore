@@ -513,7 +513,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
     case AccidentalVal::FLAT2:   return AccidentalType::FLAT2;
     case AccidentalVal::FLAT3:   return AccidentalType::FLAT3;
     default:
-        ASSERT_X("value2subtype: illegal accidental val %d" + QString::number(int(v)));
+        ASSERT_X(u"value2subtype: illegal accidental val: " + String::number(int(v)));
     }
     return AccidentalType::NONE;
 }

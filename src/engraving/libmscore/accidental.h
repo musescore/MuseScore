@@ -28,9 +28,7 @@
  Definition of class Accidental
 */
 
-#include <QString>
 #include <vector>
-#include <QVariant>
 
 #include "config.h"
 #include "engravingitem.h"

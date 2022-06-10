@@ -3365,7 +3365,7 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                 attr = QString(" placement=\"%1\"").arg((f->placement() == PlacementV::BELOW) ? "below" : "above");
             }
             if (!f->isStyled(Pid::FONT_FACE)) {
-                attr += QString(" font-family=\"%1\"").arg(f->getProperty(Pid::FONT_FACE).toString());
+                attr += QString(" font-family=\"%1\"").arg(f->getProperty(Pid::FONT_FACE).value<String>());
             }
             if (!f->isStyled(Pid::FONT_SIZE)) {
                 attr += QString(" font-size=\"%1\"").arg(f->getProperty(Pid::FONT_SIZE).toReal());
@@ -4553,7 +4553,8 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
             // text remaining and either no dynamic of not at front of text
             xml.startElement("direction-type");
             QString tag = "words";
-            tag += QString(" font-family=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_FACE : Pid::END_FONT_FACE).toString());
+            tag
+                += QString(" font-family=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_FACE : Pid::END_FONT_FACE).value<String>());
             tag += QString(" font-size=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_SIZE : Pid::END_FONT_SIZE).toReal());
             tag += fontStyleToXML(static_cast<FontStyle>(tlb->getProperty(isStart ? Pid::BEGIN_FONT_STYLE : Pid::END_FONT_STYLE).toInt()));
             tag += ExportMusicXml::positioningAttributes(tlb, isStart);

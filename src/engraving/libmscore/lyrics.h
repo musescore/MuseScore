@@ -94,7 +94,7 @@ public:
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
     int subtype() const override { return _no; }
-    QString subtypeName() const override { return QObject::tr("Verse %1").arg(_no + 1); }
+    String subtypeName() const override;
     void setNo(int n) { _no = n; }
     int no() const { return _no; }
     bool isEven() const { return _no % 1; }

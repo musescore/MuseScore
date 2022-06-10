@@ -22,9 +22,10 @@
 #include "font.h"
 #include "global/realfn.h"
 
+using namespace mu;
 using namespace mu::draw;
 
-Font::Font(const QString& family)
+Font::Font(const String& family)
     : m_family(family)
 {
 }
@@ -39,12 +40,12 @@ bool Font::operator ==(const Font& other) const
            && m_hinting == other.m_hinting;
 }
 
-void Font::setFamily(const QString& family)
+void Font::setFamily(const String& family)
 {
     m_family = family;
 }
 
-QString Font::family() const
+String Font::family() const
 {
     return m_family;
 }

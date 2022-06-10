@@ -3598,16 +3598,16 @@ EngravingItem* Chord::prevSegmentElement()
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString Chord::accessibleExtraInfo() const
+String Chord::accessibleExtraInfo() const
 {
-    QString rez = "";
+    String rez;
 
     for (const Chord* c : graceNotes()) {
         if (!score()->selectionFilter().canSelect(c)) {
             continue;
         }
         for (const Note* n : c->notes()) {
-            rez = QString("%1 %2").arg(rez, n->screenReaderInfo());
+            rez = String("%1 %2").arg(rez, n->screenReaderInfo());
         }
     }
 
@@ -3615,25 +3615,25 @@ QString Chord::accessibleExtraInfo() const
         if (!score()->selectionFilter().canSelect(a)) {
             continue;
         }
-        rez = QString("%1 %2").arg(rez, a->screenReaderInfo());
+        rez = String("%1 %2").arg(rez, a->screenReaderInfo());
     }
 
     if (arpeggio() && score()->selectionFilter().canSelect(arpeggio())) {
-        rez = QString("%1 %2").arg(rez, arpeggio()->screenReaderInfo());
+        rez = String("%1 %2").arg(rez, arpeggio()->screenReaderInfo());
     }
 
     if (tremolo() && score()->selectionFilter().canSelect(tremolo())) {
-        rez = QString("%1 %2").arg(rez, tremolo()->screenReaderInfo());
+        rez = String("%1 %2").arg(rez, tremolo()->screenReaderInfo());
     }
 
     foreach (EngravingItem* e, el()) {
         if (!score()->selectionFilter().canSelect(e)) {
             continue;
         }
-        rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
+        rez = String("%1 %2").arg(rez, e->screenReaderInfo());
     }
 
-    return QString("%1 %2").arg(rez, ChordRest::accessibleExtraInfo());
+    return String("%1 %2").arg(rez, ChordRest::accessibleExtraInfo());
 }
 
 //---------------------------------------------------------

@@ -1639,7 +1639,7 @@ void SpannerSegment::autoplaceSpannerSegment()
     setOffsetChanged(false);
 }
 
-QString SpannerSegment::formatBarsAndBeats() const
+String SpannerSegment::formatBarsAndBeats() const
 {
     const Spanner* spanner = this->spanner();
 
@@ -1659,23 +1659,21 @@ QString SpannerSegment::formatBarsAndBeats() const
         endSegment = endSegment->prev1MM(SegmentType::ChordRest);
     }
 
-    return formatStartBarsAndBeats(spanner->startSegment()) + " " + formatEndBarsAndBeats(endSegment);
+    return formatStartBarsAndBeats(spanner->startSegment()) + u' ' + formatEndBarsAndBeats(endSegment);
 }
 
-QString SpannerSegment::formatStartBarsAndBeats(const Segment* segment) const
+String SpannerSegment::formatStartBarsAndBeats(const Segment* segment) const
 {
     std::pair<int, float> barbeat = segment->barbeat();
-
-    return qtrc("engraving", "Start measure: %1; Start beat: %2")
-           .arg(QString::number(barbeat.first), QString::number(barbeat.second));
+    return mtrc("engraving", "Start measure: %1; Start beat: %2")
+           .arg(String::number(barbeat.first), String::number(barbeat.second));
 }
 
-QString SpannerSegment::formatEndBarsAndBeats(const Segment* segment) const
+String SpannerSegment::formatEndBarsAndBeats(const Segment* segment) const
 {
     std::pair<int, float> barbeat = segment->barbeat();
-
-    return qtrc("engraving", "End measure: %1; End beat: %2")
-           .arg(QString::number(barbeat.first), QString::number(barbeat.second));
+    return mtrc("engraving", "End measure: %1; End beat: %2")
+           .arg(String::number(barbeat.first), String::number(barbeat.second));
 }
 
 //---------------------------------------------------------

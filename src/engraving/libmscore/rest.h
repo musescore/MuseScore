@@ -99,7 +99,7 @@ public:
     EngravingItem* nextElement() override;
     EngravingItem* prevElement() override;
     String accessibleInfo() const override;
-    QString screenReaderInfo() const override;
+    String screenReaderInfo() const override;
     Shape shape() const override;
     void editDrag(EditData& editData) override;
 

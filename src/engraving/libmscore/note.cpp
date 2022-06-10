@@ -3290,50 +3290,51 @@ String Note::accessibleInfo() const
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString Note::screenReaderInfo() const
+String Note::screenReaderInfo() const
 {
-    QString duration = chord()->durationUserName();
+    String duration = chord()->durationUserName();
     Measure* m = chord()->measure();
     bool voices = m ? m->hasVoices(staffIdx()) : false;
-    QString voice = voices ? QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1)) : "";
-    QString pitchName;
+    String voice = voices ? mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1) : u"";
+    String pitchName;
     const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
-        pitchName = chord()->noStem() ? QObject::tr("Beat Slash") : QObject::tr("Rhythm Slash");
+        pitchName = chord()->noStem() ? mtrc("engraving", "Beat Slash") : mtrc("engraving", "Rhythm Slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = qtrc("drumset", drumset->name(pitch()));
+        pitchName = mtrc("engraving", drumset->name(pitch()));
     } else if (staff()->isTabStaff(tick())) {
-        pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(true), QString::number(string() + 1), QString::number(fret()));
+        pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
+                    .arg(tpcUserName(true), String::number(string() + 1), String::number(fret()));
     } else {
         pitchName = tpcUserName(true);
     }
-    return QString("%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+    return String("%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? u"" : String("; %1").arg(voice)));
 }
 
 //---------------------------------------------------------
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString Note::accessibleExtraInfo() const
+String Note::accessibleExtraInfo() const
 {
-    QString rez = "";
+    String rez;
     if (accidental()) {
-        rez = QString("%1 %2").arg(rez, accidental()->screenReaderInfo());
+        rez = String("%1 %2").arg(rez, accidental()->screenReaderInfo());
     }
     if (!el().empty()) {
         for (EngravingItem* e : el()) {
             if (!score()->selectionFilter().canSelect(e)) {
                 continue;
             }
-            rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
+            rez = String("%1 %2").arg(rez, e->screenReaderInfo());
         }
     }
     if (tieFor()) {
-        rez = QObject::tr("%1 Start of %2").arg(rez, tieFor()->screenReaderInfo());
+        rez = mtrc("engraving", "%1 Start of %2").arg(rez, tieFor()->screenReaderInfo());
     }
 
     if (tieBack()) {
-        rez = QObject::tr("%1 End of %2").arg(rez, tieBack()->screenReaderInfo());
+        rez = mtrc("engraving", "%1 End of %2").arg(rez, tieBack()->screenReaderInfo());
     }
 
     if (!spannerFor().empty()) {
@@ -3341,7 +3342,7 @@ QString Note::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(s)) {
                 continue;
             }
-            rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
+            rez = mtrc("engraving", "%1 Start of %2").arg(rez, s->screenReaderInfo());
         }
     }
     if (!spannerBack().empty()) {
@@ -3349,14 +3350,14 @@ QString Note::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(s)) {
                 continue;
             }
-            rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
+            rez = mtrc("engraving", "%1 End of %2").arg(rez, s->screenReaderInfo());
         }
     }
 
     // only read extra information for top note of chord
     // (it is reached directly on next/previous element)
     if (this == chord()->upNote()) {
-        rez = QString("%1 %2").arg(rez, chord()->accessibleExtraInfo());
+        rez = String("%1 %2").arg(rez, chord()->accessibleExtraInfo());
     }
 
     return rez;
@@ -3392,7 +3393,7 @@ int Note::qmlDotsCount()
 //   subtypeName
 //---------------------------------------------------------
 
-QString Note::subtypeName() const
+String Note::subtypeName() const
 {
     return TConv::toUserName(_headGroup);
 }

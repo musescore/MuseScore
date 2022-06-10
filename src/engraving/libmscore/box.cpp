@@ -901,11 +901,11 @@ void FBox::add(EngravingItem* e)
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString Box::accessibleExtraInfo() const
+String Box::accessibleExtraInfo() const
 {
-    QString rez = "";
+    String rez;
     for (EngravingItem* e : el()) {
-        rez += " " + e->screenReaderInfo();
+        rez += u' ' + e->screenReaderInfo();
     }
     return rez;
 }
@@ -914,9 +914,9 @@ QString Box::accessibleExtraInfo() const
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString TBox::accessibleExtraInfo() const
+String TBox::accessibleExtraInfo() const
 {
-    QString rez = m_text->screenReaderInfo();
+    String rez = m_text->screenReaderInfo();
     return rez;
 }
 

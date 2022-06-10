@@ -29,6 +29,7 @@
 
 #include <QVariant>
 
+#include "types/string.h"
 #include "types/types.h"
 #include "types/symid.h"
 
@@ -125,10 +126,13 @@ public:
         : m_type(P_TYPE::REAL), m_data(make_data<qreal>(v)) {}
 
     PropertyValue(const char* v)
-        : m_type(P_TYPE::STRING), m_data(make_data<QString>(QString(v))) {}
+        : m_type(P_TYPE::STRING), m_data(make_data<String>(String(v))) {}
 
     PropertyValue(const QString& v)
-        : m_type(P_TYPE::STRING), m_data(make_data<QString>(v)) {}
+        : m_type(P_TYPE::STRING), m_data(make_data<String>(String::fromQString(v))) {}
+
+    PropertyValue(const String& v)
+        : m_type(P_TYPE::STRING), m_data(make_data<String>(v)) {}
 
     // Geometry
     PropertyValue(const PointF& v)
@@ -336,10 +340,15 @@ public:
                 }
             }
 
-            //! HACK Temporary hack for Fraction to String
             if constexpr (std::is_same<T, QString>::value) {
+                //! HACK Temporary hack for Fraction to String
                 if (P_TYPE::FRACTION == m_type) {
                     return value<Fraction>().toString();
+                }
+
+                //! HACK Temporary hack for String to QString
+                if (P_TYPE::STRING == m_type) {
+                    return value<String>().toQString();
                 }
             }
         }
@@ -355,7 +364,6 @@ public:
     int toInt() const { return value<int>(); }
     qreal toReal() const { return value<qreal>(); }
     double toDouble() const { return value<qreal>(); }
-    QString toString() const { return value<QString>(); }
 
     bool operator ==(const PropertyValue& v) const;
     inline bool operator !=(const PropertyValue& v) const { return !this->operator ==(v); }
