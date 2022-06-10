@@ -22,13 +22,13 @@
 #ifndef MU_ENGRAVING_HTMLPARSER_H
 #define MU_ENGRAVING_HTMLPARSER_H
 
-#include <QString>
+#include "types/string.h"
 
 namespace mu::engraving {
 class HtmlParser
 {
 public:
-    static QString parse(const QString& name);
+    static String parse(const String& name);
 };
 }
 

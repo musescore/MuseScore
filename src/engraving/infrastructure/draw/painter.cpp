@@ -405,7 +405,7 @@ void Painter::drawRoundedRect(const RectF& rect, qreal xRadius, qreal yRadius)
     drawPath(path);
 }
 
-void Painter::drawText(const PointF& point, const QString& text)
+void Painter::drawText(const PointF& point, const String& text)
 {
     m_provider->drawText(point, text);
     if (extended) {
@@ -413,7 +413,7 @@ void Painter::drawText(const PointF& point, const QString& text)
     }
 }
 
-void Painter::drawText(const RectF& rect, int flags, const QString& text)
+void Painter::drawText(const RectF& rect, int flags, const String& text)
 {
     m_provider->drawText(rect, flags, text);
     if (extended) {
@@ -421,7 +421,7 @@ void Painter::drawText(const RectF& rect, int flags, const QString& text)
     }
 }
 
-void Painter::drawTextWorkaround(Font& f, const PointF pos, const QString text)
+void Painter::drawTextWorkaround(Font& f, const PointF pos, const String& text)
 {
     m_provider->drawTextWorkaround(f, pos, text);
     if (extended) {

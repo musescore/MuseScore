@@ -164,17 +164,17 @@ void PaintDebugger::drawPolygon(const PointF* points, size_t pointCount, Polygon
     m_real->drawPolygon(points, pointCount, mode);
 }
 
-void PaintDebugger::drawText(const PointF& point, const QString& text)
+void PaintDebugger::drawText(const PointF& point, const String& text)
 {
     m_real->drawText(point, text);
 }
 
-void PaintDebugger::drawText(const RectF& rect, int flags, const QString& text)
+void PaintDebugger::drawText(const RectF& rect, int flags, const String& text)
 {
     m_real->drawText(rect, flags, text);
 }
 
-void PaintDebugger::drawTextWorkaround(const Font& f, const PointF& pos, const QString& text)
+void PaintDebugger::drawTextWorkaround(const Font& f, const PointF& pos, const String& text)
 {
     m_real->drawTextWorkaround(f, pos, text);
 }

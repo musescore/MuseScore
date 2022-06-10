@@ -35,6 +35,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
@@ -111,7 +112,7 @@ MscWriter::IWriter* MscWriter::writer() const
     return m_writer;
 }
 
-bool MscWriter::addFileData(const QString& fileName, const ByteArray& data)
+bool MscWriter::addFileData(const String& fileName, const ByteArray& data)
 {
     if (!writer()->addFileData(fileName, data)) {
         LOGE() << "failed write file: " << fileName;
@@ -125,26 +126,26 @@ bool MscWriter::addFileData(const QString& fileName, const ByteArray& data)
 
 void MscWriter::writeStyleFile(const ByteArray& data)
 {
-    addFileData("score_style.mss", data);
+    addFileData(u"score_style.mss", data);
 }
 
-QString MscWriter::mainFileName() const
+String MscWriter::mainFileName() const
 {
     if (!m_params.mainFileName.isEmpty()) {
         return m_params.mainFileName;
     }
 
-    QString name = "score.mscx";
-    if (m_params.filePath.isEmpty()) {
+    String name = u"score.mscx";
+    if (m_params.filePath.empty()) {
         return name;
     }
 
-    QString completeBaseName = FileInfo(m_params.filePath).completeBaseName();
+    String completeBaseName = FileInfo(m_params.filePath).completeBaseName();
     if (completeBaseName.isEmpty()) {
         return name;
     }
 
-    return completeBaseName + ".mscx";
+    return completeBaseName + u".mscx";
 }
 
 void MscWriter::writeScoreFile(const ByteArray& data)
@@ -152,46 +153,46 @@ void MscWriter::writeScoreFile(const ByteArray& data)
     addFileData(mainFileName(), data);
 }
 
-void MscWriter::addExcerptStyleFile(const QString& name, const ByteArray& data)
+void MscWriter::addExcerptStyleFile(const String& name, const ByteArray& data)
 {
-    QString fileName = name + ".mss";
-    addFileData("Excerpts/" + fileName, data);
+    String fileName = name + u".mss";
+    addFileData(u"Excerpts/" + fileName, data);
 }
 
-void MscWriter::addExcerptFile(const QString& name, const ByteArray& data)
+void MscWriter::addExcerptFile(const String& name, const ByteArray& data)
 {
-    QString fileName = name + ".mscx";
-    addFileData("Excerpts/" + fileName, data);
+    String fileName = name + u".mscx";
+    addFileData(u"Excerpts/" + fileName, data);
 }
 
 void MscWriter::writeChordListFile(const ByteArray& data)
 {
-    addFileData("chordlist.xml", data);
+    addFileData(u"chordlist.xml", data);
 }
 
 void MscWriter::writeThumbnailFile(const ByteArray& data)
 {
-    addFileData("Thumbnails/thumbnail.png", data);
+    addFileData(u"Thumbnails/thumbnail.png", data);
 }
 
-void MscWriter::addImageFile(const QString& fileName, const ByteArray& data)
+void MscWriter::addImageFile(const String& fileName, const ByteArray& data)
 {
-    addFileData("Pictures/" + fileName, data);
+    addFileData(u"Pictures/" + fileName, data);
 }
 
 void MscWriter::writeAudioFile(const ByteArray& data)
 {
-    addFileData("audio.ogg", data);
+    addFileData(u"audio.ogg", data);
 }
 
 void MscWriter::writeAudioSettingsJsonFile(const ByteArray& data)
 {
-    addFileData("audiosettings.json", data);
+    addFileData(u"audiosettings.json", data);
 }
 
 void MscWriter::writeViewSettingsJsonFile(const ByteArray& data)
 {
-    addFileData("viewsettings.json", data);
+    addFileData(u"viewsettings.json", data);
 }
 
 void MscWriter::writeMeta()
@@ -205,7 +206,7 @@ void MscWriter::writeMeta()
     m_meta.isWritten = true;
 }
 
-void MscWriter::writeContainer(const std::vector<QString>& paths)
+void MscWriter::writeContainer(const std::vector<String>& paths)
 {
     ByteArray data;
     Buffer buf(&data);
@@ -215,7 +216,7 @@ void MscWriter::writeContainer(const std::vector<QString>& paths)
     xml.startElement("container");
     xml.startElement("rootfiles");
 
-    for (const QString& f : paths) {
+    for (const String& f : paths) {
         xml.element("rootfile", { { "full-path", f } });
     }
 
@@ -223,10 +224,10 @@ void MscWriter::writeContainer(const std::vector<QString>& paths)
     xml.endElement();
     xml.flush();
 
-    addFileData("META-INF/container.xml", data);
+    addFileData(u"META-INF/container.xml", data);
 }
 
-bool MscWriter::Meta::contains(const QString& file) const
+bool MscWriter::Meta::contains(const String& file) const
 {
     if (std::find(files.begin(), files.end(), file) != files.end()) {
         return true;
@@ -234,7 +235,7 @@ bool MscWriter::Meta::contains(const QString& file) const
     return false;
 }
 
-void MscWriter::Meta::addFile(const QString& file)
+void MscWriter::Meta::addFile(const String& file)
 {
     if (!contains(file)) {
         files.push_back(file);
@@ -253,7 +254,7 @@ MscWriter::ZipFileWriter::~ZipFileWriter()
     }
 }
 
-bool MscWriter::ZipFileWriter::open(io::IODevice* device, const QString& filePath)
+bool MscWriter::ZipFileWriter::open(io::IODevice* device, const path_t& filePath)
 {
     m_device = device;
     if (!m_device) {
@@ -289,7 +290,7 @@ bool MscWriter::ZipFileWriter::isOpened() const
     return m_device ? m_device->isOpen() : false;
 }
 
-bool MscWriter::ZipFileWriter::addFileData(const QString& fileName, const ByteArray& data)
+bool MscWriter::ZipFileWriter::addFileData(const String& fileName, const ByteArray& data)
 {
     IF_ASSERT_FAILED(m_zip) {
         return false;
@@ -303,21 +304,21 @@ bool MscWriter::ZipFileWriter::addFileData(const QString& fileName, const ByteAr
     return true;
 }
 
-bool MscWriter::DirWriter::open(io::IODevice* device, const QString& filePath)
+bool MscWriter::DirWriter::open(io::IODevice* device, const io::path_t& filePath)
 {
     if (device) {
         NOT_SUPPORTED;
         return false;
     }
 
-    if (filePath.isEmpty()) {
+    if (filePath.empty()) {
         LOGE() << "file path is empty";
         return false;
     }
 
-    m_rootPath = containerPath(filePath).toQString();
+    m_rootPath = containerPath(filePath);
 
-    QDir dir(m_rootPath);
+    QDir dir(m_rootPath.toQString());
     if (!dir.removeRecursively()) {
         LOGE() << "failed clear dir: " << dir.absolutePath();
         return false;
@@ -341,9 +342,9 @@ bool MscWriter::DirWriter::isOpened() const
     return FileInfo::exists(m_rootPath);
 }
 
-bool MscWriter::DirWriter::addFileData(const QString& fileName, const ByteArray& data)
+bool MscWriter::DirWriter::addFileData(const String& fileName, const ByteArray& data)
 {
-    QString filePath = m_rootPath + "/" + fileName;
+    io::path_t filePath = m_rootPath + "/" + fileName;
 
     QDir fileDir(FileInfo(filePath).absolutePath());
     if (!fileDir.exists()) {
@@ -375,7 +376,7 @@ MscWriter::XmlFileWriter::~XmlFileWriter()
     }
 }
 
-bool MscWriter::XmlFileWriter::open(io::IODevice* device, const QString& filePath)
+bool MscWriter::XmlFileWriter::open(io::IODevice* device, const path_t& filePath)
 {
     m_device = device;
     if (!m_device) {
@@ -413,14 +414,14 @@ bool MscWriter::XmlFileWriter::isOpened() const
     return m_device ? m_device->isOpen() : false;
 }
 
-bool MscWriter::XmlFileWriter::addFileData(const QString& fileName, const ByteArray& data)
+bool MscWriter::XmlFileWriter::addFileData(const String& fileName, const ByteArray& data)
 {
     if (!m_stream) {
         return false;
     }
 
-    static const std::vector<QString> supportedExts = { "mscx", "json", "mss" };
-    QString ext = FileInfo::suffix(fileName);
+    static const std::vector<String> supportedExts = { u"mscx", u"json", u"mss" };
+    String ext = FileInfo::suffix(fileName);
     if (!mu::contains(supportedExts, ext)) {
         NOT_SUPPORTED << fileName;
         return true; // not error

@@ -44,11 +44,11 @@ DefaultStyle* DefaultStyle::instance()
     return &s;
 }
 
-void DefaultStyle::init(const QString& defaultStyleFilePath, const QString& partStyleFilePath)
+void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath)
 {
     m_baseStyle.precomputeValues();
 
-    if (!defaultStyleFilePath.isEmpty()) {
+    if (!defaultStyleFilePath.empty()) {
         m_defaultStyle = new MStyle();
         bool ok = doLoadStyle(m_defaultStyle, defaultStyleFilePath);
         if (!ok) {
@@ -59,7 +59,7 @@ void DefaultStyle::init(const QString& defaultStyleFilePath, const QString& part
         }
     }
 
-    if (!partStyleFilePath.isEmpty()) {
+    if (!partStyleFilePath.empty()) {
         m_defaultStyleForParts = new MStyle();
         bool ok = doLoadStyle(m_defaultStyleForParts, defaultStyleFilePath);
         if (!ok) {
@@ -71,7 +71,7 @@ void DefaultStyle::init(const QString& defaultStyleFilePath, const QString& part
     }
 }
 
-bool DefaultStyle::doLoadStyle(MStyle* style, const QString& filePath)
+bool DefaultStyle::doLoadStyle(MStyle* style, const path_t& filePath)
 {
     File file(filePath);
     if (!file.open(IODevice::ReadOnly)) {

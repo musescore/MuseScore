@@ -88,16 +88,16 @@ void GlobalModule::onInit(const IApplication::RunMode& mode)
         logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
     }
 
-    io::path_t logPath = s_globalConf->userAppDataPath() + "/logs";
+    io::path_t logPath = s_globalConf->userAppDataPath() + u"/logs";
     fileSystem()->makePath(logPath);
 
     //! Remove old logs
     LogRemover::removeLogs(logPath, 7, "MuseScore_yyMMdd_HHmmss.log");
 
     //! File, this creates a file named "data/logs/MuseScore_yyMMdd_HHmmss.log"
-    io::path_t logFilePath = logPath + "/MuseScore_"
+    io::path_t logFilePath = logPath + u"/MuseScore_"
                              + QDateTime::currentDateTime().toString("yyMMdd_HHmmss")
-                             + ".log";
+                             + u".log";
 
     FileLogDest* logFile = new FileLogDest(logFilePath.toStdString(),
                                            LogLayout("${datetime} | ${type|5} | ${thread} | ${tag|10} | ${message}"));

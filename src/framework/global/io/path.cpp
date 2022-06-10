@@ -27,36 +27,43 @@
 
 #include "stringutils.h"
 
+using namespace mu;
 using namespace mu::io;
 
-path_t::path_t(const QByteArray& s)
-    : m_path(s)
+path_t::path_t(const String& s)
+    : m_path(s.toStdString())
 {
 }
 
 path_t::path_t(const QString& s)
-    : m_path(s.toUtf8())
+    : m_path(s.toStdString())
 {
 }
 
 path_t::path_t(const std::string& s)
-    : m_path(s.c_str())
+    : m_path(s)
 {
 }
 
 path_t::path_t(const char* s)
-    : m_path(s)
+    : m_path(s ? s : "")
 {
 }
 
 bool path_t::empty() const
 {
-    return m_path.isEmpty();
+    return m_path.empty();
+}
+
+size_t path_t::size() const
+{
+    return m_path.size();
 }
 
 path_t path_t::appendingComponent(const path_t& other) const
 {
-    if (m_path.endsWith('/') || other.m_path.startsWith('/')) {
+    if ((!m_path.empty() && m_path.back() == '/')
+        || (!other.m_path.empty() && other.m_path.front() == '/')) {
         return m_path + other.m_path;
     }
 
@@ -65,36 +72,36 @@ path_t path_t::appendingComponent(const path_t& other) const
 
 path_t path_t::appendingSuffix(const path_t& suffix) const
 {
-    if (suffix.m_path.startsWith('.')) {
+    if (!suffix.m_path.empty() && suffix.m_path.front() == '.') {
         return m_path + suffix.m_path;
     }
 
     return m_path + '.' + suffix.m_path;
 }
 
+String path_t::toString() const
+{
+    return String::fromStdString(m_path);
+}
+
 QString path_t::toQString() const
 {
-    return QString(m_path);
+    return QString::fromStdString(m_path);
 }
 
 std::string path_t::toStdString() const
 {
-    return std::string(m_path.data());
+    return m_path;
 }
 
 std::wstring path_t::toStdWString() const
 {
-    return QString(m_path).toStdWString();
+    return QString::fromStdString(m_path).toStdWString();
 }
 
 const char* path_t::c_str() const
 {
-    return m_path.data();
-}
-
-const QByteArray& path_t::constData() const
-{
-    return m_path;
+    return m_path.c_str();
 }
 
 std::string mu::io::suffix(const mu::io::path_t& path)

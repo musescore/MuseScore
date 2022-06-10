@@ -22,6 +22,7 @@
 #ifndef MU_ENGRAVING_DEFAULTSTYLE_H
 #define MU_ENGRAVING_DEFAULTSTYLE_H
 
+#include "io/path.h"
 #include "style.h"
 
 namespace mu::engraving {
@@ -31,7 +32,7 @@ public:
 
     static DefaultStyle* instance();
 
-    void init(const QString& defaultStyleFilePath, const QString& partStyleFilePath);
+    void init(const io::path_t& defaultStyleFilePath, const io::path_t& partStyleFilePath);
 
     static const MStyle& baseStyle();
 
@@ -45,7 +46,7 @@ public:
 private:
     DefaultStyle() = default;
 
-    static bool doLoadStyle(MStyle* style, const QString& filePath);
+    static bool doLoadStyle(MStyle* style, const io::path_t& filePath);
 
     MStyle m_baseStyle; // builtin initial style
     MStyle* m_defaultStyle; // builtin modified by preferences

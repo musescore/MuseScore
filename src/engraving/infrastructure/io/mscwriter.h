@@ -22,8 +22,8 @@
 #ifndef MU_ENGRAVING_MSCWRITER_H
 #define MU_ENGRAVING_MSCWRITER_H
 
-#include <QString>
-
+#include "types/string.h"
+#include "io/path.h"
 #include "io/iodevice.h"
 #include "mscio.h"
 
@@ -40,8 +40,8 @@ public:
     struct Params
     {
         io::IODevice* device = nullptr;
-        QString filePath;
-        QString mainFileName;
+        io::path_t filePath;
+        String mainFileName;
         MscIoMode mode = MscIoMode::Zip;
     };
 
@@ -58,11 +58,11 @@ public:
 
     void writeStyleFile(const ByteArray& data);
     void writeScoreFile(const ByteArray& data);
-    void addExcerptStyleFile(const QString& name, const ByteArray& data);
-    void addExcerptFile(const QString& name, const ByteArray& data);
+    void addExcerptStyleFile(const String& name, const ByteArray& data);
+    void addExcerptFile(const String& name, const ByteArray& data);
     void writeChordListFile(const ByteArray& data);
     void writeThumbnailFile(const ByteArray& data);
-    void addImageFile(const QString& fileName, const ByteArray& data);
+    void addImageFile(const String& fileName, const ByteArray& data);
     void writeAudioFile(const ByteArray& data);
     void writeAudioSettingsJsonFile(const ByteArray& data);
     void writeViewSettingsJsonFile(const ByteArray& data);
@@ -72,19 +72,19 @@ private:
     struct IWriter {
         virtual ~IWriter() = default;
 
-        virtual bool open(io::IODevice* device, const QString& filePath) = 0;
+        virtual bool open(io::IODevice* device, const io::path_t& filePath) = 0;
         virtual void close() = 0;
         virtual bool isOpened() const = 0;
-        virtual bool addFileData(const QString& fileName, const ByteArray& data) = 0;
+        virtual bool addFileData(const String& fileName, const ByteArray& data) = 0;
     };
 
     struct ZipFileWriter : public IWriter
     {
         ~ZipFileWriter() override;
-        bool open(io::IODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
-        bool addFileData(const QString& fileName, const ByteArray& data) override;
+        bool addFileData(const String& fileName, const ByteArray& data) override;
 
     private:
         io::IODevice* m_device = nullptr;
@@ -94,21 +94,21 @@ private:
 
     struct DirWriter : public IWriter
     {
-        bool open(io::IODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
-        bool addFileData(const QString& fileName, const ByteArray& data) override;
+        bool addFileData(const String& fileName, const ByteArray& data) override;
     private:
-        QString m_rootPath;
+        io::path_t m_rootPath;
     };
 
     struct XmlFileWriter : public IWriter
     {
         ~XmlFileWriter() override;
-        bool open(io::IODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
-        bool addFileData(const QString& fileName, const ByteArray& data) override;
+        bool addFileData(const String& fileName, const ByteArray& data) override;
     private:
         io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
@@ -116,21 +116,21 @@ private:
     };
 
     struct Meta {
-        std::vector<QString> files;
+        std::vector<String> files;
         bool isWritten = false;
 
-        bool contains(const QString& file) const;
-        void addFile(const QString& file);
+        bool contains(const String& file) const;
+        void addFile(const String& file);
     };
 
     IWriter* writer() const;
 
-    bool addFileData(const QString& fileName, const ByteArray& data);
+    bool addFileData(const String& fileName, const ByteArray& data);
 
     void writeMeta();
-    void writeContainer(const std::vector<QString>& paths);
+    void writeContainer(const std::vector<String>& paths);
 
-    QString mainFileName() const;
+    String mainFileName() const;
 
     Params m_params;
     mutable IWriter* m_writer = nullptr;

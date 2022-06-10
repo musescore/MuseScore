@@ -289,7 +289,7 @@ static QJsonObject toObj(const DrawText& text)
 {
     QJsonObject o;
     o["pos"] = toArr(text.pos);
-    o["text"] = text.text;
+    o["text"] = text.text.toQString();
     return o;
 }
 
@@ -304,7 +304,7 @@ static QJsonObject toObj(const DrawRectText& text)
     QJsonObject o;
     o["rect"] = toArr(text.rect);
     o["flags"] = text.flags;
-    o["text"] = text.text;
+    o["text"] = text.text.toQString();
     return o;
 }
 

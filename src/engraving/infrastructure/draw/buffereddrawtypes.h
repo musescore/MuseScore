@@ -66,13 +66,13 @@ struct DrawPolygon {
 
 struct DrawText {
     PointF pos;
-    QString text;
+    String text;
 };
 
 struct DrawRectText {
     RectF rect;
     int flags = 0;
-    QString text;
+    String text;
 };
 
 struct DrawPixmap {

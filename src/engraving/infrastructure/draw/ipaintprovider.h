@@ -71,9 +71,9 @@ public:
     virtual void drawPath(const PainterPath& path) = 0;
     virtual void drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode) = 0;
 
-    virtual void drawText(const PointF& point, const QString& text) = 0;
-    virtual void drawText(const RectF& rect, int flags, const QString& text) = 0;
-    virtual void drawTextWorkaround(const Font& f, const PointF& pos, const QString& text) = 0; // see Painter::drawTextWorkaround .h file
+    virtual void drawText(const PointF& point, const String& text) = 0;
+    virtual void drawText(const RectF& rect, int flags, const String& text) = 0;
+    virtual void drawTextWorkaround(const Font& f, const PointF& pos, const String& text) = 0; // see Painter::drawTextWorkaround .h file
 
     virtual void drawSymbol(const PointF& point, uint ucs4Code) = 0;
 

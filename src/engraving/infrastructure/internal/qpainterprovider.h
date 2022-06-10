@@ -71,9 +71,9 @@ public:
     void drawPath(const PainterPath& path) override;
     void drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode) override;
 
-    void drawText(const PointF& point, const QString& text) override;
-    void drawText(const RectF& rect, int flags, const QString& text) override;
-    void drawTextWorkaround(const Font& f, const PointF& pos, const QString& text) override;
+    void drawText(const PointF& point, const String& text) override;
+    void drawText(const RectF& rect, int flags, const String& text) override;
+    void drawTextWorkaround(const Font& f, const PointF& pos, const String& text) override;
 
     void drawSymbol(const PointF& point, uint ucs4Code) override;
 

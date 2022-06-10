@@ -29,6 +29,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
 std::shared_ptr<EngravingProject> EngravingProject::create()
@@ -65,7 +66,7 @@ void EngravingProject::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider
     m_masterScore->setFileInfoProvider(fileInfoProvider);
 }
 
-QString EngravingProject::appVersion() const
+String EngravingProject::appVersion() const
 {
     return m_masterScore->mscoreVersion();
 }

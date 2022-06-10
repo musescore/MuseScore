@@ -72,14 +72,6 @@ bool Color::operator<(const Color& other) const
     return m_rgba < other.m_rgba;
 }
 
-#ifndef NO_QT_SUPPORT
-QString Color::toQString() const
-{
-    return QString::fromStdString(toString());
-}
-
-#endif
-
 std::string Color::toString() const
 {
     return rgb2hex(m_rgba);

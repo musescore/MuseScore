@@ -23,6 +23,8 @@
 #ifndef __MIDIPATCH_H__
 #define __MIDIPATCH_H__
 
+#include "types/string.h"
+
 namespace mu::engraving {
 //---------------------------------------------------------
 //   MidiPatch
@@ -30,9 +32,9 @@ namespace mu::engraving {
 
 struct MidiPatch {
     bool drum;
-    QString synti;
+    String synti;
     int bank, prog, sfid;
-    QString name;
+    String name;
 };
 }
 #endif

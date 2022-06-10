@@ -3387,8 +3387,7 @@ TremoloChordType Chord::tremoloChordType() const
         } else if (_tremolo->chord2() == this) {
             return TremoloChordType::TremoloSecondNote;
         } else {
-            ASSERT_X(QString::asprintf("Chord::tremoloChordType(): inconsistency %p - %p, this is %p", _tremolo->chord1(),
-                                       _tremolo->chord2(), this));
+            ASSERT_X(String(u"Chord::tremoloChordType(): inconsistency"));
         }
     }
     return TremoloChordType::TremoloSingle;
