@@ -26,6 +26,7 @@
 #include "measure.h"
 #include "chordrest.h"
 #include "score.h"
+#include "stafftype.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -64,6 +65,13 @@ HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
 
 void HarmonicMarkSegment::layout()
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }

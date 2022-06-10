@@ -231,12 +231,10 @@ void Arpeggio::layout()
 {
     qreal top = calcTop();
     qreal bottom = calcBottom();
-    _hidden = false;
     if (score()->styleB(Sid::ArpeggioHiddenInStdIfTab)) {
         if (staff() && staff()->isPitchedStaff(tick())) {
             for (Staff* s : staff()->staffList()) {
                 if (s->score() == score() && s->isTabStaff(tick()) && s->visible()) {
-                    _hidden = true;
                     setbbox(RectF());
                     return;
                 }
@@ -304,9 +302,6 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
-    if (_hidden) {
-        return;
-    }
 
     qreal _spatium = spatium();
 
