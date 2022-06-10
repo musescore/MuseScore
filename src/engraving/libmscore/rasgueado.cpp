@@ -26,6 +26,7 @@
 #include "measure.h"
 #include "chordrest.h"
 #include "score.h"
+#include "stafftype.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -64,6 +65,13 @@ RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
 
 void RasgueadoSegment::layout()
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::rasgueadoShowTabCommon, Sid::rasgueadoShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }

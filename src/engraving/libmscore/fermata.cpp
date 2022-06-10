@@ -211,6 +211,13 @@ Page* Fermata::page() const
 
 void Fermata::layout()
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     Segment* s = segment();
     setPos(PointF());
     if (!s) {            // for use in palette

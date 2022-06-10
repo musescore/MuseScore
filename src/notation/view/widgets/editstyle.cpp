@@ -546,6 +546,37 @@ EditStyle::EditStyle(QWidget* parent)
 
         { StyleId::bendLineWidth,     false, bendLineWidth,     resetBendLineWidth },
         { StyleId::bendArrowWidth,    false, bendArrowWidth,    resetBendArrowWidth },
+
+        /// Tablature styles
+
+        { StyleId::slurShowTabSimple, false, slurShowTabSimple, 0 },
+        { StyleId::slurShowTabCommon, false, slurShowTabCommon, 0 },
+        { StyleId::fermataShowTabSimple, false, fermataShowTabSimple, 0 },
+        { StyleId::fermataShowTabCommon, false, fermataShowTabCommon, 0 },
+        { StyleId::dynamicsShowTabSimple, false, dynamicsShowTabSimple, 0 },
+        { StyleId::dynamicsShowTabCommon, false, dynamicsShowTabCommon, 0 },
+        { StyleId::hairpinShowTabSimple, false, hairpinShowTabSimple, 0 },
+        { StyleId::hairpinShowTabCommon, false, hairpinShowTabCommon, 0 },
+        { StyleId::accentShowTabSimple, false, accentShowTabSimple, 0 },
+        { StyleId::accentShowTabCommon, false, accentShowTabCommon, 0 },
+        { StyleId::staccatoShowTabSimple, false, staccatoShowTabSimple, 0 },
+        { StyleId::staccatoShowTabCommon, false, staccatoShowTabCommon, 0 },
+        { StyleId::harmonicMarkShowTabSimple, false, harmonicMarkShowTabSimple, 0 },
+        { StyleId::harmonicMarkShowTabCommon, false, harmonicMarkShowTabCommon, 0 },
+        { StyleId::letRingShowTabSimple, false, letRingShowTabSimple, 0 },
+        { StyleId::letRingShowTabCommon, false, letRingShowTabCommon, 0 },
+        { StyleId::palmMuteShowTabSimple, false, palmMuteShowTabSimple, 0 },
+        { StyleId::palmMuteShowTabCommon, false, palmMuteShowTabCommon, 0 },
+        { StyleId::rasgueadoShowTabSimple, false, rasgueadoShowTabSimple, 0 },
+        { StyleId::rasgueadoShowTabCommon, false, rasgueadoShowTabCommon, 0 },
+        { StyleId::mordentShowTabSimple, false, mordentShowTabSimple, 0 },
+        { StyleId::mordentShowTabCommon, false, mordentShowTabCommon, 0 },
+        { StyleId::turnShowTabSimple, false, turnShowTabSimple, 0 },
+        { StyleId::turnShowTabCommon, false, turnShowTabCommon, 0 },
+        { StyleId::wahShowTabSimple, false, wahShowTabSimple, 0 },
+        { StyleId::wahShowTabCommon, false, wahShowTabCommon, 0 },
+        { StyleId::golpeShowTabSimple, false, golpeShowTabSimple, 0 },
+        { StyleId::golpeShowTabCommon, false, golpeShowTabCommon, 0 },
     };
 
     // ====================================================
@@ -921,6 +952,9 @@ EditStyle::EditStyle(QWidget* parent)
     connect(textStyleColor, &Awl::ColorLabel::colorChanged, [=]() {
         textStyleValueChanged(mu::engraving::Pid::COLOR, textStyleColor->color());
     });
+
+    // TODO: bring back the tab styles button and make sure right styles are applied as default
+    resetTabStylesButton->setVisible(false);
 
     connect(textStyles, &QListWidget::currentRowChanged, this, &EditStyle::textStyleChanged);
     textStyles->setCurrentRow(0);
@@ -1371,6 +1405,18 @@ void EditStyle::on_resetStylesButton_clicked()
 {
     globalContext()->currentNotation()->style()->resetAllStyleValues();
     setValues();
+}
+
+//---------------------------------------------------------
+//    On resetTabStylesButton clicked
+//---------------------------------------------------------
+
+void EditStyle::on_resetTabStylesButton_clicked()
+{
+    // TODO: now button is hidden, make sure default styles are chosen correctly
+    for (int i = static_cast<int>(StyleId::slurShowTabSimple); i <= static_cast<int>(StyleId::golpeShowTabCommon); i++) {
+        resetStyleValue(i);
+    }
 }
 
 //---------------------------------------------------------

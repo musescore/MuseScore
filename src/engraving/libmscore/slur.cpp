@@ -500,6 +500,13 @@ void SlurSegment::computeBezier(mu::PointF p6o)
 
 void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     setPos(PointF());
     ups(Grip::START).p = p1;
     ups(Grip::END).p   = p2;
