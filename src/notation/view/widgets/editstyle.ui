@@ -318,7 +318,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>711</width>
+                <width>675</width>
                 <height>570</height>
                </rect>
               </property>
@@ -8937,13 +8937,13 @@ By default, they will be placed such as that their right end are at the same lev
           </property>
           <layout class="QGridLayout" name="gridLayout_9">
            <item row="3" column="2">
-            <widget class="QToolButton" name="resetArticulationMag">
+            <widget class="QToolButton" name="resetArticStaffDist">
              <property name="accessibleName">
-              <string>Reset 'Articulation size' value</string>
+              <string>Reset 'Articulation distance' value</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="articNoteHeadDist">
              <property name="suffix">
               <string comment="space unit">sp</string>
@@ -8953,17 +8953,17 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="articStemDist">
-             <property name="suffix">
-              <string comment="space unit">sp</string>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_37">
+             <property name="text">
+              <string>Distance from stem:</string>
              </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
+             <property name="buddy">
+              <cstring>articStemDist</cstring>
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label_32">
              <property name="text">
               <string>Articulation size:</string>
@@ -8973,48 +8973,7 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
-            <widget class="QToolButton" name="resetArticStemDist">
-             <property name="accessibleName">
-              <string>Reset 'Stem distance' value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_41">
-             <property name="text">
-              <string>Staff distance:</string>
-             </property>
-             <property name="buddy">
-              <cstring>articStaffDist</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QToolButton" name="resetArticNoteHeadDist">
-             <property name="accessibleName">
-              <string>Reset 'Notehead distance' value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetArticStaffDist">
-             <property name="accessibleName">
-              <string>Reset 'Articulation distance' value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_37">
-             <property name="text">
-              <string>Stem distance:</string>
-             </property>
-             <property name="buddy">
-              <cstring>articStemDist</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
+           <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="articStaffDist">
              <property name="suffix">
               <string comment="space unit">sp</string>
@@ -9024,20 +8983,7 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
             </widget>
            </item>
-           <item row="0" column="3">
-            <spacer name="horizontalSpacer_31">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="3" column="1">
+           <item row="4" column="1">
             <widget class="QSpinBox" name="articulationMag">
              <property name="suffix">
               <string notr="true">%</string>
@@ -9053,13 +8999,91 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="articStemDist">
+             <property name="suffix">
+              <string comment="space unit">sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetArticStemDist">
+             <property name="accessibleName">
+              <string>Reset 'Stem distance' value</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetArticNoteHeadDist">
+             <property name="accessibleName">
+              <string>Reset 'Notehead distance' value</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_41">
+             <property name="text">
+              <string>Distance from staff:</string>
+             </property>
+             <property name="buddy">
+              <cstring>articStaffDist</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_31">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="0">
             <widget class="QLabel" name="label_35">
              <property name="text">
-              <string>Notehead distance:</string>
+              <string>Distance from notehead:</string>
              </property>
              <property name="buddy">
               <cstring>articNoteHeadDist</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QToolButton" name="resetArticulationMag">
+             <property name="accessibleName">
+              <string>Reset 'Articulation size' value</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Minimum vertical distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="articMinVerticalDist">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetArticMinVerticalDist">
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>
@@ -11828,8 +11852,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>531</width>
-                <height>481</height>
+                <width>597</width>
+                <height>479</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -12265,7 +12289,7 @@ By default, they will be placed such as that their right end are at the same lev
                    <item>
                     <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="2,1">
                      <property name="spacing">
-                      <number>-1</number>
+                      <number>6</number>
                      </property>
                      <property name="leftMargin">
                       <number>0</number>

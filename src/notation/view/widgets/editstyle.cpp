@@ -410,6 +410,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::dividerRight,            false, dividerRight,            0 },
         { StyleId::dividerRightX,           false, dividerRightX,           0 },
         { StyleId::dividerRightY,           false, dividerRightY,           0 },
+        { StyleId::articulationMinDistance, false, articMinVerticalDist,    resetArticMinVerticalDist },
         { StyleId::propertyDistanceHead,    false, articNoteHeadDist,       resetArticNoteHeadDist },
         { StyleId::propertyDistanceStem,    false, articStemDist,           resetArticStemDist },
         { StyleId::propertyDistance,        false, articStaffDist,          resetArticStaffDist },
