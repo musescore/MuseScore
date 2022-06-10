@@ -59,13 +59,17 @@ inline T value(const std::vector<T>& vec, size_t idx)
 template<typename T>
 inline bool remove(std::vector<T>& vec, const T& v)
 {
-    return vec.erase(std::remove(vec.begin(), vec.end(), v), vec.end()) != vec.end();
+    size_t origSize = vec.size();
+    vec.erase(std::remove(vec.begin(), vec.end(), v), vec.end());
+    return origSize != vec.size();
 }
 
 template<typename T, typename Predicate>
 inline bool remove_if(std::vector<T>& vec, Predicate p)
 {
-    return vec.erase(std::remove_if(vec.begin(), vec.end(), p), vec.end()) != vec.end();
+    size_t origSize = vec.size();
+    vec.erase(std::remove_if(vec.begin(), vec.end(), p), vec.end());
+    return origSize != vec.size();
 }
 
 template<typename T>
