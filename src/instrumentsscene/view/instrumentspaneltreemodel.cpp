@@ -370,16 +370,21 @@ void InstrumentsPanelTreeModel::moveSelectedRowsDown()
 
 void InstrumentsPanelTreeModel::removeSelectedRows()
 {
-    if (!m_selectionModel || !m_selectionModel->hasSelection()) {
+    if (!m_selectionModel) {
         return;
     }
 
     QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
-
-    for (const QModelIndex& selectedIndex : selectedIndexList) {
-        AbstractInstrumentsPanelTreeItem* item = modelIndexToItem(selectedIndex);
-        removeRows(item->row(), 1, selectedIndex.parent());
+    if (selectedIndexList.empty()) {
+        return;
     }
+
+    QModelIndex firstIndex = *std::min_element(selectedIndexList.cbegin(), selectedIndexList.cend(),
+                                               [](const QModelIndex& f, const QModelIndex& s) {
+        return f.row() < s.row();
+    });
+
+    removeRows(firstIndex.row(), selectedIndexList.size(), firstIndex.parent());
 }
 
 bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
