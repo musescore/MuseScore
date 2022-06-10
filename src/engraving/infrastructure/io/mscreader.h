@@ -22,10 +22,10 @@
 #ifndef MU_ENGRAVING_MSCREADER_H
 #define MU_ENGRAVING_MSCREADER_H
 
-#include <QString>
+#include "types/string.h"
+#include "io/path.h"
 #include "io/iodevice.h"
 #include "mscio.h"
-#include "types/string.h"
 
 namespace mu {
 class ZipReader;
@@ -39,8 +39,8 @@ public:
     struct Params
     {
         io::IODevice* device = nullptr;
-        QString filePath;
-        QString mainFileName;
+        io::path_t filePath;
+        String mainFileName;
         MscIoMode mode = MscIoMode::Zip;
     };
 
@@ -58,15 +58,15 @@ public:
     ByteArray readStyleFile() const;
     ByteArray readScoreFile() const;
 
-    std::vector<QString> excerptNames() const;
-    ByteArray readExcerptStyleFile(const QString& name) const;
-    ByteArray readExcerptFile(const QString& name) const;
+    std::vector<String> excerptNames() const;
+    ByteArray readExcerptStyleFile(const String& name) const;
+    ByteArray readExcerptFile(const String& name) const;
 
     ByteArray readChordListFile() const;
     ByteArray readThumbnailFile() const;
 
-    std::vector<QString> imageFileNames() const;
-    ByteArray readImageFile(const QString& fileName) const;
+    std::vector<String> imageFileNames() const;
+    ByteArray readImageFile(const String& fileName) const;
 
     ByteArray readAudioFile() const;
     ByteArray readAudioSettingsJsonFile() const;
@@ -77,7 +77,7 @@ private:
     struct IReader {
         virtual ~IReader() = default;
 
-        virtual bool open(io::IODevice* device, const QString& filePath) = 0;
+        virtual bool open(io::IODevice* device, const io::path_t& filePath) = 0;
         virtual void close() = 0;
         virtual bool isOpened() const = 0;
         //! NOTE In the case of reading from a directory,
@@ -85,18 +85,18 @@ private:
         //! but only one file among others (`.mscx` from MU 3.x)
         virtual bool isContainer() const = 0;
         virtual StringList fileList() const = 0;
-        virtual ByteArray fileData(const QString& fileName) const = 0;
+        virtual ByteArray fileData(const String& fileName) const = 0;
     };
 
     struct ZipFileReader : public IReader
     {
         ~ZipFileReader() override;
-        bool open(io::IODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
         StringList fileList() const override;
-        ByteArray fileData(const QString& fileName) const override;
+        ByteArray fileData(const String& fileName) const override;
     private:
         io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
@@ -105,33 +105,33 @@ private:
 
     struct DirReader : public IReader
     {
-        bool open(io::IODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
         StringList fileList() const override;
-        ByteArray fileData(const QString& fileName) const override;
+        ByteArray fileData(const String& fileName) const override;
     private:
-        QString m_rootPath;
+        io::path_t m_rootPath;
     };
 
     struct XmlFileReader : public IReader
     {
-        bool open(io::IODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
         StringList fileList() const override;
-        ByteArray fileData(const QString& fileName) const override;
+        ByteArray fileData(const String& fileName) const override;
     private:
         io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
     };
 
     IReader* reader() const;
-    ByteArray fileData(const QString& fileName) const;
+    ByteArray fileData(const String& fileName) const;
 
-    QString mainFileName() const;
+    String mainFileName() const;
 
     Params m_params;
     mutable IReader* m_reader = nullptr;

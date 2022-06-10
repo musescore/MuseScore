@@ -7462,11 +7462,12 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 s += " parentheses-degrees=\"yes\"";
             }
             _xml.tagRaw(s, h->xmlKind());
-            QStringList l = h->xmlDegrees();
-            if (!l.isEmpty()) {
-                for (QString tag : qAsConst(l)) {
+            StringList l = h->xmlDegrees();
+            if (!l.empty()) {
+                for (const String& _tag : qAsConst(l)) {
+                    QString tag = _tag.toQString();
                     QString degreeText;
-                    if (h->xmlKind().startsWith("suspended")
+                    if (h->xmlKind().startsWith(u"suspended")
                         && tag.startsWith("add") && tag[3].isDigit()
                         && !kindText.isEmpty() && kindText[0].isDigit()) {
                         // hack to correct text for suspended chords whose kind text has degree information baked in

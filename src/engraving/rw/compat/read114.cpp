@@ -601,7 +601,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
 
         if (tag == "html-data") {
             auto htmlDdata = HtmlParser::parse(e.readXml());
-            htmlDdata.replace(" ", "");
+            htmlDdata.replace(u" ", u"");
             fing->setPlainText(htmlDdata);
         } else if (tag == "subtype") {
             auto subtype = e.readText();

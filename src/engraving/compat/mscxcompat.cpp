@@ -33,7 +33,7 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePath, ByteArray* msczData)
+Score::FileError mu::engraving::compat::mscxToMscz(const String& mscxFilePath, ByteArray* msczData)
 {
     File mscxFile(mscxFilePath);
     if (!mscxFile.open(IODevice::ReadOnly)) {
@@ -55,17 +55,17 @@ Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePath, 
     return Score::FileError::FILE_NO_ERROR;
 }
 
-Score::FileError mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const QString& path, bool ignoreVersionError)
+Score::FileError mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& path, bool ignoreVersionError)
 {
     ByteArray msczData;
-    if (path.endsWith(".mscx", Qt::CaseInsensitive)) {
+    if (path.endsWith(u".mscx", mu::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
         Score::FileError err = mscxToMscz(path, &msczData);
         if (err != Score::FileError::FILE_NO_ERROR) {
             return err;
         }
-    } else if (path.endsWith(".mscz", Qt::CaseInsensitive)) {
+    } else if (path.endsWith(u".mscz", mu::CaseInsensitive)) {
         File msczFile(path);
         if (!msczFile.open(IODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;
@@ -94,18 +94,18 @@ Score::FileError mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const
     return err == Err::NoError ? Score::FileError::FILE_NO_ERROR : Score::FileError::FILE_ERROR;
 }
 
-Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const QString& path, bool ignoreVersionError)
+Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const String& path, bool ignoreVersionError)
 {
     ByteArray msczData;
-    QString filePath = path;
-    if (path.endsWith(".mscx", Qt::CaseInsensitive)) {
+    String filePath = path;
+    if (path.endsWith(u".mscx", mu::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
         Score::FileError err = mscxToMscz(path, &msczData);
         if (err != Score::FileError::FILE_NO_ERROR) {
             return scoreFileErrorToErr(err);
         }
-    } else if (path.endsWith(".mscz", Qt::CaseInsensitive)) {
+    } else if (path.endsWith(u".mscz", mu::CaseInsensitive)) {
         File msczFile(path);
         if (!msczFile.open(IODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;

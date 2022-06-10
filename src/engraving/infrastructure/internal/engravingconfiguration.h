@@ -41,13 +41,13 @@ public:
 
     void init();
 
-    QString defaultStyleFilePath() const override;
-    void setDefaultStyleFilePath(const QString& path) override;
+    io::path_t defaultStyleFilePath() const override;
+    void setDefaultStyleFilePath(const io::path_t& path) override;
 
-    QString partStyleFilePath() const override;
-    void setPartStyleFilePath(const QString& path) override;
+    io::path_t partStyleFilePath() const override;
+    void setPartStyleFilePath(const io::path_t& path) override;
 
-    std::string iconsFontFamily() const override;
+    String iconsFontFamily() const override;
 
     draw::Color defaultColor() const override;
     draw::Color scoreInversionColor() const override;

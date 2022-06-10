@@ -681,7 +681,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     if (parenth[4] != Parenthesis::NONE) {
         int x = lineEndX > 0.0 ? lineEndX : textWidth;
         painter->drawText(RectF(x, 0, bbox().width(), bbox().height()), Qt::AlignLeft | Qt::AlignTop,
-                          QChar(g_FBFonts.at(font).displayParenthesis[int(parenth[4])].unicode()));
+                          Char(g_FBFonts.at(font).displayParenthesis[int(parenth[4])].unicode()));
     }
 }
 

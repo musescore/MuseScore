@@ -322,11 +322,11 @@ TEST_F(Global_Types_StringTests, String_StartEndWith)
         //! GIVEN Some String
         String str = u"123abc";
         //! CHECK
-        EXPECT_TRUE(str.startsWith("12"));
-        EXPECT_FALSE(str.startsWith("13"));
+        EXPECT_TRUE(str.startsWith(u"12"));
+        EXPECT_FALSE(str.startsWith(u"13"));
         //! CHECK
-        EXPECT_TRUE(str.endsWith("bc"));
-        EXPECT_FALSE(str.endsWith("ac"));
+        EXPECT_TRUE(str.endsWith(u"bc"));
+        EXPECT_FALSE(str.endsWith(u"ac"));
     }
 }
 

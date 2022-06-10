@@ -137,7 +137,7 @@ public:
 
     const ElementList* el() const { return &_el; }
 
-    static QString userTypeName(BarLineType);
+    static String userTypeName(BarLineType);
 
     void setBarLineType(BarLineType i) { _barLineType = i; }
     BarLineType barLineType() const { return _barLineType; }

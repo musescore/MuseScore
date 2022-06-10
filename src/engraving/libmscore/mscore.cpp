@@ -85,7 +85,7 @@ bool MScore::useFallbackFont     = true;
 bool MScore::saveTemplateMode = false;
 bool MScore::noGui = false;
 
-QString MScore::_globalShare;
+String MScore::_globalShare;
 int MScore::_vRaster;
 int MScore::_hRaster;
 bool MScore::_verticalOrientation = false;

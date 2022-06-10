@@ -210,7 +210,8 @@ void Bend::layout()
             int idx = (pitch + 12) / 25;
             const char* l = label[idx];
             bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
-                                     Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l)));
+                                     Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip,
+                                     String::fromAscii(l)));
             y = y2;
         }
         if (pitch == m_points[pt + 1].pitch) {
@@ -236,7 +237,8 @@ void Bend::layout()
             int idx = (m_points[pt + 1].pitch + 12) / 25;
             const char* l = label[idx];
             bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
-                                     Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l)));
+                                     Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip,
+                                     String::fromAscii(l)));
         } else {
             // down
             x2 = x + _spatium * .5;
@@ -300,8 +302,9 @@ void Bend::draw(mu::draw::Painter* painter) const
 
             int idx = (pitch + 12) / 25;
             const char* l = label[idx];
-            QString s(l);
-            painter->drawText(RectF(x2, y2, .0, .0), Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, s);
+            painter->drawText(RectF(x2, y2, .0, .0),
+                              Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip,
+                              String::fromAscii(l));
 
             y = y2;
         }
@@ -332,7 +335,8 @@ void Bend::draw(mu::draw::Painter* painter) const
             const char* l = label[idx];
             qreal ty = y2;       // - _spatium;
             painter->drawText(RectF(x2, ty, .0, .0),
-                              Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l));
+                              Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip,
+                              String::fromAscii(l));
         } else {
             // down
             x2 = x + _spatium * .5;

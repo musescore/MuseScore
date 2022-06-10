@@ -23,6 +23,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "translation.h"
 #include "io/file.h"
 
 #include "factory.h"
@@ -111,11 +112,11 @@ void Score::checkScore()
 ///    Check that voices > 1 contains less than measure duration
 //---------------------------------------------------------
 
-bool Score::sanityCheck(const QString& name)
+bool Score::sanityCheck(const String& name)
 {
     bool result = true;
     int mNumber = 1;
-    QString error;
+    String error;
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         Fraction mLen = m->ticks();
         size_t endStaff  = staves().size();
@@ -141,10 +142,11 @@ bool Score::sanityCheck(const QString& name)
                 }
             }
             if (voices[0] != mLen) {
-                QString msg = QObject::tr("Measure %1, staff %2 incomplete. Expected: %3; Found: %4").arg(mNumber).arg(staffIdx + 1).arg(
-                    mLen.toString(), voices[0].toString());
+                String msg
+                    = mtrc("engraving", "Measure %1, staff %2 incomplete. Expected: %3; Found: %4")
+                      .arg(mNumber).arg(staffIdx + 1).arg(mLen.toString(), voices[0].toString());
                 LOGE() << msg;
-                error += QString("%1\n").arg(msg);
+                error += String("%1\n").arg(msg);
 #ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
 #endif
@@ -160,10 +162,10 @@ bool Score::sanityCheck(const QString& name)
             }
             for (voice_idx_t v = 1; v < VOICES; ++v) {
                 if (voices[v] > mLen) {
-                    QString msg = QObject::tr("Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5").arg(mNumber).arg(
-                        staffIdx + 1).arg(v + 1).arg(mLen.toString(), voices[v].toString());
+                    String msg = mtrc("engraving", "Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5")
+                                 .arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(mLen.toString(), voices[v].toString());
                     LOGE() << msg;
-                    error += QString("%1\n").arg(msg);
+                    error += String("%1\n").arg(msg);
 #ifndef NDEBUG
                     m->setCorrupted(staffIdx, true);
 #endif
@@ -179,7 +181,7 @@ bool Score::sanityCheck(const QString& name)
             json["result"] = 0;
         } else {
             json["result"] = 1;
-            json["error"] = error.trimmed().replace("\n", "\\n");
+            json["error"] = error.trimmed().replace(u"\n", u"\\n").toQString();
         }
         QJsonDocument jsonDoc(json);
         io::File fp(name);

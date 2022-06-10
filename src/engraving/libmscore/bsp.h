@@ -24,7 +24,7 @@
 #define __BSP_H__
 
 #include <list>
-
+#include "types/string.h"
 #include "infrastructure/draw/geometry.h"
 
 namespace mu::engraving {
@@ -89,7 +89,7 @@ public:
     }
 
 #ifndef NDEBUG
-    QString debug(int index) const;
+    String debug(int index) const;
 #endif
 };
 

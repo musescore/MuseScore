@@ -23,8 +23,6 @@
 #ifndef MU_DRAW_COLOR_H
 #define MU_DRAW_COLOR_H
 
-#include <QString>
-
 #ifndef NO_QT_SUPPORT
 #include <QColor>
 #endif
@@ -54,9 +52,6 @@ public:
     bool operator<(const Color& other) const;
 
     std::string toString() const;
-#ifndef NO_QT_SUPPORT
-    QString toQString() const;
-#endif
 
     void setNamedColor(const std::string& color);
     void setNamedColor(const char* color);

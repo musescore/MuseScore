@@ -298,7 +298,7 @@ void Harmony::write(XmlWriter& xml) const
         // parser uses leading "=" as a hidden specifier for minor
         // this may or may not currently be incorporated into _textName
         QString writeName = _textName;
-        if (_parsedForm && _parsedForm->name().startsWith("=") && !writeName.startsWith("=")) {
+        if (_parsedForm && _parsedForm->name().startsWith(u'=') && !writeName.startsWith(u'=')) {
             writeName = "=" + writeName;
         }
         if (!writeName.isEmpty()) {
@@ -1027,10 +1027,10 @@ qreal Harmony::baseLine() const
 //   text
 //---------------------------------------------------------
 
-QString HDegree::text() const
+String HDegree::text() const
 {
     if (_type == HDegreeType::UNDEF) {
-        return QString();
+        return String();
     }
     const char* d = 0;
     switch (_type) {
@@ -1042,16 +1042,16 @@ QString HDegree::text() const
     case HDegreeType::SUBTRACT:    d= "sub";
         break;
     }
-    QString degree(d);
+    String degree(d);
     switch (_alter) {
-    case -1:          degree += "b";
+    case -1:          degree += u"b";
         break;
-    case 1:           degree += "#";
+    case 1:           degree += u"#";
         break;
     default:          break;
     }
-    QString s = QString("%1").arg(_value);
-    QString ss = degree + s;
+    String s = String::number(_value);
+    String ss = degree + s;
     return ss;
 }
 
@@ -1213,10 +1213,10 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
 
 const ChordDescription* Harmony::fromXml(const QString& kind, const std::list<HDegree>& dl)
 {
-    QStringList degrees;
+    StringList degrees;
 
     for (const HDegree& d : dl) {
-        degrees.append(d.text());
+        degrees.push_back(d.text());
     }
 
     QString lowerCaseKind = kind.toLower();
@@ -1225,7 +1225,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const std::list<HD
         const ChordDescription& cd = p.second;
         QString k     = cd.xmlKind;
         QString lowerCaseK = k.toLower();     // required for xmlKind Tristan
-        QStringList d = cd.xmlDegrees;
+        StringList d = cd.xmlDegrees;
         if ((lowerCaseKind == lowerCaseK) && (d == degrees)) {
 //                  LOGD("harmony found in db: %s %s -> %d", qPrintable(kind), qPrintable(degrees), cd->id);
             return &cd;
@@ -1944,50 +1944,50 @@ const QString& Harmony::extensionName() const
 //   xmlKind
 //---------------------------------------------------------
 
-QString Harmony::xmlKind() const
+String Harmony::xmlKind() const
 {
     const ChordDescription* cd = descr();
-    return cd ? cd->xmlKind : QString();
+    return cd ? cd->xmlKind : String();
 }
 
 //---------------------------------------------------------
 //   musicXmlText
 //---------------------------------------------------------
 
-QString Harmony::musicXmlText() const
+String Harmony::musicXmlText() const
 {
     const ChordDescription* cd = descr();
-    return cd ? cd->xmlText : QString();
+    return cd ? cd->xmlText : String();
 }
 
 //---------------------------------------------------------
 //   xmlSymbols
 //---------------------------------------------------------
 
-QString Harmony::xmlSymbols() const
+String Harmony::xmlSymbols() const
 {
     const ChordDescription* cd = descr();
-    return cd ? cd->xmlSymbols : QString();
+    return cd ? cd->xmlSymbols : String();
 }
 
 //---------------------------------------------------------
 //   xmlParens
 //---------------------------------------------------------
 
-QString Harmony::xmlParens() const
+String Harmony::xmlParens() const
 {
     const ChordDescription* cd = descr();
-    return cd ? cd->xmlParens : QString();
+    return cd ? cd->xmlParens : String();
 }
 
 //---------------------------------------------------------
 //   xmlDegrees
 //---------------------------------------------------------
 
-QStringList Harmony::xmlDegrees() const
+StringList Harmony::xmlDegrees() const
 {
     const ChordDescription* cd = descr();
-    return cd ? cd->xmlDegrees : QStringList();
+    return cd ? cd->xmlDegrees : StringList();
 }
 
 //---------------------------------------------------------
