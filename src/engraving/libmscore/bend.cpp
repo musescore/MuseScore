@@ -429,7 +429,7 @@ bool Bend::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::FONT_FACE:
-        _fontFace = v.toString();
+        _fontFace = v.value<String>();
         break;
     case Pid::FONT_SIZE:
         _fontSize = v.toReal();

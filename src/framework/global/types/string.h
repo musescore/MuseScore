@@ -73,6 +73,12 @@ public:
     Char(AsciiChar c)
         : m_ch(c.unicode()) {}
 
+    Char(QChar c)
+        : m_ch(c.unicode()) {}
+    operator QChar() const {
+        return QChar(m_ch);
+    }
+
     inline bool operator ==(Char c) const { return m_ch == c.m_ch; }
     inline bool operator !=(Char c) const { return !operator ==(c); }
     inline bool operator ==(char16_t c) const { return m_ch == c; }
@@ -183,6 +189,14 @@ public:
     String arg(int val1, int val2) const { return arg(number(val1), number(val2)); }
     String arg(int val1, int val2, int val3) const { return arg(number(val1), number(val2), number(val3)); }
 
+    String arg(size_t val) const { return arg(number(val)); }
+    String arg(size_t val1, size_t val2) const { return arg(number(val1), number(val2)); }
+    String arg(size_t val1, size_t val2, size_t val3) const { return arg(number(val1), number(val2), number(val3)); }
+
+    String arg(double val) const { return arg(number(val)); }
+    String arg(double val1, double val2) const { return arg(number(val1), number(val2)); }
+    String arg(double val1, double val2, double val3) const { return arg(number(val1), number(val2), number(val3)); }
+
     String mid(size_t pos, size_t count = mu::nidx) const;
     String left(size_t n) const;
 
@@ -195,6 +209,8 @@ public:
     double toDouble(bool* ok = nullptr) const;
 
     static String number(int n);
+    static String number(size_t n);
+    static String number(double n);
 
 private:
     const std::u16string& constStr() const;

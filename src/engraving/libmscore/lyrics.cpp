@@ -24,6 +24,7 @@
 
 #include <QRegularExpression>
 
+#include "translation.h"
 #include "rw/xml.h"
 
 #include "chord.h"
@@ -161,6 +162,11 @@ bool Lyrics::readProperties(XmlReader& e)
         return false;
     }
     return true;
+}
+
+String Lyrics::subtypeName() const
+{
+    return mtrc("engraving", "Verse %1").arg(_no + 1);
 }
 
 //---------------------------------------------------------

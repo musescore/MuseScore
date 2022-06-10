@@ -89,7 +89,7 @@ HarmonicMark::HarmonicMark(EngravingItem* parent)
 bool HarmonicMark::setProperty(Pid propertyId, const PropertyValue& value)
 {
     if (propertyId == Pid::BEGIN_TEXT) {
-        m_text = value.toString();
+        m_text = value.value<String>();
     }
 
     return TextLineBase::setProperty(propertyId, value);

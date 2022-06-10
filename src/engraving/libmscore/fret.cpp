@@ -72,7 +72,7 @@ static const ElementStyle fretStyle {
 FretDiagram::FretDiagram(Segment* parent)
     : EngravingItem(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    font.setFamily("FreeSans");
+    font.setFamily(u"FreeSans");
     font.setPointSizeF(4.0 * mag());
     initElementStyle(&fretStyle);
 }
@@ -1469,20 +1469,20 @@ String FretDiagram::accessibleInfo() const
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString FretDiagram::screenReaderInfo() const
+String FretDiagram::screenReaderInfo() const
 {
-    QString detailedInfo;
+    String detailedInfo;
     for (int i = 0; i < _strings; i++) {
-        QString stringIdent = QObject::tr("string %1").arg(i + 1);
+        String stringIdent = mtrc("engraving", "string %1").arg(i + 1);
 
         const FretItem::Marker& m = marker(i);
-        QString markerName;
+        String markerName;
         switch (m.mtype) {
         case FretMarkerType::CIRCLE:
-            markerName = QObject::tr("circle marker");
+            markerName = mtrc("engraving", "circle marker");
             break;
         case FretMarkerType::CROSS:
-            markerName = QObject::tr("cross marker");
+            markerName = mtrc("engraving", "cross marker");
             break;
         case FretMarkerType::NONE:
         default:
@@ -1503,68 +1503,70 @@ QString FretDiagram::screenReaderInfo() const
             // understand, so leaving it out for now.
         }
 
-        if (dotsCount == 0 && markerName.length() == 0) {
+        if (dotsCount == 0 && markerName.size() == 0) {
             continue;
         }
 
-        QString fretInfo;
+        String fretInfo;
         if (dotsCount == 1) {
-            fretInfo = QString("%1").arg(fretsWithDots.front());
+            fretInfo = String::number(fretsWithDots.front());
         } else if (dotsCount > 1) {
             int max = int(fretsWithDots.size());
             for (int j = 0; j < max; j++) {
                 if (j == max - 1) {
-                    fretInfo = QObject::tr("%1 and %2").arg(fretInfo).arg(fretsWithDots[j]);
+                    fretInfo = mtrc("engraving", "%1 and %2").arg(fretInfo).arg(fretsWithDots[j]);
                 } else {
-                    fretInfo = QString("%1 %2").arg(fretInfo).arg(fretsWithDots[j]);
+                    fretInfo = String("%1 %2").arg(fretInfo).arg(fretsWithDots[j]);
                 }
             }
         }
 
         //: Omit the "%n " for the singular translation (and the "(s)" too)
-        QString dotsInfo = QObject::tr("%n dot(s) on fret(s) %1", "", dotsCount).arg(fretInfo);
+        String dotsInfo = mtrc("engraving", "%n dot(s) on fret(s) %1", "", dotsCount).arg(fretInfo);
 
-        detailedInfo = QString("%1 %2 %3 %4").arg(detailedInfo, stringIdent, markerName, dotsInfo);
+        detailedInfo = String("%1 %2 %3 %4").arg(detailedInfo, stringIdent, markerName, dotsInfo);
     }
 
-    QString barreInfo;
+    String barreInfo;
     for (auto const& iter : _barres) {
         const FretItem::Barre& b = iter.second;
         if (!b.exists()) {
             continue;
         }
 
-        QString fretInfo = QObject::tr("fret %1").arg(iter.first);
+        String fretInfo = mtrc("engraving", "fret %1").arg(iter.first);
 
-        QString newBarreInfo;
+        String newBarreInfo;
         if (b.startString == 0 && (b.endString == -1 || b.endString == _strings - 1)) {
-            newBarreInfo = QObject::tr("barré %1").arg(fretInfo);
+            newBarreInfo = mtrc("engraving", "barré %1").arg(fretInfo);
         } else {
-            QString startPart = QObject::tr("beginning string %1").arg(b.startString + 1);
-            QString endPart;
+            String startPart = mtrc("engraving", "beginning string %1").arg(b.startString + 1);
+            String endPart;
             if (b.endString != -1) {
-                endPart = QObject::tr("and ending string %1").arg(b.endString + 1);
+                endPart = mtrc("engraving", "and ending string %1").arg(b.endString + 1);
             }
 
-            newBarreInfo = QObject::tr("partial barré %1 %2 %3").arg(fretInfo, startPart, endPart);
+            newBarreInfo = mtrc("engraving", "partial barré %1 %2 %3").arg(fretInfo, startPart, endPart);
         }
 
-        barreInfo = QString("%1 %2").arg(barreInfo, newBarreInfo);
+        barreInfo = String("%1 %2").arg(barreInfo, newBarreInfo);
     }
 
-    detailedInfo = QString("%1 %2").arg(detailedInfo, barreInfo);
+    detailedInfo = String("%1 %2").arg(detailedInfo, barreInfo);
 
-    if (detailedInfo.trimmed().length() == 0) {
-        detailedInfo = QObject::tr("no content");
+    if (detailedInfo.trimmed().size() == 0) {
+        detailedInfo = mtrc("engraving", "no content");
     }
 
-    QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->generateScreenReaderInfo()) : QObject::tr(
-        "without chord symbol");
-    QString basicInfo = QString("%1 %2").arg(typeUserName(), chordName);
+    String chordName = _harmony
+                       ? mtrc("engraving", "with chord symbol %1").arg(_harmony->generateScreenReaderInfo())
+                       : mtrc("engraving", "without chord symbol");
 
-    QString generalInfo = QObject::tr("%n string(s) total", "", _strings);
+    String basicInfo = String("%1 %2").arg(typeUserName(), chordName);
 
-    QString res = QString("%1 %2 %3").arg(basicInfo, generalInfo, detailedInfo);
+    String generalInfo = mtrc("engraving", "%n string(s) total", "", _strings);
+
+    String res = String("%1 %2 %3").arg(basicInfo, generalInfo, detailedInfo);
 
     return res;
 }

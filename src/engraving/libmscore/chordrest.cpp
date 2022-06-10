@@ -22,6 +22,7 @@
 
 #include "chordrest.h"
 
+#include "translation.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
@@ -1206,14 +1207,14 @@ EngravingItem* ChordRest::prevSegmentElement()
     return segment()->lastInPrevSegments(staffIdx());
 }
 
-QString ChordRest::accessibleExtraInfo() const
+String ChordRest::accessibleExtraInfo() const
 {
-    QString rez = "";
+    String rez;
     for (EngravingItem* l : lyrics()) {
         if (!score()->selectionFilter().canSelect(l)) {
             continue;
         }
-        rez = QString("%1 %2").arg(rez, l->screenReaderInfo());
+        rez = String("%1 %2").arg(rez, l->screenReaderInfo());
     }
 
     if (segment()) {
@@ -1222,7 +1223,7 @@ QString ChordRest::accessibleExtraInfo() const
                 continue;
             }
             if (e->track() == track()) {
-                rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
+                rez = String("%1 %2").arg(rez, e->screenReaderInfo());
             }
         }
 
@@ -1240,20 +1241,20 @@ QString ChordRest::accessibleExtraInfo() const
 
             if (s->type() == ElementType::SLUR) {
                 if (s->tick() == tick() && s->track() == track()) {
-                    rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
+                    rez = mtrc("engraving", "%1 Start of %2").arg(rez, s->screenReaderInfo());
                 }
                 if (s->tick2() == tick() && s->track2() == track()) {
-                    rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
+                    rez = mtrc("engraving", "%1 End of %2").arg(rez, s->screenReaderInfo());
                 }
             } else if (s->staffIdx() == staffIdx()) {
                 bool start = s->tick() == tick();
                 bool end   = s->tick2() == tick() + ticks();
                 if (start && end) {
-                    rez = QObject::tr("%1 Start and end of %2").arg(rez, s->screenReaderInfo());
+                    rez = mtrc("engraving", "%1 Start and end of %2").arg(rez, s->screenReaderInfo());
                 } else if (start) {
-                    rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
+                    rez = mtrc("engraving", "%1 Start of %2").arg(rez, s->screenReaderInfo());
                 } else if (end) {
-                    rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
+                    rez = mtrc("engraving", "%1 End of %2").arg(rez, s->screenReaderInfo());
                 }
             }
         }

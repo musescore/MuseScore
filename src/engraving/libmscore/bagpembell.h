@@ -36,7 +36,7 @@ typedef std::vector<int> noteList;
 
 struct BagpipeEmbellishmentInfo {
     const char* name;
-    QString notes;
+    AsciiStringView notes;
 };
 
 //---------------------------------------------------------
@@ -45,7 +45,7 @@ struct BagpipeEmbellishmentInfo {
 //---------------------------------------------------------
 
 struct BagpipeNoteInfo {
-    QString name;
+    AsciiStringView name;
     int line;
     int pitch;
 };

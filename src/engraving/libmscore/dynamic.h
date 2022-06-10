@@ -70,7 +70,7 @@ public:
 
     DynamicType dynamicType() const { return _dynamicType; }
     int subtype() const override { return static_cast<int>(_dynamicType); }
-    QString subtypeName() const override;
+    String subtypeName() const override;
 
     void layout() override;
     void write(XmlWriter& xml) const override;
@@ -102,7 +102,7 @@ public:
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
     String accessibleInfo() const override;
-    QString screenReaderInfo() const override;
+    String screenReaderInfo() const override;
     void doAutoplace();
 
     static QString dynamicText(DynamicType t);

@@ -569,6 +569,18 @@ String String::number(int n)
     return fromAscii(s.c_str());
 }
 
+String String::number(size_t n)
+{
+    std::string s = std::to_string(n);
+    return fromAscii(s.c_str());
+}
+
+String String::number(double n)
+{
+    std::string s = std::to_string(n);
+    return fromAscii(s.c_str());
+}
+
 double String::toDouble(bool* ok) const
 {
     ByteArray ba = toUtf8();

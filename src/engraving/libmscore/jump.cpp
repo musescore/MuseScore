@@ -227,13 +227,13 @@ bool Jump::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::JUMP_TO:
-        setJumpTo(v.toString());
+        setJumpTo(v.value<String>());
         break;
     case Pid::PLAY_UNTIL:
-        setPlayUntil(v.toString());
+        setPlayUntil(v.value<String>());
         break;
     case Pid::CONTINUE_AT:
-        setContinueAt(v.toString());
+        setContinueAt(v.value<String>());
         break;
     case Pid::PLAY_REPEATS:
         setPlayRepeats(v.toInt());

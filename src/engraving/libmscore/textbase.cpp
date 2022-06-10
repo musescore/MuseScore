@@ -157,7 +157,7 @@ void TextCursor::endEdit()
 void TextCursor::init()
 {
     PropertyValue family = _text->propertyDefault(Pid::FONT_FACE);
-    _format.setFontFamily(family.toString());
+    _format.setFontFamily(family.value<String>());
 
     PropertyValue size = _text->propertyDefault(Pid::FONT_SIZE);
     _format.setFontSize(size.toReal());
@@ -2097,7 +2097,7 @@ void TextBase::genText() const
     bool strike_    = false;
 
     CharFormat fmt;
-    fmt.setFontFamily(propertyDefault(Pid::FONT_FACE).toString());
+    fmt.setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
     fmt.setFontSize(propertyDefault(Pid::FONT_SIZE).toReal());
     fmt.setStyle(static_cast<FontStyle>(propertyDefault(Pid::FONT_STYLE).toInt()));
 
@@ -2496,7 +2496,7 @@ void TextBase::setXmlText(const QString& s)
 void TextBase::resetFormatting()
 {
     // reset any formatting properties that can be changed per-character (doesn't change existing text)
-    cursor()->format()->setFontFamily(propertyDefault(Pid::FONT_FACE).toString());
+    cursor()->format()->setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
     cursor()->format()->setFontSize(propertyDefault(Pid::FONT_SIZE).toReal());
     cursor()->format()->setStyle(static_cast<FontStyle>(propertyDefault(Pid::FONT_STYLE).toInt()));
     cursor()->format()->setValign(VerticalAlignment::AlignNormal);
@@ -2613,9 +2613,9 @@ String TextBase::accessibleInfo() const
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString TextBase::screenReaderInfo() const
+String TextBase::screenReaderInfo() const
 {
-    QString rez;
+    String rez;
 
     switch (textStyleType()) {
     case TextStyleType::TITLE:
@@ -2631,8 +2631,8 @@ QString TextBase::screenReaderInfo() const
         rez = EngravingItem::accessibleInfo();
         break;
     }
-    QString s = plainText().toQString().simplified();
-    return QString("%1: %2").arg(rez, s);
+    String s = plainText().toQString().simplified();
+    return String("%1: %2").arg(rez, s);
 }
 
 //---------------------------------------------------------
@@ -2648,7 +2648,7 @@ int TextBase::subtype() const
 //   subtypeName
 //---------------------------------------------------------
 
-QString TextBase::subtypeName() const
+String TextBase::subtypeName() const
 {
     return score() ? score()->getTextStyleUserName(textStyleType()) : TConv::toUserName(textStyleType());
 }
@@ -2835,7 +2835,7 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
         initTextStyleType(v.value<TextStyleType>());
         break;
     case Pid::FONT_FACE:
-        setFamily(v.toString());
+        setFamily(v.value<String>());
         break;
     case Pid::FONT_SIZE:
         setSize(v.toReal());
@@ -2865,7 +2865,7 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
         setBgColor(v.value<mu::draw::Color>());
         break;
     case Pid::TEXT:
-        setXmlText(v.toString());
+        setXmlText(v.value<String>());
         break;
     case Pid::ALIGN:
         setAlign(v.value<Align>());

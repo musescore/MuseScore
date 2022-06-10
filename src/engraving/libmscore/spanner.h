@@ -127,9 +127,9 @@ public:
     void autoplaceSpannerSegment();
 
 private:
-    QString formatBarsAndBeats() const override;
-    QString formatStartBarsAndBeats(const Segment* segment) const;
-    QString formatEndBarsAndBeats(const Segment* segment) const;
+    String formatBarsAndBeats() const override;
+    String formatStartBarsAndBeats(const Segment* segment) const;
+    String formatEndBarsAndBeats(const Segment* segment) const;
 };
 
 //----------------------------------------------------------------------------------

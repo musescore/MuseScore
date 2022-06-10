@@ -52,6 +52,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
@@ -485,7 +486,7 @@ void BarLine::getY() const
 //   drawDots
 //---------------------------------------------------------
 
-void BarLine::drawDots(mu::draw::Painter* painter, qreal x) const
+void BarLine::drawDots(Painter* painter, qreal x) const
 {
     qreal _spatium = spatium();
 
@@ -518,7 +519,7 @@ void BarLine::drawDots(mu::draw::Painter* painter, qreal x) const
 //   drawTips
 //---------------------------------------------------------
 
-void BarLine::drawTips(mu::draw::Painter* painter, bool reversed, qreal x) const
+void BarLine::drawTips(Painter* painter, bool reversed, qreal x) const
 {
     if (reversed) {
         if (isTop()) {
@@ -572,7 +573,7 @@ bool BarLine::isBottom() const
 //   draw
 //---------------------------------------------------------
 
-void BarLine::draw(mu::draw::Painter* painter) const
+void BarLine::draw(Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
@@ -730,11 +731,11 @@ void BarLine::draw(mu::draw::Painter* painter) const
         Measure* m = s->measure();
         if (m->isIrregular() && score()->markIrregularMeasures() && !m->isMMRest()) {
             painter->setPen(engravingConfiguration()->formattingMarksColor());
-            mu::draw::Font f("Edwin");
+mu:         draw::Font f(u"Edwin");
             f.setPointSizeF(12 * spatium() * MScore::pixelRatio / SPATIUM20);
             f.setBold(true);
             QString str = m->ticks() > m->timesig() ? "+" : "-";
-            RectF r = mu::draw::FontMetrics(f).boundingRect(str);
+            RectF r = FontMetrics(f).boundingRect(str);
             painter->setFont(f);
             painter->drawText(-r.width(), 0.0, str);
         }
@@ -745,7 +746,7 @@ void BarLine::draw(mu::draw::Painter* painter) const
 //   drawEditMode
 //---------------------------------------------------------
 
-void BarLine::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling)
+void BarLine::drawEditMode(Painter* p, EditData& ed, qreal currentViewScaling)
 {
     EngravingItem::drawEditMode(p, ed, currentViewScaling);
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
@@ -1581,16 +1582,16 @@ String BarLine::accessibleInfo() const
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString BarLine::accessibleExtraInfo() const
+String BarLine::accessibleExtraInfo() const
 {
     Segment* seg = segment();
-    QString rez;
+    String rez;
 
     for (const EngravingItem* e : *el()) {
         if (!score()->selectionFilter().canSelect(e)) {
             continue;
         }
-        rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
+        rez = String("%1 %2").arg(rez, e->screenReaderInfo());
     }
 
     for (const EngravingItem* e : seg->annotations()) {
@@ -1598,7 +1599,7 @@ QString BarLine::accessibleExtraInfo() const
             continue;
         }
         if (e->track() == track()) {
-            rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
+            rez = String("%1 %2").arg(rez, e->screenReaderInfo());
         }
     }
     Measure* m = seg->measure();
@@ -1610,12 +1611,12 @@ QString BarLine::accessibleExtraInfo() const
                 continue;
             }
             if (e->type() == ElementType::JUMP) {
-                rez= QString("%1 %2").arg(rez, e->screenReaderInfo());
+                rez= String("%1 %2").arg(rez, e->screenReaderInfo());
             }
             if (e->type() == ElementType::MARKER) {
                 const Marker* m1 = toMarker(e);
                 if (m1->markerType() == Marker::Type::FINE) {
-                    rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
+                    rez = String("%1 %2").arg(rez, e->screenReaderInfo());
                 }
             }
         }
@@ -1630,7 +1631,7 @@ QString BarLine::accessibleExtraInfo() const
                     if (toMarker(e)->markerType() == Marker::Type::FINE) {
                         continue;             //added above^
                     }
-                    rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
+                    rez = String("%1 %2").arg(rez, e->screenReaderInfo());
                 }
             }
         }
@@ -1646,10 +1647,10 @@ QString BarLine::accessibleExtraInfo() const
         }
         if (s->type() == ElementType::VOLTA) {
             if (s->tick() == tick) {
-                rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
+                rez = mtrc("engraving", "%1 Start of %2").arg(rez, s->screenReaderInfo());
             }
             if (s->tick2() == tick) {
-                rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
+                rez = mtrc("engraving", "%1 End of %2").arg(rez, s->screenReaderInfo());
             }
         }
     }
