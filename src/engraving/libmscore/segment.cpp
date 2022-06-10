@@ -22,6 +22,7 @@
 
 #include "segment.h"
 
+#include "translation.h"
 #include "rw/xml.h"
 
 #include "mscore.h"
@@ -2139,11 +2140,11 @@ EngravingItem* Segment::lastInPrevSegments(staff_idx_t activeStaff)
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString Segment::accessibleExtraInfo() const
+String Segment::accessibleExtraInfo() const
 {
-    QString rez = "";
+    String rez;
     if (!annotations().empty()) {
-        QString temp = "";
+        String temp;
         for (const EngravingItem* a : annotations()) {
             if (!score()->selectionFilter().canSelect(a)) {
                 continue;
@@ -2153,16 +2154,16 @@ QString Segment::accessibleExtraInfo() const
                 //they are added in the chordrest, because they are for only one staff
                 break;
             default:
-                temp = temp + " " + a->accessibleInfo();
+                temp = temp + u' ' + a->accessibleInfo();
             }
         }
         if (!temp.isEmpty()) {
-            rez = rez + QObject::tr("Annotations:") + temp;
+            rez = rez + mtrc("engraving", "Annotations:") + temp;
         }
     }
 
-    QString startSpanners = "";
-    QString endSpanners = "";
+    String startSpanners;
+    String endSpanners;
 
     auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), tick().ticks());
     for (auto interval : spanners) {
@@ -2183,7 +2184,7 @@ QString Segment::accessibleExtraInfo() const
         }
 
         if (s->tick() == tick()) {
-            startSpanners += QObject::tr("Start of %1").arg(s->accessibleInfo());
+            startSpanners += mtrc("engraving", "Start of %1").arg(s->accessibleInfo());
         }
 
         const Segment* seg = 0;
@@ -2198,10 +2199,10 @@ QString Segment::accessibleExtraInfo() const
         }
 
         if (seg && s->tick2() == seg->tick()) {
-            endSpanners += QObject::tr("End of %1").arg(s->accessibleInfo());
+            endSpanners += mtrc("engraving", "End of %1").arg(s->accessibleInfo());
         }
     }
-    return rez + " " + startSpanners + " " + endSpanners;
+    return rez + u' ' + startSpanners + u' ' + endSpanners;
 }
 
 //---------------------------------------------------------

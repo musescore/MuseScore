@@ -52,13 +52,13 @@ protected:
 
 static FontPaintDevice device;
 
-int QFontProvider::addApplicationFont(const QString& family, const QString& path)
+int QFontProvider::addApplicationFont(const String& family, const String& path)
 {
     m_paths[family] = path;
     return QFontDatabase::addApplicationFont(path);
 }
 
-void QFontProvider::insertSubstitution(const QString& familyName, const QString& substituteName)
+void QFontProvider::insertSubstitution(const String& familyName, const String& substituteName)
 {
     QFont::insertSubstitution(familyName, substituteName);
 }
@@ -88,7 +88,7 @@ qreal QFontProvider::descent(const Font& f) const
     return QFontMetricsF(f.toQFont(), &device).descent();
 }
 
-bool QFontProvider::inFont(const Font& f, QChar ch) const
+bool QFontProvider::inFont(const Font& f, Char ch) const
 {
     return QFontMetricsF(f.toQFont(), &device).inFont(ch);
 }
@@ -98,32 +98,32 @@ bool QFontProvider::inFontUcs4(const Font& f, uint ucs4) const
     return QFontMetricsF(f.toQFont(), &device).inFontUcs4(ucs4);
 }
 
-qreal QFontProvider::horizontalAdvance(const Font& f, const QString& string) const
+qreal QFontProvider::horizontalAdvance(const Font& f, const String& string) const
 {
     return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(string);
 }
 
-qreal QFontProvider::horizontalAdvance(const Font& f, const QChar& ch) const
+qreal QFontProvider::horizontalAdvance(const Font& f, const Char& ch) const
 {
     return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(ch);
 }
 
-RectF QFontProvider::boundingRect(const Font& f, const QString& string) const
+RectF QFontProvider::boundingRect(const Font& f, const String& string) const
 {
     return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(string));
 }
 
-RectF QFontProvider::boundingRect(const Font& f, const QChar& ch) const
+RectF QFontProvider::boundingRect(const Font& f, const Char& ch) const
 {
     return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(ch));
 }
 
-RectF QFontProvider::boundingRect(const Font& f, const RectF& r, int flags, const QString& string) const
+RectF QFontProvider::boundingRect(const Font& f, const RectF& r, int flags, const String& string) const
 {
     return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(r.toQRectF(), flags, string));
 }
 
-RectF QFontProvider::tightBoundingRect(const Font& f, const QString& string) const
+RectF QFontProvider::tightBoundingRect(const Font& f, const String& string) const
 {
     return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).tightBoundingRect(string));
 }

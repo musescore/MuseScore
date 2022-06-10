@@ -28,6 +28,7 @@
 
 #include "engraving/libmscore/system.h"
 
+#include "translation.h"
 #include "notationtypes.h"
 
 #include "ui/view/widgetstatestore.h"
@@ -47,18 +48,18 @@ SelectDialog::SelectDialog(QWidget* parent)
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     m_element = contextItem(globalContext()->currentNotation()->interaction());
-    type->setText(qtrc("elementName", m_element->typeUserName()));
+    type->setText(qtrc("notation", m_element->typeUserName()));
 
     switch (m_element->type()) {
     case ElementType::ACCIDENTAL:
-        subtype->setText(qApp->translate("accidental", m_element->subtypeName().toUtf8()));
+        subtype->setText(qtrc("notation", m_element->subtypeName()));
         break;
     case ElementType::SLUR_SEGMENT:
-        subtype->setText(qApp->translate("elementName", m_element->subtypeName().toUtf8()));
+        subtype->setText(qtrc("notation", m_element->subtypeName()));
         break;
     case ElementType::FINGERING:
     case ElementType::STAFF_TEXT:
-        subtype->setText(qApp->translate("TextStyle", m_element->subtypeName().toUtf8()));
+        subtype->setText(qtrc("notation", m_element->subtypeName()));
         break;
     case ElementType::ARTICULATION: { // comes translated, but from a different method
         const Articulation* artic = dynamic_cast<const Articulation*>(m_element);
@@ -67,7 +68,7 @@ SelectDialog::SelectDialog(QWidget* parent)
     }
     // other come translated or don't need any or are too difficult to implement
     default:
-        subtype->setText(m_element->subtypeName());
+        subtype->setText(m_element->subtypeName().toQString());
         break;
     }
     sameSubtype->setEnabled(m_element->subtype() != -1);

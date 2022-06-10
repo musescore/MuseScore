@@ -83,9 +83,9 @@ void Articulation::setSymId(SymId id)
 
 int Articulation::subtype() const
 {
-    QString s = SymNames::nameForSymId(_symId).toQLatin1String();
+    String s = String::fromAscii(SymNames::nameForSymId(_symId).ascii());
     if (s.endsWith("Below")) {
-        return int(SymNames::symIdByName(s.left(s.size() - 5) + "Above"));
+        return int(SymNames::symIdByName(s.left(s.size() - 5) + u"Above"));
     } else if (s.endsWith("Turned")) {
         return int(SymNames::symIdByName(s.left(s.size() - 6)));
     } else {
@@ -101,15 +101,15 @@ void Articulation::setUp(bool val)
 {
     _up = val;
     bool dup = _direction == DirectionV::AUTO ? val : _direction == DirectionV::UP;
-    QString s = SymNames::nameForSymId(_symId).toQLatin1String();
+    String s = String::fromAscii(SymNames::nameForSymId(_symId).ascii());
     if (s.endsWith(!dup ? "Above" : "Below")) {
-        QString s2 = s.left(s.size() - 5) + (dup ? "Above" : "Below");
+        String s2 = s.left(s.size() - 5) + (dup ? u"Above" : u"Below");
         _symId = SymNames::symIdByName(s2);
     } else if (s.endsWith("Turned")) {
-        QString s2 = dup ? s.left(s.size() - 6) : s;
+        String s2 = dup ? s.left(s.size() - 6) : s;
         _symId = SymNames::symIdByName(s2);
     } else if (!dup) {
-        QString s2 = s + "Turned";
+        String s2 = s + u"Turned";
         SymId sym = SymNames::symIdByName(s2);
         if (sym != SymId::noSym) {
             _symId = sym;
@@ -148,8 +148,8 @@ bool Articulation::readProperties(XmlReader& e)
             id = SymId::ornamentMordent;
         }
 
-        QString programVersion = masterScore()->mscoreVersion();
-        if (!programVersion.isEmpty() && programVersion < "3.6") {
+        String programVersion = masterScore()->mscoreVersion();
+        if (!programVersion.isEmpty() && programVersion < u"3.6") {
             if (id == SymId::noSym || s == "ornamentMordent") {   // SMuFL < 1.30 and MuseScore < 3.6
                 id = SymId::ornamentShortTrill;
             }

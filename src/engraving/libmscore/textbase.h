@@ -420,10 +420,10 @@ public:
     static QString escape(QString s);
 
     String accessibleInfo() const override;
-    QString screenReaderInfo() const override;
+    String screenReaderInfo() const override;
 
     int subtype() const override;
-    virtual QString subtypeName() const override;
+    String subtypeName() const override;
 
     std::list<TextFragment> fragmentList() const;   // for MusicXML formatted export
 

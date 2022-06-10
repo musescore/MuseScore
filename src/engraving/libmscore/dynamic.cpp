@@ -381,9 +381,9 @@ QString Dynamic::dynamicText(DynamicType t)
     return dynList[int(t)].text;
 }
 
-QString Dynamic::subtypeName() const
+String Dynamic::subtypeName() const
 {
-    return TConv::toXml(dynamicType()).ascii();
+    return String::fromAscii(TConv::toXml(dynamicType()).ascii());
 }
 
 //---------------------------------------------------------
@@ -587,15 +587,15 @@ String Dynamic::accessibleInfo() const
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString Dynamic::screenReaderInfo() const
+String Dynamic::screenReaderInfo() const
 {
-    QString s;
+    String s;
 
     if (dynamicType() == DynamicType::OTHER) {
         s = plainText().toQString().simplified();
     } else {
         s = TConv::toUserName(dynamicType());
     }
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), s);
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
 }

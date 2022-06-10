@@ -2101,9 +2101,9 @@ String Harmony::accessibleInfo() const
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString Harmony::screenReaderInfo() const
+String Harmony::screenReaderInfo() const
 {
-    return QString("%1 %2").arg(typeUserName(), generateScreenReaderInfo());
+    return String("%1 %2").arg(typeUserName(), generateScreenReaderInfo());
 }
 
 //---------------------------------------------------------
@@ -2289,7 +2289,7 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
     default:
         if (TextBase::setProperty(pid, v)) {
             if (pid == Pid::TEXT) {
-                setHarmony(v.toString());
+                setHarmony(v.value<String>());
             }
             render();
             break;

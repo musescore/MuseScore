@@ -613,9 +613,9 @@ Fraction Tremolo::tremoloLen() const
 //   subtypeName
 //---------------------------------------------------------
 
-QString Tremolo::subtypeName() const
+String Tremolo::subtypeName() const
 {
-    return qtrc("Tremolo", tremoloName[subtype()]);
+    return mtrc("engraving", tremoloName[subtype()]);
 }
 
 //---------------------------------------------------------

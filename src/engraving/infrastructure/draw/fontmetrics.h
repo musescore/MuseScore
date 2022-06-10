@@ -24,6 +24,7 @@
 
 #include "font.h"
 
+#include "types/string.h"
 #include "modularity/ioc.h"
 #include "ifontprovider.h"
 #include "geometry.h"
@@ -41,23 +42,24 @@ public:
     qreal ascent() const;
     qreal descent() const;
 
-    qreal width(const QString& string) const;
-    qreal width(const QChar& ch) const;
+    qreal width(const String& string) const;
+    qreal width(const Char& ch) const;
 
-    qreal horizontalAdvance(const QString& string) const;
-    qreal horizontalAdvance(const QChar& ch) const;
+    qreal horizontalAdvance(const String& string) const;
+    qreal horizontalAdvance(const Char& ch) const;
 
-    RectF boundingRect(const QString& string) const;
-    RectF boundingRect(const QChar& ch) const;
-    RectF boundingRect(const RectF& r, int flags, const QString& string) const;
-    RectF tightBoundingRect(const QString& string) const;
+    RectF boundingRect(const String& string) const;
+    RectF boundingRect(const Char& ch) const;
+    RectF boundingRect(const RectF& r, int flags, const String& string) const;
+    RectF tightBoundingRect(const String& string) const;
+    RectF tightBoundingRect(const Char& ch) const;
 
-    bool inFont(QChar ch) const;
+    bool inFont(Char ch) const;
     bool inFontUcs4(uint ucs4) const;
 
-    static qreal width(const Font& f, const QString& string);
-    static RectF boundingRect(const Font& f, const QString& string);
-    static RectF tightBoundingRect(const Font& f, const QString& string);
+    static qreal width(const Font& f, const String& string);
+    static RectF boundingRect(const Font& f, const String& string);
+    static RectF tightBoundingRect(const Font& f, const String& string);
     static qreal ascent(const Font& f);
 
 private:

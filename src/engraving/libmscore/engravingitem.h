@@ -165,13 +165,13 @@ public:
 
     int key                          { 0 };
     Qt::KeyboardModifiers modifiers  { /*0*/ };   // '0' initialized via default constructor, doing it here too results in compiler warning with Qt 5.15
-    QString s;
-    QString preeditString;
+    String s;
+    String preeditString;
 
     Qt::MouseButtons buttons         { Qt::NoButton };
 
     // drop data:
-    mu::PointF dragOffset;
+    PointF dragOffset;
     EngravingItem* element                 { 0 };
     EngravingItem* dropElement             { 0 };
 
@@ -254,7 +254,7 @@ public:
 
     EngravingItem& operator=(const EngravingItem&) = delete;
     //@ create a copy of the element
-    Q_INVOKABLE virtual EngravingItem* clone() const = 0;
+    virtual EngravingItem* clone() const = 0;
     virtual EngravingItem* linkedClone();
 
     void deleteLater();
@@ -468,10 +468,7 @@ public:
 
     // debug functions
     virtual void dump() const;
-    virtual Q_INVOKABLE QString subtypeName() const;
-    //@ Returns the human-readable name of the element type
-    //@ Returns the name of the element type
-    virtual Q_INVOKABLE QString _name() const { return QString(typeName()); }
+    virtual String subtypeName() const;
 
     virtual mu::draw::Color color() const;
     mu::draw::Color curColor() const;
@@ -574,10 +571,10 @@ public:
     qreal symHeight(SymId id) const;
     qreal symWidth(SymId id) const;
     qreal symWidth(const SymIdList&) const;
-    mu::RectF symBbox(SymId id) const;
-    mu::RectF symBbox(const SymIdList&) const;
+    RectF symBbox(SymId id) const;
+    RectF symBbox(const SymIdList&) const;
 
-    mu::PointF symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const;
+    PointF symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const;
 
     qreal symAdvance(SymId id) const;
     bool symIsValid(SymId id) const;
@@ -590,14 +587,15 @@ public:
 
     AccessibleItem* accessible() const;
     virtual String accessibleInfo() const;
-    virtual QString screenReaderInfo() const { return accessibleInfo(); }
+    virtual String screenReaderInfo() const { return accessibleInfo(); }
     //  if the screen-reader needs a special string (see note for example)
     // used to return info that will be appended to accessibleInfo
-    virtual QString accessibleExtraInfo() const { return QString(); }
+    virtual String accessibleExtraInfo() const { return String(); }
+    virtual String formatBarsAndBeats() const;
 
     virtual void triggerLayout() const;
     virtual void triggerLayoutAll() const;
-    virtual void drawEditMode(mu::draw::Painter* painter, EditData& editData, qreal currentViewScaling);
+    virtual void drawEditMode(draw::Painter* painter, EditData& editData, qreal currentViewScaling);
 
     void autoplaceSegmentElement(bool above, bool add);          // helper functions
     void autoplaceMeasureElement(bool above, bool add);
@@ -612,7 +610,6 @@ public:
     bool colorsInversionEnabled() const;
     void setColorsInverionEnabled(bool enabled);
 
-    virtual QString formatBarsAndBeats() const;
     std::pair<int, float> barbeat() const;
 
 private:

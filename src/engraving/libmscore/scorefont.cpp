@@ -128,13 +128,13 @@ void ScoreFont::initScoreFonts()
         }
     }
 
-    fontProvider()->insertSubstitution("Leland Text",    "Bravura Text");
-    fontProvider()->insertSubstitution("Bravura Text",   "Leland Text");
-    fontProvider()->insertSubstitution("MScore Text",    "Leland Text");
-    fontProvider()->insertSubstitution("Gootville Text", "Leland Text");
-    fontProvider()->insertSubstitution("MuseJazz Text",  "Leland Text");
-    fontProvider()->insertSubstitution("Petaluma Text",  "MuseJazz Text");
-    fontProvider()->insertSubstitution("ScoreFont",      "Leland Text"); // alias for current Musical Text Font
+    fontProvider()->insertSubstitution(u"Leland Text",    u"Bravura Text");
+    fontProvider()->insertSubstitution(u"Bravura Text",   u"Leland Text");
+    fontProvider()->insertSubstitution(u"MScore Text",    u"Leland Text");
+    fontProvider()->insertSubstitution(u"Gootville Text", u"Leland Text");
+    fontProvider()->insertSubstitution(u"MuseJazz Text",  u"Leland Text");
+    fontProvider()->insertSubstitution(u"Petaluma Text",  u"MuseJazz Text");
+    fontProvider()->insertSubstitution(u"ScoreFont",      u"Leland Text"); // alias for current Musical Text Font
 
     fallbackFont(); // load fallback font
 }

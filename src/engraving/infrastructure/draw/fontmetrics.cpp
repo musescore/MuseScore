@@ -54,47 +54,52 @@ qreal FontMetrics::descent() const
     return fontProvider()->descent(m_font);
 }
 
-qreal FontMetrics::width(const QString& string) const
+qreal FontMetrics::width(const String& string) const
 {
     return horizontalAdvance(string);
 }
 
-qreal FontMetrics::width(const QChar& ch) const
+qreal FontMetrics::width(const Char& ch) const
 {
     return horizontalAdvance(ch);
 }
 
-qreal FontMetrics::horizontalAdvance(const QString& string) const
+qreal FontMetrics::horizontalAdvance(const String& string) const
 {
     return fontProvider()->horizontalAdvance(m_font, string);
 }
 
-qreal FontMetrics::horizontalAdvance(const QChar& ch) const
+qreal FontMetrics::horizontalAdvance(const Char& ch) const
 {
     return fontProvider()->horizontalAdvance(m_font, ch);
 }
 
-RectF FontMetrics::boundingRect(const QString& string) const
+RectF FontMetrics::boundingRect(const String& string) const
 {
     return fontProvider()->boundingRect(m_font, string);
 }
 
-RectF FontMetrics::boundingRect(const QChar& ch) const
+RectF FontMetrics::boundingRect(const Char& ch) const
 {
     return fontProvider()->boundingRect(m_font, ch);
 }
 
-RectF FontMetrics::boundingRect(const RectF& r, int flags, const QString& string) const
+RectF FontMetrics::boundingRect(const RectF& r, int flags, const String& string) const
 {
     return fontProvider()->boundingRect(m_font, r, flags, string);
 }
 
-RectF FontMetrics::tightBoundingRect(const QString& string) const
+RectF FontMetrics::tightBoundingRect(const String& string) const
 {
     return fontProvider()->tightBoundingRect(m_font, string);
 }
 
-bool FontMetrics::inFont(QChar ch) const
+RectF FontMetrics::tightBoundingRect(const Char& ch) const
+{
+    return fontProvider()->tightBoundingRect(m_font, ch);
+}
+
+bool FontMetrics::inFont(Char ch) const
 {
     return fontProvider()->inFont(m_font, ch);
 }
@@ -106,17 +111,17 @@ bool FontMetrics::inFontUcs4(uint ucs4) const
 
 // Static
 
-qreal FontMetrics::width(const Font& f, const QString& string)
+qreal FontMetrics::width(const Font& f, const String& string)
 {
     return FontMetrics(f).width(string);
 }
 
-RectF FontMetrics::boundingRect(const Font& f, const QString& string)
+RectF FontMetrics::boundingRect(const Font& f, const String& string)
 {
     return FontMetrics(f).boundingRect(string);
 }
 
-RectF FontMetrics::tightBoundingRect(const Font& f, const QString& string)
+RectF FontMetrics::tightBoundingRect(const Font& f, const String& string)
 {
     return FontMetrics(f).tightBoundingRect(string);
 }

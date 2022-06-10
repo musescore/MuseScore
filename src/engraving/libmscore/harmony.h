@@ -224,7 +224,7 @@ public:
     String typeUserName() const override;
     String accessibleInfo() const override;
     QString generateScreenReaderInfo() const;
-    QString screenReaderInfo() const override;
+    String screenReaderInfo() const override;
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;

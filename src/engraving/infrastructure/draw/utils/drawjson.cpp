@@ -76,7 +76,7 @@ static void fromObj(const QJsonObject& obj, Brush& brush)
 static QJsonObject toObj(const Font& font)
 {
     QJsonObject obj;
-    obj["family"] = font.family();
+    obj["family"] = font.family().toQString();
     obj["pointSize"] = font.pointSizeF();
     obj["weight"] = font.weight();
     obj["italic"] = font.italic();

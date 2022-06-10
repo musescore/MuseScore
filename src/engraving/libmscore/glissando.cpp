@@ -707,7 +707,7 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
         setGlissandoType(GlissandoType(v.toInt()));
         break;
     case Pid::GLISS_TEXT:
-        setText(v.toString());
+        setText(v.value<String>());
         break;
     case Pid::GLISS_SHOW_TEXT:
         setShowText(v.toBool());
@@ -725,7 +725,7 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
         setPlayGlissando(v.toBool());
         break;
     case Pid::FONT_FACE:
-        setFontFace(v.toString());
+        setFontFace(v.value<String>());
         break;
     case Pid::FONT_SIZE:
         setFontSize(v.toReal());

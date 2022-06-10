@@ -858,12 +858,12 @@ String Rest::accessibleInfo() const
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString Rest::screenReaderInfo() const
+String Rest::screenReaderInfo() const
 {
     Measure* m = measure();
     bool voices = m ? m->hasVoices(staffIdx()) : false;
-    QString voice = voices ? QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1)) : "";
-    return QString("%1 %2 %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
+    String voice = voices ? mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1) : u"";
+    return String("%1 %2 %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
 }
 
 //---------------------------------------------------------

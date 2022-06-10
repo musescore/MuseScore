@@ -85,7 +85,7 @@ class Articulation final : public EngravingItem
 {
     SymId _symId;
     DirectionV _direction;
-    QString _channelName;
+    String _channelName;
 
     ArticulationAnchor _anchor;
 
@@ -156,8 +156,8 @@ public:
     bool playArticulation() const { return _playArticulation; }
     void setPlayArticulation(bool val) { _playArticulation = val; }
 
-    QString channelName() const { return _channelName; }
-    void setChannelName(const QString& s) { _channelName = s; }
+    String channelName() const { return _channelName; }
+    void setChannelName(const String& s) { _channelName = s; }
 
     String accessibleInfo() const override;
 

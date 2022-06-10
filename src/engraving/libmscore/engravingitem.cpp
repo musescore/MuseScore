@@ -305,9 +305,9 @@ qreal EngravingItem::magS() const
 //   name
 //---------------------------------------------------------
 
-QString EngravingItem::subtypeName() const
+String EngravingItem::subtypeName() const
 {
-    return "";
+    return String();
 }
 
 //---------------------------------------------------------
@@ -717,7 +717,7 @@ PointF EngravingItem::pagePos() const
         } else if (explicitParent()->isFretDiagram()) {
             return p + parentItem()->pagePos();
         } else {
-            ASSERT_X(QString::asprintf("this %s parent %s\n", typeName(), explicitParent()->typeName()));
+            ASSERT_X(String("this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
         }
         if (measure) {
             system = measure->system();
@@ -775,7 +775,7 @@ PointF EngravingItem::canvasPos() const
         } else if (explicitParent()->isFretDiagram()) {
             return p + parentItem()->canvasPos() + PointF(toFretDiagram(explicitParent())->centerX(), 0.0);
         } else {
-            ASSERT_X(QString::asprintf("this %s parent %s\n", typeName(), explicitParent()->typeName()));
+            ASSERT_X(String("this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
         }
         if (measure) {
             const StaffLines* lines = measure->staffLines(idx);
@@ -996,7 +996,7 @@ bool EngravingItem::readProperties(XmlReader& e)
                 const AsciiStringView ntag(e.name());
 
                 if (ntag == "score") {
-                    QString val(e.readText());
+                    String val(e.readText());
                     if (val == "same") {
                         linkedIsMaster = score()->isMaster();
                     }
@@ -1046,8 +1046,10 @@ bool EngravingItem::readProperties(XmlReader& e)
             for (EngravingObject* eee : *_links) {
                 EngravingItem* ee = static_cast<EngravingItem*>(eee);
                 if (ee->type() != type()) {
-                    ASSERT_X(QString::asprintf("link %s(%d) type mismatch %s linked to %s", ee->typeName(), id, ee->typeName(),
-                                               typeName()));
+                    ASSERT_X(String("link %1(%2) type mismatch %3 linked to %4")
+                             .arg(String::fromAscii(ee->typeName()))
+                             .arg(id)
+                             .arg(String::fromAscii(ee->typeName()), String::fromAscii(typeName())));
                 }
             }
         }
@@ -1064,7 +1066,7 @@ bool EngravingItem::readProperties(XmlReader& e)
     } else if (tag == "voice") {
         setVoice(e.readInt());
     } else if (tag == "tag") {
-        QString val(e.readText());
+        String val(e.readText());
         for (int i = 1; i < MAX_TAGS; i++) {
             if (score()->layerTags()[i] == val) {
                 _tag = 1 << i;
@@ -1352,7 +1354,7 @@ void EngravingItem::add(EngravingItem* e)
 
 void EngravingItem::remove(EngravingItem* e)
 {
-    ASSERT_X(QString::asprintf("EngravingItem: cannot remove %s from %s", e->typeName(), typeName()));
+    ASSERT_X(String("EngravingItem: cannot remove %1 from %2").arg(String::fromAscii(e->typeName()), String::fromAscii(typeName())));
 }
 
 //---------------------------------------------------------
@@ -1500,7 +1502,7 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
             return explicitParent()->setProperty(propertyId, v);
         }
 
-        LOG_PROP() << typeName() << " unknown <" << propertyName(propertyId) << ">(" << int(propertyId) << "), data: " << v.toString();
+        LOG_PROP() << typeName() << " unknown <" << propertyName(propertyId) << ">(" << int(propertyId) << "), data: " << v.value<String>();
         return false;
     }
     triggerLayout();
@@ -2125,7 +2127,7 @@ void EditData::addData(std::shared_ptr<ElementEditData> ed)
 //   drawEditMode
 //---------------------------------------------------------
 
-void EngravingItem::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal /*currentViewScaling*/)
+void EngravingItem::drawEditMode(draw::Painter* p, EditData& ed, qreal /*currentViewScaling*/)
 {
     using namespace mu::draw;
     Pen pen(engravingConfiguration()->defaultColor(), 0.0);
@@ -2779,16 +2781,16 @@ KerningType EngravingItem::computeKerningType(const EngravingItem* nextItem) con
     return doComputeKerningType(nextItem);
 }
 
-QString EngravingItem::formatBarsAndBeats() const
+String EngravingItem::formatBarsAndBeats() const
 {
-    QString result;
+    String result;
     std::pair<int, float> barbeat = this->barbeat();
 
     if (barbeat.first != 0) {
-        result = qtrc("engraving", "Measure: %1").arg(QString::number(barbeat.first));
+        result = mtrc("engraving", "Measure: %1").arg(barbeat.first);
 
-        if (!qFuzzyIsNull(barbeat.second)) {
-            result += qtrc("engraving", "; Beat: %1").arg(QString::number(barbeat.second));
+        if (!RealIsNull(barbeat.second)) {
+            result += mtrc("engraving", "; Beat: %1").arg(barbeat.second);
         }
     }
 
