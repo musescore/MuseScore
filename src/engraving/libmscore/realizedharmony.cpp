@@ -307,7 +307,7 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
     const ParsedChord* p = _harmony->parsedForm();
     QString quality = p->quality();
     int ext = p->extension().toInt();
-    const QStringList& modList = p->modifierList();
+    const StringList& modList = p->modifierList();
 
     int omit = 0;   //omit flags for which notes to omit (for notes that are altered
                     //or specified to be omitted as a modification) so that they
@@ -315,11 +315,12 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
     bool alt5 = false;   //altered 5
 
     //handle modifiers
-    for (QString s : modList) {
+    for (const String& _s : modList) {
+        QString s = _s.toQString();
         //find number, split up mods
         bool modded = false;
-        for (int c = 0; c < s.length(); ++c) {
-            if (s[c].isDigit()) {
+        for (int c = 0; c < s.size(); ++c) {
+            if (s.at(c).isDigit()) {
                 int alter = 0;
                 int cutoff = c;
                 int deg = s.rightRef(s.length() - c).toInt();

@@ -35,7 +35,7 @@ namespace mu::engraving {
 ActionIcon::ActionIcon(EngravingItem* score)
     : EngravingItem(ElementType::ACTION_ICON, score)
 {
-    m_iconFont = Font(QString::fromStdString(engravingConfiguration()->iconsFontFamily()));
+    m_iconFont = Font(engravingConfiguration()->iconsFontFamily());
     m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
 }
 
@@ -109,14 +109,14 @@ void ActionIcon::draw(Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     painter->setFont(m_iconFont);
-    painter->drawText(bbox(), Qt::AlignCenter, QChar(m_icon));
+    painter->drawText(bbox(), Qt::AlignCenter, Char(m_icon));
 }
 
 engraving::PropertyValue ActionIcon::getProperty(Pid pid) const
 {
     switch (pid) {
     case Pid::ACTION:
-        return QString::fromStdString(actionCode());
+        return String::fromStdString(actionCode());
     default:
         break;
     }

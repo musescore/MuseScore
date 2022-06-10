@@ -400,7 +400,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
         return Score::FileError::FILE_OPEN_ERROR;
     }
     score->style().set(Sid::chordsXmlFile, true);
-    score->chordList()->read("chords.xml");
+    score->chordList()->read(u"chords.xml");
     *(score->sigmap()) = bb.siglist();
 
     QList<BBTrack*>* tracks = bb.tracks();

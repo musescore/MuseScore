@@ -84,13 +84,12 @@ void Articulation::setSymId(SymId id)
 int Articulation::subtype() const
 {
     String s = String::fromAscii(SymNames::nameForSymId(_symId).ascii());
-    if (s.endsWith("Below")) {
+    if (s.endsWith(u"Below")) {
         return int(SymNames::symIdByName(s.left(s.size() - 5) + u"Above"));
-    } else if (s.endsWith("Turned")) {
+    } else if (s.endsWith(u"Turned")) {
         return int(SymNames::symIdByName(s.left(s.size() - 6)));
-    } else {
-        return int(_symId);
     }
+    return int(_symId);
 }
 
 //---------------------------------------------------------
@@ -102,10 +101,10 @@ void Articulation::setUp(bool val)
     _up = val;
     bool dup = _direction == DirectionV::AUTO ? val : _direction == DirectionV::UP;
     String s = String::fromAscii(SymNames::nameForSymId(_symId).ascii());
-    if (s.endsWith(!dup ? "Above" : "Below")) {
+    if (s.endsWith(!dup ? u"Above" : u"Below")) {
         String s2 = s.left(s.size() - 5) + (dup ? u"Above" : u"Below");
         _symId = SymNames::symIdByName(s2);
-    } else if (s.endsWith("Turned")) {
+    } else if (s.endsWith(u"Turned")) {
         String s2 = dup ? s.left(s.size() - 6) : s;
         _symId = SymNames::symIdByName(s2);
     } else if (!dup) {

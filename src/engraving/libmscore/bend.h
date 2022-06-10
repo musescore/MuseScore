@@ -47,7 +47,7 @@ enum class BendType {
 
 class Bend final : public EngravingItem
 {
-    M_PROPERTY(QString,    fontFace,  setFontFace)
+    M_PROPERTY(String,     fontFace,  setFontFace)
     M_PROPERTY(qreal,      fontSize,  setFontSize)
     M_PROPERTY(FontStyle,  fontStyle, setFontStyle)
     M_PROPERTY(Millimetre, lineWidth, setLineWidth)

@@ -183,15 +183,15 @@ std::vector<EngravingItem*> BspTree::items(const PointF& pos)
 //   debug
 //---------------------------------------------------------
 
-QString BspTree::debug(int index) const
+String BspTree::debug(int index) const
 {
     const Node* node = &nodes.at(index);
 
-    QString tmp;
+    String tmp;
     if (node->type == Node::Type::LEAF) {
         RectF rec = rectForIndex(index);
         if (!leaves[node->leafIndex].empty()) {
-            tmp += QString::fromLatin1("[%1, %2, %3, %4] contains %5 items\n")
+            tmp += String(u"[%1, %2, %3, %4] contains %5 items\n")
                    .arg(rec.left()).arg(rec.top())
                    .arg(rec.width()).arg(rec.height())
                    .arg(leaves[node->leafIndex].size());

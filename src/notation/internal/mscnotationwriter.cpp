@@ -23,6 +23,7 @@
 #include "mscnotationwriter.h"
 
 #include "io/buffer.h"
+#include "io/file.h"
 #include "engraving/engravingproject.h"
 
 #include "log.h"
@@ -69,8 +70,8 @@ mu::Ret MscNotationWriter::write(INotationPtr notation, io::Device& destinationD
     params.filePath = destinationDevice.property("path").toString();
     if (m_mode != MscIoMode::Dir) {
         params.device = &buf;
-    } else if (QFile::exists(params.filePath)) {
-        QFile::remove(params.filePath);
+    } else if (File::exists(params.filePath)) {
+        File::remove(params.filePath);
     }
 
     MscWriter msczWriter(params);

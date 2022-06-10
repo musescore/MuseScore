@@ -46,7 +46,7 @@ Val::Val(int val)
     : m_val(val), m_type(Type::Int) {}
 
 Val::Val(const io::path_t& path)
-    : m_val(path.toQString()), m_type(Type::String) {}
+    : m_val(path.toString()), m_type(Type::String) {}
 
 #ifndef NO_QT_SUPPORT
 Val::Val(QColor color)

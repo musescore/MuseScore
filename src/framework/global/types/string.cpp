@@ -90,22 +90,22 @@ static void trim_helper(std::u16string& s)
 // ============================
 char Char::toAscii(char16_t c, bool* ok)
 {
-    if (c > 0xff) {
-        if (ok) {
-            *ok = false;
-        }
-        return '?';
-    } else {
+    if (isAscii(c)) {
         if (ok) {
             *ok = true;
         }
         return static_cast<char>(c);
+    } else {
+        if (ok) {
+            *ok = false;
+        }
+        return '?';
     }
 }
 
-char16_t Char::fromAscii(char c)
+bool Char::isAscii() const
 {
-    return static_cast<char16_t>(c);
+    return isAscii(m_ch);
 }
 
 char Char::toAscii(bool* ok) const
@@ -113,9 +113,44 @@ char Char::toAscii(bool* ok) const
     return toAscii(m_ch, ok);
 }
 
+bool Char::isDigit() const
+{
+    return isDigit(m_ch);
+}
+
 bool Char::isDigit(char16_t c)
 {
     return c >= u'0' && c <= u'9';
+}
+
+Char Char::toLower() const
+{
+    return toLower(m_ch);
+}
+
+char16_t Char::toLower(char16_t ch)
+{
+    static std::locale loc("C");
+    if (!isAscii(ch)) {
+        LOGW() << "toLower for not ASCII not implemented";
+        return ch;
+    }
+    return std::tolower(static_cast<char>(ch), loc);
+}
+
+Char Char::toUpper() const
+{
+    return toUpper(m_ch);
+}
+
+char16_t Char::toUpper(char16_t ch)
+{
+    static std::locale loc("C");
+    if (!isAscii(ch)) {
+        LOGW() << "toUpper for not ASCII not implemented";
+        return ch;
+    }
+    return std::toupper(static_cast<char>(ch), loc);
 }
 
 // ============================
@@ -336,19 +371,24 @@ bool String::contains(const Char& ch) const
     return constStr().find(ch.unicode()) != std::u16string::npos;
 }
 
-bool String::startsWith(const AsciiStringView& str, CaseSensitivity cs) const
+bool String::contains(const String& ch) const
+{
+    return constStr().find(ch.constStr()) != std::u16string::npos;
+}
+
+bool String::startsWith(const String& str, CaseSensitivity cs) const
 {
     if (str.size() > size()) {
         return false;
     }
 
     for (size_t i = 0; i < str.size(); ++i) {
-        if (Char(m_data->at(i)).toAscii() == str.at(i).ascii()) {
+        if (Char(m_data->at(i)) == str.at(i)) {
             continue;
         }
 
         if (cs == CaseInsensitive) {
-            if (AsciiChar::toLower(Char(m_data->at(i)).toAscii()) == AsciiChar::toLower(str.at(i).ascii())) {
+            if (Char::toLower(m_data->at(i)) == Char::toLower(str.m_data->at(i))) {
                 continue;
             }
         }
@@ -359,7 +399,26 @@ bool String::startsWith(const AsciiStringView& str, CaseSensitivity cs) const
     return true;
 }
 
-bool String::endsWith(const AsciiStringView& str, CaseSensitivity cs) const
+bool String::startsWith(char16_t ch, CaseSensitivity cs) const
+{
+    if (empty()) {
+        return false;
+    }
+
+    if (constStr().front() == ch) {
+        return true;
+    }
+
+    if (cs == CaseInsensitive) {
+        if (Char::toLower(constStr().front()) == Char::toLower(ch)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool String::endsWith(const String& str, CaseSensitivity cs) const
 {
     if (str.size() > size()) {
         return false;
@@ -367,12 +426,12 @@ bool String::endsWith(const AsciiStringView& str, CaseSensitivity cs) const
 
     size_t start = size() - str.size();
     for (size_t i = 0; i < str.size(); ++i) {
-        if (Char(m_data->at(start + i)).toAscii() == str.at(i).ascii()) {
+        if (m_data->at(start + i) == str.at(i)) {
             continue;
         }
 
         if (cs == CaseInsensitive) {
-            if (AsciiChar::toLower(Char(m_data->at(start + i)).toAscii()) == AsciiChar::toLower(str.at(i).ascii())) {
+            if (Char::toLower(m_data->at(start + i)) == Char::toLower(str.m_data->at(i))) {
                 continue;
             }
         }
@@ -383,19 +442,46 @@ bool String::endsWith(const AsciiStringView& str, CaseSensitivity cs) const
     return true;
 }
 
-StringList String::split(const Char& ch) const
+bool String::endsWith(char16_t ch, CaseSensitivity cs) const
+{
+    if (empty()) {
+        return false;
+    }
+
+    if (constStr().back() == ch) {
+        return true;
+    }
+
+    if (cs == CaseInsensitive) {
+        if (Char::toLower(constStr().back()) == Char::toLower(ch)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+StringList String::split(const Char& ch, SplitBehavior behavior) const
 {
     StringList out;
     std::size_t current, previous = 0;
     current = constStr().find(ch.unicode());
     while (current != std::string::npos) {
         String sub = mid(previous, current - previous);
-        out.push_back(std::move(sub));
+        if (behavior == SplitBehavior::SkipEmptyParts && sub.empty()) {
+            // skip
+        } else {
+            out.push_back(std::move(sub));
+        }
         previous = current + 1;
         current = constStr().find(ch.unicode(), previous);
     }
     String sub = mid(previous, current - previous);
-    out.push_back(std::move(sub));
+    if (behavior == SplitBehavior::SkipEmptyParts && sub.empty()) {
+        // skip
+    } else {
+        out.push_back(std::move(sub));
+    }
 
     return out;
 }
@@ -557,6 +643,22 @@ String String::toXmlEscaped() const
     return toXmlEscaped(*this);
 }
 
+String String::toLower() const
+{
+    String copy(*this);
+    std::u16string& str = *copy.m_data.get();
+    std::transform(str.begin(), str.end(), str.begin(), [](char16_t c){ return Char::toLower(c); });
+    return copy;
+}
+
+String String::toUpper() const
+{
+    String copy(*this);
+    std::u16string& str = *copy.m_data.get();
+    std::transform(str.begin(), str.end(), str.begin(), [](char16_t c){ return Char::toUpper(c); });
+    return copy;
+}
+
 int String::toInt(bool* ok, int base) const
 {
     ByteArray ba = toUtf8();
@@ -588,7 +690,56 @@ double String::toDouble(bool* ok) const
 }
 
 // ============================
-// AsciiStringView
+// StringList
+// ============================
+
+StringList StringList::filter(const String& str) const
+{
+    StringList result;
+    for (const String& s : *this) {
+        if (s.contains(str)) {
+            result << s;
+        }
+    }
+    return result;
+}
+
+String StringList::join(const String& sep) const
+{
+    QString res;
+    for (size_t i = 0; i < size(); ++i) {
+        if (i) {
+            res += sep;
+        }
+        res += at(i);
+    }
+    return res;
+}
+
+void StringList::insert(size_t idx, const String& str)
+{
+    std::vector<String>::insert(begin() + idx, str);
+}
+
+void StringList::replace(size_t idx, const String& str)
+{
+    this->operator [](idx) = str;
+}
+
+bool StringList::removeAll(const String& str)
+{
+    size_t origSize = size();
+    erase(std::remove(begin(), end(), str), end());
+    return origSize != size();
+}
+
+void StringList::removeAt(size_t i)
+{
+    erase(begin() + i);
+}
+
+// ============================
+// AsciiChar
 // ============================
 
 char AsciiChar::toLower(char ch)

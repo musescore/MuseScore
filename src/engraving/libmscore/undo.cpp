@@ -1864,7 +1864,7 @@ void ChangeStyleVal::flip(EditData*)
             qreal madjust = score->styleD(Sid::chordModifierAdjust);
             score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
             if (score->styleB(Sid::chordsXmlFile)) {
-                score->chordList()->read("chords.xml");
+                score->chordList()->read(u"chords.xml");
             }
             score->chordList()->read(score->styleSt(Sid::chordDescriptionFile));
             score->chordList()->setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");

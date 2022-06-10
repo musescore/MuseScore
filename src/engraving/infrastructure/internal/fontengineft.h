@@ -22,8 +22,7 @@
 #ifndef MU_DRAW_FONTENGINEFT_H
 #define MU_DRAW_FONTENGINEFT_H
 
-#include <QString>
-#include <QByteArray>
+#include "io/path.h"
 
 namespace mu::draw {
 struct FTData;
@@ -34,7 +33,7 @@ public:
     FontEngineFT();
     ~FontEngineFT();
 
-    bool load(const QString& path);
+    bool load(const io::path_t& path);
 
     QRectF bbox(uint ucs4, qreal DPI_F) const;
     qreal advance(uint ucs4, qreal DPI_F) const;

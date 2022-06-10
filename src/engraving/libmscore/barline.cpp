@@ -268,14 +268,14 @@ const std::vector<BarLineTableItem> BarLine::barLineTable {
 //   userTypeName
 //---------------------------------------------------------
 
-QString BarLine::userTypeName(BarLineType t)
+String BarLine::userTypeName(BarLineType t)
 {
     for (const auto& i : barLineTable) {
         if (i.type == t) {
-            return qtrc("symUserNames", i.userName);
+            return mtrc("symUserNames", i.userName);
         }
     }
-    return QString();
+    return String();
 }
 
 //---------------------------------------------------------
@@ -731,13 +731,13 @@ void BarLine::draw(Painter* painter) const
         Measure* m = s->measure();
         if (m->isIrregular() && score()->markIrregularMeasures() && !m->isMMRest()) {
             painter->setPen(engravingConfiguration()->formattingMarksColor());
-mu:         draw::Font f(u"Edwin");
+            draw::Font f(u"Edwin");
             f.setPointSizeF(12 * spatium() * MScore::pixelRatio / SPATIUM20);
             f.setBold(true);
-            QString str = m->ticks() > m->timesig() ? "+" : "-";
-            RectF r = FontMetrics(f).boundingRect(str);
+            Char ch = m->ticks() > m->timesig() ? u'+' : u'-';
+            RectF r = FontMetrics(f).boundingRect(ch);
             painter->setFont(f);
-            painter->drawText(-r.width(), 0.0, str);
+            painter->drawText(-r.width(), 0.0, ch);
         }
     }
 }

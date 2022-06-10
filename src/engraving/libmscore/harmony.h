@@ -202,11 +202,11 @@ public:
 
     const QString& extensionName() const;
 
-    QString xmlKind() const;
-    QString musicXmlText() const;
-    QString xmlSymbols() const;
-    QString xmlParens() const;
-    QStringList xmlDegrees() const;
+    String xmlKind() const;
+    String musicXmlText() const;
+    String xmlSymbols() const;
+    String xmlParens() const;
+    StringList xmlDegrees() const;
 
     void resolveDegreeList();
 
