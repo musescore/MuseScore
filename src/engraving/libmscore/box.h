@@ -98,7 +98,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-    QString accessibleExtraInfo() const override;
+    String accessibleExtraInfo() const override;
 
     // TODO: add a grip for moving the entire box
     bool needStartEditingAfterSelecting() const override { return true; }

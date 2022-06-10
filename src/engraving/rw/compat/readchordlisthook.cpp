@@ -34,7 +34,7 @@ ReadChordListHook::ReadChordListHook(Score* score)
     : m_score(score)
 {
     if (m_score) {
-        m_oldChordDescriptionFile = m_score->style().value(Sid::chordDescriptionFile).toString();
+        m_oldChordDescriptionFile = m_score->style().styleSt(Sid::chordDescriptionFile);
     }
 }
 
@@ -64,9 +64,9 @@ void ReadChordListHook::validate()
     MStyle& style = m_score->style();
     ChordList* chordList = m_score->chordList();
 
-    QString newChordDescriptionFile = style.value(Sid::chordDescriptionFile).toString();
+    QString newChordDescriptionFile = style.styleSt(Sid::chordDescriptionFile);
     if (newChordDescriptionFile != m_oldChordDescriptionFile && !m_chordListTag) {
-        if (!newChordDescriptionFile.startsWith("chords_") && style.value(Sid::chordStyle).toString() == "std") {
+        if (!newChordDescriptionFile.startsWith("chords_") && style.styleSt(Sid::chordStyle) == "std") {
             // should not normally happen,
             // but treat as "old" (114) score just in case
             style.set(Sid::chordStyle, QString("custom"));
@@ -74,7 +74,7 @@ void ReadChordListHook::validate()
             LOGD("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
         }
 
-        bool custom = style.value(Sid::chordStyle).toString() == "custom";
+        bool custom = style.styleSt(Sid::chordStyle) == "custom";
         chordList->setCustomChordList(custom);
 
         chordList->unload();

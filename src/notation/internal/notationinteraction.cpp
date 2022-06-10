@@ -2634,7 +2634,7 @@ void NotationInteraction::editText(QInputMethodEvent* event)
 
     mu::engraving::TextBase* text = mu::engraving::toTextBase(m_editData.element);
     mu::engraving::TextCursor* cursor = text->cursor();
-    QString& preeditString = m_editData.preeditString;
+    String& preeditString = m_editData.preeditString;
 
     // remove preedit string
     int n = preeditString.size();

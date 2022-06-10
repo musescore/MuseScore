@@ -1828,7 +1828,7 @@ void ChangeStyle::flip(EditData*)
         score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool());
     }
     if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
-        score->setScoreFont(ScoreFont::fontByName(style.value(Sid::MusicalSymbolFont).toString()));
+        score->setScoreFont(ScoreFont::fontByName(style.styleSt(Sid::MusicalSymbolFont)));
     }
 
     score->setStyle(style, overlap);

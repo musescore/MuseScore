@@ -200,7 +200,7 @@ public:
     EngravingItem* lastElementBeforeSegment();
     virtual EngravingItem* nextSegmentElement() override;
     virtual EngravingItem* prevSegmentElement() override;
-    virtual QString accessibleExtraInfo() const override;
+    virtual String accessibleExtraInfo() const override;
     virtual Shape shape() const override;
     virtual void computeUp() { _usesAutoUp = false; _up = true; }
 

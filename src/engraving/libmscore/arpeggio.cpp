@@ -68,9 +68,9 @@ Arpeggio::Arpeggio(Chord* parent)
     _stretch = 1.0;
 }
 
-QString Arpeggio::arpeggioTypeName() const
+String Arpeggio::arpeggioTypeName() const
 {
-    return qtrc("Palette", arpeggioTypeNames[int(_arpeggioType)]);
+    return mtrc("engraving", arpeggioTypeNames[int(_arpeggioType)]);
 }
 
 //---------------------------------------------------------

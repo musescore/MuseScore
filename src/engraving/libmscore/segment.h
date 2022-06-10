@@ -223,7 +223,7 @@ public:
     bool operator<(const Segment&) const;
     bool operator>(const Segment&) const;
 
-    virtual QString accessibleExtraInfo() const override;
+    String accessibleExtraInfo() const override;
 
     EngravingItem* firstInNextSegments(staff_idx_t activeStaff);   //<
     EngravingItem* lastInPrevSegments(staff_idx_t activeStaff);     //<

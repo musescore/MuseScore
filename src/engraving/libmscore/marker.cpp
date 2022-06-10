@@ -275,7 +275,7 @@ bool Marker::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LABEL:
-        setLabel(v.toString());
+        setLabel(v.value<String>());
         break;
     case Pid::MARKER_TYPE:
         setMarkerType(Type(v.toInt()));
