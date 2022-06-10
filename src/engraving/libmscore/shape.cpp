@@ -174,8 +174,8 @@ qreal Shape::minVerticalDistance(const Shape& a) const
 qreal Shape::left() const
 {
     qreal dist = 0.0;
-    for (const RectF& r : *this) {
-        if (r.height() != 0.0 && r.left() < dist) {
+    for (const ShapeElement& r : *this) {
+        if (r.height() != 0.0 && !(r.toItem && r.toItem->isTextBase()) && r.left() < dist) {
             // if (r.left() < dist)
             dist = r.left();
         }

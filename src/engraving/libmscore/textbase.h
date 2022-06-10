@@ -317,6 +317,8 @@ class TextBase : public EngravingItem
     void notifyAboutTextInserted(int startPosition, int endPosition, const QString& text);
     void notifyAboutTextRemoved(int startPosition, int endPosition, const QString& text);
 
+    virtual bool alwaysKernable() const override { return true; }
+
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);
