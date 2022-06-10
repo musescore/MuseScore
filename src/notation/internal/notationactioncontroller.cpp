@@ -852,7 +852,8 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         return;
     }
 
-    EngravingItem* selectedElement = interaction->selection()->element();
+    const EngravingItem* selectedElement = interaction->selection()->element();
+    bool playChord = false;
 
     switch (direction) {
     case MoveDirection::Up:
@@ -864,6 +865,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         } else if (interaction->noteInput()->isNoteInputMode()
                    && interaction->noteInput()->state().staffGroup == mu::engraving::StaffGroup::TAB) {
             interaction->moveSelection(direction, MoveSelectionType::String);
+            return;
         } else {
             interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC);
         }
@@ -879,12 +881,14 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->nudge(direction, quickly);
         } else {
             interaction->moveSelection(direction, quickly ? MoveSelectionType::Measure : MoveSelectionType::Chord);
+            playChord = true;
         }
         break;
     case MoveDirection::Undefined:
         break;
     }
-    playSelectedElement(false);
+
+    playSelectedElement(playChord);
 }
 
 void NotationActionController::moveWithinChord(MoveDirection direction)
