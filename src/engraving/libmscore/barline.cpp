@@ -731,7 +731,7 @@ void BarLine::draw(Painter* painter) const
         Measure* m = s->measure();
         if (m->isIrregular() && score()->markIrregularMeasures() && !m->isMMRest()) {
             painter->setPen(engravingConfiguration()->formattingMarksColor());
-mu:         draw::Font f(u"Edwin");
+            draw::Font f(u"Edwin");
             f.setPointSizeF(12 * spatium() * MScore::pixelRatio / SPATIUM20);
             f.setBold(true);
             QString str = m->ticks() > m->timesig() ? "+" : "-";
