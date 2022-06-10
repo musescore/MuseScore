@@ -5074,6 +5074,8 @@ void Score::undoRemoveStaff(Staff* staff)
         }
     }
 
+    staff->undoUnlink();
+
     undo(new RemoveStaff(staff));
 }
 
