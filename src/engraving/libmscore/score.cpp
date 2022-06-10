@@ -2666,7 +2666,6 @@ void Score::removeStaff(Staff* staff)
 
     mu::remove(_staves, staff);
     staff->part()->removeStaff(staff);
-    staff->unlink();
 }
 
 //---------------------------------------------------------
