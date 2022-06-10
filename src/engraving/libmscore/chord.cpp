@@ -3730,28 +3730,23 @@ void Chord::layoutArticulations()
         a->layout();                 // must be done after assigning direction, or else symId is not reliable
 
         bool headSide = bottom == up();
-        double x = centerX();
-        double y = 0.0;
-        const double halfBeamSp = score()->styleS(Sid::beamWidth).val() * score()->spatium() * 0.5;
+        qreal x = centerX();
+        qreal y = 0.0;
         if (bottom) {
             if (!headSide && stem()) {
                 auto userLen = stem()->userLength();
                 if (_up) {
                     y = downPos() - stem()->length() - userLen;
-                    if (beam()) {
-                        y -= halfBeamSp * beam()->mag();
-                    }
                 } else {
                     y = upPos() + stem()->length() - userLen;
-                    if (beam()) {
-                        y += halfBeamSp * beam()->mag();
-                    }
                 }
-                int line   = lrint((y + 0.5 * _spStaff) / _spStaff);
+                int line   = lrint((y + 0.49 * _spStaff) / _spStaff);
+                // hack: using 0.49 instead of 0.5 otherwise the result can be unpredictably
+                // rounded to upper or lower integer depending on rounding errors
                 if (line < staffType->lines()) {        // align between staff lines
                     y = line * _spStaff + _spatium * .5;
                 } else {
-                    y += _spatium;
+                    y += score()->styleMM(Sid::propertyDistanceStem) + 0.5 * a->height();
                 }
                 if (a->isStaccato() && articulations().size() == 1) {
                     if (_up) {
@@ -3779,20 +3774,16 @@ void Chord::layoutArticulations()
                 auto userLen = stem()->userLength();
                 if (_up) {
                     y = downPos() - stem()->length() + userLen;
-                    if (beam()) {
-                        y -= halfBeamSp * beam()->mag();
-                    }
                 } else {
                     y = upPos() + stem()->length() + userLen;
-                    if (beam()) {
-                        y += halfBeamSp * beam()->mag();
-                    }
                 }
-                int line   = lrint((y - 0.5 * _spStaff) / _spStaff);
+                int line   = lrint((y - 0.49 * _spStaff) / _spStaff);
+                // hack: using 0.49 instead of 0.5 otherwise the result can be unpredictably
+                // rounded to upper or lower integer depending on rounding errors
                 if (line >= 0) {        // align between staff lines
                     y = line * _spStaff - _spatium * .5;
                 } else {
-                    y -= _spatium;
+                    y -= score()->styleMM(Sid::propertyDistanceStem) + 0.5 * a->height();
                 }
                 if (a->isStaccato() && articulations().size() == 1) {
                     if (_up) {
