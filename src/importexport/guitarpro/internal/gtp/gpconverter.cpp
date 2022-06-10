@@ -120,6 +120,23 @@ static QString harmonicText(const GPNote::Harmonic::Type& type)
     return QString();
 }
 
+static OttavaType ottavaType(GPBeat::OttavaType t)
+{
+    static QMap<GPBeat::OttavaType, mu::engraving::OttavaType> types {
+        { GPBeat::OttavaType::va8,  OttavaType::OTTAVA_8VA },
+        { GPBeat::OttavaType::vb8,  OttavaType::OTTAVA_8VB },
+        { GPBeat::OttavaType::ma15, OttavaType::OTTAVA_15MA },
+        { GPBeat::OttavaType::mb15, OttavaType::OTTAVA_15MB }
+    };
+
+    if (types.contains(t)) {
+        return types[t];
+    }
+
+    LOGE() << "wrong ottava type";
+    return OttavaType::OTTAVA_8VA; /// there is no type "NONE"
+}
+
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     : _score(score), _gpDom(std::move(gpDom))
 {
@@ -228,10 +245,12 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
     }
 
     // adding end tick of ottava if the score ends with it
-    if (_lastOttava) {
-        _lastOttava->setTick2(_score->endTick());
-        _score->addElement(_lastOttava);
-        _lastOttava = nullptr;
+    for (auto& ottava : m_lastOttavas) {
+        if (ottava) {
+            ottava->setTick2(_score->endTick());
+            _score->addElement(ottava);
+            ottava = nullptr;
+        }
     }
 
     // fixing last measure barline
@@ -794,6 +813,8 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
 
 void GPConverter::setUpTracks(const std::map<int, std::unique_ptr<GPTrack> >& tracks)
 {
+    m_lastOttavas.resize(tracks.size());
+
     for (const auto& track : tracks) {
         setUpTrack(track.second);
     }
@@ -1885,48 +1906,29 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
 {
-    auto convertOttava = [](GPBeat::OttavaType t) {
-        switch (t) {
-        case GPBeat::OttavaType::va8: {
-            return mu::engraving::OttavaType::OTTAVA_8VA;
-        }
-        case GPBeat::OttavaType::vb8: {
-            return mu::engraving::OttavaType::OTTAVA_8VB;
-        }
-        case GPBeat::OttavaType::ma15: {
-            return mu::engraving::OttavaType::OTTAVA_15MA;
-        }
-        case GPBeat::OttavaType::mb15: {
-            return mu::engraving::OttavaType::OTTAVA_15MB;
-        }
-        case GPBeat::OttavaType::None:
-            break;
-        }
-        LOGE() << "wrong ottava type";
-        return mu::engraving::OttavaType::OTTAVA_8VA;
-    };
+    auto& ot = m_lastOttavas[cr->track() / VOICES];
 
     if (gpb->ottavaType() == GPBeat::OttavaType::None) {
-        if (_lastOttava) {
-            _lastOttava->setTick2(cr->segment()->tick());
-            _score->addElement(_lastOttava);
+        if (ot) {
+            ot->setTick2(cr->segment()->tick());
+            _score->addElement(ot);
         }
-        _lastOttava = nullptr;
+        ot = nullptr;
         return;
     }
 
-    auto newOttavaType = convertOttava(gpb->ottavaType());
+    auto newOttavaType = ottavaType(gpb->ottavaType());
 
-    if (!_lastOttava || newOttavaType != _lastOttava->ottavaType()) {
+    if (!ot || newOttavaType != ot->ottavaType()) {
         Ottava* ottava = Factory::createOttava(_score->dummy());
         ottava->setTrack(cr->track());
         ottava->setTick(cr->segment()->tick());
         ottava->setOttavaType(newOttavaType);
-        if (_lastOttava) {
-            _lastOttava->setTick2(cr->segment()->tick());
-            _score->addElement(_lastOttava);
+        if (ot) {
+            ot->setTick2(cr->segment()->tick());
+            _score->addElement(ot);
         }
-        _lastOttava = ottava;
+        ot = ottava;
     }
 
     if (!cr->isChord()) {
@@ -1934,7 +1936,7 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
     }
 
     const Chord* chord = toChord(cr);
-    mu::engraving::OttavaType type = _lastOttava->ottavaType();
+    mu::engraving::OttavaType type = ot->ottavaType();
 
     for (mu::engraving::Note* note : chord->notes()) {
         int pitch = note->pitch();
