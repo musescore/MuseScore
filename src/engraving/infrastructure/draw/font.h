@@ -22,7 +22,7 @@
 #ifndef MU_DRAW_FONT_H
 #define MU_DRAW_FONT_H
 
-#include <QString>
+#include "types/string.h"
 
 #ifndef NO_QT_SUPPORT
 #include <QFont>
@@ -32,7 +32,7 @@ namespace mu::draw {
 class Font
 {
 public:
-    Font(const QString& family = QString());
+    Font(const String& family = String());
 
     enum class Style {
         //Undefined   = -1,
@@ -62,8 +62,8 @@ public:
         Black    = 87    // 900
     };
 
-    void setFamily(const QString& family);
-    QString family() const;
+    void setFamily(const String& family);
+    String family() const;
 
     qreal pointSizeF() const;
     void setPointSizeF(qreal s);
@@ -96,7 +96,7 @@ public:
 
 private:
 
-    QString m_family;
+    String m_family;
     qreal m_pointSizeF = -1.0;
     Weight m_weight = Weight::Normal;
     QFlags<Style> m_style{ Style::Normal };

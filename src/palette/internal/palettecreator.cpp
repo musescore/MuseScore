@@ -530,7 +530,7 @@ PalettePtr PaletteCreator::newTremoloPalette()
     for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
         auto tremolo = Factory::makeTremolo(gpaletteScore->dummy()->chord());
         tremolo->setTremoloType(TremoloType(i));
-        sp->appendElement(tremolo, tremolo->subtypeName());
+        sp->appendElement(tremolo, tremolo->subtypeName().toQString());
     }
     return sp;
 }

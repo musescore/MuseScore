@@ -1556,7 +1556,7 @@ void EditStyle::setValues()
             }
         } break;
         case P_TYPE::STRING: {
-            QString value = val.toString();
+            QString value = val.value<String>();
             if (qobject_cast<QFontComboBox*>(sw.widget)) {
                 static_cast<QFontComboBox*>(sw.widget)->setCurrentFont(QFont(value));
             } else if (qobject_cast<QComboBox*>(sw.widget)) {
@@ -1605,8 +1605,8 @@ void EditStyle::setValues()
 
     //TODO: convert the rest:
 
-    QByteArray ba = styleValue(StyleId::swingUnit).toString().toLatin1();
-    mu::engraving::DurationType unit = TConv::fromXml(ba.constData(), mu::engraving::DurationType::V_INVALID);
+    ByteArray ba = styleValue(StyleId::swingUnit).value<String>().toAscii();
+    mu::engraving::DurationType unit = TConv::fromXml(ba.constChar(), mu::engraving::DurationType::V_INVALID);
 
     if (unit == mu::engraving::DurationType::V_EIGHTH) {
         swingEighth->setChecked(true);
@@ -1618,9 +1618,9 @@ void EditStyle::setValues()
         swingOff->setChecked(true);
         swingBox->setEnabled(false);
     }
-    QString s(styleValue(StyleId::chordDescriptionFile).toString());
+    QString s(styleValue(StyleId::chordDescriptionFile).value<String>());
     chordDescriptionFile->setText(s);
-    QString cstyle(styleValue(StyleId::chordStyle).toString());
+    QString cstyle(styleValue(StyleId::chordStyle).value<String>());
     if (cstyle == "std") {
         chordsStandard->setChecked(true);
         chordDescriptionGroup->setEnabled(false);
@@ -1635,7 +1635,7 @@ void EditStyle::setValues()
 
     // figured bass
     for (int i = 0; i < comboFBFont->count(); i++) {
-        if (comboFBFont->itemText(i) == styleValue(StyleId::figuredBassFontFamily).toString()) {
+        if (comboFBFont->itemText(i) == styleValue(StyleId::figuredBassFontFamily).value<String>()) {
             comboFBFont->setCurrentIndex(i);
             break;
         }
@@ -1644,7 +1644,7 @@ void EditStyle::setValues()
     doubleSpinFBVertPos->setValue(styleValue(StyleId::figuredBassYOffset).toDouble());
     spinFBLineHeight->setValue(styleValue(StyleId::figuredBassLineHeight).toDouble() * 100.0);
 
-    QString mfont(styleValue(StyleId::MusicalSymbolFont).toString());
+    QString mfont(styleValue(StyleId::MusicalSymbolFont).value<String>());
     int idx = 0;
     for (const auto& i : mu::engraving::ScoreFont::scoreFonts()) {
         if (i.name().toLower() == mfont.toLower()) {
@@ -1663,7 +1663,7 @@ void EditStyle::setValues()
     musicalTextFont->addItem("Gonville Text", "Gootville Text");
     musicalTextFont->addItem("MuseJazz Text", "MuseJazz Text");
     musicalTextFont->addItem("Petaluma Text", "Petaluma Text");
-    QString tfont(styleValue(StyleId::MusicalTextFont).toString());
+    QString tfont(styleValue(StyleId::MusicalTextFont).value<String>());
     idx = musicalTextFont->findData(tfont);
     musicalTextFont->setCurrentIndex(idx);
     musicalTextFont->blockSignals(false);
@@ -1935,7 +1935,7 @@ void EditStyle::valueChanged(int i)
     PropertyValue val  = getValue(idx);
     bool setValue = false;
     if (idx == StyleId::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
-        mu::engraving::ScoreFont* scoreFont = mu::engraving::ScoreFont::fontByName(val.toString());
+        mu::engraving::ScoreFont* scoreFont = mu::engraving::ScoreFont::fontByName(val.value<String>());
         if (scoreFont) {
             for (auto j : scoreFont->engravingDefaults()) {
                 setStyleQVariantValue(j.first, j.second);
@@ -2003,7 +2003,7 @@ void EditStyle::textStyleChanged(int row)
         switch (a.pid) {
         case mu::engraving::Pid::FONT_FACE: {
             PropertyValue val = styleValue(a.sid);
-            textStyleFontFace->setCurrentFont(QFont(val.toString()));
+            textStyleFontFace->setCurrentFont(QFont(val.value<String>()));
             resetTextStyleFontFace->setEnabled(val != defaultStyleValue(a.sid));
         }
         break;

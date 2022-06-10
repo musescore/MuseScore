@@ -647,7 +647,7 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
             return QString("%1x%2").arg(QString::number(s.width()), QString::number(s.height()));
         }
         case P_TYPE::STRING: {
-            return value.toString();
+            return value.value<String>();
         }
         // TODO: support QVariant::Rect and QVariant::RectF?
         default:

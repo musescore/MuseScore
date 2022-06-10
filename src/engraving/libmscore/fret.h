@@ -254,7 +254,7 @@ public:
     void setUserMag(qreal m) { _userMag = m; }
 
     String accessibleInfo() const override;
-    QString screenReaderInfo() const override;
+    String screenReaderInfo() const override;
 
     friend class FretUndoData;
 };

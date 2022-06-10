@@ -692,7 +692,7 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         _endHookType = v.value<HookType>();
         break;
     case Pid::BEGIN_TEXT:
-        setBeginText(v.toString());
+        setBeginText(v.value<String>());
         break;
     case Pid::BEGIN_TEXT_OFFSET:
         setBeginTextOffset(v.value<PointF>());
@@ -704,16 +704,16 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         setEndTextOffset(v.value<PointF>());
         break;
     case Pid::CONTINUE_TEXT:
-        setContinueText(v.toString());
+        setContinueText(v.value<String>());
         break;
     case Pid::END_TEXT:
-        setEndText(v.toString());
+        setEndText(v.value<String>());
         break;
     case Pid::LINE_VISIBLE:
         setLineVisible(v.toBool());
         break;
     case Pid::BEGIN_FONT_FACE:
-        setBeginFontFamily(v.toString());
+        setBeginFontFamily(v.value<String>());
         break;
     case Pid::BEGIN_FONT_SIZE:
         if (v.toReal() <= 0) {
@@ -725,7 +725,7 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         setBeginFontStyle(FontStyle(v.toInt()));
         break;
     case Pid::CONTINUE_FONT_FACE:
-        setContinueFontFamily(v.toString());
+        setContinueFontFamily(v.value<String>());
         break;
     case Pid::CONTINUE_FONT_SIZE:
         setContinueFontSize(v.toReal());
@@ -734,7 +734,7 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         setContinueFontStyle(FontStyle(v.toInt()));
         break;
     case Pid::END_FONT_FACE:
-        setEndFontFamily(v.toString());
+        setEndFontFamily(v.value<String>());
         break;
     case Pid::END_FONT_SIZE:
         setEndFontSize(v.toReal());

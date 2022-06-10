@@ -424,7 +424,7 @@ public:
     /// Create a copy of the element
     Q_INVOKABLE mu::engraving::PluginAPI::EngravingItem* clone() const { return wrap(element()->clone(), Ownership::PLUGIN); }
 
-    Q_INVOKABLE QString subtypeName() const { return element()->subtypeName(); }
+    Q_INVOKABLE QString subtypeName() const { return element()->subtypeName().toQString(); }
     /// Deprecated: same as ScoreElement::name. Left for compatibility purposes.
     Q_INVOKABLE QString _name() const { return name(); }
 };

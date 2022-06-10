@@ -157,7 +157,7 @@ public:
     EngravingItem* prevSegmentElement() override;
 
     String accessibleInfo() const override;
-    QString accessibleExtraInfo() const override;
+    String accessibleExtraInfo() const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }

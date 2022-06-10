@@ -123,7 +123,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
                 // float mode
                 score->style().set(Sid::spatium, sp);
             }
-            score->_scoreFont = ScoreFont::fontByName(score->style().value(Sid::MusicalSymbolFont).toString());
+            score->_scoreFont = ScoreFont::fontByName(score->style().styleSt(Sid::MusicalSymbolFont));
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag("copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {

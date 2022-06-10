@@ -5402,7 +5402,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 {
     TRACEFUNC;
 
-    _scoreFont = ScoreFont::fontByName(style().value(Sid::MusicalSymbolFont).toString());
+    _scoreFont = ScoreFont::fontByName(style().value(Sid::MusicalSymbolFont).value<String>());
     _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
     m_layoutOptions.updateFromStyle(style());

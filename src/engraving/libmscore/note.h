@@ -304,7 +304,7 @@ public:
     void setHeadType(NoteHeadType t);
 
     int subtype() const override { return int(_headGroup); }
-    QString subtypeName() const override;
+    String subtypeName() const override;
 
     void setPitch(int val);
     void setPitch(int pitch, int tpc1, int tpc2);
@@ -488,8 +488,8 @@ public:
     EngravingItem* prevSegmentElement() override;
 
     String accessibleInfo() const override;
-    QString screenReaderInfo() const override;
-    QString accessibleExtraInfo() const override;
+    String screenReaderInfo() const override;
+    String accessibleExtraInfo() const override;
 
     Shape shape() const override;
     std::vector<Note*> tiedNotes() const;

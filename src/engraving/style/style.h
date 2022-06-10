@@ -59,7 +59,7 @@ public:
     }
 
     Millimetre styleMM(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::SPATIUM); return valueMM(idx); }
-    QString  styleSt(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::STRING); return value(idx).toString(); }
+    QString  styleSt(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::STRING); return value(idx).value<QString>(); }
     bool     styleB(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::BOOL); return value(idx).toBool(); }
     qreal    styleD(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::REAL); return value(idx).toReal(); }
     int      styleI(Sid idx) const { /* can be int or enum, so no assert */ return value(idx).toInt(); }

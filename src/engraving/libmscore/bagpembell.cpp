@@ -347,12 +347,12 @@ noteList BagpipeEmbellishment::getNoteList() const
 {
     noteList nl;
     if (_embelType >= 0 && _embelType < nEmbellishments()) {
-        QStringList notes = BagpipeEmbellishmentList[_embelType].notes.split(' ');
+        StringList notes = String::fromAscii(BagpipeEmbellishmentList[_embelType].notes.ascii()).split(u' ');
         int noteInfoSize = sizeof(BagpipeNoteInfoList) / sizeof(*BagpipeNoteInfoList);
-        foreach (const QString note, notes) {
+        for (const String& note : notes) {
             // search for note in BagpipeNoteInfoList
             for (int i = 0; i < noteInfoSize; ++i) {
-                if (BagpipeNoteInfoList[i].name == note) {
+                if (String::fromAscii(BagpipeNoteInfoList[i].name.ascii()) == note) {
                     // found it, append to list
                     nl.push_back(i);
                     break;
