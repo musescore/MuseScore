@@ -170,7 +170,6 @@ private:
     std::vector<TextLineBase*> m_rasgueados;
     std::map<GPNote::Harmonic::Type, std::vector<TextLineBase*> > m_harmonicMarks;
     std::vector<Vibrato*> _vibratos;
-    std::vector<Ottava*> _ottavas;
     Volta* _lastVolta = nullptr;
 
     struct NextTupletInfo {
@@ -185,7 +184,7 @@ private:
     } m_nextTupletInfo;
 
     Hairpin* _lastHairpin = nullptr;
-    Ottava* _lastOttava = nullptr;
+    std::vector<Ottava*> m_lastOttavas;
     Measure* _lastMeasure = nullptr;
     bool m_showCapo = true; // TODO-gp : settings
 };
