@@ -1221,7 +1221,7 @@ public:
     QString createRehearsalMarkText(RehearsalMark* current) const;
     QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
-    bool sanityCheck(const QString& name = QString());
+    bool sanityCheck(const String& name = String());
 
     bool checkKeys();
 

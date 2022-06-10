@@ -74,8 +74,8 @@ Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, 
     // Read images
     {
         if (!MScore::noImages) {
-            std::vector<QString> images = mscReader.imageFileNames();
-            for (const QString& name : images) {
+            std::vector<String> images = mscReader.imageFileNames();
+            for (const String& name : images) {
                 imageStore.add(name, mscReader.readImageFile(name));
             }
         }
@@ -102,8 +102,8 @@ Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, 
 
     // Read excerpts
     if (masterScore->mscVersion() >= 400) {
-        std::vector<QString> excerptNames = mscReader.excerptNames();
-        for (const QString& excerptName : excerptNames) {
+        std::vector<String> excerptNames = mscReader.excerptNames();
+        for (const String& excerptName : excerptNames) {
             Score* partScore = masterScore->createScore();
 
             compat::ReadStyleHook::setupDefaultStyle(partScore);

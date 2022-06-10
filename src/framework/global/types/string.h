@@ -38,6 +38,11 @@ enum CaseSensitivity {
     CaseSensitive = 1
 };
 
+enum SplitBehavior {
+    KeepEmptyParts = 0,
+    SkipEmptyParts = 1,
+};
+
 // ============================
 // AsciiChar (ASCII)
 // ============================
@@ -86,13 +91,31 @@ public:
     inline bool operator ==(AsciiChar c) const { return m_ch == c.unicode(); }
     inline bool operator !=(AsciiChar c) const { return !operator ==(c); }
 
+    inline bool operator >(Char c) const { return m_ch > c.m_ch; }
+    inline bool operator >(char16_t c) const { return m_ch > c; }
+    inline bool operator <(Char c) const { return m_ch < c.m_ch; }
+    inline bool operator <(char16_t c) const { return m_ch < c; }
+
     inline char16_t unicode() const { return m_ch; }
-    inline char toAscii(bool* ok = nullptr) const;
 
+    bool isNull() const { return m_ch == 0; }
+
+    bool isAscii() const;
+    static inline bool isAscii(char16_t c) { return c <= 0xff; }
+    char toAscii(bool* ok = nullptr) const;
     static char toAscii(char16_t c, bool* ok = nullptr);
-    static char16_t fromAscii(char c);
+    static inline char16_t fromAscii(char c) { return static_cast<char16_t>(c); }
 
+    bool isDigit() const;
     static bool isDigit(char16_t c);
+
+    Char toLower() const;
+    static char16_t toLower(char16_t ch);
+    Char toUpper() const;
+    static char16_t toUpper(char16_t ch);
+
+    static inline char16_t highSurrogate(uint ucs4) { return char16_t((ucs4 >> 10) + 0xd7c0); }
+    static inline char16_t lowSurrogate(uint ucs4) { return char16_t(ucs4 % 0x400 + 0xdc00); }
 
 private:
     char16_t m_ch = 0;
@@ -170,13 +193,17 @@ public:
     void clear();
     Char at(size_t i) const;
     bool contains(const Char& ch) const;
+    bool contains(const String& ch) const;
 
     //! NOTE Now implemented only compare with ASCII
-    bool startsWith(const AsciiStringView& str, CaseSensitivity cs = CaseSensitive) const;
-    bool endsWith(const AsciiStringView& str, CaseSensitivity cs = CaseSensitive) const;
+    bool startsWith(const String& str, CaseSensitivity cs = CaseSensitive) const;
+    bool startsWith(char16_t ch, CaseSensitivity cs = CaseSensitive) const;
+    bool endsWith(const String& str, CaseSensitivity cs = CaseSensitive) const;
+    bool endsWith(char16_t ch, CaseSensitivity cs = CaseSensitive) const;
 
-    StringList split(const Char& ch) const;
+    StringList split(const Char& ch, SplitBehavior behavior = KeepEmptyParts) const;
     String& replace(const String& before, const String& after);
+    String& remove(const String& str) { return replace(str, String()); }
     void truncate(size_t position);
 
     String arg(const String& val) const;
@@ -205,6 +232,9 @@ public:
     static String toXmlEscaped(const String& str);
     static String toXmlEscaped(char16_t c);
 
+    String toLower() const;
+    String toUpper() const;
+
     int toInt(bool* ok = nullptr, int base = 10) const;
     double toDouble(bool* ok = nullptr) const;
 
@@ -226,6 +256,16 @@ class StringList : public std::vector<String>
 public:
 
     StringList& operator <<(const String& s) { push_back(s); return *this; }
+
+    size_t indexOf(const String& s) const { return mu::indexOf(*this, s); }
+    bool contains(const String& s) const { return mu::contains(*this, s); }
+    StringList filter(const String& str) const;
+    String join(const String& sep) const;
+
+    void insert(size_t idx, const String& str);
+    void replace(size_t idx, const String& str);
+    bool removeAll(const String& str);
+    void removeAt(size_t i);
 };
 
 // ============================

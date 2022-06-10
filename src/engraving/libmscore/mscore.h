@@ -25,6 +25,7 @@
 
 #include <QObject>
 
+#include "types/string.h"
 #include "config.h"
 
 #include "infrastructure/draw/color.h"
@@ -249,7 +250,7 @@ struct MScoreError {
 
 class MScore
 {
-    static QString _globalShare;
+    static String _globalShare;
     static int _hRaster, _vRaster;
     static bool _verticalOrientation;
 
@@ -261,7 +262,7 @@ public:
     static void init();
     static void registerUiTypes();
 
-    static const QString& globalShare() { return _globalShare; }
+    static const String& globalShare() { return _globalShare; }
     static qreal hRaster() { return _hRaster; }
     static qreal vRaster() { return _vRaster; }
     static void setHRaster(int val) { _hRaster = val; }

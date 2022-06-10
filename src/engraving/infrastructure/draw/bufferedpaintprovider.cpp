@@ -214,17 +214,17 @@ void BufferedPaintProvider::drawPolygon(const PointF* points, size_t pointCount,
     editableData().polygons.push_back(DrawPolygon { pol, mode });
 }
 
-void BufferedPaintProvider::drawText(const PointF& point, const QString& text)
+void BufferedPaintProvider::drawText(const PointF& point, const String& text)
 {
     editableData().texts.push_back(DrawText { point, text });
 }
 
-void BufferedPaintProvider::drawText(const RectF& rect, int flags, const QString& text)
+void BufferedPaintProvider::drawText(const RectF& rect, int flags, const String& text)
 {
     editableData().rectTexts.push_back(DrawRectText { rect, flags, text });
 }
 
-void BufferedPaintProvider::drawTextWorkaround(const Font& f, const PointF& pos, const QString& text)
+void BufferedPaintProvider::drawTextWorkaround(const Font& f, const PointF& pos, const String& text)
 {
     setFont(f);
     drawText(pos, text);

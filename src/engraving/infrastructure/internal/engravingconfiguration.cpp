@@ -73,29 +73,29 @@ void EngravingConfiguration::init()
     }
 }
 
-QString EngravingConfiguration::defaultStyleFilePath() const
+mu::io::path_t EngravingConfiguration::defaultStyleFilePath() const
 {
-    return settings()->value(DEFAULT_STYLE_FILE_PATH).toQString();
+    return settings()->value(DEFAULT_STYLE_FILE_PATH).toPath();
 }
 
-void EngravingConfiguration::setDefaultStyleFilePath(const QString& path)
+void EngravingConfiguration::setDefaultStyleFilePath(const io::path_t& path)
 {
     settings()->setSharedValue(DEFAULT_STYLE_FILE_PATH, Val(path.toStdString()));
 }
 
-QString EngravingConfiguration::partStyleFilePath() const
+mu::io::path_t EngravingConfiguration::partStyleFilePath() const
 {
-    return settings()->value(PART_STYLE_FILE_PATH).toQString();
+    return settings()->value(PART_STYLE_FILE_PATH).toPath();
 }
 
-void EngravingConfiguration::setPartStyleFilePath(const QString& path)
+void EngravingConfiguration::setPartStyleFilePath(const io::path_t& path)
 {
     settings()->setSharedValue(PART_STYLE_FILE_PATH, Val(path.toStdString()));
 }
 
-std::string EngravingConfiguration::iconsFontFamily() const
+mu::String EngravingConfiguration::iconsFontFamily() const
 {
-    return uiConfiguration()->iconsFontFamily();
+    return String::fromStdString(uiConfiguration()->iconsFontFamily());
 }
 
 Color EngravingConfiguration::defaultColor() const

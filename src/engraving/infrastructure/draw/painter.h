@@ -28,6 +28,7 @@
 #include "config.h"
 #include "ipaintprovider.h"
 
+#include "types/string.h"
 #include "color.h"
 #include "geometry.h"
 #include "drawtypes.h"
@@ -135,13 +136,13 @@ public:
 
     void drawArc(const RectF& rect, int a, int alen);
 
-    void drawText(const PointF& point, const QString& text);
-    void drawText(const RectF& rect, int flags, const QString& text);
+    void drawText(const PointF& point, const String& text);
+    void drawText(const RectF& rect, int flags, const String& text);
 
     //! NOTE Potentially dangerous method.
     //! Most of them are cut with fractional values.
     //! Fractions are also passed to this method, and, accordingly, the fractional part is discarded.
-    inline void drawText(int x, int y, const QString& text);
+    inline void drawText(int x, int y, const String& text);
 
     //! NOTE workaround for https://musescore.org/en/node/284218
     //! and https://musescore.org/en/node/281601
@@ -152,7 +153,7 @@ public:
     //! The workaround works badly if the text is at the same time
     //! bold and underlined or struck out.
     //! (moved from TextBase::drawTextWorkaround)
-    void drawTextWorkaround(Font& f, const PointF pos, const QString text);
+    void drawTextWorkaround(Font& f, const PointF pos, const String& text);
 
     void drawSymbol(const PointF& point, uint ucs4Code);
 
@@ -260,7 +261,7 @@ inline void Painter::drawConvexPolygon(const PolygonF& poly)
     drawConvexPolygon(poly.data(), poly.size());
 }
 
-inline void Painter::drawText(int x, int y, const QString& text)
+inline void Painter::drawText(int x, int y, const String& text)
 {
     drawText(PointF(x, y), text);
 }

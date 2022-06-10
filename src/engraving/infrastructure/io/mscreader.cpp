@@ -109,45 +109,45 @@ MscReader::IReader* MscReader::reader() const
     return m_reader;
 }
 
-ByteArray MscReader::fileData(const QString& fileName) const
+ByteArray MscReader::fileData(const String& fileName) const
 {
     return reader()->fileData(fileName);
 }
 
 ByteArray MscReader::readStyleFile() const
 {
-    return fileData("score_style.mss");
+    return fileData(u"score_style.mss");
 }
 
-QString MscReader::mainFileName() const
+String MscReader::mainFileName() const
 {
     if (!m_params.mainFileName.isEmpty()) {
         return m_params.mainFileName;
     }
 
-    QString name = "score.mscx";
-    if (m_params.filePath.isEmpty()) {
+    String name = u"score.mscx";
+    if (m_params.filePath.empty()) {
         return name;
     }
 
-    QString completeBaseName = FileInfo(m_params.filePath).completeBaseName();
+    String completeBaseName = FileInfo(m_params.filePath).completeBaseName();
     if (completeBaseName.isEmpty()) {
         return name;
     }
 
-    return completeBaseName + ".mscx";
+    return completeBaseName + u".mscx";
 }
 
 ByteArray MscReader::readScoreFile() const
 {
-    QString mscxFileName = mainFileName();
+    String mscxFileName = mainFileName();
     ByteArray data = fileData(mscxFileName);
     if (data.empty() && reader()->isContainer()) {
         StringList files = reader()->fileList();
         for (const String& name : files) {
             // mscx file in the root dir
-            if (!name.contains('/') && name.endsWith(".mscx", mu::CaseInsensitive)) {
-                mscxFileName = name.toQString();
+            if (!name.contains(u'/') && name.endsWith(u".mscx", mu::CaseInsensitive)) {
+                mscxFileName = name;
                 break;
             }
         }
@@ -156,62 +156,62 @@ ByteArray MscReader::readScoreFile() const
     return fileData(mscxFileName);
 }
 
-std::vector<QString> MscReader::excerptNames() const
+std::vector<String> MscReader::excerptNames() const
 {
     if (!reader()->isContainer()) {
         NOT_SUPPORTED << " not container";
-        return std::vector<QString>();
+        return std::vector<String>();
     }
 
-    std::vector<QString> names;
+    std::vector<String> names;
     StringList files = reader()->fileList();
     for (const String& filePath : files) {
-        if (filePath.startsWith("Excerpts/") && filePath.endsWith(".mscx", mu::CaseInsensitive)) {
-            names.push_back(FileInfo(filePath.toQString()).completeBaseName());
+        if (filePath.startsWith(u"Excerpts/") && filePath.endsWith(u".mscx", mu::CaseInsensitive)) {
+            names.push_back(FileInfo(filePath).completeBaseName());
         }
     }
     return names;
 }
 
-ByteArray MscReader::readExcerptStyleFile(const QString& name) const
+ByteArray MscReader::readExcerptStyleFile(const String& name) const
 {
-    QString fileName = name + ".mss";
-    return fileData("Excerpts/" + fileName);
+    String fileName = name + u".mss";
+    return fileData(u"Excerpts/" + fileName);
 }
 
-ByteArray MscReader::readExcerptFile(const QString& name) const
+ByteArray MscReader::readExcerptFile(const String& name) const
 {
-    QString fileName = name + ".mscx";
-    return fileData("Excerpts/" + fileName);
+    String fileName = name + u".mscx";
+    return fileData(u"Excerpts/" + fileName);
 }
 
 ByteArray MscReader::readChordListFile() const
 {
-    return fileData("chordlist.xml");
+    return fileData(u"chordlist.xml");
 }
 
 ByteArray MscReader::readThumbnailFile() const
 {
-    return fileData("Thumbnails/thumbnail.png");
+    return fileData(u"Thumbnails/thumbnail.png");
 }
 
-ByteArray MscReader::readImageFile(const QString& fileName) const
+ByteArray MscReader::readImageFile(const String& fileName) const
 {
-    return fileData("Pictures/" + fileName);
+    return fileData(u"Pictures/" + fileName);
 }
 
-std::vector<QString> MscReader::imageFileNames() const
+std::vector<String> MscReader::imageFileNames() const
 {
     if (!reader()->isContainer()) {
         NOT_SUPPORTED << " not container";
-        return std::vector<QString>();
+        return std::vector<String>();
     }
 
-    std::vector<QString> names;
+    std::vector<String> names;
     StringList files = reader()->fileList();
     for (const String& filePath : files) {
-        if (filePath.startsWith("Pictures/")) {
-            names.push_back(FileInfo(filePath.toQString()).fileName());
+        if (filePath.startsWith(u"Pictures/")) {
+            names.push_back(FileInfo(filePath).fileName());
         }
     }
     return names;
@@ -219,17 +219,17 @@ std::vector<QString> MscReader::imageFileNames() const
 
 ByteArray MscReader::readAudioFile() const
 {
-    return fileData("audio.ogg");
+    return fileData(u"audio.ogg");
 }
 
 ByteArray MscReader::readAudioSettingsJsonFile() const
 {
-    return fileData("audiosettings.json");
+    return fileData(u"audiosettings.json");
 }
 
 ByteArray MscReader::readViewSettingsJsonFile() const
 {
-    return fileData("viewsettings.json");
+    return fileData(u"viewsettings.json");
 }
 
 // =======================================================================
@@ -244,7 +244,7 @@ MscReader::ZipFileReader::~ZipFileReader()
     }
 }
 
-bool MscReader::ZipFileReader::open(IODevice* device, const QString& filePath)
+bool MscReader::ZipFileReader::open(IODevice* device, const path_t& filePath)
 {
     m_device = device;
     if (!m_device) {
@@ -299,14 +299,14 @@ StringList MscReader::ZipFileReader::fileList() const
 
     for (const ZipReader::FileInfo& fi : fileInfoList) {
         if (fi.isFile) {
-            files << String::fromQString(fi.filePath);
+            files << fi.filePath;
         }
     }
 
     return files;
 }
 
-ByteArray MscReader::ZipFileReader::fileData(const QString& fileName) const
+ByteArray MscReader::ZipFileReader::fileData(const String& fileName) const
 {
     IF_ASSERT_FAILED(m_zip) {
         return ByteArray();
@@ -320,7 +320,7 @@ ByteArray MscReader::ZipFileReader::fileData(const QString& fileName) const
     return data;
 }
 
-bool MscReader::DirReader::open(IODevice* device, const QString& filePath)
+bool MscReader::DirReader::open(IODevice* device, const path_t& filePath)
 {
     if (device) {
         NOT_SUPPORTED;
@@ -332,7 +332,7 @@ bool MscReader::DirReader::open(IODevice* device, const QString& filePath)
         return false;
     }
 
-    m_rootPath = containerPath(filePath).toQString();
+    m_rootPath = containerPath(filePath);
 
     return true;
 }
@@ -358,19 +358,19 @@ StringList MscReader::DirReader::fileList() const
 {
     StringList files;
     QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories;
-    QDirIterator it(m_rootPath, QStringList(), QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Readable | QDir::Files, flags);
+    QDirIterator it(m_rootPath.toQString(), QStringList(), QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Readable | QDir::Files, flags);
 
     while (it.hasNext()) {
         String filePath = String::fromQString(it.next());
-        files << filePath.mid(m_rootPath.length() + 1);
+        files << filePath.mid(m_rootPath.size() + 1);
     }
 
     return files;
 }
 
-ByteArray MscReader::DirReader::fileData(const QString& fileName) const
+ByteArray MscReader::DirReader::fileData(const String& fileName) const
 {
-    QString filePath = m_rootPath + "/" + fileName;
+    io::path_t filePath = m_rootPath + "/" + fileName;
     File file(filePath);
     if (!file.open(IODevice::ReadOnly)) {
         LOGD() << "failed open file: " << filePath;
@@ -380,7 +380,7 @@ ByteArray MscReader::DirReader::fileData(const QString& fileName) const
     return file.readAll();
 }
 
-bool MscReader::XmlFileReader::open(IODevice* device, const QString& filePath)
+bool MscReader::XmlFileReader::open(IODevice* device, const path_t& filePath)
 {
     m_device = device;
     if (!m_device) {
@@ -446,7 +446,7 @@ StringList MscReader::XmlFileReader::fileList() const
     return files;
 }
 
-ByteArray MscReader::XmlFileReader::fileData(const QString& fileName) const
+ByteArray MscReader::XmlFileReader::fileData(const String& fileName) const
 {
     if (!m_device) {
         return ByteArray();

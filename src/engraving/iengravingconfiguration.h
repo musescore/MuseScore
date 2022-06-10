@@ -22,8 +22,8 @@
 #ifndef MU_ENGRAVING_IENGRAVINGCONFIGURATION_H
 #define MU_ENGRAVING_IENGRAVINGCONFIGURATION_H
 
-#include <QString>
-
+#include "types/string.h"
+#include "io/path.h"
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
 #include "async/notification.h"
@@ -40,13 +40,13 @@ class IEngravingConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IEngravingConfiguration() = default;
 
-    virtual QString defaultStyleFilePath() const = 0;
-    virtual void setDefaultStyleFilePath(const QString& path) = 0;
+    virtual io::path_t defaultStyleFilePath() const = 0;
+    virtual void setDefaultStyleFilePath(const io::path_t& path) = 0;
 
-    virtual QString partStyleFilePath() const = 0;
-    virtual void setPartStyleFilePath(const QString& path) = 0;
+    virtual io::path_t partStyleFilePath() const = 0;
+    virtual void setPartStyleFilePath(const io::path_t& path) = 0;
 
-    virtual std::string iconsFontFamily() const = 0;
+    virtual String iconsFontFamily() const = 0;
 
     virtual draw::Color defaultColor() const = 0;
     virtual draw::Color scoreInversionColor() const = 0;
@@ -60,15 +60,15 @@ public:
 
     virtual double guiScaling() const = 0;
 
-    virtual draw::Color selectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
-    virtual void setSelectionColor(engraving::voice_idx_t voiceIndex, draw::Color color) = 0;
-    virtual async::Channel<engraving::voice_idx_t, draw::Color> selectionColorChanged() const = 0;
+    virtual draw::Color selectionColor(voice_idx_t voiceIndex = 0) const = 0;
+    virtual void setSelectionColor(voice_idx_t voiceIndex, draw::Color color) = 0;
+    virtual async::Channel<voice_idx_t, draw::Color> selectionColorChanged() const = 0;
 
     virtual bool scoreInversionEnabled() const = 0;
     virtual void setScoreInversionEnabled(bool value) = 0;
     virtual async::Notification scoreInversionChanged() const = 0;
 
-    virtual draw::Color highlightSelectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
+    virtual draw::Color highlightSelectionColor(voice_idx_t voiceIndex = 0) const = 0;
 
     struct DebuggingOptions {
         bool showSkylines = false;

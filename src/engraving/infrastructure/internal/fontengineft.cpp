@@ -72,7 +72,7 @@ FontEngineFT::~FontEngineFT()
     delete m_data;
 }
 
-bool FontEngineFT::load(const QString& path)
+bool FontEngineFT::load(const io::path_t& path)
 {
     if (!_init_ft()) {
         return false;

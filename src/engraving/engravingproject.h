@@ -59,7 +59,7 @@ public:
     IFileInfoProviderPtr fileInfoProvider() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 
-    QString appVersion() const;
+    String appVersion() const;
     int mscVersion() const;
 
     bool readOnly() const;

@@ -52,47 +52,44 @@ enum class Err {
 
 inline Ret make_ret(Err err, const io::path_t& filePath = "")
 {
-    QString text;
+    String text;
 
     switch (err) {
     case Err::FileUnknownError:
-        text = qtrc("engraving", "Unknown error");
+        text = mtrc("engraving", "Unknown error");
         break;
     case Err::FileNotFound:
-        text = qtrc("engraving", "File \"%1\" not found")
-               .arg(filePath.toQString());
+        text = mtrc("engraving", "File \"%1\" not found").arg(filePath.toString());
         break;
     case Err::FileOpenError:
-        text = qtrc("engraving", "File open error");
+        text = mtrc("engraving", "File open error");
         break;
     case Err::FileBadFormat:
-        text = qtrc("engraving", "Bad format");
+        text = mtrc("engraving", "Bad format");
         break;
     case Err::FileUnknownType:
-        text = qtrc("engraving", "Unknown filetype");
+        text = mtrc("engraving", "Unknown filetype");
         break;
     case Err::FileTooOld:
-        text = qtrc("engraving", "It was last saved with a version older than 2.0.0.\n"
+        text = mtrc("engraving", "It was last saved with a version older than 2.0.0.\n"
                                  "You can convert this score by opening and then\n"
                                  "saving with MuseScore version 2.x.\n"
                                  "Visit the %1MuseScore download page%2 to obtain such a 2.x version.")
-               .arg("<a href=\"https://musescore.org/download#older-versions\">", "</a>");
+               .arg(u"<a href=\"https://musescore.org/download#older-versions\">", u"</a>");
         break;
     case Err::FileTooNew:
-        text = qtrc("engraving", "This score was saved using a newer version of MuseScore.\n "
+        text = mtrc("engraving", "This score was saved using a newer version of MuseScore.\n "
                                  "Visit the %1MuseScore website%2 to obtain the latest version.")
-               .arg("<a href=\"https://musescore.org\">", "</a>");
+               .arg(u"<a href=\"https://musescore.org\">", u"</a>");
         break;
     case Err::FileOld300Format:
-        text = qtrc("engraving", "It was last saved with a developer version of 3.0.");
+        text = mtrc("engraving", "It was last saved with a developer version of 3.0.");
         break;
     case Err::FileCorrupted:
-        text = qtrc("engraving", "File \"%1\" corrupted.")
-               .arg(filePath.toQString());
+        text = mtrc("engraving", "File \"%1\" corrupted.").arg(filePath.toString());
         break;
     case Err::FileCriticalCorrupted:
-        text = qtrc("engraving", "File \"%1\" is critically corrupted and cannot be processed.")
-               .arg(filePath.toQString());
+        text = mtrc("engraving", "File \"%1\" is critically corrupted and cannot be processed.").arg(filePath.toString());
         break;
     case Err::Undefined:
     case Err::NoError:

@@ -215,17 +215,17 @@ void QPainterProvider::drawPolygon(const PointF* points, size_t pointCount, Poly
     }
 }
 
-void QPainterProvider::drawText(const PointF& point, const QString& text)
+void QPainterProvider::drawText(const PointF& point, const String& text)
 {
     m_painter->drawText(point.toQPointF(), text);
 }
 
-void QPainterProvider::drawText(const RectF& rect, int flags, const QString& text)
+void QPainterProvider::drawText(const RectF& rect, int flags, const String& text)
 {
     m_painter->drawText(rect.toQRectF(), flags, text);
 }
 
-void QPainterProvider::drawTextWorkaround(const Font& f, const PointF& pos, const QString& text)
+void QPainterProvider::drawTextWorkaround(const Font& f, const PointF& pos, const String& text)
 {
     m_painter->save();
     qreal mm = m_painter->worldTransform().m11();

@@ -30,7 +30,7 @@ using namespace mu::io;
 
 XmlWriter::XmlWriter(const io::path_t& path)
 {
-    m_device = std::make_unique<QFile>(path.toQString());
+    m_device = std::make_unique<QFile>(path.toString());
     m_device->open(Device::WriteOnly);
 
     initWriter(m_device.get());
