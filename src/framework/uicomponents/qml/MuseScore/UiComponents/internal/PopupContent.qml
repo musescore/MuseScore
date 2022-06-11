@@ -104,7 +104,7 @@ FocusScope {
         Rectangle {
             id: contentBackground
             anchors.fill: parent
-            color: ui.theme.backgroundPrimaryColor
+            color: ui.theme.popupBackgroundColor
             radius: 4
             border.width: 1
             border.color: ui.theme.strokeColor
