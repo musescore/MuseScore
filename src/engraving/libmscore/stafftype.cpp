@@ -278,7 +278,7 @@ bool StaffType::isSimpleTabStaff() const
         return true;
 
     default:
-        return false;
+        break;
     }
 
     return false;
