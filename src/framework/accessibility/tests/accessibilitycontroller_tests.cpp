@@ -32,7 +32,7 @@
 
 using ::testing::Return;
 using ::testing::_;
-using ::testing::SaveArgPointee;
+using ::testing::SaveArg;
 using ::testing::DoAll;
 
 using namespace mu;
@@ -112,16 +112,12 @@ public:
     }
 
 #ifdef Q_OS_LINUX
-    QEvent expectDispatchEventOnFocus()
+    void expectDispatchEventOnFocus(QEvent** event)
     {
-        QEvent event(QEvent::None);
-
         //! For Linux it needs to send spontanous event for canceling reading the name of previous control on accessibility
         QWindow* window = new QWindow();
         EXPECT_CALL(*m_mainWindow, qWindow()).WillOnce(Return(window));
-        EXPECT_CALL(*m_application, notify(window, _)).WillOnce(DoAll(SaveArgPointee<1>(&event), Return(true)));
-
-        return event;
+        EXPECT_CALL(*m_application, notify(window, _)).WillOnce(DoAll(SaveArg<1>(event), Return(true)));
     }
 
     void notExpectDispatchEventOnFocus()
@@ -134,19 +130,16 @@ public:
         EXPECT_CALL(*m_application, notify(window, _)).Times(0);
     }
 
-    void checkDispatchEventOnFocus(const QEvent& event)
+    void checkDispatchEventOnFocus(const QEvent* event)
     {
-        EXPECT_TRUE(event.spontaneous());
+        EXPECT_TRUE(event);
+        EXPECT_TRUE(event->spontaneous());
     }
 
 #else
-    QEvent expectDispatchEventOnFocus()
-    {
-        return QEvent(QEvent::None);
-    }
-
+    void expectDispatchEventOnFocus(QEvent**) {}
     void notExpectDispatchEventOnFocus() {}
-    void checkDispatchEventOnFocus(const QEvent&) {}
+    void checkDispatchEventOnFocus(const QEvent*) {}
 #endif
 
     std::shared_ptr<AccessibilityController> m_controller;
@@ -174,7 +167,8 @@ TEST_F(AccessibilityControllerTests, SendEventOnFocusChanged)
     //! [GIVEN] First is on focus
     item1->accessibleStateChanged().send(IAccessible::State::Focused, true);
 
-    QEvent event = expectDispatchEventOnFocus();
+    QEvent* event = nullptr;
+    expectDispatchEventOnFocus(&event);
 
     //! [WHEN] Focus on second item
     item2->accessibleStateChanged().send(IAccessible::State::Focused, true);
