@@ -2128,7 +2128,7 @@ void EngravingItem::startDrag(EditData& ed)
     eed->pushProperty(Pid::AUTOPLACE);
     eed->initOffset = offset();
     ed.addData(eed);
-    if (ed.modifiers & AltModifier) {
+    if (ed.modifiers & AltModifier && ed.modifiers & ShiftModifier) {
         setAutoplace(false);
     }
 }
@@ -2201,6 +2201,52 @@ RectF EngravingItem::drag(EditData& ed)
             }
             if (move) {
                 setOffset(PointF(x, y));
+            }
+        }
+    }
+    // TODO, move to new function
+    auto p = explicitParent();
+    if (p && (p->isSegment() || p->isChordRest() || p->isNote() || p->isMeasure())) {
+        if (ed.modifiers != (ShiftModifier | ControlModifier)) {
+            staff_idx_t si = staffIdx();
+            Segment* ourSeg = p->isSegment() ? toSegment(p)
+                              : p->isChordRest() ? toChordRest(p)->segment()
+                              : p->isNote() ? toNote(p)->chord()->segment()
+                              : p->isMeasure() ? toMeasure(p)->first() : nullptr, * seg = ourSeg;
+            score()->dragPosition(canvasPos(), &si, &seg);
+            // prevent unexpected horizontal re-anchoring when mouse hasn't moved enough, or
+            // while moving left unless right-edge has moved left of parent
+            if (fabs(ed.evtDelta.x()) < QApplication::startDragDistance() / 2.0f) {
+                seg = ourSeg;
+            } else if (ed.evtDelta.x() < 0.0f && toEngravingItem(p)->canvasBoundingRect().left() < canvasBoundingRect().right()) {
+                seg = ourSeg;
+            }
+            if (seg && (seg != ourSeg || staffIdx() != si)) {
+                EngravingItem* newParent = p->isSegment() ? seg : seg->element(si * VOICES);
+                if (newParent) {
+                    if (p->isNote()) {
+                        newParent = newParent->isChord() ? toChord(newParent)->upNote() : nullptr;
+                    } else if (p->isChordRest() && !newParent->isChordRest()) {
+                        newParent = nullptr;
+                    } else if (p->isMeasure()) {
+                        newParent = newParent->findMeasure();
+                    }
+                    if (newParent) {
+                        const PointF oldOffset = offset();
+                        PointF pos1(canvasPos());
+                        score()->undo(new ChangeParent(this, newParent, si));
+                        setOffset(PointF());
+                        setOffsetChanged(true);
+                        layout();
+                        PointF pos2(canvasPos());
+                        const PointF newOffset = pos1 - pos2;
+                        setOffset(newOffset);
+                        ElementEditDataPtr eed = ed.getData(this);
+                        if (eed) {
+                            eed->initOffset += newOffset - oldOffset;
+                        }
+                    }
+                }
             }
         }
     }

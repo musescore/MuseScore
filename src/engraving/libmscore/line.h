@@ -84,6 +84,7 @@ private:
     static Fraction lastSegmentEndTick(const Segment* lastSeg, const Spanner* s);
     LineSegment* rebaseAnchor(Grip grip, Segment* newSeg);
     void rebaseAnchors(EditData&, Grip);
+    void handleStaffChange();
 };
 
 //---------------------------------------------------------

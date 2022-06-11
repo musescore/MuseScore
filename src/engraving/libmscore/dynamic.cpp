@@ -444,30 +444,7 @@ std::unique_ptr<ElementGroup> Dynamic::getDragGroup(std::function<bool(const Eng
 
 mu::RectF Dynamic::drag(EditData& ed)
 {
-    RectF f = EngravingItem::drag(ed);
-
-    //
-    // move anchor
-    //
-    KeyboardModifiers km = ed.modifiers;
-    if (km != (ShiftModifier | ControlModifier)) {
-        staff_idx_t si = staffIdx();
-        Segment* seg = segment();
-        score()->dragPosition(canvasPos(), &si, &seg);
-        if (seg != segment() || staffIdx() != si) {
-            const PointF oldOffset = offset();
-            PointF pos1(canvasPos());
-            score()->undo(new ChangeParent(this, seg, si));
-            setOffset(PointF());
-            layout();
-            PointF pos2(canvasPos());
-            const PointF newOffset = pos1 - pos2;
-            setOffset(newOffset);
-            ElementEditDataPtr eed = ed.getData(this);
-            eed->initOffset += newOffset - oldOffset;
-        }
-    }
-    return f;
+    return EngravingItem::drag(ed);
 }
 
 //---------------------------------------------------------

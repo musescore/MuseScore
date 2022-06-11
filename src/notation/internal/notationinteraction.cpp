@@ -888,6 +888,16 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
     qreal proximity = configuration()->selectionProximity() * 0.5f / scaling;
     m_scoreCallbacks.setSelectionProximity(proximity);
 
+    if (elems.size() == 1 && (m_editData.modifiers & Qt::KeyboardModifier::AltModifier)) {
+        if (elems[0]->isSpannerSegment()) {
+            auto copy = toSpannerSegment(elems[0])->spanner()->clone();
+            score()->undoAddElement(copy);
+        } else {
+            auto copy = elems[0]->clone();
+            score()->undoAddElement(copy);
+        }
+    }
+
     if (isGripEditStarted()) {
         m_editData.element->startEditDrag(m_editData);
         return;

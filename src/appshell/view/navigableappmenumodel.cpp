@@ -221,6 +221,9 @@ bool NavigableAppMenuModel::processEventForOpenedMenu(QEvent* event)
 
 bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
 {
+    if (event->type() == QEvent::Type::MouseButtonPress) {
+        m_needActivateHighlight = false;
+    }
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
     if (!keyEvent) {
         return false;

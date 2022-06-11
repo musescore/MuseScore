@@ -41,7 +41,6 @@
 #include "system.h"
 #include "textline.h"
 #include "utils.h"
-
 #include "log.h"
 
 using namespace mu;
@@ -587,6 +586,24 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
     return nullptr;
 }
 
+void LineSegment::handleStaffChange()
+{
+    staff_idx_t oldIdx = spanner()->staffIdx();
+    auto seg = spanner()->startSegment();
+    qreal y = canvasPos().y() - system()->canvasPos().y();
+    auto newIdx = system()->searchStaff(y);
+    if (newIdx != oldIdx) {
+        auto oldY = pagePos().y();
+        spanner()->undoChangeProperty(Pid::TRACK, newIdx * VOICES);
+        for (auto seg : spanner()->spannerSegments()) {
+            seg->setTrack(newIdx * VOICES);
+        }
+        auto newY = pagePos().y();
+        setOffset(PointF(offset().x(), offset().y() + oldY - newY));
+        setOffsetChanged(true);
+    }
+}
+
 //---------------------------------------------------------
 //   rebaseAnchors
 //---------------------------------------------------------
@@ -676,6 +693,10 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
 
         rebaseAnchor(Grip::START, seg1);
         rebaseAnchor(Grip::END, seg2);
+
+        if (!(ed.modifiers & Qt::KeyboardModifier::ControlModifier) || !!(ed.modifiers & Qt::KeyboardModifier::ShiftModifier)) {
+            handleStaffChange();
+        }
     }
     default:
         break;
