@@ -2637,7 +2637,7 @@ void NotationInteraction::editText(QInputMethodEvent* event)
     String& preeditString = m_editData.preeditString;
 
     // remove preedit string
-    int n = preeditString.size();
+    size_t n = preeditString.size();
     while (n--) {
         if (cursor->movePosition(mu::engraving::TextCursor::MoveOperation::Left)) {
             mu::engraving::TextBlock& curLine = cursor->curLine();
