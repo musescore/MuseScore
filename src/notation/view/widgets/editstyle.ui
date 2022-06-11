@@ -11490,7 +11490,7 @@ By default, they will be placed such as that their right end are at the same lev
          <number>12</number>
         </property>
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupBox_tablature">
           <property name="title">
            <string>Tablature</string>
           </property>
