@@ -239,7 +239,7 @@ void PaletteCell::write(XmlWriter& xml) const
     // for pre-3.3 version compatibility
     XmlWriter::Attributes cellAttrs;
     if (!name.isEmpty()) {
-        cellAttrs.push_back({ "name", XmlWriter::xmlString(name) });
+        cellAttrs.push_back({ "name", name });
     }
     if (custom) {
         cellAttrs.push_back({ "custom", "1" });
