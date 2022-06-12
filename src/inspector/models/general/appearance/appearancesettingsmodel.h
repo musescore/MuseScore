@@ -77,7 +77,9 @@ private:
     void updatePropertiesOnNotationChanged() override;
 
     void loadOffsets();
-    std::vector<Ms::EngravingItem*> getAllElementsInPage();
+    mu::engraving::Page* getPage();
+    std::vector<mu::engraving::EngravingItem*> getAllElementsInPage();
+    std::vector<mu::engraving::EngravingItem*> getAllOverlappingElements();
 
     PropertyItem* m_leadingSpace = nullptr;
     PropertyItem* m_barWidth = nullptr;
