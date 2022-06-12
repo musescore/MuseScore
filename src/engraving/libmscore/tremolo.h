@@ -47,7 +47,7 @@ class Tremolo final : public EngravingItem
     Chord* _chord2 { nullptr };
     TDuration _durationType;
     bool _up{ true };
-    Ms::DirectionV _direction;
+    DirectionV _direction;
     mu::PainterPath path;
 
     int _lines;         // derived from _subtype
