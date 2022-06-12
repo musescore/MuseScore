@@ -192,6 +192,21 @@ Notification PlaybackController::currentTrackSequenceIdChanged() const
     return m_currentSequenceIdChanged;
 }
 
+const IPlaybackController::InstrumentTrackIdMap& PlaybackController::instrumentTrackIdMap() const
+{
+    return m_trackIdMap;
+}
+
+Channel<TrackId, mu::engraving::InstrumentTrackId> PlaybackController::trackAdded() const
+{
+    return m_trackAdded;
+}
+
+Channel<TrackId, mu::engraving::InstrumentTrackId> PlaybackController::trackRemoved() const
+{
+    return m_trackRemoved;
+}
+
 mu::engraving::InstrumentTrackId PlaybackController::instrumentTrackIdForAudioTrackId(audio::TrackId theTrackId) const
 {
     for (auto [instrumentTrackId, audioTrackId] : m_trackIdMap) {
@@ -704,6 +719,8 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
         updateMuteStates();
 
         onFinished(instrumentTrackId);
+
+        m_trackAdded.send(trackId, instrumentTrackId);
     })
     .onReject(this, [instrumentTrackId, onFinished](int code, const std::string& msg) {
         LOGE() << "can't add a new track, code: [" << code << "] " << msg;
@@ -793,6 +810,7 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
     playback()->tracks()->removeTrack(m_currentSequenceId, search->second);
     audioSettings()->removeTrackParams(instrumentTrackId);
 
+    m_trackRemoved.send(search->second, instrumentTrackId);
     m_trackIdMap.erase(instrumentTrackId);
 }
 

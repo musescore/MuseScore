@@ -56,6 +56,12 @@ public:
     virtual audio::TrackSequenceId currentTrackSequenceId() const = 0;
     virtual async::Notification currentTrackSequenceIdChanged() const = 0;
 
+    using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, audio::TrackId>;
+    virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;
+
+    virtual async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackAdded() const = 0;
+    virtual async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const = 0;
+
     virtual engraving::InstrumentTrackId instrumentTrackIdForAudioTrackId(audio::TrackId trackId) const = 0;
 
     virtual void playElement(const notation::EngravingItem* element) = 0;

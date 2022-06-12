@@ -111,6 +111,7 @@ public:
     track_idx_t startTrack() const;
     track_idx_t endTrack() const;
 
+    InstrumentTrackIdList instrumentTrackIdList() const;
     InstrumentTrackIdSet instrumentTrackIdSet() const;
 
     String longName(const Fraction& tick = { -1, 1 }) const;

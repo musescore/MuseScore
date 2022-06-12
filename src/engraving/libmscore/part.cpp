@@ -618,6 +618,21 @@ track_idx_t Part::endTrack() const
     return _staves.back()->idx() * VOICES + VOICES;
 }
 
+InstrumentTrackIdList Part::instrumentTrackIdList() const
+{
+    InstrumentTrackIdList result;
+    std::set<std::string> seen;
+
+    for (const auto& pair : _instruments) {
+        std::string instrId = pair.second->id().toStdString();
+        if (seen.insert(instrId).second) {
+            result.push_back({ _id, instrId });
+        }
+    }
+
+    return result;
+}
+
 InstrumentTrackIdSet Part::instrumentTrackIdSet() const
 {
     InstrumentTrackIdSet result;
