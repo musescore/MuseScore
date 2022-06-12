@@ -475,6 +475,17 @@ const Instrument* Part::instrument(Fraction tick) const
     return _instruments.instrument(tick.ticks());
 }
 
+const Instrument* Part::instrumentById(const std::string& id) const
+{
+    for (const auto& pair: _instruments) {
+        if (pair.second->id().toStdString() == id) {
+            return pair.second;
+        }
+    }
+
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   instruments
 //---------------------------------------------------------
