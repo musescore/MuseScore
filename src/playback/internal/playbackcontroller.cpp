@@ -678,7 +678,13 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
         return;
     }
 
-    doAddTrack(instrumentTrackId, part->partName().toStdString(), onFinished);
+    const std::string primaryInstrId = part->instrument()->id().toStdString();
+
+    const std::string trackName = (instrumentTrackId.instrumentId == primaryInstrId)
+                                  ? part->partName().toStdString()
+                                  : "(" + part->instrumentById(instrumentTrackId.instrumentId)->trackName().toStdString() + ")";
+
+    doAddTrack(instrumentTrackId, trackName, onFinished);
 }
 
 void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, const std::string& title,
@@ -920,15 +926,15 @@ void PlaybackController::setupSequenceTracks()
             auto search = m_trackIdMap.find(trackId);
             if (search == m_trackIdMap.cend()) {
                 removeNonExistingTracks();
-                doAddTrack(trackId, part->partName().toStdString(), onAddFinished);
+                addTrack(trackId, onAddFinished);
             }
         }
 
         updateMuteStates();
     });
 
-    audioSettings()->soloMuteStateChanged().onReceive(this,
-                                                      [this](const InstrumentTrackId&, const project::IProjectAudioSettings::SoloMuteState&) {
+    audioSettings()->soloMuteStateChanged().onReceive(
+        this, [this](const InstrumentTrackId&, const project::IProjectAudioSettings::SoloMuteState&) {
         updateMuteStates();
     });
 
