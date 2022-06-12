@@ -98,7 +98,7 @@
           <actual-notes>2</actual-notes>
           <normal-notes>1</normal-notes>
           </time-modification>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <ornaments>
             <tremolo type="start">1</tremolo>
@@ -117,7 +117,7 @@
           <actual-notes>2</actual-notes>
           <normal-notes>1</normal-notes>
           </time-modification>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <ornaments>
             <tremolo type="stop">1</tremolo>
@@ -144,7 +144,7 @@
           <actual-notes>6</actual-notes>
           <normal-notes>2</normal-notes>
           </time-modification>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <tuplet type="start" bracket="yes">
             <tuplet-actual>
@@ -173,7 +173,7 @@
           <actual-notes>6</actual-notes>
           <normal-notes>2</normal-notes>
           </time-modification>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <ornaments>
             <tremolo type="stop">1</tremolo>

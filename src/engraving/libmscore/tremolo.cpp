@@ -346,10 +346,14 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
             isUp = true;
         } else if (_chord1->measure()->hasVoices(_chord1->staffIdx(), _chord1->tick(), _chord2->rtick() - _chord1->tick())) {
             isUp = _chord1->track() % 2 == 0;
+        } else if (_chord1->stemDirection() != DirectionV::AUTO) {
+            isUp = _chord1->stemDirection() == DirectionV::UP;
+        } else if (_chord2->stemDirection() != DirectionV::AUTO) {
+            isUp = _chord2->stemDirection() == DirectionV::UP;
         }
         _up = isUp;
-        _chord1->setUp(isUp ^ (_chord1->staffMove() != 0)); // xor
-        _chord2->setUp(isUp ^ (_chord2->staffMove() != 0));
+        _chord1->setUp(_chord1->staffMove() == 0 ? isUp : !isUp); // if on a different staff, flip stem dir
+        _chord2->setUp(_chord2->staffMove() == 0 ? isUp : !isUp);
         _chord1->layoutStem();
         _chord2->layoutStem();
     }
