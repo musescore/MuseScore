@@ -42,9 +42,9 @@
     <beamMaxSlope>0.25</beamMaxSlope>
     <dotNoteDistance>0.45</dotNoteDistance>
     <dotDotDistance>0.6</dotDotDistance>
-    <propertyDistanceHead>1.1</propertyDistanceHead>
+    <propertyDistanceHead>0.5.1</propertyDistanceHead>
     <propertyDistanceStem>0.6</propertyDistanceStem>
-    <propertyDistance>1.1</propertyDistance>
+    <propertyDistance>0.5.1</propertyDistance>
     <pageFillLimit>0.69</pageFillLimit>
     <lastSystemFillLimit>0.29</lastSystemFillLimit>
     <hairpinHeight>1.3</hairpinHeight>

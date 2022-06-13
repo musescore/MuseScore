@@ -57,9 +57,9 @@
     <dotNoteDistance>0.35</dotNoteDistance>
     <dotRestDistance>0.25</dotRestDistance>
     <dotDotDistance>0.5</dotDotDistance>
-    <propertyDistanceHead>1</propertyDistanceHead>
-    <propertyDistanceStem>1.8</propertyDistanceStem>
-    <propertyDistance>1</propertyDistance>
+    <propertyDistanceHead>0.5</propertyDistanceHead>
+    <propertyDistanceStem>0.5</propertyDistanceStem>
+    <propertyDistance>0.5</propertyDistance>
     <articulationMag>1</articulationMag>
     <lastSystemFillLimit>0.3</lastSystemFillLimit>
     <hairpinY>8</hairpinY>
