@@ -56,7 +56,7 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     QString musicalFontFamily = QString::fromStdString(uiConfiguration()->musicalFontFamily());
     int musicalFontSize = uiConfiguration()->musicalFontSize();
 
-    QString radioButtonStyle = QString("QRadioButton { font-family: %1; font-size: %2pt }")
+    QString radioButtonStyle = QString("QRadioButton { font-family: %1; font-size: %2px }")
                                .arg(musicalFontFamily)
                                .arg(musicalFontSize);
 
@@ -137,7 +137,7 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     ScoreFont* scoreFont = gpaletteScore->scoreFont();
 
     otherCombo->clear();
-    otherCombo->setStyleSheet(QString("QComboBox { font-family: \"%1 Text\"; font-size: %2pt; max-height: 30px } ")
+    otherCombo->setStyleSheet(QString("QComboBox { font-family: \"%1 Text\"; font-size: %2px; max-height: 30px } ")
                               .arg(scoreFont->family()).arg(musicalFontSize));
 
     int idx = 0;
