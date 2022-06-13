@@ -3,6 +3,7 @@
 //  ABC Import Plugin
 //  Based on ABC Import by Nicolas Froment (lasconic)
 //  Copyright (2013) Stephane Groleau (vgstef)
+//  Copyright (2022) Johan Temmerman (jeetee)
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -20,18 +21,19 @@
 import QtQuick 2.1
 import QtQuick.Dialogs 1.0
 import QtQuick.Controls 1.0
+import QtQuick.Window 2.2
 import MuseScore 3.0
 import FileIO 3.0
 
 MuseScore {
     menuPath: "Plugins.ABC Import"
-    version: "3.0"
+    version: "3.0.3"
     description: "This plugin imports ABC text from a file or the clipboard. Internet connection is required."
     requiresScore: false
     pluginType: "dialog"
 
-    id:window
-    width:  800; height: 500;
+    id: pluginDialog
+    width: 800; height: 500;
     onRun: {}
 
     FileIO {
@@ -65,8 +67,8 @@ MuseScore {
         wrapMode: Text.WordWrap
         text: qsTr("Paste your ABC tune here (or click button to load a file)\nYou need to be connected to internet for this plugin to work")
         font.pointSize:12
-        anchors.left: window.left
-        anchors.top: window.top
+        anchors.left: pluginDialog.left
+        anchors.top: pluginDialog.top
         anchors.leftMargin: 10
         anchors.topMargin: 10
         }
@@ -75,8 +77,8 @@ MuseScore {
     TextArea {
         id:abcText
         anchors.top: textLabel.bottom
-        anchors.left: window.left
-        anchors.right: window.right
+        anchors.left: pluginDialog.left
+        anchors.right: pluginDialog.right
         anchors.bottom: buttonOpenFile.top
         anchors.topMargin: 10
         anchors.bottomMargin: 10
@@ -91,7 +93,7 @@ MuseScore {
     Button {
         id : buttonOpenFile
         text: qsTr("Open file")
-        anchors.bottom: window.bottom
+        anchors.bottom: pluginDialog.bottom
         anchors.left: abcText.left
         anchors.topMargin: 10
         anchors.bottomMargin: 10
@@ -104,7 +106,7 @@ MuseScore {
     Button {
         id : buttonConvert
         text: qsTr("Import")
-        anchors.bottom: window.bottom
+        anchors.bottom: pluginDialog.bottom
         anchors.right: abcText.right
         anchors.topMargin: 10
         anchors.bottomMargin: 10
@@ -118,12 +120,13 @@ MuseScore {
                 if (request.readyState == XMLHttpRequest.DONE) {
                     var response = request.responseText
                     //console.log("responseText : " + response)
+                    myFile.source = myFile.tempPath() + "//" + (Date.now()) +".xml"
                     myFile.write(response)
                     readScore(myFile.source)
-                        Qt.quit()
+                    pluginDialog.parent.Window.window.close();
                     }
                 }
-            request.open("POST", "https://abc2xml.appspot.com/abcrenderer", true)
+            request.open("POST", "https://musescore.jeetee.net/abc/abc2xml.py", true)
             request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
             request.send(content)
             }
@@ -131,13 +134,13 @@ MuseScore {
 
     Button {
         id : buttonCancel
-        text: qsTr("Cancel")
-        anchors.bottom: window.bottom
+        text: pluginDialog.parent.Window.window.close();
+        anchors.bottom: pluginDialog.bottom
         anchors.right: buttonConvert.left
         anchors.topMargin: 10
         anchors.bottomMargin: 10
         onClicked: {
-                Qt.quit();
+                pluginDialog.parent.Window.window.close();
             }
         }
     }
