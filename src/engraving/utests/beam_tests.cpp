@@ -26,6 +26,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
+#include "libmscore/tremolo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -223,6 +224,37 @@ TEST_F(BeamTests, flipBeamStemDir)
     score->doLayout();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"flipBeamStemDir-01.mscx", BEAM_DATA_DIR + u"flipBeamStemDir-01-ref.mscx"));
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   flipTremoloStemDir
+//   This method tests if a tremolo's stem direction will be set to
+//   all its chords and will not affect other tremolos in score
+//   after using the flip command
+//---------------------------------------------------------
+
+TEST_F(BeamTests, flipTremoloStemDir)
+{
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "flipTremoloStemDir.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
+    Tremolo* t = toChord(cr)->tremolo();
+    Chord* c1 = t->chord1();
+    Chord* c2 = t->chord2();
+    EXPECT_TRUE(t->up() && c1->up() && c2->up());
+
+    score->select(c1->upNote());
+    score->startCmd();
+    score->cmdFlip();
+    score->endCmd();
+
+    score->update();
+    score->doLayout();
+    EXPECT_FALSE(t->up() || c1->up() || c2->up());
 
     delete score;
 }
