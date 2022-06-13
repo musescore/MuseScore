@@ -219,9 +219,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::dotNoteDistance,         "dotNoteDistance",         Spatium(0.5) },
     { Sid::dotRestDistance,         "dotRestDistance",         Spatium(0.25) },
     { Sid::dotDotDistance,          "dotDotDistance",          Spatium(0.65) },
-    { Sid::propertyDistanceHead,    "propertyDistanceHead",    Spatium(1.0) },
-    { Sid::propertyDistanceStem,    "propertyDistanceStem",    Spatium(1.8) },
-    { Sid::propertyDistance,        "propertyDistance",        Spatium(1.0) },
+    { Sid::propertyDistanceHead,    "propertyDistanceHead",    Spatium(0.5) },
+    { Sid::propertyDistanceStem,    "propertyDistanceStem",    Spatium(0.5) },
+    { Sid::propertyDistance,        "propertyDistance",        Spatium(0.5) },
 
     { Sid::articulationMag,         "articulationMag",         PropertyValue(1.0) },
     { Sid::articulationPosAbove,    "articulationPosAbove",    PointF(0.0, 0.0) },
