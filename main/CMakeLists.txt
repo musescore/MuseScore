@@ -525,6 +525,8 @@ if (APPLE)
       ../fonts/leland/LelandText.otf
       ../fonts/petaluma/PetalumaText.otf
       ../fonts/petaluma/PetalumaScript.otf
+      ../fonts/finalemaestro/FinaleMaestroText-Regular.otf
+      ../fonts/finalebroadway/FinaleBroadwayText.otf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )
      install(DIRECTORY

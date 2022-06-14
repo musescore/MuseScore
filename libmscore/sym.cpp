@@ -40,6 +40,8 @@ QVector<ScoreFont> ScoreFont::_scoreFonts {
       ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf"),
       ScoreFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/",  "MuseJazz.otf" ),
       ScoreFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/",  "Petaluma.otf" ),
+      ScoreFont("Finale Maestro", "Finale Maestro", ":/fonts/finalemaestro/", "FinaleMaestro.otf"),
+      ScoreFont("Finale Broadway", "Finale Broadway", ":/fonts/finalebroadway/", "FinaleBroadway.otf"),
       };
 
 std::array<uint, size_t(SymId::lastSym)+1> ScoreFont::_mainSymCodeTable { {0} };
@@ -6580,6 +6582,8 @@ void initScoreFonts()
       QFont::insertSubstitution("Gootville Text", "Leland Text");
       QFont::insertSubstitution("MuseJazz Text",  "Leland Text");
       QFont::insertSubstitution("Petaluma Text",  "MuseJazz Text");
+      QFont::insertSubstitution("Finale Maestro Text",  "Leland Text");
+      QFont::insertSubstitution("Finale Broadway Text",  "MuseJazz Text");
       QFont::insertSubstitution("ScoreFont",      "Leland Text"); // alias for current Musical Text Font
       ScoreFont::fallbackFont();   // load fallback font
       }

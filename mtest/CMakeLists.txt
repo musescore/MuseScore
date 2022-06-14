@@ -50,6 +50,8 @@ QT5_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Free.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-FreeSerif.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Petaluma.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-FinaleMaestro.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-FinaleBroadway.qrc
       )
 
 add_library (testResources STATIC

@@ -14,6 +14,8 @@ This directory contains the fonts used internally by MuseScore and the sources u
 * **mscore** Prior to 3.6 this was the main font used in MuseScore scores for musical symbols (formerly known as [_Emmentaler_](http://lilypond.org/doc/v2.18/Documentation/notation/the-feta-font)), as well its counterpart used for texts.
 * **musejazz** The _MuseJazz_ and _MuseJazzText_ fonts used for notation and text in a handwritten style.  These are maintained by the MuseScore project.
 * **petaluma** The [_Petaluma_](https://github.com/steinbergmedia/petaluma/) fonts and the documentation for them. These fonts are **not** maintained by the MuseScore community, please **DO NOT EDIT** these fonts. 
+* **finalemaestro** The [_Finale Maestro_](https://makemusic.zendesk.com/hc/en-us/articles/1500013053461-MakeMusic-Fonts-and-Licensing-Information) fonts and the documentation for them. These fonts are **not** maintained by the MuseScore community, please **DO NOT EDIT** these fonts. 
+* **finalebroadway** The [_Finale Broadway_](https://makemusic.zendesk.com/hc/en-us/articles/1500013053461-MakeMusic-Fonts-and-Licensing-Information) fonts and the documentation for them. These fonts are **not** maintained by the MuseScore community, please **DO NOT EDIT** these fonts. 
 * **smufl** The [_SMuFL_](https://github.com/w3c/smufl/) files and documentation for [_SMuFL_](http://www.smufl.org). These are **not** maintained by the MuseScore community, please **DO NOT EDIT** these files. 
 
 Other files in the main **fonts** directories are for collateral fonts used by MuseScore for specific tasks. If an *.sfd* file is present, the font is maintained/customized by the MuseScore community.
