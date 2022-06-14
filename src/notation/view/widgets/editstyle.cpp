@@ -87,6 +87,7 @@ static const QStringList ALL_PAGE_CODES {
     "figured-bass",
     "chord-symbols",
     "fretboard-diagrams",
+    "tablature-styles",
     "text-styles"
 };
 
