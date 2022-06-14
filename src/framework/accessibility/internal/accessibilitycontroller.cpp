@@ -31,6 +31,7 @@
 #endif
 
 #include "accessibleobject.h"
+#include "accessiblestub.h"
 #include "accessibleiteminterface.h"
 #include "async/async.h"
 
@@ -69,7 +70,7 @@ static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObje
         return interfaceGetter(object);
     }
 
-    return nullptr;
+    return AccessibleStub::accessibleInterface(object);
 }
 
 void AccessibilityController::init()
