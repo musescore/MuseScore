@@ -1710,6 +1710,8 @@ void EditStyle::setValues()
     musicalTextFont->addItem("Gonville Text", "Gootville Text");
     musicalTextFont->addItem("MuseJazz Text", "MuseJazz Text");
     musicalTextFont->addItem("Petaluma Text", "Petaluma Text");
+    musicalTextFont->addItem("Finale Maestro Text", "Finale Maestro Text");
+    musicalTextFont->addItem("Finale Broadway Text", "Finale Broadway Text");
     QString tfont(styleValue(StyleId::MusicalTextFont).value<String>());
     idx = musicalTextFont->findData(tfont);
     musicalTextFont->setCurrentIndex(idx);
