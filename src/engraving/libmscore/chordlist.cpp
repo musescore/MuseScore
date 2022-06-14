@@ -523,8 +523,8 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
     String initial;
     bool take6 = false, take7 = false, take9 = false, take11 = false, take13 = false;
     size_t lastLeadingToken = 0;
-    int len = s.size();
-    int i;
+    size_t len = s.size();
+    size_t i = 0;
     int thirdKey = 0, seventhKey = 0;
     bool susChord = false;
     std::vector<HDegree> hdl;
@@ -534,7 +534,6 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
     _name = s;
     _parseable = true;
     _understandable = true;
-    i = 0;
 
     lastLeadingToken = _tokenList.size();
     // get quality
@@ -1139,10 +1138,10 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         for (const String& d : altList) {
             QString unalt(d.toQString());
             unalt.replace(QRegularExpression("alt[b#]"), "add");
-            if (_xmlDegrees.removeAll(unalt) > 0) {
+            if (_xmlDegrees.removeAll(unalt)) {
                 String alt(d);
                 alt.replace(u"alt", u"add");
-                int i1 = _xmlDegrees.indexOf(d);
+                size_t i1 = _xmlDegrees.indexOf(d);
                 _xmlDegrees.replace(i1, alt);
             }
         }
