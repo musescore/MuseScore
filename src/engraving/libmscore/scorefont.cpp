@@ -44,6 +44,8 @@ std::vector<ScoreFont> ScoreFont::s_scoreFonts {
     ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf"),
     ScoreFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/",  "MuseJazz.otf"),
     ScoreFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/",  "Petaluma.otf"),
+    ScoreFont("Finale Maestro", "Finale Maestro", ":/fonts/finalemaestro/", "FinaleMaestro.otf"),
+    ScoreFont("Finale Broadway", "Finale Broadway", ":/fonts/finalebroadway/", "FinaleBroadway.otf"),
 };
 
 std::array<ScoreFont::Code, size_t(SymId::lastSym) + 1> ScoreFont::s_symIdCodes { {  } };
@@ -114,6 +116,8 @@ void ScoreFont::initScoreFonts()
     fontProvider()->insertSubstitution(u"Gootville Text", u"Leland Text");
     fontProvider()->insertSubstitution(u"MuseJazz Text",  u"Leland Text");
     fontProvider()->insertSubstitution(u"Petaluma Text",  u"MuseJazz Text");
+    fontProvider()->insertSubstitution(u"Finale Maestro Text", u"Leland Text");
+    fontProvider()->insertSubstitution(u"Finale Broadway Text", u"MuseJazz Text");
     fontProvider()->insertSubstitution(u"ScoreFont",      u"Leland Text"); // alias for current Musical Text Font
 
     fallbackFont(); // load fallback font
