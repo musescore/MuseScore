@@ -22,7 +22,7 @@
 
 #include "mixerpanelmodel.h"
 
-#include "async/async.h"
+#include "defer.h"
 
 #include "log.h"
 #include "translation.h"
@@ -112,7 +112,16 @@ void MixerPanelModel::loadItems()
 
     beginResetModel();
 
+    DEFER {
+        endResetModel();
+        emit rowCountChanged();
+    };
+
     clear();
+
+    if (m_currentTrackSequenceId == -1) {
+        return;
+    }
 
     const auto& instrumentTrackIdMap = controller()->instrumentTrackIdMap();
 
@@ -139,9 +148,6 @@ void MixerPanelModel::loadItems()
     m_mixerChannelList.append(buildMasterChannelItem());
 
     updateItemsPanelsOrder();
-
-    endResetModel();
-    emit rowCountChanged();
 }
 
 void MixerPanelModel::addItem(const audio::TrackId trackId, const engraving::InstrumentTrackId instrumentTrackId)

@@ -62,8 +62,6 @@ public:
     virtual async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackAdded() const = 0;
     virtual async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const = 0;
 
-    virtual engraving::InstrumentTrackId instrumentTrackIdForAudioTrackId(audio::TrackId trackId) const = 0;
-
     virtual void playElement(const notation::EngravingItem* element) = 0;
     virtual void seekElement(const notation::EngravingItem* element) = 0;
 
