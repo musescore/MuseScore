@@ -78,8 +78,6 @@ public:
     async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackAdded() const override;
     async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const override;
 
-    engraving::InstrumentTrackId instrumentTrackIdForAudioTrackId(audio::TrackId trackId) const override;
-
     void playElement(const notation::EngravingItem* element) override;
     void seekElement(const notation::EngravingItem* element) override;
 

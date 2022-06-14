@@ -207,17 +207,6 @@ Channel<TrackId, mu::engraving::InstrumentTrackId> PlaybackController::trackRemo
     return m_trackRemoved;
 }
 
-mu::engraving::InstrumentTrackId PlaybackController::instrumentTrackIdForAudioTrackId(audio::TrackId theTrackId) const
-{
-    for (auto [instrumentTrackId, audioTrackId] : m_trackIdMap) {
-        if (audioTrackId == theTrackId) {
-            return instrumentTrackId;
-        }
-    }
-
-    return {};
-}
-
 void PlaybackController::playElement(const notation::EngravingItem* element)
 {
     IF_ASSERT_FAILED(element) {
@@ -648,7 +637,11 @@ void PlaybackController::resetCurrentSequence()
     setCurrentPlaybackStatus(PlaybackStatus::Stopped);
 
     playback()->removeSequence(m_currentSequenceId);
+
+    m_trackIdMap.clear();
+
     m_currentSequenceId = -1;
+    m_currentSequenceIdChanged.notify();
 }
 
 void PlaybackController::setCurrentTick(const tick_t tick)
