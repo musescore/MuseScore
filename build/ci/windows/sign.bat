@@ -9,10 +9,10 @@ SET FILE_PATH=""
 SET FILE_NAME=""
 
 SET SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe"
-SET SIGNCERT="build\ci\windows\resources\musescore.p12"
-SET SIGNCERT_ENCRYPTED="build\ci\windows\resources\musescore.p12.enc"
+SET SIGNCERT="build\ci\windows\resources\musescore.pfx"
+SET SIGNCERT_ENCRYPTED="build\ci\windows\resources\musescore.enc"
 
-SET TIMESERVER1="http://timestamp.globalsign.com/scripts/timstamp.dll"
+SET TIMESERVER1="http://timestamp.digicert.com"
 SET TIMESERVER2="http://timestamp.sectigo.com"
 SET TIMESERVER3="http://tsa.starfieldtech.com"
 
@@ -36,12 +36,9 @@ ECHO "FILES_DIR: %FILES_DIR%"
 ECHO "FILE_PATH: %FILE_PATH%"
 ECHO "FILE_NAME: %FILE_NAME%"
 
-ECHO "Install secure-file"
-WHERE /q secure-file
-IF ERRORLEVEL 1 ( choco install -y --ignore-checksums secure-file )
-
-ECHO "Decrypt certificate"
-secure-file -decrypt %SIGNCERT_ENCRYPTED% -secret %CERT_ENCRYPT_SECRET%
+ECHO "=== Decrypt certificate ==="
+7z x -y %SIGNCERT_ENCRYPTED% -obuild\ci\windows\resources\ -p%CERT_ENCRYPT_SECRET%
+ECHO "=== End Decrypt certificate ==="
 
 :: Sign files in dir
 IF %MODE% == "dir" (
@@ -92,5 +89,4 @@ IF %MODE% == "file" (
         exit /b 1 
     )
 )
-
 
