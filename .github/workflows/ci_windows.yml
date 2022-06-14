@@ -102,6 +102,7 @@ jobs:
       with:
         name: MuseScore_x64_${{ github.run_id }}
         path: build.artifacts\ 
+
   build_x32:
     runs-on: windows-2019
     steps:
