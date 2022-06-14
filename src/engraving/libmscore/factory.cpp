@@ -81,6 +81,7 @@
 #include "tremolobar.h"
 #include "fret.h"
 #include "bend.h"
+#include "stretchedbend.h"
 #include "lyrics.h"
 #include "figuredbass.h"
 #include "slur.h"
@@ -178,6 +179,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::HARMONY:           return new Harmony(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::FRET_DIAGRAM:      return new FretDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::BEND:              return new Bend(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::STRETCHED_BEND:    return new StretchedBend(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
     case ElementType::LYRICS:            return new Lyrics(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
     case ElementType::FIGURED_BASS:      return new FiguredBass(parent->isSegment() ? toSegment(parent) : dummy->segment());
@@ -308,7 +310,17 @@ std::shared_ptr<Beam> Factory::makeBeam(System* parent)
     return std::shared_ptr<Beam>(createBeam(parent));
 }
 
-CREATE_ITEM_IMPL(Bend, ElementType::BEND, Note, isAccessibleEnabled)
+//CREATE_ITEM_IMPL(Bend, ElementType::BEND, Note, isAccessibleEnabled)
+CREATE_ITEM_IMPL(StretchedBend, ElementType::STRETCHED_BEND, Note, isAccessibleEnabled)
+
+Bend* Factory::createBend(Note * parent, ElementType type, bool isAccessibleEnabled)
+{
+    Bend* b = new Bend(parent, type);
+    b->setAccessibleEnabled(isAccessibleEnabled);
+
+    return b;
+}
+
 MAKE_ITEM_IMPL(Bend, Note)
 
 CREATE_ITEM_IMPL(Bracket, ElementType::BRACKET, EngravingItem, isAccessibleEnabled)

@@ -26,7 +26,6 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
-#include "libmscore/bend.h"
 #include "libmscore/box.h"
 #include "libmscore/bracket.h"
 #include "libmscore/chord.h"
@@ -953,6 +952,10 @@ bool GuitarPro5::read(IODevice* io)
             }
         }
     }
+
+#ifdef ENGRAVING_USE_STRETCHED_BENDS
+    StretchedBend::prepareBends(m_bends);
+#endif
 
     return true;
 }
