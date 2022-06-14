@@ -52,7 +52,7 @@ void Slide::layout()
     if (!modified) {
         qreal x2 = 0;
         qreal y2 = 0;
-        qreal halfLength = _initialLength / 2;
+        qreal halfLength = _baseLength / 2;
 
         if (_chordLineType != ChordLineType::NOTYPE) {
             path = PainterPath();
