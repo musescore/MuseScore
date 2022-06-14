@@ -41,6 +41,7 @@ class MixerChannelItem : public QObject, public async::Asyncable
     Q_OBJECT
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+    Q_PROPERTY(bool isPrimaryChannel READ isPrimaryChannel CONSTANT)
 
     Q_PROPERTY(bool outputOnly READ outputOnly CONSTANT)
     Q_PROPERTY(QList<OutputResourceItem*> outputResourceItemList READ outputResourceItemList NOTIFY outputResourceItemListChanged)
@@ -60,7 +61,7 @@ class MixerChannelItem : public QObject, public async::Asyncable
     INJECT(playback, framework::IInteractive, interactive)
 
 public:
-    explicit MixerChannelItem(QObject* parent, audio::TrackId trackId = -1);
+    explicit MixerChannelItem(QObject* parent, audio::TrackId trackId = -1, bool isPrimary = true);
     virtual ~MixerChannelItem();
 
     audio::TrackId trackId() const;
@@ -68,6 +69,7 @@ public:
     virtual bool isMasterChannel() const;
 
     QString title() const;
+    bool isPrimaryChannel() const;
 
     float leftChannelPressure() const;
     float rightChannelPressure() const;
@@ -152,6 +154,7 @@ protected:
     audio::AudioSignalChanges m_audioSignalChanges;
 
     QString m_title;
+    bool m_isPrimary = true;
 
     float m_leftChannelPressure = 0.0;
     float m_rightChannelPressure = 0.0;
@@ -166,7 +169,8 @@ class TrackMixerChannelItem : public MixerChannelItem
     Q_PROPERTY(InputResourceItem * inputResourceItem READ inputResourceItem NOTIFY inputResourceItemChanged)
 
 public:
-    explicit TrackMixerChannelItem(QObject* parent, audio::TrackId trackId, engraving::InstrumentTrackId instrumentTrackId);
+    explicit TrackMixerChannelItem(QObject* parent, audio::TrackId trackId, engraving::InstrumentTrackId instrumentTrackId,
+                                   bool isPrimary = true);
 
     engraving::InstrumentTrackId instrumentTrackId() const;
 

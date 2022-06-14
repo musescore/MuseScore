@@ -30,6 +30,7 @@
 using namespace mu::playback;
 using namespace mu::audio;
 using namespace mu::project;
+using namespace mu::engraving;
 
 static constexpr int INVALID_INDEX = -1;
 
@@ -115,18 +116,21 @@ void MixerPanelModel::loadItems()
 
     const auto& instrumentTrackIdMap = controller()->instrumentTrackIdMap();
 
-    auto addTrack = [this, &instrumentTrackIdMap](engraving::InstrumentTrackId instrumentTrackId) {
+    auto addTrack = [this, &instrumentTrackIdMap](engraving::InstrumentTrackId instrumentTrackId, bool isPrimary = true) {
         auto search = instrumentTrackIdMap.find(instrumentTrackId);
         if (search == instrumentTrackIdMap.cend()) {
             return;
         }
 
-        m_mixerChannelList.push_back(buildTrackChannelItem(search->second, instrumentTrackId));
+        m_mixerChannelList.push_back(buildTrackChannelItem(search->second, instrumentTrackId, isPrimary));
     };
 
     for (const Part* part : masterNotationParts()->partList()) {
+        std::string primaryInstrId = part->instrument()->id().toStdString();
+
         for (const InstrumentTrackId& instrumentTrackId : part->instrumentTrackIdList()) {
-            addTrack(instrumentTrackId);
+            bool isPrimary = instrumentTrackId.instrumentId == primaryInstrId;
+            addTrack(instrumentTrackId, isPrimary);
         }
     }
 
@@ -151,7 +155,10 @@ void MixerPanelModel::addItem(const audio::TrackId trackId, const engraving::Ins
 
     beginInsertRows(QModelIndex(), index, index);
 
-    MixerChannelItem* item = buildTrackChannelItem(trackId, instrumentTrackId);
+    const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
+    bool isPrimary = part ? part->instrument()->id().toStdString() == instrumentTrackId.instrumentId : true;
+
+    MixerChannelItem* item = buildTrackChannelItem(trackId, instrumentTrackId, isPrimary);
     m_mixerChannelList.insert(index, item);
     updateItemsPanelsOrder();
 
@@ -249,10 +256,10 @@ int MixerPanelModel::indexOf(const audio::TrackId trackId) const
     return INVALID_INDEX;
 }
 
-MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackId trackId,
-                                                         const engraving::InstrumentTrackId instrumentTrackId)
+MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackId trackId, const engraving::InstrumentTrackId instrumentTrackId,
+                                                         bool isPrimary)
 {
-    TrackMixerChannelItem* item = new TrackMixerChannelItem(this, trackId, instrumentTrackId);
+    TrackMixerChannelItem* item = new TrackMixerChannelItem(this, trackId, instrumentTrackId, isPrimary);
     item->setPanelSection(m_itemsNavigationSection);
 
     item->loadSoloMuteState(audioSettings()->soloMuteState(instrumentTrackId));
