@@ -41,9 +41,10 @@ static const std::string TRACK_ID_KEY("trackId");
 static const std::string RESOURCE_ID_KEY("resourceId");
 static const std::string CHAIN_ORDER_KEY("chainOrder");
 
-MixerChannelItem::MixerChannelItem(QObject* parent, audio::TrackId trackId)
+MixerChannelItem::MixerChannelItem(QObject* parent, audio::TrackId trackId, bool isPrimary)
     : QObject(parent),
     m_trackId(trackId),
+    m_isPrimary(isPrimary),
     m_leftChannelPressure(MIN_DISPLAYED_DBFS),
     m_rightChannelPressure(MIN_DISPLAYED_DBFS)
 {
@@ -78,6 +79,11 @@ bool MixerChannelItem::isMasterChannel() const
 QString MixerChannelItem::title() const
 {
     return m_title;
+}
+
+bool MixerChannelItem::isPrimaryChannel() const
+{
+    return m_isPrimary;
 }
 
 float MixerChannelItem::leftChannelPressure() const
@@ -427,8 +433,9 @@ const QList<OutputResourceItem*>& MixerChannelItem::outputResourceItemList() con
 // TrackMixerChannelItem
 //================================
 
-TrackMixerChannelItem::TrackMixerChannelItem(QObject* parent, audio::TrackId trackId, engraving::InstrumentTrackId instrumentTrackId)
-    : MixerChannelItem(parent, trackId), m_instrumentTrackId(instrumentTrackId)
+TrackMixerChannelItem::TrackMixerChannelItem(QObject* parent, audio::TrackId trackId, engraving::InstrumentTrackId instrumentTrackId,
+                                             bool isPrimary)
+    : MixerChannelItem(parent, trackId, isPrimary), m_instrumentTrackId(instrumentTrackId)
 {
     m_inputResourceItem = buildInputResourceItem();
 }

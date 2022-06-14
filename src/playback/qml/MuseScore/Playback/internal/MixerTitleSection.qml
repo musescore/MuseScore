@@ -34,7 +34,7 @@ MixerPanelSection {
         width: root.channelItemWidth
         height: 22
 
-        color: Utils.colorWithAlpha(ui.theme.accentColor, 0.5)
+        color: Utils.colorWithAlpha(ui.theme.accentColor, channelItem.isPrimaryChannel ? 0.5 : 0.25)
         border.color: ui.theme.accentColor
         border.width: 1
 

@@ -74,7 +74,8 @@ private:
     int resolveInsertIndex(const engraving::InstrumentTrackId instrumentTrackId) const;
     int indexOf(const audio::TrackId trackId) const;
 
-    MixerChannelItem* buildTrackChannelItem(const audio::TrackId trackId, const engraving::InstrumentTrackId instrumentTrackId);
+    MixerChannelItem* buildTrackChannelItem(const audio::TrackId trackId, const engraving::InstrumentTrackId instrumentTrackId,
+                                            bool isPrimary = true);
     MixerChannelItem* buildMasterChannelItem();
 
     TrackMixerChannelItem* trackChannelItem(const audio::TrackId& trackId) const;
