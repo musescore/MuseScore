@@ -2193,6 +2193,10 @@ void Chord::layoutPitched()
     _spaceLw = lll;
     _spaceRw = rrr;
 
+    for (Note* note : _notes) {
+        note->layout2();
+    }
+
     for (EngravingItem* e : el()) {
         if (e->type() == ElementType::SLUR) {       // we cannot at this time as chordpositions are not fixed
             continue;
@@ -2209,10 +2213,6 @@ void Chord::layoutPitched()
                 _spaceRw = rx;
             }
         }
-    }
-
-    for (Note* note : _notes) {
-        note->layout2();
     }
 
     // align note-based fingerings

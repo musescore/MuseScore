@@ -82,39 +82,18 @@ void ChordLine::layout()
     if (!modified) {
         qreal x2 = 0;
         qreal y2 = 0;
-        switch (_chordLineType) {
-        case ChordLineType::NOTYPE:
-            break;
-        case ChordLineType::FALL:
-            x2 = _initialLength;
-            y2 = _initialLength;
-            break;
-        case ChordLineType::PLOP:
-            x2 = -_initialLength;
-            y2 = -_initialLength;
-            break;
-        case ChordLineType::SCOOP:
-            x2 = -_initialLength;
-            y2 = _initialLength;
-            break;
-        default:
-        case ChordLineType::DOIT:
-            x2 = _initialLength;
-            y2 = -_initialLength;
-            break;
-        }
+        double horBaseLength = 1.2 * _baseLength; // let the symbols extend a bit more horizontally
+        x2 += isToTheLeft() ? -horBaseLength : horBaseLength;
+        y2 += isBelow() ? _baseLength : -_baseLength;
         if (_chordLineType != ChordLineType::NOTYPE) {
             path = PainterPath();
-            // chordlines to the right of the note
-            if (_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT) {
+            if (!isToTheLeft()) {
                 if (_straight) {
                     path.lineTo(x2, y2);
                 } else {
                     path.cubicTo(x2 / 2, 0.0, x2, y2 / 2, x2, y2);
                 }
-            }
-            // chordlines to the left of the note
-            else if (_chordLineType == ChordLineType::PLOP || _chordLineType == ChordLineType::SCOOP) {
+            } else {
                 if (_straight) {
                     path.lineTo(x2, y2);
                 } else {
@@ -127,19 +106,13 @@ void ChordLine::layout()
     qreal _spatium = spatium();
     if (explicitParent()) {
         Note* note = chord()->upNote();
-        PointF p(note->pos());
-        // chordlines to the right of the note
-        if (_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT) {
-            setPos(p.x() + note->bboxRightPos() + _spatium * .2, p.y());
-        }
-        // chordlines to the left of the note
-        if (_chordLineType == ChordLineType::PLOP) {
-            setPos(p.x() + note->bboxRightPos() * .25, p.y() - note->headHeight() * .75);
-        }
-        if (_chordLineType == ChordLineType::SCOOP) {
-            qreal x = p.x() + (chord()->up() ? note->bboxRightPos() * .25 : _spatium * -.2);
-            setPos(x, p.y() + note->headHeight() * .75);
-        }
+        double x = note->pos().x();
+        double y = note->pos().y();
+        double horOffset = 0.33 * spatium(); // one third of a space away from the note
+        double vertOffset = 0.25 * spatium(); // one quarter of a space from the center line
+        x += isToTheLeft() ? -note->shape().left() - horOffset : note->shape().right() + horOffset;
+        y += isBelow() ? vertOffset : -vertOffset;
+        setPos(x, y);
     } else {
         setPos(0.0, 0.0);
     }
@@ -248,34 +221,11 @@ void ChordLine::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     qreal _spatium = spatium();
-
-    if (this->isStraight()) {
-        painter->scale(_spatium, _spatium);
-        painter->setPen(Pen(curColor(), .15, PenStyle::SolidLine));
-        painter->setBrush(BrushStyle::NoBrush);
-
-        PainterPath pathOffset = path;
-        qreal offset = 0.5;
-
-        if (_chordLineType == ChordLineType::FALL) {
-            pathOffset.translate(offset, -offset);
-        } else if (_chordLineType == ChordLineType::DOIT) {
-            pathOffset.translate(offset, offset);
-        } else if (_chordLineType == ChordLineType::SCOOP) {
-            pathOffset.translate(-offset, offset);
-        } else if (_chordLineType == ChordLineType::PLOP) {
-            pathOffset.translate(-offset, -offset);
-        }
-
-        painter->drawPath(pathOffset);
-        painter->scale(1.0 / _spatium, 1.0 / _spatium);
-    } else {
-        painter->scale(_spatium, _spatium);
-        painter->setPen(Pen(curColor(), .15, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin));
-        painter->setBrush(BrushStyle::NoBrush);
-        painter->drawPath(path);
-        painter->scale(1.0 / _spatium, 1.0 / _spatium);
-    }
+    painter->scale(_spatium, _spatium);
+    painter->setPen(Pen(curColor(), .15, PenStyle::SolidLine));
+    painter->setBrush(BrushStyle::NoBrush);
+    painter->drawPath(path);
+    painter->scale(1.0 / _spatium, 1.0 / _spatium);
 }
 
 //---------------------------------------------------------

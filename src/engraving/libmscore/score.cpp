@@ -5568,6 +5568,16 @@ void Score::createPaddingTable()
 
     // Temporary hack, because some padding is already constructed inside the lyrics themselves.
     _paddingTable[ElementType::BAR_LINE][ElementType::LYRICS] = 0.0 * spatium();
+
+    // Chordlines
+    for (auto& elem : _paddingTable[ElementType::CHORDLINE]) {
+        elem.second = 0.35 * spatium();
+    }
+    for (auto& elem: _paddingTable) {
+        elem.second[ElementType::CHORDLINE] = 0.35 * spatium();
+    }
+    _paddingTable[ElementType::BAR_LINE][ElementType::CHORDLINE] = 0.65 * spatium();
+    _paddingTable[ElementType::CHORDLINE][ElementType::BAR_LINE] = 0.65 * spatium();
 }
 
 //--------------------------------------------------------
