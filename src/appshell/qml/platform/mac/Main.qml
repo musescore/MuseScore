@@ -37,6 +37,9 @@ AppWindow {
         id: menuModel
     }
 
+    minimumWidth: Math.max(400, window.minimumSize.width)
+    minimumHeight: Math.max(400, window.minimumSize.height)
+
     Component.onCompleted: {
         menuModel.load()
 

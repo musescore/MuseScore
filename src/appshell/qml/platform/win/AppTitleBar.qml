@@ -34,6 +34,9 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    implicitHeight: 32
+    implicitWidth: contentRow.implicitWidth
+
     property alias title: titleTextmetrics.text
     property rect titleMoveAreaRect: Qt.rect(titleMoveArea.x, titleMoveArea.y, titleMoveArea.width, titleMoveArea.height)
 
@@ -46,6 +49,7 @@ Rectangle {
     signal closeWindowRequested()
 
     RowLayout {
+        id: contentRow
         anchors.fill: parent
 
         spacing: 8

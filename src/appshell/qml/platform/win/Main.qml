@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Window 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.AppShell 1.0
@@ -29,6 +30,9 @@ import "../../"
 
 AppWindow {
     id: root
+
+    minimumWidth: Math.max(400, contentColumn.implicitWidth)
+    minimumHeight: Math.max(400, contentColumn.implicitHeight)
 
     function toggleMaximized() {
         if (root.visibility === Window.Maximized) {
@@ -49,39 +53,44 @@ AppWindow {
         window.init()
     }
 
-    AppTitleBar {
-        id: appTitleBar
+    ColumnLayout {
+        id: contentColumn
 
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.fill: parent
+        spacing: 0
 
-        height: 32
-        title: root.title
+        AppTitleBar {
+            id: appTitleBar
 
-        windowVisibility: root.visibility
+            Layout.fillWidth: true
 
-        appWindow: root
+            title: root.title
 
-        onShowWindowMinimizedRequested: {
-            root.showMinimized()
+            windowVisibility: root.visibility
+
+            appWindow: root
+
+            onShowWindowMinimizedRequested: {
+                root.showMinimized()
+            }
+
+            onToggleWindowMaximizedRequested: {
+                root.toggleMaximized()
+            }
+
+            onCloseWindowRequested: {
+                root.close()
+            }
         }
 
-        onToggleWindowMaximizedRequested: {
-            root.toggleMaximized()
+        WindowContent {
+            id: window
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Layout.minimumWidth: minimumSize.width
+            Layout.minimumHeight: minimumSize.height
         }
-
-        onCloseWindowRequested: {
-            root.close()
-        }
-    }
-
-    WindowContent {
-        id: window
-
-        anchors.top: appTitleBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
     }
 }

@@ -52,6 +52,8 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
 {
     Q_OBJECT
 
+    Q_PROPERTY(QSize minimumSize READ minimumSize NOTIFY minimumSizeChanged)
+
     Q_PROPERTY(QString currentPageUri READ currentPageUri NOTIFY currentPageUriChanged)
 
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarView> toolBars READ toolBarsProperty)
@@ -65,6 +67,8 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);
     ~DockWindow() override;
+
+    QSize minimumSize() const;
 
     QString currentPageUri() const;
 
@@ -92,6 +96,8 @@ public:
 signals:
     void pageLoaded();
     void currentPageUriChanged(const QString& uri);
+
+    void minimumSizeChanged();
 
 private slots:
     void onQuit();

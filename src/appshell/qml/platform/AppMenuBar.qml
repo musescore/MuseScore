@@ -30,6 +30,7 @@ ListView {
 
     height: contentItem.childrenRect.height
     width: contentWidth
+    implicitWidth: contentWidth
 
     property alias appWindow: appMenuModel.appWindow
 

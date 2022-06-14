@@ -90,6 +90,15 @@ DockWindow::~DockWindow()
     dockWindowProvider()->deinit();
 }
 
+QSize DockWindow::minimumSize() const
+{
+    if (!m_mainWindow) {
+        return {};
+    }
+
+    return m_mainWindow->minimumSize();
+}
+
 void DockWindow::componentComplete()
 {
     TRACEFUNC;
@@ -99,6 +108,8 @@ void DockWindow::componentComplete()
     m_mainWindow = new KDDockWidgets::MainWindowQuick("mainWindow",
                                                       KDDockWidgets::MainWindowOption_None,
                                                       this);
+
+    connect(m_mainWindow, &KDDockWidgets::MainWindowBase::geometryUpdated, this, &DockWindow::minimumSizeChanged);
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
 }
@@ -423,8 +434,13 @@ void DockWindow::alignToolBars(const DockPageView* page)
         deltaForLastCentralToolBar = 0;
     }
 
+    // Temporarily setting the minimum width to force a size update
     lastLeftToolBar->setMinimumWidth(lastLeftToolBar->contentWidth() + deltaForLastLeftToolbar);
     lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth() + deltaForLastCentralToolBar);
+
+    // Restoring, to allow the window to be resized down
+    lastLeftToolBar->setMinimumWidth(lastLeftToolBar->contentWidth());
+    lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth());
 }
 
 void DockWindow::addDock(DockBase* dock, Location location, const DockBase* relativeTo)

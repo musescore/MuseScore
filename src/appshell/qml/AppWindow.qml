@@ -35,11 +35,14 @@ ApplicationWindow {
 
     title: titleProvider.title
 
-    width: 1150
-    height: 800
+    // Minimum width and height are set in Main.qml files
+    onMinimumWidthChanged: {
+        width = Math.max(width, minimumWidth)
+    }
 
-    minimumWidth: 1150
-    minimumHeight: 600
+    onMinimumHeightChanged: {
+        height = Math.max(height, minimumHeight)
+    }
 
     visible: false
 

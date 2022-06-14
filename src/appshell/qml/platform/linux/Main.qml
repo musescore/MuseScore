@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -30,26 +31,35 @@ import "../../"
 AppWindow {
     id: root
 
-    AppMenuBar {
-        id: appMenuBar
-
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        appWindow: root
-    }
+    minimumWidth: Math.max(400, contentColumn.implicitWidth)
+    minimumHeight: Math.max(400, contentColumn.implicitHeight)
 
     Component.onCompleted: {
         window.init()
     }
 
-    WindowContent {
-        id: window
+    ColumnLayout {
+        id: contentColumn
 
-        anchors.top: appMenuBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        anchors.fill: parent
+        spacing: 0
+
+        AppMenuBar {
+            id: appMenuBar
+
+            Layout.fillWidth: true
+
+            appWindow: root
+        }
+
+        WindowContent {
+            id: window
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Layout.minimumWidth: minimumSize.width
+            Layout.minimumHeight: minimumSize.height
+        }
     }
 }
