@@ -7,7 +7,6 @@
 #include "libmscore/factory.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/box.h"
-#include "libmscore/bend.h"
 #include "libmscore/bracketItem.h"
 #include "libmscore/clef.h"
 #include "libmscore/chord.h"
@@ -49,7 +48,7 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 #include "libmscore/harmonicmark.h"
-#include "libmscore/excerpt.h"
+#include "libmscore/stretchedbend.h"
 
 #include "../importgtp.h"
 
@@ -329,6 +328,11 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
     }
 
     addTempoMap();
+
+#ifdef ENGRAVING_USE_STRETCHED_BENDS
+    StretchedBend::prepareBends(m_bends);
+#endif
+
     addFermatas();
     addContinuousSlideHammerOn();
 }
@@ -1676,7 +1680,12 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         return;
     }
 
+#ifdef ENGRAVING_USE_STRETCHED_BENDS
+    StretchedBend* bend = mu::engraving::Factory::createStretchedBend(note);
+#else
     Bend* bend = mu::engraving::Factory::createBend(note);
+#endif
+
     auto gpBend = gpnote->bend();
 
     bool bendHasMiddleValue{ true };
@@ -1719,6 +1728,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
 
     bend->setTrack(note->track());
     note->add(bend);
+    m_bends.push_back(bend);
 }
 
 void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elements, ElementType muType, TextLineImportType importType,

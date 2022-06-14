@@ -187,6 +187,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::HARMONY,              "Harmony",              QT_TRANSLATE_NOOP("engraving", "Chord symbol") },
     { ElementType::FRET_DIAGRAM,         "FretDiagram",          QT_TRANSLATE_NOOP("engraving", "Fretboard diagram") },
     { ElementType::BEND,                 "Bend",                 QT_TRANSLATE_NOOP("engraving", "Bend") },
+    { ElementType::STRETCHED_BEND,       "Bend",                 QT_TRANSLATE_NOOP("engraving", "Bend") },
     { ElementType::TREMOLOBAR,           "TremoloBar",           QT_TRANSLATE_NOOP("engraving", "Tremolo bar") },
     { ElementType::VOLTA,                "Volta",                QT_TRANSLATE_NOOP("engraving", "Volta") },
     { ElementType::HAIRPIN_SEGMENT,      "HairpinSegment",       QT_TRANSLATE_NOOP("engraving", "Hairpin segment") },

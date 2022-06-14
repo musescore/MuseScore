@@ -106,6 +106,7 @@ class TextBase;
 class Hairpin;
 class HairpinSegment;
 class Bend;
+class StretchedBend;
 class TremoloBar;
 class MeasureRepeat;
 class Tuplet;
@@ -351,6 +352,7 @@ public:
     CONVERT(Hairpin,       HAIRPIN)
     CONVERT(HairpinSegment, HAIRPIN_SEGMENT)
     CONVERT(Bend,          BEND)
+    CONVERT(StretchedBend, STRETCHED_BEND)
     CONVERT(TremoloBar,    TREMOLOBAR)
     CONVERT(MeasureRepeat, MEASURE_REPEAT)
     CONVERT(Tuplet,        TUPLET)
@@ -680,6 +682,7 @@ CONVERT(MMRestRange)
 CONVERT(Hairpin)
 CONVERT(HairpinSegment)
 CONVERT(Bend)
+CONVERT(StretchedBend)
 CONVERT(TremoloBar)
 CONVERT(MeasureRepeat)
 CONVERT(MMRest)

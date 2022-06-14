@@ -59,7 +59,7 @@
 #include <libmscore/articulation.h>
 #include <libmscore/keysig.h>
 #include <libmscore/harmony.h>
-#include <libmscore/bend.h>
+#include "libmscore/stretchedbend.h"
 #include <libmscore/tremolobar.h>
 #include <libmscore/segment.h>
 #include <libmscore/rehearsalmark.h>
@@ -759,7 +759,13 @@ void GuitarPro::readBend(Note* note)
     if (numPoints == 0) {
         return;
     }
+
+#ifdef ENGRAVING_USE_STRETCHED_BENDS
+    StretchedBend* bend = Factory::createStretchedBend(note);
+#else
     Bend* bend = Factory::createBend(note);
+#endif
+
     //TODO-ws      bend->setNote(note);
     for (int i = 0; i < numPoints; ++i) {
         int bendTime  = readInt();
@@ -770,6 +776,7 @@ void GuitarPro::readBend(Note* note)
     //TODO-ws      bend->setAmplitude(amplitude);
     bend->setTrack(note->track());
     note->add(bend);
+    m_bends.push_back(bend);
 }
 
 //---------------------------------------------------------
@@ -2741,6 +2748,11 @@ bool GuitarPro3::read(IODevice* io)
             break;
         }
     }
+
+#ifdef ENGRAVING_USE_STRETCHED_BENDS
+    StretchedBend::prepareBends(m_bends);
+#endif
+
     return true;
 }
 
