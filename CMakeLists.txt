@@ -93,6 +93,7 @@ option(TRY_USE_CCACHE "Try use ccache" ON)
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_UNITY "Build using unity build." ON)
 option(TRY_BUILD_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
+option(BUILD_ASAN "Enable Address Sanitizer" OFF)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(TRACE_DRAW_OBJ_ENABLED "Trace draw objects" OFF)
 

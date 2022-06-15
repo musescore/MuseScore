@@ -24,6 +24,10 @@ if (CC_IS_GCC)
         set(BUILD_SHARED_LIBS ON)
     endif()
 
+    if (BUILD_ASAN)
+        string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-pointer")
+    endif()
+
 elseif(CC_IS_MSVC)
     message(STATUS "Using Compiler MSVC ${CMAKE_CXX_COMPILER_VERSION}")
 
@@ -68,6 +72,10 @@ elseif(CC_IS_CLANG)
 
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
+    if (BUILD_ASAN)
+        string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-pointer")
+    endif()
 
 elseif(CC_IS_EMSCRIPTEN)
     message(STATUS "Using Compiler Emscripten ${CMAKE_CXX_COMPILER_VERSION}")
