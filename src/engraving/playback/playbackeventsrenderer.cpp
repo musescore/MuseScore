@@ -37,6 +37,7 @@
 #include "renderers/arpeggiorenderer.h"
 #include "renderers/gracenotesrenderer.h"
 #include "renderers/glissandosrenderer.h"
+#include "filters/chordfilter.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;
@@ -162,6 +163,10 @@ void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tick
                          persistentArticulationApplied,
                          articulations,
                          profile);
+
+    if (!ChordFilter::isItemPlayable(chord, ctx)) {
+        return;
+    }
 
     ChordArticulationsParser::buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
 
