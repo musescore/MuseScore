@@ -173,7 +173,6 @@ bool FluidSynth::handleEvent(const midi::Event& event)
 
         ret = fluid_synth_cc(m_fluid->synth, event.channel(), event.index(), event.data());
         updateCurrentExpressionLevel(event);
-
     } break;
     case Event::Opcode::ProgramChange: {
         fluid_synth_program_change(m_fluid->synth, event.channel(), event.program());
