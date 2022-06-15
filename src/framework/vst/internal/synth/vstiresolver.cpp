@@ -58,13 +58,11 @@ void VstiResolver::refresh()
 
 VstSynthPtr VstiResolver::createSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const
 {
-    PluginModulePtr modulePtr = pluginModulesRepo()->pluginModule(params.resourceMeta.id);
-
-    if (!modulePtr) {
+    if (!pluginModulesRepo()->exists(params.resourceMeta.id)) {
         return nullptr;
     }
 
-    VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(modulePtr);
+    VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(params.resourceMeta.id);
     pluginsRegister()->registerInstrPlugin(trackId, params.resourceMeta.id, pluginPtr);
 
     pluginPtr->load();
