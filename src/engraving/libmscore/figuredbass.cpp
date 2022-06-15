@@ -200,7 +200,7 @@ int FiguredBassItem::parsePrefixSuffix(String& str, bool bPrefix)
 {
     Modifier* dest  = bPrefix ? &_prefix : &_suffix;
     bool done  = false;
-    int size  = str.size();
+    size_t size  = str.size();
     str = str.trimmed();
 
     *dest       = Modifier::NONE;
@@ -265,7 +265,7 @@ int FiguredBassItem::parsePrefixSuffix(String& str, bool bPrefix)
         str.remove(0, 1);                             // 'eat' the char and continue
     }
 
-    return size - str.size();                        // return how many chars we had read into prefix/suffix
+    return static_cast<int>(size - str.size());                        // return how many chars we had read into prefix/suffix
 }
 
 //---------------------------------------------------------
@@ -280,7 +280,7 @@ int FiguredBassItem::parsePrefixSuffix(String& str, bool bPrefix)
 
 int FiguredBassItem::parseDigit(String& str)
 {
-    int size   = str.size();
+    size_t size   = str.size();
     str        = str.trimmed();
 
     _digit = FBIDigitNone;
@@ -300,7 +300,7 @@ int FiguredBassItem::parseDigit(String& str)
         }
     }
 
-    return size - str.size();
+    return static_cast<int>(size - str.size());
 }
 
 //---------------------------------------------------------
