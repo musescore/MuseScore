@@ -3,7 +3,7 @@
         "Accent": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 9500,
+                    "durationFactor": 10000,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -4066,7 +4066,7 @@
         "SoftAccent": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 9500,
+                    "durationFactor": 10000,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -4381,7 +4381,7 @@
         "Standard": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 9500,
+                    "durationFactor": 10000,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -4486,7 +4486,7 @@
         "Subito": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 9500,
+                    "durationFactor": 10000,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
