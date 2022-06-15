@@ -35,6 +35,10 @@ void TremoloMetaParser::doParse(const EngravingItem* item, const RenderingContex
 
     const Tremolo* tremolo = toTremolo(item);
 
+    if (tremolo->twoNotes() && tremolo->chord2()->tick().ticks() == ctx.nominalPositionStartTick) {
+        return;
+    }
+
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
 
     switch (tremolo->tremoloType()) {
