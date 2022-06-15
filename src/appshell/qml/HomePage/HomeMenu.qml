@@ -55,11 +55,12 @@ Item {
     ColumnLayout {
         anchors.fill: parent
 
-        spacing: 20
+        spacing: 0
 
         AccountInfoButton {
             Layout.fillWidth: true
             Layout.preferredHeight: 60
+            Layout.topMargin: 20
 
             navigation.name: "AccountInfo"
             navigation.panel: navPanel
