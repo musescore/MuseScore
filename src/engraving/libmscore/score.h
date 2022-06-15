@@ -1156,6 +1156,7 @@ public:
 
     const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
     SpannerMap& spannerMap() { return _spanner; }
+    const SpannerMap& spannerMap() const { return _spanner; }
     bool isSpannerStartEnd(const Fraction& tick, track_idx_t track) const;
     void removeSpanner(Spanner*);
     void addSpanner(Spanner*);
