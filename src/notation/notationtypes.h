@@ -146,7 +146,7 @@ using MidiArticulationList = QList<MidiArticulation>;
 using InstrumentTrackId = mu::engraving::InstrumentTrackId;
 using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 
-static const QString COMMON_GENRE_ID("common");
+static const String COMMON_GENRE_ID("common");
 
 enum class DragMode
 {

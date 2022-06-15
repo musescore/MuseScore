@@ -115,7 +115,7 @@ void RealizeHarmonyDialog::setChordList(const QList<Harmony*>& hlist)
             continue;
         }
 
-        s += h->harmonyName() + " ";
+        s += h->harmonyName() + u" ";
         QString intervals;
         QString noteNames;
         int rootTpc;
@@ -133,7 +133,7 @@ void RealizeHarmonyDialog::setChordList(const QList<Harmony*>& hlist)
             intervals += QString::number((pitch - mu::engraving::tpc2pitch(rootTpc)) % 128 % 12) + " ";
         }
         for (int tpc : mu::values(map)) {
-            noteNames += ", " + mu::engraving::tpc2name(tpc, mu::engraving::NoteSpellingType::STANDARD, mu::engraving::NoteCaseType::AUTO);
+            noteNames += u", " + mu::engraving::tpc2name(tpc, mu::engraving::NoteSpellingType::STANDARD, mu::engraving::NoteCaseType::AUTO);
         }
 
         chordTable->setItem(i, 0, new QTableWidgetItem(QString::number(h->id())));

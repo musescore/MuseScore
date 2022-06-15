@@ -219,7 +219,7 @@ mu::Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const mu::io
     score->setSaved(true);
     score->update();
 
-    if (!score->sanityCheck(QString())) {
+    if (!score->sanityCheck()) {
         return make_ret(engraving::Err::FileCorrupted, path);
     }
 

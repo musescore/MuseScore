@@ -59,10 +59,10 @@ public:
 
 class Glissando final : public SLine
 {
-    M_PROPERTY(QString, text, setText)
+    M_PROPERTY(String, text, setText)
     M_PROPERTY(GlissandoType, glissandoType, setGlissandoType)
     M_PROPERTY(GlissandoStyle, glissandoStyle, setGlissandoStyle)
-    M_PROPERTY(QString, fontFace, setFontFace)
+    M_PROPERTY(String, fontFace, setFontFace)
     M_PROPERTY(qreal, fontSize, setFontSize)
     M_PROPERTY(bool, showText, setShowText)
     M_PROPERTY(bool, playGlissando, setPlayGlissando)
@@ -79,7 +79,7 @@ public:
     static Note* guessInitialNote(Chord* chord);
     static Note* guessFinalNote(Chord* chord);
 
-    QString glissandoTypeName() const;
+    String glissandoTypeName() const;
 
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }

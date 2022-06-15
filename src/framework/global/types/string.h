@@ -108,9 +108,12 @@ public:
 
     bool isDigit() const;
     static bool isDigit(char16_t c);
+    int digitValue() const;
 
+    bool isLower() const;
     Char toLower() const;
     static char16_t toLower(char16_t ch);
+    bool isUpper() const;
     Char toUpper() const;
     static char16_t toUpper(char16_t ch);
 
@@ -129,6 +132,8 @@ class UtfCodec
 public:
     static void utf8to16(std::string_view src, std::u16string& dst);
     static void utf16to8(std::u16string_view src, std::string& dst);
+    static void utf8to32(std::string_view src, std::u32string& dst);
+    static void utf32to8(std::u32string_view src, std::string& dst);
 };
 
 // ============================
@@ -153,8 +158,12 @@ public:
 
     inline bool operator ==(const String& s) const { return constStr() == s.constStr(); }
     inline bool operator !=(const String& s) const { return !operator ==(s); }
+    inline bool operator ==(const QString& s) const { return toQString() == s; }
+    inline bool operator !=(const QString& s) const { return !operator ==(s); }
     bool operator ==(const AsciiStringView& s) const;
     inline bool operator !=(const AsciiStringView& s) const { return !operator ==(s); }
+    bool operator ==(const char* s) const;
+    inline bool operator !=(const char* s) const { return !operator ==(s); }
 
     inline bool operator <(const String& s) const { return constStr() < s.constStr(); }
 
@@ -179,6 +188,8 @@ public:
 
     static String fromStdString(const std::string& str);
     std::string toStdString() const;
+    std::u16string toStdU16String() const;
+    std::u32string toStdU32String() const;
 
 //#ifndef NO_QT_SUPPORT
     String(const QString& str) { *this = fromQString(str); }
@@ -193,7 +204,10 @@ public:
     void clear();
     Char at(size_t i) const;
     bool contains(const Char& ch) const;
-    bool contains(const String& ch) const;
+    bool contains(const String& str, CaseSensitivity cs = CaseSensitive) const;
+    int count(const Char& ch) const;
+    size_t indexOf(const Char& ch) const;
+    size_t lastIndexOf(const Char& ch) const;
 
     //! NOTE Now implemented only compare with ASCII
     bool startsWith(const String& str, CaseSensitivity cs = CaseSensitive) const;
@@ -203,7 +217,11 @@ public:
 
     StringList split(const Char& ch, SplitBehavior behavior = KeepEmptyParts) const;
     String& replace(const String& before, const String& after);
+    String& replace(char16_t before, char16_t after);
     String& remove(const String& str) { return replace(str, String()); }
+    String& remove(const Char& ch);
+    String& remove(char16_t ch);
+    String& remove(size_t position, size_t n = mu::nidx);
     void truncate(size_t position);
 
     String arg(const String& val) const;
@@ -226,8 +244,10 @@ public:
 
     String mid(size_t pos, size_t count = mu::nidx) const;
     String left(size_t n) const;
+    String right(size_t n) const;
 
     String trimmed() const;
+    String simplified() const;
     String toXmlEscaped() const;
     static String toXmlEscaped(const String& str);
     static String toXmlEscaped(char16_t c);

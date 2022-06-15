@@ -4910,21 +4910,21 @@ QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* cur
     QString previousText = previous->xmlText();
     QString fallback = current ? current->xmlText() : previousText + "'";
 
-    if (previousText.length() == 1 && previousText[0].isLetter()) {
+    if (previousText.size() == 1 && previousText.at(0).isLetter()) {
         // single letter sequence
         if (previousText == "Z") {
             return "AA";
         } else if (previousText == "z") {
             return "aa";
         } else {
-            return QChar::fromLatin1(previousText[0].toLatin1() + 1);
+            return QChar::fromLatin1(previousText.at(0).toLatin1() + 1);
         }
-    } else if (previousText.length() == 2 && previousText[0].isLetter() && previousText[1].isLetter()) {
+    } else if (previousText.size() == 2 && previousText.at(0).isLetter() && previousText.at(1).isLetter()) {
         // double letter sequence
-        if (previousText[0] == previousText[1]) {
+        if (previousText.at(0) == previousText.at(1)) {
             // repeated letter sequence
             if (previousText.toUpper() != "ZZ") {
-                QString c = QChar::fromLatin1(previousText[0].toLatin1() + 1);
+                QString c = QChar::fromLatin1(previousText.at(0).toLatin1() + 1);
                 return c + c;
             } else {
                 return fallback;

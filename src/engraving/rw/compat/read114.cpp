@@ -2489,7 +2489,7 @@ static void readInstrument(Instrument* i, Part* p, XmlReader& e)
 
     if (i->channel().empty()) {        // for backward compatibility
         InstrChannel* a = new InstrChannel;
-        a->setName(InstrChannel::DEFAULT_NAME);
+        a->setName(String::fromUtf8(InstrChannel::DEFAULT_NAME));
         a->setProgram(program);
         a->setBank(bank);
         a->setVolume(volume);
@@ -2603,10 +2603,10 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
     }
     //set default articulations
     std::vector<MidiArticulation> articulations;
-    articulations.push_back(MidiArticulation("", "", 100, 100));
-    articulations.push_back(MidiArticulation("staccato", "", 100, 50));
-    articulations.push_back(MidiArticulation("tenuto", "", 100, 100));
-    articulations.push_back(MidiArticulation("sforzato", "", 120, 100));
+    articulations.push_back(MidiArticulation(u"", u"", 100, 100));
+    articulations.push_back(MidiArticulation(u"staccato", u"", 100, 50));
+    articulations.push_back(MidiArticulation(u"tenuto", u"", 100, 100));
+    articulations.push_back(MidiArticulation(u"sforzato", u"", 120, 100));
     part->instrument()->setArticulation(articulations);
 }
 

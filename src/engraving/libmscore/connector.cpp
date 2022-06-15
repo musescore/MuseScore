@@ -41,9 +41,10 @@ namespace mu::engraving {
 ConnectorInfo::ConnectorInfo(const EngravingItem* current, int track, Fraction frac)
     : _current(current), _score(current->score()), _currentLoc(Location::absolute())
 {
-    if (!current) {
-        ASSERT_X(QString::asprintf("ConnectorInfo::ConnectorInfo(): invalid argument: %p", current));
+    IF_ASSERT_FAILED(current) {
+        return;
     }
+
     // It is not always possible to determine the track number correctly from
     // the current element (for example, in case of a Segment).
     // If the caller does not know the track number and passes -1
@@ -338,8 +339,7 @@ ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* cu
                                          Fraction frac)
     : ConnectorInfo(current, track, frac), _xml(&xml), _connector(connector)
 {
-    if (!connector) {
-        ASSERT_X(QString::asprintf("ConnectorInfoWriter::ConnectorInfoWriter(): invalid arguments: %p, %p", connector, current));
+    IF_ASSERT_FAILED(current) {
         return;
     }
     _type = connector->type();

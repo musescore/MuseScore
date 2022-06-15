@@ -427,7 +427,7 @@ public:
 
     std::list<TextFragment> fragmentList() const;   // for MusicXML formatted export
 
-    static bool validateText(QString& s);
+    static bool validateText(String& s);
     bool inHexState() const { return hexState >= 0; }
     void endHexState(EditData&);
 

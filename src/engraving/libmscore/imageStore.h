@@ -24,8 +24,9 @@
 #define __IMAGE_CACHE_H__
 
 #include <list>
-#include <QString>
+#include "types/string.h"
 #include "types/bytearray.h"
+#include "io/path.h"
 
 namespace mu::engraving {
 class Image;
@@ -38,25 +39,25 @@ class Score;
 class ImageStoreItem
 {
     std::list<Image*> _references;
-    QString _path;                  // original location of image
-    QString _type;                  // image type (file extension)
+    io::path_t _path;                  // original location of image
+    String _type;                  // image type (file extension)
     mu::ByteArray _buffer;
     mu::ByteArray _hash;               // 16 byte md4 hash of _buffer
 
 public:
-    ImageStoreItem(const QString& p);
+    ImageStoreItem(const io::path_t& p);
     void dereference(Image*);
     void reference(Image*);
 
-    const QString& path() const { return _path; }
+    const io::path_t& path() const { return _path; }
     mu::ByteArray& buffer() { return _buffer; }
     const mu::ByteArray& buffer() const { return _buffer; }
     bool loaded() const { return !_buffer.empty(); }
-    void setPath(const QString& val);
+    void setPath(const io::path_t& val);
     bool isUsed(Score*) const;
     bool isUsed() const { return !_references.empty(); }
     void load();
-    QString hashName() const;
+    String hashName() const;
     const mu::ByteArray& hash() const { return _hash; }
     void set(const mu::ByteArray& b, const mu::ByteArray& h) { _buffer = b; _hash = h; }
 };
@@ -76,8 +77,8 @@ public:
     ImageStore& operator=(const ImageStore&) = delete;
     ~ImageStore();
 
-    ImageStoreItem* getImage(const QString& path) const;
-    ImageStoreItem* add(const QString& path, const mu::ByteArray&);
+    ImageStoreItem* getImage(const io::path_t& path) const;
+    ImageStoreItem* add(const io::path_t& path, const mu::ByteArray&);
     void clearUnused();
 
     typedef ItemList::iterator iterator;

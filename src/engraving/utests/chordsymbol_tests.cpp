@@ -130,7 +130,7 @@ TEST_F(ChordSymbolTests, testAddLink)
     Segment* seg = score->firstSegment(SegmentType::ChordRest);
     ChordRest* cr = seg->cr(0);
     Harmony* harmony = new Harmony(cr->segment());
-    harmony->setHarmony("C7");
+    harmony->setHarmony(u"C7");
     harmony->setTrack(cr->track());
     harmony->setParent(cr->segment());
     score->undoAddElement(harmony);
@@ -144,7 +144,7 @@ TEST_F(ChordSymbolTests, testAddPart)
     Segment* seg = score->firstSegment(SegmentType::ChordRest);
     ChordRest* cr = seg->cr(0);
     Harmony* harmony = new Harmony(cr->segment());
-    harmony->setHarmony("C7");
+    harmony->setHarmony(u"C7");
     harmony->setTrack(cr->track());
     harmony->setParent(cr->segment());
     score->undoAddElement(harmony);

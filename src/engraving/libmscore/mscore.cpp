@@ -209,7 +209,7 @@ void MScore::init()
     ScoreFont::initScoreFonts();
     StaffType::initStaffTypes();
     initDrumset();
-    FiguredBass::readConfigFile(0);
+    FiguredBass::readConfigFile(String());
 
     initDone = true;
 }

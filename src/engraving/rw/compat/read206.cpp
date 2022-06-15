@@ -692,7 +692,7 @@ static void readInstrument206(Instrument* i, Part* p, XmlReader& e)
 
     if (i->channel().empty()) {        // for backward compatibility
         InstrChannel* a = new InstrChannel;
-        a->setName(InstrChannel::DEFAULT_NAME);
+        a->setName(String::fromUtf8(InstrChannel::DEFAULT_NAME));
         a->setProgram(i->recognizeMidiProgram());
         a->setBank(bank);
         a->setVolume(volume);

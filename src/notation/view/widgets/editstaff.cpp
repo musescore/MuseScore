@@ -209,11 +209,11 @@ void EditStaff::updateInstrument()
     updateInterval(m_instrument.transpose());
 
     std::list<mu::engraving::StaffName>& snl = m_instrument.shortNames();
-    QString df = snl.empty() ? "" : snl.front().name();
+    QString df = snl.empty() ? u"" : snl.front().name();
     shortName->setPlainText(df);
 
     std::list<mu::engraving::StaffName>& lnl = m_instrument.longNames();
-    df = lnl.empty() ? "" : lnl.front().name();
+    df = lnl.empty() ? u"" : lnl.front().name();
 
     longName->setPlainText(df);
 
@@ -508,13 +508,15 @@ void EditStaff::applyPartProperties()
 {
     Part* part    = m_orgStaff->part();
 
-    QString sn = shortName->toPlainText();
-    QString ln = longName->toPlainText();
-    if (!mu::engraving::Text::validateText(sn) || !mu::engraving::Text::validateText(ln)) {
+    String _sn = shortName->toPlainText();
+    String _ln = longName->toPlainText();
+    if (!mu::engraving::Text::validateText(_sn) || !mu::engraving::Text::validateText(_ln)) {
         interactive()->warning(trc("notation", "Invalid instrument name"),
                                trc("notation", "The instrument name is invalid."));
         return;
     }
+    QString sn = _sn;
+    QString ln = _ln;
     shortName->setPlainText(sn);    // show the fixed text
     longName->setPlainText(ln);
 

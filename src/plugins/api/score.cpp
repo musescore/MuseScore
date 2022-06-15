@@ -89,7 +89,7 @@ static const mu::engraving::InstrumentTemplate* defaultInstrTemplate()
         mu::engraving::InstrChannel a;
         a.setChorus(0);
         a.setReverb(0);
-        a.setName(mu::engraving::InstrChannel::DEFAULT_NAME);
+        a.setName(String::fromUtf8(mu::engraving::InstrChannel::DEFAULT_NAME));
         a.setBank(0);
         a.setVolume(90);
         a.setPan(0);

@@ -762,50 +762,50 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
 
         SigEvent event = sigmap()->timesig(chordRest->tick());
         Fraction f = event.nominal();
-        QString text("<sym>metNoteQuarterUp</sym> = 80");
+        String text(u"<sym>metNoteQuarterUp</sym> = 80");
         switch (f.denominator()) {
         case 1:
-            text = "<sym>metNoteWhole</sym> = 80";
+            text = u"<sym>metNoteWhole</sym> = 80";
             break;
         case 2:
-            text = "<sym>metNoteHalfUp</sym> = 80";
+            text = u"<sym>metNoteHalfUp</sym> = 80";
             break;
         case 4:
-            text = "<sym>metNoteQuarterUp</sym> = 80";
+            text = u"<sym>metNoteQuarterUp</sym> = 80";
             break;
         case 8:
             if (f.numerator() % 3 == 0) {
-                text = "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
+                text = u"<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
             } else {
-                text = "<sym>metNote8thUp</sym> = 80";
+                text = u"<sym>metNote8thUp</sym> = 80";
             }
             break;
         case 16:
             if (f.numerator() % 3 == 0) {
-                text = "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
+                text = u"<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
             } else {
-                text = "<sym>metNote16thUp</sym> = 80";
+                text = u"<sym>metNote16thUp</sym> = 80";
             }
             break;
         case 32:
             if (f.numerator() % 3 == 0) {
-                text = "<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
+                text = u"<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
             } else {
-                text = "<sym>metNote32ndUp</sym> = 80";
+                text = u"<sym>metNote32ndUp</sym> = 80";
             }
             break;
         case 64:
             if (f.numerator() % 3 == 0) {
-                text = "<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
+                text = u"<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
             } else {
-                text = "<sym>metNote64thUp</sym> = 80";
+                text = u"<sym>metNote64thUp</sym> = 80";
             }
             break;
         case 128:
             if (f.numerator() % 3 == 0) {
-                text = "<sym>metNote64ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
+                text = u"<sym>metNote64ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
             } else {
-                text = "<sym>metNote128thUp</sym> = 80";
+                text = u"<sym>metNote128thUp</sym> = 80";
             }
             break;
         default:
@@ -2454,7 +2454,7 @@ void Score::deleteItem(EngravingItem* el)
             // Set input position
             // TODO If deleted element is last of a sequence, use prev?
             if (noteEntryMode()) {
-                score()->move("prev-chord");
+                score()->move(u"prev-chord");
             }
         }
     }
@@ -2639,7 +2639,7 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::TEXT:
         if ((el->explicitParent() && el->explicitParent()->isTBox()) || el->isTBox()) {
-            el->undoChangeProperty(Pid::TEXT, QString());
+            el->undoChangeProperty(Pid::TEXT, String());
         } else {
             undoRemoveElement(el);
         }
