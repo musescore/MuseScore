@@ -83,6 +83,7 @@ void NotationAccessibility::setEnabled(bool enabled)
     };
 
     EngravingItem* selectedElement = selection()->element();
+    AccessibleItem* selectedElementAccItem = selectedElement ? selectedElement->accessible() : nullptr;
 
     for (AccessibleRoot* root : roots) {
         root->setEnabled(enabled);
@@ -92,8 +93,12 @@ void NotationAccessibility::setEnabled(bool enabled)
             continue;
         }
 
-        if (selectedElement && selectedElement->accessible()->accessibleRoot() == root) {
-            root->setFocusedElement(selectedElement->accessible());
+        if (!selectedElementAccItem) {
+            continue;
+        }
+
+        if (selectedElementAccItem->accessibleRoot() == root) {
+            root->setFocusedElement(selectedElementAccItem);
         }
     }
 }

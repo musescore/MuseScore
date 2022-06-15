@@ -153,6 +153,11 @@ void NoteInputBarModel::load()
     AbstractMenuModel::load();
 }
 
+bool NoteInputBarModel::isInputAllowed() const
+{
+    return notation() != nullptr;
+}
+
 int NoteInputBarModel::findNoteInputModeItemIndex() const
 {
     const MenuItemList& items = this->items();
@@ -183,6 +188,8 @@ void NoteInputBarModel::onNotationChanged()
     }
 
     updateState();
+
+    emit isInputAllowedChanged();
 }
 
 void NoteInputBarModel::updateItemStateChecked(MenuItem* item, bool checked)
@@ -196,30 +203,16 @@ void NoteInputBarModel::updateItemStateChecked(MenuItem* item, bool checked)
     item->setState(state);
 }
 
-void NoteInputBarModel::updateItemStateEnabled(MenuItem* item, bool enabled)
-{
-    if (!item) {
-        return;
-    }
-
-    UiActionState state = item->state();
-    state.enabled = enabled;
-    item->setState(state);
-}
-
 void NoteInputBarModel::updateState()
 {
-    bool enabled = notation() && !playbackController()->isPlaying();
-
     for (int i = 0; i < rowCount(); ++i) {
         MenuItem& item = this->item(i);
         UiActionState state = item.state();
         state.checked = false;
-        state.enabled = enabled;
         item.setState(state);
     }
 
-    if (enabled) {
+    if (isInputAllowed()) {
         updateNoteInputState();
     }
 }
@@ -336,7 +329,8 @@ void NoteInputBarModel::updateTieState()
 
 void NoteInputBarModel::updateSlurState()
 {
-    updateItemStateChecked(&findItem(codeFromQString("add-slur")), notation()->elements()->msScore()->inputState().slur() != nullptr);
+    bool checked = notation() ? notation()->elements()->msScore()->inputState().slur() != nullptr : false;
+    updateItemStateChecked(&findItem(codeFromQString("add-slur")), checked);
 }
 
 void NoteInputBarModel::updateVoicesState()
