@@ -1012,6 +1012,9 @@ void Chord::computeUp()
             }
         }
         Measure* measure = findMeasure();
+        if (!cross && !_beam->userModified()) {
+            _up = _beam->up();
+        }
         if (!measure->explicitParent()) {
             // this method will be called later (from Measure::layoutCrossStaff) after the
             // system is completely laid out.
