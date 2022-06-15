@@ -1701,7 +1701,7 @@ TEST_F(PlaybackEventsRendererTests, Two_Chords_Tremolo)
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(chordIdx));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
-            if (chordIdx % 2) {
+            if (chordIdx % 2 == 0) {
                 EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, firstChordPitches.at(noteIdx));
             } else {
                 EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, secondChordPitches.at(noteIdx));
