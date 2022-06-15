@@ -35,6 +35,7 @@
 #include "ivstmodulesrepository.h"
 #include "ivstconfiguration.h"
 #include "vsttypes.h"
+#include "vstmodulesmetaregister.h"
 
 namespace mu::vst {
 class VstModulesRepository : public IVstModulesRepository, public async::Asyncable
@@ -49,14 +50,16 @@ public:
     void init();
     void deInit();
 
+    bool exists(const audio::AudioResourceId& resourceId) const override;
     PluginModulePtr pluginModule(const audio::AudioResourceId& resourceId) const override;
+    void addPluginModule(const audio::AudioResourceId& resourceId) override;
 
     audio::AudioResourceMetaList instrumentModulesMeta() const override;
     audio::AudioResourceMetaList fxModulesMeta() const override;
     void refresh() override;
 
 private:
-    void addModule(const io::path_t& path);
+    void addModule(const io::path_t& path) const;
     audio::AudioResourceMetaList modulesMetaList(const VstPluginType& type) const;
 
     io::paths_t pluginPathsFromCustomLocations(const io::paths_t& customPaths) const;
@@ -65,7 +68,9 @@ private:
     PluginContext m_pluginContext;
 
     mutable std::mutex m_mutex;
-    std::unordered_map<audio::AudioResourceId, PluginModulePtr> m_modules;
+    mutable std::unordered_map<audio::AudioResourceId, PluginModulePtr> m_modules;
+
+    VstModulesMetaRegister m_knownPlugins;
 };
 }
 
