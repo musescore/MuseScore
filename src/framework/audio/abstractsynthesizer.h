@@ -30,6 +30,7 @@
 #include "synthtypes.h"
 #include "audiotypes.h"
 #include "iaudiosource.h"
+#include "abstracteventsequencer.h"
 
 namespace mu::audio::synth {
 class AbstractSynthesizer : public IAudioSource, public async::Asyncable
@@ -43,8 +44,8 @@ public:
     const audio::AudioInputParams& params() const;
     async::Channel<audio::AudioInputParams> paramsChanged() const;
 
-    msecs_t playbackPosition() const;
-    void setPlaybackPosition(const msecs_t newPosition);
+    virtual msecs_t playbackPosition() const;
+    virtual void setPlaybackPosition(const msecs_t newPosition);
 
     void setup(const mpe::PlaybackData& playbackData);
     virtual void flushSound() = 0;
@@ -55,7 +56,7 @@ public:
     virtual void setIsActive(bool arg);
 
     static constexpr float DAMPER_FACTOR = 5.0;
-    static constexpr msecs_t MIN_NOTE_LENGTH = 250;
+    static constexpr msecs_t MIN_NOTE_LENGTH = 25;
 
 protected:
     using EventsMapIterator = mpe::PlaybackEventsMap::const_iterator;
