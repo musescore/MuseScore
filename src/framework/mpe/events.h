@@ -40,6 +40,7 @@ using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
 using PlaybackEventsMap = std::map<msecs_t, PlaybackEventList>;
 using PlaybackEventsChanges = async::Channel<PlaybackEventsMap>;
+using DynamicLevelChanges = async::Channel<DynamicLevelMap>;
 
 struct ArrangementContext
 {
@@ -303,7 +304,7 @@ struct PlaybackData {
     PlaybackEventsChanges mainStream;
     PlaybackEventsChanges offStream;
     DynamicLevelMap dynamicLevelMap;
-    async::Channel<DynamicLevelMap> dynamicLevelChanges;
+    DynamicLevelChanges dynamicLevelChanges;
 
     bool operator==(const PlaybackData& other) const
     {
