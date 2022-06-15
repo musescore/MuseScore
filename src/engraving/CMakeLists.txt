@@ -190,6 +190,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/percussionssetupdataresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/voicessetupdataresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/voicessetupdataresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/filterbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/chordfilter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/chordfilter.h
+    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/internal/tremolofilter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/internal/tremolofilter.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/pitchutils.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/expressionutils.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/arrangementutils.h
