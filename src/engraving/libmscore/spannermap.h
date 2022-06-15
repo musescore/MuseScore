@@ -37,20 +37,42 @@ class SpannerMap : std::multimap<int, Spanner*>
 {
     mutable bool dirty;
     mutable interval_tree::IntervalTree<Spanner*> tree;
-    std::vector<interval_tree::Interval<Spanner*> > results;
+    mutable std::vector<interval_tree::Interval<Spanner*> > results;
 
 public:
+    typedef typename std::multimap<int, Spanner*>::const_reverse_iterator const_reverse_it;
+    typedef typename std::multimap<int, Spanner*>::const_iterator const_it;
+
     SpannerMap();
-    const std::vector<interval_tree::Interval<Spanner*> >& findContained(int start, int stop);
-    const std::vector<interval_tree::Interval<Spanner*> >& findOverlapping(int start, int stop);
+
+    struct SpannerRange {
+        const_it first;
+        const_it last;
+
+        const_it begin() const
+        {
+            return first;
+        }
+
+        const_it end() const
+        {
+            return last;
+        }
+    };
+
+    const SpannerRange& range(int tickFrom, int tickTo) const;
+
+    const std::vector<interval_tree::Interval<Spanner*> >& findContained(int start, int stop) const;
+    const std::vector<interval_tree::Interval<Spanner*> >& findOverlapping(int start, int stop) const;
     const std::multimap<int, Spanner*>& map() const { return *this; }
-    std::multimap<int, Spanner*>::const_reverse_iterator crbegin() const { return std::multimap<int, Spanner*>::crbegin(); }
-    std::multimap<int, Spanner*>::const_reverse_iterator crend() const { return std::multimap<int, Spanner*>::crend(); }
-    std::multimap<int, Spanner*>::const_iterator cbegin() const { return std::multimap<int, Spanner*>::cbegin(); }
-    std::multimap<int, Spanner*>::const_iterator cend() const { return std::multimap<int, Spanner*>::cend(); }
+    const_reverse_it crbegin() const { return std::multimap<int, Spanner*>::crbegin(); }
+    const_reverse_it crend() const { return std::multimap<int, Spanner*>::crend(); }
+    const_it cbegin() const { return std::multimap<int, Spanner*>::cbegin(); }
+    const_it cend() const { return std::multimap<int, Spanner*>::cend(); }
     void addSpanner(Spanner* s);
     bool removeSpanner(Spanner* s);
     void clear() { std::multimap<int, Spanner*>::clear(); dirty = true; }
+    bool empty() const { return std::multimap<int, Spanner*>::empty(); }
     void update() const;
     void setDirty() const { dirty = true; }     // must be called if a spanner changes start/length
 #ifndef NDEBUG
