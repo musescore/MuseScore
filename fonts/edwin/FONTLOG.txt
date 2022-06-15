@@ -15,7 +15,12 @@ Edwin is a typeface adapted from the C059 typeface (from URW++ Design and Develo
 Change log
 ----------
 
-23 November 2021 (Martin Keary & Simon Smith) Edwin Version 0.53
+15 June 2022 (Martin Keary & Simon Smith) Edwin Version 0.54
+- added U+2123 (versicle) and U+211F (response)
+- added U+2117 (sound recording copyright)
+- reinstated accidentals to Italic, Bold and Bold Italic
+
+24 November 2021 (Martin Keary & Simon Smith) Edwin Version 0.53
 - added U+203F (undertie) and U+2040 (tie)
 - removed "Nr." -> numero sign ligature
 - Updated accidentals (matching Leland Text)
