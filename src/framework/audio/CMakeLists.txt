@@ -62,6 +62,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudiostream.h
     ${CMAKE_CURRENT_LIST_DIR}/abstractsynthesizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/abstractsynthesizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/abstracteventsequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/ifxprocessor.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h

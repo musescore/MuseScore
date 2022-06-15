@@ -26,7 +26,7 @@
 #include "mpe/events.h"
 #include "midi/miditypes.h"
 
-namespace mu::audio::synth {
+namespace mu::audio {
 struct SoundMappingKey {
     mpe::SoundId id = mpe::SoundId::Undefined;
     mpe::SoundSubCategories subCategories;
@@ -837,13 +837,6 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     return empty;
 }
 
-static const mpe::ArticulationTypeSet PORTAMENTO_CC_SUPPORTED_TYPES = {
-    mpe::ArticulationType::DiscreteGlissando, mpe::ArticulationType::ContinuousGlissando,
-    mpe::ArticulationType::Fall, mpe::ArticulationType::QuickFall, mpe::ArticulationType::Doit,
-    mpe::ArticulationType::Plop, mpe::ArticulationType::Scoop, mpe::ArticulationType::SlideOutDown,
-    mpe::ArticulationType::SlideInAbove, mpe::ArticulationType::SlideInBelow, mpe::ArticulationType::SlideOutUp
-};
-
 static const mpe::ArticulationTypeSet LEGATO_CC_SUPPORTED_TYPES = {
     mpe::ArticulationType::Legato, mpe::ArticulationType::Acciaccatura,
     mpe::ArticulationType::PreAppoggiatura, mpe::ArticulationType::PostAppoggiatura,
@@ -857,7 +850,11 @@ static const mpe::ArticulationTypeSet PEDAL_CC_SUPPORTED_TYPES = {
 };
 
 static const mpe::ArticulationTypeSet BEND_SUPPORTED_TYPES = {
-    mpe::ArticulationType::Bend
+    mpe::ArticulationType::Bend, mpe::ArticulationType::SlideOutUp,
+    mpe::ArticulationType::DiscreteGlissando, mpe::ArticulationType::ContinuousGlissando,
+    mpe::ArticulationType::Fall, mpe::ArticulationType::QuickFall, mpe::ArticulationType::Doit,
+    mpe::ArticulationType::Plop, mpe::ArticulationType::Scoop, mpe::ArticulationType::SlideOutDown,
+    mpe::ArticulationType::SlideInAbove, mpe::ArticulationType::SlideInBelow
 };
 
 static const mpe::ArticulationTypeSet AFTERTOUCH_SUPPORTED_TYPES = {
