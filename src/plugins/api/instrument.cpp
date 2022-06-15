@@ -142,7 +142,7 @@ Channel* ChannelListProperty::at(QQmlListProperty<Channel>* l, int i)
 QString Instrument::longName() const
 {
     const std::list<mu::engraving::StaffName>& names = instrument()->longNames();
-    return names.empty() ? "" : names.front().name();
+    return names.empty() ? u"" : names.front().name();
 }
 
 //---------------------------------------------------------
@@ -152,7 +152,7 @@ QString Instrument::longName() const
 QString Instrument::shortName() const
 {
     const std::list<mu::engraving::StaffName>& names = instrument()->shortNames();
-    return names.empty() ? "" : names.front().name();
+    return names.empty() ? u"" : names.front().name();
 }
 
 //---------------------------------------------------------

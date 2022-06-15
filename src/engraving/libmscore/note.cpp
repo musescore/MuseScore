@@ -795,24 +795,23 @@ int Note::tpc() const
 //   tpcUserName
 //---------------------------------------------------------
 
-QString Note::tpcUserName(const int tpc, const int pitch, const bool explicitAccidental)
+String Note::tpcUserName(const int tpc, const int pitch, const bool explicitAccidental)
 {
-    const auto pitchStr
-        = qtrc("InspectorAmbitus",
-               tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental).replace("b", "♭").replace("#",
-                                                                                                                           "♯").toUtf8().constData());
-    const auto octaveStr = QString::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
+    const String pitchStr = mtrc("engraving",
+                                 tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental)
+                                 .replace(u"b", u"♭").replace(u"#", u"♯").toUtf8().constChar());
+    const String octaveStr = String::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
 
-    return pitchStr + (explicitAccidental ? " " : "") + octaveStr;
+    return pitchStr + (explicitAccidental ? u" " : u"") + octaveStr;
 }
 
 //---------------------------------------------------------
 //   tpcUserName
 //---------------------------------------------------------
 
-QString Note::tpcUserName(const bool explicitAccidental) const
+String Note::tpcUserName(const bool explicitAccidental) const
 {
-    QString pitchName = tpcUserName(tpc(), epitch() + ottaveCapoFret(), explicitAccidental);
+    String pitchName = tpcUserName(tpc(), epitch() + ottaveCapoFret(), explicitAccidental);
 
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         // see Note::accessibleInfo(), but we return what we have
@@ -827,14 +826,14 @@ QString Note::tpcUserName(const bool explicitAccidental) const
         return pitchName;
     }
 
-    QString pitchOffset;
+    String pitchOffset;
     if (tuning() != 0) {
         pitchOffset = QString::asprintf("%+.3f", tuning());
     }
 
     if (!concertPitch() && transposition()) {
-        QString soundingPitch = tpcUserName(tpc1(), ppitch(), explicitAccidental);
-        return QObject::tr("%1 (sounding as %2%3)").arg(pitchName, soundingPitch, pitchOffset);
+        String soundingPitch = tpcUserName(tpc1(), ppitch(), explicitAccidental);
+        return mtrc("engraving", "%1 (sounding as %2%3)").arg(pitchName, soundingPitch, pitchOffset);
     }
     return pitchName + pitchOffset;
 }

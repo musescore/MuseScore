@@ -152,7 +152,7 @@ public:
         return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.ticks() : _durationType.ticks();
     }
 
-    QString durationUserName() const;
+    String durationUserName() const;
 
     void setTrack(track_idx_t val) override;
 

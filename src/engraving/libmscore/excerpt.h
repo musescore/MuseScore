@@ -51,7 +51,7 @@ public:
     void setExcerptScore(Score* s);
 
     String name() const { return m_name; }
-    void setName(const QString& title) { m_name = title; }
+    void setName(const String& title) { m_name = title; }
 
     std::vector<Part*>& parts() { return m_parts; }
     const std::vector<Part*>& parts() const { return m_parts; }
@@ -87,7 +87,7 @@ public:
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
 
 private:
-    static QString formatName(const QString& partName, const std::vector<Excerpt*>&);
+    static String formatName(const String& partName, const std::vector<Excerpt*>&);
 
     MasterScore* m_masterScore = nullptr;
     Score* m_excerptScore = nullptr;

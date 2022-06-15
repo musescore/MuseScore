@@ -134,7 +134,7 @@ private:
 
     static const QChar normParenthToChar[int(Parenthesis::NUMOF)];
 
-    QString _displayText;                       // the constructed display text (read-only)
+    String _displayText;                        // the constructed display text (read-only)
     int ord;                                    // the line ordinal of this element in the FB stack
     // the parts making a FiguredBassItem up
     Modifier _prefix;                           // the accidental coming before the body
@@ -149,13 +149,13 @@ private:
     FiguredBassItem(const FiguredBassItem&);
 
     // part parsing
-    int               parseDigit(QString& str);
-    int               parseParenthesis(QString& str, int parenthIdx);
-    int               parsePrefixSuffix(QString& str, bool bPrefix);
+    int               parseDigit(String& str);
+    int               parseParenthesis(String& str, int parenthIdx);
+    int               parsePrefixSuffix(String& str, bool bPrefix);
 
-    void              setDisplayText(const QString& s) { _displayText = s; }
+    void              setDisplayText(const String& s) { _displayText = s; }
     // read / write MusicXML support
-    QString                   Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
+    String            Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
 
 public:
 
@@ -163,7 +163,7 @@ public:
 
     FiguredBassItem& operator=(const FiguredBassItem&) = delete;
 
-    FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix) const;
+    FiguredBassItem::Modifier MusicXML2Modifier(const String prefix) const;
 
     // standard re-implemented virtual functions
     FiguredBassItem* clone() const override { return new FiguredBassItem(*this); }
@@ -179,7 +179,7 @@ public:
 
     // specific API
     const FiguredBass* figuredBass() const { return (FiguredBass*)(explicitParent()); }
-    bool              parse(QString& text);
+    bool              parse(String& text);
 
     // getters / setters
     Modifier          prefix() const { return _prefix; }
@@ -211,8 +211,8 @@ public:
     void              undoSetParenth3(Parenthesis par);
     void              undoSetParenth4(Parenthesis par);
     void              undoSetParenth5(Parenthesis par);
-    QString           normalizedText() const;
-    QString           displayText() const { return _displayText; }
+    String            normalizedText() const;
+    String            displayText() const { return _displayText; }
 
     PropertyValue  getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -269,9 +269,9 @@ public:
     static FiguredBass* addFiguredBassToSegment(Segment* seg, track_idx_t track, const Fraction& extTicks, bool* pNew);
 
     // static functions for font config files
-    static bool       readConfigFile(const QString& fileName);
-    static std::list<QString> fontNames();
-    static bool       fontData(int nIdx, QString* pFamily, QString* pDisplayName, qreal* pSize, qreal* pLineHeight);
+    static bool       readConfigFile(const String& fileName);
+    static std::list<String> fontNames();
+    static bool       fontData(int nIdx, String* pFamily, String* pDisplayName, qreal* pSize, qreal* pLineHeight);
 
     // standard re-implemented virtual functions
     FiguredBass* clone() const override { return new FiguredBass(*this); }

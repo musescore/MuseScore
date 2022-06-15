@@ -133,9 +133,9 @@ void Fermata::write(XmlWriter& xml) const
 
 int Fermata::subtype() const
 {
-    QString s = SymNames::nameForSymId(_symId).toQLatin1String();
-    if (s.endsWith("Below")) {
-        return int(SymNames::symIdByName(s.left(s.size() - 5) + "Above"));
+    String s = String::fromAscii(SymNames::nameForSymId(_symId).ascii());
+    if (s.endsWith(u"Below")) {
+        return int(SymNames::symIdByName(s.left(s.size() - 5) + u"Above"));
     } else {
         return int(_symId);
     }
@@ -239,15 +239,15 @@ void Fermata::layout()
         }
     }
 
-    QString name = SymNames::nameForSymId(_symId).toQLatin1String();
+    String name = String::fromAscii(SymNames::nameForSymId(_symId).ascii());
     if (placeAbove()) {
-        if (name.endsWith("Below")) {
-            _symId = SymNames::symIdByName(name.left(name.size() - 5) + "Above");
+        if (name.endsWith(u"Below")) {
+            _symId = SymNames::symIdByName(name.left(name.size() - 5) + u"Above");
         }
     } else {
         rypos() += staff()->height();
-        if (name.endsWith("Above")) {
-            _symId = SymNames::symIdByName(name.left(name.size() - 5) + "Below");
+        if (name.endsWith(u"Above")) {
+            _symId = SymNames::symIdByName(name.left(name.size() - 5) + u"Below");
         }
     }
     RectF b(symBbox(_symId));
@@ -297,10 +297,10 @@ bool Fermata::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::PLACEMENT: {
         PlacementV p = v.value<PlacementV>();
         if (p != placement()) {
-            QString s = SymNames::nameForSymId(_symId).toQLatin1String();
+            String s = String::fromAscii(SymNames::nameForSymId(_symId).ascii());
             bool up = placeAbove();
-            if (s.endsWith(up ? "Above" : "Below")) {
-                QString s2 = s.left(s.size() - 5) + (up ? "Below" : "Above");
+            if (s.endsWith(up ? u"Above" : u"Below")) {
+                String s2 = s.left(s.size() - 5) + (up ? u"Below" : u"Above");
                 _symId = SymNames::symIdByName(s2);
             }
             setPlacement(p);

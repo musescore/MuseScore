@@ -257,22 +257,6 @@ DrumInstrumentVariant Drumset::findVariant(int p, const std::vector<Articulation
 }
 
 //---------------------------------------------------------
-//   pitch
-/// find a variant for the given pitch with matching chord articulation and tremolo
-//---------------------------------------------------------
-int Drumset::pitch(int /*element*/, int /*variation*/, const QString& /*name*/) const
-{
-//    for (const auto& [key, drum] : _drum) {
-//        if (drum.element == element && drum.variation == variation) {
-//            if (drum._name.find(name) != std::string::npos)
-//                return key;
-//        }
-//    }
-
-    return 0;
-}
-
-//---------------------------------------------------------
 //   initDrumset
 //    initialize standard midi drumset
 //---------------------------------------------------------

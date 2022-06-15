@@ -1011,7 +1011,7 @@ void GPConverter::addContinuousSlideHammerOn()
             gl->setTick2(endNote->chord()->tick());
             gl->setEndElement(endNote);
             gl->setParent(startNote);
-            gl->setText("");
+            gl->setText(u"");
             gl->setGlissandoType(GlissandoType::STRAIGHT);
             _score->addElement(gl);
         }
@@ -1790,23 +1790,23 @@ void GPConverter::addDynamic(const GPBeat* gpb, ChordRest* cr)
 
     auto convertDynamic = [](GPBeat::DynamicType t) {
         if (t == GPBeat::DynamicType::FFF) {
-            return "fff";
+            return u"fff";
         } else if (t == GPBeat::DynamicType::FF) {
-            return "ff";
+            return u"ff";
         } else if (t == GPBeat::DynamicType::FF) {
-            return "ff";
+            return u"ff";
         } else if (t == GPBeat::DynamicType::F) {
-            return "f";
+            return u"f";
         } else if (t == GPBeat::DynamicType::MF) {
-            return "mf";
+            return u"mf";
         } else if (t == GPBeat::DynamicType::MP) {
-            return "mp";
+            return u"mp";
         } else if (t == GPBeat::DynamicType::P) {
-            return "p";
+            return u"p";
         } else if (t == GPBeat::DynamicType::PP) {
-            return "pp";
+            return u"pp";
         }
-        return "ppp";
+        return u"ppp";
     };
 
     Dynamic* dynamic = Factory::createDynamic(_score->dummy()->segment());

@@ -652,61 +652,61 @@ void ChordRest::setDurationType(TDuration v)
 //   durationUserName
 //---------------------------------------------------------
 
-QString ChordRest::durationUserName() const
+String ChordRest::durationUserName() const
 {
-    QString tupletType = "";
+    String tupletType;
     if (tuplet()) {
         switch (tuplet()->ratio().numerator()) {
         case 2:
-            tupletType = QObject::tr("Duplet");
+            tupletType = mtrc("engraving", "Duplet");
             break;
         case 3:
-            tupletType = QObject::tr("Triplet");
+            tupletType = mtrc("engraving", "Triplet");
             break;
         case 4:
-            tupletType = QObject::tr("Quadruplet");
+            tupletType = mtrc("engraving", "Quadruplet");
             break;
         case 5:
-            tupletType = QObject::tr("Quintuplet");
+            tupletType = mtrc("engraving", "Quintuplet");
             break;
         case 6:
-            tupletType = QObject::tr("Sextuplet");
+            tupletType = mtrc("engraving", "Sextuplet");
             break;
         case 7:
-            tupletType = QObject::tr("Septuplet");
+            tupletType = mtrc("engraving", "Septuplet");
             break;
         case 8:
-            tupletType = QObject::tr("Octuplet");
+            tupletType = mtrc("engraving", "Octuplet");
             break;
         case 9:
-            tupletType = QObject::tr("Nonuplet");
+            tupletType = mtrc("engraving", "Nonuplet");
             break;
         default:
-            tupletType = QObject::tr("Custom tuplet");
+            tupletType = mtrc("engraving", "Custom tuplet");
         }
     }
-    QString dotString = "";
+    String dotString;
     if (!tupletType.isEmpty()) {
-        dotString += " ";
+        dotString += u' ';
     }
 
     switch (dots()) {
     case 1:
-        dotString += QObject::tr("Dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
+        dotString += mtrc("engraving", "Dotted %1").arg(TConv::toUserName(durationType().type()));
         break;
     case 2:
-        dotString += QObject::tr("Double dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
+        dotString += mtrc("engraving", "Double dotted %1").arg(TConv::toUserName(durationType().type()));
         break;
     case 3:
-        dotString += QObject::tr("Triple dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
+        dotString += mtrc("engraving", "Triple dotted %1").arg(TConv::toUserName(durationType().type()));
         break;
     case 4:
-        dotString += QObject::tr("Quadruple dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
+        dotString += mtrc("engraving", "Quadruple dotted %1").arg(TConv::toUserName(durationType().type()));
         break;
     default:
         dotString += TConv::toUserName(durationType().type());
     }
-    return QString("%1%2").arg(tupletType, dotString);
+    return String("%1%2").arg(tupletType, dotString);
 }
 
 //---------------------------------------------------------
@@ -729,7 +729,7 @@ void ChordRest::add(EngravingItem* e)
         e->added();
         break;
     default:
-        ASSERT_X("ChordRest::add: unknown element " + QString(e->typeName()));
+        ASSERT_X(u"ChordRest::add: unknown element " + String(e->typeName()));
         break;
     }
 }
@@ -753,7 +753,7 @@ void ChordRest::remove(EngravingItem* e)
     }
     break;
     default:
-        ASSERT_X("ChordRest::remove: unknown element " + QString(e->typeName()));
+        ASSERT_X(u"ChordRest::remove: unknown element " + String(e->typeName()));
     }
 }
 

@@ -34,6 +34,25 @@ class Global_Types_StringTests : public ::testing::Test
 public:
 };
 
+TEST_F(Global_Types_StringTests, Char_Digit)
+{
+    {
+        //! GIVEN Some string
+        Char ch(u'2');
+        //! CHECK
+        EXPECT_TRUE(ch.isDigit());
+        EXPECT_EQ(ch.digitValue(), 2);
+    }
+
+    {
+        //! GIVEN Some string
+        Char ch(u'a');
+        //! CHECK
+        EXPECT_FALSE(ch.isDigit());
+        EXPECT_EQ(ch.digitValue(), -1);
+    }
+}
+
 TEST_F(Global_Types_StringTests, String_Construct)
 {
     {
@@ -206,6 +225,15 @@ TEST_F(Global_Types_StringTests, String_Replace)
         //! CHECK
         EXPECT_EQ(str, u"123de456de");
     }
+
+    {
+        //! GIVEN Some String
+        String str = u"123abc456abc";
+        //! DO
+        str.replace(u'a', u'x');
+        //! CHECK
+        EXPECT_EQ(str, u"123xbc456xbc");
+    }
 }
 
 TEST_F(Global_Types_StringTests, String_PlusAssign)
@@ -268,6 +296,15 @@ TEST_F(Global_Types_StringTests, String_SubStr)
         String newStr = str.left(2);
         //! CHECK
         EXPECT_EQ(newStr, u"12");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"123abc";
+        //! DO
+        String newStr = str.right(2);
+        //! CHECK
+        EXPECT_EQ(newStr, u"bc");
     }
 }
 

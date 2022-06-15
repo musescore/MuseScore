@@ -437,7 +437,7 @@ void Part::removeInstrument(const Fraction& tick)
     _instruments.erase(i);
 }
 
-void Part::removeInstrument(const QString& instrumentId)
+void Part::removeInstrument(const String& instrumentId)
 {
     for (auto it = _instruments.begin(); it != _instruments.end(); ++it) {
         if (it->second->instrumentId() == instrumentId) {
@@ -490,7 +490,7 @@ QString Part::instrumentId(const Fraction& tick) const
 QString Part::longName(const Fraction& tick) const
 {
     const std::list<StaffName>& nl = longNames(tick);
-    return nl.empty() ? "" : nl.front().name();
+    return nl.empty() ? u"" : nl.front().name();
 }
 
 //---------------------------------------------------------
@@ -509,7 +509,7 @@ QString Part::instrumentName(const Fraction& tick) const
 QString Part::shortName(const Fraction& tick) const
 {
     const std::list<StaffName>& nl = shortNames(tick);
-    return nl.empty() ? "" : nl.front().name();
+    return nl.empty() ? u"" : nl.front().name();
 }
 
 //---------------------------------------------------------
@@ -735,7 +735,7 @@ void Part::updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval
         //~OPTIM~
         if (harmonyCount() == 0) {
             Instrument* instr = instrument();
-            int hChIdx = instr->channelIdx(InstrChannel::HARMONY_NAME);
+            int hChIdx = instr->channelIdx(String::fromUtf8(InstrChannel::HARMONY_NAME));
             if (hChIdx != -1) {
                 InstrChannel* hChan = instr->channel(hChIdx);
                 instr->removeChannel(hChan);
@@ -756,7 +756,7 @@ void Part::updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval
         if (c->bank() == 128) { // drumset?
             c->setBank(0);
         }
-        c->setName(InstrChannel::HARMONY_NAME);
+        c->setName(String::fromUtf8(InstrChannel::HARMONY_NAME));
         instr->appendChannel(c);
         onInstrumentChanged();
     }
@@ -773,7 +773,7 @@ const InstrChannel* Part::harmonyChannel() const
         return nullptr;
     }
 
-    int chanIdx = instr->channelIdx(InstrChannel::HARMONY_NAME);
+    int chanIdx = instr->channelIdx(String::fromUtf8(InstrChannel::HARMONY_NAME));
     if (chanIdx == -1) {
         return nullptr;
     }

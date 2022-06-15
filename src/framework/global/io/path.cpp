@@ -26,6 +26,7 @@
 #include <QRegularExpression>
 
 #include "stringutils.h"
+#include "fileinfo.h"
 
 using namespace mu;
 using namespace mu::io;
@@ -58,6 +59,11 @@ bool path_t::empty() const
 size_t path_t::size() const
 {
     return m_path.size();
+}
+
+bool path_t::withSuffix(const char* str) const
+{
+    return io::FileInfo::suffix(m_path).toLower() == str;
 }
 
 path_t path_t::appendingComponent(const path_t& other) const
