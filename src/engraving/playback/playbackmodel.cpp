@@ -331,7 +331,9 @@ bool PlaybackModel::hasToReloadScore(const std::unordered_set<ElementType>& chan
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
         ElementType::GRADUAL_TEMPO_CHANGE, ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT,
         ElementType::TEMPO_TEXT,
-        ElementType::LAYOUT_BREAK, ElementType::FERMATA
+        ElementType::LAYOUT_BREAK, ElementType::FERMATA,
+        ElementType::MEASURE_REPEAT, ElementType::VOLTA,
+        ElementType::VOLTA_SEGMENT, ElementType::SYSTEM_TEXT
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
