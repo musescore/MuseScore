@@ -89,8 +89,8 @@ public:
     Chord* chord1() const { return _chord1; }
     Chord* chord2() const { return _chord2; }
 
-    TDuration durationType() const { return _durationType; }
-    void setDurationType(TDuration d) { _durationType = d; }
+    TDuration durationType() const;
+    void setDurationType(TDuration d);
 
     void setChords(Chord* c1, Chord* c2)
     {
