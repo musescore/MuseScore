@@ -32,8 +32,8 @@ using namespace mu::async;
 static const std::string_view COMPONENT_STATE_KEY = "componentState";
 static const std::string_view CONTROLLER_STATE_KEY = "controllerState";
 
-VstPlugin::VstPlugin(PluginModulePtr module)
-    : m_module(std::move(module)), m_componentHandlerPtr(new VstComponentHandler())
+VstPlugin::VstPlugin(const audio::AudioResourceId& resourceId)
+    : m_resourceId(resourceId), m_componentHandlerPtr(new VstComponentHandler())
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -62,6 +62,16 @@ void VstPlugin::load()
         ONLY_MAIN_THREAD(threadSecurer);
 
         std::lock_guard lock(m_mutex);
+
+        m_module = modulesRepo()->pluginModule(m_resourceId);
+        if (!m_module) {
+            modulesRepo()->addPluginModule(m_resourceId);
+            m_module = modulesRepo()->pluginModule(m_resourceId);
+        }
+
+        if (!m_module) {
+            return;
+        }
 
         const auto& factory = m_module->getFactory();
 
