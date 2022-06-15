@@ -31,6 +31,7 @@
 #include <unordered_set>
 
 #include "modularity/ioc.h"
+#include "midi/imidioutport.h"
 
 #include "abstractsynthesizer.h"
 #include "fluidsequencer.h"
@@ -40,6 +41,7 @@ namespace mu::audio::synth {
 struct Fluid;
 class FluidSynth : public AbstractSynthesizer
 {
+    INJECT(audio, midi::IMidiOutPort, midiOutPort)
 public:
     FluidSynth(const audio::AudioSourceParams& params);
 
@@ -57,8 +59,6 @@ public:
 
     msecs_t playbackPosition() const override;
     void setPlaybackPosition(const msecs_t newPosition) override;
-
-    bool hasAnythingToPlayback(const msecs_t from, const msecs_t to) const;
 
     void revokePlayingNotes() override; // all channels
 
