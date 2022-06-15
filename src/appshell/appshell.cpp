@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#include <QLoggingCategory>
+
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
@@ -65,6 +67,8 @@ int AppShell::run(int argc, char** argv)
     qputenv("QML_DISABLE_DISK_CACHE", "true");
 
     qDebug() << "================ QT_QPA_PLATFORMTHEME=" << qgetenv("QT_QPA_PLATFORMTHEME");
+
+    QLoggingCategory::setFilterRules("qt.qpa.plugin=true");
 
     const char* appName;
     if (framework::Version::unstable()) {

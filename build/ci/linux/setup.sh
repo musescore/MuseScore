@@ -58,11 +58,12 @@ apt_packages_basic=(
 apt_packages_standard=(
   # Alphabetical order please!
   curl
-  libasound2-dev 
+  libasound2-dev
   libfontconfig1-dev
   libfreetype6-dev
   libfreetype6
   libgl1-mesa-dev
+  libgtk-3-dev
   libjack-dev
   libnss3-dev
   libportmidi-dev
@@ -96,8 +97,8 @@ apt_packages_runtime=(
 
 apt_packages_ffmpeg=(
   ffmpeg
-  libavcodec-dev 
-  libavformat-dev 
+  libavcodec-dev
+  libavformat-dev
   libswscale-dev
   )
 
@@ -126,7 +127,6 @@ echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
 echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
 echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
 echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
-echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 
 
 ##########################################################################
@@ -145,7 +145,7 @@ echo export CC="/usr/bin/gcc-${gcc_version}" >> ${ENV_FILE}
 echo export CXX="/usr/bin/g++-${gcc_version}" >> ${ENV_FILE}
 
 gcc-${gcc_version} --version
-g++-${gcc_version} --version 
+g++-${gcc_version} --version
 
 # CMAKE
 # Get newer CMake (only used cached version if it is the same)
@@ -205,4 +205,3 @@ chmod +x "$ENV_FILE"
 
 df -h .
 echo "Setup script done"
-
