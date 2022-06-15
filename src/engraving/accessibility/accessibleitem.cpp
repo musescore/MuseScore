@@ -40,6 +40,8 @@ AccessibleItem::AccessibleItem(EngravingItem* e, Role role)
 
 AccessibleItem::~AccessibleItem()
 {
+    m_element = nullptr;
+
     AccessibleRoot* root = accessibleRoot();
     if (root && root->focusedElement() == this) {
         root->setFocusedElement(nullptr);
@@ -49,8 +51,6 @@ AccessibleItem::~AccessibleItem()
         accessibilityController()->unreg(this);
         m_registred = false;
     }
-
-    m_element = nullptr;
 }
 
 AccessibleItem* AccessibleItem::clone(EngravingItem* e) const
@@ -104,6 +104,10 @@ void AccessibleItem::notifyAboutFocus(bool focused)
 
 const IAccessible* AccessibleItem::accessibleParent() const
 {
+    if (!m_element) {
+        return nullptr;
+    }
+
     EngravingObject* p = m_element->parent();
     if (!p || !p->isEngravingItem()) {
         return nullptr;
@@ -115,6 +119,11 @@ const IAccessible* AccessibleItem::accessibleParent() const
 size_t AccessibleItem::accessibleChildCount() const
 {
     TRACEFUNC;
+
+    if (!m_element) {
+        return 0;
+    }
+
     size_t count = 0;
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
@@ -130,6 +139,11 @@ size_t AccessibleItem::accessibleChildCount() const
 const IAccessible* AccessibleItem::accessibleChild(size_t i) const
 {
     TRACEFUNC;
+
+    if (!m_element) {
+        return nullptr;
+    }
+
     size_t count = 0;
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
@@ -152,6 +166,10 @@ IAccessible::Role AccessibleItem::accessibleRole() const
 
 QString AccessibleItem::accessibleName() const
 {
+    if (!m_element) {
+        return QString();
+    }
+
     AccessibleRoot* root = accessibleRoot();
     QString staffInfo = root ? root->staffInfo() : "";
     QString barsAndBeats = m_element->formatBarsAndBeats();
@@ -163,6 +181,10 @@ QString AccessibleItem::accessibleName() const
 
 QString AccessibleItem::accessibleDescription() const
 {
+    if (!m_element) {
+        return QString();
+    }
+
     QString result;
 #ifdef Q_OS_MACOS
     result = accessibleName() + " ";
