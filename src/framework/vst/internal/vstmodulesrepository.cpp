@@ -34,22 +34,21 @@ using namespace mu::vst;
 //@see https://developer.steinberg.help/pages/viewpage.action?pageId=9798275
 static const std::string VST3_PACKAGE_EXTENSION = "*.vst3";
 
-static const std::map<VstPluginType, std::string> PLUGIN_TYPE_MAP = {
-    { VstPluginType::Instrument, "Instrument" },
-    { VstPluginType::Fx, "Fx" }
-};
-
 void VstModulesRepository::init()
 {
     ONLY_MAIN_THREAD(threadSecurer);
 
     PluginContextFactory::instance().setPluginContext(&m_pluginContext);
 
+    m_knownPlugins.init();
+
     configuration()->userVstDirectoriesChanged().onReceive(this, [this](const io::paths_t&) {
         refresh();
     });
 
-    refresh();
+    if (m_knownPlugins.isEmpty()) {
+        refresh();
+    }
 }
 
 void VstModulesRepository::deInit()
@@ -61,9 +60,18 @@ void VstModulesRepository::deInit()
     PluginContextFactory::instance().setPluginContext(nullptr);
 }
 
-PluginModulePtr VstModulesRepository::pluginModule(const audio::AudioResourceId& resourceId) const
+bool VstModulesRepository::exists(const audio::AudioResourceId& resourceId) const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    return !m_knownPlugins.pluginPath(resourceId).empty();
+}
+
+PluginModulePtr VstModulesRepository::pluginModule(const audio::AudioResourceId& resourceId) const
+{
+    ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
 
     std::lock_guard lock(m_mutex);
 
@@ -76,6 +84,15 @@ PluginModulePtr VstModulesRepository::pluginModule(const audio::AudioResourceId&
     LOGE() << "Unable to find vst plugin module, resourceId: " << resourceId;
 
     return nullptr;
+}
+
+void VstModulesRepository::addPluginModule(const audio::AudioResourceId& resourceId)
+{
+    ONLY_MAIN_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    addModule(m_knownPlugins.pluginPath(resourceId));
 }
 
 audio::AudioResourceMetaList VstModulesRepository::instrumentModulesMeta() const
@@ -104,16 +121,22 @@ void VstModulesRepository::refresh()
 
     m_modules.clear();
 
+    std::unordered_map<audio::AudioResourceId, io::path_t> paths;
+
     for (const std::string& pluginPath : pluginPathsFromDefaultLocation()) {
         addModule(pluginPath);
+        paths.emplace(io::basename(pluginPath).toStdString(), io::path_t(pluginPath));
     }
 
     for (const io::path_t& pluginPath : pluginPathsFromCustomLocations(configuration()->userVstDirectories())) {
         addModule(pluginPath);
+        paths.emplace(io::basename(pluginPath).toStdString(), io::path_t(pluginPath));
     }
+
+    m_knownPlugins.registerPlugins(m_modules, std::move(paths));
 }
 
-void VstModulesRepository::addModule(const io::path_t& path)
+void VstModulesRepository::addModule(const io::path_t& path) const
 {
     std::string errorString;
 
@@ -129,41 +152,7 @@ void VstModulesRepository::addModule(const io::path_t& path)
 
 audio::AudioResourceMetaList VstModulesRepository::modulesMetaList(const VstPluginType& type) const
 {
-    audio::AudioResourceMetaList result;
-
-    static auto hasNativeEditorSupport = []() {
-#ifdef Q_OS_LINUX
-        //!Note Host applications on Linux should provide their own event loop via VST3 API,
-        //!     otherwise it'll be impossible to launch native VST editor views
-        return false;
-#else
-        return true;
-#endif
-    };
-
-    for (const auto& pair : m_modules) {
-        PluginModulePtr module = pair.second;
-        const auto& factory = module->getFactory();
-
-        for (auto& classInfo : factory.classInfos()) {
-            if (classInfo.category() != kVstAudioEffectClass) {
-                continue;
-            }
-
-            std::string subCategoriesStr = classInfo.subCategoriesString();
-            if (subCategoriesStr.find(PLUGIN_TYPE_MAP.at(type)) != std::string::npos) {
-                audio::AudioResourceMeta meta;
-                meta.id = pair.first;
-                meta.type = audio::AudioResourceType::VstPlugin;
-                meta.vendor = factory.info().vendor();
-                meta.hasNativeEditorSupport = hasNativeEditorSupport();
-                result.emplace_back(std::move(meta));
-                break;
-            }
-        }
-    }
-
-    return result;
+    return m_knownPlugins.metaList(type);
 }
 
 io::paths_t VstModulesRepository::pluginPathsFromCustomLocations(const io::paths_t& customPaths) const
