@@ -95,10 +95,10 @@ public:
     static const std::vector<FretItem::DotTypeNameItem> dotTypeNameMap;
 
     static QChar markerToChar(FretMarkerType t);
-    static QString markerTypeToName(FretMarkerType t);
-    static FretMarkerType nameToMarkerType(QString n);
-    static QString dotTypeToName(FretDotType t);
-    static FretDotType nameToDotType(QString n);
+    static String markerTypeToName(FretMarkerType t);
+    static FretMarkerType nameToMarkerType(String n);
+    static String dotTypeToName(FretDotType t);
+    static FretDotType nameToDotType(String n);
 };
 
 // The three main storage containers used by fret diagrams
@@ -185,7 +185,7 @@ public:
 
     Segment* segment() const { return toSegment(explicitParent()); }
 
-    static std::shared_ptr<FretDiagram> createFromString(Score* score, const QString& s);
+    static std::shared_ptr<FretDiagram> createFromString(Score* score, const String& s);
 
     void layout() override;
     void write(XmlWriter& xml) const override;
@@ -224,7 +224,7 @@ public:
 
     String harmonyText() const { return _harmony ? _harmony->plainText() : String(); }
     qreal centerX() const;
-    void setHarmony(QString harmonyText);
+    void setHarmony(String harmonyText);
 
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
     FretItem::Marker marker(int s) const;

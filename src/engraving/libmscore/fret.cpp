@@ -128,7 +128,7 @@ EngravingItem* FretDiagram::linkedClone()
 ///   Always assume barre on the first visible fret
 //---------------------------------------------------------
 
-std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const QString& s)
+std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const String& s)
 {
     auto fd = Factory::makeFretDiagram(score->dummy()->segment());
     int strings = s.size();
@@ -422,7 +422,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
         mu::draw::Font scaledFont(font);
         scaledFont.setPointSizeF(font.pointSizeF() * _userMag * (spatium() / SPATIUM20) * MScore::pixelRatio * fretNumMag);
         painter->setFont(scaledFont);
-        QString text = QString("%1").arg(_fretOffset + 1);
+        String text = String::number(_fretOffset + 1);
 
         if (_orientation == Orientation::VERTICAL) {
             if (_numPos == 0) {
@@ -431,7 +431,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
             } else {
                 painter->drawText(RectF(x2 + (stringDist * .4), .0, .0, fretDist),
                                   Qt::AlignVCenter | Qt::AlignLeft | Qt::TextDontClip,
-                                  QString("%1").arg(_fretOffset + 1));
+                                  String::number(_fretOffset + 1));
             }
         } else if (_orientation == Orientation::HORIZONTAL) {
             painter->save();
@@ -482,7 +482,7 @@ void FretDiagram::layout()
         qreal fretNumMag = score()->styleD(Sid::fretNumMag);
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
         mu::draw::FontMetrics fm2(scaledFont);
-        qreal numw = fm2.width(QString::number(_fretOffset + 1));
+        qreal numw = fm2.width(String::number(_fretOffset + 1));
         qreal xdiff = numw + stringDist * .4;
         w += xdiff;
         x += (_numPos == 0) == (_orientation == Orientation::VERTICAL) ? -xdiff : 0;
@@ -1179,7 +1179,7 @@ FretItem::Barre FretDiagram::barre(int f) const
 ///   if this is being done by the user, use undoSetHarmony instead
 //---------------------------------------------------------
 
-void FretDiagram::setHarmony(QString harmonyText)
+void FretDiagram::setHarmony(String harmonyText)
 {
     if (!_harmony) {
         Harmony* h = new Harmony(this->score()->dummy()->segment());
@@ -1598,26 +1598,26 @@ const std::vector<FretItem::MarkerTypeNameItem> FretItem::markerTypeNameMap = {
     { FretMarkerType::NONE,       "none" }
 };
 
-QString FretItem::markerTypeToName(FretMarkerType t)
+String FretItem::markerTypeToName(FretMarkerType t)
 {
     for (auto i : FretItem::markerTypeNameMap) {
         if (i.mtype == t) {
-            return i.name;
+            return String::fromAscii(i.name);
         }
     }
 
     ASSERT_X("Unrecognised FretMarkerType!");
-    return QString();         // prevent compiler warnings
+    return String();         // prevent compiler warnings
 }
 
 //---------------------------------------------------------
 //   nameToMarkerType
 //---------------------------------------------------------
 
-FretMarkerType FretItem::nameToMarkerType(QString n)
+FretMarkerType FretItem::nameToMarkerType(String n)
 {
     for (auto i : FretItem::markerTypeNameMap) {
-        if (i.name == n) {
+        if (String::fromAscii(i.name) == n) {
             return i.mtype;
         }
     }
@@ -1636,26 +1636,26 @@ const std::vector<FretItem::DotTypeNameItem> FretItem::dotTypeNameMap = {
     { FretDotType::TRIANGLE,      "triangle" },
 };
 
-QString FretItem::dotTypeToName(FretDotType t)
+String FretItem::dotTypeToName(FretDotType t)
 {
     for (auto i : FretItem::dotTypeNameMap) {
         if (i.dtype == t) {
-            return i.name;
+            return String::fromAscii(i.name);
         }
     }
 
     ASSERT_X("Unrecognised FretDotType!");
-    return QString();         // prevent compiler warnings
+    return String();         // prevent compiler warnings
 }
 
 //---------------------------------------------------------
 //   nameToDotType
 //---------------------------------------------------------
 
-FretDotType FretItem::nameToDotType(QString n)
+FretDotType FretItem::nameToDotType(String n)
 {
     for (auto i : FretItem::dotTypeNameMap) {
-        if (i.name == n) {
+        if (String::fromAscii(i.name) == n) {
             return i.dtype;
         }
     }

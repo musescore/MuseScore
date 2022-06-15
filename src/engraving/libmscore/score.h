@@ -1054,8 +1054,8 @@ public:
     void expandVoice(Segment* s, track_idx_t track);
     void expandVoice();
 
-    EngravingItem* selectMove(const QString& cmd);
-    EngravingItem* move(const QString& cmd);
+    EngravingItem* selectMove(const String& cmd);
+    EngravingItem* move(const String& cmd);
     void cmdEnterRest(const TDuration& d);
     void enterRest(const TDuration& d, InputState* externalInputState = nullptr);
     void addInterval(int, const std::vector<Note*>&);
@@ -1221,7 +1221,7 @@ public:
     QString createRehearsalMarkText(RehearsalMark* current) const;
     QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
-    bool sanityCheck(const String& name = String());
+    bool sanityCheck();
 
     bool checkKeys();
 

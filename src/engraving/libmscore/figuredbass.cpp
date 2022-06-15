@@ -22,6 +22,7 @@
 
 #include "figuredbass.h"
 
+#include "translation.h"
 #include "io/file.h"
 
 #include "draw/fontmetrics.h"
@@ -118,7 +119,7 @@ FiguredBassItem::~FiguredBassItem()
 // return true on success | false if the string is non-conformant
 //---------------------------------------------------------
 
-bool FiguredBassItem::parse(QString& str)
+bool FiguredBassItem::parse(String& str)
 {
     int retVal;
 
@@ -140,11 +141,11 @@ bool FiguredBassItem::parse(QString& str)
     parseParenthesis(str, 3);
     // check for a possible cont. line symbol(s)
     _contLine = ContLine::NONE;                         // contLine
-    if (str[0] == '-' || str[0] == '_') {             // 1 symbol: simple continuation
+    if (str.at(0) == u'-' || str.at(0) == u'_') {             // 1 symbol: simple continuation
         _contLine = ContLine::SIMPLE;
         str.remove(0, 1);
     }
-    while (str[0] == '-' || str[0] == '_') {          // more than 1 symbol: extended continuation
+    while (str.at(0) == u'-' || str.at(0) == u'_') {          // more than 1 symbol: extended continuation
         _contLine = ContLine::EXTENDED;
         str.remove(0, 1);
     }
@@ -195,7 +196,7 @@ bool FiguredBassItem::parse(QString& str)
 // (no prefix / suffix at all IS legal)
 //---------------------------------------------------------
 
-int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
+int FiguredBassItem::parsePrefixSuffix(String& str, bool bPrefix)
 {
     Modifier* dest  = bPrefix ? &_prefix : &_suffix;
     bool done  = false;
@@ -277,20 +278,20 @@ int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
 // (no digit at all IS legal)
 //---------------------------------------------------------
 
-int FiguredBassItem::parseDigit(QString& str)
+int FiguredBassItem::parseDigit(String& str)
 {
     int size   = str.size();
-    str         = str.trimmed();
+    str        = str.trimmed();
 
     _digit = FBIDigitNone;
 
     while (str.size()) {
         // any digit acceptable
-        if (str[0] >= '0' && str[0] <= '9') {
+        if (str.at(0) >= u'0' && str.at(0) <= u'9') {
             if (_digit == FBIDigitNone) {
                 _digit = 0;
             }
-            _digit = _digit * 10 + (str[0].unicode() - '0');
+            _digit = _digit * 10 + (str.at(0).unicode() - '0');
             str.remove(0, 1);
         }
         // anything else: no longer in digit part
@@ -311,9 +312,9 @@ int FiguredBassItem::parseDigit(QString& str)
 // returns the number of QChar's read from str (actually 0 or 1).
 //---------------------------------------------------------
 
-int FiguredBassItem::parseParenthesis(QString& str, int parenthIdx)
+int FiguredBassItem::parseParenthesis(String& str, int parenthIdx)
 {
-    int c = str[0].unicode();
+    char16_t c = str.at(0).unicode();
     Parenthesis code = Parenthesis::NONE;
     switch (c) {
     case '(':
@@ -346,9 +347,9 @@ int FiguredBassItem::parseParenthesis(QString& str, int parenthIdx)
 // this is a standard textual representation of the item properties
 //---------------------------------------------------------
 
-QString FiguredBassItem::normalizedText() const
+String FiguredBassItem::normalizedText() const
 {
-    QString str = QString();
+    String str;
     if (parenth[0] != Parenthesis::NONE) {
         str.append(normParenthToChar[int(parenth[0])]);
     }
@@ -356,22 +357,22 @@ QString FiguredBassItem::normalizedText() const
     if (_prefix != Modifier::NONE) {
         switch (_prefix) {
         case Modifier::FLAT:
-            str.append('b');
+            str.append(u'b');
             break;
         case Modifier::NATURAL:
-            str.append('h');
+            str.append(u'h');
             break;
         case Modifier::SHARP:
-            str.append('#');
+            str.append(u'#');
             break;
         case Modifier::CROSS:
-            str.append('+');
+            str.append(u'+');
             break;
         case Modifier::DOUBLEFLAT:
-            str.append("bb");
+            str.append(u"bb");
             break;
         case Modifier::DOUBLESHARP:
-            str.append("##");
+            str.append(u"##");
             break;
         default:
             break;
@@ -384,7 +385,7 @@ QString FiguredBassItem::normalizedText() const
 
     // digit
     if (_digit != FBIDigitNone) {
-        str.append(QString::number(_digit));
+        str.append(String::number(_digit));
     }
 
     if (parenth[2] != Parenthesis::NONE) {
@@ -395,28 +396,28 @@ QString FiguredBassItem::normalizedText() const
     if (_suffix != Modifier::NONE) {
         switch (_suffix) {
         case Modifier::FLAT:
-            str.append('b');
+            str.append(u'b');
             break;
         case Modifier::NATURAL:
-            str.append('h');
+            str.append(u'h');
             break;
         case Modifier::SHARP:
-            str.append('#');
+            str.append(u'#');
             break;
         case Modifier::CROSS:
-            str.append('+');
+            str.append(u'+');
             break;
         case Modifier::BACKSLASH:
-            str.append('\\');
+            str.append(u'\\');
             break;
         case Modifier::SLASH:
-            str.append('/');
+            str.append(u'/');
             break;
         case Modifier::DOUBLEFLAT:
-            str.append("bb");
+            str.append(u"bb");
             break;
         case Modifier::DOUBLESHARP:
-            str.append("##");
+            str.append(u"##");
             break;
         default:
             break;
@@ -873,25 +874,25 @@ void FiguredBassItem::undoSetParenth5(Parenthesis par)
 //   Convert MusicXML prefix/suffix to Modifier
 //---------------------------------------------------------
 
-FiguredBassItem::Modifier FiguredBassItem::MusicXML2Modifier(const QString prefix) const
+FiguredBassItem::Modifier FiguredBassItem::MusicXML2Modifier(const String prefix) const
 {
-    if (prefix == "sharp") {
+    if (prefix == u"sharp") {
         return Modifier::SHARP;
-    } else if (prefix == "flat") {
+    } else if (prefix == u"flat") {
         return Modifier::FLAT;
-    } else if (prefix == "natural") {
+    } else if (prefix == u"natural") {
         return Modifier::NATURAL;
-    } else if (prefix == "double-sharp") {
+    } else if (prefix == u"double-sharp") {
         return Modifier::DOUBLESHARP;
-    } else if (prefix == "flat-flat") {
+    } else if (prefix == u"flat-flat") {
         return Modifier::DOUBLEFLAT;
-    } else if (prefix == "sharp-sharp") {
+    } else if (prefix == u"sharp-sharp") {
         return Modifier::DOUBLESHARP;
-    } else if (prefix == "cross") {
+    } else if (prefix == u"cross") {
         return Modifier::CROSS;
-    } else if (prefix == "backslash") {
+    } else if (prefix == u"backslash") {
         return Modifier::BACKSLASH;
-    } else if (prefix == "slash") {
+    } else if (prefix == u"slash") {
         return Modifier::SLASH;
     } else {
         return Modifier::NONE;
@@ -902,21 +903,21 @@ FiguredBassItem::Modifier FiguredBassItem::MusicXML2Modifier(const QString prefi
 //   Convert Modifier to MusicXML prefix/suffix
 //---------------------------------------------------------
 
-QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) const
+String FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) const
 {
     switch (prefix) {
-    case Modifier::NONE:        return "";
-    case Modifier::DOUBLEFLAT:  return "flat-flat";
-    case Modifier::FLAT:        return "flat";
-    case Modifier::NATURAL:     return "natural";
-    case Modifier::SHARP:       return "sharp";
-    case Modifier::DOUBLESHARP: return "double-sharp";
-    case Modifier::CROSS:       return "cross";
-    case Modifier::BACKSLASH:   return "backslash";
-    case Modifier::SLASH:       return "slash";
-    case Modifier::NUMOF:       return "";         // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
+    case Modifier::NONE:        return u"";
+    case Modifier::DOUBLEFLAT:  return u"flat-flat";
+    case Modifier::FLAT:        return u"flat";
+    case Modifier::NATURAL:     return u"natural";
+    case Modifier::SHARP:       return u"sharp";
+    case Modifier::DOUBLESHARP: return u"double-sharp";
+    case Modifier::CROSS:       return u"cross";
+    case Modifier::BACKSLASH:   return u"backslash";
+    case Modifier::SLASH:       return u"slash";
+    case Modifier::NUMOF:       return u"";         // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
     }
-    return "";
+    return u"";
 }
 
 //---------------------------------------------------------
@@ -940,14 +941,14 @@ void FiguredBassItem::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int c
     // The first figure of each group is the "original" figure. Practically, it is one inserted manually
     // by the user, rather than automatically by the "duration" extend method.
     if (isOriginalFigure) {
-        QString strPrefix = Modifier2MusicXML(_prefix);
+        String strPrefix = Modifier2MusicXML(_prefix);
         if (strPrefix != "") {
             xml.tag("prefix", strPrefix);
         }
         if (_digit != FBIDigitNone) {
             xml.tag("figure-number", _digit);
         }
-        QString strSuffix = Modifier2MusicXML(_suffix);
+        String strSuffix = Modifier2MusicXML(_suffix);
         if (strSuffix != "") {
             xml.tag("suffix", strSuffix);
         }
@@ -1100,7 +1101,7 @@ void FiguredBass::write(XmlWriter& xml) const
 
 void FiguredBass::read(XmlReader& e)
 {
-    QString normalizedText;
+    String normalizedText;
     int idx = 0;
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -1343,18 +1344,18 @@ void FiguredBass::endEdit(EditData& ed)
     TextBase::endEdit(ed);
     // as the standard text editor keeps inserting spurious HTML formatting and styles
     // retrieve and work only on the plain text
-    const QString txt = plainText();
+    const String txt = plainText();
     if (txt.isEmpty()) { // if no text, nothing to do
         return;
     }
 
     // split text into lines and create an item for each line
-    QStringList list = txt.split('\n', Qt::SkipEmptyParts);
+    StringList list = txt.split(u'\n', mu::SkipEmptyParts);
     qDeleteAll(items);
     items.clear();
-    QString normalizedText = QString();
+    String normalizedText;
     int idx = 0;
-    for (QString str : qAsConst(list)) {
+    for (String str : list) {
         FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
         if (!pItem->parse(str)) {               // if any item fails parsing
             qDeleteAll(items);
@@ -1669,11 +1670,11 @@ bool FiguredBassFont::read(XmlReader& e)
 //    resets everything and reads the built-in config file if fileName is null or empty
 //---------------------------------------------------------
 
-bool FiguredBass::readConfigFile(const QString& fileName)
+bool FiguredBass::readConfigFile(const String& fileName)
 {
-    QString path;
+    String path;
 
-    if (fileName == 0 || fileName.isEmpty()) {         // defaults to built-in xml
+    if (fileName.isEmpty()) {         // defaults to built-in xml
         path = ":/fonts/fonts_figuredbass.xml";
         g_FBFonts.clear();
     } else {
@@ -1682,15 +1683,15 @@ bool FiguredBass::readConfigFile(const QString& fileName)
 
     File fi(path);
     if (!fi.open(IODevice::ReadOnly)) {
-        MScore::lastError = QObject::tr("Cannot open figured bass description:\n%1").arg(fi.filePath().toQString());
-        LOGD("FiguredBass::read failed: <%s>", qPrintable(path));
+        MScore::lastError = mtrc("engraving", "Cannot open figured bass description:\n%1").arg(fi.filePath().toString());
+        LOGD("FiguredBass::read failed: <%s>", muPrintable(path));
         return false;
     }
     XmlReader e(&fi);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            // QString version = e.attribute(QString("version"));
-            // QStringList sl = version.split('.');
+            // String version = e.attribute(String("version"));
+            // StringList sl = version.split('.');
             // int _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
 
             while (e.readNextStartElement()) {
@@ -1718,9 +1719,9 @@ bool FiguredBass::readConfigFile(const QString& fileName)
 //    the index of a name in the list can be used to retrieve the font data with fontData()
 //---------------------------------------------------------
 
-std::list<QString> FiguredBass::fontNames()
+std::list<String> FiguredBass::fontNames()
 {
-    std::list<QString> names;
+    std::list<String> names;
     for (const FiguredBassFont& f : g_FBFonts) {
         names.push_back(f.displayName);
     }
@@ -1735,7 +1736,7 @@ std::list<QString> FiguredBass::fontNames()
 // any of the pointer parameter can be null, if that datum is not needed
 //---------------------------------------------------------
 
-bool FiguredBass::fontData(int nIdx, QString* pFamily, QString* pDisplayName,
+bool FiguredBass::fontData(int nIdx, String* pFamily, String* pDisplayName,
                            qreal* pSize, qreal* pLineHeight)
 {
     if (nIdx >= 0 && nIdx < static_cast<int>(g_FBFonts.size())) {

@@ -66,7 +66,7 @@ public:
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     void setDynamicType(DynamicType val) { _dynamicType = val; }
-    void setDynamicType(const QString&);
+    void setDynamicType(const String&);
 
     DynamicType dynamicType() const { return _dynamicType; }
     int subtype() const override { return static_cast<int>(_dynamicType); }
@@ -105,7 +105,7 @@ public:
     String screenReaderInfo() const override;
     void doAutoplace();
 
-    static QString dynamicText(DynamicType t);
+    static String dynamicText(DynamicType t);
 };
 } // namespace mu::engraving
 

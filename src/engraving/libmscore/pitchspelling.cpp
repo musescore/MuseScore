@@ -133,13 +133,13 @@ int tpc2stepByKey(int tpc, Key key, int& alter)
 //   step2tpc
 //---------------------------------------------------------
 
-int step2tpc(const QString& stepName, AccidentalVal alter)
+int step2tpc(const String& stepName, AccidentalVal alter)
 {
     if (stepName.isEmpty()) {
         return Tpc::TPC_INVALID;
     }
     int r;
-    switch (stepName[0].toLower().toLatin1()) {
+    switch (stepName.at(0).toLower().toAscii()) {
     case 'c': r = 0;
         break;
     case 'd': r = 1;
@@ -253,19 +253,19 @@ int tpc2alterByKey(int tpc, Key key)
 //    return note name
 //---------------------------------------------------------
 
-QString tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, bool explicitAccidental)
+String tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, bool explicitAccidental)
 {
-    QString s;
-    QString acc;
+    String s;
+    String acc;
     tpc2name(tpc, noteSpelling, noteCase, s, acc, explicitAccidental);
-    return s + (explicitAccidental ? " " : "") + acc;
+    return s + (explicitAccidental ? u" " : u"") + acc;
 }
 
 //---------------------------------------------------------
 //   tpc2name
 //---------------------------------------------------------
 
-void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, QString& acc, bool explicitAccidental)
+void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, String& acc, bool explicitAccidental)
 {
     AccidentalVal accVal;
     tpc2name(tpc, noteSpelling, noteCase, s, accVal);
@@ -343,18 +343,18 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
 //   tpc2name
 //---------------------------------------------------------
 
-void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, AccidentalVal& acc)
+void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, AccidentalVal& acc)
 {
     const char names[]  = "FCGDAEB";
     const char gnames[] = "FCGDAEH";
-    const QString snames[] = { "Fa", "Do", "Sol", "Re", "La", "Mi", "Si" };
+    const String snames[] = { u"Fa", u"Do", u"Sol", u"Re", u"La", u"Mi", u"Si" };
 
     acc = tpc2alter(tpc);
     int idx = (tpc - Tpc::TPC_MIN) % TPC_DELTA_SEMITONE;
     switch (noteSpelling) {
     case NoteSpellingType::GERMAN:
     case NoteSpellingType::GERMAN_PURE:
-        s = gnames[idx];
+        s = String(Char::fromAscii(gnames[idx]));
         if (s == "H" && acc == AccidentalVal::FLAT) {
             s = "B";
             if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
@@ -367,12 +367,12 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
         break;
     case NoteSpellingType::FRENCH:
         s = snames[idx];
-        if (s == "Re") {
-            s = "Ré";
+        if (s == u"Re") {
+            s = u"Ré";
         }
         break;
     default:
-        s = names[idx];
+        s = String(Char::fromAscii(names[idx]));
         break;
     }
     switch (noteCase) {
@@ -391,10 +391,10 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
 //   tpc2stepName
 //---------------------------------------------------------
 
-QString tpc2stepName(int tpc)
+String tpc2stepName(int tpc)
 {
     const char names[] = "FCGDAEB";
-    return QString(names[(tpc - Tpc::TPC_MIN) % 7]);
+    return String(names[(tpc - Tpc::TPC_MIN) % 7]);
 }
 
 // table of alternative spellings for one octave
@@ -569,8 +569,8 @@ static const int enharmonicSpelling[15][34] = {
 
 static int penalty(int lof1, int lof2, int k)
 {
-    if (k < 0 || k >= 15) {
-        ASSERT_X(QString::asprintf("Illegal key %d >= 15", k));
+    IF_ASSERT_FAILED((k >= 0 && k < 15)) {
+        return 0;
     }
     Q_ASSERT(lof1 >= 0 && lof1 < 34);
     Q_ASSERT(lof2 >= 0 && lof2 < 34);
@@ -922,18 +922,18 @@ int step2pitchInterval(int step, int alter)
 ///   might be temporary, just used to parse nashville notation now
 ///
 //----------------------------------------------
-int function2Tpc(const QString& s, Key key)
+int function2Tpc(const String& s, Key key)
 {
     //TODO - PHV: allow for alternate spellings
     int alter = 0;
     int step;
-    if (!s.isEmpty() && s[0].isDigit()) {
-        step = s[0].digitValue();
-    } else if (s.size() > 1 && s[1].isDigit()) {
-        step = s[1].digitValue();
-        if (s[0] == 'b') {
+    if (!s.isEmpty() && s.at(0).isDigit()) {
+        step = s.at(0).digitValue();
+    } else if (s.size() > 1 && s.at(1).isDigit()) {
+        step = s.at(1).digitValue();
+        if (s.at(0) == u'b') {
             alter = -1;
-        } else if (s[0] == '#') {
+        } else if (s.at(0) == u'#') {
             alter = 1;
         }
     } else {

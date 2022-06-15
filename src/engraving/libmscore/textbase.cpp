@@ -2689,51 +2689,52 @@ std::list<TextFragment> TextBase::fragmentList() const
 //  (this is incomplete/experimental)
 //---------------------------------------------------------
 
-bool TextBase::validateText(QString& s)
+bool TextBase::validateText(String& s)
 {
-    QString d;
-    for (int i = 0; i < s.size(); ++i) {
-        QChar c = s[i];
-        if (c == '&') {
-            const char* ok[] { "amp;", "lt;", "gt;", "quot;" };
+    String d;
+    for (size_t i = 0; i < s.size(); ++i) {
+        Char c = s.at(i);
+        if (c == u'&') {
+            const char16_t* ok[] { u"amp;", u"lt;", u"gt;", u"quot;" };
             QString t = s.mid(i + 1);
             bool found = false;
             for (auto k : ok) {
                 if (t.startsWith(k)) {
                     d.append(c);
                     d.append(k);
-                    i += int(strlen(k));
+                    i += int(std::u16string_view(k).size());
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                d.append("&amp;");
+                d.append(u"&amp;");
             }
-        } else if (c == '<') {
-            const char* ok[] { "b>", "/b>", "i>", "/i>", "u>", "/u", "s>", "/s>", "font ", "/font>", "sym>", "/sym>", "sub>",
-                               "/sub>", "sup>", "/sup>" };
-            QString t = s.mid(i + 1);
+        } else if (c == u'<') {
+            const char16_t* ok[] { u"b>", u"/b>", u"i>", u"/i>", u"u>", u"/u", u"s>", u"/s>", u"font ", u"/font>", u"sym>", u"/sym>",
+                                   u"sub>", u"/sub>", u"sup>", u"/sup>" };
+            String t = s.mid(i + 1);
             bool found = false;
             for (auto k : ok) {
                 if (t.startsWith(k)) {
                     d.append(c);
                     d.append(k);
-                    i += int(strlen(k));
+                    i += int(std::u16string_view(k).size());
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                d.append("&lt;");
+                d.append(u"&lt;");
             }
         } else {
             d.append(c);
         }
     }
-    QString ss = "<data>" + d + "</data>\n";
-    QByteArray ba = ss.toUtf8();
-    XmlReader xml(ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size()));
+
+    String ss = u"<data>" + d + u"</data>\n";
+    ByteArray ba = ss.toUtf8();
+    XmlReader xml(ba);
     while (xml.readNextStartElement()) {
         // LOGD("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
     }
@@ -2742,7 +2743,7 @@ bool TextBase::validateText(QString& s)
         return true;
     }
     LOGD("xml error at line %lld column %lld: %s", xml.lineNumber(), xml.columnNumber(), qPrintable(xml.errorString()));
-    LOGD("text: |%s|", qPrintable(ss));
+    LOGD("text: |%s|", muPrintable(ss));
     return false;
 }
 

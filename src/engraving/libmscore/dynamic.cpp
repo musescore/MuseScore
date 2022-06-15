@@ -257,7 +257,7 @@ void Dynamic::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "subtype") {
-            setDynamicType(e.readText().toQString());
+            setDynamicType(e.readText());
         } else if (tag == "velocity") {
             _velocity = e.readInt();
         } else if (tag == "dynType") {
@@ -368,13 +368,14 @@ void Dynamic::doAutoplace()
 //   setDynamicType
 //---------------------------------------------------------
 
-void Dynamic::setDynamicType(const QString& tag)
+void Dynamic::setDynamicType(const String& tag)
 {
+    std::string utf8Tag = tag.toStdString();
     int n = sizeof(dynList) / sizeof(*dynList);
     for (int i = 0; i < n; ++i) {
-        if (TConv::toXml(DynamicType(i)).ascii() == tag || dynList[i].text == tag) {
+        if (TConv::toXml(DynamicType(i)).ascii() == utf8Tag || dynList[i].text == utf8Tag) {
             setDynamicType(DynamicType(i));
-            setXmlText(QString::fromUtf8(dynList[i].text));
+            setXmlText(String::fromUtf8(dynList[i].text));
             return;
         }
     }
@@ -383,9 +384,9 @@ void Dynamic::setDynamicType(const QString& tag)
     setXmlText(tag);
 }
 
-QString Dynamic::dynamicText(DynamicType t)
+String Dynamic::dynamicText(DynamicType t)
 {
-    return dynList[int(t)].text;
+    return String::fromUtf8(dynList[int(t)].text);
 }
 
 String Dynamic::subtypeName() const
@@ -409,7 +410,7 @@ void Dynamic::startEdit(EditData& ed)
 void Dynamic::endEdit(EditData& ed)
 {
     TextBase::endEdit(ed);
-    if (xmlText() != QString::fromUtf8(dynList[int(_dynamicType)].text)) {
+    if (xmlText() != String::fromUtf8(dynList[int(_dynamicType)].text)) {
         _dynamicType = DynamicType::OTHER;
     }
 }
@@ -579,7 +580,7 @@ String Dynamic::accessibleInfo() const
     String s;
 
     if (dynamicType() == DynamicType::OTHER) {
-        s = plainText().toQString().simplified();
+        s = plainText().simplified();
         if (s.size() > 20) {
             s.truncate(20);
             s += u"…";
@@ -599,7 +600,7 @@ String Dynamic::screenReaderInfo() const
     String s;
 
     if (dynamicType() == DynamicType::OTHER) {
-        s = plainText().toQString().simplified();
+        s = plainText().simplified();
     } else {
         s = TConv::toUserName(dynamicType());
     }

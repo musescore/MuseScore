@@ -1351,9 +1351,9 @@ QString ExportBrailleImpl::brailleNote(const QString& pitchName, DurationType du
 
 QString ExportBrailleImpl::brailleChordRootNote(Chord* chord, Note* rootNote)
 {
-    QString pitchName;
-    QString accidental; //TODO, do we need this for anything?
-    QString octaveBraille = QString();
+    String pitchName;
+    String accidental; //TODO, do we need this for anything?
+    String octaveBraille;
     tpc2name(rootNote->tpc(), NoteSpellingType::STANDARD, NoteCaseType::UPPER, pitchName, accidental);
     QString noteBraille = brailleNote(pitchName, chord->durationType().type(), chord->dots());
 
@@ -1409,9 +1409,9 @@ int ExportBrailleImpl::computeInterval(Note* note1, Note* note2, bool ignoreOcta
         initNotes << "G" << "F" << "E" << "D" << "C" << "B" << "A";
     }
 
-    QString note1PitchName;
-    QString note2PitchName;
-    QString accidental; //We don't need this, but tpc2name requires it
+    String note1PitchName;
+    String note2PitchName;
+    String accidental; //We don't need this, but tpc2name requires it
     tpc2name(note1->tpc(), NoteSpellingType::STANDARD, NoteCaseType::UPPER, note1PitchName, accidental);
     tpc2name(note2->tpc(), NoteSpellingType::STANDARD, NoteCaseType::UPPER, note2PitchName, accidental);
 

@@ -57,13 +57,13 @@ namespace mu::engraving {
 //   harmonyName
 //---------------------------------------------------------
 
-QString Harmony::harmonyName() const
+String Harmony::harmonyName() const
 {
     // Hack:
     const_cast<Harmony*>(this)->determineRootBaseSpelling();
 
     HChord hc = descr() ? descr()->chord : HChord();
-    QString s, r, e, b;
+    String s, r, e, b;
 
     if (_leftParen) {
         s = "(";
@@ -78,7 +78,7 @@ QString Harmony::harmonyName() const
     if (_textName != "") {
         e = _textName;
         if (_harmonyType != HarmonyType::ROMAN) {
-            e.remove('=');
+            e.remove(u'=');
         }
     } else if (!_degreeList.empty()) {
         hc.add(_degreeList);
@@ -103,13 +103,13 @@ QString Harmony::harmonyName() const
     }
 
     if (_baseTpc != Tpc::TPC_INVALID) {
-        b = "/" + tpc2name(_baseTpc, _baseSpelling, _baseCase);
+        b = u"/" + tpc2name(_baseTpc, _baseSpelling, _baseCase);
     }
 
     s += r + e + b;
 
     if (_rightParen) {
-        s += ")";
+        s += u")";
     }
 
     return s;
@@ -119,7 +119,7 @@ QString Harmony::harmonyName() const
 //   rootName
 //---------------------------------------------------------
 
-QString Harmony::rootName()
+String Harmony::rootName()
 {
     determineRootBaseSpelling();
     return tpc2name(_rootTpc, _rootSpelling, _rootCase);
@@ -129,7 +129,7 @@ QString Harmony::rootName()
 //   baseName
 //---------------------------------------------------------
 
-QString Harmony::baseName()
+String Harmony::baseName()
 {
     determineRootBaseSpelling();
     if (_baseTpc == Tpc::TPC_INVALID) {
@@ -297,9 +297,9 @@ void Harmony::write(XmlWriter& xml) const
         }
         // parser uses leading "=" as a hidden specifier for minor
         // this may or may not currently be incorporated into _textName
-        QString writeName = _textName;
+        String writeName = _textName;
         if (_parsedForm && _parsedForm->name().startsWith(u'=') && !writeName.startsWith(u'=')) {
-            writeName = "=" + writeName;
+            writeName = u"=" + writeName;
         }
         if (!writeName.isEmpty()) {
             xml.tag("name", writeName);
@@ -373,7 +373,7 @@ void Harmony::read(XmlReader& e)
         } else if (tag == "degree") {
             int degreeValue = 0;
             int degreeAlter = 0;
-            QString degreeType = "";
+            String degreeType;
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
                 if (t == "degree-value") {
@@ -440,7 +440,7 @@ void Harmony::read(XmlReader& e)
         // but we no longer support user-applied formatting for chord symbols anyhow
         // with any luck, the resulting text will be parseable now, so give it a shot
         createLayout();
-        QString s = plainText();
+        String s = plainText();
         if (!s.isEmpty()) {
             setHarmony(s);
             return;
@@ -501,7 +501,7 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCase
     // override for minor chords
     if (score()->styleB(Sid::lowerCaseMinorChords)) {
         const ChordDescription* cd = descr();
-        QString quality;
+        String quality;
         if (cd) {
             // use chord description if possible
             // this is the usual case
@@ -542,7 +542,7 @@ void Harmony::determineRootBaseSpelling()
 //    convert something like "C#" into tpc 21
 //---------------------------------------------------------
 
-static int convertNote(const QString& s, NoteSpellingType noteSpelling, NoteCaseType& noteCase, int& idx)
+static int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& noteCase, size_t& idx)
 {
     bool useGerman = false;
     bool useSolfeggio = false;
@@ -559,13 +559,13 @@ static int convertNote(const QString& s, NoteSpellingType noteSpelling, NoteCase
     if (s == "") {
         return Tpc::TPC_INVALID;
     }
-    noteCase = s[0].isLower() ? NoteCaseType::LOWER : NoteCaseType::CAPITAL;
+    noteCase = s.at(0).isLower() ? NoteCaseType::LOWER : NoteCaseType::CAPITAL;
     int acci;
     switch (noteSpelling) {
     case NoteSpellingType::SOLFEGGIO:
     case NoteSpellingType::FRENCH:
         useSolfeggio = true;
-        if (s.startsWith("sol", Qt::CaseInsensitive)) {
+        if (s.startsWith(u"sol", mu::CaseInsensitive)) {
             acci = 3;
         } else {
             acci = 2;
@@ -581,46 +581,46 @@ static int convertNote(const QString& s, NoteSpellingType noteSpelling, NoteCase
     idx = acci;
     int alter = 0;
     int n = s.size();
-    QString acc = s.right(n - acci);
+    String acc = s.right(n - acci);
     if (acc != "") {
-        if (acc.startsWith("bb")) {
+        if (acc.startsWith(u"bb")) {
             alter = -2;
             idx += 2;
-        } else if (acc.startsWith("b")) {
+        } else if (acc.startsWith(u"b")) {
             alter = -1;
             idx += 1;
-        } else if (useGerman && acc.startsWith("eses")) {
+        } else if (useGerman && acc.startsWith(u"eses")) {
             alter = -2;
             idx += 4;
-        } else if (useGerman && (acc.startsWith("ses") || acc.startsWith("sas"))) {
+        } else if (useGerman && (acc.startsWith(u"ses") || acc.startsWith(u"sas"))) {
             alter = -2;
             idx += 3;
-        } else if (useGerman && acc.startsWith("es")) {
+        } else if (useGerman && acc.startsWith(u"es")) {
             alter = -1;
             idx += 2;
-        } else if (useGerman && acc.startsWith("s") && !acc.startsWith("su")) {
+        } else if (useGerman && acc.startsWith(u"s") && !acc.startsWith(u"su")) {
             alter = -1;
             idx += 1;
-        } else if (acc.startsWith("##")) {
+        } else if (acc.startsWith(u"##")) {
             alter = 2;
             idx += 2;
-        } else if (acc.startsWith("x")) {
+        } else if (acc.startsWith(u"x")) {
             alter = 2;
             idx += 1;
-        } else if (acc.startsWith("#")) {
+        } else if (acc.startsWith(u"#")) {
             alter = 1;
             idx += 1;
-        } else if (useGerman && acc.startsWith("isis")) {
+        } else if (useGerman && acc.startsWith(u"isis")) {
             alter = 2;
             idx += 4;
-        } else if (useGerman && acc.startsWith("is")) {
+        } else if (useGerman && acc.startsWith(u"is")) {
             alter = 1;
             idx += 2;
         }
     }
     int r;
     if (useGerman) {
-        switch (s[0].toLower().toLatin1()) {
+        switch (s.at(0).toLower().toAscii()) {
         case 'c':   r = 0;
             break;
         case 'd':   r = 1;
@@ -646,13 +646,13 @@ static int convertNote(const QString& s, NoteSpellingType noteSpelling, NoteCase
             return Tpc::TPC_INVALID;
         }
     } else if (useSolfeggio) {
-        if (s.length() < 2) {
+        if (s.size() < 2) {
             return Tpc::TPC_INVALID;
         }
-        if (s[1].isUpper()) {
+        if (s.at(1).isUpper()) {
             noteCase = NoteCaseType::UPPER;
         }
-        QString ss = s.toLower().left(2);
+        String ss = s.toLower().left(2);
         if (ss == "do") {
             r = 0;
         } else if (ss == "re" || ss == "ré") {
@@ -671,7 +671,7 @@ static int convertNote(const QString& s, NoteSpellingType noteSpelling, NoteCase
             return Tpc::TPC_INVALID;
         }
     } else {
-        switch (s[0].toLower().toLatin1()) {
+        switch (s.at(0).toLower().toAscii()) {
         case 'c':   r = 0;
             break;
         case 'd':   r = 1;
@@ -700,7 +700,7 @@ static int convertNote(const QString& s, NoteSpellingType noteSpelling, NoteCase
 //    return true if chord is recognized
 //---------------------------------------------------------
 
-const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int* base, bool syntaxOnly)
+const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* base, bool syntaxOnly)
 {
     _id = -1;
     if (_parsedForm) {
@@ -722,7 +722,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
     }
 
     // pre-process for parentheses
-    QString s = ss.simplified();
+    String s = ss.simplified();
     if ((_leftParen = s.startsWith('('))) {
         s.remove(0, 1);
     }
@@ -738,7 +738,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
 
     // pre-process for lower case minor chords
     bool preferMinor;
-    if (score()->styleB(Sid::lowerCaseMinorChords) && s[0].isLower()) {
+    if (score()->styleB(Sid::lowerCaseMinorChords) && s.at(0).isLower()) {
         preferMinor = true;
     } else {
         preferMinor = false;
@@ -746,9 +746,9 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
 
     if (_harmonyType == HarmonyType::NASHVILLE) {
         int n = 0;
-        if (s[0].isDigit()) {
+        if (s.at(0).isDigit()) {
             n = 1;
-        } else if (s[1].isDigit()) {
+        } else if (s.at(1).isDigit()) {
             n = 2;
         }
         _function = s.mid(0, n);
@@ -757,10 +757,10 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
         *base = Tpc::TPC_INVALID;
     } else {
         determineRootBaseSpelling();
-        int idx;
+        size_t idx;
         int r = convertNote(s, _rootSpelling, _rootCase, idx);
         if (r == Tpc::TPC_INVALID) {
-            if (s[0] == '/') {
+            if (s.at(0) == '/') {
                 idx = 0;
             } else {
                 LOGD("failed <%s>", qPrintable(ss));
@@ -771,11 +771,11 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
         }
         *root = r;
         *base = Tpc::TPC_INVALID;
-        int slash = s.lastIndexOf('/');
-        if (slash != -1) {
-            QString bs = s.mid(slash + 1).simplified();
+        size_t slash = s.lastIndexOf(u'/');
+        if (slash != mu::nidx) {
+            String bs = s.mid(slash + 1).simplified();
             s = s.mid(idx, slash - idx).simplified();
-            int idx2;
+            size_t idx2;
             *base = convertNote(bs, _baseSpelling, _baseCase, idx2);
             if (idx2 != bs.size()) {
                 *base = Tpc::TPC_INVALID;
@@ -783,7 +783,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             if (*base == Tpc::TPC_INVALID) {
                 // if what follows after slash is not (just) a TPC
                 // then reassemble chord and try to parse with the slash
-                s = s + "/" + bs;
+                s = s + u"/" + bs;
             }
         } else {
             s = s.mid(idx);         // don't simplify; keep leading space before extension if present
@@ -884,7 +884,7 @@ bool Harmony::edit(EditData& ed)
     // check spelling
     int root = TPC_INVALID;
     int base = TPC_INVALID;
-    QString str = xmlText();
+    String str = xmlText();
     _isMisspelled = !str.isEmpty()
                     && !parseHarmony(str, &root, &base, true)
                     && root == TPC_INVALID
@@ -910,29 +910,29 @@ void Harmony::endEdit(EditData& ed)
     TextBase::endEdit(ed);
 
     // get plain text
-    QString s = plainText();
+    String s = plainText();
 
     // if user explicitly added symbols to the text,
     // convert them back to their respective replacement texts
     if (harmonyType() != HarmonyType::ROMAN) {
-        s.replace("\u1d12b", "bb");     // double-flat
-        s.replace("\u266d",  "b");      // flat
-        s.replace("\ue260",  "b");      // flat
+        s.replace(u"\u1d12b", u"bb");     // double-flat
+        s.replace(u"\u266d",  u"b");      // flat
+        s.replace(u"\ue260",  u"b");      // flat
         // do not replace natural sign
         // (right now adding the symbol explicitly is the only way to force a natural sign to appear at all)
         //s.replace("\u266e",  "n");  // natural, if one day we support that too
         //s.replace("\ue261",  "n");  // natural, if one day we support that too
-        s.replace("\u266f",  "#");      // sharp
-        s.replace("\ue262",  "#");      // sharp
-        s.replace("\u1d12a", "x");      // double-sharp
-        s.replace("\u0394",  "^");      // &Delta;
-        s.replace("\u00d0",  "o");      // &deg;
-        s.replace("\u00f8",  "0");      // &oslash;
-        s.replace("\u00d8",  "0");      // &Oslash;
+        s.replace(u"\u266f",  u"#");      // sharp
+        s.replace(u"\ue262",  u"#");      // sharp
+        s.replace(u"\u1d12a", u"x");      // double-sharp
+        s.replace(u"\u0394",  u"^");      // &Delta;
+        s.replace(u"\u00d0",  u"o");      // &deg;
+        s.replace(u"\u00f8",  u"0");      // &oslash;
+        s.replace(u"\u00d8",  u"0");      // &Oslash;
     } else {
-        s.replace("\ue260",  "\u266d");         // flat
-        s.replace("\ue261",  "\u266e");         // natural
-        s.replace("\ue262",  "\u266f");         // sharp
+        s.replace(u"\ue260",  u"\u266d");         // flat
+        s.replace(u"\ue261",  u"\u266e");         // natural
+        s.replace(u"\ue262",  u"\u266f");         // sharp
     }
 
     //play chord on edit and set dirty
@@ -987,7 +987,7 @@ void Harmony::endEdit(EditData& ed)
 //   setHarmony
 //---------------------------------------------------------
 
-void Harmony::setHarmony(const QString& s)
+void Harmony::setHarmony(const String& s)
 {
     int r, b;
     const ChordDescription* cd = parseHarmony(s, &r, &b);
@@ -1211,7 +1211,7 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
 //    using musicXml "kind" string and degree list
 //---------------------------------------------------------
 
-const ChordDescription* Harmony::fromXml(const QString& kind, const std::list<HDegree>& dl)
+const ChordDescription* Harmony::fromXml(const String& kind, const std::list<HDegree>& dl)
 {
     StringList degrees;
 
@@ -1219,12 +1219,12 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const std::list<HD
         degrees.push_back(d.text());
     }
 
-    QString lowerCaseKind = kind.toLower();
+    String lowerCaseKind = kind.toLower();
     const ChordList* cl = score()->chordList();
     for (const auto& p : *cl) {
         const ChordDescription& cd = p.second;
-        QString k     = cd.xmlKind;
-        QString lowerCaseK = k.toLower();     // required for xmlKind Tristan
+        String k     = cd.xmlKind;
+        String lowerCaseK = k.toLower();     // required for xmlKind Tristan
         StringList d = cd.xmlDegrees;
         if ((lowerCaseKind == lowerCaseK) && (d == degrees)) {
 //                  LOGD("harmony found in db: %s %s -> %d", qPrintable(kind), qPrintable(degrees), cd->id);
@@ -1240,9 +1240,9 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const std::list<HD
 //    using musicXml "kind" string only
 //---------------------------------------------------------
 
-const ChordDescription* Harmony::fromXml(const QString& kind)
+const ChordDescription* Harmony::fromXml(const String& kind)
 {
-    QString lowerCaseKind = kind.toLower();
+    String lowerCaseKind = kind.toLower();
     const ChordList* cl = score()->chordList();
     for (const auto& p : *cl) {
         const ChordDescription& cd = p.second;
@@ -1260,7 +1260,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind)
 //    then generate chord description from that
 //---------------------------------------------------------
 
-const ChordDescription* Harmony::fromXml(const QString& kind, const QString& kindText, const QString& symbols, const QString& parens,
+const ChordDescription* Harmony::fromXml(const String& kind, const String& kindText, const String& symbols, const String& parens,
                                          const std::list<HDegree>& dl)
 {
     ParsedChord* pc = new ParsedChord;
@@ -1288,14 +1288,14 @@ const ChordDescription* Harmony::descr() const
 //    return chord description if found, or null
 //---------------------------------------------------------
 
-const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* pc) const
+const ChordDescription* Harmony::descr(const String& name, const ParsedChord* pc) const
 {
     const ChordList* cl = score()->chordList();
     const ChordDescription* match = 0;
     if (cl) {
         for (const auto& p : *cl) {
             const ChordDescription& cd = p.second;
-            for (const QString& s : cd.names) {
+            for (const String& s : cd.names) {
                 if (s == name) {
                     return &cd;
                 } else if (pc) {
@@ -1338,7 +1338,7 @@ const ChordDescription* Harmony::getDescription()
 //    same but lookup by name and optionally parsed chord
 //---------------------------------------------------------
 
-const ChordDescription* Harmony::getDescription(const QString& name, const ParsedChord* pc)
+const ChordDescription* Harmony::getDescription(const String& name, const ParsedChord* pc)
 {
     const ChordDescription* cd = descr(name, pc);
     if (cd) {
@@ -1640,7 +1640,7 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentView
 //   TextSegment
 //---------------------------------------------------------
 
-TextSegment::TextSegment(const QString& s, const mu::draw::Font& f, qreal x, qreal y)
+TextSegment::TextSegment(const String& s, const mu::draw::Font& f, qreal x, qreal y)
 {
     set(s, f, x, y, PointF());
     select = false;
@@ -1677,7 +1677,7 @@ RectF TextSegment::tightBoundingRect() const
 //   set
 //---------------------------------------------------------
 
-void TextSegment::set(const QString& s, const mu::draw::Font& f, qreal _x, qreal _y, PointF _offset)
+void TextSegment::set(const String& s, const mu::draw::Font& f, qreal _x, qreal _y, PointF _offset)
 {
     m_font   = f;
     x      = _x;
@@ -1690,7 +1690,7 @@ void TextSegment::set(const QString& s, const mu::draw::Font& f, qreal _x, qreal
 //   render
 //---------------------------------------------------------
 
-void Harmony::render(const QString& s, qreal& x, qreal& y)
+void Harmony::render(const String& s, qreal& x, qreal& y)
 {
     int fontIdx = 0;
     if (!s.isEmpty()) {
@@ -1746,7 +1746,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal&
                 LOGD("RenderAction::RenderActionType::POP: stack empty");
             }
         } else if (a.type == RenderAction::RenderActionType::NOTE) {
-            QString c;
+            String c;
             AccidentalVal acc;
             if (tpcIsValid(tpc)) {
                 tpc2name(tpc, noteSpelling, noteCase, c, acc);
@@ -1754,7 +1754,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal&
                 c = _function.at(_function.size() - 1);
             }
             TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
-            QString lookup = "note" + c;
+            String lookup = u"note" + c;
             ChordSymbol cs = chordList->symbol(lookup);
             if (!cs.isValid()) {
                 cs = chordList->symbol(c);
@@ -1768,9 +1768,9 @@ void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal&
             textList.push_back(ts);
             x += ts->width();
         } else if (a.type == RenderAction::RenderActionType::ACCIDENTAL) {
-            QString c;
-            QString acc;
-            QString context = "accidental";
+            String c;
+            String acc;
+            String context = u"accidental";
             if (tpcIsValid(tpc)) {
                 tpc2name(tpc, noteSpelling, noteCase, c, acc);
             } else if (_function.size() > 1) {
@@ -1783,7 +1783,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal&
             }
             if (acc != "") {
                 TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
-                QString lookup = context + acc;
+                String lookup = context + acc;
                 ChordSymbol cs = chordList->symbol(lookup);
                 if (!cs.isValid()) {
                     cs = chordList->symbol(acc);
@@ -1836,7 +1836,7 @@ void Harmony::render()
     determineRootBaseSpelling();
 
     if (_leftParen) {
-        render("( ", x, y);
+        render(u"( ", x, y);
     }
 
     if (_rootTpc != Tpc::TPC_INVALID) {
@@ -1891,7 +1891,7 @@ void Harmony::render()
             }
         }
 
-        render("(", x, y);
+        render(u"(", x, y);
         render(chordList->renderListRoot, x, y, capoRootTpc, _rootSpelling, _rootRenderCase);
 
         // render extension
@@ -1903,11 +1903,11 @@ void Harmony::render()
         if (capoBassTpc != Tpc::TPC_INVALID) {
             render(chordList->renderListBase, x, y, capoBassTpc, _baseSpelling, _baseRenderCase);
         }
-        render(")", x, y);
+        render(u")", x, y);
     }
 
     if (_rightParen) {
-        render(" )", x, y);
+        render(u" )", x, y);
     }
 }
 
@@ -1935,7 +1935,7 @@ void Harmony::localSpatiumChanged(qreal oldValue, qreal newValue)
 //   extensionName
 //---------------------------------------------------------
 
-const QString& Harmony::extensionName() const
+const String& Harmony::extensionName() const
 {
     return _textName;
 }
@@ -2110,33 +2110,33 @@ String Harmony::screenReaderInfo() const
 //   generateScreenReaderInfo
 //---------------------------------------------------------
 
-QString Harmony::generateScreenReaderInfo() const
+String Harmony::generateScreenReaderInfo() const
 {
-    QString rez;
+    String rez;
     switch (_harmonyType) {
     case HarmonyType::ROMAN: {
-        QString aux = _textName;
-        bool hasUpper = aux.contains('I') || aux.contains('V');
-        bool hasLower = aux.contains('i') || aux.contains('v');
+        String aux = _textName;
+        bool hasUpper = aux.contains(u'I') || aux.contains(u'V');
+        bool hasLower = aux.contains(u'i') || aux.contains(u'v');
         if (hasLower && !hasUpper) {
-            rez = QString("%1 %2").arg(rez, QObject::tr("lower case"));
+            rez = String("%1 %2").arg(rez, mtrc("engraving", "lower case"));
         }
         aux = aux.toLower();
-        static std::vector<std::pair<QString, QString> > rnaReplacements {
-            { "vii", "7" },
-            { "vi", "6" },
-            { "iv", "4" },
-            { "v", "5" },
-            { "iii", "3" },
-            { "ii", "2" },
-            { "i", "1" },
+        static std::vector<std::pair<String, String> > rnaReplacements {
+            { u"vii", u"7" },
+            { u"vi", u"6" },
+            { u"iv", u"4" },
+            { u"v", u"5" },
+            { u"iii", u"3" },
+            { u"ii", u"2" },
+            { u"i", u"1" },
         };
-        static std::vector<std::pair<QString, QString> > symbolReplacements {
-            { "b", "♭" },
-            { "h", "♮" },
-            { "#", "♯" },
-            { "bb", "𝄫" },
-            { "##", "𝄪" },
+        static std::vector<std::pair<String, String> > symbolReplacements {
+            { u"b", u"♭" },
+            { u"h", u"♮" },
+            { u"#", u"♯" },
+            { u"bb", u"𝄫" },
+            { u"##", u"𝄪" },
             // TODO: use SMuFL glyphs and translate
             //{ "o", ""},
             //{ "0", ""},
@@ -2148,46 +2148,46 @@ QString Harmony::generateScreenReaderInfo() const
         }
         for (auto const& r : symbolReplacements) {
             // only replace when not preceded by backslash
-            QString s = "(?<!\\\\)" + r.first;
-            QRegularExpression re(s);
-            aux.replace(re, r.second);
+            String s = u"(?<!\\\\)" + r.first;
+            QRegularExpression re(s.toQString());
+            aux = QString(aux).replace(re, r.second);
         }
-        // construct string one character at a time
-        for (auto c : qAsConst(aux)) {
-            rez = QString("%1 %2").arg(rez).arg(c);
+        // construct string one  character at a time
+        for (size_t i = 0; i < aux.size(); ++i) {
+            rez = String("%1 %2").arg(rez).arg(aux.at(i));
         }
     }
         return rez;
     case HarmonyType::NASHVILLE:
         if (!_function.isEmpty()) {
-            rez = QString("%1 %2").arg(rez, _function);
+            rez = String("%1 %2").arg(rez, _function);
         }
         break;
     case HarmonyType::STANDARD:
     default:
         if (_rootTpc != Tpc::TPC_INVALID) {
-            rez = QString("%1 %2").arg(rez, tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+            rez = String("%1 %2").arg(rez, tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
         }
     }
 
     if (const_cast<Harmony*>(this)->parsedForm() && !hTextName().isEmpty()) {
-        QString aux = const_cast<Harmony*>(this)->parsedForm()->handle();
-        aux = aux.replace("#", QObject::tr("♯")).replace("<", "");
-        QString extension = "";
+        String aux = const_cast<Harmony*>(this)->parsedForm()->handle();
+        aux = aux.replace(u"#", u"♯").replace(u"<", u"");
+        String extension;
 
-        for (QString s : aux.split(">", Qt::SkipEmptyParts)) {
-            if (!s.contains("blues")) {
-                s.replace("b", QObject::tr("♭"));
+        for (String s : aux.split(u'>', mu::SkipEmptyParts)) {
+            if (!s.contains(u"blues")) {
+                s.replace(u"b", u"♭");
             }
-            extension += s + " ";
+            extension += s + u' ';
         }
-        rez = QString("%1 %2").arg(rez, extension);
+        rez = String("%1 %2").arg(rez, extension);
     } else {
-        rez = QString("%1 %2").arg(rez, hTextName());
+        rez = String("%1 %2").arg(rez, hTextName());
     }
 
     if (_baseTpc != Tpc::TPC_INVALID) {
-        rez = QString("%1 / %2").arg(rez, tpc2name(_baseTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+        rez = String("%1 / %2").arg(rez, tpc2name(_baseTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
     }
 
     return rez;

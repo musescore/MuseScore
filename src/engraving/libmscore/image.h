@@ -57,8 +57,8 @@ public:
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
-    bool load(const QString& s);
-    bool loadFromData(const QString&, const mu::ByteArray&);
+    bool load(const io::path_t& s);
+    bool loadFromData(const io::path_t& name, const mu::ByteArray&);
     void layout() override;
     void draw(mu::draw::Painter*) const override;
 
@@ -96,8 +96,8 @@ public:
 
 protected:
     ImageStoreItem* _storeItem;
-    QString _storePath;             // the path of the img in the ImageStore
-    QString _linkPath;              // the path of an external linked img
+    String _storePath;             // the path of the img in the ImageStore
+    String _linkPath;              // the path of an external linked img
     bool _linkIsValid;              // whether _linkPath file exists or not
     mutable mu::draw::Pixmap buffer;         ///< cached rendering
     mu::SizeF _size;                   // in mm or spatium units

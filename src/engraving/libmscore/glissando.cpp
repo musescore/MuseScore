@@ -218,9 +218,9 @@ Glissando::Glissando(const Glissando& g)
     _fontStyle      = g._fontStyle;
 }
 
-QString Glissando::glissandoTypeName() const
+String Glissando::glissandoTypeName() const
 {
-    return qtrc("Palette", glissandoTypeNames[int(glissandoType())]);
+    return mtrc("engraving", glissandoTypeNames[int(glissandoType())]);
 }
 
 //---------------------------------------------------------
