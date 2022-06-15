@@ -580,7 +580,7 @@ static int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseT
     }
     idx = acci;
     int alter = 0;
-    int n = s.size();
+    size_t n = s.size();
     String acc = s.right(n - acci);
     if (acc != "") {
         if (acc.startsWith(u"bb")) {
@@ -1377,9 +1377,9 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
         int rootTpc = function2Tpc(_function, key);
 
         //parse bass
-        int slash = _textName.lastIndexOf('/');
+        size_t slash = _textName.lastIndexOf('/');
         int bassTpc;
-        if (slash == -1) {
+        if (slash == mu::nidx) {
             bassTpc = Tpc::TPC_INVALID;
         } else {
             bassTpc = function2Tpc(_textName.mid(slash + 1), key);
