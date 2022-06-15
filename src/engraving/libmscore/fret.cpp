@@ -131,9 +131,9 @@ EngravingItem* FretDiagram::linkedClone()
 std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const String& s)
 {
     auto fd = Factory::makeFretDiagram(score->dummy()->segment());
-    int strings = s.size();
+    size_t strings = s.size();
 
-    fd->setStrings(strings);
+    fd->setStrings(static_cast<int>(strings));
     fd->setFrets(4);
     fd->setPropertyFlags(Pid::FRET_STRINGS, PropertyFlags::UNSTYLED);
     fd->setPropertyFlags(Pid::FRET_FRETS,   PropertyFlags::UNSTYLED);
