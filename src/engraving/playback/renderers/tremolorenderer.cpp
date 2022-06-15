@@ -74,7 +74,7 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
         for (int i = 0; i < stepsCount; ++i) {
             const Chord* currentChord = firstTremoloChord;
 
-            if (i % 2 == 0) {
+            if (i % 2 != 0) {
                 currentChord = secondTremoloChord;
             }
 
