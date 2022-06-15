@@ -310,7 +310,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
         Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
         txt->setPlainText(partLabel);
         measure->add(txt);
-        score->setMetaTag("partName", partLabel.toQString());
+        score->setMetaTag("partName", partLabel);
     }
 
     // initial layout of score
@@ -1427,7 +1427,7 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
             excerpt->tracksMapping().insert({ i, j });
         }
 
-        QString name = formatName(part->partName(), result);
+        String name = formatName(part->partName(), result);
         excerpt->setName(name);
         result.push_back(excerpt);
     }
@@ -1443,27 +1443,27 @@ Excerpt* Excerpt::createExcerptFromPart(Part* part)
     return excerpt;
 }
 
-QString Excerpt::formatName(const QString& partName, const std::vector<Excerpt*>& excerptList)
+String Excerpt::formatName(const String& partName, const std::vector<Excerpt*>& excerptList)
 {
-    QString name = partName.simplified();
+    String name = partName.simplified();
     int count = 0;      // no of occurrences of partName
 
     for (Excerpt* e : excerptList) {
         // if <partName> already exists, change <partName> to <partName 1>
-        QString excName = e->name().toQString();
-        if (excName.compare(name) == 0) {
-            e->setName(excName + " 1");
+        String excName = e->name();
+        if (excName == name) {
+            e->setName(excName + u" 1");
         }
 
         QRegularExpression regex("^(.+)\\s\\d+$");
-        QRegularExpressionMatch match = regex.match(excName);
-        if (match.hasMatch() && match.capturedTexts()[1] == name) {
+        QRegularExpressionMatch match = regex.match(excName.toQString());
+        if (match.hasMatch() && match.capturedTexts()[1] == name.toQString()) {
             count++;
         }
     }
 
     if (count > 0) {
-        name += QString(" %1").arg(count + 1);
+        name += String(" %1").arg(count + 1);
     }
 
     return name;

@@ -248,7 +248,7 @@ private:
 
     void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
 
-    static QString tpcUserName(int tpc, int pitch, bool explicitAccidental);
+    static String tpcUserName(int tpc, int pitch, bool explicitAccidental);
 
     bool sameVoiceKerningLimited() const override { return true; }
 
@@ -326,7 +326,7 @@ public:
     int tpc() const;
     int tpc1() const { return _tpc[0]; }                  // non transposed tpc
     int tpc2() const { return _tpc[1]; }                  // transposed tpc
-    QString tpcUserName(bool explicitAccidental = false) const;
+    String tpcUserName(bool explicitAccidental = false) const;
 
     void setTpc(int v);
     void setTpc1(int v) { _tpc[0] = v; }

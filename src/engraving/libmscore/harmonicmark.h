@@ -65,7 +65,7 @@ public:
 
 private:
 
-    QString m_text;
+    String m_text;
 };
 } // namespace mu::engraving
 #endif

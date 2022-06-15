@@ -470,7 +470,7 @@ void InstrumentListModel::updateStateBySearch()
 bool InstrumentListModel::isInstrumentAccepted(const InstrumentTemplate& instrument, bool compareWithCurrentGroup) const
 {
     if (isSearching()) {
-        return instrument.trackName.contains(m_searchText, Qt::CaseInsensitive);
+        return instrument.trackName.toQString().contains(m_searchText, Qt::CaseInsensitive);
     }
 
     if (instrument.groupId != m_currentGroupId && compareWithCurrentGroup) {

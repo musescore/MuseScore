@@ -2389,7 +2389,7 @@ void Score::resetDefaults()
 //    move current selection
 //---------------------------------------------------------
 
-EngravingItem* Score::move(const QString& cmd)
+EngravingItem* Score::move(const String& cmd)
 {
     ChordRest* cr { nullptr };
     Box* box { nullptr };
@@ -2399,7 +2399,7 @@ EngravingItem* Score::move(const QString& cmd)
         // also use it if we are moving to next chord
         // to catch up with the cursor and not move the selection by 2 positions
         cr = selection().cr();
-        if (cr && (cr->isGrace() || cmd == "next-chord" || cmd == "prev-chord")) {
+        if (cr && (cr->isGrace() || cmd == u"next-chord" || cmd == u"prev-chord")) {
         } else {
             cr = inputState().cr();
         }
@@ -2412,7 +2412,7 @@ EngravingItem* Score::move(const QString& cmd)
     // no chord/rest found? look for another type of element,
     // but commands [empty-trailing-measure] and [top-staff] don't
     // necessarily need an active selection for appropriate functioning
-    if (!cr && cmd != "empty-trailing-measure" && cmd != "top-staff") {
+    if (!cr && cmd != u"empty-trailing-measure" && cmd != u"top-staff") {
         if (selection().elements().empty()) {
             return 0;
         }
@@ -2479,7 +2479,7 @@ EngravingItem* Score::move(const QString& cmd)
         }
 
         // if something found and command is forward, the element found is the destination
-        if (trg && cmd == "next-chord") {
+        if (trg && cmd == u"next-chord") {
             // if chord, go to topmost note
             if (trg->type() == ElementType::CHORD) {
                 trg = toChord(trg)->upNote();
@@ -2499,7 +2499,7 @@ EngravingItem* Score::move(const QString& cmd)
     Segment* ois = noteEntryMode() ? _is.segment() : nullptr;
     Measure* oim = ois ? ois->measure() : nullptr;
 
-    if (cmd == "next-chord" && cr) {
+    if (cmd == u"next-chord" && cr) {
         // note input cursor
         if (noteEntryMode()) {
             _is.moveToNextInputPos();
@@ -2528,7 +2528,7 @@ EngravingItem* Score::move(const QString& cmd)
         } else if (!el) {
             el = cr;
         }
-    } else if (cmd == "prev-chord" && cr) {
+    } else if (cmd == u"prev-chord" && cr) {
         // note input cursor
         if (noteEntryMode() && _is.segment()) {
             Measure* m = _is.segment()->measure();
@@ -2570,7 +2570,7 @@ EngravingItem* Score::move(const QString& cmd)
         } else if (!el) {
             el = cr;
         }
-    } else if (cmd == "next-measure") {
+    } else if (cmd == u"next-measure") {
         if (box && box->nextMeasure() && box->nextMeasure()->first()) {
             el = box->nextMeasure()->first()->nextChordRest(0, false);
         }
@@ -2580,7 +2580,7 @@ EngravingItem* Score::move(const QString& cmd)
         if (el && noteEntryMode()) {
             _is.moveInputPos(el);
         }
-    } else if (cmd == "prev-measure") {
+    } else if (cmd == u"prev-measure") {
         if (box && box->prevMeasure() && box->prevMeasure()->first()) {
             el = box->prevMeasure()->first()->nextChordRest(0, false);
         }
@@ -2590,48 +2590,48 @@ EngravingItem* Score::move(const QString& cmd)
         if (el && noteEntryMode()) {
             _is.moveInputPos(el);
         }
-    } else if (cmd == "next-system" && cr) {
+    } else if (cmd == u"next-system" && cr) {
         el = cmdNextPrevSystem(cr, true);
         if (noteEntryMode()) {
             _is.moveInputPos(el);
         }
-    } else if (cmd == "prev-system" && cr) {
+    } else if (cmd == u"prev-system" && cr) {
         el = cmdNextPrevSystem(cr, false);
         if (noteEntryMode()) {
             _is.moveInputPos(el);
         }
-    } else if (cmd == "next-frame") {
+    } else if (cmd == u"next-frame") {
         auto measureBase = cr ? cr->measure()->findMeasureBase() : box->findMeasureBase();
         el = measureBase ? cmdNextPrevFrame(measureBase, true) : nullptr;
-    } else if (cmd == "prev-frame") {
+    } else if (cmd == u"prev-frame") {
         auto measureBase = cr ? cr->measure()->findMeasureBase() : box->findMeasureBase();
         el = measureBase ? cmdNextPrevFrame(measureBase, false) : nullptr;
-    } else if (cmd == "next-section") {
+    } else if (cmd == u"next-section") {
         if (!(el = box)) {
             el = cr;
         }
         el = cmdNextPrevSection(el, true);
-    } else if (cmd == "prev-section") {
+    } else if (cmd == u"prev-section") {
         if (!(el = box)) {
             el = cr;
         }
         el = cmdNextPrevSection(el, false);
-    } else if (cmd == "next-track" && cr) {
+    } else if (cmd == u"next-track" && cr) {
         el = nextTrack(cr);
         if (noteEntryMode()) {
             _is.moveInputPos(el);
         }
-    } else if (cmd == "prev-track" && cr) {
+    } else if (cmd == u"prev-track" && cr) {
         el = prevTrack(cr);
         if (noteEntryMode()) {
             _is.moveInputPos(el);
         }
-    } else if (cmd == "top-staff") {
+    } else if (cmd == u"top-staff") {
         el = cr ? cmdTopStaff(cr) : cmdTopStaff();
         if (noteEntryMode()) {
             _is.moveInputPos(el);
         }
-    } else if (cmd == "empty-trailing-measure") {
+    } else if (cmd == u"empty-trailing-measure") {
         const Measure* ftm = nullptr;
         if (!cr) {
             ftm = firstTrailingMeasure() ? firstTrailingMeasure() : lastMeasure();
@@ -2676,7 +2676,7 @@ EngravingItem* Score::move(const QString& cmd)
 //   selectMove
 //---------------------------------------------------------
 
-EngravingItem* Score::selectMove(const QString& cmd)
+EngravingItem* Score::selectMove(const String& cmd)
 {
     ChordRest* cr;
     if (selection().activeCR()) {
@@ -2692,41 +2692,41 @@ EngravingItem* Score::selectMove(const QString& cmd)
     }
 
     ChordRest* el = nullptr;
-    if (cmd == "select-next-chord") {
+    if (cmd == u"select-next-chord") {
         el = nextChordRest(cr, true, false);
-    } else if (cmd == "select-prev-chord") {
+    } else if (cmd == u"select-prev-chord") {
         el = prevChordRest(cr, true, false);
-    } else if (cmd == "select-next-measure") {
+    } else if (cmd == u"select-next-measure") {
         el = nextMeasure(cr, true, true);
-    } else if (cmd == "select-prev-measure") {
+    } else if (cmd == u"select-prev-measure") {
         el = prevMeasure(cr, true);
-    } else if (cmd == "select-begin-line") {
+    } else if (cmd == u"select-begin-line") {
         Measure* measure = cr->segment()->measure()->system()->firstMeasure();
         if (!measure) {
             return 0;
         }
         el = measure->first()->nextChordRest(cr->track());
-    } else if (cmd == "select-end-line") {
+    } else if (cmd == u"select-end-line") {
         Measure* measure = cr->segment()->measure()->system()->lastMeasure();
         if (!measure) {
             return 0;
         }
         el = measure->last()->nextChordRest(cr->track(), true);
-    } else if (cmd == "select-begin-score") {
+    } else if (cmd == u"select-begin-score") {
         Measure* measure = firstMeasureMM();
         if (!measure) {
             return 0;
         }
         el = measure->first()->nextChordRest(cr->track());
-    } else if (cmd == "select-end-score") {
+    } else if (cmd == u"select-end-score") {
         Measure* measure = lastMeasureMM();
         if (!measure) {
             return 0;
         }
         el = measure->last()->nextChordRest(cr->track(), true);
-    } else if (cmd == "select-staff-above") {
+    } else if (cmd == u"select-staff-above") {
         el = upStaff(cr);
-    } else if (cmd == "select-staff-below") {
+    } else if (cmd == u"select-staff-below") {
         el = downStaff(cr);
     }
     if (el) {
@@ -3758,7 +3758,7 @@ void Score::cmdResequenceRehearsalMarks()
             if (e->type() == ElementType::REHEARSAL_MARK) {
                 RehearsalMark* rm = toRehearsalMark(e);
                 if (last) {
-                    QString rmText = nextRehearsalMarkText(last, rm);
+                    String rmText = nextRehearsalMarkText(last, rm);
                     for (EngravingObject* le : rm->linkList()) {
                         le->undoChangeProperty(Pid::TEXT, rmText);
                     }

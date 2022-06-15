@@ -24,8 +24,6 @@
 #define MU_ENGRAVING_FACTORY_H
 
 #include <memory>
-#include <QStringRef>
-#include <QString>
 
 #include "engravingitem.h"
 #include "durationtype.h"

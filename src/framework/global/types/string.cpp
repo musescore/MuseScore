@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "string.h"
+
+#include <algorithm>
 #include <cstring>
 #include <cstdlib>
 #include <locale>
@@ -123,6 +125,19 @@ bool Char::isDigit(char16_t c)
     return c >= u'0' && c <= u'9';
 }
 
+int Char::digitValue() const
+{
+    if (!isDigit()) {
+        return -1;
+    }
+    return m_ch - 48;
+}
+
+bool Char::isLower() const
+{
+    return toLower() == m_ch;
+}
+
 Char Char::toLower() const
 {
     return toLower(m_ch);
@@ -136,6 +151,11 @@ char16_t Char::toLower(char16_t ch)
         return ch;
     }
     return std::tolower(static_cast<char>(ch), loc);
+}
+
+bool Char::isUpper() const
+{
+    return toUpper() == m_ch;
 }
 
 Char Char::toUpper() const
@@ -166,6 +186,16 @@ void UtfCodec::utf16to8(std::u16string_view src, std::string& dst)
     utf8::utf16to8(src.begin(), src.end(), std::back_inserter(dst));
 }
 
+void UtfCodec::utf8to32(std::string_view src, std::u32string& dst)
+{
+    utf8::utf8to32(src.begin(), src.end(), std::back_inserter(dst));
+}
+
+void UtfCodec::utf32to8(std::u32string_view src, std::string& dst)
+{
+    utf8::utf32to8(src.begin(), src.end(), std::back_inserter(dst));
+}
+
 // ============================
 // String
 // ============================
@@ -177,7 +207,7 @@ String::String()
 
 String::String(const char16_t* str)
 {
-    m_data = std::make_shared<std::u16string>(str);
+    m_data = std::make_shared<std::u16string>(str ? str : u"");
 }
 
 String::String(const Char& ch)
@@ -210,6 +240,23 @@ bool String::operator ==(const AsciiStringView& s) const
 
     for (size_t i = 0; i < s.size(); ++i) {
         if (at(i).toAscii() != s.at(i).ascii()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool String::operator ==(const char* s) const
+{
+    std::string_view v(s);
+    if (size() != v.size()) {
+        return false;
+    }
+
+    for (size_t i = 0; i < v.size(); ++i) {
+        IF_ASSERT_FAILED(Char::isAscii(v.at(i))) {
+        }
+        if (at(i).toAscii() != v.at(i)) {
             return false;
         }
     }
@@ -268,14 +315,14 @@ String& String::prepend(const String& s)
 String String::fromUtf8(const char* str)
 {
     String s;
-    UtfCodec::utf8to16(std::string_view(str), *s.m_data.get());
+    UtfCodec::utf8to16(std::string_view(str), s.mutStr());
     return s;
 }
 
 ByteArray String::toUtf8() const
 {
     std::string str;
-    UtfCodec::utf16to8(std::u16string_view(*m_data.get()), str);
+    UtfCodec::utf16to8(std::u16string_view(constStr()), str);
     return ByteArray(reinterpret_cast<const uint8_t*>(str.c_str()), str.size());
 }
 
@@ -283,8 +330,8 @@ String String::fromAscii(const char* str, size_t size)
 {
     size = (size == mu::nidx) ? std::strlen(str) : size;
     String s;
-    s.m_data->resize(size);
-    std::u16string& data = *s.m_data.get();
+    std::u16string& data = s.mutStr();
+    data.resize(size);
     for (size_t i = 0; i < size; ++i) {
         data[i] = Char::fromAscii(str[i]);
     }
@@ -302,7 +349,7 @@ ByteArray String::toAscii(bool* ok) const
 
     for (size_t i = 0; i < size(); ++i) {
         bool cok = false;
-        char ch = Char::toAscii(m_data->at(i), &cok);
+        char ch = Char::toAscii(constStr().at(i), &cok);
         if (!cok && ok) {
             *ok = false;
         }
@@ -314,15 +361,29 @@ ByteArray String::toAscii(bool* ok) const
 String String::fromStdString(const std::string& str)
 {
     String s;
-    UtfCodec::utf8to16(std::string_view(str), *s.m_data.get());
+    UtfCodec::utf8to16(std::string_view(str), s.mutStr());
     return s;
 }
 
 std::string String::toStdString() const
 {
     std::string s;
-    UtfCodec::utf16to8(std::u16string_view(*m_data.get()), s);
+    UtfCodec::utf16to8(std::u16string_view(constStr()), s);
     return s;
+}
+
+std::u16string String::toStdU16String() const
+{
+    return constStr();
+}
+
+std::u32string String::toStdU32String() const
+{
+    std::string s;
+    UtfCodec::utf16to8(constStr(), s);
+    std::u32string s32;
+    UtfCodec::utf8to32(s, s32);
+    return s32;
 }
 
 String String::fromQString(const QString& str)
@@ -345,17 +406,17 @@ QString String::toQString() const
 
 size_t String::size() const
 {
-    return m_data->size();
+    return constStr().size();
 }
 
 bool String::empty() const
 {
-    return m_data->empty();
+    return constStr().empty();
 }
 
 void String::clear()
 {
-    m_data->clear();
+    mutStr().clear();
 }
 
 Char String::at(size_t i) const
@@ -363,7 +424,7 @@ Char String::at(size_t i) const
     IF_ASSERT_FAILED(i < size()) {
         return Char();
     }
-    return Char(m_data->at(i));
+    return Char(constStr().at(i));
 }
 
 bool String::contains(const Char& ch) const
@@ -371,9 +432,48 @@ bool String::contains(const Char& ch) const
     return constStr().find(ch.unicode()) != std::u16string::npos;
 }
 
-bool String::contains(const String& ch) const
+bool String::contains(const String& str, CaseSensitivity cs) const
 {
-    return constStr().find(ch.constStr()) != std::u16string::npos;
+    if (cs == CaseSensitivity::CaseSensitive) {
+        return constStr().find(str.constStr()) != std::u16string::npos;
+    } else {
+        std::u16string self = constStr();
+        std::transform(self.begin(), self.end(), self.begin(), [](char16_t c){ return Char::toLower(c); });
+        std::u16string other = str.constStr();
+        std::transform(other.begin(), other.end(), other.begin(), [](char16_t c){ return Char::toLower(c); });
+        return self.find(other) != std::u16string::npos;
+    }
+}
+
+int String::count(const Char& ch) const
+{
+    int count = 0;
+    for (size_t i = 0; i < constStr().size(); ++i) {
+        if (constStr().at(i) == ch.unicode()) {
+            ++count;
+        }
+    }
+    return count;
+}
+
+size_t String::indexOf(const Char& ch) const
+{
+    for (size_t i = 0; i < constStr().size(); ++i) {
+        if (constStr().at(i) == ch.unicode()) {
+            return i;
+        }
+    }
+    return mu::nidx;
+}
+
+size_t String::lastIndexOf(const Char& ch) const
+{
+    for (int i = static_cast<int>(constStr().size() - 1); i >= 0; --i) {
+        if (constStr().at(i) == ch.unicode()) {
+            return i;
+        }
+    }
+    return mu::nidx;
 }
 
 bool String::startsWith(const String& str, CaseSensitivity cs) const
@@ -383,12 +483,12 @@ bool String::startsWith(const String& str, CaseSensitivity cs) const
     }
 
     for (size_t i = 0; i < str.size(); ++i) {
-        if (Char(m_data->at(i)) == str.at(i)) {
+        if (Char(constStr().at(i)) == str.at(i)) {
             continue;
         }
 
         if (cs == CaseInsensitive) {
-            if (Char::toLower(m_data->at(i)) == Char::toLower(str.m_data->at(i))) {
+            if (Char::toLower(constStr().at(i)) == Char::toLower(str.constStr().at(i))) {
                 continue;
             }
         }
@@ -426,12 +526,12 @@ bool String::endsWith(const String& str, CaseSensitivity cs) const
 
     size_t start = size() - str.size();
     for (size_t i = 0; i < str.size(); ++i) {
-        if (m_data->at(start + i) == str.at(i)) {
+        if (constStr().at(start + i) == str.at(i)) {
             continue;
         }
 
         if (cs == CaseInsensitive) {
-            if (Char::toLower(m_data->at(start + i)) == Char::toLower(str.m_data->at(i))) {
+            if (Char::toLower(constStr().at(start + i)) == Char::toLower(str.constStr().at(i))) {
                 continue;
             }
         }
@@ -488,11 +588,43 @@ StringList String::split(const Char& ch, SplitBehavior behavior) const
 
 String& String::replace(const String& before, const String& after)
 {
+    std::u16string& str = mutStr();
     size_t start_pos = 0;
-    while ((start_pos = m_data->find(before.constStr(), start_pos)) != std::string::npos) {
-        m_data->replace(start_pos, before.size(), after.constStr());
+    while ((start_pos = str.find(before.constStr(), start_pos)) != std::string::npos) {
+        str.replace(start_pos, before.size(), after.constStr());
         start_pos += after.size(); // Handles case where 'after' is a substring of 'before'
     }
+    return *this;
+}
+
+String& String::replace(char16_t before, char16_t after)
+{
+    std::u16string& str = mutStr();
+    for (size_t i = 0; i < str.size(); ++i) {
+        if (str.at(i) == before) {
+            str[i] = after;
+        }
+    }
+    return *this;
+}
+
+String& String::remove(const Char& ch)
+{
+    return remove(ch.unicode());
+}
+
+String& String::remove(char16_t ch)
+{
+    auto it = constStr().find(ch);
+    if (it != std::u16string::npos) {
+        mutStr().erase(it);
+    }
+    return *this;
+}
+
+String& String::remove(size_t position, size_t n)
+{
+    mutStr().erase(position, n);
     return *this;
 }
 
@@ -600,11 +732,22 @@ String String::left(size_t n) const
     return mid(0, n);
 }
 
+String String::right(size_t n) const
+{
+    return mid(size() - n);
+}
+
 String String::trimmed() const
 {
     String s = *this;
     trim_helper(s.mutStr());
     return s;
+}
+
+String String::simplified() const
+{
+    //! TODO
+    return toQString().simplified();
 }
 
 String String::toXmlEscaped(char16_t c)
@@ -645,18 +788,16 @@ String String::toXmlEscaped() const
 
 String String::toLower() const
 {
-    String copy(*this);
-    std::u16string& str = *copy.m_data.get();
-    std::transform(str.begin(), str.end(), str.begin(), [](char16_t c){ return Char::toLower(c); });
-    return copy;
+    //! TODO
+    QString qs = toQString();
+    return qs.toLower();
 }
 
 String String::toUpper() const
 {
-    String copy(*this);
-    std::u16string& str = *copy.m_data.get();
-    std::transform(str.begin(), str.end(), str.begin(), [](char16_t c){ return Char::toUpper(c); });
-    return copy;
+    //! TODO
+    QString qs = toQString();
+    return qs.toUpper();
 }
 
 int String::toInt(bool* ok, int base) const
@@ -706,7 +847,7 @@ StringList StringList::filter(const String& str) const
 
 String StringList::join(const String& sep) const
 {
-    QString res;
+    String res;
     for (size_t i = 0; i < size(); ++i) {
         if (i) {
             res += sep;

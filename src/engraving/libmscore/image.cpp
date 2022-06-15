@@ -284,20 +284,20 @@ void Image::write(XmlWriter& xml) const
     // TODO : on Save As, score()->fileInfo() still contains the old path and fname
     //          if the Save As path is different, image relative path will be wrong!
     //
-    QString relativeFilePath= QString();
+    String relativeFilePath;
     if (!_linkPath.isEmpty() && _linkIsValid) {
         FileInfo fi(_linkPath);
         // score()->fileInfo()->canonicalPath() would be better
         // but we are saving under a temp file name and the 'final' file
         // might not exist yet, so canonicalFilePath() may return only "/"
         // OTOH, the score 'final' file name is practically always canonical, at this point
-        QString scorePath = score()->masterScore()->fileInfo()->absoluteDirPath().toQString();
-        QString imgFPath  = fi.canonicalFilePath();
+        String scorePath = score()->masterScore()->fileInfo()->absoluteDirPath().toString();
+        String imgFPath  = fi.canonicalFilePath();
         // if imgFPath is in (or below) the directory of scorePath
-        if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
+        if (imgFPath.startsWith(scorePath, mu::CaseSensitive)) {
             // relative img path is the part exceeding scorePath
             imgFPath.remove(0, scorePath.size());
-            if (imgFPath.startsWith('/')) {
+            if (imgFPath.startsWith(u'/')) {
                 imgFPath.remove(0, 1);
             }
             relativeFilePath = imgFPath;
@@ -308,13 +308,13 @@ void Image::write(XmlWriter& xml) const
             fi = FileInfo(scorePath);
             scorePath = fi.path();
             // if imgFPath is in (or below) the directory up the score directory
-            if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
+            if (imgFPath.startsWith(scorePath, mu::CaseSensitive)) {
                 // relative img path is the part exceeding new scorePath plus "../"
                 imgFPath.remove(0, scorePath.size());
-                if (!imgFPath.startsWith('/')) {
-                    imgFPath.prepend('/');
+                if (!imgFPath.startsWith(u'/')) {
+                    imgFPath.prepend(u'/');
                 }
-                imgFPath.prepend("..");
+                imgFPath.prepend(u"..");
                 relativeFilePath = imgFPath;
             }
         }
@@ -378,7 +378,7 @@ void Image::read(XmlReader& e)
     // once all paths are read, load img or retrieve it from store
     // loading from file is tried first to update the stored image, if necessary
 
-    QString path;
+    io::path_t path;
     bool loaded = false;
     // if a store path is given, attempt to get the image from the store
     if (!_storePath.isEmpty()) {
@@ -399,7 +399,7 @@ void Image::read(XmlReader& e)
         path = _linkPath;
     }
 
-    if (path.endsWith(".svg", Qt::CaseInsensitive)) {
+    if (path.withSuffix("svg")) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -412,21 +412,20 @@ void Image::read(XmlReader& e)
 //    return true on success
 //---------------------------------------------------------
 
-bool Image::load(const QString& ss)
+bool Image::load(const io::path_t& ss)
 {
-    LOGD("Image::load <%s>", qPrintable(ss));
-    QString path(ss);
+    io::path_t path(ss);
     // if file path is relative, prepend score path
     FileInfo fi(path);
     if (fi.isRelative()) {
-        path.prepend(masterScore()->fileInfo()->absoluteDirPath().toQString() + "/");
+        path = masterScore()->fileInfo()->absoluteDirPath() + '/' + path;
         fi = FileInfo(path);
     }
 
     _linkIsValid = false;                       // assume link fname is invalid
     File f(path);
     if (!f.open(IODevice::ReadOnly)) {
-        LOGD("Image::load<%s> failed", qPrintable(path));
+        LOGD() << "failed load file: " << path;
         return false;
     }
     ByteArray ba = f.readAll();
@@ -436,7 +435,7 @@ bool Image::load(const QString& ss)
     _linkPath = fi.canonicalFilePath();
     _storeItem = imageStore.add(_linkPath, ba);
     _storeItem->reference(this);
-    if (path.endsWith(".svg", Qt::CaseInsensitive)) {
+    if (path.withSuffix("svg")) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -450,15 +449,13 @@ bool Image::load(const QString& ss)
 //    return true on success
 //---------------------------------------------------------
 
-bool Image::loadFromData(const QString& ss, const ByteArray& ba)
+bool Image::loadFromData(const path_t& name, const ByteArray& ba)
 {
-    LOGD("Image::loadFromData <%s>", qPrintable(ss));
-
     _linkIsValid = false;
     _linkPath = "";
-    _storeItem = imageStore.add(ss, ba);
+    _storeItem = imageStore.add(name, ba);
     _storeItem->reference(this);
-    if (ss.endsWith(".svg", Qt::CaseInsensitive)) {
+    if (name.withSuffix("svg")) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);

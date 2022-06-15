@@ -112,7 +112,7 @@ void Score::checkScore()
 ///    Check that voices > 1 contains less than measure duration
 //---------------------------------------------------------
 
-bool Score::sanityCheck(const String& name)
+bool Score::sanityCheck()
 {
     bool result = true;
     int mNumber = 1;
@@ -175,25 +175,8 @@ bool Score::sanityCheck(const String& name)
         }
         mNumber++;
     }
-    if (!name.isEmpty()) {
-        QJsonObject json;
-        if (result) {
-            json["result"] = 0;
-        } else {
-            json["result"] = 1;
-            json["error"] = error.trimmed().replace(u"\n", u"\\n").toQString();
-        }
-        QJsonDocument jsonDoc(json);
-        io::File fp(name);
-        if (!fp.open(io::IODevice::WriteOnly)) {
-            LOGE() << "Failed open file: " << name;
-            return false;
-        }
-        fp.write(jsonDoc.toJson(QJsonDocument::Compact));
-        fp.close();
-    } else {
-        MScore::lastError = error;
-    }
+
+    MScore::lastError = error;
     return result;
 }
 

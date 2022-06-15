@@ -182,11 +182,11 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             // Find maximum width for the staff name
             std::list<mu::engraving::StaffName>& staffNamesLong
                 = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->longNames();
-            QString staffName = staffNamesLong.empty() ? " " : staffNamesLong.front().name();
+            QString staffName = staffNamesLong.empty() ? u" " : staffNamesLong.front().name();
             if (staffName == "") {
                 std::list<mu::engraving::StaffName>& staffNamesShort
                     = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->shortNames();
-                staffName = staffNamesShort.empty() ? "" : staffNamesShort.front().name();
+                staffName = staffNamesShort.empty() ? u"" : staffNamesShort.front().name();
             }
 
             mu::engraving::Text* newName = engraving::Factory::createText(parent, mu::engraving::TextStyleType::DEFAULT,
@@ -372,11 +372,11 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             // Draw the current staff name
             std::list<mu::engraving::StaffName>& staffNamesLong
                 = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->longNames();
-            QString staffName = staffNamesLong.empty() ? " " : staffNamesLong.front().name();
+            QString staffName = staffNamesLong.empty() ? u" " : staffNamesLong.front().name();
             if (staffName == "") {
                 std::list<mu::engraving::StaffName>& staffNamesShort
                     = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->shortNames();
-                staffName = staffNamesShort.empty() ? "" : staffNamesShort.front().name();
+                staffName = staffNamesShort.empty() ? u"" : staffNamesShort.front().name();
             }
 
             mu::engraving::Text* newName = engraving::Factory::createText(parent, mu::engraving::TextStyleType::DEFAULT,

@@ -851,22 +851,22 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
     case Pid::BEGIN_TEXT:
         if (_hairpinType == HairpinType::CRESC_LINE) {
-            return QString("cresc.");
+            return String(u"cresc.");
         }
         if (_hairpinType == HairpinType::DECRESC_LINE) {
-            return QString("dim.");
+            return String(u"dim.");
         }
-        return QString();
+        return String();
 
     case Pid::CONTINUE_TEXT:
     case Pid::END_TEXT:
         if (_hairpinType == HairpinType::CRESC_LINE) {
-            return QString("(cresc.)");
+            return String(u"(cresc.)");
         }
         if (_hairpinType == HairpinType::DECRESC_LINE) {
-            return QString("(dim.)");
+            return String(u"(dim.)");
         }
-        return QString("");
+        return String();
 
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:

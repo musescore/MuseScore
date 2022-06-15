@@ -2324,7 +2324,7 @@ void Score::createPlayEvents(Chord* chord)
     // gateTime is 100% for slurred notes
     if (!slur) {
         Instrument* instr = chord->part()->instrument(tick);
-        instr->updateGateTime(&gateTime, 0, "");
+        instr->updateGateTime(&gateTime, 0, u"");
     }
 
     int ontime    = 0;

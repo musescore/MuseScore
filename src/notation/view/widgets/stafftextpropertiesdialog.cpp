@@ -233,8 +233,8 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
         if (a->name().isEmpty()) {
             name = InstrChannel::DEFAULT_NAME;
         }
-        item->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
-        item->setText(1, qApp->translate("InstrumentsXML", a->descr().toUtf8().data()));
+        item->setText(0, qtrc("InstrumentsXML", name.toUtf8().data()));
+        item->setText(1, qtrc("InstrumentsXML", a->descr()));
         if (i == 0) {
             selectedItem = item;
         }

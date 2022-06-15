@@ -39,6 +39,7 @@ struct path_t {
 
     bool empty() const;
     size_t size() const;
+    bool withSuffix(const char* str) const;
 
     path_t appendingComponent(const path_t& other) const;
     path_t appendingSuffix(const path_t& suffix) const;
@@ -54,11 +55,13 @@ struct path_t {
     inline path_t operator+(const String& other) const { path_t p = *this; p += other; return p; }
     inline path_t operator+(const QString& other) const { path_t p = *this; p += String::fromQString(other); return p; }
     inline path_t operator+(const char* other) const { path_t p = *this; p += other; return p; }
+    inline path_t operator+(const char other) const { path_t p = *this; p += other; return p; }
 
     inline path_t& operator+=(const path_t& other) { m_path += other.m_path; return *this; }
     inline path_t& operator+=(const String& other) { m_path += other.toStdString(); return *this; }
     inline path_t& operator+=(const QString& other) { m_path += other.toStdString(); return *this; }
     inline path_t& operator+=(const char* other) { m_path += other; return *this; }
+    inline path_t& operator+=(const char other) { m_path += other; return *this; }
 
     inline bool operator<(const path_t& other) const { return m_path < other.m_path; }
 
