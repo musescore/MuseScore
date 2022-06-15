@@ -187,6 +187,8 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     }
     }
 
+    midiOutPort()->sendEvent(event);
+
     return ret == FLUID_OK;
 }
 
@@ -274,25 +276,6 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
 void FluidSynth::setupEvents(const mpe::PlaybackData& playbackData)
 {
     m_sequencer.load(playbackData);
-}
-
-bool FluidSynth::hasAnythingToPlayback(const msecs_t from, const msecs_t to) const
-{
-    if (!m_offStreamEvents.empty()) {
-        return true;
-    }
-
-    if (!m_isActive || m_mainStreamEvents.empty()) {
-        return false;
-    }
-
-    msecs_t startMsec = m_mainStreamEvents.from;
-    msecs_t endMsec = m_mainStreamEvents.to;
-
-    bool lowerBound = from >= startMsec && from < endMsec;
-    bool upperBound = to > startMsec && to <= endMsec;
-
-    return lowerBound || upperBound;
 }
 
 void FluidSynth::revokePlayingNotes()
