@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <locale>
 #include <cctype>
+#include <iomanip>
 
 #include "global/thirdparty/utfcpp-3.2.1/utf8.h"
 
@@ -818,10 +819,28 @@ String String::number(size_t n)
     return fromAscii(s.c_str());
 }
 
-String String::number(double n)
+String String::number(double n, int prec)
 {
-    std::string s = std::to_string(n);
-    return fromAscii(s.c_str());
+    std::stringstream stream;
+    stream << std::fixed << std::setprecision(prec) << n;
+    std::string s = stream.str();
+
+    // remove extra '0'
+    size_t correctedIdx = s.size() - 1;
+    if (s.back() == '0') {
+        for (int i = static_cast<int>(s.size() - 1); i > 0; --i) {
+            if (s.at(i) != '0') {
+                correctedIdx = i;
+                break;
+            }
+        }
+    }
+
+    if (s.at(correctedIdx) == '.') {
+        --correctedIdx;
+    }
+
+    return fromAscii(s.c_str(), correctedIdx + 1);
 }
 
 double String::toDouble(bool* ok) const
