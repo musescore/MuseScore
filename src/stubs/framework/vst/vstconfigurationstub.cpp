@@ -40,3 +40,8 @@ mu::async::Channel<mu::io::paths_t> VstConfigurationStub::userVstDirectoriesChan
     static mu::async::Channel<mu::io::paths_t> stub;
     return stub;
 }
+
+mu::io::path_t VstConfigurationStub::knownPluginsFile() const
+{
+    return mu::io::path_t();
+}

@@ -39,7 +39,7 @@ VstModulesMetaRegister::~VstModulesMetaRegister()
 
 void VstModulesMetaRegister::init()
 {
-    m_file = io::File(config()->knownPluginsList());
+    m_file = io::File(config()->knownPluginsFile());
 
     if (m_file.exists()) {
         readMetaList();
