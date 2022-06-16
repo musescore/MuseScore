@@ -69,6 +69,11 @@ void TextFrameSettingsModel::resetProperties()
     m_frameBottomMargin->resetToDefault();
 }
 
+void TextFrameSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadProperties();
+}
+
 PropertyItem* TextFrameSettingsModel::gapAbove() const
 {
     return m_gapAbove;

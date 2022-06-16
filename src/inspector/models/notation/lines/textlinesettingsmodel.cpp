@@ -317,3 +317,8 @@ void TextLineSettingsModel::setPossibleEndHookTypes(const QList<HookTypeInfo>& t
 {
     m_possibleEndHookTypes = hookTypesToObjList(types);
 }
+
+void TextLineSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadProperties();
+}
