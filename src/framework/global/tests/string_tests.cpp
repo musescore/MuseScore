@@ -397,6 +397,54 @@ TEST_F(Global_Types_StringTests, String_Args)
     }
 }
 
+TEST_F(Global_Types_StringTests, String_Number)
+{
+    {
+        //! GIVEN Some double
+        double v = 2.0;
+        //! DO
+        String str = String::number(v);
+        //! CHECK
+        EXPECT_EQ(str, u"2");
+    }
+
+    {
+        //! GIVEN Some double
+        double v = 2.1;
+        //! DO
+        String str = String::number(v);
+        //! CHECK
+        EXPECT_EQ(str, u"2.1");
+    }
+
+    {
+        //! GIVEN Some double
+        double v = 2.01;
+        //! DO
+        String str = String::number(v);
+        //! CHECK
+        EXPECT_EQ(str, u"2.01");
+    }
+
+    {
+        //! GIVEN Some double
+        double v = 2.1231231;
+        //! DO
+        String str = String::number(v);
+        //! CHECK
+        EXPECT_EQ(str, u"2.123123");
+    }
+
+    {
+        //! GIVEN Some double
+        double v = 2.1231231;
+        //! DO
+        String str = String::number(v, 2);
+        //! CHECK
+        EXPECT_EQ(str, u"2.12");
+    }
+}
+
 TEST_F(Global_Types_StringTests, AsciiString_Construct)
 {
     //! GIVEN Some ASCII String

@@ -260,7 +260,7 @@ public:
 
     static String number(int n);
     static String number(size_t n);
-    static String number(double n);
+    static String number(double n, int prec = 6);
 
 private:
     const std::u16string& constStr() const;
