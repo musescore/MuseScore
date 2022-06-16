@@ -47,7 +47,6 @@ private:
     void loadProperties() override;
     void resetProperties() override;
     void requestElements() override;
-    void updatePropertiesOnNotationChanged() override;
 
     bool isTextVisible(TextType type) const override;
 
