@@ -32,6 +32,7 @@ public:
     io::paths_t userVstDirectories() const override;
     void setUserVstDirectories(const io::paths_t& paths) override;
     async::Channel<io::paths_t> userVstDirectoriesChanged() const override;
+    io::path_t knownPluginsFile() const override;
 };
 }
 
