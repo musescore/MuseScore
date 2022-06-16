@@ -1843,7 +1843,7 @@ bool ChordList::read(const String& name)
     if (!FileInfo::exists(path))
 #if defined(Q_OS_IOS)
     {
-        path = String("%1/%2").arg(MScore::globalShare()).arg("chords_std.xml");
+        path = String("%1/%2").arg(MScore::globalShare()).arg(u"chords_std.xml");
     }
 #elif defined(Q_OS_ANDROID)
     {
