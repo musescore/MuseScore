@@ -46,8 +46,11 @@ int CommonAudioApiConfigurationModel::currentSampleRateIndex() const
 void CommonAudioApiConfigurationModel::load()
 {
     audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
-        emit currentDeviceIndexChanged();
         emit deviceListChanged();
+    });
+
+    audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
+        emit currentDeviceIndexChanged();
     });
 }
 
@@ -58,7 +61,7 @@ void CommonAudioApiConfigurationModel::setCurrentDeviceIndex(int index)
     }
 
     std::string deviceName = deviceList()[index].toStdString();
-    audioDriver()->selectOutputDevice(deviceName);
+    audioConfiguration()->setAudioOutputDeviceName(deviceName);
 
     emit currentDeviceIndexChanged();
 }

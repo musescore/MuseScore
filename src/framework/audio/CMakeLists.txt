@@ -89,6 +89,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputcontroller.h
 
     # Driver
     ${DRIVER_SRC}

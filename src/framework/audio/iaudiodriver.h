@@ -63,6 +63,9 @@ public:
 
     virtual std::string outputDevice() const = 0;
     virtual bool selectOutputDevice(const std::string& name) = 0;
+    virtual bool resetToDefaultOutputDevice() = 0;
+    virtual async::Notification outputDeviceChanged() const = 0;
+
     virtual std::vector<std::string> availableOutputDevices() const = 0;
     virtual async::Notification availableOutputDevicesChanged() const = 0;
 

@@ -27,6 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
+#include "audio/iaudioconfiguration.h"
 #include "audio/iaudiodriver.h"
 
 namespace mu::appshell {
@@ -39,6 +40,7 @@ class CommonAudioApiConfigurationModel : public QObject, public async::Asyncable
 
     Q_PROPERTY(int currentSampleRateIndex READ currentSampleRateIndex WRITE setCurrentSampleRateIndex NOTIFY currentSampleRateIndexChanged)
 
+    INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
     INJECT(appshell, audio::IAudioDriver, audioDriver)
 
 public:
