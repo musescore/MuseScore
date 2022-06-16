@@ -142,7 +142,7 @@ std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const S
     std::vector<std::pair<int, int> > dotsToAdd;
 
     for (int i = 0; i < strings; i++) {
-        QChar c = s.at(i);
+        Char c = s.at(i);
         if (c == 'X' || c == 'O') {
             FretMarkerType mt = (c == 'X' ? FretMarkerType::CROSS : FretMarkerType::CIRCLE);
             fd->setMarker(i, mt);

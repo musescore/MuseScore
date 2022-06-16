@@ -102,7 +102,7 @@ void ActionIcon::read(XmlReader& e)
 void ActionIcon::layout()
 {
     FontMetrics fontMetrics(m_iconFont);
-    setbbox(fontMetrics.boundingRect(QChar(m_icon)));
+    setbbox(fontMetrics.boundingRect(Char(m_icon)));
 }
 
 void ActionIcon::draw(Painter* painter) const
