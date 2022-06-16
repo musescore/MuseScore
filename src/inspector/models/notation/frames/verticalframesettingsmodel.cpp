@@ -74,6 +74,11 @@ void VerticalFrameSettingsModel::resetProperties()
     m_frameBottomMargin->resetToDefault();
 }
 
+void VerticalFrameSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadProperties();
+}
+
 PropertyItem* VerticalFrameSettingsModel::frameHeight() const
 {
     return m_frameHeight;
