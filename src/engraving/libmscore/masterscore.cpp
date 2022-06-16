@@ -72,26 +72,26 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     _pos[int(POS::RIGHT)]   = Fraction(0, 1);
 
 #if defined(Q_OS_WIN)
-    metaTags().insert({ "platform", "Microsoft Windows" });
+    metaTags().insert({ u"platform", u"Microsoft Windows" });
 #elif defined(Q_OS_MAC)
-    metaTags().insert({ "platform", "Apple Macintosh" });
+    metaTags().insert({ u"platform", u"Apple Macintosh" });
 #elif defined(Q_OS_LINUX)
-    metaTags().insert({ "platform", "Linux" });
+    metaTags().insert({ u"platform", u"Linux" });
 #else
     metaTags().insert({ "platform", "Unknown" });
 #endif
-    metaTags().insert({ "movementNumber", "" });
-    metaTags().insert({ "movementTitle", "" });
-    metaTags().insert({ "workNumber", "" });
-    metaTags().insert({ "workTitle", "" });
-    metaTags().insert({ "arranger", "" });
-    metaTags().insert({ "composer", "" });
-    metaTags().insert({ "lyricist", "" });
-    metaTags().insert({ "poet", "" });
-    metaTags().insert({ "translator", "" });
-    metaTags().insert({ "source", "" });
-    metaTags().insert({ "copyright", "" });
-    metaTags().insert({ "creationDate", QDate::currentDate().toString(Qt::ISODate) });
+    metaTags().insert({ u"movementNumber", u"" });
+    metaTags().insert({ u"movementTitle", u"" });
+    metaTags().insert({ u"workNumber", u"" });
+    metaTags().insert({ u"workTitle", u"" });
+    metaTags().insert({ u"arranger", u"" });
+    metaTags().insert({ u"composer", u"" });
+    metaTags().insert({ u"lyricist", u"" });
+    metaTags().insert({ u"poet", u"" });
+    metaTags().insert({ u"translator", u"" });
+    metaTags().insert({ u"source", u"" });
+    metaTags().insert({ u"copyright", u"" });
+    metaTags().insert({ u"creationDate", QDate::currentDate().toString(Qt::ISODate) });
 }
 
 MasterScore::MasterScore(const MStyle& s, std::weak_ptr<engraving::EngravingProject> project)
@@ -159,9 +159,9 @@ void MasterScore::setAutosaveDirty(bool v)
     m_autosaveDirty = v;
 }
 
-QString MasterScore::name() const
+String MasterScore::name() const
 {
-    return fileInfo()->fileName(false).toQString();
+    return fileInfo()->fileName(false).toString();
 }
 
 //---------------------------------------------------------

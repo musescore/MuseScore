@@ -758,8 +758,8 @@ void Note::setTpcFromPitch()
 
 void Note::setTpc(int v)
 {
-    if (!tpcIsValid(v)) {
-        ASSERT_X(QString::asprintf("Note::setTpc: bad tpc %d", v));
+    IF_ASSERT_FAILED(tpcIsValid(v)) {
+        return;
     }
     _tpc[concertPitchIdx()] = v;
 }
@@ -2199,13 +2199,13 @@ void Note::layout()
         } else {
             _fretString = tab->fretString(_fret, _string, _deadNote);
             if (m_displayFret == DisplayFretOption::ArtificialHarmonic) {
-                _fretString = QString("%1 <%2>").arg(_fretString, QString::number(m_harmonicFret));
+                _fretString = String("%1 <%2>").arg(_fretString, String::number(m_harmonicFret));
             } else if (m_displayFret == DisplayFretOption::NaturalHarmonic) {
-                _fretString = QString("<%1>").arg(QString::number(m_harmonicFret));
+                _fretString = String("<%1>").arg(String::number(m_harmonicFret));
             }
         }
         if (parenthesis) {
-            _fretString = QString("(%1)").arg(_fretString);
+            _fretString = String("(%1)").arg(_fretString);
         }
         qreal w = tabHeadWidth(tab);     // !! use _fretString
         bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
@@ -2439,7 +2439,7 @@ NoteType Note::noteType() const
 //   noteTypeUserName
 //---------------------------------------------------------
 
-QString Note::noteTypeUserName() const
+String Note::noteTypeUserName() const
 {
     switch (noteType()) {
     case NoteType::ACCIACCATURA:

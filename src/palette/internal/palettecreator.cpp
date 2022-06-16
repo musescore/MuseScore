@@ -1344,7 +1344,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
 
     auto stxt = makeElement<SystemText>(gpaletteScore);
     stxt->setTextStyleType(TextStyleType::TEMPO);
-    stxt->setXmlText(QT_TRANSLATE_NOOP("palette", "Swing"));
+    stxt->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Swing")));
     stxt->setSwing(true);
     PaletteCellPtr cell = sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "Swing"), 1.3);
     cell->yoffset = 0.4;

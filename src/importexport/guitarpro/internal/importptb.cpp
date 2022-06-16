@@ -729,7 +729,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 score->addElement(slur);
 
                 Text* st = Factory::createText(chord->notes().front(), TextStyleType::HARMONY_A);
-                st->setXmlText("H");
+                st->setXmlText(u"H");
                 st->setTrack(staff * VOICES);
                 cr1->notes().front()->add(st);
             }

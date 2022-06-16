@@ -402,23 +402,14 @@ static constexpr PropertyMetaData propertyList[] = {
 //   propertyId
 //---------------------------------------------------------
 
-Pid propertyId(const QStringRef& s)
+Pid propertyId(const AsciiStringView& s)
 {
     for (const PropertyMetaData& pd : propertyList) {
-        if (pd.name == s) {
+        if (s == pd.name) {
             return pd.id;
         }
     }
     return Pid::END;
-}
-
-//---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid propertyId(const QString& s)
-{
-    return propertyId(QStringRef(&s));
 }
 
 //---------------------------------------------------------
@@ -455,7 +446,7 @@ const char* propertyName(Pid id)
 //   propertyUserName
 //---------------------------------------------------------
 
-QString propertyUserName(Pid id)
+String propertyUserName(Pid id)
 {
     Q_ASSERT(propertyList[int(id)].id == id);
     return QObject::tr(propertyList[int(id)].userName, "propertyName");
@@ -465,7 +456,7 @@ QString propertyUserName(Pid id)
 //    propertyFromString
 //---------------------------------------------------------
 
-PropertyValue propertyFromString(P_TYPE type, QString)
+PropertyValue propertyFromString(P_TYPE type, String)
 {
     switch (type) {
     case P_TYPE::BEAM_MODE:
@@ -593,21 +584,21 @@ PropertyValue readProperty(Pid id, XmlReader& e)
 //    Originally extracted from XmlWriter
 //---------------------------------------------------------
 
-QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
+String propertyToString(Pid id, const PropertyValue& value, bool mscx)
 {
     if (!value.isValid()) {
-        return QString();
+        return String();
     }
 
     switch (id) {
     case Pid::SYSTEM_BRACKET:         // system bracket type
-        return TConv::toXml(BracketType(value.toInt())).toQLatin1String();
+        return String::fromAscii(TConv::toXml(BracketType(value.toInt())).ascii());
     case Pid::ACCIDENTAL_TYPE:
-        return Accidental::subtype2name(AccidentalType(value.toInt())).toQLatin1String();
+        return String::fromAscii(Accidental::subtype2name(AccidentalType(value.toInt())).ascii());
     case Pid::OTTAVA_TYPE:
-        return Ottava::ottavaTypeName(OttavaType(value.toInt()));
+        return String::fromAscii(Ottava::ottavaTypeName(OttavaType(value.toInt())));
     case Pid::TREMOLO_TYPE:
-        return TConv::toXml(TremoloType(value.toInt())).toQLatin1String();
+        return String::fromAscii(TConv::toXml(TremoloType(value.toInt())).ascii());
     case Pid::TRILL_TYPE:
         return Trill::type2name(Trill::Type(value.toInt()));
     case Pid::VIBRATO_TYPE:
@@ -640,11 +631,11 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         switch (value.type()) {
         case P_TYPE::POINT: {
             const PointF p(value.value<PointF>());
-            return QString("%1;%2").arg(QString::number(p.x()), QString::number(p.y()));
+            return String("%1;%2").arg(String::number(p.x()), String::number(p.y()));
         }
         case P_TYPE::SIZE: {
             const SizeF s(value.value<SizeF>());
-            return QString("%1x%2").arg(QString::number(s.width()), QString::number(s.height()));
+            return String("%1x%2").arg(String::number(s.width()), String::number(s.height()));
         }
         case P_TYPE::STRING: {
             return value.value<String>();
@@ -655,6 +646,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         }
     }
 
-    return QString();
+    return String();
 }
 }

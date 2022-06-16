@@ -995,8 +995,8 @@ SwingParameters Staff::swing(const Fraction& tick) const
 {
     SwingParameters sp;
     int swingUnit = 0;
-    QByteArray ba = score()->styleSt(Sid::swingUnit).toLatin1();
-    DurationType unit = TConv::fromXml(ba.constData(), DurationType::V_INVALID);
+    ByteArray ba = score()->styleSt(Sid::swingUnit).toAscii();
+    DurationType unit = TConv::fromXml(ba.constChar(), DurationType::V_INVALID);
     int swingRatio = score()->styleI(Sid::swingRatio);
     if (unit == DurationType::V_EIGHTH) {
         swingUnit = Constants::division / 2;

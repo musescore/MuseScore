@@ -234,7 +234,7 @@ int AccessibleItem::accessibleSelectionCount() const
         return 0;
     }
 
-    return textCursor->selectedText().length();
+    return textCursor->selectedText().size();
 }
 
 int AccessibleItem::accessibleCursorPosition() const

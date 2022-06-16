@@ -305,7 +305,7 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
     PitchMap ret;
 
     const ParsedChord* p = _harmony->parsedForm();
-    QString quality = p->quality();
+    String quality = p->quality();
     int ext = p->extension().toInt();
     const StringList& modList = p->modifierList();
 
@@ -315,27 +315,26 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
     bool alt5 = false;   //altered 5
 
     //handle modifiers
-    for (const String& _s : modList) {
-        QString s = _s.toQString();
+    for (const String& s : modList) {
         //find number, split up mods
         bool modded = false;
-        for (int c = 0; c < s.size(); ++c) {
+        for (size_t c = 0; c < s.size(); ++c) {
             if (s.at(c).isDigit()) {
                 int alter = 0;
                 int cutoff = c;
-                int deg = s.rightRef(s.length() - c).toInt();
+                int deg = s.right(s.size() - c).toInt();
                 //account for if the flat/sharp is stuck to the end of add
                 if (c) {
-                    if (s[c - 1] == '#') {
+                    if (s.at(c - 1) == u'#') {
                         cutoff -= 1;
                         alter = +1;
-                    } else if (s[c - 1] == 'b') {
+                    } else if (s.at(c - 1) == u'b') {
                         cutoff -= 1;
                         alter = -1;
                     }
                 }
 
-                QString extType = s.left(cutoff);
+                String extType = s.left(cutoff);
                 if (extType == "" || extType == "major") {         //alteration
                     if (deg == 9) {
                         ret.insert({ step2pitchInterval(deg, alter) + RANK_MULT * RANK_9TH, tpcInterval(rootTpc, deg, alter) });
@@ -496,7 +495,7 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
     Harmony* next = _harmony->findNext();
     if (!literal && next && tpcIsValid(next->rootTpc())) {
         //jazz interpretation
-        QString qNext = next->parsedForm()->quality();
+        String qNext = next->parsedForm()->quality();
         //pitch from current to next harmony normalized to a range between 0 and 12
         //add PITCH_DELTA_OCTAVE before modulo so that we can ensure arithmetic mod rather than computer mod
         //int keyTpc = int(next->staff()->key(next->tick())) + 14; //tpc of key (ex. F# major would be Tpc::F_S)

@@ -372,14 +372,14 @@ void OveToMScore::convertHeader()
     QList<QString> titles = m_ove->getTitles();
     if (!titles.empty() && !titles[0].isEmpty()) {
         QString title = titles[0];
-        m_score->setMetaTag("movementTitle", title);
+        m_score->setMetaTag(u"movementTitle", title);
         ove::addText(vbox, m_score, title, TextStyleType::TITLE);
     }
 
     QList<QString> copyrights = m_ove->getCopyrights();
     if (!copyrights.empty() && !copyrights[0].isEmpty()) {
         QString copyright = copyrights[0];
-        m_score->setMetaTag("copyright", copyright);
+        m_score->setMetaTag(u"copyright", copyright);
     }
 
     QList<QString> annotates = m_ove->getAnnotates();
@@ -391,7 +391,7 @@ void OveToMScore::convertHeader()
     QList<QString> writers = m_ove->getWriters();
     if (!writers.empty()) {
         QString composer = writers[0];
-        m_score->setMetaTag("composer", composer);
+        m_score->setMetaTag(u"composer", composer);
         ove::addText(vbox, m_score, composer, TextStyleType::COMPOSER);
     }
 

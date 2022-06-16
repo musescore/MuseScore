@@ -51,8 +51,8 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 //! FIXME
-//extern QString revision;
-static QString revision;
+//extern String revision;
+static String revision;
 
 //---------------------------------------------------------
 //   Page
@@ -112,7 +112,7 @@ void Page::draw(mu::draw::Painter* painter) const
     page_idx_t n = no() + 1 + score()->pageNumberOffset();
     painter->setPen(curColor());
 
-    QString s1, s2, s3;
+    String s1, s2, s3;
 
     if (score()->styleB(Sid::showHeader) && (no() || score()->styleB(Sid::headerFirstPage))) {
         bool odd = (n & 1) || !score()->styleB(Sid::headerOddEven);
@@ -153,7 +153,7 @@ void Page::draw(mu::draw::Painter* painter) const
 //   drawHeaderFooter
 //---------------------------------------------------------
 
-void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) const
+void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const String& ss) const
 {
     Text* text = layoutHeaderFooter(area, ss);
     if (!text) {
@@ -169,9 +169,9 @@ void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) c
 //   layoutHeaderFooter
 //---------------------------------------------------------
 
-Text* Page::layoutHeaderFooter(int area, const QString& ss) const
+Text* Page::layoutHeaderFooter(int area, const String& ss) const
 {
-    QString s = replaceTextMacros(ss);
+    String s = replaceTextMacros(ss);
     if (s.isEmpty()) {
         return nullptr;
     }
@@ -231,7 +231,7 @@ qreal Page::headerExtension() const
 
     page_idx_t n = no() + 1 + score()->pageNumberOffset();
 
-    QString s1, s2, s3;
+    String s1, s2, s3;
 
     if (score()->styleB(Sid::showHeader) && (no() || score()->styleB(Sid::headerFirstPage))) {
         bool odd = (n & 1) || !score()->styleB(Sid::headerOddEven);
@@ -274,7 +274,7 @@ qreal Page::footerExtension() const
 
     page_idx_t n = no() + 1 + score()->pageNumberOffset();
 
-    QString s1, s2, s3;
+    String s1, s2, s3;
 
     if (score()->styleB(Sid::showFooter) && (no() || score()->styleB(Sid::footerFirstPage))) {
         bool odd = (n & 1) || !score()->styleB(Sid::footerOddEven);
@@ -397,14 +397,14 @@ void Page::doRebuildBspTree()
 //       workTitle
 //---------------------------------------------------------
 
-QString Page::replaceTextMacros(const QString& s) const
+String Page::replaceTextMacros(const String& s) const
 {
-    QString d;
-    for (int i = 0, n = s.size(); i < n; ++i) {
-        QChar c = s[i];
+    String d;
+    for (size_t i = 0, n = s.size(); i < n; ++i) {
+        Char c = s.at(i);
         if (c == '$' && (i < (n - 1))) {
-            QChar nc = s[i + 1];
-            switch (nc.toLatin1()) {
+            Char nc = s.at(i + 1);
+            switch (nc.toAscii()) {
             case 'p': // not on first page 1
                 if (!_no) {
                     break;
@@ -419,12 +419,12 @@ QString Page::replaceTextMacros(const QString& s) const
             {
                 int no = static_cast<int>(_no) + 1 + score()->pageNumberOffset();
                 if (no > 0) {
-                    d += QString("%1").arg(no);
+                    d += String("%1").arg(no);
                 }
             }
             break;
             case 'n':
-                d += QString("%1").arg(score()->npages() + score()->pageNumberOffset());
+                d += String("%1").arg(score()->npages() + score()->pageNumberOffset());
                 break;
             case 'i': // not on first page
                 if (!_no) {
@@ -432,21 +432,21 @@ QString Page::replaceTextMacros(const QString& s) const
                 }
             // FALLTHROUGH
             case 'I':
-                d += score()->metaTag("partName").toHtmlEscaped();
+                d += score()->metaTag(u"partName").toXmlEscaped();
                 break;
             case 'f':
-                d += masterScore()->fileInfo()->fileName(false).toQString().toHtmlEscaped();
+                d += masterScore()->fileInfo()->fileName(false).toString().toXmlEscaped();
                 break;
             case 'F':
-                d += masterScore()->fileInfo()->path().toQString().toHtmlEscaped();
+                d += masterScore()->fileInfo()->path().toString().toXmlEscaped();
                 break;
             case 'd':
                 d += QLocale().toString(QDate::currentDate(), QLocale::ShortFormat);
                 break;
             case 'D':
             {
-                QString creationDate = score()->metaTag("creationDate");
-                if (creationDate.isNull()) {
+                String creationDate = score()->metaTag(u"creationDate");
+                if (creationDate.isEmpty()) {
                     d += QLocale().toString(masterScore()->fileInfo()->birthTime().date(), QLocale::ShortFormat);
                 } else {
                     d += QLocale().toString(QDate::fromString(creationDate, Qt::ISODate), QLocale::ShortFormat);
@@ -473,11 +473,11 @@ QString Page::replaceTextMacros(const QString& s) const
                 }
             // FALLTHROUGH
             case 'c':
-                d += score()->metaTag("copyright").toHtmlEscaped();
+                d += score()->metaTag(u"copyright").toXmlEscaped();
                 break;
             case 'v':
                 if (score()->dirty()) {
-                    d += QString(VERSION);
+                    d += String(VERSION);
                 } else {
                     d += score()->mscoreVersion();
                 }
@@ -488,9 +488,9 @@ QString Page::replaceTextMacros(const QString& s) const
                 } else {
                     int rev = score()->mscoreRevision();
                     if (rev > 99999) { // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
-                        d += QString::number(rev, 16);
+                        d += String::number(rev, 16);
                     } else {
-                        d += QString::number(rev, 10);
+                        d += String::number(rev, 10);
                     }
                 }
                 break;
@@ -499,16 +499,16 @@ QString Page::replaceTextMacros(const QString& s) const
                 break;
             case ':':
             {
-                QString tag;
-                int k = i + 2;
+                String tag;
+                size_t k = i + 2;
                 for (; k < n; ++k) {
-                    if (s[k].toLatin1() == ':') {
+                    if (s.at(k) == u':') {
                         break;
                     }
-                    tag += s[k];
+                    tag += s.at(k);
                 }
                 if (k != n) {       // found ':' ?
-                    d += score()->metaTag(tag).toHtmlEscaped();
+                    d += score()->metaTag(tag).toXmlEscaped();
                     i = k - 1;
                 }
             }
@@ -520,7 +520,7 @@ QString Page::replaceTextMacros(const QString& s) const
             }
             ++i;
         } else if (c == '&') {
-            d += "&amp;";
+            d += u"&amp;";
         } else {
             d += c;
         }

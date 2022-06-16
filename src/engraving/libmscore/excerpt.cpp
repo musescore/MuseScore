@@ -310,7 +310,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
         Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
         txt->setPlainText(partLabel);
         measure->add(txt);
-        score->setMetaTag("partName", partLabel);
+        score->setMetaTag(u"partName", partLabel);
     }
 
     // initial layout of score

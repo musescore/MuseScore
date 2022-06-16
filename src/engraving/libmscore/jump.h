@@ -67,7 +67,7 @@ public:
 
     void setJumpType(Type t);
     Type jumpType() const;
-    QString jumpTypeUserName() const;
+    String jumpTypeUserName() const;
 
     Jump* clone() const override { return new Jump(*this); }
 
@@ -80,15 +80,15 @@ public:
 
     void layout() override;
 
-    QString jumpTo() const { return _jumpTo; }
-    QString playUntil() const { return _playUntil; }
-    QString continueAt() const { return _continueAt; }
-    void setJumpTo(const QString& s) { _jumpTo = s; }
-    void setPlayUntil(const QString& s) { _playUntil = s; }
-    void setContinueAt(const QString& s) { _continueAt = s; }
-    void undoSetJumpTo(const QString& s);
-    void undoSetPlayUntil(const QString& s);
-    void undoSetContinueAt(const QString& s);
+    String jumpTo() const { return _jumpTo; }
+    String playUntil() const { return _playUntil; }
+    String continueAt() const { return _continueAt; }
+    void setJumpTo(const String& s) { _jumpTo = s; }
+    void setPlayUntil(const String& s) { _playUntil = s; }
+    void setContinueAt(const String& s) { _continueAt = s; }
+    void undoSetJumpTo(const String& s);
+    void undoSetPlayUntil(const String& s);
+    void undoSetContinueAt(const String& s);
     bool playRepeats() const { return _playRepeats; }
     void setPlayRepeats(bool val) { _playRepeats = val; }
 
@@ -107,7 +107,7 @@ struct JumpTypeTableItem {
     AsciiStringView jumpTo;
     AsciiStringView playUntil;
     AsciiStringView continueAt;
-    QString userText;
+    const char* userText = nullptr;
 };
 
 extern const std::vector<JumpTypeTableItem> jumpTypeTable;

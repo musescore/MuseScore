@@ -126,7 +126,7 @@ void ExcerptNotation::setName(const QString& name)
     }
 
     excerptTitle->setPlainText(name);
-    score()->setMetaTag("partName", name);
+    score()->setMetaTag(u"partName", name);
     score()->doLayout();
 
     notifyAboutNotationChanged();

@@ -40,22 +40,22 @@ struct Item
 };
 
 template<typename T>
-static QString findUserNameByType(const std::vector<Item<T> >& cont, const T& v)
+static String findUserNameByType(const std::vector<Item<T> >& cont, const T& v)
 {
     auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
         return i.type == v;
     });
 
     IF_ASSERT_FAILED(it != cont.cend()) {
-        static QString dummy;
+        static String dummy;
         return dummy;
     }
 
     if (!it->userName) {
-        return it->xml.toQLatin1String();
+        return String::fromAscii(it->xml.ascii());
     }
 
-    return mu::qtrc("engraving", it->userName);
+    return mu::mtrc("engraving", it->userName);
 }
 
 template<typename T>
@@ -99,11 +99,11 @@ static AsciiStringView findXmlTagByType(const std::vector<Item<T> >& cont, const
 }
 
 template<typename T>
-static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const QString& tag, T def)
+static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const String& tag, T def)
 {
-    QByteArray ba = tag.toLatin1();
+    ByteArray ba = tag.toAscii();
     auto it = std::find_if(cont.cbegin(), cont.cend(), [ba](const Item<T>& i) {
-        return i.xml == ba.constData();
+        return i.xml == ba.constChar();
     });
 
     IF_ASSERT_FAILED(it != cont.cend()) {
@@ -127,20 +127,20 @@ static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const AsciiStringVi
 
 // ==========================================================
 
-QString TConv::toXml(const std::vector<int>& v)
+String TConv::toXml(const std::vector<int>& v)
 {
-    QStringList sl;
+    StringList sl;
     for (int i : v) {
-        sl << QString::number(i);
+        sl << String::number(i);
     }
-    return sl.join(",");
+    return sl.join(u",");
 }
 
-std::vector<int> TConv::fromXml(const QString& tag, const std::vector<int>& def)
+std::vector<int> TConv::fromXml(const String& tag, const std::vector<int>& def)
 {
     std::vector<int> list;
-    QStringList sl = tag.split(",", Qt::SkipEmptyParts);
-    for (const QString& s : qAsConst(sl)) {
+    StringList sl = tag.split(u',', mu::SkipEmptyParts);
+    for (const String& s : sl) {
         bool ok = false;
         int i = s.simplified().toInt(&ok);
         if (!ok) {
@@ -174,17 +174,17 @@ AlignV TConv::fromXml(const AsciiStringView& tag, AlignV def)
     return findTypeByXmlTag<AlignV>(ALIGN_V, tag, def);
 }
 
-QString TConv::toXml(Align v)
+String TConv::toXml(Align v)
 {
-    QStringList sl;
-    sl << findXmlTagByType<AlignH>(ALIGN_H, v.horizontal).ascii();
-    sl << findXmlTagByType<AlignV>(ALIGN_V, v.vertical).ascii();
-    return sl.join(",");
+    StringList sl;
+    sl << String::fromAscii(findXmlTagByType<AlignH>(ALIGN_H, v.horizontal).ascii());
+    sl << String::fromAscii(findXmlTagByType<AlignV>(ALIGN_V, v.vertical).ascii());
+    return sl.join(u",");
 }
 
-Align TConv::fromXml(const QString& str, Align def)
+Align TConv::fromXml(const String& str, Align def)
 {
-    QStringList sl = str.split(',');
+    StringList sl = str.split(',');
     if (sl.size() != 2) {
         LOGD() << "bad align value: " << str;
         return def;
@@ -196,7 +196,7 @@ Align TConv::fromXml(const QString& str, Align def)
     return a;
 }
 
-QString TConv::toUserName(SymId v)
+String TConv::toUserName(SymId v)
 {
     return SymNames::translatedUserNameForSymId(v);
 }
@@ -216,7 +216,7 @@ static const std::vector<Item<Orientation> > ORIENTATION = {
     { Orientation::HORIZONTAL,  "horizontal",   QT_TRANSLATE_NOOP("engraving", "Horizontal") },
 };
 
-QString TConv::toUserName(Orientation v)
+String TConv::toUserName(Orientation v)
 {
     return findUserNameByType<Orientation>(ORIENTATION, v);
 }
@@ -239,7 +239,7 @@ static const std::vector<Item<NoteHeadType> > NOTEHEAD_TYPES = {
     { NoteHeadType::HEAD_BREVIS,    "breve",   QT_TRANSLATE_NOOP("engraving", "Breve") },
 };
 
-QString TConv::toUserName(NoteHeadType v)
+String TConv::toUserName(NoteHeadType v)
 {
     return findUserNameByType<NoteHeadType>(NOTEHEAD_TYPES, v);
 }
@@ -267,7 +267,7 @@ static const std::vector<Item<NoteHeadScheme> > NOTEHEAD_SCHEMES = {
     { NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER, "shape-7-walker",      QT_TRANSLATE_NOOP("engraving", "7-shape (Walker)") }
 };
 
-QString TConv::toUserName(NoteHeadScheme v)
+String TConv::toUserName(NoteHeadScheme v)
 {
     return findUserNameByType<NoteHeadScheme>(NOTEHEAD_SCHEMES, v);
 }
@@ -367,7 +367,7 @@ static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
     { NoteHeadGroup::HEAD_CUSTOM,       "custom",       QT_TRANSLATE_NOOP("engraving",  "Custom") }
 };
 
-QString TConv::toUserName(NoteHeadGroup v)
+String TConv::toUserName(NoteHeadGroup v)
 {
     return findUserNameByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v);
 }
@@ -422,7 +422,7 @@ static const std::vector<Item<ClefType> > CLEF_TYPES = {
     { ClefType::TAB4_SERIF, "TAB4_SERIF", QT_TRANSLATE_NOOP("engraving", "Tablature Serif 4 lines") },
 };
 
-QString TConv::toUserName(ClefType v)
+String TConv::toUserName(ClefType v)
 {
     return findUserNameByType<ClefType>(CLEF_TYPES, v);
 }
@@ -491,7 +491,7 @@ static const std::vector<Item<DynamicType> > DYNAMIC_TYPES = {
     { DynamicType::N,       "n",                nullptr, SymId::dynamicNiente },
 };
 
-QString TConv::toUserName(DynamicType v)
+String TConv::toUserName(DynamicType v)
 {
     return findUserNameByType<DynamicType>(DYNAMIC_TYPES, v);
 }
@@ -598,14 +598,14 @@ static const std::vector<Item<DynamicRange> > DYNAMIC_RANGES = {
     { DynamicRange::SYSTEM, "system" },
 };
 
-QString TConv::toUserName(DynamicRange v)
+String TConv::toUserName(DynamicRange v)
 {
     return findUserNameByType<DynamicRange>(DYNAMIC_RANGES, v);
 }
 
-QString TConv::toXml(DynamicRange v)
+String TConv::toXml(DynamicRange v)
 {
-    return QString::number(static_cast<int>(v));
+    return String::number(static_cast<int>(v));
 }
 
 DynamicRange TConv::fromXml(const AsciiStringView& tag, DynamicRange def)
@@ -621,7 +621,7 @@ static const std::vector<Item<DynamicSpeed> > DYNAMIC_SPEEDS = {
     { DynamicSpeed::FAST,   "fast" },
 };
 
-QString TConv::toUserName(DynamicSpeed v)
+String TConv::toUserName(DynamicSpeed v)
 {
     return findUserNameByType<DynamicSpeed>(DYNAMIC_SPEEDS, v);
 }
@@ -643,14 +643,14 @@ static const std::vector<Item<HookType> > HOOK_TYPES = {
     { HookType::HOOK_90T,   "hook_90t" },
 };
 
-QString TConv::toUserName(HookType v)
+String TConv::toUserName(HookType v)
 {
     return findUserNameByType<HookType>(HOOK_TYPES, v);
 }
 
-QString TConv::toXml(HookType v)
+String TConv::toXml(HookType v)
 {
-    return QString::number(static_cast<int>(v));
+    return String::number(static_cast<int>(v));
 }
 
 HookType TConv::fromXml(const AsciiStringView& tag, HookType def)
@@ -674,7 +674,7 @@ static const std::vector<Item<KeyMode> > KEY_MODES = {
     { KeyMode::LOCRIAN,     "locrian" },
 };
 
-QString TConv::toUserName(KeyMode v)
+String TConv::toUserName(KeyMode v)
 {
     return findUserNameByType<KeyMode>(KEY_MODES, v);
 }
@@ -755,7 +755,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::USER12,            "user_12",              QT_TRANSLATE_NOOP("engraving", "User-12") },
 };
 
-QString TConv::toUserName(TextStyleType v)
+String TConv::toUserName(TextStyleType v)
 {
     return findUserNameByType<TextStyleType>(TEXTSTYLE_TYPES, v);
 }
@@ -923,7 +923,7 @@ std::map<int, double> TConv::easingValueCurve(const int ticksDuration, const int
     return buildEasedValueCurve(ticksDuration, stepsCount, amplitude, method);
 }
 
-QString TConv::toUserName(ChangeMethod v)
+String TConv::toUserName(ChangeMethod v)
 {
     return findUserNameByType<ChangeMethod>(CHANGE_METHODS, v);
 }
@@ -938,14 +938,14 @@ ChangeMethod TConv::fromXml(const AsciiStringView& tag, ChangeMethod def)
     return findTypeByXmlTag<ChangeMethod>(CHANGE_METHODS, tag, def);
 }
 
-QString TConv::toXml(const PitchValue& v)
+String TConv::toXml(const PitchValue& v)
 {
-    return QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"").arg(v.time).arg(v.pitch).arg(v.vibrato);
+    return String("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"").arg(v.time).arg(v.pitch).arg(v.vibrato);
 }
 
-QString TConv::toXml(AccidentalRole v)
+String TConv::toXml(AccidentalRole v)
 {
-    return QString::number(static_cast<int>(v));
+    return String::number(static_cast<int>(v));
 }
 
 AccidentalRole TConv::fromXml(const AsciiStringView& tag, AccidentalRole def)
@@ -955,9 +955,9 @@ AccidentalRole TConv::fromXml(const AsciiStringView& tag, AccidentalRole def)
     return ok ? static_cast<AccidentalRole>(r) : def;
 }
 
-QString TConv::toXml(BeatsPerSecond v)
+String TConv::toXml(BeatsPerSecond v)
 {
-    return QString::number(v.val);
+    return String::number(v.val);
 }
 
 BeatsPerSecond TConv::fromXml(const AsciiStringView& tag, BeatsPerSecond def)
@@ -986,7 +986,7 @@ static const std::vector<Item<DurationType> > DURATION_TYPES = {
     { DurationType::V_INVALID,  "",         QT_TRANSLATE_NOOP("engraving", "Invalid") },
 };
 
-QString TConv::toUserName(DurationType v)
+String TConv::toUserName(DurationType v)
 {
     return findUserNameByType<DurationType>(DURATION_TYPES, v);
 }

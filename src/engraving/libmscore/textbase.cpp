@@ -109,7 +109,7 @@ static void sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
     }
 }
 
-const QString TextBase::UNDEFINED_FONT_FAMILY = QString("Undefined");
+const String TextBase::UNDEFINED_FONT_FAMILY = String(u"Undefined");
 const int TextBase::UNDEFINED_FONT_SIZE = -1;
 
 //---------------------------------------------------------
@@ -216,14 +216,14 @@ size_t TextCursor::columns() const
 //   currentCharacter
 //---------------------------------------------------------
 
-QChar TextCursor::currentCharacter() const
+Char TextCursor::currentCharacter() const
 {
     const TextBlock& t = _text->_layout[row()];
-    QString s = t.text(static_cast<int>(column()), 1);
+    String s = t.text(static_cast<int>(column()), 1);
     if (s.isEmpty()) {
-        return QChar();
+        return Char();
     }
-    return s[0];
+    return s.at(0);
 }
 
 //---------------------------------------------------------
@@ -595,7 +595,7 @@ bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
 //    return current selection
 //---------------------------------------------------------
 
-QString TextCursor::selectedText(bool withFormat) const
+String TextCursor::selectedText(bool withFormat) const
 {
     size_t r1 = selectLine();
     size_t r2 = _row;
@@ -610,7 +610,7 @@ QString TextCursor::selectedText(bool withFormat) const
 //    return text between (r1,c1) and (r2,c2).
 //---------------------------------------------------------
 
-QString TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) const
+String TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) const
 {
     Q_ASSERT(isSorted(r1, c1, r2, c2));
     const std::vector<TextBlock>& tb = _text->_layout;
@@ -619,10 +619,10 @@ QString TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat)
         return tb.at(r1).text(c1, c2 - c1, withFormat);
     }
 
-    QString str = tb.at(r1).text(c1, -1, withFormat) + "\n";
+    String str = tb.at(r1).text(c1, -1, withFormat) + u"\n";
 
     for (int r = r1 + 1; r < r2; ++r) {
-        str += tb.at(r).text(0, -1, withFormat) + "\n";
+        str += tb.at(r).text(0, -1, withFormat) + u"\n";
     }
 
     str += tb.at(r2).text(0, c2, withFormat);
@@ -631,7 +631,7 @@ QString TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat)
 
 TextCursor::Range TextCursor::range(int start, int end) const
 {
-    QString result;
+    String result;
     int pos = 0;
     for (size_t i = 0; i < _text->rows(); ++i) {
         const TextBlock& t = _text->_layout[i];
@@ -674,12 +674,12 @@ TextFragment::TextFragment()
 {
 }
 
-TextFragment::TextFragment(const QString& s)
+TextFragment::TextFragment(const String& s)
 {
     text = s;
 }
 
-TextFragment::TextFragment(TextCursor* cursor, const QString& s)
+TextFragment::TextFragment(TextCursor* cursor, const String& s)
 {
     format = *cursor->format();
     text = s;
@@ -691,12 +691,13 @@ TextFragment::TextFragment(TextCursor* cursor, const QString& s)
 
 TextFragment TextFragment::split(int column)
 {
-    int idx = 0;
+    size_t idx = 0;
     int col = 0;
     TextFragment f;
     f.format = format;
 
-    for (const QChar& c : qAsConst(text)) {
+    for (size_t i = 0; i < text.size(); ++i) {
+        const Char& c = text.at(i);
         if (col == column) {
             if (idx) {
                 if (idx < text.size()) {
@@ -722,8 +723,8 @@ TextFragment TextFragment::split(int column)
 int TextFragment::columns() const
 {
     int col = 0;
-    for (const QChar& c : qAsConst(text)) {
-        if (c.isHighSurrogate()) {
+    for (size_t i = 0; i < text.size(); ++i) {
+        if (text.at(i).isHighSurrogate()) {
             continue;
         }
         ++col;
@@ -760,7 +761,7 @@ void TextFragment::draw(mu::draw::Painter* p, const TextBase* t) const
 //   drawTextWorkaround
 //---------------------------------------------------------
 
-void TextBase::drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const QString& text)
+void TextBase::drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const String& text)
 {
     qreal mm = p->worldTransform().m11();
     if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline() || f.strike())) {
@@ -788,7 +789,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
         m *= subScriptSize;
     }
 
-    QString family;
+    String family;
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic()) {
             family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
@@ -806,13 +807,13 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
         mu::draw::FontMetrics fm(font);
 
         bool fail = false;
-        for (int i = 0; i < text.size(); ++i) {
-            QChar c = text[i];
+        for (size_t i = 0; i < text.size(); ++i) {
+            const Char& c = text.at(i);
             if (c.isHighSurrogate()) {
                 if (i + 1 == text.size()) {
                     ASSERT_X("bad string");
                 }
-                QChar c2 = text[i + 1];
+                const Char& c2 = text.at(i + 1);
                 ++i;
                 uint v = QChar::surrogateToUcs4(c, c2);
                 if (!fm.inFontUcs4(v)) {
@@ -1004,9 +1005,9 @@ qreal TextBlock::xpos(int column, const TextBase* t) const
         }
         mu::draw::FontMetrics fm(f.font(t));
         int idx = 0;
-        for (const QChar& c : qAsConst(f.text)) {
+        for (size_t i = 0; i < f.text.size(); ++i) {
             ++idx;
-            if (c.isHighSurrogate()) {
+            if (f.text.at(i).isHighSurrogate()) {
                 continue;
             }
             ++col;
@@ -1030,8 +1031,8 @@ const TextFragment* TextBlock::fragment(int column) const
     int col = 0;
     auto f = _fragments.begin();
     for (; f != _fragments.end(); ++f) {
-        for (const QChar& c : qAsConst(f->text)) {
-            if (c.isHighSurrogate()) {
+        for (size_t i = 0; i < f->text.size(); ++i) {
+            if (f->text.at(i).isHighSurrogate()) {
                 continue;
             }
             if (column == col) {
@@ -1078,8 +1079,8 @@ size_t TextBlock::columns() const
 {
     size_t col = 0;
     for (const TextFragment& f : _fragments) {
-        for (const QChar& c : qAsConst(f.text)) {
-            if (!c.isHighSurrogate()) {
+        for (size_t i = 0; i < f.text.size(); ++i) {
+            if (!f.text.at(i).isHighSurrogate()) {
                 ++col;
             }
         }
@@ -1102,9 +1103,9 @@ int TextBlock::column(qreal x, TextBase* t) const
             return col;
         }
         qreal px = 0.0;
-        for (const QChar& c : qAsConst(f.text)) {
+        for (size_t i = 0; i < f.text.size(); ++i) {
             ++idx;
-            if (c.isHighSurrogate()) {
+            if (f.text.at(i).isHighSurrogate()) {
                 continue;
             }
             mu::draw::FontMetrics fm(f.font(t));
@@ -1123,7 +1124,7 @@ int TextBlock::column(qreal x, TextBase* t) const
 //   insert
 //---------------------------------------------------------
 
-void TextBlock::insert(TextCursor* cursor, const QString& s)
+void TextBlock::insert(TextCursor* cursor, const String& s)
 {
     int rcol, ridx;
     removeEmptyFragment();   // since we are going to write text, we don't need an empty fragment to hold format info. if such exists, delete it
@@ -1160,7 +1161,7 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
 void TextBlock::insertEmptyFragmentIfNeeded(TextCursor* cursor)
 {
     if (_fragments.size() == 0 || _fragments.front().text.isEmpty()) {
-        _fragments.insert(_fragments.begin(), TextFragment(cursor, ""));
+        _fragments.insert(_fragments.begin(), TextFragment(cursor, u""));
     }
 }
 
@@ -1181,22 +1182,22 @@ void TextBlock::removeEmptyFragment()
 //      column is the column relative to the start of the TextBlock.
 //    outputs:
 //      rcol will be the column relative to the start of the TextFragment that the input column is in.
-//      ridx will be the QChar index into TextFragment's text QString relative to the start of that TextFragment.
+//      ridx will be the QChar index into TextFragment's text String relative to the start of that TextFragment.
 //
 //---------------------------------------------------------
 
 std::list<TextFragment>::iterator TextBlock::fragment(int column, int* rcol, int* ridx)
 {
     int col = 0;
-    for (auto i = _fragments.begin(); i != _fragments.end(); ++i) {
+    for (auto it = _fragments.begin(); it != _fragments.end(); ++it) {
         *rcol = 0;
         *ridx = 0;
-        for (const QChar& c : qAsConst(i->text)) {
+        for (size_t i = 0; i < it->text.size(); ++i) {
             if (col == column) {
-                return i;
+                return it;
             }
             ++*ridx;
-            if (c.isHighSurrogate()) {
+            if (it->text.at(i).isHighSurrogate()) {
                 continue;
             }
             ++col;
@@ -1210,31 +1211,32 @@ std::list<TextFragment>::iterator TextBlock::fragment(int column, int* rcol, int
 //   remove
 //---------------------------------------------------------
 
-QString TextBlock::remove(int column, TextCursor* cursor)
+String TextBlock::remove(int column, TextCursor* cursor)
 {
     int col = 0;
-    QString s;
-    for (auto i = _fragments.begin(); i != _fragments.end(); ++i) {
+    String s;
+    for (auto it = _fragments.begin(); it != _fragments.end(); ++it) {
         int idx  = 0;
         int rcol = 0;
-        for (const QChar& c : qAsConst(i->text)) {
+
+        for (size_t i = 0; i < it->text.size(); ++i) {
             if (col == column) {
-                if (c.isSurrogate()) {
-                    s = i->text.mid(idx, 2);
-                    i->text.remove(idx, 2);
+                if (it->text.at(i).isSurrogate()) {
+                    s = it->text.mid(idx, 2);
+                    it->text.remove(idx, 2);
                 } else {
-                    s = i->text.mid(idx, 1);
-                    i->text.remove(idx, 1);
+                    s = it->text.mid(idx, 1);
+                    it->text.remove(idx, 1);
                 }
-                if (i->text.isEmpty()) {
-                    _fragments.erase(i);
+                if (it->text.isEmpty()) {
+                    _fragments.erase(it);
                 }
                 simplify();
                 insertEmptyFragmentIfNeeded(cursor);         // without this, cursorRect can't calculate the y position of the cursor correctly
                 return s;
             }
             ++idx;
-            if (c.isHighSurrogate()) {
+            if (it->text.at(i).isHighSurrogate()) {
                 continue;
             }
             ++col;
@@ -1274,23 +1276,23 @@ void TextBlock::simplify()
 //   remove
 //---------------------------------------------------------
 
-QString TextBlock::remove(int start, int n, TextCursor* cursor)
+String TextBlock::remove(int start, int n, TextCursor* cursor)
 {
     if (n == 0) {
-        return QString();
+        return String();
     }
     int col = 0;
-    QString s;
+    String s;
     for (auto i = _fragments.begin(); i != _fragments.end();) {
         int rcol = 0;
         bool inc = true;
-        for (int idx = 0; idx < i->text.length();) {
-            QChar c = i->text[idx];
+        for (size_t idx = 0; idx < i->text.size();) {
+            Char c = i->text.at(idx);
             if (col == start) {
                 if (c.isHighSurrogate()) {
                     s += c;
                     i->text.remove(idx, 1);
-                    c = i->text[idx];
+                    c = i->text.at(idx);
                 }
                 s += c;
                 i->text.remove(idx, 1);
@@ -1380,7 +1382,7 @@ QVariant CharFormat::formatValue(FormatId id) const
     case FormatId::Strike: return strike();
     case FormatId::Valign: return static_cast<int>(valign());
     case FormatId::FontSize: return fontSize();
-    case FormatId::FontFamily: return fontFamily();
+    case FormatId::FontFamily: return fontFamily().toQString();
     }
 
     return QVariant();
@@ -1435,21 +1437,21 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
     TextBlock tl;
 
     int col = 0;
-    for (auto i = _fragments.begin(); i != _fragments.end(); ++i) {
-        int idx = 0;
-        for (const QChar& c : qAsConst(i->text)) {
+    for (auto it = _fragments.begin(); it != _fragments.end(); ++it) {
+        size_t idx = 0;
+        for (size_t i = 0; i < it->text.size(); ++i) {
             if (col == column) {
                 if (idx) {
-                    if (idx < i->text.size()) {
-                        TextFragment tf(i->text.mid(idx));
-                        tf.format = i->format;
+                    if (idx < it->text.size()) {
+                        TextFragment tf(it->text.mid(idx));
+                        tf.format = it->format;
                         tl._fragments.push_back(tf);
-                        i->text = i->text.left(idx);
-                        ++i;
+                        it->text = it->text.left(idx);
+                        ++it;
                     }
                 }
-                for (; i != _fragments.end(); i = _fragments.erase(i)) {
-                    tl._fragments.push_back(*i);
+                for (; it != _fragments.end(); it = _fragments.erase(it)) {
+                    tl._fragments.push_back(*it);
                 }
 
                 if (_fragments.size() == 0) {
@@ -1458,13 +1460,14 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
                 return tl;
             }
             ++idx;
-            if (c.isHighSurrogate()) {
+            if (it->text.at(i).isHighSurrogate()) {
                 continue;
             }
             ++col;
         }
     }
-    TextFragment tf("");
+
+    TextFragment tf(u"");
     if (_fragments.size() > 0) {
         tf.format = _fragments.back().format;
     } else if (_fragments.size() == 0) {
@@ -1475,10 +1478,10 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
     return tl;
 }
 
-static QString toSymbolXml(QChar c)
+static String toSymbolXml(QChar c)
 {
     SymId symId = ScoreFont::fallbackFont()->fromCode(c.unicode());
-    return "<sym>" + QString(SymNames::nameForSymId(symId).toQLatin1String()) + "</sym>";
+    return u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";
 }
 
 //---------------------------------------------------------
@@ -1486,12 +1489,12 @@ static QString toSymbolXml(QChar c)
 //    extract text, symbols are marked with <sym>xxx</sym>
 //---------------------------------------------------------
 
-QString TextBlock::text(int col1, int len, bool withFormat) const
+String TextBlock::text(int col1, int len, bool withFormat) const
 {
-    QString s;
+    String s;
     int col = 0;
     qreal size;
-    QString family;
+    String family;
     for (const auto& f : _fragments) {
         if (f.text.isEmpty()) {
             continue;
@@ -1499,7 +1502,9 @@ QString TextBlock::text(int col1, int len, bool withFormat) const
         if (withFormat) {
             s += TextBase::getHtmlStartTag(f.format.fontSize(), size, f.format.fontFamily(), family, f.format.style(), f.format.valign());
         }
-        for (const QChar& c : qAsConst(f.text)) {
+
+        for (size_t i = 0; i < f.text.size(); ++i) {
+            Char c = f.text.at(i);
             if (col >= col1 && (len < 0 || ((col - col1) < len))) {
                 if (f.format.fontFamily() == "ScoreText" && withFormat) {
                     s += toSymbolXml(c);
@@ -1557,7 +1562,7 @@ TextBase::TextBase(const TextBase& st)
     _layoutToParentWidth         = st._layoutToParentWidth;
     hexState                     = -1;
 
-    _textStyleType                         = st._textStyleType;
+    _textStyleType               = st._textStyleType;
     _textLineSpacing             = st._textLineSpacing;
     _bgColor                     = st._bgColor;
     _frameColor                  = st._frameColor;
@@ -1610,7 +1615,7 @@ mu::draw::Color TextBase::textColor() const
 //    insert character
 //---------------------------------------------------------
 
-void TextBase::insert(TextCursor* cursor, uint code)
+void TextBase::insert(TextCursor* cursor, char32_t code)
 {
     if (cursor->row() >= rows()) {
         _layout.push_back(TextBlock());
@@ -1619,11 +1624,11 @@ void TextBase::insert(TextCursor* cursor, uint code)
         code = ' ';
     }
 
-    QString s;
-    if (QChar::requiresSurrogates(code)) {
-        s = QString(QChar(QChar::highSurrogate(code))).append(QChar(QChar::lowSurrogate(code)));
+    String s;
+    if (Char::requiresSurrogates(code)) {
+        s = String(Char(Char::highSurrogate(code))).append(Char(Char::lowSurrogate(code)));
     } else {
-        s = QString(code);
+        s = String::fromUcs4(&code, 1);
     }
 
     if (cursor->row() < rows()) {
@@ -1638,10 +1643,11 @@ void TextBase::insert(TextCursor* cursor, uint code)
 //   parseStringProperty
 //---------------------------------------------------------
 
-static QString parseStringProperty(const QString& s)
+static String parseStringProperty(const String& s)
 {
-    QString rs;
-    for (const QChar& c : s) {
+    String rs;
+    for (size_t i = 0; i < s.size(); ++i) {
+        Char c = s.at(i);
         if (c == '"') {
             break;
         }
@@ -1654,7 +1660,7 @@ static QString parseStringProperty(const QString& s)
 //   parseNumProperty
 //---------------------------------------------------------
 
-static qreal parseNumProperty(const QString& s)
+static qreal parseNumProperty(const String& s)
 {
     return parseStringProperty(s).toDouble();
 }
@@ -1673,11 +1679,11 @@ void TextBase::createLayout()
     cursor.setColumn(0);
 
     int state = 0;
-    QString token;
-    QString sym;
+    String token;
+    String sym;
     bool symState = false;
-    for (int i = 0; i < _text.length(); i++) {
-        const QChar& c = _text[i];
+    for (size_t i = 0; i < _text.size(); i++) {
+        const Char& c = _text.at(i);
         if (state == 0) {
             if (c == '<') {
                 state = 1;
@@ -1715,8 +1721,8 @@ void TextBase::createLayout()
                 } else {
                     if (c.isHighSurrogate()) {
                         i++;
-                        Q_ASSERT(i < _text.length());
-                        insert(&cursor, QChar::surrogateToUcs4(c, _text[i]));
+                        Q_ASSERT(i < _text.size());
+                        insert(&cursor, Char::surrogateToUcs4(c, _text.at(i)));
                     } else {
                         insert(&cursor, c.unicode());
                     }
@@ -1737,7 +1743,7 @@ void TextBase::createLayout()
 
                         //uint code = score()->scoreFont()->symCode(id);
                         uint code = id == SymId::space ? static_cast<uint>(' ') : ScoreFont::fallbackFont()->symCode(id);
-                        cursor.format()->setFontFamily("ScoreText");
+                        cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code);
                         cursor.setFormat(fmt); // restore format
                     } else {
@@ -1775,7 +1781,7 @@ void TextBase::createLayout()
 //---------------------------------------------------------
 //   prepareFormat - used when reading from XML and when pasting from clipboard
 //---------------------------------------------------------
-bool TextBase::prepareFormat(const QString& token, CharFormat& format)
+bool TextBase::prepareFormat(const String& token, CharFormat& format)
 {
     if (token == "b") {
         format.setBold(true);
@@ -1805,19 +1811,18 @@ bool TextBase::prepareFormat(const QString& token, CharFormat& format)
         format.setValign(VerticalAlignment::AlignSuperScript);
     } else if (token == "/sup") {
         format.setValign(VerticalAlignment::AlignNormal);
-    } else if (token.startsWith("font ")) {
-        QString remainder = token.mid(5);
-        if (remainder.startsWith("size=\"")) {
+    } else if (token.startsWith(u"font ")) {
+        String remainder = token.mid(5);
+        if (remainder.startsWith(u"size=\"")) {
             format.setFontSize(parseNumProperty(remainder.mid(6)));
             return true;
-        } else if (remainder.startsWith("face=\"")) {
-            QString face = parseStringProperty(remainder.mid(6));
+        } else if (remainder.startsWith(u"face=\"")) {
+            String face = parseStringProperty(remainder.mid(6));
             face = unEscape(face);
             format.setFontFamily(face);
             return true;
         } else {
-            LOGD("cannot parse html property <%s> in text <%s>",
-                 qPrintable(token), qPrintable(_text));
+            LOGD("cannot parse html property <%s> in text <%s>", muPrintable(token), muPrintable(_text));
         }
     }
     return false;
@@ -1826,7 +1831,7 @@ bool TextBase::prepareFormat(const QString& token, CharFormat& format)
 //---------------------------------------------------------
 //   prepareFormat - used when reading from XML
 //---------------------------------------------------------
-void TextBase::prepareFormat(const QString& token, TextCursor& cursor)
+void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 {
     if (prepareFormat(token, *cursor.format())) {
         setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
@@ -2003,7 +2008,7 @@ FontStyle TextBase::fontStyle() const
     return _cursor->format()->style();
 }
 
-QString TextBase::family() const
+String TextBase::family() const
 {
     return _cursor->format()->fontFamily();
 }
@@ -2021,9 +2026,9 @@ void TextBase::setFontStyle(const FontStyle& val)
     _cursor->setFormat(FormatId::Strike, val & FontStyle::Strike);
 }
 
-void TextBase::setFamily(const QString& val)
+void TextBase::setFamily(const String& val)
 {
-    _cursor->setFormat(FormatId::FontFamily, val);
+    _cursor->setFormat(FormatId::FontFamily, val.toQString());
 }
 
 void TextBase::setSize(const qreal& val)
@@ -2035,45 +2040,45 @@ void TextBase::setSize(const qreal& val)
 //   XmlNesting
 //---------------------------------------------------------
 
-class XmlNesting : public QStack<QString>
+class XmlNesting : public QStack<String>
 {
-    QString* _s;
+    String* _s;
 
 public:
-    XmlNesting(QString* s) { _s = s; }
-    void pushToken(const QString& t)
+    XmlNesting(String* s) { _s = s; }
+    void pushToken(const String& t)
     {
-        *_s += "<";
+        *_s += u"<";
         *_s += t;
-        *_s += ">";
+        *_s += u">";
         push(t);
     }
 
-    void pushB() { pushToken("b"); }
-    void pushI() { pushToken("i"); }
-    void pushU() { pushToken("u"); }
-    void pushS() { pushToken("s"); }
+    void pushB() { pushToken(u"b"); }
+    void pushI() { pushToken(u"i"); }
+    void pushU() { pushToken(u"u"); }
+    void pushS() { pushToken(u"s"); }
 
-    QString popToken()
+    String popToken()
     {
-        QString s = pop();
-        *_s += "</";
+        String s = pop();
+        *_s += u"</";
         *_s += s;
-        *_s += ">";
+        *_s += u">";
         return s;
     }
 
     void popToken(const char* t)
     {
-        QStringList ps;
+        StringList ps;
         for (;;) {
-            QString s = popToken();
+            String s = popToken();
             if (s == t) {
                 break;
             }
-            ps += s;
+            ps << s;
         }
-        for (const QString& s : qAsConst(ps)) {
+        for (const String& s : qAsConst(ps)) {
             pushToken(s);
         }
     }
@@ -2168,10 +2173,10 @@ void TextBase::genText() const
             }
 
             if (format.fontSize() != fmt.fontSize()) {
-                _text += QString("<font size=\"%1\"/>").arg(format.fontSize());
+                _text += String("<font size=\"%1\"/>").arg(format.fontSize());
             }
             if (format.fontFamily() != "ScoreText" && format.fontFamily() != fmt.fontFamily()) {
-                _text += QString("<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
+                _text += String("<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
             }
 
             VerticalAlignment va = format.valign();
@@ -2182,18 +2187,18 @@ void TextBase::genText() const
                     xmlNesting.popToken(cva == VerticalAlignment::AlignSuperScript ? "sup" : "sub");
                     break;
                 case VerticalAlignment::AlignSuperScript:
-                    xmlNesting.pushToken("sup");
+                    xmlNesting.pushToken(u"sup");
                     break;
                 case VerticalAlignment::AlignSubScript:
-                    xmlNesting.pushToken("sub");
+                    xmlNesting.pushToken(u"sub");
                     break;
                 case VerticalAlignment::AlignUndefined:
                     break;
                 }
             }
-            if (format.fontFamily() == "ScoreText") {
-                for (const QChar& c : qAsConst(f.text)) {
-                    _text += toSymbolXml(c);
+            if (format.fontFamily() == u"ScoreText") {
+                for (size_t i = 0; i < f.text.size(); ++i) {
+                    _text += toSymbolXml(f.text.at(i));
                 }
             } else {
                 _text += XmlWriter::xmlString(f.text);
@@ -2486,7 +2491,7 @@ bool TextBase::acceptDrop(EditData& data) const
 //   setXmlText
 //---------------------------------------------------------
 
-void TextBase::setXmlText(const QString& s)
+void TextBase::setXmlText(const String& s)
 {
     _text = s;
     textInvalid = false;
@@ -2509,7 +2514,7 @@ void TextBase::resetFormatting()
 
 String TextBase::plainText() const
 {
-    QString s;
+    String s;
 
     const TextBase* text = this;
     std::unique_ptr<TextBase> tmpText;
@@ -2536,7 +2541,7 @@ String TextBase::plainText() const
 //   xmlText
 //---------------------------------------------------------
 
-QString TextBase::xmlText() const
+String TextBase::xmlText() const
 {
     // this is way too expensive
     // what side effects has genText() ?
@@ -2558,12 +2563,12 @@ QString TextBase::xmlText() const
 //   unEscape
 //---------------------------------------------------------
 
-QString TextBase::unEscape(QString s)
+String TextBase::unEscape(String s)
 {
-    s.replace("&lt;", "<");
-    s.replace("&gt;", ">");
-    s.replace("&amp;", "&");
-    s.replace("&quot;", "\"");
+    s.replace(u"&lt;", u"<");
+    s.replace(u"&gt;", u">");
+    s.replace(u"&amp;", u"&");
+    s.replace(u"&quot;", u"\"");
     return s;
 }
 
@@ -2571,12 +2576,12 @@ QString TextBase::unEscape(QString s)
 //   escape
 //---------------------------------------------------------
 
-QString TextBase::escape(QString s)
+String TextBase::escape(String s)
 {
-    s.replace("<", "&lt;");
-    s.replace(">", "&gt;");
-    s.replace("&", "&amp;");
-    s.replace("\"", "&quot;");
+    s.replace(u"<", u"&lt;");
+    s.replace(u">", u"&gt;");
+    s.replace(u"&", u"&amp;");
+    s.replace(u"\"", u"&quot;");
     return s;
 }
 
@@ -2601,7 +2606,7 @@ String TextBase::accessibleInfo() const
         rez = EngravingItem::accessibleInfo();
         break;
     }
-    String s = plainText().toQString().simplified();
+    String s = plainText().simplified();
     if (s.size() > 20) {
         s.truncate(20);
         s += u"…";
@@ -2631,7 +2636,7 @@ String TextBase::screenReaderInfo() const
         rez = EngravingItem::accessibleInfo();
         break;
     }
-    String s = plainText().toQString().simplified();
+    String s = plainText().simplified();
     return String("%1: %2").arg(rez, s);
 }
 
@@ -2674,7 +2679,7 @@ std::list<TextFragment> TextBase::fragmentList() const
             res.push_back(f);
             if (block.eol()) {
                 // simply append a newline
-                res.back().text += "\n";
+                res.back().text += u"\n";
             }
         }
     }
@@ -2910,7 +2915,7 @@ PropertyValue TextBase::propertyDefault(Pid id) const
     case Pid::TEXT_STYLE:
         return TextStyleType::DEFAULT;
     case Pid::TEXT:
-        return QString();
+        return String();
     case Pid::TEXT_SCRIPT_ALIGN:
         return static_cast<int>(VerticalAlignment::AlignNormal);
     default:
@@ -2986,34 +2991,34 @@ Sid TextBase::offsetSid() const
 //---------------------------------------------------------
 //   getHtmlStartTag - helper function for extractText with withFormat = true
 //---------------------------------------------------------
-QString TextBase::getHtmlStartTag(qreal newSize, qreal& curSize, const QString& newFamily, QString& curFamily, FontStyle style,
-                                  VerticalAlignment vAlign)
+String TextBase::getHtmlStartTag(qreal newSize, qreal& curSize, const String& newFamily, String& curFamily, FontStyle style,
+                                 VerticalAlignment vAlign)
 {
-    QString s;
+    String s;
     if (fabs(newSize - curSize) > 0.1) {
         curSize = newSize;
-        s += QString("<font size=\"%1\"/>").arg(newSize);
+        s += String("<font size=\"%1\"/>").arg(newSize);
     }
     if (newFamily != curFamily && newFamily != "ScoreText") {
         curFamily = newFamily;
-        s += QString("<font face=\"%1\"/>").arg(newFamily);
+        s += String("<font face=\"%1\"/>").arg(newFamily);
     }
     if (style & FontStyle::Bold) {
-        s += "<b>";
+        s += u"<b>";
     }
     if (style & FontStyle::Italic) {
-        s += "<i>";
+        s += u"<i>";
     }
     if (style & FontStyle::Underline) {
-        s += "<u>";
+        s += u"<u>";
     }
     if (style & mu::engraving::FontStyle::Strike) {
-        s += "<s>";
+        s += u"<s>";
     }
     if (vAlign == VerticalAlignment::AlignSubScript) {
-        s += "<sub>";
+        s += u"<sub>";
     } else if (vAlign == VerticalAlignment::AlignSuperScript) {
-        s += "<sup>";
+        s += u"<sup>";
     }
     return s;
 }
@@ -3021,25 +3026,25 @@ QString TextBase::getHtmlStartTag(qreal newSize, qreal& curSize, const QString& 
 //---------------------------------------------------------
 //   getHtmlEndTag - helper function for extractText with withFormat = true
 //---------------------------------------------------------
-QString TextBase::getHtmlEndTag(FontStyle style, VerticalAlignment vAlign)
+String TextBase::getHtmlEndTag(FontStyle style, VerticalAlignment vAlign)
 {
-    QString s;
+    String s;
     if (vAlign == VerticalAlignment::AlignSubScript) {
-        s += "</sub>";
+        s += u"</sub>";
     } else if (vAlign == VerticalAlignment::AlignSuperScript) {
-        s += "</sup>";
+        s += u"</sup>";
     }
     if (style & FontStyle::Strike) {
-        s += "</s>";
+        s += u"</s>";
     }
     if (style & FontStyle::Underline) {
-        s += "</u>";
+        s += u"</u>";
     }
     if (style & FontStyle::Italic) {
-        s += "</i>";
+        s += u"</i>";
     }
     if (style & FontStyle::Bold) {
-        s += "</b>";
+        s += u"</b>";
     }
     return s;
 }
@@ -3057,7 +3062,7 @@ void TextBase::notifyAboutTextCursorChanged()
     }
 }
 
-void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const QString& text)
+void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const String& text)
 {
     if (accessible()) {
         auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
@@ -3066,7 +3071,7 @@ void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const
     }
 }
 
-void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const QString& text)
+void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const String& text)
 {
     if (accessible()) {
         auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
@@ -3183,13 +3188,13 @@ void TextBase::editCut(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
-    QString s = cursor->selectedText(true);
+    String s = cursor->selectedText(true);
 
     if (!s.isEmpty()) {
         ted->selectedText = cursor->selectedText(true);
         ed.curGrip = Grip::START;
         ed.key     = Qt::Key_Delete;
-        ed.s       = QString();
+        ed.s       = String();
         edit(ed);
     }
 }
@@ -3371,9 +3376,9 @@ bool TextBase::hasCustomFormatting() const
 //    result as xml string
 //---------------------------------------------------------
 
-QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) const
+String TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) const
 {
-    QString _txt;
+    String _txt;
     bool bold_      = false;
     bool italic_    = false;
     bool underline_ = false;
@@ -3455,10 +3460,10 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
             }
 
             if (!removeSize && (format.fontSize() != fmt.fontSize())) {
-                _txt += QString("<font size=\"%1\"/>").arg(format.fontSize());
+                _txt += String("<font size=\"%1\"/>").arg(format.fontSize());
             }
             if (!removeFace && (format.fontFamily() != fmt.fontFamily())) {
-                _txt += QString("<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
+                _txt += String("<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
             }
 
             VerticalAlignment va = format.valign();
@@ -3469,10 +3474,10 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
                     xmlNesting.popToken(cva == VerticalAlignment::AlignSuperScript ? "sup" : "sub");
                     break;
                 case VerticalAlignment::AlignSuperScript:
-                    xmlNesting.pushToken("sup");
+                    xmlNesting.pushToken(u"sup");
                     break;
                 case VerticalAlignment::AlignSubScript:
-                    xmlNesting.pushToken("sub");
+                    xmlNesting.pushToken(u"sub");
                     break;
                 case VerticalAlignment::AlignUndefined:
                     break;
