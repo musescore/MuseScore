@@ -57,7 +57,7 @@ TEST_F(Global_IO_IODeviceTests, Open_ReadOnly)
     EXPECT_DEATH({
         size_t size = buf.write(wrba);
         EXPECT_EQ(size, 0);
-    }, ".*isOpenModeWriteable().*");
+    }, ".*isOpenModeWriteable\\(\\).*");
 }
 
 TEST_F(Global_IO_IODeviceTests, Open_WriteOnly)
@@ -82,18 +82,18 @@ TEST_F(Global_IO_IODeviceTests, Open_WriteOnly)
     EXPECT_DEATH({
         ByteArray rba = buf.readAll();
         EXPECT_TRUE(rba.empty());
-    }, ".*isOpenModeReadable().*");
+    }, ".*isOpenModeReadable\\(\\).*");
 
     EXPECT_DEATH({
         ByteArray rba = buf.read(4);
         EXPECT_TRUE(rba.empty());
-    }, ".*isOpenModeReadable().*");
+    }, ".*isOpenModeReadable\\(\\).*");
 
     EXPECT_DEATH({
         uint8_t d = 0;
         size_t s = buf.read(&d, 1);
         EXPECT_EQ(s, 0);
-    }, ".*isOpenModeReadable().*");
+    }, ".*isOpenModeReadable\\(\\).*");
 }
 
 TEST_F(Global_IO_IODeviceTests, Open_ReadWrite)
