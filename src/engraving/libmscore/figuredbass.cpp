@@ -78,7 +78,7 @@ static std::vector<FiguredBassFont> g_FBFonts;
 
 // used for indexed access to parenthesis chars
 // (these is no normAccidToChar[], as accidentals may use mult. chars in normalized display):
-const QChar FiguredBassItem::normParenthToChar[int(FiguredBassItem::Parenthesis::NUMOF)] =
+const Char FiguredBassItem::normParenthToChar[int(FiguredBassItem::Parenthesis::NUMOF)] =
 { 0, '(', ')', '[', ']' };
 
 FiguredBassItem::FiguredBassItem(FiguredBass* parent, int l)
@@ -192,7 +192,7 @@ bool FiguredBassItem::parse(String& str)
 //    scans str to extract prefix or suffix properties. Stops at the first char which cannot fit.
 //    Fitting chars are removed from str. DOES NOT generate any display text
 //
-// returns the number of QChar's read from str or -1 if prefix / suffix has an illegal format
+// returns the number of Chars read from str or -1 if prefix / suffix has an illegal format
 // (no prefix / suffix at all IS legal)
 //---------------------------------------------------------
 
@@ -274,7 +274,7 @@ int FiguredBassItem::parsePrefixSuffix(String& str, bool bPrefix)
 //    scans str to extract digit properties. Stops at the first char which cannot belong to digit part.
 //    Fitting chars are removed from str. DOES NOT generate any display text
 //
-// returns the number of QChar's read from str or -1 if no legal digit can be constructed
+// returns the number of Chars read from str or -1 if no legal digit can be constructed
 // (no digit at all IS legal)
 //---------------------------------------------------------
 
@@ -309,7 +309,7 @@ int FiguredBassItem::parseDigit(String& str)
 //    scans str to extract a (possible) parenthesis, stores its code into parenth[parenthIdx]
 //    and removes it from str. Only looks at first str char.
 //
-// returns the number of QChar's read from str (actually 0 or 1).
+// returns the number of Chars read from str (actually 0 or 1).
 //---------------------------------------------------------
 
 int FiguredBassItem::parseParenthesis(String& str, int parenthIdx)

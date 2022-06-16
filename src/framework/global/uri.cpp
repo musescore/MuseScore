@@ -155,7 +155,7 @@ void UriQuery::extractQuotedStrings(const std::string& str, std::vector<std::str
 
     int bi = -1;
     for (size_t i = 0; i < str.size(); ++i) {
-        if (str.at(i) == QChar('\'')) {
+        if (str.at(i) == u'\'') {
             if (bi == -1) { // begin quotes string
                 bi = int(i);
             } else {  // end quotes string

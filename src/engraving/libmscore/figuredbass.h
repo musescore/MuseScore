@@ -132,7 +132,7 @@ public:
 
 private:
 
-    static const QChar normParenthToChar[int(Parenthesis::NUMOF)];
+    static const Char normParenthToChar[int(Parenthesis::NUMOF)];
 
     String _displayText;                        // the constructed display text (read-only)
     int ord;                                    // the line ordinal of this element in the FB stack
