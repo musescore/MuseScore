@@ -2696,7 +2696,7 @@ bool TextBase::validateText(String& s)
         Char c = s.at(i);
         if (c == u'&') {
             const char16_t* ok[] { u"amp;", u"lt;", u"gt;", u"quot;" };
-            QString t = s.mid(i + 1);
+            String t = s.mid(i + 1);
             bool found = false;
             for (auto k : ok) {
                 if (t.startsWith(k)) {
