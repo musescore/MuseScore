@@ -83,9 +83,27 @@ std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, 
 
 class Articulation final : public EngravingItem
 {
+public:
+
+    enum TextType {
+        NO_TEXT,
+        SLAP,
+        POP
+    };
+
+    struct TextTypeMapping {
+        String text;
+        String name;
+    };
+
+private:
+
     SymId _symId;
     DirectionV _direction;
     String _channelName;
+
+    TextType m_textType;
+    mu::draw::Font m_font; // used for drawing text type articulations
 
     ArticulationAnchor _anchor;
 
@@ -121,6 +139,7 @@ public:
     SymId symId() const { return _symId; }
     void setSymId(SymId id);
     int subtype() const override;
+    void setTextType(TextType textType);
     String typeUserName() const override;
     String articulationName() const;    // type-name of articulation; used for midi rendering
     static String symId2ArticulationName(SymId symId);
