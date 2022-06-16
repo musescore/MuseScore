@@ -510,14 +510,14 @@ Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device
 
     for (const mu::engraving::Excerpt* excerpt : score->excerpts()) {
         mu::engraving::Score* part = excerpt->excerptScore();
-        std::map<QString, QString> partMetaTags = part->metaTags();
+        std::map<String, String> partMetaTags = part->metaTags();
 
         QJsonValue partTitle(part->name());
         partsTitles << partTitle;
 
         QVariantMap meta;
-        for (const QString& key: mu::keys(partMetaTags)) {
-            meta[key] = partMetaTags[key];
+        for (const String& key: mu::keys(partMetaTags)) {
+            meta[key] = partMetaTags[key].toQString();
         }
 
         QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);

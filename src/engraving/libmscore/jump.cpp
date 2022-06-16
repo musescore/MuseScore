@@ -91,10 +91,10 @@ void Jump::setJumpType(Type t)
 {
     for (const JumpTypeTableItem& p : jumpTypeTable) {
         if (p.type == t) {
-            setXmlText(p.text.ascii());
-            setJumpTo(p.jumpTo.ascii());
-            setPlayUntil(p.playUntil.ascii());
-            setContinueAt(p.continueAt.ascii());
+            setXmlText(String::fromAscii(p.text.ascii()));
+            setJumpTo(String::fromAscii(p.jumpTo.ascii()));
+            setPlayUntil(String::fromAscii(p.playUntil.ascii()));
+            setContinueAt(String::fromAscii(p.continueAt.ascii()));
             initTextStyleType(TextStyleType::REPEAT_RIGHT);
             break;
         }
@@ -115,13 +115,13 @@ Jump::Type Jump::jumpType() const
     return Type::USER;
 }
 
-QString Jump::jumpTypeUserName() const
+String Jump::jumpTypeUserName() const
 {
     size_t idx = static_cast<size_t>(jumpType());
     if (idx < jumpTypeTable.size()) {
-        return qtrc("jumpType", jumpTypeTable[idx].userText.toUtf8().constData());
+        return mtrc("engraving", jumpTypeTable[idx].userText);
     }
-    return QObject::tr("Custom");
+    return mtrc("engraving", "Custom");
 }
 
 //---------------------------------------------------------
@@ -175,7 +175,7 @@ void Jump::write(XmlWriter& xml) const
 //   undoSetJumpTo
 //---------------------------------------------------------
 
-void Jump::undoSetJumpTo(const QString& s)
+void Jump::undoSetJumpTo(const String& s)
 {
     undoChangeProperty(Pid::JUMP_TO, s);
 }
@@ -184,7 +184,7 @@ void Jump::undoSetJumpTo(const QString& s)
 //   undoSetPlayUntil
 //---------------------------------------------------------
 
-void Jump::undoSetPlayUntil(const QString& s)
+void Jump::undoSetPlayUntil(const String& s)
 {
     undoChangeProperty(Pid::PLAY_UNTIL, s);
 }
@@ -193,7 +193,7 @@ void Jump::undoSetPlayUntil(const QString& s)
 //   undoSetContinueAt
 //---------------------------------------------------------
 
-void Jump::undoSetContinueAt(const QString& s)
+void Jump::undoSetContinueAt(const String& s)
 {
     undoChangeProperty(Pid::CONTINUE_AT, s);
 }
@@ -259,7 +259,7 @@ PropertyValue Jump::propertyDefault(Pid propertyId) const
     case Pid::JUMP_TO:
     case Pid::PLAY_UNTIL:
     case Pid::CONTINUE_AT:
-        return QString("");
+        return String("");
     case Pid::PLAY_REPEATS:
         return false;
     case Pid::PLACEMENT:

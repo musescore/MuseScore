@@ -23,6 +23,7 @@
 #ifndef __MCURSOR_H__
 #define __MCURSOR_H__
 
+#include "types/string.h"
 #include "types/fraction.h"
 
 namespace mu::engraving {
@@ -48,9 +49,9 @@ class MCursor
 
 public:
     MCursor(MasterScore* s = 0);
-    void createScore(const QString& s);
+    void createScore(const String& s);
 
-    void addPart(const QString& instrument);
+    void addPart(const String& instrument);
     Chord* addChord(int pitch, const TDuration& duration);
     void addKeySig(Key);
     TimeSig* addTimeSig(const Fraction&);

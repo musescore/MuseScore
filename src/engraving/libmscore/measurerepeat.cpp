@@ -62,6 +62,7 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
+
     painter->setPen(curColor());
     drawSymbol(symId(), painter);
 
@@ -116,7 +117,7 @@ void MeasureRepeat::layout()
             }
             if (placeInSeries % score()->styleI(Sid::mrNumberEveryXMeasures) == 0) {
                 if (score()->styleB(Sid::mrNumberSeriesWithParentheses)) {
-                    m_numberSym = timeSigSymIdsFromString(QString("(%1)").arg(placeInSeries));
+                    m_numberSym = timeSigSymIdsFromString(String("(%1)").arg(placeInSeries));
                 } else {
                     setNumberSym(placeInSeries);
                 }

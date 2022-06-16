@@ -282,10 +282,10 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
     createMeasures(score, scoreOptions);
 
     {
-        QString title = score->metaTag("workTitle");
-        QString subtitle = score->metaTag("subtitle");
-        QString composer = score->metaTag("composer");
-        QString lyricist = score->metaTag("lyricist");
+        QString title = score->metaTag(u"workTitle");
+        QString subtitle = score->metaTag(u"subtitle");
+        QString composer = score->metaTag(u"composer");
+        QString lyricist = score->metaTag(u"lyricist");
 
         if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !lyricist.isEmpty()) {
             mu::engraving::MeasureBase* measure = score->measures()->first();

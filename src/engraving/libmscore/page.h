@@ -57,9 +57,9 @@ class Page final : public EngravingItem
     friend class Factory;
     Page(RootItem* parent);
 
-    QString replaceTextMacros(const QString&) const;
-    void drawHeaderFooter(mu::draw::Painter*, int area, const QString&) const;
-    Text* layoutHeaderFooter(int area, const QString& ss) const;
+    String replaceTextMacros(const String&) const;
+    void drawHeaderFooter(mu::draw::Painter*, int area, const String&) const;
+    Text* layoutHeaderFooter(int area, const String& ss) const;
 
 public:
 

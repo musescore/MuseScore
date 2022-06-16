@@ -605,8 +605,8 @@ void ExportBrailleImpl::credits(io::Device& device)
             out << TextToUEBBraille().braille(QString("%1 %2").arg(type).arg(creator)).toUtf8() << Qt::endl;
         }
     }
-    if (!score->metaTag("copyright").isEmpty()) {
-        out << TextToUEBBraille().braille(QString("© %2").arg(score->metaTag("copyright"))).toUtf8() << Qt::endl;
+    if (!score->metaTag(u"copyright").isEmpty()) {
+        out << TextToUEBBraille().braille(QString("© %2").arg(score->metaTag(u"copyright"))).toUtf8() << Qt::endl;
     }
     out << Qt::endl;
     out.flush();

@@ -122,8 +122,8 @@ void Lyrics::read(XmlReader& e)
     if (!isStyled(Pid::OFFSET) && !e.context()->pasteMode()) {
         // fix offset for pre-3.1 scores
         // 3.0: y offset was meaningless if autoplace is set
-        QString version = e.context()->mscoreVersion();
-        if (autoplace() && !version.isEmpty() && version < "3.1") {
+        String version = e.context()->mscoreVersion();
+        if (autoplace() && !version.isEmpty() && version < u"3.1") {
             PointF off = propertyDefault(Pid::OFFSET).value<PointF>();
             ryoffset() = off.y();
         }
@@ -141,7 +141,7 @@ bool Lyrics::readProperties(XmlReader& e)
     if (tag == "no") {
         _no = e.readInt();
     } else if (tag == "syllabic") {
-        QString val(e.readText());
+        String val(e.readText());
         if (val == "single") {
             _syllabic = Syllabic::SINGLE;
         } else if (val == "begin") {
@@ -257,9 +257,9 @@ void Lyrics::layout()
     // 3) string of non-word characters at end of syllable
     //QRegularExpression leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
 
-    const QString text = plainText();
-    QString leading;
-    QString trailing;
+    const String text = plainText();
+    String leading;
+    String trailing;
 
     if (score()->styleB(Sid::lyricsAlignVerseNumber)) {
         QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)", QRegularExpression::UseUnicodePropertiesOption);
@@ -268,8 +268,8 @@ void Lyrics::layout()
             // leading and trailing punctuation
             leading = punctuationMatch.captured(1);
             trailing = punctuationMatch.captured(3);
-            //QString actualLyric = punctuationMatch.captured(2);
-            if (!leading.isEmpty() && leading[0].isDigit()) {
+            //String actualLyric = punctuationMatch.captured(2);
+            if (!leading.isEmpty() && leading.at(0).isDigit()) {
                 hasNumber = true;
             }
         }
@@ -319,8 +319,8 @@ void Lyrics::layout()
 //                   LOGD("create leading, trailing <%s> -- <%s><%s>", qPrintable(text), qPrintable(leading), qPrintable(trailing));
             const TextBlock& tb = textBlock(0);
 
-            const qreal leadingWidth = tb.xpos(leading.length(), this) - tb.boundingRect().x();
-            const int trailingPos = text.length() - trailing.length();
+            const qreal leadingWidth = tb.xpos(leading.size(), this) - tb.boundingRect().x();
+            const int trailingPos = text.size() - trailing.size();
             const qreal trailingWidth = tb.boundingRect().right() - tb.xpos(trailingPos, this);
 
             leftAdjust = leadingWidth;
@@ -414,52 +414,52 @@ void Lyrics::layout2(int nAbove)
 //   paste
 //---------------------------------------------------------
 
-void Lyrics::paste(EditData& ed, const QString& txt)
+void Lyrics::paste(EditData& ed, const String& txt)
 {
     MuseScoreView* scoreview = ed.view();
     QString regex = QString("[^\\S") + QChar(0xa0) + QChar(0x202F) + "]+";
-    QStringList sl = txt.split(QRegularExpression(regex), Qt::SkipEmptyParts);
+    StringList sl = txt.toQString().split(QRegularExpression(regex), Qt::SkipEmptyParts);
     if (sl.empty()) {
         return;
     }
 
-    QStringList hyph = sl[0].split("-");
+    StringList hyph = sl[0].split(u'-');
     bool minus = false;
     bool underscore = false;
     score()->startCmd();
 
-    if (hyph.length() > 1) {
+    if (hyph.size() > 1) {
         score()->undo(new InsertText(cursorFromEditData(ed), hyph[0]), &ed);
-        hyph.removeFirst();
-        sl[0] =  hyph.join("-");
+        hyph.removeAt(0);
+        sl[0] =  hyph.join(u"-");
         minus = true;
-    } else if (sl.length() > 1 && sl[1] == "-") {
+    } else if (sl.size() > 1 && sl[1] == u"-") {
         score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
-        sl.removeFirst();
-        sl.removeFirst();
+        sl.removeAt(0);
+        sl.removeAt(0);
         minus = true;
-    } else if (sl[0].startsWith("_")) {
+    } else if (sl[0].startsWith(u"_")) {
         sl[0].remove(0, 1);
         if (sl[0].isEmpty()) {
-            sl.removeFirst();
+            sl.removeAt(0);
         }
         underscore = true;
-    } else if (sl[0].contains("_")) {
-        int p = sl[0].indexOf("_");
+    } else if (sl[0].contains(u"_")) {
+        int p = sl[0].indexOf(u'_');
         score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
         sl[0] = sl[0].mid(p + 1);
         if (sl[0].isEmpty()) {
-            sl.removeFirst();
+            sl.removeAt(0);
         }
         underscore = true;
-    } else if (sl.length() > 1 && sl[1] == "_") {
+    } else if (sl.size() > 1 && sl[1] == "_") {
         score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
-        sl.removeFirst();
-        sl.removeFirst();
+        sl.removeAt(0);
+        sl.removeAt(0);
         underscore = true;
     } else {
         score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
-        sl.removeFirst();
+        sl.removeAt(0);
     }
 
     score()->endCmd();

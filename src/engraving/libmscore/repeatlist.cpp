@@ -207,7 +207,7 @@ int RepeatList::utick2tick(int tick) const
         }
     }
 
-    ASSERT_X(QString::asprintf("tick %d not found in RepeatList", tick));
+    ASSERT_X(String("tick %1 not found in RepeatList").arg(tick));
     return 0;
 }
 
@@ -261,7 +261,7 @@ int RepeatList::utime2utick(qreal secs) const
         }
     }
 
-    ASSERT_X(QString::asprintf("time %f not found in RepeatList", secs));
+    ASSERT_X(String("time %1 not found in RepeatList").arg(secs));
     return 0;
 }
 
@@ -614,7 +614,7 @@ void RepeatList::collectRepeatListElements()
 ///         "end" will result in end of current section
 ///
 std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementList::const_iterator> RepeatList::findMarker(
-    QString label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
+    String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
     RepeatListElementList::const_iterator referenceRepeatListElementIt) const
 {
     bool found = false;

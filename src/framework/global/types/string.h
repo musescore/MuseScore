@@ -98,27 +98,41 @@ public:
 
     inline char16_t unicode() const { return m_ch; }
 
-    bool isNull() const { return m_ch == 0; }
+    inline bool isNull() const { return m_ch == 0; }
 
-    bool isAscii() const;
+    inline bool isAscii() const { return isAscii(m_ch); }
     static inline bool isAscii(char16_t c) { return c <= 0xff; }
-    char toAscii(bool* ok = nullptr) const;
+    inline char toAscii(bool* ok = nullptr) const { return toAscii(m_ch, ok); }
     static char toAscii(char16_t c, bool* ok = nullptr);
-    static inline char16_t fromAscii(char c) { return static_cast<char16_t>(c); }
+    static inline Char fromAscii(char c) { return static_cast<char16_t>(c); }
 
-    bool isDigit() const;
+    inline bool isLetter() const { return isLetter(m_ch); }
+    static bool isLetter(char16_t c);
+    inline bool isSpace() const { return isSpace(m_ch); }
+    static bool isSpace(char16_t c);
+    inline bool isDigit() const { return isDigit(m_ch); }
     static bool isDigit(char16_t c);
     int digitValue() const;
 
-    bool isLower() const;
-    Char toLower() const;
+    inline bool isLower() const { return toLower() == m_ch; }
+    inline Char toLower() const { return toLower(m_ch); }
     static char16_t toLower(char16_t ch);
-    bool isUpper() const;
-    Char toUpper() const;
+    inline bool isUpper() const { return toUpper() == m_ch; }
+    inline Char toUpper() const { return toUpper(m_ch); }
     static char16_t toUpper(char16_t ch);
 
-    static inline char16_t highSurrogate(uint ucs4) { return char16_t((ucs4 >> 10) + 0xd7c0); }
-    static inline char16_t lowSurrogate(uint ucs4) { return char16_t(ucs4 % 0x400 + 0xdc00); }
+    inline bool isHighSurrogate() const { return isHighSurrogate(m_ch); }
+    inline bool isLowSurrogate() const { return isLowSurrogate(m_ch); }
+    inline bool isSurrogate() const { return isSurrogate(m_ch); }
+
+    static inline char32_t surrogateToUcs4(char16_t high, char16_t low) { return (char32_t(high) << 10) + low - 0x35fdc00; }
+    static inline char32_t surrogateToUcs4(Char high, Char low) { return surrogateToUcs4(high.m_ch, low.m_ch); }
+    static inline bool isHighSurrogate(char32_t ucs4) { return (ucs4 & 0xfffffc00) == 0xd800; }
+    static inline bool isLowSurrogate(char32_t ucs4) { return (ucs4 & 0xfffffc00) == 0xdc00; }
+    static inline bool isSurrogate(char32_t ucs4) { return ucs4 - 0xd800u < 2048u; }
+    static inline char16_t highSurrogate(char32_t ucs4) { return char16_t((ucs4 >> 10) + 0xd7c0); }
+    static inline char16_t lowSurrogate(char32_t ucs4) { return char16_t(ucs4 % 0x400 + 0xdc00); }
+    static inline bool requiresSurrogates(char32_t ucs4) { return ucs4 >= 0x10000; }
 
 private:
     char16_t m_ch = 0;
@@ -189,6 +203,7 @@ public:
     static String fromStdString(const std::string& str);
     std::string toStdString() const;
     std::u16string toStdU16String() const;
+    static String fromUcs4(const char32_t* str, size_t size = mu::nidx);
     std::u32string toStdU32String() const;
 
 //#ifndef NO_QT_SUPPORT
@@ -218,6 +233,7 @@ public:
     StringList split(const Char& ch, SplitBehavior behavior = KeepEmptyParts) const;
     String& replace(const String& before, const String& after);
     String& replace(char16_t before, char16_t after);
+    String& insert(size_t position, const String& str);
     String& remove(const String& str) { return replace(str, String()); }
     String& remove(const Char& ch);
     String& remove(char16_t ch);
@@ -258,7 +274,7 @@ public:
     int toInt(bool* ok = nullptr, int base = 10) const;
     double toDouble(bool* ok = nullptr) const;
 
-    static String number(int n);
+    static String number(int n, int base = 10);
     static String number(size_t n);
     static String number(double n, int prec = 6);
 
@@ -274,8 +290,11 @@ private:
 class StringList : public std::vector<String>
 {
 public:
+    StringList() = default;
+    StringList(const QStringList& l);
 
     StringList& operator <<(const String& s) { push_back(s); return *this; }
+    StringList& append(const String& s) { push_back(s); return *this; }
 
     size_t indexOf(const String& s) const { return mu::indexOf(*this, s); }
     bool contains(const String& s) const { return mu::contains(*this, s); }

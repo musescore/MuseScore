@@ -321,7 +321,7 @@ void TextLineBaseSegment::layout()
         _endText->setTrack(track());
         _endText->layout();
     } else {
-        _endText->setXmlText("");
+        _endText->setXmlText(u"");
     }
 
     PointF pp1;

@@ -105,7 +105,7 @@ qreal MScore::nudgeStep10;
 qreal MScore::nudgeStep50;
 int MScore::defaultPlayDuration;
 
-QString MScore::lastError;
+String MScore::lastError;
 int MScore::sampleRate  = 44100;
 int MScore::mtcType;
 
@@ -178,19 +178,19 @@ void MScore::init()
     }
 
 #ifdef Q_OS_WIN
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
+    QDir dir(QCoreApplication::applicationDirPath() + String("/../" INSTALL_NAME));
     _globalShare = dir.absolutePath() + "/";
 
 #elif defined(Q_OS_MAC)
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
+    QDir dir(QCoreApplication::applicationDirPath() + String("/../Resources"));
     _globalShare = dir.absolutePath() + "/";
 #else
     // Try relative path (needed for portable AppImage and non-standard installations)
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" INSTALL_NAME));
+    QDir dir(QCoreApplication::applicationDirPath() + String("/../share/" INSTALL_NAME));
     if (dir.exists()) {
         _globalShare = dir.absolutePath() + "/";
     } else { // Fall back to default location (e.g. if binary has moved relative to share)
-        _globalShare = QString(INSTPREFIX "/share/" INSTALL_NAME);
+        _globalShare = String(INSTPREFIX "/share/" INSTALL_NAME);
     }
 #endif
 

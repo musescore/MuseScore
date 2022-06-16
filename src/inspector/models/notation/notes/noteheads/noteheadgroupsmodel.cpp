@@ -60,7 +60,7 @@ QVariant NoteheadGroupsModel::data(const QModelIndex& index, int role) const
     case HeadGroupRole:
         return row;
     case HintRole:
-        return TConv::toUserName(group);
+        return TConv::toUserName(group).toQString();
     case IconCodeRole: {
         auto type = (group == NoteHeadGroup::HEAD_BREVIS_ALT) ? NoteHeadType::HEAD_BREVIS : NoteHeadType::HEAD_QUARTER;
         return ScoreFont::fallbackFont()->symCode(Note::noteHead(0, group, type));

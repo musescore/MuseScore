@@ -140,15 +140,15 @@ public:
     mu::engraving::Score* score() { return toScore(e); }
     const mu::engraving::Score* score() const { return toScore(e); }
 
-    QString composer() { return score()->metaTag("composer"); }
+    QString composer() { return score()->metaTag(u"composer"); }
     int duration() { return score()->duration(); }
     int harmonyCount() { return score()->harmonyCount(); }
     bool hasHarmonies() { return score()->hasHarmonies(); }
     bool hasLyrics() { return score()->hasLyrics(); }
     int keysig() { return score()->keysig(); }
     int lyricCount() { return score()->lyricCount(); }
-    QString lyricist() { return score()->metaTag("lyricist"); }   // not the meanwhile obsolete "poet"
-    QString title() { return score()->metaTag("workTitle"); }
+    QString lyricist() { return score()->metaTag(u"lyricist"); }   // not the meanwhile obsolete "poet"
+    QString title() { return score()->metaTag(u"workTitle"); }
     mu::engraving::PluginAPI::Selection* selection() { return selectionWrap(&score()->selection()); }
     MStyle* style() { return wrap(&score()->style(), score()); }
 

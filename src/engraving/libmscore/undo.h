@@ -1525,12 +1525,12 @@ public:
 class ChangeMetaTags : public UndoCommand
 {
     Score* score;
-    std::map<QString, QString> metaTags;
+    std::map<String, String> metaTags;
 
     void flip(EditData*) override;
 
 public:
-    ChangeMetaTags(Score* s, const std::map<QString, QString>& m)
+    ChangeMetaTags(Score* s, const std::map<String, String>& m)
         : score(s), metaTags(m) {}
     UNDO_NAME("ChangeMetaTags")
     UNDO_CHANGED_OBJECTS({ score });

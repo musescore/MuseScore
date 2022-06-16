@@ -44,7 +44,7 @@ public:
     int numMeasures() const { return m_numMeasures; }
     void setSymId(SymId id) { m_symId = id; }
     SymId symId() const { return m_symId; }
-    void setNumberSym(int n) { m_numberSym = timeSigSymIdsFromString(QString::number(n)); }
+    void setNumberSym(int n) { m_numberSym = timeSigSymIdsFromString(String::number(n)); }
     SymIdList numberSym() const { return m_numberSym; }
     void setNumberPos(qreal d) { m_numberPos = d; }
     qreal numberPos() const { return m_numberPos; }

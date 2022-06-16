@@ -23,7 +23,6 @@
 #ifndef MU_ENGRAVING_TYPESCONV_H
 #define MU_ENGRAVING_TYPESCONV_H
 
-#include <QString>
 #include "types/string.h"
 #include "types.h"
 
@@ -33,62 +32,62 @@ class TConv
 public:
     TConv() = default;
 
-    static QString toXml(const std::vector<int>& v);
-    static std::vector<int> fromXml(const QString& tag, const std::vector<int>& def);
+    static String toXml(const std::vector<int>& v);
+    static std::vector<int> fromXml(const String& tag, const std::vector<int>& def);
 
-    static QString toXml(Align v);
-    static Align fromXml(const QString& str, Align def);
+    static String toXml(Align v);
+    static Align fromXml(const String& str, Align def);
     static AlignH fromXml(const AsciiStringView& str, AlignH def);
     static AlignV fromXml(const AsciiStringView& str, AlignV def);
 
-    static QString toUserName(SymId v);
+    static String toUserName(SymId v);
     static AsciiStringView toXml(SymId v);
     static SymId fromXml(const AsciiStringView& tag, SymId def);
 
-    static QString toUserName(Orientation v);
+    static String toUserName(Orientation v);
     static AsciiStringView toXml(Orientation v);
     static Orientation fromXml(const AsciiStringView& tag, Orientation def);
 
-    static QString toUserName(NoteHeadType v);
+    static String toUserName(NoteHeadType v);
     static AsciiStringView toXml(NoteHeadType v);
     static NoteHeadType fromXml(const AsciiStringView& tag, NoteHeadType def);
-    static QString toUserName(NoteHeadScheme v);
+    static String toUserName(NoteHeadScheme v);
     static AsciiStringView toXml(NoteHeadScheme v);
     static NoteHeadScheme fromXml(const AsciiStringView& tag, NoteHeadScheme def);
-    static QString toUserName(NoteHeadGroup v);
+    static String toUserName(NoteHeadGroup v);
     static AsciiStringView toXml(NoteHeadGroup v);
     static NoteHeadGroup fromXml(const AsciiStringView& tag, NoteHeadGroup def);
 
-    static QString toUserName(ClefType v);
+    static String toUserName(ClefType v);
     static AsciiStringView toXml(ClefType v);
     static ClefType fromXml(const AsciiStringView& tag, ClefType def);
 
-    static QString toUserName(DynamicType v);
+    static String toUserName(DynamicType v);
     static SymId symId(DynamicType v);
     static DynamicType dynamicType(SymId v);
     static DynamicType dynamicType(const AsciiStringView& string);
     static AsciiStringView toXml(DynamicType v);
     static DynamicType fromXml(const AsciiStringView& tag, DynamicType def);
-    static QString toUserName(DynamicRange v);
-    static QString toXml(DynamicRange v);
+    static String toUserName(DynamicRange v);
+    static String toXml(DynamicRange v);
     static DynamicRange fromXml(const AsciiStringView& tag, DynamicRange def);
-    static QString toUserName(DynamicSpeed v);
+    static String toUserName(DynamicSpeed v);
     static AsciiStringView toXml(DynamicSpeed v);
     static DynamicSpeed fromXml(const AsciiStringView& tag, DynamicSpeed def);
 
-    static QString toUserName(HookType v);
-    static QString toXml(HookType v);
+    static String toUserName(HookType v);
+    static String toXml(HookType v);
     static HookType fromXml(const AsciiStringView& tag, HookType def);
 
-    static QString toUserName(KeyMode v);
+    static String toUserName(KeyMode v);
     static AsciiStringView toXml(KeyMode v);
     static KeyMode fromXml(const AsciiStringView& tag, KeyMode def);
 
-    static QString toUserName(TextStyleType v);
+    static String toUserName(TextStyleType v);
     static AsciiStringView toXml(TextStyleType v);
     static TextStyleType fromXml(const AsciiStringView& tag, TextStyleType def);
 
-    static QString toUserName(ChangeMethod v);
+    static String toUserName(ChangeMethod v);
     static AsciiStringView toXml(ChangeMethod v);
     static ChangeMethod fromXml(const AsciiStringView& tag, ChangeMethod def);
     static std::map<int /*positionTick*/, int> easingValueCurve(const int ticksDuration, const int stepsCount, const int amplitude,
@@ -96,15 +95,15 @@ public:
     static std::map<int /*positionTick*/, double> easingValueCurve(const int ticksDuration, const int stepsCount, const double amplitude,
                                                                    const ChangeMethod method);
 
-    static QString toXml(const PitchValue& v);
+    static String toXml(const PitchValue& v);
 
-    static QString toXml(AccidentalRole v);
+    static String toXml(AccidentalRole v);
     static AccidentalRole fromXml(const AsciiStringView& tag, AccidentalRole def);
 
-    static QString toXml(BeatsPerSecond v);
+    static String toXml(BeatsPerSecond v);
     static BeatsPerSecond fromXml(const AsciiStringView& tag, BeatsPerSecond def);
 
-    static QString toUserName(DurationType v);
+    static String toUserName(DurationType v);
     static AsciiStringView toXml(DurationType v);
     static DurationType fromXml(const AsciiStringView& tag, DurationType def);
 

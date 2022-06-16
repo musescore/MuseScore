@@ -141,7 +141,7 @@ void MMRest::draw(mu::draw::Painter* painter) const
 void MMRest::layout()
 {
     m_number = measure()->mmRestCount();
-    m_numberSym = timeSigSymIdsFromString(QString("%1").arg(m_number));
+    m_numberSym = timeSigSymIdsFromString(String::number(m_number));
 
     for (EngravingItem* e : el()) {
         e->layout();

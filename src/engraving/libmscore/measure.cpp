@@ -618,9 +618,9 @@ void Measure::layoutMeasureNumber()
 {
     bool smn = showsMeasureNumber();
 
-    QString s;
+    String s;
     if (smn) {
-        s = QString("%1").arg(no() + 1);
+        s = String::number(no() + 1);
     }
 
     unsigned nn = 1;
@@ -682,14 +682,14 @@ void Measure::layoutMMRestRange()
         return;
     }
 
-    QString s;
+    String s;
     if (mmRestCount() > 1) {
         // middle char is an en dash (not em)
-        s = QString("%1–%2").arg(no() + 1).arg(no() + mmRestCount());
+        s = String("%1–%2").arg(no() + 1).arg(no() + mmRestCount());
     } else {
         // If the minimum range to create a mmrest is set to 1,
         // then simply show the measure number as there is no range
-        s = QString("%1").arg(no() + 1);
+        s = String::number(no() + 1);
     }
 
     for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
@@ -3199,7 +3199,7 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff)
 
 String Measure::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), QString::number(no() + 1));
+    return String("%1: %2").arg(EngravingItem::accessibleInfo(), String::number(no() + 1));
 }
 
 //-----------------------------------------------------------------------------

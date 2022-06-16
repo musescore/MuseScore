@@ -225,7 +225,7 @@ private:
     SymId _cachedNoteheadSym;   // use in draw to avoid recomputing at every update
     SymId _cachedSymNull;   // additional symbol for some transparent notehead
 
-    QString _fretString;
+    String _fretString;
 
     friend class Factory;
     Note(Chord* ch = 0);
@@ -402,7 +402,7 @@ public:
     void setDotsHidden(bool val) { _dotsHidden = val; }
 
     NoteType noteType() const;
-    QString  noteTypeUserName() const;
+    String  noteTypeUserName() const;
 
     ElementList& el() { return _el; }
     const ElementList& el() const { return _el; }

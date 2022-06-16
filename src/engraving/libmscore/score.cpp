@@ -2065,7 +2065,7 @@ Text* Score::getText(TextStyleType tid) const
 //   metaTag
 //---------------------------------------------------------
 
-QString Score::metaTag(const QString& s) const
+String Score::metaTag(const String& s) const
 {
     if (mu::contains(_metaTags, s)) {
         return _metaTags.at(s);
@@ -2078,7 +2078,7 @@ QString Score::metaTag(const QString& s) const
 //   setMetaTag
 //---------------------------------------------------------
 
-void Score::setMetaTag(const QString& tag, const QString& val)
+void Score::setMetaTag(const String& tag, const String& val)
 {
     _metaTags.insert_or_assign(tag, val);
 }
@@ -2824,7 +2824,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
         } else if (newLocation != _staves[i]->idx() && mu::contains(systemObjectStaves, _staves[i])) {
             // system object staff was moved somewhere, put the system objects at the top of its new group
             staff_idx_t topOfGroup = newLocation;
-            QString family = _staves[dst[newLocation]]->part()->familyId();
+            String family = _staves[dst[newLocation]]->part()->familyId();
             while (topOfGroup > 0) {
                 if (_staves[dst[topOfGroup - 1]]->part()->familyId() != family) {
                     // the staff above is of a different instrument family, current topOfGroup is destination
@@ -3910,7 +3910,7 @@ void Score::lassoSelectEnd(bool convertToRange)
 //   addLyrics
 //---------------------------------------------------------
 
-void Score::addLyrics(const Fraction& tick, staff_idx_t staffIdx, const QString& txt)
+void Score::addLyrics(const Fraction& tick, staff_idx_t staffIdx, const String& txt)
 {
     if (txt.trimmed().isEmpty()) {
         return;
@@ -4126,7 +4126,7 @@ std::list<Score*> Score::scoreList()
 //   switchLayer
 //---------------------------------------------------------
 
-bool Score::switchLayer(const QString& s)
+bool Score::switchLayer(const String& s)
 {
     int layerIdx = 0;
     for (const Layer& l : layer()) {
@@ -4705,9 +4705,9 @@ int Score::harmonyCount()
 //   extractLyrics
 //---------------------------------------------------------
 
-QString Score::extractLyrics()
+String Score::extractLyrics()
 {
-    QString result;
+    String result;
     masterScore()->setExpandRepeats(true);
     SegmentType st = SegmentType::ChordRest;
     for (size_t track = 0; track < ntracks(); track += VOICES) {
@@ -4740,9 +4740,9 @@ QString Score::extractLyrics()
                         continue;
                     }
                     found = true;
-                    QString lyric = l->plainText().trimmed();
+                    String lyric = l->plainText().trimmed();
                     if (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END) {
-                        result += lyric + " ";
+                        result += lyric + u" ";
                     } else if (l->syllabic() == Lyrics::Syllabic::BEGIN || l->syllabic() == Lyrics::Syllabic::MIDDLE) {
                         result += lyric;
                     }
@@ -4775,9 +4775,9 @@ QString Score::extractLyrics()
                             continue;
                         }
                         found = true;
-                        QString lyric = l->plainText().trimmed();
+                        String lyric = l->plainText().trimmed();
                         if (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END) {
-                            result += lyric + " ";
+                            result += lyric + u" ";
                         } else if (l->syllabic() == Lyrics::Syllabic::BEGIN || l->syllabic() == Lyrics:: Syllabic::MIDDLE) {
                             result += lyric;
                         }
@@ -4786,7 +4786,7 @@ QString Score::extractLyrics()
             }
         }
         if (found) {
-            result += "\n\n";
+            result += u"\n\n";
         }
     }
     return result.trimmed();
@@ -4849,7 +4849,7 @@ int Score::durationWithoutRepeats()
 //   createRehearsalMarkText
 //---------------------------------------------------------
 
-QString Score::createRehearsalMarkText(RehearsalMark* current) const
+String Score::createRehearsalMarkText(RehearsalMark* current) const
 {
     Fraction tick = current->segment()->tick();
     RehearsalMark* before = 0;
@@ -4869,9 +4869,9 @@ QString Score::createRehearsalMarkText(RehearsalMark* current) const
             break;
         }
     }
-    QString s = "A";
-    QString s1 = before ? before->xmlText() : "";
-    QString s2 = after ? after->xmlText() : "";
+    String s = u"A";
+    String s1 = before ? before->xmlText() : u"";
+    String s2 = after ? after->xmlText() : u"";
     if (s1.isEmpty()) {
         return s;
     }
@@ -4881,14 +4881,14 @@ QString Score::createRehearsalMarkText(RehearsalMark* current) const
         return s;
     } else if (s == s2) {
         // next in sequence already present
-        if (s1[0].isLetter()) {
+        if (s1.at(0).isLetter()) {
             if (s1.size() == 2) {
-                s = s1[0] + QChar::fromLatin1(s1[1].toLatin1() + 1);          // BB, BC, CC
+                s = String(s1.at(0)) + Char::fromAscii(s1.at(1).toAscii() + 1);          // BB, BC, CC
             } else {
-                s = s1 + QChar::fromLatin1('1');                              // B, B1, C
+                s = s1 + u'1';                              // B, B1, C
             }
         } else {
-            s = s1 + QChar::fromLatin1('A');                                  // 2, 2A, 3
+            s = s1 + u'A';                                  // 2, 2A, 3
         }
     }
     return s;
@@ -4905,26 +4905,26 @@ QString Score::createRehearsalMarkText(RehearsalMark* current) const
 //      If number of previous rehearsal mark matches measure number, assume use of measure numbers throughout
 //---------------------------------------------------------
 
-QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const
+String Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const
 {
-    QString previousText = previous->xmlText();
-    QString fallback = current ? current->xmlText() : previousText + "'";
+    String previousText = previous->xmlText();
+    String fallback = current ? current->xmlText() : previousText + u"'";
 
     if (previousText.size() == 1 && previousText.at(0).isLetter()) {
         // single letter sequence
         if (previousText == "Z") {
-            return "AA";
+            return u"AA";
         } else if (previousText == "z") {
-            return "aa";
+            return u"aa";
         } else {
-            return QChar::fromLatin1(previousText.at(0).toLatin1() + 1);
+            return String(Char::fromAscii(previousText.at(0).toAscii() + 1));
         }
     } else if (previousText.size() == 2 && previousText.at(0).isLetter() && previousText.at(1).isLetter()) {
         // double letter sequence
         if (previousText.at(0) == previousText.at(1)) {
             // repeated letter sequence
             if (previousText.toUpper() != "ZZ") {
-                QString c = QChar::fromLatin1(previousText.at(0).toLatin1() + 1);
+                String c = Char::fromAscii(previousText.at(0).toAscii() + 1);
                 return c + c;
             } else {
                 return fallback;
@@ -4941,11 +4941,11 @@ QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* cur
         } else if (current && n == previous->segment()->measure()->no() + 1) {
             // use measure number
             n = current->segment()->measure()->no() + 1;
-            return QString("%1").arg(n);
+            return String::number(n);
         } else {
             // use number sequence
             n = previousText.toInt() + 1;
-            return QString("%1").arg(n);
+            return String::number(n);
         }
     }
 }
@@ -5177,22 +5177,22 @@ void Score::setStyle(const MStyle& s, const bool overlap)
 //   getTextStyleUserName
 //---------------------------------------------------------
 
-QString Score::getTextStyleUserName(TextStyleType tid)
+String Score::getTextStyleUserName(TextStyleType tid)
 {
-    QString name = "";
+    String name;
     if (int(tid) >= int(TextStyleType::USER1) && int(tid) <= int(TextStyleType::USER12)) {
         int idx = int(tid) - int(TextStyleType::USER1);
         Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name,
                       Sid::user7Name, Sid::user8Name, Sid::user9Name, Sid::user10Name, Sid::user11Name, Sid::user12Name };
         name = styleSt(sid[idx]);
     }
-    if (name == "") {
+    if (name == u"") {
         name = TConv::toUserName(tid);
     }
     return name;
 }
 
-QString Score::name() const
+String Score::name() const
 {
     return _excerpt ? _excerpt->name() : String();
 }
