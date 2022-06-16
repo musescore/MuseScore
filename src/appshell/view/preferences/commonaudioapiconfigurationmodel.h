@@ -24,13 +24,22 @@
 
 #include <QObject>
 
+#include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "audio/iaudiodriver.h"
+
 namespace mu::appshell {
-class CommonAudioApiConfigurationModel : public QObject
+class CommonAudioApiConfigurationModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(int currentDeviceIndex READ currentDeviceIndex WRITE setCurrentDeviceIndex NOTIFY currentDeviceIndexChanged)
+    Q_PROPERTY(QStringList deviceList READ deviceList NOTIFY deviceListChanged)
+
     Q_PROPERTY(int currentSampleRateIndex READ currentSampleRateIndex WRITE setCurrentSampleRateIndex NOTIFY currentSampleRateIndexChanged)
+
+    INJECT(appshell, audio::IAudioDriver, audioDriver)
 
 public:
     explicit CommonAudioApiConfigurationModel(QObject* parent = nullptr);
@@ -38,7 +47,9 @@ public:
     int currentDeviceIndex() const;
     int currentSampleRateIndex() const;
 
-    Q_INVOKABLE QStringList deviceList() const;
+    Q_INVOKABLE void load();
+
+    QStringList deviceList() const;
     Q_INVOKABLE QStringList sampleRateHzList() const;
 
 public slots:
@@ -46,8 +57,10 @@ public slots:
     void setCurrentSampleRateIndex(int index);
 
 signals:
-    void currentDeviceIndexChanged(int index);
-    void currentSampleRateIndexChanged(int index);
+    void currentDeviceIndexChanged();
+    void deviceListChanged();
+
+    void currentSampleRateIndexChanged();
 
 private:
     int m_currentDeviceIndex = 0;
