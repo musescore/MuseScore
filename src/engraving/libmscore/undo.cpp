@@ -90,6 +90,7 @@
 #include "textedit.h"
 #include "textline.h"
 #include "linkedobjects.h"
+#include "stafftypechange.h"
 
 #include "masterscore.h"
 
@@ -1991,6 +1992,7 @@ std::vector<Clef*> InsertRemoveMeasures::getCourtesyClefs(Measure* m)
 void InsertRemoveMeasures::insertMeasures()
 {
     Score* score = fm->score();
+
     std::list<Clef*> clefs;
     std::vector<Clef*> prevMeasureClefs;
     std::list<KeySig*> keys;
@@ -2044,6 +2046,21 @@ void InsertRemoveMeasures::insertMeasures()
     }
 
     score->setLayoutAll();
+
+    if (Measure* nextMeasure = lm->nextMeasure()) {
+        for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            Staff* staff = score->staff(staffIdx);
+            if (staff->isStaffTypeStartFrom(fm->tick())) {
+                staff->moveStaffType(fm->tick(), nextMeasure->tick());
+
+                for (auto el : nextMeasure->el()) {
+                    if (el && el->isStaffTypeChange()) {
+                        toStaffTypeChange(el)->setStaffType(staff->staffType(nextMeasure->tick()), false);
+                    }
+                }
+            }
+        }
+    }
 
     //
     // connect ties
@@ -2101,6 +2118,22 @@ void InsertRemoveMeasures::removeMeasures()
             break;
         }
     }
+
+    if (Measure* nextMeasure = lm->nextMeasure()) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            Staff* staff = score->staff(staffIdx);
+            if (staff->isStaffTypeStartFrom(nextMeasure->tick())) {
+                staff->moveStaffType(nextMeasure->tick(), fm->tick());
+
+                for (auto el : nextMeasure->el()) {
+                    if (el && el->isStaffTypeChange()) {
+                        toStaffTypeChange(el)->setStaffType(staff->staffType(fm->tick()), false);
+                    }
+                }
+            }
+        }
+    }
+
     score->measures()->remove(fm, lm);
 
     score->setUpTempoMap();

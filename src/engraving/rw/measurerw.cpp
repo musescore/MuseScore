@@ -615,6 +615,7 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
         if (e->generated()) {
             continue;
         }
+
         bool writeSystem = writeSystemElements;
         if (e->systemFlag()) {
             ElementType et = e->type();
@@ -629,11 +630,13 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
                 writeSystem = (e->staffIdx() == staff); // always show these on appropriate staves
             }
         }
+
         if (e->staffIdx() != staff) {
-            if (e->systemFlag() && !writeSystem) {
+            if (!e->systemFlag() || (e->systemFlag() && !writeSystem)) {
                 continue;
             }
         }
+
         e->write(xml);
     }
     Q_ASSERT(measure->first());
