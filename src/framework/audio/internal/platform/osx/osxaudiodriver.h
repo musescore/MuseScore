@@ -24,7 +24,12 @@
 
 #include <memory>
 #include <map>
+
 #include <MacTypes.h>
+
+#include "modularity/ioc.h"
+#include "iaudioconfiguration.h"
+
 #include "iaudiodriver.h"
 
 struct AudioTimeStamp;
@@ -34,6 +39,8 @@ struct OpaqueAudioQueue;
 namespace mu::audio {
 class OSXAudioDriver : public IAudioDriver
 {
+    INJECT(audio, IAudioConfiguration, configuration)
+
 public:
     OSXAudioDriver();
     ~OSXAudioDriver();
@@ -48,6 +55,9 @@ public:
 
     std::string outputDevice() const override;
     bool selectOutputDevice(const std::string& name) override;
+    bool resetToDefaultOutputDevice() override;
+    async::Notification outputDeviceChanged() const override;
+
     std::vector<std::string> availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
     void updateDeviceMap();
@@ -63,6 +73,7 @@ private:
 
     std::shared_ptr<Data> m_data = nullptr;
     std::map<unsigned int, std::string> m_outputDevices = {}, m_inputDevices = {};
+    async::Notification m_outputDeviceChanged;
     async::Notification m_availableOutputDevicesChanged;
     std::string m_deviceName = DEFAULT_DEVICE_NAME;
 };
