@@ -56,7 +56,7 @@ mu::async::Channel<mu::io::paths_t> VstConfiguration::userVstDirectoriesChanged(
     return m_userVstDirsChanged;
 }
 
-mu::io::path_t VstConfiguration::knownPluginsList() const
+mu::io::path_t VstConfiguration::knownPluginsFile() const
 {
     return globalConfig()->userAppDataPath() + KNOWN_PLUGINS_LIST_FILENAME;
 }
