@@ -3263,6 +3263,7 @@ mu::Ret NotationInteraction::repeatSelection()
             }
             apply();
         }
+        return make_ok();
     }
 
     if (!selection.isRange()) {
