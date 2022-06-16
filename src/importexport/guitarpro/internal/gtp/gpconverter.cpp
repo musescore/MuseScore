@@ -1535,7 +1535,11 @@ void GPConverter::addTapping(const GPNote* gpnote, Note* note)
         return;
     }
 
-    addTextToNote("T", note);
+    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
+    art->setSymId(SymId::guitarRightHandTapping);
+    if (!note->score()->toggleArticulation(note, art)) {
+        delete art;
+    }
 }
 
 void GPConverter::addSlide(const GPNote* gpnote, Note* note)
@@ -2044,8 +2048,9 @@ void GPConverter::addSlapped(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto ch = static_cast<Chord*>(cr);
-    addTextToNote("S", ch->upNote());
+    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
+    art->setTextType(Articulation::TextType::SLAP);
+    cr->add(art);
 }
 
 void GPConverter::addPopped(const GPBeat* beat, ChordRest* cr)
@@ -2054,8 +2059,9 @@ void GPConverter::addPopped(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto ch = static_cast<Chord*>(cr);
-    addTextToNote("P", ch->upNote());
+    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
+    art->setTextType(Articulation::TextType::POP);
+    cr->add(art);
 }
 
 void GPConverter::addBrush(const GPBeat* beat, ChordRest* cr)
