@@ -33,6 +33,9 @@ https://musescore.com/contact
 Change log
 ----------
 
+17 May 2022 (Martin Keary & Simon Smith) Leland Version 0.77
+- Adjusted kerning for dynamics and octave symbols
+
 9 May 2022 (Martin Keary & Simon Smith) Leland Version 0.76
 - Leland
   - Added:
@@ -42,6 +45,7 @@ Change log
     - Individual notes (E1D3-E1E6)
     - Tremolos (E220-E22A) - now centered on x=0
     - Accidental parentheses (E26A, E26B, and derived ligatures)
+    - Octaves (E510-E51F)
 - Leland Text
   - Added:
     - Quarter note (crotchet) stem up (E1D5)
