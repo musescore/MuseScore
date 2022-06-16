@@ -145,26 +145,6 @@ QDateTime FileInfo::lastModified() const
     return fileSystem()->lastModified(m_filePath);
 }
 
-#if defined(Q_OS_WIN)
-bool FileInfo::isRelative() const
-{
-    return m_filePath.isEmpty()
-           || (m_filePath.at(0) != '/'
-               && !(m_filePath.length() >= 2 && m_filePath.at(1) == ':'));
-}
-
-bool FileInfo::isAbsolute() const
-{
-    return (m_filePath.length() >= 3
-            && m_filePath.at(0).isLetter()
-            && m_filePath.at(1) == ':'
-            && m_filePath.at(2) == '/')
-           || (m_filePath.length() >= 2
-               && m_filePath.at(0) == '/'
-               && m_filePath.at(1) == '/');
-}
-
-#else
 bool FileInfo::isRelative() const
 {
     return !isAbsolute();
@@ -172,10 +152,18 @@ bool FileInfo::isRelative() const
 
 bool FileInfo::isAbsolute() const
 {
+#ifdef Q_OS_WIN
+    return (m_filePath.length() >= 3
+            && m_filePath.at(0).isLetter()
+            && m_filePath.at(1) == ':'
+            && m_filePath.at(2) == '/')
+           || (!m_filePath.isEmpty()
+               && (m_filePath.at(0) == '/'
+                   || m_filePath.at(0) == ':'));
+#else
     return !m_filePath.isEmpty() && (m_filePath.at(0) == '/' || m_filePath.at(0) == ':');
-}
-
 #endif
+}
 
 bool FileInfo::exists() const
 {
