@@ -125,7 +125,7 @@ QWidget* WidgetView::qWidget() const
 void WidgetView::updateSizeConstraints()
 {
     if (qWidget()) {
-        qWidget()->setMinimumSize(width(), height());
+        qWidget()->setFixedSize(width(), height());
     }
 }
 
