@@ -358,12 +358,12 @@ void NotationActionController::init()
     registerAction("grace16after", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE16_AFTER);
     registerAction("grace32after", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE32_AFTER);
 
-    registerAction("beam-start", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN);
-    registerAction("beam-mid", &Interaction::addBeamToSelectedChordRests, BeamMode::MID);
-    registerAction("no-beam", &Interaction::addBeamToSelectedChordRests, BeamMode::NONE);
-    registerAction("beam-32", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN32);
-    registerAction("beam-64", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN64);
-    registerAction("auto-beam", &Interaction::addBeamToSelectedChordRests, BeamMode::AUTO);
+    registerAction("beam-auto", &Interaction::addBeamToSelectedChordRests, BeamMode::AUTO);
+    registerAction("beam-none", &Interaction::addBeamToSelectedChordRests, BeamMode::NONE);
+    registerAction("beam-break-left", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN);
+    registerAction("beam-break-inner-8th", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN32);
+    registerAction("beam-break-inner-16th", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN64);
+    registerAction("beam-join", &Interaction::addBeamToSelectedChordRests, BeamMode::MID);
 
     registerAction("add-brackets", &Interaction::addBracketsToSelection, BracketsType::Brackets);
     registerAction("add-parentheses", &Interaction::addBracketsToSelection, BracketsType::Parentheses);

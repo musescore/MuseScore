@@ -99,8 +99,8 @@ FocusableItem {
 
                     model: [
                         { text: qsTrc("inspector", "None"), value: Beam.FEATHERING_NONE, title: qsTrc("inspector", "None") },
-                        { iconCode: IconCode.FEATHERED_LEFT_HEIGHT, value: Beam.FEATHERING_LEFT, title: qsTrc("inspector", "Left") },
-                        { iconCode: IconCode.FEATHERED_RIGHT_HEIGHT, value: Beam.FEATHERING_RIGHT, title: qsTrc("inspector", "Right") }
+                        { iconCode: IconCode.BEAM_FEATHERED_DECELERATE, value: Beam.FEATHERED_DECELERATE, title: qsTrc("inspector", "Decelerate") },
+                        { iconCode: IconCode.BEAM_FEATHERED_ACCELERATE, value: Beam.FEATHERED_ACCELERATE, title: qsTrc("inspector", "Accelerate") }
                     ]
 
                     delegate: FlatRadioButton {
@@ -137,7 +137,7 @@ FocusableItem {
                         propertyItem: root.model ? root.model.featheringHeightLeft : null
                         enabled: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable : false
 
-                        icon: IconCode.FEATHERED_LEFT_HEIGHT
+                        icon: IconCode.BEAM_FEATHERING_LEFT_HEIGHT
                         maxValue: 4
                         minValue: 0
                         step: 0.1
@@ -157,7 +157,7 @@ FocusableItem {
                         propertyItem: root.model ? root.model.featheringHeightRight : null
                         enabled: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable : false
 
-                        icon: IconCode.FEATHERED_RIGHT_HEIGHT
+                        icon: IconCode.BEAM_FEATHERING_RIGHT_HEIGHT
                         iconMode: IncrementalPropertyControl.Right
                         maxValue: 4
                         minValue: 0

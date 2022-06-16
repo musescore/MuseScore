@@ -1786,8 +1786,8 @@ bool Beam::acceptDrop(EditData& data) const
 
     if (e->isActionIcon()) {
         ActionIconType type = toActionIcon(e)->actionType();
-        return type == ActionIconType::BEAM_FEATHERED_SLOWER
-               || type == ActionIconType::BEAM_FEATHERED_FASTER;
+        return type == ActionIconType::BEAM_FEATHERED_DECELERATE
+               || type == ActionIconType::BEAM_FEATHERED_ACCELERATE;
     }
 
     return false;
@@ -1805,9 +1805,9 @@ EngravingItem* Beam::drop(EditData& data)
 
     ActionIcon* e = toActionIcon(data.dropElement);
 
-    if (e->actionType() == ActionIconType::BEAM_FEATHERED_SLOWER) {
+    if (e->actionType() == ActionIconType::BEAM_FEATHERED_DECELERATE) {
         setAsFeathered(true /*slower*/);
-    } else if (e->actionType() == ActionIconType::BEAM_FEATHERED_FASTER) {
+    } else if (e->actionType() == ActionIconType::BEAM_FEATHERED_ACCELERATE) {
         setAsFeathered(false /*slower*/);
     }
 
@@ -2026,18 +2026,18 @@ Fraction Beam::ticks() const
 ActionIconType Beam::actionIconTypeForBeamMode(BeamMode mode)
 {
     switch (mode) {
-    case BeamMode::BEGIN:
-        return ActionIconType::BEAM_START;
-    case BeamMode::MID:
-        return ActionIconType::BEAM_MID;
-    case BeamMode::NONE:
-        return ActionIconType::BEAM_NONE;
-    case BeamMode::BEGIN32:
-        return ActionIconType::BEAM_BEGIN_32;
-    case BeamMode::BEGIN64:
-        return ActionIconType::BEAM_BEGIN_64;
     case BeamMode::AUTO:
         return ActionIconType::BEAM_AUTO;
+    case BeamMode::NONE:
+        return ActionIconType::BEAM_NONE;
+    case BeamMode::BEGIN:
+        return ActionIconType::BEAM_BREAK_LEFT;
+    case BeamMode::BEGIN32:
+        return ActionIconType::BEAM_BREAK_INNER_8TH;
+    case BeamMode::BEGIN64:
+        return ActionIconType::BEAM_BREAK_INNER_16TH;
+    case BeamMode::MID:
+        return ActionIconType::BEAM_JOIN;
     default:
         break;
     }

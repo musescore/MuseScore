@@ -565,35 +565,45 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Grace: 32nd after"),
              IconCode::Code::GRACE32_AFTER
              ),
-    UiAction("beam-start",
+    UiAction("beam-auto",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Beam start"),
-             IconCode::Code::BEAM_START
+             QT_TRANSLATE_NOOP("action", "Auto beam"),
+             IconCode::Code::AUTO_TEXT
              ),
-    UiAction("beam-mid",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Beam middle"),
-             IconCode::Code::BEAM_MIDDLE
-             ),
-    UiAction("no-beam",
+    UiAction("beam-none",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "No beam"),
              IconCode::Code::NOTE_HEAD_EIGHTH
              ),
-    UiAction("beam-32",
+    UiAction("beam-break-left",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Beam 16th sub"),
-             IconCode::Code::BEAM_32
+             QT_TRANSLATE_NOOP("action", "Break beam left"),
+             IconCode::Code::BEAM_BREAK_LEFT
              ),
-    UiAction("beam-64",
+    UiAction("beam-break-inner-8th",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Beam 32nd sub"),
-             IconCode::Code::BEAM_64
+             QT_TRANSLATE_NOOP("action", "Break inner beams (8th)"),
+             IconCode::Code::BEAM_BREAK_INNER_8TH
              ),
-    UiAction("auto-beam",
+    UiAction("beam-break-inner-16th",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Auto beam"),
-             IconCode::Code::AUTO_TEXT
+             QT_TRANSLATE_NOOP("action", "Break inner beams (16th)"),
+             IconCode::Code::BEAM_BREAK_INNER_16TH
+             ),
+    UiAction("beam-join",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Join beams"),
+             IconCode::Code::BEAM_JOIN
+             ),
+    UiAction("beam-feathered-decelerate",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Feathered beam, decelerate"),
+             IconCode::Code::BEAM_FEATHERED_DECELERATE
+             ),
+    UiAction("beam-feathered-accelerate",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Feathered beam, accelerate"),
+             IconCode::Code::BEAM_FEATHERED_ACCELERATE
              ),
     UiAction("add-brackets",
              mu::context::UiCtxNotationOpened,

@@ -58,11 +58,11 @@ InspectorPropertyView {
 
             model: [
                 { value: Beam.MODE_AUTO, iconCode: IconCode.AUTO_TEXT, hint: qsTrc("inspector", "Auto") },
-                { value: Beam.MODE_BEGIN, iconCode: IconCode.BEAM_START, hint: qsTrc("inspector", "Begin") },
-                { value: Beam.MODE_MID, iconCode: IconCode.BEAM_MIDDLE, hint: qsTrc("inspector", "Middle") },
-                { value: Beam.MODE_NONE, iconCode: IconCode.NOTE_HEAD_EIGHTH, hint: qsTrc("inspector", "None") },
-                { value: Beam.MODE_BEGIN32, iconCode: IconCode.BEAM_32, hint: qsTrc("inspector", "Begin 32") },
-                { value: Beam.MODE_BEGIN64, iconCode: IconCode.BEAM_64, hint: qsTrc("inspector", "Begin 64") }
+                { value: Beam.MODE_NONE, iconCode: IconCode.NOTE_HEAD_EIGHTH, hint: qsTrc("inspector", "No beam") },
+                { value: Beam.MODE_BEGIN, iconCode: IconCode.BEAM_BREAK_LEFT, hint: qsTrc("inspector", "Break beam left") },
+                { value: Beam.MODE_BEGIN32, iconCode: IconCode.BEAM_BREAK_INNER_8TH, hint: qsTrc("inspector", "Break inner beams (8th)") },
+                { value: Beam.MODE_BEGIN64, iconCode: IconCode.BEAM_BREAK_INNER_16TH, hint: qsTrc("inspector", "Break inner beams (16th)") },
+                { value: Beam.MODE_MID, iconCode: IconCode.BEAM_JOIN, hint: qsTrc("inspector", "Join beams") },
             ]
 
             delegate: ListItemBlank {
@@ -85,7 +85,7 @@ InspectorPropertyView {
                 StyledIconLabel {
                     anchors.centerIn: parent
                     iconCode: modelData["iconCode"] ?? IconCode.NONE
-                    font.pixelSize: 30
+                    font.pixelSize: 32
                 }
 
                 onClicked: {
