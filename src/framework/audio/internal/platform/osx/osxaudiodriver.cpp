@@ -99,7 +99,7 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    audioQueueSetDeviceName(m_deviceName);
+    audioQueueSetDeviceName(outputDevice());
 
     // Allocate 3 audio buffers. At the same time one used for writing, one for reading and one for reserve
     for (unsigned int i = 0; i < 3; ++i) {
@@ -284,10 +284,27 @@ bool OSXAudioDriver::selectOutputDevice(const std::string& name)
     bool reopen = isOpened();
     close();
     m_deviceName = name;
+
+    bool ok = true;
     if (reopen) {
-        return open(m_data->format, &m_data->format);
+        ok = open(m_data->format, &m_data->format);
     }
-    return true;
+
+    if (ok) {
+        m_outputDeviceChanged.notify();
+    }
+
+    return ok;
+}
+
+bool OSXAudioDriver::resetToDefaultOutputDevice()
+{
+    return selectOutputDevice(DEFAULT_DEVICE_NAME);
+}
+
+mu::async::Notification OSXAudioDriver::outputDeviceChanged() const
+{
+    return m_outputDeviceChanged;
 }
 
 void OSXAudioDriver::resume()
