@@ -82,7 +82,7 @@ bool PedalSettingsModel::isStarSymbolVisible() const
 
 void PedalSettingsModel::setPedalSymbolVisible(bool visible)
 {
-    beginningText()->setValue(visible ? mu::engraving::Pedal::PEDAL_SYMBOL : "");
+    beginningText()->setValue(visible ? mu::engraving::Pedal::PEDAL_SYMBOL.toQString() : "");
 }
 
 void PedalSettingsModel::createProperties()

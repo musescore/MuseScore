@@ -63,23 +63,23 @@ InstrumentName::InstrumentName(System* s)
 //   instrumentNameTypeName
 //---------------------------------------------------------
 
-QString InstrumentName::instrumentNameTypeName() const
+String InstrumentName::instrumentNameTypeName() const
 {
-    return instrumentNameType() == InstrumentNameType::SHORT ? "short" : "long";
+    return instrumentNameType() == InstrumentNameType::SHORT ? u"short" : u"long";
 }
 
 //---------------------------------------------------------
 //   setInstrumentNameType
 //---------------------------------------------------------
 
-void InstrumentName::setInstrumentNameType(const QString& s)
+void InstrumentName::setInstrumentNameType(const String& s)
 {
-    if (s == "short") {
+    if (s == u"short") {
         setInstrumentNameType(InstrumentNameType::SHORT);
-    } else if (s == "long") {
+    } else if (s == u"long") {
         setInstrumentNameType(InstrumentNameType::LONG);
     } else {
-        LOGD("InstrumentName::setSubtype: unknown <%s>", qPrintable(s));
+        LOGD("InstrumentName::setSubtype: unknown <%s>", muPrintable(s));
     }
 }
 

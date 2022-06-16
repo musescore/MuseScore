@@ -441,8 +441,8 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                         }
                     }
                 } else {
-                    ASSERT_X(QString::asprintf("premature end of measure list in track %zu, rest %d/%d",
-                                               _track, duration.numerator(), duration.denominator()));
+                    ASSERT_X(String("premature end of measure list in track %1, rest %2/%3")
+                             .arg(_track).arg(duration.numerator(), duration.denominator()));
                 }
             }
             if (e->isChordRest()) {

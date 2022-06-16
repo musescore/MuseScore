@@ -125,17 +125,17 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
             }
             score->_scoreFont = ScoreFont::fontByName(score->style().styleSt(Sid::MusicalSymbolFont));
         } else if (tag == "copyright" || tag == "rights") {
-            score->setMetaTag("copyright", Text::readXmlText(e, score));
+            score->setMetaTag(u"copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
-            score->setMetaTag("movementNumber", e.readText());
+            score->setMetaTag(u"movementNumber", e.readText());
         } else if (tag == "movement-title") {
-            score->setMetaTag("movementTitle", e.readText());
+            score->setMetaTag(u"movementTitle", e.readText());
         } else if (tag == "work-number") {
-            score->setMetaTag("workNumber", e.readText());
+            score->setMetaTag(u"workNumber", e.readText());
         } else if (tag == "work-title") {
-            score->setMetaTag("workTitle", e.readText());
+            score->setMetaTag(u"workTitle", e.readText());
         } else if (tag == "source") {
-            score->setMetaTag("source", e.readText());
+            score->setMetaTag(u"source", e.readText());
         } else if (tag == "metaTag") {
             QString name = e.attribute("name");
             score->setMetaTag(name, e.readText());

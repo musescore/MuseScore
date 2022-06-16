@@ -84,45 +84,45 @@ void Marker::setMarkerType(Type t)
     switch (t) {
     case Type::SEGNO:
         txt = "<sym>segno</sym>";
-        setLabel("segno");
+        setLabel(u"segno");
         break;
 
     case Type::VARSEGNO:
         txt = "<sym>segnoSerpent1</sym>";
-        setLabel("varsegno");
+        setLabel(u"varsegno");
         break;
 
     case Type::CODA:
         txt = "<sym>coda</sym>";
-        setLabel("codab");
+        setLabel(u"codab");
         break;
 
     case Type::VARCODA:
         txt = "<sym>codaSquare</sym>";
-        setLabel("varcoda");
+        setLabel(u"varcoda");
         break;
 
     case Type::CODETTA:
         txt = "<sym>coda</sym><sym>coda</sym>";
-        setLabel("codetta");
+        setLabel(u"codetta");
         break;
 
     case Type::FINE:
         txt = "Fine";
         initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
-        setLabel("fine");
+        setLabel(u"fine");
         break;
 
     case Type::TOCODA:
         txt = "To Coda";
         initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
-        setLabel("coda");
+        setLabel(u"coda");
         break;
 
     case Type::TOCODASYM:
         txt = "To <font size=\"20\"/><sym>coda</sym>";
         initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
-        setLabel("coda");
+        setLabel(u"coda");
         break;
 
     case Type::USER:
@@ -133,7 +133,7 @@ void Marker::setMarkerType(Type t)
         break;
     }
     if (empty() && txt) {
-        setXmlText(txt);
+        setXmlText(String::fromAscii(txt));
     }
 }
 
@@ -141,9 +141,9 @@ void Marker::setMarkerType(Type t)
 //   markerTypeUserName
 //---------------------------------------------------------
 
-QString Marker::markerTypeUserName() const
+String Marker::markerTypeUserName() const
 {
-    return qtrc("markerType", markerTypeTable[static_cast<int>(_markerType)].name.toUtf8().constData());
+    return mtrc("engraving", markerTypeTable[static_cast<int>(_markerType)].name);
 }
 
 //---------------------------------------------------------
@@ -160,7 +160,7 @@ void Marker::styleChanged()
 //   markerType
 //---------------------------------------------------------
 
-Marker::Type Marker::markerType(const QString& s) const
+Marker::Type Marker::markerType(const String& s) const
 {
     if (s == "segno") {
         return Type::SEGNO;
@@ -210,7 +210,7 @@ void Marker::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "label") {
-            QString s(e.readText());
+            String s(e.readText());
             setLabel(s);
             mt = markerType(s);
         } else if (!TextBase::readProperties(e)) {
@@ -236,7 +236,7 @@ void Marker::write(XmlWriter& xml) const
 //   undoSetLabel
 //---------------------------------------------------------
 
-void Marker::undoSetLabel(const QString& s)
+void Marker::undoSetLabel(const String& s)
 {
     undoChangeProperty(Pid::LABEL, s);
 }
@@ -298,7 +298,7 @@ PropertyValue Marker::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LABEL:
-        return QString();
+        return String();
     case Pid::MARKER_TYPE:
         return int(Type::FINE);
     case Pid::PLACEMENT:

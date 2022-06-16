@@ -110,7 +110,7 @@ public:
     void removeFromScore();
 
     using EngravingObject::undoChangeProperty;
-    void paste(EditData& ed, const QString& txt) override;
+    void paste(EditData& ed, const String& txt) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

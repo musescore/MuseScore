@@ -359,7 +359,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
 
         MeasureBase* measure = cs->first();
         Text* text = Factory::createText(measure, ssid);
-        text->setPlainText((const char*)(mm.edata()));
+        text->setPlainText(String::fromUtf8((const char*)(mm.edata())));
 
         if (!measure->isVBox()) {
             measure = Factory::createVBox(cs->dummy()->system());
@@ -371,7 +371,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
     }
     break;
     case META_COPYRIGHT:
-        cs->setMetaTag("copyright", QString((const char*)(mm.edata())));
+        cs->setMetaTag(u"copyright", QString((const char*)(mm.edata())));
         break;
     case META_TIME_SIGNATURE:
         break;                                  // added earlier

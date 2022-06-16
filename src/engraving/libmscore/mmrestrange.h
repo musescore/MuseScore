@@ -48,7 +48,7 @@ public:
 
     bool readProperties(XmlReader&) override;
 
-    void setXmlText(const QString&) override;
+    void setXmlText(const String&) override;
 };
 } // namespace mu::engraving
 

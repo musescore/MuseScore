@@ -2042,7 +2042,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             if (a->markerType() == Marker::Type::SEGNO || a->markerType() == Marker::Type::CODA
                 || a->markerType() == Marker::Type::VARCODA || a->markerType() == Marker::Type::CODETTA) {
                 // force the marker type for correct display
-                a->setXmlText("");
+                a->setXmlText(u"");
                 a->setMarkerType(a->markerType());
             }
             m->add(a);
@@ -2826,18 +2826,18 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(masterScore->dummy(), TextStyleType::DEFAULT, false);
             readText114(e, text, text);
-            masterScore->setMetaTag("copyright", text->plainText());
+            masterScore->setMetaTag(u"copyright", text->plainText());
             delete text;
         } else if (tag == "movement-number") {
-            masterScore->setMetaTag("movementNumber", e.readText());
+            masterScore->setMetaTag(u"movementNumber", e.readText());
         } else if (tag == "movement-title") {
-            masterScore->setMetaTag("movementTitle", e.readText());
+            masterScore->setMetaTag(u"movementTitle", e.readText());
         } else if (tag == "work-number") {
-            masterScore->setMetaTag("workNumber", e.readText());
+            masterScore->setMetaTag(u"workNumber", e.readText());
         } else if (tag == "work-title") {
-            masterScore->setMetaTag("workTitle", e.readText());
+            masterScore->setMetaTag(u"workTitle", e.readText());
         } else if (tag == "source") {
-            masterScore->setMetaTag("source", e.readText());
+            masterScore->setMetaTag(u"source", e.readText());
         } else if (tag == "metaTag") {
             QString name = e.attribute("name");
             masterScore->setMetaTag(name, e.readText());

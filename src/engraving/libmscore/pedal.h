@@ -58,8 +58,8 @@ protected:
     mu::PointF linePos(Grip, System**) const override;
 
 public:
-    static const QString PEDAL_SYMBOL;
-    static const QString STAR_SYMBOL;
+    static const String PEDAL_SYMBOL;
+    static const String STAR_SYMBOL;
 
     Pedal(EngravingItem* parent);
 

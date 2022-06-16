@@ -40,8 +40,8 @@ Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chord
 {
     MCursor c;
     c.setTimeSig(_sig);
-    c.createScore("");
-    c.addPart("voice");
+    c.createScore(u"");
+    c.addPart(u"voice");
     c.move(0, Fraction(0, 1));
     c.addKeySig(Key::C);
 

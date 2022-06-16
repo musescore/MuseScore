@@ -23,9 +23,10 @@
 #ifndef __REVISIONS_H__
 #define __REVISIONS_H__
 
-#include <QString>
 #include <QDateTime>
 #include <vector>
+
+#include "types/string.h"
 
 namespace mu::engraving {
 class XmlWriter;
@@ -37,8 +38,8 @@ class XmlReader;
 
 class Revision
 {
-    QString _id;
-    QString _diff;            // diff to parent
+    String _id;
+    String _diff;            // diff to parent
     QDateTime _dateTime;
     Revision* _parent;
     std::vector<Revision*> _branches;
@@ -50,8 +51,8 @@ public:
     void setParent(Revision* r) { _parent = r; }
     Revision* parent() const { return _parent; }
     const std::vector<Revision*>& branches() const { return _branches; }
-    void setId(const QString& s) { _id = s; }
-    void setDiff(const QString& s) { _diff = s; }
+    void setId(const String& s) { _id = s; }
+    void setDiff(const String& s) { _diff = s; }
 };
 
 //---------------------------------------------------------
@@ -71,7 +72,7 @@ class Revisions
 public:
     Revisions();
     void add(Revision*);
-    QString getRevision(QString id);
+    String getRevision(String id);
     Revision* trunk() { return _trunk; }
     void write(XmlWriter&) const;
 };

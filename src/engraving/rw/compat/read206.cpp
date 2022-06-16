@@ -1358,10 +1358,10 @@ static void readTempoText(TempoText* t, XmlReader& e, const ReadContext& ctx)
     }
     // check sanity
     if (t->xmlText().isEmpty()) {
-        t->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(t->tempo().toBPM().val)));
+        t->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(int(lrint(t->tempo().toBPM().val))));
         t->setVisible(false);
     } else {
-        t->setXmlText(t->xmlText().replace("<sym>unicode", "<sym>met"));
+        t->setXmlText(t->xmlText().replace(u"<sym>unicode", u"<sym>met"));
     }
 }
 
@@ -3247,18 +3247,18 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(score->dummy(), TextStyleType::DEFAULT, false);
             readText206(e, ctx, text, text);
-            score->setMetaTag("copyright", text->xmlText());
+            score->setMetaTag(u"copyright", text->xmlText());
             delete text;
         } else if (tag == "movement-number") {
-            score->setMetaTag("movementNumber", e.readText());
+            score->setMetaTag(u"movementNumber", e.readText());
         } else if (tag == "movement-title") {
-            score->setMetaTag("movementTitle", e.readText());
+            score->setMetaTag(u"movementTitle", e.readText());
         } else if (tag == "work-number") {
-            score->setMetaTag("workNumber", e.readText());
+            score->setMetaTag(u"workNumber", e.readText());
         } else if (tag == "work-title") {
-            score->setMetaTag("workTitle", e.readText());
+            score->setMetaTag(u"workTitle", e.readText());
         } else if (tag == "source") {
-            score->setMetaTag("source", e.readText());
+            score->setMetaTag(u"source", e.readText());
         } else if (tag == "metaTag") {
             QString name = e.attribute("name");
             score->setMetaTag(name, e.readText());

@@ -50,7 +50,7 @@ public:
 
 private:
     Type _markerType;
-    QString _label;                 ///< referenced from Jump() element
+    String _label;                 ///< referenced from Jump() element
 
 public:
     Marker(EngravingItem* parent);
@@ -58,8 +58,8 @@ public:
 
     void setMarkerType(Type t);
     Type markerType() const { return _markerType; }
-    QString markerTypeUserName() const;
-    Type markerType(const QString&) const;
+    String markerTypeUserName() const;
+    Type markerType(const String&) const;
 
     Marker* clone() const override { return new Marker(*this); }
 
@@ -71,9 +71,9 @@ public:
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    QString label() const { return _label; }
-    void setLabel(const QString& s) { _label = s; }
-    void undoSetLabel(const QString& s);
+    String label() const { return _label; }
+    void setLabel(const String& s) { _label = s; }
+    void undoSetLabel(const String& s);
     void undoSetMarkerType(Type t);
 
     void styleChanged() override;
@@ -93,7 +93,7 @@ public:
 
 struct MarkerTypeItem {
     Marker::Type type;
-    QString name;
+    const char* name = nullptr;
 };
 
 extern const std::vector<MarkerTypeItem> markerTypeTable;

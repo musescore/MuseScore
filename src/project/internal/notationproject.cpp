@@ -284,7 +284,7 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     m_masterNotation->setMasterScore(score);
     setPath(path);
     score->setSaved(true);
-    score->setMetaTag("originalFormat", QString::fromStdString(suffix));
+    score->setMetaTag(u"originalFormat", QString::fromStdString(suffix));
 
     m_isNewlyCreated = true;
 
@@ -761,12 +761,12 @@ ProjectMeta NotationProject::metaInfo() const
     meta.musescoreRevision = score->mscoreRevision();
     meta.mscVersion = score->mscVersion();
 
-    for (const QString& tag : mu::keys(allTags)) {
+    for (const String& tag : mu::keys(allTags)) {
         if (isStandardTag(tag)) {
             continue;
         }
 
-        meta.additionalTags[tag] = allTags[tag];
+        meta.additionalTags[tag] = allTags[tag].toQString();
     }
 
     meta.filePath = m_path;
@@ -778,7 +778,7 @@ ProjectMeta NotationProject::metaInfo() const
 
 void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
 {
-    std::map<QString, QString> tags {
+    std::map<String, String> tags {
         { WORK_TITLE_TAG, meta.title },
         { SUBTITLE_TAG, meta.subtitle },
         { COMPOSER_TAG, meta.composer },

@@ -194,7 +194,7 @@ void Score::updateChannel()
             }
             const StaffTextBase* st = toStaffTextBase(e);
             for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-                QString an(st->channelName(voice));
+                String an(st->channelName(voice));
                 if (an.isEmpty()) {
                     continue;
                 }
@@ -601,7 +601,7 @@ static void collectProgramChanges(EventMap* events, Measure const* m, Staff* sta
             Instrument* instr = e->part()->instrument(tick);
             for (const ChannelActions& ca : st1->channelActions()) {
                 int channel = instr->channel().at(ca.channel)->channel();
-                for (const QString& ma : ca.midiActionNames) {
+                for (const String& ma : ca.midiActionNames) {
                     NamedEventList* nel = instr->midiAction(ma, ca.channel);
                     if (!nel) {
                         continue;

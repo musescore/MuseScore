@@ -445,6 +445,31 @@ TEST_F(Global_Types_StringTests, String_Number)
     }
 }
 
+TEST_F(Global_Types_StringTests, String_ToInt)
+{
+    {
+        //! GIVEN Some string
+        String s("2");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_EQ(v, 2);
+    }
+
+    {
+        //! GIVEN Some string
+        String s("2abc");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_FALSE(ok);
+        EXPECT_EQ(v, 0);
+    }
+}
+
 TEST_F(Global_Types_StringTests, AsciiString_Construct)
 {
     //! GIVEN Some ASCII String

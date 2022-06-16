@@ -125,7 +125,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
             e.unknown();
             break;
         }
-        QString version = e.attribute("version", u"NONE");
+        String version = e.attribute("version", u"NONE");
         if (!MScore::testMode) {
             if (version != MSC_VERSION) {
                 LOGD("pasteStaff: bad version");
@@ -800,7 +800,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
             e.unknown();
             break;
         }
-        QString version = e.attribute("version", u"NONE");
+        String version = e.attribute("version", u"NONE");
         if (version != MSC_VERSION) {
             break;
         }
@@ -1254,8 +1254,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         }
         delete image;
     } else {
-        LOGD("cannot paste selState %d staffList %s",
-             int(_selection.state()), (ms->hasFormat(mimeStaffListFormat)) ? "true" : "false");
+        LOGD("cannot paste selState %d staffList %s", int(_selection.state()), (ms->hasFormat(mimeStaffListFormat)) ? "true" : "false");
         for (const QString& s : ms->formats()) {
             LOGD("  format %s", qPrintable(s));
         }

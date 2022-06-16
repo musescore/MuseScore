@@ -99,10 +99,10 @@ Staff* Part::staff(staff_idx_t idx) const
 //   family
 //---------------------------------------------------------
 
-QString Part::familyId() const
+String Part::familyId() const
 {
     if (_instruments.size() <= 0) {
-        return QString("");
+        return String("");
     }
 
     InstrumentIndex ii = searchTemplateIndexForId(instrumentId());
@@ -478,7 +478,7 @@ const InstrumentList& Part::instruments() const
 //   instrumentId
 //---------------------------------------------------------
 
-QString Part::instrumentId(const Fraction& tick) const
+String Part::instrumentId(const Fraction& tick) const
 {
     return instrument(tick)->id();
 }
@@ -487,7 +487,7 @@ QString Part::instrumentId(const Fraction& tick) const
 //   longName
 //---------------------------------------------------------
 
-QString Part::longName(const Fraction& tick) const
+String Part::longName(const Fraction& tick) const
 {
     const std::list<StaffName>& nl = longNames(tick);
     return nl.empty() ? u"" : nl.front().name();
@@ -497,7 +497,7 @@ QString Part::longName(const Fraction& tick) const
 //   instrumentName
 //---------------------------------------------------------
 
-QString Part::instrumentName(const Fraction& tick) const
+String Part::instrumentName(const Fraction& tick) const
 {
     return instrument(tick)->trackName();
 }
@@ -506,7 +506,7 @@ QString Part::instrumentName(const Fraction& tick) const
 //   shortName
 //---------------------------------------------------------
 
-QString Part::shortName(const Fraction& tick) const
+String Part::shortName(const Fraction& tick) const
 {
     const std::list<StaffName>& nl = shortNames(tick);
     return nl.empty() ? u"" : nl.front().name();
@@ -516,7 +516,7 @@ QString Part::shortName(const Fraction& tick) const
 //   setLongName
 //---------------------------------------------------------
 
-void Part::setLongName(const QString& s)
+void Part::setLongName(const String& s)
 {
     instrument()->setLongName(s);
 }
@@ -525,7 +525,7 @@ void Part::setLongName(const QString& s)
 //   setShortName
 //---------------------------------------------------------
 
-void Part::setShortName(const QString& s)
+void Part::setShortName(const String& s)
 {
     instrument()->setShortName(s);
 }
@@ -534,7 +534,7 @@ void Part::setShortName(const QString& s)
 //   setPlainLongName
 //---------------------------------------------------------
 
-void Part::setPlainLongName(const QString& s)
+void Part::setPlainLongName(const String& s)
 {
     setLongName(XmlWriter::xmlString(s));
 }
@@ -543,7 +543,7 @@ void Part::setPlainLongName(const QString& s)
 //   setPlainShortName
 //---------------------------------------------------------
 
-void Part::setPlainShortName(const QString& s)
+void Part::setPlainShortName(const String& s)
 {
     setShortName(XmlWriter::xmlString(s));
 }

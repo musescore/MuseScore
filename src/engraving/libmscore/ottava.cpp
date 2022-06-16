@@ -34,6 +34,8 @@
 #include "segment.h"
 #include "musescoreCore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -322,7 +324,7 @@ bool Ottava::readProperties(XmlReader& e)
 {
     const AsciiStringView tag(e.name());
     if (tag == "subtype") {
-        QString s = e.readText();
+        String s = e.readText();
         bool ok;
         int idx = s.toInt(&ok);
         if (!ok) {
@@ -436,7 +438,7 @@ PropertyValue Ottava::propertyDefault(Pid pid) const
     case Pid::BEGIN_HOOK_HEIGHT:
         return Spatium(.0);
     case Pid::END_TEXT:
-        return QString("");
+        return String("");
     case Pid::PLACEMENT:
         return styleValue(Pid::PLACEMENT, getPropertyStyle(Pid::PLACEMENT));
 

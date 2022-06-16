@@ -584,7 +584,7 @@ void GuitarPro4::readInfo()
     composer     = readDelphiString();
     QString copyright = readDelphiString();
     if (!copyright.isEmpty()) {
-        score->setMetaTag("copyright", QString("%1").arg(copyright));
+        score->setMetaTag(u"copyright", copyright);
     }
 
     transcriber  = readDelphiString();

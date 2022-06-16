@@ -237,7 +237,7 @@ enum class PlayMode : char {
 //---------------------------------------------------------
 
 struct Layer {
-    QString name;
+    String name;
     uint tags = 0;
 };
 
@@ -405,11 +405,11 @@ private:
     std::vector<Text*> _headersText;
     std::vector<Text*> _footersText;
 
-    QString _mscoreVersion;
+    String _mscoreVersion;
     int _mscoreRevision;
 
-    QString _layerTags[32];
-    QString _layerTagComments[32];
+    String _layerTags[32];
+    String _layerTagComments[32];
     std::vector<Layer> _layer;
     int _currentLayer { 0 };
 
@@ -452,7 +452,7 @@ private:
 
     bool _isOpen { true };
 
-    std::map<QString, QString> _metaTags;
+    std::map<String, String> _metaTags;
 
     Selection _selection;
     SelectionFilter _selectionFilter;
@@ -900,19 +900,19 @@ public:
     void resetStyleValue(Sid styleToReset);
 
     void setStyle(const MStyle& s, const bool overlap = false);
-    bool loadStyle(const QString&, bool ign = false, const bool overlap = false);
-    bool saveStyle(const QString&);
+    bool loadStyle(const String&, bool ign = false, const bool overlap = false);
+    bool saveStyle(const String&);
 
     const PropertyValue& styleV(Sid idx) const { return style().styleV(idx); }
     Spatium  styleS(Sid idx) const { return style().styleS(idx); }
     Millimetre styleMM(Sid idx) const { return style().styleMM(idx); }
-    QString styleSt(Sid idx) const { return style().styleSt(idx); }
+    String styleSt(Sid idx) const { return style().styleSt(idx); }
     bool styleB(Sid idx) const { return style().styleB(idx); }
     qreal styleD(Sid idx) const { return style().styleD(idx); }
     int styleI(Sid idx) const { return style().styleI(idx); }
 
     void setStyleValue(Sid sid, const PropertyValue& value) { style().set(sid, value); }
-    QString getTextStyleUserName(TextStyleType tid);
+    String getTextStyleUserName(TextStyleType tid);
     qreal spatium() const { return styleD(Sid::spatium); }
     void setSpatium(qreal v) { setStyleValue(Sid::spatium, v); }
 
@@ -957,7 +957,7 @@ public:
     int mscVersion() const { return _mscVersion; }
     void setMscVersion(int v) { _mscVersion = v; }
 
-    void addLyrics(const Fraction& tick, staff_idx_t staffIdx, const QString&);
+    void addLyrics(const Fraction& tick, staff_idx_t staffIdx, const String&);
 
     void updateSwing();
     void createPlayEvents(Measure const* start = nullptr, Measure const* const end = nullptr);
@@ -1074,14 +1074,14 @@ public:
     void setMasterScore(MasterScore* s) { _masterScore = s; }
     void writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, Segment* sseg, Segment* eseg, bool, bool);
 
-    const std::map<QString, QString>& metaTags() const { return _metaTags; }
-    std::map<QString, QString>& metaTags() { return _metaTags; }
-    void setMetaTags(const std::map<QString, QString>& t) { _metaTags = t; }
+    const std::map<String, String>& metaTags() const { return _metaTags; }
+    std::map<String, String>& metaTags() { return _metaTags; }
+    void setMetaTags(const std::map<String, String>& t) { _metaTags = t; }
 
     //@ returns as a string the metatag named 'tag'
-    QString metaTag(const QString& tag) const;
+    String metaTag(const String& tag) const;
     //@ sets the metatag named 'tag' to 'val'
-    void setMetaTag(const QString& tag, const QString& val);
+    void setMetaTag(const String& tag, const String& val);
 
     void cmdSplitMeasure(ChordRest*);
     void splitMeasure(Segment*);
@@ -1090,16 +1090,16 @@ public:
     int pageNumberOffset() const { return _pageNumberOffset; }
     void setPageNumberOffset(int v) { _pageNumberOffset = v; }
 
-    QString mscoreVersion() const { return _mscoreVersion; }
+    String mscoreVersion() const { return _mscoreVersion; }
     int mscoreRevision() const { return _mscoreRevision; }
-    void setMscoreVersion(const QString& val) { _mscoreVersion = val; }
+    void setMscoreVersion(const String& val) { _mscoreVersion = val; }
     void setMscoreRevision(int val) { _mscoreRevision = val; }
 
     uint currentLayerMask() const { return _layer[_currentLayer].tags; }
     void setCurrentLayer(int val) { _currentLayer = val; }
     int currentLayer() const { return _currentLayer; }
-    QString* layerTags() { return _layerTags; }
-    QString* layerTagComments() { return _layerTagComments; }
+    String* layerTags() { return _layerTags; }
+    String* layerTagComments() { return _layerTagComments; }
     std::vector<Layer>& layer() { return _layer; }
     const std::vector<Layer>& layer() const { return _layer; }
     bool tagIsValid(uint tag) const { return tag & _layer[_currentLayer].tags; }
@@ -1151,7 +1151,7 @@ public:
     int getLinkId() const { return _linkId; }
 
     std::list<Score*> scoreList();
-    bool switchLayer(const QString& s);
+    bool switchLayer(const String& s);
     //@ appends to the score a number of measures
     void appendMeasures(int);
 
@@ -1198,7 +1198,7 @@ public:
     bool hasHarmonies();
     int  lyricCount();
     int  harmonyCount();
-    QString extractLyrics();
+    String extractLyrics();
     int keysig();
     int duration();
     int durationWithoutRepeats();
@@ -1218,8 +1218,8 @@ public:
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
 
     std::shared_ptr<mu::draw::Pixmap> createThumbnail();
-    QString createRehearsalMarkText(RehearsalMark* current) const;
-    QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
+    String createRehearsalMarkText(RehearsalMark* current) const;
+    String nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
     bool sanityCheck();
 
@@ -1236,7 +1236,7 @@ public:
 
     /// For MasterScores: returns the filename without extension
     /// For Scores: returns the excerpt name
-    virtual QString name() const;
+    virtual String name() const;
 
     void cmdTimeDelete();
     void localTimeDelete();

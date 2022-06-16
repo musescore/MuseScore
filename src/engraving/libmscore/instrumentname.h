@@ -51,10 +51,10 @@ public:
     int layoutPos() const { return _layoutPos; }
     void setLayoutPos(int val) { _layoutPos = val; }
 
-    QString instrumentNameTypeName() const;
+    String instrumentNameTypeName() const;
     InstrumentNameType instrumentNameType() const { return _instrumentNameType; }
     void setInstrumentNameType(InstrumentNameType v);
-    void setInstrumentNameType(const QString& s);
+    void setInstrumentNameType(const String& s);
 
     System* system() const { return toSystem(explicitParent()); }
 
