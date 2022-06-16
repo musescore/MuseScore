@@ -49,12 +49,14 @@ protected:
     bool modified;
     qreal _lengthX;
     qreal _lengthY;
-    const int _initialLength = 2;
+    static constexpr double _baseLength = 1.0;
 
     friend class Factory;
 
     ChordLine(Chord* parent, const ElementType& type = ElementType::CHORDLINE);
     ChordLine(const ChordLine&);
+
+    bool sameVoiceKerningLimited() const override { return true; }
 
 public:
 
@@ -87,6 +89,9 @@ public:
     Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
     Grip defaultGrip() const override { return initialEditModeGrip(); }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+
+    bool isToTheLeft() const { return _chordLineType == ChordLineType::PLOP || _chordLineType == ChordLineType::SCOOP; }
+    bool isBelow() const { return _chordLineType == ChordLineType::SCOOP || _chordLineType == ChordLineType::FALL; }
 };
 
 extern const char* scorelineNames[];
