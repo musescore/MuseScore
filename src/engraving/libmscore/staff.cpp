@@ -816,6 +816,9 @@ void Staff::write(XmlWriter& xml) const
     if (_mergeMatchingRests) {
         xml.tag("mergeMatchingRests", _mergeMatchingRests);
     }
+    if (!visible()) {
+        xml.tag("isStaffVisible", visible());
+    }
 
     for (const BracketItem* i : _brackets) {
         BracketType a = i->bracketType();
@@ -883,6 +886,8 @@ bool Staff::readProperties(XmlReader& e)
         _hideSystemBarLine = e.readInt();
     } else if (tag == "mergeMatchingRests") {
         _mergeMatchingRests = e.readInt();
+    } else if (tag == "isStaffVisible") {
+        setVisible(e.readBool());
     } else if (tag == "keylist") {
         _keys.read(e, score());
     } else if (tag == "bracket") {
