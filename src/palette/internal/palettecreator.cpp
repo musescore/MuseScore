@@ -183,18 +183,18 @@ PalettePtr PaletteCreator::newBeamPalette()
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Beam);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Beam properties"));
     sp->setGridSize(35, 33);
-    sp->setMag(1.4);
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    sp->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
-    sp->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
-    sp->appendActionIcon(ActionIconType::BEAM_NONE, "no-beam");
-    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam-32");
-    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam-64");
-    sp->appendActionIcon(ActionIconType::BEAM_AUTO, "auto-beam");
-    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_SLOWER, "fbeam1");
-    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_FASTER, "fbeam2");
+    sp->appendActionIcon(ActionIconType::BEAM_AUTO, "beam-auto")->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_NONE, "beam-none")->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_BREAK_LEFT, "beam-break-left")->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_8TH, "beam-break-inner-8th")->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_16TH, "beam-break-inner-16th")->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_JOIN, "beam-join")->mag = 1.4;
+
+    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_DECELERATE, "beam-feathered-decelerate");
+    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_ACCELERATE, "beam-feathered-accelerate");
 
     return sp;
 }

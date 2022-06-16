@@ -40,10 +40,7 @@ BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService*
 void BeamSettingsModel::createProperties()
 {
     m_featheringHeightLeft = buildPropertyItem(mu::engraving::Pid::GROW_LEFT);
-    m_featheringHeightRight
-        = buildPropertyItem(mu::engraving::Pid::GROW_RIGHT, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
-    });
+    m_featheringHeightRight = buildPropertyItem(mu::engraving::Pid::GROW_RIGHT);
 
     m_isBeamHidden = buildPropertyItem(mu::engraving::Pid::VISIBLE, [this](const mu::engraving::Pid pid, const QVariant& isBeamHidden) {
         onPropertyValueChanged(pid, !isBeamHidden.toBool());
@@ -99,6 +96,14 @@ void BeamSettingsModel::resetProperties()
     setIsBeamHeightLocked(false);
 }
 
+void BeamSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadPropertyItem(m_featheringHeightLeft, formatDoubleFunc);
+    loadPropertyItem(m_featheringHeightRight, formatDoubleFunc);
+
+    updateFeatheringMode(m_featheringHeightLeft->value().toDouble(), m_featheringHeightRight->value().toDouble());
+}
+
 void BeamSettingsModel::forceHorizontal()
 {
     onPropertyValueChanged(mu::engraving::Pid::BEAM_NO_SLOPE, true);
@@ -137,8 +142,8 @@ void BeamSettingsModel::synchronizeLockedBeamHeight(const qreal& currentX, const
 void BeamSettingsModel::updateFeatheringMode(const qreal& x, const qreal& y)
 {
     if (x != y) {
-        setFeatheringMode(x > y ? BeamTypes::FeatheringMode::FEATHERING_LEFT
-                          : BeamTypes::FeatheringMode::FEATHERING_RIGHT);
+        setFeatheringMode(x > y ? BeamTypes::FeatheringMode::FEATHERED_DECELERATE
+                          : BeamTypes::FeatheringMode::FEATHERED_ACCELERATE);
     } else {
         setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
     }
@@ -212,11 +217,11 @@ void BeamSettingsModel::setFeatheringMode(BeamTypes::FeatheringMode featheringMo
         m_featheringHeightLeft->setValue(1.0);
         m_featheringHeightRight->setValue(1.0);
         break;
-    case BeamTypes::FeatheringMode::FEATHERING_LEFT:
+    case BeamTypes::FeatheringMode::FEATHERED_DECELERATE:
         m_featheringHeightLeft->setValue(1.0);
         m_featheringHeightRight->setValue(0.0);
         break;
-    case BeamTypes::FeatheringMode::FEATHERING_RIGHT:
+    case BeamTypes::FeatheringMode::FEATHERED_ACCELERATE:
         m_featheringHeightLeft->setValue(0.0);
         m_featheringHeightRight->setValue(1.0);
         break;

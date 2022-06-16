@@ -34,7 +34,6 @@
 #include "translation.h"
 
 using namespace mu::palette;
-using namespace mu::notation;
 using namespace mu::engraving;
 
 Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chords)
@@ -73,7 +72,7 @@ Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chord
     StaffType* st = c.score()->staff(0)->staffType(Fraction(0, 1));
     st->setLines(1);            // single line only
     st->setGenClef(false);      // no clef
-//      st->setGenTimesig(false); // don't display time sig since ExampleView is unable to reflect custom time sig text/symbols
+//    st->setGenTimesig(false); // don't display time sig since NoteGroupsExampleView is unable to reflect custom time sig text/symbols
 
     return c.score();
 }
@@ -87,10 +86,10 @@ NoteGroups::NoteGroups(QWidget* parent)
     iconPalette->setGridSize(27, 40);
     iconPalette->setDrawGrid(true);
 
-    iconPalette->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam-32");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam-64");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_JOIN, "beam-join");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_LEFT, "beam-break-left");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_8TH, "beam-break-inner-8th");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_16TH, "beam-break-inner-16th");
 
     iconPalette->setReadOnly(true);
     iconPalette->setApplyingElementsDisabled(true);
@@ -101,13 +100,13 @@ NoteGroups::NoteGroups(QWidget* parent)
 
     connect(resetGroups, &QPushButton::clicked, this, &NoteGroups::resetClicked);
 
-    connect(view8, &ExampleView::noteClicked, this, &NoteGroups::noteClicked);
-    connect(view16, &ExampleView::noteClicked, this, &NoteGroups::noteClicked);
-    connect(view32, &ExampleView::noteClicked, this, &NoteGroups::noteClicked);
+    connect(view8, &NoteGroupsExampleView::noteClicked, this, &NoteGroups::noteClicked);
+    connect(view16, &NoteGroupsExampleView::noteClicked, this, &NoteGroups::noteClicked);
+    connect(view32, &NoteGroupsExampleView::noteClicked, this, &NoteGroups::noteClicked);
 
-    connect(view8, &ExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
-    connect(view16, &ExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
-    connect(view32, &ExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
+    connect(view8, &NoteGroupsExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
+    connect(view16, &NoteGroupsExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
+    connect(view32, &NoteGroupsExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
 }
 
 void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const QString& n)
@@ -153,7 +152,7 @@ void NoteGroups::noteClicked(Note* note)
     Chord* chord = note->chord();
     if (chord->beamMode() == BeamMode::AUTO) {
         updateBeams(chord, BeamMode::BEGIN);
-    } else if (chord->beamMode() == BeamMode::BEGIN) {
+    } else {
         updateBeams(chord, BeamMode::AUTO);
     }
 }
@@ -161,16 +160,16 @@ void NoteGroups::noteClicked(Note* note)
 void NoteGroups::beamPropertyDropped(Chord* chord, ActionIcon* icon)
 {
     switch (icon->actionType()) {
-    case ActionIconType::BEAM_START:
-        updateBeams(chord, BeamMode::BEGIN);
-        break;
-    case ActionIconType::BEAM_MID:
+    case ActionIconType::BEAM_JOIN:
         updateBeams(chord, BeamMode::AUTO);
         break;
-    case ActionIconType::BEAM_BEGIN_32:
+    case ActionIconType::BEAM_BREAK_LEFT:
+        updateBeams(chord, BeamMode::BEGIN);
+        break;
+    case ActionIconType::BEAM_BREAK_INNER_8TH:
         updateBeams(chord, BeamMode::BEGIN32);
         break;
-    case ActionIconType::BEAM_BEGIN_64:
+    case ActionIconType::BEAM_BREAK_INNER_16TH:
         updateBeams(chord, BeamMode::BEGIN64);
         break;
     default:
