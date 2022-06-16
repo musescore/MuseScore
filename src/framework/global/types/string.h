@@ -96,6 +96,11 @@ public:
     inline bool operator <(Char c) const { return m_ch < c.m_ch; }
     inline bool operator <(char16_t c) const { return m_ch < c; }
 
+    inline bool operator >=(Char c) const { return m_ch >= c.m_ch; }
+    inline bool operator >=(char16_t c) const { return m_ch >= c; }
+    inline bool operator <=(Char c) const { return m_ch <= c.m_ch; }
+    inline bool operator <=(char16_t c) const { return m_ch <= c; }
+
     inline char16_t unicode() const { return m_ch; }
 
     inline bool isNull() const { return m_ch == 0; }
@@ -362,6 +367,12 @@ private:
 inline String operator+(char16_t s1, const String& s2) { String t(s1); t += s2; return t; }
 inline String operator+(const char16_t* s1, const String& s2) { String t(s1); t += s2; return t; }
 }
+
+// ============================
+// Char (UTF-16)
+// ============================
+inline bool operator ==(const char16_t c1, const mu::Char c2) { return c2 == c1; }
+inline bool operator !=(const char16_t c1, const mu::Char c2) { return c2 != c1; }
 
 // ============================
 // String (UTF-16)
