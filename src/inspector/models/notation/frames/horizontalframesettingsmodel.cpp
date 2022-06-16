@@ -64,6 +64,11 @@ void HorizontalFrameSettingsModel::resetProperties()
     m_shouldDisplayKeysAndBrackets->resetToDefault();
 }
 
+void HorizontalFrameSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadProperties();
+}
+
 PropertyItem* HorizontalFrameSettingsModel::frameWidth() const
 {
     return m_frameWidth;
