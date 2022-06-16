@@ -2354,7 +2354,7 @@ void Score::resetDefaults()
                 for (EngravingItem* e : seg->annotations()) {
                     if (e->isDynamic()) {
                         Dynamic* d = toDynamic(e);
-                        if (d->xmlText().contains("<sym>") && !d->xmlText().contains("<font")) {
+                        if (d->xmlText().contains(u"<sym>") && !d->xmlText().contains(u"<font")) {
                             d->setAlign(Align(AlignH::HCENTER, AlignV::BOTTOM));
                         }
                         d->setSize(10.0);

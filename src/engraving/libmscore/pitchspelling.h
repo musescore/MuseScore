@@ -104,7 +104,7 @@ inline static AccidentalVal tpc2alter(int tpc)
     return AccidentalVal(((tpc - Tpc::TPC_MIN) / TPC_DELTA_SEMITONE) + int(AccidentalVal::MIN));
 }
 
-extern String tpc2stepName(int tpc);
+extern Char tpc2stepName(int tpc);
 extern bool tpcIsValid(int val);
 inline bool pitchIsValid(int pitch) { return pitch >= 0 && pitch <= 127; }
 } // namespace mu::engraving

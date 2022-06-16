@@ -23,6 +23,7 @@
 #ifndef __POS_H__
 #define __POS_H__
 
+#include "types/string.h"
 #include "sig.h"
 
 namespace mu::engraving {
@@ -61,7 +62,7 @@ public:
     Pos(TempoMap*, TimeSigMap*, int measure, int beat, int tick);
     Pos(TempoMap*, TimeSigMap*, int minute, int sec, int frame, int subframe);
     Pos(TempoMap*, TimeSigMap*, unsigned, TType type = TType::TICKS);
-    Pos(TempoMap*, TimeSigMap*, const QString&);
+    Pos(TempoMap*, TimeSigMap*, const String&);
 
     void setContext(TempoMap* t, TimeSigMap* s) { tempo = t; sig = s; }
     void dump(int n = 0) const;

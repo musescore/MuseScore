@@ -34,7 +34,7 @@ namespace mu::engraving {
 
 struct ChannelActions {
     int channel;
-    QStringList midiActionNames;
+    StringList midiActionNames;
 };
 
 //---------------------------------------------------------

@@ -1545,7 +1545,7 @@ bool GuitarPro2::read(IODevice* io)
     composer     = readDelphiString();
     QString copyright = readDelphiString();
     if (!copyright.isEmpty()) {
-        score->setMetaTag("copyright", QString("%1").arg(copyright));
+        score->setMetaTag(u"copyright", copyright);
     }
 
     transcriber  = readDelphiString();
@@ -2220,7 +2220,7 @@ bool GuitarPro3::read(IODevice* io)
     composer     = readDelphiString();
     QString copyright = readDelphiString();
     if (!copyright.isEmpty()) {
-        score->setMetaTag("copyright", QString("%1").arg(copyright));
+        score->setMetaTag(u"copyright", copyright);
     }
 
     transcriber  = readDelphiString();
@@ -2986,7 +2986,7 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io)
         return Score::FileError::FILE_NO_ERROR;
     }
 
-    score->loadStyle(":/engraving/styles/gp-style.mss");
+    score->loadStyle(u":/engraving/styles/gp-style.mss");
 
     if (!mu::engraving::MScore::lastError.isEmpty()) {
         LOGE() << mu::engraving::MScore::lastError;

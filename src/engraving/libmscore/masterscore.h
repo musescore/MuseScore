@@ -230,7 +230,7 @@ public:
     bool autosaveDirty() const;
     void setAutosaveDirty(bool v);
 
-    QString name() const override;
+    String name() const override;
 
     void setWidthOfSegmentCell(qreal val) { m_widthOfSegmentCell = val; }
     qreal widthOfSegmentCell() const { return m_widthOfSegmentCell; }

@@ -524,7 +524,7 @@ String Clef::accessibleInfo() const
     if (type == ClefType::INVALID) {
         return String();
     }
-    return mtrc("engraving", TConv::toUserName(clefType()).toUtf8().constData());
+    return mtrc("engraving", TConv::toUserName(clefType()));
 }
 
 //---------------------------------------------------------

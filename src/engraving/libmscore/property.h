@@ -24,7 +24,8 @@
 #define __PROPERTY_H__
 
 #include <QVariant>
-#include <QString>
+
+#include "types/string.h"
 
 #include "property/propertyvalue.h"
 
@@ -398,14 +399,13 @@ enum class Pid {
 };
 
 extern PropertyValue readProperty(Pid type, XmlReader& e);
-extern PropertyValue propertyFromString(P_TYPE type, QString value);
-extern QString propertyToString(Pid, const PropertyValue& value, bool mscx);
+extern PropertyValue propertyFromString(P_TYPE type, String value);
+extern String propertyToString(Pid, const PropertyValue& value, bool mscx);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
-extern Pid propertyId(const QString& name);
-extern Pid propertyId(const QStringRef& name);
-extern QString propertyUserName(Pid);
+extern Pid propertyId(const AsciiStringView& name);
+extern String propertyUserName(Pid);
 } // namespace mu::engraving
 
 #endif

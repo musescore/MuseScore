@@ -391,10 +391,10 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, Str
 //   tpc2stepName
 //---------------------------------------------------------
 
-String tpc2stepName(int tpc)
+Char tpc2stepName(int tpc)
 {
-    const char names[] = "FCGDAEB";
-    return String(names[(tpc - Tpc::TPC_MIN) % 7]);
+    static const String names = u"FCGDAEB";
+    return names.at((tpc - Tpc::TPC_MIN) % 7);
 }
 
 // table of alternative spellings for one octave
@@ -862,10 +862,10 @@ int absStep2pitchByKey(int step, Key key)
 
 int tpc2degree(int tpc, Key key)
 {
-    const QString names("CDEFGAB");
-    const QString scales("CGDAEBFCGDAEBFC");
-    QString scale = scales[int(key) + 7];
-    QString stepName = tpc2stepName(tpc);
+    static const String names(u"CDEFGAB");
+    static const String scales(u"CGDAEBFCGDAEBFC");
+    Char scale = scales.at(int(key) + 7);
+    Char stepName = tpc2stepName(tpc);
     return (names.indexOf(stepName) - names.indexOf(scale) + 28) % 7;
 }
 

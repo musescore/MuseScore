@@ -168,7 +168,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     for (const auto& t : _metaTags) {
         // do not output "platform" and "creationDate" in test and save template mode
         if ((!MScore::testMode && !MScore::saveTemplateMode) || (t.first != "platform" && t.first != "creationDate")) {
-            xml.tag("metaTag", { { "name", t.first.toHtmlEscaped() } }, t.second);
+            xml.tag("metaTag", { { "name", t.first.toXmlEscaped() } }, t.second);
         }
     }
 
@@ -183,7 +183,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         xml.startElement("SystemObjects");
         for (Staff* s : systemObjectStaves) {
             // TODO: when we add more granularity to system object display, construct this string per staff
-            QString sysObjForStaff = "barNumbers=\"false\"";
+            String sysObjForStaff = u"barNumbers=\"false\"";
             // for now, everything except bar numbers is shown on system object staves
             // (also, the code to display bar numbers on system staves other than the first currently does not exist!)
             xml.tag("Instance", { { "staffId", s->idx() + 1 }, { "barNumbers", "false" } });
@@ -317,7 +317,7 @@ std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
 //   loadStyle
 //---------------------------------------------------------
 
-bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
+bool Score::loadStyle(const String& fn, bool ign, const bool overlap)
 {
     TRACEFUNC;
 
@@ -328,7 +328,7 @@ bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
             undo(new ChangeStyle(this, st, overlap));
             return true;
         } else {
-            MScore::lastError = QObject::tr("The style file is not compatible with this version of MuseScore.");
+            MScore::lastError = mtrc("engraving", "The style file is not compatible with this version of MuseScore.");
             return false;
         }
     }
@@ -340,9 +340,9 @@ bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
 //   saveStyle
 //---------------------------------------------------------
 
-bool Score::saveStyle(const QString& name)
+bool Score::saveStyle(const String& name)
 {
-    QString ext(".mss");
+    String ext(u".mss");
     FileInfo info(name);
 
     if (info.suffix().isEmpty()) {
@@ -350,13 +350,13 @@ bool Score::saveStyle(const QString& name)
     }
     File f(info.filePath());
     if (!f.open(IODevice::WriteOnly)) {
-        MScore::lastError = QObject::tr("Failed open style file: %1 ").arg(info.filePath());
+        MScore::lastError = mtrc("engraving", "Failed open style file: %1 ").arg(info.filePath());
         return false;
     }
 
     bool ok = style().write(&f);
     if (!ok) {
-        MScore::lastError = QObject::tr("Failed write style file: %1").arg(info.filePath());
+        MScore::lastError = mtrc("engraving", "Failed write style file: %1").arg(info.filePath());
         return false;
     }
 
@@ -369,8 +369,8 @@ bool Score::saveStyle(const QString& name)
 //---------------------------------------------------------
 
 //! FIXME
-//extern QString revision;
-static QString revision;
+//extern String revision;
+static String revision;
 
 bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook)
 {

@@ -27,6 +27,8 @@
 #include <set>
 #include <vector>
 
+#include "types/string.h"
+
 namespace mu::engraving {
 class Score;
 class Measure;
@@ -85,7 +87,7 @@ class RepeatList : public std::vector<RepeatSegment*>
 
     void collectRepeatListElements();
     std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementList::const_iterator> findMarker(
-        QString label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
+        String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
         RepeatListElementList::const_iterator referenceRepeatListElementIt) const;
 
     void performJump(std::vector<RepeatListElementList>::const_iterator sectionIt,

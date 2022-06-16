@@ -45,9 +45,13 @@ static int toInt_helper(const char* str, bool* ok, int base)
     char* end = nullptr;
     long int v = static_cast<int>(std::strtol(str, &end, base));
     setlocale(LC_NUMERIC, currentLoc);
+    bool myOk = std::strlen(end) == 0;
+    if (!myOk) {
+        v = 0;
+    }
+
     if (ok) {
-        size_t sz = std::strlen(end);
-        *ok = sz != std::strlen(str);
+        *ok = myOk;
     }
     return v;
 }
@@ -106,19 +110,16 @@ char Char::toAscii(char16_t c, bool* ok)
     }
 }
 
-bool Char::isAscii() const
+bool Char::isLetter(char16_t c)
 {
-    return isAscii(m_ch);
+    //! TODO
+    return QChar::isLetter(c);
 }
 
-char Char::toAscii(bool* ok) const
+bool Char::isSpace(char16_t c)
 {
-    return toAscii(m_ch, ok);
-}
-
-bool Char::isDigit() const
-{
-    return isDigit(m_ch);
+    //! TODO
+    return QChar::isSpace(c);
 }
 
 bool Char::isDigit(char16_t c)
@@ -131,47 +132,19 @@ int Char::digitValue() const
     if (!isDigit()) {
         return -1;
     }
-    return m_ch - 48;
-}
-
-bool Char::isLower() const
-{
-    return toLower() == m_ch;
-}
-
-Char Char::toLower() const
-{
-    return toLower(m_ch);
+    return m_ch - '0';
 }
 
 char16_t Char::toLower(char16_t ch)
 {
-    static std::locale loc("C");
-    if (!isAscii(ch)) {
-        LOGW() << "toLower for not ASCII not implemented";
-        return ch;
-    }
-    return std::tolower(static_cast<char>(ch), loc);
-}
-
-bool Char::isUpper() const
-{
-    return toUpper() == m_ch;
-}
-
-Char Char::toUpper() const
-{
-    return toUpper(m_ch);
+    //! TODO
+    return QChar::toLower(ch);
 }
 
 char16_t Char::toUpper(char16_t ch)
 {
-    static std::locale loc("C");
-    if (!isAscii(ch)) {
-        LOGW() << "toUpper for not ASCII not implemented";
-        return ch;
-    }
-    return std::toupper(static_cast<char>(ch), loc);
+    //! TODO
+    return QChar::toUpper(ch);
 }
 
 // ============================
@@ -334,7 +307,7 @@ String String::fromAscii(const char* str, size_t size)
     std::u16string& data = s.mutStr();
     data.resize(size);
     for (size_t i = 0; i < size; ++i) {
-        data[i] = Char::fromAscii(str[i]);
+        data[i] = Char::fromAscii(str[i]).unicode();
     }
     return s;
 }
@@ -376,6 +349,23 @@ std::string String::toStdString() const
 std::u16string String::toStdU16String() const
 {
     return constStr();
+}
+
+String String::fromUcs4(const char32_t* str, size_t size)
+{
+    std::u32string_view v32;
+    if (size == mu::nidx) {
+        v32 = std::u32string_view(str);
+    } else {
+        v32 = std::u32string_view(str, size);
+    }
+
+    std::string s8;
+    UtfCodec::utf32to8(v32, s8);
+
+    String s;
+    UtfCodec::utf8to16(s8, s.mutStr());
+    return s;
 }
 
 std::u32string String::toStdU32String() const
@@ -609,6 +599,12 @@ String& String::replace(char16_t before, char16_t after)
     return *this;
 }
 
+String& String::insert(size_t position, const String& str)
+{
+    mutStr().insert(position, str.constStr());
+    return *this;
+}
+
 String& String::remove(const Char& ch)
 {
     return remove(ch.unicode());
@@ -807,10 +803,15 @@ int String::toInt(bool* ok, int base) const
     return toInt_helper(ba.constChar(), ok, base);
 }
 
-String String::number(int n)
+String String::number(int n, int base)
 {
-    std::string s = std::to_string(n);
-    return fromAscii(s.c_str());
+    std::stringstream stream;
+    if (base == 16) {
+        stream << std::hex;
+    }
+    stream << n;
+    std::string s = stream.str();
+    return fromAscii(s.c_str(), s.size());
 }
 
 String String::number(size_t n)
@@ -852,6 +853,14 @@ double String::toDouble(bool* ok) const
 // ============================
 // StringList
 // ============================
+
+StringList::StringList(const QStringList& l)
+{
+    reserve(l.size());
+    for (const QString& s : l) {
+        push_back(String::fromQString(s));
+    }
+}
 
 StringList StringList::filter(const String& str) const
 {

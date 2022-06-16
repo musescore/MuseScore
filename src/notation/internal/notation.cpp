@@ -142,12 +142,12 @@ mu::async::Notification Notation::scoreInited() const
 
 QString Notation::name() const
 {
-    return m_score ? m_score->name() : QString();
+    return m_score ? m_score->name().toQString() : QString();
 }
 
 QString Notation::projectName() const
 {
-    return m_score ? m_score->masterScore()->name() : QString();
+    return m_score ? m_score->masterScore()->name().toQString() : QString();
 }
 
 QString Notation::projectNameAndPartName() const
@@ -158,7 +158,7 @@ QString Notation::projectNameAndPartName() const
 
     QString result = m_score->masterScore()->name();
     if (!m_score->isMaster()) {
-        result += " - " + m_score->name();
+        result += " - " + m_score->name().toQString();
     }
 
     return result;
@@ -170,7 +170,7 @@ QString Notation::workTitle() const
         return QString();
     }
 
-    QString workTitle = m_score->metaTag("workTitle");
+    QString workTitle = m_score->metaTag(u"workTitle");
     if (workTitle.isEmpty()) {
         return m_score->masterScore()->name();
     }
@@ -184,7 +184,7 @@ QString Notation::projectWorkTitle() const
         return QString();
     }
 
-    QString workTitle = m_score->masterScore()->metaTag("workTitle");
+    QString workTitle = m_score->masterScore()->metaTag(u"workTitle");
     if (workTitle.isEmpty()) {
         return m_score->masterScore()->name();
     }

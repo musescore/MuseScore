@@ -65,14 +65,14 @@ TextCursor* TextEditData::cursor() const
 //   editInsertText
 //---------------------------------------------------------
 
-void TextBase::editInsertText(TextCursor* cursor, const QString& s)
+void TextBase::editInsertText(TextCursor* cursor, const String& s)
 {
     Q_ASSERT(!layoutInvalid);
     textInvalid = true;
 
     int col = 0;
-    for (const QChar& c : s) {
-        if (!c.isHighSurrogate()) {
+    for (size_t i = 0; i < s.size(); ++i) {
+        if (!s.at(i).isHighSurrogate()) {
             ++col;
         }
     }
@@ -128,8 +128,8 @@ void TextBase::endEdit(EditData& ed)
         return;
     }
 
-    const QString actualXmlText = xmlText();
-    const QString actualPlainText = plainText();
+    const String actualXmlText = xmlText();
+    const String actualPlainText = plainText();
 
     // replace all undo/redo records collected during text editing with
     // one property change
@@ -225,9 +225,9 @@ void TextBase::insertSym(EditData& ed, SymId id)
     TextCursor* cursor = ted->cursor();
 
     deleteSelectedText(ed);
-    QString s = score()->scoreFont()->toString(id);
+    String s = score()->scoreFont()->toString(id);
     CharFormat fmt = *cursor->format();    // save format
-    cursor->format()->setFontFamily("ScoreText");
+    cursor->format()->setFontFamily(u"ScoreText");
     score()->undo(new InsertText(_cursor, s), &ed);
     cursor->setFormat(fmt);    // restore format
 }
@@ -236,7 +236,7 @@ void TextBase::insertSym(EditData& ed, SymId id)
 //   insertText
 //---------------------------------------------------------
 
-void TextBase::insertText(EditData& ed, const QString& s)
+void TextBase::insertText(EditData& ed, const String& s)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
@@ -286,7 +286,7 @@ bool TextBase::edit(EditData& ed)
     }
     TextCursor* cursor = ted->cursor();
 
-    QString s         = ed.s;
+    String s         = ed.s;
     bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
     bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
     bool altPressed = ed.modifiers & Qt::AltModifier;
@@ -356,7 +356,7 @@ bool TextBase::edit(EditData& ed)
                         score()->undo(new JoinText(cursor), &ed);
                     }
                 } else {
-                    score()->undo(new RemoveText(cursor, QString(cursor->currentCharacter())), &ed);
+                    score()->undo(new RemoveText(cursor, String(cursor->currentCharacter())), &ed);
                 }
 
 //                notifyAboutTextRemoved() // todo
@@ -370,7 +370,7 @@ bool TextBase::edit(EditData& ed)
                 // delete last word
                 cursor->movePosition(TextCursor::MoveOperation::WordLeft, TextCursor::MoveMode::KeepAnchor);
                 int endPosition = cursor->currentPosition();
-                QString text = cursor->selectedText();
+                String text = cursor->selectedText();
 
                 s.clear();
 
@@ -378,7 +378,7 @@ bool TextBase::edit(EditData& ed)
                     notifyAboutTextRemoved(startPosition, endPosition, text);
                 }
             } else {
-                QString text = cursor->selectedText();
+                String text = cursor->selectedText();
 
                 if (!deleteSelectedText(ed)) {
                     if (cursor->column() == 0 && _cursor->row() != 0) {
@@ -387,7 +387,7 @@ bool TextBase::edit(EditData& ed)
                         if (!cursor->movePosition(TextCursor::MoveOperation::Left)) {
                             return false;
                         }
-                        score()->undo(new RemoveText(cursor, QString(cursor->currentCharacter())), &ed);
+                        score()->undo(new RemoveText(cursor, String(cursor->currentCharacter())), &ed);
                     }
                 } else {
                     notifyAboutTextRemoved(startPosition, startPosition - 1, text);
@@ -479,7 +479,7 @@ bool TextBase::edit(EditData& ed)
 
         case Qt::Key_Space:
             if (ed.modifiers & CONTROL_MODIFIER) {
-                s = QString(QChar(0xa0));               // non-breaking space
+                s = String(Char(0xa0));               // non-breaking space
             } else {
                 if (isFingering() && ed.view()) {
                     score()->endCmd();
@@ -723,8 +723,8 @@ EngravingItem* TextBase::drop(EditData& ed)
 
     case ElementType::FSYMBOL:
     {
-        uint code = toFSymbol(e)->code();
-        QString s = QString::fromUcs4(&code, 1);
+        char32_t code = static_cast<char32_t>(toFSymbol(e)->code());
+        String s = String::fromUcs4(&code, 1);
         delete e;
 
         deleteSelectedText(ed);
@@ -743,21 +743,21 @@ EngravingItem* TextBase::drop(EditData& ed)
 //   paste
 //---------------------------------------------------------
 
-void TextBase::paste(EditData& ed, const QString& txt)
+void TextBase::paste(EditData& ed, const String& txt)
 {
     if (MScore::debugMode) {
         LOGD("<%s>", qPrintable(txt));
     }
 
     int state = 0;
-    QString token;
-    QString sym;
+    String token;
+    String sym;
     bool symState = false;
     CharFormat format = *static_cast<TextEditData*>(ed.getData(this).get())->cursor()->format();
 
     score()->startCmd();
-    for (int i = 0; i < txt.length(); i++) {
-        QChar c = txt[i];
+    for (size_t i = 0; i < txt.size(); i++) {
+        Char c = txt.at(i);
         if (state == 0) {
             if (c == '<') {
                 state = 1;
@@ -772,13 +772,13 @@ void TextBase::paste(EditData& ed, const QString& txt)
                     deleteSelectedText(ed);
                     static_cast<TextEditData*>(ed.getData(this).get())->cursor()->setFormat(format);
                     if (c.isHighSurrogate()) {
-                        QChar highSurrogate = c;
-                        Q_ASSERT(i + 1 < txt.length());
+                        Char highSurrogate = c;
+                        Q_ASSERT(i + 1 < txt.size());
                         i++;
-                        QChar lowSurrogate = txt[i];
-                        insertText(ed, QString(QChar::surrogateToUcs4(highSurrogate, lowSurrogate)));
+                        Char lowSurrogate = txt.at(i);
+                        insertText(ed, String(Char::surrogateToUcs4(highSurrogate, lowSurrogate)));
                     } else {
-                        insertText(ed, QString(QChar(c.unicode())));
+                        insertText(ed, String(Char(c.unicode())));
                     }
                 }
             }
@@ -801,19 +801,19 @@ void TextBase::paste(EditData& ed, const QString& txt)
             if (c == ';') {
                 state = 0;
                 if (token == "lt") {
-                    insertText(ed, "<");
+                    insertText(ed, u"<");
                 } else if (token == "gt") {
-                    insertText(ed, ">");
+                    insertText(ed, u">");
                 } else if (token == "amp") {
-                    insertText(ed, "&");
+                    insertText(ed, u"&");
                 } else if (token == "quot") {
-                    insertText(ed, "\"");
+                    insertText(ed, u"\"");
                 } else {
                     insertSym(ed, SymNames::symIdByName(token));
                 }
             } else if (!c.isLetter()) {
                 state = 0;
-                insertText(ed, "&");
+                insertText(ed, u"&");
                 insertText(ed, token);
                 insertText(ed, c);
             } else {
@@ -822,7 +822,7 @@ void TextBase::paste(EditData& ed, const QString& txt)
         }
     }
     if (state == 2) {
-        insertText(ed, "&");
+        insertText(ed, u"&");
         insertText(ed, token);
     }
     score()->endCmd();
@@ -843,13 +843,13 @@ void TextBase::endHexState(EditData& ed)
             size_t c1 = c2 - (hexState + 1);
 
             TextBlock& t = _layout[cursor->row()];
-            QString ss   = t.remove(static_cast<int>(c1), hexState + 1, cursor);
+            String ss   = t.remove(static_cast<int>(c1), hexState + 1, cursor);
             bool ok;
             int code     = ss.mid(1).toInt(&ok, 16);
             cursor->setColumn(c1);
             cursor->clearSelection();
             if (ok) {
-                editInsertText(cursor, QString(code));
+                editInsertText(cursor, String(code));
             } else {
                 LOGD("cannot convert hex string <%s>, state %d (%zu-%zu)",
                      qPrintable(ss.mid(1)), hexState, c1, c2);
@@ -897,7 +897,7 @@ bool TextBase::deleteSelectedText(EditData& ed)
             TextCursor undoCursor(*_cursor);
             // can't rely on the cursor's current format as it doesn't preserve the special font "ScoreText"
             undoCursor.setFormat(*_layout[_cursor->row()].formatAt(static_cast<int>(_cursor->column())));
-            score()->undo(new RemoveText(&undoCursor, QString(_cursor->currentCharacter())), &ed);
+            score()->undo(new RemoveText(&undoCursor, String(_cursor->currentCharacter())), &ed);
         }
     }
     return true;

@@ -85,7 +85,7 @@ void GuitarPro5::readInfo()
     readDelphiString();
     QString copyright = readDelphiString();
     if (!copyright.isEmpty()) {
-        score->setMetaTag("copyright", QString("%1").arg(copyright));
+        score->setMetaTag(u"copyright", copyright);
     }
 
     transcriber  = readDelphiString();
@@ -121,7 +121,7 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
     }
     if (fxBits2 & 0x01) {   // Rasgueado effect
         StaffText* st = new StaffText(score->dummy()->segment());
-        st->setXmlText("rasg.");
+        st->setXmlText(u"rasg.");
         st->setParent(segment);
         st->setTrack(track);
         score->addElement(st);
@@ -941,7 +941,7 @@ bool GuitarPro5::read(IODevice* io)
                     "D.S. al Fine", "Da Segno Segno", "D.S.S. al Coda", "D.S.S. al Double Coda",
                     "D.S.S. al Fine", "Da Coda", "Da Double Coda"
                 };
-                st->setPlainText(text[i - 4]);
+                st->setPlainText(String::fromAscii(text[i - 4]));
                 st->setParent(s);
                 st->setTrack(0);
                 auto iter = counter.find(articulations[i]);

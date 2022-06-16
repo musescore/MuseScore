@@ -479,7 +479,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
 
     MeasureBase* measureB = score->first();
     Text* text = Factory::createText(measureB, TextStyleType::TITLE);
-    text->setPlainText(bb.title());
+    text->setPlainText(String::fromUtf8(bb.title()));
 
     if (measureB->type() != ElementType::VBOX) {
         measureB = Factory::createVBox(score->dummy()->system());

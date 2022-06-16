@@ -285,7 +285,7 @@ public:
     static qreal nudgeStep10;
     static qreal nudgeStep50;
     static int defaultPlayDuration;
-    static QString lastError;
+    static String lastError;
 
 // #ifndef NDEBUG
     static bool noHorizontalStretch;
