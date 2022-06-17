@@ -258,7 +258,7 @@ RectF TextCursor::cursorRect() const
     mu::draw::Font _font  = fragment ? fragment->font(_text) : _text->font();
     qreal ascent = mu::draw::FontMetrics::ascent(_font);
     qreal h = ascent;
-    qreal x = tline.xpos(static_cast<int>(column()), _text);
+    qreal x = tline.xpos(column(), _text);
     qreal y = tline.y() - ascent * .9;
     return RectF(x, y, 4.0, h);
 }
@@ -996,15 +996,15 @@ std::list<TextFragment> TextBlock::fragmentsWithoutEmpty()
 //   xpos
 //---------------------------------------------------------
 
-qreal TextBlock::xpos(int column, const TextBase* t) const
+qreal TextBlock::xpos(size_t column, const TextBase* t) const
 {
-    int col = 0;
+    size_t col = 0;
     for (const TextFragment& f : _fragments) {
         if (column == col) {
             return f.pos.x();
         }
         mu::draw::FontMetrics fm(f.font(t));
-        int idx = 0;
+        size_t idx = 0;
         for (size_t i = 0; i < f.text.size(); ++i) {
             ++idx;
             if (f.text.at(i).isHighSurrogate()) {

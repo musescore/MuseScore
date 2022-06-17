@@ -254,7 +254,7 @@ public:
     String remove(int start, int n, TextCursor*);
     int column(qreal x, TextBase*) const;
     TextBlock split(int column, TextCursor* cursor);
-    qreal xpos(int col, const TextBase*) const;
+    qreal xpos(size_t col, const TextBase*) const;
     const CharFormat* formatAt(int) const;
     const TextFragment* fragment(int col) const;
     std::list<TextFragment>::iterator fragment(int column, int* rcol, int* ridx);
