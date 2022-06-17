@@ -33,7 +33,7 @@
 #include "libmscore/rest.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/score.h"
-#include "libmscore/slide.h"
+#include "libmscore/chordline.h"
 #include "libmscore/slur.h"
 #include "libmscore/spanner.h"
 #include "libmscore/stafftext.h"
@@ -1549,11 +1549,10 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
         if (gpnote->slides()[flagIdx]) {
             auto type = slideType(flagIdx);
 
-            Slide* slide = mu::engraving::Factory::createSlide(_score->dummy()->chord());
-            slide->setChordLineType(type.first);
-            note->chord()->add(slide);
-
-            slide->setNote(note);
+            ChordLine* cl = mu::engraving::Factory::createChordLine(_score->dummy()->chord());
+            cl->setChordLineType(type.first);
+            cl->setStraight(true);
+            note->chord()->add(cl);
 
             Note::Slide sl{ type.second, nullptr };
             note->attachSlide(sl);

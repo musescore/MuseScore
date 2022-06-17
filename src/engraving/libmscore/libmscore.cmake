@@ -255,8 +255,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/sig.h
     ${CMAKE_CURRENT_LIST_DIR}/skyline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/skyline.h
-    ${CMAKE_CURRENT_LIST_DIR}/slide.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/slide.h
     ${CMAKE_CURRENT_LIST_DIR}/slur.cpp
     ${CMAKE_CURRENT_LIST_DIR}/slur.h
     ${CMAKE_CURRENT_LIST_DIR}/slurtie.cpp

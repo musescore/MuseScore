@@ -57,7 +57,6 @@
 #include "chord.h"
 #include "fermata.h"
 #include "chordline.h"
-#include "slide.h"
 #include "accidental.h"
 #include "measurenumber.h"
 #include "mmrestrange.h"
@@ -143,7 +142,6 @@ static const ElementName elementNames[] = {
     { ElementType::ARTICULATION,         "Articulation",         QT_TRANSLATE_NOOP("elementName", "Articulation") },
     { ElementType::FERMATA,              "Fermata",              QT_TRANSLATE_NOOP("elementName", "Fermata") },
     { ElementType::CHORDLINE,            "ChordLine",            QT_TRANSLATE_NOOP("elementName", "Chord line") },
-    { ElementType::SLIDE,                "Slide",                QT_TRANSLATE_NOOP("elementName", "Slide") },
     { ElementType::DYNAMIC,              "Dynamic",              QT_TRANSLATE_NOOP("elementName", "Dynamic") },
     { ElementType::BEAM,                 "Beam",                 QT_TRANSLATE_NOOP("elementName", "Beam") },
     { ElementType::HOOK,                 "Hook",                 QT_TRANSLATE_NOOP("elementName", "Flag") }, // internally called "Hook", but "Flag" in SMuFL, so here externally too
@@ -272,7 +270,6 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::ARTICULATION:      return new Articulation(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
     case ElementType::FERMATA:           return new Fermata(parent);
     case ElementType::CHORDLINE:         return new ChordLine(parent->isChord() ? toChord(parent) : dummy->chord());
-    case ElementType::SLIDE:             return new Slide(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::ACCIDENTAL:        return new Accidental(parent);
     case ElementType::DYNAMIC:           return new Dynamic(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TEXT:              return new Text(parent);
@@ -593,10 +590,6 @@ Segment* Factory::createSegment(Measure* parent, SegmentType type, const Fractio
 
     return s;
 }
-
-CREATE_ITEM_IMPL(Slide, ElementType::SLIDE, Chord, isAccessibleEnabled)
-COPY_ITEM_IMPL(Slide)
-MAKE_ITEM_IMPL(Slide, Chord)
 
 CREATE_ITEM_IMPL(Slur, ElementType::SLUR, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Slur, EngravingItem)
