@@ -51,6 +51,16 @@ static const ElementStyle articulationStyle {
     { Sid::articulationAnchorDefault, Pid::ARTICULATION_ANCHOR },
 };
 
+static const std::map<Articulation::TextType, Articulation::TextTypeMapping> artTypeToInfo {
+    { Articulation::TextType::SLAP, { String("S"), String("Slap") } },
+    { Articulation::TextType::POP, { String("P"), String("Pop") } },
+};
+
+static const std::map<String, Articulation::TextType> artTextToType {
+    { String("Slap"), Articulation::TextType::SLAP },
+    { String("Pop"), Articulation::TextType::POP },
+};
+
 //---------------------------------------------------------
 //   Articulation
 //---------------------------------------------------------
@@ -63,6 +73,11 @@ Articulation::Articulation(ChordRest* parent)
     _direction     = DirectionV::AUTO;
     _up            = true;
     _ornamentStyle = OrnamentStyle::DEFAULT;
+
+    m_font.setFamily(u"FreeSans");
+    m_font.setPointSizeF(7.0);
+    m_font.setBold(true);
+
     setPlayArticulation(true);
     initElementStyle(&articulationStyle);
     setupShowOnTabStyles();
@@ -77,6 +92,16 @@ void Articulation::setSymId(SymId id)
     _symId  = id;
     setupShowOnTabStyles();
     _anchor = ArticulationAnchor(propertyDefault(Pid::ARTICULATION_ANCHOR).toInt());
+    m_textType = TextType::NO_TEXT;
+}
+
+//---------------------------------------------------------
+//   setTextType
+//---------------------------------------------------------
+
+void Articulation::setTextType(TextType textType)
+{
+    m_textType = textType;
 }
 
 //---------------------------------------------------------
@@ -91,6 +116,7 @@ int Articulation::subtype() const
     } else if (s.endsWith(u"Turned")) {
         return int(SymNames::symIdByName(s.left(s.size() - 6)));
     }
+
     return int(_symId);
 }
 
@@ -141,21 +167,26 @@ bool Articulation::readProperties(XmlReader& e)
 
     if (tag == "subtype") {
         AsciiStringView s = e.readAsciiText();
-        SymId id = SymNames::symIdByName(s);
-        if (id == SymId::noSym) {
-            id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
-        }
-        if (id == SymId::noSym || s == "ornamentMordentInverted") {   // SMuFL < 1.30
-            id = SymId::ornamentMordent;
-        }
-
-        String programVersion = masterScore()->mscoreVersion();
-        if (!programVersion.isEmpty() && programVersion < u"3.6") {
-            if (id == SymId::noSym || s == "ornamentMordent") {   // SMuFL < 1.30 and MuseScore < 3.6
-                id = SymId::ornamentShortTrill;
+        String typeName = String(s.ascii());
+        if (artTextToType.find(typeName) != artTextToType.end()) {
+            m_textType = artTextToType.at(typeName);
+        } else {
+            SymId id = SymNames::symIdByName(s);
+            if (id == SymId::noSym) {
+                id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
             }
+            if (id == SymId::noSym || s == "ornamentMordentInverted") {   // SMuFL < 1.30
+                id = SymId::ornamentMordent;
+            }
+
+            String programVersion = masterScore()->mscoreVersion();
+            if (!programVersion.isEmpty() && programVersion < u"3.6") {
+                if (id == SymId::noSym || s == "ornamentMordent") {   // SMuFL < 1.30 and MuseScore < 3.6
+                    id = SymId::ornamentShortTrill;
+                }
+            }
+            setSymId(id);
         }
-        setSymId(id);
     } else if (tag == "channel") {
         _channelName = e.attribute("name");
         e.readNext();
@@ -193,7 +224,12 @@ void Articulation::write(XmlWriter& xml) const
         xml.tag("channe", { { "name", _channelName } });
     }
     writeProperty(xml, Pid::DIRECTION);
-    xml.tag("subtype", SymNames::nameForSymId(_symId));
+    if (m_textType != TextType::NO_TEXT) {
+        xml.tag("subtype", artTypeToInfo.at(m_textType).name);
+    } else {
+        xml.tag("subtype", SymNames::nameForSymId(_symId));
+    }
+
     writeProperty(xml, Pid::PLAY);
     writeProperty(xml, Pid::ORNAMENT_STYLE);
     for (const StyledProperty& spp : *styledProperties()) {
@@ -209,6 +245,10 @@ void Articulation::write(XmlWriter& xml) const
 
 String Articulation::typeUserName() const
 {
+    if (m_textType != TextType::NO_TEXT) {
+        return artTypeToInfo.at(m_textType).text;
+    }
+
     return SymNames::translatedUserNameForSymId(symId());
 }
 
@@ -221,7 +261,15 @@ void Articulation::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
 
     painter->setPen(curColor());
-    drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
+
+    if (m_textType != TextType::NO_TEXT) {
+        mu::draw::Font scaledFont(m_font);
+        scaledFont.setPointSizeF(m_font.pointSizeF() * magS() * MScore::pixelRatio);
+        painter->setFont(scaledFont);
+        painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, artTypeToInfo.at(m_textType).text);
+    } else {
+        drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
+    }
 }
 
 //---------------------------------------------------------
@@ -284,8 +332,14 @@ void Articulation::layout()
         return;
     }
 
-    RectF b(symBbox(_symId));
-    setbbox(b.translated(-0.5 * b.width(), 0.0));
+    if (m_textType != TextType::NO_TEXT) {
+        mu::draw::FontMetrics fm(m_font);
+        RectF b(fm.boundingRect(m_font, artTypeToInfo.at(m_textType).text));
+        setbbox(b.translated(-0.5 * b.width(), 0.0));
+    } else {
+        RectF b(symBbox(_symId));
+        setbbox(b.translated(-0.5 * b.width(), 0.0));
+    }
 }
 
 bool Articulation::isHiddenOnTabStaff() const
