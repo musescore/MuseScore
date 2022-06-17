@@ -690,7 +690,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     default:
-        ASSERT_X(QString::asprintf("Segment::add() unknown %s", el->typeName()));
+        ASSERT_X(String("Segment::add() unknown %1").arg(String::fromAscii(el->typeName())));
         return;
     }
 
@@ -807,7 +807,7 @@ void Segment::remove(EngravingItem* el)
         break;
 
     default:
-        ASSERT_X(QString::asprintf("Segment::remove() unknown %s", el->typeName()));
+        ASSERT_X(String("Segment::remove() unknown %1").arg(String::fromAscii(el->typeName())));
         return;
     }
     triggerLayout();

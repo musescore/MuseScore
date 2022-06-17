@@ -527,16 +527,16 @@ static const char* valu[] = {
  * @return
  *  The string representation of the note.
  */
-QString pitch2string(int v)
+String pitch2string(int v)
 {
     if (v < 0 || v > 127) {
-        return QString("----");
+        return String("----");
     }
     int octave = (v / 12) - 1;
-    QString o;
-    o = QString::asprintf("%d", octave);
+    String o;
+    o = String::number(octave);
     int i = v % 12;
-    return qtrc("utils", octave < 0 ? valu[i] : vall[i]) + o;
+    return mtrc("engraving", octave < 0 ? valu[i] : vall[i]) + o;
 }
 
 /*!
@@ -655,7 +655,7 @@ int version()
     QRegularExpression versionRegEx("(\\d+)\\.(\\d+)\\.(\\d+)");
     QRegularExpressionMatch versionMatch = versionRegEx.match(VERSION);
     if (versionMatch.hasMatch()) {
-        QStringList versionStringList = versionMatch.capturedTexts();
+        StringList versionStringList = versionMatch.capturedTexts();
         if (versionStringList.size() == 4) {
             _majorVersion = versionStringList[1].toInt();
             _minorVersion = versionStringList[2].toInt();
@@ -1031,7 +1031,7 @@ Segment* skipTuplet(Tuplet* tuplet)
 //    replace ascii with bravura symbols
 //---------------------------------------------------------
 
-SymIdList timeSigSymIdsFromString(const QString& string)
+SymIdList timeSigSymIdsFromString(const String& string)
 {
     static const std::map<QChar, SymId> dict = {
         { 43,    SymId::timeSigPlusSmall },             // '+'
@@ -1065,8 +1065,8 @@ SymIdList timeSigSymIdsFromString(const QString& string)
     };
 
     SymIdList list;
-    for (const QChar& c : string) {
-        SymId sym = mu::value(dict, c, SymId::noSym);
+    for (size_t i = 0; i < string.size(); ++i) {
+        SymId sym = mu::value(dict, string.at(i), SymId::noSym);
         if (sym != SymId::noSym) {
             list.push_back(sym);
         }

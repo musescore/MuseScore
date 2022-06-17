@@ -643,14 +643,14 @@ int Hairpin::subtype() const
 
 DynamicType Hairpin::dynamicTypeFrom() const
 {
-    QByteArray ba = beginText().toLatin1();
-    return TConv::dynamicType(ba.constData());
+    ByteArray ba = beginText().toAscii();
+    return TConv::dynamicType(ba.constChar());
 }
 
 DynamicType Hairpin::dynamicTypeTo() const
 {
-    QByteArray ba = endText().toLatin1();
-    return TConv::dynamicType(ba.constData());
+    ByteArray ba = endText().toAscii();
+    return TConv::dynamicType(ba.constChar());
 }
 
 //---------------------------------------------------------

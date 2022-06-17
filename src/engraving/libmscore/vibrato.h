@@ -86,15 +86,15 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    void setVibratoType(const QString& s);
+    void setVibratoType(const String& s);
     void undoSetVibratoType(Type val);
     void setVibratoType(Type tt) { _vibratoType = tt; }
     Type vibratoType() const { return _vibratoType; }
     void setPlayArticulation(bool val) { _playArticulation = val; }
     bool playArticulation() const { return _playArticulation; }
-    static QString type2name(Vibrato::Type t);
-    QString vibratoTypeName() const;
-    QString vibratoTypeUserName() const;
+    static String type2name(Vibrato::Type t);
+    String vibratoTypeName() const;
+    String vibratoTypeUserName() const;
 
     Segment* segment() const { return (Segment*)explicitParent(); }
 
@@ -111,7 +111,7 @@ public:
 struct VibratoTableItem {
     Vibrato::Type type;
     const char* name;
-    QString userName;
+    const char* userName;
 };
 
 extern const std::vector<VibratoTableItem> vibratoTable;

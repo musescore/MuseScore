@@ -550,7 +550,7 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
 {
     if (MScore::debugMode) {
         const int mno = measure->no() + 1;
-        xml.comment(QString("Measure %1").arg(mno));
+        xml.comment(String("Measure %1").arg(mno));
     }
     if (measure->_len != measure->m_timesig) {
         // this is an irregular measure

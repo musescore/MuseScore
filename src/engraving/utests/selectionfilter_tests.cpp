@@ -28,9 +28,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString SELECTIONFILTER_DATA_DIR("selectionfilter_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String SELECTIONFILTER_DATA_DIR("selectionfilter_data/");
 
 class SelectionFilterTests : public ::testing::Test
 {
@@ -41,7 +42,7 @@ public:
 
 void SelectionFilterTests::testFilter(int idx, SelectionFilterType filter)
 {
-    Score* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1.mscx").arg(idx));
+    Score* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String(u"selectionfilter%1.mscx").arg(idx));
     EXPECT_TRUE(score);
     score->doLayout();
 
@@ -53,23 +54,23 @@ void SelectionFilterTests::testFilter(int idx, SelectionFilterType filter)
     EXPECT_TRUE(score->selection().canCopy());
     EXPECT_EQ(score->selection().mimeType(), mimeStaffListFormat);
 
-    EXPECT_TRUE(ScoreComp::saveCompareMimeData(score->selection().mimeData(), QString("selectionfilter%1-base.xml").arg(idx),
-                                               SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1-base-ref.xml").arg(idx)));
+    EXPECT_TRUE(ScoreComp::saveCompareMimeData(score->selection().mimeData(), String("selectionfilter%1-base.xml").arg(idx),
+                                               SELECTIONFILTER_DATA_DIR + String("selectionfilter%1-base-ref.xml").arg(idx)));
 
     score->selectionFilter().setFiltered(filter, false);
 
     EXPECT_TRUE(score->selection().canCopy());
     EXPECT_EQ(score->selection().mimeType(), mimeStaffListFormat);
 
-    EXPECT_TRUE(ScoreComp::saveCompareMimeData(score->selection().mimeData(), QString("selectionfilter%1.xml").arg(idx),
-                                               SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
+    EXPECT_TRUE(ScoreComp::saveCompareMimeData(score->selection().mimeData(), String("selectionfilter%1.xml").arg(idx),
+                                               SELECTIONFILTER_DATA_DIR + String("selectionfilter%1-ref.xml").arg(idx)));
 
     delete score;
 }
 
 void SelectionFilterTests::testFilterSpanner(int idx, SelectionFilterType filter)
 {
-    Score* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1.mscx").arg(idx));
+    Score* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String("selectionfilter%1.mscx").arg(idx));
     EXPECT_TRUE(score);
     score->doLayout();
 
@@ -85,16 +86,16 @@ void SelectionFilterTests::testFilterSpanner(int idx, SelectionFilterType filter
     EXPECT_TRUE(score->selection().canCopy());
     EXPECT_EQ(score->selection().mimeType(), mimeStaffListFormat);
 
-    EXPECT_TRUE(ScoreComp::saveCompareMimeData(score->selection().mimeData(), QString("selectionfilter%1-base.xml").arg(idx),
-                                               SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1-base-ref.xml").arg(idx)));
+    EXPECT_TRUE(ScoreComp::saveCompareMimeData(score->selection().mimeData(), String("selectionfilter%1-base.xml").arg(idx),
+                                               SELECTIONFILTER_DATA_DIR + String("selectionfilter%1-base-ref.xml").arg(idx)));
 
     score->selectionFilter().setFiltered(filter, false);
 
     EXPECT_TRUE(score->selection().canCopy());
     EXPECT_EQ(score->selection().mimeType(), mimeStaffListFormat);
 
-    EXPECT_TRUE(ScoreComp::saveCompareMimeData(score->selection().mimeData(), QString("selectionfilter%1.xml").arg(idx),
-                                               SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
+    EXPECT_TRUE(ScoreComp::saveCompareMimeData(score->selection().mimeData(), String("selectionfilter%1.xml").arg(idx),
+                                               SELECTIONFILTER_DATA_DIR + String("selectionfilter%1-ref.xml").arg(idx)));
 
     delete score;
 }

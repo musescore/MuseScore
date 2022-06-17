@@ -171,7 +171,7 @@ class Selection
     Fraction _currentTick;    // tracks the most recent selection
     track_idx_t _currentTrack = 0;
 
-    QString _lockReason;
+    String _lockReason;
 
     mu::ByteArray staffMimeData() const;
     mu::ByteArray symbolListMimeData() const;
@@ -192,10 +192,10 @@ public:
     void setState(SelState s);
 
     //! NOTE If locked, the selected items should not be changed.
-    void lock(const QString& reason) { _lockReason = reason; }
-    void unlock(const QString& reason) { Q_UNUSED(reason); _lockReason.clear(); }    // reason for clarity
+    void lock(const String& reason) { _lockReason = reason; }
+    void unlock(const String& reason) { Q_UNUSED(reason); _lockReason.clear(); }    // reason for clarity
     bool isLocked() const { return !_lockReason.isEmpty(); }
-    const QString& lockReason() const { return _lockReason; }
+    const String& lockReason() const { return _lockReason; }
 
     const std::vector<EngravingItem*>& elements() const { return _el; }
     std::vector<EngravingItem*> elements(ElementType type) const;
@@ -219,7 +219,7 @@ public:
     void update();
     void updateState();
     void dump();
-    QString mimeType() const;
+    String mimeType() const;
     mu::ByteArray mimeData() const;
 
     Segment* startSegment() const { return _startSegment; }

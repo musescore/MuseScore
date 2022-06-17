@@ -135,7 +135,7 @@ public:
     void setScore(Score* score) override;
 
     bool isTop() const;
-    QString partName() const;
+    String partName() const;
     staff_idx_t rstaff() const;
     staff_idx_t idx() const;
     void read(XmlReader&) override;
@@ -164,7 +164,7 @@ public:
     Fraction nextClefTick(const Fraction&) const;
     Fraction currentClefTick(const Fraction&) const;
 
-    QString staffName() const;
+    String staffName() const;
 
     void setClef(Clef*);
     void removeClef(const Clef*);

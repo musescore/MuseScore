@@ -106,7 +106,7 @@ void TempoText::read(XmlReader& e)
     }
     // check sanity
     if (xmlText().isEmpty()) {
-        setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(_tempo.toBPM().val)));
+        setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(int(lrint(_tempo.toBPM().val))));
         setVisible(false);
     }
 }
@@ -115,7 +115,7 @@ qreal TempoText::tempoBpm() const
 {
     //! NOTE: find tempo in format " = 180"
     QRegularExpression regex("\\s*=\\s*(\\d+[.]{0,1}\\d*)");
-    QStringList matches = regex.match(xmlText()).capturedTexts();
+    StringList matches = regex.match(xmlText()).capturedTexts();
 
     if (matches.empty() || matches.size() < 1) {
         return 0;
@@ -174,7 +174,7 @@ static const TempoPattern tp[] = {
 //    set len to the match length and dur to the duration value
 //---------------------------------------------------------
 
-int TempoText::findTempoDuration(const QString& s, int& len, TDuration& dur)
+int TempoText::findTempoDuration(const String& s, int& len, TDuration& dur)
 {
     len = 0;
     dur = TDuration();
@@ -235,16 +235,16 @@ static const TempoPattern tpSym[] = {
 //    find the tempoText string representation for duration
 //---------------------------------------------------------
 
-QString TempoText::duration2tempoTextString(const TDuration dur)
+String TempoText::duration2tempoTextString(const TDuration dur)
 {
     for (const TempoPattern& pa : tpSym) {
         if (pa.d == dur) {
-            QString res = pa.pattern;
-            res.replace("\\s*", " ");
+            String res = String::fromUtf8(pa.pattern);
+            res.replace(u"\\s*", u" ");
             return res;
         }
     }
-    return "";
+    return u"";
 }
 
 //---------------------------------------------------------
@@ -292,9 +292,9 @@ void TempoText::updateTempo()
     // cache regexp, they are costly to create
     static std::unordered_map<QString, QRegularExpression> regexps;
     static std::unordered_map<QString, QRegularExpression> regexps2;
-    QString s = plainText();
-    s.replace(",", ".");
-    s.replace("<sym>space</sym>", " ");
+    String s = plainText();
+    s.replace(u",", u".");
+    s.replace(u"<sym>space</sym>", u" ");
     for (const TempoPattern& pa : tp) {
         QRegularExpression re;
         if (!mu::contains(regexps, QString(pa.pattern))) {
@@ -304,7 +304,7 @@ void TempoText::updateTempo()
         re = mu::value(regexps, pa.pattern);
         QRegularExpressionMatch match = re.match(s);
         if (match.hasMatch()) {
-            QStringList sl = match.capturedTexts();
+            StringList sl = match.capturedTexts();
             if (sl.size() == 2) {
                 BeatsPerSecond nt = BeatsPerSecond(sl[1].toDouble() * pa.f);
                 if (nt != _tempo) {
@@ -460,9 +460,9 @@ void TempoText::layout()
 //   duration2userName
 //---------------------------------------------------------
 
-QString TempoText::duration2userName(const TDuration t)
+String TempoText::duration2userName(const TDuration t)
 {
-    QString dots;
+    String dots;
     switch (t.dots()) {
     case 1: dots = QObject::tr("Dotted %1").arg(TConv::toUserName(t.type()));
         break;

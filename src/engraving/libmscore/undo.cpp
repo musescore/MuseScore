@@ -1612,7 +1612,7 @@ void EditText::redo(EditData*)
 
 void EditText::undoRedo()
 {
-    QString s = text->xmlText();
+    String s = text->xmlText();
     text->setXmlText(oldText);
     oldText = s;
     text->triggerLayout();
@@ -1774,7 +1774,7 @@ void ChangeStaffType::flip(EditData*)
 //   ChangePart
 //---------------------------------------------------------
 
-ChangePart::ChangePart(Part* _part, Instrument* i, const QString& s)
+ChangePart::ChangePart(Part* _part, Instrument* i, const String& s)
 {
     instrument = i;
     part       = _part;
@@ -1788,7 +1788,7 @@ ChangePart::ChangePart(Part* _part, Instrument* i, const QString& s)
 void ChangePart::flip(EditData*)
 {
     Instrument* oi = part->instrument(); //tick?
-    QString s      = part->partName();
+    String s      = part->partName();
     part->setInstrument(instrument);
     part->setPartName(partName);
 
@@ -2289,7 +2289,7 @@ void SwapExcerpt::flip(EditData*)
 
 void ChangeExcerptTitle::flip(EditData*)
 {
-    QString s = title;
+    String s = title;
     title = excerpt->name();
     excerpt->setName(s);
     excerpt->masterScore()->setExcerptsChanged(true);
@@ -2506,7 +2506,7 @@ void ChangeTextLineProperty::flip(EditData* ed)
 
 void ChangeMetaText::flip(EditData*)
 {
-    QString s = score->metaTag(id);
+    String s = score->metaTag(id);
     score->setMetaTag(id, text);
     text = s;
 }

@@ -30,7 +30,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-static const QString TEMPOMAP_TEST_FILES_DIR("tempomap_data/");
+static const String TEMPOMAP_TEST_FILES_DIR("tempomap_data/");
 
 class TempoMapTests : public ::testing::Test
 {

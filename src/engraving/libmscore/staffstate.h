@@ -60,10 +60,10 @@ public:
 
     StaffState* clone() const override { return new StaffState(*this); }
 
-    void setStaffStateType(const QString&);
+    void setStaffStateType(const String&);
     void setStaffStateType(StaffStateType st) { _staffStateType = st; }
     StaffStateType staffStateType() const { return _staffStateType; }
-    QString staffStateTypeName() const;
+    String staffStateTypeName() const;
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;

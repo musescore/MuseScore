@@ -167,7 +167,7 @@ void StaffState::layout()
 //   setStaffStateType
 //---------------------------------------------------------
 
-void StaffState::setStaffStateType(const QString& s)
+void StaffState::setStaffStateType(const String& s)
 {
     if (s == "instrument") {
         setStaffStateType(StaffStateType::INSTRUMENT);
@@ -184,19 +184,19 @@ void StaffState::setStaffStateType(const QString& s)
 //   staffStateTypeName
 //---------------------------------------------------------
 
-QString StaffState::staffStateTypeName() const
+String StaffState::staffStateTypeName() const
 {
     switch (staffStateType()) {
     case StaffStateType::INSTRUMENT:
-        return "instrument";
+        return u"instrument";
     case StaffStateType::TYPE:
-        return "type";
+        return u"type";
     case StaffStateType::VISIBLE:
-        return "visible";
+        return u"visible";
     case StaffStateType::INVISIBLE:
-        return "invisible";
+        return u"invisible";
     default:
-        return "??";
+        return u"??";
     }
 }
 

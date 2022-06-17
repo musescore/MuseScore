@@ -81,7 +81,7 @@ engraving::PropertyValue Text::propertyDefault(Pid id) const
     }
 }
 
-QString Text::readXmlText(XmlReader& r, Score* score)
+String Text::readXmlText(XmlReader& r, Score* score)
 {
     Text t(score->dummy());
     t.read(r);

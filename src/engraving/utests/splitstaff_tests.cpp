@@ -30,9 +30,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString SPLITSTAFF_DATA_DIR("splitstaff_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String SPLITSTAFF_DATA_DIR(u"splitstaff_data/");
 
 class SplitStaffTests : public ::testing::Test
 {
@@ -42,15 +43,15 @@ public:
 
 void SplitStaffTests::splitstaff(int idx, int staffIdx)
 {
-    MasterScore* score = ScoreRW::readScore(SPLITSTAFF_DATA_DIR + QString("splitstaff0%1.mscx").arg(idx));
+    MasterScore* score = ScoreRW::readScore(SPLITSTAFF_DATA_DIR + String(u"splitstaff0%1.mscx").arg(idx));
     EXPECT_TRUE(score);
 
     score->startCmd();
     score->splitStaff(staffIdx, 60);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, QString("splitstaff0%1.mscx").arg(idx),
-                                            SPLITSTAFF_DATA_DIR + QString("splitstaff0%1-ref.mscx").arg(idx)));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"splitstaff0%1.mscx").arg(idx),
+                                            SPLITSTAFF_DATA_DIR + String(u"splitstaff0%1-ref.mscx").arg(idx)));
     delete score;
 }
 

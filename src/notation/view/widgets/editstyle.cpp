@@ -655,7 +655,7 @@ EditStyle::EditStyle(QWidget* parent)
     musicalSymbolFont->clear();
     int idx = 0;
     for (auto i : mu::engraving::ScoreFont::scoreFonts()) {
-        musicalSymbolFont->addItem(i.name(), i.name());
+        musicalSymbolFont->addItem(i.name().toQString(), i.name().toQString());
         ++idx;
     }
 

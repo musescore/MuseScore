@@ -3340,11 +3340,11 @@ Hairpin* Score::addHairpin(HairpinType t, const Fraction& tickStart, const Fract
     Hairpin* pin = Factory::createHairpin(this->dummy()->segment());
     pin->setHairpinType(t);
     if (t == HairpinType::CRESC_LINE) {
-        pin->setBeginText("cresc.");
-        pin->setContinueText("(cresc.)");
+        pin->setBeginText(u"cresc.");
+        pin->setContinueText(u"(cresc.)");
     } else if (t == HairpinType::DECRESC_LINE) {
-        pin->setBeginText("dim.");
-        pin->setContinueText("(dim.)");
+        pin->setBeginText(u"dim.");
+        pin->setContinueText(u"(dim.)");
     }
     pin->setTrack(track);
     pin->setTrack2(track);

@@ -33,14 +33,14 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 struct TextEditData : public ElementEditData {
-    QString oldXmlText;
+    String oldXmlText;
     size_t startUndoIdx { 0 };
 
     TextCursor* cursor() const;
     TextBase* _textBase = nullptr;
     bool deleteText = false;
 
-    QString selectedText;
+    String selectedText;
 
     TextEditData(TextBase* t)
         : _textBase(t) {}
@@ -78,7 +78,7 @@ public:
 
 class ChangeTextProperties : public TextEditUndoCommand
 {
-    QString xmlText;
+    String xmlText;
     Pid propertyId;
     PropertyValue propertyVal;
     FontStyle existingStyle;
@@ -98,18 +98,18 @@ public:
 
 class ChangeText : public TextEditUndoCommand
 {
-    QString s;
+    String s;
 
 protected:
     void insertText(EditData*);
     void removeText(EditData*);
 
 public:
-    ChangeText(const TextCursor* tc, const QString& t)
+    ChangeText(const TextCursor* tc, const String& t)
         : TextEditUndoCommand(*tc), s(t) {}
     virtual void undo(EditData*) override = 0;
     virtual void redo(EditData*) override = 0;
-    const QString& string() const { return s; }
+    const String& string() const { return s; }
 };
 
 //---------------------------------------------------------
@@ -119,7 +119,7 @@ public:
 class InsertText : public ChangeText
 {
 public:
-    InsertText(const TextCursor* tc, const QString& t)
+    InsertText(const TextCursor* tc, const String& t)
         : ChangeText(tc, t) {}
     virtual void redo(EditData* ed) override { insertText(ed); }
     virtual void undo(EditData* ed) override { removeText(ed); }
@@ -133,7 +133,7 @@ public:
 class RemoveText : public ChangeText
 {
 public:
-    RemoveText(const TextCursor* tc, const QString& t)
+    RemoveText(const TextCursor* tc, const String& t)
         : ChangeText(tc, t) {}
     virtual void redo(EditData* ed) override { removeText(ed); }
     virtual void undo(EditData* ed) override { insertText(ed); }

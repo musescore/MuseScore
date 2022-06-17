@@ -64,9 +64,9 @@ public:
 
     TDuration duration() const;
 
-    static int findTempoDuration(const QString& s, int& len, TDuration& dur);
-    static QString duration2tempoTextString(const TDuration dur);
-    static QString duration2userName(const TDuration t);
+    static int findTempoDuration(const String& s, int& len, TDuration& dur);
+    static String duration2tempoTextString(const TDuration dur);
+    static String duration2userName(const TDuration t);
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

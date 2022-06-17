@@ -24,7 +24,7 @@
 #define __SYNTHESIZERSTATE_H__
 
 #include <list>
-#include <QString>
+#include "types/string.h"
 
 namespace mu::engraving {
 class XmlWriter;
@@ -37,10 +37,10 @@ class SynthesizerState;
 
 struct IdValue {
     int id = 0;
-    QString data;
+    String data;
 
     IdValue() {}
-    IdValue(int _id, const QString& _data)
+    IdValue(int _id, const String& _data)
         : id(_id), data(_data) {}
 };
 
@@ -50,11 +50,11 @@ struct IdValue {
 
 class SynthesizerGroup : public std::list<IdValue>
 {
-    QString _name;
+    String _name;
 
 public:
-    const QString& name() const { return _name; }
-    void setName(const QString& s) { _name = s; }
+    const String& name() const { return _name; }
+    void setName(const String& s) { _name = s; }
 
     SynthesizerGroup()
         : std::list<IdValue>() {}
@@ -81,34 +81,12 @@ public:
 
     void write(XmlWriter&, bool force = false) const;
     void read(XmlReader&);
-    SynthesizerGroup group(const QString& name) const;
+    SynthesizerGroup group(const String& name) const;
     bool isDefaultSynthSoundfont();
     int ccToUse() const;
     int method() const;
     bool isDefault() const { return _isDefault; }
     void setIsDefault(bool val) { _isDefault = val; }
-};
-
-//---------------------------------------------------------
-//   default builtin SynthesizerState
-//    used if synthesizer.xml does not exist or is not
-//    readable
-//---------------------------------------------------------
-
-static SynthesizerState defaultState = {
-    { "master", {
-          {
-              2, "0.1"
-          },
-          { 3, "440" },
-          { 4, "1" },
-          { 5, "1" }
-      },
-    },
-    { "Fluid", {
-          { 0, "MuseScore_General.sf3" },
-      },
-    }
 };
 } // namespace mu::engraving
 #endif

@@ -28,6 +28,7 @@
 #include "engraving/compat/scoreaccess.h"
 #include "utils/scorerw.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
 class HairpinTests : public ::testing::Test

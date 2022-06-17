@@ -413,7 +413,7 @@ size_t Staff::bracketLevels() const
 //   partName
 //---------------------------------------------------------
 
-QString Staff::partName() const
+String Staff::partName() const
 {
     return _part->partName();
 }
@@ -487,7 +487,7 @@ Fraction Staff::currentClefTick(const Fraction& tick) const
     return Fraction::fromTicks(clefs.currentClefTick(tick.ticks()));
 }
 
-QString Staff::staffName() const
+String Staff::staffName() const
 {
     return TConv::toUserName(clefType(Fraction())._transposingClef);
 }
