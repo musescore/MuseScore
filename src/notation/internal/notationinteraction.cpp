@@ -1523,7 +1523,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 PointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                 pt += m->system()->page()->pos();
                 applyDropPaletteElement(score, m, element, modifiers, pt);
-                if (m == last) {
+                if ((m == last) || (element->type() == ElementType::BRACKET)) {
                     break;
                 }
             }
