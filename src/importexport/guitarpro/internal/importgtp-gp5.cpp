@@ -63,7 +63,6 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
-#include "libmscore/slide.h"
 
 #include "log.h"
 
@@ -1052,30 +1051,30 @@ bool GuitarPro5::readNoteEffects(Note* note)
     }
     if (modMask2 & EFFECT_SLIDE) {
         int slideKind = readUChar();
-        Slide* sld = nullptr;
+        ChordLine* sld = nullptr;
         ChordLineType slideType = ChordLineType::NOTYPE;
 
         if (slideKind & SLIDE_OUT_DOWN) {
             slideKind &= ~SLIDE_OUT_DOWN;
-            sld = Factory::createSlide(score->dummy()->chord());
+            sld = Factory::createChordLine(score->dummy()->chord());
             slideType = ChordLineType::FALL;
         }
         // slide out upwards (doit)
         if (slideKind & SLIDE_OUT_UP) {
             slideKind &= ~SLIDE_OUT_UP;
-            sld = Factory::createSlide(score->dummy()->chord());
+            sld = Factory::createChordLine(score->dummy()->chord());
             slideType = ChordLineType::DOIT;
         }
         // slide in from below (plop)
         if (slideKind & SLIDE_IN_BELOW) {
             slideKind &= ~SLIDE_IN_BELOW;
-            sld = Factory::createSlide(score->dummy()->chord());
+            sld = Factory::createChordLine(score->dummy()->chord());
             slideType = ChordLineType::PLOP;
         }
         // slide in from above (scoop)
         if (slideKind & SLIDE_IN_ABOVE) {
             slideKind &= ~SLIDE_IN_ABOVE;
-            sld = Factory::createSlide(score->dummy()->chord());
+            sld = Factory::createChordLine(score->dummy()->chord());
             slideType = ChordLineType::SCOOP;
         }
 
@@ -1097,7 +1096,6 @@ bool GuitarPro5::readNoteEffects(Note* note)
 
             sld->setChordLineType(slideType);
             note->chord()->add(sld);
-            sld->setNote(note);
             Note::Slide sl{ convertSlideType(slideType), nullptr };
             note->attachSlide(sl);
         }

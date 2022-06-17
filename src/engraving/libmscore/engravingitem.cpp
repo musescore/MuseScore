@@ -86,7 +86,6 @@
 #include "score.h"
 #include "scorefont.h"
 #include "segment.h"
-#include "slide.h"
 #include "slur.h"
 #include "spacer.h"
 #include "staff.h"

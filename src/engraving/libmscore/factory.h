@@ -84,10 +84,6 @@ public:
     static ChordLine* copyChordLine(const ChordLine& src);
     static std::shared_ptr<ChordLine> makeChordLine(Chord* parent);
 
-    static Slide* createSlide(Chord* parent, bool isAccessibleEnabled = true);
-    static Slide* copySlide(const Slide& src);
-    static std::shared_ptr<Slide> makeSlide(Chord* parent);
-
     static Clef* createClef(Segment* parent, bool isAccessibleEnabled = true);
     static Clef* copyClef(const Clef& src);
     static std::shared_ptr<Clef> makeClef(Segment* parent);
