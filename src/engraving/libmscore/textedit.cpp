@@ -589,7 +589,7 @@ bool TextBase::edit(EditData& ed)
         score()->undo(new InsertText(_cursor, s), &ed);
 
         int startPosition = cursor->currentPosition();
-        notifyAboutTextInserted(startPosition, startPosition + s.size(), s);
+        notifyAboutTextInserted(startPosition, startPosition + static_cast<int>(s.size()), s);
     }
     return true;
 }

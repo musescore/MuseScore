@@ -1137,13 +1137,13 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
 
 static String ReadStyleName206(String xmlTag)
 {
-    int beginIdx = xmlTag.indexOf(u"<style>");
-    if (beginIdx == -1) {
+    size_t beginIdx = xmlTag.indexOf(u"<style>");
+    if (beginIdx == mu::nidx) {
         return String();
     }
     beginIdx += String(u"<style>").size();
 
-    int endIdx = xmlTag.indexOf(u"</style>");
+    size_t endIdx = xmlTag.indexOf(u"</style>");
     IF_ASSERT_FAILED(endIdx > 0) {
         return String();
     }
