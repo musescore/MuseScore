@@ -237,11 +237,11 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
         volta->setTrack(0);
         volta->endings().clear();
         if (mbf.endingFirst) {
-            volta->setText("1");
+            volta->setText(u"1");
             volta->endings().push_back(1);
             ending = 1;
         } else {
-            volta->setText("2");
+            volta->setText(u"2");
             volta->endings().push_back(2);
             ending = 2;
         }

@@ -42,22 +42,22 @@ public:
     ScoreFont(const char* name, const char* family, const char* path, const char* filename);
     ScoreFont(const ScoreFont& other);
 
-    const QString& name() const;
-    const QString& family() const;
-    const QString& fontPath() const;
+    const String& name() const;
+    const String& family() const;
+    const String& fontPath() const;
 
     std::list<std::pair<Sid, QVariant> > engravingDefaults();
     double textEnclosureThickness();
 
     static void initScoreFonts();
     static const std::vector<ScoreFont>& scoreFonts();
-    static ScoreFont* fontByName(const QString& name);
+    static ScoreFont* fontByName(const String& name);
     static ScoreFont* fallbackFont();
     static const char* fallbackTextFont();
 
     uint symCode(SymId id) const;
     SymId fromCode(uint code) const;
-    QString toString(SymId id) const;
+    String toString(SymId id) const;
 
     bool isValid(SymId id) const;
     bool useFallbackFont(SymId id) const;
@@ -116,10 +116,10 @@ private:
     std::vector<Sym> m_symbols;
     mutable mu::draw::Font m_font;
 
-    QString m_name;
-    QString m_family;
-    QString m_fontPath;
-    QString m_filename;
+    String m_name;
+    String m_family;
+    String m_fontPath;
+    String m_filename;
 
     std::list<std::pair<Sid, QVariant> > m_engravingDefaults;
     double m_textEnclosureThickness = 0;

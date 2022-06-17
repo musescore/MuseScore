@@ -23,7 +23,7 @@
 #ifndef MU_ENGRAVING_SCORERW_H
 #define MU_ENGRAVING_SCORERW_H
 
-#include <QString>
+#include "types/string.h"
 
 #include "engraving/libmscore/masterscore.h"
 
@@ -33,12 +33,12 @@ class ScoreRW
 public:
     ScoreRW() = default;
 
-    static QString rootPath();
+    static String rootPath();
 
-    static MasterScore* readScore(const QString& path, bool isAbsolutePath = false);
-    static bool saveScore(Score* score, const QString& name);
+    static MasterScore* readScore(const String& path, bool isAbsolutePath = false);
+    static bool saveScore(Score* score, const String& name);
     static EngravingItem* writeReadElement(EngravingItem* element);
-    static bool saveMimeData(ByteArray mimeData, const QString& saveName);
+    static bool saveMimeData(ByteArray mimeData, const String& saveName);
 };
 }
 

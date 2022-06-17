@@ -30,10 +30,11 @@
 #include "utils/scorerw.h"
 #include "playback/playbackeventsrenderer.h"
 
+using namespace mu;
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-static const QString PLAYBACK_EVENTS_RENDERING_DIR("playbackeventsrenderer_data/");
+static const String PLAYBACK_EVENTS_RENDERING_DIR("playbackeventsrenderer_data/");
 static constexpr duration_t QUARTER_NOTE_DURATION = 500; // duration in msecs for 4/4 120BPM
 static constexpr duration_t QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 2; // duration in msecs for 4/4 120BPM
 static constexpr duration_t SEMI_QUAVER_NOTE_DURATION = QUAVER_NOTE_DURATION / 2; // duration in msecs for 4/4 120BPM

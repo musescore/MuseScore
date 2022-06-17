@@ -36,7 +36,7 @@ int ticks_beat(int n)
 {
     int m = (Constants::division * 4) / n;
     if ((Constants::division* 4) % n) {
-        ASSERT_X(QString::asprintf("Mscore: ticks_beat(): bad divisor %d", n));
+        ASSERT_X(String("Mscore: ticks_beat(): bad divisor %1").arg(n));
     }
     return m;
 }
@@ -326,7 +326,7 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
     }
     auto e = upper_bound(t);
     if (empty() || e == begin()) {
-        ASSERT_X(QString::asprintf("tickValue(0x%x) not found", t));
+        ASSERT_X(String("tickValue(0x%1) not found").arg(t));
     }
     --e;
     int delta  = t - e->first;
@@ -351,11 +351,11 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
 //    This is not reentrant and only for debugging!
 //---------------------------------------------------------
 
-QString TimeSigMap::pos(int t) const
+String TimeSigMap::pos(int t) const
 {
     int bar, beat, tick;
     tickValues(t, &bar, &beat, &tick);
-    return QString("%1:%2:%3").arg(bar + 1).arg(beat).arg(tick);
+    return String("%1:%2:%3").arg(bar + 1, beat, tick);
 }
 
 //---------------------------------------------------------

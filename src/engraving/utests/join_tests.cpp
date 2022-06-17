@@ -31,9 +31,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString JOIN_DATA_DIR("join_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String JOIN_DATA_DIR("join_data/");
 
 class JoinTests : public ::testing::Test
 {
@@ -44,7 +45,7 @@ public:
 
 void JoinTests::join(const char* p1, const char* p2, int index)
 {
-    MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + p1);
+    MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + String::fromUtf8(p1));
     EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
@@ -61,13 +62,13 @@ void JoinTests::join(const char* p1, const char* p2, int index)
 
     score->cmdJoinMeasure(m1, m2);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, p1, JOIN_DATA_DIR + p2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(p1), JOIN_DATA_DIR + String::fromUtf8(p2)));
     delete score;
 }
 
 void JoinTests::join1(const char* p1)
 {
-    MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + p1);
+    MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + String::fromUtf8(p1));
     EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();

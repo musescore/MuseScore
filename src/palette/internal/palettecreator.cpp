@@ -1027,7 +1027,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     auto gabel4 = Factory::makeHairpin(gpaletteScore->dummy()->segment());
     gabel4->setHairpinType(HairpinType::CRESC_HAIRPIN);
-    gabel4->setBeginText("<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
+    gabel4->setBeginText(u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
     gabel4->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
     gabel4->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
     gabel4->setPropertyFlags(Pid::BEGIN_TEXT_ALIGN, PropertyFlags::UNSTYLED);
@@ -1037,7 +1037,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     auto volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::CLOSED);
     volta->setLen(w);
-    volta->setText("1.");
+    volta->setText(u"1.");
     std::vector<int> il;
     il.push_back(1);
     volta->setEndings(il);
@@ -1047,7 +1047,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         volta = makeElement<Volta>(gpaletteScore);
         volta->setVoltaType(Volta::Type::CLOSED);
         volta->setLen(w);
-        volta->setText("2.");
+        volta->setText(u"2.");
         il.clear();
         il.push_back(2);
         volta->setEndings(il);
@@ -1056,7 +1056,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         volta = makeElement<Volta>(gpaletteScore);
         volta->setVoltaType(Volta::Type::CLOSED);
         volta->setLen(w);
-        volta->setText("3.");
+        volta->setText(u"3.");
         il.clear();
         il.push_back(3);
         volta->setEndings(il);
@@ -1066,7 +1066,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::OPEN);
     volta->setLen(w);
-    volta->setText("2.");
+    volta->setText(u"2.");
     il.clear();
     il.push_back(2);
     volta->setEndings(il);
@@ -1169,21 +1169,21 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     auto staffTextLine = makeElement<TextLine>(gpaletteScore);
     staffTextLine->setLen(w);
-    staffTextLine->setBeginText("Staff");
+    staffTextLine->setBeginText(u"Staff");
     staffTextLine->setEndHookType(HookType::HOOK_90);
     sp->appendElement(staffTextLine, QT_TRANSLATE_NOOP("palette", "Staff Text line"));
 
     auto systemTextLine = makeElement<TextLine>(gpaletteScore);
     systemTextLine->setSystemFlag(true);
     systemTextLine->setLen(w);
-    systemTextLine->setBeginText("System");
+    systemTextLine->setBeginText(u"System");
     systemTextLine->setEndHookType(HookType::HOOK_90);
     sp->appendElement(systemTextLine, QT_TRANSLATE_NOOP("palette", "System Text line"));
 
     if (!defaultPalette) {
         auto textLine = makeElement<TextLine>(gpaletteScore);
         textLine->setLen(w);
-        textLine->setBeginText("VII");
+        textLine->setBeginText(u"VII");
         textLine->setEndHookType(HookType::HOOK_90);
         sp->appendElement(textLine, QT_TRANSLATE_NOOP("palette", "Text line"));
     }
@@ -1338,7 +1338,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     for (const auto& pair : defaultPalette ? DEFAULT_TEMPO_CHANGE : MASTER_TEMPO_CHANGE) {
         auto item = makeElement<GradualTempoChange>(gpaletteScore);
         item->setTempoChangeType(pair.first);
-        item->setBeginText(pair.second);
+        item->setBeginText(String::fromUtf8(pair.second));
         sp->appendElement(item, pair.second, 1.3)->yoffset = 0.4;
     }
 
@@ -1488,37 +1488,37 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
 
         auto sa = makeElement<StaffText>(gpaletteScore);
         sa->setXmlText(QT_TRANSLATE_NOOP("palette", "S/A"));
-        sa->setChannelName(0, "Soprano");
-        sa->setChannelName(1, "Alto");
-        sa->setChannelName(2, "Soprano");
-        sa->setChannelName(3, "Alto");
+        sa->setChannelName(0, u"Soprano");
+        sa->setChannelName(1, u"Alto");
+        sa->setChannelName(2, u"Soprano");
+        sa->setChannelName(3, u"Alto");
         sa->setVisible(false);
         sp->appendElement(sa, QT_TRANSLATE_NOOP("palette", "Soprano/Alto"))->setElementTranslated(true);
 
         auto tb = makeElement<StaffText>(gpaletteScore);
         tb->setXmlText(QT_TRANSLATE_NOOP("palette", "T/B"));
-        tb->setChannelName(0, "Tenor");
-        tb->setChannelName(1, "Bass");
-        tb->setChannelName(2, "Tenor");
-        tb->setChannelName(3, "Bass");
+        tb->setChannelName(0, u"Tenor");
+        tb->setChannelName(1, u"Bass");
+        tb->setChannelName(2, u"Tenor");
+        tb->setChannelName(3, u"Bass");
         tb->setVisible(false);
         sp->appendElement(tb, QT_TRANSLATE_NOOP("palette", "Tenor/Bass"))->setElementTranslated(true);
 
         auto tl = makeElement<StaffText>(gpaletteScore);
         tl->setXmlText(QT_TRANSLATE_NOOP("palette", "T/L"));
-        tl->setChannelName(0, "TENOR");
-        tl->setChannelName(1, "LEAD");
-        tl->setChannelName(2, "TENOR");
-        tl->setChannelName(3, "LEAD");
+        tl->setChannelName(0, u"TENOR");
+        tl->setChannelName(1, u"LEAD");
+        tl->setChannelName(2, u"TENOR");
+        tl->setChannelName(3, u"LEAD");
         tl->setVisible(false);
         sp->appendElement(tl, QT_TRANSLATE_NOOP("palette", "Tenor/Lead"))->setElementTranslated(true);
 
         auto bb = makeElement<StaffText>(gpaletteScore);
         bb->setXmlText(QT_TRANSLATE_NOOP("palette", "B/B"));
-        bb->setChannelName(0, "BARI");
-        bb->setChannelName(1, "BASS");
-        bb->setChannelName(2, "BARI");
-        bb->setChannelName(3, "BASS");
+        bb->setChannelName(0, u"BARI");
+        bb->setChannelName(1, u"BASS");
+        bb->setChannelName(2, u"BARI");
+        bb->setChannelName(3, u"BASS");
         bb->setVisible(false);
         sp->appendElement(bb, QT_TRANSLATE_NOOP("palette", "Bari/Bass"))->setElementTranslated(true);
     }

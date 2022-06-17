@@ -131,7 +131,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<AccidentalRole>());
 
     // Sound
-    case P_TYPE::FRACTION:    return value<Fraction>().toString();
+    case P_TYPE::FRACTION:    return value<Fraction>().toString().toQString();
     case P_TYPE::DURATION_TYPE_WITH_DOTS: {
         DurationTypeWithDots d = value<DurationTypeWithDots>();
         return QVariantMap({ { "type", static_cast<int>(d.type) }, { "dots", d.dots } });

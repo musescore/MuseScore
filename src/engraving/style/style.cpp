@@ -123,7 +123,7 @@ bool MStyle::readProperties(XmlReader& e)
             } else if (P_TYPE::DIRECTION_V == type) {
                 set(idx, DirectionV(e.readInt()));
             } else if (P_TYPE::STRING == type) {
-                set(idx, e.readText().toQString());
+                set(idx, e.readText());
             } else if (P_TYPE::ALIGN == type) {
                 Align align = TConv::fromXml(e.readText(), Align());
                 set(idx, align);
@@ -157,7 +157,7 @@ bool MStyle::readProperties(XmlReader& e)
             } else if (P_TYPE::HOOK_TYPE == type) {
                 set(idx, HookType(e.readText().toInt()));
             } else {
-                ASSERT_X("unhandled type " + QString::number(int(type)));
+                ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
             return true;
         }
@@ -201,20 +201,20 @@ bool MStyle::readStyleValCompat(XmlReader& e)
 
 bool MStyle::readTextStyleValCompat(XmlReader& e)
 {
-    static const std::array<std::pair<const char*, FontStyle>, 4> styleNamesEndings { {
-        { "FontBold",      FontStyle::Bold },
-        { "FontItalic",    FontStyle::Italic },
-        { "FontUnderline", FontStyle::Underline },
-        { "FontStrike",    FontStyle::Strike }
+    static const std::array<std::pair<String, FontStyle>, 4> styleNamesEndings { {
+        { u"FontBold",      FontStyle::Bold },
+        { u"FontItalic",    FontStyle::Italic },
+        { u"FontUnderline", FontStyle::Underline },
+        { u"FontStrike",    FontStyle::Strike }
     } };
 
-    const QString tag(e.name().toQLatin1String());
+    const String tag(e.name().toQLatin1String());
     FontStyle readFontStyle = FontStyle::Normal;
-    QString typeName;
+    String typeName;
     for (auto& fontStyle : styleNamesEndings) {
         if (tag.endsWith(fontStyle.first)) {
             readFontStyle = fontStyle.second;
-            typeName = tag.mid(0, tag.length() - int(strlen(fontStyle.first)));
+            typeName = tag.mid(0, tag.size() - fontStyle.first.size());
             break;
         }
     }
@@ -222,7 +222,7 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
         return false;
     }
 
-    const QString newFontStyleName = typeName + "FontStyle";
+    const String newFontStyleName = typeName + u"FontStyle";
     const Sid sid = MStyle::styleIdx(newFontStyleName);
     if (sid == Sid::NOSTYLE) {
         LOGW() << "readFontStyleValCompat: couldn't read text readFontStyle value:" << tag;
@@ -247,8 +247,8 @@ bool MStyle::read(IODevice* device, bool ign)
     XmlReader e(device);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            QString version = e.attribute("version");
-            QStringList sl  = version.split('.');
+            String version = e.attribute("version");
+            StringList sl  = version.split('.');
             int mscVersion  = sl[0].toInt() * 100 + sl[1].toInt();
             if (mscVersion != MSCVERSION && !ign) {
                 return false;
@@ -386,11 +386,11 @@ const char* MStyle::valueName(const Sid i)
     return StyleDef::styleValues[size_t(i)].name().ascii();
 }
 
-Sid MStyle::styleIdx(const QString& name)
+Sid MStyle::styleIdx(const String& name)
 {
-    QByteArray ba = name.toLatin1();
+    ByteArray ba = name.toAscii();
     for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
-        if (st.name() == ba.constData()) {
+        if (st.name() == ba.constChar()) {
             return st.styleIdx();
         }
     }

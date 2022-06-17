@@ -35,7 +35,7 @@ using namespace mu;
 using namespace mu::engraving::compat;
 using namespace mu::engraving;
 
-static int readStyleDefaultsVersion(MasterScore* score, const ByteArray& scoreData, const QString& completeBaseName)
+static int readStyleDefaultsVersion(MasterScore* score, const ByteArray& scoreData, const String& completeBaseName)
 {
     XmlReader e(scoreData);
     e.setDocName(completeBaseName);
@@ -50,7 +50,7 @@ static int readStyleDefaultsVersion(MasterScore* score, const ByteArray& scoreDa
     return ReadStyleHook::styleDefaultByMscVersion(score->mscVersion());
 }
 
-ReadStyleHook::ReadStyleHook(Score* score, const ByteArray& scoreData, const QString& completeBaseName)
+ReadStyleHook::ReadStyleHook(Score* score, const ByteArray& scoreData, const String& completeBaseName)
     : m_score(score), m_scoreData(scoreData), m_completeBaseName(completeBaseName)
 {
 }

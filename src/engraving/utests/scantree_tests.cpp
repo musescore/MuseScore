@@ -28,9 +28,10 @@
 
 #include "log.h"
 
-static const QString ALL_ELEMENTS_DATA_DIR("all_elements_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String ALL_ELEMENTS_DATA_DIR("all_elements_data/");
 
 //---------------------------------------------------------
 //   TestTreeModel
@@ -43,14 +44,14 @@ using namespace mu::engraving;
 class ScanTreeTests : public ::testing::Test
 {
 public:
-    void tstTree(QString file);
+    void tstTree(String file);
     void traverseTree(EngravingObject* element);
 };
 
-static QString elementToText(EngravingObject* element)
+static String elementToText(EngravingObject* element)
 {
     if (element == nullptr) {
-        return "nullptr";
+        return u"nullptr";
     }
     if (element->isEngravingItem()) {
         return toEngravingItem(element)->accessibleInfo();
@@ -58,7 +59,7 @@ static QString elementToText(EngravingObject* element)
     return element->typeUserName();
 }
 
-void ScanTreeTests::tstTree(QString file)
+void ScanTreeTests::tstTree(String file)
 {
     MasterScore* score = ScoreRW::readScore(ALL_ELEMENTS_DATA_DIR + file);
     traverseTree(score);
@@ -100,20 +101,20 @@ void ScanTreeTests::traverseTree(EngravingObject* element)
 
 TEST_F(ScanTreeTests, tstTreeElements)
 {
-    tstTree("layout_elements.mscx");
+    tstTree(u"layout_elements.mscx");
 }
 
 TEST_F(ScanTreeTests, tstTreeTablature)
 {
-    tstTree("layout_elements_tab.mscx");
+    tstTree(u"layout_elements_tab.mscx");
 }
 
 TEST_F(ScanTreeTests, tstTreeMoonlight)
 {
-    tstTree("moonlight.mscx");
+    tstTree(u"moonlight.mscx");
 }
 
 TEST_F(ScanTreeTests, DISABLED_tstTreeGoldberg) // too long
 {
-    tstTree("goldberg.mscx");
+    tstTree(u"goldberg.mscx");
 }

@@ -25,6 +25,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
@@ -33,10 +34,10 @@ static const int LEGACY_MSC_VERSION_V3 = 301;
 static const int LEGACY_MSC_VERSION_V2 = 206;
 static const int LEGACY_MSC_VERSION_V1 = 114;
 
-static const QString LEGACY_MSS_V1_PATH(":/engraving/styles/legacy-style-defaults-v1.mss");
-static const QString LEGACY_MSS_V2_PATH(":/engraving/styles/legacy-style-defaults-v2.mss");
-static const QString LEGACY_MSS_V3_PATH(":/engraving/styles/legacy-style-defaults-v3.mss");
-static const QString LEGACY_MSS_V302_PATH(":/engraving/styles/legacy-style-defaults-v302.mss");
+static const String LEGACY_MSS_V1_PATH(u":/engraving/styles/legacy-style-defaults-v1.mss");
+static const String LEGACY_MSS_V2_PATH(u":/engraving/styles/legacy-style-defaults-v2.mss");
+static const String LEGACY_MSS_V3_PATH(u":/engraving/styles/legacy-style-defaults-v3.mss");
+static const String LEGACY_MSS_V302_PATH(u":/engraving/styles/legacy-style-defaults-v302.mss");
 
 DefaultStyle* DefaultStyle::instance()
 {
@@ -112,7 +113,7 @@ const MStyle* DefaultStyle::defaultStyleForParts()
 
 const MStyle& DefaultStyle::resolveStyleDefaults(const int defaultsVersion)
 {
-    static auto loadedStyle = [](MStyle& style, const QString& path, bool& loaded_flag) -> const MStyle&
+    static auto loadedStyle = [](MStyle& style, const String& path, bool& loaded_flag) -> const MStyle&
     {
         if (loaded_flag) {
             return style;

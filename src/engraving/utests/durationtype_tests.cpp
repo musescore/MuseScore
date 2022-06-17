@@ -37,9 +37,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString DURATIONTYPE_DATA_DIR("durationtype_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String DURATIONTYPE_DATA_DIR("durationtype_data/");
 
 class DurationTypeTests : public ::testing::Test
 {
@@ -88,7 +89,7 @@ TEST_F(DurationTypeTests, halfDuration)
 //---------------------------------------------------------
 TEST_F(DurationTypeTests, doubleDuration)
 {
-    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
     EXPECT_TRUE(score);
 
     score->inputState().setTrack(0);
@@ -116,7 +117,7 @@ TEST_F(DurationTypeTests, doubleDuration)
 //---------------------------------------------------------
 TEST_F(DurationTypeTests, decDurationDotted)
 {
-    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
     EXPECT_TRUE(score);
 
     score->inputState().setTrack(0);
@@ -149,7 +150,7 @@ TEST_F(DurationTypeTests, decDurationDotted)
 //---------------------------------------------------------
 TEST_F(DurationTypeTests, incDurationDotted)
 {
-    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
     EXPECT_TRUE(score);
 
     score->inputState().setTrack(0);

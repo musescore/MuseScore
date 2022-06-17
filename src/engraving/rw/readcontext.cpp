@@ -29,6 +29,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
 ReadContext::ReadContext(Score* score)
@@ -72,7 +73,7 @@ bool ReadContext::ignoreVersionError() const
     return m_ignoreVersionError;
 }
 
-QString ReadContext::mscoreVersion() const
+String ReadContext::mscoreVersion() const
 {
     return m_score->mscoreVersion();
 }
@@ -458,7 +459,7 @@ void ReadContext::reconnectBrokenConnectors()
 //      (too many user text styles)
 //---------------------------------------------------------
 
-TextStyleType ReadContext::addUserTextStyle(const QString& name)
+TextStyleType ReadContext::addUserTextStyle(const String& name)
 {
     LOGD() << name;
     TextStyleType id = TextStyleType::TEXT_TYPES;
@@ -495,7 +496,7 @@ TextStyleType ReadContext::addUserTextStyle(const QString& name)
     return id;
 }
 
-TextStyleType ReadContext::lookupUserTextStyle(const QString& name) const
+TextStyleType ReadContext::lookupUserTextStyle(const String& name) const
 {
     for (const auto& i : userTextStyles) {
         if (i.name == name) {

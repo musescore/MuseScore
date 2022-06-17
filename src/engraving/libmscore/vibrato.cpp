@@ -277,10 +277,10 @@ void Vibrato::read(XmlReader& e)
 //   setVibratoType
 //---------------------------------------------------------
 
-void Vibrato::setVibratoType(const QString& s)
+void Vibrato::setVibratoType(const String& s)
 {
     for (VibratoTableItem i : vibratoTable) {
-        if (s.compare(i.name) == 0) {
+        if (s == String::fromUtf8(i.name)) {
             _vibratoType = i.type;
             return;
         }
@@ -292,22 +292,22 @@ void Vibrato::setVibratoType(const QString& s)
 //   type2name
 //---------------------------------------------------------
 
-QString Vibrato::type2name(Vibrato::Type t)
+String Vibrato::type2name(Vibrato::Type t)
 {
     for (VibratoTableItem i : vibratoTable) {
         if (i.type == t) {
-            return i.name;
+            return String::fromUtf8(i.name);
         }
     }
     LOGD("unknown Vibrato subtype %d", int(t));
-    return "?";
+    return u"?";
 }
 
 //---------------------------------------------------------
 //   vibratoTypeName
 //---------------------------------------------------------
 
-QString Vibrato::vibratoTypeName() const
+String Vibrato::vibratoTypeName() const
 {
     return type2name(vibratoType());
 }
@@ -316,9 +316,9 @@ QString Vibrato::vibratoTypeName() const
 //   vibratoTypeName
 //---------------------------------------------------------
 
-QString Vibrato::vibratoTypeUserName() const
+String Vibrato::vibratoTypeUserName() const
 {
-    return qtrc("vibratoType", vibratoTable[static_cast<int>(vibratoType())].userName.toUtf8().constData());
+    return mtrc("engraving", vibratoTable[static_cast<int>(vibratoType())].userName);
 }
 
 //---------------------------------------------------------

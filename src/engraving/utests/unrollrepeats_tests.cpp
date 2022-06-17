@@ -27,9 +27,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString UNROLLREPEATS_DATA_DIR("unrollrepeats_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String UNROLLREPEATS_DATA_DIR(u"unrollrepeats_data/");
 
 class UnrollRepeatsTests : public ::testing::Test
 {
@@ -43,11 +44,11 @@ class UnrollRepeatsTests : public ::testing::Test
 
 TEST_F(UnrollRepeatsTests, clefKeyTs)
 {
-    MasterScore* score = ScoreRW::readScore(UNROLLREPEATS_DATA_DIR + "clef-key-ts-test.mscx");
+    MasterScore* score = ScoreRW::readScore(UNROLLREPEATS_DATA_DIR + u"clef-key-ts-test.mscx");
 
     MasterScore* unrolled = score->unrollRepeats();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(unrolled, "clef-key-ts-test.mscx", UNROLLREPEATS_DATA_DIR + "clef-key-ts-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(unrolled, u"clef-key-ts-test.mscx", UNROLLREPEATS_DATA_DIR + u"clef-key-ts-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -58,9 +59,9 @@ TEST_F(UnrollRepeatsTests, clefKeyTs)
 
 TEST_F(UnrollRepeatsTests, pickupMeasure)
 {
-    MasterScore* score = ScoreRW::readScore(UNROLLREPEATS_DATA_DIR + "pickup-measure-test.mscx");
+    MasterScore* score = ScoreRW::readScore(UNROLLREPEATS_DATA_DIR + u"pickup-measure-test.mscx");
 
     MasterScore* unrolled = score->unrollRepeats();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(unrolled, "pickup-measure-test.mscx", UNROLLREPEATS_DATA_DIR + "pickup-measure-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(unrolled, u"pickup-measure-test.mscx", UNROLLREPEATS_DATA_DIR + u"pickup-measure-ref.mscx"));
 }

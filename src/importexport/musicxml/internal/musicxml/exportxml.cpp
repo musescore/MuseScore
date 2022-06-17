@@ -1731,7 +1731,7 @@ static void ending(XmlWriter& xml, Volta* v, bool left)
     QString voltaXml = QString("ending number=\"%1\" type=\"%2\"").arg(number, type);
     voltaXml += ExportMusicXml::positioningAttributes(v, left);
     if (left) {
-        xml.tagRaw(voltaXml, v->text().toHtmlEscaped());
+        xml.tagRaw(voltaXml, v->text().toXmlEscaped());
     } else {
         xml.tagRaw(voltaXml);
     }

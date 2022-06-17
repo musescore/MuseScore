@@ -75,14 +75,14 @@ EditStaffType::EditStaffType(QWidget* parent)
     setupUi(this);
 
     // tab page configuration
-    std::vector<QString> fontNames = mu::engraving::StaffType::fontNames(false);
-    foreach (const QString& fn, fontNames) {   // fill fret font name combo
-        fretFontName->addItem(fn);
+    std::vector<String> fontNames = mu::engraving::StaffType::fontNames(false);
+    for (const String& fn : fontNames) {   // fill fret font name combo
+        fretFontName->addItem(fn.toQString());
     }
     fretFontName->setCurrentIndex(0);
     fontNames = mu::engraving::StaffType::fontNames(true);
-    foreach (const QString& fn, fontNames) {  // fill duration font name combo
-        durFontName->addItem(fn);
+    for (const String& fn : fontNames) {  // fill duration font name combo
+        durFontName->addItem(fn.toQString());
     }
     durFontName->setCurrentIndex(0);
 

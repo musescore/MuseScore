@@ -326,7 +326,7 @@ Score::Score()
     _layer.push_back(l);
     _layerTags[0]   = "default";
 
-    _scoreFont = ScoreFont::fontByName("Leland");
+    _scoreFont = ScoreFont::fontByName(u"Leland");
 
     _fileDivision           = Constants::division;
     _style  = DefaultStyle::defaultStyle();
