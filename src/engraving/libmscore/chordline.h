@@ -39,7 +39,7 @@ class Chord;
 ///    implements fall, doit, plop, bend
 //---------------------------------------------------------
 
-class ChordLine : public EngravingItem
+class ChordLine final : public EngravingItem
 {
 protected:
 
@@ -53,7 +53,7 @@ protected:
 
     friend class Factory;
 
-    ChordLine(Chord* parent, const ElementType& type = ElementType::CHORDLINE);
+    ChordLine(Chord* parent);
     ChordLine(const ChordLine&);
 
     bool sameVoiceKerningLimited() const override { return true; }
