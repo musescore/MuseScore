@@ -508,6 +508,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     case ElementType::TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::STICKING:
     case ElementType::STAFF_STATE:

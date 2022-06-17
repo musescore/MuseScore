@@ -337,7 +337,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         // clone elements from underlying measure to mmr
         for (EngravingItem* e : underlyingSeg->annotations()) {
             // look at elements in underlying measure
-            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
+            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel()
                   || e->isPlayTechAnnotation() || e->isInstrumentChange())) {
                 continue;
             }
@@ -361,7 +361,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         // this should not happen since the elements are linked?
         for (EngravingItem* e : s->annotations()) {
             // look at elements in mmr
-            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
+            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel()
                   || e->isPlayTechAnnotation() || e->isInstrumentChange())) {
                 continue;
             }
@@ -400,7 +400,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
     int n = 0;
     for (Segment* s = m->first(); s; s = s->next()) {
         for (EngravingItem* e : s->annotations()) {
-            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
+            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel()
                   || e->isPlayTechAnnotation() || e->isInstrumentChange())) {
                 return false;
             }
@@ -506,7 +506,8 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
             }
             if (e->isRehearsalMark()
                 || e->isTempoText()
-                || ((e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isPlayTechAnnotation() || e->isInstrumentChange())
+                || ((e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel() || e->isPlayTechAnnotation()
+                     || e->isInstrumentChange())
                     && (e->systemFlag() || ctx.score()->staff(e->staffIdx())->show()))) {
                 return true;
             }
