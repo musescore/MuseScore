@@ -581,6 +581,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::FRET_DIAGRAM:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
@@ -749,6 +750,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::REHEARSAL_MARK:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::SYMBOL:
     case ElementType::TAB_DURATION_SYMBOL:
@@ -873,6 +875,7 @@ void Segment::sortStaves(std::vector<staff_idx_t>& dst)
         static const std::set<ElementType> allowedTypes {
             ElementType::REHEARSAL_MARK,
             ElementType::SYSTEM_TEXT,
+            ElementType::TRIPLET_FEEL,
             ElementType::PLAYTECH_ANNOTATION,
             ElementType::JUMP,
             ElementType::MARKER,
@@ -1780,6 +1783,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
@@ -1922,6 +1926,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
@@ -2291,6 +2296,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isSymbol()
                    && !e->isFSymbol()
                    && !e->isSystemText()
+                   && !e->isTripletFeel()
                    && !e->isInstrumentChange()
                    && !e->isArticulation()
                    && !e->isFermata()

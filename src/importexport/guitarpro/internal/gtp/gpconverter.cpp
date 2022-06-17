@@ -44,6 +44,7 @@
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
+#include "libmscore/tripletfeel.h"
 #include "libmscore/trill.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
@@ -118,6 +119,25 @@ static QString harmonicText(const GPNote::Harmonic::Type& type)
 
     LOGE() << "wrong harmonic type";
     return QString();
+}
+
+static TripletFeelType tripletFeelType(GPMasterBar::TripletFeelType tf)
+{
+    static QMap<GPMasterBar::TripletFeelType, TripletFeelType> types {
+        { GPMasterBar::TripletFeelType::Triplet8th, TripletFeelType::TRIPLET_8TH },
+        { GPMasterBar::TripletFeelType::Triplet16th, TripletFeelType::TRIPLET_16TH },
+        { GPMasterBar::TripletFeelType::Dotted8th, TripletFeelType::DOTTED_8TH },
+        { GPMasterBar::TripletFeelType::Dotted16th, TripletFeelType::DOTTED_16TH },
+        { GPMasterBar::TripletFeelType::Scottish8th, TripletFeelType::SCOTTISH_8TH },
+        { GPMasterBar::TripletFeelType::Scottish16th, TripletFeelType::SCOTTISH_16TH },
+        { GPMasterBar::TripletFeelType::None, TripletFeelType::NONE }
+    };
+
+    if (types.contains(tf)) {
+        return types[tf];
+    }
+
+    return TripletFeelType::NONE;
 }
 
 static OttavaType ottavaType(GPBeat::OttavaType t)
@@ -670,21 +690,18 @@ void GPConverter::addSection(const GPMasterBar* mB, Measure* measure)
     }
 }
 
-void GPConverter::addTripletFeel(const GPMasterBar* mB, Measure* /*measure*/)
+void GPConverter::addTripletFeel(const GPMasterBar* mB, Measure* measure)
 {
     if (mB->tripletFeel() == _lastTripletFeel) {
-        return; // if last triplet of last measure is equal current dont create new staff text
+        return; // if last triplet of last measure is equal current dont create new system text
     }
 
-//    auto convertTripletFeel = [] (GPMasterBar::TripletFeelType tf) {
-//        if (tf == GPMasterBar::TripletFeelType::Triplet8th) return TripletFeelType::Triplet8th;
-//        else if (tf == GPMasterBar::TripletFeelType::Triplet16th) return TripletFeelType::Triplet16th;
-//        else if (tf == GPMasterBar::TripletFeelType::Dotted8th) return TripletFeelType::Dotted8th;
-//        else if (tf == GPMasterBar::TripletFeelType::Dotted16th) return TripletFeelType::Dotted16th;
-//        else if (tf == GPMasterBar::TripletFeelType::Scottish8th) return TripletFeelType::Scottish8th;
-//        else if (tf == GPMasterBar::TripletFeelType::Scottish16th) return TripletFeelType::Scottish16th;
-//        return TripletFeelType::None;
-//    };
+    Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
+    TripletFeelType type = tripletFeelType(mB->tripletFeel());
+    TripletFeel* tripletFeel = Factory::createTripletFeel(segment, type);
+    _lastTripletFeel = mB->tripletFeel();
+    tripletFeel->setTrack(0);
+    segment->add(tripletFeel);
 }
 
 void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)

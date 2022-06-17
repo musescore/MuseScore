@@ -1090,6 +1090,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                         // this should be same list excluded in Score::undoAddElement()
                         case ElementType::STAFF_TEXT:
                         case ElementType::SYSTEM_TEXT:
+                        case ElementType::TRIPLET_FEEL:
                         case ElementType::PLAYTECH_ANNOTATION:
                         case ElementType::FRET_DIAGRAM:
                         case ElementType::HARMONY:
@@ -1333,6 +1334,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         // this should be same list excluded in Score::undoAddElement()
                         case ElementType::STAFF_TEXT:
                         case ElementType::SYSTEM_TEXT:
+                        case ElementType::TRIPLET_FEEL:
                         case ElementType::PLAYTECH_ANNOTATION:
                         case ElementType::FRET_DIAGRAM:
                         case ElementType::HARMONY:

@@ -165,7 +165,7 @@ public:
 
     static System* createSystem(Page* parent, bool isAccessibleEnabled = true);
     static SystemText* createSystemText(Segment* parent, TextStyleType textStyleType = TextStyleType::SYSTEM,
-                                        bool isAccessibleEnabled = true);
+                                        ElementType type = ElementType::SYSTEM_TEXT, bool isAccessibleEnabled = true);
 
     static InstrumentChange* createInstrumentChange(Segment* parent, bool isAccessibleEnabled = true);
     static InstrumentChange* createInstrumentChange(Segment* parent, const Instrument& instrument, bool isAccessibleEnabled = true);
@@ -195,6 +195,8 @@ public:
 
     static TremoloBar* createTremoloBar(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<TremoloBar> makeTremoloBar(EngravingItem* parent);
+
+    static TripletFeel* createTripletFeel(Segment* parent, TripletFeelType type = TripletFeelType::NONE, bool isAccessibleEnabled = true);
 
     static Tuplet* createTuplet(Measure* parent, bool isAccessibleEnabled = true);
     static Tuplet* copyTuplet(const Tuplet& src);

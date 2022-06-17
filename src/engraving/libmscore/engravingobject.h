@@ -71,6 +71,7 @@ class Glissando;
 class GlissandoSegment;
 class SystemDivider;
 class RehearsalMark;
+class TripletFeel;
 class Harmony;
 class Volta;
 class Jump;
@@ -326,6 +327,7 @@ public:
     CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
     CONVERT(SystemDivider, SYSTEM_DIVIDER)
     CONVERT(RehearsalMark, REHEARSAL_MARK)
+    CONVERT(TripletFeel, TRIPLET_FEEL)
     CONVERT(Harmony,       HARMONY)
     CONVERT(Volta,         VOLTA)
     CONVERT(Jump,          JUMP)
@@ -489,7 +491,7 @@ public:
 
     bool isStaffTextBase() const
     {
-        return isStaffText() || isSystemText() || isPlayTechAnnotation();
+        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation();
     }
 };
 
@@ -649,6 +651,7 @@ CONVERT(Glissando)
 CONVERT(GlissandoSegment)
 CONVERT(SystemDivider)
 CONVERT(RehearsalMark)
+CONVERT(TripletFeel)
 CONVERT(Harmony)
 CONVERT(Volta)
 CONVERT(Jump)
