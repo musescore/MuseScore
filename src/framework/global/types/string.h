@@ -27,6 +27,7 @@
 #include <vector>
 #include <string>
 #include <string_view>
+#include <regex>
 
 #include "containers.h"
 #include "bytearray.h"
@@ -243,10 +244,14 @@ public:
     bool endsWith(char16_t ch, CaseSensitivity cs = CaseSensitive) const;
 
     StringList split(const Char& ch, SplitBehavior behavior = KeepEmptyParts) const;
+    StringList split(const String& str, SplitBehavior behavior = KeepEmptyParts) const;
+    StringList split(const std::regex& re, SplitBehavior behavior = KeepEmptyParts) const;
     String& replace(const String& before, const String& after);
     String& replace(char16_t before, char16_t after);
+    String& replace(const std::regex& re, const String& after);
     String& insert(size_t position, const String& str);
     String& remove(const String& str) { return replace(str, String()); }
+    String& remove(const std::regex& rx) { return replace(rx, String()); }
     String& remove(const Char& ch);
     String& remove(char16_t ch);
     String& remove(size_t position, size_t n = mu::nidx);

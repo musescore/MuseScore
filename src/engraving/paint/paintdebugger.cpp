@@ -179,7 +179,7 @@ void PaintDebugger::drawTextWorkaround(const Font& f, const PointF& pos, const S
     m_real->drawTextWorkaround(f, pos, text);
 }
 
-void PaintDebugger::drawSymbol(const PointF& point, uint ucs4Code)
+void PaintDebugger::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
     m_real->drawSymbol(point, ucs4Code);
 }

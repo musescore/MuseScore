@@ -286,9 +286,9 @@ void QPainterProvider::drawTextWorkaround(const Font& f, const PointF& pos, cons
     m_painter->restore();
 }
 
-void QPainterProvider::drawSymbol(const PointF& point, uint ucs4Code)
+void QPainterProvider::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
-    static QHash<uint, QString> cache;
+    static QHash<char32_t, QString> cache;
     if (!cache.contains(ucs4Code)) {
         cache[ucs4Code] = QString::fromUcs4(&ucs4Code, 1);
     }

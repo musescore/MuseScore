@@ -23,7 +23,6 @@
 #include "read206.h"
 
 #include <cmath>
-#include <QRegularExpression>
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
