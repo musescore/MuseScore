@@ -119,7 +119,7 @@ void AccessibleRoot::updateStaffInfo(const AccessibleItem* newAccessibleItem, co
 
     if (newAccessibleItem && newAccessibleItem->element()->hasStaff()) {
         staff_idx_t newStaffIdx = newAccessibleItem->element()->staffIdx();
-        staff_idx_t oldStaffIdx = oldAccessibleItem ? oldAccessibleItem->element()->staffIdx() : nidx;
+        staff_idx_t oldStaffIdx = oldAccessibleItem && oldAccessibleItem->registered() ? oldAccessibleItem->element()->staffIdx() : nidx;
 
         if (newStaffIdx != oldStaffIdx) {
             auto element = newAccessibleItem->element();
