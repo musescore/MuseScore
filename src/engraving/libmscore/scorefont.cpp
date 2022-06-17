@@ -79,17 +79,17 @@ ScoreFont::ScoreFont(const ScoreFont& other)
 // Properties
 // =============================================
 
-const QString& ScoreFont::name() const
+const String& ScoreFont::name() const
 {
     return m_name;
 }
 
-const QString& ScoreFont::family() const
+const String& ScoreFont::family() const
 {
     return m_family;
 }
 
-const QString& ScoreFont::fontPath() const
+const String& ScoreFont::fontPath() const
 {
     return m_fontPath;
 }
@@ -117,7 +117,7 @@ void ScoreFont::initScoreFonts()
     }
 
     for (size_t i = 0; i < s_symIdCodes.size(); ++i) {
-        QString name(SymNames::nameForSymId(static_cast<SymId>(i)).toQLatin1String());
+        String name(SymNames::nameForSymId(static_cast<SymId>(i)).toQLatin1String());
 
         bool ok;
         uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);
@@ -169,7 +169,7 @@ const std::vector<ScoreFont>& ScoreFont::scoreFonts()
     return s_scoreFonts;
 }
 
-ScoreFont* ScoreFont::fontByName(const QString& name)
+ScoreFont* ScoreFont::fontByName(const String& name)
 {
     ScoreFont* font = nullptr;
     for (ScoreFont& f : s_scoreFonts) {
@@ -222,7 +222,7 @@ const char* ScoreFont::fallbackTextFont()
 
 void ScoreFont::load()
 {
-    QString facePath = m_fontPath + m_filename;
+    String facePath = m_fontPath + m_filename;
     if (-1 == fontProvider()->addApplicationFont(m_family, facePath)) {
         LOGE() << "fatal error: cannot load internal font: " << facePath;
         return;
@@ -243,7 +243,7 @@ void ScoreFont::load()
         computeMetrics(sym, code);
     }
 
-    File metadataFile(m_fontPath + "metadata.json");
+    File metadataFile(m_fontPath + u"metadata.json");
     if (!metadataFile.open(IODevice::ReadOnly)) {
         LOGE() << "Failed to open glyph metadata file: " << metadataFile.filePath();
         return;
@@ -267,7 +267,7 @@ void ScoreFont::load()
 
 void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
 {
-    for (const QString& symName : glyphsWithAnchors.keys()) {
+    for (const String& symName : glyphsWithAnchors.keys()) {
         SymId symId = SymNames::symIdByName(symName);
         if (symId == SymId::noSym) {
             //! NOTE currently, Bravura contains a bunch of entries in glyphsWithAnchors
@@ -278,16 +278,16 @@ void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
         Sym& sym = this->sym(symId);
         QJsonObject anchors = glyphsWithAnchors.value(symName).toObject();
 
-        static const std::unordered_map<QString, SmuflAnchorId> smuflAnchorIdNames {
-            { "stemDownNW", SmuflAnchorId::stemDownNW },
-            { "stemUpSE", SmuflAnchorId::stemUpSE },
-            { "stemDownSW", SmuflAnchorId::stemDownSW },
-            { "stemUpNW", SmuflAnchorId::stemUpNW },
-            { "cutOutNE", SmuflAnchorId::cutOutNE },
-            { "cutOutNW", SmuflAnchorId::cutOutNW },
-            { "cutOutSE", SmuflAnchorId::cutOutSE },
-            { "cutOutSW", SmuflAnchorId::cutOutSW },
-            { "opticalCenter", SmuflAnchorId::opticalCenter },
+        static const std::map<String, SmuflAnchorId> smuflAnchorIdNames {
+            { u"stemDownNW", SmuflAnchorId::stemDownNW },
+            { u"stemUpSE", SmuflAnchorId::stemUpSE },
+            { u"stemDownSW", SmuflAnchorId::stemDownSW },
+            { u"stemUpNW", SmuflAnchorId::stemUpNW },
+            { u"cutOutNE", SmuflAnchorId::cutOutNE },
+            { u"cutOutNW", SmuflAnchorId::cutOutNW },
+            { u"cutOutSE", SmuflAnchorId::cutOutSE },
+            { u"cutOutSW", SmuflAnchorId::cutOutSW },
+            { u"opticalCenter", SmuflAnchorId::opticalCenter },
         };
 
         for (const QString& anchorId : anchors.keys()) {
@@ -370,132 +370,132 @@ void ScoreFont::loadComposedGlyphs()
 void ScoreFont::loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesObject)
 {
     static const struct GlyphWithAlternates {
-        const QString key;
-        const QString alternateKey;
+        const String key;
+        const String alternateKey;
         const SymId alternateSymId;
     } glyphsWithAlternates[] = {
-        { QString("4stringTabClef"),
-          QString("4stringTabClefSerif"),
+        { String("4stringTabClef"),
+          String("4stringTabClefSerif"),
           SymId::fourStringTabClefSerif
         },
-        { QString("6stringTabClef"),
-          QString("6stringTabClefSerif"),
+        { String("6stringTabClef"),
+          String("6stringTabClefSerif"),
           SymId::sixStringTabClefSerif
         },
-        { QString("cClef"),
-          QString("cClefFrench"),
+        { String("cClef"),
+          String("cClefFrench"),
           SymId::cClefFrench
         },
-        { QString("cClef"),
-          QString("cClefFrench20C"),
+        { String("cClef"),
+          String("cClefFrench20C"),
           SymId::cClefFrench20C
         },
-        { QString("fClef"),
-          QString("fClefFrench"),
+        { String("fClef"),
+          String("fClefFrench"),
           SymId::fClefFrench
         },
-        { QString("fClef"),
-          QString("fClef19thCentury"),
+        { String("fClef"),
+          String("fClef19thCentury"),
           SymId::fClef19thCentury
         },
-        { QString("noteheadBlack"),
-          QString("noteheadBlackOversized"),
+        { String("noteheadBlack"),
+          String("noteheadBlackOversized"),
           SymId::noteheadBlack
         },
-        { QString("noteheadHalf"),
-          QString("noteheadHalfOversized"),
+        { String("noteheadHalf"),
+          String("noteheadHalfOversized"),
           SymId::noteheadHalf
         },
-        { QString("noteheadWhole"),
-          QString("noteheadWholeOversized"),
+        { String("noteheadWhole"),
+          String("noteheadWholeOversized"),
           SymId::noteheadWhole
         },
-        { QString("noteheadDoubleWhole"),
-          QString("noteheadDoubleWholeOversized"),
+        { String("noteheadDoubleWhole"),
+          String("noteheadDoubleWholeOversized"),
           SymId::noteheadDoubleWhole
         },
-        { QString("noteheadDoubleWholeSquare"),
-          QString("noteheadDoubleWholeSquareOversized"),
+        { String("noteheadDoubleWholeSquare"),
+          String("noteheadDoubleWholeSquareOversized"),
           SymId::noteheadDoubleWholeSquare
         },
-        { QString("noteheadDoubleWhole"),
-          QString("noteheadDoubleWholeAlt"),
+        { String("noteheadDoubleWhole"),
+          String("noteheadDoubleWholeAlt"),
           SymId::noteheadDoubleWholeAlt
         },
-        { QString("brace"),
-          QString("braceSmall"),
+        { String("brace"),
+          String("braceSmall"),
           SymId::braceSmall
         },
-        { QString("brace"),
-          QString("braceLarge"),
+        { String("brace"),
+          String("braceLarge"),
           SymId::braceLarge
         },
-        { QString("brace"),
-          QString("braceLarger"),
+        { String("brace"),
+          String("braceLarger"),
           SymId::braceLarger
         },
-        { QString("flag1024thDown"),
-          QString("flag1024thDownStraight"),
+        { String("flag1024thDown"),
+          String("flag1024thDownStraight"),
           SymId::flag1024thDownStraight
         },
-        { QString("flag1024thUp"),
-          QString("flag1024thUpStraight"),
+        { String("flag1024thUp"),
+          String("flag1024thUpStraight"),
           SymId::flag1024thUpStraight
         },
-        { QString("flag128thDown"),
-          QString("flag128thDownStraight"),
+        { String("flag128thDown"),
+          String("flag128thDownStraight"),
           SymId::flag128thDownStraight
         },
-        { QString("flag128thUp"),
-          QString("flag128thUpStraight"),
+        { String("flag128thUp"),
+          String("flag128thUpStraight"),
           SymId::flag128thUpStraight
         },
-        { QString("flag16thDown"),
-          QString("flag16thDownStraight"),
+        { String("flag16thDown"),
+          String("flag16thDownStraight"),
           SymId::flag16thDownStraight
         },
-        { QString("flag16thUp"),
-          QString("flag16thUpStraight"),
+        { String("flag16thUp"),
+          String("flag16thUpStraight"),
           SymId::flag16thUpStraight
         },
-        { QString("flag256thDown"),
-          QString("flag256thDownStraight"),
+        { String("flag256thDown"),
+          String("flag256thDownStraight"),
           SymId::flag256thDownStraight
         },
-        { QString("flag256thUp"),
-          QString("flag256thUpStraight"),
+        { String("flag256thUp"),
+          String("flag256thUpStraight"),
           SymId::flag256thUpStraight
         },
-        { QString("flag32ndDown"),
-          QString("flag32ndDownStraight"),
+        { String("flag32ndDown"),
+          String("flag32ndDownStraight"),
           SymId::flag32ndDownStraight
         },
-        { QString("flag32ndUp"),
-          QString("flag32ndUpStraight"),
+        { String("flag32ndUp"),
+          String("flag32ndUpStraight"),
           SymId::flag32ndUpStraight
         },
-        { QString("flag512thDown"),
-          QString("flag512thDownStraight"),
+        { String("flag512thDown"),
+          String("flag512thDownStraight"),
           SymId::flag512thDownStraight
         },
-        { QString("flag512thUp"),
-          QString("flag512thUpStraight"),
+        { String("flag512thUp"),
+          String("flag512thUpStraight"),
           SymId::flag512thUpStraight
         },
-        { QString("flag64thDown"),
-          QString("flag64thDownStraight"),
+        { String("flag64thDown"),
+          String("flag64thDownStraight"),
           SymId::flag64thDownStraight
         },
-        { QString("flag64thUp"),
-          QString("flag64thUpStraight"),
+        { String("flag64thUp"),
+          String("flag64thUpStraight"),
           SymId::flag64thUpStraight
         },
-        { QString("flag8thDown"),
-          QString("flag8thDownStraight"),
+        { String("flag8thDown"),
+          String("flag8thDownStraight"),
           SymId::flag8thDownStraight
         },
-        { QString("flag8thUp"),
-          QString("flag8thUpStraight"),
+        { String("flag8thUp"),
+          String("flag8thUpStraight"),
           SymId::flag8thUpStraight
         }
     };
@@ -510,7 +510,7 @@ void ScoreFont::loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesO
             // locate the relevant altKey in alternate array
             const QJsonArray::const_iterator alternateIt
                 = std::find_if(alternatesArray.cbegin(), alternatesArray.cend(), [&glyph](const QJsonValue& value) {
-                return value.toObject().value("name") == glyph.alternateKey;
+                return value.toObject().value("name") == glyph.alternateKey.toQString();
             });
 
             if (alternateIt != alternatesArray.cend()) {
@@ -526,32 +526,32 @@ void ScoreFont::loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesO
 
 void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject)
 {
-    static const std::list<std::pair<QString, Sid> > engravingDefaultsMapping = {
-        { "staffLineThickness",            Sid::staffLineWidth },
-        { "stemThickness",                 Sid::stemWidth },
-        { "beamThickness",                 Sid::beamWidth },
-        { "beamSpacing",                   Sid::useWideBeams },
-        { "legerLineThickness",            Sid::ledgerLineWidth },
-        { "legerLineExtension",            Sid::ledgerLineLength },
-        { "slurEndpointThickness",         Sid::SlurEndWidth },
-        { "slurMidpointThickness",         Sid::SlurMidWidth },
-        { "thinBarlineThickness",          Sid::barWidth },
-        { "thinBarlineThickness",          Sid::doubleBarWidth },
-        { "thickBarlineThickness",         Sid::endBarWidth },
-        { "dashedBarlineThickness",        Sid::barWidth },
-        { "barlineSeparation",             Sid::doubleBarDistance },
-        { "barlineSeparation",             Sid::endBarDistance },
-        { "repeatBarlineDotSeparation",    Sid::repeatBarlineDotSeparation },
-        { "bracketThickness",              Sid::bracketWidth },
-        { "hairpinThickness",              Sid::hairpinLineWidth },
-        { "octaveLineThickness",           Sid::ottavaLineWidth },
-        { "pedalLineThickness",            Sid::pedalLineWidth },
-        { "repeatEndingLineThickness",     Sid::voltaLineWidth },
-        { "lyricLineThickness",            Sid::lyricsLineThickness },
-        { "tupletBracketThickness",        Sid::tupletBracketWidth }
+    static const std::list<std::pair<String, Sid> > engravingDefaultsMapping = {
+        { u"staffLineThickness",            Sid::staffLineWidth },
+        { u"stemThickness",                 Sid::stemWidth },
+        { u"beamThickness",                 Sid::beamWidth },
+        { u"beamSpacing",                   Sid::useWideBeams },
+        { u"legerLineThickness",            Sid::ledgerLineWidth },
+        { u"legerLineExtension",            Sid::ledgerLineLength },
+        { u"slurEndpointThickness",         Sid::SlurEndWidth },
+        { u"slurMidpointThickness",         Sid::SlurMidWidth },
+        { u"thinBarlineThickness",          Sid::barWidth },
+        { u"thinBarlineThickness",          Sid::doubleBarWidth },
+        { u"thickBarlineThickness",         Sid::endBarWidth },
+        { u"dashedBarlineThickness",        Sid::barWidth },
+        { u"barlineSeparation",             Sid::doubleBarDistance },
+        { u"barlineSeparation",             Sid::endBarDistance },
+        { u"repeatBarlineDotSeparation",    Sid::repeatBarlineDotSeparation },
+        { u"bracketThickness",              Sid::bracketWidth },
+        { u"hairpinThickness",              Sid::hairpinLineWidth },
+        { u"octaveLineThickness",           Sid::ottavaLineWidth },
+        { u"pedalLineThickness",            Sid::pedalLineWidth },
+        { u"repeatEndingLineThickness",     Sid::voltaLineWidth },
+        { u"lyricLineThickness",            Sid::lyricsLineThickness },
+        { u"tupletBracketThickness",        Sid::tupletBracketWidth }
     };
 
-    for (const QString& key : engravingDefaultsObject.keys()) {
+    for (const String& key : engravingDefaultsObject.keys()) {
         if (key == "textEnclosureThickness") {
             m_textEnclosureThickness = engravingDefaultsObject.value(key).toDouble();
             continue;
@@ -570,7 +570,7 @@ void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject
         }
     }
 
-    m_engravingDefaults.push_back({ Sid::MusicalTextFont, QString("%1 Text").arg(m_family) });
+    m_engravingDefaults.push_back({ Sid::MusicalTextFont, QString("%1 Text").arg(m_family.toQString()) });
 }
 
 void ScoreFont::computeMetrics(ScoreFont::Sym& sym, uint code)
@@ -611,12 +611,12 @@ SymId ScoreFont::fromCode(uint code) const
     return static_cast<SymId>(it == m_symbols.end() ? 0 : it - m_symbols.begin());
 }
 
-static QString codeToString(uint code)
+static String codeToString(char32_t code)
 {
-    return QString::fromUcs4(&code, 1);
+    return String::fromUcs4(&code, 1);
 }
 
-QString ScoreFont::toString(SymId id) const
+String ScoreFont::toString(SymId id) const
 {
     return codeToString(symCode(id));
 }

@@ -22,8 +22,6 @@
 
 #include "playbackmodel.h"
 
-#include <QString>
-
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/repeatlist.h"

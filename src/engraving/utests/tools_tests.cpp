@@ -30,9 +30,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString TOOLS_DATA_DIR("tools_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String TOOLS_DATA_DIR("tools_data/");
 
 class ToolsTests : public ::testing::Test
 {
@@ -42,11 +43,11 @@ public:
 
 TEST_F(ToolsTests, undoAddLineBreaks)
 {
-    QString readFile(TOOLS_DATA_DIR + "undoAddLineBreaks.mscx");
-    QString writeFile1("undoAddLineBreaks01-test.mscx");
-    QString reference1(TOOLS_DATA_DIR + "undoAddLineBreaks01-ref.mscx");
-    QString writeFile2("undoAddLineBreaks02-test.mscx");
-    QString reference2(TOOLS_DATA_DIR + "undoAddLineBreaks02-ref.mscx");
+    String readFile(TOOLS_DATA_DIR + "undoAddLineBreaks.mscx");
+    String writeFile1("undoAddLineBreaks01-test.mscx");
+    String reference1(TOOLS_DATA_DIR + "undoAddLineBreaks01-ref.mscx");
+    String writeFile2("undoAddLineBreaks02-test.mscx");
+    String reference2(TOOLS_DATA_DIR + "undoAddLineBreaks02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
@@ -72,11 +73,11 @@ TEST_F(ToolsTests, undoAddLineBreaks)
 
 TEST_F(ToolsTests, undoSlashFill)
 {
-    QString readFile(TOOLS_DATA_DIR + "undoSlashFill.mscx");
-    QString writeFile1("undoSlashFill01-test.mscx");
-    QString reference1(TOOLS_DATA_DIR + "undoSlashFill01-ref.mscx");
-    QString writeFile2("undoSlashFill02-test.mscx");
-    QString reference2(TOOLS_DATA_DIR + "undoSlashFill02-ref.mscx");
+    String readFile(TOOLS_DATA_DIR + "undoSlashFill.mscx");
+    String writeFile1("undoSlashFill01-test.mscx");
+    String reference1(TOOLS_DATA_DIR + "undoSlashFill01-ref.mscx");
+    String writeFile2("undoSlashFill02-test.mscx");
+    String reference2(TOOLS_DATA_DIR + "undoSlashFill02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
 
@@ -100,11 +101,11 @@ TEST_F(ToolsTests, undoSlashFill)
 
 TEST_F(ToolsTests, undoSlashRhythm)
 {
-    QString readFile(TOOLS_DATA_DIR + "undoSlashRhythm.mscx");
-    QString writeFile1("undoSlashRhythm01-test.mscx");
-    QString reference1(TOOLS_DATA_DIR + "undoSlashRhythm01-ref.mscx");
-    QString writeFile2("undoSlashRhythm02-test.mscx");
-    QString reference2(TOOLS_DATA_DIR + "undoSlashRhythm02-ref.mscx");
+    String readFile(TOOLS_DATA_DIR + "undoSlashRhythm.mscx");
+    String writeFile1("undoSlashRhythm01-test.mscx");
+    String reference1(TOOLS_DATA_DIR + "undoSlashRhythm01-ref.mscx");
+    String writeFile2("undoSlashRhythm02-test.mscx");
+    String reference2(TOOLS_DATA_DIR + "undoSlashRhythm02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
@@ -130,11 +131,11 @@ TEST_F(ToolsTests, undoSlashRhythm)
 
 TEST_F(ToolsTests, undoResequenceAlpha)
 {
-    QString readFile(TOOLS_DATA_DIR + "undoResequenceAlpha.mscx");
-    QString writeFile1("undoResequenceAlpha01-test.mscx");
-    QString reference1(TOOLS_DATA_DIR + "undoResequenceAlpha01-ref.mscx");
-    QString writeFile2("undoResequenceAlpha02-test.mscx");
-    QString reference2(TOOLS_DATA_DIR + "undoResequenceAlpha02-ref.mscx");
+    String readFile(TOOLS_DATA_DIR + "undoResequenceAlpha.mscx");
+    String writeFile1("undoResequenceAlpha01-test.mscx");
+    String reference1(TOOLS_DATA_DIR + "undoResequenceAlpha01-ref.mscx");
+    String writeFile2("undoResequenceAlpha02-test.mscx");
+    String reference2(TOOLS_DATA_DIR + "undoResequenceAlpha02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
@@ -155,11 +156,11 @@ TEST_F(ToolsTests, undoResequenceAlpha)
 
 TEST_F(ToolsTests, undoResequenceNumeric)
 {
-    QString readFile(TOOLS_DATA_DIR + "undoResequenceNumeric.mscx");
-    QString writeFile1("undoResequenceNumeric01-test.mscx");
-    QString reference1(TOOLS_DATA_DIR + "undoResequenceNumeric01-ref.mscx");
-    QString writeFile2("undoResequenceNumeric02-test.mscx");
-    QString reference2(TOOLS_DATA_DIR + "undoResequenceNumeric02-ref.mscx");
+    String readFile(TOOLS_DATA_DIR + "undoResequenceNumeric.mscx");
+    String writeFile1("undoResequenceNumeric01-test.mscx");
+    String reference1(TOOLS_DATA_DIR + "undoResequenceNumeric01-ref.mscx");
+    String writeFile2("undoResequenceNumeric02-test.mscx");
+    String reference2(TOOLS_DATA_DIR + "undoResequenceNumeric02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
@@ -180,11 +181,11 @@ TEST_F(ToolsTests, undoResequenceNumeric)
 
 TEST_F(ToolsTests, undoResequenceMeasure)
 {
-    QString readFile(TOOLS_DATA_DIR + "undoResequenceMeasure.mscx");
-    QString writeFile1("undoResequenceMeasure01-test.mscx");
-    QString reference1(TOOLS_DATA_DIR + "undoResequenceMeasure01-ref.mscx");
-    QString writeFile2("undoResequenceMeasure02-test.mscx");
-    QString reference2(TOOLS_DATA_DIR + "undoResequenceMeasure02-ref.mscx");
+    String readFile(TOOLS_DATA_DIR + "undoResequenceMeasure.mscx");
+    String writeFile1("undoResequenceMeasure01-test.mscx");
+    String reference1(TOOLS_DATA_DIR + "undoResequenceMeasure01-ref.mscx");
+    String writeFile2("undoResequenceMeasure02-test.mscx");
+    String reference2(TOOLS_DATA_DIR + "undoResequenceMeasure02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
@@ -205,11 +206,11 @@ TEST_F(ToolsTests, undoResequenceMeasure)
 
 TEST_F(ToolsTests, undoResequencePart)
 {
-    QString readFile(TOOLS_DATA_DIR + "undoResequencePart.mscx");
-    QString writeFile1("undoResequencePart01-test.mscx");
-    QString reference1(TOOLS_DATA_DIR + "undoResequencePart01-ref.mscx");
-    QString writeFile2("undoResequencePart02-test.mscx");
-    QString reference2(TOOLS_DATA_DIR + "undoResequencePart02-ref.mscx");
+    String readFile(TOOLS_DATA_DIR + "undoResequencePart.mscx");
+    String writeFile1("undoResequencePart01-test.mscx");
+    String reference1(TOOLS_DATA_DIR + "undoResequencePart01-ref.mscx");
+    String writeFile2("undoResequencePart02-test.mscx");
+    String reference2(TOOLS_DATA_DIR + "undoResequencePart02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
@@ -230,17 +231,17 @@ TEST_F(ToolsTests, undoResequencePart)
 
 void ToolsTests::changeEnharmonic(bool both)
 {
-    QString readFile(TOOLS_DATA_DIR + "change-enharmonic.mscx");
+    String readFile(TOOLS_DATA_DIR + u"change-enharmonic.mscx");
     MasterScore* score = ScoreRW::readScore(readFile);
-    QString mode = both ? "both" : "current";
+    String mode = both ? u"both" : u"current";
     score->doLayout();
     score->cmdSelectAll();
     for (int i = 1; i < 6; ++i) {
         score->startCmd();
         score->changeEnharmonicSpelling(both);
         score->endCmd();
-        QString prefix = "change-enharmonic-" + mode + "-0" + ('0' + i);
-        EXPECT_TRUE(ScoreComp::saveCompareScore(score, prefix + "-test.mscx", TOOLS_DATA_DIR + prefix + "-ref.mscx"));
+        String prefix = u"change-enharmonic-" + mode + u"-0" + (u'0' + i);
+        EXPECT_TRUE(ScoreComp::saveCompareScore(score, prefix + u"-test.mscx", TOOLS_DATA_DIR + prefix + u"-ref.mscx"));
     }
 }
 

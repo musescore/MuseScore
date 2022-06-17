@@ -214,7 +214,7 @@ void ShadowNote::drawArticulations(mu::draw::Painter* painter) const
     RectF boundRect = RectF(PointF(x1, y1), PointF(x2, y2));
 
     for (const SymId& artic: score()->inputState().articulationIds()) {
-        bool isMarcato = QString(Articulation::symId2ArticulationName(artic)).contains("marcato");
+        bool isMarcato = Articulation::symId2ArticulationName(artic).contains(u"marcato");
 
         if (isMarcato) {
             drawMarcato(painter, artic, boundRect);

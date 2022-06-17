@@ -190,6 +190,22 @@ String::String(const Char& ch)
     *m_data.get() += ch.unicode();
 }
 
+String::String(const Char* unicode, size_t size)
+{
+    if (!unicode) {
+        m_data = std::make_shared<std::u16string>();
+        return;
+    }
+
+    static_assert(sizeof(Char) == sizeof(char16_t));
+    const char16_t* str = reinterpret_cast<const char16_t*>(unicode);
+    if (size == mu::nidx) {
+        m_data = std::make_shared<std::u16string>(str);
+    } else {
+        m_data = std::make_shared<std::u16string>(str, size);
+    }
+}
+
 const std::u16string& String::constStr() const
 {
     return *m_data.get();
@@ -222,6 +238,10 @@ bool String::operator ==(const AsciiStringView& s) const
 
 bool String::operator ==(const char* s) const
 {
+    if (!s) {
+        return false;
+    }
+
     std::string_view v(s);
     if (size() != v.size()) {
         return false;
@@ -455,6 +475,11 @@ size_t String::indexOf(const Char& ch) const
         }
     }
     return mu::nidx;
+}
+
+size_t String::indexOf(const char16_t* str) const
+{
+    return constStr().find(str);
 }
 
 size_t String::lastIndexOf(const Char& ch) const
@@ -744,7 +769,7 @@ String String::trimmed() const
 String String::simplified() const
 {
     //! TODO
-    return toQString().simplified();
+    return String::fromQString(toQString().simplified());
 }
 
 String String::toXmlEscaped(char16_t c)
@@ -787,14 +812,14 @@ String String::toLower() const
 {
     //! TODO
     QString qs = toQString();
-    return qs.toLower();
+    return String::fromQString(qs.toLower());
 }
 
 String String::toUpper() const
 {
     //! TODO
     QString qs = toQString();
-    return qs.toUpper();
+    return String::fromQString(qs.toUpper());
 }
 
 int String::toInt(bool* ok, int base) const
@@ -812,6 +837,12 @@ String String::number(int n, int base)
     stream << n;
     std::string s = stream.str();
     return fromAscii(s.c_str(), s.size());
+}
+
+String String::number(int64_t n)
+{
+    std::string s = std::to_string(n);
+    return fromAscii(s.c_str());
 }
 
 String String::number(size_t n)

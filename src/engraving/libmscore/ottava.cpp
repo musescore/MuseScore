@@ -241,7 +241,7 @@ Ottava::Ottava(EngravingItem* parent)
     setEndHookType(HookType::HOOK_90);
     setLineVisible(true);
     setBeginHookHeight(Spatium(.0));
-    setEndText("");
+    setEndText(u"");
 
     initElementStyle(&ottavaStyle);
 }

@@ -41,8 +41,8 @@ void SynthesizerState::write(XmlWriter& xml, bool force /* = false */) const
     xml.startElement("Synthesizer");
     for (const SynthesizerGroup& g : *this) {
         if (!g.name().isEmpty()) {
-            QByteArray ba = g.name().toLatin1();
-            xml.startElement(ba.constData());
+            ByteArray ba = g.name().toAscii();
+            xml.startElement(ba.constChar());
             for (const IdValue& v : g) {
                 xml.tag("val", { { "id", v.id } }, v.data);
             }
@@ -61,7 +61,7 @@ void SynthesizerState::read(XmlReader& e)
     std::list<SynthesizerGroup> tempGroups;
     while (e.readNextStartElement()) {
         SynthesizerGroup group;
-        group.setName(e.name().toQLatin1String());
+        group.setName(String::fromAscii(e.name().ascii()));
 
         while (e.readNextStartElement()) {
             if (e.name() == "val") {
@@ -86,7 +86,7 @@ void SynthesizerState::read(XmlReader& e)
 ///  Get SynthesizerGroup by name
 //---------------------------------------------------------
 
-SynthesizerGroup SynthesizerState::group(const QString& name) const
+SynthesizerGroup SynthesizerState::group(const String& name) const
 {
     for (const SynthesizerGroup& g : *this) {
         if (g.name() == name) {
@@ -105,9 +105,9 @@ SynthesizerGroup SynthesizerState::group(const QString& name) const
 
 bool SynthesizerState::isDefaultSynthSoundfont()
 {
-    SynthesizerGroup fluid = group("Fluid");
+    SynthesizerGroup fluid = group(u"Fluid");
     if (fluid.size() == 1) {
-        if (fluid.front().data == "MuseScore_General.sf3") {
+        if (fluid.front().data == u"MuseScore_General.sf3") {
             return true;
         }
     }
@@ -120,7 +120,7 @@ bool SynthesizerState::isDefaultSynthSoundfont()
 
 int SynthesizerState::ccToUse() const
 {
-    SynthesizerGroup g = group("master");
+    SynthesizerGroup g = group(u"master");
 
     int method = 1;
     int cc = -1;
@@ -161,7 +161,7 @@ int SynthesizerState::ccToUse() const
 
 int SynthesizerState::method() const
 {
-    SynthesizerGroup g = group("master");
+    SynthesizerGroup g = group(u"master");
 
     int method = -1;
 

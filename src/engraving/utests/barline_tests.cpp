@@ -33,9 +33,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString BARLINE_DATA_DIR("barline_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String BARLINE_DATA_DIR(u"barline_data/");
 
 //---------------------------------------------------------
 //   BarlineTests
@@ -427,7 +428,7 @@ TEST_F(BarlineTests, deleteSkipBarlines)
 
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, QString("barlinedelete.mscx"), BARLINE_DATA_DIR + QString("barlinedelete-ref.mscx")));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("barlinedelete.mscx"), BARLINE_DATA_DIR + String("barlinedelete-ref.mscx")));
 
     delete score;
 }

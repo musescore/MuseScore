@@ -60,9 +60,9 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     // with different default values for older vs newer scores
     // note: older templates get the default values for older scores
     // these can be forced back in MuseScore::getNewFile() if necessary
-    QString programVersion = score->masterScore()->mscoreVersion();
+    String programVersion = score->masterScore()->mscoreVersion();
     bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;
-    if (!programVersion.isEmpty() && programVersion < "3.5" && disableHarmonyPlay) {
+    if (!programVersion.isEmpty() && programVersion < u"3.5" && disableHarmonyPlay) {
         score->style().set(Sid::harmonyPlay, false);
     }
 
@@ -82,8 +82,8 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
             score->_playMode = PlayMode(e.readInt());
         } else if (tag == "LayerTag") {
             int id = e.intAttribute("id");
-            const QString& t = e.attribute("tag");
-            QString val(e.readText());
+            const String& t = e.attribute("tag");
+            String val(e.readText());
             if (id >= 0 && id < 32) {
                 score->_layerTags[id] = t;
                 score->_layerTagComments[id] = val;
@@ -137,7 +137,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "source") {
             score->setMetaTag(u"source", e.readText());
         } else if (tag == "metaTag") {
-            QString name = e.attribute("name");
+            String name = e.attribute("name");
             score->setMetaTag(name, e.readText());
         } else if (tag == "Order") {
             ScoreOrder order;
@@ -206,12 +206,12 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
                 m->addExcerpt(ex);
             }
         } else if (tag == "name") {
-            QString n = e.readText();
+            String n = e.readText();
             if (!score->isMaster()) {     //ignore the name if it's not a child score
                 score->excerpt()->setName(n);
             }
         } else if (tag == "layoutMode") {
-            QString s = e.readText();
+            String s = e.readText();
             if (s == "line") {
                 score->setLayoutMode(LayoutMode::LINE);
             } else if (s == "system") {

@@ -34,17 +34,18 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-QString ScoreRW::rootPath()
+String ScoreRW::rootPath()
 {
-    return QString(engraving_utests_DATA_ROOT);
+    return String(engraving_utests_DATA_ROOT);
 }
 
-MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
+MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath)
 {
-    io::path_t path = isAbsolutePath ? name : (rootPath() + "/" + name);
+    io::path_t path = isAbsolutePath ? name : (rootPath() + u"/" + name);
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
     std::string suffix = io::suffix(path);
@@ -52,7 +53,7 @@ MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
     ScoreLoad sl;
     Score::FileError rv;
     if (suffix == "mscz" || suffix == "mscx") {
-        rv = compat::loadMsczOrMscx(score, path.toQString(), false);
+        rv = compat::loadMsczOrMscx(score, path.toString(), false);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
@@ -70,7 +71,7 @@ MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
     return score;
 }
 
-bool ScoreRW::saveScore(Score* score, const QString& name)
+bool ScoreRW::saveScore(Score* score, const String& name)
 {
     File file(name);
     if (file.exists()) {
@@ -108,7 +109,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     return element;
 }
 
-bool ScoreRW::saveMimeData(ByteArray mimeData, const QString& saveName)
+bool ScoreRW::saveMimeData(ByteArray mimeData, const String& saveName)
 {
     File f(saveName);
     if (!f.open(IODevice::WriteOnly)) {

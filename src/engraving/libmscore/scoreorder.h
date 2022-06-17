@@ -34,8 +34,8 @@ namespace mu::engraving {
 
 struct ScoreGroup
 {
-    QString family { QString("") };
-    QString section { QString("") };
+    String family { String("") };
+    String section { String("") };
     QString unsorted { QString() };    // isNull()   : not an unsorted group
                                        // isEmpty()  : equal to <unsorted/>
                                        // !isEmpty() : equal to <unsorted group="unsorted"/>
@@ -74,16 +74,16 @@ struct ScoreOrder
 
     bool readBoolAttribute(XmlReader& reader, const char* name, bool defValue);
     void readInstrument(XmlReader& reader);
-    void readSoloists(XmlReader& reader, const QString section);
+    void readSoloists(XmlReader& reader, const String section);
     void readSection(XmlReader& reader);
-    bool hasGroup(const QString& id, const QString& group=QString()) const;
+    bool hasGroup(const String& id, const String& group=String()) const;
 
     bool isValid() const;
     bool isCustom() const;
     String getName() const;
-    QString getFamilyName(const InstrumentTemplate* instrTemplate, bool soloist) const;
-    ScoreGroup newUnsortedGroup(const QString group, const QString section) const;
-    ScoreGroup getGroup(const QString family, const QString instrumentGroup) const;
+    String getFamilyName(const InstrumentTemplate* instrTemplate, bool soloist) const;
+    ScoreGroup newUnsortedGroup(const String group, const String section) const;
+    ScoreGroup getGroup(const String family, const String instrumentGroup) const;
     int instrumentSortingIndex(const String& instrumentId, bool isSoloist) const;
     bool isScoreOrder(const std::list<int>& indices) const;
     bool isScoreOrder(const Score* score) const;

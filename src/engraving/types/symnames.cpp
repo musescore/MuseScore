@@ -53,18 +53,18 @@ SymId SymNames::symIdByName(const AsciiStringView& name, SymId def)
     return mu::value(s_nameToSymIdHash, name, def);
 }
 
-SymId SymNames::symIdByName(const QString& name, SymId def)
+SymId SymNames::symIdByName(const String& name, SymId def)
 {
-    QByteArray ba = name.toLatin1();
-    return symIdByName(AsciiStringView(ba.constData()), def);
+    ByteArray ba = name.toAscii();
+    return symIdByName(AsciiStringView(ba.constChar()), def);
 }
 
-SymId SymNames::symIdByOldName(const QString& oldName)
+SymId SymNames::symIdByOldName(const AsciiStringView& oldName)
 {
     return mu::value(s_oldNameToSymIdHash, oldName, SymId::noSym);
 }
 
-SymId SymNames::symIdByUserName(const QString& userName)
+SymId SymNames::symIdByUserName(const String& userName)
 {
     size_t index = 0;
     for (const char* n : s_symUserNames) {
@@ -6088,7 +6088,7 @@ constexpr const std::array<const char*, size_t(SymId::lastSym) + 1> SymNames::s_
 //! Conversion table of old symbol names (1.3)
 //! The mapping corresponds to fonts/mscore/glyphnames.json and must be in sync with it
 //! symNames must be in sync with enum class SymId
-const std::unordered_map<QString, SymId> SymNames::s_oldNameToSymIdHash {
+const std::map<AsciiStringView, SymId> SymNames::s_oldNameToSymIdHash {
     //{ "ornamentDownPrall",         SymId::ornamentPrecompMordentUpperPrefix },
     { "clef eight",                SymId::clef8 },
     //{ "clef one"                    SymId::},

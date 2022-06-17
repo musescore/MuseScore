@@ -204,9 +204,9 @@ void Tuplet::layout()
         _number->setPropertyFlags(Pid::FONT_STYLE, propertyFlags(Pid::FONT_STYLE));
         _number->setPropertyFlags(Pid::ALIGN, propertyFlags(Pid::ALIGN));
         if (_numberType == TupletNumberType::SHOW_NUMBER) {
-            _number->setXmlText(QString("%1").arg(_ratio.numerator()));
+            _number->setXmlText(String(u"%1").arg(_ratio.numerator()));
         } else {
-            _number->setXmlText(QString("%1:%2").arg(_ratio.numerator()).arg(_ratio.denominator()));
+            _number->setXmlText(String(u"%1:%2").arg(_ratio.numerator(), _ratio.denominator()));
         }
 
         _isSmall = true;
@@ -1261,7 +1261,7 @@ PropertyValue Tuplet::propertyDefault(Pid id) const
     case Pid::SYSTEM_FLAG:
         return false;
     case Pid::TEXT:
-        return QString("");
+        return String("");
     case Pid::NORMAL_NOTES:
     case Pid::ACTUAL_NOTES:
         return 0;

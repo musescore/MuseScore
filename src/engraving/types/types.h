@@ -24,8 +24,8 @@
 #include <functional>
 #include <unordered_set>
 #include <map>
-#include <QString>
 
+#include "types/string.h"
 #include "id.h"
 
 #include "infrastructure/draw/color.h"

@@ -51,8 +51,8 @@ enum class TimeSigType : char {
 
 class TimeSig final : public EngravingItem
 {
-    QString _numeratorString;       // calculated from actualSig() if !customText
-    QString _denominatorString;
+    String _numeratorString;       // calculated from actualSig() if !customText
+    String _denominatorString;
 
     SymIdList ns;
     SymIdList ds;
@@ -79,8 +79,8 @@ public:
 
     void setParent(Segment* parent);
 
-    QString ssig() const;
-    void setSSig(const QString&);
+    String ssig() const;
+    void setSSig(const String&);
 
     TimeSig* clone() const override { return new TimeSig(*this); }
 
@@ -114,11 +114,11 @@ public:
     bool showCourtesySig() const { return _showCourtesySig; }
     void setShowCourtesySig(bool v) { _showCourtesySig = v; }
 
-    QString numeratorString() const { return _numeratorString; }
-    void setNumeratorString(const QString&);
+    String numeratorString() const { return _numeratorString; }
+    void setNumeratorString(const String&);
 
-    QString denominatorString() const { return _denominatorString; }
-    void setDenominatorString(const QString&);
+    String denominatorString() const { return _denominatorString; }
+    void setDenominatorString(const String&);
 
     void setLargeParentheses(bool v) { _largeParentheses = v; }
 

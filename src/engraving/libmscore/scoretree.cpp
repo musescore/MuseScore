@@ -693,7 +693,6 @@ void TBox::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
 
 void _dumpScoreTree(EngravingObject* s, int depth)
 {
-    LOGD() << qPrintable(QString(" ").repeated(4 * depth)) << s->typeName() << "at" << s;
     for (EngravingObject* child : s->scanChildren()) {
         _dumpScoreTree(child, depth + 1);
     }

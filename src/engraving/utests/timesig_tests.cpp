@@ -31,9 +31,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString TIMESIG_DATA_DIR("timesig_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String TIMESIG_DATA_DIR(u"timesig_data/");
 
 class TimesigTests : public ::testing::Test
 {
@@ -58,7 +59,7 @@ TEST_F(TimesigTests, timesig01)
     score->cmdAddTimeSig(m, staffIdx, ts, local);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "timesig01.mscx", TIMESIG_DATA_DIR + "timesig01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig01.mscx", TIMESIG_DATA_DIR + u"timesig01-ref.mscx"));
     delete score;
 }
 
@@ -81,7 +82,7 @@ TEST_F(TimesigTests, timesig02)
     score->doLayout();
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "timesig-02.mscx", TIMESIG_DATA_DIR + "timesig-02-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-02.mscx", TIMESIG_DATA_DIR + u"timesig-02-ref.mscx"));
     delete score;
 }
 
@@ -96,7 +97,7 @@ TEST_F(TimesigTests, timesig02)
 
 TEST_F(TimesigTests, timesig03)
 {
-    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-03.mscx");
+    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-03.mscx");
     EXPECT_TRUE(score);
     Measure* m = score->firstMeasure()->nextMeasure();
     TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
@@ -105,7 +106,7 @@ TEST_F(TimesigTests, timesig03)
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "timesig-03.mscx", TIMESIG_DATA_DIR + "timesig-03-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-03.mscx", TIMESIG_DATA_DIR + u"timesig-03-ref.mscx"));
     delete score;
 }
 
@@ -126,7 +127,7 @@ TEST_F(TimesigTests, timesig04)
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "timesig-04.mscx", TIMESIG_DATA_DIR + "timesig-04-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-04.mscx", TIMESIG_DATA_DIR + u"timesig-04-ref.mscx"));
     delete score;
 }
 
@@ -150,7 +151,7 @@ TEST_F(TimesigTests, timesig05)
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "timesig-05.mscx", TIMESIG_DATA_DIR + "timesig-05-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-05.mscx", TIMESIG_DATA_DIR + u"timesig-05-ref.mscx"));
     delete score;
 }
 
@@ -170,7 +171,7 @@ TEST_F(TimesigTests, timesig06)
     score->startCmd();
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "timesig-06.mscx", TIMESIG_DATA_DIR + "timesig-06-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-06.mscx", TIMESIG_DATA_DIR + u"timesig-06-ref.mscx"));
     score->endCmd();
 
     // Now undo the change, if it crashes, it will fail
@@ -187,7 +188,7 @@ TEST_F(TimesigTests, timesig06)
 
 TEST_F(TimesigTests, timesig07)
 {
-    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-07.mscx");
+    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-07.mscx");
     EXPECT_TRUE(score);
     Measure* m = score->firstMeasure();
     TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
@@ -196,7 +197,7 @@ TEST_F(TimesigTests, timesig07)
     score->startCmd();
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "timesig-07.mscx", TIMESIG_DATA_DIR + "timesig-07-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-07.mscx", TIMESIG_DATA_DIR + u"timesig-07-ref.mscx"));
     score->endCmd();
 
     // Now undo the change, if there is a crash the test will fail
@@ -214,7 +215,7 @@ TEST_F(TimesigTests, timesig07)
 
 TEST_F(TimesigTests, timesig08)
 {
-    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-08.mscx");
+    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-08.mscx");
     score->doLayout();
 
     Measure* m1 = score->firstMeasure();
@@ -241,13 +242,13 @@ TEST_F(TimesigTests, timesig09)
     score->startCmd();
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "timesig-09-1.mscx", TIMESIG_DATA_DIR + "timesig-09-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-09-1.mscx", TIMESIG_DATA_DIR + u"timesig-09-ref.mscx"));
     score->endCmd();
 
     // Now undo the change
     score->undoStack()->undo(0);
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "timesig-09-2.mscx", TIMESIG_DATA_DIR + "timesig-09.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-09-2.mscx", TIMESIG_DATA_DIR + u"timesig-09.mscx"));
     delete score;
 }
 
@@ -259,7 +260,7 @@ TEST_F(TimesigTests, timesig09)
 
 TEST_F(TimesigTests, timesig10)
 {
-    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-10.mscx");
+    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-10.mscx");
 
     Measure* m1 = score->firstMeasure();
     TimeSig* ts1 = Factory::createTimeSig(score->dummy()->segment());
@@ -279,7 +280,7 @@ TEST_F(TimesigTests, timesig10)
     score->cmdAddTimeSig(m2, 0, ts3, false);
 
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "timesig-10.mscx", TIMESIG_DATA_DIR + "timesig-10-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-10.mscx", TIMESIG_DATA_DIR + u"timesig-10-ref.mscx"));
     score->endCmd();
     delete score;
 }
