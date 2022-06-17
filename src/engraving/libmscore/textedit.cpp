@@ -631,7 +631,7 @@ void ChangeText::removeText(EditData* ed)
     TextBlock& l  = _cursor.curLine();
     size_t column = _cursor.column();
 
-    for (int n = 0; n < s.size(); ++n) {
+    for (size_t n = 0; n < s.size(); ++n) {
         l.remove(static_cast<int>(column), &_cursor);
     }
     _cursor.text()->triggerLayout();
