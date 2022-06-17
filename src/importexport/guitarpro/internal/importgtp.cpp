@@ -808,6 +808,7 @@ void GuitarPro::readLyrics()
 
 void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* note)
 {
+    UNUSED(note);
     // shift / legato slide
     if (sl == SHIFT_SLIDE || sl == LEGATO_SLIDE) {
         Glissando* s = new Glissando(cr);
