@@ -23,7 +23,6 @@
 #include "harmony.h"
 
 #include <QStack>
-#include <QRegularExpression>
 
 #include "containers.h"
 #include "translation.h"
@@ -2149,8 +2148,8 @@ String Harmony::generateScreenReaderInfo() const
         for (auto const& r : symbolReplacements) {
             // only replace when not preceded by backslash
             String s = u"(?<!\\\\)" + r.first;
-            QRegularExpression re(s.toQString());
-            aux = QString(aux).replace(re, r.second);
+            std::regex re(s.toStdString());
+            aux.replace(re, r.second);
         }
         // construct string one  character at a time
         for (size_t i = 0; i < aux.size(); ++i) {

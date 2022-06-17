@@ -22,8 +22,6 @@
 
 #include "chordlist.h"
 
-#include <QRegularExpression>
-
 #include "io/file.h"
 #include "io/fileinfo.h"
 
@@ -496,14 +494,14 @@ void ParsedChord::configure(const ChordList* cl)
 
 void ParsedChord::correctXmlText(const String& s)
 {
-    QString xmlText = _xmlText.toQString();
-    xmlText.remove(QRegularExpression("[0-9]"));
+    String xmlText = _xmlText;
+    xmlText.remove(std::regex("[0-9]"));
     if (s != "") {
-        int pos = xmlText.lastIndexOf(')');
-        if (pos == -1) {
+        size_t pos = xmlText.lastIndexOf(u')');
+        if (pos == mu::nidx) {
             pos = xmlText.size();
         }
-        xmlText.insert(pos, s.toQString());
+        xmlText.insert(pos, s);
     }
     _xmlText = xmlText;
 }
@@ -1136,8 +1134,8 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         // so add9,altb9 -> addb9
         StringList altList = _xmlDegrees.filter(u"alt");
         for (const String& d : altList) {
-            QString unalt(d.toQString());
-            unalt.replace(QRegularExpression("alt[b#]"), "add");
+            String unalt(d);
+            unalt.replace(std::regex("alt[b#]"), u"add");
             if (_xmlDegrees.removeAll(unalt)) {
                 String alt(d);
                 alt.replace(u"alt", u"add");

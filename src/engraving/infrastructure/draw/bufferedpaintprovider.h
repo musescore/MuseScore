@@ -73,7 +73,7 @@ public:
     void drawText(const RectF& rect, int flags, const String& text) override;
     void drawTextWorkaround(const Font& f, const PointF& pos, const String& text) override;
 
-    void drawSymbol(const PointF& point, uint ucs4Code) override;
+    void drawSymbol(const PointF& point, char32_t ucs4Code) override;
 
     void drawPixmap(const PointF& p, const Pixmap& pm) override;
     void drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset = PointF()) override;

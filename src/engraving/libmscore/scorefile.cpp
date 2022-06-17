@@ -22,7 +22,6 @@
 
 #include <cmath>
 #include <QDir>
-#include <QRegularExpression>
 
 #include "translation.h"
 #include "io/file.h"

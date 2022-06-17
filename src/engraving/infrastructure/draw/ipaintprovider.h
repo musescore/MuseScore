@@ -75,7 +75,7 @@ public:
     virtual void drawText(const RectF& rect, int flags, const String& text) = 0;
     virtual void drawTextWorkaround(const Font& f, const PointF& pos, const String& text) = 0; // see Painter::drawTextWorkaround .h file
 
-    virtual void drawSymbol(const PointF& point, uint ucs4Code) = 0;
+    virtual void drawSymbol(const PointF& point, char32_t ucs4Code) = 0;
 
     virtual void drawPixmap(const PointF& point, const Pixmap& pm) = 0;
     virtual void drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset = PointF()) = 0;
