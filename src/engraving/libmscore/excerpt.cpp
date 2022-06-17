@@ -22,7 +22,6 @@
 
 #include "excerpt.h"
 
-#include <QRegularExpression>
 #include <list>
 
 #include "containers.h"
@@ -1457,9 +1456,11 @@ String Excerpt::formatName(const String& partName, const std::vector<Excerpt*>& 
             e->setName(excName + u" 1");
         }
 
-        QRegularExpression regex("^(.+)\\s\\d+$");
-        QRegularExpressionMatch match = regex.match(excName.toQString());
-        if (match.hasMatch() && match.capturedTexts()[1] == name.toQString()) {
+        std::string excNameU8 = excName.toStdString();
+        std::regex regex("^(.+)\\s\\d+$");
+        std::smatch match;
+        std::regex_search(excNameU8, match, regex);
+        if (!match.empty() && match[0].str() == name.toStdString()) {
             count++;
         }
     }

@@ -417,13 +417,13 @@ void Lyrics::layout2(int nAbove)
 void Lyrics::paste(EditData& ed, const String& txt)
 {
     MuseScoreView* scoreview = ed.view();
-    QString regex = QString("[^\\S") + QChar(0xa0) + QChar(0x202F) + "]+";
-    StringList sl = txt.toQString().split(QRegularExpression(regex), Qt::SkipEmptyParts);
+    String regex = String("[^\\S") + Char(0xa0) + Char(0x202F) + u"]+";
+    StringList sl = txt.split(std::regex(regex.toStdString()), mu::SkipEmptyParts);
     if (sl.empty()) {
         return;
     }
 
-    StringList hyph = sl[0].split(u'-');
+    StringList hyph = sl.at(0).split(u'-');
     bool minus = false;
     bool underscore = false;
     score()->startCmd();

@@ -602,6 +602,54 @@ StringList String::split(const Char& ch, SplitBehavior behavior) const
     return out;
 }
 
+StringList String::split(const String& str, SplitBehavior behavior) const
+{
+    StringList out;
+    std::size_t current, previous = 0;
+    current = constStr().find(str.constStr());
+    while (current != std::string::npos) {
+        String sub = mid(previous, current - previous);
+        if (behavior == SplitBehavior::SkipEmptyParts && sub.empty()) {
+            // skip
+        } else {
+            out.push_back(std::move(sub));
+        }
+        previous = current + str.size();
+        current = constStr().find(str.constStr(), previous);
+    }
+    String sub = mid(previous, current - previous);
+    if (behavior == SplitBehavior::SkipEmptyParts && sub.empty()) {
+        // skip
+    } else {
+        out.push_back(std::move(sub));
+    }
+
+    return out;
+}
+
+StringList String::split(const std::regex& re, SplitBehavior behavior) const
+{
+    std::string originU8;
+    UtfCodec::utf16to8(std::u16string_view(constStr()), originU8);
+    std::sregex_token_iterator iter(originU8.begin(), originU8.end(), re, -1);
+    std::sregex_token_iterator end;
+    std::vector<std::string> vec = { iter, end };
+
+    StringList out;
+    for (const std::string& s : vec) {
+        if (behavior == SplitBehavior::SkipEmptyParts && s.empty()) {
+            // skip
+            continue;
+        }
+
+        String sub;
+        UtfCodec::utf8to16(s, sub.mutStr());
+        out.push_back(std::move(sub));
+    }
+
+    return out;
+}
+
 String& String::replace(const String& before, const String& after)
 {
     std::u16string& str = mutStr();
@@ -621,6 +669,21 @@ String& String::replace(char16_t before, char16_t after)
             str[i] = after;
         }
     }
+    return *this;
+}
+
+String& String::replace(const std::regex& re, const String& after)
+{
+    std::string afterU8;
+    UtfCodec::utf16to8(std::u16string_view(after.constStr()), afterU8);
+
+    std::string originU8;
+    UtfCodec::utf16to8(std::u16string_view(constStr()), originU8);
+    std::string replasedU8 = std::regex_replace(originU8, re, afterU8);
+
+    std::u16string& sefl = mutStr();
+    sefl.clear();
+    UtfCodec::utf8to16(std::string_view(replasedU8), sefl);
     return *this;
 }
 
