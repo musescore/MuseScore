@@ -45,10 +45,16 @@ class BeamSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * isBeamHidden READ isBeamHidden CONSTANT)
 
+    Q_PROPERTY(PropertyItem * forceHorizontal READ forceHorizontal CONSTANT)
+
+    Q_PROPERTY(PropertyItem * customPositioned READ customPositioned CONSTANT)
+
 public:
     explicit BeamSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    Q_INVOKABLE void forceHorizontal();
+    PropertyItem* forceHorizontal();
+
+    PropertyItem* customPositioned();
 
     QObject* beamModesModel() const;
 
@@ -97,6 +103,8 @@ private:
     bool m_isBeamHeightLocked = false;
 
     PropertyItem* m_isBeamHidden = nullptr;
+    PropertyItem* m_forceHorizontal = nullptr;
+    PropertyItem* m_customPositioned = nullptr;
 };
 }
 
