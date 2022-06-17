@@ -41,9 +41,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString MEASURE_DATA_DIR("measure_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String MEASURE_DATA_DIR("measure_data/");
 
 class MeasureTests : public ::testing::Test
 {
@@ -51,7 +52,7 @@ class MeasureTests : public ::testing::Test
 
 TEST_F(MeasureTests, DISABLED_insertMeasureMiddle) //TODO: verify program change, 72 is wrong surely?
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-1.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-1.mscx");
     EXPECT_TRUE(score);
 
     score->startCmd();
@@ -59,13 +60,13 @@ TEST_F(MeasureTests, DISABLED_insertMeasureMiddle) //TODO: verify program change
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-1.mscx", MEASURE_DATA_DIR + "measure-1-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-1.mscx", MEASURE_DATA_DIR + u"measure-1-ref.mscx"));
     delete score;
 }
 
 TEST_F(MeasureTests, DISABLED_insertMeasureBegin) // TODO: verify program change, 72 is wrong surely?
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-1.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-1.mscx");
     EXPECT_TRUE(score);
 
     score->startCmd();
@@ -73,7 +74,7 @@ TEST_F(MeasureTests, DISABLED_insertMeasureBegin) // TODO: verify program change
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-2.mscx", MEASURE_DATA_DIR + "measure-2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-2.mscx", MEASURE_DATA_DIR + u"measure-2-ref.mscx"));
     delete score;
 }
 
@@ -86,13 +87,13 @@ TEST_F(MeasureTests, DISABLED_insertMeasureEnd) // TODO: verify program change, 
     score->insertMeasure(ElementType::MEASURE, 0);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-3.mscx", MEASURE_DATA_DIR + "measure-3-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-3.mscx", MEASURE_DATA_DIR + u"measure-3-ref.mscx"));
     delete score;
 }
 
 TEST_F(MeasureTests, insertBfClefChange)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx");
     EXPECT_TRUE(score);
 
     // 4th measure
@@ -102,29 +103,29 @@ TEST_F(MeasureTests, insertBfClefChange)
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_clef.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_clef-ref.mscx"));
 
     score->undoRedo(true, 0);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx"));
 
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_clef-2.mscx",
-                                            MEASURE_DATA_DIR + "measure-insert_bf_clef-2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef-2.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_bf_clef-2-ref.mscx"));
 
     score->undoRedo(true, 0);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx"));
     delete score;
 }
 
 TEST_F(MeasureTests, insertBfKeyChange)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-insert_bf_key.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_bf_key.mscx");
     EXPECT_TRUE(score);
 
     // 4th measure
@@ -135,24 +136,25 @@ TEST_F(MeasureTests, insertBfKeyChange)
     score->endCmd();
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_key.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_key-ref.mscx"));
 
     score->undoRedo(true, 0);
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_key.mscx"));
 
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_key-2.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key-2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key-2.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_bf_key-2-ref.mscx"));
 
     score->undoRedo(true, 0);
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_key.mscx"));
     delete score;
 }
 
@@ -166,7 +168,7 @@ TEST_F(MeasureTests, insertBfKeyChange)
 
 TEST_F(MeasureTests, spanner_a)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-3.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-3.mscx");
     EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -174,7 +176,7 @@ TEST_F(MeasureTests, spanner_a)
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-4.mscx", MEASURE_DATA_DIR + "measure-4-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-4.mscx", MEASURE_DATA_DIR + u"measure-4-ref.mscx"));
     delete score;
 }
 
@@ -188,7 +190,7 @@ TEST_F(MeasureTests, spanner_a)
 
 TEST_F(MeasureTests, spanner_b)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-4.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-4.mscx");
     EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure();
@@ -196,7 +198,7 @@ TEST_F(MeasureTests, spanner_b)
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-5.mscx", MEASURE_DATA_DIR + "measure-5-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-5.mscx", MEASURE_DATA_DIR + u"measure-5-ref.mscx"));
     delete score;
 }
 
@@ -209,7 +211,7 @@ TEST_F(MeasureTests, spanner_b)
 
 TEST_F(MeasureTests, spanner_A)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-6.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-6.mscx");
     EXPECT_TRUE(score);
 
     score->select(score->firstMeasure());
@@ -218,7 +220,7 @@ TEST_F(MeasureTests, spanner_A)
     score->endCmd();
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-6.mscx", MEASURE_DATA_DIR + "measure-6-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-6.mscx", MEASURE_DATA_DIR + u"measure-6-ref.mscx"));
     delete score;
 }
 
@@ -232,7 +234,7 @@ TEST_F(MeasureTests, spanner_A)
 
 TEST_F(MeasureTests, spanner_B)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-7.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-7.mscx");
     EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -241,7 +243,7 @@ TEST_F(MeasureTests, spanner_B)
     score->localTimeDelete();
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-7.mscx", MEASURE_DATA_DIR + "measure-7-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-7.mscx", MEASURE_DATA_DIR + u"measure-7-ref.mscx"));
     delete score;
 }
 
@@ -255,7 +257,7 @@ TEST_F(MeasureTests, spanner_B)
 
 TEST_F(MeasureTests, spanner_C)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-8.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-8.mscx");
     EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -264,7 +266,7 @@ TEST_F(MeasureTests, spanner_C)
     score->localTimeDelete();
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-8.mscx", MEASURE_DATA_DIR + "measure-8-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-8.mscx", MEASURE_DATA_DIR + u"measure-8-ref.mscx"));
     delete score;
 }
 
@@ -278,7 +280,7 @@ TEST_F(MeasureTests, spanner_C)
 
 TEST_F(MeasureTests, spanner_D)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-9.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-9.mscx");
     EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -287,7 +289,7 @@ TEST_F(MeasureTests, spanner_D)
     score->localTimeDelete();
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-9.mscx", MEASURE_DATA_DIR + "measure-9-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-9.mscx", MEASURE_DATA_DIR + u"measure-9-ref.mscx"));
     delete score;
 }
 
@@ -297,7 +299,7 @@ TEST_F(MeasureTests, spanner_D)
 
 TEST_F(MeasureTests, deleteLast)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-10.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-10.mscx");
     EXPECT_TRUE(score);
 
     Measure* m = score->lastMeasure();
@@ -306,7 +308,7 @@ TEST_F(MeasureTests, deleteLast)
     score->localTimeDelete();
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-10.mscx", MEASURE_DATA_DIR + "measure-10-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-10.mscx", MEASURE_DATA_DIR + u"measure-10-ref.mscx"));
     delete score;
 }
 
@@ -316,7 +318,7 @@ TEST_F(MeasureTests, deleteLast)
 
 TEST_F(MeasureTests, gap)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "gaps.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"gaps.mscx");
     EXPECT_TRUE(score);
 
     EngravingItem* tst = 0;
@@ -381,7 +383,7 @@ TEST_F(MeasureTests, gap)
 
 TEST_F(MeasureTests, checkMeasure)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "checkMeasure.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"checkMeasure.mscx");
     EXPECT_TRUE(score);
 
     EngravingItem* tst = 0;
@@ -435,7 +437,7 @@ TEST_F(MeasureTests, checkMeasure)
 
 TEST_F(MeasureTests, undoDelInitialVBox_269919)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "undoDelInitialVBox_269919.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"undoDelInitialVBox_269919.mscx");
     EXPECT_TRUE(score);
 
     // 1. delete initial VBox
@@ -459,8 +461,8 @@ TEST_F(MeasureTests, undoDelInitialVBox_269919)
     // 4. Undo to restore initial VBox resulted in assert failure crash
     score->undoRedo(true, 0);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "undoDelInitialVBox_269919.mscx",
-                                            MEASURE_DATA_DIR + "undoDelInitialVBox_269919-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"undoDelInitialVBox_269919.mscx",
+                                            MEASURE_DATA_DIR + u"undoDelInitialVBox_269919-ref.mscx"));
     delete score;
 }
 
@@ -471,7 +473,7 @@ TEST_F(MeasureTests, undoDelInitialVBox_269919)
 
 TEST_F(MeasureTests, mmrest)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "mmrest.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrest.mscx");
     EXPECT_TRUE(score);
 
     score->startCmd();
@@ -479,7 +481,7 @@ TEST_F(MeasureTests, mmrest)
     score->setLayoutAll();
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "mmrest.mscx", MEASURE_DATA_DIR + "mmrest-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"mmrest.mscx", MEASURE_DATA_DIR + u"mmrest-ref.mscx"));
     delete score;
 }
 
@@ -490,7 +492,7 @@ TEST_F(MeasureTests, mmrest)
 
 TEST_F(MeasureTests, measureNumbers)
 {
-    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measurenumber.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measurenumber.mscx");
     EXPECT_TRUE(score);
 
     MeasureNumber* measureNumber = new MeasureNumber(score->dummy()->measure());
@@ -507,20 +509,20 @@ TEST_F(MeasureTests, measureNumbers)
     score->undo(new ChangeStyleVal(score, Sid::measureNumberVPlacement, PlacementV::BELOW));
     score->setLayoutAll();
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-1.mscx", MEASURE_DATA_DIR + "measurenumber-1-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-1.mscx", MEASURE_DATA_DIR + u"measurenumber-1-ref.mscx"));
 
     // center measure numbers
     score->startCmd();
     score->undo(new ChangeStyleVal(score, Sid::measureNumberHPlacement, PlacementH::CENTER));
     score->setLayoutAll();
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-2.mscx", MEASURE_DATA_DIR + "measurenumber-2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-2.mscx", MEASURE_DATA_DIR + u"measurenumber-2-ref.mscx"));
 
     // show on first system too
     score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, true));
     score->setLayoutAll();
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-3.mscx", MEASURE_DATA_DIR + "measurenumber-3-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-3.mscx", MEASURE_DATA_DIR + u"measurenumber-3-ref.mscx"));
 
     // every 5 measures (default interval)
     score->startCmd();
@@ -529,7 +531,7 @@ TEST_F(MeasureTests, measureNumbers)
     score->undo(new ChangeStyleVal(score, Sid::measureNumberSystem, false));
     score->setLayoutAll();
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-4.mscx", MEASURE_DATA_DIR + "measurenumber-4-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-4.mscx", MEASURE_DATA_DIR + u"measurenumber-4-ref.mscx"));
 
     // do not show first measure number. This should shift all measure numbers,
     // because they are still placed at regular intervals.
@@ -538,14 +540,14 @@ TEST_F(MeasureTests, measureNumbers)
     score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, false));
     score->setLayoutAll();
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-5.mscx", MEASURE_DATA_DIR + "measurenumber-5-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-5.mscx", MEASURE_DATA_DIR + u"measurenumber-5-ref.mscx"));
 
     // show at every measure (except fist)
     score->startCmd();
     score->undo(new ChangeStyleVal(score, Sid::measureNumberInterval, 1));
     score->setLayoutAll();
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-6.mscx", MEASURE_DATA_DIR + "measurenumber-6-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-6.mscx", MEASURE_DATA_DIR + u"measurenumber-6-ref.mscx"));
 
     // Disable measure numbers
     score->startCmd();
@@ -554,7 +556,7 @@ TEST_F(MeasureTests, measureNumbers)
     score->undo(new ChangeStyleVal(score, Sid::showMeasureNumber, false));
     score->setLayoutAll();
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-7.mscx", MEASURE_DATA_DIR + "measurenumber-7-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-7.mscx", MEASURE_DATA_DIR + u"measurenumber-7-ref.mscx"));
 
     delete score;
 }

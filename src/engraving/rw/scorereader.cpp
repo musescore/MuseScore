@@ -89,7 +89,7 @@ Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, 
     // Read score
     {
         ByteArray scoreData = mscReader.readScoreFile();
-        QString docName = masterScore->fileInfo()->fileName().toQString();
+        String docName = masterScore->fileInfo()->fileName().toString();
 
         compat::ReadStyleHook styleHook(masterScore, scoreData, docName);
 
@@ -151,8 +151,8 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            const QString& version = e.attribute("version");
-            QStringList sl = version.split('.');
+            const String& version = e.attribute("version");
+            StringList sl = version.split('.');
             score->setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
 
             if (!ctx.ignoreVersionError()) {

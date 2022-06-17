@@ -38,7 +38,7 @@ public:
     void read(XmlReader&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    static QString readXmlText(XmlReader& r, Score* score);
+    static String readXmlText(XmlReader& r, Score* score);
 
 private:
     friend class Factory;

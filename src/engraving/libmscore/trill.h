@@ -101,16 +101,16 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    void setTrillType(const QString& s);
+    void setTrillType(const String& s);
     void setTrillType(Type tt) { _trillType = tt; }
     Type trillType() const { return _trillType; }
     void setOrnamentStyle(OrnamentStyle val) { _ornamentStyle = val; }
     OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
     void setPlayArticulation(bool val) { _playArticulation = val; }
     bool playArticulation() const { return _playArticulation; }
-    static QString type2name(Trill::Type t);
-    QString trillTypeName() const;
-    QString trillTypeUserName() const;
+    static String type2name(Trill::Type t);
+    String trillTypeName() const;
+    String trillTypeUserName() const;
     Accidental* accidental() const { return _accidental; }
     void setAccidental(Accidental* a) { _accidental = a; }
 
@@ -126,7 +126,7 @@ public:
 struct TrillTableItem {
     Trill::Type type;
     const char* name;
-    QString userName;
+    const char* userName;
 };
 
 extern const std::vector<TrillTableItem> trillTable;

@@ -213,7 +213,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         fixInstrumentIds(score);
     }
     if (ok && score->mscVersion() != mu::engraving::MSCVERSION) {
-        score->undo(new mu::engraving::ChangeMetaText(score, "mscVersion", MSC_VERSION));
+        score->undo(new mu::engraving::ChangeMetaText(score, u"mscVersion", String::fromAscii(MSC_VERSION)));
     }
 
     if (ok && m_resetStyleSettings) {

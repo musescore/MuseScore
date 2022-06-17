@@ -167,13 +167,10 @@ public:
     String();
     String(const char16_t* str);
     String(const Char& ch);
+    String(const Char* unicode, size_t size = mu::nidx);
 
     String& operator=(const char16_t* str);
     void reserve(size_t i);
-
-    operator QString() const {
-        return this->toQString();
-    }
 
     inline bool operator ==(const String& s) const { return constStr() == s.constStr(); }
     inline bool operator !=(const String& s) const { return !operator ==(s); }
@@ -181,10 +178,15 @@ public:
     inline bool operator !=(const QString& s) const { return !operator ==(s); }
     bool operator ==(const AsciiStringView& s) const;
     inline bool operator !=(const AsciiStringView& s) const { return !operator ==(s); }
+    inline bool operator ==(const char16_t* s) const { return constStr() == s; }
+    inline bool operator !=(const char16_t* s) const { return !operator ==(s); }
     bool operator ==(const char* s) const;
     inline bool operator !=(const char* s) const { return !operator ==(s); }
 
     inline bool operator <(const String& s) const { return constStr() < s.constStr(); }
+    inline bool operator >(const String& s) const { return constStr() > s.constStr(); }
+    inline bool operator <=(const String& s) const { return constStr() <= s.constStr(); }
+    inline bool operator >=(const String& s) const { return constStr() >= s.constStr(); }
 
     inline String& operator +=(const String& s) { return append(s); }
     String& operator +=(const char16_t* s);
@@ -213,6 +215,10 @@ public:
 
 //#ifndef NO_QT_SUPPORT
     String(const QString& str) { *this = fromQString(str); }
+    operator QString() const {
+        return this->toQString();
+    }
+
     String& operator=(const QString& str) { *this = fromQString(str); return *this; }
     static String fromQString(const QString& str);
     QString toQString() const;
@@ -227,6 +233,7 @@ public:
     bool contains(const String& str, CaseSensitivity cs = CaseSensitive) const;
     int count(const Char& ch) const;
     size_t indexOf(const Char& ch) const;
+    size_t indexOf(const char16_t* str) const;
     size_t lastIndexOf(const Char& ch) const;
 
     //! NOTE Now implemented only compare with ASCII
@@ -255,6 +262,10 @@ public:
     String arg(int val1, int val2) const { return arg(number(val1), number(val2)); }
     String arg(int val1, int val2, int val3) const { return arg(number(val1), number(val2), number(val3)); }
 
+    String arg(int64_t val) const { return arg(number(val)); }
+    String arg(int64_t val1, int64_t val2) const { return arg(number(val1), number(val2)); }
+    String arg(int64_t val1, int64_t val2, int64_t val3) const { return arg(number(val1), number(val2), number(val3)); }
+
     String arg(size_t val) const { return arg(number(val)); }
     String arg(size_t val1, size_t val2) const { return arg(number(val1), number(val2)); }
     String arg(size_t val1, size_t val2, size_t val3) const { return arg(number(val1), number(val2), number(val3)); }
@@ -280,8 +291,11 @@ public:
     double toDouble(bool* ok = nullptr) const;
 
     static String number(int n, int base = 10);
+    static String number(int64_t n);
     static String number(size_t n);
     static String number(double n, int prec = 6);
+
+    inline size_t hash() const { return std::hash<std::u16string> {}(constStr()); }
 
 private:
     const std::u16string& constStr() const;
@@ -379,6 +393,12 @@ inline bool operator !=(const char16_t c1, const mu::Char c2) { return c2 != c1;
 // ============================
 inline bool operator ==(const char16_t* s1, const mu::String& s2) { return s2 == s1; }
 inline bool operator !=(const char16_t* s1, const mu::String& s2) { return s2 != s1; }
+
+template<>
+struct std::hash<mu::String>
+{
+    std::size_t operator()(const mu::String& s) const noexcept { return s.hash(); }
+};
 
 inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::String& str)
 {

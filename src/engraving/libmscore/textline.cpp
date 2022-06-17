@@ -145,9 +145,9 @@ TextLine::TextLine(EngravingItem* parent, bool system)
 
     initStyle();
 
-    setBeginText("");
-    setContinueText("");
-    setEndText("");
+    setBeginText(u"");
+    setContinueText(u"");
+    setEndText(u"");
     setBeginTextOffset(PointF(0, 0));
     setContinueTextOffset(PointF(0, 0));
     setEndTextOffset(PointF(0, 0));

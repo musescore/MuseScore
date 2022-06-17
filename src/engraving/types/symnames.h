@@ -25,7 +25,6 @@
 #include <vector>
 #include <array>
 #include <unordered_map>
-#include <QString>
 #include "symid.h"
 #include "types/string.h"
 
@@ -36,9 +35,9 @@ struct SymNames {
     static String translatedUserNameForSymId(SymId id);
 
     static SymId symIdByName(const AsciiStringView& name, SymId def = SymId::noSym);
-    static SymId symIdByName(const QString& name, SymId def = SymId::noSym);
-    static SymId symIdByOldName(const QString& oldName);
-    static SymId symIdByUserName(const QString& userName);
+    static SymId symIdByName(const String& name, SymId def = SymId::noSym);
+    static SymId symIdByOldName(const AsciiStringView& oldName);
+    static SymId symIdByUserName(const String& userName);
 
 private:
     static void loadNameToSymIdHash();
@@ -48,7 +47,7 @@ private:
 
     //! Will be initialized when first used
     static std::map<AsciiStringView, SymId> s_nameToSymIdHash;
-    static const std::unordered_map<QString, SymId> s_oldNameToSymIdHash;
+    static const std::map<AsciiStringView, SymId> s_oldNameToSymIdHash;
 };
 }
 

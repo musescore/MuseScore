@@ -151,7 +151,7 @@ void Symbol::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            QString val(e.readText());
+            String val(e.readText());
             SymId symId = SymNames::symIdByName(val);
             if (val != "noSym" && symId == SymId::noSym) {
                 // if symbol name not found, fall back to user names
@@ -241,15 +241,15 @@ FSymbol::FSymbol(const FSymbol& s)
 
 void FSymbol::draw(mu::draw::Painter* painter) const
 {
-    QString s;
+    String s;
     mu::draw::Font f(_font);
     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
     painter->setFont(f);
     if (_code & 0xffff0000) {
-        s = QChar(QChar::highSurrogate(_code));
-        s += QChar(QChar::lowSurrogate(_code));
+        s = Char(Char::highSurrogate(_code));
+        s += Char(Char::lowSurrogate(_code));
     } else {
-        s = QChar(_code);
+        s = Char(_code);
     }
     painter->setPen(curColor());
     painter->drawText(PointF(0, 0), s);
@@ -296,12 +296,12 @@ void FSymbol::read(XmlReader& e)
 
 void FSymbol::layout()
 {
-    QString s;
+    String s;
     if (_code & 0xffff0000) {
-        s = QChar(QChar::highSurrogate(_code));
-        s += QChar(QChar::lowSurrogate(_code));
+        s = Char(Char::highSurrogate(_code));
+        s += Char(Char::lowSurrogate(_code));
     } else {
-        s = QChar(_code);
+        s = Char(_code);
     }
 
     setbbox(mu::draw::FontMetrics::boundingRect(_font, s));

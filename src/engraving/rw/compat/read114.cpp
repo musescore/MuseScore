@@ -150,7 +150,7 @@ static const PaperSize paperSizes114[] = {
 //   getPaperSize
 //---------------------------------------------------------
 
-static const PaperSize* getPaperSize114(const QString& name)
+static const PaperSize* getPaperSize114(const String& name)
 {
     for (int i = 0; paperSizes114[i].name; ++i) {
         if (name == paperSizes114[i].name) {
@@ -165,7 +165,7 @@ static const PaperSize* getPaperSize114(const QString& name)
 //   convertFromHtml
 //---------------------------------------------------------
 
-static QString convertFromHtml(const QString& in_html)
+static String convertFromHtml(const String& in_html)
 {
     if (in_html.isEmpty()) {
         return in_html;
@@ -285,7 +285,7 @@ static QString convertFromHtml(const QString& in_html)
     replaceSym(text, 0xee85a8 /*0xe168*/, "<sym>coda</sym>");                     // coda
     replaceSym(text, 0xee85a9 /*0xe169*/, "<sym>codaSquare</sym>");               // varcoda
 
-    return QString::fromStdString(text);
+    return String::fromStdString(text);
 }
 
 //---------------------------------------------------------
@@ -381,8 +381,8 @@ static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
     } else if (tag == "subtype") {
         e.skipCurrentElement();
     } else if (tag == "html-data") {
-        QString ss = e.readXml();
-        QString s  = convertFromHtml(ss);
+        String ss = e.readXml();
+        String s  = convertFromHtml(ss);
 // LOGD("html-data <%s>", qPrintable(s));
         t->setXmlText(s);
     } else if (tag == "foregroundColor") { // same as "color" ?
@@ -443,7 +443,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
                 a->setBracket(AccidentalBracket(i));
             }
         } else if (tag == "subtype") {
-            QString text(e.readText());
+            String text(e.readText());
             bool isInt;
             int i = text.toInt(&isInt);
             if (isInt) {
@@ -552,18 +552,19 @@ static void readAccidental(Accidental* a, XmlReader& e)
                 }
                 a->setAccidentalType(at);
             } else {
-                const static std::map<QString, AccidentalType> accMap = {
-                    { "none", AccidentalType::NONE }, { "sharp", AccidentalType::SHARP },
-                    { "flat", AccidentalType::FLAT }, { "natural", AccidentalType::NATURAL },
-                    { "double sharp", AccidentalType::SHARP2 }, { "double flat", AccidentalType::FLAT2 },
-                    { "flat-slash", AccidentalType::FLAT_SLASH }, { "flat-slash2", AccidentalType::FLAT_SLASH2 },
-                    { "mirrored-flat2", AccidentalType::MIRRORED_FLAT2 }, { "mirrored-flat", AccidentalType::MIRRORED_FLAT },
-                    { "sharp-slash", AccidentalType::SHARP_SLASH }, { "sharp-slash2", AccidentalType::SHARP_SLASH2 },
-                    { "sharp-slash3", AccidentalType::SHARP_SLASH3 }, { "sharp-slash4", AccidentalType::SHARP_SLASH4 },
-                    { "sharp arrow up", AccidentalType::SHARP_ARROW_UP }, { "sharp arrow down", AccidentalType::SHARP_ARROW_DOWN },
-                    { "flat arrow up", AccidentalType::FLAT_ARROW_UP }, { "flat arrow down", AccidentalType::FLAT_ARROW_DOWN },
-                    { "natural arrow up", AccidentalType::NATURAL_ARROW_UP }, { "natural arrow down", AccidentalType::NATURAL_ARROW_DOWN },
-                    { "sori", AccidentalType::SORI }, { "koron", AccidentalType::KORON }
+                const static std::map<String, AccidentalType> accMap = {
+                    { u"none", AccidentalType::NONE }, { u"sharp", AccidentalType::SHARP },
+                    { u"flat", AccidentalType::FLAT }, { u"natural", AccidentalType::NATURAL },
+                    { u"double sharp", AccidentalType::SHARP2 }, { u"double flat", AccidentalType::FLAT2 },
+                    { u"flat-slash", AccidentalType::FLAT_SLASH }, { u"flat-slash2", AccidentalType::FLAT_SLASH2 },
+                    { u"mirrored-flat2", AccidentalType::MIRRORED_FLAT2 }, { u"mirrored-flat", AccidentalType::MIRRORED_FLAT },
+                    { u"sharp-slash", AccidentalType::SHARP_SLASH }, { u"sharp-slash2", AccidentalType::SHARP_SLASH2 },
+                    { u"sharp-slash3", AccidentalType::SHARP_SLASH3 }, { u"sharp-slash4", AccidentalType::SHARP_SLASH4 },
+                    { u"sharp arrow up", AccidentalType::SHARP_ARROW_UP }, { u"sharp arrow down", AccidentalType::SHARP_ARROW_DOWN },
+                    { u"flat arrow up", AccidentalType::FLAT_ARROW_UP }, { u"flat arrow down", AccidentalType::FLAT_ARROW_DOWN },
+                    { u"natural arrow up", AccidentalType::NATURAL_ARROW_UP },
+                    { u"natural arrow down", AccidentalType::NATURAL_ARROW_DOWN },
+                    { u"sori", AccidentalType::SORI }, { u"koron", AccidentalType::KORON }
                 };
                 auto it = accMap.find(text);
                 if (it == accMap.end()) {
@@ -700,7 +701,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
                 note->setOffTimeOffset(1000 + (e.readInt() * 10));
             }
         } else if (tag == "userAccidental") {
-            QString val(e.readText());
+            String val(e.readText());
             bool ok;
             int k = val.toInt(&ok);
             if (ok) {
@@ -1204,10 +1205,10 @@ static void readVolta114(XmlReader& e, const ReadContext& ctx, Volta* volta)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "endings") {
-            QString s = e.readText();
-            QStringList sl = s.split(",", Qt::SkipEmptyParts);
+            String s = e.readText();
+            StringList sl = s.split(u',', mu::SkipEmptyParts);
             volta->endings().clear();
-            for (const QString& l : qAsConst(sl)) {
+            for (const String& l : qAsConst(sl)) {
                 int i = l.simplified().toInt();
                 volta->endings().push_back(i);
             }
@@ -1233,7 +1234,7 @@ static void readOttava114(XmlReader& e, const ReadContext& ctx, Ottava* ottava)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            QString s = e.readText();
+            String s = e.readText();
             bool ok;
             int idx = s.toInt(&ok);
             if (!ok) {
@@ -1270,24 +1271,24 @@ static void readOttava114(XmlReader& e, const ReadContext& ctx, Ottava* ottava)
 //   resolveSymCompatibility
 //---------------------------------------------------------
 
-static QString resolveSymCompatibility(SymId i, QString programVersion)
+static String resolveSymCompatibility(SymId i, String programVersion)
 {
-    if (!programVersion.isEmpty() && programVersion < "1.1") {
+    if (!programVersion.isEmpty() && programVersion < u"1.1") {
         i = SymId(int(i) + 5);
     }
     switch (int(i)) {
     case 197:
-        return "keyboardPedalPed";
+        return u"keyboardPedalPed";
     case 191:
-        return "keyboardPedalUp";
+        return u"keyboardPedalUp";
     case 193:
-        return "noSym";           //SymId(pedaldotSym);
+        return u"noSym";           //SymId(pedaldotSym);
     case 192:
-        return "noSym";           //SymId(pedaldashSym);
+        return u"noSym";           //SymId(pedaldashSym);
     case 139:
-        return "ornamentTrill";
+        return u"ornamentTrill";
     default:
-        return "noSym";
+        return u"noSym";
     }
 }
 
@@ -1310,21 +1311,21 @@ static void readTextLine114(XmlReader& e, const ReadContext& ctx, TextLine* text
         } else if (tag == "hookUp") { // obsolete
             textLine->setEndHookHeight(Spatium(qreal(-1.0)));
         } else if (tag == "beginSymbol" || tag == "symbol") {   // "symbol" is obsolete
-            QString text(e.readText());
-            textLine->setBeginText(QString("<sym>%1</sym>").arg(
-                                       text[0].isNumber()
+            String text(e.readText());
+            textLine->setBeginText(String(u"<sym>%1</sym>").arg(
+                                       text.at(0).isDigit()
                                        ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
                                        : text));
         } else if (tag == "continueSymbol") {
-            QString text(e.readText());
-            textLine->setContinueText(QString("<sym>%1</sym>").arg(
-                                          text[0].isNumber()
+            String text(e.readText());
+            textLine->setContinueText(String(u"<sym>%1</sym>").arg(
+                                          text.at(0).isDigit()
                                           ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
                                           : text));
         } else if (tag == "endSymbol") {
-            QString text(e.readText());
-            textLine->setEndText(QString("<sym>%1</sym>").arg(
-                                     text[0].isNumber()
+            String text(e.readText());
+            textLine->setEndText(String(u"<sym>%1</sym>").arg(
+                                     text.at(0).isDigit()
                                      ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
                                      : text));
         } else if (tag == "beginSymbolOffset") { // obsolete
@@ -1365,21 +1366,21 @@ static void readPedal114(XmlReader& e, const ReadContext& ctx, Pedal* pedal)
             pedal->setLineStyle(mu::draw::PenStyle(e.readInt()));
             pedal->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
         } else if (tag == "beginSymbol" || tag == "symbol") {   // "symbol" is obsolete
-            QString text(e.readText());
-            pedal->setBeginText(QString("<sym>%1</sym>").arg(
-                                    text[0].isNumber()
+            String text(e.readText());
+            pedal->setBeginText(String(u"<sym>%1</sym>").arg(
+                                    text.at(0).isDigit()
                                     ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
                                     : text));
         } else if (tag == "continueSymbol") {
-            QString text(e.readText());
-            pedal->setContinueText(QString("<sym>%1</sym>").arg(
-                                       text[0].isNumber()
+            String text(e.readText());
+            pedal->setContinueText(String(u"<sym>%1</sym>").arg(
+                                       text.at(0).isDigit()
                                        ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
                                        : text));
         } else if (tag == "endSymbol") {
-            QString text(e.readText());
-            pedal->setEndText(QString("<sym>%1</sym>").arg(
-                                  text[0].isNumber()
+            String text(e.readText());
+            pedal->setEndText(String(u"<sym>%1</sym>").arg(
+                                  text.at(0).isDigit()
                                   ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
                                   : text));
         } else if (tag == "beginSymbolOffset") { // obsolete
@@ -1430,7 +1431,7 @@ static void readHarmony114(XmlReader& e, const ReadContext& ctx, Harmony* h)
         } else if (tag == "degree") {
             int degreeValue = 0;
             int degreeAlter = 0;
-            QString degreeType = "";
+            String degreeType;
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
                 if (t == "degree-value") {
@@ -1491,7 +1492,7 @@ static void readHarmony114(XmlReader& e, const ReadContext& ctx, Harmony* h)
         // but we no longer support user-applied formatting for chord symbols anyhow
         // with any luck, the resulting text will be parseable now, so give it a shot
 //            h->createLayout();
-        QString s = h->plainText();
+        String s = h->plainText();
         if (!s.isEmpty()) {
             h->setHarmony(s);
             return;
@@ -1901,7 +1902,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 if (t == "no") {
                     l->setNo(e.readInt());
                 } else if (t == "syllabic") {
-                    QString val(e.readText());
+                    String val(e.readText());
                     if (val == "single") {
                         l->setSyllabic(Lyrics::Syllabic::SINGLE);
                     } else if (val == "begin") {
@@ -2030,7 +2031,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
                 if (t == "subtype") {
-                    QString s(e.readText());
+                    String s(e.readText());
                     a->setLabel(s);
                     mt = a->markerType(s);
                 } else if (!a->TextBase::readProperties(e)) {
@@ -2684,7 +2685,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
 static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordListHook)
 {
     while (e.readNextStartElement()) {
-        QString tag = e.name().toQLatin1String();
+        String tag = String::fromAscii(e.name().ascii());
 
         if (tag == "lyricsDistance") {          // was renamed
             tag = "lyricsPosBelow";
@@ -2723,7 +2724,7 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
         }
         // for compatibility:
         else if (tag == "oddHeader" || tag == "evenHeader" || tag == "oddFooter" || tag == "evenFooter") {
-            tag += "C";
+            tag += u"C";
         } else {
             if (!ReadStyleHook::readStyleProperties(style, e)) {
                 e.skipCurrentElement();
@@ -2839,7 +2840,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         } else if (tag == "source") {
             masterScore->setMetaTag(u"source", e.readText());
         } else if (tag == "metaTag") {
-            QString name = e.attribute("name");
+            String name = e.attribute("name");
             masterScore->setMetaTag(name, e.readText());
         } else if (tag == "Part") {
             Part* part = new Part(masterScore);
@@ -3087,8 +3088,8 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         masterScore->style().set(Sid::dontHideStavesInFirstSystem, false);
     }
     if (masterScore->styleB(Sid::showPageNumberOne)) {      // http://musescore.org/en/node/21207
-        masterScore->style().set(Sid::evenFooterL, QString("$P"));
-        masterScore->style().set(Sid::oddFooterR, QString("$P"));
+        masterScore->style().set(Sid::evenFooterL, String("$P"));
+        masterScore->style().set(Sid::oddFooterR, String("$P"));
     }
     if (masterScore->styleI(Sid::minEmptyMeasures) == 0) {
         masterScore->style().set(Sid::minEmptyMeasures, 1);
@@ -3104,7 +3105,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         BeatsPerSecond tempo   = i.second.tempo;
         if (masterScore->tempomap()->tempo(tick.ticks()) != tempo) {
             TempoText* tt = Factory::createTempoText(masterScore->dummy()->segment());
-            tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(qRound(tempo.toBPM().val)));
+            tt->setXmlText(String("<sym>metNoteQuarterUp</sym> = %1").arg(qRound(tempo.toBPM().val)));
             tt->setTempo(tempo);
             tt->setTrack(0);
             tt->setVisible(false);

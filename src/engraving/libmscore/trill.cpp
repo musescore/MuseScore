@@ -428,7 +428,7 @@ void Trill::read(XmlReader& e)
 //   setTrillType
 //---------------------------------------------------------
 
-void Trill::setTrillType(const QString& s)
+void Trill::setTrillType(const String& s)
 {
     if (s == "0") {
         _trillType = Type::TRILL_LINE;
@@ -439,7 +439,7 @@ void Trill::setTrillType(const QString& s)
         return;
     }
     for (TrillTableItem i : trillTable) {
-        if (s.compare(i.name) == 0) {
+        if (s == String::fromUtf8(i.name)) {
             _trillType = i.type;
             return;
         }
@@ -451,22 +451,22 @@ void Trill::setTrillType(const QString& s)
 //   type2name
 //---------------------------------------------------------
 
-QString Trill::type2name(Trill::Type t)
+String Trill::type2name(Trill::Type t)
 {
     for (TrillTableItem i : trillTable) {
         if (i.type == t) {
-            return i.name;
+            return String::fromUtf8(i.name);
         }
     }
     LOGD("unknown Trill subtype %d", int(t));
-    return "?";
+    return u"?";
 }
 
 //---------------------------------------------------------
 //   trillTypeName
 //---------------------------------------------------------
 
-QString Trill::trillTypeName() const
+String Trill::trillTypeName() const
 {
     return type2name(trillType());
 }
@@ -475,9 +475,9 @@ QString Trill::trillTypeName() const
 //   trillTypeName
 //---------------------------------------------------------
 
-QString Trill::trillTypeUserName() const
+String Trill::trillTypeUserName() const
 {
-    return qtrc("trillType", trillTable[static_cast<int>(trillType())].userName.toUtf8().constData());
+    return mtrc("engraving", trillTable[static_cast<int>(trillType())].userName);
 }
 
 //---------------------------------------------------------

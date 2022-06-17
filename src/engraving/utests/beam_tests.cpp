@@ -30,9 +30,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString BEAM_DATA_DIR("beam_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String BEAM_DATA_DIR("beam_data/");
 
 //---------------------------------------------------------
 //   TestBeam
@@ -49,9 +50,9 @@ public:
 //---------------------------------------------------------
 void BeamTests::beam(const char* path)
 {
-    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + path);
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + String::fromUtf8(path));
     EXPECT_TRUE(score);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, path, BEAM_DATA_DIR + path));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(path), BEAM_DATA_DIR + String::fromUtf8(path)));
     delete score;
 }
 
@@ -145,7 +146,7 @@ TEST_F(BeamTests, DISABLED_beamCrossMeasure4)
 // in the refactored beams code
 TEST_F(BeamTests, DISABLED_beamCrossMeasure1)
 {
-    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "Beam-CrossM1.mscx");
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"Beam-CrossM1.mscx");
     EXPECT_TRUE(score);
 
     Measure* first_measure = score->firstMeasure();
@@ -180,7 +181,7 @@ TEST_F(BeamTests, DISABLED_beamCrossMeasure1)
 
 TEST_F(BeamTests, beamStemDir)
 {
-    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "beamStemDir.mscx");
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"beamStemDir.mscx");
     EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
@@ -191,7 +192,7 @@ TEST_F(BeamTests, beamStemDir)
     score->update();
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "beamStemDir-01.mscx", BEAM_DATA_DIR + "beamStemDir-01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"beamStemDir-01.mscx", BEAM_DATA_DIR + u"beamStemDir-01-ref.mscx"));
 
     delete score;
 }
@@ -205,7 +206,7 @@ TEST_F(BeamTests, beamStemDir)
 
 TEST_F(BeamTests, flipBeamStemDir)
 {
-    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "flipBeamStemDir.mscx");
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"flipBeamStemDir.mscx");
     EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
@@ -221,7 +222,7 @@ TEST_F(BeamTests, flipBeamStemDir)
     score->update();
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "flipBeamStemDir-01.mscx", BEAM_DATA_DIR + "flipBeamStemDir-01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"flipBeamStemDir-01.mscx", BEAM_DATA_DIR + u"flipBeamStemDir-01-ref.mscx"));
 
     delete score;
 }

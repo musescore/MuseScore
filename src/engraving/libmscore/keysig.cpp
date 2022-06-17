@@ -493,7 +493,7 @@ void KeySig::read(XmlReader& e)
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
                 if (t == "sym") {
-                    String val(e.readText());
+                    AsciiStringView val(e.readAsciiText());
                     bool valid;
                     SymId id = SymId(val.toInt(&valid));
                     if (!valid) {

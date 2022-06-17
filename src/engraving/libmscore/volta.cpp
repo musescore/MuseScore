@@ -135,7 +135,7 @@ void Volta::setEndings(const std::vector<int>& l)
 //   setText
 //---------------------------------------------------------
 
-void Volta::setText(const QString& s)
+void Volta::setText(const String& s)
 {
     setBeginText(s);
 }
@@ -144,7 +144,7 @@ void Volta::setText(const QString& s)
 //   text
 //---------------------------------------------------------
 
-QString Volta::text() const
+String Volta::text() const
 {
     return beginText();
 }
@@ -160,7 +160,7 @@ void Volta::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "endings") {
-            QString s = e.readText();
+            String s = e.readText();
             _endings = TConv::fromXml(s, std::vector<int>());
         } else if (readStyledProperty(e, tag)) {
         } else if (!readProperties(e)) {

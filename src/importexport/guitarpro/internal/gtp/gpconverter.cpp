@@ -1154,10 +1154,10 @@ void GPConverter::addTempoMap()
                 _lastGradualTempoChange->setTick2(tick);
                 if (realTemp > previousTempo) {
                     _lastGradualTempoChange->setTempoChangeType(GradualTempoChangeType::Accelerando);
-                    _lastGradualTempoChange->setBeginText("accel");
+                    _lastGradualTempoChange->setBeginText(u"accel");
                 } else {
                     _lastGradualTempoChange->setTempoChangeType(GradualTempoChangeType::Rallentando);
-                    _lastGradualTempoChange->setBeginText("rall");
+                    _lastGradualTempoChange->setBeginText(u"rall");
                 }
 
                 _score->addElement(_lastGradualTempoChange);

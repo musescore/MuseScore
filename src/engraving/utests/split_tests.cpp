@@ -30,9 +30,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString SPLIT_DATA_DIR("split_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String SPLIT_DATA_DIR("split_data/");
 
 class SplitTests : public ::testing::Test
 {
@@ -42,7 +43,7 @@ public:
 
 void SplitTests::split(const char* f1, const char* ref, int index)
 {
-    MasterScore* score = ScoreRW::readScore(SPLIT_DATA_DIR + f1);
+    MasterScore* score = ScoreRW::readScore(SPLIT_DATA_DIR + String::fromUtf8(f1));
     EXPECT_TRUE(score);
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
@@ -53,7 +54,7 @@ void SplitTests::split(const char* f1, const char* ref, int index)
 
     score->cmdSplitMeasure(cr);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, f1, SPLIT_DATA_DIR + ref));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(f1), SPLIT_DATA_DIR + String::fromUtf8(ref)));
     delete score;
 }
 

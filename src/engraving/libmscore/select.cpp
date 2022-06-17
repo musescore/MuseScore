@@ -765,16 +765,16 @@ void Selection::setState(SelState s)
     _score->setSelectionChanged(true);
 }
 
-QString Selection::mimeType() const
+String Selection::mimeType() const
 {
     switch (_state) {
     default:
     case SelState::NONE:
-        return QString();
+        return String();
     case SelState::LIST:
-        return isSingle() ? mimeSymbolFormat : mimeSymbolListFormat;
+        return isSingle() ? String::fromAscii(mimeSymbolFormat) : String::fromAscii(mimeSymbolListFormat);
     case SelState::RANGE:
-        return mimeStaffListFormat;
+        return String::fromAscii(mimeStaffListFormat);
     }
 }
 

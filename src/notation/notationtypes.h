@@ -531,7 +531,7 @@ struct ScoreConfig
 inline QString staffTypeToString(StaffTypeId type)
 {
     const StaffType* preset = StaffType::preset(type);
-    return preset ? preset->name() : QString();
+    return preset ? preset->name().toQString() : QString();
 }
 
 inline QList<StaffTypeId> allStaffTypes()

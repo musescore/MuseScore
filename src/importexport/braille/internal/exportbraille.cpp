@@ -2146,7 +2146,7 @@ QString ExportBrailleImpl::brailleVolta(Measure* measure, Volta* volta, int staf
 
     // 17.1.1. Page 121. Music Braille Code 2015.
     resetOctave(staffCount);
-    QStringList voltaNumbers = volta->text().split(QRegularExpression("(,|\\.| )"));
+    QStringList voltaNumbers = volta->text().toQString().split(QRegularExpression("(,|\\.| )"));
     QString result = QString();
     for (QString voltaNumber : voltaNumbers) {
         if (voltaNumber.isEmpty()) {

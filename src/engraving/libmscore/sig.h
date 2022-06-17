@@ -25,6 +25,7 @@
 
 #include <map>
 
+#include "types/string.h"
 #include "types/fraction.h"
 
 namespace mu::engraving {
@@ -125,7 +126,7 @@ public:
 
     bool operator==(const SigEvent& e) const;
     bool valid() const { return _timesig.isValid(); }
-    QString print() const { return _timesig.toString(); }
+    String print() const { return _timesig.toString(); }
     TimeSigFrac timesig() const { return _timesig; }
     TimeSigFrac nominal() const { return _nominal; }
     void setNominal(const Fraction& f) { _nominal = f; }
@@ -160,7 +161,7 @@ public:
 
     void tickValues(int t, int* bar, int* beat, int* tick) const;
     int bar2tick(int bar, int beat) const;
-    QString pos(int t) const;
+    String pos(int t) const;
 
     unsigned raster(unsigned tick, int raster) const;
     unsigned raster1(unsigned tick, int raster) const;      // round down

@@ -32,9 +32,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString EARLYMUSIC_DATA_DIR("earlymusic_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String EARLYMUSIC_DATA_DIR("earlymusic_data/");
 
 class EarlymusicTests : public ::testing::Test
 {
@@ -45,7 +46,7 @@ class EarlymusicTests : public ::testing::Test
 //---------------------------------------------------------
 TEST_F(EarlymusicTests, earlymusic01)
 {
-    MasterScore* score = ScoreRW::readScore(EARLYMUSIC_DATA_DIR + "mensurstrich01.mscx");
+    MasterScore* score = ScoreRW::readScore(EARLYMUSIC_DATA_DIR + u"mensurstrich01.mscx");
     EXPECT_TRUE(score);
     score->doLayout();
 
@@ -82,7 +83,7 @@ TEST_F(EarlymusicTests, earlymusic01)
     dur   = chord->durationType();
     EXPECT_EQ(dur.type(), DurationType::V_LONG);
     // verify score file did not change
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "mensurstrich01.mscx", EARLYMUSIC_DATA_DIR + "mensurstrich01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"mensurstrich01.mscx", EARLYMUSIC_DATA_DIR + u"mensurstrich01-ref.mscx"));
 
     // UNDO AND VERIFY
     EditData ed;
@@ -95,6 +96,6 @@ TEST_F(EarlymusicTests, earlymusic01)
     EXPECT_EQ(acDur.type(), DurationType::V_BREVE);
     dur   = chord->durationType();
     EXPECT_EQ(dur.type(), DurationType::V_BREVE);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "mensurstrich01.mscx", EARLYMUSIC_DATA_DIR + "mensurstrich01.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"mensurstrich01.mscx", EARLYMUSIC_DATA_DIR + u"mensurstrich01.mscx"));
     delete score;
 }

@@ -681,13 +681,13 @@ public:
 class EditText : public UndoCommand
 {
     Text* text;
-    QString oldText;
+    String oldText;
     //int undoLevel;
 
     void undoRedo();
 
 public:
-    EditText(Text* t, const QString& ot, int /*l*/)
+    EditText(Text* t, const String& ot, int /*l*/)
         : text(t), oldText(ot) /*, undoLevel(l)*/ {}
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
@@ -785,12 +785,12 @@ class ChangePart : public UndoCommand
 {
     Part* part;
     Instrument* instrument;
-    QString partName;
+    String partName;
 
     void flip(EditData*) override;
 
 public:
-    ChangePart(Part*, Instrument*, const QString& name);
+    ChangePart(Part*, Instrument*, const String& name);
     UNDO_NAME("ChangePart")
     UNDO_CHANGED_OBJECTS({ part });
 };
@@ -1015,12 +1015,12 @@ public:
 class ChangeExcerptTitle : public UndoCommand
 {
     Excerpt* excerpt;
-    QString title;
+    String title;
 
     void flip(EditData*) override;
 
 public:
-    ChangeExcerptTitle(Excerpt* x, const QString& t)
+    ChangeExcerptTitle(Excerpt* x, const String& t)
         : excerpt(x), title(t) {}
     UNDO_NAME("ChangeExcerptTitle")
 };
@@ -1245,13 +1245,13 @@ public:
 class ChangeMetaText : public UndoCommand
 {
     Score* score;
-    QString id;
-    QString text;
+    String id;
+    String text;
 
     void flip(EditData*) override;
 
 public:
-    ChangeMetaText(Score* s, const QString& i, const QString& t)
+    ChangeMetaText(Score* s, const String& i, const String& t)
         : score(s), id(i), text(t) {}
     UNDO_NAME("ChangeMetaText")
     UNDO_CHANGED_OBJECTS({ score });

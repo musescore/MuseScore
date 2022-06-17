@@ -85,8 +85,8 @@ public:
     std::vector<int> endings() const { return _endings; }
     std::vector<int>& endings() { return _endings; }
     void setEndings(const std::vector<int>& l);
-    void setText(const QString& s);
-    QString text() const;
+    void setText(const String& s);
+    String text() const;
 
     bool hasEnding(int repeat) const;
     int firstEnding() const;

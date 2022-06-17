@@ -28,9 +28,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString TRANSPOSE_DATA_DIR("transpose_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String TRANSPOSE_DATA_DIR("transpose_data/");
 
 class TransposeTests : public ::testing::Test
 {
@@ -38,11 +39,11 @@ class TransposeTests : public ::testing::Test
 
 TEST_F(TransposeTests, undoTranspose)
 {
-    QString readFile(TRANSPOSE_DATA_DIR + "undoTranspose.mscx");
-    QString writeFile1("undoTranspose01-test.mscx");
-    QString reference1(TRANSPOSE_DATA_DIR + "undoTranspose01-ref.mscx");
-    QString writeFile2("undoTranspose02-test.mscx");
-    QString reference2(TRANSPOSE_DATA_DIR + "undoTranspose02-ref.mscx");
+    String readFile(TRANSPOSE_DATA_DIR + "undoTranspose.mscx");
+    String writeFile1("undoTranspose01-test.mscx");
+    String reference1(TRANSPOSE_DATA_DIR + "undoTranspose01-ref.mscx");
+    String writeFile2("undoTranspose02-test.mscx");
+    String reference2(TRANSPOSE_DATA_DIR + "undoTranspose02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
 
@@ -66,11 +67,11 @@ TEST_F(TransposeTests, undoTranspose)
 
 TEST_F(TransposeTests, undoDiatonicTranspose)
 {
-    QString readFile(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose.mscx");
-    QString writeFile1("undoDiatonicTranspose01-test.mscx");
-    QString reference1(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose01-ref.mscx");
-    QString writeFile2("undoDiatonicTranspose02-test.mscx");
-    QString reference2(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose02-ref.mscx");
+    String readFile(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose.mscx");
+    String writeFile1("undoDiatonicTranspose01-test.mscx");
+    String reference1(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose01-ref.mscx");
+    String writeFile2("undoDiatonicTranspose02-test.mscx");
+    String reference2(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();

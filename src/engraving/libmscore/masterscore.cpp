@@ -641,7 +641,7 @@ void MasterScore::setPlaybackScore(Score* score)
 void MasterScore::updateExpressive(Synthesizer* synth)
 {
     SynthesizerState s = synthesizerState();
-    SynthesizerGroup g = s.group("master");
+    SynthesizerGroup g = s.group(u"master");
 
     int method = 1;
     for (const IdValue& idVal : g) {
@@ -662,7 +662,7 @@ void MasterScore::updateExpressive(Synthesizer* synth, bool expressive, bool for
 
     if (!force) {
         SynthesizerState s = synthesizerState();
-        SynthesizerGroup g = s.group("master");
+        SynthesizerGroup g = s.group(u"master");
 
         for (const IdValue& idVal : g) {
             if (idVal.id == 4) {

@@ -124,7 +124,7 @@ EngravingItem* TimeSig::drop(EditData& data)
 //    setSig() has to be called first
 //---------------------------------------------------------
 
-void TimeSig::setNumeratorString(const QString& a)
+void TimeSig::setNumeratorString(const String& a)
 {
     if (_timeSigType == TimeSigType::NORMAL) {
         _numeratorString = a;
@@ -136,7 +136,7 @@ void TimeSig::setNumeratorString(const QString& a)
 //    setSig() has to be called first
 //---------------------------------------------------------
 
-void TimeSig::setDenominatorString(const QString& a)
+void TimeSig::setDenominatorString(const String& a)
 {
     if (_timeSigType == TimeSigType::NORMAL) {
         _denominatorString = a;
@@ -238,13 +238,13 @@ void TimeSig::read(XmlReader& e)
 
     // HACK: handle time signatures from scores before 3.5 differently on some special occasions.
     // See https://musescore.org/node/308139.
-    QString version = score()->mscoreVersion();
-    if (!version.isEmpty() && (version >= "3.0") && (version < "3.5")) {
+    String version = score()->mscoreVersion();
+    if (!version.isEmpty() && (version >= u"3.0") && (version < u"3.5")) {
         if ((_timeSigType == TimeSigType::NORMAL) && !_numeratorString.isEmpty() && _denominatorString.isEmpty()) {
-            if (_numeratorString == QString::number(_sig.numerator())) {
+            if (_numeratorString == String::number(_sig.numerator())) {
                 _numeratorString.clear();
             } else {
-                setDenominatorString(QString::number(_sig.denominator()));
+                setDenominatorString(String::number(_sig.denominator()));
             }
         }
     }
@@ -325,8 +325,8 @@ void TimeSig::layout()
         ds.clear();
     } else {
         if (_numeratorString.isEmpty()) {
-            ns = timeSigSymIdsFromString(_numeratorString.isEmpty() ? QString::number(_sig.numerator()) : _numeratorString);
-            ds = timeSigSymIdsFromString(_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString);
+            ns = timeSigSymIdsFromString(_numeratorString.isEmpty() ? String::number(_sig.numerator()) : _numeratorString);
+            ds = timeSigSymIdsFromString(_denominatorString.isEmpty() ? String::number(_sig.denominator()) : _denominatorString);
         } else {
             ns = timeSigSymIdsFromString(_numeratorString);
             ds = timeSigSymIdsFromString(_denominatorString);
@@ -415,18 +415,18 @@ void TimeSig::setFrom(const TimeSig* ts)
 //   ssig
 //---------------------------------------------------------
 
-QString TimeSig::ssig() const
+String TimeSig::ssig() const
 {
-    return QString("%1/%2").arg(_sig.numerator()).arg(_sig.denominator());
+    return String("%1/%2").arg(_sig.numerator()).arg(_sig.denominator());
 }
 
 //---------------------------------------------------------
 //   setSSig
 //---------------------------------------------------------
 
-void TimeSig::setSSig(const QString& s)
+void TimeSig::setSSig(const String& s)
 {
-    QStringList sl = s.split("/");
+    StringList sl = s.split(u'/');
     if (sl.size() == 2) {
         _sig.setNumerator(sl[0].toInt());
         _sig.setDenominator(sl[1].toInt());
@@ -521,9 +521,9 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
     case Pid::SHOW_COURTESY:
         return 1;
     case Pid::NUMERATOR_STRING:
-        return QString();
+        return String();
     case Pid::DENOMINATOR_STRING:
-        return QString();
+        return String();
     case Pid::TIMESIG:
         return PropertyValue::fromValue(Fraction(4, 4));
     case Pid::TIMESIG_GLOBAL:

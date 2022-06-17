@@ -28,9 +28,10 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString RHYTHMICGRP_DATA_DIR("rhythmicGrouping_data/");
-
+using namespace mu;
 using namespace mu::engraving;
+
+static const String RHYTHMICGRP_DATA_DIR("rhythmicGrouping_data/");
 
 class RhythmicGroupingTests : public ::testing::Test
 {
@@ -40,7 +41,7 @@ public:
 
 void RhythmicGroupingTests::group(const char* p1, const char* p2, size_t staves)
 {
-    MasterScore* score = ScoreRW::readScore(RHYTHMICGRP_DATA_DIR + p1);
+    MasterScore* score = ScoreRW::readScore(RHYTHMICGRP_DATA_DIR + String::fromUtf8(p1));
     EXPECT_TRUE(score);
 
     if (!staves) {
@@ -57,7 +58,7 @@ void RhythmicGroupingTests::group(const char* p1, const char* p2, size_t staves)
     }
 
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, p1, RHYTHMICGRP_DATA_DIR + p2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(p1), RHYTHMICGRP_DATA_DIR + String::fromUtf8(p2)));
     delete score;
 }
 
