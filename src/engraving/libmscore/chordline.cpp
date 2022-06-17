@@ -43,8 +43,8 @@ const char* scorelineNames[] = {
 //   ChordLine
 //---------------------------------------------------------
 
-ChordLine::ChordLine(Chord* parent, const ElementType& type)
-    : EngravingItem(type, parent, ElementFlag::MOVABLE)
+ChordLine::ChordLine(Chord* parent)
+    : EngravingItem(ElementType::CHORDLINE, parent, ElementFlag::MOVABLE)
 {
     modified = false;
     _chordLineType = ChordLineType::NOTYPE;
