@@ -162,8 +162,9 @@ mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePat
     }
 
     MscReader reader(params);
-    if (!reader.open()) {
-        return make_ret(engraving::Err::FileOpenError);
+    Ret openResult = reader.open();
+    if (openResult != scoreFileErrorToRet(Score::FileError::FILE_NO_ERROR, "")) {
+        return openResult;
     }
 
     Ret ret = doLoad(reader, stylePath, forceMode);

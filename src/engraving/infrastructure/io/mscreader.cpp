@@ -26,6 +26,8 @@
 #include "io/dir.h"
 #include "serialization/zipreader.h"
 #include "serialization/xmlstreamreader.h"
+#include "engraving/engravingerrors.h"
+#include "libmscore/masterscore.h"
 
 #include "log.h"
 
@@ -65,7 +67,7 @@ const MscReader::Params& MscReader::params() const
     return m_params;
 }
 
-bool MscReader::open()
+Ret MscReader::open()
 {
     return reader()->open(m_params.device, m_params.filePath);
 }
@@ -242,7 +244,7 @@ MscReader::ZipFileReader::~ZipFileReader()
     }
 }
 
-bool MscReader::ZipFileReader::open(IODevice* device, const path_t& filePath)
+Ret MscReader::ZipFileReader::open(IODevice* device, const path_t& filePath)
 {
     m_device = device;
     if (!m_device) {
@@ -250,16 +252,21 @@ bool MscReader::ZipFileReader::open(IODevice* device, const path_t& filePath)
         m_selfDeviceOwner = true;
     }
 
+    if (!FileInfo::exists(filePath)) {
+        LOGD() << "not exists path: " << filePath;
+        return scoreFileErrorToRet(Score::FileError::FILE_NOT_FOUND, filePath);
+    }
+
     if (!m_device->isOpen()) {
         if (!m_device->open(IODevice::ReadOnly)) {
             LOGD() << "failed open file: " << filePath;
-            return false;
+            return scoreFileErrorToRet(Score::FileError::FILE_OPEN_ERROR, filePath);
         }
     }
 
     m_zip = new ZipReader(m_device);
 
-    return true;
+    return scoreFileErrorToRet(Score::FileError::FILE_NO_ERROR, filePath);
 }
 
 void MscReader::ZipFileReader::close()
@@ -318,7 +325,7 @@ ByteArray MscReader::ZipFileReader::fileData(const String& fileName) const
     return data;
 }
 
-bool MscReader::DirReader::open(IODevice* device, const path_t& filePath)
+Ret MscReader::DirReader::open(IODevice* device, const path_t& filePath)
 {
     if (device) {
         NOT_SUPPORTED;
@@ -327,12 +334,12 @@ bool MscReader::DirReader::open(IODevice* device, const path_t& filePath)
 
     if (!FileInfo::exists(filePath)) {
         LOGD() << "not exists path: " << filePath;
-        return false;
+        return scoreFileErrorToRet(Score::FileError::FILE_NOT_FOUND, filePath);
     }
 
     m_rootPath = containerPath(filePath);
 
-    return true;
+    return scoreFileErrorToRet(Score::FileError::FILE_NO_ERROR, filePath);
 }
 
 void MscReader::DirReader::close()
@@ -381,7 +388,7 @@ ByteArray MscReader::DirReader::fileData(const String& fileName) const
     return file.readAll();
 }
 
-bool MscReader::XmlFileReader::open(IODevice* device, const path_t& filePath)
+Ret MscReader::XmlFileReader::open(IODevice* device, const path_t& filePath)
 {
     m_device = device;
     if (!m_device) {
@@ -389,14 +396,19 @@ bool MscReader::XmlFileReader::open(IODevice* device, const path_t& filePath)
         m_selfDeviceOwner = true;
     }
 
+    if (!FileInfo::exists(filePath)) {
+        LOGD() << "not exists path: " << filePath;
+        return scoreFileErrorToRet(Score::FileError::FILE_NOT_FOUND, filePath);
+    }
+
     if (!m_device->isOpen()) {
         if (!m_device->open(IODevice::ReadOnly)) {
             LOGD() << "failed open file: " << filePath;
-            return false;
+            return scoreFileErrorToRet(Score::FileError::FILE_OPEN_ERROR, filePath);
         }
     }
 
-    return true;
+    return scoreFileErrorToRet(Score::FileError::FILE_NO_ERROR, filePath);
 }
 
 void MscReader::XmlFileReader::close()
@@ -427,13 +439,13 @@ StringList MscReader::XmlFileReader::fileList() const
     m_device->seek(0);
     XmlStreamReader xml(m_device);
     while (xml.readNextStartElement()) {
-        if ("files" != xml.name()) {
+        if (xml.name() != "files") {
             xml.skipCurrentElement();
             continue;
         }
 
         while (xml.readNextStartElement()) {
-            if ("file" != xml.name()) {
+            if (xml.name() != "file") {
                 xml.skipCurrentElement();
                 continue;
             }
@@ -456,13 +468,13 @@ ByteArray MscReader::XmlFileReader::fileData(const String& fileName) const
     m_device->seek(0);
     XmlStreamReader xml(m_device);
     while (xml.readNextStartElement()) {
-        if ("files" != xml.name()) {
+        if (xml.name() != "files") {
             xml.skipCurrentElement();
             continue;
         }
 
         while (xml.readNextStartElement()) {
-            if ("file" != xml.name()) {
+            if (xml.name() != "file") {
                 xml.skipCurrentElement();
                 continue;
             }
