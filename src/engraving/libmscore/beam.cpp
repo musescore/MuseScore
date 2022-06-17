@@ -639,14 +639,10 @@ PointF Beam::chordBeamAnchor(Chord* chord) const
 
 void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
 {
-    PointF posStart = chordBeamAnchor(startChord);
-    PointF posEnd = chordBeamAnchor(endChord);
-    double y1 = _slope * (posStart.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
-    double y2 = _slope * (posEnd.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
-    bool isFirstSubgroup = startChord == toChord(_elements.front());
-    bool isLastSubgroup = endChord == toChord(_elements.back());
-    bool firstUp = startChord->up();
-    bool lastUp = endChord->up();
+    const bool isFirstSubgroup = startChord == toChord(_elements.front());
+    const bool isLastSubgroup = endChord == toChord(_elements.back());
+    const bool firstUp = startChord->up();
+    const bool lastUp = endChord->up();
     bool overallUp = _up;
     if (isFirstSubgroup == isLastSubgroup) {
         // this subgroup is either the only one in the beam, or in the middle
@@ -666,10 +662,10 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
                 if (cr->tick() > endChord->tick()) {
                     break;
                 }
-                Chord* c = toChord(cr);
-                upStems += c->up() ? 1 : 0;
-                downStems += c->up() ? 0 : 1;
-                if (c == endChord) {
+
+                ++(toChord(cr)->up() ? upStems : downStems);
+
+                if (cr == endChord) {
                     break;
                 }
             }
@@ -688,18 +684,25 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
         overallUp = firstUp;
     }
 
-    double verticalOffset = 0;
-    int upValue = overallUp ? -1 : 1;
+    PointF posStart = chordBeamAnchor(startChord);
+    PointF posEnd = chordBeamAnchor(endChord);
+
     double startOffsetX = 0.0;
     double endOffsetX = 0.0;
-    if (startChord->stem()) {
-        startOffsetX = startChord->up() && !_tab ? -(startChord->stem()->lineWidth().val() * startChord->mag()) : 0.0;
+
+    if (startChord->stem() && startChord->up() && !_tab) {
+        startOffsetX = -startChord->stem()->lineWidth().val() * startChord->mag();
     }
-    if (endChord->stem()) {
-        endOffsetX = endChord->up() || _tab ? 0.0 : endChord->stem()->lineWidth().val() * endChord->mag();
+    if (endChord->stem() && !endChord->up() && !_tab) {
+        endOffsetX = endChord->stem()->lineWidth().val() * endChord->mag();
     }
-    double startX = posStart.x() + startOffsetX;
-    double endX = posEnd.x() + endOffsetX;
+
+    const double startX = posStart.x() + startOffsetX;
+    const double endX = posEnd.x() + endOffsetX;
+
+    double startY = _slope * (posStart.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
+    double endY = _slope * (posEnd.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
+
     int beamsBelow = 0; // how many beams below level 0?
     int beamsAbove = 0; // how many beams above level 0?
 
@@ -710,30 +713,39 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
                 continue;
             }
 
-            if (beam->above) {
-                beamsAbove++;
-            } else {
-                beamsBelow++;
-            }
+            ++(beam->above ? beamsAbove : beamsBelow);
         }
-        int extraBeamAdjust = overallUp ? beamsAbove : beamsBelow;
-        verticalOffset = _beamDist * (level - extraBeamAdjust) * upValue;
+
+        const int upValue = overallUp ? -1 : 1;
+        const int extraBeamAdjust = overallUp ? beamsAbove : beamsBelow;
+        const double verticalOffset = _beamDist * (level - extraBeamAdjust) * upValue;
+
+        if (qFuzzyCompare(_grow1, _grow2)) {
+            startY -= verticalOffset * _grow1;
+            endY -= verticalOffset * _grow1;
+        } else {
+            // Feathered beams
+            double startProportionAlongX = (startX - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
+            double endProportionAlongX = (endX - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
+
+            double grow1 = startProportionAlongX * (_grow2 - _grow1) + _grow1;
+            double grow2 = endProportionAlongX * (_grow2 - _grow1) + _grow1;
+
+            startY -= verticalOffset * grow1;
+            endY -= verticalOffset * grow2;
+        }
     }
 
     BeamSegment* b = new BeamSegment();
     b->above = !overallUp;
     b->level = level;
-    b->line = LineF(
-        posStart.x() + startOffsetX,
-        y1 - verticalOffset,
-        posEnd.x() + endOffsetX,
-        y2 - verticalOffset
-        );
+    b->line = LineF(startX, startY, endX, endY);
     _beamSegments.push_back(b);
-    if (b->level > 0) {
-        beamsAbove += b->above ? 1 : 0;
-        beamsBelow += b->above ? 0 : 1;
+
+    if (level > 0) {
+        ++(b->above ? beamsAbove : beamsBelow);
     }
+
     // extend stems properly
     for (ChordRest* cr : _elements) {
         if (!cr->isChord() || cr->tick() < startChord->tick()) {
@@ -742,9 +754,25 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
         if (cr->tick() > endChord->tick()) {
             break;
         }
-        Chord* c = toChord(cr);
-        extendStem(c, c->up() ? beamsAbove : beamsBelow);
-        if (c == endChord) {
+
+        Chord* chord = toChord(cr);
+        double addition = 0.0;
+
+        if (level > 0) {
+            double grow = _grow1;
+            if (!qFuzzyCompare(_grow1, _grow2)) {
+                PointF anchor = chordBeamAnchor(chord);
+                double proportionAlongX = (anchor.x() - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
+                grow = proportionAlongX * (_grow2 - _grow1) + _grow1;
+            }
+
+            int extraBeamAdjust = cr->up() ? beamsBelow : beamsAbove;
+            addition = grow * (level - extraBeamAdjust) * _beamDist;
+        }
+
+        extendStem(chord, addition);
+
+        if (chord == endChord) {
             break;
         }
     }
@@ -836,17 +864,8 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Bre
 void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
 {
     PointF chordPos = chordBeamAnchor(chord);
-    double beamletLength = score()->styleMM(Sid::beamMinLen).val()
-                           * mag()
-                           * chord->staff()->staffMag(chord);
-    double x2 = chordPos.x() + (isBefore ? -beamletLength : beamletLength);
-    double y1 = _slope * (chordPos.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
-    double y2 = _slope * (x2 - chordPos.x()) + y1;
 
-    int upValue = chord->up() ? -1 : 1;
-    double verticalOffset = 0;
-
-    double stemWidth = chord->stem() ? chord->stem()->lineWidth().val() * chord->mag() : 0;
+    const double stemWidth = chord->stem() ? chord->stem()->lineWidth().val() * chord->mag() : 0;
     double startOffsetX = 0;
     if (!_tab) {
         if (isBefore && !chord->up()) {
@@ -855,36 +874,55 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
             startOffsetX = -stemWidth;
         }
     }
-    double startX = chordPos.x() + startOffsetX;
-    double endX = x2;
-    int extraBeamAdjust = 0; // how many beams past level 0 (i.e. beams on the other side
-                             // of level 0 for this subgroup)
-    // avoid adjusting for beams on opposite side of level 0
-    if (_beamSegments.size() > 0) {
-        for (const BeamSegment* beam : _beamSegments) {
-            if (beam->level == 0 || beam->line.x2() < startX || beam->line.x1() > endX) {
-                continue;
-            }
 
-            if ((!chord->up() && !beam->above) || (chord->up() && beam->above)) {
-                extraBeamAdjust++;
-            }
+    const double startX = chordPos.x() + startOffsetX;
+
+    const double beamletLength = score()->styleMM(Sid::beamMinLen).val()
+                                 * mag()
+                                 * chord->staff()->staffMag(chord);
+
+    const double endX = chordPos.x() + (isBefore ? -beamletLength : beamletLength);
+
+    double startY = _slope * (chordPos.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
+    double endY = _slope * (endX - startX) + startY;
+
+    // how many beams past level 0 (i.e. beams on the other side of level 0 for this subgroup)
+    int extraBeamAdjust = 0;
+
+    // avoid adjusting for beams on opposite side of level 0
+    for (const BeamSegment* beam : _beamSegments) {
+        if (beam->level == 0 || beam->line.x2() < startX || beam->line.x1() > endX) {
+            continue;
         }
-        verticalOffset = _beamDist * (level - extraBeamAdjust) * upValue;
+
+        if (chord->up() == beam->above) {
+            extraBeamAdjust++;
+        }
     }
+
+    const int upValue = chord->up() ? -1 : 1;
+    const double verticalOffset = _beamDist * (level - extraBeamAdjust) * upValue;
+
+    if (qFuzzyCompare(_grow1, _grow2)) {
+        startY -= verticalOffset * _grow1;
+        endY -= verticalOffset * _grow1;
+    } else {
+        // Feathered beams
+        double startProportionAlongX = (startX - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
+        double endProportionAlongX = (endX - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
+
+        double grow1 = startProportionAlongX * (_grow2 - _grow1) + _grow1;
+        double grow2 = endProportionAlongX * (_grow2 - _grow1) + _grow1;
+
+        startY -= verticalOffset * grow1;
+        endY -= verticalOffset * grow2;
+    }
+
     BeamSegment* b = new BeamSegment();
     b->above = !chord->up();
     b->level = level;
-    b->line = LineF(
-        chordPos.x() + startOffsetX,
-        y1 - verticalOffset,
-        x2,
-        y2 - verticalOffset
-        );
+    b->line = LineF(startX, startY, endX, endY);
     _beamSegments.push_back(b);
-
-    // extend stem properly
-    extendStem(chord, extraBeamAdjust);
 }
 
 void Beam::calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, int level, bool& isBroken32, bool& isBroken64) const
@@ -1028,7 +1066,7 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
     }
 }
 
-void Beam::extendStem(Chord* chord, int extraBeamAdjust)
+void Beam::extendStem(Chord* chord, double addition)
 {
     PointF anchor = chordBeamAnchor(chord);
     double desiredY;
@@ -1038,12 +1076,11 @@ void Beam::extendStem(Chord* chord, int extraBeamAdjust)
     } else {
         desiredY = std::max(_endAnchor.y(), _startAnchor.y());
     }
-    double beamsAddition = extraBeamAdjust * _beamDist;
 
     if (chord->up()) {
-        chord->setBeamExtension(anchor.y() - desiredY + beamsAddition);
+        chord->setBeamExtension(anchor.y() - desiredY + addition);
     } else {
-        chord->setBeamExtension(desiredY - anchor.y() + beamsAddition);
+        chord->setBeamExtension(desiredY - anchor.y() + addition);
     }
     if (chord->tremolo()) {
         chord->tremolo()->layout();

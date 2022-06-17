@@ -107,7 +107,7 @@ class Beam final : public EngravingItem
                                bool isAscending);
     void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval);
     void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
-    void extendStem(Chord* chord, int extraBeamAdjust);
+    void extendStem(Chord* chord, double addition);
     bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
     void createBeamSegment(Chord* startChord, Chord* endChord, int level);
     void createBeamletSegment(Chord* chord, bool isBefore, int level);
