@@ -81,6 +81,7 @@ class Beam final : public EngravingItem
     int _minMove             { 0 };                // set in layout1()
     int _maxMove             { 0 };
     TDuration _maxDuration;
+    bool _noSlope = false;
     qreal _slope             { 0.0 };
     std::vector<int> _notes;
 
@@ -216,6 +217,9 @@ public:
     mu::RectF drag(EditData&) override;
     bool isMovable() const override;
     void startDrag(EditData&) override;
+
+    void setNoSlope(bool b) { _noSlope = b; }
+    bool noSlope() const { return _noSlope; }
 
 private:
     void initBeamEditData(EditData& ed);
