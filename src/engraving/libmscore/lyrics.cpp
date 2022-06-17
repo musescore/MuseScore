@@ -319,8 +319,8 @@ void Lyrics::layout()
 //                   LOGD("create leading, trailing <%s> -- <%s><%s>", qPrintable(text), qPrintable(leading), qPrintable(trailing));
             const TextBlock& tb = textBlock(0);
 
-            const qreal leadingWidth = tb.xpos(static_cast<int>(leading.size()), this) - tb.boundingRect().x();
-            const int trailingPos = static_cast<int>(text.size() - trailing.size());
+            const qreal leadingWidth = tb.xpos(leading.size(), this) - tb.boundingRect().x();
+            const size_t trailingPos = text.size() - trailing.size();
             const qreal trailingWidth = tb.boundingRect().right() - tb.xpos(trailingPos, this);
 
             leftAdjust = leadingWidth;
