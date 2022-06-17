@@ -21,7 +21,6 @@
  */
 
 #include <cmath>
-#include <QRegularExpression>
 
 #include <unordered_map>
 
@@ -114,14 +113,15 @@ void TempoText::read(XmlReader& e)
 qreal TempoText::tempoBpm() const
 {
     //! NOTE: find tempo in format " = 180"
-    QRegularExpression regex("\\s*=\\s*(\\d+[.]{0,1}\\d*)");
-    StringList matches = regex.match(xmlText()).capturedTexts();
-
-    if (matches.empty() || matches.size() < 1) {
+    std::regex regex("\\s*=\\s*(\\d+[.]{0,1}\\d*)");
+    std::smatch match;
+    std::string stru8 = xmlText().toStdString();
+    std::regex_search(stru8, match, regex);
+    if (match.empty() || match.size() < 1) {
         return 0;
     }
 
-    qreal tempo = matches[1].toDouble();
+    qreal tempo = String::fromStdString(match[1].str()).toDouble();
     return tempo;
 }
 
@@ -178,13 +178,15 @@ int TempoText::findTempoDuration(const String& s, int& len, TDuration& dur)
 {
     len = 0;
     dur = TDuration();
+    std::string su8 = s.toStdString();
     for (const auto& i : tp) {
-        QRegularExpression regex(i.pattern);
-        QRegularExpressionMatch match = regex.match(s);
-        if (match.hasMatch()) {
-            len = match.capturedLength();
+        std::regex regex(i.pattern);
+        std::smatch match;
+        std::regex_search(su8, match, regex);
+        if (!match.empty()) {
+            len = static_cast<int>(String::fromStdString(match[0].str()).size());
             dur = i.d;
-            return match.capturedStart();
+            return std::distance(su8.cbegin(), match[0].first);
         }
     }
     return -1;
@@ -290,23 +292,25 @@ void TempoText::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags
 void TempoText::updateTempo()
 {
     // cache regexp, they are costly to create
-    static std::unordered_map<QString, QRegularExpression> regexps;
-    static std::unordered_map<QString, QRegularExpression> regexps2;
+    static std::unordered_map<String, std::regex> regexps;
+    static std::unordered_map<String, std::regex> regexps2;
     String s = plainText();
     s.replace(u",", u".");
     s.replace(u"<sym>space</sym>", u" ");
+    std::string su8 = s.toStdString();
     for (const TempoPattern& pa : tp) {
-        QRegularExpression re;
-        if (!mu::contains(regexps, QString(pa.pattern))) {
-            re = QRegularExpression(QString("%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pa.pattern));
-            regexps[pa.pattern] = re;
+        String pattern = String::fromUtf8(pa.pattern);
+        std::regex re;
+        if (!mu::contains(regexps, String::fromUtf8(pa.pattern))) {
+            re = std::regex(String("%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pattern).toStdString());
+            regexps[pattern] = re;
         }
-        re = mu::value(regexps, pa.pattern);
-        QRegularExpressionMatch match = re.match(s);
-        if (match.hasMatch()) {
-            StringList sl = match.capturedTexts();
-            if (sl.size() == 2) {
-                BeatsPerSecond nt = BeatsPerSecond(sl[1].toDouble() * pa.f);
+        re = mu::value(regexps, pattern);
+        std::smatch match;
+        std::regex_search(su8, match, re);
+        if (!match.empty()) {
+            if (match.size() == 2) {
+                BeatsPerSecond nt = BeatsPerSecond(String::fromStdString(match[1].str()).toDouble() * pa.f);
                 if (nt != _tempo) {
                     undoChangeProperty(Pid::TEMPO, PropertyValue(nt), propertyFlags(Pid::TEMPO));
                     _relative = 1.0;
@@ -317,15 +321,17 @@ void TempoText::updateTempo()
             }
         } else {
             for (const TempoPattern& pa2 : tp) {
-                QString key = QString("%1_%2").arg(pa.pattern, pa2.pattern);
-                QRegularExpression re2;
+                String pattern2 = String::fromUtf8(pa2.pattern);
+                String key = String("%1_%2").arg(pattern, pattern2);
+                std::regex re2;
                 if (!mu::contains(regexps2, key)) {
-                    re2 = QRegularExpression(QString("%1\\s*=\\s*%2\\s*").arg(pa.pattern, pa2.pattern));
+                    re2 = std::regex(String("%1\\s*=\\s*%2\\s*").arg(pattern, pattern2).toStdString());
                     regexps2[key] = re2;
                 }
                 re2 = mu::value(regexps2, key);
-                QRegularExpressionMatch match2 = re2.match(s);
-                if (match2.hasMatch()) {
+                std::smatch match2;
+                std::regex_search(su8, match2, re2);
+                if (!match2.empty()) {
                     _relative = pa2.f / pa.f;
                     _isRelative = true;
                     updateRelative();

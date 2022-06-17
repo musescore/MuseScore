@@ -23,7 +23,6 @@
 #include <cmath>
 
 #include <QStack>
-#include <QRegularExpression>
 
 #include "draw/fontmetrics.h"
 #include "draw/pen.h"

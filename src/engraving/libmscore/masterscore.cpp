@@ -22,7 +22,6 @@
 #include "masterscore.h"
 
 #include <QDate>
-#include <QRegularExpression>
 
 #include "io/buffer.h"
 #include "io/mscreader.h"

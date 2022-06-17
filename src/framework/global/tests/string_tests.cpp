@@ -22,6 +22,8 @@
 #include <gtest/gtest.h>
 
 #include <QString>
+#include <QRegularExpression>
+#include <regex>
 
 #include "types/string.h"
 
@@ -234,6 +236,15 @@ TEST_F(Global_Types_StringTests, String_Replace)
         //! CHECK
         EXPECT_EQ(str, u"123xbc456xbc");
     }
+
+    {
+        //! GIVEN Some String
+        String str = u"abc123def678";
+        //! DO
+        str.replace(std::regex("[0-9]"), u"");
+        //! CHECK
+        EXPECT_EQ(str, u"abcdef");
+    }
 }
 
 TEST_F(Global_Types_StringTests, String_PlusAssign)
@@ -350,6 +361,31 @@ TEST_F(Global_Types_StringTests, String_Split)
         EXPECT_EQ(list.at(0), u"wwww");
         EXPECT_EQ(list.at(1), u"gggg");
         EXPECT_EQ(list.at(2), u"ыыыы");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"wwww = gggg = ыыыы";
+        //! DO
+        StringList list = str.split(u" = ");
+        //! CHECK
+        EXPECT_EQ(list.size(), 3);
+        EXPECT_EQ(list.at(0), u"wwww");
+        EXPECT_EQ(list.at(1), u"gggg");
+        EXPECT_EQ(list.at(2), u"ыыыы");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"first|second:ыыыы,цццц";
+        //! DO
+        StringList list = str.split(std::regex("[|:,]"));
+        //! CHECK
+        EXPECT_EQ(list.size(), 4);
+        EXPECT_EQ(list.at(0), u"first");
+        EXPECT_EQ(list.at(1), u"second");
+        EXPECT_EQ(list.at(2), u"ыыыы");
+        EXPECT_EQ(list.at(3), u"цццц");
     }
 }
 
