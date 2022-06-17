@@ -185,18 +185,21 @@ FocusableItem {
                 navigation.panel: root.navigationPanel
                 navigation.row: featheringRightSection.navigationRowEnd + 1
 
+                accentButton: root.model ? root.model.forceHorizontal.value : false
+                enabled: root.model.customPositioned.value === false
+
                 onClicked: {
                     if (!root.model) {
                         return
                     }
-
-                    root.model.forceHorizontal()
+                    root.model.forceHorizontal.value = !root.model.forceHorizontal.value
                 }
             }
 
             ExpandableBlank {
                 id: showItem
                 isExpanded: false
+                enabled: root.model.forceHorizontal.value === false
 
                 title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
@@ -221,13 +224,11 @@ FocusableItem {
                         navigationRowStart: showItem.navigation.row + 1
                         navigationRowEnd: beamHeightLeftControl.navigation.row
 
-                        isModified: root.model ? (root.model.beamVectorX.isModified
-                                                  || root.model.beamVectorY.isModified) : false
+                        isModified: root.model ? root.model.customPositioned.value : false
 
                         onRequestResetToDefault: {
-                            if (root.model) {
-                                root.model.beamVectorX.resetToDefault()
-                                root.model.beamVectorY.resetToDefault()
+                            if (root.model) {                                
+                                root.model.customPositioned.resetToDefault();
                             }
                         }
 
@@ -251,7 +252,9 @@ FocusableItem {
                                 navigation.row: beamHeight.navigationRowStart + 1
                                 navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Right") + " " + currentValue
 
-                                onValueEdited: function(newValue) { root.model.beamVectorX.value = newValue }
+                                onValueEdited: function(newValue) {
+                                    root.model.beamVectorX.value = newValue
+                                }
                             }
 
                             FlatToggleButton {
@@ -293,7 +296,9 @@ FocusableItem {
                                 navigation.row: lockButton.navigation.row + 1
                                 navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Left") + " " + currentValue
 
-                                onValueEdited: function(newValue) { root.model.beamVectorY.value = newValue }
+                                onValueEdited: function(newValue) {
+                                    root.model.beamVectorY.value = newValue
+                                }
                             }
                         }
                     }
