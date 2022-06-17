@@ -684,7 +684,7 @@ public:
     void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false);
     void undoChangeMeasureRepeatCount(Measure* m, int count, staff_idx_t staffIdx);
     void undoAddBracket(Staff* staff, int level, BracketType type, size_t span);
-    void undoRemoveBracket(Bracket*);
+    void undoRemoveBracket(BracketItem* bi);
     void undoInsertTime(const Fraction& tick, const Fraction& len);
     void undoChangeStyleVal(Sid idx, const PropertyValue& v);
     void undoChangePageNumberOffset(int po);

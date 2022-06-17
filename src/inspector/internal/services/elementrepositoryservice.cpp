@@ -88,7 +88,8 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::CLEF: return findPairedClefs();
     case mu::engraving::ElementType::TEXT: return findTexts();
     case mu::engraving::ElementType::TREMOLO: return findTremolos();
-    case mu::engraving::ElementType::BRACKET: return findBrackets();
+    case mu::engraving::ElementType::BRACKET:
+    case mu::engraving::ElementType::BRACKET_ITEM: return findBrackets();
     case mu::engraving::ElementType::PEDAL:
     case mu::engraving::ElementType::GLISSANDO:
     case mu::engraving::ElementType::VIBRATO:
@@ -148,11 +149,6 @@ const
         //! so we have to exclude them from the list to prevent
         //! crashes on invalid pointers in the inspector
         if (elementType == mu::engraving::ElementType::INSTRUMENT_NAME) {
-            continue;
-        }
-
-        if (elementType == mu::engraving::ElementType::BRACKET) {
-            resultList << mu::engraving::toBracket(element)->bracketItem();
             continue;
         }
 

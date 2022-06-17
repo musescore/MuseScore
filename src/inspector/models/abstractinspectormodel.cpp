@@ -80,6 +80,7 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::HARMONY, InspectorModelType::TYPE_CHORD_SYMBOL },
     { mu::engraving::ElementType::AMBITUS, InspectorModelType::TYPE_AMBITUS },
     { mu::engraving::ElementType::BRACKET, InspectorModelType::TYPE_BRACKET },
+    { mu::engraving::ElementType::BRACKET_ITEM, InspectorModelType::TYPE_BRACKET },
     { mu::engraving::ElementType::TIMESIG, InspectorModelType::TYPE_TIME_SIGNATURE },
     { mu::engraving::ElementType::MMREST, InspectorModelType::TYPE_MMREST },
     { mu::engraving::ElementType::BEND, InspectorModelType::TYPE_BEND },

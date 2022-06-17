@@ -237,7 +237,7 @@ public:
 
     inline bool flag(ElementFlag f) const { return _flags & f; }
 
-    bool selected() const;
+    virtual bool selected() const;
     virtual void setSelected(bool f);
 
     bool visible() const { return !flag(ElementFlag::INVISIBLE); }

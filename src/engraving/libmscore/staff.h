@@ -117,7 +117,6 @@ private:
     Staff(const Staff& staff);
 
     void fillBrackets(size_t idx);
-    void cleanBrackets();
 
     double staffMag(const StaffType*) const;
 
@@ -156,6 +155,7 @@ public:
     void swapBracket(size_t oldIdx, size_t newIdx);
     void changeBracketColumn(size_t oldColumn, size_t newColumn);
     void addBracket(BracketItem*);
+    void removeBracket(BracketItem*);
     const std::vector<BracketItem*>& brackets() const { return _brackets; }
     std::vector<BracketItem*>& brackets() { return _brackets; }
     void cleanupBrackets();

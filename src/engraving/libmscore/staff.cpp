@@ -142,19 +142,6 @@ void Staff::fillBrackets(size_t idx)
 }
 
 //---------------------------------------------------------
-//   cleanBrackets
-//    remove NO_BRACKET entries from the end of list
-//---------------------------------------------------------
-
-void Staff::cleanBrackets()
-{
-    while (!_brackets.empty() && (_brackets.back()->bracketType() == BracketType::NO_BRACKET)) {
-        BracketItem* bi = mu::takeLast(_brackets);
-        delete bi;
-    }
-}
-
-//---------------------------------------------------------
 //   bracket
 //---------------------------------------------------------
 
@@ -186,7 +173,6 @@ void Staff::setBracketType(size_t idx, BracketType val)
 {
     fillBrackets(idx);
     _brackets[idx]->setBracketType(val);
-    cleanBrackets();
 }
 
 //---------------------------------------------------------
@@ -200,7 +186,6 @@ void Staff::swapBracket(size_t oldIdx, size_t newIdx)
     _brackets[oldIdx]->setColumn(newIdx);
     _brackets[newIdx]->setColumn(oldIdx);
     mu::swapItemsAt(_brackets, oldIdx, newIdx);
-    cleanBrackets();
 }
 
 //---------------------------------------------------------
@@ -219,7 +204,6 @@ void Staff::changeBracketColumn(size_t oldColumn, size_t newColumn)
         _brackets[newIdx]->setColumn(oldIdx);
         mu::swapItemsAt(_brackets, oldIdx, newIdx);
     }
-    cleanBrackets();
 }
 
 //---------------------------------------------------------
@@ -255,6 +239,12 @@ void Staff::addBracket(BracketItem* b)
             }
         }
     }
+}
+
+void Staff::removeBracket(BracketItem* b)
+{
+    b->setStaff(nullptr);
+    mu::remove(_brackets, b);
 }
 
 //---------------------------------------------------------

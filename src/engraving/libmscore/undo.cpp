@@ -2585,17 +2585,34 @@ void AddBracket::undo(EditData*)
     staff->triggerLayout();
 }
 
+RemoveBracket::RemoveBracket(BracketItem* item)
+    : bracket(item), staff(item->staff()), type(item->bracketType()), column(item->column()), span(item->bracketSpan())
+{
+}
+
+RemoveBracket::~RemoveBracket()
+{
+    if (deleteBracket) {
+        delete bracket;
+        bracket = nullptr;
+    }
+}
+
 void RemoveBracket::redo(EditData*)
 {
-    staff->setBracketType(level, BracketType::NO_BRACKET);
+    staff->setBracketType(column, BracketType::NO_BRACKET);
+    staff->removeBracket(bracket);
     staff->triggerLayout();
+    deleteBracket = true;
 }
 
 void RemoveBracket::undo(EditData*)
 {
-    staff->setBracketType(level, type);
-    staff->setBracketSpan(level, span);
+    staff->addBracket(bracket);
+    staff->setBracketType(column, type);
+    staff->setBracketSpan(column, span);
     staff->triggerLayout();
+    deleteBracket = false;
 }
 
 //---------------------------------------------------------

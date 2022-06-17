@@ -2236,11 +2236,11 @@ void Score::deleteItem(EngravingItem* el)
     if (!el) {
         return;
     }
+
     // cannot remove generated elements
-    if (el->generated() && !(el->isBracket() || el->isBarLine() || el->isClef() || el->isMeasureNumber())) {
+    if (el->generated() && !(el->isBarLine() || el->isClef() || el->isMeasureNumber())) {
         return;
     }
-//      LOGD("%s", el->typeName());
 
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME: {
@@ -2523,8 +2523,8 @@ void Score::deleteItem(EngravingItem* el)
     }
     break;
 
-    case ElementType::BRACKET:
-        undoRemoveBracket(toBracket(el));
+    case ElementType::BRACKET_ITEM:
+        undoRemoveBracket(toBracketItem(el));
         break;
 
     case ElementType::LAYOUT_BREAK:
@@ -5973,9 +5973,9 @@ void Score::undoAddBracket(Staff* staff, int level, BracketType type, size_t spa
 //   undoRemoveBracket
 //---------------------------------------------------------
 
-void Score::undoRemoveBracket(Bracket* b)
+void Score::undoRemoveBracket(BracketItem* bi)
 {
-    undo(new RemoveBracket(b->staff(), b->column(), b->bracketType(), b->span()));
+    undo(new RemoveBracket(bi));
 }
 
 //---------------------------------------------------------

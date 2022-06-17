@@ -688,23 +688,8 @@ Bracket* System::createBracket(const LayoutContext& ctx, BracketItem* bi, size_t
             b->setTrack(track);
             b->setMeasure(measure);
         }
+
         add(b);
-
-        if (bi->selected()) {
-            bool needSelect = true;
-
-            std::vector<EngravingItem*> brackets = score()->selection().elements(ElementType::BRACKET);
-            for (const EngravingItem* element : brackets) {
-                if (toBracket(element)->bracketItem() == bi) {
-                    needSelect = false;
-                    break;
-                }
-            }
-
-            if (needSelect) {
-                score()->select(b, SelectType::ADD);
-            }
-        }
 
         b->setStaffSpan(firstStaff, lastStaff);
 

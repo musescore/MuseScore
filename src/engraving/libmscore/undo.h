@@ -1397,17 +1397,20 @@ class RemoveBracket : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveBracket)
 
-    Staff* staff;
-    size_t level;
-    BracketType type;
-    size_t span;
+    BracketItem* bracket = nullptr;
+    Staff* staff = nullptr;
+    BracketType type = BracketType::NO_BRACKET;
+    size_t column = mu::nidx;
+    size_t span = mu::nidx;
+    bool deleteBracket = false;
 
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
 
 public:
-    RemoveBracket(Staff* s, size_t l, BracketType t, size_t sp)
-        : staff(s), level(l), type(t), span(sp) {}
+    RemoveBracket(BracketItem* item);
+    ~RemoveBracket() override;
+
     UNDO_NAME("RemoveBracket")
     UNDO_CHANGED_OBJECTS({ staff });
 };

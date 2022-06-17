@@ -190,15 +190,6 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
         }
     } else {
         for (System* s : m_score->_systems) {
-            for (Bracket* b : s->brackets()) {
-                if (b->selected()) {
-                    bool selected = b->selected();
-                    m_score->_selection.remove(b);
-                    BracketItem* item = b->bracketItem();
-                    item->setSelected(selected);
-                    m_score->setSelectionChanged(true);
-                }
-            }
             s->resetExplicitParent();
         }
         for (MeasureBase* mb = m_score->first(); mb; mb = mb->next()) {

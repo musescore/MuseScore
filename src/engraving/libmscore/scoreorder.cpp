@@ -408,12 +408,14 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
         bool blockThinBracket { false };
         size_t braceSpan { 0 };
         for (Staff* staff : part->staves()) {
-            for (BracketItem* bi : staff->brackets()) {
+            std::vector<BracketItem*> brackets = staff->brackets();
+
+            for (BracketItem* bi : brackets) {
                 if (bi->bracketType() == BracketType::BRACE) {
                     braceSpan = std::max(braceSpan, bi->bracketSpan() - 1);
                 }
                 if (!braceSpan) {
-                    score->undo(new RemoveBracket(staff, bi->column(), bi->bracketType(), bi->bracketSpan()));
+                    score->undoRemoveBracket(bi);
                 }
             }
             if (!braceSpan) {

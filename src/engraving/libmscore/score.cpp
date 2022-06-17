@@ -3315,9 +3315,14 @@ void Score::select(EngravingItem* e, SelectType type, staff_idx_t staffIdx)
 {
     // Move the playhead to the selected element's preferred play position.
     if (e) {
-        const auto playTick = e->playTick();
+        Fraction playTick = e->playTick();
+
         if (masterScore()->playPos() != playTick) {
             masterScore()->setPlayPos(playTick);
+        }
+
+        if (e->type() == ElementType::BRACKET) {
+            e = toBracket(e)->bracketItem();
         }
     }
 

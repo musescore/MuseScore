@@ -3012,9 +3012,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
         event->accept();
 
         if (isBracket && system && bracketIndex != mu::nidx) {
-            mu::engraving::EngravingItem* bracket = system->brackets().at(bracketIndex);
-            m_editData.element = bracket;
-            select({ bracket }, SelectType::SINGLE);
+            m_editData.element = system->brackets().at(bracketIndex);
         }
 
         apply();
