@@ -87,8 +87,11 @@ protected:
     void updatePropertiesOnNotationChanged() override;
 
 private:
-    void updateBeamHeight(const qreal& x, const qreal& y);
-    void synchronizeLockedBeamHeight(const qreal& currentX, const qreal& currentY);
+    void loadBeamHeightProperties();
+    void setBeamHeight1(const qreal height1);
+    void setBeamHeight2(const qreal height2);
+    void setBeamHeight(const qreal height1, const qreal height2);
+
     void updateFeatheringMode(const qreal& x, const qreal& y);
 
     BeamModesModel* m_beamModesModel = nullptr;
@@ -99,7 +102,7 @@ private:
 
     PropertyItem* m_beamVectorX = nullptr;
     PropertyItem* m_beamVectorY = nullptr;
-    PointF m_cachedBeamVector; //!Note used in delta calculation
+    PairF m_cachedBeamVector; //!Note used in delta calculation
     bool m_isBeamHeightLocked = false;
 
     PropertyItem* m_isBeamHidden = nullptr;

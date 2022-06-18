@@ -185,8 +185,7 @@ FocusableItem {
                 navigation.panel: root.navigationPanel
                 navigation.row: featheringRightSection.navigationRowEnd + 1
 
-                accentButton: root.model ? root.model.forceHorizontal.value : false
-                enabled: root.model.customPositioned.value === false
+                accentButton: root.model && !root.model.forceHorizontal.isUndefined ? root.model.forceHorizontal.value : false
 
                 onClicked: {
                     if (!root.model) {
@@ -199,7 +198,6 @@ FocusableItem {
             ExpandableBlank {
                 id: showItem
                 isExpanded: false
-                enabled: root.model.forceHorizontal.value === false
 
                 title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
@@ -217,20 +215,12 @@ FocusableItem {
                     InspectorPropertyView {
                         id: beamHeight
                         titleText: qsTrc("inspector", "Beam height")
-                        propertyItem: root.model ? root.model.beamVectorX : null
+                        propertyItem: root.model ? root.model.customPositioned : null
 
                         navigationName: "Beam height"
                         navigationPanel: root.navigationPanel
                         navigationRowStart: showItem.navigation.row + 1
                         navigationRowEnd: beamHeightLeftControl.navigation.row
-
-                        isModified: root.model ? root.model.customPositioned.value : false
-
-                        onRequestResetToDefault: {
-                            if (root.model) {                                
-                                root.model.customPositioned.resetToDefault();
-                            }
-                        }
 
                         Item {
                             height: childrenRect.height
