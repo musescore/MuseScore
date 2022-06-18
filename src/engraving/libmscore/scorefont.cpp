@@ -94,7 +94,7 @@ const String& ScoreFont::fontPath() const
     return m_fontPath;
 }
 
-std::list<std::pair<Sid, QVariant> > ScoreFont::engravingDefaults()
+std::unordered_map<Sid, PropertyValue> ScoreFont::engravingDefaults()
 {
     return m_engravingDefaults;
 }
@@ -117,7 +117,7 @@ void ScoreFont::initScoreFonts()
     }
 
     for (size_t i = 0; i < s_symIdCodes.size(); ++i) {
-        String name(SymNames::nameForSymId(static_cast<SymId>(i)).toQLatin1String());
+        QString name(SymNames::nameForSymId(static_cast<SymId>(i)).toQLatin1String());
 
         bool ok;
         uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);
@@ -278,16 +278,16 @@ void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
         Sym& sym = this->sym(symId);
         QJsonObject anchors = glyphsWithAnchors.value(symName).toObject();
 
-        static const std::map<String, SmuflAnchorId> smuflAnchorIdNames {
-            { u"stemDownNW", SmuflAnchorId::stemDownNW },
-            { u"stemUpSE", SmuflAnchorId::stemUpSE },
-            { u"stemDownSW", SmuflAnchorId::stemDownSW },
-            { u"stemUpNW", SmuflAnchorId::stemUpNW },
-            { u"cutOutNE", SmuflAnchorId::cutOutNE },
-            { u"cutOutNW", SmuflAnchorId::cutOutNW },
-            { u"cutOutSE", SmuflAnchorId::cutOutSE },
-            { u"cutOutSW", SmuflAnchorId::cutOutSW },
-            { u"opticalCenter", SmuflAnchorId::opticalCenter },
+        static const std::unordered_map<QString, SmuflAnchorId> smuflAnchorIdNames {
+            { "stemDownNW", SmuflAnchorId::stemDownNW },
+            { "stemUpSE", SmuflAnchorId::stemUpSE },
+            { "stemDownSW", SmuflAnchorId::stemDownSW },
+            { "stemUpNW", SmuflAnchorId::stemUpNW },
+            { "cutOutNE", SmuflAnchorId::cutOutNE },
+            { "cutOutNW", SmuflAnchorId::cutOutNW },
+            { "cutOutSE", SmuflAnchorId::cutOutSE },
+            { "cutOutSW", SmuflAnchorId::cutOutSW },
+            { "opticalCenter", SmuflAnchorId::opticalCenter },
         };
 
         for (const QString& anchorId : anchors.keys()) {
@@ -526,29 +526,28 @@ void ScoreFont::loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesO
 
 void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject)
 {
-    static const std::list<std::pair<String, Sid> > engravingDefaultsMapping = {
-        { u"staffLineThickness",            Sid::staffLineWidth },
-        { u"stemThickness",                 Sid::stemWidth },
-        { u"beamThickness",                 Sid::beamWidth },
-        { u"beamSpacing",                   Sid::useWideBeams },
-        { u"legerLineThickness",            Sid::ledgerLineWidth },
-        { u"legerLineExtension",            Sid::ledgerLineLength },
-        { u"slurEndpointThickness",         Sid::SlurEndWidth },
-        { u"slurMidpointThickness",         Sid::SlurMidWidth },
-        { u"thinBarlineThickness",          Sid::barWidth },
-        { u"thinBarlineThickness",          Sid::doubleBarWidth },
-        { u"thickBarlineThickness",         Sid::endBarWidth },
-        { u"dashedBarlineThickness",        Sid::barWidth },
-        { u"barlineSeparation",             Sid::doubleBarDistance },
-        { u"barlineSeparation",             Sid::endBarDistance },
-        { u"repeatBarlineDotSeparation",    Sid::repeatBarlineDotSeparation },
-        { u"bracketThickness",              Sid::bracketWidth },
-        { u"hairpinThickness",              Sid::hairpinLineWidth },
-        { u"octaveLineThickness",           Sid::ottavaLineWidth },
-        { u"pedalLineThickness",            Sid::pedalLineWidth },
-        { u"repeatEndingLineThickness",     Sid::voltaLineWidth },
-        { u"lyricLineThickness",            Sid::lyricsLineThickness },
-        { u"tupletBracketThickness",        Sid::tupletBracketWidth }
+    static const std::unordered_map<QString, Sid> engravingDefaultsMapping = {
+        { "staffLineThickness",            Sid::staffLineWidth },
+        { "stemThickness",                 Sid::stemWidth },
+        { "beamThickness",                 Sid::beamWidth },
+        { "legerLineThickness",            Sid::ledgerLineWidth },
+        { "legerLineExtension",            Sid::ledgerLineLength },
+        { "slurEndpointThickness",         Sid::SlurEndWidth },
+        { "slurMidpointThickness",         Sid::SlurMidWidth },
+        { "thinBarlineThickness",          Sid::barWidth },
+        { "thinBarlineThickness",          Sid::doubleBarWidth },
+        { "thickBarlineThickness",         Sid::endBarWidth },
+        { "dashedBarlineThickness",        Sid::barWidth },
+        { "barlineSeparation",             Sid::doubleBarDistance },
+        { "barlineSeparation",             Sid::endBarDistance },
+        { "repeatBarlineDotSeparation",    Sid::repeatBarlineDotSeparation },
+        { "bracketThickness",              Sid::bracketWidth },
+        { "hairpinThickness",              Sid::hairpinLineWidth },
+        { "octaveLineThickness",           Sid::ottavaLineWidth },
+        { "pedalLineThickness",            Sid::pedalLineWidth },
+        { "repeatEndingLineThickness",     Sid::voltaLineWidth },
+        { "lyricLineThickness",            Sid::lyricsLineThickness },
+        { "tupletBracketThickness",        Sid::tupletBracketWidth }
     };
 
     for (const QString& key : engravingDefaultsObject.keys()) {
@@ -557,20 +556,20 @@ void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject
             continue;
         }
 
-        for (auto mapping : engravingDefaultsMapping) {
-            if (key == mapping.first) {
-                qreal value = engravingDefaultsObject.value(key).toDouble();
+        if (key == "beamSpacing") {
+            bool value = engravingDefaultsObject.value(key).toDouble() > 0.75;
+            m_engravingDefaults.insert({ Sid::useWideBeams, value });
+            continue;
+        }
 
-                if (key == "beamSpacing") {
-                    value = value > 0.75;
-                }
-
-                m_engravingDefaults.push_back({ mapping.second, value });
-            }
+        auto search = engravingDefaultsMapping.find(key);
+        if (search != engravingDefaultsMapping.cend()) {
+            qreal value = engravingDefaultsObject.value(key).toDouble();
+            m_engravingDefaults.insert({ search->second, value });
         }
     }
 
-    m_engravingDefaults.push_back({ Sid::MusicalTextFont, QString("%1 Text").arg(m_family.toQString()) });
+    m_engravingDefaults.insert({ Sid::MusicalTextFont, String("%1 Text").arg(m_family) });
 }
 
 void ScoreFont::computeMetrics(ScoreFont::Sym& sym, uint code)

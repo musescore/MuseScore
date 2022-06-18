@@ -1985,7 +1985,7 @@ void EditStyle::valueChanged(int i)
         mu::engraving::ScoreFont* scoreFont = mu::engraving::ScoreFont::fontByName(val.value<String>());
         if (scoreFont) {
             for (auto j : scoreFont->engravingDefaults()) {
-                setStyleQVariantValue(j.first, j.second);
+                setStyleValue(j.first, j.second);
             }
 
             // fix values, the distances are defined different in MuseScore
