@@ -89,6 +89,7 @@ class HairpinSegment;
 class HarmonicMark;
 class HarmonicMarkSegment;
 class Harmony;
+class HarpPedalDiagram;
 class Hook;
 class Image;
 class InstrumentChange;
@@ -405,6 +406,7 @@ public:
     CONVERT(Image,         IMAGE)
     CONVERT(ChordLine,     CHORDLINE)
     CONVERT(FretDiagram,   FRET_DIAGRAM)
+    CONVERT(HarpPedalDiagram, HARP_DIAGRAM)
     CONVERT(Page,          PAGE)
     CONVERT(Text,          TEXT)
     CONVERT(MeasureNumber, MEASURE_NUMBER)
@@ -752,6 +754,7 @@ CONVERT(Arpeggio)
 CONVERT(Image)
 CONVERT(ChordLine)
 CONVERT(FretDiagram)
+CONVERT(HarpPedalDiagram)
 CONVERT(Page)
 CONVERT(SystemText)
 CONVERT(BracketItem)

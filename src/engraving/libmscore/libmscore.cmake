@@ -124,6 +124,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/harmonicmark.h
     ${CMAKE_CURRENT_LIST_DIR}/harmony.cpp
     ${CMAKE_CURRENT_LIST_DIR}/harmony.h
+    ${CMAKE_CURRENT_LIST_DIR}/harppedaldiagram.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/harppedaldiagram.h
     ${CMAKE_CURRENT_LIST_DIR}/hook.cpp
     ${CMAKE_CURRENT_LIST_DIR}/hook.h
     ${CMAKE_CURRENT_LIST_DIR}/image.cpp

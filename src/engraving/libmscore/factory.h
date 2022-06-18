@@ -94,6 +94,10 @@ public:
     static FretDiagram* copyFretDiagram(const FretDiagram& src);
     static std::shared_ptr<FretDiagram> makeFretDiagram(Segment* parent);
 
+    static HarpPedalDiagram* createHarpPedalDiagram(Segment* parent, bool isAccessibleEnabled = true);
+    static HarpPedalDiagram* copyHarpPedalDiagram(const HarpPedalDiagram& src);
+    static std::shared_ptr<HarpPedalDiagram> makeHarpPedalDiagram(Segment* parent);
+
     static KeySig* createKeySig(Segment* parent, bool isAccessibleEnabled = true);
     static KeySig* copyKeySig(const KeySig& src);
     static std::shared_ptr<KeySig> makeKeySig(Segment* parent);

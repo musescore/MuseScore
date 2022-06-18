@@ -539,6 +539,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                    || tag == "InstrumentChange"
                    || tag == "StaffState"
                    || tag == "FiguredBass"
+                   || tag == "HarpPedalDiagram"
                    ) {
             // hack - getSegment needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure

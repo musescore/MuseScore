@@ -188,6 +188,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::STAFFTYPE_CHANGE,     "StaffTypeChange",      TranslatableString("engraving", "Staff type change") },
     { ElementType::HARMONY,              "Harmony",              TranslatableString("engraving", "Chord symbol") },
     { ElementType::FRET_DIAGRAM,         "FretDiagram",          TranslatableString("engraving", "Fretboard diagram") },
+    { ElementType::HARP_DIAGRAM,         "HarpPedalDiagram",     TranslatableString("engraving", "Harp pedal diagram") },
     { ElementType::BEND,                 "Bend",                 TranslatableString("engraving", "Bend") },
     { ElementType::STRETCHED_BEND,       "Bend",                 TranslatableString("engraving", "Bend") },
     { ElementType::TREMOLOBAR,           "TremoloBar",           TranslatableString("engraving", "Tremolo bar") },
