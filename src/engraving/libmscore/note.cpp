@@ -1438,6 +1438,12 @@ void Note::write(XmlWriter& xml) const
         e->writeSpannerEnd(xml, this, track());
     }
 
+    for (EngravingItem* e : chord()->el()) {
+        if (e->isChordLine() && toChordLine(e)->note() && toChordLine(e)->note() == this) {
+            toChordLine(e)->write(xml);
+        }
+    }
+
     xml.endElement();
 }
 
@@ -1642,6 +1648,11 @@ bool Note::readProperties(XmlReader& e)
         }
     } else if (tag == "offset") {
         EngravingItem::readProperties(e);
+    } else if (tag == "ChordLine") {
+        ChordLine* cl = Factory::createChordLine(chord());
+        cl->setNote(this);
+        cl->read(e);
+        chord()->add(cl);
     } else if (EngravingItem::readProperties(e)) {
     } else {
         return false;
