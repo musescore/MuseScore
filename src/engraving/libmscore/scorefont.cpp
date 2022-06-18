@@ -267,7 +267,7 @@ void ScoreFont::load()
 
 void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
 {
-    for (const String& symName : glyphsWithAnchors.keys()) {
+    for (const QString& symName : glyphsWithAnchors.keys()) {
         SymId symId = SymNames::symIdByName(symName);
         if (symId == SymId::noSym) {
             //! NOTE currently, Bravura contains a bunch of entries in glyphsWithAnchors
@@ -551,7 +551,7 @@ void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject
         { u"tupletBracketThickness",        Sid::tupletBracketWidth }
     };
 
-    for (const String& key : engravingDefaultsObject.keys()) {
+    for (const QString& key : engravingDefaultsObject.keys()) {
         if (key == "textEnclosureThickness") {
             m_textEnclosureThickness = engravingDefaultsObject.value(key).toDouble();
             continue;
