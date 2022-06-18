@@ -1200,6 +1200,9 @@ void Chord::write(XmlWriter& xml) const
         _tremolo->write(xml);
     }
     for (EngravingItem* e : el()) {
+        if (e->isChordLine() && toChordLine(e)->note()) { // this is now written by Note
+            continue;
+        }
         e->write(xml);
     }
     xml.endElement();
