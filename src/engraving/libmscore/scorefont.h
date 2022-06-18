@@ -22,6 +22,8 @@
 #ifndef MS_SCOREFONT_H
 #define MS_SCOREFONT_H
 
+#include <unordered_map>
+
 #include "style/style.h"
 
 #include "infrastructure/draw/geometry.h"
@@ -46,7 +48,7 @@ public:
     const String& family() const;
     const String& fontPath() const;
 
-    std::list<std::pair<Sid, QVariant> > engravingDefaults();
+    std::unordered_map<Sid, PropertyValue> engravingDefaults();
     double textEnclosureThickness();
 
     static void initScoreFonts();
@@ -121,7 +123,7 @@ private:
     String m_fontPath;
     String m_filename;
 
-    std::list<std::pair<Sid, QVariant> > m_engravingDefaults;
+    std::unordered_map<Sid, PropertyValue> m_engravingDefaults;
     double m_textEnclosureThickness = 0;
 
     static std::vector<ScoreFont> s_scoreFonts;
