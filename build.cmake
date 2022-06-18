@@ -143,7 +143,7 @@ endif()
 
 fn__get_option(GENERATOR -G ${CONFIGURE_ARGS})
 if(WIN32)
-    fn__set_default(GENERATOR "Visual Studio 16 2019")
+    fn__set_default(GENERATOR "Visual Studio 17 2022")
 else()
     fn__set_default(GENERATOR "Unix Makefiles")
 endif()
