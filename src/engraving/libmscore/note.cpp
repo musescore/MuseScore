@@ -43,6 +43,7 @@
 #include "bagpembell.h"
 #include "bend.h"
 #include "chord.h"
+#include "chordline.h"
 #include "clef.h"
 #include "drumset.h"
 #include "factory.h"
@@ -2049,6 +2050,10 @@ EngravingItem* Note::drop(EditData& data)
         delete e;
     }
     break;
+
+    case ElementType::CHORDLINE:
+        toChordLine(e)->setNote(this);
+        return ch->drop(data);
 
     default:
         Spanner* spanner;
