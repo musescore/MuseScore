@@ -220,30 +220,30 @@ FocusableItem {
                         navigationName: "Beam height"
                         navigationPanel: root.navigationPanel
                         navigationRowStart: showItem.navigation.row + 1
-                        navigationRowEnd: beamHeightLeftControl.navigation.row
+                        navigationRowEnd: beamHeightRightControl.navigation.row
 
                         Item {
                             height: childrenRect.height
                             width: parent.width
 
                             IncrementalPropertyControl {
-                                id: beamHeightRightControl
+                                id: beamHeightLeftControl
 
                                 anchors.left: parent.left
                                 anchors.right: lockButton.left
                                 anchors.rightMargin: 6
 
-                                icon: IconCode.BEAM_RIGHT_Y_POSITION
-                                isIndeterminate: root.model ? root.model.beamVectorX.isUndefined : false
-                                currentValue: root.model ? root.model.beamVectorX.value : 0
+                                icon: IconCode.BEAM_HEIGHT_LEFT
+                                isIndeterminate: root.model ? root.model.beamHeightLeft.isUndefined : false
+                                currentValue: root.model ? root.model.beamHeightLeft.value : 0
 
-                                navigation.name: "BeamHeightRightControl"
+                                navigation.name: "BeamHeightLeftControl"
                                 navigation.panel: root.navigationPanel
                                 navigation.row: beamHeight.navigationRowStart + 1
-                                navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Right") + " " + currentValue
+                                navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Left") + " " + currentValue
 
                                 onValueEdited: function(newValue) {
-                                    root.model.beamVectorX.value = newValue
+                                    root.model.beamHeightLeft.value = newValue
                                 }
                             }
 
@@ -251,7 +251,7 @@ FocusableItem {
                                 id: lockButton
 
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.verticalCenter: beamHeightRightControl.verticalCenter
+                                anchors.verticalCenter: beamHeightLeftControl.verticalCenter
 
                                 height: 20
                                 width: 20
@@ -262,7 +262,7 @@ FocusableItem {
 
                                 navigation.name: "Lock beam height"
                                 navigation.panel: root.navigationPanel
-                                navigation.row: beamHeightRightControl.navigation.row + 1
+                                navigation.row: beamHeightLeftControl.navigation.row + 1
                                 navigation.accessible.name: qsTrc("inspector", "Lock")
 
                                 onToggled: {
@@ -271,23 +271,23 @@ FocusableItem {
                             }
 
                             IncrementalPropertyControl {
-                                id: beamHeightLeftControl
+                                id: beamHeightRightControl
                                 anchors.left: lockButton.right
                                 anchors.leftMargin: 6
                                 anchors.right: parent.right
 
-                                icon: IconCode.BEAM_LEFT_Y_POSITION
+                                icon: IconCode.BEAM_HEIGHT_RIGHT
                                 iconMode: IncrementalPropertyControl.Right
-                                isIndeterminate: root.model ? root.model.beamVectorY.isUndefined : false
-                                currentValue: root.model ? root.model.beamVectorY.value : 0
+                                isIndeterminate: root.model ? root.model.beamHeightRight.isUndefined : false
+                                currentValue: root.model ? root.model.beamHeightRight.value : 0
 
-                                navigation.name: "BeamHightLeftControl"
+                                navigation.name: "BeamHeightRightControl"
                                 navigation.panel: root.navigationPanel
                                 navigation.row: lockButton.navigation.row + 1
-                                navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Left") + " " + currentValue
+                                navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Right") + " " + currentValue
 
                                 onValueEdited: function(newValue) {
-                                    root.model.beamVectorY.value = newValue
+                                    root.model.beamHeightRight.value = newValue
                                 }
                             }
                         }

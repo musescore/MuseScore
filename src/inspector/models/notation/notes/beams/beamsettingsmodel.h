@@ -39,8 +39,8 @@ class BeamSettingsModel : public AbstractInspectorModel
         mu::inspector::BeamTypes::FeatheringMode featheringMode READ featheringMode WRITE setFeatheringMode NOTIFY featheringModeChanged)
     Q_PROPERTY(bool isFeatheringHeightChangingAllowed READ isFeatheringHeightChangingAllowed NOTIFY featheringModeChanged)
 
-    Q_PROPERTY(PropertyItem * beamVectorX READ beamVectorX CONSTANT)
-    Q_PROPERTY(PropertyItem * beamVectorY READ beamVectorY CONSTANT)
+    Q_PROPERTY(PropertyItem * beamHeightLeft READ beamHeightLeft CONSTANT)
+    Q_PROPERTY(PropertyItem * beamHeightRight READ beamHeightRight CONSTANT)
     Q_PROPERTY(bool isBeamHeightLocked READ isBeamHeightLocked WRITE setIsBeamHeightLocked NOTIFY isBeamHeightLockedChanged)
 
     Q_PROPERTY(PropertyItem * isBeamHidden READ isBeamHidden CONSTANT)
@@ -65,8 +65,8 @@ public:
 
     PropertyItem* isBeamHidden() const;
 
-    PropertyItem* beamVectorX() const;
-    PropertyItem* beamVectorY() const;
+    PropertyItem* beamHeightLeft() const;
+    PropertyItem* beamHeightRight() const;
     bool isBeamHeightLocked() const;
 
 public slots:
@@ -88,11 +88,11 @@ protected:
 
 private:
     void loadBeamHeightProperties();
-    void setBeamHeight1(const qreal height1);
-    void setBeamHeight2(const qreal height2);
-    void setBeamHeight(const qreal height1, const qreal height2);
+    void setBeamHeightLeft(const qreal left);
+    void setBeamHeightRight(const qreal height2);
+    void setBeamHeight(const qreal left, const qreal right);
 
-    void updateFeatheringMode(const qreal& x, const qreal& y);
+    void updateFeatheringMode(const qreal left, const qreal right);
 
     BeamModesModel* m_beamModesModel = nullptr;
 
@@ -100,9 +100,9 @@ private:
     PropertyItem* m_featheringHeightRight = nullptr;
     BeamTypes::FeatheringMode m_featheringMode = BeamTypes::FeatheringMode::FEATHERING_NONE;
 
-    PropertyItem* m_beamVectorX = nullptr;
-    PropertyItem* m_beamVectorY = nullptr;
-    PairF m_cachedBeamVector; //!Note used in delta calculation
+    PropertyItem* m_beamHeightLeft = nullptr;
+    PropertyItem* m_beamHeightRight = nullptr;
+    PairF m_cachedBeamHeights; //!Note used in delta calculation
     bool m_isBeamHeightLocked = false;
 
     PropertyItem* m_isBeamHidden = nullptr;

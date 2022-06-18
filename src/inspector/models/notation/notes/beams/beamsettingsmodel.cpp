@@ -46,12 +46,12 @@ void BeamSettingsModel::createProperties()
         onPropertyValueChanged(pid, !isBeamHidden.toBool());
     });
 
-    m_beamVectorX = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
-        setBeamHeight1(newValue.toDouble());
+    m_beamHeightLeft = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
+        setBeamHeightLeft(newValue.toDouble());
     });
 
-    m_beamVectorY = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
-        setBeamHeight2(newValue.toDouble());
+    m_beamHeightRight = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
+        setBeamHeightRight(newValue.toDouble());
     });
 
     m_forceHorizontal = buildPropertyItem(mu::engraving::Pid::BEAM_NO_SLOPE,
@@ -93,31 +93,31 @@ void BeamSettingsModel::updatePropertiesOnNotationChanged()
 
 void BeamSettingsModel::loadBeamHeightProperties()
 {
-    loadPropertyItem(m_beamVectorX, [](const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_beamHeightLeft, [](const QVariant& elementPropertyValue) -> QVariant {
         return round((elementPropertyValue.value<QPair<double, double> >().first) * 100) / 100;
     });
 
-    loadPropertyItem(m_beamVectorY, [](const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_beamHeightRight, [](const QVariant& elementPropertyValue) -> QVariant {
         return round((elementPropertyValue.value<QPair<double, double> >().second) * 100) / 100;
     });
 
     loadPropertyItem(m_forceHorizontal);
     loadPropertyItem(m_customPositioned);
 
-    m_cachedBeamVector.first = m_beamVectorX->value().toDouble();
-    m_cachedBeamVector.second = m_beamVectorY->value().toDouble();
+    m_cachedBeamHeights.first = m_beamHeightLeft->value().toDouble();
+    m_cachedBeamHeights.second = m_beamHeightRight->value().toDouble();
 }
 
 void BeamSettingsModel::resetProperties()
 {
     m_featheringHeightLeft->resetToDefault();
     m_featheringHeightRight->resetToDefault();
-    m_beamVectorX->resetToDefault();
-    m_beamVectorY->resetToDefault();
+    m_beamHeightLeft->resetToDefault();
+    m_beamHeightRight->resetToDefault();
     m_forceHorizontal->resetToDefault();
     m_customPositioned->resetToDefault();
 
-    m_cachedBeamVector = PairF();
+    m_cachedBeamHeights = PairF();
 
     setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
     setIsBeamHeightLocked(false);
@@ -133,45 +133,45 @@ PropertyItem* BeamSettingsModel::customPositioned()
     return m_customPositioned;
 }
 
-void BeamSettingsModel::setBeamHeight1(const qreal height1)
+void BeamSettingsModel::setBeamHeightLeft(const qreal left)
 {
-    qreal height2 = m_beamVectorY->value().toDouble();
+    qreal right = m_beamHeightRight->value().toDouble();
     if (m_forceHorizontal->value().toBool()) {
-        height2 = height1;
+        right = left;
     } else if (m_isBeamHeightLocked) {
-        qreal delta = height1 - m_cachedBeamVector.first;
-        height2 += delta;
+        qreal delta = left - m_cachedBeamHeights.first;
+        right += delta;
     }
 
-    setBeamHeight(height1, height2);
+    setBeamHeight(left, right);
 }
 
-void BeamSettingsModel::setBeamHeight2(const qreal height2)
+void BeamSettingsModel::setBeamHeightRight(const qreal right)
 {
-    qreal height1 = m_beamVectorX->value().toDouble();
+    qreal left = m_beamHeightLeft->value().toDouble();
     if (m_forceHorizontal->value().toBool()) {
-        height1 = height2;
+        left = right;
     } else if (m_isBeamHeightLocked) {
-        qreal delta = height2 - m_cachedBeamVector.second;
-        height1 += delta;
+        qreal delta = right - m_cachedBeamHeights.second;
+        left += delta;
     }
 
-    setBeamHeight(height1, height2);
+    setBeamHeight(left, right);
 }
 
-void BeamSettingsModel::setBeamHeight(const qreal height1, const qreal height2)
+void BeamSettingsModel::setBeamHeight(const qreal left, const qreal right)
 {
     m_customPositioned->setValue(true);
 
-    onPropertyValueChanged(engraving::Pid::BEAM_POS, QVariant::fromValue(QPair<qreal, qreal>(height1, height2)));
+    onPropertyValueChanged(engraving::Pid::BEAM_POS, QVariant::fromValue(QPair<qreal, qreal>(left, right)));
 
     loadBeamHeightProperties();
 }
 
-void BeamSettingsModel::updateFeatheringMode(const qreal& x, const qreal& y)
+void BeamSettingsModel::updateFeatheringMode(const qreal left, const qreal right)
 {
-    if (x != y) {
-        setFeatheringMode(x > y ? BeamTypes::FeatheringMode::FEATHERED_DECELERATE
+    if (left != right) {
+        setFeatheringMode(left > right ? BeamTypes::FeatheringMode::FEATHERED_DECELERATE
                           : BeamTypes::FeatheringMode::FEATHERED_ACCELERATE);
     } else {
         setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
@@ -213,14 +213,14 @@ PropertyItem* BeamSettingsModel::isBeamHidden() const
     return m_isBeamHidden;
 }
 
-PropertyItem* BeamSettingsModel::beamVectorX() const
+PropertyItem* BeamSettingsModel::beamHeightLeft() const
 {
-    return m_beamVectorX;
+    return m_beamHeightLeft;
 }
 
-PropertyItem* BeamSettingsModel::beamVectorY() const
+PropertyItem* BeamSettingsModel::beamHeightRight() const
 {
-    return m_beamVectorY;
+    return m_beamHeightRight;
 }
 
 void BeamSettingsModel::setIsBeamHeightLocked(bool isBeamHeightLocked)
