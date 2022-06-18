@@ -1,10 +1,10 @@
 # Leland music fonts
 
-This repository contains the **Leland music fonts, Version 0.76**.
+This repository contains the **Leland music fonts, Version 0.77**.
 
 ## About the fonts
 
-The Leland music fonts (Leland & Leland Text), Version 0.76 are available in Type 1, OpenType-CFF format. They are distributed under the [SIL Open Font License (OFL), Version 1.1](./LICENSE.txt).
+The Leland music fonts (Leland & Leland Text), Version 0.77 are available in Type 1, OpenType-CFF format. They are distributed under the [SIL Open Font License (OFL), Version 1.1](./LICENSE.txt).
 
 The fonts have been initially developed for MuseScore (https://www.musescore.org) music composition software.
 
