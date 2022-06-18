@@ -192,6 +192,9 @@ public:
 
     qreal beamDist() const { return _beamDist; }
 
+    bool noSlope() const { return _noSlope; }
+    void setNoSlope(bool b);
+
     inline const mu::PointF startAnchor() const { return _startAnchor; }
     inline const mu::PointF endAnchor() const { return _endAnchor; }
 
@@ -217,9 +220,6 @@ public:
     mu::RectF drag(EditData&) override;
     bool isMovable() const override;
     void startDrag(EditData&) override;
-
-    void setNoSlope(bool b) { _noSlope = b; }
-    bool noSlope() const { return _noSlope; }
 
 private:
     void initBeamEditData(EditData& ed);

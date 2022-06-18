@@ -1703,12 +1703,12 @@ void Beam::editDrag(EditData& ed)
     qreal y1 = f->py1[idx];
     qreal y2 = f->py2[idx];
 
-    if (ed.curGrip == Grip::START) {
+    if (ed.curGrip == Grip::MIDDLE || noSlope()) {
+        y1 += dy;
+        y2 += dy;
+    } else if (ed.curGrip == Grip::START) {
         y1 += dy;
     } else if (ed.curGrip == Grip::END) {
-        y2 += dy;
-    } else if (ed.curGrip == Grip::MIDDLE) {
-        y1 += dy;
         y2 += dy;
     }
 
@@ -1926,8 +1926,18 @@ void Beam::setBeamPos(const PairF& bp)
     _userModified[idx] = true;
     setGenerated(false);
     qreal _spatium = spatium();
-    f->py1[idx] = bp.first * _spatium;
-    f->py2[idx] = bp.second * _spatium;
+    if (noSlope()) {
+        f->py1[idx] = f->py2[idx] = (bp.first + bp.second) * 0.5 * _spatium;
+    } else {
+        f->py1[idx] = bp.first * _spatium;
+        f->py2[idx] = bp.second * _spatium;
+    }
+}
+
+void Beam::setNoSlope(bool b)
+{
+    _noSlope = b;
+    setUserModified(false);
 }
 
 //---------------------------------------------------------
