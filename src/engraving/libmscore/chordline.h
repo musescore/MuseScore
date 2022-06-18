@@ -49,6 +49,7 @@ protected:
     bool modified;
     qreal _lengthX;
     qreal _lengthY;
+    Note* _note;
     static constexpr double _baseLength = 1.0;
 
     friend class Factory;
@@ -92,6 +93,9 @@ public:
 
     bool isToTheLeft() const { return _chordLineType == ChordLineType::PLOP || _chordLineType == ChordLineType::SCOOP; }
     bool isBelow() const { return _chordLineType == ChordLineType::SCOOP || _chordLineType == ChordLineType::FALL; }
+
+    void setNote(Note* note) { _note = note; }
+    Note* note() const { return _note; }
 };
 
 extern const char* scorelineNames[];

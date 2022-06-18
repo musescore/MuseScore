@@ -51,6 +51,7 @@ ChordLine::ChordLine(Chord* parent)
     _straight = false;
     _lengthX = 0.0;
     _lengthY = 0.0;
+    _note = nullptr;
 }
 
 ChordLine::ChordLine(const ChordLine& cl)
@@ -62,6 +63,7 @@ ChordLine::ChordLine(const ChordLine& cl)
     _straight = cl._straight;
     _lengthX = cl._lengthX;
     _lengthY = cl._lengthY;
+    _note = cl._note;
 }
 
 //---------------------------------------------------------
@@ -105,7 +107,7 @@ void ChordLine::layout()
 
     qreal _spatium = spatium();
     if (explicitParent()) {
-        Note* note = chord()->upNote();
+        Note* note = _note ? _note : chord()->upNote();
         double x = note->pos().x();
         double y = note->pos().y();
         double horOffset = 0.33 * spatium(); // one third of a space away from the note
