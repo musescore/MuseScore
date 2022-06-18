@@ -122,11 +122,12 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newKeySigPalette());
     tree->append(newTimePalette());
     tree->append(newTempoPalette());
+    tree->append(newPitchPalette());
     tree->append(newAccidentalsPalette());
     tree->append(newDynamicsPalette());
     tree->append(newArticulationsPalette());
     tree->append(newTextPalette());
-    tree->append(newLinesPalette());
+    tree->append(newKeyboardPalette());
     tree->append(newRepeatsPalette());
     tree->append(newBarLinePalette());
     tree->append(newLayoutPalette());
@@ -137,11 +138,13 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newNoteHeadsPalette());
     tree->append(newArpeggioPalette());
     tree->append(newTremoloPalette());
+    tree->append(newGuitarPalette());
     tree->append(newFingeringPalette());
     tree->append(newFretboardDiagramPalette());
     tree->append(newAccordionPalette());
     tree->append(newBagpipeEmbellishmentPalette());
     tree->append(newBeamPalette());
+    tree->append(newLinesPalette());
 
     return tree;
 }
@@ -154,11 +157,12 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newKeySigPalette());
     defaultPalette->append(newTimePalette(true));
     defaultPalette->append(newTempoPalette(true));
+    defaultPalette->append(newPitchPalette(true));
     defaultPalette->append(newAccidentalsPalette(true));
     defaultPalette->append(newDynamicsPalette(true));
     defaultPalette->append(newArticulationsPalette(true));
     defaultPalette->append(newTextPalette(true));
-    defaultPalette->append(newLinesPalette(true));
+    defaultPalette->append(newKeyboardPalette());
     defaultPalette->append(newRepeatsPalette(true));
     defaultPalette->append(newBarLinePalette(true));
     defaultPalette->append(newLayoutPalette());
@@ -169,11 +173,13 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newNoteHeadsPalette());
     defaultPalette->append(newArpeggioPalette());
     defaultPalette->append(newTremoloPalette());
+    defaultPalette->append(newGuitarPalette());
     defaultPalette->append(newFingeringPalette(true));
     defaultPalette->append(newFretboardDiagramPalette());
     defaultPalette->append(newAccordionPalette());
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
+    defaultPalette->append(newLinesPalette(true));
 
     return defaultPalette;
 }
@@ -208,7 +214,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
 
     static const std::vector<const char*> defaultDynamics = {
         "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
-        "fp", "pf", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
+        "fp", "pf", "sf", "sfz", "sff", "sffz", "sfp",
         "rfz", "rf", "fz"
     };
 
@@ -225,6 +231,34 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
         dynamic->setDynamicType(String::fromAscii(dynamicType));
         sp->appendElement(dynamic, TConv::toUserName(dynamic->dynamicType()));
     }
+
+    std::pair<HairpinType, const char*> hairpins[] = {
+        { HairpinType::CRESC_LINE,       QT_TRANSLATE_NOOP("palette", "Crescendo line") },
+        { HairpinType::DECRESC_LINE,     QT_TRANSLATE_NOOP("palette", "Diminuendo line") },
+        { HairpinType::CRESC_HAIRPIN,    QT_TRANSLATE_NOOP("palette", "Crescendo hairpin") },
+        { HairpinType::DECRESC_HAIRPIN,  QT_TRANSLATE_NOOP("palette", "Diminuendo hairpin") }
+    };
+
+    qreal w = gpaletteScore->spatium() * 8;
+    for (std::pair<HairpinType, const char*> pair : hairpins) {
+        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+        hairpin->setHairpinType(pair.first);
+        hairpin->setLen(w);
+        qreal mag = (pair.first == HairpinType::CRESC_LINE || pair.first == HairpinType::DECRESC_LINE) ? 0.9 : 1;
+        sp->appendElement(hairpin, pair.second, mag);
+    }
+
+    if (!defaultPalette) {
+        auto gabel = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+        gabel->setHairpinType(HairpinType::CRESC_HAIRPIN);
+        gabel->setBeginText(u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
+        gabel->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+        gabel->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
+        gabel->setPropertyFlags(Pid::BEGIN_TEXT_ALIGN, PropertyFlags::UNSTYLED);
+        gabel->setLen(w);
+        sp->appendElement(gabel, QT_TRANSLATE_NOOP("palette", "Dynamic + hairpin"));
+    }
+
     return sp;
 }
 
@@ -379,7 +413,16 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         sp->appendElement(mk, markerTypeItem.name);
     }
 
-    for (const JumpTypeTableItem& item : jumpTypeTable) {
+    const std::vector<JumpTypeTableItem> defaultJumpTypeTable {
+        { Jump::Type::DC,         "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo") },
+        { Jump::Type::DC_AL_FINE, "D.C. al Fine", "start", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine") },
+        { Jump::Type::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda") },
+        { Jump::Type::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda") },
+        { Jump::Type::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine") },
+        { Jump::Type::DS,         "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.") },
+    };
+
+    for (const JumpTypeTableItem& item : (defaultPalette ? defaultJumpTypeTable : jumpTypeTable)) {
         auto jp = makeElement<Jump>(gpaletteScore);
         jp->setJumpType(item.type);
         sp->appendElement(jp, item.userText);
@@ -399,6 +442,55 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         b->setBarLineType(bti.type);
         PaletteCellPtr cell = sp->appendElement(b, BarLine::userTypeName(bti.type));
         cell->drawStaff = false;
+    }
+
+    qreal w = gpaletteScore->spatium() * 8;
+    auto volta = makeElement<Volta>(gpaletteScore);
+    volta->setVoltaType(Volta::Type::CLOSED);
+    volta->setLen(w);
+    volta->setText(u"1.");
+    std::vector<int> il;
+    il.push_back(1);
+    volta->setEndings(il);
+    sp->appendElement(volta, QT_TRANSLATE_NOOP("palette", "Prima volta"));
+
+    volta = makeElement<Volta>(gpaletteScore);
+    volta->setVoltaType(Volta::Type::OPEN);
+    volta->setLen(w);
+    volta->setText(u"2.");
+    il.clear();
+    il.push_back(2);
+    volta->setEndings(il);
+    sp->appendElement(volta, QT_TRANSLATE_NOOP("palette", "Seconda volta, open"));
+
+    volta = makeElement<Volta>(gpaletteScore);
+    volta->setVoltaType(Volta::Type::CLOSED);
+    volta->setLen(w);
+    volta->setText(u"2.");
+    il.clear();
+    il.push_back(2);
+    volta->setEndings(il);
+    sp->appendElement(volta, QT_TRANSLATE_NOOP("palette", "Seconda volta"));
+
+    volta = makeElement<Volta>(gpaletteScore);
+    volta->setVoltaType(Volta::Type::CLOSED);
+    volta->setLen(w);
+    volta->setText(u"3.");
+    il.clear();
+    il.push_back(3);
+    volta->setEndings(il);
+    sp->appendElement(volta, QT_TRANSLATE_NOOP("palette", "Terza volta"));
+
+    if (!defaultPalette) {
+        auto vibrato = makeElement<Vibrato>(gpaletteScore);
+        vibrato->setVibratoType(Vibrato::Type::VIBRATO_SAWTOOTH);
+        vibrato->setLen(w);
+        sp->appendElement(vibrato, QT_TRANSLATE_NOOP("vibratoType", "Vibrato sawtooth"));
+
+        vibrato = makeElement<Vibrato>(gpaletteScore);
+        vibrato->setVibratoType(Vibrato::Type::VIBRATO_SAWTOOTH_WIDE);
+        vibrato->setLen(w);
+        sp->appendElement(vibrato, QT_TRANSLATE_NOOP("vibratoType", "Tremolo sawtooth wide"));
     }
 
     return sp;
@@ -568,6 +660,9 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
     sp->setGridSize(42, 25);
     sp->setDrawGrid(true);
 
+    auto slur = Factory::makeSlur(gpaletteScore->dummy());
+    sp->appendElement(slur, QT_TRANSLATE_NOOP("palette", "Slur"));
+
     static const SymIdList defaultArticulations {
         SymId::articAccentAbove,
         SymId::articStaccatoAbove,
@@ -576,7 +671,6 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
         SymId::articTenutoStaccatoAbove,
         SymId::articMarcatoAbove,
         SymId::articAccentStaccatoAbove,
-        SymId::articLaissezVibrerAbove,
         SymId::articMarcatoStaccatoAbove,
         SymId::articMarcatoTenutoAbove,
         SymId::articStaccatissimoStrokeAbove,
@@ -660,8 +754,8 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Ornament);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Ornaments"));
-    sp->setGridSize(42, 25);
-    sp->setMag(1.2);
+    sp->setGridSize(73, 27);
+    sp->setMag(1);
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
@@ -696,8 +790,21 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
     for (auto ornamentType : defaultPalette ? defaultOrnaments : masterOrnaments) {
         auto ornament = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         ornament->setSymId(ornamentType);
-        sp->appendElement(ornament, ornament->typeUserName());
+        qreal mag = ornament->symId() == SymId::ornamentTrill ? 1.0 : 1.2;
+        sp->appendElement(ornament, ornament->typeUserName(), mag);
     }
+
+    for (TrillTableItem trillTableItem : trillTable) {
+        auto trill = makeElement<Trill>(gpaletteScore);
+        trill->setTrillType(trillTableItem.type);
+        trill->setLen(gpaletteScore->spatium() * 8);
+
+        int trillType = trill->getProperty(Pid::TRILL_TYPE).toInt();
+        qreal mag = (trillType == static_cast<int>(Trill::Type::TRILL_LINE)
+                     || trillType == static_cast<int>(Trill::Type::PRALLPRALL_LINE) ? 1.0 : 0.8);
+        sp->appendElement(trill, trillTableItem.userName, mag);
+    }
+
     return sp;
 }
 
@@ -999,40 +1106,35 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     sp->setMag(.8);
     sp->setGridSize(75, 28);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
 
     qreal w = gpaletteScore->spatium() * 8;
 
     auto slur = Factory::makeSlur(gpaletteScore->dummy());
     sp->appendElement(slur, QT_TRANSLATE_NOOP("palette", "Slur"));
 
-    auto gabel0 = Factory::makeHairpin(gpaletteScore->dummy()->segment());
-    gabel0->setHairpinType(HairpinType::CRESC_HAIRPIN);
-    gabel0->setLen(w);
-    sp->appendElement(gabel0, QT_TRANSLATE_NOOP("palette", "Crescendo hairpin"));
+    std::pair<HairpinType, const char*> hairpins[] = {
+        { HairpinType::CRESC_HAIRPIN,    QT_TRANSLATE_NOOP("palette", "Crescendo hairpin") },
+        { HairpinType::DECRESC_HAIRPIN,  QT_TRANSLATE_NOOP("palette", "Diminuendo hairpin") },
+        { HairpinType::CRESC_LINE,       QT_TRANSLATE_NOOP("palette", "Crescendo line") },
+        { HairpinType::DECRESC_LINE,     QT_TRANSLATE_NOOP("palette", "Diminuendo line") }
+    };
 
-    auto gabel1 = Factory::makeHairpin(gpaletteScore->dummy()->segment());
-    gabel1->setHairpinType(HairpinType::DECRESC_HAIRPIN);
-    gabel1->setLen(w);
-    sp->appendElement(gabel1, QT_TRANSLATE_NOOP("palette", "Diminuendo hairpin"));
+    for (std::pair<HairpinType, const char*> pair : hairpins) {
+        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+        hairpin->setHairpinType(pair.first);
+        hairpin->setLen(w);
+        sp->appendElement(hairpin, pair.second);
+    }
 
-    auto gabel2 = Factory::makeHairpin(gpaletteScore->dummy()->segment());
-    gabel2->setHairpinType(HairpinType::CRESC_LINE);
-    gabel2->setLen(w);
-    sp->appendElement(gabel2, QT_TRANSLATE_NOOP("palette", "Crescendo line"));
-
-    auto gabel3 = Factory::makeHairpin(gpaletteScore->dummy()->segment());
-    gabel3->setHairpinType(HairpinType::DECRESC_LINE);
-    gabel3->setLen(w);
-    sp->appendElement(gabel3, QT_TRANSLATE_NOOP("palette", "Diminuendo line"));
-
-    auto gabel4 = Factory::makeHairpin(gpaletteScore->dummy()->segment());
-    gabel4->setHairpinType(HairpinType::CRESC_HAIRPIN);
-    gabel4->setBeginText(u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
-    gabel4->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
-    gabel4->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
-    gabel4->setPropertyFlags(Pid::BEGIN_TEXT_ALIGN, PropertyFlags::UNSTYLED);
-    gabel4->setLen(w);
-    sp->appendElement(gabel4, QT_TRANSLATE_NOOP("palette", "Dynamic + hairpin"));
+    auto gabel = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+    gabel->setHairpinType(HairpinType::CRESC_HAIRPIN);
+    gabel->setBeginText(u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
+    gabel->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+    gabel->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
+    gabel->setPropertyFlags(Pid::BEGIN_TEXT_ALIGN, PropertyFlags::UNSTYLED);
+    gabel->setLen(w);
+    sp->appendElement(gabel, QT_TRANSLATE_NOOP("palette", "Dynamic + hairpin"));
 
     auto volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::CLOSED);
@@ -1175,7 +1277,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     auto systemTextLine = makeElement<TextLine>(gpaletteScore);
     systemTextLine->setSystemFlag(true);
-    systemTextLine->setLen(w);
+    systemTextLine->setLen(w * 1.5);
     systemTextLine->setBeginText(u"System");
     systemTextLine->setEndHookType(HookType::HOOK_90);
     sp->appendElement(systemTextLine, QT_TRANSLATE_NOOP("palette", "System Text line"));
@@ -1369,20 +1471,38 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Text);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Text"));
+    sp->setGridSize(100, 28);
     sp->setMag(0.85);
-    sp->setGridSize(84, 28);
     sp->setDrawGrid(true);
 
     auto st = makeElement<StaffText>(gpaletteScore);
     st->setXmlText(QT_TRANSLATE_NOOP("palette", "Staff text"));
     sp->appendElement(st, QT_TRANSLATE_NOOP("palette", "Staff text"))->setElementTranslated(true);
 
-    st = makeElement<StaffText>(gpaletteScore);
-    st->setTextStyleType(TextStyleType::EXPRESSION);
-    st->setXmlText(QT_TRANSLATE_NOOP("palette", "Expression"));
-    st->setPlacement(PlacementV::BELOW);
-    st->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
-    sp->appendElement(st, QT_TRANSLATE_NOOP("palette", "Expression text"))->setElementTranslated(true);
+    qreal w = gpaletteScore->spatium() * 8;
+    auto staffTextLine = makeElement<TextLine>(gpaletteScore);
+    staffTextLine->setLen(w);
+    staffTextLine->setBeginText(u"Staff");
+    staffTextLine->setEndHookType(HookType::HOOK_90);
+    sp->appendElement(staffTextLine, QT_TRANSLATE_NOOP("palette", "Staff Text line"));
+
+    auto stxt = makeElement<SystemText>(gpaletteScore);
+    stxt->setXmlText(QT_TRANSLATE_NOOP("palette", "System text"));
+    sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "System text"))->setElementTranslated(true);
+
+    auto systemTextLine = makeElement<TextLine>(gpaletteScore);
+    systemTextLine->setSystemFlag(true);
+    systemTextLine->setLen(w * 1.5);
+    systemTextLine->setBeginText(u"System");
+    systemTextLine->setEndHookType(HookType::HOOK_90);
+    sp->appendElement(systemTextLine, QT_TRANSLATE_NOOP("palette", "System Text line"));
+
+    auto expressionText = makeElement<StaffText>(gpaletteScore);
+    expressionText->setTextStyleType(TextStyleType::EXPRESSION);
+    expressionText->setXmlText(QT_TRANSLATE_NOOP("palette", "Expression"));
+    expressionText->setPlacement(PlacementV::BELOW);
+    expressionText->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    sp->appendElement(expressionText, QT_TRANSLATE_NOOP("palette", "Expression text"))->setElementTranslated(true);
 
     auto is = makeElement<InstrumentChange>(gpaletteScore);
     is->setXmlText(QT_TRANSLATE_NOOP("palette", "Change instr."));
@@ -1391,10 +1511,6 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     auto rhm = makeElement<RehearsalMark>(gpaletteScore);
     rhm->setXmlText("B1");
     sp->appendElement(rhm, QT_TRANSLATE_NOOP("palette", "Rehearsal mark"));
-
-    auto stxt = makeElement<SystemText>(gpaletteScore);
-    stxt->setXmlText(QT_TRANSLATE_NOOP("palette", "System text"));
-    sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "System text"))->setElementTranslated(true);
 
     auto legato = makeElement<PlayTechAnnotation>(gpaletteScore);
     legato->setXmlText(QT_TRANSLATE_NOOP("palette", "legato"));
@@ -1668,6 +1784,211 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     fret = FretDiagram::createFromString(gpaletteScore, u"X212O2");
     fret->setHarmony(u"B7");
     sp->appendElement(fret, "B7");
+
+    return sp;
+}
+
+PalettePtr PaletteCreator::newGuitarPalette()
+{
+    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Guitar);
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Guitar"));
+    sp->setGridSize(60, 33);
+    sp->setMag(1.2);
+    sp->setDrawGrid(true);
+    sp->setVisible(false);
+
+    qreal w = gpaletteScore->spatium() * 8;
+
+    auto capoLine = makeElement<TextLine>(gpaletteScore);
+    capoLine->setLen(w);
+    capoLine->setBeginText(u"VII");
+    capoLine->setEndHookType(HookType::HOOK_90);
+    sp->appendElement(capoLine, QT_TRANSLATE_NOOP("palette", "Capo line"), 0.8);
+
+    auto pm = makeElement<PalmMute>(gpaletteScore);
+    pm->setLen(w);
+    sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm mute"), 0.8);
+
+    auto letRing = makeElement<LetRing>(gpaletteScore);
+    letRing->setLen(w);
+    sp->appendElement(letRing, QT_TRANSLATE_NOOP("palette", "Let ring"), 0.8);
+
+    auto bend = Factory::makeBend(gpaletteScore->dummy()->note());
+    bend->points().push_back(PitchValue(0,    0, false));
+    bend->points().push_back(PitchValue(15, 100, false));
+    bend->points().push_back(PitchValue(60, 100, false));
+    sp->appendElement(bend, QT_TRANSLATE_NOOP("palette", "Bend"), 0.9);
+
+    auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
+    tb->points().push_back(PitchValue(0,     0, false));       // "Dip"
+    tb->points().push_back(PitchValue(30, -100, false));
+    tb->points().push_back(PitchValue(60,    0, false));
+    sp->appendElement(tb, QT_TRANSLATE_NOOP("palette", "Tremolo bar"), 0.8);
+
+    const std::vector<VibratoTableItem> vibratos = {
+        { Vibrato::Type::GUITAR_VIBRATO,        "guitarVibrato",       QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato") },
+        { Vibrato::Type::GUITAR_VIBRATO_WIDE,   "guitarVibratoWide",   QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato wide") }
+    };
+
+    for (VibratoTableItem vibratoTableItem : vibratos) {
+        auto vibrato = makeElement<Vibrato>(gpaletteScore);
+        vibrato->setVibratoType(vibratoTableItem.type);
+        vibrato->setLen(gpaletteScore->spatium() * 8);
+        sp->appendElement(vibrato, vibratoTableItem.userName);
+    }
+
+    const char* finger = "pimac";
+    for (unsigned i = 0; i < strlen(finger); ++i) {
+        auto f = makeElement<Fingering>(gpaletteScore);
+        f->setTextStyleType(TextStyleType::RH_GUITAR_FINGERING);
+        f->setXmlText(QString(finger[i]));
+        sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "RH guitar fingering %1"));
+    }
+
+    finger = "012345T";
+    for (unsigned i = 0; i < strlen(finger); ++i) {
+        auto f = makeElement<Fingering>(gpaletteScore);
+        f->setTextStyleType(TextStyleType::LH_GUITAR_FINGERING);
+        f->setXmlText(QString(finger[i]));
+        sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "LH guitar fingering %1"));
+    }
+    finger = "0123456";
+    for (unsigned i = 0; i < strlen(finger); ++i) {
+        auto f = makeElement<Fingering>(gpaletteScore);
+        f->setTextStyleType(TextStyleType::STRING_NUMBER);
+        f->setXmlText(QString(finger[i]));
+        sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "String number %1"));
+    }
+
+    static const SymIdList luteSymbols {
+        SymId::stringsThumbPosition,
+        SymId::luteFingeringRHThumb, SymId::luteFingeringRHFirst,
+        SymId::luteFingeringRHSecond, SymId::luteFingeringRHThird
+    };
+
+    for (auto i : luteSymbols) {
+        auto s = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+        s->setSymId(i);
+        sp->appendElement(s, s->typeUserName());
+    }
+
+    auto distort = makeElement<PlayTechAnnotation>(gpaletteScore);
+    distort->setXmlText(QT_TRANSLATE_NOOP("palette", "distort"));
+    distort->setTechniqueType(PlayingTechniqueType::Distortion);
+    sp->appendElement(distort, QT_TRANSLATE_NOOP("palette", "Distortion"), 0.8)->setElementTranslated(true);
+
+    auto overdrive = makeElement<PlayTechAnnotation>(gpaletteScore);
+    overdrive->setXmlText(QT_TRANSLATE_NOOP("palette", "overdrive"));
+    overdrive->setTechniqueType(PlayingTechniqueType::Overdrive);
+    sp->appendElement(overdrive, QT_TRANSLATE_NOOP("palette", "Overdrive"), 0.8)->setElementTranslated(true);
+
+    return sp;
+}
+
+PalettePtr PaletteCreator::newKeyboardPalette()
+{
+    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Keyboard);
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Keyboard"));
+    sp->setGridSize(73, 30);
+    sp->setDrawGrid(true);
+
+    qreal w = gpaletteScore->spatium() * 8;
+
+    auto pedal = makeElement<Pedal>(gpaletteScore);
+    pedal->setLen(w);
+    pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
+    pedal->setEndText(Pedal::STAR_SYMBOL);
+    pedal->setLineVisible(false);
+    sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
+
+    pedal = makeElement<Pedal>(gpaletteScore);
+    pedal->setLen(w);
+    pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
+    pedal->setEndHookType(HookType::HOOK_90);
+    sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
+
+    pedal = makeElement<Pedal>(gpaletteScore);
+    pedal->setLen(w);
+    pedal->setBeginHookType(HookType::HOOK_90);
+    pedal->setEndHookType(HookType::HOOK_90);
+    sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (straight hooks)"));
+
+    pedal = makeElement<Pedal>(gpaletteScore);
+    pedal->setLen(w);
+    pedal->setBeginHookType(HookType::HOOK_90);
+    pedal->setEndHookType(HookType::HOOK_45);
+    sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled end hook)"));
+
+    pedal = makeElement<Pedal>(gpaletteScore);
+    pedal->setLen(w);
+    pedal->setBeginHookType(HookType::HOOK_45);
+    pedal->setEndHookType(HookType::HOOK_45);
+    sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (both hooks angled)"));
+
+    pedal = makeElement<Pedal>(gpaletteScore);
+    pedal->setLen(w);
+    pedal->setBeginHookType(HookType::HOOK_45);
+    pedal->setEndHookType(HookType::HOOK_90);
+    sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled start hook)"));
+
+    return sp;
+}
+
+PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
+{
+    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Pitch);
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Pitch"));
+    sp->setGridSize(100, 30);
+    sp->setDrawGrid(true);
+    sp->setMag(0.8);
+
+    qreal w = gpaletteScore->spatium() * 8;
+
+    auto ottava = makeElement<Ottava>(gpaletteScore);
+    ottava->setOttavaType(OttavaType::OTTAVA_8VA);
+    ottava->setLen(w);
+    ottava->styleChanged();
+    sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "8va alta"));
+
+    ottava = makeElement<Ottava>(gpaletteScore);
+    ottava->setOttavaType(OttavaType::OTTAVA_8VB);
+    ottava->setLen(w);
+    ottava->setPlacement(PlacementV::BELOW);
+    ottava->styleChanged();
+    sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "8va bassa"));
+
+    ottava = makeElement<Ottava>(gpaletteScore);
+    ottava->setOttavaType(OttavaType::OTTAVA_15MA);
+    ottava->setLen(w);
+    ottava->styleChanged();
+    sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "15ma alta"));
+
+    ottava = makeElement<Ottava>(gpaletteScore);
+    ottava->setOttavaType(OttavaType::OTTAVA_15MB);
+    ottava->setLen(w);
+    ottava->setPlacement(PlacementV::BELOW);
+    ottava->styleChanged();
+    sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "15ma bassa"));
+
+    if (!defaultPalette) {
+        ottava = makeElement<Ottava>(gpaletteScore);
+        ottava->setOttavaType(OttavaType::OTTAVA_22MA);
+        ottava->setLen(w);
+        ottava->styleChanged();
+        sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "22ma alta"));
+
+        ottava = makeElement<Ottava>(gpaletteScore);
+        ottava->setOttavaType(OttavaType::OTTAVA_22MB);
+        ottava->setPlacement(PlacementV::BELOW);
+        ottava->setLen(w);
+        ottava->styleChanged();
+        sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "22ma bassa"));
+    }
+
+    auto a = Factory::makeAmbitus(gpaletteScore->dummy()->segment());
+    sp->appendElement(a, QT_TRANSLATE_NOOP("palette", "Ambitus"));
 
     return sp;
 }
