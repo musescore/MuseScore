@@ -47,15 +47,24 @@ void BeamSettingsModel::createProperties()
     });
 
     m_beamVectorX = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
-        updateBeamHeight(newValue.toDouble(), m_beamVectorY->value().toDouble());
+        setBeamHeight1(newValue.toDouble());
     });
 
     m_beamVectorY = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
-        updateBeamHeight(m_beamVectorX->value().toDouble(), newValue.toDouble());
+        setBeamHeight2(newValue.toDouble());
     });
 
-    m_forceHorizontal = buildPropertyItem(mu::engraving::Pid::BEAM_NO_SLOPE);
-    m_customPositioned = buildPropertyItem(mu::engraving::Pid::USER_MODIFIED);
+    m_forceHorizontal = buildPropertyItem(mu::engraving::Pid::BEAM_NO_SLOPE,
+                                          [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
+        loadBeamHeightProperties();
+    });
+
+    m_customPositioned = buildPropertyItem(mu::engraving::Pid::USER_MODIFIED,
+                                           [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
+        loadBeamHeightProperties();
+    });
 }
 
 void BeamSettingsModel::requestElements()
@@ -65,35 +74,25 @@ void BeamSettingsModel::requestElements()
 
 void BeamSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_featheringHeightLeft, formatDoubleFunc);
-    loadPropertyItem(m_featheringHeightRight, formatDoubleFunc);
-
     loadPropertyItem(m_isBeamHidden, [](const QVariant& isVisible) -> QVariant {
         return !isVisible.toBool();
     });
 
-    loadPropertyItem(m_beamVectorX, [](const QVariant& elementPropertyValue) -> QVariant {
-        return round((elementPropertyValue.value<QPair<double, double> >().first) * 100) / 100;
-    });
+    loadBeamHeightProperties();
 
-    loadPropertyItem(m_beamVectorY, [](const QVariant& elementPropertyValue) -> QVariant {
-        return round((elementPropertyValue.value<QPair<double, double> >().second) * 100) / 100;
-    });
-
-    m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());
-    m_cachedBeamVector.setY(m_beamVectorY->value().toDouble());
+    loadPropertyItem(m_featheringHeightLeft, formatDoubleFunc);
+    loadPropertyItem(m_featheringHeightRight, formatDoubleFunc);
 
     updateFeatheringMode(m_featheringHeightLeft->value().toDouble(), m_featheringHeightRight->value().toDouble());
-    loadPropertyItem(m_forceHorizontal);
-    loadPropertyItem(m_customPositioned);
 }
 
 void BeamSettingsModel::updatePropertiesOnNotationChanged()
 {
-    loadPropertyItem(m_isBeamHidden, [](const QVariant& isVisible) -> QVariant {
-        return !isVisible.toBool();
-    });
+    loadProperties();
+}
 
+void BeamSettingsModel::loadBeamHeightProperties()
+{
     loadPropertyItem(m_beamVectorX, [](const QVariant& elementPropertyValue) -> QVariant {
         return round((elementPropertyValue.value<QPair<double, double> >().first) * 100) / 100;
     });
@@ -102,12 +101,11 @@ void BeamSettingsModel::updatePropertiesOnNotationChanged()
         return round((elementPropertyValue.value<QPair<double, double> >().second) * 100) / 100;
     });
 
+    loadPropertyItem(m_forceHorizontal);
     loadPropertyItem(m_customPositioned);
 
-    loadPropertyItem(m_featheringHeightLeft, formatDoubleFunc);
-    loadPropertyItem(m_featheringHeightRight, formatDoubleFunc);
-
-    updateFeatheringMode(m_featheringHeightLeft->value().toDouble(), m_featheringHeightRight->value().toDouble());
+    m_cachedBeamVector.first = m_beamVectorX->value().toDouble();
+    m_cachedBeamVector.second = m_beamVectorY->value().toDouble();
 }
 
 void BeamSettingsModel::resetProperties()
@@ -119,7 +117,7 @@ void BeamSettingsModel::resetProperties()
     m_forceHorizontal->resetToDefault();
     m_customPositioned->resetToDefault();
 
-    m_cachedBeamVector = PointF();
+    m_cachedBeamVector = PairF();
 
     setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
     setIsBeamHeightLocked(false);
@@ -135,32 +133,39 @@ PropertyItem* BeamSettingsModel::customPositioned()
     return m_customPositioned;
 }
 
-void BeamSettingsModel::updateBeamHeight(const qreal& x, const qreal& y)
+void BeamSettingsModel::setBeamHeight1(const qreal height1)
 {
-    if (m_isBeamHeightLocked) {
-        synchronizeLockedBeamHeight(x, y);
+    qreal height2 = m_beamVectorY->value().toDouble();
+    if (m_forceHorizontal->value().toBool()) {
+        height2 = height1;
+    } else if (m_isBeamHeightLocked) {
+        qreal delta = height1 - m_cachedBeamVector.first;
+        height2 += delta;
     }
 
-    onPropertyValueChanged(mu::engraving::Pid::USER_MODIFIED, true);
-    onPropertyValueChanged(mu::engraving::Pid::BEAM_POS,
-                           QVariant::fromValue(QPair<qreal, qreal>(m_beamVectorX->value().toDouble(), m_beamVectorY->value().toDouble())));
-
-    m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());
-    m_cachedBeamVector.setY(m_beamVectorY->value().toDouble());
+    setBeamHeight(height1, height2);
 }
 
-void BeamSettingsModel::synchronizeLockedBeamHeight(const qreal& currentX, const qreal& currentY)
+void BeamSettingsModel::setBeamHeight2(const qreal height2)
 {
-    qreal deltaX = currentX - m_cachedBeamVector.x();
-    qreal deltaY = currentY - m_cachedBeamVector.y();
-
-    qreal maxDelta = qMax(qAbs(deltaX), qAbs(deltaY));
-
-    if (qFuzzyCompare(qAbs(deltaX), maxDelta)) {
-        m_beamVectorY->updateCurrentValue(m_cachedBeamVector.y() + deltaX);
-    } else {
-        m_beamVectorX->updateCurrentValue(m_cachedBeamVector.x() + deltaY);
+    qreal height1 = m_beamVectorX->value().toDouble();
+    if (m_forceHorizontal->value().toBool()) {
+        height1 = height2;
+    } else if (m_isBeamHeightLocked) {
+        qreal delta = height2 - m_cachedBeamVector.second;
+        height1 += delta;
     }
+
+    setBeamHeight(height1, height2);
+}
+
+void BeamSettingsModel::setBeamHeight(const qreal height1, const qreal height2)
+{
+    m_customPositioned->setValue(true);
+
+    onPropertyValueChanged(engraving::Pid::BEAM_POS, QVariant::fromValue(QPair<qreal, qreal>(height1, height2)));
+
+    loadBeamHeightProperties();
 }
 
 void BeamSettingsModel::updateFeatheringMode(const qreal& x, const qreal& y)
@@ -258,8 +263,8 @@ void BeamSettingsModel::setBeamModesModel(BeamModesModel* beamModesModel)
 {
     m_beamModesModel = beamModesModel;
 
-    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified, this, [this](const mu::engraving::Pid,
-                                                                                                     const QVariant& newValue) {
+    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified,
+            this, [this](const mu::engraving::Pid, const QVariant& newValue) {
         if (!newValue.toBool()) {
             setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
         }
