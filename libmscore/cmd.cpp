@@ -2693,7 +2693,7 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 
       // if measure rest is selected as input, then the correct initialDuration will be the
       // duration of the measure's time signature, else is just the input state's duration
-      TDuration initialDuration = (cr->durationType() == TDuration::DurationType::V_MEASURE) ? TDuration(cr->measure()->timesig()) : _is.duration();
+      TDuration initialDuration = (cr->durationType() == TDuration::DurationType::V_MEASURE) ? TDuration(cr->measure()->timesig(), true) : _is.duration();
       TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
       if (!d.isValid())
             return;
