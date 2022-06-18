@@ -33,7 +33,6 @@
 #include "staff.h"
 #include "system.h"
 #include "score.h"
-#include "system.h"
 #include "mscore.h"
 #include "bracketItem.h"
 
@@ -42,11 +41,6 @@
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::draw;
-
-namespace mu::engraving {
-//---------------------------------------------------------
-//   Bracket
-//---------------------------------------------------------
 
 Bracket::Bracket(EngravingItem* parent)
     : EngravingItem(ElementType::BRACKET, parent)
@@ -60,14 +54,6 @@ Bracket::Bracket(EngravingItem* parent)
     _magx        = 1.;
     setGenerated(true);       // brackets are not saved
 }
-
-Bracket::~Bracket()
-{
-}
-
-//---------------------------------------------------------
-//   playTick
-//---------------------------------------------------------
 
 Fraction Bracket::playTick() const
 {
@@ -83,22 +69,15 @@ Fraction Bracket::playTick() const
     return tick();
 }
 
-//---------------------------------------------------------
-//   setHeight
-//---------------------------------------------------------
-
 void Bracket::setHeight(double h)
 {
     h2 = h * .5;
 }
 
-//---------------------------------------------------------
-//   width
-//---------------------------------------------------------
-
-double Bracket::width() const
+qreal Bracket::width() const
 {
-    double w;
+    double w = 0.0;
+
     switch (bracketType()) {
     case BracketType::BRACE:
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
@@ -117,16 +96,11 @@ double Bracket::width() const
         w = 0.67 * score()->styleMM(Sid::bracketWidth) + score()->styleMM(Sid::bracketDistance);
         break;
     case BracketType::NO_BRACKET:
-    default:
-        w = 0.0;
         break;
     }
+
     return w;
 }
-
-//---------------------------------------------------------
-//   setStaffSpan
-//---------------------------------------------------------
 
 void Bracket::setStaffSpan(size_t a, size_t b)
 {
@@ -163,18 +137,16 @@ void Bracket::setStaffSpan(size_t a, size_t b)
     }
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
 void Bracket::layout()
 {
     path = PainterPath();
+
     if (h2 == 0.0) {
         return;
     }
 
     _shape.clear();
+
     switch (bracketType()) {
     case BracketType::BRACE: {
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
@@ -260,16 +232,14 @@ void Bracket::layout()
     }
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
 void Bracket::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+
     if (h2 == 0.0) {
         return;
     }
+
     switch (bracketType()) {
     case BracketType::BRACE: {
         if (_braceSymbol == SymId::noSym) {
@@ -337,38 +307,22 @@ bool Bracket::needStartEditingAfterSelecting() const
     return true;
 }
 
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
 void Bracket::startEdit(EditData& ed)
 {
     EngravingItem::startEdit(ed);
     ay1 = pagePos().y();
 }
 
-//---------------------------------------------------------
-//   gripsPositions
-//---------------------------------------------------------
-
 std::vector<PointF> Bracket::gripsPositions(const EditData&) const
 {
     return { PointF(0.0, h2 * 2) + pagePos() };
 }
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
 
 void Bracket::endEdit(EditData& ed)
 {
     triggerLayoutAll();
     ed.clear(); // score layout invalidates element
 }
-
-//---------------------------------------------------------
-//   editDrag
-//---------------------------------------------------------
 
 void Bracket::editDrag(EditData& ed)
 {
@@ -412,18 +366,10 @@ void Bracket::endEditDrag(EditData&)
     bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, staffIdx2 - staffIdx1 + 1);
 }
 
-//---------------------------------------------------------
-//   acceptDrop
-//---------------------------------------------------------
-
 bool Bracket::acceptDrop(EditData& data) const
 {
     return data.dropElement->type() == ElementType::BRACKET;
 }
-
-//---------------------------------------------------------
-//   drop
-//---------------------------------------------------------
 
 EngravingItem* Bracket::drop(EditData& data)
 {
@@ -442,6 +388,7 @@ bool Bracket::isEditAllowed(EditData& ed) const
     if (ed.key == Key_Up && span() > 1) {
         return true;
     }
+
     if (ed.key == Key_Down && _lastStaff < system()->staves().size() - 1) {
         return true;
     }
@@ -453,6 +400,7 @@ bool Bracket::isEditAllowed(EditData& ed) const
     if (ed.key == Key_Left) {
         return true;
     }
+
     if (ed.key == Key_Right) {
         if (bracketItem()->column() == 0) {
             return true;
@@ -462,11 +410,6 @@ bool Bracket::isEditAllowed(EditData& ed) const
 
     return false;
 }
-
-//---------------------------------------------------------
-//   edit
-//    return true if event is accepted
-//---------------------------------------------------------
 
 bool Bracket::edit(EditData& ed)
 {
@@ -478,6 +421,7 @@ bool Bracket::edit(EditData& ed)
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) - 1);
         return true;
     }
+
     if (ed.key == Key_Down && _lastStaff < system()->staves().size() - 1) {
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) + 1);
         return true;
@@ -487,6 +431,7 @@ bool Bracket::edit(EditData& ed)
         bracketItem()->undoChangeProperty(Pid::BRACKET_COLUMN, bracketItem()->column() + 1);
         return true;
     }
+
     if (ed.key == Key_Right) {
         if (bracketItem()->column() == 0) {
             return true;
@@ -494,61 +439,28 @@ bool Bracket::edit(EditData& ed)
         bracketItem()->undoChangeProperty(Pid::BRACKET_COLUMN, bracketItem()->column() - 1);
         return true;
     }
+
     return false;
 }
 
-//---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
 PropertyValue Bracket::getProperty(Pid id) const
 {
-    PropertyValue v = EngravingItem::getProperty(id);
-    if (!v.isValid()) {
-        v = _bi->getProperty(id);
-    }
-    return v;
+    return _bi->getProperty(id);
 }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
 
 bool Bracket::setProperty(Pid id, const PropertyValue& v)
 {
     return _bi->setProperty(id, v);
 }
 
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
 PropertyValue Bracket::propertyDefault(Pid id) const
 {
-    if (id == Pid::BRACKET_COLUMN) {
-        return 0;
-    }
-    PropertyValue v = EngravingItem::propertyDefault(id);
-    if (!v.isValid()) {
-        v = _bi->propertyDefault(id);
-    }
-    return v;
+    return _bi->propertyDefault(id);
 }
-
-//---------------------------------------------------------
-//   undoChangeProperty
-//---------------------------------------------------------
 
 void Bracket::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
-    if (id == Pid::COLOR) {
-        setColor(v.value<draw::Color>());
-    }
-
-    // brackets do not survive layout() and therefore cannot be on
-    // the undo stack; delegate to BracketItem:
-    BracketItem* bi = bracketItem();
-    bi->undoChangeProperty(id, v, ps);
+    _bi->undoChangeProperty(id, v, ps);
 }
 
 bool Bracket::selected() const
@@ -614,5 +526,4 @@ void Bracket::read(XmlReader& e)
             e.unknown();
         }
     }
-}
 }

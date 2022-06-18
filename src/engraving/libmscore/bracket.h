@@ -60,9 +60,6 @@ class Bracket final : public EngravingItem
     Bracket(EngravingItem* parent);
 
 public:
-
-    ~Bracket();
-
     Bracket* clone() const override { return new Bracket(*this); }
 
     void setBracketItem(BracketItem* i) { _bi = i; }
