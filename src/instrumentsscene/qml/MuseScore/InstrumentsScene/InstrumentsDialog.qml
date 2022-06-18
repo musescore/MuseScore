@@ -36,7 +36,7 @@ StyledDialogView {
     contentWidth: root.canSelectMultipleInstruments ? 900 : 600
     margins: 12
 
-    title: canSelectMultipleInstruments ? qsTrc("instruments", "Instruments") :
+    title: canSelectMultipleInstruments ? qsTrc("instruments", "Add or remove instruments") :
                                           qsTrc("instruments", "Select instrument")
 
     onOpened: {
