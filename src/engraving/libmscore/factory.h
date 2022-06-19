@@ -64,10 +64,10 @@ public:
 
     static StretchedBend* createStretchedBend(Note* parent, bool isAccessibleEnabled = true);
 
-    static Bracket* createBracket(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Bracket* createBracket(EngravingItem* parent);
     static std::shared_ptr<Bracket> makeBracket(EngravingItem* parent);
-    static BracketItem* createBracketItem(EngravingItem* parent);
-    static BracketItem* createBracketItem(EngravingItem* parent, BracketType a, int b);
+    static BracketItem* createBracketItem(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static BracketItem* createBracketItem(EngravingItem* parent, BracketType a, int b, bool isAccessibleEnabled = true);
 
     static Breath* createBreath(Segment* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Breath> makeBreath(Segment* parent);

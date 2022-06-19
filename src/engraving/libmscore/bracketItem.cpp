@@ -26,8 +26,8 @@
 #include "staff.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
-namespace mu::engraving {
 BracketItem::BracketItem(EngravingItem* parent)
     : EngravingItem(ElementType::BRACKET_ITEM, parent)
 {
@@ -86,5 +86,4 @@ PropertyValue BracketItem::propertyDefault(Pid id) const
     default:
         return EngravingItem::propertyDefault(id);
     }
-}
 }

@@ -323,18 +323,24 @@ Bend* Factory::createBend(Note * parent, ElementType type, bool isAccessibleEnab
 
 MAKE_ITEM_IMPL(Bend, Note)
 
-CREATE_ITEM_IMPL(Bracket, ElementType::BRACKET, EngravingItem, isAccessibleEnabled)
+Bracket* Factory::createBracket(EngravingItem* parent)
+{
+    return new Bracket(parent);
+}
+
 MAKE_ITEM_IMPL(Bracket, EngravingItem)
 
-BracketItem* Factory::createBracketItem(EngravingItem * parent)
+BracketItem* Factory::createBracketItem(EngravingItem * parent, bool isAccessibleEnabled)
 {
     BracketItem* bi = new BracketItem(parent);
+    bi->setAccessibleEnabled(isAccessibleEnabled);
     return bi;
 }
 
-BracketItem* Factory::createBracketItem(EngravingItem* parent, BracketType a, int b)
+BracketItem* Factory::createBracketItem(EngravingItem* parent, BracketType a, int b, bool isAccessibleEnabled)
 {
     BracketItem* bi = new BracketItem(parent, a, b);
+    bi->setAccessibleEnabled(isAccessibleEnabled);
     return bi;
 }
 
