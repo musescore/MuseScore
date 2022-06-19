@@ -2336,6 +2336,7 @@ void NotationInteraction::selectTopStaff()
     }
 
     select({ el }, SelectType::SINGLE, 0);
+    showItem(el);
     resetHitElementContext();
 }
 
