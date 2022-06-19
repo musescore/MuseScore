@@ -143,7 +143,7 @@ Column {
     FlatButton {
         width: parent.width
 
-        text: qsTrc("inspector", "Change time signature")
+        text: qsTrc("inspector", "Time signature properties")
 
         navigation.name: "ChangeButton"
         navigation.panel: root.navigationPanel
