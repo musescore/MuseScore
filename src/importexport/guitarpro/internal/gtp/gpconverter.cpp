@@ -58,26 +58,26 @@
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static Jump::Type jumpType(const QString& typeString)
+static Jump::Type jumpType(const String& typeString)
 {
-    static QMap<QString, Jump::Type> types {
-        { "DaCapo", Jump::Type::DC },
-        { "DaCapoAlFine", Jump::Type::DC_AL_FINE },
-        { "DaCapoAlCoda", Jump::Type::DC_AL_CODA },
-        { "DaCapoAlDoubleCoda", Jump::Type::DC_AL_DBLCODA },
-        { "DaSegnoAlCoda", Jump::Type::DS_AL_CODA },
-        { "DaSegnoAlDoubleCoda", Jump::Type::DS_AL_DBLCODA },
-        { "DaSegnoAlFine", Jump::Type::DS_AL_FINE },
-        { "DaSegnoSegno", Jump::Type::DSS },
-        { "DaSegnoSegnoAlCoda", Jump::Type::DSS_AL_CODA },
-        { "DaSegnoSegnoAlDoubleCoda", Jump::Type::DSS_AL_DBLCODA },
-        { "DaSegnoSegnoAlFine", Jump::Type::DSS_AL_FINE },
-        { "DaCoda", Jump::Type::DCODA },
-        { "DaDoubleCoda", Jump::Type::DDBLCODA },
-        { "DaCoda", Jump::Type::DCODA },
+    static std::map<String, Jump::Type> types {
+        { u"DaCapo", Jump::Type::DC },
+        { u"DaCapoAlFine", Jump::Type::DC_AL_FINE },
+        { u"DaCapoAlCoda", Jump::Type::DC_AL_CODA },
+        { u"DaCapoAlDoubleCoda", Jump::Type::DC_AL_DBLCODA },
+        { u"DaSegnoAlCoda", Jump::Type::DS_AL_CODA },
+        { u"DaSegnoAlDoubleCoda", Jump::Type::DS_AL_DBLCODA },
+        { u"DaSegnoAlFine", Jump::Type::DS_AL_FINE },
+        { u"DaSegnoSegno", Jump::Type::DSS },
+        { u"DaSegnoSegnoAlCoda", Jump::Type::DSS_AL_CODA },
+        { u"DaSegnoSegnoAlDoubleCoda", Jump::Type::DSS_AL_DBLCODA },
+        { u"DaSegnoSegnoAlFine", Jump::Type::DSS_AL_FINE },
+        { u"DaCoda", Jump::Type::DCODA },
+        { u"DaDoubleCoda", Jump::Type::DDBLCODA },
+        { u"DaCoda", Jump::Type::DCODA },
     };
 
-    if (types.contains(typeString)) {
+    if (types.find(typeString) != types.end()) {
         return types[typeString];
     }
 
@@ -85,17 +85,17 @@ static Jump::Type jumpType(const QString& typeString)
     return Jump::Type::USER;
 }
 
-static Marker::Type markerType(const QString& typeString)
+static Marker::Type markerType(const String& typeString)
 {
-    static QMap<QString, Marker::Type> types {
-        { "Segno", Marker::Type::SEGNO },
-        { "SegnoSegno", Marker::Type::VARSEGNO },
-        { "Coda", Marker::Type::CODA },
-        { "DoubleCoda", Marker::Type::VARCODA },
-        { "Fine", Marker::Type::FINE }
+    static std::map<String, Marker::Type> types {
+        { u"Segno", Marker::Type::SEGNO },
+        { u"SegnoSegno", Marker::Type::VARSEGNO },
+        { u"Coda", Marker::Type::CODA },
+        { u"DoubleCoda", Marker::Type::VARCODA },
+        { u"Fine", Marker::Type::FINE }
     };
 
-    if (types.contains(typeString)) {
+    if (types.find(typeString) != types.end()) {
         return types[typeString];
     }
 
@@ -103,27 +103,27 @@ static Marker::Type markerType(const QString& typeString)
     return Marker::Type::USER;
 }
 
-static QString harmonicText(const GPNote::Harmonic::Type& type)
+static QString harmonicText(const GPBeat::HarmonicMarkType& type)
 {
-    static QMap<GPNote::Harmonic::Type, QString> names {
-        { GPNote::Harmonic::Type::Artificial, "A.H." },
-        { GPNote::Harmonic::Type::Pinch, "P.H." },
-        { GPNote::Harmonic::Type::Tap, "T.H." },
-        { GPNote::Harmonic::Type::Semi, "S.H." },
-        { GPNote::Harmonic::Type::FeedBack, "Fdbk." },
+    static std::map<GPBeat::HarmonicMarkType, String> names {
+        { GPBeat::HarmonicMarkType::Artificial, u"A.H." },
+        { GPBeat::HarmonicMarkType::Pinch, u"P.H." },
+        { GPBeat::HarmonicMarkType::Tap, u"T.H." },
+        { GPBeat::HarmonicMarkType::Semi, u"S.H." },
+        { GPBeat::HarmonicMarkType::FeedBack, u"Fdbk." },
     };
 
-    if (names.contains(type)) {
+    if (names.find(type) != names.end()) {
         return names[type];
     }
 
     LOGE() << "wrong harmonic type";
-    return QString();
+    return String();
 }
 
 static TripletFeelType tripletFeelType(GPMasterBar::TripletFeelType tf)
 {
-    static QMap<GPMasterBar::TripletFeelType, TripletFeelType> types {
+    static std::map<GPMasterBar::TripletFeelType, TripletFeelType> types {
         { GPMasterBar::TripletFeelType::Triplet8th, TripletFeelType::TRIPLET_8TH },
         { GPMasterBar::TripletFeelType::Triplet16th, TripletFeelType::TRIPLET_16TH },
         { GPMasterBar::TripletFeelType::Dotted8th, TripletFeelType::DOTTED_8TH },
@@ -133,7 +133,7 @@ static TripletFeelType tripletFeelType(GPMasterBar::TripletFeelType tf)
         { GPMasterBar::TripletFeelType::None, TripletFeelType::NONE }
     };
 
-    if (types.contains(tf)) {
+    if (types.find(tf) != types.end()) {
         return types[tf];
     }
 
@@ -142,14 +142,14 @@ static TripletFeelType tripletFeelType(GPMasterBar::TripletFeelType tf)
 
 static OttavaType ottavaType(GPBeat::OttavaType t)
 {
-    static QMap<GPBeat::OttavaType, mu::engraving::OttavaType> types {
+    static std::map<GPBeat::OttavaType, mu::engraving::OttavaType> types {
         { GPBeat::OttavaType::va8,  OttavaType::OTTAVA_8VA },
         { GPBeat::OttavaType::vb8,  OttavaType::OTTAVA_8VB },
         { GPBeat::OttavaType::ma15, OttavaType::OTTAVA_15MA },
         { GPBeat::OttavaType::mb15, OttavaType::OTTAVA_15MB }
     };
 
-    if (types.contains(t)) {
+    if (types.find(t) != types.end()) {
         return types[t];
     }
 
@@ -157,21 +157,62 @@ static OttavaType ottavaType(GPBeat::OttavaType t)
     return OttavaType::OTTAVA_8VA; /// there is no type "NONE"
 }
 
+static GPBeat::HarmonicMarkType harmonicTypeNoteToBeat(GPNote::Harmonic::Type t)
+{
+    static std::map<GPNote::Harmonic::Type, GPBeat::HarmonicMarkType> types {
+        { GPNote::Harmonic::Type::Artificial, GPBeat::HarmonicMarkType::Artificial },
+        { GPNote::Harmonic::Type::Pinch, GPBeat::HarmonicMarkType::Pinch },
+        { GPNote::Harmonic::Type::Tap, GPBeat::HarmonicMarkType::Tap },
+        { GPNote::Harmonic::Type::Semi, GPBeat::HarmonicMarkType::Semi },
+        { GPNote::Harmonic::Type::FeedBack, GPBeat::HarmonicMarkType::FeedBack }
+    };
+
+    if (types.find(t) != types.end()) {
+        return types[t];
+    }
+
+    LOGE() << "wrong harmonic type";
+    return GPBeat::HarmonicMarkType::None;
+}
+
+static GPConverter::TextLineImportType harmonicMarkToImportType(GPBeat::HarmonicMarkType t)
+{
+    static std::map<GPBeat::HarmonicMarkType, GPConverter::TextLineImportType> types {
+        { GPBeat::HarmonicMarkType::Artificial, GPConverter::TextLineImportType::HARMONIC_ARTIFICIAL },
+        { GPBeat::HarmonicMarkType::Pinch, GPConverter::TextLineImportType::HARMONIC_PINCH },
+        { GPBeat::HarmonicMarkType::Tap, GPConverter::TextLineImportType::HARMONIC_TAP },
+        { GPBeat::HarmonicMarkType::Semi, GPConverter::TextLineImportType::HARMONIC_SEMI },
+        { GPBeat::HarmonicMarkType::FeedBack, GPConverter::TextLineImportType::HARMONIC_FEEDBACK }
+    };
+
+    if (types.find(t) != types.end()) {
+        return types[t];
+    }
+
+    LOGE() << "wrong harmonic type";
+    return GPConverter::TextLineImportType::NONE;
+}
+
+static GPConverter::TextLineImportType ottavaToImportType(GPBeat::OttavaType t)
+{
+    static std::map<GPBeat::OttavaType, GPConverter::TextLineImportType> types {
+        { GPBeat::OttavaType::ma15, GPConverter::TextLineImportType::OTTAVA_MA15 },
+        { GPBeat::OttavaType::va8, GPConverter::TextLineImportType::OTTAVA_VA8 },
+        { GPBeat::OttavaType::vb8, GPConverter::TextLineImportType::OTTAVA_VB8 },
+        { GPBeat::OttavaType::mb15, GPConverter::TextLineImportType::OTTAVA_MB15 }
+    };
+
+    if (types.find(t) != types.end()) {
+        return types[t];
+    }
+
+    LOGE() << "wrong ottava type";
+    return GPConverter::TextLineImportType::NONE;
+}
+
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     : _score(score), _gpDom(std::move(gpDom))
 {
-    fillHarmonicMarksMap();
-}
-
-void GPConverter::fillHarmonicMarksMap()
-{
-    using type_t = GPNote::Harmonic::Type;
-    for (int i = static_cast<int>(type_t::None); i < static_cast<int>(type_t::Types); i++) {
-        type_t type = static_cast<type_t>(i);
-        if (GPNote::Harmonic::isArtificial(type)) {
-            m_harmonicMarks[type] = std::vector<TextLineBase*>();
-        }
-    }
 }
 
 const std::unique_ptr<GPDomModel>& GPConverter::gpDom() const
@@ -264,12 +305,14 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
         convertMasterBar(masterBars.at(mi).get(), ctx);
     }
 
-    // adding end tick of ottava if the score ends with it
-    for (auto& ottava : m_lastOttavas) {
-        if (ottava) {
-            ottava->setTick2(_score->endTick());
-            _score->addElement(ottava);
-            ottava = nullptr;
+    // glueing line segment elements separated with rests
+    for (auto& trackMaps : m_elementsToAddToScore) {
+        for (auto& typeMaps : trackMaps.second) {
+            for (TextLineBase* elem : typeMaps.second) {
+                if (elem) {
+                    _score->addElement(elem);
+                }
+            }
         }
     }
 
@@ -402,6 +445,7 @@ void GPConverter::convertBeats(const std::vector<std::shared_ptr<GPBeat> >& beat
 {
     ChordRestContainer graceGhords;
     for (const auto& beat : beats) {
+        m_currentGPBeat = beat.get();
         ctx.curTick = convertBeat(beat.get(), graceGhords, ctx);
     }
 
@@ -456,7 +500,6 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceG
     addVibratoWTremBar(beat, cr);
     addFadding(beat, cr);
     addHairPin(beat, cr);
-    addRasgueado(beat, cr);
     addTremolo(beat, cr);
     addPickStroke(beat, cr);
     addDynamic(beat, cr);
@@ -470,8 +513,14 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceG
     addArpeggio(beat, cr);
     addLyrics(beat, cr, ctx);
     addLegato(beat, cr);
+
+    // line segment elements
     addOttava(beat, cr);
+    addLetRing(beat, cr);
+    addPalmMute(beat, cr);
+    addRasgueado(beat, cr);
     addDive(beat, cr);
+    addHarmonicMark(beat, cr);
 
     ctx.curTick += cr->actualTicks();
 
@@ -496,8 +545,12 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     Note* note = mu::engraving::Factory::createNote(ch);
     note->setTrack(cr->track());
     cr->add(note);
-    configureNote(gpnote, note);
-
+    setPitch(note, gpnote->midiPitch());
+    addBend(gpnote, note);
+    addLetRing(gpnote, note);
+    addPalmMute(gpnote, note);
+    note->setGhost(gpnote->ghostNote());
+    note->setDeadNote(gpnote->muted());
     addAccent(gpnote, note);
     addSlide(gpnote, note);
     collectHammerOn(gpnote, note);
@@ -830,8 +883,6 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
 
 void GPConverter::setUpTracks(const std::map<int, std::unique_ptr<GPTrack> >& tracks)
 {
-    m_lastOttavas.resize(tracks.size());
-
     for (const auto& track : tracks) {
         setUpTrack(track.second);
     }
@@ -945,6 +996,15 @@ void GPConverter::fillUncompletedMeasure(const Context& ctx)
     int tickOffset = lastMeasure->ticks().ticks() + lastMeasure->tick().ticks() - ctx.curTick.ticks();
     if (tickOffset > 0) {
         _score->setRest(ctx.curTick, ctx.curTrack, Fraction::fromTicks(tickOffset), true, nullptr);
+
+        for (auto& trackMaps : m_elementsToAddToScore) {
+            for (auto& typeMaps : trackMaps.second) {
+                auto& elemsToAdd = typeMaps.second;
+                if (!elemsToAdd.empty() && elemsToAdd.back() != nullptr) {
+                    elemsToAdd.push_back(nullptr);
+                }
+            }
+        }
     }
 }
 
@@ -1460,31 +1520,9 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
     harmonicNote->setTpcFromPitch();
     harmonicNote->setHarmonic(true);
 
-    addHarmonicMark(gpnote, note);
-}
-
-void GPConverter::addHarmonicMark(const GPNote* gpnote, Note* note)
-{
-    if (GPNote::Harmonic::isArtificial(gpnote->harmonic().type)) {
-        auto& textLineElems = m_harmonicMarks[gpnote->harmonic().type];
-        addLineElement(note->chord(), textLineElems, ElementType::HARMONIC_MARK);
-        if (!textLineElems.empty()) {
-            auto& elem = textLineElems.back();
-            elem->setBeginText(harmonicText(gpnote->harmonic().type));
-        }
+    if (GPNote::Harmonic::isArtificial(gpnote->harmonic().type) && m_currentGPBeat) {
+        m_currentGPBeat->setHarmonicMarkType(harmonicTypeNoteToBeat(gpnote->harmonic().type));
     }
-}
-
-void GPConverter::configureNote(const GPNote* gpnote, Note* note)
-{
-    setPitch(note, gpnote->midiPitch());
-
-    addBend(gpnote, note);
-
-    addLetRing(gpnote, note);
-    addPalmMute(gpnote, note);
-    note->setGhost(gpnote->ghostNote());
-    note->setDeadNote(gpnote->muted());
 }
 
 void GPConverter::addAccent(const GPNote* gpnote, Note* note)
@@ -1649,49 +1687,92 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
     note->add(bend);
 }
 
-void GPConverter::addLineElement(Chord* chord, std::vector<TextLineBase*>& elements, ElementType type)
+void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elements, ElementType muType, TextLineImportType importType,
+                                 bool forceSplitByRests)
 {
-    track_idx_t track = chord->track();
+    track_idx_t track = cr->track();
+
+    auto& lastTypeForTrack = m_lastImportTypes[track][muType];
+
     while (elements.size() < track + 1) {
-        elements.push_back(0);
+        elements.push_back(nullptr);
     }
 
-    if (elements[track]) {
-        auto elem = elements[track];
-        Chord* lastChord = toChord(elem->endCR());
-        if (lastChord == chord) {
+    auto& elem = elements[track];
+
+    if (!forceSplitByRests) {
+        if (!cr->isRest()) {
+            elem = nullptr; // should start new element
             return;
         }
-        //
-        // extend the current element or start a new one
-        //
-        Fraction tick = chord->segment()->tick();
+
+        if (lastTypeForTrack != TextLineImportType::NONE) {
+            auto& lastTypeElementsToAdd = m_elementsToAddToScore[track][lastTypeForTrack];
+
+            /// adding nullptr to 'elements to be added' to track the REST
+            if (!lastTypeElementsToAdd.empty() && lastTypeElementsToAdd.back() != nullptr) {
+                lastTypeElementsToAdd.push_back(nullptr);
+            }
+        }
+
+        return;
+    }
+
+    if (lastTypeForTrack != importType) {
+        elem = nullptr;
+    }
+
+    Fraction tick = cr->tick();
+
+    if (elem) {
+        ChordRest* lastCR = elem->endCR();
+        if (lastCR == cr) {
+            return;
+        }
+
         if (elem->tick2() < tick) {
-            elements[track] = 0;
+            if (lastTypeForTrack != TextLineImportType::NONE) {
+                auto& lastTypeElementsToAdd = m_elementsToAddToScore[track][lastTypeForTrack];
+
+                /// removing info about the REST and updating last element's ticks
+                if (!lastTypeElementsToAdd.empty() && lastTypeElementsToAdd.back() == nullptr) {
+                    lastTypeElementsToAdd.pop_back();
+                    TextLineBase* prevElem = lastTypeElementsToAdd.back();
+                    if (!prevElem) {
+                        LOGE() << "error while importing";
+                        return;
+                    }
+
+                    elem = prevElem;
+                    elem->setTick2(tick + cr->actualTicks());
+                }
+            }
         } else {
-            elem->setTick2(chord->tick() + chord->actualTicks());
-            elem->setEndElement(chord);
+            elem->setTick2(cr->tick() + cr->actualTicks());
+            elem->setEndElement(cr);
         }
     }
-    if (!elements[track]) {
-        EngravingItem* engItem = Factory::createItem(type, _score->dummy());
 
-        TextLineBase* elem = dynamic_cast<TextLineBase*>(engItem);
-        if (!elem) {
+    if (!elem) {
+        EngravingItem* engItem = Factory::createItem(muType, _score->dummy());
+
+        TextLineBase* newElem = dynamic_cast<TextLineBase*>(engItem);
+        if (!newElem) {
             qFatal("wrong type of imported element");
         }
 
-        elements[track] = elem;
-        Segment* segment = chord->segment();
-        Fraction tick = segment->tick();
+        elem = newElem;
 
-        elem->setTick(tick);
-        elem->setTick2(tick + chord->actualTicks());
-        elem->setTrack(track);
-        elem->setTrack2(track);
-        elem->setStartElement(chord);
-        elem->setEndElement(chord);
-        _score->addElement(elem);
+        newElem->setTick(tick);
+        newElem->setTick2(tick + cr->actualTicks());
+        newElem->setTrack(track);
+        newElem->setTrack2(track);
+        newElem->setStartElement(cr);
+        newElem->setEndElement(cr);
+
+        auto& elementsToAdd = m_elementsToAddToScore[track][importType];
+        elementsToAdd.push_back(newElem);
+        lastTypeForTrack = importType;
     }
 }
 
@@ -1926,37 +2007,15 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
 {
-    auto& ot = m_lastOttavas[cr->track() / VOICES];
-
-    if (gpb->ottavaType() == GPBeat::OttavaType::None) {
-        if (ot) {
-            ot->setTick2(cr->segment()->tick());
-            _score->addElement(ot);
-        }
-        ot = nullptr;
-        return;
-    }
-
-    auto newOttavaType = ottavaType(gpb->ottavaType());
-
-    if (!ot || newOttavaType != ot->ottavaType()) {
-        Ottava* ottava = Factory::createOttava(_score->dummy());
-        ottava->setTrack(cr->track());
-        ottava->setTick(cr->segment()->tick());
-        ottava->setOttavaType(newOttavaType);
-        if (ot) {
-            ot->setTick2(cr->segment()->tick());
-            _score->addElement(ot);
-        }
-        ot = ottava;
-    }
+    addLineElement(cr, m_ottavas[gpb->ottavaType()], ElementType::OTTAVA, ottavaToImportType(gpb->ottavaType()),
+                   gpb->ottavaType() != GPBeat::OttavaType::None);
 
     if (!cr->isChord()) {
         return;
     }
 
     const Chord* chord = toChord(cr);
-    mu::engraving::OttavaType type = ot->ottavaType();
+    mu::engraving::OttavaType type = ottavaType(gpb->ottavaType());
 
     for (mu::engraving::Note* note : chord->notes()) {
         int pitch = note->pitch();
@@ -1972,24 +2031,53 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
     }
 }
 
-void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
+void GPConverter::addLetRing(const GPNote* gpnote, Note* /*note*/)
 {
-    if (gpnote->letRing()) {
-        addLineElement(note->chord(), m_letRings, ElementType::LET_RING);
+    if (gpnote->letRing() && m_currentGPBeat) {
+        m_currentGPBeat->setLetRing(true);
+        //note->setLetRing(true); TODO-gp: let ring playback
     }
 }
 
-void GPConverter::addPalmMute(const GPNote* gpnote, Note* note)
+void GPConverter::addPalmMute(const GPNote* gpnote, Note* /*note*/)
 {
-    if (gpnote->palmMute()) {
-        addLineElement(note->chord(), m_palmMutes, ElementType::PALM_MUTE);
+    if (gpnote->palmMute() && m_currentGPBeat) {
+        m_currentGPBeat->setPalmMute(true);
+        //note->setPalmMute(true); TODO-gp: palm mute playback
     }
+}
+
+void GPConverter::addLetRing(const GPBeat* gpbeat, ChordRest* cr)
+{
+    addLineElement(cr, m_letRings, ElementType::LET_RING, TextLineImportType::LET_RING, gpbeat->letRing());
+}
+
+void GPConverter::addPalmMute(const GPBeat* gpbeat, ChordRest* cr)
+{
+    addLineElement(cr, m_palmMutes, ElementType::PALM_MUTE, TextLineImportType::PALM_MUTE, gpbeat->palmMute());
 }
 
 void GPConverter::addDive(const GPBeat* beat, ChordRest* cr)
 {
-    if (beat->dive() && cr->type() == ElementType::CHORD) {
-        addLineElement(static_cast<Chord*>(cr), m_dives, ElementType::WHAMMY_BAR);
+    addLineElement(cr, m_dives, ElementType::WHAMMY_BAR, TextLineImportType::WHAMMY_BAR, beat->dive());
+}
+
+void GPConverter::addRasgueado(const GPBeat* beat, ChordRest* cr)
+{
+    addLineElement(cr, m_rasgueados, ElementType::RASGUEADO, TextLineImportType::RASGUEADO, beat->rasgueado() != GPBeat::Rasgueado::None);
+}
+
+void GPConverter::addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr)
+{
+    auto harmonicMarkType = gpbeat->harmonicMarkType();
+    auto& textLineElems = m_harmonicMarks[harmonicMarkType];
+    addLineElement(cr, textLineElems, ElementType::HARMONIC_MARK, harmonicMarkToImportType(
+                       harmonicMarkType), harmonicMarkType != GPBeat::HarmonicMarkType::None);
+    if (!textLineElems.empty()) {
+        auto& elem = textLineElems.back();
+        if (elem) {
+            elem->setBeginText(harmonicText(harmonicMarkType));
+        }
     }
 }
 
@@ -2329,13 +2417,6 @@ void GPConverter::addHairPin(const GPBeat* beat, ChordRest* cr)
 
     _lastHairpin->setTick2(cr->tick());
     _lastHairpin->setEndElement(cr);
-}
-
-void GPConverter::addRasgueado(const GPBeat* beat, ChordRest* cr)
-{
-    if (beat->rasgueado() != GPBeat::Rasgueado::None && cr->type() == ElementType::CHORD) {
-        addLineElement(static_cast<Chord*>(cr), m_rasgueados, ElementType::RASGUEADO);
-    }
 }
 
 void GPConverter::addPickStroke(const GPBeat* beat, ChordRest* cr)
