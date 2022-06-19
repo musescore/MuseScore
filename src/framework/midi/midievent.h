@@ -147,6 +147,11 @@ struct Event {
         return operator!=(NOOP()) && isValid();
     }
 
+    bool operator <(const Event& other) const
+    {
+        return m_data < other.m_data;
+    }
+
     bool isChannelVoice() const { return messageType() == MessageType::ChannelVoice10 || messageType() == MessageType::ChannelVoice20; }
     bool isChannelVoice20() const { return messageType() == MessageType::ChannelVoice20; }
     bool isMessageTypeIn(const std::set<MessageType>& types) const { return types.find(messageType()) != types.end(); }
