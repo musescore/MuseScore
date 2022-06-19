@@ -30,6 +30,7 @@
 #include "bracket.h"
 #include "breath.h"
 #include "chord.h"
+#include "chordline.h"
 #include "clef.h"
 #include "drumset.h"
 #include "excerpt.h"
@@ -5473,6 +5474,17 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 ne->setTrack(ntrack);
                 ChordRest* ncr = toChordRest(seg->element(ntrack));
                 ne->setParent(ncr);
+                if (element->isChordLine() && toChordLine(element)->note() && cr->isChord()) {
+                    // ChordLine must be attached to the new note in the linked staff:
+                    Note* note = toChordLine(element)->note();
+                    Chord* chord = toChord(cr);
+                    auto iter = std::find(chord->notes().begin(), chord->notes().end(), note); // find note index in start chord
+                    if (iter != chord->notes().end()) {
+                        int index = iter - chord->notes().begin();
+                        Note* newNote = toChord(ncr)->notes().at(index); // find corresponding note in end chord
+                        toChordLine(ne)->setNote(newNote); // ... attach chordLine to the new note
+                    }
+                }
                 undo(new AddElement(ne));
             }
             //
