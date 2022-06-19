@@ -76,6 +76,7 @@ DockSeparator::DockSeparator(Layouting::Widget* parent)
 
     // Only set on Separator::init(), so single-shot
     QTimer::singleShot(0, this, &DockSeparator::isVerticalChanged);
+    QTimer::singleShot(0, this, &DockSeparator::showResizeCursorChanged);
     QTimer::singleShot(0, this, [this]() {
         initAvailability();
     });
@@ -89,6 +90,7 @@ void DockSeparator::initAvailability()
     if (properties.isValid()) {
         m_isSeparatorVisible = properties.separatorsVisible;
         emit isSeparatorVisibleChanged();
+        emit showResizeCursorChanged();
     }
 }
 
@@ -100,6 +102,13 @@ bool DockSeparator::isVertical() const
 bool DockSeparator::isSeparatorVisible() const
 {
     return m_isSeparatorVisible;
+}
+
+bool DockSeparator::showResizeCursor() const
+{
+    return parentContainer()
+           && (parentContainer()->minPosForSeparator_global(const_cast<DockSeparator*>(this))
+               != parentContainer()->maxPosForSeparator_global(const_cast<DockSeparator*>(this)));
 }
 
 Layouting::Widget* DockSeparator::createRubberBand(Layouting::Widget* parent)
