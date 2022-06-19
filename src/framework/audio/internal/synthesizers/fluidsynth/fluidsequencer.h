@@ -43,7 +43,7 @@ private:
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes);
 
     void appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
-                             const int midiControlIdx, const mpe::timestamp_t timestampFrom, const mpe::timestamp_t timestampTo);
+                             const int midiControlIdx);
 
     void appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
                          const midi::channel_t channelIdx);
