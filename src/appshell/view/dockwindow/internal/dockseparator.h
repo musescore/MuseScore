@@ -35,12 +35,14 @@ class DockSeparator : public QQuickItem, public Layouting::Separator, public Lay
 
     Q_PROPERTY(bool isVertical READ isVertical NOTIFY isVerticalChanged)
     Q_PROPERTY(bool isSeparatorVisible READ isSeparatorVisible NOTIFY isSeparatorVisibleChanged)
+    Q_PROPERTY(bool showResizeCursor READ showResizeCursor NOTIFY showResizeCursorChanged)
 
 public:
     explicit DockSeparator(Layouting::Widget* parent = nullptr);
 
     bool isVertical() const;
     bool isSeparatorVisible() const;
+    bool showResizeCursor() const;
 
     Q_INVOKABLE void onMousePressed();
     Q_INVOKABLE void onMouseMoved(QPointF localPos);
@@ -50,6 +52,7 @@ public:
 signals:
     void isVerticalChanged();
     void isSeparatorVisibleChanged();
+    void showResizeCursorChanged();
 
 private:
     void initAvailability();
