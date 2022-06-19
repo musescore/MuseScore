@@ -323,7 +323,7 @@ Bend* Factory::createBend(Note * parent, ElementType type, bool isAccessibleEnab
 
 MAKE_ITEM_IMPL(Bend, Note)
 
-Bracket* Factory::createBracket(EngravingItem* parent)
+Bracket* Factory::createBracket(EngravingItem * parent)
 {
     return new Bracket(parent);
 }

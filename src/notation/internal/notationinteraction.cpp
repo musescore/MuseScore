@@ -680,6 +680,7 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
 
     if (oldSelectedElements != selection.elements() || oldSelectionState != selection.state()) {
         notifyAboutSelectionChangedIfNeed();
+        endEditElement();
     } else {
         score()->setSelectionChanged(false);
     }
@@ -688,12 +689,6 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
 void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
 {
     TRACEFUNC;
-
-    if (needEndTextEditing(elements)) {
-        endEditText();
-    } else if (isElementEditStarted() && (elements.size() != 1 || elements.front() != score()->selection().element())) {
-        endEditElement();
-    }
 
     if (elements.size() == 1 && type == SelectType::ADD && QGuiApplication::keyboardModifiers() == Qt::KeyboardModifier::ControlModifier) {
         if (score()->selection().isRange()) {
@@ -1262,7 +1257,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
             EngravingItem* dropElement = el->drop(m_dropData.ed);
             score()->addRefresh(el->canvasBoundingRect());
             if (dropElement) {
-                doSelect({ dropElement }, SelectType::SINGLE);
+                select({ dropElement }, SelectType::SINGLE);
                 score()->addRefresh(dropElement->canvasBoundingRect());
             }
         }
@@ -1340,7 +1335,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         score()->addRefresh(el->canvasBoundingRect());
         if (dropElement) {
             if (!score()->noteEntryMode()) {
-                doSelect({ dropElement }, SelectType::SINGLE);
+                select({ dropElement }, SelectType::SINGLE);
             }
             score()->addRefresh(dropElement->canvasBoundingRect());
         }
@@ -4070,23 +4065,6 @@ void NotationInteraction::setScoreConfig(ScoreConfig config)
     }
 
     apply();
-}
-
-bool NotationInteraction::needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const
-{
-    if (!isTextEditingStarted()) {
-        return false;
-    }
-
-    if (newSelectedElements.empty()) {
-        return false;
-    }
-
-    if (newSelectedElements.size() > 1) {
-        return true;
-    }
-
-    return newSelectedElements.front() != m_editData.element;
 }
 
 void NotationInteraction::resetGripEdit()
