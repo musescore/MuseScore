@@ -254,10 +254,6 @@ void NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
-
-    if (mu::engraving::ChordRest* chordRest = score()->inputState().cr()) {
-        m_interaction->showItem(chordRest);
-    }
 }
 
 void NotationNoteInput::removeNote(const PointF& pos)
@@ -483,6 +479,10 @@ void NotationNoteInput::startEdit()
 void NotationNoteInput::apply()
 {
     m_undoStack->commitChanges();
+
+    if (mu::engraving::ChordRest* chordRest = score()->inputState().cr()) {
+        m_interaction->showItem(chordRest);
+    }
 }
 
 void NotationNoteInput::updateInputState()
