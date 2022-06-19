@@ -164,8 +164,6 @@ mu::engraving::Segment* NotationSelectionRange::rangeStartSegment() const
 {
     mu::engraving::Segment* startSegment = score()->selection().startSegment();
 
-    startSegment->measure()->firstEnabled();
-
     if (!startSegment) {
         return nullptr;
     }
