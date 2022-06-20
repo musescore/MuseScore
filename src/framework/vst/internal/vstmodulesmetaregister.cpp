@@ -22,7 +22,9 @@
 
 #include "vstmodulesmetaregister.h"
 
-#include <QJsonArray>
+#include <QJsonDocument>
+
+#include "io/file.h"
 
 using namespace mu;
 using namespace mu::vst;
@@ -32,17 +34,84 @@ static const std::map<VstPluginType, QString> PLUGIN_TYPE_MAP = {
     { VstPluginType::Fx, "Fx" }
 };
 
-VstModulesMetaRegister::~VstModulesMetaRegister()
-{
-    m_file.close();
-}
-
 void VstModulesMetaRegister::init()
 {
-    m_file = io::File(config()->knownPluginsFile());
+    m_knownPluginsDir = config()->knownPluginsDir();
 
-    if (m_file.exists()) {
-        readMetaList();
+    load();
+}
+
+void VstModulesMetaRegister::registerPath(const audio::AudioResourceId& resourceId, const io::path_t& path)
+{
+    if (!fileSystem()->exists(m_knownPluginsDir)) {
+        fileSystem()->makePath(m_knownPluginsDir);
+    }
+
+    io::File file(m_knownPluginsDir + "/" + resourceId + ".json");
+    file.open(io::IODevice::WriteOnly);
+
+    QJsonObject obj;
+    obj.insert(QStringLiteral("enabled"), false);
+    obj.insert(QStringLiteral("type"), "");
+    obj.insert(QStringLiteral("meta"), "");
+    obj.insert(QStringLiteral("path"), path.toQString());
+
+    m_paths.emplace(resourceId, path);
+
+    file.write(QJsonDocument(obj).toJson());
+    file.close();
+}
+
+void VstModulesMetaRegister::registerPlugin(const audio::AudioResourceId& resourceId, PluginModulePtr module, const bool enabled)
+{
+    auto pluginPath = m_paths.find(resourceId);
+    if (pluginPath == m_paths.cend()) {
+        return;
+    }
+
+    io::File file(m_knownPluginsDir + "/" + resourceId + ".json");
+    file.open(io::IODevice::WriteOnly);
+
+    const auto& factory = module->getFactory();
+
+    for (auto& classInfo : factory.classInfos()) {
+        if (classInfo.category() != kVstAudioEffectClass) {
+            continue;
+        }
+
+        std::string subCategoriesStr = classInfo.subCategoriesString();
+
+        for (const auto& type : PLUGIN_TYPE_MAP) {
+            VstPluginType currentType = VstPluginType::Undefined;
+
+            if (subCategoriesStr.find(type.second.toStdString()) != std::string::npos) {
+                currentType = type.first;
+            }
+
+            if (currentType == VstPluginType::Undefined) {
+                continue;
+            }
+
+            audio::AudioResourceMeta meta;
+
+            meta.id = resourceId;
+            meta.type = audio::AudioResourceType::VstPlugin;
+            meta.vendor = factory.info().vendor();
+            meta.hasNativeEditorSupport = hasNativeEditorSupport();
+
+            QJsonObject obj;
+            obj.insert(QStringLiteral("enabled"), enabled);
+            obj.insert(QStringLiteral("type"), pluginTypeToString(currentType));
+            obj.insert(QStringLiteral("meta"), metaToJson(meta));
+            obj.insert(QStringLiteral("path"), pluginPath->second.toQString());
+
+            m_metaMap[currentType].insert(std::move(meta));
+
+            file.write(QJsonDocument(obj).toJson());
+            file.close();
+
+            return;
+        }
     }
 }
 
@@ -50,59 +119,6 @@ void VstModulesMetaRegister::clear()
 {
     m_paths.clear();
     m_metaMap.clear();
-}
-
-void VstModulesMetaRegister::registerPlugins(const ModulesMap& modules, PathMap&& paths)
-{
-    clear();
-
-    m_paths = paths;
-
-    static auto hasNativeEditorSupport = []() {
-#ifdef Q_OS_LINUX
-        //!Note Host applications on Linux should provide their own event loop via VST3 API,
-        //!     otherwise it'll be impossible to launch native VST editor views
-        return false;
-#else
-        return true;
-#endif
-    };
-
-    for (const auto& pair : modules) {
-        PluginModulePtr module = pair.second;
-        const auto& factory = module->getFactory();
-
-        for (auto& classInfo : factory.classInfos()) {
-            if (classInfo.category() != kVstAudioEffectClass) {
-                continue;
-            }
-
-            std::string subCategoriesStr = classInfo.subCategoriesString();
-
-            for (const auto& type : PLUGIN_TYPE_MAP) {
-                VstPluginType currentType = VstPluginType::Undefined;
-
-                if (subCategoriesStr.find(type.second.toStdString()) != std::string::npos) {
-                    currentType = type.first;
-                }
-
-                if (currentType == VstPluginType::Undefined) {
-                    continue;
-                }
-
-                audio::AudioResourceMeta meta;
-
-                meta.id = pair.first;
-                meta.type = audio::AudioResourceType::VstPlugin;
-                meta.vendor = factory.info().vendor();
-                meta.hasNativeEditorSupport = hasNativeEditorSupport();
-
-                m_metaMap[currentType].emplace_back(std::move(meta));
-            }
-        }
-    }
-
-    writeMetaList();
 }
 
 const io::path_t& VstModulesMetaRegister::pluginPath(const audio::AudioResourceId& resourceId) const
@@ -125,7 +141,21 @@ const audio::AudioResourceMetaList& VstModulesMetaRegister::metaList(const VstPl
         return empty;
     }
 
-    return search->second;
+    static audio::AudioResourceMetaList result;
+    result.clear();
+    result.insert(result.cbegin(), search->second.cbegin(), search->second.cend());
+
+    return result;
+}
+
+bool VstModulesMetaRegister::exists(const audio::AudioResourceId& resourceId) const
+{
+    return !pluginPath(resourceId).empty();
+}
+
+bool VstModulesMetaRegister::exists(const io::path_t& path) const
+{
+    return !pluginPath(io::basename(path).toStdString()).empty();
 }
 
 bool VstModulesMetaRegister::isEmpty() const
@@ -133,45 +163,34 @@ bool VstModulesMetaRegister::isEmpty() const
     return m_metaMap.empty() && m_paths.empty();
 }
 
-void VstModulesMetaRegister::readMetaList()
+void VstModulesMetaRegister::load()
 {
-    m_file.open(io::IODevice::OpenMode::ReadWrite);
+    RetVal<io::paths_t> paths = fileSystem()->scanFiles(m_knownPluginsDir,
+                                                        { "*.json" },
+                                                        io::IFileSystem::ScanMode::FilesInCurrentDir);
 
-    QJsonDocument json = QJsonDocument::fromJson(m_file.readAll().toQByteArrayNoCopy());
+    for (const io::path_t& path : paths.val) {
+        io::File file(path);
+        file.open(io::IODevice::ReadOnly);
 
-    for (const QJsonValue& val : json.array()) {
-        QJsonObject object = val.toObject();
-        QJsonValue metaJson = object.value(QStringLiteral("meta"));
+        QJsonDocument json = QJsonDocument::fromJson(file.readAll().toQByteArrayNoCopy());
+        QJsonObject object = json.object();
 
-        audio::AudioResourceMeta meta = metaFromJson(metaJson.toObject());
-        io::path_t path(object.value(QStringLiteral("path")).toString().toStdString());
-        VstPluginType type = pluginTypeFromString(object.value(QStringLiteral("type")).toString());
+        bool isEnabled = object.value(QStringLiteral("enabled")).toBool();
+        if (isEnabled) {
+            QJsonValue metaJson = object.value(QStringLiteral("meta"));
 
-        m_paths.emplace(meta.id, std::move(path));
-        m_metaMap[type].emplace_back(std::move(meta));
-    }
-}
+            audio::AudioResourceMeta meta = metaFromJson(metaJson.toObject());
+            VstPluginType type = pluginTypeFromString(object.value(QStringLiteral("type")).toString());
 
-void VstModulesMetaRegister::writeMetaList()
-{
-    m_file.open(io::IODevice::OpenMode::ReadWrite);
-
-    QJsonArray rootArray;
-
-    for (const auto& pair : m_metaMap) {
-        const QString& typeStr = pluginTypeToString(pair.first);
-
-        for (const audio::AudioResourceMeta& meta : pair.second) {
-            QJsonObject obj;
-            obj.insert(QStringLiteral("type"), typeStr);
-            obj.insert(QStringLiteral("meta"), metaToJson(meta));
-            obj.insert(QStringLiteral("path"), m_paths.at(meta.id).toQString());
-
-            rootArray.append(obj);
+            m_metaMap[type].insert(std::move(meta));
         }
-    }
 
-    m_file.write(QJsonDocument(rootArray).toJson());
+        io::path_t pluginPath(object.value(QStringLiteral("path")).toString().toStdString());
+        m_paths.emplace(io::basename(pluginPath).toStdString(), std::move(pluginPath));
+
+        file.close();
+    }
 }
 
 QJsonObject VstModulesMetaRegister::metaToJson(const audio::AudioResourceMeta& meta) const
@@ -217,4 +236,15 @@ const QString& VstModulesMetaRegister::pluginTypeToString(const VstPluginType ty
     }
 
     return search->second;
+}
+
+bool VstModulesMetaRegister::hasNativeEditorSupport() const
+{
+#ifdef Q_OS_LINUX
+    //!Note Host applications on Linux should provide their own event loop via VST3 API,
+    //!     otherwise it'll be impossible to launch native VST editor views
+    return false;
+#else
+    return true;
+#endif
 }
