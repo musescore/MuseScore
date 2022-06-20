@@ -65,6 +65,7 @@ public:
     Tie* tie() const { return (Tie*)spanner(); }
 
     void computeBezier(mu::PointF so = mu::PointF()) override;
+    void addLineAttachPoints();
 };
 
 //---------------------------------------------------------

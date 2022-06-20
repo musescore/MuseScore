@@ -1986,7 +1986,6 @@ void Chord::layoutPitched()
     qreal _spatium         = spatium();
     qreal mag_             = staff() ? staff()->staffMag(this) : 1.0;      // palette elements do not have a staff
     qreal dotNoteDistance  = score()->styleMM(Sid::dotNoteDistance) * mag_;
-    qreal minTieLength     = score()->styleMM(Sid::MinTieLength) * mag_;
 
     qreal chordX           = (_noteType == NoteType::NORMAL) ? ipos().x() : 0.0;
 
@@ -2055,58 +2054,6 @@ void Chord::layoutPitched()
             lll = qMax(lll, -x);
         }
 
-        // allow extra space for shortened ties
-        // this code must be kept synchronized
-        // with the tie positioning code in Tie::slurPos()
-        // but the allocation of space needs to be performed here
-        Tie* tie;
-        tie = note->tieBack();
-        if (tie && tie->endNote()) {
-            tie->calculateDirection();
-            qreal overlap = 0.0;
-            bool shortStart = false;
-            Note* sn = tie->startNote();
-            Chord* sc = sn->chord();
-            if (sc && sc->measure() == measure() && sc == prevChordRest(this)) {
-                if (sc->notes().size() > 1 || (sc->stem() && sc->up() == tie->up())) {
-                    shortStart = true;
-                    if (sc->width() > sn->width()) {
-                        // chord with second?
-                        // account for noteheads further to right
-                        qreal snEnd = sn->x() + sn->bboxRightPos();
-                        qreal scEnd = snEnd;
-                        for (unsigned i = 0; i < sc->notes().size(); ++i) {
-                            scEnd = qMax(scEnd, sc->notes().at(i)->x() + sc->notes().at(i)->bboxRightPos());
-                        }
-                        overlap += scEnd - snEnd;
-                    } else {
-                        overlap -= sn->headWidth() * 0.12;
-                    }
-                } else {
-                    overlap += sn->headWidth() * 0.35;
-                }
-                if (notes().size() > 1 || (stem() && !up() && !tie->up())) {
-                    // for positive offset:
-                    //    use available space
-                    // for negative x offset:
-                    //    space is allocated elsewhere, so don't re-allocate here
-                    if (note->ipos().x() != 0.0) {
-                        overlap += qAbs(note->ipos().x());
-                    } else {
-                        overlap -= note->headWidth() * 0.12;
-                    }
-                } else {
-                    if (shortStart) {
-                        overlap += note->headWidth() * 0.15;
-                    } else {
-                        overlap += note->headWidth() * 0.35;
-                    }
-                }
-                qreal d = qMax(minTieLength - overlap, 0.0);
-                lll = qMax(lll, d);
-            }
-        }
-
         // clear layout for note-based fingerings
         for (EngravingItem* e : note->el()) {
             if (e->isFingering()) {
@@ -2152,24 +2099,6 @@ void Chord::layoutPitched()
         // handle the special case of _arpeggio->span() > 1
         // in layoutArpeggio2() after page layout has done so we
         // know the y position of the next staves
-    }
-
-    // allocate enough room for glissandi
-    if (_endsGlissando) {
-        for (const Note* note : notes()) {
-            for (const Spanner* sp : note->spannerBack()) {
-                if (sp->isGlissando()) {
-                    if (toGlissando(sp)->visible()) {
-                        if (!rtick().isZero()                             // if not at beginning of measure
-                            || graceNotesBefore().size() > 0) {             // or there are graces before
-                            lll += _spatium * 0.5 + minTieLength;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        // special case of system-initial glissando final note is handled in Glissando::layout() itself
     }
 
     if (dots()) {
