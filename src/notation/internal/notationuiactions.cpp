@@ -1103,11 +1103,6 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Reset shapes and positions"),
              QT_TRANSLATE_NOOP("action", "Reset shapes and positions of selected elements to their defaults")
              ),
-    UiAction("show-keys",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert special characters"),
-             QT_TRANSLATE_NOOP("action", "Insert special characters")
-             ),
     UiAction("zoomin",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Zoom in"),

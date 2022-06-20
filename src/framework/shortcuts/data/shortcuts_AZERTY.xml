@@ -837,7 +837,6 @@
   <SC>
     <key>show-keys</key>
     <seq>F2</seq>
-    <ctx>notation-text-editing</ctx>
     </SC>
   <SC>
     <key>rest-1</key>
@@ -1418,112 +1417,102 @@
   <SC>
     <key>interval-2</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>interval-3</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>interval-4</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>interval-5</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>interval-6</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>interval-7</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>interval-8</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>interval-9</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
+    </SC>
+  <SC>
+    <key>interval-2</key>
+    <seq></seq>
     </SC>
   <SC>
     <key>voice-x12</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>voice-x13</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>voice-x14</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>voice-x23</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>voice-x24</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>voice-x34</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>explode</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>implode</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>slash-fill</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>empty-trailing-measure</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
+    </SC>
+  <SC>
+    <key>slash-fill</key>
+    <seq></seq>
     </SC>
   <SC>
     <key>next-frame</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>prev-frame</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>next-system</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>prev-system</key>
     <seq></seq>
-    <ctx>notation-opened</ctx>
+    </SC>
+  <SC>
+    <key>slash-fill</key>
+    <seq></seq>
     </SC>
   <SC>
     <key>insert-hbox</key>
