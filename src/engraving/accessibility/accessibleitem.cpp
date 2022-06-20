@@ -40,12 +40,11 @@ AccessibleItem::AccessibleItem(EngravingItem* e, Role role)
 
 AccessibleItem::~AccessibleItem()
 {
-    m_element = nullptr;
-
     AccessibleRoot* root = accessibleRoot();
     if (root && root->focusedElement() == this) {
         root->setFocusedElement(nullptr);
     }
+    m_element = nullptr;
 
     if (m_registred && accessibilityController()) {
         accessibilityController()->unreg(this);
