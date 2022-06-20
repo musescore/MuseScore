@@ -175,24 +175,16 @@ FocusableItem {
                 visible: featheringControlsColumn.visible
             }
 
-            FlatButton {
+            CheckBoxPropertyView {
                 id: forceHorizontalButton
                 width: parent.width
 
                 text: qsTrc("inspector", "Force horizontal")
+                propertyItem: root.model ? root.model.forceHorizontal : null
 
                 navigation.name: "ForceHorizontal"
                 navigation.panel: root.navigationPanel
                 navigation.row: featheringRightSection.navigationRowEnd + 1
-
-                accentButton: root.model && !root.model.forceHorizontal.isUndefined ? root.model.forceHorizontal.value : false
-
-                onClicked: {
-                    if (!root.model) {
-                        return
-                    }
-                    root.model.forceHorizontal.value = !root.model.forceHorizontal.value
-                }
             }
 
             ExpandableBlank {
