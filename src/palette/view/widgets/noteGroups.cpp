@@ -82,7 +82,7 @@ NoteGroups::NoteGroups(QWidget* parent)
 {
     setupUi(this);
 
-    iconPalette->setName(QT_TRANSLATE_NOOP("palette", "Beam properties"));
+    iconPalette->setName(QT_TRANSLATE_NOOP("palette", "Beam selector"));
     iconPalette->setGridSize(27, 40);
     iconPalette->setDrawGrid(true);
 
