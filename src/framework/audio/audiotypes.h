@@ -91,12 +91,12 @@ struct AudioResourceMeta {
     bool operator<(const AudioResourceMeta& other) const
     {
         return id < other.id
-               && type < other.type
-               && vendor < other.vendor;
+               || vendor < other.vendor;
     }
 };
 
 using AudioResourceMetaList = std::vector<AudioResourceMeta>;
+using AudioResourceMetaSet = std::set<AudioResourceMeta>;
 
 enum class AudioFxType {
     Undefined = -1,
