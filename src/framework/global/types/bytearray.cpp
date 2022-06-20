@@ -29,6 +29,8 @@ using namespace mu;
 ByteArray::ByteArray()
 {
     m_data = std::make_shared<Data>();
+    m_data->resize(1);
+    m_data->operator [](0) = 0;
 }
 
 ByteArray::ByteArray(const uint8_t* data, size_t size)
@@ -61,6 +63,11 @@ ByteArray ByteArray::fromRawData(const uint8_t* data, size_t size)
     ba.m_raw.size = size;
     ba.m_raw.data = data;
     return ba;
+}
+
+ByteArray ByteArray::fromRawData(const char* data, size_t size)
+{
+    return fromRawData(reinterpret_cast<const uint8_t*>(data), size);
 }
 
 uint8_t* ByteArray::data()
