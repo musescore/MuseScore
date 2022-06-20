@@ -21,7 +21,6 @@
  */
 #include "folderspreferencesmodel.h"
 
-#include "log.h"
 #include "translation.h"
 
 using namespace mu::appshell;
@@ -109,11 +108,8 @@ void FoldersPreferencesModel::load()
         {
             FolderType::VST3, qtrc("appshell", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
-        },
+        }
 #endif
-        {
-            FolderType::Images, qtrc("appshell", "Images"), "", ""
-        }  // todo: need implement
     };
 
     endResetModel();
@@ -180,9 +176,6 @@ void FoldersPreferencesModel::saveFolderPaths(FoldersPreferencesModel::FolderTyp
         vstConfiguration()->setUserVstDirectories(pathsFromString(paths));
         break;
     }
-    case FolderType::Images:
-        NOT_IMPLEMENTED;
-        break;
     case FolderType::Undefined:
         break;
     }

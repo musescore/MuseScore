@@ -72,8 +72,7 @@ private:
         Templates,
         Plugins,
         SoundFonts,
-        VST3,
-        Images
+        VST3
     };
 
     enum class FolderValueType {
