@@ -1937,7 +1937,15 @@ void Beam::setBeamPos(const PairF& bp)
 void Beam::setNoSlope(bool b)
 {
     _noSlope = b;
-    setUserModified(false);
+
+    // Make flat if usermodified
+    if (_noSlope) {
+        int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+        if (_userModified[idx]) {
+            BeamFragment* f = fragments.back();
+            f->py1[idx] = f->py2[idx] = (f->py1[idx] + f->py2[idx]) * 0.5;
+        }
+    }
 }
 
 //---------------------------------------------------------
