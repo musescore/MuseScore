@@ -147,7 +147,14 @@ public:
 
     void layout1();
     void layout() override;
-    mu::PointF chordBeamAnchor(Chord* chord) const;
+
+    enum class ChordBeamAnchorType {
+        Start, End, Middle
+    };
+
+    qreal chordBeamAnchorX(const Chord* chord, ChordBeamAnchorType anchorType) const;
+    qreal chordBeamAnchorY(const Chord* chord) const;
+    PointF chordBeamAnchor(const Chord* chord, ChordBeamAnchorType anchorType) const;
 
     const std::vector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }

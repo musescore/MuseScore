@@ -487,8 +487,7 @@ double Chord::noteHeadWidth() const
 //! Returns Chord coordinates
 double Chord::stemPosX() const
 {
-    const Staff* staff = this->staff();
-    const StaffType* staffType = staff ? staff->staffTypeForElement(this) : nullptr;
+    const StaffType* staffType = this->staffType();
     if (staffType && staffType->isTabStaff()) {
         return staffType->chordStemPosX(this) * spatium();
     }
@@ -1029,10 +1028,10 @@ void Chord::computeUp()
             PointF startAnchor = PointF();
             PointF endAnchor = PointF();
             if (firstCr->isChord()) {
-                startAnchor = _beam->chordBeamAnchor(toChord(firstCr));
+                startAnchor = _beam->chordBeamAnchor(toChord(firstCr), Beam::ChordBeamAnchorType::Start);
             }
             if (lastCr->isChord()) {
-                endAnchor = _beam->chordBeamAnchor(toChord(lastCr));
+                endAnchor = _beam->chordBeamAnchor(toChord(lastCr), Beam::ChordBeamAnchorType::End);
             }
 
             if (this == _beam->elements().front()) {
