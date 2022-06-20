@@ -4362,6 +4362,7 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
     }
 
     LayoutChords::updateGraceNotes(this);
+    LayoutChords::updateLineAttachPoints(this);
 
     x = computeFirstSegmentXPosition(s);
     bool isSystemHeader = s->header();

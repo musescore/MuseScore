@@ -3860,10 +3860,46 @@ double Note::computePadding(const EngravingItem* nextItem) const
     }
     // Main-to-grace
     if (!isGrace() && nextItem->isNote() && toNote(nextItem)->isGrace()) {
-        qDebug() << nextItem->typeName();
         padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToMainNoteDist)));
     }
 
+    if (nextItem->isNote()) {
+        // This is where space for minTieLength and minGlissandoLength is allocated by making sure
+        // there is enough distance between the attach points
+        double minEndPointsDistance = 0.0;
+        const double minGlissandoLength = 1.2 * spatium(); // TODO: style settings
+        for (LineAttachPoint thisLAP : lineAttachPoints()) {
+            for (LineAttachPoint nextLAP : toNote(nextItem)->lineAttachPoints()) {
+                if (thisLAP.line() != nextLAP.line()) {
+                    continue;
+                }
+                if (thisLAP.line()->isTie()) {
+                    minEndPointsDistance = score()->styleMM(Sid::MinTieLength);
+                }
+                if (thisLAP.line()->isGlissando()) {
+                    minEndPointsDistance = minGlissandoLength;
+                }
+                double lapPadding = (thisLAP.pos().x() - headWidth()) + minEndPointsDistance - nextLAP.pos().x();
+                lapPadding *= scaling;
+                padding = std::max(padding, lapPadding);
+            }
+        }
+    }
+
     return padding;
+}
+
+mu::PointF Note::posInStaffCoordinates()
+{
+    double X = x() + chord()->x() + chord()->segment()->x() + chord()->measure()->x() + headWidth() / 2;
+    return mu::PointF(X, y());
+}
+
+void Note::addLineAttachPoint(PointF point, EngravingItem* line)
+{
+    // IMPORTANT: the point is expected in *staff* coordinates
+    // We transform into note coordinates by subtracting the note position in staff coordinates
+    point -= posInStaffCoordinates();
+    _lineAttachPoints.push_back(LineAttachPoint(line, point.x(), point.y()));
 }
 }

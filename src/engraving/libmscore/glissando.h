@@ -94,6 +94,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+    void addLineAttachPoints();
 };
 } // namespace mu::engraving
 
