@@ -344,33 +344,43 @@ TEST_F(BarlineTests, barline179726)
     Measure* m = score->firstMeasure();
 
     // drop NORMAL onto initial START_REPEAT barline will remove that START_REPEAT
-    dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
+    Segment* seg = m->findSegment(SegmentType::StartRepeatBarLine, m->tick());
+    EXPECT_TRUE(seg);
+    dropNormalBarline(seg->elementAt(0));
     EXPECT_EQ(m->findSegment(SegmentType::StartRepeatBarLine, Fraction(0, 1)), nullptr);
 
     // drop NORMAL onto END_START_REPEAT will turn into NORMAL
-    dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
-    BarLine* bar = static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+    seg = m->findSegment(SegmentType::EndBarLine, m->endTick());
+    EXPECT_TRUE(seg);
+    dropNormalBarline(seg->elementAt(0));
+    seg = m->findSegment(SegmentType::EndBarLine, m->endTick());
+    EXPECT_TRUE(seg);
+    BarLine* bar = static_cast<BarLine*>(seg->elementAt(0));
     EXPECT_TRUE(bar);
     EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
 
     m = m->nextMeasure();
 
     // drop NORMAL onto the END_REPEAT part of an END_START_REPEAT straddling a newline will turn into NORMAL at the end of this meas
-    dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
-    bar = static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+    seg = m->findSegment(SegmentType::EndBarLine, m->endTick());
+    EXPECT_TRUE(seg);
+    dropNormalBarline(seg->elementAt(0));
+    bar = static_cast<BarLine*>(seg->elementAt(0));
     EXPECT_TRUE(bar);
     EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
 
     m = m->nextMeasure();
 
     // but leave START_REPEAT at the beginning of the newline
-    bar = static_cast<BarLine*>(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
+    seg = m->findSegment(SegmentType::StartRepeatBarLine, m->tick());
+    bar = static_cast<BarLine*>(seg->elementAt(0));
     EXPECT_TRUE(bar);
 
     // drop NORMAL onto the meas ending with an END_START_REPEAT straddling a newline will turn into NORMAL at the end of this meas
     // but note I'm not verifying what happens to the START_REPEAT at the beginning of the newline...I'm not sure that behavior is well-defined yet
     dropNormalBarline(m);
-    bar = static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+    seg = m->findSegment(SegmentType::EndBarLine, m->endTick());
+    bar = static_cast<BarLine*>(seg->elementAt(0));
     EXPECT_TRUE(bar);
     EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
 
@@ -378,18 +388,23 @@ TEST_F(BarlineTests, barline179726)
     m = m->nextMeasure();
 
     // drop NORMAL onto the START_REPEAT part of an END_START_REPEAT straddling a newline will remove the START_REPEAT at the beginning of this measure
-    dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
+    seg = m->findSegment(SegmentType::StartRepeatBarLine, m->tick());
+    dropNormalBarline(seg->elementAt(0));
     EXPECT_EQ(m->findSegment(SegmentType::StartRepeatBarLine, m->tick()), nullptr);
 
     // but leave END_REPEAT at the end of previous line
-    bar = static_cast<BarLine*>(m->prevMeasure()->findSegment(SegmentType::EndBarLine, m->tick())->elementAt(0));
+    seg = m->prevMeasure()->findSegment(SegmentType::EndBarLine, m->tick());
+    EXPECT_TRUE(seg);
+    bar = static_cast<BarLine*>(seg->elementAt(0));
     EXPECT_TRUE(bar);
     EXPECT_EQ(bar->barLineType(), BarLineType::END_REPEAT);
 
     for (int i = 0; i < 4; i++, m = m->nextMeasure()) {
         // drop NORMAL onto END_REPEAT, BROKEN, DOTTED, DOUBLE at the end of this meas will turn into NORMAL
-        dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
-        bar = static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+        seg = m->findSegment(SegmentType::EndBarLine, m->endTick());
+        EXPECT_TRUE(seg);
+        dropNormalBarline(seg->elementAt(0));
+        bar = static_cast<BarLine*>(seg->elementAt(0));
         EXPECT_TRUE(bar);
         EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
     }
@@ -397,12 +412,15 @@ TEST_F(BarlineTests, barline179726)
     m = m->nextMeasure();
 
     // drop NORMAL onto a START_REPEAT in middle of a line will remove the START_REPEAT at the beginning of this measure
-    dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
+    seg = m->findSegment(SegmentType::StartRepeatBarLine, m->tick());
+    dropNormalBarline(seg->elementAt(0));
     EXPECT_EQ(m->findSegment(SegmentType::StartRepeatBarLine, m->tick()), nullptr);
 
     // drop NORMAL onto final END_REPEAT at end of score will turn into NORMAL
-    dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
-    bar = static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+    seg = m->findSegment(SegmentType::EndBarLine, m->endTick());
+    EXPECT_TRUE(seg);
+    dropNormalBarline(seg->elementAt(0));
+    bar = static_cast<BarLine*>(seg->elementAt(0));
     EXPECT_TRUE(bar);
     EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
 

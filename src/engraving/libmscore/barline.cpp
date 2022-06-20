@@ -67,22 +67,37 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     if (!m) {
         return;
     }
-
-    if (barType == BarLineType::START_REPEAT) {
-        m = m->nextMeasure();
-        if (!m) {
-            return;
-        }
-    } else if (bl->barLineType() == BarLineType::START_REPEAT) {
-        if (barType != BarLineType::END_REPEAT) {
-            m->undoChangeProperty(Pid::REPEAT_START, false);
-        }
+    bool isStartRepeat = barType == BarLineType::END_START_REPEAT || barType == BarLineType::START_REPEAT;
+    if (bl->barLineType() == BarLineType::START_REPEAT) {
         m = m->prevMeasure();
         if (!m) {
+            if (!isStartRepeat) {
+                bl->measure()->undoChangeProperty(Pid::REPEAT_START, false);
+            }
             return;
         }
     }
-
+    if (m->nextMeasure()) {
+        if (isStartRepeat || bl->barLineType() == BarLineType::START_REPEAT || m->system() == m->nextMeasure()->system()) {
+            m->nextMeasure()->undoChangeProperty(Pid::REPEAT_START, isStartRepeat);
+        }
+        if (!isStartRepeat) {
+            if (bl->score()->selection().element() == bl) {
+                bl->score()->select(const_cast<BarLine*>(m->endBarLine()));
+            }
+            if (bl->barLineType() == BarLineType::START_REPEAT) {
+                bl->score()->onElementDestruction(bl);
+                if (m->system() != m->nextMeasure()->system()) {
+                    return; // don't touch the previous barline if it's on a different system
+                }
+                bl = const_cast<BarLine*>(m->endBarLine());
+            }
+        }
+    }
+    bool isEndRepeat = barType == BarLineType::END_START_REPEAT || barType == BarLineType::END_REPEAT;
+    if (isEndRepeat || (m->nextMeasure() && m->system() == m->nextMeasure()->system())) {
+        m->undoChangeProperty(Pid::REPEAT_END, isEndRepeat);
+    }
     switch (barType) {
     case BarLineType::END:
     case BarLineType::NORMAL:
@@ -189,8 +204,8 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
         }
         for (Score* lscore : m2->score()->scoreList()) {
             Measure* lmeasure = lscore->tick2measure(m2->tick());
-            if (lmeasure) {
-                lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+            if (lmeasure && lmeasure->nextMeasure()) {
+                lmeasure->nextMeasure()->undoChangeProperty(Pid::REPEAT_START, true);
             }
         }
     }
@@ -1503,18 +1518,8 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
 void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::BARLINE_TYPE && segment()) {
-        const BarLine* bl = this;
         BarLineType blType = v.value<BarLineType>();
-        if (blType == BarLineType::START_REPEAT) {     // change next measures endBarLine
-            if (bl->measure()->nextMeasure()) {
-                bl = bl->measure()->nextMeasure()->endBarLine();
-            } else {
-                bl = 0;
-            }
-        }
-        if (bl) {
-            undoChangeBarLineType(const_cast<BarLine*>(bl), v.value<BarLineType>(), true);
-        }
+        undoChangeBarLineType(this, v.value<BarLineType>(), true);
     } else {
         EngravingObject::undoChangeProperty(id, v, ps);
     }

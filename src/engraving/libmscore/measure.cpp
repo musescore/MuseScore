@@ -3463,6 +3463,12 @@ void Measure::barLinesSetSpan(Segment* seg)
             bl->setSpanTo(staff->barLineTo());
             bl->layout();
             score()->addElement(bl);
+            if (score()->selection().element() && score()->selection().element()->isBarLine()) {
+                BarLine* existing = toBarLine(score()->selection().element());
+                if (existing->track() == track) {
+                    score()->select(bl);
+                }
+            }
         }
         track += VOICES;
     }
