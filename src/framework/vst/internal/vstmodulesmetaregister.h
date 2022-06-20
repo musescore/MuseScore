@@ -23,13 +23,13 @@
 #ifndef MU_VST_VSTMODULESMETAREGISTER_H
 #define MU_VST_VSTMODULESMETAREGISTER_H
 
-#include <QJsonDocument>
 #include <QJsonObject>
 #include <QString>
 
 #include "modularity/ioc.h"
-#include "io/file.h"
+#include "io/path.h"
 #include "audio/audiotypes.h"
+#include "io/ifilesystem.h"
 
 #include "ivstconfiguration.h"
 #include "vsttypes.h"
@@ -38,35 +38,40 @@ namespace mu::vst {
 class VstModulesMetaRegister
 {
     INJECT(vst, IVstConfiguration, config)
+    INJECT(vst, io::IFileSystem, fileSystem)
 public:
     VstModulesMetaRegister() = default;
-    ~VstModulesMetaRegister();
 
     using ModulesMap = std::unordered_map<audio::AudioResourceId, PluginModulePtr>;
     using PathMap = std::unordered_map<audio::AudioResourceId, io::path_t>;
 
     void init();
-    void registerPlugins(const ModulesMap& modules, PathMap&& paths);
+    void registerPath(const audio::AudioResourceId& resourceId, const io::path_t& path);
+    void registerPlugin(const audio::AudioResourceId& resourceId, PluginModulePtr module, const bool enabled = true);
 
     const io::path_t& pluginPath(const audio::AudioResourceId& resourceId) const;
     const audio::AudioResourceMetaList& metaList(const VstPluginType type) const;
 
+    bool exists(const audio::AudioResourceId& resourceId) const;
+    bool exists(const io::path_t& path) const;
     bool isEmpty() const;
 
 private:
     void clear();
 
-    void readMetaList();
-    void writeMetaList();
+    void load();
+    void save();
 
     QJsonObject metaToJson(const audio::AudioResourceMeta& meta) const;
     audio::AudioResourceMeta metaFromJson(const QJsonObject& object) const;
     VstPluginType pluginTypeFromString(const QString& string) const;
     const QString& pluginTypeToString(const VstPluginType type) const;
 
-    io::File m_file;
+    bool hasNativeEditorSupport() const;
 
-    std::map<VstPluginType, audio::AudioResourceMetaList> m_metaMap;
+    io::path_t m_knownPluginsDir;
+
+    std::map<VstPluginType, audio::AudioResourceMetaSet> m_metaMap;
     PathMap m_paths;
 };
 }

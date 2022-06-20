@@ -59,7 +59,8 @@ public:
     void refresh() override;
 
 private:
-    void addModule(const io::path_t& path) const;
+    PluginModulePtr createModule(const io::path_t& path);
+    void addModule(const io::path_t& path);
     audio::AudioResourceMetaList modulesMetaList(const VstPluginType& type) const;
 
     io::paths_t pluginPathsFromCustomLocations(const io::paths_t& customPaths) const;
