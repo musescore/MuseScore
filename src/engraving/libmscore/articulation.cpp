@@ -246,7 +246,7 @@ void Articulation::write(XmlWriter& xml) const
 String Articulation::typeUserName() const
 {
     if (m_textType != TextType::NO_TEXT) {
-        return artTypeToInfo.at(m_textType).text;
+        return artTypeToInfo.at(m_textType).name;
     }
 
     return SymNames::translatedUserNameForSymId(symId());
