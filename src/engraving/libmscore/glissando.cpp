@@ -404,6 +404,30 @@ void Glissando::layout()
     RectF r = RectF(anchor2SystPos - segm2->pos(), anchor2SystPos - segm2->pos() - segm2->pos2()).normalized();
     qreal lw = lineWidth() * .5;
     setbbox(r.adjusted(-lw, -lw, lw, lw));
+
+    addLineAttachPoints();
+}
+
+void Glissando::addLineAttachPoints()
+{
+    auto seg = toGlissandoSegment(frontSegment());
+    Note* startNote = nullptr;
+    Note* endNote = nullptr;
+    if (startElement() && startElement()->isNote()) {
+        startNote = toNote(startElement());
+    }
+    if (endElement() && endElement()->isNote()) {
+        endNote = toNote(endElement());
+    }
+    if (!seg || !startNote || !endNote || (startNote->findMeasure() != endNote->findMeasure())) {
+        return;
+    }
+    double startX = seg->ipos().x();
+    double endX = seg->pos2().x() + seg->ipos().x(); // because pos2 is relative to ipos
+    // Here we don't pass y() because its value is unreliable during the first stages of layout.
+    // The y() is irrelevant anyway for horizontal spacing.
+    startNote->addLineAttachPoint(PointF(startX, 0.0), this);
+    endNote->addLineAttachPoint(PointF(endX, 0.0), this);
 }
 
 //---------------------------------------------------------

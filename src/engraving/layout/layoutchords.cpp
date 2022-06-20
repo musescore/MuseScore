@@ -31,6 +31,8 @@
 #include "libmscore/segment.h"
 #include "libmscore/staff.h"
 #include "libmscore/stemslash.h"
+#include "libmscore/tie.h"
+#include "libmscore/glissando.h"
 
 using namespace mu::engraving;
 
@@ -1244,6 +1246,78 @@ void LayoutChords::repositionGraceNotesAfter(Segment* segment)
             double offset = segment->rxpos() - chord->parentItem()->parentItem()->rxpos();
             // Difference between the segment they "belong" and the segment they are "appended" to.
             chord->setPos(chord->pos().x() + offset, 0.0);
+        }
+    }
+}
+
+void LayoutChords::updateLineAttachPoints(Measure* measure)
+{
+    for (Segment& s : measure->segments()) {
+        if (!s.isChordRestType()) {
+            continue;
+        }
+        for (EngravingItem* e : s.elist()) {
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(e);
+            for (Note* n : c->notes()) {
+                n->lineAttachPoints().clear();
+            }
+            for (Chord* ch : c->graceNotes()) {
+                for (Note* n : ch->notes()) {
+                    n->lineAttachPoints().clear();
+                }
+            }
+        }
+    }
+    for (Segment& s : measure->segments()) {
+        if (!s.isChordRestType()) {
+            continue;
+        }
+        for (EngravingItem* e : s.elist()) {
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(e);
+            doUpdateLineAttachPoints(c);
+            for (Chord* gn : c->graceNotes()) {
+                doUpdateLineAttachPoints(gn);
+            }
+        }
+    }
+    for (Segment& s : measure->segments()) {
+        s.createShapes();
+    }
+}
+
+/* We perform a pre-layout of ties and glissandi to obtain the attach points and attach them to
+ * the notes of the chord. Will be needed for spacing calculation, particularly to
+ * enforce minTieLength. The true layout of ties and glissandi is done much later. */
+void LayoutChords::doUpdateLineAttachPoints(Chord* chord)
+{
+    if (chord->endsGlissando()) {
+        for (Note* note : chord->notes()) {
+            for (Spanner* sp : note->spannerBack()) {
+                if (sp->isGlissando()) {
+                    Glissando* gliss = toGlissando(sp);
+                    if (gliss->startElement() && gliss->startElement()->isNote()) {
+                        Note* startNote = toNote(gliss->startElement());
+                        if (startNote->findMeasure() == chord->measure()) {
+                            gliss->layout(); // line attach points are updated here
+                        }
+                    }
+                }
+            }
+        }
+    }
+    for (Note* note : chord->notes()) {
+        Tie* tie = note->tieFor();
+        if (tie) {
+            Note* endNote = tie->endNote();
+            if (endNote && endNote->findMeasure() == note->findMeasure()) {
+                tie->layoutFor(note->findMeasure()->system()); // line attach points are updated here
+            }
         }
     }
 }

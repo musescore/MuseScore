@@ -626,7 +626,9 @@ void TieSegment::adjustX()
     // ADJUST LEFT GRIP -----------
     if (sc && (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN)) {
         // grips are in system coordinates, normalize to note position
-        PointF p1 = ups(Grip::START).p + PointF(system()->pos().x() - sn->canvasX() + sn->headWidth(), 0);
+        // (now generalized for the case of non-defined system (M.S.))
+        PointF p1 = system() ? ups(Grip::START).p + PointF(system()->pos().x() - sn->canvasX() + sn->headWidth(), 0)
+                    : ups(Grip::START).p + sn->posInStaffCoordinates();
         xo = 0;
         if (tie()->isInside()) {  // only adjust for inside-style ties
             // for cross-voice collisions, we need a list of all chords at this tick
@@ -722,7 +724,9 @@ void TieSegment::adjustX()
     // ADJUST RIGHT GRIP ----------
     if (ec && (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END)) {
         // grips are in system coordinates, normalize to note position
-        PointF p2 = ups(Grip::END).p + PointF(system()->pos().x() - en->canvasX(), 0);
+        // (now generalized for the case of non-defined system (M.S.))
+        PointF p2 = system() ? ups(Grip::END).p + PointF(system()->pos().x() - en->canvasX(), 0)
+                    : ups(Grip::END).p + en->posInStaffCoordinates();
         xo = 0;
         if (tie()->isInside()) {
             // for inter-voice collisions, we need a list of all notes from all voices
@@ -821,6 +825,17 @@ bool TieSegment::isEdited() const
         }
     }
     return false;
+}
+
+void TieSegment::addLineAttachPoints()
+{
+    // Add tie attach point to start and end note
+    Note* startNote = tie()->startNote();
+    Note* endNote = tie()->endNote();
+    if (endNote && endNote->findMeasure() == startNote->findMeasure()) {
+        startNote->addLineAttachPoint(ups(Grip::START).pos(), tie());
+        endNote->addLineAttachPoint(ups(Grip::END).pos(), tie());
+    }
 }
 
 //---------------------------------------------------------
@@ -1162,6 +1177,7 @@ TieSegment* Tie::layoutFor(System* system)
     segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     segment->adjustX(); // adjust horizontally for inside-style ties
     segment->finalizeSegment(); // compute bezier and set bbox
+    segment->addLineAttachPoints(); // add attach points to start and end note
     return segment;
 }
 

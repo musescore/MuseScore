@@ -96,9 +96,10 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     Fraction prevMinTicks = Fraction(1, 1);
     bool changeMinSysTicks = false;
     qreal oldStretch = 1;
+    System* oldSystem = nullptr;
 
     while (ctx.curMeasure) {      // collect measure for system
-        System* oldSystem = ctx.curMeasure->system();
+        oldSystem = ctx.curMeasure->system();
         system->appendMeasure(ctx.curMeasure);
 
         qreal ww  = 0;          // width of current measure
@@ -455,6 +456,11 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     system->setWidth(pos.x());
 
     layoutSystemElements(options, ctx, score, system);
+    if (oldSystem) {
+        // We may have previously processed some elements of the first measure of next system.
+        // This restores the correct state.
+        layoutSystemElements(options, ctx, score, oldSystem);
+    }
     system->layout2(ctx);     // compute staff distances
     for (MeasureBase* mb : system->measures()) {
         mb->layoutCrossStaff();
