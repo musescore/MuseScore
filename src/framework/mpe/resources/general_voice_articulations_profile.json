@@ -2806,7 +2806,7 @@
         "Legato": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 11500,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
