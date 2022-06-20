@@ -46,6 +46,8 @@ public:
     static void updateGraceNotes(Measure* measure);
     static void repositionGraceNotesAfter(Segment* segment);
     static void appendGraceNotes(Chord* chord);
+    static void updateLineAttachPoints(Measure* measure);
+    static void doUpdateLineAttachPoints(Chord* chord);
 };
 }
 

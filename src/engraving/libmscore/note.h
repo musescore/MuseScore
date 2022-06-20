@@ -58,6 +58,26 @@ enum class AccidentalType;
 
 static constexpr int MAX_DOTS = 4;
 
+//--------------------------------------------------------------------------------
+// LINE ATTACHMENT POINT
+// Represents the attachment point of any line (tie, slur, glissando...)
+// with respect to the note. Each note can hold a vector of line attach points, which
+// it may use to make spacing decision with the surrounding items.
+//--------------------------------------------------------------------------------
+class LineAttachPoint
+{
+private:
+    EngravingItem* _line = nullptr;
+    PointF _pos = PointF(0.0, 0.0);
+
+public:
+    LineAttachPoint(EngravingItem* l, double x, double y)
+        : _line(l), _pos(PointF(x, y)) {}
+
+    const EngravingItem* line() const { return _line; }
+    const PointF pos() const { return _pos; }
+};
+
 //---------------------------------------------------------
 //   @@ NoteHead
 //---------------------------------------------------------
@@ -251,6 +271,8 @@ private:
     static String tpcUserName(int tpc, int pitch, bool explicitAccidental);
 
     bool sameVoiceKerningLimited() const override { return true; }
+
+    std::vector<LineAttachPoint> _lineAttachPoints;
 
 public:
 
@@ -522,6 +544,12 @@ public:
     bool harmonic() const { return _harmonic; }
 
     bool isGrace() const { return noteType() != NoteType::NORMAL; }
+
+    void addLineAttachPoint(mu::PointF point, EngravingItem* line);
+    std::vector<LineAttachPoint>& lineAttachPoints() { return _lineAttachPoints; }
+    const std::vector<LineAttachPoint>& lineAttachPoints() const { return _lineAttachPoints; }
+
+    mu::PointF posInStaffCoordinates();
 };
 } // namespace mu::engraving
 #endif
