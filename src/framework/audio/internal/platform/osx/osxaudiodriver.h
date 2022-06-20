@@ -44,7 +44,6 @@ class OSXAudioDriver : public IAudioDriver
 public:
     OSXAudioDriver();
     ~OSXAudioDriver();
-    const static AudioDeviceID DEFAULT_DEVICE_ID;
 
     void init() override;
 
@@ -77,7 +76,7 @@ private:
     std::map<unsigned int, std::string> m_outputDevices = {}, m_inputDevices = {};
     async::Notification m_outputDeviceChanged;
     async::Notification m_availableOutputDevicesChanged;
-    AudioDeviceID m_deviceId = DEFAULT_DEVICE_ID;
+    AudioDeviceID m_deviceId;
 };
 }
 #endif // MU_AUDIO_OSXAUDIODRIVER_H

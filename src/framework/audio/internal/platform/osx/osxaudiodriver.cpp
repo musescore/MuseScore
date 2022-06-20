@@ -31,7 +31,7 @@
 typedef AudioDeviceID OSXAudioDeviceID;
 
 using namespace mu::audio;
-const std::string OSXAudioDriver::DEFAULT_DEVICE_ID = "Systems default";
+static constexpr char DEFAULT_DEVICE_ID[] = "Systems default";
 
 struct OSXAudioDriver::Data {
     Spec format;
@@ -48,6 +48,8 @@ OSXAudioDriver::OSXAudioDriver()
 
     initDeviceMapListener();
     updateDeviceMap();
+
+    m_deviceId = DEFAULT_DEVICE_ID;
 }
 
 OSXAudioDriver::~OSXAudioDriver()
