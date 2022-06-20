@@ -617,7 +617,50 @@ int Beam::getBeamCount(const std::vector<ChordRest*> chordRests) const
     return beamCount;
 }
 
-PointF Beam::chordBeamAnchor(Chord* chord) const
+double Beam::chordBeamAnchorX(const Chord* chord, ChordBeamAnchorType anchorType) const
+{
+    double stemPosX = chord->stemPosX() + chord->pagePos().x() - pagePos().x();
+
+    if (!chord->stem()) {
+        return stemPosX;
+    }
+
+    double stemWidth = chord->stem()->lineWidth().val() * chord->mag();
+
+    switch (anchorType) {
+    case ChordBeamAnchorType::Start:
+        if (_tab) {
+            return stemPosX - 0.5 * stemWidth;
+        }
+
+        if (chord->up()) {
+            return stemPosX - stemWidth;
+        }
+
+        break;
+    case ChordBeamAnchorType::Middle:
+        if (_tab) {
+            return stemPosX;
+        }
+
+        return chord->up() ? stemPosX - 0.5 * stemWidth : stemPosX + 0.5 * stemWidth;
+
+    case ChordBeamAnchorType::End:
+        if (_tab) {
+            return stemPosX + 0.5 * stemWidth;
+        }
+
+        if (!chord->up()) {
+            return stemPosX + stemWidth;
+        }
+
+        break;
+    }
+
+    return stemPosX;
+}
+
+double Beam::chordBeamAnchorY(const Chord* chord) const
 {
     Note* note = chord->up() ? chord->downNote() : chord->upNote();
     PointF position = note->pagePos();
@@ -625,16 +668,20 @@ PointF Beam::chordBeamAnchor(Chord* chord) const
     int upValue = chord->up() ? -1 : 1;
     double beamOffset = _beamWidth / 2 * upValue;
 
-    double x = chord->stemPosX() + chord->pagePos().x() - pagePos().x();
-    double y = position.y() + (chord->defaultStemLength() * upValue) - beamOffset;
     if (_isBesideTabStaff) {
-        StaffType const* staffType = chord->staff()->staffType(chord->tick());
-        double stemLength = staffType->chordStemLength(chord);
-        y = _tab->chordRestStemPosY(chord) + stemLength;
+        double stemLength = _tab->chordStemLength(chord);
+        double y = _tab->chordRestStemPosY(chord) + stemLength;
         y *= spatium();
         y -= beamOffset;
+        return y;
     }
-    return PointF(x, y);
+
+    return position.y() + (chord->defaultStemLength() * upValue) - beamOffset;
+}
+
+PointF Beam::chordBeamAnchor(const Chord* chord, ChordBeamAnchorType anchorType) const
+{
+    return PointF(chordBeamAnchorX(chord, anchorType), chordBeamAnchorY(chord));
 }
 
 void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
@@ -684,24 +731,11 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
         overallUp = firstUp;
     }
 
-    PointF posStart = chordBeamAnchor(startChord);
-    PointF posEnd = chordBeamAnchor(endChord);
+    const double startX = chordBeamAnchorX(startChord, ChordBeamAnchorType::Start);
+    const double endX = chordBeamAnchorX(endChord, ChordBeamAnchorType::End);
 
-    double startOffsetX = 0.0;
-    double endOffsetX = 0.0;
-
-    if (startChord->stem() && startChord->up() && !_tab) {
-        startOffsetX = -startChord->stem()->lineWidth().val() * startChord->mag();
-    }
-    if (endChord->stem() && !endChord->up() && !_tab) {
-        endOffsetX = endChord->stem()->lineWidth().val() * endChord->mag();
-    }
-
-    const double startX = posStart.x() + startOffsetX;
-    const double endX = posEnd.x() + endOffsetX;
-
-    double startY = _slope * (posStart.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
-    double endY = _slope * (posEnd.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
+    double startY = _slope * (startX - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
+    double endY = _slope * (endX - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
 
     int beamsBelow = 0; // how many beams below level 0?
     int beamsAbove = 0; // how many beams above level 0?
@@ -761,8 +795,8 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
         if (level > 0) {
             double grow = _grow1;
             if (!qFuzzyCompare(_grow1, _grow2)) {
-                PointF anchor = chordBeamAnchor(chord);
-                double proportionAlongX = (anchor.x() - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
+                double anchorX = chordBeamAnchorX(chord, ChordBeamAnchorType::Middle);
+                double proportionAlongX = (anchorX - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
                 grow = proportionAlongX * (_grow2 - _grow1) + _grow1;
             }
 
@@ -863,27 +897,15 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Bre
 
 void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
 {
-    PointF chordPos = chordBeamAnchor(chord);
-
-    const double stemWidth = chord->stem() ? chord->stem()->lineWidth().val() * chord->mag() : 0;
-    double startOffsetX = 0;
-    if (!_tab) {
-        if (isBefore && !chord->up()) {
-            startOffsetX = stemWidth;
-        } else if (!isBefore && chord->up()) {
-            startOffsetX = -stemWidth;
-        }
-    }
-
-    const double startX = chordPos.x() + startOffsetX;
+    const double startX = chordBeamAnchorX(chord, isBefore ? ChordBeamAnchorType::End : ChordBeamAnchorType::Start);
 
     const double beamletLength = score()->styleMM(Sid::beamMinLen).val()
                                  * mag()
                                  * chord->staff()->staffMag(chord);
 
-    const double endX = chordPos.x() + (isBefore ? -beamletLength : beamletLength);
+    const double endX = startX + (isBefore ? -beamletLength : beamletLength);
 
-    double startY = _slope * (chordPos.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
+    double startY = _slope * (startX - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
     double endY = _slope * (endX - startX) + startY;
 
     // how many beams past level 0 (i.e. beams on the other side of level 0 for this subgroup)
@@ -1029,7 +1051,7 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
             continue;
         }
         Chord* chord = toChord(chordRest);
-        PointF anchor = chordBeamAnchor(chord) - pagePos();
+        PointF anchor = chordBeamAnchor(chord, ChordBeamAnchorType::Middle) - pagePos();
         double reduction = 0;
         if (chordRest != _elements.back() && chordRest != _elements.front()) {
             double minLength = chord->beams() < 6
@@ -1068,7 +1090,7 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
 
 void Beam::extendStem(Chord* chord, double addition)
 {
-    PointF anchor = chordBeamAnchor(chord);
+    PointF anchor = chordBeamAnchor(chord, ChordBeamAnchorType::Middle);
     double desiredY;
     if (_endAnchor.x() > _startAnchor.x()) {
         double proportionAlongX = (anchor.x() - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
@@ -1271,8 +1293,8 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
 
     Chord* startChord = toChord(chordRests.front());
     Chord* endChord = toChord(chordRests.back());
-    _startAnchor = chordBeamAnchor(startChord);
-    _endAnchor = chordBeamAnchor(endChord);
+    _startAnchor = chordBeamAnchor(startChord, ChordBeamAnchorType::Start);
+    _endAnchor = chordBeamAnchor(endChord, ChordBeamAnchorType::End);
 
     if (_isGrace) {
         _beamDist *= score()->styleD(Sid::graceNoteMag);
@@ -1365,7 +1387,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
                         }
                         bottomLast = c;
                     }
-                    maxY = std::min(maxY, chordBeamAnchor(toChord(c)).y());
+                    maxY = std::min(maxY, chordBeamAnchorY(toChord(c)));
                 } else {
                     // this chord is on the top staff
                     if (penultimateTopIsSame) {
@@ -1391,7 +1413,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
                         }
                         topLast = c;
                     }
-                    minY = std::max(minY, chordBeamAnchor(toChord(c)).y());
+                    minY = std::max(minY, chordBeamAnchorY(toChord(c)));
                 }
             }
             _startAnchor.ry() = (maxY + minY) / 2;
