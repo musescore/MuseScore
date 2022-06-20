@@ -14,7 +14,7 @@
    <string>Note Groups</string>
   </property>
   <property name="title">
-   <string>Note Groups</string>
+   <string>Beam groups</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -170,7 +170,7 @@
         </size>
        </property>
        <property name="title">
-        <string>Beam properties</string>
+        <string>Beam selector</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>

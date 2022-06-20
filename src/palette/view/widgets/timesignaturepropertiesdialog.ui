@@ -46,7 +46,7 @@
            </sizepolicy>
           </property>
           <property name="title">
-           <string>Note Groups</string>
+           <string>Beam groups</string>
           </property>
          </widget>
         </item>
@@ -79,7 +79,7 @@
         <item row="0" column="0" colspan="2">
          <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
-           <string>Appearance</string>
+           <string>Appearance (visual only; will not affect actual measure duration)</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_3">
            <property name="verticalSpacing">
