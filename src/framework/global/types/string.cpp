@@ -315,9 +315,10 @@ String String::fromUtf8(const char* str)
 
 ByteArray String::toUtf8() const
 {
-    std::string str;
-    UtfCodec::utf16to8(std::u16string_view(constStr()), str);
-    return ByteArray(reinterpret_cast<const uint8_t*>(str.c_str()), str.size());
+    ByteArray ba;
+    std::u16string_view v(constStr());
+    utf8::utf16to8(v.begin(), v.end(), std::back_inserter(ba));
+    return ba;
 }
 
 String String::fromAscii(const char* str, size_t size)
