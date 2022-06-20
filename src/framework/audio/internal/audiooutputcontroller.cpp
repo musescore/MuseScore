@@ -27,7 +27,10 @@ using namespace mu::audio;
 
 void AudioOutputController::init()
 {
-    audioDriver()->selectOutputDevice(configuration()->audioOutputDeviceId());
+    AudioDeviceID preferredDeviceId = configuration()->audioOutputDeviceId();
+    if (!preferredDeviceId.empty()) {
+        audioDriver()->selectOutputDevice(configuration()->audioOutputDeviceId());
+    }
 
     audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
         checkConnection();
@@ -55,25 +58,12 @@ void AudioOutputController::checkConnection()
     AudioDeviceID currentDeviceId = audioDriver()->outputDevice();
     AudioDeviceList devices = audioDriver()->availableOutputDevices();
 
-    if (preferredDeviceId != currentDeviceId && containsDevice(devices, preferredDeviceId)) {
+    if (!preferredDeviceId.empty() && preferredDeviceId != currentDeviceId && containsDevice(devices, preferredDeviceId)) {
         audioDriver()->selectOutputDevice(preferredDeviceId);
         return;
     }
 
     if (!containsDevice(devices, currentDeviceId)) {
         audioDriver()->resetToDefaultOutputDevice();
-    }
-}
-
-void AudioOutputController::connectCurrentOutputDevice()
-{
-    AudioDeviceID deviceId = configuration()->audioOutputDeviceId();
-    if (deviceId.empty()) {
-        return;
-    }
-
-    bool ok = audioDriver()->selectOutputDevice(deviceId);
-    if (!ok) {
-        LOGW() << "failed connect to output device, deviceId: " << deviceId;
     }
 }

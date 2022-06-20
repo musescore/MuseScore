@@ -25,8 +25,8 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iaudioconfiguration.h"
-#include "iaudiodriver.h"
+#include "../iaudioconfiguration.h"
+#include "../iaudiodriver.h"
 
 namespace mu::audio {
 class AudioOutputController : public async::Asyncable

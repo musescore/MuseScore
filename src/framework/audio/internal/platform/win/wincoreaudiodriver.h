@@ -36,9 +36,8 @@ class CoreAudioDriver : public IAudioDriver, public async::Asyncable
 public:
     CoreAudioDriver();
     ~CoreAudioDriver();
-    const static std::string DEFAULT_DEVICE_NAME;
 
-    void init();
+    void init() override;
 
     std::string name() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
@@ -70,7 +69,7 @@ private:
     AudioDevicesListener m_devicesListener;
     async::Notification m_availableOutputDevicesChanged;
 
-    std::string m_deviceId = DEFAULT_DEVICE_NAME;
+    std::string m_deviceId;
 };
 }
 

@@ -25,7 +25,7 @@
 #include <thread>
 
 #include "async/notification.h"
-#include "audiotypes.h"
+#include "../audiotypes.h"
 
 namespace mu::audio {
 class AudioDevicesListener

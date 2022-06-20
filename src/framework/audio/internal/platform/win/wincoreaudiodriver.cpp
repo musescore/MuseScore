@@ -63,7 +63,7 @@ static std::string lpwstrToString(const LPWSTR& lpwstr)
 static void logError(HRESULT hr);
 
 static WinCoreData* s_data = nullptr;
-const std::string CoreAudioDriver::DEFAULT_DEVICE_NAME = "default";
+static constexpr char DEFAULT_DEVICE_ID[] = "default";
 static IAudioDriver::Spec s_format;
 
 const IID MU_IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
@@ -72,6 +72,7 @@ const IID MU_IID_IAudioRenderClient = __uuidof(IAudioRenderClient);
 
 CoreAudioDriver::CoreAudioDriver()
 {
+    m_deviceId = DEFAULT_DEVICE_ID;
 }
 
 CoreAudioDriver::~CoreAudioDriver()
@@ -337,7 +338,7 @@ AudioDeviceID CoreAudioDriver::outputDevice() const
     return m_deviceId;
 }
 
-bool CoreAudioDriver::selectOutputDevice(const AudioDeviceID &id)
+bool CoreAudioDriver::selectOutputDevice(const AudioDeviceID& id)
 {
     if (m_deviceId == id) {
         return true;
@@ -372,7 +373,7 @@ std::string CoreAudioDriver::defaultDeviceId() const
 
     IMMDeviceEnumerator* pEnumerator = nullptr;
     hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_ALL, MU_IID_IMMDeviceEnumerator, (void**)&pEnumerator);
-    CHECK_HRESULT(hr, false);
+    CHECK_HRESULT(hr, std::string());
 
     EDataFlow dataFlow = eRender;
     ERole role = eConsole;
@@ -396,7 +397,7 @@ AudioDeviceList CoreAudioDriver::availableOutputDevices() const
     std::lock_guard lock(m_devicesMutex);
 
     //! NOTE: Required because the method can be called from another thread
-    CoInitialize( NULL );
+    CoInitialize(NULL);
 
     AudioDeviceList result;
 
@@ -425,7 +426,7 @@ AudioDeviceList CoreAudioDriver::availableOutputDevices() const
         hr = device->GetId(&devId);
         CHECK_HRESULT(hr, {});
 
-        IPropertyStore *pProps = NULL;
+        IPropertyStore* pProps = NULL;
 
         hr = device->OpenPropertyStore(STGM_READ, &pProps);
         CHECK_HRESULT(hr, {});
