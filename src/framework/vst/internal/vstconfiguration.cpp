@@ -30,7 +30,7 @@ using namespace mu::framework;
 static const std::string module_name("vst");
 
 static const Settings::Key USER_VST_PATHS = Settings::Key(module_name, "application/paths/myVSTs");
-static const mu::io::path_t KNOWN_PLUGINS_LIST_FILENAME("/known_plugins_list.json");
+static const mu::io::path_t KNOWN_PLUGINS_DIR("/vst");
 
 void VstConfiguration::init()
 {
@@ -56,7 +56,7 @@ mu::async::Channel<mu::io::paths_t> VstConfiguration::userVstDirectoriesChanged(
     return m_userVstDirsChanged;
 }
 
-mu::io::path_t VstConfiguration::knownPluginsFile() const
+mu::io::path_t VstConfiguration::knownPluginsDir() const
 {
-    return globalConfig()->userAppDataPath() + KNOWN_PLUGINS_LIST_FILENAME;
+    return globalConfig()->userAppDataPath() + KNOWN_PLUGINS_DIR;
 }

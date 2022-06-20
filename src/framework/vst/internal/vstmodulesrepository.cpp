@@ -46,9 +46,7 @@ void VstModulesRepository::init()
         refresh();
     });
 
-    if (m_knownPlugins.isEmpty()) {
-        refresh();
-    }
+    refresh();
 }
 
 void VstModulesRepository::deInit()
@@ -66,7 +64,7 @@ bool VstModulesRepository::exists(const audio::AudioResourceId& resourceId) cons
 
     std::lock_guard lock(m_mutex);
 
-    return !m_knownPlugins.pluginPath(resourceId).empty();
+    return m_knownPlugins.exists(resourceId);
 }
 
 PluginModulePtr VstModulesRepository::pluginModule(const audio::AudioResourceId& resourceId) const
@@ -92,7 +90,17 @@ void VstModulesRepository::addPluginModule(const audio::AudioResourceId& resourc
 
     std::lock_guard lock(m_mutex);
 
-    addModule(m_knownPlugins.pluginPath(resourceId));
+    auto search = m_modules.find(resourceId);
+    if (search != m_modules.end()) {
+        return;
+    }
+
+    PluginModulePtr module = createModule(m_knownPlugins.pluginPath(resourceId));
+    if (!module) {
+        return;
+    }
+
+    m_modules.emplace(resourceId, std::move(module));
 }
 
 audio::AudioResourceMetaList VstModulesRepository::instrumentModulesMeta() const
@@ -121,33 +129,46 @@ void VstModulesRepository::refresh()
 
     m_modules.clear();
 
-    std::unordered_map<audio::AudioResourceId, io::path_t> paths;
-
     for (const std::string& pluginPath : pluginPathsFromDefaultLocation()) {
-        addModule(pluginPath);
-        paths.emplace(io::basename(pluginPath).toStdString(), io::path_t(pluginPath));
+        if (!m_knownPlugins.exists(io::path_t(pluginPath))) {
+            addModule(io::path_t(pluginPath));
+        }
     }
 
     for (const io::path_t& pluginPath : pluginPathsFromCustomLocations(configuration()->userVstDirectories())) {
-        addModule(pluginPath);
-        paths.emplace(io::basename(pluginPath).toStdString(), io::path_t(pluginPath));
+        if (!m_knownPlugins.exists(pluginPath)) {
+            addModule(pluginPath);
+        }
     }
-
-    m_knownPlugins.registerPlugins(m_modules, std::move(paths));
 }
 
-void VstModulesRepository::addModule(const io::path_t& path) const
+PluginModulePtr VstModulesRepository::createModule(const io::path_t& path)
 {
     std::string errorString;
+    PluginModulePtr result = nullptr;
 
-    PluginModulePtr module = PluginModule::create(path.toStdString(), errorString);
+    try {
+        result = PluginModule::create(path.toStdString(), errorString);
+    }  catch (...) {
+        LOGE() << "Unable to load a new VST Module, error string: " << errorString;
+    }
 
+    return result;
+}
+
+void VstModulesRepository::addModule(const io::path_t& path)
+{
+    audio::AudioResourceId resourceId = io::basename(path).toStdString();
+
+    m_knownPlugins.registerPath(resourceId, path);
+
+    PluginModulePtr module = createModule(path);
     if (!module) {
-        LOGE() << errorString;
         return;
     }
 
-    m_modules.emplace(io::basename(path).toStdString(), module);
+    m_knownPlugins.registerPlugin(resourceId, module);
+    m_modules.emplace(resourceId, module);
 }
 
 audio::AudioResourceMetaList VstModulesRepository::modulesMetaList(const VstPluginType& type) const
