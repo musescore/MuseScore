@@ -149,6 +149,7 @@ io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t&
 {
     QFileDialog::Options options;
     options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
+    options.setFlag(QFileDialog::DontUseNativeDialog, false);
     QString path = QFileDialog::getSaveFileName(nullptr, title, dir.toQString(), filter, nullptr, options);
     return path;
 }

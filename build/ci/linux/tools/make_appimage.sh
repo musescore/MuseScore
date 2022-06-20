@@ -114,6 +114,10 @@ if [ ! -f ${appdir}/usr/lib/libQt5QuickControls2.so.5 ]; then
     cp $BUILD_TOOLS/Qt/5152/lib/libQt5QuickTemplates2.so.5 ${appdir}/usr/lib/libQt5QuickTemplates2.so.5 
 fi
 
+if [ ! -f ${appdir}/plugins/platformthemes/libqgtk3.so ]; then
+  cp $BUILD_TOOLS/Qt/5152/plugins/platformthemes/libqgtk3.so ${appdir}/plugins/platformthemes/libqgtk3.so 
+fi
+
 unset QML_SOURCES_PATHS
 
 # In case this container is reused multiple times, return the moved libraries back

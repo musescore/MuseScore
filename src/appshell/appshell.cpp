@@ -42,6 +42,8 @@
 
 #include "log.h"
 
+#include "testnativedialogs.h"
+
 using namespace mu::appshell;
 
 //! NOTE Separately to initialize logger and profiler as early as possible
@@ -88,6 +90,11 @@ int AppShell::run(int argc, char** argv)
     QCoreApplication::setOrganizationName("MuseScore");
     QCoreApplication::setOrganizationDomain("musescore.org");
     QCoreApplication::setApplicationVersion(QString::fromStdString(framework::Version::fullVersion()));
+
+    TestNativeDialogs d;
+    d.test();
+
+    return app.exec();
 
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
