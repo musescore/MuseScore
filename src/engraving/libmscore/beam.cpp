@@ -673,7 +673,7 @@ double Beam::chordBeamAnchorY(const Chord* chord) const
         double y = _tab->chordRestStemPosY(chord) + stemLength;
         y *= spatium();
         y -= beamOffset;
-        return y;
+        return y + chord->pagePos().y();
     }
 
     return position.y() + (chord->defaultStemLength() * upValue) - beamOffset;
