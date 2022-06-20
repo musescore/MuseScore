@@ -33,9 +33,11 @@
 #include "log.h"
 #include "runtime.h"
 
+static constexpr char DEFAULT_DEVICE_ID[] = "default";
+
 using namespace mu::audio;
 
-namespace  {
+namespace {
 struct ALSAData
 {
     float* buffer = nullptr;
@@ -48,7 +50,8 @@ struct ALSAData
     void* userdata = nullptr;
 };
 
-static ALSAData* _alsaData{ nullptr };
+static ALSAData* s_alsaData{ nullptr };
+IAudioDriver::Spec s_format;
 
 static void* alsaThread(void* aParam)
 {
@@ -80,28 +83,45 @@ static void* alsaThread(void* aParam)
 
 static void alsaCleanup()
 {
-    IF_ASSERT_FAILED(_alsaData) {
+    if (!s_alsaData) {
         return;
     }
 
-    _alsaData->audioProcessingDone = true;
-    if (_alsaData->threadHandle) {
-        pthread_join(_alsaData->threadHandle, nullptr);
+    s_alsaData->audioProcessingDone = true;
+    if (s_alsaData->threadHandle) {
+        pthread_join(s_alsaData->threadHandle, nullptr);
     }
-    snd_pcm_drain(_alsaData->alsaDeviceHandle);
-    snd_pcm_close(_alsaData->alsaDeviceHandle);
+    snd_pcm_drain(s_alsaData->alsaDeviceHandle);
+    snd_pcm_close(s_alsaData->alsaDeviceHandle);
 
-    if (nullptr != _alsaData->buffer) {
-        delete[] _alsaData->buffer;
+    if (nullptr != s_alsaData->buffer) {
+        delete[] s_alsaData->buffer;
     }
 
-    delete _alsaData;
-    _alsaData = nullptr;
+    delete s_alsaData;
+    s_alsaData = nullptr;
 }
 }
 
 LinuxAudioDriver::LinuxAudioDriver()
 {
+    m_deviceId = DEFAULT_DEVICE_ID;
+}
+
+LinuxAudioDriver::~LinuxAudioDriver()
+{
+    alsaCleanup();
+}
+
+void LinuxAudioDriver::init()
+{
+    m_devicesListener.startWithCallback([this]() {
+        return availableOutputDevices();
+    });
+
+    m_devicesListener.devicesChanged().onNotify(this, [this]() {
+        m_availableOutputDevicesChanged.notify();
+    });
 }
 
 std::string LinuxAudioDriver::name() const
@@ -111,20 +131,20 @@ std::string LinuxAudioDriver::name() const
 
 bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
-    _alsaData = new ALSAData();
-    _alsaData->samples = spec.samples;
-    _alsaData->channels = spec.channels;
-    _alsaData->callback = spec.callback;
-    _alsaData->userdata = spec.userdata;
+    s_alsaData = new ALSAData();
+    s_alsaData->samples = spec.samples;
+    s_alsaData->channels = spec.channels;
+    s_alsaData->callback = spec.callback;
+    s_alsaData->userdata = spec.userdata;
 
     int rc;
     snd_pcm_t* handle;
-    rc = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
+    rc = snd_pcm_open(&handle, outputDevice().c_str(), SND_PCM_STREAM_PLAYBACK, 0);
     if (rc < 0) {
         return false;
     }
 
-    _alsaData->alsaDeviceHandle = handle;
+    s_alsaData->alsaDeviceHandle = handle;
 
     snd_pcm_hw_params_t* params;
     snd_pcm_hw_params_alloca(&params);
@@ -142,7 +162,7 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    snd_pcm_hw_params_set_buffer_size_near(handle, params, &_alsaData->samples);
+    snd_pcm_hw_params_set_buffer_size_near(handle, params, &s_alsaData->samples);
 
     rc = snd_pcm_hw_params(handle, params);
     if (rc < 0) {
@@ -152,22 +172,24 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     snd_pcm_hw_params_get_rate(params, &val, &dir);
     aSamplerate = val;
 
-    _alsaData->buffer = new float[_alsaData->samples * _alsaData->channels];
+    s_alsaData->buffer = new float[s_alsaData->samples * s_alsaData->channels];
     //_alsaData->sampleBuffer = new short[_alsaData->samples * _alsaData->channels];
 
     if (activeSpec) {
         *activeSpec = spec;
         activeSpec->format = Format::AudioF32;
         activeSpec->sampleRate = aSamplerate;
+        s_format = *activeSpec;
     }
 
-    _alsaData->threadHandle = 0;
-    int ret = pthread_create(&_alsaData->threadHandle, NULL, alsaThread, (void*)_alsaData);
+    s_alsaData->threadHandle = 0;
+    int ret = pthread_create(&s_alsaData->threadHandle, NULL, alsaThread, (void*)s_alsaData);
 
     if (0 != ret) {
         return false;
     }
 
+    LOGD() << "Connected to " << outputDevice();
     return true;
 }
 
@@ -178,32 +200,94 @@ void LinuxAudioDriver::close()
 
 bool LinuxAudioDriver::isOpened() const
 {
-    return _alsaData != nullptr;
+    return s_alsaData != nullptr;
 }
 
-std::string LinuxAudioDriver::outputDevice() const
+AudioDeviceID LinuxAudioDriver::outputDevice() const
 {
-    NOT_IMPLEMENTED;
-    return "default";
+    return m_deviceId;
 }
 
-bool LinuxAudioDriver::selectOutputDevice(const std::string& name)
+bool LinuxAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 {
-    UNUSED(name);
-    NOT_IMPLEMENTED;
-    return false;
+    if (m_deviceId == deviceId) {
+        return true;
+    }
+
+    bool reopen = isOpened();
+    close();
+    m_deviceId = deviceId;
+
+    bool ok = true;
+    if (reopen) {
+        ok = open(s_format, &s_format);
+    }
+
+    if (ok) {
+        m_outputDeviceChanged.notify();
+    }
+
+    return ok;
 }
 
-std::vector<std::string> LinuxAudioDriver::availableOutputDevices() const
+bool LinuxAudioDriver::resetToDefaultOutputDevice()
 {
-    NOT_IMPLEMENTED;
-    return { "default" };
+    return selectOutputDevice(DEFAULT_DEVICE_ID);
+}
+
+mu::async::Notification LinuxAudioDriver::outputDeviceChanged() const
+{
+    return m_outputDeviceChanged;
+}
+
+AudioDeviceList LinuxAudioDriver::availableOutputDevices() const
+{
+    AudioDeviceList devices;
+
+    snd_ctl_card_info_t* cardInfo;
+    snd_ctl_card_info_alloca(&cardInfo);
+    snd_pcm_info_t* pcmInfo;
+    snd_pcm_info_alloca(&pcmInfo);
+    int cardIndex = -1;
+
+    while (!snd_card_next(&cardIndex) && cardIndex >= 0)
+    {
+        const QString dev = "hw:" + QString::number(cardIndex);
+        snd_ctl_t* ctl;
+        if (snd_ctl_open(&ctl, dev.toLocal8Bit(), 0)) {
+            continue;
+        }
+
+        if (!snd_ctl_card_info(ctl, cardInfo)) {
+            const QString cardName = snd_ctl_card_info_get_name(cardInfo);
+            int devIndex = -1;
+            while (!snd_ctl_pcm_next_device(ctl, &devIndex) && devIndex >= 0)
+            {
+                snd_pcm_info_set_device(pcmInfo, static_cast<unsigned>(devIndex));
+                snd_pcm_info_set_stream(pcmInfo, SND_PCM_STREAM_PLAYBACK);
+
+                if (snd_ctl_pcm_info(ctl, pcmInfo) >= 0) {
+                    const QString pcmName = snd_pcm_info_get_name(pcmInfo);
+                    QString deviceId = dev + "," + QString::number(devIndex);
+                    QString name = cardName + (!pcmName.isEmpty() ? QString(": ") + snd_pcm_info_get_name(pcmInfo) : QString());
+                    devices.push_back({ deviceId.toStdString(), name.toStdString() });
+                }
+            }
+        }
+
+        snd_ctl_close(ctl);
+    }
+
+    if (devices.size() > 0) {
+        devices.insert(devices.begin(), { DEFAULT_DEVICE_ID, DEFAULT_DEVICE_ID });
+    }
+
+    return devices;
 }
 
 mu::async::Notification LinuxAudioDriver::availableOutputDevicesChanged() const
 {
-    NOT_IMPLEMENTED;
-    return mu::async::Notification();
+    return m_availableOutputDevicesChanged;
 }
 
 void LinuxAudioDriver::resume()
