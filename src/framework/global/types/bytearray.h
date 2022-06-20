@@ -33,6 +33,8 @@ namespace mu {
 class ByteArray
 {
 public:
+    typedef uint8_t value_type;
+
     ByteArray();
     ByteArray(const uint8_t* data, size_t size);
     ByteArray(const char* str);
@@ -40,6 +42,7 @@ public:
 
     //! NOTE Not coped!!!
     static ByteArray fromRawData(const uint8_t* data, size_t size);
+    static ByteArray fromRawData(const char* data, size_t size);
 
     bool operator==(const ByteArray& other) const;
     bool operator!=(const ByteArray& other) const { return !operator==(other); }
