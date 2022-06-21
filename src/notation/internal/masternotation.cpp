@@ -402,6 +402,16 @@ mu::ValNt<bool> MasterNotation::needSave() const
     return needSave;
 }
 
+void MasterNotation::initExcerpts(const ExcerptNotationList& excerpts)
+{
+    for (IExcerptNotationPtr excerptNotation : excerpts) {
+        ExcerptNotation* impl = get_impl(excerptNotation);
+
+        masterScore()->initExcerpt(impl->excerpt());
+        impl->init();
+    }
+}
+
 void MasterNotation::addExcerpts(const ExcerptNotationList& excerpts)
 {
     if (excerpts.empty()) {
@@ -423,7 +433,7 @@ void MasterNotation::addExcerpts(const ExcerptNotationList& excerpts)
 
         if (!excerptNotationImpl->isCreated()) {
             masterScore()->initAndAddExcerpt(excerptNotationImpl->excerpt(), false);
-            excerptNotationImpl->setIsCreated(true);
+            excerptNotationImpl->init();
         }
 
         result.push_back(excerptNotation);

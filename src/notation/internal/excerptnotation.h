@@ -37,6 +37,7 @@ public:
 
     bool isCreated() const override;
     void setIsCreated(bool created);
+    void init();
 
     mu::engraving::Excerpt* excerpt() const;
 

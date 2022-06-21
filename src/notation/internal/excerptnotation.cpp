@@ -52,6 +52,11 @@ void ExcerptNotation::setIsCreated(bool created)
         return;
     }
 
+    init();
+}
+
+void ExcerptNotation::init()
+{
     setScore(m_excerpt->excerptScore());
     setName(m_name);
 

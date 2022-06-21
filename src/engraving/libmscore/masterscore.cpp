@@ -369,49 +369,8 @@ bool MasterScore::exportPart(MscWriter& mscWriter, Score* partScore)
 
 void MasterScore::addExcerpt(Excerpt* ex, size_t index)
 {
-    Score* score = ex->excerptScore();
-
-    int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
-    std::set<ID> assignedStavesIds;
-    for (Staff* excerptStaff : score->staves()) {
-        const LinkedObjects* ls = excerptStaff->links();
-        if (ls == 0) {
-            continue;
-        }
-
-        for (auto le : *ls) {
-            if (le->score() != this) {
-                continue;
-            }
-
-            Staff* linkedMasterStaff = toStaff(le);
-            if (mu::contains(assignedStavesIds, linkedMasterStaff->id())) {
-                continue;
-            }
-
-            Part* excerptPart = excerptStaff->part();
-            Part* masterPart = linkedMasterStaff->part();
-
-            //! NOTE: parts/staves of excerpt must have the same ID as parts/staves of the master score
-            //! In fact, excerpts are just viewers for the master score
-            excerptStaff->setId(linkedMasterStaff->id());
-            excerptPart->setId(masterPart->id());
-
-            assignedStavesIds.insert(linkedMasterStaff->id());
-
-            // For instruments with multiple staves, every staff will point to the
-            // same part. To prevent adding the same part several times to the excerpt,
-            // add only the part of the first staff pointing to the part.
-            if (!(--nstaves)) {
-                ex->parts().push_back(linkedMasterStaff->part());
-                nstaves = static_cast<int>(linkedMasterStaff->part()->nstaves());
-            }
-            break;
-        }
-    }
-
-    if (ex->tracksMapping().empty()) {   // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
-        ex->updateTracksMapping();
+    if (!ex->inited()) {
+        initParts(ex);
     }
 
     excerpts().insert(excerpts().begin() + (index == mu::nidx ? excerpts().size() : index), ex);
