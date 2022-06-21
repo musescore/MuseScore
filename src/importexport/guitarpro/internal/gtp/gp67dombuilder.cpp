@@ -366,11 +366,7 @@ std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(QDomNode* masterB
         } else if (nodeName == "Section") {
             masterBar->setSection(readMasterBarSection(innerNode));
         } else if (nodeName == "Directions") {
-            if (innerNode.firstChild().nodeName() == "Jump") {
-                masterBar->setDirectionJump(innerNode.firstChild().toElement().text());
-            } else {
-                masterBar->setDirectionTarget(innerNode.firstChild().toElement().text());
-            }
+            masterBar->setDirections(readRepeatsJumps(&innerNode));
         } else if (nodeName == "DoubleBar") {
             masterBar->setBarlineType(GPMasterBar::BarlineType::DOUBLE);
         } else if (nodeName == "FreeTime") {
@@ -1298,5 +1294,23 @@ std::vector<GPMasterBar::Fermata> GP67DomBuilder::readFermatas(QDomNode* fermata
     }
 
     return fermatas;
+}
+
+std::vector<GPMasterBar::Direction> GP67DomBuilder::readRepeatsJumps(QDomNode* repeatsJumpsNode) const
+{
+    std::vector<GPMasterBar::Direction> repeatsJumps;
+
+    auto innerNode = repeatsJumpsNode->firstChild();
+
+    while (!innerNode.isNull()) {
+        GPMasterBar::Direction repeatJump;
+        repeatJump.type = (innerNode.nodeName() == "Jump" ? GPMasterBar::Direction::Type::Jump : GPMasterBar::Direction::Type::Repeat);
+        repeatJump.name = innerNode.toElement().text();
+
+        repeatsJumps.push_back(repeatJump);
+        innerNode = innerNode.nextSibling();
+    }
+
+    return repeatsJumps;
 }
 } //end Ms namespace
