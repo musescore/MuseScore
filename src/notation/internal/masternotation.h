@@ -55,7 +55,7 @@ public:
 
     IExcerptNotationPtr newExcerptBlankNotation() const override;
     ValCh<ExcerptNotationList> excerpts() const override;
-    ExcerptNotationList potentialExcerpts() const override;
+    const ExcerptNotationList& potentialExcerpts() const override;
 
     void addExcerpts(const ExcerptNotationList& excerpts) override;
     void removeExcerpts(const ExcerptNotationList& excerpts) override;
@@ -72,11 +72,14 @@ private:
 
     mu::engraving::MasterScore* masterScore() const;
 
+    void updatePotentialExcerpts() const;
     void initExcerptNotations(const std::vector<mu::engraving::Excerpt*>& excerpts);
     void addExcerptsToMasterScore(const std::vector<mu::engraving::Excerpt*>& excerpts);
     void doSetExcerpts(ExcerptNotationList excerpts);
     void updateExcerpts();
+
     bool containsExcerpt(const mu::engraving::Excerpt* excerpt) const;
+    bool containsExcerptForPart(const Part* part) const;
 
     void notifyAboutNeedSaveChanged();
 
@@ -84,8 +87,10 @@ private:
 
     ValCh<ExcerptNotationList> m_excerpts;
     INotationPlaybackPtr m_notationPlayback = nullptr;
-
     async::Notification m_needSaveNotification;
+
+    mutable bool m_needUpdatePotentialExcerpts = false;
+    mutable ExcerptNotationList m_potentialExcerpts;
 };
 
 using MasterNotationPtr = std::shared_ptr<MasterNotation>;
