@@ -46,6 +46,8 @@ public:
 
     ~Excerpt();
 
+    bool inited() const;
+
     MasterScore* masterScore() const { return m_masterScore; }
     Score* excerptScore() const { return m_excerptScore; }
     void setExcerptScore(Score* s);
@@ -87,13 +89,18 @@ public:
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
 
 private:
+    friend class MasterScore;
+
     static String formatName(const String& partName, const std::vector<Excerpt*>&);
+
+    void setInited(bool inited);
 
     MasterScore* m_masterScore = nullptr;
     Score* m_excerptScore = nullptr;
     String m_name;
     std::vector<Part*> m_parts;
     TracksMap m_tracksMapping;
+    bool m_inited = false;
 };
 }
 

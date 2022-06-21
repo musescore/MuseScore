@@ -131,6 +131,8 @@ class MasterScore : public Score
     bool writeMscz(MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
     bool exportPart(MscWriter& mscWriter, Score* partScore);
 
+    void initParts(Excerpt*);
+
 public:
 
     ~MasterScore();
@@ -208,6 +210,7 @@ public:
     void deleteExcerpt(Excerpt*);
 
     void initAndAddExcerpt(Excerpt*, bool);
+    void initExcerpt(Excerpt*);
     void initEmptyExcerpt(Excerpt*);
 
     void setPlaybackScore(Score*);
