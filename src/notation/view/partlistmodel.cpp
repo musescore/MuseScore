@@ -104,21 +104,6 @@ bool PartListModel::hasSelection() const
     return m_selectionModel->hasSelection();
 }
 
-bool PartListModel::isRemovingAvailable() const
-{
-    if (!m_selectionModel->hasSelection()) {
-        return false;
-    }
-
-    for (int index : m_selectionModel->selectedRows()) {
-        if (!m_excerpts[index]->isCreated()) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 void PartListModel::createNewPart()
 {
     IExcerptNotationPtr excerpt = masterNotation()->newExcerptBlankNotation();
@@ -145,9 +130,13 @@ void PartListModel::removePart(int partIndex)
         return;
     }
 
-    constexpr int partCount = 1;
+    std::string question = mu::trc("notation", "Are you sure you want to delete this part?");
 
-    if (userAgreesToRemoveParts(partCount)) {
+    IInteractive::Button btn = interactive()->question("", question, {
+        IInteractive::Button::Yes, IInteractive::Button::No
+    }).standardButton();
+
+    if (btn == IInteractive::Button::Yes) {
         doRemovePart(partIndex);
     }
 }
@@ -233,47 +222,6 @@ void PartListModel::insertExcerpt(int destinationIndex, IExcerptNotationPtr exce
 
     emit partAdded(destinationIndex);
     selectPart(destinationIndex);
-}
-
-void PartListModel::removeSelectedParts()
-{
-    if (!isRemovingAvailable()) {
-        return;
-    }
-
-    QList<int> rows = m_selectionModel->selectedRows();
-    if (rows.empty()) {
-        return;
-    }
-
-    if (!userAgreesToRemoveParts(rows.count())) {
-        return;
-    }
-
-    QList<IExcerptNotationPtr> excerptsToRemove;
-
-    for (int row : rows) {
-        excerptsToRemove.push_back(m_excerpts[row]);
-    }
-
-    for (IExcerptNotationPtr excerpt : excerptsToRemove) {
-        int row = m_excerpts.indexOf(excerpt);
-        doRemovePart(row);
-    }
-
-    m_selectionModel->clear();
-}
-
-bool PartListModel::userAgreesToRemoveParts(int partCount) const
-{
-    QString question = mu::qtrc("notation", "Are you sure you want to delete %1?")
-                       .arg(partCount > 1 ? "these parts" : "this part");
-
-    IInteractive::Result result = interactive()->question("", question.toStdString(), {
-        IInteractive::Button::Yes, IInteractive::Button::No
-    });
-
-    return result.standardButton() == IInteractive::Button::Yes;
 }
 
 void PartListModel::openSelectedParts()
