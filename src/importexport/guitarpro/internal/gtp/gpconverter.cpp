@@ -2010,12 +2010,21 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
     addLineElement(cr, m_ottavas[gpb->ottavaType()], ElementType::OTTAVA, ottavaToImportType(gpb->ottavaType()),
                    gpb->ottavaType() != GPBeat::OttavaType::None);
 
-    if (!cr->isChord()) {
+    if (!cr->isChord() || gpb->ottavaType() == GPBeat::OttavaType::None) {
         return;
     }
 
     const Chord* chord = toChord(cr);
     mu::engraving::OttavaType type = ottavaType(gpb->ottavaType());
+
+    TextLineBase* textLineElem = m_ottavas[gpb->ottavaType()].back();
+    Ottava* ottava = dynamic_cast<Ottava*>(textLineElem);
+
+    if (!ottava) {
+        return;
+    }
+
+    ottava->setOttavaType(type);
 
     for (mu::engraving::Note* note : chord->notes()) {
         int pitch = note->pitch();
