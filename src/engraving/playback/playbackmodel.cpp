@@ -334,7 +334,7 @@ bool PlaybackModel::hasToReloadScore(const std::unordered_set<ElementType>& chan
         ElementType::LAYOUT_BREAK, ElementType::FERMATA,
         ElementType::MEASURE_REPEAT, ElementType::VOLTA,
         ElementType::VOLTA_SEGMENT, ElementType::SYSTEM_TEXT,
-        ElementType::JUMP
+        ElementType::JUMP, ElementType::MARKER
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
