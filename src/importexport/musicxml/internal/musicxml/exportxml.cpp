@@ -3617,7 +3617,7 @@ QString ExportMusicXml::elementPosition(const ExportMusicXml* const expMxml, con
         const double pageHeight  = expMxml->getTenthsFromInches(expMxml->score()->styleD(Sid::pageHeight));
 
         const auto meas = elm->findMeasure();
-        IF_ASSERT_FAILED(!meas) {
+        IF_ASSERT_FAILED(meas) {
             return res;
         }
 
