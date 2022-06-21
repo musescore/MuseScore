@@ -218,6 +218,7 @@ void PartListModel::insertExcerpt(int destinationIndex, IExcerptNotationPtr exce
 {
     beginInsertRows(QModelIndex(), destinationIndex, destinationIndex);
     m_excerpts.insert(destinationIndex, excerpt);
+    masterNotation()->addExcerpts({ excerpt });
     endInsertRows();
 
     emit partAdded(destinationIndex);

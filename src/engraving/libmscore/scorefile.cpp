@@ -152,13 +152,13 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     hook.onWriteStyle302(this, xml);
 
-    xml.tag("showInvisible",   _showInvisible);
+    xml.tag("showInvisible", _showInvisible);
     xml.tag("showUnprintable", _showUnprintable);
-    xml.tag("showFrames",      _showFrames);
-    xml.tag("showMargins",     _showPageborders);
+    xml.tag("showFrames", _showFrames);
+    xml.tag("showMargins", _showPageborders);
     xml.tag("markIrregularMeasures", _markIrregularMeasures, true);
 
-    if (!_isOpen) {
+    if (_isOpen) {
         xml.tag("open", _isOpen);
     }
 

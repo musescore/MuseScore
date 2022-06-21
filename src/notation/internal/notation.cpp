@@ -213,7 +213,7 @@ bool Notation::isOpen() const
 
 void Notation::setIsOpen(bool open)
 {
-    if (this->isOpen() == open) {
+    if (isOpen() == open) {
         return;
     }
 
