@@ -704,18 +704,18 @@ void GPConverter::doAddVolta(const GPMasterBar* mB, Measure* measure)
 
 void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
 {
-    if (!mB->direction().jump.isEmpty()) {
-        Jump* jump = Factory::createJump(measure);
-        jump->setJumpType(jumpType(mB->direction().jump));
-        jump->setTrack(0);
-        measure->add(jump);
-    }
-
-    if (!mB->direction().target.isEmpty()) {
-        Marker* marker = Factory::createMarker(measure);
-        marker->setMarkerType(markerType(mB->direction().target));
-        marker->setTrack(0);
-        measure->add(marker);
+    for (const auto& dir : mB->directions()) {
+        if (dir.type == GPMasterBar::Direction::Type::Jump) {
+            Jump* jump = Factory::createJump(measure);
+            jump->setJumpType(jumpType(dir.name));
+            jump->setTrack(0);
+            measure->add(jump);
+        } else {
+            Marker* marker = Factory::createMarker(measure);
+            marker->setMarkerType(markerType(dir.name));
+            marker->setTrack(0);
+            measure->add(marker);
+        }
     }
 }
 
