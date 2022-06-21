@@ -39,7 +39,7 @@ class LearnService : public ILearnService
     INJECT(learn, framework::IInteractive, interactive)
 
 public:
-    void refreshPlaylists();
+    void refreshPlaylists() override;
 
     Playlist startedPlaylist() const override;
     async::Channel<Playlist> startedPlaylistChanged() const override;
