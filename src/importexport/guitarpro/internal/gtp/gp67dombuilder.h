@@ -59,6 +59,7 @@ protected:
     void readDiagram(const QDomNode& items, GPTrack* track) const;
     void readLyrics(const QDomNode& items, GPTrack* track) const;
     std::vector<GPMasterBar::Fermata> readFermatas(QDomNode* fermatasNode) const;
+    std::vector<GPMasterBar::Direction> readRepeatsJumps(QDomNode* repeatsJumpsNode) const;
     std::pair<QString, QString> readMasterBarSection(const QDomNode& sectionNode) const;
     GPMasterBar::Repeat readRepeat(QDomNode* repeatNode) const;
     std::vector<int> readEnding(QDomNode* endNode) const;
