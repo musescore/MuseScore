@@ -40,7 +40,6 @@ class PartListModel : public QAbstractListModel
     INJECT(notation, framework::IInteractive, interactive)
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
-    Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable NOTIFY selectionChanged)
 
 public:
     explicit PartListModel(QObject* parent = nullptr);
@@ -50,11 +49,9 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     bool hasSelection() const;
-    bool isRemovingAvailable() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void createNewPart();
-    Q_INVOKABLE void removeSelectedParts();
     Q_INVOKABLE void openSelectedParts();
     Q_INVOKABLE void openAllParts();
 
@@ -75,7 +72,6 @@ private:
 
     bool isExcerptIndexValid(int index) const;
 
-    bool userAgreesToRemoveParts(int partCount) const;
     void doRemovePart(int partIndex);
 
     IMasterNotationPtr masterNotation() const;

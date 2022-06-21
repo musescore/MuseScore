@@ -63,19 +63,12 @@ StyledDialogView {
             Layout.topMargin: privateProperties.sideMargin
 
             sideMargin: privateProperties.sideMargin
-            buttonsMargin: privateProperties.buttonsMargin
-
-            isRemovingAvailable: partsModel.isRemovingAvailable
 
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 1
 
             onCreateNewPartRequested: {
                 partsModel.createNewPart()
-            }
-
-            onRemoveSelectedPartsRequested: {
-                partsModel.removeSelectedParts()
             }
         }
 
