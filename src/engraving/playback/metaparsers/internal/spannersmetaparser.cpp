@@ -47,9 +47,24 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
     int overallDurationTicks = spanner->ticks().ticks();
 
     switch (spanner->type()) {
-    case ElementType::SLUR:
+    case ElementType::SLUR: {
         type = mpe::ArticulationType::Legato;
+
+        EngravingItem* startItem = spanner->startElement();
+        EngravingItem* endItem = spanner->endElement();
+
+        if (!startItem || !endItem) {
+            break;
+        }
+
+        if (startItem->isChordRest() && endItem->isChordRest()) {
+            ChordRest* startChord = toChordRest(startItem);
+            ChordRest* endChord = toChordRest(endItem);
+            overallDurationTicks = startChord->ticks().ticks() + endChord->ticks().ticks();
+        }
+
         break;
+    }
     case ElementType::PEDAL:
         type = mpe::ArticulationType::Pedal;
         break;

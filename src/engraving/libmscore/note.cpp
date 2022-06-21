@@ -1144,6 +1144,10 @@ int Note::playTicks() const
 
 Fraction Note::playTicksFraction() const
 {
+    if (!_tieBack && !_tieFor && chord()) {
+        return chord()->actualTicks();
+    }
+
     Fraction stick = firstTiedNote()->chord()->tick();
     const Note* note = lastTiedNote();
     return note->chord()->tick() + note->chord()->actualTicks() - stick;
