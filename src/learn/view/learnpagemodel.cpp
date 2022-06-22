@@ -47,6 +47,8 @@ QVariantList LearnPageModel::advancedPlaylist() const
 
 void LearnPageModel::load()
 {
+    learnService()->refreshPlaylists();
+
     setStartedPlaylist(learnService()->startedPlaylist());
     learnService()->startedPlaylistChanged().onReceive(this, [this](const Playlist& playlist) {
         setStartedPlaylist(playlist);
