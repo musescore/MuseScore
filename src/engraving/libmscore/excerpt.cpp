@@ -88,14 +88,19 @@ bool Excerpt::inited() const
     return m_inited;
 }
 
-String Excerpt::initialInstrumentId() const
-{
-    return m_initialInstrumentId;
-}
-
 void Excerpt::setInited(bool inited)
 {
     m_inited = inited;
+}
+
+const ID& Excerpt::initialPartId() const
+{
+    return m_initialPartId;
+}
+
+void Excerpt::setInitialPartId(const ID& id)
+{
+    m_initialPartId = id;
 }
 
 void Excerpt::setExcerptScore(Score* s)
@@ -1512,7 +1517,7 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
 
         String name = formatName(part->partName(), result);
         excerpt->setName(name);
-        excerpt->m_initialInstrumentId = part->instrumentId();
+        excerpt->setInitialPartId(part->id());
 
         result.push_back(excerpt);
     }

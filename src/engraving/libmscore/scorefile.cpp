@@ -108,11 +108,15 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     if (excerpt()) {
         Excerpt* e = excerpt();
-        TracksMap trackList = e->tracksMapping();
+        const TracksMap& trackList = e->tracksMapping();
         if (!(trackList.size() == e->nstaves() * VOICES) && !trackList.empty()) {
             for (auto it = trackList.begin(); it != trackList.end(); ++it) {
                 xml.tag("Tracklist", { { "sTrack", it->first }, { "dstTrack", it->second } });
             }
+        }
+
+        if (e->initialPartId().isValid()) {
+            xml.tag("initialPartId", e->initialPartId().toUint64());
         }
     }
 
