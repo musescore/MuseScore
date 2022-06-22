@@ -43,6 +43,77 @@
 using namespace mu;
 
 namespace mu::engraving {
+using ElementPair = std::pair<EngravingItem*, int>; // element and its index as a child
+
+//---------------------------------------------------------
+//   isChild1beforeChild2
+//    compares if two children are order correctly
+//    from top-left to bottom-right
+//---------------------------------------------------------
+
+static bool isChild1beforeChild2(const ElementPair& child1, const ElementPair& child2)
+{
+    Q_ASSERT(child1.first->parent() == child2.first->parent());
+
+    PointF p1 = child1.first->pos() + child1.first->bbox().center();
+    PointF p2 = child2.first->pos() + child2.first->bbox().center();
+
+    // If one child is *clearly* above the other then visit the higher one first
+    qreal verticalSeparation = p2.y() - p1.y();
+    if (verticalSeparation > 10) {
+        return true;
+    } else if (verticalSeparation < -10) {
+        return false;
+    }
+
+    // Children are roughly aligned vertically. Visit the one on the left first
+    qreal horizontalSeparation = p2.x() - p1.x();
+    if (horizontalSeparation > 0.0) {
+        return true;
+    } else if (horizontalSeparation < 0.0) {
+        return false;
+    }
+
+    // Children are aligned horizontally so check exact vertical position.
+    if (verticalSeparation > 0.0) {
+        return true;
+    } else if (verticalSeparation < 0.0) {
+        return false;
+    }
+
+    // Elements are at exact same position so fall back to using child index to determine order.
+    if (child1.second < child2.second) {
+        return true;
+    }
+
+    return false;
+}
+
+//---------------------------------------------------------
+//   toChildPairsSet
+//    return a set of children ordered
+//    on the basis of position
+//---------------------------------------------------------
+
+static std::set<ElementPair, decltype(& isChild1beforeChild2)> toChildPairsSet(const EngravingItem* element)
+{
+    std::set<ElementPair, decltype(& isChild1beforeChild2)> children(&isChild1beforeChild2);
+    int index = 0;
+
+    for (EngravingObject* object : element->children()) {
+        EngravingItem* engravingItem = toEngravingItem(object);
+
+        if (!engravingItem) {
+            continue;
+        }
+
+        children.insert(std::pair<EngravingItem*, int>(engravingItem, index));
+        index++;
+    }
+
+    return children;
+}
+
 //---------------------------------------------------------
 //   nextChordRest
 //    return next Chord or Rest
@@ -695,6 +766,28 @@ EngravingItem* Score::nextElement()
         case ElementType::VBOX:
         case ElementType::HBOX:
         case ElementType::TBOX: {
+            auto boxChildren = toChildPairsSet(e);
+
+            EngravingItem* selectedElement = getSelectedElement();
+
+            if ((selectedElement->type() == ElementType::VBOX
+                 || selectedElement->type() == ElementType::HBOX
+                 || selectedElement->type() == ElementType::TBOX) && !boxChildren.empty()) {
+                return boxChildren.begin()->first;
+            }
+
+            for (auto child = boxChildren.begin(); child != boxChildren.end(); child++) {
+                if (selectedElement != child->first) {
+                    continue;
+                }
+
+                auto targetElement = std::next(child);
+
+                if (targetElement != boxChildren.end()) {
+                    return targetElement->first;
+                }
+            }
+
             MeasureBase* mb = toMeasureBase(e)->nextMM();
             if (!mb) {
                 break;
@@ -760,8 +853,21 @@ EngravingItem* Score::prevElement()
         case ElementType::BAR_LINE: {
             for (; e && e->type() != ElementType::SEGMENT; e = e->parentItem()) {
             }
-            Segment* s = toSegment(e);
-            return s->prevElement(staffId);
+            EngravingItem* previousElement = toSegment(e)->prevElement(staffId);
+
+            if (previousElement->type() != ElementType::VBOX
+                && previousElement->type() != ElementType::HBOX
+                && previousElement->type() != ElementType::TBOX) {
+                return previousElement;
+            }
+
+            auto boxChildren = toChildPairsSet(previousElement);
+
+            if (boxChildren.size() > 0) {
+                return boxChildren.rbegin()->first;
+            }
+
+            return previousElement;
         }
         case ElementType::VOLTA_SEGMENT:
         case ElementType::SLUR_SEGMENT:
@@ -824,6 +930,22 @@ EngravingItem* Score::prevElement()
         case ElementType::VBOX:
         case ElementType::HBOX:
         case ElementType::TBOX: {
+            auto boxChildren = toChildPairsSet(e);
+
+            EngravingItem* selectedElement = getSelectedElement();
+
+            for (auto child = boxChildren.rbegin(); child != boxChildren.rend(); child++) {
+                if (selectedElement != child->first) {
+                    continue;
+                }
+
+                auto targetElement = std::next(child);
+
+                if (targetElement != boxChildren.rend()) {
+                    return targetElement->first;
+                }
+            }
+
             MeasureBase* mb = toMeasureBase(e)->prevMM();
             if (!mb) {
                 break;
