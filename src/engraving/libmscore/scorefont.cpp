@@ -50,7 +50,7 @@ std::vector<ScoreFont> ScoreFont::s_scoreFonts {
     ScoreFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/",  "Petaluma.otf"),
 };
 
-std::array<uint, size_t(SymId::lastSym) + 1> ScoreFont::s_symIdCodes { { 0 } };
+std::array<ScoreFont::Code, size_t(SymId::lastSym) + 1> ScoreFont::s_symIdCodes { {  } };
 
 // =============================================
 // ScoreFont
@@ -122,9 +122,15 @@ void ScoreFont::initScoreFonts()
         bool ok;
         uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);
         if (ok) {
-            s_symIdCodes[i] = code;
+            s_symIdCodes[i].smuflCode = code;
         } else if (MScore::debugMode) {
             LOGD() << "could not read codepoint for glyph " << name;
+        }
+        uint alernativeCode = glyphNamesJson.value(name).toObject().value("alternateCodepoint").toString().midRef(2).toUInt(&ok, 16);
+        if (ok) {
+            s_symIdCodes[i].musicSymBlockCode = alernativeCode;
+        } else if (MScore::debugMode) {
+            LOGD() << "could not read alternate codepoint for glyph " << name;
         }
     }
 
@@ -235,8 +241,8 @@ void ScoreFont::load()
     m_font.setHinting(mu::draw::Font::Hinting::PreferVerticalHinting);
 
     for (size_t id = 0; id < s_symIdCodes.size(); ++id) {
-        uint code = s_symIdCodes[id];
-        if (code == 0) {
+        Code code = s_symIdCodes[id];
+        if (code.smuflCode == 0 && code.musicSymBlockCode == 0) {
             continue;
         }
         Sym& sym = m_symbols[id];
@@ -515,8 +521,18 @@ void ScoreFont::loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesO
 
             if (alternateIt != alternatesArray.cend()) {
                 Sym& sym = this->sym(glyph.alternateSymId);
-                uint code = alternateIt->toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);
+
+                Code code;
+                uint smuflCode = alternateIt->toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);
                 if (ok) {
+                    code.smuflCode = smuflCode;
+                }
+                uint musicSymBlockCode = alternateIt->toObject().value("alternateCodepoint").toString().midRef(2).toUInt(&ok, 16);
+                if (ok) {
+                    code.musicSymBlockCode = musicSymBlockCode;
+                }
+
+                if (code.smuflCode || code.musicSymBlockCode) {
                     computeMetrics(sym, code);
                 }
             }
@@ -572,11 +588,18 @@ void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject
     m_engravingDefaults.insert({ Sid::MusicalTextFont, String("%1 Text").arg(m_family) });
 }
 
-void ScoreFont::computeMetrics(ScoreFont::Sym& sym, uint code)
+void ScoreFont::computeMetrics(ScoreFont::Sym& sym, const Code& code)
 {
-    sym.code = code;
-    sym.bbox = fontProvider()->symBBox(m_font, code, DPI_F);
-    sym.advance = fontProvider()->symAdvance(m_font, code, DPI_F);
+    if (fontProvider()->inFontUcs4(m_font, code.smuflCode)) {
+        sym.code = code.smuflCode;
+    } else if (fontProvider()->inFontUcs4(m_font, code.musicSymBlockCode)) {
+        sym.code = code.musicSymBlockCode;
+    }
+
+    if (sym.code > 0) {
+        sym.bbox = fontProvider()->symBBox(m_font, sym.code, DPI_F);
+        sym.advance = fontProvider()->symAdvance(m_font, sym.code, DPI_F);
+    }
 }
 
 // =============================================
@@ -601,7 +624,7 @@ uint ScoreFont::symCode(SymId id) const
     }
 
     // fallback: search in the common SMuFL table
-    return s_symIdCodes.at(static_cast<size_t>(id));
+    return s_symIdCodes.at(static_cast<size_t>(id)).smuflCode;
 }
 
 SymId ScoreFont::fromCode(uint code) const
