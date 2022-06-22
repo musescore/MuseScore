@@ -95,7 +95,14 @@ bool QFontProvider::inFont(const Font& f, Char ch) const
 
 bool QFontProvider::inFontUcs4(const Font& f, uint ucs4) const
 {
-    return QFontMetricsF(f.toQFont(), &device).inFontUcs4(ucs4);
+    if (!QFontMetricsF(f.toQFont(), &device).inFontUcs4(ucs4)) {
+        return false;
+    }
+
+    //! @NOTE some symbols in fonts dont have glyph. For example U+ee80
+    //! exists in Bravura.otf but doen't have glyph
+    //! so QFontMetricsF returns true in that case
+    return symBBox(f, ucs4, 1.).isValid();
 }
 
 qreal QFontProvider::horizontalAdvance(const Font& f, const String& string) const
@@ -135,7 +142,25 @@ RectF QFontProvider::symBBox(const Font& f, uint ucs4, qreal dpi_f) const
     if (!engine) {
         return RectF();
     }
-    return RectF::fromQRectF(engine->bbox(ucs4, dpi_f));
+
+    RectF rect = RectF::fromQRectF(engine->bbox(ucs4, dpi_f));
+    if (!rect.isValid()) {
+        for (const auto& fontName : QFont::substitutes(f.family())) {
+            Font subFont(f);
+            subFont.setFamily(fontName);
+            engine = symEngine(subFont);
+            if (!engine) {
+                continue;
+            }
+
+            rect = RectF::fromQRectF(engine->bbox(ucs4, dpi_f));
+            if (rect.isValid()) {
+                break;
+            }
+        }
+    }
+
+    return rect;
 }
 
 qreal QFontProvider::symAdvance(const Font& f, uint ucs4, qreal dpi_f) const
@@ -144,7 +169,25 @@ qreal QFontProvider::symAdvance(const Font& f, uint ucs4, qreal dpi_f) const
     if (!engine) {
         return 0.0;
     }
-    return engine->advance(ucs4, dpi_f);
+
+    qreal symAdvance = engine->advance(ucs4, dpi_f);
+    if (RealIsNull(symAdvance)) {
+        for (const auto& fontName : QFont::substitutes(f.family())) {
+            Font subFont(f);
+            subFont.setFamily(fontName);
+            engine = symEngine(subFont);
+            if (!engine) {
+                continue;
+            }
+
+            symAdvance = engine->advance(ucs4, dpi_f);
+            if (!RealIsNull(symAdvance)) {
+                break;
+            }
+        }
+    }
+
+    return symAdvance;
 }
 
 FontEngineFT* QFontProvider::symEngine(const Font& f) const

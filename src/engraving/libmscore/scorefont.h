@@ -83,8 +83,14 @@ public:
     void draw(const SymIdList&, mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos) const;
 
 private:
+
+    struct Code {
+        uint smuflCode = 0;
+        uint musicSymBlockCode = 0;
+    };
+
     struct Sym {
-        uint code = 0;
+        uint code;
         mu::RectF bbox;
         qreal advance = 0.0;
 
@@ -109,7 +115,7 @@ private:
     void loadComposedGlyphs();
     void loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesObject);
     void loadEngravingDefaults(const QJsonObject& engravingDefaultsObject);
-    void computeMetrics(Sym& sym, uint code);
+    void computeMetrics(Sym& sym, const Code& code);
 
     Sym& sym(SymId id);
     const Sym& sym(SymId id) const;
@@ -127,7 +133,7 @@ private:
     double m_textEnclosureThickness = 0;
 
     static std::vector<ScoreFont> s_scoreFonts;
-    static std::array<uint, size_t(SymId::lastSym) + 1> s_symIdCodes;
+    static std::array<Code, size_t(SymId::lastSym) + 1> s_symIdCodes;
 };
 }
 
