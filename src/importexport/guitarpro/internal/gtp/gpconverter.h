@@ -94,6 +94,8 @@ private:
     void setUpTrack(const std::unique_ptr<GPTrack>& tracks);
     void collectTempoMap(const GPMasterTracks* mTr);
     void collectFermatas(const GPMasterBar* mB, Measure* measure);
+    void fixPercussion();
+    void setupTabDisplayStyle();
 
     Measure* addMeasure(const GPMasterBar* mB);
     void addTimeSig(const GPMasterBar* mB, Measure* measure);

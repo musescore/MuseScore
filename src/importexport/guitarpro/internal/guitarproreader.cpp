@@ -27,7 +27,7 @@
 #include "engraving/engravingerrors.h"
 
 namespace mu::engraving {
-extern Score::FileError importGTP(MasterScore*, mu::io::IODevice* io);
+extern Score::FileError importGTP(MasterScore*, mu::io::IODevice* io, bool createLinkedTabForce = false);
 }
 
 using namespace mu::iex::guitarpro;

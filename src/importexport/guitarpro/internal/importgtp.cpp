@@ -1115,7 +1115,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro1::read(IODevice* io)
+bool GuitarPro1::read(IODevice* io, bool /*createLinkedTabForce*/)
 {
     f      = io;
     curPos = 30;
@@ -1530,7 +1530,7 @@ void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString v
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro2::read(IODevice* io)
+bool GuitarPro2::read(IODevice* io, bool /*createLinkedTabForce*/)
 {
     f      = io;
     curPos = 30;
@@ -2205,7 +2205,7 @@ int GuitarPro1::readBeatEffects(int, Segment*)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro3::read(IODevice* io)
+bool GuitarPro3::read(IODevice* io, bool /*createLinkedTabForce*/)
 {
     f      = io;
     curPos = 30;
@@ -2900,7 +2900,7 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp)
 //   importGTP
 //---------------------------------------------------------
 
-Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io)
+Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool createLinkedTabForce)
 {
     if (!io->open(IODevice::ReadOnly)) {
         return Score::FileError::FILE_OPEN_ERROR;
@@ -2921,14 +2921,14 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io)
     if (strcmp(header, "PK\x3\x4") == 0) {
         gp = new GuitarPro7(score);
         gp->initGuitarProDrumset();
-        readResult = gp->read(io);
+        readResult = gp->read(io, createLinkedTabForce);
         gp->setTempo(0, 0);
     }
     // check to see if we are dealing with a GPX file via the extension
     else if (strcmp(header, "BCFZ") == 0) {
         gp = new GuitarPro6(score);
         gp->initGuitarProDrumset();
-        readResult = gp->read(io);
+        readResult = gp->read(io, createLinkedTabForce);
         gp->setTempo(0, 0);
     }
     // otherwise it's an older version - check the header
@@ -2965,7 +2965,7 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io)
             return Score::FileError::FILE_BAD_FORMAT;
         }
         gp->initGuitarProDrumset();
-        readResult = gp->read(io);
+        readResult = gp->read(io, createLinkedTabForce);
         gp->setTempo(0, 0);
     } else {
         return Score::FileError::FILE_BAD_FORMAT;

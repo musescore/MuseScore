@@ -49,6 +49,7 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 #include "libmscore/harmonicmark.h"
+#include "libmscore/excerpt.h"
 
 #include "../importgtp.h"
 
@@ -171,7 +172,7 @@ static GPBeat::HarmonicMarkType harmonicTypeNoteToBeat(GPNote::Harmonic::Type t)
         return types[t];
     }
 
-    LOGE() << "wrong harmonic type";
+    //LOGE() << "wrong harmonic type"; TODO: fix
     return GPBeat::HarmonicMarkType::None;
 }
 
@@ -189,7 +190,7 @@ static GPConverter::TextLineImportType harmonicMarkToImportType(GPBeat::Harmonic
         return types[t];
     }
 
-    LOGE() << "wrong harmonic type";
+    //LOGE() << "wrong harmonic type"; TODO: fix
     return GPConverter::TextLineImportType::NONE;
 }
 
@@ -206,7 +207,7 @@ static GPConverter::TextLineImportType ottavaToImportType(GPBeat::OttavaType t)
         return types[t];
     }
 
-    LOGE() << "wrong ottava type";
+    // LOGE() << "wrong ottava type"; TODO: fix
     return GPConverter::TextLineImportType::NONE;
 }
 
@@ -229,12 +230,17 @@ void GPConverter::convertGP()
     convert(_gpDom->masterBars());
 
     clearDefectedSpanner();
+    fixPercussion();
+    setupTabDisplayStyle();
+}
 
-    // @NOTE(o.zhukov@wsmgroup.ru): After reading some of the GP files, there're
-    //                              parts, which contain only one percussion instrument.
-    //                              In this case the program value for this instrument will
-    //                              be set to the pitch value of the notes of the instrument,
-    //                              thus we need to reset this value to 0.
+void GPConverter::fixPercussion()
+{
+    // After reading some of the GP files, there're
+    // parts, which contain only one percussion instrument.
+    // In this case the program value for this instrument will
+    // be set to the pitch value of the notes of the instrument,
+    // thus we need to reset this value to 0.
     for (size_t i = 0; i < _score->parts().size(); ++i) {
         mu::engraving::Part* pPart = _score->parts()[i];
         IF_ASSERT_FAILED(!!pPart) {
@@ -262,6 +268,57 @@ void GPConverter::convertGP()
 
             pChannel->setProgram(0);
         }
+    }
+}
+
+/// show standard/tab or st+tab, according to GP properties
+void GPConverter::setupTabDisplayStyle()
+{
+    GPDomModel::GPProperties properties = _gpDom->properties();
+    using parts_import_t = GPDomModel::TabImportOption;
+    std::vector<GPDomModel::TabImportOption>& partsImportOpts = properties.partsImportOptions;
+    bool importLinkedStaffForce = properties.createLinkedTabForce;
+
+    if (partsImportOpts.size() != _score->parts().size()) {
+        importLinkedStaffForce = true;
+    }
+
+    for (int partNum = 0; partNum < _score->parts().size(); partNum++) {
+        Part* part = _score->parts()[partNum];
+        Fraction fr = Fraction(0, 1);
+        int lines = part->instrument()->stringData()->strings();
+        int stavesNum = part->nstaves();
+
+        if (importLinkedStaffForce /*|| partsImportOpts[partNum] == parts_import_t::BOTH*/) {
+            part->setStaves(stavesNum * 2);
+            for (int i = 0; i < stavesNum; i++) {
+                Staff* s = part->staff(i);
+                Staff* s1 = part->staff(stavesNum + i);
+
+                StaffTypes tabType = StaffTypes::TAB_6SIMPLE;
+                if (lines == 4) {
+                    tabType = StaffTypes::TAB_4SIMPLE;
+                } else if (lines == 5) {
+                    tabType = StaffTypes::TAB_5SIMPLE;
+                }
+
+                s1->setStaffType(fr, *StaffType::preset(tabType));
+                s1->setLines(fr, lines);
+                Excerpt::cloneStaff(s, s1);
+            }
+        } /* else if (partsImportOpts[partNum] == parts_import_t::TAB) {
+            for (int i = 0; i < stavesNum; i++) {
+                Staff* s = part->staff(i);
+                StaffTypes tabType = StaffTypes::TAB_6COMMON;
+                if (lines == 4) {
+                    tabType = StaffTypes::TAB_4COMMON;
+                } else if (lines == 5) {
+                    tabType = StaffTypes::TAB_5COMMON;
+                }
+
+                s->setStaffType(fr, *StaffType::preset(tabType));
+            }
+        } */
     }
 }
 
@@ -897,14 +954,13 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
     Part* part = new Part(_score);
     part->setPlainLongName(tR->name());
+    part->setPlainShortName(tR->shortName());
     part->setPartName(tR->name());
     part->setId(idx);
 
     _score->appendPart(part);
     for (size_t staffIdx = 0; staffIdx < tR->staffCount(); staffIdx++) {
         Staff* s = Factory::createStaff(part);
-        StaffType stType;
-        stType.fretFont();
         _score->appendStaff(s);
     }
 
@@ -924,7 +980,11 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
     if (midiChannel == 9) {
         part->instrument()->setDrumset(gpDrumset);
-        part->setShortName(tR->instrument());
+        String drumInstrName = tR->instrument();
+        if (!drumInstrName.empty()) {
+            part->setShortName(drumInstrName);
+        }
+
         Staff* staff = part->staff(0);
         staff->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
         part->instrument()->setDrumset(gpDrumset);
@@ -1710,6 +1770,7 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elem
                                  bool forceSplitByRests)
 {
     track_idx_t track = cr->track();
+    LOGE() << "@# add line element for track : " << cr->track();
 
     auto& lastTypeForTrack = m_lastImportTypes[track][muType];
 
@@ -1785,6 +1846,7 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elem
         newElem->setTick(tick);
         newElem->setTick2(tick + cr->actualTicks());
         newElem->setTrack(track);
+        LOGE() << "@# new elem track & track2 === " << track;
         newElem->setTrack2(track);
         newElem->setStartElement(cr);
         newElem->setEndElement(cr);
