@@ -118,7 +118,7 @@ PluginInfoMap PluginsService::readPlugins() const
 
         QString thumbnailName = view.thumbnailName();
         if (!thumbnailName.isEmpty()) {
-            info.thumbnailUrl = "file://" + io::dirpath(pluginPath).toQString() + "/" + thumbnailName;
+            info.thumbnailUrl = QUrl::fromLocalFile(io::dirpath(pluginPath).toQString() + "/" + thumbnailName);
         }
 
         auto sequences = shortcutsRegister()->shortcut(info.codeKey.toStdString()).sequences;
