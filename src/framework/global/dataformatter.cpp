@@ -93,35 +93,3 @@ QString DataFormatter::formatTimeSince(const QDate& dateTime)
 
     return qtrc("global", "%1 years ago").arg(years);
 }
-
-QDateTime DataFormatter::dateTimeFromIsoFormat(const QString& dateTimeIso)
-{
-    // NOTE Available ISO8601 duration format: P#Y#M#DT#H#M#S
-
-    QRegularExpression regexp(QString("("
-                                      "P"
-                                      "((?<year>[0-9]+)Y)?"
-                                      "((?<month>[0-9]+)M)?"
-                                      "((?<day>[0-9]+)D)?"
-                                      "T"
-                                      "((?<hour>[0-9]+)H)?"
-                                      "((?<minute>[0-9]+)M)?"
-                                      "((?<second>[0-9]+)S)?"
-                                      ")"));
-
-    QRegularExpressionMatch match = regexp.match(dateTimeIso);
-
-    if (!match.hasMatch()) {
-        return QDateTime();
-    }
-
-    int year = match.captured("year").toInt();
-    int month = match.captured("month").toInt();
-    int day = match.captured("day").toInt();
-    int hour = match.captured("hour").toInt();
-    int minute = match.captured("minute").toInt();
-    int second = match.captured("second").toInt();
-
-    QDateTime dateTime(QDate(year, month, day), QTime(hour, minute, second));
-    return dateTime;
-}

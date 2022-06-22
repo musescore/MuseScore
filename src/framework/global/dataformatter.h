@@ -32,7 +32,6 @@ public:
     static double roundDouble(const double& val, const int decimals = 2);
     static QString formatReal(double val, int prec = 2);
     static QString formatTimeSince(const QDate& creationDate);
-    static QDateTime dateTimeFromIsoFormat(const QString& dateTimeIso);
 };
 
 #endif // MU_FRAMEWORK_DATAFORMATTER_H
