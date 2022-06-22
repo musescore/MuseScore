@@ -26,10 +26,8 @@
 
 #include "serialization/json.h"
 
-#include "thirdparty/rapidjson/document.h"
-#include "thirdparty/rapidjson/writer.h"
-#include "thirdparty/rapidjson/prettywriter.h"
-#include "thirdparty/rapidjson/stringbuffer.h"
+#include <QJsonObject>
+#include <QJsonDocument>
 
 using namespace mu;
 
@@ -51,34 +49,42 @@ TEST_F(Global_Ser_Json, WriteRead)
 //                       "   \"o\":{\"key1\":\"val1\", \"key2\":\"val2\"} "
 //                       "} ";
 
+    {
+//        QJsonObject o;
+//        o["pi"] = 3.1416;
+//        QByteArray ba = QJsonDocument(o).toJson();
+//        std::cout << ba.constData() << "\n";
+    }
+
     ByteArray data;
 
     // Write
     {
-        JsonDocument doc;
-        JsonObject root = doc.rootObject();
+        JsonObject root;
 
-        root["hello"] = u"world";
+        root["hello"] = "world";
         root["t"] = true;
         root["f"] = false;
-        root["n"].setNull();
+        root["n"] = JsonValue();
         root["i"] = 123;
         root["pi"] = 3.1416;
 
-        JsonArray ar = root["a"].toArray();
+        JsonArray ar;
         ar.append(1);
         ar.append(2);
         ar.append(3);
         ar.append(4);
+        root["a"] = ar;
 
-        JsonObject o = root["o"].toObject();
+        JsonObject o;
         o["key1"] = "val1";
         o["key2"] = "val2";
+        root["o"] = o;
 
-        data = doc.toJson(JsonDocument::Format::Indented);
+        data = JsonDocument(root).toJson(JsonDocument::Format::Indented);
     }
 
-    std::cout << data.constChar() << "\n";
+    std::cout << data.constChar() << std::endl;
 
     // Read
     {
@@ -91,40 +97,40 @@ TEST_F(Global_Ser_Json, WriteRead)
         EXPECT_FALSE(root.contains("notexists"));
 
         EXPECT_TRUE(root.contains("hello"));
-        EXPECT_TRUE(root.value("hello").isString());
-        EXPECT_EQ(root.value("hello").toString(), u"world");
+        EXPECT_TRUE(root.at("hello").isString());
+        EXPECT_EQ(root.at("hello").toString(), u"world");
 
         EXPECT_TRUE(root.contains("t"));
-        EXPECT_TRUE(root.value("t").isBool());
-        EXPECT_TRUE(root.value("t").toBool());
+        EXPECT_TRUE(root.at("t").isBool());
+        EXPECT_TRUE(root.at("t").toBool());
 
         EXPECT_TRUE(root.contains("f"));
-        EXPECT_TRUE(root.value("f").isBool());
-        EXPECT_FALSE(root.value("f").toBool());
+        EXPECT_TRUE(root.at("f").isBool());
+        EXPECT_FALSE(root.at("f").toBool());
 
         EXPECT_TRUE(root.contains("n"));
-        EXPECT_TRUE(root.value("n").isNull());
+        EXPECT_TRUE(root.at("n").isNull());
 
         EXPECT_TRUE(root.contains("i"));
-        EXPECT_TRUE(root.value("i").isInt());
-        EXPECT_EQ(root.value("i").toInt(), 123);
+        EXPECT_TRUE(root.at("i").isNumber());
+        EXPECT_EQ(root.at("i").toInt(), 123);
 
         EXPECT_TRUE(root.contains("pi"));
-        EXPECT_TRUE(root.value("pi").isDouble());
-        EXPECT_DOUBLE_EQ(root.value("pi").toDouble(), 3.1416);
+        EXPECT_TRUE(root.at("pi").isNumber());
+        EXPECT_DOUBLE_EQ(root.at("pi").toDouble(), 3.1416);
 
         EXPECT_TRUE(root.contains("a"));
-        EXPECT_TRUE(root.value("a").isArray());
-        JsonArray ar = root.value("a").toArray();
+        EXPECT_TRUE(root.at("a").isArray());
+        JsonArray ar = root.at("a").toArray();
         EXPECT_EQ(ar.size(), 4);
         EXPECT_EQ(ar.at(0).toInt(), 1);
         EXPECT_EQ(ar.at(3).toInt(), 4);
 
         EXPECT_TRUE(root.contains("o"));
-        EXPECT_TRUE(root.value("o").isObject());
-        JsonObject obj = root.value("o").toObject();
+        EXPECT_TRUE(root.at("o").isObject());
+        JsonObject obj = root.at("o").toObject();
         EXPECT_EQ(obj.size(), 2);
-        std::vector<AsciiStringView> keys = obj.keys();
+        std::vector<std::string> keys = obj.keys();
         EXPECT_EQ(keys.size(), 2);
         EXPECT_EQ(keys.at(0), "key1");
         EXPECT_EQ(keys.at(1), "key2");

@@ -41,9 +41,9 @@ ByteArray::ByteArray(const uint8_t* data, size_t size)
     std::memcpy(&m_data->operator [](0), data, size);
 }
 
-ByteArray::ByteArray(const char* str)
+ByteArray::ByteArray(const char* str, size_t size)
 {
-    size_t size = std::strlen(str);
+    size = (size == static_cast<size_t>(-1)) ? std::strlen(str) : size;
     m_data = std::make_shared<Data>();
     m_data->resize(size + 1);
     m_data->operator [](size) = 0;
