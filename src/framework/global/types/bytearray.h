@@ -37,7 +37,7 @@ public:
 
     ByteArray();
     ByteArray(const uint8_t* data, size_t size);
-    ByteArray(const char* str);
+    ByteArray(const char* str, size_t size = static_cast<size_t>(-1));
     ByteArray(size_t size);
 
     //! NOTE Not coped!!!
