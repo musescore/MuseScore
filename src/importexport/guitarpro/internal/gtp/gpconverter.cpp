@@ -1122,7 +1122,8 @@ void GPConverter::addContinuousSlideHammerOn()
                 return note;
             }
         }
-        return nullptr;
+
+        return nextChord->upNote();
     };
 
     std::unordered_map<Note*, Slur*> legatoSlides;
@@ -1696,6 +1697,7 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
             cl->setChordLineType(type.first);
             cl->setStraight(true);
             note->chord()->add(cl);
+            cl->setNote(note);
 
             Note::Slide sl{ type.second, nullptr };
             note->attachSlide(sl);
