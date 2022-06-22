@@ -264,7 +264,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::pedalPosAbove,           "pedalPosAbove",           PointF(.0, -1) },
     { Sid::pedalPosBelow,           "pedalPosBelow",           PointF(.0, 2.5) },
     { Sid::pedalLineWidth,          "pedalLineWidth",          Spatium(0.11) },
-    { Sid::pedalLineStyle,          "pedalListStyle",          PropertyValue(LineType::SOLID) },
+    { Sid::pedalLineStyle,          "pedalLineStyle",          PropertyValue(LineType::SOLID) },
     { Sid::pedalDashLineLen,        "pedalDashLineLen",        4.0 },
     { Sid::pedalDashGapLen,         "pedalDashGapLen",         4.0 },
     { Sid::pedalHookHeight,         "pedalHookHeight",         Spatium(-1.2) },
