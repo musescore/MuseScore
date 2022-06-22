@@ -49,7 +49,7 @@ protected:
     bool modified;
     qreal _lengthX;
     qreal _lengthY;
-    Note* _note;
+    Note* _note = nullptr;
     static constexpr double _baseLength = 1.0;
 
     friend class Factory;
