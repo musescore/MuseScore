@@ -39,30 +39,30 @@ ExcerptNotation::~ExcerptNotation()
     setScore(nullptr);
 }
 
-bool ExcerptNotation::isCreated() const
+void ExcerptNotation::init()
 {
-    return m_isCreated;
-}
-
-void ExcerptNotation::setIsCreated(bool created)
-{
-    m_isCreated = created;
-
-    if (!created) {
+    if (m_inited) {
         return;
     }
 
-    init();
-}
-
-void ExcerptNotation::init()
-{
     setScore(m_excerpt->excerptScore());
     setName(m_name);
 
     if (isEmpty()) {
         fillWithDefaultInfo();
     }
+
+    m_inited = true;
+}
+
+bool ExcerptNotation::isCustom() const
+{
+    return m_excerpt && m_excerpt->initialInstrumentId().empty();
+}
+
+bool ExcerptNotation::isEmpty() const
+{
+    return m_excerpt ? m_excerpt->parts().empty() : true;
 }
 
 void ExcerptNotation::fillWithDefaultInfo()
@@ -104,11 +104,6 @@ void ExcerptNotation::fillWithDefaultInfo()
 mu::engraving::Excerpt* ExcerptNotation::excerpt() const
 {
     return m_excerpt;
-}
-
-bool ExcerptNotation::isEmpty() const
-{
-    return m_excerpt ? m_excerpt->parts().empty() : true;
 }
 
 QString ExcerptNotation::name() const

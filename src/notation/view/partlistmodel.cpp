@@ -76,8 +76,8 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
         return excerpt->name();
     case RoleIsSelected:
         return m_selectionModel->isSelected(index);
-    case RoleIsCreated:
-        return excerpt->isCreated();
+    case RoleIsCustom:
+        return excerpt->isCustom();
     }
 
     return QVariant();
@@ -93,7 +93,7 @@ QHash<int, QByteArray> PartListModel::roleNames() const
     static const QHash<int, QByteArray> roles {
         { RoleTitle, "title" },
         { RoleIsSelected, "isSelected" },
-        { RoleIsCreated, "isCreated" }
+        { RoleIsCustom, "isCustom" }
     };
 
     return roles;
@@ -106,7 +106,7 @@ bool PartListModel::hasSelection() const
 
 void PartListModel::createNewPart()
 {
-    IExcerptNotationPtr excerpt = masterNotation()->newExcerptBlankNotation();
+    IExcerptNotationPtr excerpt = masterNotation()->createEmptyExcerpt();
 
     int index = m_excerpts.size();
     insertExcerpt(index, excerpt);
@@ -130,15 +130,19 @@ void PartListModel::removePart(int partIndex)
         return;
     }
 
-    std::string question = mu::trc("notation", "Are you sure you want to delete this part?");
+    if (!m_excerpts[partIndex]->isEmpty()) {
+        std::string question = mu::trc("notation", "Are you sure you want to delete this part?");
 
-    IInteractive::Button btn = interactive()->question("", question, {
-        IInteractive::Button::Yes, IInteractive::Button::No
-    }).standardButton();
+        IInteractive::Button btn = interactive()->question("", question, {
+            IInteractive::Button::Yes, IInteractive::Button::No
+        }).standardButton();
 
-    if (btn == IInteractive::Button::Yes) {
-        doRemovePart(partIndex);
+        if (btn != IInteractive::Button::Yes) {
+            return;
+        }
     }
+
+    doRemovePart(partIndex);
 }
 
 void PartListModel::doRemovePart(int partIndex)

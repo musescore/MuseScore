@@ -47,6 +47,7 @@ public:
     ~Excerpt();
 
     bool inited() const;
+    String initialInstrumentId() const;
 
     MasterScore* masterScore() const { return m_masterScore; }
     Score* excerptScore() const { return m_excerptScore; }
@@ -101,6 +102,7 @@ private:
     std::vector<Part*> m_parts;
     TracksMap m_tracksMapping;
     bool m_inited = false;
+    String m_initialInstrumentId;
 };
 }
 
