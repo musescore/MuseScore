@@ -29,7 +29,7 @@ import MuseScore.AppShell 1.0
 
 Page {
     title: qsTrc("appshell", "Playback")
-    explanation: qsTrc("appshell", "Enjoy premium sounds for free with our Muse Symphony Orchestra library")
+    explanation: qsTrc("appshell", "Enjoy realistic playback for free by downloading our new Muse Sounds library")
 
     titleContentSpacing: 12
 
@@ -43,7 +43,7 @@ Page {
         id: image
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
-        source: "resources/placeholder.png"
+        source: "resources/MuseSounds.png"
         sourceSize: Qt.size(width * Screen.devicePixelRatio, height * Screen.devicePixelRatio)
 
         layer.enabled: true
