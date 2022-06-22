@@ -27,17 +27,16 @@
 #include <QBuffer>
 #include <QtConcurrent>
 
-#include "log.h"
 #include "dataformatter.h"
 #include "learnerrors.h"
+#include "log.h"
 
 using namespace mu::learn;
 using namespace mu::network;
 
 void LearnService::refreshPlaylists()
 {
-    async::Channel<RetVal<Playlist> > startedPlaylistFinishChannel;
-    startedPlaylistFinishChannel.onReceive(this, [this](const RetVal<Playlist>& result) {
+    auto startedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
         if (!result.ret) {
             LOGW() << result.ret.toString();
             return;
@@ -49,10 +48,9 @@ void LearnService::refreshPlaylists()
 
         m_startedPlaylist = result.val;
         m_startedPlaylistChannel.send(m_startedPlaylist);
-    });
+    };
 
-    async::Channel<RetVal<Playlist> > advancedPlaylistFinishChannel;
-    advancedPlaylistFinishChannel.onReceive(this, [this](const RetVal<Playlist>& result) {
+    auto advancedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
         if (!result.ret) {
             LOGW() << result.ret.toString();
             return;
@@ -64,10 +62,10 @@ void LearnService::refreshPlaylists()
 
         m_advancedPlaylist = result.val;
         m_advancedPlaylistChannel.send(m_advancedPlaylist);
-    });
+    };
 
-    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->startedPlaylistUrl(), startedPlaylistFinishChannel);
-    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->advancedPlaylistUrl(), advancedPlaylistFinishChannel);
+    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->startedPlaylistUrl(), startedPlaylistCallBack);
+    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->advancedPlaylistUrl(), advancedPlaylistCallBack);
 }
 
 Playlist LearnService::startedPlaylist() const
@@ -95,7 +93,7 @@ void LearnService::openVideo(const QString& videoId) const
     openUrl(configuration()->videoOpenUrl(videoId));
 }
 
-void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<RetVal<Playlist> > finishChannel) const
+void LearnService::th_requestPlaylist(const QUrl& playlistUrl, std::function<void(RetVal<Playlist>)> callBack) const
 {
     TRACEFUNC;
 
@@ -105,7 +103,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
     QBuffer playlistItemsData;
     Ret playlistItemsRet = networkManager->get(playlistUrl, &playlistItemsData, headers);
     if (!playlistItemsRet) {
-        finishChannel.send(playlistItemsRet);
+        callBack(playlistItemsRet);
         return;
     }
 
@@ -113,7 +111,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
 
     QStringList playlistItemsIds = parsePlaylistItemsIds(playlistInfoDoc);
     if (playlistItemsIds.isEmpty()) {
-        finishChannel.send(make_ret(Err::PlaylistIsEmpty));
+        callBack(make_ret(Err::PlaylistIsEmpty));
         return;
     }
 
@@ -121,7 +119,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
     QBuffer videosInfoData;
     Ret videosRet = networkManager->get(playlistVideosInfoUrl, &videosInfoData, headers);
     if (!videosRet) {
-        finishChannel.send(videosRet);
+        callBack(videosRet);
         return;
     }
 
@@ -131,7 +129,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
     result.ret = make_ret(Ret::Code::Ok);
     result.val = parsePlaylist(videosInfoDoc);
 
-    finishChannel.send(result);
+    callBack(result);
 }
 
 void LearnService::openUrl(const QUrl& url) const

@@ -25,7 +25,6 @@
 #include "ilearnservice.h"
 
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
 #include "ilearnconfiguration.h"
 #include "network/inetworkmanagercreator.h"
 #include "iinteractive.h"
@@ -33,14 +32,14 @@
 class QJsonDocument;
 
 namespace mu::learn {
-class LearnService : public ILearnService, public async::Asyncable
+class LearnService : public ILearnService
 {
     INJECT(learn, ILearnConfiguration, configuration)
     INJECT(learn, network::INetworkManagerCreator, networkManagerCreator)
     INJECT(learn, framework::IInteractive, interactive)
 
 public:
-    void refreshPlaylists();
+    void refreshPlaylists() override;
 
     Playlist startedPlaylist() const override;
     async::Channel<Playlist> startedPlaylistChanged() const override;
@@ -51,7 +50,7 @@ public:
     void openVideo(const QString& videoId) const override;
 
 private:
-    void th_requestPlaylist(const QUrl& playlistUrl, async::Channel<RetVal<Playlist> > finishChannel) const;
+    void th_requestPlaylist(const QUrl& playlistUrl, std::function<void(RetVal<Playlist>)> callBack) const;
 
     void openUrl(const QUrl& url) const;
 

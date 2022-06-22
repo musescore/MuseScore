@@ -34,6 +34,8 @@ class ILearnService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ILearnService() = default;
 
+    virtual void refreshPlaylists() = 0;
+
     virtual Playlist startedPlaylist() const = 0;
     virtual async::Channel<Playlist> startedPlaylistChanged() const = 0;
 
