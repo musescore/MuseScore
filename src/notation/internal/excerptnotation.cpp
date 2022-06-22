@@ -57,7 +57,7 @@ void ExcerptNotation::init()
 
 bool ExcerptNotation::isCustom() const
 {
-    return m_excerpt && m_excerpt->initialInstrumentId().empty();
+    return m_excerpt && !m_excerpt->initialPartId().isValid();
 }
 
 bool ExcerptNotation::isEmpty() const

@@ -550,13 +550,7 @@ bool MasterNotation::containsExcerpt(const mu::engraving::Excerpt* excerpt) cons
 bool MasterNotation::containsExcerptForPart(const Part* part) const
 {
     for (const mu::engraving::Excerpt* excerpt : masterScore()->excerpts()) {
-        const std::vector<Part*>& excerptParts = excerpt->parts();
-
-        if (excerptParts.size() != 1) {
-            continue;
-        }
-
-        if (ID(excerptParts.front()->id()) == part->id()) {
+        if (excerpt->initialPartId() == part->id()) {
             return true;
         }
     }

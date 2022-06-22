@@ -1315,7 +1315,7 @@ void Staff::init(const Staff* s)
     _visibilityVoices = s->_visibilityVoices;
 }
 
-ID Staff::id() const
+const ID& Staff::id() const
 {
     return _id;
 }
