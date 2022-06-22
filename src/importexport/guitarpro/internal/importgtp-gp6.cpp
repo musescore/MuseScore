@@ -406,7 +406,8 @@ void GuitarPro6::readGPX(QByteArray* buffer)
     if (fileHeader == GPX_HEADER_COMPRESSED) {
         // this is  a compressed file.
         int length             = readInteger(buffer, position / BITS_IN_BYTE);
-        QByteArray* bcfsBuffer = new QByteArray();
+        QByteArray bcfsBuffer;
+        bcfsBuffer.reserve(length);
         int positionCounter    = 0;
         while ((position / BITS_IN_BYTE) < length) {
             // read the bit indicating compression information
@@ -417,23 +418,21 @@ void GuitarPro6::readGPX(QByteArray* buffer)
                 int offs = readBitsReversed(buffer, bits);
                 int size = readBitsReversed(buffer, bits);
 
-                QByteArray bcfsBufferCopy = *bcfsBuffer;
-                int pos                   = (bcfsBufferCopy.length() - offs);
+                int pos = (bcfsBuffer.length() - offs);
                 for (int i = 0; i < (size > offs ? offs : size); i++) {
-                    bcfsBuffer->insert(positionCounter, bcfsBufferCopy[pos + i]);
+                    bcfsBuffer.insert(positionCounter, bcfsBuffer[pos + i]);
                     positionCounter++;
                 }
             } else {
                 int size = readBitsReversed(buffer, 2);
                 for (int i = 0; i < size; i++) {
-                    bcfsBuffer->insert(positionCounter, readBits(buffer, 8));
+                    bcfsBuffer.insert(positionCounter, readBits(buffer, 8));
                     positionCounter++;
                 }
             }
         }
         // recurse on the decompressed file stored as a byte array
-        readGPX(bcfsBuffer);
-        delete bcfsBuffer;
+        readGPX(&bcfsBuffer);
     } else if (fileHeader == GPX_HEADER_UNCOMPRESSED) {
         // this is an uncompressed file - strip the header off
         *buffer = buffer->right(buffer->length() - sizeof(int));
