@@ -267,7 +267,7 @@ static const StyleType styleTypes[] {
       { Sid::pedalPosAbove,           "pedalPosAbove",           QPointF(.0, -1) },
       { Sid::pedalPosBelow,           "pedalPosBelow",           QPointF(.0, 2.5) },
       { Sid::pedalLineWidth,          "pedalLineWidth",          Spatium(0.11) },
-      { Sid::pedalLineStyle,          "pedalListStyle",          QVariant(int(Qt::SolidLine)) },
+      { Sid::pedalLineStyle,          "pedalLineStyle",          QVariant(int(Qt::SolidLine)) },
       { Sid::pedalBeginTextOffset,    "pedalBeginTextOffset",    QPointF(0.0, 0.15) },
       { Sid::pedalHookHeight,         "pedalHookHeight",         Spatium(-1.2) },
       { Sid::pedalFontFace,           "pedalFontFace",           "Edwin" },
@@ -3050,6 +3050,8 @@ void MStyle::load(XmlReader& e)
                   set(Sid::lyricsDashMaxLength, e.readDouble());
             else if (tag == "dontHidStavesInFirstSystm") // pre-3.6.3/4.0 typo
                   set(Sid::dontHideStavesInFirstSystem, e.readBool());
+            else if (tag == "pedalListStyle") // pre-3.6.3/4.0 typo
+                  set(Sid::pedalLineStyle, e.readInt());
             else if (!readProperties(e))
                   e.unknown();
             }
