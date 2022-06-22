@@ -134,8 +134,8 @@ FocusScope {
             text: root.title
 
             horizontalAlignment: Text.AlignLeft
-            wrapMode: Text.WrapAnywhere
-            maximumLineCount: 1
+            wrapMode: Text.WordWrap
+            maximumLineCount: 2
 
             font: ui.theme.tabBoldFont
         }
