@@ -22,11 +22,26 @@ namespace mu::engraving {
 class GPDomModel
 {
 public:
+
+    enum class TabImportOption {
+        STANDARD = 1,
+        TAB      = 2,
+        BOTH     = 3
+    };
+
+    struct GPProperties {
+        std::vector<TabImportOption> partsImportOptions;
+        bool createLinkedTabForce = false;
+    };
+
     GPDomModel() = default;
     virtual ~GPDomModel() = default;
 
     GPDomModel(const GPDomModel& gp) = delete;
     GPDomModel& operator=(const GPDomModel&) = delete;
+
+    void setProperties(const GPProperties& properties) { _properties = properties; }
+    GPProperties properties() const { return _properties; }
 
     void addGPScore(std::unique_ptr<GPScore>&& score) { _score = std::move(score); }
 
@@ -46,6 +61,7 @@ private:
     std::map<int, std::unique_ptr<GPAudioTrack> > _audiotracks;
     std::map<int, std::unique_ptr<GPTrack> > _tracks;
     std::vector<std::unique_ptr<GPMasterBar> > _masterBars;
+    GPProperties _properties;
 };
 } // end Ms namespace
 #endif // GPDOMMODEL_H
