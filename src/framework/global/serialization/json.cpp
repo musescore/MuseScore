@@ -120,20 +120,20 @@ String JsonValue::toString() const
 JsonValue& JsonValue::operator=(const String& str)
 {
     ByteArray ba = str.toUtf8();
-    value_cast(m_value).SetString(ba.constChar(), ba.size(), m_data->doc.GetAllocator());
+    value_cast(m_value).SetString(ba.constChar(), static_cast<rapidjson::SizeType>(ba.size()), m_data->doc.GetAllocator());
     return *this;
 }
 
 JsonValue& JsonValue::operator=(const char16_t* str)
 {
     ByteArray ba = String(str).toUtf8();
-    value_cast(m_value).SetString(ba.constChar(), ba.size(), m_data->doc.GetAllocator());
+    value_cast(m_value).SetString(ba.constChar(), static_cast<rapidjson::SizeType>(ba.size()), m_data->doc.GetAllocator());
     return *this;
 }
 
 JsonValue& JsonValue::operator=(const char* str)
 {
-    value_cast(m_value).SetString(str, std::strlen(str), m_data->doc.GetAllocator());
+    value_cast(m_value).SetString(str, static_cast<rapidjson::SizeType>(std::strlen(str)), m_data->doc.GetAllocator());
     return *this;
 }
 
@@ -204,14 +204,14 @@ JsonArray& JsonArray::append(double v)
 JsonArray& JsonArray::append(const String& str)
 {
     ByteArray ba = str.toUtf8();
-    value_cast(m_value).PushBack(GenericStringRef(ba.constChar(), ba.size()), m_data->doc.GetAllocator());
+    value_cast(m_value).PushBack(GenericStringRef(ba.constChar(), static_cast<rapidjson::SizeType>(ba.size())), m_data->doc.GetAllocator());
     return *this;
 }
 
 JsonArray& JsonArray::append(const char16_t* str)
 {
     ByteArray ba = String(str).toUtf8();
-    value_cast(m_value).PushBack(GenericStringRef(ba.constChar(), ba.size()), m_data->doc.GetAllocator());
+    value_cast(m_value).PushBack(GenericStringRef(ba.constChar(), static_cast<rapidjson::SizeType>(ba.size())), m_data->doc.GetAllocator());
     return *this;
 }
 
