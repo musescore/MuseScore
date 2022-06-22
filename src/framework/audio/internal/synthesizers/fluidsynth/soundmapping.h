@@ -775,7 +775,6 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         { mpe::ArticulationType::Mute, midi::Program(30, 45) }
     };
 
-
     static ArticulationMapping VIOLONCELLO_SECTION = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(40, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(40, 45) },

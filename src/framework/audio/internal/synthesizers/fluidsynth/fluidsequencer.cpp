@@ -93,7 +93,6 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
             destination[timestampTo].emplace(std::move(noteOff));
 
             appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, 64);
-            appendControlSwitch(destination, noteEvent, LEGATO_CC_SUPPORTED_TYPES, 68);
             appendPitchBend(destination, noteEvent, BEND_SUPPORTED_TYPES, channelIdx);
         }
     }
