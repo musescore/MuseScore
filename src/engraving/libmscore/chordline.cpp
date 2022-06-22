@@ -109,7 +109,16 @@ void ChordLine::layout()
 
     double _spatium = spatium();
     if (explicitParent()) {
-        Note* note = _note ? _note : chord()->upNote();
+        Note* note = nullptr;
+
+        if (_note) {
+            note = chord()->findNote(_note->pitch());
+        }
+
+        if (!note) {
+            note = chord()->upNote();
+        }
+
         double x = note->pos().x();
         double y = note->pos().y();
         double horOffset = 0.33 * spatium(); // one third of a space away from the note
