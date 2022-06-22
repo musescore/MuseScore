@@ -82,7 +82,7 @@ private:
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
         RoleIsSelected,
-        RoleIsCreated
+        RoleIsCustom
     };
 
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;

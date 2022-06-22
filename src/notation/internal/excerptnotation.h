@@ -35,9 +35,10 @@ public:
 
     ~ExcerptNotation() override;
 
-    bool isCreated() const override;
-    void setIsCreated(bool created);
     void init();
+
+    bool isCustom() const override;
+    bool isEmpty() const override;
 
     mu::engraving::Excerpt* excerpt() const;
 
@@ -48,12 +49,11 @@ public:
     IExcerptNotationPtr clone() const override;
 
 private:
-    bool isEmpty() const;
     void fillWithDefaultInfo();
 
     mu::engraving::Excerpt* m_excerpt = nullptr;
-    bool m_isCreated = false;
     QString m_name;
+    bool m_inited = false;
 };
 }
 

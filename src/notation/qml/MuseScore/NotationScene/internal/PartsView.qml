@@ -110,7 +110,7 @@ Item {
             title: model.title
             currentPartIndex: view.currentIndex
             isSelected: model.isSelected
-            isCreated: model.isCreated
+            isCustom: model.isCustom
 
             navigation.name: model.title + model.index
             navigation.panel: view.navigationPanel
