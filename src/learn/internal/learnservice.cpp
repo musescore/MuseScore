@@ -34,6 +34,34 @@
 using namespace mu::learn;
 using namespace mu::network;
 
+static int videoDurationSecs(const QString& durationInIsoFormat)
+{
+    // NOTE Available ISO8601 duration format: P#Y#M#DT#H#M#S
+
+    QRegularExpression regexp(QString("("
+                                      "P"
+                                      "((?<years>[0-9]+)Y)?"
+                                      "((?<months>[0-9]+)M)?"
+                                      "((?<days>[0-9]+)D)?"
+                                      "T"
+                                      "((?<hours>[0-9]+)H)?"
+                                      "((?<minutes>[0-9]+)M)?"
+                                      "((?<seconds>[0-9]+)S)?"
+                                      ")"));
+
+    QRegularExpressionMatch match = regexp.match(durationInIsoFormat);
+
+    if (!match.hasMatch()) {
+        return 0;
+    }
+
+    int hours = match.captured("hours").toInt();
+    int minutes = match.captured("minutes").toInt();
+    int seconds = match.captured("seconds").toInt();
+
+    return seconds + minutes * 60 + hours * 60 * 60;
+}
+
 void LearnService::refreshPlaylists()
 {
     auto startedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
@@ -182,7 +210,7 @@ Playlist LearnService::parsePlaylist(const QJsonDocument& playlistDoc) const
 
         QJsonObject contentDetails = itemObj.value("contentDetails").toObject();
         QString durationInIsoFormat = contentDetails["duration"].toString();
-        item.durationSecs = DataFormatter::dateTimeFromIsoFormat(durationInIsoFormat).toSecsSinceEpoch();
+        item.durationSecs = videoDurationSecs(durationInIsoFormat);
 
         result << item;
     }
