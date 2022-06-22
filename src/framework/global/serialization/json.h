@@ -29,13 +29,12 @@
 
 namespace mu {
 struct JsonData;
-using JsonDataPtr = std::shared_ptr<JsonData>;
 class JsonArray;
 class JsonObject;
 class JsonValue
 {
 public:
-    JsonValue() = delete;
+    JsonValue(std::shared_ptr<JsonData> d = nullptr);
 
     bool isNull() const;
     void setNull();
@@ -44,85 +43,137 @@ public:
     bool toBool() const;
     JsonValue& operator=(bool v);
 
-    bool isInt() const;
+    bool isNumber() const;
     int toInt() const;
-    JsonValue& operator=(int v);
-
-    bool isDouble() const;
     double toDouble() const;
+    JsonValue& operator=(int v);
     JsonValue& operator=(double v);
 
     bool isString() const;
     String toString() const;
+    const std::string& toStdString() const;
     JsonValue& operator=(const String& str);
-    JsonValue& operator=(const char16_t* str);
+    JsonValue& operator=(const std::string& str);
     JsonValue& operator=(const char* str);
 
     bool isArray() const;
     JsonArray toArray() const;
+    JsonValue& operator=(const JsonArray& arr);
 
     bool isObject() const;
     JsonObject toObject() const;
+    JsonValue& operator=(const JsonObject& obj);
 
 private:
     friend class JsonObject;
     friend class JsonArray;
 
-    JsonValue(JsonDataPtr data, uintptr_t value);
+    void detach();
+    std::shared_ptr<JsonData> m_data;
+};
 
-    JsonDataPtr m_data = nullptr;
-    uintptr_t m_value;
+class JsonValueRef
+{
+public:
+    JsonValueRef(const std::string& key, JsonObject* o);
+    JsonValueRef(size_t i, JsonArray* a);
+
+    JsonValueRef& operator=(bool v);
+    JsonValueRef& operator=(int v);
+    JsonValueRef& operator=(double v);
+    JsonValueRef& operator=(const String& str);
+    JsonValueRef& operator=(const std::string& str);
+    JsonValueRef& operator=(const char* str);
+    JsonValueRef& operator=(const JsonValue& v);
+    JsonValueRef& operator=(const JsonArray& arr);
+    JsonValueRef& operator=(const JsonObject& obj);
+
+private:
+    std::string m_key;
+    JsonObject* m_object = nullptr;
+
+    size_t m_idx = 0;
+    JsonArray* m_array = nullptr;
 };
 
 class JsonArray
 {
 public:
 
+    JsonArray(std::shared_ptr<JsonData> d = nullptr);
+
     size_t size() const;
+    void resize(size_t i);
+
     JsonValue at(size_t i) const;
+
+    JsonArray& set(size_t i, bool v);
+    JsonArray& set(size_t i, int v);
+    JsonArray& set(size_t i, double v);
+    JsonArray& set(size_t i, const String& str);
+    JsonArray& set(size_t i, const std::string& str);
+    JsonArray& set(size_t i, const char* str);
+    JsonArray& set(size_t i, const JsonValue& v);
+    JsonArray& set(size_t i, const JsonArray& v);
+    JsonArray& set(size_t i, const JsonObject& v);
 
     JsonArray& append(bool v);
     JsonArray& append(int v);
     JsonArray& append(double v);
     JsonArray& append(const String& str);
-    JsonArray& append(const char16_t* str);
+    JsonArray& append(const std::string& str);
     JsonArray& append(const char* str);
+    JsonArray& append(const JsonValue& v);
+    JsonArray& append(const JsonArray& v);
+    JsonArray& append(const JsonObject& v);
+
+    JsonValueRef operator [](size_t i);
 
 private:
 
     friend class JsonValue;
+    friend class JsonObject;
 
-    JsonArray(JsonDataPtr data, uintptr_t value);
-
-    JsonDataPtr m_data = nullptr;
-    uintptr_t m_value;
+    void detach();
+    std::shared_ptr<JsonData> m_data;
 };
 
 class JsonObject
 {
 public:
-    JsonObject() = delete;
+    JsonObject(std::shared_ptr<JsonData> d = nullptr);
 
     size_t size() const;
-    std::vector<AsciiStringView> keys() const;
-    bool contains(const AsciiStringView& key) const;
-    JsonValue value(const AsciiStringView& key) const;
-    JsonValue operator [](const AsciiStringView& key);
+    std::vector<std::string> keys() const;
+    bool contains(const std::string& key) const;
+    JsonValue at(const std::string& key) const;
+
+    JsonObject& set(const std::string& key, bool v);
+    JsonObject& set(const std::string& key, int v);
+    JsonObject& set(const std::string& key, double v);
+    JsonObject& set(const std::string& key, const String& str);
+    JsonObject& set(const std::string& key, const std::string& str);
+    JsonObject& set(const std::string& key, const char* str);
+    JsonObject& set(const std::string& key, const JsonValue& v);
+    JsonObject& set(const std::string& key, const JsonArray& v);
+    JsonObject& set(const std::string& key, const JsonObject& v);
+
+    JsonValueRef operator [](const std::string& key);
 
 private:
-    friend class JsonDocument;
     friend class JsonValue;
+    friend class JsonArray;
+    friend class JsonDocument;
 
-    JsonObject(JsonDataPtr data, uintptr_t value);
-
-    JsonDataPtr m_data = nullptr;
-    uintptr_t m_value;
+    void detach();
+    std::shared_ptr<JsonData> m_data;
 };
 
 class JsonDocument
 {
 public:
-    JsonDocument();
+    JsonDocument(std::shared_ptr<JsonData> d = nullptr);
+    JsonDocument(JsonObject o);
 
     enum class Format {
         Indented,
@@ -131,15 +182,12 @@ public:
 
     bool isObject() const;
     JsonObject rootObject() const;
-    JsonObject rootObject();
-
-    JsonObject newObject();
 
     ByteArray toJson(Format format = Format::Indented) const;
     static JsonDocument fromJson(const ByteArray& ba, bool* ok = nullptr);
 
 private:
-    JsonDataPtr m_data = nullptr;
+    std::shared_ptr<JsonData> m_data;
 };
 }
 
