@@ -49,6 +49,42 @@ static inline picojson::value& val_mut(std::shared_ptr<JsonData>& d)
 // =======================================
 // JsonValue
 // =======================================
+JsonValue::JsonValue(bool v)
+    : m_data(std::make_shared<JsonData>())
+{
+    val_mut(m_data).set<bool>(v);
+}
+
+JsonValue::JsonValue(int v)
+    : m_data(std::make_shared<JsonData>())
+{
+    double d = static_cast<double>(v);
+    val_mut(m_data).set<double>(d);
+}
+
+JsonValue::JsonValue(double v)
+    : m_data(std::make_shared<JsonData>())
+{
+    val_mut(m_data).set<double>(v);
+}
+
+JsonValue::JsonValue(const String& v)
+    : m_data(std::make_shared<JsonData>())
+{
+    val_mut(m_data).set<std::string>(v.toStdString());
+}
+
+JsonValue::JsonValue(const std::string& v)
+    : m_data(std::make_shared<JsonData>())
+{
+    val_mut(m_data).set<std::string>(v);
+}
+
+JsonValue::JsonValue(const char* v)
+    : m_data(std::make_shared<JsonData>())
+{
+    val_mut(m_data).set<std::string>(std::string(v));
+}
 
 JsonValue::JsonValue(std::shared_ptr<JsonData> d)
     : m_data(d)
@@ -89,7 +125,7 @@ bool JsonValue::isBool() const
 
 bool JsonValue::toBool() const
 {
-    return val_const(m_data).get<bool>();
+    return val_const(m_data).evaluate_as_boolean();
 }
 
 JsonValue& JsonValue::operator=(bool v)
@@ -106,11 +142,17 @@ bool JsonValue::isNumber() const
 
 int JsonValue::toInt() const
 {
+    if (!isNumber()) {
+        return 0;
+    }
     return static_cast<int>(std::round(val_const(m_data).get<double>()));
 }
 
 double JsonValue::toDouble() const
 {
+    if (!isNumber()) {
+        return 0.0;
+    }
     return val_const(m_data).get<double>();
 }
 
@@ -136,11 +178,19 @@ bool JsonValue::isString() const
 
 String JsonValue::toString() const
 {
+    if (!isString()) {
+        static String dummy;
+        return dummy;
+    }
     return String::fromStdString(val_const(m_data).get<std::string>());
 }
 
 const std::string& JsonValue::toStdString() const
 {
+    if (!isString()) {
+        static std::string dummy;
+        return dummy;
+    }
     return val_const(m_data).get<std::string>();
 }
 
@@ -326,6 +376,17 @@ JsonArray::JsonArray(std::shared_ptr<JsonData> d)
     }
 }
 
+JsonArray::JsonArray(std::initializer_list<JsonValue> args)
+{
+    m_data = std::make_shared<JsonData>();
+    m_data->val = picojson::value(picojson::array());
+
+    array_mut(m_data).reserve(args.size());
+    for (const JsonValue& v : args) {
+        array_mut(m_data).push_back(v.m_data->val);
+    }
+}
+
 void JsonArray::detach()
 {
     if (!m_data) {
@@ -462,6 +523,11 @@ JsonArray& JsonArray::append(const char* str)
     return *this;
 }
 
+JsonValue JsonArray::operator [](size_t i) const
+{
+    return at(i);
+}
+
 JsonValueRef JsonArray::operator [](size_t i)
 {
     return JsonValueRef(i, this);
@@ -502,6 +568,16 @@ void JsonObject::detach()
     m_data = std::make_shared<JsonData>(*m_data);
 }
 
+bool JsonObject::isValid() const
+{
+    return val_const(m_data).is<picojson::object>();
+}
+
+bool JsonObject::empty() const
+{
+    return object_const(m_data).size() == 0;
+}
+
 size_t JsonObject::size() const
 {
     return object_const(m_data).size();
@@ -513,7 +589,7 @@ bool JsonObject::contains(const std::string& key) const
     return o.find(key) != o.cend();
 }
 
-JsonValue JsonObject::at(const std::string& key) const
+JsonValue JsonObject::value(const std::string& key) const
 {
     const picojson::object& o = object_const(m_data);
     auto it = o.find(key);
@@ -588,6 +664,11 @@ JsonObject& JsonObject::set(const std::string& key, const JsonObject& v)
     return *this;
 }
 
+JsonValue JsonObject::operator [](const std::string& key) const
+{
+    return value(key);
+}
+
 JsonValueRef JsonObject::operator [](const std::string& key)
 {
     return JsonValueRef(key, this);
@@ -622,22 +703,17 @@ ByteArray JsonDocument::toJson(Format format) const
     return ByteArray(json.c_str(), json.size());
 }
 
-JsonDocument JsonDocument::fromJson(const ByteArray& ba, bool* ok)
+JsonDocument JsonDocument::fromJson(const ByteArray& ba, std::string* err)
 {
     std::shared_ptr<JsonData> d = std::make_shared<JsonData>();
 
-    std::string err;
     std::string_view json(ba.constChar(), ba.size());
 
     const char* currentLoc = setlocale(LC_NUMERIC, "C");
-    picojson::parse(d->val, json.begin(), json.end(), &err);
+    picojson::parse(d->val, json.begin(), json.end(), err);
     setlocale(LC_NUMERIC, currentLoc);
 
     JsonDocument doc(d);
-    if (ok && !err.empty()) {
-        LOGE() << err;
-        *ok = false;
-    }
     return doc;
 }
 

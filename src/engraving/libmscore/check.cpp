@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QJsonDocument>
 #include <QJsonObject>
 
 #include "translation.h"

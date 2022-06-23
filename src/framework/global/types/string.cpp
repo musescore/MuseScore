@@ -36,7 +36,7 @@ using namespace mu;
 
 // Helpers
 
-static int toInt_helper(const char* str, bool* ok, int base)
+static long int toInt_helper(const char* str, bool* ok, int base)
 {
     if (!str) {
         return 0;
@@ -809,6 +809,9 @@ String String::arg(const String& val1, const String& val2, const String& val3, c
 String String::mid(size_t pos, size_t count) const
 {
     String s;
+    if (pos > size()) {
+        return s;
+    }
     s.mutStr() = constStr().substr(pos, count);
     return s;
 }
@@ -889,7 +892,13 @@ String String::toUpper() const
 int String::toInt(bool* ok, int base) const
 {
     ByteArray ba = toUtf8();
-    return toInt_helper(ba.constChar(), ok, base);
+    return static_cast<int>(toInt_helper(ba.constChar(), ok, base));
+}
+
+unsigned int String::toUInt(bool* ok, int base) const
+{
+    ByteArray ba = toUtf8();
+    return static_cast<unsigned int>(toInt_helper(ba.constChar(), ok, base));
 }
 
 String String::number(int n, int base)
