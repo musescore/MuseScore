@@ -83,6 +83,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/string.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/string.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/io/ioenums.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/path.h
     ${CMAKE_CURRENT_LIST_DIR}/io/iodevice.cpp
@@ -95,6 +96,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/ioretcodes.h
     ${CMAKE_CURRENT_LIST_DIR}/io/fileinfo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/fileinfo.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/dir.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/dir.h
 
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.h

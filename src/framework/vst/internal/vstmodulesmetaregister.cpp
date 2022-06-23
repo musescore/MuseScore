@@ -167,7 +167,7 @@ void VstModulesMetaRegister::load()
 {
     RetVal<io::paths_t> paths = fileSystem()->scanFiles(m_knownPluginsDir,
                                                         { "*.json" },
-                                                        io::IFileSystem::ScanMode::FilesInCurrentDir);
+                                                        io::ScanMode::FilesInCurrentDir);
 
     for (const io::path_t& path : paths.val) {
         io::File file(path);

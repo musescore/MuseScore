@@ -21,7 +21,6 @@
  */
 
 #include <cmath>
-#include <QDir>
 
 #include "translation.h"
 #include "io/file.h"
