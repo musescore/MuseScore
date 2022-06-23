@@ -25,9 +25,9 @@
 #include <cstdint>
 #include <memory>
 
-//#ifndef NO_QT_SUPPORT
+#ifndef GLOBAL_NO_QT_SUPPORT
 #include <QByteArray>
-//#endif
+#endif
 
 namespace mu {
 class ByteArray
@@ -67,7 +67,7 @@ public:
     ByteArray left(size_t len) const;
     ByteArray right(size_t len) const;
 
-//#ifndef NO_QT_SUPPORT
+#ifndef GLOBAL_NO_QT_SUPPORT
     static ByteArray fromQByteArray(const QByteArray& ba)
     {
         return ByteArray(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
@@ -88,7 +88,7 @@ public:
         return QByteArray::fromRawData(reinterpret_cast<const char*>(constData()), static_cast<int>(size()));
     }
 
-//#endif
+#endif
 
 private:
     using Data = std::vector<uint8_t>;

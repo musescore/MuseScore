@@ -25,6 +25,8 @@
 #include "io/file.h"
 #include "io/fileinfo.h"
 
+#include "infrastructure/draw/iimageprovider.h"
+
 #include "draw/pixmap.h"
 #include "draw/transform.h"
 #include "draw/svgrenderer.h"

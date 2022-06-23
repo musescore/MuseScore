@@ -43,11 +43,11 @@ if (NOT PROJECT_ROOT_DIR)
     set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 endif()
 
-if (MODULE_QRC)
+if (MODULE_QRC AND NOT NO_QT_SUPPORT)
     qt5_add_resources(RCC_SOURCES ${MODULE_QRC})
 endif()
 
-if (MODULE_BIG_QRC)
+if (MODULE_BIG_QRC AND NOT NO_QT_SUPPORT)
     qt5_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
 endif()
 
