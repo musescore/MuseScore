@@ -376,8 +376,12 @@ void ScoreFont::loadComposedGlyphs()
     }
 }
 
-void ScoreFont::loadStylisticAlternates(const mu::JsonObject& glyphsWithAlternatesObject)
+void ScoreFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternatesObject)
 {
+    if (!glyphsWithAlternatesObject.isValid()) {
+        return;
+    }
+
     static const struct GlyphWithAlternates {
         const std::string key;
         const String alternateKey;
