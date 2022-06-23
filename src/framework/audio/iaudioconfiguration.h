@@ -43,9 +43,9 @@ public:
     virtual std::string currentAudioApi() const = 0;
     virtual void setCurrentAudioApi(const std::string& name) = 0;
 
-    virtual std::string audioOutputDeviceName() const = 0;
-    virtual void setAudioOutputDeviceName(const std::string& deviceName) = 0;
-    virtual async::Notification audioOutputDeviceNameChanged() const = 0;
+    virtual std::string audioOutputDeviceId() const = 0;
+    virtual void setAudioOutputDeviceId(const std::string& deviceId) = 0;
+    virtual async::Notification audioOutputDeviceIdChanged() const = 0;
 
     virtual audioch_t audioChannelsCount() const = 0;
     virtual unsigned int driverBufferSize() const = 0; // samples

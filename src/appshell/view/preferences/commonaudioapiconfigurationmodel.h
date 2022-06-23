@@ -35,8 +35,8 @@ class CommonAudioApiConfigurationModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(int currentDeviceIndex READ currentDeviceIndex WRITE setCurrentDeviceIndex NOTIFY currentDeviceIndexChanged)
-    Q_PROPERTY(QStringList deviceList READ deviceList NOTIFY deviceListChanged)
+    Q_PROPERTY(QString currentDeviceId READ currentDeviceId NOTIFY currentDeviceIdChanged)
+    Q_PROPERTY(QVariantList deviceList READ deviceList NOTIFY deviceListChanged)
 
     Q_PROPERTY(int currentSampleRateIndex READ currentSampleRateIndex WRITE setCurrentSampleRateIndex NOTIFY currentSampleRateIndexChanged)
 
@@ -46,26 +46,26 @@ class CommonAudioApiConfigurationModel : public QObject, public async::Asyncable
 public:
     explicit CommonAudioApiConfigurationModel(QObject* parent = nullptr);
 
-    int currentDeviceIndex() const;
+    QString currentDeviceId() const;
     int currentSampleRateIndex() const;
 
     Q_INVOKABLE void load();
 
-    QStringList deviceList() const;
+    QVariantList deviceList() const;
+    Q_INVOKABLE void deviceSelected(const QString& deviceId);
+
     Q_INVOKABLE QStringList sampleRateHzList() const;
 
 public slots:
-    void setCurrentDeviceIndex(int index);
     void setCurrentSampleRateIndex(int index);
 
 signals:
-    void currentDeviceIndexChanged();
+    void currentDeviceIdChanged();
     void deviceListChanged();
 
     void currentSampleRateIndexChanged();
 
 private:
-    int m_currentDeviceIndex = 0;
     int m_currentSampleRateIndex = 0;
 };
 }
