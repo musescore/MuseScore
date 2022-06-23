@@ -233,7 +233,7 @@ io::paths_t WorkspaceManager::findWorkspaceFiles() const
     io::paths_t dirPaths = configuration()->workspacePaths();
 
     for (const io::path_t& dirPath : dirPaths) {
-        QString filter = QString::fromStdString("*" + WORKSPACE_EXT);
+        std::string filter = "*" + WORKSPACE_EXT;
         RetVal<io::paths_t> files = fileSystem()->scanFiles(dirPath, { filter });
         if (!files.ret) {
             LOGE() << files.ret.toString();

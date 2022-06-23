@@ -23,12 +23,11 @@
 
 #include <vector>
 
-#include <QDir>
-
 #include "containers.h"
 #include "io/buffer.h"
 #include "io/file.h"
 #include "io/fileinfo.h"
+#include "io/dir.h"
 #include "serialization/xmlstreamwriter.h"
 #include "serialization/zipwriter.h"
 #include "serialization/textstream.h"
@@ -318,7 +317,7 @@ bool MscWriter::DirWriter::open(io::IODevice* device, const io::path_t& filePath
 
     m_rootPath = containerPath(filePath);
 
-    QDir dir(m_rootPath.toQString());
+    Dir dir(m_rootPath.toQString());
     if (!dir.removeRecursively()) {
         LOGE() << "failed clear dir: " << dir.absolutePath();
         return false;
@@ -346,7 +345,7 @@ bool MscWriter::DirWriter::addFileData(const String& fileName, const ByteArray& 
 {
     io::path_t filePath = m_rootPath + "/" + fileName;
 
-    QDir fileDir(FileInfo(filePath).absolutePath());
+    Dir fileDir(FileInfo(filePath).absolutePath());
     if (!fileDir.exists()) {
         if (!fileDir.mkpath(fileDir.absolutePath())) {
             LOGE() << "failed make path: " << fileDir.absolutePath();

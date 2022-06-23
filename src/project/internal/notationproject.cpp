@@ -541,8 +541,7 @@ mu::Ret NotationProject::doSave(const io::path_t& path, bool generateBackup, eng
     // Step 4: replace to saved file
     {
         if (ioMode == MscIoMode::Dir) {
-            RetVal<io::paths_t> filesToBeMoved
-                = fileSystem()->scanFiles(savePath, { "*" }, io::IFileSystem::ScanMode::FilesAndFoldersInCurrentDir);
+            RetVal<io::paths_t> filesToBeMoved = fileSystem()->scanFiles(savePath, { "*" }, io::ScanMode::FilesAndFoldersInCurrentDir);
             if (!filesToBeMoved.ret) {
                 return filesToBeMoved.ret;
             }
