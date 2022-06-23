@@ -21,11 +21,7 @@
  */
 #include "scorefont.h"
 
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonParseError>
-
+#include "serialization/json.h"
 #include "io/file.h"
 #include "draw/painter.h"
 #include "types/symnames.h"
@@ -110,29 +106,7 @@ double ScoreFont::textEnclosureThickness()
 
 void ScoreFont::initScoreFonts()
 {
-    QJsonObject glyphNamesJson(ScoreFont::initGlyphNamesJson());
-    IF_ASSERT_FAILED(!glyphNamesJson.empty()) {
-        LOGE() << "Could not read glyph names JSON";
-        return;
-    }
-
-    for (size_t i = 0; i < s_symIdCodes.size(); ++i) {
-        QString name(SymNames::nameForSymId(static_cast<SymId>(i)).toQLatin1String());
-
-        bool ok;
-        uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);
-        if (ok) {
-            s_symIdCodes[i].smuflCode = code;
-        } else if (MScore::debugMode) {
-            LOGD() << "could not read codepoint for glyph " << name;
-        }
-        uint alernativeCode = glyphNamesJson.value(name).toObject().value("alternateCodepoint").toString().midRef(2).toUInt(&ok, 16);
-        if (ok) {
-            s_symIdCodes[i].musicSymBlockCode = alernativeCode;
-        } else if (MScore::debugMode) {
-            LOGD() << "could not read alternate codepoint for glyph " << name;
-        }
-    }
+    initGlyphNamesJson();
 
     fontProvider()->insertSubstitution(u"Leland Text",    u"Bravura Text");
     fontProvider()->insertSubstitution(u"Bravura Text",   u"Leland Text");
@@ -145,25 +119,55 @@ void ScoreFont::initScoreFonts()
     fallbackFont(); // load fallback font
 }
 
-QJsonObject ScoreFont::initGlyphNamesJson()
+bool ScoreFont::initGlyphNamesJson()
 {
     File file(":fonts/smufl/glyphnames.json");
     if (!file.open(IODevice::ReadOnly)) {
         LOGE() << "could not open glyph names JSON file.";
-        return QJsonObject();
+        return false;
     }
 
-    QJsonParseError error;
-    QJsonObject glyphNamesJson = QJsonDocument::fromJson(file.readAll().toQByteArray(), &error).object();
+    std::string error;
+    JsonObject glyphNamesJson = JsonDocument::fromJson(file.readAll(), &error).rootObject();
     file.close();
 
-    if (error.error != QJsonParseError::NoError) {
-        LOGE() << "JSON parse error in glyph names file: " << error.errorString()
-               << " (offset: " << error.offset << ")";
-        return QJsonObject();
+    if (!error.empty()) {
+        LOGE() << "JSON parse error in glyph names file: " << error;
+        return false;
     }
 
-    return glyphNamesJson;
+    IF_ASSERT_FAILED(!glyphNamesJson.empty()) {
+        LOGE() << "Could not read glyph names JSON";
+        return false;
+    }
+
+    for (size_t i = 0; i < s_symIdCodes.size(); ++i) {
+        SymId sym = static_cast<SymId>(i);
+        if (sym == SymId::noSym || sym == SymId::lastSym) {
+            continue;
+        }
+
+        std::string name(SymNames::nameForSymId(sym).ascii());
+        JsonObject symObj = glyphNamesJson.value(name).toObject();
+        if (!symObj.isValid()) {
+            continue;
+        }
+
+        bool ok;
+        uint code = symObj.value("codepoint").toString().mid(2).toUInt(&ok, 16);
+        if (ok) {
+            s_symIdCodes[i].smuflCode = code;
+        } else if (MScore::debugMode) {
+            LOGD() << "could not read codepoint for glyph " << name;
+        }
+
+        uint alernativeCode = symObj.value("alternateCodepoint").toString().mid(2).toUInt(&ok, 16);
+        if (ok) {
+            s_symIdCodes[i].musicSymBlockCode = alernativeCode;
+        } else if (MScore::debugMode) {
+            LOGD() << "could not read alternate codepoint for glyph " << name;
+        }
+    }
 }
 
 // =============================================
@@ -255,11 +259,10 @@ void ScoreFont::load()
         return;
     }
 
-    QJsonParseError error;
-    QJsonObject metadataJson = QJsonDocument::fromJson(metadataFile.readAll().toQByteArray(), &error).object();
-    if (error.error != QJsonParseError::NoError) {
-        LOGE() << "Json parse error in " << metadataFile.filePath()
-               << ", offset " << error.offset << ": " << error.errorString();
+    std::string error;
+    JsonObject metadataJson = JsonDocument::fromJson(metadataFile.readAll(), &error).rootObject();
+    if (!error.empty()) {
+        LOGE() << "Json parse error in " << metadataFile.filePath() << ", error: " << error;
         return;
     }
 
@@ -271,9 +274,9 @@ void ScoreFont::load()
     m_loaded = true;
 }
 
-void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
+void ScoreFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
 {
-    for (const QString& symName : glyphsWithAnchors.keys()) {
+    for (const std::string& symName : glyphsWithAnchors.keys()) {
         SymId symId = SymNames::symIdByName(symName);
         if (symId == SymId::noSym) {
             //! NOTE currently, Bravura contains a bunch of entries in glyphsWithAnchors
@@ -282,9 +285,9 @@ void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
         }
 
         Sym& sym = this->sym(symId);
-        QJsonObject anchors = glyphsWithAnchors.value(symName).toObject();
+        JsonObject anchors = glyphsWithAnchors.value(symName).toObject();
 
-        static const std::unordered_map<QString, SmuflAnchorId> smuflAnchorIdNames {
+        static const std::unordered_map<std::string, SmuflAnchorId> smuflAnchorIdNames {
             { "stemDownNW", SmuflAnchorId::stemDownNW },
             { "stemUpSE", SmuflAnchorId::stemUpSE },
             { "stemDownSW", SmuflAnchorId::stemDownSW },
@@ -296,14 +299,14 @@ void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
             { "opticalCenter", SmuflAnchorId::opticalCenter },
         };
 
-        for (const QString& anchorId : anchors.keys()) {
+        for (const std::string& anchorId : anchors.keys()) {
             auto search = smuflAnchorIdNames.find(anchorId);
             if (search == smuflAnchorIdNames.cend()) {
                 //LOGD() << "Unhandled SMuFL anchorId: " << anchorId;
                 continue;
             }
 
-            QJsonArray arr = anchors.value(anchorId).toArray();
+            JsonArray arr = anchors.value(anchorId).toArray();
             double x = arr.at(0).toDouble();
             double y = arr.at(1).toDouble();
 
@@ -373,134 +376,134 @@ void ScoreFont::loadComposedGlyphs()
     }
 }
 
-void ScoreFont::loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesObject)
+void ScoreFont::loadStylisticAlternates(const mu::JsonObject& glyphsWithAlternatesObject)
 {
     static const struct GlyphWithAlternates {
-        const String key;
+        const std::string key;
         const String alternateKey;
         const SymId alternateSymId;
     } glyphsWithAlternates[] = {
-        { String("4stringTabClef"),
+        { std::string("4stringTabClef"),
           String("4stringTabClefSerif"),
           SymId::fourStringTabClefSerif
         },
-        { String("6stringTabClef"),
+        { std::string("6stringTabClef"),
           String("6stringTabClefSerif"),
           SymId::sixStringTabClefSerif
         },
-        { String("cClef"),
+        { std::string("cClef"),
           String("cClefFrench"),
           SymId::cClefFrench
         },
-        { String("cClef"),
+        { std::string("cClef"),
           String("cClefFrench20C"),
           SymId::cClefFrench20C
         },
-        { String("fClef"),
+        { std::string("fClef"),
           String("fClefFrench"),
           SymId::fClefFrench
         },
-        { String("fClef"),
+        { std::string("fClef"),
           String("fClef19thCentury"),
           SymId::fClef19thCentury
         },
-        { String("noteheadBlack"),
+        { std::string("noteheadBlack"),
           String("noteheadBlackOversized"),
           SymId::noteheadBlack
         },
-        { String("noteheadHalf"),
+        { std::string("noteheadHalf"),
           String("noteheadHalfOversized"),
           SymId::noteheadHalf
         },
-        { String("noteheadWhole"),
+        { std::string("noteheadWhole"),
           String("noteheadWholeOversized"),
           SymId::noteheadWhole
         },
-        { String("noteheadDoubleWhole"),
+        { std::string("noteheadDoubleWhole"),
           String("noteheadDoubleWholeOversized"),
           SymId::noteheadDoubleWhole
         },
-        { String("noteheadDoubleWholeSquare"),
+        { std::string("noteheadDoubleWholeSquare"),
           String("noteheadDoubleWholeSquareOversized"),
           SymId::noteheadDoubleWholeSquare
         },
-        { String("noteheadDoubleWhole"),
+        { std::string("noteheadDoubleWhole"),
           String("noteheadDoubleWholeAlt"),
           SymId::noteheadDoubleWholeAlt
         },
-        { String("brace"),
+        { std::string("brace"),
           String("braceSmall"),
           SymId::braceSmall
         },
-        { String("brace"),
+        { std::string("brace"),
           String("braceLarge"),
           SymId::braceLarge
         },
-        { String("brace"),
+        { std::string("brace"),
           String("braceLarger"),
           SymId::braceLarger
         },
-        { String("flag1024thDown"),
+        { std::string("flag1024thDown"),
           String("flag1024thDownStraight"),
           SymId::flag1024thDownStraight
         },
-        { String("flag1024thUp"),
+        { std::string("flag1024thUp"),
           String("flag1024thUpStraight"),
           SymId::flag1024thUpStraight
         },
-        { String("flag128thDown"),
+        { std::string("flag128thDown"),
           String("flag128thDownStraight"),
           SymId::flag128thDownStraight
         },
-        { String("flag128thUp"),
+        { std::string("flag128thUp"),
           String("flag128thUpStraight"),
           SymId::flag128thUpStraight
         },
-        { String("flag16thDown"),
+        { std::string("flag16thDown"),
           String("flag16thDownStraight"),
           SymId::flag16thDownStraight
         },
-        { String("flag16thUp"),
+        { std::string("flag16thUp"),
           String("flag16thUpStraight"),
           SymId::flag16thUpStraight
         },
-        { String("flag256thDown"),
+        { std::string("flag256thDown"),
           String("flag256thDownStraight"),
           SymId::flag256thDownStraight
         },
-        { String("flag256thUp"),
+        { std::string("flag256thUp"),
           String("flag256thUpStraight"),
           SymId::flag256thUpStraight
         },
-        { String("flag32ndDown"),
+        { std::string("flag32ndDown"),
           String("flag32ndDownStraight"),
           SymId::flag32ndDownStraight
         },
-        { String("flag32ndUp"),
+        { std::string("flag32ndUp"),
           String("flag32ndUpStraight"),
           SymId::flag32ndUpStraight
         },
-        { String("flag512thDown"),
+        { std::string("flag512thDown"),
           String("flag512thDownStraight"),
           SymId::flag512thDownStraight
         },
-        { String("flag512thUp"),
+        { std::string("flag512thUp"),
           String("flag512thUpStraight"),
           SymId::flag512thUpStraight
         },
-        { String("flag64thDown"),
+        { std::string("flag64thDown"),
           String("flag64thDownStraight"),
           SymId::flag64thDownStraight
         },
-        { String("flag64thUp"),
+        { std::string("flag64thUp"),
           String("flag64thUpStraight"),
           SymId::flag64thUpStraight
         },
-        { String("flag8thDown"),
+        { std::string("flag8thDown"),
           String("flag8thDownStraight"),
           SymId::flag8thDownStraight
         },
-        { String("flag8thUp"),
+        { std::string("flag8thUp"),
           String("flag8thUpStraight"),
           SymId::flag8thUpStraight
         }
@@ -508,26 +511,29 @@ void ScoreFont::loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesO
 
     bool ok;
     for (const GlyphWithAlternates& glyph : glyphsWithAlternates) {
-        const QJsonObject::const_iterator glyphIt = glyphsWithAlternatesObject.find(glyph.key);
+        if (glyphsWithAlternatesObject.contains(glyph.key)) {
+            const JsonArray alternatesArray = glyphsWithAlternatesObject.value(glyph.key).toObject().value("alternates").toArray();
 
-        if (glyphIt != glyphsWithAlternatesObject.end()) {
-            const QJsonArray alternatesArray = glyphIt.value().toObject().value("alternates").toArray();
+            JsonValue val;
+            for (size_t i = 0; i < alternatesArray.size(); ++i) {
+                JsonValue v = alternatesArray.at(i);
+                if (v.toObject().value("name").toString() == glyph.alternateKey) {
+                    val = v;
+                    break;
+                }
+            }
 
-            // locate the relevant altKey in alternate array
-            const QJsonArray::const_iterator alternateIt
-                = std::find_if(alternatesArray.cbegin(), alternatesArray.cend(), [&glyph](const QJsonValue& value) {
-                return value.toObject().value("name") == glyph.alternateKey.toQString();
-            });
-
-            if (alternateIt != alternatesArray.cend()) {
+            if (!val.isNull()) {
+                JsonObject symObj = val.toObject();
                 Sym& sym = this->sym(glyph.alternateSymId);
 
                 Code code;
-                uint smuflCode = alternateIt->toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);
+                uint smuflCode = symObj.value("codepoint").toString().mid(2).toUInt(&ok, 16);
                 if (ok) {
                     code.smuflCode = smuflCode;
                 }
-                uint musicSymBlockCode = alternateIt->toObject().value("alternateCodepoint").toString().midRef(2).toUInt(&ok, 16);
+
+                uint musicSymBlockCode = symObj.value("alternateCodepoint").toString().mid(2).toUInt(&ok, 16);
                 if (ok) {
                     code.musicSymBlockCode = musicSymBlockCode;
                 }
@@ -540,9 +546,9 @@ void ScoreFont::loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesO
     }
 }
 
-void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject)
+void ScoreFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject)
 {
-    static const std::unordered_map<QString, Sid> engravingDefaultsMapping = {
+    static const std::unordered_map<std::string, Sid> engravingDefaultsMapping = {
         { "staffLineThickness",            Sid::staffLineWidth },
         { "stemThickness",                 Sid::stemWidth },
         { "beamThickness",                 Sid::beamWidth },
@@ -566,7 +572,7 @@ void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject
         { "tupletBracketThickness",        Sid::tupletBracketWidth }
     };
 
-    for (const QString& key : engravingDefaultsObject.keys()) {
+    for (const std::string& key : engravingDefaultsObject.keys()) {
         if (key == "textEnclosureThickness") {
             m_textEnclosureThickness = engravingDefaultsObject.value(key).toDouble();
             continue;

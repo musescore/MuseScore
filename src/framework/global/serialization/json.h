@@ -34,34 +34,37 @@ class JsonObject;
 class JsonValue
 {
 public:
+    JsonValue(bool v);
+    JsonValue(int v);
+    JsonValue(double v);
+    JsonValue(const String& v);
+    JsonValue(const std::string& v);
+    JsonValue(const char* v);
     JsonValue(std::shared_ptr<JsonData> d = nullptr);
 
     bool isNull() const;
-    void setNull();
-
     bool isBool() const;
-    bool toBool() const;
-    JsonValue& operator=(bool v);
-
     bool isNumber() const;
+    bool isString() const;
+    bool isArray() const;
+    bool isObject() const;
+
+    bool toBool() const;
     int toInt() const;
     double toDouble() const;
-    JsonValue& operator=(int v);
-    JsonValue& operator=(double v);
-
-    bool isString() const;
     String toString() const;
     const std::string& toStdString() const;
+    JsonArray toArray() const;
+    JsonObject toObject() const;
+
+    void setNull();
+    JsonValue& operator=(bool v);
+    JsonValue& operator=(int v);
+    JsonValue& operator=(double v);
     JsonValue& operator=(const String& str);
     JsonValue& operator=(const std::string& str);
     JsonValue& operator=(const char* str);
-
-    bool isArray() const;
-    JsonArray toArray() const;
     JsonValue& operator=(const JsonArray& arr);
-
-    bool isObject() const;
-    JsonObject toObject() const;
     JsonValue& operator=(const JsonObject& obj);
 
 private:
@@ -101,6 +104,7 @@ class JsonArray
 public:
 
     JsonArray(std::shared_ptr<JsonData> d = nullptr);
+    JsonArray(std::initializer_list<JsonValue> args);
 
     size_t size() const;
     void resize(size_t i);
@@ -127,6 +131,11 @@ public:
     JsonArray& append(const JsonArray& v);
     JsonArray& append(const JsonObject& v);
 
+    JsonArray& operator <<(const JsonValue& v) { append(v); return *this; }
+    JsonArray& operator <<(const JsonArray& v) { append(v); return *this; }
+    JsonArray& operator <<(const JsonObject& v) { append(v); return *this; }
+
+    JsonValue operator [](size_t i) const;
     JsonValueRef operator [](size_t i);
 
 private:
@@ -143,10 +152,13 @@ class JsonObject
 public:
     JsonObject(std::shared_ptr<JsonData> d = nullptr);
 
+    bool isValid() const;
+
+    bool empty() const;
     size_t size() const;
     std::vector<std::string> keys() const;
     bool contains(const std::string& key) const;
-    JsonValue at(const std::string& key) const;
+    JsonValue value(const std::string& key) const;
 
     JsonObject& set(const std::string& key, bool v);
     JsonObject& set(const std::string& key, int v);
@@ -158,6 +170,7 @@ public:
     JsonObject& set(const std::string& key, const JsonArray& v);
     JsonObject& set(const std::string& key, const JsonObject& v);
 
+    JsonValue operator [](const std::string& key) const;
     JsonValueRef operator [](const std::string& key);
 
 private:
@@ -184,7 +197,7 @@ public:
     JsonObject rootObject() const;
 
     ByteArray toJson(Format format = Format::Indented) const;
-    static JsonDocument fromJson(const ByteArray& ba, bool* ok = nullptr);
+    static JsonDocument fromJson(const ByteArray& ba, std::string* err = nullptr);
 
 private:
     std::shared_ptr<JsonData> m_data;
