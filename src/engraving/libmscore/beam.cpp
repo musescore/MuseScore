@@ -982,12 +982,32 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
     double tolerance = _beamWidth * 0.25 * (_up ? -1 : 1);
     double startY = (isStartDictator ? dictator : pointer) * spatium() / 4 + tolerance;
     double endY = (isStartDictator ? pointer : dictator) * spatium() / 4 + tolerance;
+    // using <= or >= for doubles is not a very good plan because 0 != 0.000000000001
+    auto fuzzyCompare = [](qreal a, qreal b) {
+        qreal diff = a - b;
+        if (abs(diff) < 0.001) {
+            return 0;
+        } else {
+            return diff < 0 ? -1 : 1;
+        }
+    };
+    // stems in the middle of the beam can be shortened to a minimum of.....
+    // 1 beam 2 beams etc
+    const static double middleStemMinLength[5] = { 2.75, 3.25, 3.75, 4.5, 5.25 };
     for (ChordRest* chordRest : chordRests) {
         if (!chordRest->isChord()) {
             continue;
         }
         Chord* chord = toChord(chordRest);
         PointF anchor = chordBeamAnchor(chord) - pagePos();
+        double reduction = 0;
+        if (chordRest != _elements.back() && chordRest != _elements.front()) {
+            qreal minLength = chord->beams() < 6
+                              ? middleStemMinLength[chord->beams() - 1]
+                              : middleStemMinLength[4] + ((chord->beams() - 5) * 0.75);
+            minLength *= spatium();
+            reduction = chord->stem()->length() - minLength;
+        }
         if (endX != startX) {
             // avoid division by zero for zero-length beams (can exist as a pre-layout state used
             // for horizontal spacing computations)
@@ -995,7 +1015,8 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
 
             while (true) {
                 double desiredY = proportionAlongX * (endY - startY) + startY;
-                bool beamClearsAnchor = (_up && desiredY <= anchor.y()) || (!_up && desiredY >= anchor.y());
+                bool beamClearsAnchor = (_up && fuzzyCompare(desiredY, anchor.y() + reduction) <= 0)
+                                        || (!_up && fuzzyCompare(desiredY, anchor.y() - reduction) >= 0);
                 if (beamClearsAnchor) {
                     break;
                 } else {
