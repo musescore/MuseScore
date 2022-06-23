@@ -23,6 +23,7 @@
 
 #include <QFileInfo>
 
+using namespace mu;
 using namespace mu::io;
 
 FileInfo::FileInfo(const path_t& filePath)
@@ -135,12 +136,12 @@ QString FileInfo::doSuffix(const QString& filePath)
     return filePath.mid(lastDot + 1);
 }
 
-QDateTime FileInfo::birthTime() const
+DateTime FileInfo::birthTime() const
 {
     return fileSystem()->birthTime(m_filePath);
 }
 
-QDateTime FileInfo::lastModified() const
+DateTime FileInfo::lastModified() const
 {
     return fileSystem()->lastModified(m_filePath);
 }
