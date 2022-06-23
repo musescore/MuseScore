@@ -28,16 +28,21 @@ BaseSection {
 
     title: qsTrc("appshell", "Audio")
 
-    property alias currentAudioApiIndex: apiComboBox.currentIndex
-    property alias audioApiList: apiComboBox.model
+    property int currentAudioApiIndex: -1
+    property var audioApiList: null
 
     signal currentAudioApiIndexChangeRequested(int newIndex)
 
+    /*
+     * TODO: https://github.com/musescore/MuseScore/issues/9807
     ComboBoxWithTitle {
         id: apiComboBox
 
         title: qsTrc("appshell", "Audio API:")
         columnWidth: root.columnWidth
+
+        currentIndex: root.currentAudioApiIndex
+        model: root.audioApiList
 
         navigation.name: "AudioApiBox"
         navigation.panel: root.navigation
@@ -47,6 +52,7 @@ BaseSection {
             root.currentAudioApiIndexChangeRequested(newIndex)
         }
     }
+    */
 
     CommonAudioApiConfiguration {
         columnWidth: root.columnWidth

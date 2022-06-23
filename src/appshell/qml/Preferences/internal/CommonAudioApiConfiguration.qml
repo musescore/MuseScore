@@ -40,6 +40,10 @@ Item {
         id: apiModel
     }
 
+    Component.onCompleted: {
+        apiModel.load()
+    }
+
     Column {
         id: content
 
@@ -49,18 +53,20 @@ Item {
             title: qsTrc("appshell", "Audio device:")
             columnWidth: root.columnWidth
 
-            currentIndex: apiModel.currentDeviceIndex
-            model: apiModel.deviceList()
+            currentIndex: indexOfValue(apiModel.currentDeviceId)
+            model: apiModel.deviceList
 
             navigation.name: "AudioDeviceBox"
             navigation.panel: root.navigation
             navigation.row: root.navigationOrderStart
 
             onValueEdited: function(newIndex, newValue) {
-                apiModel.currentDeviceIndex = newIndex
+                apiModel.deviceSelected(newValue)
             }
         }
 
+        /*
+         * TODO: https://github.com/musescore/MuseScore/issues/9807
         ComboBoxWithTitle {
             id: sampleRate
 
@@ -79,5 +85,6 @@ Item {
                 apiModel.currentSampleRateIndex = newIndex
             }
         }
+        */
     }
 }

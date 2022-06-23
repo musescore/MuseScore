@@ -22,17 +22,22 @@
 #include "wincoreaudiodriver.h"
 
 #include <system_error>
+
 #include "mmdeviceapi.h"
 #include "windows.h"
 #include "audioclient.h"
+
+#include <Functiondiscoverykeys_devpkey.h>
+#include <atlstr.h>
+
 #include "log.h"
 
 #define REFTIMES_PER_SEC  10000000
 #define REFTIMES_PER_MILLISEC  10000
 
-#define CHECK_HRESULT(hr); if (hr != S_OK) { \
+#define CHECK_HRESULT(hr, errorValue); if (hr != S_OK) { \
         logError(hr); \
-        return false; \
+        return errorValue; \
 } \
 
 using namespace mu::audio;
@@ -45,17 +50,45 @@ struct WinCoreData {
     HANDLE hEvent;
 };
 
+static LPWSTR stringToLPWSTR(const std::string& str)
+{
+    return LPWSTR(QString::fromStdString(str).toStdWString().c_str());
+}
+
+static std::string lpwstrToString(const LPWSTR& lpwstr)
+{
+    return QString::fromStdWString(lpwstr).toStdString();
+}
+
 static void logError(HRESULT hr);
 
 static WinCoreData* s_data = nullptr;
+static constexpr char DEFAULT_DEVICE_ID[] = "default";
+static IAudioDriver::Spec s_format;
+
+const IID MU_IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
+const IID MU_IID_IAudioClient = __uuidof(IAudioClient);
+const IID MU_IID_IAudioRenderClient = __uuidof(IAudioRenderClient);
 
 CoreAudioDriver::CoreAudioDriver()
 {
+    m_deviceId = DEFAULT_DEVICE_ID;
 }
 
 CoreAudioDriver::~CoreAudioDriver()
 {
     close();
+}
+
+void CoreAudioDriver::init()
+{
+    m_devicesListener.startWithCallback([this]() {
+        return availableOutputDevices();
+    });
+
+    m_devicesListener.devicesChanged().onNotify(this, [this]() {
+        m_availableOutputDevicesChanged.notify();
+    });
 }
 
 std::string CoreAudioDriver::name() const
@@ -72,30 +105,32 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     s_data = new WinCoreData();
 
     HRESULT hr = S_OK;
-    const IID MU_IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
-    const IID MU_IID_IAudioClient = __uuidof(IAudioClient);
-    const IID MU_IID_IAudioRenderClient = __uuidof(IAudioRenderClient);
 
     IMMDeviceEnumerator* pEnumerator = nullptr;
     hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_ALL, MU_IID_IMMDeviceEnumerator, (void**)&pEnumerator);
-    CHECK_HRESULT(hr);
+    CHECK_HRESULT(hr, false);
 
     IMMDevice* pDdevice = nullptr;
-    hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDdevice);
+    AudioDeviceID outputDeviceId = outputDevice();
+    if (outputDeviceId == DEFAULT_DEVICE_ID) {
+        hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDdevice);
+    } else {
+        hr = pEnumerator->GetDevice(stringToLPWSTR(outputDeviceId), &pDdevice);
+    }
     pEnumerator->Release();
-    CHECK_HRESULT(hr);
+    CHECK_HRESULT(hr, false);
 
     hr = pDdevice->Activate(MU_IID_IAudioClient, CLSCTX_ALL, NULL, (void**)&s_data->audioClient);
     pDdevice->Release();
-    CHECK_HRESULT(hr);
+    CHECK_HRESULT(hr, false);
 
     WAVEFORMATEX* deviceFormat;
     hr = s_data->audioClient->GetMixFormat(&deviceFormat);
-    CHECK_HRESULT(hr);
+    CHECK_HRESULT(hr, false);
 
     REFERENCE_TIME defaultTime, minimumTime;
     hr = s_data->audioClient->GetDevicePeriod(&defaultTime, &minimumTime);
-    CHECK_HRESULT(hr);
+    CHECK_HRESULT(hr, false);
 
     s_data->pFormat = *deviceFormat;
     s_data->pFormat.wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
@@ -110,20 +145,21 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         *activeSpec = spec;
         activeSpec->format = Format::AudioF32;
         activeSpec->sampleRate = s_data->pFormat.nSamplesPerSec;
+        s_format = *activeSpec;
     }
     hr = s_data->audioClient->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
                                          defaultTime, defaultTime, &s_data->pFormat, NULL);
-    CHECK_HRESULT(hr);
+    CHECK_HRESULT(hr, false);
 
     UINT32 bufferFrameCount;
     hr = s_data->audioClient->GetBufferSize(&bufferFrameCount);
-    CHECK_HRESULT(hr);
+    CHECK_HRESULT(hr, false);
 
     hr = s_data->audioClient->GetService(MU_IID_IAudioRenderClient, (void**)&s_data->renderClient);
-    CHECK_HRESULT(hr);
+    CHECK_HRESULT(hr, false);
 
     s_data->hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-    CHECK_HRESULT(hr);
+    CHECK_HRESULT(hr, false);
     hr = s_data->audioClient->SetEventHandle(s_data->hEvent);
 
     REFERENCE_TIME hnsActualDuration = (double)REFTIMES_PER_SEC
@@ -163,7 +199,7 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     });
 
     hr = s_data->audioClient->Start();
-    CHECK_HRESULT(hr);
+    CHECK_HRESULT(hr, false);
 
     LOGI() << "Core Audio driver started";
     return true;
@@ -297,27 +333,125 @@ void CoreAudioDriver::suspend()
 {
 }
 
-std::string CoreAudioDriver::outputDevice() const
+AudioDeviceID CoreAudioDriver::outputDevice() const
 {
-    NOT_IMPLEMENTED;
-    return "default";
+    return m_deviceId;
 }
 
-bool CoreAudioDriver::selectOutputDevice(const std::string& name)
+bool CoreAudioDriver::selectOutputDevice(const AudioDeviceID& id)
 {
-    UNUSED(name);
-    NOT_IMPLEMENTED;
-    return false;
+    if (m_deviceId == id) {
+        return true;
+    }
+
+    bool reopen = isOpened();
+    close();
+    m_deviceId = id;
+
+    bool ok = true;
+    if (reopen) {
+        ok = open(s_format, &s_format);
+    }
+
+    if (ok) {
+        m_outputDeviceChanged.notify();
+    }
+
+    return ok;
 }
 
-std::vector<std::string> CoreAudioDriver::availableOutputDevices() const
+bool mu::audio::CoreAudioDriver::resetToDefaultOutputDevice()
 {
-    NOT_IMPLEMENTED;
-    return { "default" };
+    return selectOutputDevice(defaultDeviceId());
+}
+
+std::string CoreAudioDriver::defaultDeviceId() const
+{
+    HRESULT hr;
+    LPWSTR devId;
+    IMMDevice* device;
+
+    IMMDeviceEnumerator* pEnumerator = nullptr;
+    hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_ALL, MU_IID_IMMDeviceEnumerator, (void**)&pEnumerator);
+    CHECK_HRESULT(hr, std::string());
+
+    EDataFlow dataFlow = eRender;
+    ERole role = eConsole;
+    hr = pEnumerator->GetDefaultAudioEndpoint(dataFlow, role, &device);
+    CHECK_HRESULT(hr, std::string());
+
+    hr = device->GetId(&devId);
+    CHECK_HRESULT(hr, std::string());
+
+    std::wstring ws(devId);
+    return std::string(ws.begin(), ws.end());
+}
+
+mu::async::Notification CoreAudioDriver::outputDeviceChanged() const
+{
+    return m_outputDeviceChanged;
+}
+
+AudioDeviceList CoreAudioDriver::availableOutputDevices() const
+{
+    std::lock_guard lock(m_devicesMutex);
+
+    //! NOTE: Required because the method can be called from another thread
+    CoInitialize(NULL);
+
+    AudioDeviceList result;
+
+    HRESULT hr;
+    IMMDeviceCollection* devices;
+
+    IMMDeviceEnumerator* enumerator = nullptr;
+    hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_ALL, MU_IID_IMMDeviceEnumerator, (void**)&enumerator);
+    CHECK_HRESULT(hr, {});
+
+    hr = enumerator->EnumAudioEndpoints(eRender, DEVICE_STATE_ACTIVE, &devices);
+    CHECK_HRESULT(hr, {});
+
+    UINT deviceCount;
+
+    hr = devices->GetCount(&deviceCount);
+    CHECK_HRESULT(hr, {});
+
+    for (UINT i = 0; i < deviceCount; ++i) {
+        IMMDevice* device;
+
+        hr = devices->Item(i, &device);
+        CHECK_HRESULT(hr, {});
+
+        LPWSTR devId;
+        hr = device->GetId(&devId);
+        CHECK_HRESULT(hr, {});
+
+        IPropertyStore* pProps = NULL;
+
+        hr = device->OpenPropertyStore(STGM_READ, &pProps);
+        CHECK_HRESULT(hr, {});
+
+        PROPVARIANT name;
+        PropVariantInit(&name);
+
+        hr = pProps->GetValue(PKEY_Device_FriendlyName, &name);
+        CHECK_HRESULT(hr, {});
+
+        AudioDevice deviceInfo;
+        deviceInfo.id = lpwstrToString(devId);
+        deviceInfo.name = lpwstrToString(name.pwszVal);
+        result.push_back(deviceInfo);
+
+        PropVariantClear(&name);
+        device->Release();
+    }
+
+    devices->Release();
+
+    return result;
 }
 
 mu::async::Notification CoreAudioDriver::availableOutputDevicesChanged() const
 {
-    NOT_IMPLEMENTED;
-    return mu::async::Notification();
+    return m_availableOutputDevicesChanged;
 }

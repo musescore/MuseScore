@@ -22,19 +22,22 @@
 
 #include "commonaudioapiconfigurationmodel.h"
 
+#include "audio/audiotypes.h"
+
 #include "translation.h"
 #include "log.h"
 
 using namespace mu::appshell;
+using namespace mu::audio;
 
 CommonAudioApiConfigurationModel::CommonAudioApiConfigurationModel(QObject* parent)
     : QObject(parent)
 {
 }
 
-int CommonAudioApiConfigurationModel::currentDeviceIndex() const
+QString CommonAudioApiConfigurationModel::currentDeviceId() const
 {
-    return m_currentDeviceIndex;
+    return QString::fromStdString(audioDriver()->outputDevice());
 }
 
 int CommonAudioApiConfigurationModel::currentSampleRateIndex() const
@@ -42,39 +45,43 @@ int CommonAudioApiConfigurationModel::currentSampleRateIndex() const
     return m_currentSampleRateIndex;
 }
 
-void CommonAudioApiConfigurationModel::setCurrentDeviceIndex(int index)
+void CommonAudioApiConfigurationModel::load()
 {
-    NOT_IMPLEMENTED;
+    audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
+        emit deviceListChanged();
+    });
 
-    if (index == currentDeviceIndex()) {
-        return;
-    }
-
-    m_currentDeviceIndex = index;
-    emit currentDeviceIndexChanged(index);
+    audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
+        emit currentDeviceIdChanged();
+    });
 }
 
 void CommonAudioApiConfigurationModel::setCurrentSampleRateIndex(int index)
 {
     NOT_IMPLEMENTED;
-
-    if (index == currentDeviceIndex()) {
-        return;
-    }
-
     m_currentSampleRateIndex = index;
-    emit currentSampleRateIndexChanged(index);
+    emit currentSampleRateIndexChanged();
 }
 
-QStringList CommonAudioApiConfigurationModel::deviceList() const
+QVariantList CommonAudioApiConfigurationModel::deviceList() const
 {
-    QStringList devices {
-        "Built-in Output",
-        "Test device 1",
-        "Test device 2"
-    };
+    QVariantList result;
 
-    return devices;
+    AudioDeviceList devices = audioDriver()->availableOutputDevices();
+    for (const AudioDevice& device : devices) {
+        QVariantMap obj;
+        obj["value"] = QString::fromStdString(device.id);
+        obj["text"] = QString::fromStdString(device.name);
+
+        result << obj;
+    }
+
+    return result;
+}
+
+void CommonAudioApiConfigurationModel::deviceSelected(const QString& deviceId)
+{
+    audioConfiguration()->setAudioOutputDeviceId(deviceId.toStdString());
 }
 
 QStringList CommonAudioApiConfigurationModel::sampleRateHzList() const
