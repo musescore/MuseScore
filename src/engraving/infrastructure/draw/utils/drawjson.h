@@ -31,8 +31,8 @@ class DrawBufferJson
 {
 public:
 
-    static QByteArray toJson(const DrawData& buf);
-    static RetVal<DrawDataPtr> fromJson(const QByteArray& json);
+    static ByteArray toJson(const DrawData& buf);
+    static RetVal<DrawDataPtr> fromJson(const ByteArray& json);
 };
 }
 #endif // MU_DRAW_DRAWJSON_H

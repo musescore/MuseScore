@@ -97,38 +97,38 @@ TEST_F(Global_Ser_Json, WriteRead)
         EXPECT_FALSE(root.contains("notexists"));
 
         EXPECT_TRUE(root.contains("hello"));
-        EXPECT_TRUE(root.at("hello").isString());
-        EXPECT_EQ(root.at("hello").toString(), u"world");
+        EXPECT_TRUE(root.value("hello").isString());
+        EXPECT_EQ(root.value("hello").toString(), u"world");
 
         EXPECT_TRUE(root.contains("t"));
-        EXPECT_TRUE(root.at("t").isBool());
-        EXPECT_TRUE(root.at("t").toBool());
+        EXPECT_TRUE(root.value("t").isBool());
+        EXPECT_TRUE(root.value("t").toBool());
 
         EXPECT_TRUE(root.contains("f"));
-        EXPECT_TRUE(root.at("f").isBool());
-        EXPECT_FALSE(root.at("f").toBool());
+        EXPECT_TRUE(root.value("f").isBool());
+        EXPECT_FALSE(root.value("f").toBool());
 
         EXPECT_TRUE(root.contains("n"));
-        EXPECT_TRUE(root.at("n").isNull());
+        EXPECT_TRUE(root.value("n").isNull());
 
         EXPECT_TRUE(root.contains("i"));
-        EXPECT_TRUE(root.at("i").isNumber());
-        EXPECT_EQ(root.at("i").toInt(), 123);
+        EXPECT_TRUE(root.value("i").isNumber());
+        EXPECT_EQ(root.value("i").toInt(), 123);
 
         EXPECT_TRUE(root.contains("pi"));
-        EXPECT_TRUE(root.at("pi").isNumber());
-        EXPECT_DOUBLE_EQ(root.at("pi").toDouble(), 3.1416);
+        EXPECT_TRUE(root.value("pi").isNumber());
+        EXPECT_DOUBLE_EQ(root.value("pi").toDouble(), 3.1416);
 
         EXPECT_TRUE(root.contains("a"));
-        EXPECT_TRUE(root.at("a").isArray());
-        JsonArray ar = root.at("a").toArray();
+        EXPECT_TRUE(root.value("a").isArray());
+        JsonArray ar = root.value("a").toArray();
         EXPECT_EQ(ar.size(), 4);
         EXPECT_EQ(ar.at(0).toInt(), 1);
         EXPECT_EQ(ar.at(3).toInt(), 4);
 
         EXPECT_TRUE(root.contains("o"));
-        EXPECT_TRUE(root.at("o").isObject());
-        JsonObject obj = root.at("o").toObject();
+        EXPECT_TRUE(root.value("o").isObject());
+        JsonObject obj = root.value("o").toObject();
         EXPECT_EQ(obj.size(), 2);
         std::vector<std::string> keys = obj.keys();
         EXPECT_EQ(keys.size(), 2);

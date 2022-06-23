@@ -293,6 +293,7 @@ public:
     String toUpper() const;
 
     int toInt(bool* ok = nullptr, int base = 10) const;
+    unsigned int toUInt(bool* ok = nullptr, int base = 10) const;
     double toDouble(bool* ok = nullptr) const;
 
     static String number(int n, int base = 10);
@@ -344,6 +345,9 @@ public:
         : m_size(str ? std::char_traits<char>::length(str) : 0), m_data(str) {}
     constexpr AsciiStringView(const char* str, size_t size)
         : m_size(size), m_data(str) {}
+
+    AsciiStringView(const std::string& str)
+        : m_size(str.size()), m_data(str.c_str()) {}
 
 //#ifndef NO_QT_SUPPORT
     static AsciiStringView fromQLatin1String(const QLatin1String& str) { return AsciiStringView(str.latin1(), str.size()); }
