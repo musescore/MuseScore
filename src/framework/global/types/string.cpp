@@ -27,6 +27,7 @@
 #include <locale>
 #include <cctype>
 #include <iomanip>
+#include <QStringList>
 
 #include "global/thirdparty/utfcpp-3.2.1/utf8.h"
 

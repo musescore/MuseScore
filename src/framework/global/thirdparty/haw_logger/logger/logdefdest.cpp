@@ -3,22 +3,6 @@
 #include <iostream>
 #include <cassert>
 
-#ifdef HAW_LOGGER_QT_SUPPORT
-    #define USE_QT_DIR
-    #include <QDir>
-#else
-//    #if __has_include(<filesystem>)
-//        #include <filesystem>
-//        namespace fs = std::filesystem;
-//    #elif __has_include(<experimental/filesystem>)
-//        #include <experimental/filesystem>
-//        namespace fs = std::experimental::filesystem;
-//    #else
-//        #error compiler must either support c++17
-//    #endif
-#error At moment supported only with Qt
-#endif
-
 using namespace haw::logger;
 
 MemLogDest::MemLogDest(const LogLayout& l)

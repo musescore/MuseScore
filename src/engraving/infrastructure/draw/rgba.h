@@ -23,6 +23,8 @@
 #ifndef MU_DRAW_RGBA_H
 #define MU_DRAW_RGBA_H
 
+#include <cstdint>
+
 namespace mu::draw {
 using Rgba = uint32_t;
 

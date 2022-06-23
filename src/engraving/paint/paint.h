@@ -22,12 +22,8 @@
 #ifndef MU_ENGRAVING_PAINT_H
 #define MU_ENGRAVING_PAINT_H
 
-#include <list>
-
+#include <vector>
 #include "infrastructure/draw/painter.h"
-
-#include "modularity/ioc.h"
-#include "ui/iuiconfiguration.h"
 
 namespace mu::engraving {
 class EngravingItem;

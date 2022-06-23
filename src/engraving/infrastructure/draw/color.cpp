@@ -6,7 +6,7 @@
 namespace mu::draw {
 static constexpr int fromHex(uint c);
 static int hex2int(const char* s, int n);
-static bool getHexRgb(const char* name, size_t len, mu::draw::Rgba* rgba);
+static bool getHexRgb(const char* name, size_t len, Rgba* rgba);
 static std::string rgb2hex(int r, int g, int b, int a = Color::DEFAULT_ALPHA);
 static std::string rgb2hex(Rgba rgba);
 static constexpr bool isValidComp(int num);
