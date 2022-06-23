@@ -28,7 +28,6 @@
 #include "audioclient.h"
 
 #include <Functiondiscoverykeys_devpkey.h>
-#include <atlstr.h>
 
 #include "log.h"
 
@@ -52,7 +51,8 @@ struct WinCoreData {
 
 static LPWSTR stringToLPWSTR(const std::string& str)
 {
-    return LPWSTR(QString::fromStdString(str).toStdWString().c_str());
+    static std::wstring wstr = QString::fromStdString(str).toStdWString();
+    return LPWSTR(wstr.c_str());
 }
 
 static std::string lpwstrToString(const LPWSTR& lpwstr)
