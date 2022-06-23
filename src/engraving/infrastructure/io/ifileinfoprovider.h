@@ -24,8 +24,7 @@
 
 #include <memory>
 
-#include <QDateTime>
-
+#include "types/datetime.h"
 #include "io/path.h"
 
 namespace mu::engraving {
@@ -38,8 +37,8 @@ public:
     virtual io::path_t fileName(bool includingExtension = true) const = 0;
     virtual io::path_t absoluteDirPath() const = 0; //! Absolute path of the containing folder
 
-    virtual QDateTime birthTime() const = 0;
-    virtual QDateTime lastModified() const = 0;
+    virtual DateTime birthTime() const = 0;
+    virtual DateTime lastModified() const = 0;
 };
 
 using IFileInfoProviderPtr = std::shared_ptr<IFileInfoProvider>;

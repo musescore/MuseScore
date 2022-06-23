@@ -24,9 +24,13 @@
 
 #include "ifileinfoprovider.h"
 
+#include "modularity/ioc.h"
+#include "io/ifilesystem.h"
+
 namespace mu::engraving {
 class LocalFileInfoProvider : public IFileInfoProvider
 {
+    INJECT(engraving, io::IFileSystem, fileSystem)
 public:
     explicit LocalFileInfoProvider(const io::path_t& filePath);
 
@@ -34,8 +38,8 @@ public:
     io::path_t fileName(bool includingExtension = true) const override;
     io::path_t absoluteDirPath() const override;
 
-    QDateTime birthTime() const override;
-    QDateTime lastModified() const override;
+    DateTime birthTime() const override;
+    DateTime lastModified() const override;
 
 private:
     io::path_t m_path;

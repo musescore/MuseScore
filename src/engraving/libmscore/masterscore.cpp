@@ -21,8 +21,7 @@
  */
 #include "masterscore.h"
 
-#include <QDate>
-
+#include "types/datetime.h"
 #include "io/buffer.h"
 #include "io/mscreader.h"
 #include "io/mscwriter.h"
@@ -88,7 +87,7 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     metaTags().insert({ u"translator", u"" });
     metaTags().insert({ u"source", u"" });
     metaTags().insert({ u"copyright", u"" });
-    metaTags().insert({ u"creationDate", QDate::currentDate().toString(Qt::ISODate) });
+    metaTags().insert({ u"creationDate", Date::currentDate().toString(DateFormat::ISODate) });
 }
 
 MasterScore::MasterScore(const MStyle& s, std::weak_ptr<engraving::EngravingProject> project)

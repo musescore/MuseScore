@@ -22,8 +22,6 @@
 
 #include "projectfileinfoprovider.h"
 
-#include <QFileInfo>
-
 #include "notationproject.h"
 
 using namespace mu;
@@ -50,12 +48,12 @@ io::path_t ProjectFileInfoProvider::absoluteDirPath() const
     return io::absoluteDirpath(path());
 }
 
-QDateTime ProjectFileInfoProvider::birthTime() const
+DateTime ProjectFileInfoProvider::birthTime() const
 {
-    return QFileInfo(path().toQString()).birthTime();
+    return filesystem()->birthTime(path());
 }
 
-QDateTime ProjectFileInfoProvider::lastModified() const
+DateTime ProjectFileInfoProvider::lastModified() const
 {
-    return QFileInfo(path().toQString()).lastModified();
+    return filesystem()->lastModified(path());
 }
