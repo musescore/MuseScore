@@ -44,7 +44,9 @@ class OSXAudioDriver : public IAudioDriver
 public:
     OSXAudioDriver();
     ~OSXAudioDriver();
-    const static std::string DEFAULT_DEVICE_NAME;
+    const static AudioDeviceID DEFAULT_DEVICE_ID;
+
+    void init() override;
 
     std::string name() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
@@ -53,12 +55,12 @@ public:
     void resume() override;
     void suspend() override;
 
-    std::string outputDevice() const override;
-    bool selectOutputDevice(const std::string& name) override;
+    AudioDeviceID outputDevice() const override;
+    bool selectOutputDevice(const AudioDeviceID& deviceId) override;
     bool resetToDefaultOutputDevice() override;
     async::Notification outputDeviceChanged() const override;
 
-    std::vector<std::string> availableOutputDevices() const override;
+    AudioDeviceList availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
     void updateDeviceMap();
 
@@ -67,7 +69,7 @@ private:
     static void logError(const std::string message, OSStatus error);
 
     void initDeviceMapListener();
-    bool audioQueueSetDeviceName(const std::string& deviceName);
+    bool audioQueueSetDeviceName(const AudioDeviceID& deviceId);
 
     struct Data;
 
@@ -75,7 +77,7 @@ private:
     std::map<unsigned int, std::string> m_outputDevices = {}, m_inputDevices = {};
     async::Notification m_outputDeviceChanged;
     async::Notification m_availableOutputDevicesChanged;
-    std::string m_deviceName = DEFAULT_DEVICE_NAME;
+    AudioDeviceID m_deviceId = DEFAULT_DEVICE_ID;
 };
 }
 #endif // MU_AUDIO_OSXAUDIODRIVER_H

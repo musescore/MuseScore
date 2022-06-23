@@ -302,6 +302,19 @@ struct SoundTrackFormat {
                && audioChannelsNumber != 0;
     }
 };
+
+using AudioDeviceID = std::string;
+struct AudioDevice {
+    AudioDeviceID id;
+    std::string name;
+
+    bool operator==(const AudioDevice& other) const
+    {
+        return id == other.id;
+    }
+};
+
+using AudioDeviceList = std::vector<AudioDevice>;
 }
 
 #endif // MU_AUDIO_AUDIOTYPES_H

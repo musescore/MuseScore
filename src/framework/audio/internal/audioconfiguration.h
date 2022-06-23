@@ -42,9 +42,9 @@ public:
     std::string currentAudioApi() const override;
     void setCurrentAudioApi(const std::string& name) override;
 
-    std::string audioOutputDeviceName() const override;
-    void setAudioOutputDeviceName(const std::string& deviceName) override;
-    async::Notification audioOutputDeviceNameChanged() const override;
+    std::string audioOutputDeviceId() const override;
+    void setAudioOutputDeviceId(const std::string& deviceId) override;
+    async::Notification audioOutputDeviceIdChanged() const override;
 
     audioch_t audioChannelsCount() const override;
     unsigned int driverBufferSize() const override;

@@ -23,10 +23,15 @@
 #include "osxaudiodriver.h"
 
 #include <mutex>
+
 #include <AudioToolbox/AudioToolbox.h>
+
 #include "log.h"
 
+typedef AudioDeviceID OSXAudioDeviceID;
+
 using namespace mu::audio;
+const std::string OSXAudioDriver::DEFAULT_DEVICE_ID = "Systems default";
 
 struct OSXAudioDriver::Data {
     Spec format;
@@ -50,7 +55,9 @@ OSXAudioDriver::~OSXAudioDriver()
     close();
 }
 
-const std::string OSXAudioDriver::DEFAULT_DEVICE_NAME = "Systems default";
+void OSXAudioDriver::init()
+{
+}
 
 std::string OSXAudioDriver::name() const
 {
@@ -141,12 +148,19 @@ bool OSXAudioDriver::isOpened() const
     return m_data->audioQueue != nullptr;
 }
 
-std::vector<std::string> OSXAudioDriver::availableOutputDevices() const
+AudioDeviceList OSXAudioDriver::availableOutputDevices() const
 {
-    std::vector<std::string> deviceList = { DEFAULT_DEVICE_NAME };
+    AudioDeviceList deviceList;
+    deviceList.push_back({ DEFAULT_DEVICE_ID, DEFAULT_DEVICE_ID });
+
     for (auto& device : m_outputDevices) {
-        deviceList.push_back(device.second);
+        AudioDevice deviceInfo;
+        deviceInfo.id = QString::number(device.first).toStdString();
+        deviceInfo.name = device.second;
+
+        deviceList.push_back(deviceInfo);
     }
+
     return deviceList;
 }
 
@@ -155,9 +169,9 @@ mu::async::Notification OSXAudioDriver::availableOutputDevicesChanged() const
     return m_availableOutputDevicesChanged;
 }
 
-std::string OSXAudioDriver::outputDevice() const
+mu::audio::AudioDeviceID OSXAudioDriver::outputDevice() const
 {
-    return m_deviceName;
+    return m_deviceId;
 }
 
 void OSXAudioDriver::updateDeviceMap()
@@ -209,7 +223,7 @@ void OSXAudioDriver::updateDeviceMap()
         return;
     }
 
-    audioObjects.resize(propertySize / sizeof(AudioDeviceID));
+    audioObjects.resize(propertySize / sizeof(OSXAudioDeviceID));
     result = AudioObjectGetPropertyData(kAudioObjectSystemObject, &devicesPropertyAddress, 0, NULL, &propertySize, audioObjects.data());
     if (result != noErr) {
         logError("Failed to get devices list, err: ", result);
@@ -242,18 +256,23 @@ void OSXAudioDriver::updateDeviceMap()
     m_availableOutputDevicesChanged.notify();
 }
 
-bool OSXAudioDriver::audioQueueSetDeviceName(const std::string& deviceName)
+bool OSXAudioDriver::audioQueueSetDeviceName(const AudioDeviceID& deviceId)
 {
-    if (deviceName.empty() || deviceName == DEFAULT_DEVICE_NAME) {
+    if (deviceId.empty() || deviceId == DEFAULT_DEVICE_ID) {
         return true; //default device used
     }
 
-    auto index = std::find_if(m_outputDevices.begin(), m_outputDevices.end(), [&deviceName](auto& d) { return d.second == deviceName; });
+    uint deviceIdInt = QString::fromStdString(deviceId).toInt();
+    auto index = std::find_if(m_outputDevices.begin(), m_outputDevices.end(), [&deviceIdInt](auto& d) {
+        return d.first == deviceIdInt;
+    });
+
     if (index == m_outputDevices.end()) {
-        LOGW() << "device " << deviceName << " not found";
+        LOGW() << "device " << deviceId << " not found";
         return false;
     }
-    AudioDeviceID deviceId = index->first;
+
+    OSXAudioDeviceID osxDeviceId = index->first;
 
     CFStringRef deviceUID;
     UInt32 deviceUIDSize = sizeof(deviceUID);
@@ -262,7 +281,7 @@ bool OSXAudioDriver::audioQueueSetDeviceName(const std::string& deviceName)
     propertyAddress.mScope = kAudioDevicePropertyScopeOutput;
     propertyAddress.mElement = kAudioObjectPropertyElementMaster;
 
-    auto result = AudioObjectGetPropertyData(deviceId, &propertyAddress, 0, NULL, &deviceUIDSize, &deviceUID);
+    auto result = AudioObjectGetPropertyData(osxDeviceId, &propertyAddress, 0, NULL, &deviceUIDSize, &deviceUID);
     if (result != noErr) {
         logError("Failed to get device UID, err: ", result);
         return false;
@@ -275,15 +294,15 @@ bool OSXAudioDriver::audioQueueSetDeviceName(const std::string& deviceName)
     return true;
 }
 
-bool OSXAudioDriver::selectOutputDevice(const std::string& name)
+bool OSXAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 {
-    if (m_deviceName == name) {
+    if (m_deviceId == deviceId) {
         return true;
     }
 
     bool reopen = isOpened();
     close();
-    m_deviceName = name;
+    m_deviceId = deviceId;
 
     bool ok = true;
     if (reopen) {
@@ -299,7 +318,7 @@ bool OSXAudioDriver::selectOutputDevice(const std::string& name)
 
 bool OSXAudioDriver::resetToDefaultOutputDevice()
 {
-    return selectOutputDevice(DEFAULT_DEVICE_NAME);
+    return selectOutputDevice(DEFAULT_DEVICE_ID);
 }
 
 mu::async::Notification OSXAudioDriver::outputDeviceChanged() const
