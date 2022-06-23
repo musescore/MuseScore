@@ -330,7 +330,7 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
 
 SpannerSegment* Volta::layoutSystem(System* system)
 {
-    SpannerSegment* voltaSegment= SLine::layoutSystem(system);
+    SpannerSegment* voltaSegment = TextLineBase::layoutSystem(system);
 
     // we need set tempo in layout because all tempos of score is set in layout
     // so fermata in seconda volta works correct because fermata apply itself tempo during layouting
