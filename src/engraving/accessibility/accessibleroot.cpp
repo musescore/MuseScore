@@ -25,8 +25,6 @@
 #include "../libmscore/staff.h"
 #include "../libmscore/part.h"
 
-#include "context/uicontext.h"
-
 #include "translation.h"
 
 using namespace mu::engraving;
