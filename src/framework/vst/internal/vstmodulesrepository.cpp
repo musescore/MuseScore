@@ -181,7 +181,7 @@ io::paths_t VstModulesRepository::pluginPathsFromCustomLocations(const io::paths
     io::paths_t result;
 
     for (const io::path_t& path : customPaths) {
-        RetVal<io::paths_t> paths = fileSystem()->scanFiles(path, QStringList(QString::fromStdString(VST3_PACKAGE_EXTENSION)));
+        RetVal<io::paths_t> paths = fileSystem()->scanFiles(path, { VST3_PACKAGE_EXTENSION });
         if (!paths.ret) {
             LOGW() << paths.ret.toString();
             continue;

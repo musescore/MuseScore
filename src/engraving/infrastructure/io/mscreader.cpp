@@ -21,11 +21,9 @@
  */
 #include "mscreader.h"
 
-#include <QDir>
-#include <QDirIterator>
-
 #include "io/file.h"
 #include "io/fileinfo.h"
+#include "io/dir.h"
 #include "serialization/zipreader.h"
 #include "serialization/xmlstreamreader.h"
 
@@ -356,12 +354,15 @@ bool MscReader::DirReader::isContainer() const
 
 StringList MscReader::DirReader::fileList() const
 {
-    StringList files;
-    QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories;
-    QDirIterator it(m_rootPath.toQString(), QStringList(), QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Readable | QDir::Files, flags);
+    RetVal<io::paths_t> rv = Dir::scanFiles(m_rootPath, {}, ScanMode::FilesInCurrentDirAndSubdirs);
+    if (!rv.ret) {
+        LOGE() << "failed scan dir: " << m_rootPath << ", err: " << rv.ret.toString();
+        return StringList();
+    }
 
-    while (it.hasNext()) {
-        String filePath = String::fromQString(it.next());
+    StringList files;
+    for (const io::path_t& p : rv.val) {
+        String filePath = p.toString();
         files << filePath.mid(m_rootPath.size() + 1);
     }
 

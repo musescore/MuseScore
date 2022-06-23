@@ -195,8 +195,8 @@ io::paths_t LanguagesConfiguration::languageFilePaths(const QString& languageCod
     TRACEFUNC;
 
     auto scan = [this](const io::path_t& path, const QString& code) {
-        QStringList filters = { QString("*%1.qm").arg(code) };
-        RetVal<io::paths_t> files = fileSystem()->scanFiles(path, filters);
+        std::string filter = QString("*%1.qm").arg(code).toStdString();
+        RetVal<io::paths_t> files = fileSystem()->scanFiles(path, { filter });
         if (!files.ret) {
             LOGW() << files.ret.toString();
             return io::paths_t();

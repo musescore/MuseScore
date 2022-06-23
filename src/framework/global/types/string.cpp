@@ -1011,6 +1011,16 @@ void StringList::removeAt(size_t i)
     erase(begin() + i);
 }
 
+QStringList StringList::toQStringList() const
+{
+    QStringList l;
+    l.reserve(static_cast<int>(size()));
+    for (size_t i = 0; i < size(); ++i) {
+        l << at(i).toQString();
+    }
+    return l;
+}
+
 // ============================
 // AsciiChar
 // ============================

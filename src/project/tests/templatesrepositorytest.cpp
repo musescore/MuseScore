@@ -140,8 +140,8 @@ TEST_F(TemplatesRepositoryTest, Templates)
         "/path/to/user/templates/without/categories_json/BBB.mscx"
     };
 
-    QStringList filters = { "*.mscz", "*.mscx" };
-    ON_CALL(*m_fileSystem, scanFiles(otherUserTemplatesDir, filters, IFileSystem::ScanMode::FilesInCurrentDirAndSubdirs))
+    std::vector<std::string> filters = { "*.mscz", "*.mscx" };
+    ON_CALL(*m_fileSystem, scanFiles(otherUserTemplatesDir, filters, ScanMode::FilesInCurrentDirAndSubdirs))
     .WillByDefault(Return(RetVal<io::paths_t>::make_ok(otherUserTemplates)));
 
     // [GIVEN] All templates

@@ -206,7 +206,7 @@ RetVal<uint64_t> FileSystem::fileSize(const io::path_t& path) const
     return rv;
 }
 
-RetVal<io::paths_t> FileSystem::scanFiles(const io::path_t& rootDir, const QStringList& nameFilters, ScanMode mode) const
+RetVal<io::paths_t> FileSystem::scanFiles(const io::path_t& rootDir, const std::vector<std::string>& nameFilters, ScanMode mode) const
 {
     RetVal<io::paths_t> result;
     Ret ret = exists(rootDir);
@@ -222,16 +222,21 @@ RetVal<io::paths_t> FileSystem::scanFiles(const io::path_t& rootDir, const QStri
     case ScanMode::FilesInCurrentDir:
         filters |= QDir::Files;
         break;
-    case IFileSystem::ScanMode::FilesAndFoldersInCurrentDir:
+    case ScanMode::FilesAndFoldersInCurrentDir:
         filters |= QDir::Files | QDir::Dirs;
         break;
-    case IFileSystem::ScanMode::FilesInCurrentDirAndSubdirs:
+    case ScanMode::FilesInCurrentDirAndSubdirs:
         flags |= QDirIterator::Subdirectories;
         filters |= QDir::Files;
         break;
     }
 
-    QDirIterator it(rootDir.toQString(), nameFilters, filters, flags);
+    QStringList qnameFilters;
+    for (const std::string& f : nameFilters) {
+        qnameFilters << QString::fromStdString(f);
+    }
+
+    QDirIterator it(rootDir.toQString(), qnameFilters, filters, flags);
 
     while (it.hasNext()) {
         result.val.push_back(it.next());
