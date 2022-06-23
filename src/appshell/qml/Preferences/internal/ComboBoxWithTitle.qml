@@ -41,6 +41,10 @@ Row {
 
     spacing: 12
 
+    function indexOfValue(value) {
+        return comboBox.indexOfValue(value)
+    }
+
     StyledTextLabel {
         id: titleLabel
 

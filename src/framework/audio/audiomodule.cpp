@@ -32,6 +32,7 @@
 #include "internal/audiothread.h"
 #include "internal/audiobuffer.h"
 #include "internal/audiothreadsecurer.h"
+#include "internal/audiooutputcontroller.h"
 
 #include "internal/worker/audioengine.h"
 #include "internal/worker/playback.h"
@@ -58,7 +59,8 @@ using namespace mu::audio::fx;
 
 static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shared<AudioConfiguration>();
 static std::shared_ptr<AudioThread> s_audioWorker = std::make_shared<AudioThread>();
-static std::shared_ptr<mu::audio::AudioBuffer> s_audioBuffer = std::make_shared<mu::audio::AudioBuffer>();
+static std::shared_ptr<AudioBuffer> s_audioBuffer = std::make_shared<AudioBuffer>();
+static std::shared_ptr<AudioOutputController> s_audioOutputController = std::make_shared<AudioOutputController>();
 
 static std::shared_ptr<FxResolver> s_fxResolver = std::make_shared<FxResolver>();
 static std::shared_ptr<SynthResolver> s_synthResolver = std::make_shared<SynthResolver>();
@@ -168,6 +170,8 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
 
     s_audioBuffer->init(s_audioConfiguration->audioChannelsCount());
 
+    s_audioOutputController->init();
+
     // Setup audio driver
     IAudioDriver::Spec requiredSpec;
     requiredSpec.sampleRate = 48000;
@@ -182,6 +186,8 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     IAudioDriver::Spec activeSpec;
 
     if (mode == framework::IApplication::RunMode::Editor) {
+        s_audioDriver->init();
+
         bool driverOpened = s_audioDriver->open(requiredSpec, &activeSpec);
         if (!driverOpened) {
             LOGE() << "audio output open failed";

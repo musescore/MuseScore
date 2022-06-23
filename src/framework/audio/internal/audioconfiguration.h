@@ -42,6 +42,10 @@ public:
     std::string currentAudioApi() const override;
     void setCurrentAudioApi(const std::string& name) override;
 
+    std::string audioOutputDeviceId() const override;
+    void setAudioOutputDeviceId(const std::string& deviceId) override;
+    async::Notification audioOutputDeviceIdChanged() const override;
+
     audioch_t audioChannelsCount() const override;
     unsigned int driverBufferSize() const override;
 
@@ -68,6 +72,8 @@ private:
     mutable synth::SynthesizerState m_state;
     async::Notification m_synthesizerStateChanged;
     mutable std::map<std::string, async::Notification> m_synthesizerStateGroupChanged;
+
+    async::Notification m_audioOutputDeviceNameChanged;
 };
 }
 
