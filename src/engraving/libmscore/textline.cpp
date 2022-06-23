@@ -367,17 +367,9 @@ void TextLine::undoChangeProperty(Pid id, const engraving::PropertyValue& v, Pro
 
 SpannerSegment* TextLine::layoutSystem(System* system)
 {
-    TextLineSegment* tls = toTextLineSegment(TextLineBase::layoutSystem(system));
+    SpannerSegment* segment = TextLineBase::layoutSystem(system);
+    moveToSystemTopIfNeed(segment);
 
-    if (tls->spanner()) {
-        for (SpannerSegment* ss : tls->spanner()->spannerSegments()) {
-            ss->setFlag(ElementFlag::SYSTEM, systemFlag());
-            ss->setTrack(systemFlag() ? 0 : track());
-        }
-        tls->spanner()->setFlag(ElementFlag::SYSTEM, systemFlag());
-        tls->spanner()->setTrack(systemFlag() ? 0 : track());
-    }
-
-    return tls;
+    return segment;
 }
 } // namespace mu::engraving
