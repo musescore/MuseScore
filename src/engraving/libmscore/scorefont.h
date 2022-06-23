@@ -115,10 +115,10 @@ private:
     static bool initGlyphNamesJson();
 
     void load();
-    void loadGlyphsWithAnchors(const mu::JsonObject& glyphsWithAnchors);
+    void loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors);
     void loadComposedGlyphs();
-    void loadStylisticAlternates(const mu::JsonObject& glyphsWithAlternatesObject);
-    void loadEngravingDefaults(const mu::JsonObject& engravingDefaultsObject);
+    void loadStylisticAlternates(const JsonObject& glyphsWithAlternatesObject);
+    void loadEngravingDefaults(const JsonObject& engravingDefaultsObject);
     void computeMetrics(Sym& sym, const Code& code);
 
     Sym& sym(SymId id);

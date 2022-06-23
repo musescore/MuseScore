@@ -722,7 +722,17 @@ bool JsonDocument::isObject() const
     return m_data->val.is<picojson::object>();
 }
 
+bool JsonDocument::isArray() const
+{
+    return m_data->val.is<picojson::array>();
+}
+
 JsonObject JsonDocument::rootObject() const
 {
     return JsonObject(m_data);
+}
+
+JsonArray JsonDocument::rootArray() const
+{
+    return JsonArray(m_data);
 }

@@ -194,7 +194,9 @@ public:
     };
 
     bool isObject() const;
+    bool isArray() const;
     JsonObject rootObject() const;
+    JsonArray rootArray() const;
 
     ByteArray toJson(Format format = Format::Indented) const;
     static JsonDocument fromJson(const ByteArray& ba, std::string* err = nullptr);
