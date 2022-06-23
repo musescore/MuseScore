@@ -42,7 +42,7 @@ void SoundFontRepository::loadSoundFontPaths()
 
     m_soundFontPaths.clear();
 
-    static const QStringList filters = { "*.sf2",  "*.sf3" };
+    static const std::vector<std::string> filters = { "*.sf2",  "*.sf3" };
     io::paths_t dirs = configuration()->soundFontDirectories();
 
     for (const io::path_t& dir : dirs) {

@@ -331,6 +331,8 @@ public:
     void replace(size_t idx, const String& str);
     bool removeAll(const String& str);
     void removeAt(size_t i);
+
+    QStringList toQStringList() const;
 };
 
 // ============================

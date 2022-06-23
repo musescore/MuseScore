@@ -46,7 +46,7 @@ public:
 
     MOCK_METHOD(Ret, makePath, (const io::path_t&), (const, override));
 
-    MOCK_METHOD(RetVal<io::paths_t>, scanFiles, (const io::path_t&, const QStringList&, ScanMode), (const, override));
+    MOCK_METHOD(RetVal<io::paths_t>, scanFiles, (const io::path_t&, const std::vector<std::string>&, ScanMode), (const, override));
 
     MOCK_METHOD(void, setAttribute, (const io::path_t& path, Attribute attribute), (const, override));
     MOCK_METHOD(bool, setPermissionsAllowedForAll, (const io::path_t& path), (const, override));

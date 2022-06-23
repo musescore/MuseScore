@@ -20,11 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QDir>
 #include <QCoreApplication>
 
 #include "translation.h"
 #include "style/style.h"
+#include "io/dir.h"
 
 #include "musescoreCore.h"
 #include "mscore.h"
@@ -178,17 +178,17 @@ void MScore::init()
     }
 
 #ifdef Q_OS_WIN
-    QDir dir(QCoreApplication::applicationDirPath() + String("/../" INSTALL_NAME));
-    _globalShare = dir.absolutePath() + "/";
+    io::Dir dir(QCoreApplication::applicationDirPath() + String("/../" INSTALL_NAME));
+    _globalShare = dir.absolutePath().toString() + u"/";
 
 #elif defined(Q_OS_MAC)
-    QDir dir(QCoreApplication::applicationDirPath() + String("/../Resources"));
-    _globalShare = dir.absolutePath() + "/";
+    io::Dir dir(QCoreApplication::applicationDirPath() + String("/../Resources"));
+    _globalShare = dir.absolutePath().toString() + u"/";
 #else
     // Try relative path (needed for portable AppImage and non-standard installations)
-    QDir dir(QCoreApplication::applicationDirPath() + String("/../share/" INSTALL_NAME));
+    io::Dir dir(QCoreApplication::applicationDirPath() + String("/../share/" INSTALL_NAME));
     if (dir.exists()) {
-        _globalShare = dir.absolutePath() + "/";
+        _globalShare = dir.absolutePath().toString() + u"/";
     } else { // Fall back to default location (e.g. if binary has moved relative to share)
         _globalShare = String(INSTPREFIX "/share/" INSTALL_NAME);
     }

@@ -28,6 +28,7 @@
 #include "retval.h"
 #include "path.h"
 #include "types/bytearray.h"
+#include "ioenums.h"
 
 namespace mu::io {
 class IFileSystem : MODULE_EXPORT_INTERFACE
@@ -47,13 +48,7 @@ public:
 
     virtual RetVal<uint64_t> fileSize(const io::path_t& path) const = 0;
 
-    enum class ScanMode {
-        FilesInCurrentDir,
-        FilesAndFoldersInCurrentDir,
-        FilesInCurrentDirAndSubdirs
-    };
-
-    virtual RetVal<io::paths_t> scanFiles(const io::path_t& rootDir, const QStringList& filters,
+    virtual RetVal<io::paths_t> scanFiles(const io::path_t& rootDir, const std::vector<std::string>& filters,
                                           ScanMode mode = ScanMode::FilesInCurrentDirAndSubdirs) const = 0;
 
     enum class Attribute {
