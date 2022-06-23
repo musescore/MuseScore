@@ -137,7 +137,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
 
     if (glissando()->showText()) {
         mu::draw::Font f(glissando()->fontFace());
-        f.setPointSizeF(glissando()->fontSize() * MScore::pixelRatio * _spatium / SPATIUM20);
+        f.setPointSizeF(glissando()->fontSize() * _spatium / SPATIUM20);
         f.setBold(glissando()->fontStyle() & FontStyle::Bold);
         f.setItalic(glissando()->fontStyle() & FontStyle::Italic);
         f.setUnderline(glissando()->fontStyle() & FontStyle::Underline);
@@ -150,7 +150,11 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
             qreal yOffset = r.height() + r.y();             // find text descender height
             // raise text slightly above line and slightly more with WAVY than with STRAIGHT
             yOffset += _spatium * (glissando()->glissandoType() == GlissandoType::WAVY ? 0.4 : 0.1);
-            painter->setFont(f);
+
+            mu::draw::Font scaledFont(f);
+            scaledFont.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            painter->setFont(scaledFont);
+
             qreal x = (l - r.width()) * 0.5;
             painter->drawText(PointF(x, -yOffset), glissando()->text());
         }
