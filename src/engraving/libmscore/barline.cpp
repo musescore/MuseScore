@@ -732,11 +732,15 @@ void BarLine::draw(Painter* painter) const
         if (m->isIrregular() && score()->markIrregularMeasures() && !m->isMMRest()) {
             painter->setPen(engravingConfiguration()->formattingMarksColor());
             draw::Font f(u"Edwin");
-            f.setPointSizeF(12 * spatium() * MScore::pixelRatio / SPATIUM20);
+            f.setPointSizeF(12 * spatium() / SPATIUM20);
             f.setBold(true);
             Char ch = m->ticks() > m->timesig() ? u'+' : u'-';
             RectF r = FontMetrics(f).boundingRect(ch);
-            painter->setFont(f);
+
+            mu::draw::Font scaledFont(f);
+            scaledFont.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            painter->setFont(scaledFont);
+
             painter->drawText(-r.width(), 0.0, ch);
         }
     }
