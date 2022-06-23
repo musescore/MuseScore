@@ -22,8 +22,6 @@
 #ifndef MU_IO_FILEINFO_H
 #define MU_IO_FILEINFO_H
 
-#include <QDateTime>
-
 #include "modularity/ioc.h"
 #include "ifilesystem.h"
 
@@ -52,8 +50,8 @@ public:
     bool exists() const;
     static bool exists(const path_t& filePath);
 
-    QDateTime birthTime() const;
-    QDateTime lastModified() const;
+    DateTime birthTime() const;
+    DateTime lastModified() const;
 
 private:
     static QString doSuffix(const QString& filePath);

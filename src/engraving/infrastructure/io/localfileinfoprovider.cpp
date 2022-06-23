@@ -21,8 +21,6 @@
  */
 #include "localfileinfoprovider.h"
 
-#include <QFileInfo>
-
 using namespace mu;
 using namespace mu::engraving;
 
@@ -46,12 +44,12 @@ io::path_t LocalFileInfoProvider::absoluteDirPath() const
     return io::absoluteDirpath(m_path);
 }
 
-QDateTime LocalFileInfoProvider::birthTime() const
+DateTime LocalFileInfoProvider::birthTime() const
 {
-    return QFileInfo(m_path.toQString()).birthTime();
+    return fileSystem()->birthTime(m_path);
 }
 
-QDateTime LocalFileInfoProvider::lastModified() const
+DateTime LocalFileInfoProvider::lastModified() const
 {
-    return QFileInfo(m_path.toQString()).lastModified();
+    return fileSystem()->lastModified(m_path);
 }

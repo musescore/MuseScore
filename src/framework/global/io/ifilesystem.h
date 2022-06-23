@@ -22,12 +22,11 @@
 #ifndef MU_SYSTEM_IFILESYSTEM_H
 #define MU_SYSTEM_IFILESYSTEM_H
 
-#include <QDateTime>
-
 #include "modularity/imoduleexport.h"
+#include "types/bytearray.h"
+#include "types/datetime.h"
 #include "retval.h"
 #include "path.h"
-#include "types/bytearray.h"
 #include "ioenums.h"
 
 namespace mu::io {
@@ -67,8 +66,8 @@ public:
     //! NOTE File info
     virtual io::path_t canonicalFilePath(const io::path_t& filePath) const = 0;
     virtual io::path_t absolutePath(const io::path_t& filePath) const = 0;
-    virtual QDateTime birthTime(const io::path_t& filePath) const = 0;
-    virtual QDateTime lastModified(const io::path_t& filePath) const = 0;
+    virtual DateTime birthTime(const io::path_t& filePath) const = 0;
+    virtual DateTime lastModified(const io::path_t& filePath) const = 0;
     virtual bool isWritable(const io::path_t& filePath) const = 0;
 };
 }
