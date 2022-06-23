@@ -104,9 +104,6 @@ class TextLineBase : public SLine
     M_PROPERTY(FontStyle, endFontStyle,          setEndFontStyle)
     M_PROPERTY(mu::PointF,   endTextOffset,         setEndTextOffset)
 
-protected:
-    friend class TextLineBaseSegment;
-
 public:
     TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 
@@ -120,6 +117,9 @@ public:
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
+
+protected:
+    friend class TextLineBaseSegment;
 };
 
 inline bool isSystemTextLine(const EngravingItem* element)

@@ -182,6 +182,8 @@ protected:
 
     const std::vector<SpannerSegment*> spannerSegments() const { return segments; }
 
+    void moveToSystemTopIfNeed(SpannerSegment* segment);
+
 public:
 
     ~Spanner();

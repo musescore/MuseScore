@@ -41,6 +41,7 @@ public:
     void write(XmlWriter& writer) const override;
 
     LineSegment* createLineSegment(System* parent) override;
+    SpannerSegment* layoutSystem(System* system) override;
 
     GradualTempoChangeType tempoChangeType() const;
     ChangeMethod easingMethod() const;
