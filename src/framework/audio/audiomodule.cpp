@@ -186,6 +186,8 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     IAudioDriver::Spec activeSpec;
 
     if (mode == framework::IApplication::RunMode::Editor) {
+        s_audioDriver->init();
+
         bool driverOpened = s_audioDriver->open(requiredSpec, &activeSpec);
         if (!driverOpened) {
             LOGE() << "audio output open failed";

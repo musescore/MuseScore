@@ -27,37 +27,53 @@ using namespace mu::audio;
 
 void AudioOutputController::init()
 {
-    audioDriver()->selectOutputDevice(configuration()->audioOutputDeviceName());
+    audioDriver()->selectOutputDevice(configuration()->audioOutputDeviceId());
 
     audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
         checkConnection();
     });
 
-    configuration()->audioOutputDeviceNameChanged().onNotify(this, [this]() {
-        std::string deviceName = configuration()->audioOutputDeviceName();
-        audioDriver()->selectOutputDevice(deviceName);
+    configuration()->audioOutputDeviceIdChanged().onNotify(this, [this]() {
+        AudioDeviceID deviceId = configuration()->audioOutputDeviceId();
+        audioDriver()->selectOutputDevice(deviceId);
     });
 }
 
 void AudioOutputController::checkConnection()
 {
-    std::string currentDeviceName = configuration()->audioOutputDeviceName();
-    std::vector<std::string> devices = audioDriver()->availableOutputDevices();
+    auto containsDevice = [](const AudioDeviceList& devices, const AudioDeviceID& deviceId) {
+        for (const AudioDevice& device : devices) {
+            if (device.id == deviceId) {
+                return true;
+            }
+        }
 
-    if (!contains(devices, currentDeviceName)) {
+        return false;
+    };
+
+    AudioDeviceID preferredDeviceId = configuration()->audioOutputDeviceId();
+    AudioDeviceID currentDeviceId = audioDriver()->outputDevice();
+    AudioDeviceList devices = audioDriver()->availableOutputDevices();
+
+    if (preferredDeviceId != currentDeviceId && containsDevice(devices, preferredDeviceId)) {
+        audioDriver()->selectOutputDevice(preferredDeviceId);
+        return;
+    }
+
+    if (!containsDevice(devices, currentDeviceId)) {
         audioDriver()->resetToDefaultOutputDevice();
     }
 }
 
 void AudioOutputController::connectCurrentOutputDevice()
 {
-    std::string deviceName = configuration()->audioOutputDeviceName();
-    if (deviceName.empty()) {
+    AudioDeviceID deviceId = configuration()->audioOutputDeviceId();
+    if (deviceId.empty()) {
         return;
     }
 
-    bool ok = audioDriver()->selectOutputDevice(deviceName);
+    bool ok = audioDriver()->selectOutputDevice(deviceId);
     if (!ok) {
-        LOGW() << "failed connect to output device, deviceName: " << deviceName;
+        LOGW() << "failed connect to output device, deviceId: " << deviceId;
     }
 }

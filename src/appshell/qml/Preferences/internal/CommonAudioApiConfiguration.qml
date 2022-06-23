@@ -53,7 +53,7 @@ Item {
             title: qsTrc("appshell", "Audio device:")
             columnWidth: root.columnWidth
 
-            currentIndex: apiModel.currentDeviceIndex
+            currentIndex: indexOfValue(apiModel.currentDeviceId)
             model: apiModel.deviceList
 
             navigation.name: "AudioDeviceBox"
@@ -61,7 +61,7 @@ Item {
             navigation.row: root.navigationOrderStart
 
             onValueEdited: function(newIndex, newValue) {
-                apiModel.currentDeviceIndex = newIndex
+                apiModel.deviceSelected(newValue)
             }
         }
 

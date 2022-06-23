@@ -40,7 +40,7 @@ static const audioch_t AUDIO_CHANNELS = 2;
 
 //TODO: add other setting: audio device etc
 static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
-static const Settings::Key AUDIO_OUTPUT_DEVICE_NAME_KEY("audio", "io/outputDevice");
+static const Settings::Key AUDIO_OUTPUT_DEVICE_ID_KEY("audio", "io/outputDevice");
 static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
@@ -61,7 +61,7 @@ void AudioConfiguration::init()
 
     settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
 
-    settings()->valueChanged(AUDIO_OUTPUT_DEVICE_NAME_KEY).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(AUDIO_OUTPUT_DEVICE_ID_KEY).onReceive(nullptr, [this](const Val&) {
         m_audioOutputDeviceNameChanged.notify();
     });
 
@@ -97,17 +97,17 @@ void AudioConfiguration::setCurrentAudioApi(const std::string& name)
     settings()->setSharedValue(AUDIO_API_KEY, Val(name));
 }
 
-std::string AudioConfiguration::audioOutputDeviceName() const
+std::string AudioConfiguration::audioOutputDeviceId() const
 {
-    return settings()->value(AUDIO_OUTPUT_DEVICE_NAME_KEY).toString();
+    return settings()->value(AUDIO_OUTPUT_DEVICE_ID_KEY).toString();
 }
 
-void AudioConfiguration::setAudioOutputDeviceName(const std::string& deviceName)
+void AudioConfiguration::setAudioOutputDeviceId(const std::string& deviceId)
 {
-    settings()->setSharedValue(AUDIO_OUTPUT_DEVICE_NAME_KEY, Val(deviceName));
+    settings()->setSharedValue(AUDIO_OUTPUT_DEVICE_ID_KEY, Val(deviceId));
 }
 
-async::Notification AudioConfiguration::audioOutputDeviceNameChanged() const
+async::Notification AudioConfiguration::audioOutputDeviceIdChanged() const
 {
     return m_audioOutputDeviceNameChanged;
 }
