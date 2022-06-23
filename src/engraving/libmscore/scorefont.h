@@ -31,6 +31,10 @@
 #include "modularity/ioc.h"
 #include "infrastructure/draw/ifontprovider.h"
 
+namespace mu {
+class JsonObject;
+}
+
 namespace mu::draw {
 class Painter;
 }
@@ -108,13 +112,13 @@ private:
         }
     };
 
-    static QJsonObject initGlyphNamesJson();
+    static bool initGlyphNamesJson();
 
     void load();
-    void loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors);
+    void loadGlyphsWithAnchors(const mu::JsonObject& glyphsWithAnchors);
     void loadComposedGlyphs();
-    void loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesObject);
-    void loadEngravingDefaults(const QJsonObject& engravingDefaultsObject);
+    void loadStylisticAlternates(const mu::JsonObject& glyphsWithAlternatesObject);
+    void loadEngravingDefaults(const mu::JsonObject& engravingDefaultsObject);
     void computeMetrics(Sym& sym, const Code& code);
 
     Sym& sym(SymId id);

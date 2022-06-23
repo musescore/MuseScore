@@ -21,12 +21,7 @@
  */
 #include "drawjson.h"
 
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QJsonValue>
-#include <QJsonParseError>
-
+#include "serialization/json.h"
 #include "realfn.h"
 #include "log.h"
 
@@ -43,47 +38,47 @@ static qreal itor(int v)
     return static_cast<qreal>(v) / 1000.0;
 }
 
-static QJsonObject toObj(const Pen& pen)
+static JsonObject toObj(const Pen& pen)
 {
-    QJsonObject obj;
+    JsonObject obj;
     obj["style"] = static_cast<int>(pen.style());
-    obj["color"] = pen.color().toString().c_str();
+    obj["color"] = pen.color().toString();
     obj["width"] = pen.widthF();
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, Pen& pen)
+static void fromObj(const JsonObject& obj, Pen& pen)
 {
     pen.setStyle(static_cast<PenStyle>(obj["style"].toInt()));
-    pen.setColor(Color(obj["color"].toString().toLocal8Bit().data()));
+    pen.setColor(Color(obj["color"].toStdString().c_str()));
     pen.setWidthF(obj["width"].toDouble());
 }
 
-static QJsonObject toObj(const Brush& brush)
+static JsonObject toObj(const Brush& brush)
 {
-    QJsonObject obj;
+    JsonObject obj;
     obj["style"] = static_cast<int>(brush.style());
-    obj["color"] = QString::fromStdString(brush.color().toString());
+    obj["color"] = brush.color().toString();
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, Brush& brush)
+static void fromObj(const JsonObject& obj, Brush& brush)
 {
     brush.setStyle(static_cast<BrushStyle>(obj["style"].toInt()));
-    brush.setColor(Color(obj["color"].toString().toLocal8Bit().data()));
+    brush.setColor(Color(obj["color"].toStdString().c_str()));
 }
 
-static QJsonObject toObj(const Font& font)
+static JsonObject toObj(const Font& font)
 {
-    QJsonObject obj;
-    obj["family"] = font.family().toQString();
+    JsonObject obj;
+    obj["family"] = font.family();
     obj["pointSize"] = font.pointSizeF();
     obj["weight"] = font.weight();
     obj["italic"] = font.italic();
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, Font& font)
+static void fromObj(const JsonObject& obj, Font& font)
 {
     font.setFamily(obj["family"].toString());
     font.setPointSizeF(obj["pointSize"].toDouble());
@@ -91,14 +86,14 @@ static void fromObj(const QJsonObject& obj, Font& font)
     font.setItalic(obj["italic"].toBool());
 }
 
-static QJsonArray toArr(const Transform& t)
+static JsonArray toArr(const Transform& t)
 {
-    return QJsonArray({ rtoi(t.m11()), rtoi(t.m12()), rtoi(t.m13()),
-                        rtoi(t.m21()), rtoi(t.m22()), rtoi(t.m23()),
-                        rtoi(t.m31()), rtoi(t.m32()), rtoi(t.m33()) });
+    return JsonArray({ rtoi(t.m11()), rtoi(t.m12()), rtoi(t.m13()),
+                       rtoi(t.m21()), rtoi(t.m22()), rtoi(t.m23()),
+                       rtoi(t.m31()), rtoi(t.m32()), rtoi(t.m33()) });
 }
 
-static void fromArr(const QJsonArray& arr, Transform& t)
+static void fromArr(const JsonArray& arr, Transform& t)
 {
     IF_ASSERT_FAILED(arr.size() == 9) {
         return;
@@ -109,12 +104,12 @@ static void fromArr(const QJsonArray& arr, Transform& t)
                 itor(arr.at(6).toInt()), itor(arr.at(7).toInt()), itor(arr.at(8).toInt()));
 }
 
-static QJsonArray toArr(const PointF& p)
+static JsonArray toArr(const PointF& p)
 {
-    return QJsonArray({ rtoi(p.x()), rtoi(p.y()) });
+    return JsonArray({ rtoi(p.x()), rtoi(p.y()) });
 }
 
-static void fromArr(const QJsonArray& arr, PointF& p)
+static void fromArr(const JsonArray& arr, PointF& p)
 {
     IF_ASSERT_FAILED(arr.size() == 2) {
         return;
@@ -123,12 +118,12 @@ static void fromArr(const QJsonArray& arr, PointF& p)
     p.setY(itor(arr.at(1).toInt()));
 }
 
-static QJsonArray toArr(const RectF& r)
+static JsonArray toArr(const RectF& r)
 {
-    return QJsonArray({ rtoi(r.x()), rtoi(r.y()), rtoi(r.width()), rtoi(r.height()) });
+    return JsonArray({ rtoi(r.x()), rtoi(r.y()), rtoi(r.width()), rtoi(r.height()) });
 }
 
-static void fromArr(const QJsonArray& arr, RectF& r)
+static void fromArr(const JsonArray& arr, RectF& r)
 {
     IF_ASSERT_FAILED(arr.size() == 4) {
         return;
@@ -136,12 +131,12 @@ static void fromArr(const QJsonArray& arr, RectF& r)
     r = RectF(itor(arr.at(0).toInt()), itor(arr.at(1).toInt()), itor(arr.at(2).toInt()), itor(arr.at(3).toInt()));
 }
 
-static QJsonArray toArr(const Size& sz)
+static JsonArray toArr(const Size& sz)
 {
-    return QJsonArray({ sz.width(), sz.height() });
+    return JsonArray({ sz.width(), sz.height() });
 }
 
-static void fromArr(const QJsonArray& arr, Size& sz)
+static void fromArr(const JsonArray& arr, Size& sz)
 {
     IF_ASSERT_FAILED(arr.size() == 2) {
         return;
@@ -149,9 +144,9 @@ static void fromArr(const QJsonArray& arr, Size& sz)
     sz = Size(arr.at(0).toInt(), arr.at(1).toInt());
 }
 
-static QJsonObject toObj(const DrawData::State& st)
+static JsonObject toObj(const DrawData::State& st)
 {
-    QJsonObject obj;
+    JsonObject obj;
     obj["pen"] = toObj(st.pen);
     obj["brush"] = toObj(st.brush);
     obj["font"] = toObj(st.font);
@@ -161,7 +156,7 @@ static QJsonObject toObj(const DrawData::State& st)
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, DrawData::State& st)
+static void fromObj(const JsonObject& obj, DrawData::State& st)
 {
     fromObj(obj["pen"].toObject(), st.pen);
     fromObj(obj["brush"].toObject(), st.brush);
@@ -171,23 +166,23 @@ static void fromObj(const QJsonObject& obj, DrawData::State& st)
     st.compositionMode = static_cast<CompositionMode>(obj["compositionMode"].toInt());
 }
 
-static QJsonObject toObj(const PainterPath& path)
+static JsonObject toObj(const PainterPath& path)
 {
-    QJsonObject obj;
+    JsonObject obj;
     obj["fillRule"] = static_cast<int>(path.fillRule());
 
-    QJsonArray elsArr;
+    JsonArray elsArr;
     for (size_t i = 0; i < path.elementCount(); ++i) {
         PainterPath::Element e = path.elementAt(i);
-        elsArr.append(QJsonArray({ static_cast<int>(e.type), rtoi(e.x), rtoi(e.y) }));
+        elsArr.append(JsonArray({ static_cast<int>(e.type), rtoi(e.x), rtoi(e.y) }));
     }
     obj["elements"] = elsArr;
     return obj;
 }
 
-static QJsonObject toObj(const DrawPath& path)
+static JsonObject toObj(const DrawPath& path)
 {
-    QJsonObject obj;
+    JsonObject obj;
     obj["path"] = toObj(path.path);
     obj["pen"] = toObj(path.pen);
     obj["brush"] = toObj(path.brush);
@@ -195,14 +190,14 @@ static QJsonObject toObj(const DrawPath& path)
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, PainterPath& path)
+static void fromObj(const JsonObject& obj, PainterPath& path)
 {
     path.setFillRule(static_cast<PainterPath::FillRule>(obj["fillRule"].toInt()));
 
-    QJsonArray elsArr = obj["elements"].toArray();
+    JsonArray elsArr = obj["elements"].toArray();
     std::vector<PainterPath::Element> curveEls;
-    for (const QJsonValue& elVal : elsArr) {
-        QJsonArray elArr = elVal.toArray();
+    for (size_t i = 0; i < elsArr.size(); ++i) {
+        JsonArray elArr = elsArr.at(i).toArray();
         IF_ASSERT_FAILED(elArr.size() == 3) {
             continue;
         }
@@ -244,7 +239,7 @@ static void fromObj(const QJsonObject& obj, PainterPath& path)
     }
 }
 
-static void fromObj(const QJsonObject& obj, DrawPath& path)
+static void fromObj(const JsonObject& obj, DrawPath& path)
 {
     fromObj(obj["path"].toObject(), path.path);
     fromObj(obj["pen"].toObject(), path.pen);
@@ -252,78 +247,78 @@ static void fromObj(const QJsonObject& obj, DrawPath& path)
     path.mode = static_cast<DrawMode>(obj["mode"].toInt());
 }
 
-static QJsonArray toArr(const PolygonF& pol)
+static JsonArray toArr(const PolygonF& pol)
 {
-    QJsonArray a;
+    JsonArray a;
     for (const PointF& p : pol) {
         a.append(toArr(p));
     }
     return a;
 }
 
-static void fromArr(const QJsonArray& arr, PolygonF& pol)
+static void fromArr(const JsonArray& arr, PolygonF& pol)
 {
     pol.reserve(arr.size());
-    for (const QJsonValue& val : arr) {
+    for (size_t i = 0; i < arr.size(); ++i) {
         PointF p;
-        fromArr(val.toArray(), p);
+        fromArr(arr.at(i).toArray(), p);
         pol.push_back(std::move(p));
     }
 }
 
-static QJsonObject toObj(const DrawPolygon& pol)
+static JsonObject toObj(const DrawPolygon& pol)
 {
-    QJsonObject obj;
+    JsonObject obj;
     obj["polygon"] = toArr(pol.polygon);
     obj["mode"] = static_cast<int>(pol.mode);
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, DrawPolygon& pol)
+static void fromObj(const JsonObject& obj, DrawPolygon& pol)
 {
     fromArr(obj["polygon"].toArray(), pol.polygon);
     pol.mode = static_cast<PolygonMode>(obj["mode"].toInt());
 }
 
-static QJsonObject toObj(const DrawText& text)
+static JsonObject toObj(const DrawText& text)
 {
-    QJsonObject o;
+    JsonObject o;
     o["pos"] = toArr(text.pos);
-    o["text"] = text.text.toQString();
+    o["text"] = text.text;
     return o;
 }
 
-static void fromObj(const QJsonObject& obj, DrawText& text)
+static void fromObj(const JsonObject& obj, DrawText& text)
 {
     fromArr(obj["pos"].toArray(), text.pos);
     text.text = obj["text"].toString();
 }
 
-static QJsonObject toObj(const DrawRectText& text)
+static JsonObject toObj(const DrawRectText& text)
 {
-    QJsonObject o;
+    JsonObject o;
     o["rect"] = toArr(text.rect);
     o["flags"] = text.flags;
-    o["text"] = text.text.toQString();
+    o["text"] = text.text;
     return o;
 }
 
-static void fromObj(const QJsonObject& obj, DrawRectText& text)
+static void fromObj(const JsonObject& obj, DrawRectText& text)
 {
     fromArr(obj["rect"].toArray(), text.rect);
     text.flags = obj["flags"].toInt();
     text.text = obj["text"].toString();
 }
 
-static QJsonObject toObj(const DrawPixmap& pm)
+static JsonObject toObj(const DrawPixmap& pm)
 {
-    QJsonObject o;
+    JsonObject o;
     o["pos"] = toArr(pm.pos);
     o["pmSize"] = toArr(pm.pm.size());
     return o;
 }
 
-static void fromObj(const QJsonObject& obj, DrawPixmap& pm)
+static void fromObj(const JsonObject& obj, DrawPixmap& pm)
 {
     fromArr(obj["pos"].toArray(), pm.pos);
     Size size;
@@ -331,16 +326,16 @@ static void fromObj(const QJsonObject& obj, DrawPixmap& pm)
     pm.pm = Pixmap(size);
 }
 
-static QJsonObject toObj(const DrawTiledPixmap& pm)
+static JsonObject toObj(const DrawTiledPixmap& pm)
 {
-    QJsonObject o;
+    JsonObject o;
     o["rect"] = toArr(pm.rect);
     o["pmSize"] = toArr(pm.pm.size());
     o["offset"] = toArr(pm.offset);
     return o;
 }
 
-static void fromObj(const QJsonObject& obj, DrawTiledPixmap& pm)
+static void fromObj(const JsonObject& obj, DrawTiledPixmap& pm)
 {
     fromArr(obj["rect"].toArray(), pm.rect);
     Size size;
@@ -350,45 +345,45 @@ static void fromObj(const QJsonObject& obj, DrawTiledPixmap& pm)
 }
 
 template<class T>
-static QJsonArray toArr(const std::vector<T>& vals)
+static JsonArray toArr(const std::vector<T>& vals)
 {
-    QJsonArray arr;
-    for (const auto& v : vals) {
-        arr << toObj(v);
+    JsonArray arr;
+    for (size_t i = 0; i < vals.size(); ++i) {
+        arr << toObj(vals.at(i));
     }
     return arr;
 }
 
 template<class T>
-static void fromArr(const QJsonArray& arr, std::vector<T>& vals)
+static void fromArr(const JsonArray& arr, std::vector<T>& vals)
 {
-    vals.reserve(arr.count());
-    for (const auto& v : arr) {
+    vals.reserve(arr.size());
+    for (size_t i = 0; i < arr.size(); ++i) {
         T val;
-        fromObj(v.toObject(), val);
+        fromObj(arr.at(i).toObject(), val);
         vals.push_back(std::move(val));
     }
 }
 
-QByteArray DrawBufferJson::toJson(const DrawData& buf)
+ByteArray DrawBufferJson::toJson(const DrawData& buf)
 {
     //! NOTE 'a' added to the beginning of some field names for convenient sorting
 
-    QJsonObject root;
-    root["a_name"] = QString::fromStdString(buf.name);
+    JsonObject root;
+    root["a_name"] = buf.name;
 
-    QJsonArray objsArr;
+    JsonArray objsArr;
     for (const DrawData::Object& obj : buf.objects) {
-        QJsonObject objObj;
+        JsonObject objObj;
         objObj["a_name"] = QString::fromStdString(obj.name);
         objObj["a_pagePos"] = toArr(obj.pagePos);
-        QJsonArray datasArr;
+        JsonArray datasArr;
         for (const DrawData::Data& data : obj.datas) {
             if (data.empty()) {
                 continue;
             }
 
-            QJsonObject dataObj;
+            JsonObject dataObj;
             dataObj["state"] = toObj(data.state);
             dataObj["paths"] = toArr(data.paths);
             dataObj["polygons"] = toArr(data.polygons);
@@ -407,32 +402,32 @@ QByteArray DrawBufferJson::toJson(const DrawData& buf)
 
     root["objects"] = objsArr;
 
-    return QJsonDocument(root).toJson(QJsonDocument::Indented);
+    return JsonDocument(root).toJson(JsonDocument::Format::Indented);
 }
 
-mu::RetVal<DrawDataPtr> DrawBufferJson::fromJson(const QByteArray& json)
+mu::RetVal<DrawDataPtr> DrawBufferJson::fromJson(const ByteArray& json)
 {
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(json, &err);
-    if (err.error != QJsonParseError::NoError) {
+    std::string err;
+    JsonDocument doc = JsonDocument::fromJson(json, &err);
+    if (!err.empty()) {
         RetVal<DrawDataPtr> rv;
-        rv.ret = make_ret(Ret::Code::UnknownError, err.errorString().toStdString());
+        rv.ret = make_ret(Ret::Code::UnknownError, err);
         return rv;
     }
 
-    QJsonObject root = doc.object();
+    const JsonObject root = doc.rootObject();
 
     DrawDataPtr buf = std::make_shared<DrawData>();
-    buf->name = root["a_name"].toString().toStdString();
-    QJsonArray objsArr = root["objects"].toArray();
-    for (const QJsonValue objVal: objsArr) {
-        QJsonObject objObj = objVal.toObject();
+    buf->name = root["a_name"].toStdString();
+    JsonArray objsArr = root["objects"].toArray();
+    for (size_t i = 0; i < objsArr.size(); ++i) {
+        const JsonObject objObj = objsArr.at(i).toObject();
         DrawData::Object obj;
         obj.name = objObj["a_name"].toString().toStdString();
         fromArr(objObj["a_pagePos"].toArray(), obj.pagePos);
-        QJsonArray datasArr = objObj["datas"].toArray();
-        for (const QJsonValue dataVal : datasArr) {
-            QJsonObject dataObj = dataVal.toObject();
+        JsonArray datasArr = objObj["datas"].toArray();
+        for (size_t j = 0; j < datasArr.size(); ++j) {
+            const JsonObject dataObj = datasArr.at(j).toObject();
             DrawData::Data data;
             fromObj(dataObj["state"].toObject(), data.state);
             fromArr(dataObj["paths"].toArray(), data.paths);
