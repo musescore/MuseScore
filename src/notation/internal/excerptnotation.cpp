@@ -68,18 +68,23 @@ void ExcerptNotation::fillWithDefaultInfo()
         return;
     }
 
-    mu::engraving::Score* excerptScore = m_excerpt->excerptScore();
+    mu::engraving::Score* score = m_excerpt->excerptScore();
+    mu::engraving::MeasureBase* topVerticalFrame = score->first();
 
-    auto setText = [&excerptScore](TextStyleType textType, const QString& text) {
-        TextBase* textBox = excerptScore->getText(textType);
+    if (topVerticalFrame && topVerticalFrame->isVBox()) {
+        topVerticalFrame->undoUnlink();
+    }
 
-        if (!textBox) {
-            textBox = excerptScore->addText(textType, false /*addToAllScores*/);
+    auto setText = [&score](TextStyleType textType, const QString& text) {
+        TextBase* textItem = score->getText(textType);
+
+        if (!textItem) {
+            textItem = score->addText(textType, false /*addToAllScores*/);
         }
 
-        if (textBox) {
-            textBox->undoUnlink();
-            textBox->setPlainText(text);
+        if (textItem) {
+            textItem->undoUnlink();
+            textItem->setPlainText(text);
         }
     };
 
@@ -88,7 +93,7 @@ void ExcerptNotation::fillWithDefaultInfo()
     setText(TextStyleType::SUBTITLE, "");
     setText(TextStyleType::POET, "");
 
-    excerptScore->doLayout();
+    score->doLayout();
 }
 
 mu::engraving::Excerpt* ExcerptNotation::excerpt() const
