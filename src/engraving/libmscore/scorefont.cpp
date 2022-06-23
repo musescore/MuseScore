@@ -168,6 +168,7 @@ bool ScoreFont::initGlyphNamesJson()
             LOGD() << "could not read alternate codepoint for glyph " << name;
         }
     }
+    return true;
 }
 
 // =============================================
