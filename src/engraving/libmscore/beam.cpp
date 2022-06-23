@@ -1296,10 +1296,24 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
 
     if (_cross) {
         const qreal quarterSpace = spatium() / 4;
+        // imagine a line of beamed notes all in a row on the same staff. the first and last of those
+        // are the 'outside' notes, and the slant of the beam is going to be affected by the 'middle' notes
+        // between them.
+        // we have to keep track of this for both staves.
         Chord* topFirst = nullptr;
         Chord* topLast = nullptr;
         Chord* bottomFirst = nullptr;
         Chord* bottomLast = nullptr;
+        int maxMiddleTopLine = std::numeric_limits<int>::min(); // lowest note in the top staff
+        int minMiddleBottomLine = std::numeric_limits<int>::max(); // highest note in the bottom staff
+        int prevTopLine = maxMiddleTopLine; // previous note's line position (top)
+        int prevBottomLine = minMiddleBottomLine; // previous note's line position (bottom)
+        // if the immediate neighbor of one of the two 'outside' notes on either the top or bottom
+        // are the same as that outside note, we need to record it so that we can add a 1/4 space slant.
+        bool secondTopIsSame = false;
+        bool secondBottomIsSame = false;
+        bool penultimateTopIsSame = false;
+        bool penultimateBottomIsSame = false;
         qreal maxY = std::numeric_limits<double>::max();
         qreal minY = std::numeric_limits<double>::min();
         int otherStaff = 0;
@@ -1310,43 +1324,68 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         }
         if (otherStaff != 0 && _minMove != _maxMove) {
             // Find the notes on the top and bottom of staves
+            //
+            bool checkNextTop = false;
+            bool checkNextBottom = false;
             for (ChordRest* cr : chordRests) {
                 if (!cr->isChord()) {
                     continue;
                 }
                 Chord* c = toChord(cr);
-                if (c->staffMove() == otherStaff && c->isChord()) {
-                    if (otherStaff > 0) {
-                        if (!bottomFirst) {
-                            bottomFirst = c;
-                        } else {
-                            bottomLast = c;
-                        }
-                        maxY = qMin(maxY, chordBeamAnchor(toChord(c)).y());
-                    } else {
-                        if (!topFirst) {
-                            topFirst = c;
-                        } else {
-                            topLast = c;
-                        }
-                        minY = qMax(minY, chordBeamAnchor(toChord(c)).y());
+                if ((c->staffMove() == otherStaff && otherStaff > 0) || (c->staffMove() != otherStaff && otherStaff < 0)) {
+                    // this chord is on the bottom staff
+                    if (penultimateBottomIsSame) {
+                        // the chord we took as the penultimate bottom note wasn't.
+                        // so treat it properly as a middle note
+                        minMiddleBottomLine = std::min(minMiddleBottomLine, prevBottomLine);
+                        penultimateBottomIsSame = false;
                     }
-                } else if (c->isChord()) {
-                    if (otherStaff > 0) {
-                        if (!topFirst) {
-                            topFirst = c;
-                        } else {
-                            topLast = c;
-                        }
-                        minY = qMax(minY, chordBeamAnchor(toChord(c)).y());
+                    checkNextTop = false; // we are no longer looking for the second note in the top
+                                          // staff being the same as the first--this note is on the bottom.
+                    if (!bottomFirst) {
+                        bottomFirst = c;
+                        checkNextBottom = true; // this was the first bottom note, so check for second next time
                     } else {
-                        if (!bottomFirst) {
-                            bottomFirst = c;
-                        } else {
-                            bottomLast = c;
+                        penultimateBottomIsSame = prevBottomLine == c->line();
+                        if (!penultimateBottomIsSame) {
+                            minMiddleBottomLine = std::min(minMiddleBottomLine, prevBottomLine);
                         }
-                        maxY = qMin(maxY, chordBeamAnchor(toChord(c)).y());
+                        if (checkNextBottom) {
+                            // this is the second bottom note, so we should see if this one is same line as first
+                            secondBottomIsSame = c->line() == bottomFirst->line();
+                            checkNextBottom = false;
+                        } else {
+                            prevBottomLine = c->line();
+                        }
+                        bottomLast = c;
                     }
+                    maxY = qMin(maxY, chordBeamAnchor(toChord(c)).y());
+                } else {
+                    // this chord is on the top staff
+                    if (penultimateTopIsSame) {
+                        // the chord we took as the penultimate top note wasn't.
+                        // so treat it properly as a middle note
+                        maxMiddleTopLine = std::max(maxMiddleTopLine, prevTopLine);
+                        penultimateTopIsSame = false;
+                    }
+                    checkNextBottom = false; // no longer looking for a bottom second note since this is on top
+                    if (!topFirst) {
+                        topFirst = c;
+                        checkNextTop = true;
+                    } else {
+                        penultimateTopIsSame = prevTopLine == c->line();
+                        if (!penultimateTopIsSame) {
+                            maxMiddleTopLine = std::max(maxMiddleTopLine, prevTopLine);
+                        }
+                        if (checkNextTop) {
+                            secondTopIsSame = c->line() == topFirst->line();
+                            checkNextTop = false;
+                        } else {
+                            prevTopLine = c->line();
+                        }
+                        topLast = c;
+                    }
+                    minY = qMax(minY, chordBeamAnchor(toChord(c)).y());
                 }
             }
             _startAnchor.ry() = (maxY + minY) / 2;
@@ -1356,6 +1395,16 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
             int topLastLine = topLast ? topLast->downNote()->line() : 0;
             int bottomFirstLine = bottomFirst ? bottomFirst->upNote()->line() : 0;
             int bottomLastLine = bottomLast ? bottomLast->upNote()->line() : 0;
+            bool constrainTopToQuarter = false;
+            bool constrainBottomToQuarter = false;
+            if ((topFirstLine > topLastLine && secondTopIsSame)
+                || (topFirstLine < topLastLine && penultimateTopIsSame)) {
+                constrainTopToQuarter = true;
+            }
+            if ((bottomFirstLine < bottomLastLine && secondBottomIsSame)
+                || (bottomFirstLine > bottomLastLine && penultimateBottomIsSame)) {
+                constrainBottomToQuarter = true;
+            }
             if (chordRests.size() == 2 && chordRests[0]->staffMove() != chordRests[1]->staffMove()) {
                 // if there are only two notes, one on each staff, special case
                 // take max slope into account
@@ -1368,39 +1417,68 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
                 // otherwise, if there is only one note on one of the staves, use slope from other staff
                 int startNote = 0;
                 int endNote = 0;
+                bool forceHoriz = false;
                 if (!topLast) {
                     startNote = bottomFirstLine;
                     endNote = bottomLastLine;
+                    if (minMiddleBottomLine <= std::min(startNote, endNote)) {
+                        // there is a note closer to the beam than the start and end notes
+                        // we force horizontal beam here.
+                        forceHoriz = true;
+                    }
                 } else if (!bottomLast) {
                     startNote = topFirstLine;
                     endNote = topLastLine;
+                    if (maxMiddleTopLine >= std::max(startNote, endNote)) {
+                        // same as above, for the top staff
+                        // force horizontal.
+                        forceHoriz = true;
+                    }
                 }
-                int slant = startNote - endNote;
-                slant = std::min(std::abs(slant), getMaxSlope());
-                qreal slope = slant * (startNote > endNote ? quarterSpace : -quarterSpace);
-                _startAnchor.ry() += (slope / 2);
-                _endAnchor.ry() -= (slope / 2);
+                if (!forceHoriz) {
+                    int slant = startNote - endNote;
+                    slant = std::min(std::abs(slant), getMaxSlope());
+                    if ((!bottomLast && constrainTopToQuarter)
+                        || (!topLast && constrainBottomToQuarter)) {
+                        slant = 1;
+                    }
+                    qreal slope = slant * (startNote > endNote ? quarterSpace : -quarterSpace);
+                    _startAnchor.ry() += (slope / 2);
+                    _endAnchor.ry() -= (slope / 2);
+                } // otherwise, do nothing, beam is already horizontal.
             } else {
                 // otherwise, there are at least two notes on each staff
                 // (that is, topLast and bottomLast are both set)
-
+                bool forceHoriz = false;
                 if (topFirstLine == topLastLine || bottomFirstLine == bottomLastLine) {
                     // if outside notes on top or bottom staff are on the same staff line, slope = 0
                     // no further adjustment needed, the beam is already well-placed and horizontal
+                    forceHoriz = true;
+                }
+                // otherwise, we have to compare the slopes from the top staff and bottom staff.
+                int topSlant = topFirstLine - topLastLine;
+                if (constrainTopToQuarter && topSlant != 0) {
+                    topSlant = topFirstLine < topLastLine ? -1 : 1;
+                }
+                int bottomSlant = bottomFirstLine - bottomLastLine;
+                if (constrainBottomToQuarter && bottomSlant != 0) {
+                    bottomSlant = bottomFirstLine < bottomLastLine ? -1 : 1;
+                }
+                if ((maxMiddleTopLine >= std::max(topFirstLine, topLastLine)
+                     || (minMiddleBottomLine <= std::min(bottomFirstLine, bottomLastLine)))) {
+                    forceHoriz = true;
+                }
+                if (topSlant == 0 || bottomSlant == 0 || forceHoriz) {
+                    // if one of the slants is 0, the whole slant is zero
+                } else if ((topSlant < 0 && bottomSlant < 0) || (topSlant > 0 && bottomSlant > 0)) {
+                    int slant = (abs(topSlant) < abs(bottomSlant)) ? topSlant : bottomSlant;
+                    slant = std::min(std::abs(slant), getMaxSlope());
+                    qreal slope = slant * ((topSlant < 0) ? -quarterSpace : quarterSpace);
+                    _startAnchor.ry() += (slope / 2);
+                    _endAnchor.ry() -= (slope / 2);
                 } else {
-                    // otherwise, we have to compare the slopes from the top staff and bottom staff.
-                    int topSlant = topFirstLine - topLastLine;
-                    int bottomSlant = bottomFirstLine - bottomLastLine;
-                    if ((topSlant < 0 && bottomSlant < 0) || (topSlant > 0 && bottomSlant > 0)) {
-                        int slant = (abs(topSlant) < abs(bottomSlant)) ? topSlant : bottomSlant;
-                        slant = std::min(std::abs(slant), getMaxSlope());
-                        qreal slope = slant * ((topSlant < 0) ? -quarterSpace : quarterSpace);
-                        _startAnchor.ry() += (slope / 2);
-                        _endAnchor.ry() -= (slope / 2);
-                    } else {
-                        // if the two slopes are in opposite directions, flat!
-                        // nothing needs to be done, the beam is already horizontal and placed nicely
-                    }
+                    // if the two slopes are in opposite directions, flat!
+                    // nothing needs to be done, the beam is already horizontal and placed nicely
                 }
             }
             _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
