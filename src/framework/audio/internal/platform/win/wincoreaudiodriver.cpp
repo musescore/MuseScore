@@ -28,7 +28,6 @@
 #include "audioclient.h"
 
 #include <Functiondiscoverykeys_devpkey.h>
-#include <atlstr.h>
 
 #include "log.h"
 
