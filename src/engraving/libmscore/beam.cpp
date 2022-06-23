@@ -978,7 +978,9 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
                 continue;
             }
             Chord* chord = toChord(chordRest);
-
+            if (level < chord->beams()) {
+                levelHasBeam = true;
+            }
             bool isBroken32 = false;
             bool isBroken64 = false;
             // updates isBroken32 and isBroken64
@@ -989,7 +991,6 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
                 if (!startChord) {
                     startChord = chord;
                 }
-                levelHasBeam = true;
             } else {
                 if (startChord && endChord) {
                     if (startChord == endChord) {
