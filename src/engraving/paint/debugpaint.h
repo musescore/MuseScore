@@ -27,7 +27,6 @@
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
 #include "iengravingconfiguration.h"
-#include "ui/iuiconfiguration.h"
 
 namespace mu::engraving {
 class EngravingItem;

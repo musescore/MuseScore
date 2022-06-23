@@ -23,11 +23,12 @@
 #ifndef MU_DRAW_COLOR_H
 #define MU_DRAW_COLOR_H
 
+#include <string>
+#include "rgba.h"
+
 #ifndef NO_QT_SUPPORT
 #include <QColor>
 #endif
-
-#include "rgba.h"
 
 namespace mu::draw {
 class Color

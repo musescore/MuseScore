@@ -24,6 +24,8 @@
 #include "containers.h"
 #include "textstream.h"
 
+#include <QStringList>
+
 #include "log.h"
 
 using namespace mu;

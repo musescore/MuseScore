@@ -28,6 +28,7 @@
 #include <string>
 #include <string_view>
 #include <regex>
+#include <QString>
 
 #include "containers.h"
 #include "bytearray.h"
