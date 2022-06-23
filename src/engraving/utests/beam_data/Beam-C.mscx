@@ -275,7 +275,7 @@
             </Chord>
           <Beam>
             <l1>-6</l1>
-            <l2>-10</l2>
+            <l2>-8</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -436,7 +436,7 @@
             </Chord>
           <Beam>
             <l1>38</l1>
-            <l2>42</l2>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -454,7 +454,7 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-10</l1>
+            <l1>-8</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
@@ -472,7 +472,7 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-10</l1>
+            <l1>-8</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
@@ -498,7 +498,7 @@
           </LayoutBreak>
         <voice>
           <Beam>
-            <l1>-10</l1>
+            <l1>-8</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
@@ -516,7 +516,7 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-10</l1>
+            <l1>-8</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
@@ -535,7 +535,7 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-10</l1>
+            <l1>-8</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
@@ -722,7 +722,7 @@
             </Chord>
           <Beam>
             <l1>38</l1>
-            <l2>42</l2>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -740,7 +740,7 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-10</l1>
+            <l1>-8</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
@@ -758,7 +758,7 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-10</l1>
+            <l1>-8</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
@@ -781,7 +781,7 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>-10</l1>
+            <l1>-8</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
