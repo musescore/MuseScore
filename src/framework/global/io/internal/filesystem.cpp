@@ -335,14 +335,14 @@ io::path_t FileSystem::absolutePath(const io::path_t& filePath) const
     return QFileInfo(filePath.toQString()).absolutePath();
 }
 
-QDateTime FileSystem::birthTime(const io::path_t& filePath) const
+DateTime FileSystem::birthTime(const io::path_t& filePath) const
 {
-    return QFileInfo(filePath.toQString()).birthTime();
+    return DateTime::fromQDateTime(QFileInfo(filePath.toQString()).birthTime());
 }
 
-QDateTime FileSystem::lastModified(const io::path_t& filePath) const
+DateTime FileSystem::lastModified(const io::path_t& filePath) const
 {
-    return QFileInfo(filePath.toQString()).lastModified();
+    return DateTime::fromQDateTime(QFileInfo(filePath.toQString()).lastModified());
 }
 
 bool FileSystem::isWritable(const io::path_t& filePath) const

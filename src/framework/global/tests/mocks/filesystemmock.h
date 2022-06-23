@@ -53,8 +53,8 @@ public:
 
     MOCK_METHOD(io::path_t, canonicalFilePath, (const io::path_t& filePath), (const, override));
     MOCK_METHOD(io::path_t, absolutePath, (const io::path_t& filePath), (const, override));
-    MOCK_METHOD(QDateTime, birthTime, (const io::path_t& filePath), (const, override));
-    MOCK_METHOD(QDateTime, lastModified, (const io::path_t& filePath), (const, override));
+    MOCK_METHOD(DateTime, birthTime, (const io::path_t& filePath), (const, override));
+    MOCK_METHOD(DateTime, lastModified, (const io::path_t& filePath), (const, override));
     MOCK_METHOD(bool, isWritable, (const io::path_t& filePath), (const, override));
 };
 }

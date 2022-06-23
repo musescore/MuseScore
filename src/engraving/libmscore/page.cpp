@@ -22,8 +22,6 @@
 
 #include "page.h"
 
-#include <QDateTime>
-
 #include "style/style.h"
 #include "rw/xml.h"
 
@@ -441,30 +439,30 @@ String Page::replaceTextMacros(const String& s) const
                 d += masterScore()->fileInfo()->path().toString().toXmlEscaped();
                 break;
             case 'd':
-                d += QLocale().toString(QDate::currentDate(), QLocale::ShortFormat);
+                d += Date::currentDate().toString(DateFormat::LocaleShortFormat);
                 break;
             case 'D':
             {
                 String creationDate = score()->metaTag(u"creationDate");
                 if (creationDate.isEmpty()) {
-                    d += QLocale().toString(masterScore()->fileInfo()->birthTime().date(), QLocale::ShortFormat);
+                    d += masterScore()->fileInfo()->birthTime().date().toString(DateFormat::LocaleShortFormat);
                 } else {
-                    d += QLocale().toString(QDate::fromString(creationDate, Qt::ISODate), QLocale::ShortFormat);
+                    d += Date::fromStringISOFormat(creationDate).toString(DateFormat::LocaleShortFormat);
                 }
             }
             break;
             case 'm':
                 if (score()->dirty()) {
-                    d += QLocale().toString(QDate::currentDate(), QLocale::ShortFormat);
+                    d += Date::currentDate().toString(DateFormat::LocaleShortFormat);
                 } else {
-                    d += QLocale().toString(masterScore()->fileInfo()->lastModified().time(), QLocale::ShortFormat);
+                    d += masterScore()->fileInfo()->lastModified().time().toString(DateFormat::LocaleShortFormat);
                 }
                 break;
             case 'M':
                 if (score()->dirty()) {
-                    d += QLocale().toString(QDate::currentDate(), QLocale::ShortFormat);
+                    d += Date::currentDate().toString(DateFormat::LocaleShortFormat);
                 } else {
-                    d += QLocale().toString(masterScore()->fileInfo()->lastModified().date(), QLocale::ShortFormat);
+                    d += masterScore()->fileInfo()->lastModified().date().toString(DateFormat::LocaleShortFormat);
                 }
                 break;
             case 'C': // only on first page
