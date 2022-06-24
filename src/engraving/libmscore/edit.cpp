@@ -2189,16 +2189,16 @@ void Score::cmdFlip()
             if (pf == PropertyFlags::STYLED) {
                 pf = PropertyFlags::UNSTYLED;
             }
-            qreal oldDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
+            double oldDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
             ee->undoChangeProperty(Pid::PLACEMENT, int(p), pf);
             // flip and rebase user offset to new default now that placement has changed
-            qreal newDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
+            double newDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
             if (ee->isSpanner()) {
                 Spanner* spanner = toSpanner(ee);
                 for (SpannerSegment* ss : spanner->spannerSegments()) {
                     if (!ss->isStyled(Pid::OFFSET)) {
                         PointF off = ss->getProperty(Pid::OFFSET).value<PointF>();
-                        qreal oldY = off.y() - oldDefaultY;
+                        double oldY = off.y() - oldDefaultY;
                         off.ry() = newDefaultY - oldY;
                         ss->undoChangeProperty(Pid::OFFSET, off);
                         ss->setOffsetChanged(false);
@@ -2206,7 +2206,7 @@ void Score::cmdFlip()
                 }
             } else if (!ee->isStyled(Pid::OFFSET)) {
                 PointF off = ee->getProperty(Pid::OFFSET).value<PointF>();
-                qreal oldY = off.y() - oldDefaultY;
+                double oldY = off.y() - oldDefaultY;
                 off.ry() = newDefaultY - oldY;
                 ee->undoChangeProperty(Pid::OFFSET, off);
                 ee->setOffsetChanged(false);
@@ -3368,7 +3368,7 @@ Hairpin* Score::addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2, boo
     if (!cr2) {
         cr2 = cr1;
     }
-    Q_ASSERT(cr1->staffIdx() == cr2->staffIdx());
+    assert(cr1->staffIdx() == cr2->staffIdx());
     const Fraction end = toCr2End ? cr2->tick() + cr2->actualTicks() : cr2->tick();
     return addHairpin(type, cr1->tick(), end, cr1->track());
 }
@@ -3551,7 +3551,7 @@ void Score::cmdDeleteTuplet(Tuplet* tuplet, bool replaceWithRest)
         if (de->isChordRest()) {
             removeChordRest(toChordRest(de), true);
         } else {
-            Q_ASSERT(de->isTuplet());
+            assert(de->isTuplet());
             cmdDeleteTuplet(toTuplet(de), false);
         }
     }
@@ -5035,7 +5035,7 @@ void Score::undoInsertPart(Part* part, int idx)
 void Score::undoRemoveStaff(Staff* staff)
 {
     const staff_idx_t staffIndex = staff->idx();
-    Q_ASSERT(staffIndex != mu::nidx);
+    assert(staffIndex != mu::nidx);
 
     auto removingAllowed = [staffIndex, this](const Spanner* spanner) {
         if (spanner->staffIdx() != staffIndex) {
@@ -5702,7 +5702,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
 
 void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
 {
-    Q_ASSERT(!cr->isChord() || !(toChord(cr)->notes()).empty());
+    assert(!cr->isChord() || !(toChord(cr)->notes()).empty());
     if (!cr->lyrics().empty()) {
         // Add chordrest and lyrics separately for correct
         // handling of adding lyrics to linked staves.
@@ -5775,7 +5775,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
             }
             Segment* seg = m->undoGetSegment(segmentType, tick);
 
-            Q_ASSERT(seg->segmentType() == segmentType);
+            assert(seg->segmentType() == segmentType);
 
             ChordRest* newcr = (staff == ostaff) ? cr : toChordRest(cr->linkedClone());
             newcr->setScore(score);
@@ -5790,7 +5790,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
                 for (Note* note : chord->notes()) {
                     // if (note->tpc() == Tpc::TPC_INVALID)
                     //      note->setTpcFromPitch();
-                    Q_ASSERT(note->tpc() != Tpc::TPC_INVALID);
+                    assert(note->tpc() != Tpc::TPC_INVALID);
                 }
             }
 #endif
@@ -5930,7 +5930,7 @@ void Score::undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElem
 //   undoChangeTuning
 //---------------------------------------------------------
 
-void Score::undoChangeTuning(Note* n, qreal v)
+void Score::undoChangeTuning(Note* n, double v)
 {
     n->undoChangeProperty(Pid::TUNING, v);
 }
@@ -6116,7 +6116,7 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
 
 void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
 {
-    Q_ASSERT(m1 && m2);
+    assert(m1 && m2);
 
     const Fraction startTick = m1->tick();
     const Fraction endTick = m2->endTick();

@@ -68,8 +68,8 @@ class BarLine final : public EngravingItem
     int _spanFrom           { 0 };         // line number on start and end staves
     int _spanTo             { 0 };
     BarLineType _barLineType { BarLineType::NORMAL };
-    mutable qreal y1;
-    mutable qreal y2;
+    mutable double y1;
+    mutable double y2;
     ElementList _el;          ///< fermata or other articulations
 
     friend class Factory;
@@ -77,11 +77,11 @@ class BarLine final : public EngravingItem
     BarLine(const BarLine&);
 
     void getY() const;
-    void drawDots(mu::draw::Painter* painter, qreal x) const;
-    void drawTips(mu::draw::Painter* painter, bool reversed, qreal x) const;
+    void drawDots(mu::draw::Painter* painter, double x) const;
+    void drawTips(mu::draw::Painter* painter, bool reversed, double x) const;
     bool isTop() const;
     bool isBottom() const;
-    void drawEditMode(mu::draw::Painter* painter, EditData& editData, qreal currentViewScaling) override;
+    void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
     bool neverKernable() const override { return true; }
 
@@ -150,7 +150,7 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
-    static qreal layoutWidth(Score*, BarLineType);
+    static double layoutWidth(Score*, BarLineType);
     mu::RectF layoutRect() const;
 
     EngravingItem* nextSegmentElement() override;

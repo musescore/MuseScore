@@ -116,7 +116,7 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     // color for line (text color comes from the text properties)
     Color color = curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
-    qreal textlineLineWidth = tl->lineWidth();
+    double textlineLineWidth = tl->lineWidth();
     if (staff()) {
         textlineLineWidth *= mag();
     }
@@ -172,16 +172,16 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
         //draw rest of line as regular
         //calculate new gap
         if (tl->lineStyle() == PenStyle::CustomDashLine) {
-            qreal adjustedLineLength = lineLength / textlineLineWidth;
-            qreal dash = tl->dashLineLen();
-            qreal gap = tl->dashGapLen();
+            double adjustedLineLength = lineLength / textlineLineWidth;
+            double dash = tl->dashLineLen();
+            double gap = tl->dashGapLen();
             int numPairs;
-            qreal newGap = 0;
+            double newGap = 0;
             std::vector<double> nDashes { dash, newGap };
             if (tl->beginHookType() == HookType::HOOK_45 || tl->beginHookType() == HookType::HOOK_90) {
-                qreal absD
+                double absD
                     = sqrt(PointF::dotProduct(points[start + 1] - points[start], points[start + 1] - points[start])) / textlineLineWidth;
-                numPairs = std::max(qreal(1), absD / (dash + gap));
+                numPairs = std::max(double(1), absD / (dash + gap));
                 nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
                 pen.setDashPattern(nDashes);
                 painter->setPen(pen);
@@ -189,15 +189,15 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
                 start++;
             }
             if (tl->endHookType() == HookType::HOOK_45 || tl->endHookType() == HookType::HOOK_90) {
-                qreal absD = sqrt(PointF::dotProduct(points[end] - points[end - 1], points[end] - points[end - 1])) / textlineLineWidth;
-                numPairs = std::max(qreal(1), absD / (dash + gap));
+                double absD = sqrt(PointF::dotProduct(points[end] - points[end - 1], points[end] - points[end - 1])) / textlineLineWidth;
+                numPairs = std::max(double(1), absD / (dash + gap));
                 nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
                 pen.setDashPattern(nDashes);
                 painter->setPen(pen);
                 painter->drawLines(&points[end - 1], 1);
                 end--;
             }
-            numPairs = std::max(qreal(1), adjustedLineLength / (dash + gap));
+            numPairs = std::max(double(1), adjustedLineLength / (dash + gap));
             nDashes[1] = (adjustedLineLength - dash * (numPairs + 1)) / numPairs;
             pen.setDashPattern(nDashes);
         }
@@ -221,8 +221,8 @@ Shape TextLineBaseSegment::shape() const
     if (!_endText->empty()) {
         shape.add(_endText->bbox().translated(_endText->pos()));
     }
-    qreal lw  = textLineBase()->lineWidth();
-    qreal lw2 = lw * .5;
+    double lw  = textLineBase()->lineWidth();
+    double lw2 = lw * .5;
     if (twoLines) {     // hairpins
         shape.add(RectF(points[0].x(), points[0].y() - lw2,
                         points[1].x() - points[0].x(), points[1].y() - points[0].y() + lw));
@@ -262,7 +262,7 @@ void TextLineBaseSegment::layout()
 {
     npoints      = 0;
     TextLineBase* tl = textLineBase();
-    qreal _spatium = tl->spatium();
+    double _spatium = tl->spatium();
 
     if (spanner()->placeBelow()) {
         rypos() = staff() ? staff()->height() : 0.0;
@@ -342,21 +342,21 @@ void TextLineBaseSegment::layout()
 
     // line has text or hooks or is not diagonal - calculate reasonable bbox
 
-    qreal x1 = qMin(0.0, pp2.x());
-    qreal x2 = qMax(0.0, pp2.x());
-    qreal y0 = -textLineBase()->lineWidth();
-    qreal y1 = qMin(0.0, pp2.y()) + y0;
-    qreal y2 = qMax(0.0, pp2.y()) - y0;
+    double x1 = qMin(0.0, pp2.x());
+    double x2 = qMax(0.0, pp2.x());
+    double y0 = -textLineBase()->lineWidth();
+    double y1 = qMin(0.0, pp2.y()) + y0;
+    double y2 = qMax(0.0, pp2.y()) - y0;
 
-    qreal l = 0.0;
+    double l = 0.0;
     if (!_text->empty()) {
-        qreal textlineTextDistance = _spatium * .5;
+        double textlineTextDistance = _spatium * .5;
         if (((isSingleType() || isBeginType())
              && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
             || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == TextPlace::LEFT))) {
             l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
         }
-        qreal h = _text->height();
+        double h = _text->height();
         if (textLineBase()->beginTextPlace() == TextPlace::ABOVE) {
             y1 = qMin(y1, -h);
         } else if (textLineBase()->beginTextPlace() == TextPlace::BELOW) {
@@ -369,7 +369,7 @@ void TextLineBaseSegment::layout()
     }
 
     if (textLineBase()->endHookType() != HookType::NONE) {
-        qreal h = pp2.y() + textLineBase()->endHookHeight().val() * _spatium;
+        double h = pp2.y() + textLineBase()->endHookHeight().val() * _spatium;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -378,7 +378,7 @@ void TextLineBaseSegment::layout()
     }
 
     if (textLineBase()->beginHookType() != HookType::NONE) {
-        qreal h = textLineBase()->beginHookHeight().val() * _spatium;
+        double h = textLineBase()->beginHookHeight().val() * _spatium;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -402,8 +402,8 @@ void TextLineBaseSegment::layout()
     if (tl->lineVisible() || !score()->printing()) {
         pp1 = PointF(l, 0.0);
 
-        qreal beginHookWidth;
-        qreal endHookWidth;
+        double beginHookWidth;
+        double endHookWidth;
 
         if (tl->beginHookType() == HookType::HOOK_45) {
             beginHookWidth = fabs(tl->beginHookHeight().val() * _spatium * .4);
@@ -423,7 +423,7 @@ void TextLineBaseSegment::layout()
         bool backwards = !_text->empty() && pp1.x() > pp2.x() && !tl->diagonal();
 
         if ((tl->beginHookType() != HookType::NONE) && (isSingleType() || isBeginType())) {
-            qreal hh = tl->beginHookHeight().val() * _spatium;
+            double hh = tl->beginHookHeight().val() * _spatium;
             if (tl->beginHookType() == HookType::HOOK_90T) {
                 points[npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() - hh);
             }
@@ -440,7 +440,7 @@ void TextLineBaseSegment::layout()
 
             if ((tl->endHookType() != HookType::NONE) && (isSingleType() || isEndType())) {
                 ++npoints;
-                qreal hh = tl->endHookHeight().val() * _spatium;
+                double hh = tl->endHookHeight().val() * _spatium;
                 // painter->drawLine(LineF(pp2.x(), pp2.y(), pp2.x() + endHookWidth, pp2.y() + hh));
                 points[npoints] = PointF(pp2.x() + endHookWidth, pp2.y() + hh);
                 if (tl->endHookType() == HookType::HOOK_90T) {
@@ -455,7 +455,7 @@ void TextLineBaseSegment::layout()
 //   spatiumChanged
 //---------------------------------------------------------
 
-void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
+void TextLineBaseSegment::spatiumChanged(double ov, double nv)
 {
     LineSegment::spatiumChanged(ov, nv);
 
@@ -555,7 +555,7 @@ void TextLineBase::read(XmlReader& e)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void TextLineBase::spatiumChanged(qreal /*ov*/, qreal /*nv*/)
+void TextLineBase::spatiumChanged(double /*ov*/, double /*nv*/)
 {
 }
 

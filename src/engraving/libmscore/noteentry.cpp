@@ -347,8 +347,8 @@ void Score::putNote(const PointF& pos, bool replace, bool insert)
     //  calculate actual clicked line from staffType offset and stepOffset
     Staff* ss = score->staff(p.staffIdx);
     int stepOffset = ss->staffType(p.segment->tick())->stepOffset();
-    qreal stYOffset = ss->staffType(p.segment->tick())->yoffset().val();
-    qreal lineDist = ss->staffType(p.segment->tick())->lineDistance().val();
+    double stYOffset = ss->staffType(p.segment->tick())->yoffset().val();
+    double lineDist = ss->staffType(p.segment->tick())->lineDistance().val();
     p.line -= stepOffset + 2 * stYOffset / lineDist;
 
     if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH) && !isTablature) {

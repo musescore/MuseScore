@@ -36,7 +36,7 @@ public:
     Hook(Chord* parent = 0);
 
     Hook* clone() const override { return new Hook(*this); }
-    qreal mag() const override { return parentItem()->mag(); }
+    double mag() const override { return parentItem()->mag(); }
     EngravingItem* elementBase() const override;
 
     void setHookType(int v);

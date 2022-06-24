@@ -76,16 +76,16 @@ void VibratoSegment::draw(mu::draw::Painter* painter) const
 
 void VibratoSegment::symbolLine(SymId start, SymId fill)
 {
-    qreal x1 = 0;
-    qreal x2 = pos2().x();
-    qreal w   = x2 - x1;
-    qreal mag = magS();
+    double x1 = 0;
+    double x2 = pos2().x();
+    double w   = x2 - x1;
+    double mag = magS();
     ScoreFont* f = score()->scoreFont();
 
     _symbols.clear();
     _symbols.push_back(start);
-    qreal w1 = f->advance(start, mag);
-    qreal w2 = f->advance(fill, mag);
+    double w1 = f->advance(start, mag);
+    double w2 = f->advance(fill, mag);
     int n    = lrint((w - w1) / w2);
     for (int i = 0; i < n; ++i) {
         _symbols.push_back(fill);
@@ -96,17 +96,17 @@ void VibratoSegment::symbolLine(SymId start, SymId fill)
 
 void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 {
-    qreal x1 = 0;
-    qreal x2 = pos2().x();
-    qreal w   = x2 - x1;
-    qreal mag = magS();
+    double x1 = 0;
+    double x2 = pos2().x();
+    double w   = x2 - x1;
+    double mag = magS();
     ScoreFont* f = score()->scoreFont();
 
     _symbols.clear();
     _symbols.push_back(start);
-    qreal w1 = f->bbox(start, mag).width();
-    qreal w2 = f->width(fill, mag);
-    qreal w3 = f->width(end, mag);
+    double w1 = f->bbox(start, mag).width();
+    double w2 = f->width(fill, mag);
+    double w3 = f->width(end, mag);
     int n    = lrint((w - w1 - w3) / w2);
     for (int i = 0; i < n; ++i) {
         _symbols.push_back(fill);

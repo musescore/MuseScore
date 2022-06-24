@@ -48,7 +48,7 @@ enum class BendType {
 class Bend final : public EngravingItem
 {
     M_PROPERTY(String,     fontFace,  setFontFace)
-    M_PROPERTY(qreal,      fontSize,  setFontSize)
+    M_PROPERTY(double,      fontSize,  setFontSize)
     M_PROPERTY(FontStyle,  fontStyle, setFontStyle)
     M_PROPERTY(Millimetre, lineWidth, setLineWidth)
 
@@ -74,7 +74,7 @@ private:
     friend class Factory;
     Bend(Note* parent);
 
-    mu::draw::Font font(qreal) const;
+    mu::draw::Font font(double) const;
     BendType parseBendTypeFromCurve() const;
     void updatePointsByBendType(const BendType bendType);
 
@@ -82,7 +82,7 @@ private:
     PitchValues m_points;
 
     mu::PointF m_notePos;
-    qreal m_noteWidth;
+    double m_noteWidth;
 };
 } // namespace mu::engraving
 #endif

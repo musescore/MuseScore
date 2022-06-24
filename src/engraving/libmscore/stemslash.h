@@ -41,7 +41,7 @@ class StemSlash final : public EngravingItem
 
 public:
 
-    qreal mag() const override { return parentItem()->mag(); }
+    double mag() const override { return parentItem()->mag(); }
     void setLine(const mu::LineF& l);
 
     StemSlash* clone() const override { return new StemSlash(*this); }

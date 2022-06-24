@@ -591,7 +591,7 @@ void ScoreFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject)
 
         auto search = engravingDefaultsMapping.find(key);
         if (search != engravingDefaultsMapping.cend()) {
-            qreal value = engravingDefaultsObject.value(key).toDouble();
+            double value = engravingDefaultsObject.value(key).toDouble();
             m_engravingDefaults.insert({ search->second, value });
         }
     }
@@ -668,7 +668,7 @@ bool ScoreFont::useFallbackFont(SymId id) const
 // Symbol bounding box
 // =============================================
 
-const RectF ScoreFont::bbox(SymId id, qreal mag) const
+const RectF ScoreFont::bbox(SymId id, double mag) const
 {
     return bbox(id, SizeF(mag, mag));
 }
@@ -684,7 +684,7 @@ const RectF ScoreFont::bbox(SymId id, const SizeF& mag) const
                  r.width() * mag.width(), r.height() * mag.height());
 }
 
-const RectF ScoreFont::bbox(const SymIdList& s, qreal mag) const
+const RectF ScoreFont::bbox(const SymIdList& s, double mag) const
 {
     return bbox(s, SizeF(mag, mag));
 }
@@ -704,17 +704,17 @@ const RectF ScoreFont::bbox(const SymIdList& s, const SizeF& mag) const
 // Symbol metrics
 // =============================================
 
-qreal ScoreFont::width(SymId id, qreal mag) const
+double ScoreFont::width(SymId id, double mag) const
 {
     return bbox(id, mag).width();
 }
 
-qreal ScoreFont::height(SymId id, qreal mag) const
+double ScoreFont::height(SymId id, double mag) const
 {
     return bbox(id, mag).height();
 }
 
-qreal ScoreFont::advance(SymId id, qreal mag) const
+double ScoreFont::advance(SymId id, double mag) const
 {
     if (useFallbackFont(id)) {
         return fallbackFont()->advance(id, mag);
@@ -723,12 +723,12 @@ qreal ScoreFont::advance(SymId id, qreal mag) const
     return sym(id).advance * mag;
 }
 
-qreal ScoreFont::width(const SymIdList& s, qreal mag) const
+double ScoreFont::width(const SymIdList& s, double mag) const
 {
     return bbox(s, mag).width();
 }
 
-PointF ScoreFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const
+PointF ScoreFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const
 {
     if (useFallbackFont(symId)) {
         return fallbackFont()->smuflAnchor(symId, anchorId, mag);
@@ -760,7 +760,7 @@ void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF&
     }
 
     painter->save();
-    qreal size = 20.0 * MScore::pixelRatio;
+    double size = 20.0 * MScore::pixelRatio;
     m_font.setPointSizeF(size);
     painter->scale(mag.width(), mag.height());
     painter->setFont(m_font);
@@ -768,18 +768,18 @@ void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF&
     painter->restore();
 }
 
-void ScoreFont::draw(SymId id, Painter* painter, qreal mag, const PointF& pos) const
+void ScoreFont::draw(SymId id, Painter* painter, double mag, const PointF& pos) const
 {
     draw(id, painter, SizeF(mag, mag), pos);
 }
 
-void ScoreFont::draw(SymId id, mu::draw::Painter* painter, qreal mag, const PointF& pos, int n) const
+void ScoreFont::draw(SymId id, mu::draw::Painter* painter, double mag, const PointF& pos, int n) const
 {
     SymIdList list(n, id);
     draw(list, painter, mag, pos);
 }
 
-void ScoreFont::draw(const SymIdList& ids, Painter* painter, qreal mag, const PointF& startPos) const
+void ScoreFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {

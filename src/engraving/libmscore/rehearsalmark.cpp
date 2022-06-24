@@ -93,9 +93,9 @@ void RehearsalMark::layout()
 
             Measure* m = s->measure();
             Segment* header = s->prev();        // possibly just a start repeat
-            qreal measureX = -s->x();
+            double measureX = -s->x();
             Segment* repeat = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
-            qreal barlineX = repeat ? repeat->x() - s->x() : measureX;
+            double barlineX = repeat ? repeat->x() - s->x() : measureX;
             System* sys = m->system();
             bool systemFirst = (sys && m->isFirstInSystem());
 
@@ -106,7 +106,7 @@ void RehearsalMark::layout()
                 // header at start of system
                 // align to a point just after the header
                 EngravingItem* e = header->element(track());
-                qreal w = e ? e->width() : header->width();
+                double w = e ? e->width() : header->width();
                 rxpos() = header->x() + w - s->x();
 
                 // special case for right aligned rehearsal marks at start of system

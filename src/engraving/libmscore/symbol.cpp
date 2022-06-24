@@ -91,7 +91,7 @@ void Symbol::layout()
     // foreach(EngravingItem* e, leafs())     done in BSymbol::layout() ?
     //      e->layout();
     setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
-    qreal w = width();
+    double w = width();
     PointF p;
     if (align() == AlignV::BOTTOM) {
         p.setY(-height());

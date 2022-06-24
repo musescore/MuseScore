@@ -73,7 +73,7 @@ void MStyle::set(const Sid t, const PropertyValue& val)
         precomputeValues();
     } else {
         if (StyleDef::styleValues[idx].valueType() == P_TYPE::SPATIUM) {
-            qreal _spatium = value(Sid::spatium).toReal();
+            double _spatium = value(Sid::spatium).toReal();
             m_precomputedValues[idx] = m_values[idx].value<Spatium>().val() * _spatium;
         }
     }
@@ -81,7 +81,7 @@ void MStyle::set(const Sid t, const PropertyValue& val)
 
 void MStyle::precomputeValues()
 {
-    qreal _spatium = value(Sid::spatium).toReal();
+    double _spatium = value(Sid::spatium).toReal();
     for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
         if (t.valueType() == P_TYPE::SPATIUM) {
             m_precomputedValues[t.idx()] = value(t.styleIdx()).value<Spatium>().val() * _spatium;
@@ -128,18 +128,18 @@ bool MStyle::readProperties(XmlReader& e)
                 Align align = TConv::fromXml(e.readText(), Align());
                 set(idx, align);
             } else if (P_TYPE::POINT == type) {
-                qreal x = e.doubleAttribute("x", 0.0);
-                qreal y = e.doubleAttribute("y", 0.0);
+                double x = e.doubleAttribute("x", 0.0);
+                double y = e.doubleAttribute("y", 0.0);
                 set(idx, PointF(x, y));
                 e.readText();
             } else if (P_TYPE::SIZE == type) {
-                qreal x = e.doubleAttribute("w", 0.0);
-                qreal y = e.doubleAttribute("h", 0.0);
+                double x = e.doubleAttribute("w", 0.0);
+                double y = e.doubleAttribute("h", 0.0);
                 set(idx, SizeF(x, y));
                 e.readText();
             } else if (P_TYPE::SCALE == type) {
-                qreal sx = e.doubleAttribute("w", 0.0);
-                qreal sy = e.doubleAttribute("h", 0.0);
+                double sx = e.doubleAttribute("w", 0.0);
+                double sy = e.doubleAttribute("h", 0.0);
                 set(idx, ScaleF(sx, sy));
                 e.readText();
             } else if (P_TYPE::COLOR == type) {
@@ -178,8 +178,8 @@ bool MStyle::readStyleValCompat(XmlReader& e)
 {
     const AsciiStringView tag(e.name());
     if (tag == "tempoOffset") {   // pre-3.0-beta
-        const qreal x = e.doubleAttribute("x", 0.0);
-        const qreal y = e.doubleAttribute("y", 0.0);
+        const double x = e.doubleAttribute("x", 0.0);
+        const double y = e.doubleAttribute("y", 0.0);
         const PointF val(x, y);
         set(Sid::tempoPosAbove, val);
         set(Sid::tempoPosBelow, val);
@@ -291,7 +291,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             //readTextStyle206(this, e);        // obsolete
             e.readText();
         } else if (tag == "ottavaHook") {             // obsolete, for 3.0dev bw. compatibility, should be removed in final release
-            qreal y = qAbs(e.readDouble());
+            double y = qAbs(e.readDouble());
             set(Sid::ottavaHookAbove, y);
             set(Sid::ottavaHookBelow, -y);
         } else if (tag == "Spatium") {

@@ -22,10 +22,13 @@
 #ifndef MU_GLOBAL_TEXTSTREAM_H
 #define MU_GLOBAL_TEXTSTREAM_H
 
-#include <QString>
 #include "io/iodevice.h"
 #include "types/bytearray.h"
 #include "types/string.h"
+
+#ifndef NO_QT_SUPPORT
+#include <QString>
+#endif
 
 namespace mu {
 class TextStream
@@ -47,10 +50,13 @@ public:
     TextStream& operator<<(size_t val);
     TextStream& operator<<(const char* s);
     TextStream& operator<<(const std::string& s);
-    TextStream& operator<<(const QString& s);
     TextStream& operator<<(const ByteArray& b);
     TextStream& operator<<(const AsciiStringView& s);
     TextStream& operator<<(const String& s);
+
+#ifndef NO_QT_SUPPORT
+    TextStream& operator<<(const QString& s);
+#endif
 
 private:
     void write(const char* ch, size_t len);

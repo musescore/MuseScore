@@ -222,7 +222,7 @@ bool Image::isImageFramed() const
 //   imageAspectRatio
 //---------------------------------------------------------
 
-qreal Image::imageAspectRatio() const
+double Image::imageAspectRatio() const
 {
     return _size.width() / _size.height();
 }
@@ -231,9 +231,9 @@ qreal Image::imageAspectRatio() const
 //   setImageHeight
 //---------------------------------------------------------
 
-void Image::updateImageHeight(const qreal& height)
+void Image::updateImageHeight(const double& height)
 {
-    qreal aspectRatio = imageAspectRatio();
+    double aspectRatio = imageAspectRatio();
 
     _size.setHeight(height);
 
@@ -246,9 +246,9 @@ void Image::updateImageHeight(const qreal& height)
 //   setImageWidth
 //---------------------------------------------------------
 
-void Image::updateImageWidth(const qreal& width)
+void Image::updateImageWidth(const double& width)
 {
-    qreal aspectRatio = imageAspectRatio();
+    double aspectRatio = imageAspectRatio();
 
     _size.setWidth(width);
 
@@ -261,7 +261,7 @@ void Image::updateImageWidth(const qreal& width)
 //   imageHeight
 //---------------------------------------------------------
 
-qreal Image::imageHeight() const
+double Image::imageHeight() const
 {
     return _size.height();
 }
@@ -270,7 +270,7 @@ qreal Image::imageHeight() const
 //   imageWidth
 //---------------------------------------------------------
 
-qreal Image::imageWidth() const
+double Image::imageWidth() const
 {
     return _size.width();
 }
@@ -483,11 +483,11 @@ void Image::startEditDrag(EditData& data)
 
 void Image::editDrag(EditData& ed)
 {
-    qreal ratio = _size.width() / _size.height();
-    qreal dx = ed.delta.x();
-    qreal dy = ed.delta.y();
+    double ratio = _size.width() / _size.height();
+    double dx = ed.delta.x();
+    double dy = ed.delta.y();
     if (_sizeIsSpatium) {
-        qreal _spatium = spatium();
+        double _spatium = spatium();
         dx /= _spatium;
         dy /= _spatium;
     } else {
@@ -565,11 +565,11 @@ void Image::layout()
     // if autoscale && inside a box, scale to box relevant size
     if (autoScale() && explicitParent() && ((explicitParent()->isHBox() || explicitParent()->isVBox()))) {
         if (_lockAspectRatio) {
-            qreal f = _sizeIsSpatium ? spatium() : DPMM;
+            double f = _sizeIsSpatium ? spatium() : DPMM;
             SizeF size(imageSize());
-            qreal ratio = size.width() / size.height();
-            qreal w = parentItem()->width();
-            qreal h = parentItem()->height();
+            double ratio = size.width() / size.height();
+            double w = parentItem()->width();
+            double h = parentItem()->height();
             if ((w / h) < ratio) {
                 _size.setWidth(w / f);
                 _size.setHeight((w / ratio) / f);

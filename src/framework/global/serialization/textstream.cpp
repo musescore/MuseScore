@@ -107,12 +107,15 @@ TextStream& TextStream::operator<<(const std::string& str)
     return *this;
 }
 
+#ifndef NO_QT_SUPPORT
 TextStream& TextStream::operator<<(const QString& s)
 {
     QByteArray ba = s.toUtf8();
     write(ba.constData(), ba.length());
     return *this;
 }
+
+#endif
 
 TextStream& TextStream::operator<<(const ByteArray& b)
 {

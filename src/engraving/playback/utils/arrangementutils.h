@@ -36,7 +36,7 @@ inline mpe::timestamp_t timestampFromTicks(const Score* score, const int tick)
     return score->repeatList().utick2utime(tick) * 1000;
 }
 
-inline mpe::duration_t durationFromTicks(const qreal beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::division)
+inline mpe::duration_t durationFromTicks(const double beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::division)
 {
     float beatsNumber = static_cast<float>(durationTicks) / static_cast<float>(ticksPerBeat);
 
@@ -48,14 +48,14 @@ static constexpr int QUAVER_TICKS = Constants::division / 2;
 static constexpr int SEMIQUAVER_TICKS = Constants::division / 4;
 static constexpr int DEMISEMIQUAVER_TICKS = Constants::division / 8;
 
-static constexpr qreal PRESTISSIMO_BPS_BOUND = 200 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal PRESTO_BPS_BOUND = 168 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal ALLEGRO_BPS_BOUND = 120 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal MODERATO_BPS_BOUND = 108 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal ANDANTE_BPS_BOUND = 76 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal ADAGIO_BPS_BOUND = 66 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal LENTO_BPS_BOUND = 40 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal GRAVE_BPS_BOUND = 20 /*bpm*/ / 60.f /*secs*/;
+static constexpr double PRESTISSIMO_BPS_BOUND = 200 /*bpm*/ / 60.f /*secs*/;
+static constexpr double PRESTO_BPS_BOUND = 168 /*bpm*/ / 60.f /*secs*/;
+static constexpr double ALLEGRO_BPS_BOUND = 120 /*bpm*/ / 60.f /*secs*/;
+static constexpr double MODERATO_BPS_BOUND = 108 /*bpm*/ / 60.f /*secs*/;
+static constexpr double ANDANTE_BPS_BOUND = 76 /*bpm*/ / 60.f /*secs*/;
+static constexpr double ADAGIO_BPS_BOUND = 66 /*bpm*/ / 60.f /*secs*/;
+static constexpr double LENTO_BPS_BOUND = 40 /*bpm*/ / 60.f /*secs*/;
+static constexpr double GRAVE_BPS_BOUND = 20 /*bpm*/ / 60.f /*secs*/;
 }
 
 #endif // MU_ENGRAVING_ARRANGEMENTUTILS_H

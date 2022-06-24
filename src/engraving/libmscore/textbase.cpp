@@ -61,11 +61,11 @@ namespace mu::engraving {
 #define CONTROL_MODIFIER Qt::ControlModifier
 #endif
 
-static const qreal subScriptSize     = 0.6;
-static const qreal subScriptOffset   = 0.5;       // of x-height
-static const qreal superScriptOffset = -.9;      // of x-height
+static const double subScriptSize     = 0.6;
+static const double subScriptOffset   = 0.5;       // of x-height
+static const double superScriptOffset = -.9;      // of x-height
 
-//static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
+//static const double tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
 
 //---------------------------------------------------------
 //   isSorted
@@ -255,10 +255,10 @@ RectF TextCursor::cursorRect() const
     const TextFragment* fragment = tline.fragment(static_cast<int>(column()));
 
     mu::draw::Font _font  = fragment ? fragment->font(_text) : _text->font();
-    qreal ascent = mu::draw::FontMetrics::ascent(_font);
-    qreal h = ascent;
-    qreal x = tline.xpos(column(), _text);
-    qreal y = tline.y() - ascent * .9;
+    double ascent = mu::draw::FontMetrics::ascent(_font);
+    double h = ascent;
+    double x = tline.xpos(column(), _text);
+    double y = tline.y() - ascent * .9;
     return RectF(x, y, 4.0, h);
 }
 
@@ -269,7 +269,7 @@ RectF TextCursor::cursorRect() const
 
 TextBlock& TextCursor::curLine() const
 {
-    Q_ASSERT(!_text->_layout.empty());
+    assert(!_text->_layout.empty());
     return _text->_layout[_row];
 }
 
@@ -611,7 +611,7 @@ String TextCursor::selectedText(bool withFormat) const
 
 String TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) const
 {
-    Q_ASSERT(isSorted(r1, c1, r2, c2));
+    assert(isSorted(r1, c1, r2, c2));
     const std::vector<TextBlock>& tb = _text->_layout;
 
     if (r1 == r2) {
@@ -762,7 +762,7 @@ void TextFragment::draw(mu::draw::Painter* p, const TextBase* t) const
 
 void TextBase::drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const String& text)
 {
-    qreal mm = p->worldTransform().m11();
+    double mm = p->worldTransform().m11();
     if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline() || f.strike())) {
         p->drawTextWorkaround(f, pos, text);
     } else {
@@ -779,7 +779,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 {
     mu::draw::Font font;
 
-    qreal m = format.fontSize();
+    double m = format.fontSize();
 
     if (t->sizeIsSpatiumDependent()) {
         m *= t->spatium() / SPATIUM20;
@@ -838,7 +838,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     }
 
     font.setFamily(family);
-    Q_ASSERT(m > 0.0);
+    assert(m > 0.0);
 
     font.setPointSizeF(m * t->mag());
     return font;
@@ -864,11 +864,11 @@ void TextBlock::draw(mu::draw::Painter* p, const TextBase* t) const
 void TextBlock::layout(TextBase* t)
 {
     _bbox        = RectF();
-    qreal x      = 0.0;
+    double x      = 0.0;
     _lineSpacing = 0.0;
-    qreal lm     = 0.0;
+    double lm     = 0.0;
 
-    qreal layoutWidth = 0;
+    double layoutWidth = 0;
     EngravingItem* e = t->parentItem();
     if (e && t->layoutToParentWidth()) {
         layoutWidth = e->width();
@@ -907,7 +907,7 @@ void TextBlock::layout(TextBase* t)
         f.pos.setX(x);
         mu::draw::FontMetrics fm(f.font(t));
         if (f.format.valign() != VerticalAlignment::AlignNormal) {
-            qreal voffset = fm.xHeight() / subScriptSize;   // use original height
+            double voffset = fm.xHeight() / subScriptSize;   // use original height
             if (f.format.valign() == VerticalAlignment::AlignSubScript) {
                 voffset *= subScriptOffset;
             } else {
@@ -929,7 +929,7 @@ void TextBlock::layout(TextBase* t)
             f.pos.setX(x);
             mu::draw::FontMetrics fm(f.font(t));
             if (f.format.valign() != VerticalAlignment::AlignNormal) {
-                qreal voffset = fm.xHeight() / subScriptSize;           // use original height
+                double voffset = fm.xHeight() / subScriptSize;           // use original height
                 if (f.format.valign() == VerticalAlignment::AlignSubScript) {
                     voffset *= subScriptOffset;
                 } else {
@@ -943,7 +943,7 @@ void TextBlock::layout(TextBase* t)
             // Optimization: don't calculate character position
             // for the next fragment if there is no next fragment
             if (fi != fiLast) {
-                const qreal w  = fm.width(f.text);
+                const double w  = fm.width(f.text);
                 x += w;
             }
 
@@ -955,7 +955,7 @@ void TextBlock::layout(TextBase* t)
     // Apply style/custom line spacing
     _lineSpacing *= t->textLineSpacing();
 
-    qreal rx = 0;
+    double rx = 0;
     switch (t->align().horizontal) {
     case AlignH::LEFT:
         rx = -_bbox.left();
@@ -995,7 +995,7 @@ std::list<TextFragment> TextBlock::fragmentsWithoutEmpty()
 //   xpos
 //---------------------------------------------------------
 
-qreal TextBlock::xpos(size_t column, const TextBase* t) const
+double TextBlock::xpos(size_t column, const TextBase* t) const
 {
     size_t col = 0;
     for (const TextFragment& f : _fragments) {
@@ -1065,8 +1065,8 @@ const CharFormat* TextBlock::formatAt(int column) const
 
 RectF TextBlock::boundingRect(int col1, int col2, const TextBase* t) const
 {
-    qreal x1 = xpos(col1, t);
-    qreal x2 = xpos(col2, t);
+    double x1 = xpos(col1, t);
+    double x2 = xpos(col2, t);
     return RectF(x1, _bbox.y(), x2 - x1, _bbox.height());
 }
 
@@ -1093,7 +1093,7 @@ size_t TextBlock::columns() const
 //    Text coordinate system
 //---------------------------------------------------------
 
-int TextBlock::column(qreal x, TextBase* t) const
+int TextBlock::column(double x, TextBase* t) const
 {
     int col = 0;
     for (const TextFragment& f : _fragments) {
@@ -1101,14 +1101,14 @@ int TextBlock::column(qreal x, TextBase* t) const
         if (x <= f.pos.x()) {
             return col;
         }
-        qreal px = 0.0;
+        double px = 0.0;
         for (size_t i = 0; i < f.text.size(); ++i) {
             ++idx;
             if (f.text.at(i).isHighSurrogate()) {
                 continue;
             }
             mu::draw::FontMetrics fm(f.font(t));
-            qreal xo = fm.width(f.text.left(idx));
+            double xo = fm.width(f.text.left(idx));
             if (x <= f.pos.x() + px + (xo - px) * .5) {
                 return col;
             }
@@ -1492,7 +1492,7 @@ String TextBlock::text(int col1, int len, bool withFormat) const
 {
     String s;
     int col = 0;
-    qreal size;
+    double size;
     String family;
     for (const auto& f : _fragments) {
         if (f.text.isEmpty()) {
@@ -1659,7 +1659,7 @@ static String parseStringProperty(const String& s)
 //   parseNumProperty
 //---------------------------------------------------------
 
-static qreal parseNumProperty(const String& s)
+static double parseNumProperty(const String& s)
 {
     return parseStringProperty(s).toDouble();
 }
@@ -1720,7 +1720,7 @@ void TextBase::createLayout()
                 } else {
                     if (c.isHighSurrogate()) {
                         i++;
-                        Q_ASSERT(i < _text.size());
+                        assert(i < _text.size());
                         insert(&cursor, Char::surrogateToUcs4(c, _text.at(i)));
                     } else {
                         insert(&cursor, c.unicode());
@@ -1868,7 +1868,7 @@ void TextBase::layout1()
         _layout.push_back(TextBlock());
     }
     RectF bb;
-    qreal y = 0;
+    double y = 0;
 
     // adjust the bounding box for the text item
     for (size_t i = 0; i < rows(); ++i) {
@@ -1883,8 +1883,8 @@ void TextBase::layout1()
         t->setY(y);
         bb |= r->translated(0.0, y);
     }
-    qreal yoff = 0;
-    qreal h    = 0;
+    double yoff = 0;
+    double h    = 0;
     if (explicitParent()) {
         if (layoutToParentWidth()) {
             if (explicitParent()->isTBox()) {
@@ -1946,8 +1946,8 @@ void TextBase::layoutFrame()
     if (bbox().width() <= 1.0 || bbox().height() < 1.0) {      // or bbox.width() <= 1.0
         // this does not work for Harmony:
         mu::draw::FontMetrics fm(font());
-        qreal ch = fm.ascent();
-        qreal cw = fm.width('n');
+        double ch = fm.ascent();
+        double cw = fm.width('n');
         frame = RectF(0.0, -ch, cw, ch);
     } else {
         frame = bbox();
@@ -1956,7 +1956,7 @@ void TextBase::layoutFrame()
     if (square()) {
         // make sure width >= height
         if (frame.height() > frame.width()) {
-            qreal w = frame.height() - frame.width();
+            double w = frame.height() - frame.width();
             frame.adjust(-w * .5, 0.0, w * .5, 0.0);
         }
     } else if (circle()) {
@@ -1968,8 +1968,8 @@ void TextBase::layoutFrame()
             frame.setWidth(frame.height());
         }
     }
-    qreal _spatium = spatium();
-    qreal w = (paddingWidth() + frameWidth() * .5f).val() * _spatium;
+    double _spatium = spatium();
+    double w = (paddingWidth() + frameWidth() * .5f).val() * _spatium;
     frame.adjust(-w, -w, w, w);
     w = frameWidth().val() * _spatium;
     setbbox(frame.adjusted(-w, -w, w, w));
@@ -1979,7 +1979,7 @@ void TextBase::layoutFrame()
 //   lineSpacing
 //---------------------------------------------------------
 
-qreal TextBase::lineSpacing() const
+double TextBase::lineSpacing() const
 {
     return fontMetrics().lineSpacing();
 }
@@ -1988,7 +1988,7 @@ qreal TextBase::lineSpacing() const
 //   lineHeight
 //---------------------------------------------------------
 
-qreal TextBase::lineHeight() const
+double TextBase::lineHeight() const
 {
     return fontMetrics().height();
 }
@@ -1997,7 +1997,7 @@ qreal TextBase::lineHeight() const
 //   baseLine
 //---------------------------------------------------------
 
-qreal TextBase::baseLine() const
+double TextBase::baseLine() const
 {
     return fontMetrics().ascent();
 }
@@ -2012,7 +2012,7 @@ String TextBase::family() const
     return _cursor->format()->fontFamily();
 }
 
-qreal TextBase::size() const
+double TextBase::size() const
 {
     return _cursor->format()->fontSize();
 }
@@ -2030,7 +2030,7 @@ void TextBase::setFamily(const String& val)
     _cursor->setFormat(FormatId::FontFamily, val.toQString());
 }
 
-void TextBase::setSize(const qreal& val)
+void TextBase::setSize(const double& val)
 {
     _cursor->setFormat(FormatId::FontSize, val);
 }
@@ -2295,7 +2295,7 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
         }
     }
     if (writeText) {
-        xml.writeXml("text", xmlText());
+        xml.writeXml(u"text", xmlText());
     }
 }
 
@@ -2384,10 +2384,10 @@ RectF TextBase::pageRectangle() const
     if (explicitParent() && (explicitParent()->isHBox() || explicitParent()->isVBox() || explicitParent()->isTBox())) {
         Box* box = toBox(explicitParent());
         RectF r = box->abbox();
-        qreal x = r.x() + box->leftMargin() * DPMM;
-        qreal y = r.y() + box->topMargin() * DPMM;
-        qreal h = r.height() - (box->topMargin() + box->bottomMargin()) * DPMM;
-        qreal w = r.width() - (box->leftMargin() + box->rightMargin()) * DPMM;
+        double x = r.x() + box->leftMargin() * DPMM;
+        double y = r.y() + box->topMargin() * DPMM;
+        double h = r.height() - (box->topMargin() + box->bottomMargin()) * DPMM;
+        double w = r.width() - (box->leftMargin() + box->rightMargin()) * DPMM;
 
         // SizeF ps = _doc->pageSize();
         // return RectF(x, y, ps.width(), ps.height());
@@ -2397,10 +2397,10 @@ RectF TextBase::pageRectangle() const
     if (explicitParent() && explicitParent()->isPage()) {
         Page* box  = toPage(explicitParent());
         RectF r = box->abbox();
-        qreal x = r.x() + box->lm();
-        qreal y = r.y() + box->tm();
-        qreal h = r.height() - box->tm() - box->bm();
-        qreal w = r.width() - box->lm() - box->rm();
+        double x = r.x() + box->lm();
+        double y = r.y() + box->tm();
+        double h = r.height() - box->tm() - box->bm();
+        double w = r.width() - box->lm() - box->rm();
         return RectF(x, y, w, h);
     }
     return abbox();
@@ -2466,7 +2466,7 @@ void TextBase::layoutEdit()
         system->setHeight(tbox->height());
         triggerLayout();
     } else {
-        static const qreal w = 2.0;     // 8.0 / view->matrix().m11();
+        static const double w = 2.0;     // 8.0 / view->matrix().m11();
         score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
     }
 }
@@ -2757,7 +2757,7 @@ bool TextBase::validateText(String& s)
 
 mu::draw::Font TextBase::font() const
 {
-    qreal m = size();
+    double m = size();
     if (sizeIsSpatiumDependent()) {
         m *= spatium() / SPATIUM20;
     }
@@ -2990,7 +2990,7 @@ Sid TextBase::offsetSid() const
 //---------------------------------------------------------
 //   getHtmlStartTag - helper function for extractText with withFormat = true
 //---------------------------------------------------------
-String TextBase::getHtmlStartTag(qreal newSize, qreal& curSize, const String& newFamily, String& curFamily, FontStyle style,
+String TextBase::getHtmlStartTag(double newSize, double& curSize, const String& newFamily, String& curFamily, FontStyle style,
                                  VerticalAlignment vAlign)
 {
     String s;
@@ -3219,7 +3219,7 @@ void TextBase::editCopy(EditData& ed)
 TextCursor* TextBase::cursorFromEditData(const EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    Q_ASSERT(ted);
+    assert(ted);
     return ted->cursor();
 }
 
@@ -3232,10 +3232,10 @@ void TextBase::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
     if (hasFrame()) {
-        qreal baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
+        double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
         if (frameWidth().val() != 0.0) {
             Color fColor = curColor(visible(), frameColor());
-            qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
+            double frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
 
             Pen pen(fColor, frameWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
@@ -3247,7 +3247,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
         if (circle()) {
             painter->drawEllipse(frame);
         } else {
-            qreal frameRoundFactor = (sizeIsSpatiumDependent() ? (spatium() / baseSpatium) / 2 : 0.5f);
+            double frameRoundFactor = (sizeIsSpatiumDependent() ? (spatium() / baseSpatium) / 2 : 0.5f);
 
             int r2 = frameRound() * frameRoundFactor;
             if (r2 > 99) {
@@ -3268,7 +3268,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
 //    draw edit mode decorations
 //---------------------------------------------------------
 
-void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling)
+void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling)
 {
     using namespace mu::draw;
     PointF pos(canvasPos());
@@ -3324,7 +3324,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentVie
     p->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 2.0 / currentViewScaling)); // 2 pixel pen size
     p->setBrush(BrushStyle::NoBrush);
 
-    qreal m = spatium();
+    double m = spatium();
     RectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
 
     p->drawRect(r);

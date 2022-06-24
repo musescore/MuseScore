@@ -1412,7 +1412,7 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
 //   position
 //---------------------------------------------------------
 
-qreal ChordList::position(const StringList& names, ChordTokenClass ctc) const
+double ChordList::position(const StringList& names, ChordTokenClass ctc) const
 {
     String name = names.empty() ? u"" : names.front();
     switch (ctc) {
@@ -1477,7 +1477,7 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         }
         // check for adjustments
         // stop adjusting when first non-adjusted modifier found
-        qreal p = adjust ? cl->position(tok.names, ctc) : 0.0;
+        double p = adjust ? cl->position(tok.names, ctc) : 0.0;
         if (tok.tokenClass == ChordTokenClass::MODIFIER && p == 0.0) {
             adjust = false;
         }
@@ -1656,7 +1656,7 @@ int ChordList::privateID = -1000;
 //   configureAutoAdjust
 //---------------------------------------------------------
 
-void ChordList::configureAutoAdjust(qreal emag, qreal eadjust, qreal mmag, qreal madjust)
+void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust)
 {
     _emag = emag;
     _eadjust = eadjust;
@@ -1962,10 +1962,10 @@ void ChordList::checkChordList(const MStyle& style)
 {
     // make sure we have a chordlist
     if (!loaded()) {
-        qreal emag = style.value(Sid::chordExtensionMag).toReal();
-        qreal eadjust = style.value(Sid::chordExtensionAdjust).toReal();
-        qreal mmag = style.value(Sid::chordModifierMag).toReal();
-        qreal madjust = style.value(Sid::chordModifierAdjust).toReal();
+        double emag = style.value(Sid::chordExtensionMag).toReal();
+        double eadjust = style.value(Sid::chordExtensionAdjust).toReal();
+        double mmag = style.value(Sid::chordModifierMag).toReal();
+        double madjust = style.value(Sid::chordModifierAdjust).toReal();
         configureAutoAdjust(emag, eadjust, mmag, madjust);
 
         if (style.value(Sid::chordsXmlFile).toBool()) {

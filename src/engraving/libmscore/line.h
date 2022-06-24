@@ -57,8 +57,8 @@ public:
 
     LineSegment(const LineSegment&);
     SLine* line() const { return (SLine*)spanner(); }
-    virtual void spatiumChanged(qreal, qreal) override;
-    virtual void localSpatiumChanged(qreal, qreal) override;
+    virtual void spatiumChanged(double, double) override;
+    virtual void localSpatiumChanged(double, double) override;
 
     friend class SLine;
     virtual void read(XmlReader&) override;
@@ -75,8 +75,8 @@ public:
     std::vector<mu::LineF> dragAnchorLines() const override;
     mu::RectF drag(EditData& ed) override;
 private:
-    mu::PointF leftAnchorPosition(const qreal& systemPositionY) const;
-    mu::PointF rightAnchorPosition(const qreal& systemPositionY) const;
+    mu::PointF leftAnchorPosition(const double& systemPositionY) const;
+    mu::PointF rightAnchorPosition(const double& systemPositionY) const;
 
     Segment* findSegmentForGrip(Grip grip, mu::PointF pos) const;
     static mu::PointF deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg);
@@ -96,8 +96,8 @@ class SLine : public Spanner
     Millimetre _lineWidth;
     mu::draw::Color _lineColor { engravingConfiguration()->defaultColor() };
     mu::draw::PenStyle _lineStyle { mu::draw::PenStyle::SolidLine };
-    qreal _dashLineLen      { 5.0 };
-    qreal _dashGapLen       { 5.0 };
+    double _dashLineLen      { 5.0 };
+    double _dashGapLen       { 5.0 };
     bool _diagonal          { false };
 
 protected:
@@ -113,7 +113,7 @@ public:
     bool readProperties(XmlReader& node) override;
     void writeProperties(XmlWriter& xml) const override;
     virtual LineSegment* createLineSegment(System* parent) = 0;
-    void setLen(qreal l);
+    void setLen(double l);
     using EngravingItem::bbox;
     const mu::RectF& bbox() const override;
 
@@ -130,10 +130,10 @@ public:
     void setLineColor(const mu::draw::Color& v) { _lineColor = v; }
     void setLineStyle(mu::draw::PenStyle v) { _lineStyle = v; }
 
-    qreal dashLineLen() const { return _dashLineLen; }
-    void setDashLineLen(qreal val) { _dashLineLen = val; }
-    qreal dashGapLen() const { return _dashGapLen; }
-    void setDashGapLen(qreal val) { _dashGapLen = val; }
+    double dashLineLen() const { return _dashLineLen; }
+    void setDashLineLen(double val) { _dashLineLen = val; }
+    double dashGapLen() const { return _dashGapLen; }
+    void setDashGapLen(double val) { _dashGapLen = val; }
 
     LineSegment* frontSegment() { return toLineSegment(Spanner::frontSegment()); }
     const LineSegment* frontSegment() const { return toLineSegment(Spanner::frontSegment()); }

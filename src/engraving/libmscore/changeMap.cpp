@@ -42,7 +42,7 @@ namespace mu::engraving {
 
 int ChangeMap::interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& tick)
 {
-    Q_ASSERT(event.type == ChangeEventType::RAMP);
+    assert(event.type == ChangeEventType::RAMP);
 
     // Prevent zero-division error
     if (event.cachedStartVal == event.cachedEndVal || event.length.isZero()) {

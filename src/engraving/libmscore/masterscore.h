@@ -94,7 +94,7 @@ class MasterScore : public Score
     Fraction _pos[3];                      ///< 0 - current, 1 - left loop, 2 - right loop
 
     int _midiPortCount = 0;                           // A count of ALSA midi out ports
-    QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
+//    QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
     std::list<MidiInputEvent> _activeMidiPitches;     // MIDI keys currently being held down
     std::vector<MidiMapping> _midiMapping;
     bool isSimpleMidiMapping = false;                 // midi mapping is simple if all ports and channels
@@ -102,7 +102,7 @@ class MasterScore : public Score
     QSet<int> occupiedMidiChannels;                   // each entry is port*16+channel, port range: 0-inf, channel: 0-15
     unsigned int searchMidiMappingFrom = 0;           // makes getting next free MIDI mapping faster
 
-    qreal m_widthOfSegmentCell = 3;
+    double m_widthOfSegmentCell = 3;
 
     std::weak_ptr<EngravingProject> m_project;
 
@@ -160,7 +160,7 @@ public:
 
     std::vector<Excerpt*>& excerpts() { return _excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return _excerpts; }
-    QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
+    //   QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
     std::list<MidiInputEvent>& activeMidiPitches() override { return _activeMidiPitches; }
 
     void setUpdateAll() override;
@@ -193,7 +193,7 @@ public:
     bool exportMidiMapping() { return !isSimpleMidiMapping; }
     int getNextFreeMidiMapping(int p = -1, int ch = -1);
     int getNextFreeDrumMidiMapping();
-    void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
+//    void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
     void rebuildAndUpdateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth, bool expressive, bool force = false);
@@ -229,8 +229,8 @@ public:
 
     String name() const override;
 
-    void setWidthOfSegmentCell(qreal val) { m_widthOfSegmentCell = val; }
-    qreal widthOfSegmentCell() const { return m_widthOfSegmentCell; }
+    void setWidthOfSegmentCell(double val) { m_widthOfSegmentCell = val; }
+    double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
 };
 
 extern MasterScore* gpaletteScore;

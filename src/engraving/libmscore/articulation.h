@@ -134,7 +134,7 @@ public:
 
     Articulation* clone() const override { return new Articulation(*this); }
 
-    qreal mag() const override;
+    double mag() const override;
 
     SymId symId() const { return _symId; }
     void setSymId(SymId id);

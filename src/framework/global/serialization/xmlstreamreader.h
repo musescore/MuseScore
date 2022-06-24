@@ -25,11 +25,14 @@
 #include <vector>
 #include <list>
 #include <map>
-#include <QByteArray>
 
 #include "io/iodevice.h"
 #include "types/bytearray.h"
 #include "types/string.h"
+
+#ifndef NO_QT_SUPPORT
+#include <QByteArray>
+#endif
 
 namespace mu {
 class XmlStreamReader
@@ -66,7 +69,9 @@ public:
     XmlStreamReader();
     explicit XmlStreamReader(io::IODevice* device);
     explicit XmlStreamReader(const ByteArray& data);
+#ifndef NO_QT_SUPPORT
     explicit XmlStreamReader(const QByteArray& data);
+#endif
     virtual ~XmlStreamReader();
 
     XmlStreamReader(const XmlStreamReader&) = delete;

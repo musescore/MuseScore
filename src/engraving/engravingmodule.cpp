@@ -23,10 +23,14 @@
 
 #include "modularity/ioc.h"
 
-#ifndef NO_ENGRAVING_INTERNAL
+#ifndef ENGRAVING_NO_INTERNAL
 #include "engraving/infrastructure/internal/engravingconfiguration.h"
 #include "engraving/infrastructure/internal/qfontprovider.h"
 #include "engraving/infrastructure/internal/qimageprovider.h"
+#endif
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+#include "engraving/accessibility/accessibleitem.h"
 #endif
 
 #include "engraving/style/defaultstyle.h"
@@ -35,14 +39,12 @@
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/scorefont.h"
 
-#include "engraving/accessibility/accessibleitem.h"
-
 #include "compat/scoreaccess.h"
 
 using namespace mu::engraving;
 using namespace mu::modularity;
 
-#ifndef NO_ENGRAVING_INTERNAL
+#ifndef ENGRAVING_NO_INTERNAL
 static std::shared_ptr<EngravingConfiguration> s_configuration = std::make_shared<EngravingConfiguration>();
 #endif
 
@@ -58,7 +60,7 @@ std::string EngravingModule::moduleName() const
 
 void EngravingModule::registerExports()
 {
-#ifndef NO_ENGRAVING_INTERNAL
+#ifndef ENGRAVING_NO_INTERNAL
     ioc()->registerExport<draw::IFontProvider>(moduleName(), new draw::QFontProvider());
     ioc()->registerExport<draw::IImageProvider>(moduleName(), new draw::QImageProvider());
     ioc()->registerExport<IEngravingConfiguration>(moduleName(), s_configuration);
@@ -81,7 +83,7 @@ void EngravingModule::registerUiTypes()
 
 void EngravingModule::onInit(const framework::IApplication::RunMode&)
 {
-#ifndef NO_ENGRAVING_INTERNAL
+#ifndef ENGRAVING_NO_INTERNAL
     s_configuration->init();
 
     DefaultStyle::instance()->init(s_configuration->defaultStyleFilePath(),

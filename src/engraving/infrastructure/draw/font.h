@@ -23,6 +23,7 @@
 #define MU_DRAW_FONT_H
 
 #include "types/string.h"
+#include "types/flags.h"
 
 #ifndef NO_QT_SUPPORT
 #include <QFont>
@@ -65,8 +66,8 @@ public:
     void setFamily(const String& family);
     String family() const;
 
-    qreal pointSizeF() const;
-    void setPointSizeF(qreal s);
+    double pointSizeF() const;
+    void setPointSizeF(double s);
 
     Weight weight() const;
     void setWeight(Weight w);
@@ -97,9 +98,9 @@ public:
 private:
 
     String m_family;
-    qreal m_pointSizeF = -1.0;
+    double m_pointSizeF = -1.0;
     Weight m_weight = Weight::Normal;
-    QFlags<Style> m_style{ Style::Normal };
+    Flags<Style> m_style{ Style::Normal };
     bool m_noFontMerging = false;
     Hinting m_hinting = Hinting::PreferDefaultHinting;
 };

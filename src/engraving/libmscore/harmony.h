@@ -42,20 +42,20 @@ class ParsedChord;
 struct TextSegment {
     mu::draw::Font m_font;
     String text;
-    qreal x, y;         // Position of segments relative to each other.
+    double x, y;         // Position of segments relative to each other.
     mu::PointF offset;     // Offset for placing within the TextBase.
     bool select;
 
-    qreal width() const;
+    double width() const;
     mu::RectF boundingRect() const;
     mu::RectF tightBoundingRect() const;
     mu::PointF pos() const { return mu::PointF(x, y) + offset; }
 
     TextSegment() { select = false; x = y = 0.0; }
-    TextSegment(const mu::draw::Font& f, qreal _x, qreal _y)
+    TextSegment(const mu::draw::Font& f, double _x, double _y)
         : m_font(f), x(_x), y(_y), select(false) {}
-    TextSegment(const String&, const mu::draw::Font&, qreal x, qreal y);
-    void set(const String&, const mu::draw::Font&, qreal x, qreal y, mu::PointF offset);
+    TextSegment(const String&, const mu::draw::Font&, double x, double y);
+    void set(const String&, const mu::draw::Font&, double x, double y, mu::PointF offset);
     void setText(const String& t) { text = t; }
 };
 
@@ -94,7 +94,7 @@ class Harmony final : public TextBase
     ParsedChord* _parsedForm;   // parsed form of chord
     bool _isMisspelled = false; // show spell check warning
     HarmonyType _harmonyType;   // used to control rendering, transposition, export, etc.
-    qreal _harmonyHeight;       // used for calculating the height is frame while editing.
+    double _harmonyHeight;       // used for calculating the height is frame while editing.
 
     mutable RealizedHarmony _realizedHarmony; // the realized harmony used for playback
 
@@ -113,9 +113,9 @@ class Harmony final : public TextBase
 
     void determineRootBaseSpelling();
     void draw(mu::draw::Painter*) const override;
-    void drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling) override;
-    void render(const String&, qreal&, qreal&);
-    void render(const std::list<RenderAction>& renderList, qreal&, qreal&, int tpc,
+    void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
+    void render(const String&, double&, double&);
+    void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
                 NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
     Sid getPropertyStyle(Pid) const override;
 
@@ -210,16 +210,16 @@ public:
 
     void resolveDegreeList();
 
-    qreal baseLine() const override;
+    double baseLine() const override;
 
     const ChordDescription* fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&);
     const ChordDescription* fromXml(const String& s, const std::list<HDegree>&);
     const ChordDescription* fromXml(const String& s);
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
-    void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+    void spatiumChanged(double oldValue, double newValue) override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
     void setHarmony(const String& s);
     mu::PointF calculateBoundingRect();
-    qreal xShapeOffset() const;
+    double xShapeOffset() const;
 
     String typeUserName() const override;
     String accessibleInfo() const override;

@@ -24,7 +24,7 @@
 
 #include "painterpath.h"
 
-namespace mu {
+using namespace mu;
 static constexpr double NEAR_CLIP = 0.000001;
 
 Transform::Transform(double h11, double h12, double h21, double h22, double dx, double dy)
@@ -240,16 +240,16 @@ Transform::TransformationType Transform::type() const
     }
     switch (m_dirty) {
     case TransformationType::Project:
-        if (!qFuzzyIsNull(m_13) || !qFuzzyIsNull(m_23) || !qFuzzyIsNull(m_33 - 1)) {
+        if (!RealIsNull(m_13) || !RealIsNull(m_23) || !RealIsNull(m_33 - 1)) {
             m_type = TransformationType::Project;
             break;
         }
     // fall through
     case TransformationType::Shear:
     case TransformationType::Rotate:
-        if (!qFuzzyIsNull(m_affine.m_12) || !qFuzzyIsNull(m_affine.m_21)) {
+        if (!RealIsNull(m_affine.m_12) || !RealIsNull(m_affine.m_21)) {
             const double dot = m_affine.m_11 * m_affine.m_12 + m_affine.m_21 * m_affine.m_22;
-            if (qFuzzyIsNull(dot)) {
+            if (RealIsNull(dot)) {
                 m_type = TransformationType::Rotate;
             } else {
                 m_type = TransformationType::Shear;
@@ -258,13 +258,13 @@ Transform::TransformationType Transform::type() const
         }
     // fall through
     case TransformationType::Scale:
-        if (!qFuzzyIsNull(m_affine.m_11 - 1) || !qFuzzyIsNull(m_affine.m_22 - 1)) {
+        if (!RealIsNull(m_affine.m_11 - 1) || !RealIsNull(m_affine.m_22 - 1)) {
             m_type = TransformationType::Scale;
             break;
         }
     // fall through
     case TransformationType::Translate:
-        if (!qFuzzyIsNull(m_affine.m_dx) || !qFuzzyIsNull(m_affine.m_dy)) {
+        if (!RealIsNull(m_affine.m_dx) || !RealIsNull(m_affine.m_dy)) {
             m_type = TransformationType::Translate;
             break;
         }
@@ -358,8 +358,8 @@ LineF Transform::map(const LineF& l) const
 
 static inline bool needsPerspectiveClipping(const RectF& rect, const Transform& transform)
 {
-    const qreal wx = qMin(transform.m13() * rect.left(), transform.m13() * rect.right());
-    const qreal wy = qMin(transform.m23() * rect.top(), transform.m23() * rect.bottom());
+    const double wx = std::min(transform.m13() * rect.left(), transform.m13() * rect.right());
+    const double wy = std::min(transform.m23() * rect.top(), transform.m23() * rect.bottom());
 
     return wx + wy + transform.m33() < NEAR_CLIP;
 }
@@ -372,10 +372,10 @@ RectF Transform::map(const RectF& rect) const
     }
 
     if (t <= TransformationType::Scale) {
-        qreal x = m_affine.m_11 * rect.x() + m_affine.m_dx;
-        qreal y = m_affine.m_22 * rect.y() + m_affine.m_dy;
-        qreal w = m_affine.m_11 * rect.width();
-        qreal h = m_affine.m_22 * rect.height();
+        double x = m_affine.m_11 * rect.x() + m_affine.m_dx;
+        double y = m_affine.m_22 * rect.y() + m_affine.m_dy;
+        double w = m_affine.m_11 * rect.width();
+        double h = m_affine.m_22 * rect.height();
         if (w < 0) {
             w = -w;
             x -= w;
@@ -386,36 +386,36 @@ RectF Transform::map(const RectF& rect) const
         }
         return RectF(x, y, w, h);
     } else if (t < TransformationType::Project || !needsPerspectiveClipping(rect, *this)) {
-        qreal x = rect.x(), y = rect.y();
+        double x = rect.x(), y = rect.y();
         mapElement(x, y, t);
-        qreal xmin = x;
-        qreal ymin = y;
-        qreal xmax = x;
-        qreal ymax = y;
+        double xmin = x;
+        double ymin = y;
+        double xmax = x;
+        double ymax = y;
 
         x = rect.x() + rect.width();
         y = rect.y();
         mapElement(x, y, t);
-        xmin = qMin(xmin, x);
-        ymin = qMin(ymin, y);
-        xmax = qMax(xmax, x);
-        ymax = qMax(ymax, y);
+        xmin = std::min(xmin, x);
+        ymin = std::min(ymin, y);
+        xmax = std::max(xmax, x);
+        ymax = std::max(ymax, y);
 
         x = rect.x() + rect.width();
         y = rect.y() + rect.height();
         mapElement(x, y, t);
-        xmin = qMin(xmin, x);
-        ymin = qMin(ymin, y);
-        xmax = qMax(xmax, x);
-        ymax = qMax(ymax, y);
+        xmin = std::min(xmin, x);
+        ymin = std::min(ymin, y);
+        xmax = std::max(xmax, x);
+        ymax = std::max(ymax, y);
 
         x = rect.x();
         y = rect.y() + rect.height();
         mapElement(x, y, t);
-        xmin = qMin(xmin, x);
-        ymin = qMin(ymin, y);
-        xmax = qMax(xmax, x);
-        ymax = qMax(ymax, y);
+        xmin = std::min(xmin, x);
+        ymin = std::min(ymin, y);
+        xmax = std::max(xmax, x);
+        ymax = std::max(ymax, y);
 
         return RectF(xmin, ymin, xmax - xmin, ymax - ymin);
     } else {
@@ -454,7 +454,7 @@ Transform& Transform::rotate(double a)
 {
     constexpr double deg2rad = 0.017453292519943295769; // pi/180
 
-    if (qFuzzyIsNull(a)) {
+    if (RealIsNull(a)) {
         return *this;
     }
 #ifdef TRACE_DRAW_OBJ_ENABLED
@@ -466,11 +466,11 @@ Transform& Transform::rotate(double a)
 
     double sina = 0.0;
     double cosa = 0.0;
-    if (qFuzzyCompare(a, 90.) || qFuzzyCompare(a, -270.)) {
+    if (RealIsEqual(a, 90.) || RealIsEqual(a, -270.)) {
         sina = 1.;
-    } else if (qFuzzyCompare(a, 270.) || qFuzzyCompare(a, -90.)) {
+    } else if (RealIsEqual(a, 270.) || RealIsEqual(a, -90.)) {
         sina = -1.;
-    } else if (qFuzzyCompare(a, 180.)) {
+    } else if (RealIsEqual(a, 180.)) {
         cosa = -1.;
     } else {
         double b = deg2rad * a;
@@ -581,7 +581,7 @@ Transform& Transform::rotateRadians(double a)
 
 Transform& Transform::translate(double dx, double dy)
 {
-    if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
+    if (RealIsNull(dx) && RealIsNull(dy)) {
         return *this;
     }
 #ifdef TRACE_DRAW_OBJ_ENABLED
@@ -620,7 +620,7 @@ Transform& Transform::translate(double dx, double dy)
 
 Transform& Transform::scale(double sx, double sy)
 {
-    if (qFuzzyCompare(sx, 1) && qFuzzyCompare(sy, 1)) {
+    if (RealIsEqual(sx, 1) && RealIsEqual(sy, 1)) {
         return *this;
     }
 #ifdef TRACE_DRAW_OBJ_ENABLED
@@ -657,7 +657,7 @@ Transform& Transform::scale(double sx, double sy)
 
 Transform& Transform::shear(double sh, double sv)
 {
-    if (qFuzzyIsNull(sh) && qFuzzyIsNull(sv)) {
+    if (RealIsNull(sh) && RealIsNull(sv)) {
         return *this;
     }
 #ifdef TRACE_DRAW_OBJ_ENABLED
@@ -714,8 +714,8 @@ Transform Transform::inverted() const
         invert.m_affine.m_dy = -m_affine.m_dy;
         break;
     case TransformationType::Scale:
-        inv = !qFuzzyIsNull(m_affine.m_11);
-        inv &= !qFuzzyIsNull(m_affine.m_22);
+        inv = !RealIsNull(m_affine.m_11);
+        inv &= !RealIsNull(m_affine.m_22);
         if (inv) {
             invert.m_affine.m_11 = 1. / m_affine.m_11;
             invert.m_affine.m_22 = 1. / m_affine.m_22;
@@ -730,7 +730,7 @@ Transform Transform::inverted() const
     default:
         // general case
         double det = determinant();
-        inv = !qFuzzyIsNull(det);
+        inv = !RealIsNull(det);
         if (inv) {
             invert = adjoint() / det;
         }
@@ -801,4 +801,3 @@ void Transform::nanWarning(const std::string& func)
 }
 
 #endif
-}

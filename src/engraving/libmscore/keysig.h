@@ -59,7 +59,7 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
     void layout() override;
-    qreal mag() const override;
+    double mag() const override;
 
     //@ sets the key of the key signature
     Q_INVOKABLE void setKey(Key);

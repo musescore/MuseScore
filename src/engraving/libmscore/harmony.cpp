@@ -1017,7 +1017,7 @@ void Harmony::setHarmony(const String& s)
 //   baseLine
 //---------------------------------------------------------
 
-qreal Harmony::baseLine() const
+double Harmony::baseLine() const
 {
     return (textList.empty()) ? TextBase::baseLine() : 0.0;
 }
@@ -1463,11 +1463,11 @@ void Harmony::layout1()
 
 PointF Harmony::calculateBoundingRect()
 {
-    const qreal ypos = (placeBelow() && staff()) ? staff()->height() : 0.0;
+    const double ypos = (placeBelow() && staff()) ? staff()->height() : 0.0;
     const FretDiagram* fd   = (explicitParent() && explicitParent()->isFretDiagram()) ? toFretDiagram(explicitParent()) : nullptr;
-    const qreal cw   = symWidth(SymId::noteheadBlack);
-    qreal newx = 0.0;
-    qreal newy = 0.0;
+    const double cw   = symWidth(SymId::noteheadBlack);
+    double newx = 0.0;
+    double newy = 0.0;
 
     if (textList.empty()) {
         TextBase::layout1();
@@ -1475,8 +1475,8 @@ PointF Harmony::calculateBoundingRect()
         // When in EDIT mode, the bbox is different as in NORMAL mode.
         // Adjust the position so the both bbox have the same alignment.
 
-        qreal xx = 0.0;
-        qreal yy = 0.0;
+        double xx = 0.0;
+        double yy = 0.0;
         if (fd) {
             if (align() == AlignH::RIGHT) {
                 xx = fd->width() / 2.0;
@@ -1499,7 +1499,7 @@ PointF Harmony::calculateBoundingRect()
             bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
         }
 
-        qreal yy = -bb.y();      // Align::TOP
+        double yy = -bb.y();      // Align::TOP
         if (align() == AlignV::VCENTER) {
             yy = -bb.y() / 2.0;
         } else if (align() == AlignV::BASELINE) {
@@ -1508,7 +1508,7 @@ PointF Harmony::calculateBoundingRect()
             yy = -bb.height() - bb.y();
         }
 
-        qreal xx = -bb.x();     // AlignH::LEFT
+        double xx = -bb.x();     // AlignH::LEFT
         if (fd) {
             if (align() == AlignH::RIGHT) {
                 xx = fd->bbox().width() - bb.width();
@@ -1557,7 +1557,7 @@ PointF Harmony::calculateBoundingRect()
 //    Returns the offset for the shapes.
 //---------------------------------------------------------
 
-qreal Harmony::xShapeOffset() const
+double Harmony::xShapeOffset() const
 {
     const FretDiagram* fd = (explicitParent() && explicitParent()->isFretDiagram()) ? toFretDiagram(explicitParent()) : nullptr;
     return (fd && textList.empty()) ? fd->centerX() : 0.0;
@@ -1616,7 +1616,7 @@ void Harmony::draw(mu::draw::Painter* painter) const
 //   drawEditMode
 //---------------------------------------------------------
 
-void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling)
+void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling)
 {
     TextBase::drawEditMode(p, ed, currentViewScaling);
 
@@ -1639,7 +1639,7 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentView
 //   TextSegment
 //---------------------------------------------------------
 
-TextSegment::TextSegment(const String& s, const mu::draw::Font& f, qreal x, qreal y)
+TextSegment::TextSegment(const String& s, const mu::draw::Font& f, double x, double y)
 {
     set(s, f, x, y, PointF());
     select = false;
@@ -1649,7 +1649,7 @@ TextSegment::TextSegment(const String& s, const mu::draw::Font& f, qreal x, qrea
 //   width
 //---------------------------------------------------------
 
-qreal TextSegment::width() const
+double TextSegment::width() const
 {
     return mu::draw::FontMetrics::width(m_font, text);
 }
@@ -1676,7 +1676,7 @@ RectF TextSegment::tightBoundingRect() const
 //   set
 //---------------------------------------------------------
 
-void TextSegment::set(const String& s, const mu::draw::Font& f, qreal _x, qreal _y, PointF _offset)
+void TextSegment::set(const String& s, const mu::draw::Font& f, double _x, double _y, PointF _offset)
 {
     m_font   = f;
     x      = _x;
@@ -1689,7 +1689,7 @@ void TextSegment::set(const String& s, const mu::draw::Font& f, qreal _x, qreal 
 //   render
 //---------------------------------------------------------
 
-void Harmony::render(const String& s, qreal& x, qreal& y)
+void Harmony::render(const String& s, double& x, double& y)
 {
     int fontIdx = 0;
     if (!s.isEmpty()) {
@@ -1704,14 +1704,14 @@ void Harmony::render(const String& s, qreal& x, qreal& y)
 //   render
 //---------------------------------------------------------
 
-void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal& y, int tpc, NoteSpellingType noteSpelling,
+void Harmony::render(const std::list<RenderAction>& renderList, double& x, double& y, int tpc, NoteSpellingType noteSpelling,
                      NoteCaseType noteCase)
 {
     ChordList* chordList = score()->chordList();
     QStack<PointF> stack;
     int fontIdx    = 0;
-    qreal _spatium = spatium();
-    qreal mag      = magS();
+    double _spatium = spatium();
+    double mag      = magS();
 
 // LOGD("===");
     for (const RenderAction& a : renderList) {
@@ -1726,7 +1726,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal&
                 ts->setText(a.text);
             }
             if (_harmonyType == HarmonyType::NASHVILLE) {
-                qreal nmag = chordList->nominalMag();
+                double nmag = chordList->nominalMag();
                 ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * nmag);
             }
             textList.push_back(ts);
@@ -1830,7 +1830,7 @@ void Harmony::render()
         delete s;
     }
     textList.clear();
-    qreal x = 0.0, y = 0.0;
+    double x = 0.0, y = 0.0;
 
     determineRootBaseSpelling();
 
@@ -1849,7 +1849,7 @@ void Harmony::render()
     } else if (_harmonyType == HarmonyType::NASHVILLE) {
         // render function
         render(chordList->renderListFunction, x, y, _rootTpc, _rootSpelling, _rootRenderCase);
-        qreal adjust = chordList->nominalAdjust();
+        double adjust = chordList->nominalAdjust();
         y += adjust * magS() * spatium() * .2;
         // render extension
         const ChordDescription* cd = getDescription();
@@ -1914,7 +1914,7 @@ void Harmony::render()
 //   spatiumChanged
 //---------------------------------------------------------
 
-void Harmony::spatiumChanged(qreal oldValue, qreal newValue)
+void Harmony::spatiumChanged(double oldValue, double newValue)
 {
     TextBase::spatiumChanged(oldValue, newValue);
     render();
@@ -1924,7 +1924,7 @@ void Harmony::spatiumChanged(qreal oldValue, qreal newValue)
 //   localSpatiumChanged
 //---------------------------------------------------------
 
-void Harmony::localSpatiumChanged(qreal oldValue, qreal newValue)
+void Harmony::localSpatiumChanged(double oldValue, double newValue)
 {
     TextBase::localSpatiumChanged(oldValue, newValue);
     render();

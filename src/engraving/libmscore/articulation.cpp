@@ -619,7 +619,7 @@ Sid Articulation::getPropertyStyle(Pid id) const
             return Sid::articulationAnchorOther;
         }
     }
-        Q_ASSERT(false);           // should never be reached
+        assert(false);           // should never be reached
         Q_FALLTHROUGH();
     default:
         return Sid::NOSTYLE;
@@ -651,7 +651,7 @@ void Articulation::resetProperty(Pid id)
 //   mag
 //---------------------------------------------------------
 
-qreal Articulation::mag() const
+double Articulation::mag() const
 {
     return explicitParent() ? parentItem()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
 }
@@ -754,7 +754,7 @@ String Articulation::accessibleInfo() const
 void Articulation::doAutoplace()
 {
     // rebase vertical offset on drag
-    qreal rebase = 0.0;
+    double rebase = 0.0;
     if (offsetChanged() != OffsetChange::NONE) {
         rebase = rebaseOffset();
     }
@@ -764,13 +764,13 @@ void Articulation::doAutoplace()
         Measure* m = measure();
         staff_idx_t si = staffIdx();
 
-        qreal sp = score()->spatium();
-        qreal md = minDistance().val() * sp;
+        double sp = score()->spatium();
+        double md = minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
         RectF r = bbox().translated(chordRest()->pos() + m->pos() + s->pos() + pos());
 
-        qreal d;
+        double d;
         bool above = up();     // (anchor() == ArticulationAnchor::TOP_STAFF || anchor() == ArticulationAnchor::TOP_CHORD);
         SkylineLine sk(!above);
         if (above) {
@@ -782,7 +782,7 @@ void Articulation::doAutoplace()
         }
 
         if (d > -md) {
-            qreal yd = d + md;
+            double yd = d + md;
             if (above) {
                 yd *= -1.0;
             }

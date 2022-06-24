@@ -32,7 +32,7 @@
 
 using namespace mu::engraving;
 
-VerticalGapData::VerticalGapData(MStyle* style, bool first, System* sys, Staff* st, SysStaff* sst, Spacer* nextSpacer, qreal y)
+VerticalGapData::VerticalGapData(MStyle* style, bool first, System* sys, Staff* st, SysStaff* sst, Spacer* nextSpacer, double y)
     : _fixedHeight(first), style(style), system(sys), sysStaff(sst), staff(st)
 {
     if (_fixedHeight) {
@@ -58,12 +58,12 @@ VerticalGapData::VerticalGapData(MStyle* style, bool first, System* sys, Staff* 
 //   updateFactor
 //---------------------------------------------------------
 
-void VerticalGapData::updateFactor(qreal factor)
+void VerticalGapData::updateFactor(double factor)
 {
     if (_fixedHeight) {
         return;
     }
-    qreal f = qMax(factor, _factor);
+    double f = qMax(factor, _factor);
     _normalisedSpacing *= _factor / f;
     _factor = f;
 }
@@ -123,7 +123,7 @@ void VerticalGapData::insideCurlyBracket()
 //   factor
 //---------------------------------------------------------
 
-qreal VerticalGapData::factor() const
+double VerticalGapData::factor() const
 {
     return _factor;
 }
@@ -133,7 +133,7 @@ qreal VerticalGapData::factor() const
 //    return normalised spacing
 //---------------------------------------------------------
 
-qreal VerticalGapData::spacing() const
+double VerticalGapData::spacing() const
 {
     return _normalisedSpacing + _addedNormalisedSpace;
 }
@@ -142,7 +142,7 @@ qreal VerticalGapData::spacing() const
 //   addedSpace
 //---------------------------------------------------------
 
-qreal VerticalGapData::actualAddedSpace() const
+double VerticalGapData::actualAddedSpace() const
 {
     return _addedNormalisedSpace * factor();
 }
@@ -151,7 +151,7 @@ qreal VerticalGapData::actualAddedSpace() const
 //   addSpacing
 //---------------------------------------------------------
 
-qreal VerticalGapData::addSpacing(qreal step)
+double VerticalGapData::addSpacing(double step)
 {
     if (_fixedHeight | _fixedSpacer) {
         return 0.0;
@@ -160,7 +160,7 @@ qreal VerticalGapData::addSpacing(qreal step)
         _normalisedSpacing = _maxActualSpacing;
         step = 0.0;
     } else {
-        qreal newSpacing { _normalisedSpacing + _addedNormalisedSpace + step };
+        double newSpacing { _normalisedSpacing + _addedNormalisedSpace + step };
         if ((newSpacing >= _maxActualSpacing)) {
             step = _maxActualSpacing - _normalisedSpacing - _addedNormalisedSpace;
         }
@@ -193,13 +193,13 @@ void VerticalGapData::undoLastAddSpacing()
 //   addFillSpacing
 //---------------------------------------------------------
 
-qreal VerticalGapData::addFillSpacing(qreal step, qreal maxFill)
+double VerticalGapData::addFillSpacing(double step, double maxFill)
 {
     if (_fixedSpacer) {
         return 0.0;
     }
-    qreal actStep { ((step + _fillSpacing / _factor) > maxFill) ? (maxFill - _fillSpacing / _factor) : step };
-    qreal res = addSpacing(actStep);
+    double actStep { ((step + _fillSpacing / _factor) > maxFill) ? (maxFill - _fillSpacing / _factor) : step };
+    double res = addSpacing(actStep);
     _fillSpacing += res * _factor;
     return res;
 }
@@ -219,9 +219,9 @@ void VerticalGapDataList::deleteAll()
 //   sumStretchFactor
 //---------------------------------------------------------
 
-qreal VerticalGapDataList::sumStretchFactor() const
+double VerticalGapDataList::sumStretchFactor() const
 {
-    qreal sum { 0.0 };
+    double sum { 0.0 };
     for (VerticalGapData* vsd : *this) {
         if (!vsd->isFixedHeight()) {
             sum += vsd->factor();
@@ -234,7 +234,7 @@ qreal VerticalGapDataList::sumStretchFactor() const
 //   smallest
 //---------------------------------------------------------
 
-qreal VerticalGapDataList::smallest(qreal limit) const
+double VerticalGapDataList::smallest(double limit) const
 {
     VerticalGapData* vdp { nullptr };
     for (VerticalGapData* vgd : *this) {

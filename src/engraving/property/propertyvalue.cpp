@@ -55,7 +55,7 @@ bool PropertyValue::operator ==(const PropertyValue& v) const
 
     //! HACK Temporary hack for Spatium comparisons (maybe one type is Spatium and another type is real)
     if (v.m_type == P_TYPE::SPATIUM || m_type == P_TYPE::SPATIUM) {
-        return RealIsEqual(v.value<qreal>(), value<qreal>());
+        return RealIsEqual(v.value<double>(), value<double>());
     }
 
     //! HACK Temporary hack for Fraction comparisons
@@ -66,7 +66,7 @@ bool PropertyValue::operator ==(const PropertyValue& v) const
 
     if (v.m_type == P_TYPE::REAL) {
         assert(m_type == P_TYPE::REAL);
-        return RealIsEqual(v.value<qreal>(), value<qreal>());
+        return RealIsEqual(v.value<double>(), value<double>());
     }
 
     assert(m_data);
@@ -95,7 +95,7 @@ QVariant PropertyValue::toQVariant() const
         return QVariant::fromValue(QList<int>(vec.begin(), vec.end()));
     } break;
     case P_TYPE::SIZE_T:      return static_cast<int>(value<size_t>());
-    case P_TYPE::REAL:        return value<qreal>();
+    case P_TYPE::REAL:        return value<double>();
     case P_TYPE::STRING:      return value<QString>();
 
     // Geometry
@@ -195,7 +195,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::SCALE:         return PropertyValue(ScaleF::fromQSizeF(v.value<QSizeF>()));
     case P_TYPE::SPATIUM:       return PropertyValue(Spatium(v.toReal()));
     case P_TYPE::MILLIMETRE:    return PropertyValue(Millimetre(v.toReal()));
-    case P_TYPE::PAIR_REAL:     return PropertyValue(PairF::fromQPairF(v.value<QPair<qreal, qreal> >()));
+    case P_TYPE::PAIR_REAL:     return PropertyValue(PairF::fromQPairF(v.value<QPair<double, double> >()));
 
     // Draw
     case P_TYPE::SYMID:         return PropertyValue(SymId(v.toInt()));

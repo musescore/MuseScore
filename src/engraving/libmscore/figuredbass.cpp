@@ -63,11 +63,11 @@ static const ElementStyle figuredBassTextStyle {
     { Sid::figuredBassFontStyle,               Pid::FONT_STYLE },
 };
 
-static constexpr qreal FB_CONTLINE_HEIGHT            = 0.875;     // the % of font EM to raise the cont. line at
-                                                                  // (0 = top of font; 1 = bottom of font)
-static constexpr qreal FB_CONTLINE_LEFT_PADDING      = 0.1875;    // (3/16sp) the blank space at the left of a cont. line (in sp)
-static constexpr qreal FB_CONTLINE_OVERLAP           = 0.125;     // (1/8sp)  the overlap of an extended cont. line (in sp)
-static constexpr qreal FB_CONTLINE_THICKNESS         = 0.09375;   // (3/32sp) the thickness of a cont. line (in sp)
+static constexpr double FB_CONTLINE_HEIGHT            = 0.875;     // the % of font EM to raise the cont. line at
+                                                                   // (0 = top of font; 1 = bottom of font)
+static constexpr double FB_CONTLINE_LEFT_PADDING      = 0.1875;    // (3/16sp) the blank space at the left of a cont. line (in sp)
+static constexpr double FB_CONTLINE_OVERLAP           = 0.125;     // (1/8sp)  the overlap of an extended cont. line (in sp)
+static constexpr double FB_CONTLINE_THICKNESS         = 0.09375;   // (3/32sp) the thickness of a cont. line (in sp)
 
 // the array of configured fonts
 static std::vector<FiguredBassFont> g_FBFonts;
@@ -503,7 +503,7 @@ void FiguredBassItem::read(XmlReader& e)
 
 void FiguredBassItem::layout()
 {
-    qreal h, w, x, x1, x2, y;
+    double h, w, x, x1, x2, y;
 
     // construct font metrics
     int fontIdx = 0;
@@ -511,7 +511,7 @@ void FiguredBassItem::layout()
 
     // font size in pixels, scaled according to spatium()
     // (use the same font selection as used in draw() below)
-    qreal m = score()->styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;
+    double m = score()->styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;
     f.setPointSizeF(m);
     mu::draw::FontMetrics fm(f);
 
@@ -626,12 +626,12 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
     int font = 0;
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     // set font from general style
     mu::draw::Font f(g_FBFonts.at(font).family);
 
     // (use the same font selection as used in layout() above)
-    qreal m = score()->styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;
+    double m = score()->styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;
     f.setPointSizeF(m * MScore::pixelRatio);
 
     painter->setFont(f);
@@ -641,9 +641,9 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, displayText());
 
     // continuation line
-    qreal lineEndX = 0.0;
+    double lineEndX = 0.0;
     if (_contLine != ContLine::NONE) {
-        qreal lineStartX  = textWidth;                           // by default, line starts right after text
+        double lineStartX  = textWidth;                           // by default, line starts right after text
         if (lineStartX > 0.0) {
             lineStartX += _spatium * FB_CONTLINE_LEFT_PADDING;          // if some text, give some room after it
         }
@@ -660,7 +660,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
                 // retrieve the X position (in page coords) of a possible cont. line of nextFB
                 // on the same line of 'this'
                 PointF pgPos = pagePos();
-                qreal nextContPageX = nextFB->additionalContLineX(pgPos.y());
+                double nextContPageX = nextFB->additionalContLineX(pgPos.y());
                 // if an additional cont. line has been found, extend up to its initial X coord
                 if (nextContPageX > 0) {
                     lineEndX = nextContPageX - pgPos.x() + _spatium * FB_CONTLINE_OVERLAP;
@@ -673,7 +673,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
         }
         // if some line, draw it
         if (lineEndX > 0.0) {
-            qreal h = bbox().height() * FB_CONTLINE_HEIGHT;
+            double h = bbox().height() * FB_CONTLINE_HEIGHT;
             painter->drawLine(lineStartX, h, lineEndX - ipos().x(), h);
         }
     }
@@ -1140,7 +1140,7 @@ void FiguredBass::read(XmlReader& e)
 void FiguredBass::layout()
 {
     // VERTICAL POSITION:
-    const qreal y = score()->styleD(Sid::figuredBassYOffset) * spatium();
+    const double y = score()->styleD(Sid::figuredBassYOffset) * spatium();
     setPos(PointF(0.0, y));
 
     // BOUNDING BOX and individual item layout (if required)
@@ -1248,8 +1248,8 @@ void FiguredBass::layoutLines()
             len = nextSegm->pageX() - pageX() - 4;               // stop 4 raster units before next segm
         } else if (i == sysIdx1) {
             // initial line
-            qreal w   = s1->staff(staffIdx())->bbox().right();
-            qreal x   = s1->pageX() + w;
+            double w   = s1->staff(staffIdx())->bbox().right();
+            double x   = s1->pageX() + w;
             len = x - pageX();
         } else if (i > 0 && i != sysIdx2) {
             // middle line
@@ -1280,7 +1280,7 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
     using namespace mu::draw;
     // if not printing, draw duration line(s)
     if (!score()->printing() && score()->showUnprintable()) {
-        for (qreal len : _lineLengths) {
+        for (double len : _lineLengths) {
             if (len > 0) {
                 painter->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
@@ -1452,7 +1452,7 @@ FiguredBass* FiguredBass::nextFiguredBass() const
 //    as line position might depend on styles.
 //---------------------------------------------------------
 
-qreal FiguredBass::additionalContLineX(qreal pagePosY) const
+double FiguredBass::additionalContLineX(double pagePosY) const
 {
     PointF pgPos = pagePos();
     for (FiguredBassItem* fbi : items) {
@@ -1737,7 +1737,7 @@ std::list<String> FiguredBass::fontNames()
 //---------------------------------------------------------
 
 bool FiguredBass::fontData(int nIdx, String* pFamily, String* pDisplayName,
-                           qreal* pSize, qreal* pLineHeight)
+                           double* pSize, double* pLineHeight)
 {
     if (nIdx >= 0 && nIdx < static_cast<int>(g_FBFonts.size())) {
         FiguredBassFont f = g_FBFonts.at(nIdx);

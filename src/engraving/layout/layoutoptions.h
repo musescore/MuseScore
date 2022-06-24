@@ -46,12 +46,12 @@ struct LayoutOptions
     bool showVBox = true;
 
     // from style
-    qreal loWidth = 0;
-    qreal loHeight = 0;
+    double loWidth = 0;
+    double loHeight = 0;
     bool firstSystemIndent = true;
 
-    qreal maxFretShiftAbove = 0;
-    qreal maxFretShiftBelow = 0;
+    double maxFretShiftAbove = 0;
+    double maxFretShiftBelow = 0;
 
     VerticalAlignRange verticalAlignRange = VerticalAlignRange::SEGMENT;
 
