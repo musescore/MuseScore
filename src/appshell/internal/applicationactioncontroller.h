@@ -62,6 +62,7 @@ public:
     void onDragEnterEvent(QDragEnterEvent* event) override;
     void onDragMoveEvent(QDragMoveEvent* event) override;
     void onDropEvent(QDropEvent* event) override;
+    bool canReceiveAction(const mu::actions::ActionCode&) const override;
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
