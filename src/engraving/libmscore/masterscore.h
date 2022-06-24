@@ -86,7 +86,6 @@ class MasterScore : public Score
     std::vector<Excerpt*> _excerpts;
     std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
     Score* _playbackScore = nullptr;
-    Revisions* _revisions;
 
     bool _readOnly = false;
 
@@ -178,8 +177,6 @@ public:
     void setExcerptsChanged(bool val) { _cmdState._excerptsChanged = val; }
     bool excerptsChanged() const { return _cmdState._excerptsChanged; }
     bool instrumentsChanged() const { return _cmdState._instrumentsChanged; }
-
-    Revisions* revisions() { return _revisions; }
 
     void setTempomap(TempoMap* tm);
 

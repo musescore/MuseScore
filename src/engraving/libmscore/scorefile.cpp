@@ -42,7 +42,6 @@
 #include "chord.h"
 #include "tuplet.h"
 #include "beam.h"
-#include "revisions.h"
 #include "page.h"
 #include "part.h"
 #include "staff.h"
@@ -393,9 +392,6 @@ bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, com
 
     xml.endElement();
 
-    if (isMaster()) {
-        masterScore()->revisions()->write(xml);
-    }
     if (!onlySelection) {
         //update version values for i.e. plugin access
         _mscoreVersion = VERSION;

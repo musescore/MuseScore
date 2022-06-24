@@ -75,7 +75,6 @@
 #include "rehearsalmark.h"
 #include "repeatlist.h"
 #include "rest.h"
-#include "revisions.h"
 #include "scorefont.h"
 #include "scoreorder.h"
 #include "segment.h"

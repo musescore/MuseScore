@@ -36,7 +36,6 @@
 
 #include "repeatlist.h"
 #include "undo.h"
-#include "revisions.h"
 #include "imageStore.h"
 #include "audio.h"
 #include "utils.h"
@@ -63,7 +62,6 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     _sigmap      = new TimeSigMap();
     _repeatList  = new RepeatList(this);
     _repeatList2 = new RepeatList(this);
-    _revisions   = new Revisions;
     setMasterScore(this);
 
     _pos[int(POS::CURRENT)] = Fraction(0, 1);
@@ -105,7 +103,6 @@ MasterScore::~MasterScore()
         m_project.lock()->m_masterScore = nullptr;
     }
 
-    delete _revisions;
     delete _repeatList;
     delete _repeatList2;
     delete _sigmap;

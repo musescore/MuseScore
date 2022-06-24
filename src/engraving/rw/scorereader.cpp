@@ -32,7 +32,6 @@
 #include "../libmscore/excerpt.h"
 #include "../libmscore/imageStore.h"
 #include "../libmscore/audio.h"
-#include "../libmscore/revisions.h"
 
 #include "log.h"
 
@@ -223,9 +222,7 @@ Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
                 return Err::FileBadFormat;
             }
         } else if (tag == "Revision") {
-            Revision* revision = new Revision;
-            revision->read(e);
-            score->revisions()->add(revision);
+            e.skipCurrentElement();
         }
     }
 
