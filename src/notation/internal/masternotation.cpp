@@ -333,53 +333,6 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
 
         QString text("<sym>metNoteQuarterUp</sym> = %1");
         double bpm = scoreOptions.tempo.valueBpm;
-        switch (ts.denominator()) {
-        case 1:
-            bpm /= 4;
-            break;
-        case 2:
-            bpm /= 2;
-            break;
-        case 4:
-            break;
-        case 8:
-            if (ts.numerator() % 3 == 0) {
-                bpm /= 1.5;
-            } else {
-                bpm *= 2;
-            }
-            break;
-        case 16:
-            if (ts.numerator() % 3 == 0) {
-                bpm *= 1.5;
-            } else {
-                bpm *= 4;
-            }
-            break;
-        case 32:
-            if (ts.numerator() % 3 == 0) {
-                bpm *= 3;
-            } else {
-                bpm *= 8;
-            }
-            break;
-        case 64:
-            if (ts.numerator() % 3 == 0) {
-                bpm *= 6;
-            } else {
-                bpm *= 16;
-            }
-            break;
-        case 128:
-            if (ts.numerator() % 3 == 0) {
-                bpm *= 6;
-            } else {
-                bpm *= 16;
-            }
-            break;
-        default:
-            break;
-        }
 
         bool withDot = scoreOptions.tempo.withDot;
         switch (scoreOptions.tempo.duration) {
