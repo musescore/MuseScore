@@ -229,8 +229,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/repeatlist.h
     ${CMAKE_CURRENT_LIST_DIR}/rest.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rest.h
-    ${CMAKE_CURRENT_LIST_DIR}/revisions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/revisions.h
     ${CMAKE_CURRENT_LIST_DIR}/rootitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rootitem.h
     ${CMAKE_CURRENT_LIST_DIR}/score.cpp
