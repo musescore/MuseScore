@@ -90,20 +90,11 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
 
     Fraction nominal = m_editedTimeSig->sig() / m_editedTimeSig->stretch();
     nominal.reduce();
-    zNominal->setValue(nominal.numerator());
-    nNominal->setValue(nominal.denominator());
-    Fraction sig(m_editedTimeSig->sig());
-    zActual->setValue(sig.numerator());
-    nActual->setValue(sig.denominator());
-    zNominal->setEnabled(false);
-    nNominal->setEnabled(false);
 
     // TODO: fix https://musescore.org/en/node/42341
     // for now, editing of actual (local) time sig is disabled in dialog
     // but more importantly, the dialog should make it clear that this is "local" change only
     // and not normally the right way to add 7/4 to a score
-    zActual->setEnabled(false);
-    nActual->setEnabled(false);
     switch (m_editedTimeSig->timeSigType()) {
     case TimeSigType::NORMAL:
         textButton->setChecked(true);
@@ -211,10 +202,7 @@ void TimeSignaturePropertiesDialog::accept()
         ts = TimeSigType::ALLA_BREVE;
     }
 
-    Fraction actual(zActual->value(), nActual->value());
-    Fraction nominal(zNominal->value(), nNominal->value());
-    m_editedTimeSig->setSig(actual, ts);
-    m_editedTimeSig->setStretch(nominal / actual);
+    m_editedTimeSig->setProperty(mu::engraving::Pid::TIMESIG_TYPE, static_cast<int>(ts));
 
     if (zText->text() != m_editedTimeSig->numeratorString()) {
         m_editedTimeSig->setNumeratorString(zText->text());
