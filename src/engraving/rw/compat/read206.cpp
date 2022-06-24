@@ -34,7 +34,6 @@
 
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
-#include "libmscore/revisions.h"
 #include "libmscore/part.h"
 #include "libmscore/page.h"
 #include "libmscore/scorefont.h"
@@ -3382,9 +3381,7 @@ Score::FileError Read206::read206(mu::engraving::MasterScore* masterScore, XmlRe
                 return Score::FileError::FILE_BAD_FORMAT;
             }
         } else if (tag == "Revision") {
-            Revision* revision = new Revision;
-            revision->read(e);
-            masterScore->revisions()->add(revision);
+            e.skipCurrentElement();
         }
     }
 
