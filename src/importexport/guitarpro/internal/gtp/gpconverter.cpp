@@ -1201,16 +1201,29 @@ void GPConverter::addTempoMap()
         for (auto tempIt = range.first; tempIt != range.second; tempIt++) {
             Fraction tick = m->tick() + Fraction::fromTicks(
                 tempIt->second.position * Constants::division * 4 * m->ticks().numerator() / m->ticks().denominator());
+            Segment* existedSegment = m->findSegment(SegmentType::ChordRest, tick);
             Segment* segment = m->getSegment(SegmentType::ChordRest, tick);
+            Segment* closestChordRestSegment = segment->next(SegmentType::ChordRest);
+            if (!closestChordRestSegment) {
+                closestChordRestSegment = segment->prev(SegmentType::ChordRest);
+            }
+
+            Segment* nextSegment = segment->next(SegmentType::ChordRest | SegmentType::BarLineType);
+
             int realTemp = realTempo(tempIt->second);
             TempoText* tt = Factory::createTempoText(segment);
             tt->setTempo((qreal)realTemp / 60);
-            tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(realTemp));
+            tt->setXmlText(String("<sym>metNoteQuarterUp</sym> = %1").arg(realTemp));
             tt->setTrack(0);
             segment->add(tt);
             _score->setTempo(tick, tt->tempo());
 
             if (_lastGradualTempoChange) {
+                // extend duration until the end of chord
+                if (nextSegment) {
+                    tick = nextSegment->tick();
+                }
+
                 _lastGradualTempoChange->setTick2(tick);
                 if (realTemp > previousTempo) {
                     _lastGradualTempoChange->setTempoChangeType(GradualTempoChangeType::Accelerando);
@@ -1226,6 +1239,12 @@ void GPConverter::addTempoMap()
 
             if (tempIt->second.linear) {
                 GradualTempoChange* tempoChange = Factory::createGradualTempoChange(segment);
+
+                /// if segment was created for tempo, set the tick to closest chordRestSegment
+                if (!existedSegment && closestChordRestSegment) {
+                    tick = closestChordRestSegment->tick();
+                }
+
                 tempoChange->setTick(tick);
                 tempoChange->setTrack(0);
                 _lastGradualTempoChange = tempoChange;
