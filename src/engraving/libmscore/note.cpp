@@ -77,6 +77,7 @@
 #include "undo.h"
 #include "utils.h"
 #include "hook.h"
+#include "notation/inotationconfiguration.h"
 
 #include "config.h"
 #include "log.h"
@@ -1340,7 +1341,8 @@ void Note::draw(mu::draw::Painter* painter) const
                     view->drawBackground(painter, bb);
                 }
             } else {
-                painter->fillRect(bb, mu::draw::Color::white);
+                auto conf = modilarity::ioc()->resolve<mu::notation::INotationConfiguration>("engraving");
+                painter->fillRect(bb, conf->backgroundColor());
             }
 
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background
