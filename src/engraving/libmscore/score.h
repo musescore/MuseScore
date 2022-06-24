@@ -519,6 +519,8 @@ private:
     void assignIdIfNeed(Staff& staff) const;
     void assignIdIfNeed(Part& part) const;
 
+    void updateStavesNumberForSystems();
+
     PaddingTable _paddingTable;
     double _minimumPaddingUnit = 0.1 * spatium(); // Maybe style setting in future
 

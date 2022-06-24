@@ -2592,6 +2592,8 @@ void Score::insertStaff(Staff* staff, staff_idx_t ridx)
             }
         }
     }
+
+    updateStavesNumberForSystems();
 }
 
 void Score::appendStaff(Staff* staff)
@@ -2603,6 +2605,8 @@ void Score::appendStaff(Staff* staff)
     assignIdIfNeed(*staff);
     staff->part()->appendStaff(staff);
     _staves.push_back(staff);
+
+    updateStavesNumberForSystems();
 }
 
 void Score::assignIdIfNeed(Staff& staff) const
@@ -2616,6 +2620,17 @@ void Score::assignIdIfNeed(Part& part) const
 {
     if (part.id() == INVALID_ID) {
         part.setId(newPartId());
+    }
+}
+
+void Score::updateStavesNumberForSystems()
+{
+    for (System* system : _systems) {
+        if (!system->firstMeasure()) {
+            continue;
+        }
+
+        system->adjustStavesNumber(nstaves());
     }
 }
 
@@ -2665,6 +2680,8 @@ void Score::removeStaff(Staff* staff)
 
     mu::remove(_staves, staff);
     staff->part()->removeStaff(staff);
+
+    updateStavesNumberForSystems();
 }
 
 //---------------------------------------------------------
