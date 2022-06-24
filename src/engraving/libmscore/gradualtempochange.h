@@ -25,12 +25,12 @@
 
 #include <optional>
 
-#include "chordtextlinebase.h"
+#include "textlinebase.h"
 #include "types/types.h"
 
 namespace mu::engraving {
 class GradualTempoChangeSegment;
-class GradualTempoChange : public ChordTextLineBase
+class GradualTempoChange : public TextLineBase
 {
 public:
     GradualTempoChange(EngravingItem* parent);
@@ -41,6 +41,7 @@ public:
     void write(XmlWriter& writer) const override;
 
     LineSegment* createLineSegment(System* parent) override;
+    SpannerSegment* layoutSystem(System* system) override;
 
     GradualTempoChangeType tempoChangeType() const;
     ChangeMethod easingMethod() const;

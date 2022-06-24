@@ -1090,10 +1090,10 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
 
     switch (m_dropData.ed.dropElement->type()) {
     case ElementType::VOLTA:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
         return dragMeasureAnchorElement(pos);
     case ElementType::PEDAL:
     case ElementType::LET_RING:
-    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     case ElementType::PALM_MUTE:
     case ElementType::OTTAVA:
@@ -1193,6 +1193,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         systemStavesOnly = m_dropData.ed.dropElement->systemFlag();
     // fall-thru
     case ElementType::VOLTA:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
         // voltas drop to system staves by default, or closest staff if Control is held
         systemStavesOnly = systemStavesOnly || !(m_dropData.ed.modifiers & Qt::ControlModifier);
     // fall-thru
@@ -1200,7 +1201,6 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::TRILL:
     case ElementType::PEDAL:
     case ElementType::LET_RING:
-    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     case ElementType::PALM_MUTE:
     case ElementType::HAIRPIN:
@@ -1631,7 +1631,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         } else if (element->isSLine() && element->type() != ElementType::GLISSANDO) {
             mu::engraving::Segment* startSegment = sel.startSegment();
             mu::engraving::Segment* endSegment = sel.endSegment();
-            bool firstStaffOnly = element->isVolta() && !(modifiers & Qt::ControlModifier);
+            bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & Qt::ControlModifier);
             staff_idx_t startStaff = firstStaffOnly ? 0 : sel.staffStart();
             staff_idx_t endStaff   = firstStaffOnly ? 1 : sel.staffEnd();
             for (staff_idx_t i = startStaff; i < endStaff; ++i) {
@@ -1949,7 +1949,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
         m_dropData.ed.dropElement->setTrack(track);
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
-        m_notifyAboutDropChanged = true;
+        notifyAboutDragChanged();
         return true;
     }
     m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
