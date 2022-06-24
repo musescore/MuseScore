@@ -1340,7 +1340,7 @@ void Note::draw(mu::draw::Painter* painter) const
                     view->drawBackground(painter, bb);
                 }
             } else {
-                painter->fillRect(bb, mu::draw::Color::white);
+                painter->fillRect(bb, notationConfiguration()->backgroundColor());
             }
 
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background

@@ -38,6 +38,7 @@
 #include "key.h"
 #include "iengravingconfiguration.h"
 #include "modularity/ioc.h"
+#include "notation/inotationconfiguration.h"
 
 namespace mu::engraving {
 class Factory;
@@ -152,6 +153,7 @@ static const int INVALID_LINE = -10000;
 
 class Note final : public EngravingItem
 {
+    INJECT(engraving, notation::INotationConfiguration, notationConfiguration)
 public:
     enum class SlideType {
         Undefined = 0,
