@@ -47,8 +47,8 @@ protected:
     bool _straight;
     mu::PainterPath path;
     bool modified;
-    qreal _lengthX;
-    qreal _lengthY;
+    double _lengthX;
+    double _lengthY;
     Note* _note = nullptr;
     static constexpr double _baseLength = 1.0;
 
@@ -68,8 +68,8 @@ public:
     Chord* chord() const { return (Chord*)(explicitParent()); }
     bool isStraight() const { return _straight; }
     void setStraight(bool straight) { _straight =  straight; }
-    void setLengthX(qreal length) { _lengthX = length; }
-    void setLengthY(qreal length) { _lengthY = length; }
+    void setLengthX(double length) { _lengthX = length; }
+    void setLengthY(double length) { _lengthY = length; }
 
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;

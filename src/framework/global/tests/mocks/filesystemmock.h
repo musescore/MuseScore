@@ -38,11 +38,9 @@ public:
 
     MOCK_METHOD(RetVal<uint64_t>, fileSize, (const io::path_t& path), (const, override));
 
-    MOCK_METHOD(RetVal<QByteArray>, readFile, (const io::path_t&), (const, override));
-    MOCK_METHOD(Ret, writeToFile, (const io::path_t&, const QByteArray&), (const, override));
-
+    MOCK_METHOD(RetVal<ByteArray>, readFile, (const io::path_t&), (const, override));
     MOCK_METHOD(bool, readFile, (const io::path_t& filePath, ByteArray & data), (const, override));
-    MOCK_METHOD(bool, writeFile, (const io::path_t& filePath, const ByteArray& data), (const, override));
+    MOCK_METHOD(Ret, writeFile, (const io::path_t& filePath, const ByteArray& data), (const, override));
 
     MOCK_METHOD(Ret, makePath, (const io::path_t&), (const, override));
 

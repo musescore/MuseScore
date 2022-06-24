@@ -123,10 +123,10 @@ void Fingering::layout()
         bool voices  = chord->measure()->hasVoices(chord->staffIdx(), chord->tick(), chord->actualTicks());
         bool tight   = voices && chord->notes().size() == 1 && !chord->beam() && textStyleType() != TextStyleType::STRING_NUMBER;
 
-        qreal headWidth = n->bboxRightPos();
+        double headWidth = n->bboxRightPos();
 
         // update offset after drag
-        qreal rebase = 0.0;
+        double rebase = 0.0;
         if (offsetChanged() != OffsetChange::NONE && !tight) {
             rebase = rebaseOffset();
         }
@@ -139,8 +139,8 @@ void Fingering::layout()
             Stem* stem = chord->stem();
             Segment* s = chord->segment();
             Measure* m = s->measure();
-            qreal sp = spatium();
-            qreal md = minDistance().val() * sp;
+            double sp = spatium();
+            double md = minDistance().val() * sp;
             SysStaff* ss = m->system()->staff(chord->vStaffIdx());
             Staff* vStaff = chord->staff();           // TODO: use current height at tick
 
@@ -158,13 +158,13 @@ void Fingering::layout()
                     RectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
                     SkylineLine sk(false);
                     sk.add(r.x(), r.bottom(), r.width());
-                    qreal d = sk.minDistance(ss->skyline().north());
-                    qreal yd = 0.0;
+                    double d = sk.minDistance(ss->skyline().north());
+                    double yd = 0.0;
                     if (d > 0.0 && isStyled(Pid::MIN_DISTANCE)) {
                         yd -= d + height() * .25;
                     }
                     // force extra space above staff & chord (but not other fingerings)
-                    qreal top;
+                    double top;
                     if (chord->up() && chord->beam() && stem) {
                         top = stem->y() + stem->bbox().top();
                     } else {
@@ -172,7 +172,7 @@ void Fingering::layout()
                         top = qMin(0.0, un->y() + un->bbox().top());
                     }
                     top -= md;
-                    qreal diff = (bbox().bottom() + ipos().y() + yd + n->y()) - top;
+                    double diff = (bbox().bottom() + ipos().y() + yd + n->y()) - top;
                     if (diff > 0.0) {
                         yd -= diff;
                     }
@@ -194,13 +194,13 @@ void Fingering::layout()
                     RectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
                     SkylineLine sk(true);
                     sk.add(r.x(), r.top(), r.width());
-                    qreal d = ss->skyline().south().minDistance(sk);
-                    qreal yd = 0.0;
+                    double d = ss->skyline().south().minDistance(sk);
+                    double yd = 0.0;
                     if (d > 0.0 && isStyled(Pid::MIN_DISTANCE)) {
                         yd += d + height() * .25;
                     }
                     // force extra space below staff & chord (but not other fingerings)
-                    qreal bottom;
+                    double bottom;
                     if (!chord->up() && chord->beam() && stem) {
                         bottom = stem->y() + stem->bbox().bottom();
                     } else {
@@ -208,7 +208,7 @@ void Fingering::layout()
                         bottom = qMax(vStaff->height(), dn->y() + dn->bbox().bottom());
                     }
                     bottom += md;
-                    qreal diff = bottom - (bbox().top() + ipos().y() + yd + n->y());
+                    double diff = bottom - (bbox().top() + ipos().y() + yd + n->y());
                     if (diff > 0.0) {
                         yd += diff;
                     }
@@ -223,7 +223,7 @@ void Fingering::layout()
             }
         } else if (textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
             // place to left of note
-            qreal left = n->shape().left();
+            double left = n->shape().left();
             if (left - n->x() > 0.0) {
                 rxpos() -= left;
             } else {

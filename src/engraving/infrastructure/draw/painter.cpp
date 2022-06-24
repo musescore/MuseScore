@@ -230,7 +230,7 @@ const Transform& Painter::worldTransform() const
     return state().worldTransform;
 }
 
-void Painter::scale(qreal sx, qreal sy)
+void Painter::scale(double sx, double sy)
 {
     State& st = editableState();
     st.worldTransform.scale(sx, sy);
@@ -238,7 +238,7 @@ void Painter::scale(qreal sx, qreal sy)
     updateMatrix();
 }
 
-void Painter::rotate(qreal angle)
+void Painter::rotate(double angle)
 {
     State& st = editableState();
     st.worldTransform.rotate(angle);
@@ -246,7 +246,7 @@ void Painter::rotate(qreal angle)
     updateMatrix();
 }
 
-void Painter::translate(qreal dx, qreal dy)
+void Painter::translate(double dx, double dy)
 {
     State& st = editableState();
     st.worldTransform.translate(dx, dy);
@@ -364,9 +364,9 @@ void Painter::drawPolyline(const PointF* points, size_t pointCount)
     }
 }
 
-void Painter::drawPolygon(const PointF* points, size_t pointCount, Qt::FillRule fillRule)
+void Painter::drawPolygon(const PointF* points, size_t pointCount, FillRule fillRule)
 {
-    PolygonMode mode = (fillRule == Qt::OddEvenFill) ? PolygonMode::OddEven : PolygonMode::Winding;
+    PolygonMode mode = (fillRule == FillRule::OddEvenFill) ? PolygonMode::OddEven : PolygonMode::Winding;
     m_provider->drawPolygon(points, pointCount, mode);
     if (extended) {
         extended->drawPolygon(points, pointCount, mode);
@@ -393,7 +393,7 @@ void Painter::drawArc(const RectF& r, int a, int alen)
     strokePath(path, pen());
 }
 
-void Painter::drawRoundedRect(const RectF& rect, qreal xRadius, qreal yRadius)
+void Painter::drawRoundedRect(const RectF& rect, double xRadius, double yRadius)
 {
     if (xRadius <= 0 || yRadius <= 0) {             // draw normal rectangle
         drawRect(rect);
@@ -498,8 +498,8 @@ const Painter::State& Painter::state() const
 Transform Painter::makeViewTransform() const
 {
     const State& st = state();
-    qreal scaleW = qreal(st.viewport.width()) / qreal(st.window.width());
-    qreal scaleH = qreal(st.viewport.height()) / qreal(st.window.height());
+    double scaleW = double(st.viewport.width()) / double(st.window.width());
+    double scaleH = double(st.viewport.height()) / double(st.window.height());
     return Transform(scaleW, 0, 0, scaleH, st.viewport.x() - st.window.x() * scaleW, st.viewport.y() - st.window.y() * scaleH);
 }
 

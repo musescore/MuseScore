@@ -22,14 +22,13 @@
 #ifndef MU_DRAW_PIXMAP_H
 #define MU_DRAW_PIXMAP_H
 
-#include <QByteArray>
+#include "types/bytearray.h"
+#include "geometry.h"
 
 #ifndef NO_QT_SUPPORT
 #include <QPixmap>
 #include <QBuffer>
 #endif
-
-#include "geometry.h"
 
 namespace mu::draw {
 class Pixmap
@@ -43,9 +42,9 @@ public:
     int width() const { return m_size.width(); }
     int height() const { return m_size.height(); }
     Size size() const { return m_size; }
-    QByteArray data() const { return m_data; }
+    ByteArray data() const { return m_data; }
 
-    bool isNull() const { return m_data.isNull(); }
+    bool isNull() const { return m_data.empty(); }
 
     uint key() const { return m_key; }
 
@@ -58,7 +57,7 @@ public:
         qtPixmap.save(&buffer, "PNG");
 
         Pixmap result({ qtPixmap.width(), qtPixmap.height() });
-        result.setData(bytes);
+        result.setData(ByteArray::fromQByteArray(bytes));
 
         return result;
     }
@@ -66,7 +65,7 @@ public:
     static QPixmap toQPixmap(const Pixmap& pixmap)
     {
         QPixmap qtPixMap;
-        qtPixMap.loadFromData(pixmap.data());
+        qtPixMap.loadFromData(pixmap.data().toQByteArrayNoCopy());
 
         return qtPixMap;
     }
@@ -75,7 +74,7 @@ public:
 
 private:
 
-    inline uint doKey(const uchar* p, size_t len) const
+    inline uint doKey(const uint8_t* p, size_t len) const
     {
         uint h = 0;
         for (size_t i = 0; i < len; ++i) {
@@ -84,18 +83,20 @@ private:
         return h;
     }
 
-    void setData(const QByteArray& data)
+    void setData(const ByteArray& data)
     {
         m_data = data;
-        m_key = doKey(reinterpret_cast<const uchar*>(data.constData()), static_cast<uint>(data.size()));
+        m_key = doKey(data.constData(), data.size());
     }
 
     Size m_size;
-    QByteArray m_data; //! usually png
+    ByteArray m_data; //! usually png
     uint m_key = 0;
 };
 }
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::draw::Pixmap)
+#endif
 
 #endif // MU_DRAW_PIXMAP_H

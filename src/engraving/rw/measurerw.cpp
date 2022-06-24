@@ -62,7 +62,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
         return;
     }
 
-    qreal _spatium = measure->spatium();
+    double _spatium = measure->spatium();
     ctx.setCurrentMeasure(measure);
     int nextTrack = staffIdx * VOICES;
     ctx.setTrack(nextTrack);
@@ -579,7 +579,7 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
         measure->writeProperty(xml, Pid::NO_OFFSET);
         measure->writeProperty(xml, Pid::MEASURE_NUMBER_MODE);
     }
-    qreal _spatium = measure->spatium();
+    double _spatium = measure->spatium();
     MStaff* mstaff = measure->m_mstaves[staff];
     if (mstaff->noText() && !mstaff->noText()->generated()) {
         mstaff->noText()->write(xml);
@@ -640,8 +640,8 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
 
         e->write(xml);
     }
-    Q_ASSERT(measure->first());
-    Q_ASSERT(measure->last());
+    assert(measure->first());
+    assert(measure->last());
     if (measure->first() && measure->last()) {
         measure->score()->writeSegments(xml, strack, etrack, measure->first(), measure->last()->next1(), writeSystemElements, forceTimeSig);
     }

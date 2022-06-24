@@ -121,16 +121,16 @@ void HairpinSegment::layout()
         return;
     }
 
-    const qreal _spatium = spatium();
+    const double _spatium = spatium();
     const track_idx_t _trck = track();
     Dynamic* sd = nullptr;
     Dynamic* ed = nullptr;
-    qreal dymax = hairpin()->placeBelow() ? -10000.0 : 10000.0;
+    double dymax = hairpin()->placeBelow() ? -10000.0 : 10000.0;
     if (autoplace() && !score()->isPaletteScore()) {
         Segment* start = hairpin()->startSegment();
         Segment* end = hairpin()->endSegment();
         // Try to fit between adjacent dynamics
-        qreal minDynamicsDistance = score()->styleMM(Sid::autoplaceHairpinDynamicsDistance) * staff()->staffMag(tick());
+        double minDynamicsDistance = score()->styleMM(Sid::autoplaceHairpinDynamicsDistance) * staff()->staffMag(tick());
         const System* sys = system();
         if (isSingleType() || isBeginType()) {
             if (start && start->system() == sys) {
@@ -146,9 +146,9 @@ void HairpinSegment::layout()
                 }
             }
             if (sd && sd->addToSkyline() && sd->placement() == hairpin()->placement()) {
-                const qreal sdRight = sd->bbox().right() + sd->pos().x()
-                                      + sd->segment()->pos().x() + sd->measure()->pos().x();
-                const qreal dist    = qMax(sdRight - pos().x() + minDynamicsDistance, 0.0);
+                const double sdRight = sd->bbox().right() + sd->pos().x()
+                                       + sd->segment()->pos().x() + sd->measure()->pos().x();
+                const double dist    = qMax(sdRight - pos().x() + minDynamicsDistance, 0.0);
                 rxpos()  += dist;
                 rxpos2() -= dist;
                 // prepare to align vertically
@@ -162,10 +162,10 @@ void HairpinSegment::layout()
                 ed = toDynamic(end->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
             }
             if (ed && ed->addToSkyline() && ed->placement() == hairpin()->placement()) {
-                const qreal edLeft  = ed->bbox().left() + ed->pos().x()
-                                      + ed->segment()->pos().x() + ed->measure()->pos().x();
-                const qreal dist    = edLeft - pos2().x() - pos().x() - minDynamicsDistance;
-                const qreal extendThreshold = 3.0 * _spatium;           // TODO: style setting
+                const double edLeft  = ed->bbox().left() + ed->pos().x()
+                                       + ed->segment()->pos().x() + ed->measure()->pos().x();
+                const double dist    = edLeft - pos2().x() - pos().x() - minDynamicsDistance;
+                const double extendThreshold = 3.0 * _spatium;           // TODO: style setting
                 if (dist < 0.0) {
                     rxpos2() += dist;                 // always shorten
                 } else if (dist >= extendThreshold && hairpin()->endText().isEmpty() && minDynamicsDistance > 0.0) {
@@ -193,25 +193,25 @@ void HairpinSegment::layout()
         hairpin()->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
         hairpin()->setEndTextAlign({ AlignH::RIGHT, AlignV::VCENTER });
 
-        qreal x1 = 0.0;
+        double x1 = 0.0;
         TextLineBaseSegment::layout();
         if (!_text->empty()) {
             x1 = _text->width() + _spatium * .5;
         }
 
         Transform t;
-        qreal h1 = hairpin()->hairpinHeight().val() * _spatium * .5;
-        qreal h2 = hairpin()->hairpinContHeight().val() * _spatium * .5;
+        double h1 = hairpin()->hairpinHeight().val() * _spatium * .5;
+        double h2 = hairpin()->hairpinContHeight().val() * _spatium * .5;
 
-        qreal x = pos2().x();
+        double x = pos2().x();
         if (!_endText->empty()) {
             x -= (_endText->width() + _spatium * .5);             // 0.5 spatium distance
         }
         if (x < _spatium) {               // minimum size of hairpin
             x = _spatium;
         }
-        qreal y = pos2().y();
-        qreal len = sqrt(x * x + y * y);
+        double y = pos2().y();
+        double len = sqrt(x * x + y * y);
         t.rotateRadians(asin(y / len));
 
         drawCircledTip   =  hairpin()->hairpinCircledTip();
@@ -281,7 +281,7 @@ void HairpinSegment::layout()
         if (!_endText->empty()) {
             r.unite(_endText->bbox().translated(x + _endText->bbox().width(), 0.0));
         }
-        qreal w  = point(score()->styleS(Sid::hairpinLineWidth));
+        double w  = point(score()->styleS(Sid::hairpinLineWidth));
         setbbox(r.adjusted(-w * .5, -w * .5, w, w));
     }
     if (!explicitParent()) {
@@ -295,18 +295,18 @@ void HairpinSegment::layout()
     }
 
     // rebase vertical offset on drag
-    qreal rebase = 0.0;
+    double rebase = 0.0;
     if (offsetChanged() != OffsetChange::NONE) {
         rebase = rebaseOffset();
     }
 
     if (autoplace()) {
-        qreal ymax = pos().y();
-        qreal d;
-        qreal ddiff = hairpin()->isLineType() ? 0.0 : _spatium * 0.5;
+        double ymax = pos().y();
+        double d;
+        double ddiff = hairpin()->isLineType() ? 0.0 : _spatium * 0.5;
 
-        qreal sp = spatium();
-        qreal md = minDistance().val() * sp;
+        double sp = spatium();
+        double md = minDistance().val() * sp;
 
         bool above = spanner()->placeAbove();
         SkylineLine sl(!above);
@@ -331,12 +331,12 @@ void HairpinSegment::layout()
                 ymax = qMax(ymax, dymax - ddiff);
             }
         }
-        qreal yd = ymax - pos().y();
+        double yd = ymax - pos().y();
         if (yd != 0.0) {
             if (offsetChanged() != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                qreal adj = pos().y() + rebase;
+                double adj = pos().y() + rebase;
                 bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < staff()->height();
                 rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
             }
@@ -346,7 +346,7 @@ void HairpinSegment::layout()
         if (hairpin()->addToSkyline() && !hairpin()->diagonal()) {
             // align dynamics with hairpin
             if (sd && sd->autoplace() && sd->placement() == hairpin()->placement()) {
-                qreal ny = y() + ddiff - sd->offset().y();
+                double ny = y() + ddiff - sd->offset().y();
                 if (sd->placeAbove()) {
                     ny = qMin(ny, sd->ipos().y());
                 } else {
@@ -365,7 +365,7 @@ void HairpinSegment::layout()
                 }
             }
             if (ed && ed->autoplace() && ed->placement() == hairpin()->placement()) {
-                qreal ny = y() + ddiff - ed->offset().y();
+                double ny = y() + ddiff - ed->offset().y();
                 if (ed->placeAbove()) {
                     ny = qMin(ny, ed->ipos().y());
                 } else {
@@ -411,22 +411,22 @@ Shape HairpinSegment::shape() const
 
 std::vector<PointF> HairpinSegment::gripsPositions(const EditData&) const
 {
-    qreal _spatium = spatium();
-    qreal x = pos2().x();
+    double _spatium = spatium();
+    double x = pos2().x();
     if (x < _spatium) {             // minimum size of hairpin
         x = _spatium;
     }
-    qreal y = pos2().y();
+    double y = pos2().y();
     PointF p(x, y);
 
     // Calc PointF for Grip Aperture
     Transform doRotation;
     PointF gripLineAperturePoint;
-    qreal h1 = hairpin()->hairpinHeight().val() * spatium() * .5;
-    qreal len = sqrt(x * x + y * y);
+    double h1 = hairpin()->hairpinHeight().val() * spatium() * .5;
+    double len = sqrt(x * x + y * y);
     doRotation.rotateRadians(asin(y / len));
-    qreal lineApertureX;
-    qreal offsetX = 10;                                 // Horizontal offset for x Grip
+    double lineApertureX;
+    double offsetX = 10;                                 // Horizontal offset for x Grip
     if (len < offsetX * 3) {                            // For small hairpin, offset = 30% of len
         offsetX = len / 3;                              // else offset is fixed to 10
     }
@@ -435,7 +435,7 @@ std::vector<PointF> HairpinSegment::gripsPositions(const EditData&) const
     } else {
         lineApertureX = offsetX;                        // Begin of DECRESCENDO + Offset
     }
-    qreal lineApertureH = (len - offsetX) * h1 / len;   // Vertical position for y grip
+    double lineApertureH = (len - offsetX) * h1 / len;   // Vertical position for y grip
     gripLineAperturePoint.setX(lineApertureX);
     gripLineAperturePoint.setY(lineApertureH);
     gripLineAperturePoint = doRotation.map(gripLineAperturePoint);
@@ -484,7 +484,7 @@ void HairpinSegment::startEditDrag(EditData& ed)
 void HairpinSegment::editDrag(EditData& ed)
 {
     if (ed.curGrip == Grip::APERTURE) {
-        qreal newHeight = hairpin()->hairpinHeight().val() + ed.delta.y() / spatium() / .5;
+        double newHeight = hairpin()->hairpinHeight().val() + ed.delta.y() / spatium() / .5;
         if (newHeight < 0.5) {
             newHeight = 0.5;
         }
@@ -505,7 +505,7 @@ void HairpinSegment::draw(mu::draw::Painter* painter) const
     TextLineBaseSegment::draw(painter);
 
     Color color = curColor(hairpin()->visible(), hairpin()->lineColor());
-    qreal w = hairpin()->lineWidth();
+    double w = hairpin()->lineWidth();
     if (staff()) {
         w *= staff()->staffMag(hairpin()->tick());
     }

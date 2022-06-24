@@ -62,7 +62,7 @@ public:
     Chord* parent() const { return _parent; }
     Shape shape() const override { return _shape; }
     void layout() override;
-    void setPos(qreal x, qreal y) override;
+    void setPos(double x, double y) override;
 
 private:
     Chord* _parent = nullptr;
@@ -106,11 +106,11 @@ class Chord final : public ChordRest
     bool _noStem;
     PlayEventType _playEventType;        ///< play events were modified by user
 
-    qreal _spaceLw;
-    qreal _spaceRw;
+    double _spaceLw;
+    double _spaceRw;
 
-    qreal _defaultStemLength;
-    qreal _minStemLength;
+    double _defaultStemLength;
+    double _minStemLength;
 
     bool _isUiItem = false;
 
@@ -120,15 +120,15 @@ class Chord final : public ChordRest
     Chord(Segment* parent = 0);
     Chord(const Chord&, bool link = false);
 
-    qreal upPos()   const override;
-    qreal downPos() const override;
-    qreal centerX() const;
+    double upPos()   const override;
+    double downPos() const override;
+    double centerX() const;
     void addLedgerLines();
     void processSiblings(std::function<void(EngravingItem*)> func) const;
 
     void layoutPitched();
     void layoutTablature();
-    qreal noteHeadWidth() const;
+    double noteHeadWidth() const;
 
     bool shouldHaveStem() const;
     bool shouldHaveHook() const;
@@ -143,7 +143,7 @@ class Chord final : public ChordRest
     int stemOpticalAdjustment(int stemEndPosition) const;
     int calcMinStemLength();
     int calc4BeamsException(int stemLength) const;
-    qreal calcDefaultStemLength();
+    double calcDefaultStemLength();
 
 public:
 
@@ -164,8 +164,8 @@ public:
     void undoUnlink() override;
 
     void setScore(Score* s) override;
-    qreal chordMag() const;
-    qreal mag() const override;
+    double chordMag() const;
+    double mag() const override;
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
@@ -183,10 +183,10 @@ public:
 
     LedgerLine* ledgerLines() { return _ledgerLines; }
 
-    qreal defaultStemLength() const { return _defaultStemLength; }
-    qreal minStemLength() const { return _minStemLength; }
-    void setBeamExtension(qreal extension);
-    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing, bool useWideBeams);
+    double defaultStemLength() const { return _defaultStemLength; }
+    double minStemLength() const { return _minStemLength; }
+    void setBeamExtension(double extension);
+    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing, bool useWideBeams);
 
     void layoutStem();
     void layoutArpeggio2();
@@ -206,7 +206,7 @@ public:
     int downString() const;
     std::vector<int> noteDistances() const;
 
-    qreal maxHeadWidth() const;
+    double maxHeadWidth() const;
 
     Note* findNote(int pitch, int skip = 0) const;
 
@@ -236,8 +236,8 @@ public:
     int downLine() const override;
     mu::PointF stemPos() const override;            ///< page coordinates
     mu::PointF stemPosBeam() const override;        ///< page coordinates
-    qreal stemPosX() const override;
-    qreal rightEdge() const override;
+    double stemPosX() const override;
+    double rightEdge() const override;
 
     bool underBeam() const;
     Hook* hook() const { return _hook; }
@@ -262,7 +262,7 @@ public:
     void computeUp() override;
     static int computeAutoStemDirection(const std::vector<int>& noteDistances);
 
-    qreal dotPosX() const;
+    double dotPosX() const;
 
     bool noStem() const { return _noStem; }
     void setNoStem(bool val) { _noStem = val; }
@@ -289,7 +289,7 @@ public:
 
     void crossMeasureSetup(bool on) override;
 
-    void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;

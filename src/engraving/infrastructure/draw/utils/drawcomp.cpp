@@ -33,7 +33,7 @@ static const int DEFAULT_PREC(3);
 template<class T>
 static bool isEqual(const std::vector<T>& v1, const std::vector<T>& v2, DrawComp::Tolerance tolerance);
 
-static bool isEqual(const qreal& v1, const qreal& v2, double tolerance)
+static bool isEqual(const double& v1, const double& v2, double tolerance)
 {
     if (tolerance > 0) {
         double delta = RealFloor(v1, DEFAULT_PREC) - RealFloor(v2, DEFAULT_PREC);

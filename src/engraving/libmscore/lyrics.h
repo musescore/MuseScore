@@ -51,7 +51,7 @@ public:
     static constexpr int TEMP_MELISMA_TICKS      = 1;
 
     // WORD_MIN_DISTANCE has never been implemented
-    // static constexpr qreal  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
+    // static constexpr double  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
 
 private:
     Fraction _ticks;          ///< if > 0 then draw an underline to tick() + _ticks
@@ -154,7 +154,7 @@ class LyricsLineSegment final : public LineSegment
 {
 protected:
     int _numOfDashes = 0;
-    qreal _dashLength = 0;
+    double _dashLength = 0;
 
 public:
     LyricsLineSegment(LyricsLine*, System* parent);

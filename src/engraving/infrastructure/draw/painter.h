@@ -82,9 +82,9 @@ public:
 
     void setWorldTransform(const Transform& matrix, bool combine = false);
     const Transform& worldTransform() const;
-    void scale(qreal sx, qreal sy);
-    void rotate(qreal angle);
-    void translate(qreal dx, qreal dy);
+    void scale(double sx, double sy);
+    void rotate(double angle);
+    void translate(double dx, double dy);
     inline void translate(const PointF& offset);
 
     RectF window() const;
@@ -120,16 +120,16 @@ public:
 
     void drawRects(const RectF* rects, size_t rectCount);
 
-    void drawRoundedRect(const RectF& rect, qreal xRadius, qreal yRadius);
+    void drawRoundedRect(const RectF& rect, double xRadius, double yRadius);
 
     void drawEllipse(const RectF& rect);
-    inline void drawEllipse(const PointF& center, qreal rx, qreal ry);
+    inline void drawEllipse(const PointF& center, double rx, double ry);
 
     void drawPolyline(const PointF* points, size_t pointCount);
     inline void drawPolyline(const PolygonF& polyline);
 
-    void drawPolygon(const PointF* points, size_t pointCount, Qt::FillRule fillRule = Qt::OddEvenFill);
-    inline void drawPolygon(const PolygonF& polygon, Qt::FillRule fillRule = Qt::OddEvenFill);
+    void drawPolygon(const PointF* points, size_t pointCount, FillRule fillRule = FillRule::OddEvenFill);
+    inline void drawPolygon(const PolygonF& polygon, FillRule fillRule = FillRule::OddEvenFill);
 
     void drawConvexPolygon(const PointF* points, size_t pointCount);
     inline void drawConvexPolygon(const PolygonF& polygon);
@@ -241,7 +241,7 @@ inline void Painter::drawRect(int x, int y, int w, int h)
     drawRects(&r, 1);
 }
 
-inline void Painter::drawEllipse(const PointF& center, qreal rx, qreal ry)
+inline void Painter::drawEllipse(const PointF& center, double rx, double ry)
 {
     drawEllipse(RectF(center.x() - rx, center.y() - ry, 2 * rx, 2 * ry));
 }
@@ -251,7 +251,7 @@ inline void Painter::drawPolyline(const PolygonF& polyline)
     drawPolyline(polyline.data(), polyline.size());
 }
 
-inline void Painter::drawPolygon(const PolygonF& polygon, Qt::FillRule fillRule)
+inline void Painter::drawPolygon(const PolygonF& polygon, FillRule fillRule)
 {
     drawPolygon(polygon.data(), polygon.size(), fillRule);
 }

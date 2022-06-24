@@ -73,13 +73,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/paint/paintdebugger.cpp
     ${CMAKE_CURRENT_LIST_DIR}/paint/paintdebugger.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.h
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleroot.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleroot.h
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.h
-
     ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/mscxcompat.cpp
@@ -201,6 +194,17 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/expressionutils.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/arrangementutils.h
     )
+
+if (NOT ENGRAVING_NO_ACCESSIBILITY)
+set(MODULE_SRC ${MODULE_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleroot.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleroot.h
+    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.h
+)
+endif()
 
 set_source_files_properties( # For these files, Unity Build does not work
     ${CMAKE_CURRENT_LIST_DIR}/libmscore/chordlist.cpp

@@ -89,7 +89,7 @@ SpannerSegment::SpannerSegment(const SpannerSegment& s)
 //   mag
 //---------------------------------------------------------
 
-qreal SpannerSegment::mag() const
+double SpannerSegment::mag() const
 {
     if (spanner()->systemFlag()) {
         return 1.0;
@@ -124,7 +124,7 @@ void SpannerSegment::setSystem(System* s)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void SpannerSegment::spatiumChanged(qreal ov, qreal nv)
+void SpannerSegment::spatiumChanged(double ov, double nv)
 {
     EngravingItem::spatiumChanged(ov, nv);
     if (offsetIsSpatiumDependent()) {
@@ -409,7 +409,7 @@ Spanner::~Spanner()
 //   mag
 //---------------------------------------------------------
 
-qreal Spanner::mag() const
+double Spanner::mag() const
 {
     if (systemFlag()) {
         return 1.0;
@@ -881,7 +881,7 @@ void Spanner::setNoteSpan(Note* startNote, Note* endNote)
 
 Chord* Spanner::startChord()
 {
-    Q_ASSERT(_anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::CHORD);
     if (!_startElement) {
         _startElement = findStartChord();
     }
@@ -894,7 +894,7 @@ Chord* Spanner::startChord()
 
 Chord* Spanner::endChord()
 {
-    Q_ASSERT(_anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::CHORD);
     if (!_endElement && type() == ElementType::SLUR) {
         _endElement = findEndChord();
     }
@@ -907,7 +907,7 @@ Chord* Spanner::endChord()
 
 ChordRest* Spanner::startCR()
 {
-    Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
     if (!_startElement || _startElement->score() != score()) {
         _startElement = findStartCR();
     }
@@ -920,7 +920,7 @@ ChordRest* Spanner::startCR()
 
 ChordRest* Spanner::endCR()
 {
-    Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
     if ((!_endElement || _endElement->score() != score())) {
         _endElement = findEndCR();
     }
@@ -933,7 +933,7 @@ ChordRest* Spanner::endCR()
 
 Chord* Spanner::findStartChord() const
 {
-    Q_ASSERT(_anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::CHORD);
     ChordRest* cr = score()->findCR(tick(), track());
     return cr->isChord() ? toChord(cr) : nullptr;
 }
@@ -944,7 +944,7 @@ Chord* Spanner::findStartChord() const
 
 Chord* Spanner::findEndChord() const
 {
-    Q_ASSERT(_anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::CHORD);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     ChordRest* endCR = s ? toChordRest(s->element(track2())) : nullptr;
     if (endCR && !endCR->isChord()) {
@@ -959,7 +959,7 @@ Chord* Spanner::findEndChord() const
 
 ChordRest* Spanner::findStartCR() const
 {
-    Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
     return score()->findCR(tick(), track());
 }
 
@@ -969,7 +969,7 @@ ChordRest* Spanner::findStartCR() const
 
 ChordRest* Spanner::findEndCR() const
 {
-    Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     const track_idx_t tr2 = effectiveTrack2();
     ChordRest* endCR = s ? toChordRest(s->element(tr2)) : nullptr;
@@ -982,7 +982,7 @@ ChordRest* Spanner::findEndCR() const
 
 Segment* Spanner::startSegment() const
 {
-    Q_ASSERT(score() != NULL);
+    assert(score() != NULL);
     return score()->tick2rightSegment(tick());
 }
 
@@ -1069,7 +1069,7 @@ void Spanner::setStartElement(EngravingItem* e)
 {
 #ifndef NDEBUG
     if (_anchor == Anchor::NOTE) {
-        Q_ASSERT(!e || e->type() == ElementType::NOTE);
+        assert(!e || e->type() == ElementType::NOTE);
     }
 #endif
     _startElement = e;
@@ -1083,7 +1083,7 @@ void Spanner::setEndElement(EngravingItem* e)
 {
 #ifndef NDEBUG
     if (_anchor == Anchor::NOTE) {
-        Q_ASSERT(!e || e->type() == ElementType::NOTE);
+        assert(!e || e->type() == ElementType::NOTE);
     }
 #endif
     _endElement = e;
@@ -1415,7 +1415,7 @@ SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::functio
             reuse(seg);
         } else {
             seg = createSegment(system);
-            Q_ASSERT(seg);
+            assert(seg);
             add(seg);
         }
     }
@@ -1610,29 +1610,29 @@ void SpannerSegment::autoplaceSpannerSegment()
     }
 
     // rebase vertical offset on drag
-    qreal rebase = 0.0;
+    double rebase = 0.0;
     if (offsetChanged() != OffsetChange::NONE) {
         rebase = rebaseOffset();
     }
 
     if (autoplace()) {
-        qreal sp = score()->spatium();
+        double sp = score()->spatium();
         if (!systemFlag() && !spanner()->systemFlag()) {
             sp *= staff()->staffMag(spanner()->tick());
         }
-        qreal md = minDistance().val() * sp;
+        double md = minDistance().val() * sp;
         bool above = spanner()->placeAbove();
         SkylineLine sl(!above);
         Shape sh = shape();
         sl.add(sh.translated(pos()));
-        qreal yd = 0.0;
+        double yd = 0.0;
         if (above) {
-            qreal d  = system()->topDistance(staffIdx(), sl);
+            double d  = system()->topDistance(staffIdx(), sl);
             if (d > -md) {
                 yd = -(d + md);
             }
         } else {
-            qreal d  = system()->bottomDistance(staffIdx(), sl);
+            double d  = system()->bottomDistance(staffIdx(), sl);
             if (d > -md) {
                 yd = d + md;
             }
@@ -1641,7 +1641,7 @@ void SpannerSegment::autoplaceSpannerSegment()
             if (offsetChanged() != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                qreal adj = pos().y() + rebase;
+                double adj = pos().y() + rebase;
                 bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < staff()->height();
                 rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
             }

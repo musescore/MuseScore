@@ -282,7 +282,7 @@ std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
 
     Page* page = pages().at(0);
     RectF fr = page->abbox();
-    qreal mag = 256.0 / qMax(fr.width(), fr.height());
+    double mag = 256.0 / qMax(fr.width(), fr.height());
     int w = int(fr.width() * mag);
     int h = int(fr.height() * mag);
 

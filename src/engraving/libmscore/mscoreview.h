@@ -47,7 +47,7 @@ class MuseScoreView
 public:
     virtual ~MuseScoreView() = default;
 
-    virtual qreal selectionProximity() const { return 0.0f; }
+    virtual double selectionProximity() const { return 0.0f; }
 
     virtual void layoutChanged() {}
     virtual void dataChanged(const mu::RectF&) = 0;

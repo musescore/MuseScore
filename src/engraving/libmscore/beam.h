@@ -63,9 +63,9 @@ class Beam final : public EngravingItem
     bool _isGrace           { false };
     bool _cross             { false };
 
-    qreal _grow1            { 1.0f };                     // define "feather" beams
-    qreal _grow2            { 1.0f };
-    qreal _beamDist         { 0.0f };
+    double _grow1            { 1.0f };                     // define "feather" beams
+    double _grow2            { 1.0f };
+    double _beamDist         { 0.0f };
     int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
     mu::PointF _startAnchor;
     mu::PointF _endAnchor;
@@ -81,8 +81,10 @@ class Beam final : public EngravingItem
     int _minMove             { 0 };                // set in layout1()
     int _maxMove             { 0 };
     TDuration _maxDuration;
+
     bool _noSlope = false;
-    qreal _slope             { 0.0 };
+    double _slope             { 0.0 };
+
     std::vector<int> _notes;
 
     friend class Factory;
@@ -93,7 +95,7 @@ class Beam final : public EngravingItem
     int computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const;
     int getMaxSlope() const;
     int getBeamCount(std::vector<ChordRest*> chordRests) const;
-    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, qreal startX, qreal endX,
+    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, double startX, double endX,
                                       bool isFlat, bool isStartDictator) const;
     bool isBeamInsideStaff(int yPos, int staffLines) const;
     int getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const;
@@ -136,7 +138,7 @@ public:
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     void reset() override;
 
@@ -176,10 +178,10 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    qreal growLeft() const { return _grow1; }
-    qreal growRight() const { return _grow2; }
-    void setGrowLeft(qreal val) { _grow1 = val; }
-    void setGrowRight(qreal val) { _grow2 = val; }
+    double growLeft() const { return _grow1; }
+    double growRight() const { return _grow2; }
+    void setGrowLeft(double val) { _grow1 = val; }
+    void setGrowRight(double val) { _grow2 = val; }
 
     bool distribute() const { return _distribute; }
     void setDistribute(bool val) { _distribute = val; }
@@ -190,7 +192,7 @@ public:
     PairF beamPos() const;
     void setBeamPos(const PairF& bp);
 
-    qreal beamDist() const { return _beamDist; }
+    double beamDist() const { return _beamDist; }
 
     bool noSlope() const { return _noSlope; }
     void setNoSlope(bool b);

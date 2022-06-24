@@ -33,16 +33,16 @@ public:
     FileInfo() = default;
     FileInfo(const path_t& filePath);
 
-    QString path() const;
-    QString filePath() const;
-    QString canonicalFilePath() const;
-    QString absolutePath() const;
+    String path() const;
+    String filePath() const;
+    String canonicalFilePath() const;
+    String absolutePath() const;
 
-    QString fileName() const;
-    QString baseName() const;
-    QString completeBaseName() const;
-    QString suffix() const;
-    static QString suffix(const path_t& filePath);
+    String fileName() const;
+    String baseName() const;
+    String completeBaseName() const;
+    String suffix() const;
+    static String suffix(const path_t& filePath);
 
     bool isRelative() const;
     bool isAbsolute() const;
@@ -54,9 +54,9 @@ public:
     DateTime lastModified() const;
 
 private:
-    static QString doSuffix(const QString& filePath);
+    static String doSuffix(const String& filePath);
 
-    QString m_filePath;
+    String m_filePath;
 };
 }
 

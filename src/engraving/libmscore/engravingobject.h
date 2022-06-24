@@ -503,127 +503,127 @@ public:
 
 static inline ChordRest* toChordRest(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-             || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
+    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
     return (ChordRest*)e;
 }
 
 static inline const ChordRest* toChordRest(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-             || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
+    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
     return (const ChordRest*)e;
 }
 
 static inline DurationElement* toDurationElement(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-             || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
-             || e->type() == ElementType::TUPLET);
+    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
+           || e->type() == ElementType::TUPLET);
     return (DurationElement*)e;
 }
 
 static inline const DurationElement* toDurationElement(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-             || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
-             || e->type() == ElementType::TUPLET);
+    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
+           || e->type() == ElementType::TUPLET);
     return (const DurationElement*)e;
 }
 
 static inline Rest* toRest(EngravingObject* e)
 {
-    Q_ASSERT(!e || e->isRestFamily());
+    assert(!e || e->isRestFamily());
     return (Rest*)e;
 }
 
 static inline const Rest* toRest(const EngravingObject* e)
 {
-    Q_ASSERT(!e || e->isRestFamily());
+    assert(!e || e->isRestFamily());
     return (const Rest*)e;
 }
 
 static inline SlurTieSegment* toSlurTieSegment(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+    assert(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
     return (SlurTieSegment*)e;
 }
 
 static inline const SlurTieSegment* toSlurTieSegment(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+    assert(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
     return (const SlurTieSegment*)e;
 }
 
 static inline const MeasureBase* toMeasureBase(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isMeasure() || e->isVBox() || e->isHBox() || e->isTBox() || e->isFBox());
+    assert(e == 0 || e->isMeasure() || e->isVBox() || e->isHBox() || e->isTBox() || e->isFBox());
     return (const MeasureBase*)e;
 }
 
 static inline MeasureBase* toMeasureBase(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isMeasureBase());
+    assert(e == 0 || e->isMeasureBase());
     return (MeasureBase*)e;
 }
 
 static inline Box* toBox(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isBox());
+    assert(e == 0 || e->isBox());
     return (Box*)e;
 }
 
 static inline SpannerSegment* toSpannerSegment(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isSpannerSegment());
+    assert(e == 0 || e->isSpannerSegment());
     return (SpannerSegment*)e;
 }
 
 static inline const SpannerSegment* toSpannerSegment(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isSpannerSegment());
+    assert(e == 0 || e->isSpannerSegment());
     return (const SpannerSegment*)e;
 }
 
 static inline BSymbol* toBSymbol(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isBSymbol());
+    assert(e == 0 || e->isBSymbol());
     return (BSymbol*)e;
 }
 
 static inline TextLineBase* toTextLineBase(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isTextLineBase());
+    assert(e == 0 || e->isTextLineBase());
     return (TextLineBase*)e;
 }
 
 static inline TextBase* toTextBase(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isTextBase());
+    assert(e == 0 || e->isTextBase());
     return (TextBase*)e;
 }
 
 static inline const TextBase* toTextBase(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isTextBase());
+    assert(e == 0 || e->isTextBase());
     return (const TextBase*)e;
 }
 
 static inline StaffTextBase* toStaffTextBase(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isStaffTextBase());
+    assert(e == 0 || e->isStaffTextBase());
     return (StaffTextBase*)e;
 }
 
 static inline const StaffTextBase* toStaffTextBase(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isStaffTextBase());
+    assert(e == 0 || e->isStaffTextBase());
     return (const StaffTextBase*)e;
 }
 
 #define CONVERT(a)  \
-    static inline a* to##a(EngravingObject * e) { Q_ASSERT(e == 0 || e->is##a()); return (a*)e; } \
-    static inline const a* to##a(const EngravingObject * e) { Q_ASSERT(e == 0 || e->is##a()); return (const a*)e; }
+    static inline a* to##a(EngravingObject * e) { assert(e == 0 || e->is##a()); return (a*)e; } \
+    static inline const a* to##a(const EngravingObject * e) { assert(e == 0 || e->is##a()); return (const a*)e; }
 
 CONVERT(EngravingItem)
 CONVERT(Note)

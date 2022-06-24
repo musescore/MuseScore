@@ -356,8 +356,8 @@ void UndoStack::push1(UndoCommand* cmd)
 
 void UndoStack::remove(size_t idx)
 {
-    Q_ASSERT(idx <= curIdx);
-    Q_ASSERT(curIdx != mu::nidx);
+    assert(idx <= curIdx);
+    assert(curIdx != mu::nidx);
     // remove redo stack
     while (list.size() > curIdx) {
         UndoCommand* cmd = mu::takeLast(list);
@@ -381,7 +381,7 @@ void UndoStack::remove(size_t idx)
 
 void UndoStack::mergeCommands(size_t startIdx)
 {
-    Q_ASSERT(startIdx <= curIdx);
+    assert(startIdx <= curIdx);
 
     if (startIdx >= list.size()) {
         return;
@@ -418,8 +418,8 @@ void UndoStack::pop()
 void UndoStack::rollback()
 {
     LOG_UNDO() << "called";
-    Q_ASSERT(curCmd == 0);
-    Q_ASSERT(curIdx > 0);
+    assert(curCmd == 0);
+    assert(curIdx > 0);
     size_t idx = curIdx - 1;
     list[idx]->unwind();
     remove(idx);
@@ -459,8 +459,8 @@ void UndoStack::endMacro(bool rollback)
 void UndoStack::reopen()
 {
     LOG_UNDO() << "curIdx: " << curIdx << ", size: " << list.size();
-    Q_ASSERT(curCmd == 0);
-    Q_ASSERT(curIdx > 0);
+    assert(curCmd == 0);
+    assert(curIdx > 0);
     --curIdx;
     curCmd = mu::takeAt(list, curIdx);
     stateList.erase(stateList.begin() + curIdx);
@@ -495,7 +495,7 @@ void UndoStack::undo(EditData* ed)
     }
     if (curIdx) {
         --curIdx;
-        Q_ASSERT(curIdx < list.size());
+        assert(curIdx < list.size());
         list[curIdx]->undo(ed);
     }
 }
@@ -1693,7 +1693,7 @@ ChangeStaff::ChangeStaff(Staff* _staff)
 }
 
 ChangeStaff::ChangeStaff(Staff* _staff, bool _visible, ClefTypeList _clefType,
-                         qreal _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
+                         double _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
                          bool _hideSystemBarLine, bool _mergeMatchingRests)
 {
     staff       = _staff;
@@ -1715,7 +1715,7 @@ void ChangeStaff::flip(EditData*)
 {
     bool oldVisible = staff->visible();
     ClefTypeList oldClefType = staff->defaultClefType();
-    qreal oldUserDist   = staff->userDist();
+    double oldUserDist   = staff->userDist();
     Staff::HideMode oldHideMode    = staff->hideWhenEmpty();
     bool oldShowIfEmpty = staff->showIfEmpty();
     bool oldCutaway     = staff->cutaway();
@@ -1859,10 +1859,10 @@ void ChangeStyleVal::flip(EditData*)
         case Sid::chordModifierAdjust:
         case Sid::chordDescriptionFile: {
             score->chordList()->unload();
-            qreal emag = score->styleD(Sid::chordExtensionMag);
-            qreal eadjust = score->styleD(Sid::chordExtensionAdjust);
-            qreal mmag = score->styleD(Sid::chordModifierMag);
-            qreal madjust = score->styleD(Sid::chordModifierAdjust);
+            double emag = score->styleD(Sid::chordExtensionMag);
+            double eadjust = score->styleD(Sid::chordExtensionAdjust);
+            double mmag = score->styleD(Sid::chordModifierMag);
+            double madjust = score->styleD(Sid::chordModifierAdjust);
             score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
             if (score->styleB(Sid::chordsXmlFile)) {
                 score->chordList()->read(u"chords.xml");
@@ -2683,7 +2683,7 @@ void ChangeNoteEvent::flip(EditData*)
 LinkUnlink::~LinkUnlink()
 {
     if (le && mustDelete) {
-        Q_ASSERT(le->size() <= 1);
+        assert(le->size() <= 1);
         delete le;
     }
 }
@@ -2700,7 +2700,7 @@ void LinkUnlink::link()
 
 void LinkUnlink::unlink()
 {
-    Q_ASSERT(le->contains(e));
+    assert(le->contains(e));
     le->remove(e);
     if (le->size() == 1) {
         le->front()->setLinks(0);
@@ -2717,7 +2717,7 @@ void LinkUnlink::unlink()
 
 Link::Link(EngravingObject* e1, EngravingObject* e2)
 {
-    Q_ASSERT(e1->links() == 0);
+    assert(e1->links() == 0);
     le = e2->links();
     if (!le) {
         if (e1->isStaff()) {
@@ -2751,7 +2751,7 @@ Unlink::Unlink(EngravingObject* _e)
 {
     e  = _e;
     le = e->links();
-    Q_ASSERT(le);
+    assert(le);
 }
 
 //---------------------------------------------------------

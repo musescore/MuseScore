@@ -741,7 +741,7 @@ class ChangeStaff : public UndoCommand
 
     bool visible = false;
     ClefTypeList clefType;
-    qreal userDist = 0.0;
+    double userDist = 0.0;
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     bool showIfEmpty = false;
     bool cutaway = false;
@@ -753,7 +753,7 @@ class ChangeStaff : public UndoCommand
 public:
     ChangeStaff(Staff*);
 
-    ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, qreal userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
+    ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, double userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
                 bool _hideSystemBarLine, bool _mergeRests);
     UNDO_NAME("ChangeStaff")
     UNDO_CHANGED_OBJECTS({ staff });

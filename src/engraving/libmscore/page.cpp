@@ -221,7 +221,7 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
 //   - how much the header extends into the page (i.e., not in the margins)
 //---------------------------------------------------------
 
-qreal Page::headerExtension() const
+double Page::headerExtension() const
 {
     if (!score()->isLayoutMode(LayoutMode::PAGE)) {
         return 0.0;
@@ -247,12 +247,12 @@ qreal Page::headerExtension() const
         Text* headerCenter = layoutHeaderFooter(1, s2);
         Text* headerRight = layoutHeaderFooter(2, s3);
 
-        qreal headerLeftHeight = headerLeft ? headerLeft->height() : 0.0;
-        qreal headerCenterHeight = headerCenter ? headerCenter->height() : 0.0;
-        qreal headerRightHeight = headerRight ? headerRight->height() : 0.0;
+        double headerLeftHeight = headerLeft ? headerLeft->height() : 0.0;
+        double headerCenterHeight = headerCenter ? headerCenter->height() : 0.0;
+        double headerRightHeight = headerRight ? headerRight->height() : 0.0;
 
-        qreal headerHeight = qMax(headerLeftHeight, qMax(headerCenterHeight, headerRightHeight));
-        qreal headerOffset = score()->styleV(Sid::headerOffset).value<PointF>().y() * DPMM;
+        double headerHeight = qMax(headerLeftHeight, qMax(headerCenterHeight, headerRightHeight));
+        double headerOffset = score()->styleV(Sid::headerOffset).value<PointF>().y() * DPMM;
         return qMax(0.0, headerHeight - headerOffset);
     }
 
@@ -264,7 +264,7 @@ qreal Page::headerExtension() const
 //   - how much the footer extends into the page (i.e., not in the margins)
 //---------------------------------------------------------
 
-qreal Page::footerExtension() const
+double Page::footerExtension() const
 {
     if (!score()->isLayoutMode(LayoutMode::PAGE)) {
         return 0.0;
@@ -290,13 +290,13 @@ qreal Page::footerExtension() const
         Text* footerCenter = layoutHeaderFooter(4, s2);
         Text* footerRight = layoutHeaderFooter(5, s3);
 
-        qreal footerLeftHeight = footerLeft ? footerLeft->height() : 0.0;
-        qreal footerCenterHeight = footerCenter ? footerCenter->height() : 0.0;
-        qreal footerRightHeight = footerRight ? footerRight->height() : 0.0;
+        double footerLeftHeight = footerLeft ? footerLeft->height() : 0.0;
+        double footerCenterHeight = footerCenter ? footerCenter->height() : 0.0;
+        double footerRightHeight = footerRight ? footerRight->height() : 0.0;
 
-        qreal footerHeight = qMax(footerLeftHeight, qMax(footerCenterHeight, footerRightHeight));
+        double footerHeight = qMax(footerLeftHeight, qMax(footerCenterHeight, footerRightHeight));
 
-        qreal footerOffset = score()->styleV(Sid::footerOffset).value<PointF>().y() * DPMM;
+        double footerOffset = score()->styleV(Sid::footerOffset).value<PointF>().y() * DPMM;
         return qMax(0.0, footerHeight - footerOffset);
     }
 
@@ -343,8 +343,8 @@ void Page::doRebuildBspTree()
 
     RectF r;
     if (score()->linearMode()) {
-        qreal w = 0.0;
-        qreal h = 0.0;
+        double w = 0.0;
+        double h = 0.0;
         if (!_systems.empty()) {
             h = _systems.front()->height();
             if (!_systems.front()->measures().empty()) {
@@ -580,7 +580,7 @@ std::vector<EngravingItem*> Page::elements() const
 //   tm
 //---------------------------------------------------------
 
-qreal Page::tm() const
+double Page::tm() const
 {
     return ((!score()->styleB(Sid::pageTwosided) || isOdd())
             ? score()->styleD(Sid::pageOddTopMargin) : score()->styleD(Sid::pageEvenTopMargin)) * DPI;
@@ -590,7 +590,7 @@ qreal Page::tm() const
 //   bm
 //---------------------------------------------------------
 
-qreal Page::bm() const
+double Page::bm() const
 {
     return ((!score()->styleB(Sid::pageTwosided) || isOdd())
             ? score()->styleD(Sid::pageOddBottomMargin) : score()->styleD(Sid::pageEvenBottomMargin)) * DPI;
@@ -600,7 +600,7 @@ qreal Page::bm() const
 //   lm
 //---------------------------------------------------------
 
-qreal Page::lm() const
+double Page::lm() const
 {
     return ((!score()->styleB(Sid::pageTwosided) || isOdd())
             ? score()->styleD(Sid::pageOddLeftMargin) : score()->styleD(Sid::pageEvenLeftMargin)) * DPI;
@@ -610,7 +610,7 @@ qreal Page::lm() const
 //   rm
 //---------------------------------------------------------
 
-qreal Page::rm() const
+double Page::rm() const
 {
     return (score()->styleD(Sid::pageWidth) - score()->styleD(Sid::pagePrintableWidth)) * DPI - lm();
 }
@@ -622,10 +622,10 @@ qreal Page::rm() const
 
 RectF Page::tbbox()
 {
-    qreal x1 = width();
-    qreal x2 = 0.0;
-    qreal y1 = height();
-    qreal y2 = 0.0;
+    double x1 = width();
+    double x2 = 0.0;
+    double y1 = height();
+    double y2 = 0.0;
     const std::vector<EngravingItem*> el = elements();
     for (EngravingItem* e : el) {
         if (e == this || !e->isPrintable()) {

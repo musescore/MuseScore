@@ -34,7 +34,7 @@ namespace mu::engraving {
 class SlurSegment final : public SlurTieSegment
 {
 protected:
-    qreal _extraHeight = 0.0;
+    double _extraHeight = 0.0;
     void changeAnchor(EditData&, EngravingItem*) override;
 
 public:

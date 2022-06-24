@@ -80,7 +80,7 @@ class MeasureBase : public EngravingItem
     Fraction _tick         { Fraction(0, 1) };
     int _no                { 0 };         ///< Measure number, counting from zero
     int _noOffset          { 0 };         ///< Offset to measure number
-    qreal m_oldWidth       { 0 };         ///< Used to restore layout during recalculations in Score::collectSystem()
+    double m_oldWidth       { 0 };         ///< Used to restore layout during recalculations in Score::collectSystem()
 
 protected:
 
@@ -152,7 +152,7 @@ public:
 
     void triggerLayout() const override;
 
-    qreal pause() const;
+    double pause() const;
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
@@ -198,8 +198,8 @@ public:
     int index() const;
     int measureIndex() const;
 
-    void setOldWidth(qreal n) { m_oldWidth = n; }
-    qreal oldWidth() const { return m_oldWidth; }
+    void setOldWidth(double n) { m_oldWidth = n; }
+    double oldWidth() const { return m_oldWidth; }
 };
 } // namespace mu::engraving
 #endif

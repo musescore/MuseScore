@@ -93,13 +93,13 @@ bool FontEngineFT::load(const io::path_t& path)
     }
 
     //! NOTE Moved form sym.cpp ScoreFont::load as is
-    qreal pixelSize = 200.0;
+    double pixelSize = 200.0;
     FT_Set_Pixel_Sizes(m_data->face, 0, int(pixelSize + .5));
 
     return true;
 }
 
-QRectF FontEngineFT::bbox(uint ucs4, qreal dpi_f) const
+QRectF FontEngineFT::bbox(uint ucs4, double dpi_f) const
 {
     FTGlyphMetrics* gm = glyphMetrics(ucs4);
     if (!gm) {
@@ -114,7 +114,7 @@ QRectF FontEngineFT::bbox(uint ucs4, qreal dpi_f) const
     return bbox;
 }
 
-qreal FontEngineFT::advance(uint ucs4, qreal dpi_f) const
+double FontEngineFT::advance(uint ucs4, double dpi_f) const
 {
     FTGlyphMetrics* gm = glyphMetrics(ucs4);
     if (!gm) {

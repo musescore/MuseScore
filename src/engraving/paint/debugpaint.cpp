@@ -53,7 +53,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
 
     if ((isDiagnosticSelected || configuration()->debuggingOptions().showBoundingRect)
         && !item->bbox().isEmpty()) {
-        qreal scaling = painter.worldTransform().m11() / configuration()->guiScaling();
+        double scaling = painter.worldTransform().m11() / configuration()->guiScaling();
         draw::Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, (item->selected() ? 2.0 : 1.0) / scaling);
 
         // Draw bbox
@@ -99,7 +99,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
         return;
     }
 
-    qreal scaling = painter.worldTransform().m11() / configuration()->guiScaling();
+    double scaling = painter.worldTransform().m11() / configuration()->guiScaling();
 
     painter.save();
 
@@ -111,7 +111,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
 
         for (const System* system : page->systems()) {
             PointF pt(system->ipos());
-            qreal h = system->height() + system->minBottom() + system->minTop();
+            double h = system->height() + system->minBottom() + system->minTop();
             painter.translate(pt);
             RectF rect(0.0, -system->minTop(), system->width(), h);
             painter.drawRect(rect);

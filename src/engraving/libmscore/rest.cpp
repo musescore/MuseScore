@@ -129,7 +129,7 @@ void Rest::draw(mu::draw::Painter* painter) const
 
 void Rest::setOffset(const mu::PointF& o)
 {
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     int line = lrint(o.y() / _spatium);
 
     if (m_sym == SymId::restWhole && (line <= -2 || line >= 3)) {
@@ -160,7 +160,7 @@ mu::RectF Rest::drag(EditData& ed)
     RectF r(abbox());
 
     // Limit horizontal drag range
-    static const qreal xDragRange = spatium() * 5;
+    static const double xDragRange = spatium() * 5;
     if (fabs(s.x()) > xDragRange) {
         s.rx() = xDragRange * (s.x() < 0 ? -1.0 : 1.0);
     }
@@ -337,7 +337,7 @@ void Rest::layout()
     for (EngravingItem* e : el()) {
         e->layout();
     }
-    qreal _spatium = spatium();
+    double _spatium = spatium();
 
     rxpos() = 0.0;
     const StaffType* stt = staffType();
@@ -377,17 +377,17 @@ void Rest::layout()
 
     m_dotline = Rest::getDotline(durationType().type());
 
-    qreal yOff       = offset().y();
+    double yOff       = offset().y();
     const Staff* stf = staff();
     const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
-    qreal lineDist = st ? st->lineDistance().val() : 1.0;
+    double lineDist = st ? st->lineDistance().val() : 1.0;
     int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
     int lines      = st ? st->lines() : 5;
     int lineOffset = computeLineOffset(lines);
 
     int yo;
     m_sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines, &yo);
-    rypos() = (qreal(yo) + qreal(lineOffset) * .5) * lineDist * _spatium;
+    rypos() = (double(yo) + double(lineOffset) * .5) * lineDist * _spatium;
     if (!shouldNotBeDrawn()) {
         setbbox(symBbox(m_sym));
     }
@@ -401,9 +401,9 @@ void Rest::layout()
 void Rest::layoutDots()
 {
     checkDots();
-    qreal x = symWidth(m_sym) + score()->styleMM(Sid::dotNoteDistance) * mag();
-    qreal dx = score()->styleMM(Sid::dotDotDistance) * mag();
-    qreal y = m_dotline * spatium() * .5;
+    double x = symWidth(m_sym) + score()->styleMM(Sid::dotNoteDistance) * mag();
+    double dx = score()->styleMM(Sid::dotDotDistance) * mag();
+    double y = m_dotline * spatium() * .5;
     for (NoteDot* dot : m_dots) {
         dot->layout();
         dot->setPos(x, y);
@@ -691,7 +691,7 @@ int Rest::computeLineOffset(int lines)
 //   upPos
 //---------------------------------------------------------
 
-qreal Rest::upPos() const
+double Rest::upPos() const
 {
     return symBbox(m_sym).y();
 }
@@ -700,7 +700,7 @@ qreal Rest::upPos() const
 //   downPos
 //---------------------------------------------------------
 
-qreal Rest::downPos() const
+double Rest::downPos() const
 {
     return symBbox(m_sym).y() + symHeight(m_sym);
 }
@@ -739,9 +739,9 @@ void Rest::setTrack(track_idx_t val)
 //   mag
 //---------------------------------------------------------
 
-qreal Rest::mag() const
+double Rest::mag() const
 {
-    qreal m = staff() ? staff()->staffMag(this) : 1.0;
+    double m = staff() ? staff()->staffMag(this) : 1.0;
     if (isSmall()) {
         m *= score()->styleD(Sid::smallNoteMag);
     }
@@ -754,7 +754,7 @@ qreal Rest::mag() const
 
 int Rest::upLine() const
 {
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     return lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
 }
 
@@ -764,7 +764,7 @@ int Rest::upLine() const
 
 int Rest::downLine() const
 {
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     return lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
 }
 
@@ -799,7 +799,7 @@ PointF Rest::stemPosBeam() const
 //   stemPosX
 //---------------------------------------------------------
 
-qreal Rest::stemPosX() const
+double Rest::stemPosX() const
 {
     if (_up) {
         return bbox().right();
@@ -812,7 +812,7 @@ qreal Rest::stemPosX() const
 //   rightEdge
 //---------------------------------------------------------
 
-qreal Rest::rightEdge() const
+double Rest::rightEdge() const
 {
     return x() + width();
 }
@@ -835,7 +835,7 @@ void Rest::setAccent(bool flag)
     undoChangeProperty(Pid::SMALL, flag);
     if (voice() % 2 == 0) {
         if (flag) {
-            qreal yOffset = -(bbox().bottom());
+            double yOffset = -(bbox().bottom());
             if (durationType() >= DurationType::V_HALF) {
                 yOffset -= staff()->spatium(tick()) * 0.5;
             }
@@ -986,7 +986,7 @@ void Rest::read(XmlReader& e)
 //   localSpatiumChanged
 //---------------------------------------------------------
 
-void Rest::localSpatiumChanged(qreal oldValue, qreal newValue)
+void Rest::localSpatiumChanged(double oldValue, double newValue)
 {
     ChordRest::localSpatiumChanged(oldValue, newValue);
     for (EngravingItem* e : m_dots) {

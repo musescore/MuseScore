@@ -23,8 +23,6 @@
 #ifndef __PROPERTY_H__
 #define __PROPERTY_H__
 
-#include <QVariant>
-
 #include "types/string.h"
 
 #include "property/propertyvalue.h"

@@ -573,10 +573,10 @@ Q_ENUM_NS(HarmonyType);
 #endif
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::NoteType);
-
 Q_DECLARE_METATYPE(mu::engraving::PlayEventType);
-
 Q_DECLARE_METATYPE(mu::engraving::AccidentalType);
+#endif
 
 #endif

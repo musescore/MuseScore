@@ -45,7 +45,7 @@ protected:
     Text* _endText;
     mu::PointF points[6];
     int npoints = 0;
-    qreal lineLength = 0;
+    double lineLength = 0;
     bool twoLines = false;
 
 public:
@@ -59,7 +59,7 @@ public:
     void layout() override;
     void setSelected(bool f) override;
 
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     EngravingItem* propertyDelegate(Pid) override;
 
@@ -84,7 +84,7 @@ class TextLineBase : public SLine
     M_PROPERTY(String,   beginText,             setBeginText)
     M_PROPERTY(Align,     beginTextAlign,        setBeginTextAlign)
     M_PROPERTY(String,   beginFontFamily,       setBeginFontFamily)
-    M_PROPERTY(qreal,     beginFontSize,         setBeginFontSize)
+    M_PROPERTY(double,     beginFontSize,         setBeginFontSize)
     M_PROPERTY(FontStyle, beginFontStyle,        setBeginFontStyle)
     M_PROPERTY(mu::PointF,   beginTextOffset,       setBeginTextOffset)
 
@@ -92,7 +92,7 @@ class TextLineBase : public SLine
     M_PROPERTY(String,   continueText,          setContinueText)
     M_PROPERTY(Align,     continueTextAlign,     setContinueTextAlign)
     M_PROPERTY(String,   continueFontFamily,    setContinueFontFamily)
-    M_PROPERTY(qreal,     continueFontSize,      setContinueFontSize)
+    M_PROPERTY(double,     continueFontSize,      setContinueFontSize)
     M_PROPERTY(FontStyle, continueFontStyle,     setContinueFontStyle)
     M_PROPERTY(mu::PointF,   continueTextOffset,    setContinueTextOffset)
 
@@ -100,7 +100,7 @@ class TextLineBase : public SLine
     M_PROPERTY(String,   endText,               setEndText)
     M_PROPERTY(Align,     endTextAlign,          setEndTextAlign)
     M_PROPERTY(String,   endFontFamily,         setEndFontFamily)
-    M_PROPERTY(qreal,     endFontSize,           setEndFontSize)
+    M_PROPERTY(double,     endFontSize,           setEndFontSize)
     M_PROPERTY(FontStyle, endFontStyle,          setEndFontStyle)
     M_PROPERTY(mu::PointF,   endTextOffset,         setEndTextOffset)
 
@@ -113,7 +113,7 @@ public:
     void writeProperties(XmlWriter& xml) const override;
     bool readProperties(XmlReader& node) override;
 
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

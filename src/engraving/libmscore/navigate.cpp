@@ -53,13 +53,13 @@ using ElementPair = std::pair<EngravingItem*, int>; // element and its index as 
 
 static bool isChild1beforeChild2(const ElementPair& child1, const ElementPair& child2)
 {
-    Q_ASSERT(child1.first->parent() == child2.first->parent());
+    assert(child1.first->parent() == child2.first->parent());
 
     PointF p1 = child1.first->pos() + child1.first->bbox().center();
     PointF p2 = child2.first->pos() + child2.first->bbox().center();
 
     // If one child is *clearly* above the other then visit the higher one first
-    qreal verticalSeparation = p2.y() - p1.y();
+    double verticalSeparation = p2.y() - p1.y();
     if (verticalSeparation > 10) {
         return true;
     } else if (verticalSeparation < -10) {
@@ -67,7 +67,7 @@ static bool isChild1beforeChild2(const ElementPair& child1, const ElementPair& c
     }
 
     // Children are roughly aligned vertically. Visit the one on the left first
-    qreal horizontalSeparation = p2.x() - p1.x();
+    double horizontalSeparation = p2.x() - p1.x();
     if (horizontalSeparation > 0.0) {
         return true;
     } else if (horizontalSeparation < 0.0) {
@@ -918,7 +918,7 @@ EngravingItem* Score::prevElement()
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();
             EngravingItem* elSt = sp->startElement();
-            Q_ASSERT(elSt->type() == ElementType::NOTE);
+            assert(elSt->type() == ElementType::NOTE);
             Note* n = toNote(elSt);
             EngravingItem* prev =  n->prevElement();
             if (prev) {

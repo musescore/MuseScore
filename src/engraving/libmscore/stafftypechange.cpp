@@ -107,7 +107,7 @@ void StaffTypeChange::setStaffType(StaffType* st, bool owned)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void StaffTypeChange::spatiumChanged(qreal, qreal)
+void StaffTypeChange::spatiumChanged(double, double)
 {
     lw = spatium() * 0.3;
 }
@@ -118,10 +118,10 @@ void StaffTypeChange::spatiumChanged(qreal, qreal)
 
 void StaffTypeChange::layout()
 {
-    qreal _spatium = score()->spatium();
+    double _spatium = score()->spatium();
     setbbox(RectF(-lw * .5, -lw * .5, _spatium * 2.5 + lw, _spatium * 2.5 + lw));
     if (measure()) {
-        qreal y = -1.5 * _spatium - height() + measure()->system()->staff(staffIdx())->y();
+        double y = -1.5 * _spatium - height() + measure()->system()->staff(staffIdx())->y();
         setPos(_spatium * .8, y);
     } else {
         setPos(0.0, 0.0);
@@ -139,10 +139,10 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
-    qreal _spatium = score()->spatium();
-    qreal h  = _spatium * 2.5;
-    qreal w  = _spatium * 2.5;
-    qreal lineDist = 0.35;           // line distance for the icon 'staff lines'
+    double _spatium = score()->spatium();
+    double h  = _spatium * 2.5;
+    double w  = _spatium * 2.5;
+    double lineDist = 0.35;           // line distance for the icon 'staff lines'
     // draw icon rectangle
     painter->setPen(Pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
                         lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
@@ -162,7 +162,7 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
         lines = qMin(staffType()->lines(), 6);
     }
     // calculate starting point Y for the lines from half the icon height (2.5) so staff lines appear vertically centered
-    qreal startY = 1.25 - (lines - 1) * lineDist * 0.5;
+    double startY = 1.25 - (lines - 1) * lineDist * 0.5;
     painter->setPen(Pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
                         2.5, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     for (int i=0; i < lines; i++) {
@@ -251,7 +251,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
         m_staffType->setGenKeysig(v.toBool());
         break;
     case Pid::MAG: {
-        qreal _spatium = spatium();
+        double _spatium = spatium();
         m_staffType->setUserMag(v.toDouble());
         Staff* _staff = staff();
         if (_staff) {
@@ -260,7 +260,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     }
     break;
     case Pid::SMALL: {
-        qreal _spatium = spatium();
+        double _spatium = spatium();
         m_staffType->setSmall(v.toBool());
         Staff* _staff = staff();
         if (_staff) {

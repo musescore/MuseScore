@@ -187,7 +187,7 @@ PointF FretDiagram::pagePos() const
     if (explicitParent()->isSegment()) {
         Measure* m = toSegment(explicitParent())->measure();
         System* system = m->system();
-        qreal yp = y();
+        double yp = y();
         if (system) {
             yp += system->staffYpage(staffIdx());
         }
@@ -300,13 +300,13 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     }
 
     // Init pen and other values
-    qreal _spatium = spatium() * _userMag;
+    double _spatium = spatium() * _userMag;
     Pen pen(curColor());
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setBrush(Brush(Color(painter->pen().color())));
 
     // x2 is the x val of the rightmost string
-    qreal x2 = (_strings - 1) * stringDist;
+    double x2 = (_strings - 1) * stringDist;
 
     // Draw the nut
     pen.setWidthF(nutLw);
@@ -318,23 +318,23 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     painter->setPen(pen);
 
     // y2 is the y val of the bottom fretline
-    qreal y2 = fretDist * (_frets + .5);
+    double y2 = fretDist * (_frets + .5);
     for (int i = 0; i < _strings; ++i) {
-        qreal x = stringDist * i;
+        double x = stringDist * i;
         painter->drawLine(LineF(x, _fretOffset ? -_spatium * .2 : 0.0, x, y2));
     }
     for (int i = 1; i <= _frets; ++i) {
-        qreal y = fretDist * i;
+        double y = fretDist * i;
         painter->drawLine(LineF(0.0, y, x2, y));
     }
 
     // dotd is the diameter of a dot
-    qreal dotd = _spatium * .49 * score()->styleD(Sid::fretDotSize);
+    double dotd = _spatium * .49 * score()->styleD(Sid::fretDotSize);
 
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
     symPen.setCapStyle(PenCapStyle::RoundCap);
-    qreal symPenWidth = stringLw * 1.2;
+    double symPenWidth = stringLw * 1.2;
     symPen.setWidthF(symPenWidth);
 
     for (auto const& i : _dots) {
@@ -347,8 +347,8 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
             int fret = d.fret - 1;
 
             // Calculate coords of the top left corner of the dot
-            qreal x = stringDist * string - dotd * .5;
-            qreal y = fretDist * fret + fretDist * .5 - dotd * .5;
+            double x = stringDist * string - dotd * .5;
+            double y = fretDist * fret + fretDist * .5 - dotd * .5;
 
             // Draw different symbols
             painter->setPen(symPen);
@@ -391,8 +391,8 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
             continue;
         }
 
-        qreal x = stringDist * string - markerSize * .5;
-        qreal y = -fretDist - markerSize * .5;
+        double x = stringDist * string - markerSize * .5;
+        double y = -fretDist - markerSize * .5;
         if (marker.mtype == FretMarkerType::CIRCLE) {
             painter->drawEllipse(RectF(x, y, markerSize, markerSize));
         } else if (marker.mtype == FretMarkerType::CROSS) {
@@ -407,9 +407,9 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
         int startString = i.second.startString;
         int endString   = i.second.endString;
 
-        qreal x1    = stringDist * startString;
-        qreal newX2 = endString == -1 ? x2 : stringDist * endString;
-        qreal y     = fretDist * (fret - 1) + fretDist * .5;
+        double x1    = stringDist * startString;
+        double newX2 = endString == -1 ? x2 : stringDist * endString;
+        double y     = fretDist * (fret - 1) + fretDist * .5;
         pen.setWidthF(dotd * score()->styleD(Sid::barreLineWidth));
         pen.setCapStyle(PenCapStyle::RoundCap);
         painter->setPen(pen);
@@ -418,7 +418,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 
     // Draw fret offset number
     if (_fretOffset > 0) {
-        qreal fretNumMag = score()->styleD(Sid::fretNumMag);
+        double fretNumMag = score()->styleD(Sid::fretNumMag);
         mu::draw::Font scaledFont(font);
         scaledFont.setPointSizeF(font.pointSizeF() * _userMag * (spatium() / SPATIUM20) * MScore::pixelRatio * fretNumMag);
         painter->setFont(scaledFont);
@@ -462,35 +462,35 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 
 void FretDiagram::layout()
 {
-    qreal _spatium  = spatium() * _userMag;
+    double _spatium  = spatium() * _userMag;
     stringLw        = _spatium * 0.08;
     nutLw           = (_fretOffset || !_showNut) ? stringLw : _spatium * 0.2;
     stringDist      = score()->styleMM(Sid::fretStringSpacing) * _userMag;
     fretDist        = score()->styleMM(Sid::fretFretSpacing) * _userMag;
     markerSize      = stringDist * .8;
 
-    qreal w    = stringDist * (_strings - 1) + markerSize;
-    qreal h    = (_frets + 1) * fretDist + markerSize;
-    qreal y    = -(markerSize * .5 + fretDist);
-    qreal x    = -(markerSize * .5);
+    double w    = stringDist * (_strings - 1) + markerSize;
+    double h    = (_frets + 1) * fretDist + markerSize;
+    double y    = -(markerSize * .5 + fretDist);
+    double x    = -(markerSize * .5);
 
     // Allocate space for fret offset number
     if (_fretOffset > 0) {
         mu::draw::Font scaledFont(font);
         scaledFont.setPointSizeF(font.pointSizeF() * _userMag);
 
-        qreal fretNumMag = score()->styleD(Sid::fretNumMag);
+        double fretNumMag = score()->styleD(Sid::fretNumMag);
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
         mu::draw::FontMetrics fm2(scaledFont);
-        qreal numw = fm2.width(String::number(_fretOffset + 1));
-        qreal xdiff = numw + stringDist * .4;
+        double numw = fm2.width(String::number(_fretOffset + 1));
+        double xdiff = numw + stringDist * .4;
         w += xdiff;
         x += (_numPos == 0) == (_orientation == Orientation::VERTICAL) ? -xdiff : 0;
     }
 
     if (_orientation == Orientation::HORIZONTAL) {
-        qreal tempW = w,
-              tempX = x;
+        double tempW = w,
+               tempX = x;
         w = h;
         h = tempW;
         x = y;
@@ -506,7 +506,7 @@ void FretDiagram::layout()
 
     // We need to get the width of the notehead/rest in order to position the fret diagram correctly
     Segment* pSeg = toSegment(explicitParent());
-    qreal noteheadWidth = 0;
+    double noteheadWidth = 0;
     if (pSeg->isChordRestType()) {
         staff_idx_t idx = staff()->idx();
         for (EngravingItem* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
@@ -522,7 +522,7 @@ void FretDiagram::layout()
         }
     }
 
-    qreal mainWidth = 0.0;
+    double mainWidth = 0.0;
     if (_orientation == Orientation::VERTICAL) {
         mainWidth = stringDist * (_strings - 1);
     } else if (_orientation == Orientation::HORIZONTAL) {
@@ -548,12 +548,12 @@ void FretDiagram::layout()
         SysStaff* ss = m->system()->staff(si);
         RectF r = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos() + PointF(_harmony->xShapeOffset(), 0.0));
 
-        qreal minDistance = _harmony->minDistance().val() * spatium();
+        double minDistance = _harmony->minDistance().val() * spatium();
         SkylineLine sk(false);
         sk.add(r.x(), r.bottom(), r.width());
-        qreal d = sk.minDistance(ss->skyline().north());
+        double d = sk.minDistance(ss->skyline().north());
         if (d > -minDistance) {
-            qreal yd = d + minDistance;
+            double yd = d + minDistance;
             yd *= -1.0;
             _harmony->rypos() += yd;
             r.translate(PointF(0.0, yd));
@@ -570,10 +570,10 @@ void FretDiagram::layout()
 //    also used in EngravingItem::canvasPos().
 //---------------------------------------------------------
 
-qreal FretDiagram::centerX() const
+double FretDiagram::centerX() const
 {
-    qreal dotd = spatium() * _userMag * .49 * score()->styleD(Sid::fretDotSize);
-    qreal x    = -((dotd + stringLw) * .5);
+    double dotd = spatium() * _userMag * .49 * score()->styleD(Sid::fretDotSize);
+    double x    = -((dotd + stringLw) * .5);
     return bbox().right() * .5 + x;
 }
 

@@ -68,22 +68,22 @@ public:
     bool isValid(SymId id) const;
     bool useFallbackFont(SymId id) const;
 
-    const mu::RectF bbox(SymId id, qreal mag) const;
+    const mu::RectF bbox(SymId id, double mag) const;
     const mu::RectF bbox(SymId id, const mu::SizeF&) const;
-    const mu::RectF bbox(const SymIdList& s, qreal mag) const;
+    const mu::RectF bbox(const SymIdList& s, double mag) const;
     const mu::RectF bbox(const SymIdList& s, const mu::SizeF& mag) const;
 
-    qreal width(SymId id, qreal mag) const;
-    qreal height(SymId id, qreal mag) const;
-    qreal advance(SymId id, qreal mag) const;
-    qreal width(const SymIdList&, qreal mag) const;
+    double width(SymId id, double mag) const;
+    double height(SymId id, double mag) const;
+    double advance(SymId id, double mag) const;
+    double width(const SymIdList&, double mag) const;
 
-    mu::PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const;
+    mu::PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const;
 
-    void draw(SymId id,         mu::draw::Painter*, qreal mag,            const mu::PointF& pos) const;
+    void draw(SymId id,         mu::draw::Painter*, double mag,            const mu::PointF& pos) const;
     void draw(SymId id,         mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos) const;
-    void draw(SymId id,         mu::draw::Painter*, qreal mag,            const mu::PointF& pos, int n) const;
-    void draw(const SymIdList&, mu::draw::Painter*, qreal mag,            const mu::PointF& pos) const;
+    void draw(SymId id,         mu::draw::Painter*, double mag,            const mu::PointF& pos, int n) const;
+    void draw(const SymIdList&, mu::draw::Painter*, double mag,            const mu::PointF& pos) const;
     void draw(const SymIdList&, mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos) const;
 
 private:
@@ -96,7 +96,7 @@ private:
     struct Sym {
         uint code;
         mu::RectF bbox;
-        qreal advance = 0.0;
+        double advance = 0.0;
 
         std::map<SmuflAnchorId, mu::PointF> smuflAnchors;
         SymIdList subSymbolIds;

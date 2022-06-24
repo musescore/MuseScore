@@ -57,7 +57,7 @@ private:
     LanguagesHash parseLanguagesConfig(const QByteArray& json) const;
     io::path_t languageFileName(const QString& languageCode) const;
 
-    RetVal<QByteArray> readLanguagesState() const;
+    RetVal<ByteArray> readLanguagesState() const;
     Ret writeLanguagesState(const QByteArray& data);
 
     async::Channel<QString> m_currentLanguageCodeChanged;

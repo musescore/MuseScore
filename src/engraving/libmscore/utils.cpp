@@ -77,7 +77,7 @@ Measure* Score::tick2measure(const Fraction& tick) const
     Measure* lm = 0;
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         if (tick < m->tick()) {
-            Q_ASSERT(lm);
+            assert(lm);
             return lm;
         }
         lm = m;
@@ -108,7 +108,7 @@ Measure* Score::tick2measureMM(const Fraction& t) const
 
     for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
         if (tick < m->tick()) {
-            Q_ASSERT(lm);
+            assert(lm);
             return lm;
         }
         lm = m;
@@ -278,7 +278,7 @@ int getStaff(System* system, const PointF& p)
 {
     PointF pp = p - system->page()->pos() - system->pos();
     for (size_t i = 0; i < system->page()->score()->nstaves(); ++i) {
-        qreal sp = system->spatium();
+        double sp = system->spatium();
         RectF r = system->bboxStaff(static_cast<int>(i)).adjusted(0.0, -sp, 0.0, sp);
         if (r.contains(pp)) {
             return static_cast<int>(i);
@@ -442,7 +442,7 @@ int pitchKeyAdjust(int step, Key key)
 //   y2pitch
 //---------------------------------------------------------
 
-int y2pitch(qreal y, ClefType clef, qreal _spatium)
+int y2pitch(double y, ClefType clef, double _spatium)
 {
     int l = lrint(y / _spatium * 2.0);
     return line2pitch(l, clef, Key::C);

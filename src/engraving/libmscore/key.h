@@ -146,7 +146,7 @@ static const int MAX_ACC_STATE = 75;
 
 class AccidentalState
 {
-    uchar state[MAX_ACC_STATE] = {};      // (0 -- 4) | TIE_CONTEXT
+    uint8_t state[MAX_ACC_STATE] = {};      // (0 -- 4) | TIE_CONTEXT
 
 public:
     AccidentalState() {}
