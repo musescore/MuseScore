@@ -41,7 +41,8 @@ class CommonAudioApiConfigurationModel : public QObject, public async::Asyncable
     Q_PROPERTY(unsigned int bufferSize READ bufferSize NOTIFY bufferSizeChanged)
     Q_PROPERTY(QList<unsigned int> bufferSizeList READ bufferSizeList NOTIFY bufferSizeListChanged)
 
-    Q_PROPERTY(int currentSampleRateIndex READ currentSampleRateIndex WRITE setCurrentSampleRateIndex NOTIFY currentSampleRateIndexChanged)
+    Q_PROPERTY(unsigned int sampleRate READ sampleRate NOTIFY sampleRateChanged)
+    Q_PROPERTY(QVariantList sampleRateList READ sampleRateList NOTIFY sampleRateListChanged)
 
     INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
     INJECT(appshell, audio::IAudioDriver, audioDriver)
@@ -49,22 +50,19 @@ class CommonAudioApiConfigurationModel : public QObject, public async::Asyncable
 public:
     explicit CommonAudioApiConfigurationModel(QObject* parent = nullptr);
 
-    QString currentDeviceId() const;
-    int currentSampleRateIndex() const;
-
     Q_INVOKABLE void load();
 
+    QString currentDeviceId() const;
     QVariantList deviceList() const;
     Q_INVOKABLE void deviceSelected(const QString& deviceId);
-
-    Q_INVOKABLE QStringList sampleRateHzList() const;
 
     unsigned int bufferSize() const;
     QList<unsigned int> bufferSizeList() const;
     Q_INVOKABLE void bufferSizeSelected(const QString& bufferSizeStr);
 
-public slots:
-    void setCurrentSampleRateIndex(int index);
+    int sampleRate() const;
+    QVariantList sampleRateList() const;
+    Q_INVOKABLE void sampleRateSelected(const QString& sampleRateStr);
 
 signals:
     void currentDeviceIdChanged();
@@ -73,12 +71,8 @@ signals:
     void bufferSizeChanged();
     void bufferSizeListChanged();
 
-    void currentSampleRateIndexChanged();
-
-private:
-    int m_currentSampleRateIndex = 0;
-    unsigned int m_bufferSize;
-    QStringList m_bufferSizeList;
+    void sampleRateChanged();
+    void sampleRateListChanged();
 };
 }
 
