@@ -399,15 +399,15 @@ void BagpipeEmbellishment::read(XmlReader& e)
 struct BEDrawingDataX {
     const SymId headsym;      // grace note head symbol
     const SymId flagsym;      // grace note flag symbol
-    const qreal mags;         // grace head magnification
-    qreal headw;              // grace head width
-    qreal headp;              // horizontal head pitch
-    const qreal spatium;      // spatium
-    const qreal lw;           // line width for stem
-    qreal xl;                 // calc x for stem of leftmost note
-    const qreal xcorr;        // correction to align flag with top of stem
+    const double mags;         // grace head magnification
+    double headw;              // grace head width
+    double headp;              // horizontal head pitch
+    const double spatium;      // spatium
+    const double lw;           // line width for stem
+    double xl;                 // calc x for stem of leftmost note
+    const double xcorr;        // correction to align flag with top of stem
 
-    BEDrawingDataX(SymId hs, SymId fs, const qreal m, const qreal s, const int nn)
+    BEDrawingDataX(SymId hs, SymId fs, const double m, const double s, const int nn)
         : headsym(hs),
         flagsym(fs),
         mags(0.75 * m),
@@ -415,7 +415,7 @@ struct BEDrawingDataX {
         lw(0.1 * s),
         xcorr(0.1 * s)
     {
-        qreal w = Score::paletteScore()->scoreFont()->width(hs, mags);
+        double w = Score::paletteScore()->scoreFont()->width(hs, mags);
         headw = 1.2 * w;     // using 1.0 the stem xpos is off
         headp = 1.6 * w;
         xl    = (1 - 1.6 * (nn - 1)) * w / 2;
@@ -429,13 +429,13 @@ struct BEDrawingDataX {
 //---------------------------------------------------------
 
 struct BEDrawingDataY {
-    const qreal y1b;          // top of all stems for beamed notes
-    const qreal y1f;          // top of stem for note with flag
-    const qreal y2;           // bottom of stem
-    const qreal ycorr;        // correction to align flag with top of stem
-    const qreal bw;           // line width for beam
+    const double y1b;          // top of all stems for beamed notes
+    const double y1f;          // top of stem for note with flag
+    const double y2;           // bottom of stem
+    const double ycorr;        // correction to align flag with top of stem
+    const double bw;           // line width for beam
 
-    BEDrawingDataY(const int l, const qreal s)
+    BEDrawingDataY(const int l, const double s)
         : y1b(-8 * s / 2),
         y1f((l - 6) * s / 2),
         y2(l * s / 2),
@@ -477,7 +477,7 @@ static void symMetrics(const char* name, const Sym& headsym)
 //      return fixed magnification
 //---------------------------------------------------------
 
-qreal BagpipeEmbellishment::mag() const
+double BagpipeEmbellishment::mag() const
 {
     return 0.7;
 }
@@ -513,7 +513,7 @@ void BagpipeEmbellishment::layout()
     bool drawFlag = nl.size() == 1;
 
     // draw the notes including stem, (optional) flag and (optional) ledger line
-    qreal x = dx.xl;
+    double x = dx.xl;
     foreach (int note, nl) {
         int line = BagpipeNoteInfoList[note].line;
         BEDrawingDataY dy(line, score()->spatium());
@@ -563,8 +563,8 @@ void BagpipeEmbellishment::layout()
 //      x2,y is the other side of the top beam
 //---------------------------------------------------------
 
-static void drawBeams(mu::draw::Painter* painter, const qreal spatium,
-                      const qreal x1, const qreal x2, qreal y)
+static void drawBeams(mu::draw::Painter* painter, const double spatium,
+                      const double x1, const double x2, double y)
 {
     // draw the beams
     painter->drawLine(mu::LineF(x1, y, x2, y));
@@ -584,12 +584,12 @@ static void drawBeams(mu::draw::Painter* painter, const qreal spatium,
 void BagpipeEmbellishment::drawGraceNote(mu::draw::Painter* painter,
                                          const BEDrawingDataX& dx,
                                          const BEDrawingDataY& dy,
-                                         SymId flagsym, const qreal x, const bool drawFlag) const
+                                         SymId flagsym, const double x, const bool drawFlag) const
 {
     // draw head
     drawSymbol(dx.headsym, painter, mu::PointF(x - dx.headw, dy.y2));
     // draw stem
-    qreal y1 =  drawFlag ? dy.y1f : dy.y1b;            // top of stems actually used
+    double y1 =  drawFlag ? dy.y1f : dy.y1b;            // top of stems actually used
     painter->drawLine(mu::LineF(x - dx.lw * .5, y1, x - dx.lw * .5, dy.y2));
     if (drawFlag) {
         // draw flag
@@ -621,7 +621,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
     bool drawFlag = nl.size() == 1;
 
     // draw the notes including stem, (optional) flag and (optional) ledger line
-    qreal x = dx.xl;
+    double x = dx.xl;
     foreach (int note, nl) {
         int line = BagpipeNoteInfoList[note].line;
         BEDrawingDataY dy(line, score()->spatium());

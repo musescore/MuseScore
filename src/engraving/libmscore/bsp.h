@@ -48,7 +48,7 @@ public:
             HORIZONTAL, VERTICAL, LEAF
         };
         union {
-            qreal offset;
+            double offset;
             int leafIndex;
         };
         Type type;

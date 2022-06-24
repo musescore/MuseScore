@@ -19,31 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_FONTENGINEFT_H
-#define MU_DRAW_FONTENGINEFT_H
+#include <gtest/gtest.h>
 
-#include "io/path.h"
+#include "types/flags.h"
 
-namespace mu::draw {
-struct FTData;
-struct FTGlyphMetrics;
-class FontEngineFT
+using namespace mu;
+
+class Global_Types_FlagsTests : public ::testing::Test
 {
 public:
-    FontEngineFT();
-    ~FontEngineFT();
 
-    bool load(const io::path_t& path);
-
-    QRectF bbox(uint ucs4, double DPI_F) const;
-    double advance(uint ucs4, double DPI_F) const;
-
-private:
-
-    FTGlyphMetrics* glyphMetrics(uint ucs4) const;
-
-    FTData* m_data = nullptr;
+    enum Option {
+        NoOption = 0x0,
+        Option1 = 0x1,
+        Option2 = 0x2,
+        Option3 = 0x4
+    };
+    DECLARE_FLAGS(Options, Option)
 };
-}
 
-#endif // MU_DRAW_FONTENGINEFT_H
+TEST_F(Global_Types_FlagsTests, Flags)
+{
+    //! GIVE
+    Options opts(Option1 | Option2);
+    //! CHECK
+    EXPECT_TRUE(opts.testFlag(Option1));
+    EXPECT_TRUE(opts.testFlag(Option2));
+    EXPECT_FALSE(opts.testFlag(Option3));
+}

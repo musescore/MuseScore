@@ -25,6 +25,7 @@
 
 #include "matrix.h"
 #include "geometry.h"
+#include "realfn.h"
 
 namespace mu {
 class PainterPath;
@@ -126,7 +127,7 @@ private:
 
 inline Transform& Transform::operator*=(double num)
 {
-    if (qFuzzyCompare(num, 1.)) {
+    if (RealIsEqual(num, 1.)) {
         return *this;
     }
     m_affine.m_11 *= num;
@@ -146,7 +147,7 @@ inline Transform& Transform::operator*=(double num)
 
 inline Transform& Transform::operator/=(double div)
 {
-    if (qFuzzyIsNull(div)) {
+    if (RealIsNull(div)) {
         return *this;
     }
     div = 1.0 / div;

@@ -142,8 +142,8 @@ Segment::Segment(Measure* m, SegmentType st, const Fraction& t)
     : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
     setParent(m);
-//      Q_ASSERT(t >= Fraction(0,1));
-//      Q_ASSERT(t <= m->ticks());
+//      assert(t >= Fraction(0,1));
+//      assert(t <= m->ticks());
     _segmentType = st;
     _tick = t;
     init();
@@ -188,7 +188,7 @@ void Segment::setParent(Measure* parent)
 
 void Segment::setSegmentType(SegmentType t)
 {
-    Q_ASSERT(_segmentType != SegmentType::Clef || t != SegmentType::ChordRest);
+    assert(_segmentType != SegmentType::Clef || t != SegmentType::ChordRest);
     _segmentType = t;
 }
 
@@ -560,9 +560,9 @@ void Segment::add(EngravingItem* el)
     }
 
     track_idx_t track = el->track();
-    Q_ASSERT(track != mu::nidx);
-    Q_ASSERT(el->score() == score());
-    Q_ASSERT(score()->nstaves() * VOICES == _elist.size());
+    assert(track != mu::nidx);
+    assert(el->score() == score());
+    assert(score()->nstaves() * VOICES == _elist.size());
     // make sure offset is correct for staff
     if (el->isStyled(Pid::OFFSET)) {
         el->setOffset(el->propertyDefault(Pid::OFFSET).value<PointF>());
@@ -613,7 +613,7 @@ void Segment::add(EngravingItem* el)
     }
 
     case ElementType::CLEF:
-        Q_ASSERT(_segmentType == SegmentType::Clef || _segmentType == SegmentType::HeaderClef);
+        assert(_segmentType == SegmentType::Clef || _segmentType == SegmentType::HeaderClef);
         checkElement(el, track);
         _elist[track] = el;
         if (!el->generated()) {
@@ -623,7 +623,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::TIMESIG:
-        Q_ASSERT(segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce);
+        assert(segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce);
         checkElement(el, track);
         _elist[track] = el;
         el->staff()->addTimeSig(toTimeSig(el));
@@ -631,7 +631,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::KEYSIG:
-        Q_ASSERT(_segmentType == SegmentType::KeySig || _segmentType == SegmentType::KeySigAnnounce);
+        assert(_segmentType == SegmentType::KeySig || _segmentType == SegmentType::KeySigAnnounce);
         checkElement(el, track);
         _elist[track] = el;
         if (!el->generated()) {
@@ -643,7 +643,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::CHORD:
     case ElementType::REST:
     case ElementType::MMREST:
-        Q_ASSERT(_segmentType == SegmentType::ChordRest);
+        assert(_segmentType == SegmentType::ChordRest);
         {
             if (track % VOICES) {
                 bool v;
@@ -684,7 +684,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::AMBITUS:
-        Q_ASSERT(_segmentType == SegmentType::Ambitus);
+        assert(_segmentType == SegmentType::Ambitus);
         checkElement(el, track);
         _elist[track] = el;
         setEmpty(false);
@@ -785,7 +785,7 @@ void Segment::remove(EngravingItem* el)
         break;
 
     case ElementType::KEYSIG:
-        Q_ASSERT(_elist[track] == el);
+        assert(_elist[track] == el);
 
         _elist[track] = 0;
         if (!el->generated()) {
@@ -1039,10 +1039,10 @@ bool Segment::setProperty(Pid propertyId, const PropertyValue& v)
 //   widthInStaff
 //---------------------------------------------------------
 
-qreal Segment::widthInStaff(staff_idx_t staffIdx, SegmentType t) const
+double Segment::widthInStaff(staff_idx_t staffIdx, SegmentType t) const
 {
-    const qreal segX = x();
-    qreal nextSegX = segX;
+    const double segX = x();
+    double nextSegX = segX;
 
     Segment* nextSeg = nextInStaff(staffIdx, t);
     if (nextSeg) {
@@ -1987,7 +1987,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::ARPEGGIO:
     case ElementType::TREMOLO: {
         EngravingItem* el = this->element(e->track());
-        Q_ASSERT(el->type() == ElementType::CHORD);
+        assert(el->type() == ElementType::CHORD);
         return toChord(el)->prevElement();
     }
     default: {
@@ -2284,9 +2284,9 @@ void Segment::createShape(staff_idx_t staffIdx)
         if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
             toHarmony(e)->layout1();
-            const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;
-            qreal x1 = e->bbox().x() - margin + e->pos().x();
-            qreal x2 = e->bbox().x() + e->bbox().width() + margin + e->pos().x();
+            const double margin = styleP(Sid::minHarmonyDistance) * 0.5;
+            double x1 = e->bbox().x() - margin + e->pos().x();
+            double x2 = e->bbox().x() + e->bbox().width() + margin + e->pos().x();
             s.addHorizontalSpacing(e, x1, x2);
         } else if (!e->isRehearsalMark()
                    && !e->isFretDiagram()
@@ -2332,9 +2332,9 @@ void Segment::addPreAppendedToShape(int staffIdx, Shape& s)
 //    calculate minimum distance needed to the right
 //---------------------------------------------------------
 
-qreal Segment::minRight() const
+double Segment::minRight() const
 {
-    qreal distance = 0.0;
+    double distance = 0.0;
     for (const Shape& sh : shapes()) {
         distance = qMax(distance, sh.right());
     }
@@ -2353,11 +2353,11 @@ qreal Segment::minRight() const
 //    sl. Sl is the same for all staves.
 //---------------------------------------------------------
 
-qreal Segment::minLeft(const Shape& sl) const
+double Segment::minLeft(const Shape& sl) const
 {
-    qreal distance = 0.0;
+    double distance = 0.0;
     for (const Shape& sh : shapes()) {
-        qreal d = sl.minHorizontalDistance(sh, score());
+        double d = sl.minHorizontalDistance(sh, score());
         if (d > distance) {
             distance = d;
         }
@@ -2365,11 +2365,11 @@ qreal Segment::minLeft(const Shape& sl) const
     return distance;
 }
 
-qreal Segment::minLeft() const
+double Segment::minLeft() const
 {
-    qreal distance = 0.0;
+    double distance = 0.0;
     for (const Shape& sh : shapes()) {
-        qreal l = sh.left();
+        double l = sh.left();
         if (l > distance) {
             distance = l;
         }
@@ -2377,7 +2377,7 @@ qreal Segment::minLeft() const
     return distance;
 }
 
-std::pair<qreal, qreal> Segment::computeCellWidth(const std::vector<int>& visibleParts) const
+std::pair<double, double> Segment::computeCellWidth(const std::vector<int>& visibleParts) const
 {
     if (!this->enabled()) {
         return { 0, 0 };
@@ -2482,12 +2482,12 @@ ChordRest* Segment::ChordRestWithMinDuration(const Segment* seg, const std::vect
     return chordRestWithMinDuration;
 }
 
-void Segment::setSpacing(qreal val)
+void Segment::setSpacing(double val)
 {
     m_spacing = val;
 }
 
-qreal Segment::spacing() const
+double Segment::spacing() const
 {
     return m_spacing;
 }
@@ -2497,17 +2497,17 @@ qreal Segment::spacing() const
 //    calculate the minimum distance to ns avoiding collisions
 //---------------------------------------------------------
 
-qreal Segment::minHorizontalCollidingDistance(Segment* ns) const
+double Segment::minHorizontalCollidingDistance(Segment* ns) const
 {
-    qreal w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
+    double w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
-        qreal d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx), score());
+        double d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx), score());
         w       = qMax(w, d);
     }
     return w;
 }
 
-qreal Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
+double Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
 {
     System* segmentSystem = measure()->system();
     SysStaff* staffSystem = segmentSystem ? segmentSystem->staff(staffIndex) : nullptr;
@@ -2540,7 +2540,7 @@ qreal Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
     return topOffset;
 }
 
-qreal Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
+double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 {
     System* segmentSystem = measure()->system();
     SysStaff* staffSystem = segmentSystem ? segmentSystem->staff(staffIndex) : nullptr;
@@ -2587,9 +2587,9 @@ bool Segment::isMMRestSegment() const
 //    calculate the minimum layout distance to Segment ns
 //---------------------------------------------------------
 
-qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
+double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 {
-    qreal ww = -1000000.0;          // can remain negative
+    double ww = -1000000.0;          // can remain negative
     double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
         if (!isMMRestSegment() && !ns->isMMRestSegment()) {
@@ -2604,7 +2604,7 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
         }
         ww      = qMax(ww, d);
     }
-    qreal w = qMax(ww, 0.0);        // non-negative
+    double w = qMax(ww, 0.0);        // non-negative
 
     if (isClefType() && ns && ns->isChordRestType()) {
         w = std::max(w, double(score()->styleMM(Sid::clefKeyRightMargin)));

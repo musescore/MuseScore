@@ -67,7 +67,7 @@ public:
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
 
-    qreal baseLine() const override { return 0.0; }
+    double baseLine() const override { return 0.0; }
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
 };
 
@@ -92,7 +92,7 @@ public:
     void read(XmlReader&) override;
     void layout() override;
 
-    qreal baseLine() const override { return 0.0; }
+    double baseLine() const override { return 0.0; }
     Segment* segment() const { return (Segment*)explicitParent(); }
     mu::draw::Font font() const { return _font; }
     int code() const { return _code; }

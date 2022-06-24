@@ -283,6 +283,16 @@ String& String::operator +=(const char16_t* s)
     return *this;
 }
 
+char16_t String::operator [](size_t i) const
+{
+    return constStr()[i];
+}
+
+char16_t& String::operator [](size_t i)
+{
+    return mutStr()[i];
+}
+
 String& String::append(Char ch)
 {
     mutStr() += ch.unicode();
@@ -469,9 +479,9 @@ int String::count(const Char& ch) const
     return count;
 }
 
-size_t String::indexOf(const Char& ch) const
+size_t String::indexOf(const Char& ch, size_t from) const
 {
-    for (size_t i = 0; i < constStr().size(); ++i) {
+    for (size_t i = from; i < constStr().size(); ++i) {
         if (constStr().at(i) == ch.unicode()) {
             return i;
         }
@@ -479,9 +489,9 @@ size_t String::indexOf(const Char& ch) const
     return mu::nidx;
 }
 
-size_t String::indexOf(const char16_t* str) const
+size_t String::indexOf(const char16_t* str, size_t from) const
 {
-    return constStr().find(str);
+    return constStr().find(str, from);
 }
 
 size_t String::lastIndexOf(const Char& ch) const

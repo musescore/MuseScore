@@ -669,7 +669,7 @@ inline int Note::concertPitchIdx() const
 
 void Note::setPitch(int val)
 {
-    Q_ASSERT(pitchIsValid(val));
+    assert(pitchIsValid(val));
     if (_pitch != val) {
         _pitch = val;
         score()->setPlaylistDirty();
@@ -678,8 +678,8 @@ void Note::setPitch(int val)
 
 void Note::setPitch(int pitch, int tpc1, int tpc2)
 {
-    Q_ASSERT(tpcIsValid(tpc1));
-    Q_ASSERT(tpcIsValid(tpc2));
+    assert(tpcIsValid(tpc1));
+    assert(tpcIsValid(tpc2));
     _tpc[0] = tpc1;
     _tpc[1] = tpc2;
     setPitch(pitch);
@@ -749,8 +749,8 @@ void Note::setTpcFromPitch()
         v.flip();
         _tpc[1] = mu::engraving::transposeTpc(_tpc[0], v, true);
     }
-    Q_ASSERT(tpcIsValid(_tpc[0]));
-    Q_ASSERT(tpcIsValid(_tpc[1]));
+    assert(tpcIsValid(_tpc[0]));
+    assert(tpcIsValid(_tpc[1]));
 }
 
 //---------------------------------------------------------
@@ -936,7 +936,7 @@ SymId Note::noteHead() const
 //
 //    returns the x of the symbol bbox. It is different from headWidth() because zero point could be different from leftmost bbox position.
 //---------------------------------------------------------
-qreal Note::bboxRightPos() const
+double Note::bboxRightPos() const
 {
     const auto& bbox = score()->scoreFont()->bbox(noteHead(), magS());
     return bbox.right();
@@ -947,7 +947,7 @@ qreal Note::bboxRightPos() const
 //
 //    returns the width of the notehead "body". It is actual for slashed noteheads like -O-, where O is body.
 //---------------------------------------------------------
-qreal Note::headBodyWidth() const
+double Note::headBodyWidth() const
 {
     return headWidth() + 2 * bboxXShift();
 }
@@ -957,9 +957,9 @@ qreal Note::headBodyWidth() const
 //
 //    returns the X-position for tie attachment for this particular notehead
 //---------------------------------------------------------
-qreal Note::outsideTieAttachX(bool up) const
+double Note::outsideTieAttachX(bool up) const
 {
-    qreal xo = 0;
+    double xo = 0;
 
     // tab staff notes just use center of bounding box
     if (staffType()->isTabStaff()) {
@@ -985,16 +985,16 @@ qreal Note::outsideTieAttachX(bool up) const
     */
     // try for average of cutouts
     if (up) {
-        qreal xNE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNE).x();
-        qreal xNW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNW).x();
+        double xNE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNE).x();
+        double xNW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNW).x();
         xo = ((xNE + xNW) / 2) * mag();
         if (xNE < xNW) {
             // musejazz is busted
             xo = 0;
         }
     } else {
-        qreal xSE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSE).x();
-        qreal xSW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSW).x();
+        double xSE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSE).x();
+        double xSW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSW).x();
         xo = ((xSE + xSW) / 2) * mag();
         if (xSE < xSW) {
             xo = 0;
@@ -1042,7 +1042,7 @@ void Note::updateHeadGroup(const NoteHeadGroup headGroup)
 //    or the width of the string representation of the fret mark
 //---------------------------------------------------------
 
-qreal Note::headWidth() const
+double Note::headWidth() const
 {
     return symWidth(noteHead());
 }
@@ -1052,7 +1052,7 @@ qreal Note::headWidth() const
 //
 //    returns the x shift of the notehead bounding box
 //---------------------------------------------------------
-qreal Note::bboxXShift() const
+double Note::bboxXShift() const
 {
     const auto& bbox = score()->scoreFont()->bbox(noteHead(), magS());
     return bbox.bottomLeft().x();
@@ -1063,7 +1063,7 @@ qreal Note::bboxXShift() const
 //
 //    returns the x coordinate of the notehead center related to the basepoint of the notehead bbox
 //---------------------------------------------------------
-qreal Note::noteheadCenterX() const
+double Note::noteheadCenterX() const
 {
     return score()->scoreFont()->width(noteHead(), magS()) / 2 + bboxXShift();
 }
@@ -1072,9 +1072,9 @@ qreal Note::noteheadCenterX() const
 //   tabHeadWidth
 //---------------------------------------------------------
 
-qreal Note::tabHeadWidth(const StaffType* tab) const
+double Note::tabHeadWidth(const StaffType* tab) const
 {
-    qreal val;
+    double val;
     if (tab && tab->isTabStaff() && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
         mu::draw::Font f    = tab->fretFont();
         f.setPointSizeF(tab->fretFontSize());
@@ -1092,7 +1092,7 @@ qreal Note::tabHeadWidth(const StaffType* tab) const
 //    or the height of the string representation of the fret mark
 //---------------------------------------------------------
 
-qreal Note::headHeight() const
+double Note::headHeight() const
 {
     return symHeight(noteHead());
 }
@@ -1101,7 +1101,7 @@ qreal Note::headHeight() const
 //   tabHeadHeight
 //---------------------------------------------------------
 
-qreal Note::tabHeadHeight(const StaffType* tab) const
+double Note::tabHeadHeight(const StaffType* tab) const
 {
     if (tab && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
         return tab->fretBoxH() * magS();
@@ -1331,7 +1331,7 @@ void Note::draw(mu::draw::Painter* painter) const
         }
         // draw background, if required (to hide a segment of string line or to show a fretting conflict)
         if (!tab->linesThrough() || fretConflict()) {
-            qreal d  = spatium() * .1;
+            double d  = spatium() * .1;
             RectF bb = RectF(bbox().x() - d, tab->fretMaskY() * magS(), bbox().width() + 2 * d, tab->fretMaskH() * magS());
             // we do not know which viewer did this draw() call
             // so update all:
@@ -1750,10 +1750,10 @@ public:
 
     static constexpr double MODE_TRANSITION_LIMIT_DEGREES = 15.0;
 
-    static inline EditMode editModeByDragDirection(const qreal& deltaX, const qreal& deltaY)
+    static inline EditMode editModeByDragDirection(const double& deltaX, const double& deltaY)
     {
-        qreal x = qAbs(deltaX);
-        qreal y = qAbs(deltaY);
+        double x = qAbs(deltaX);
+        double y = qAbs(deltaY);
 
         mu::PointF normalizedVector(x, y);
 
@@ -1761,7 +1761,7 @@ public:
 
         float radians = PointF::dotProduct(normalizedVector, PointF(1, 0));
 
-        qreal degrees = (qAcos(radians) * 180.0) / M_PI;
+        double degrees = (qAcos(radians) * 180.0) / M_PI;
 
         LOGD() << "NOTE DRAG DEGREES " << degrees;
 
@@ -2119,7 +2119,7 @@ void Note::setHeadHasParentheses(bool hasParentheses)
 void Note::setDotY(DirectionV pos)
 {
     bool onLine = false;
-    qreal y = 0;
+    double y = 0;
 
     if (staff()->isTabStaff(chord()->tick())) {
         // with TAB's, dotPosX is not set:
@@ -2200,7 +2200,7 @@ void Note::layout()
 
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
-        qreal mags = magS();
+        double mags = magS();
         bool parenthesis = false;
         if (tieBack()) {
             if (chord()->measure() != tieBack()->startNote()->chord()->measure() || !el().empty()) {
@@ -2224,7 +2224,7 @@ void Note::layout()
         if (parenthesis) {
             _fretString = String("(%1)").arg(_fretString);
         }
-        qreal w = tabHeadWidth(tab);     // !! use _fretString
+        double w = tabHeadWidth(tab);     // !! use _fretString
         bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
     } else {
         if (_deadNote) {
@@ -2261,15 +2261,15 @@ void Note::layout2()
 
     int dots = chord()->dots();
     if (dots) {
-        qreal d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * mag();
-        qreal dd = score()->point(score()->styleS(Sid::dotDotDistance)) * mag();
-        qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
+        double d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * mag();
+        double dd = score()->point(score()->styleS(Sid::dotDotDistance)) * mag();
+        double x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
         // adjust dot distance for hooks
         if (chord()->hook() && chord()->up()) {
-            qreal hookRight = chord()->hook()->width() + chord()->hook()->x() + chord()->pos().x();
-            qreal hookBottom = chord()->hook()->height() + chord()->hook()->y() + chord()->pos().y() + (0.25 * spatium());
+            double hookRight = chord()->hook()->width() + chord()->hook()->x() + chord()->pos().x();
+            double hookBottom = chord()->hook()->height() + chord()->hook()->y() + chord()->pos().y() + (0.25 * spatium());
             // the top dot in the chord, not the dot for this particular note:
-            qreal dotY = chord()->notes().back()->y() + chord()->notes().back()->dots().front()->pos().y();
+            double dotY = chord()->notes().back()->y() + chord()->notes().back()->dots().front()->pos().y();
             if (chord()->dotPosX() < hookRight && dotY < hookBottom) {
                 d = chord()->hook()->width();
             }
@@ -2290,7 +2290,7 @@ void Note::layout2()
             }
         }
         // apply to dots
-        qreal xx = x + d;
+        double xx = x + d;
         for (NoteDot* dot : qAsConst(_dots)) {
             dot->rxpos() = xx;
             xx += dd;
@@ -2304,7 +2304,7 @@ void Note::layout2()
         }
         if (e->isSymbol()) {
             e->setMag(mag());
-            qreal w = headWidth();
+            double w = headWidth();
             Symbol* sym = toSymbol(e);
             e->layout();
             if (sym->sym() == SymId::noteheadParenthesisRight) {
@@ -2557,9 +2557,9 @@ void Note::reset()
 //   mag
 //---------------------------------------------------------
 
-qreal Note::mag() const
+double Note::mag() const
 {
-    qreal m = chord() ? chord()->mag() : 1.0;
+    double m = chord() ? chord()->mag() : 1.0;
     if (m_isSmall) {
         m *= score()->styleD(Sid::smallNoteMag);
     }
@@ -2620,7 +2620,7 @@ void Note::setHeadScheme(NoteHeadScheme val)
 
 void Note::setHeadGroup(NoteHeadGroup val)
 {
-    Q_ASSERT(int(val) >= 0 && int(val) < int(NoteHeadGroup::HEAD_GROUPS));
+    assert(int(val) >= 0 && int(val) < int(NoteHeadGroup::HEAD_GROUPS));
     _headGroup = val;
 }
 
@@ -2813,9 +2813,9 @@ void Note::verticalDrag(EditData& ed)
 
     NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this).get());
 
-    qreal _spatium      = spatium();
+    double _spatium      = spatium();
     bool tab            = st->isTabStaff();
-    qreal step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
+    double step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
     int lineOffset      = lrint(ed.moveDelta.y() / step);
 
     if (tab) {
@@ -2861,11 +2861,11 @@ void Note::normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned)
     Segment* previous = seg->prev();
 
     if (previous) {
-        qreal minDist = previous->minHorizontalCollidingDistance(seg);
+        double minDist = previous->minHorizontalCollidingDistance(seg);
 
-        qreal diff = (ed.pos.x()) - (previous->pageX() + minDist);
+        double diff = (ed.pos.x()) - (previous->pageX() + minDist);
 
-        qreal distanceBetweenSegments = (previous->pageX() + minDist) - seg->pageX();
+        double distanceBetweenSegments = (previous->pageX() + minDist) - seg->pageX();
 
         if (diff < 0) {
             ned->delta.setX(distanceBetweenSegments);
@@ -2873,11 +2873,11 @@ void Note::normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned)
     } else {
         Measure* measure = seg->measure();
 
-        qreal minDist = score()->styleMM(Sid::barNoteDistance);
+        double minDist = score()->styleMM(Sid::barNoteDistance);
 
-        qreal diff = (ed.pos.x()) - (measure->pageX() + minDist);
+        double diff = (ed.pos.x()) - (measure->pageX() + minDist);
 
-        qreal distanceBetweenSegments = (measure->pageX() + minDist) - seg->pageX();
+        double distanceBetweenSegments = (measure->pageX() + minDist) - seg->pageX();
 
         if (diff < 0) {
             ned->delta.setX(distanceBetweenSegments);
@@ -2923,7 +2923,7 @@ void Note::updateRelLine(int relLine, bool undoable)
         return;
     }
     // int idx      = staffIdx() + chord()->staffMove();
-    Q_ASSERT(staffIdx() == chord()->staffIdx());
+    assert(staffIdx() == chord()->staffIdx());
     staff_idx_t idx      = chord()->vStaffIdx();
 
     const Staff* staff  = score()->staff(idx);
@@ -2951,7 +2951,7 @@ void Note::updateRelLine(int relLine, bool undoable)
     }
 
     int off  = st->stepOffset();
-    qreal ld = st->lineDistance().val();
+    double ld = st->lineDistance().val();
     rypos()  = (_line + off * 2.0) * spatium() * .5 * ld;
 }
 
@@ -3006,7 +3006,7 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
 //   localSpatiumChanged
 //---------------------------------------------------------
 
-void Note::localSpatiumChanged(qreal oldValue, qreal newValue)
+void Note::localSpatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::localSpatiumChanged(oldValue, newValue);
     for (EngravingItem* e : dots()) {

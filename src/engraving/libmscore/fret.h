@@ -124,7 +124,7 @@ public:
 //   @@ FretDiagram
 ///    Fretboard diagram
 //
-//   @P userMag    qreal
+//   @P userMag    double
 //   @P strings    int  number of strings
 //   @P frets      int  number of frets
 //   @P fretOffset int
@@ -152,13 +152,13 @@ class FretDiagram final : public EngravingItem
 
     Harmony* _harmony  { nullptr };
 
-    qreal stringLw;
-    qreal nutLw;
-    qreal stringDist;
-    qreal fretDist;
+    double stringLw;
+    double nutLw;
+    double stringDist;
+    double fretDist;
     mu::draw::Font font;
-    qreal _userMag     { 1.0 };                 // allowed 0.1 - 10.0
-    qreal markerSize;
+    double _userMag     { 1.0 };                 // allowed 0.1 - 10.0
+    double markerSize;
     int _numPos;
 
     friend class Factory;
@@ -223,7 +223,7 @@ public:
     void setShowNut(bool val) { _showNut = val; }
 
     String harmonyText() const { return _harmony ? _harmony->plainText() : String(); }
-    qreal centerX() const;
+    double centerX() const;
     void setHarmony(String harmonyText);
 
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
@@ -250,8 +250,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-    qreal userMag() const { return _userMag; }
-    void setUserMag(qreal m) { _userMag = m; }
+    double userMag() const { return _userMag; }
+    void setUserMag(double m) { _userMag = m; }
 
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
@@ -260,6 +260,8 @@ public:
 };
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::FretDiagram*)
+#endif
 
 #endif

@@ -22,18 +22,20 @@
 #ifndef MU_ENGRAVING_PROPERTYVALUE_H
 #define MU_ENGRAVING_PROPERTYVALUE_H
 
-#include <variant>
 #include <any>
 #include <string>
 #include <memory>
-
-#include <QVariant>
+#include <cassert>
 
 #include "types/string.h"
 #include "types/types.h"
 #include "types/symid.h"
 
 #include "global/logstream.h"
+
+#ifndef NO_QT_SUPPORT
+#include <QVariant>
+#endif
 
 namespace mu::engraving {
 class Groups;
@@ -122,17 +124,19 @@ public:
     PropertyValue(size_t v)
         : m_type(P_TYPE::SIZE_T), m_data(make_data<size_t>(v)) {}
 
-    PropertyValue(qreal v)
-        : m_type(P_TYPE::REAL), m_data(make_data<qreal>(v)) {}
+    PropertyValue(double v)
+        : m_type(P_TYPE::REAL), m_data(make_data<double>(v)) {}
 
     PropertyValue(const char* v)
-        : m_type(P_TYPE::STRING), m_data(make_data<String>(String(v))) {}
-
-    PropertyValue(const QString& v)
-        : m_type(P_TYPE::STRING), m_data(make_data<String>(String::fromQString(v))) {}
+        : m_type(P_TYPE::STRING), m_data(make_data<String>(String::fromUtf8(v))) {}
 
     PropertyValue(const String& v)
         : m_type(P_TYPE::STRING), m_data(make_data<String>(v)) {}
+
+#ifndef NO_QT_SUPPORT
+    PropertyValue(const QString& v)
+        : m_type(P_TYPE::STRING), m_data(make_data<String>(String::fromQString(v))) {}
+#endif
 
     // Geometry
     PropertyValue(const PointF& v)
@@ -311,14 +315,14 @@ public:
             //! HACK Temporary hack for real to Spatium
             if constexpr (std::is_same<T, Spatium>::value) {
                 if (P_TYPE::REAL == m_type) {
-                    Arg<qreal>* srv = get<qreal>();
+                    Arg<double>* srv = get<double>();
                     assert(srv);
                     return srv ? Spatium(srv->v) : Spatium();
                 }
             }
 
             //! HACK Temporary hack for Spatium to real
-            if constexpr (std::is_same<T, qreal>::value) {
+            if constexpr (std::is_same<T, double>::value) {
                 if (P_TYPE::SPATIUM == m_type) {
                     return value<Spatium>().val();
                 }
@@ -327,19 +331,27 @@ public:
             //! HACK Temporary hack for real to Millimetre
             if constexpr (std::is_same<T, Millimetre>::value) {
                 if (P_TYPE::REAL == m_type) {
-                    Arg<qreal>* mrv = get<qreal>();
+                    Arg<double>* mrv = get<double>();
                     assert(mrv);
                     return mrv ? Millimetre(mrv->v) : Millimetre();
                 }
             }
 
             //! HACK Temporary hack for Spatium to real
-            if constexpr (std::is_same<T, qreal>::value) {
+            if constexpr (std::is_same<T, double>::value) {
                 if (P_TYPE::MILLIMETRE == m_type) {
                     return value<Millimetre>().val();
                 }
             }
 
+            if constexpr (std::is_same<T, String>::value) {
+                //! HACK Temporary hack for Fraction to String
+                if (P_TYPE::FRACTION == m_type) {
+                    return value<Fraction>().toString();
+                }
+            }
+
+#ifndef NO_QT_SUPPORT
             if constexpr (std::is_same<T, QString>::value) {
                 //! HACK Temporary hack for Fraction to String
                 if (P_TYPE::FRACTION == m_type) {
@@ -351,6 +363,7 @@ public:
                     return value<String>().toQString();
                 }
             }
+#endif
         }
 
         assert(at);
@@ -362,8 +375,8 @@ public:
 
     bool toBool() const { return value<bool>(); }
     int toInt() const { return value<int>(); }
-    qreal toReal() const { return value<qreal>(); }
-    double toDouble() const { return value<qreal>(); }
+    double toReal() const { return value<double>(); }
+    double toDouble() const { return value<double>(); }
 
     bool operator ==(const PropertyValue& v) const;
     inline bool operator !=(const PropertyValue& v) const { return !this->operator ==(v); }

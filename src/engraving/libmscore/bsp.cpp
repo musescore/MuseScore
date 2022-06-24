@@ -89,7 +89,7 @@ BspTree::BspTree()
 
 static inline int intmaxlog(int n)
 {
-    return n > 0 ? qMax(int(::ceil(::log(qreal(n)) / ::log(qreal(2)))), 5) : 0;
+    return n > 0 ? qMax(int(::ceil(::log(double(n)) / ::log(double(2)))), 5) : 0;
 }
 
 //---------------------------------------------------------
@@ -225,7 +225,7 @@ void BspTree::initialize(const RectF& rec, int dep, int index)
     if (dep) {
         Node::Type type;
         RectF rect1, rect2;
-        qreal offset1, offset2;
+        double offset1, offset2;
 
         if (node->type == Node::Type::HORIZONTAL) {
             type = Node::Type::VERTICAL;

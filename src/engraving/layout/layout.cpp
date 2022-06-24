@@ -84,7 +84,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
 
     Fraction stick(st);
     Fraction etick(et);
-    Q_ASSERT(!(stick == Fraction(-1, 1) && etick == Fraction(-1, 1)));
+    assert(!(stick == Fraction(-1, 1) && etick == Fraction(-1, 1)));
 
     if (!m_score->last() || (options.isLinearMode() && !m_score->firstMeasure())) {
         LOGD("empty score");
@@ -362,7 +362,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
     // we simply assume a shortest note of 1/16. This ensures perfect spacing consistency.
 
     while (ctx.curMeasure) {
-        qreal ww = 0.0;
+        double ww = 0.0;
         if (ctx.curMeasure->isVBox() || ctx.curMeasure->isTBox()) {
             ctx.curMeasure->resetExplicitParent();
             LayoutMeasure::getNextMeasure(options, ctx);
@@ -525,7 +525,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
     // Set buffer space after the last system to avoid problems with mouse input.
     // Mouse input divides space between systems equally (see Score::searchSystem),
     // hence the choice of the value.
-    const qreal buffer = 0.5 * ctx.score()->styleS(Sid::maxSystemDistance).val() * ctx.score()->spatium();
+    const double buffer = 0.5 * ctx.score()->styleS(Sid::maxSystemDistance).val() * ctx.score()->spatium();
     ctx.page->setHeight(system->height() + system->pos().y() + buffer);
     ctx.page->invalidateBspTree();
 }

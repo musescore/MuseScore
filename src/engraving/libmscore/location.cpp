@@ -65,7 +65,7 @@ void Location::setTrack(int track)
 
 void Location::write(XmlWriter& xml) const
 {
-    Q_ASSERT(isRelative());
+    assert(isRelative());
     xml.startElement("location");
     xml.tag("staves", _staff, relDefaults._staff);
     xml.tag("voices", _voice, relDefaults._voice);
@@ -147,7 +147,7 @@ void Location::toRelative(const Location& ref)
 
 void Location::fillPositionForElement(const EngravingItem* e, bool absfrac)
 {
-    Q_ASSERT(isAbsolute());
+    assert(isAbsolute());
     if (!e) {
         LOGW("Location::fillPositionForElement: element is nullptr");
         return;
@@ -172,7 +172,7 @@ void Location::fillPositionForElement(const EngravingItem* e, bool absfrac)
 
 void Location::fillForElement(const EngravingItem* e, bool absfrac)
 {
-    Q_ASSERT(isAbsolute());
+    assert(isAbsolute());
     if (!e) {
         LOGW("Location::fillForElement: element is nullptr");
         return;

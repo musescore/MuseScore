@@ -80,12 +80,12 @@ public:
     page_idx_t no() const { return _no; }
     void setNo(page_idx_t n) { _no = n; }
     bool isOdd() const;
-    qreal tm() const;              // margins in pixel
-    qreal bm() const;
-    qreal lm() const;
-    qreal rm() const;
-    qreal headerExtension() const;
-    qreal footerExtension() const;
+    double tm() const;              // margins in pixel
+    double bm() const;
+    double lm() const;
+    double rm() const;
+    double headerExtension() const;
+    double footerExtension() const;
 
     void draw(mu::draw::Painter*) const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;

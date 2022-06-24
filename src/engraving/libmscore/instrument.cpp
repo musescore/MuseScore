@@ -1291,11 +1291,11 @@ void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const String&
 //   updateVelocity
 //---------------------------------------------------------
 
-qreal Instrument::getVelocityMultiplier(const String& name)
+double Instrument::getVelocityMultiplier(const String& name)
 {
     for (const MidiArticulation& a : qAsConst(_articulation)) {
         if (a.name == name) {
-            return qreal(a.velocity) / 100;
+            return double(a.velocity) / 100;
         }
     }
     return 1;
@@ -1783,7 +1783,7 @@ void Instrument::updateInstrumentId()
                                     + ((maxPitchA() == it->maxPitchA) ? 1 : 0)
                                     + ((maxPitchP() == it->maxPitchP) ? 1 : 0);
                 const int perfectMatchStrength = 4;
-                Q_ASSERT(matchStrength <= perfectMatchStrength);
+                assert(matchStrength <= perfectMatchStrength);
                 if (fallback.isEmpty() || matchStrength > bestMatchStrength) {
                     // Set a fallback ID or update it because we've found a better one.
                     fallback = it->id;

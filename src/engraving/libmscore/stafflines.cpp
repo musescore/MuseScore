@@ -95,11 +95,11 @@ void StaffLines::layout()
 //   layoutForWidth
 //---------------------------------------------------------
 
-void StaffLines::layoutForWidth(qreal w)
+void StaffLines::layoutForWidth(double w)
 {
     const Staff* s = staff();
-    qreal _spatium = spatium();
-    qreal dist     = _spatium;
+    double _spatium = spatium();
+    double dist     = _spatium;
     setPos(PointF(0.0, 0.0));
     int _lines;
     if (s) {
@@ -117,13 +117,13 @@ void StaffLines::layoutForWidth(qreal w)
         setColor(engravingConfiguration()->defaultColor());
     }
     lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
-    qreal x1 = pos().x();
-    qreal x2 = x1 + w;
-    qreal y  = pos().y();
+    double x1 = pos().x();
+    double x2 = x1 + w;
+    double y  = pos().y();
     bbox().setRect(x1, -lw * .5 + y, w, (_lines - 1) * dist + lw);
 
     if (_lines == 1) {
-        qreal extraSize = _spatium;
+        double extraSize = _spatium;
         bbox().adjust(0, -extraSize, 0, extraSize);
     } else if (_lines == 0) {
         bbox().adjust(0, -2 * dist, 0, 2 * dist);
@@ -142,12 +142,12 @@ void StaffLines::layoutForWidth(qreal w)
 ///   to the left or right of the measure
 //---------------------------------------------------------
 
-void StaffLines::layoutPartialWidth(qreal w, qreal wPartial, bool alignRight)
+void StaffLines::layoutPartialWidth(double w, double wPartial, bool alignRight)
 {
     const Staff* s = staff();
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     wPartial *= spatium();
-    qreal dist     = _spatium;
+    double dist     = _spatium;
     setPos(PointF(0.0, 0.0));
     int _lines;
     if (s) {
@@ -162,13 +162,13 @@ void StaffLines::layoutPartialWidth(qreal w, qreal wPartial, bool alignRight)
         setColor(engravingConfiguration()->defaultColor());
     }
     lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
-    qreal x1 = pos().x();
-    qreal x2 = x1 + w;
-    qreal y  = pos().y();
+    double x1 = pos().x();
+    double x2 = x1 + w;
+    double y  = pos().y();
     bbox().setRect(x1, -lw * .5 + y, w, (_lines - 1) * dist + lw);
 
     if (_lines == 1) {
-        qreal extraSize = _spatium;
+        double extraSize = _spatium;
         bbox().adjust(0, -extraSize, 0, extraSize);
     }
 
@@ -199,7 +199,7 @@ void StaffLines::draw(mu::draw::Painter* painter) const
 //   y1
 //---------------------------------------------------------
 
-qreal StaffLines::y1() const
+double StaffLines::y1() const
 {
     System* system = measure()->system();
 /*      if (system == 0 || staffIdx() >= system->staves()->size())

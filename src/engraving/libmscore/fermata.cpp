@@ -373,7 +373,7 @@ Sid Fermata::getPropertyStyle(Pid pid) const
 //   mag
 //---------------------------------------------------------
 
-qreal Fermata::mag() const
+double Fermata::mag() const
 {
     return staff() ? staff()->staffMag(tick()) * score()->styleD(Sid::articulationMag) : 1.0;
 }

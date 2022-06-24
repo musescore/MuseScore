@@ -42,7 +42,7 @@ enum class StaffStateType : char {
 class StaffState final : public EngravingItem
 {
     StaffStateType _staffStateType { StaffStateType::INVISIBLE };
-    qreal lw { 0.0 };
+    double lw { 0.0 };
     mu::PainterPath path;
 
     Instrument* _instrument { nullptr };

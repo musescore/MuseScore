@@ -219,7 +219,7 @@ private:
 
     int _veloOffset = 0;    ///< velocity user offset in percent, or absolute velocity for this note
     int _fixedLine = 0;     ///< fixed line number if _fixed == true
-    qreal _tuning = 0.0;    ///< pitch offset in cent, playable only by internal synthesizer
+    double _tuning = 0.0;    ///< pitch offset in cent, playable only by internal synthesizer
 
     Accidental* _accidental = nullptr;
 
@@ -292,7 +292,7 @@ public:
 
     void undoUnlink() override;
 
-    qreal mag() const override;
+    double mag() const override;
     EngravingItem* elementBase() const override;
 
     void layout() override;
@@ -305,17 +305,17 @@ public:
     int playTicks() const;
     Fraction playTicksFraction() const;
 
-    qreal headWidth() const;
-    qreal headHeight() const;
-    qreal tabHeadWidth(const StaffType* tab = 0) const;
-    qreal tabHeadHeight(const StaffType* tab = 0) const;
+    double headWidth() const;
+    double headHeight() const;
+    double tabHeadWidth(const StaffType* tab = 0) const;
+    double tabHeadHeight(const StaffType* tab = 0) const;
     mu::PointF stemDownNW() const;
     mu::PointF stemUpSE() const;
-    qreal bboxXShift() const;
-    qreal noteheadCenterX() const;
-    qreal bboxRightPos() const;
-    qreal headBodyWidth() const;
-    qreal outsideTieAttachX(bool up) const;
+    double bboxXShift() const;
+    double noteheadCenterX() const;
+    double bboxRightPos() const;
+    double headBodyWidth() const;
+    double outsideTieAttachX(bool up) const;
 
     NoteHeadScheme headScheme() const { return _headScheme; }
     void updateHeadGroup(const NoteHeadGroup headGroup);
@@ -336,8 +336,8 @@ public:
     int epitch() const;             ///< effective pitch
     int octave() const;
     int playingOctave() const;
-    qreal tuning() const { return _tuning; }
-    void setTuning(qreal v) { _tuning = v; }
+    double tuning() const { return _tuning; }
+    void setTuning(double v) { _tuning = v; }
     void undoSetTpc(int v);
     int transposition() const;
     bool fixed() const { return _fixed; }
@@ -485,7 +485,7 @@ public:
 
     void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 
-    void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;

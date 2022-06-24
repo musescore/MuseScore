@@ -779,7 +779,7 @@ const InstrChannel* Part::harmonyChannel() const
     }
 
     const InstrChannel* chan = instr->channel(chanIdx);
-    Q_ASSERT(chan);
+    assert(chan);
     return chan;
 }
 

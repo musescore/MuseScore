@@ -46,7 +46,7 @@ class Page;
 class Fermata final : public EngravingItem
 {
     SymId _symId;
-    qreal _timeStretch;
+    double _timeStretch;
     bool _play;
 
     friend class Factory;
@@ -62,7 +62,7 @@ public:
 
     Fermata* clone() const override { return new Fermata(*this); }
 
-    qreal mag() const override;
+    double mag() const override;
 
     SymId symId() const { return _symId; }
     void setSymId(SymId id) { _symId  = id; }
@@ -89,8 +89,8 @@ public:
     System* system() const;
     Page* page() const;
 
-    qreal timeStretch() const { return _timeStretch; }
-    void setTimeStretch(qreal val) { _timeStretch = val; }
+    double timeStretch() const { return _timeStretch; }
+    void setTimeStretch(double val) { _timeStretch = val; }
 
     bool play() const { return _play; }
     void setPlay(bool val) { _play = val; }

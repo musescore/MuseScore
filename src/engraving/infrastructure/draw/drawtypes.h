@@ -22,7 +22,6 @@
 #ifndef MU_DRAW_DRAWTYPES_H
 #define MU_DRAW_DRAWTYPES_H
 
-#include <QVariant>
 #include "geometry.h"
 
 namespace mu::draw {
@@ -80,6 +79,11 @@ enum class BrushStyle { // brush style
     RadialGradientPattern,
     ConicalGradientPattern,
     TexturePattern = 24
+};
+
+enum class FillRule {
+    OddEvenFill,
+    WindingFill
 };
 }
 

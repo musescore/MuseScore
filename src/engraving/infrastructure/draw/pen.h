@@ -145,7 +145,7 @@ public:
         QPen p(pen.m_color.toQColor(), pen.m_width, static_cast<Qt::PenStyle>(pen.m_style),
                static_cast<Qt::PenCapStyle>(pen.m_capStyle),
                static_cast<Qt::PenJoinStyle>(pen.m_joinStyle));
-        p.setDashPattern(QVector<qreal>(pen.m_dashPattern.cbegin(), pen.m_dashPattern.cend()));
+        p.setDashPattern(QVector<double>(pen.m_dashPattern.cbegin(), pen.m_dashPattern.cend()));
         return p;
     }
 

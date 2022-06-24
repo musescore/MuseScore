@@ -48,7 +48,7 @@ void RhythmicGroupingTests::group(const char* p1, const char* p2, size_t staves)
         score->cmdSelectAll();
         score->cmdResetNoteAndRestGroupings();
     } else {
-        Q_ASSERT(staves < score->nstaves());
+        assert(staves < score->nstaves());
         score->startCmd();
         for (size_t track = 0; track < staves * VOICES; track++) {
             score->regroupNotesAndRests(score->firstSegment(SegmentType::All)->tick(),

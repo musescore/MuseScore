@@ -33,17 +33,17 @@ using namespace mu::engraving;
 //    Returns a modified pair of stem lengths of two chords
 //---------------------------------------------------------
 
-std::pair<qreal, qreal> LayoutTremolo::extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, qreal stemLen1, qreal stemLen2)
+std::pair<double, double> LayoutTremolo::extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, double stemLen1, double stemLen2)
 {
-    const qreal spatium = tremolo->spatium();
+    const double spatium = tremolo->spatium();
     Chord* c1 = tremolo->chord1();
     Chord* c2 = tremolo->chord2();
     Stem* s1 = c1->stem();
     Stem* s2 = c2->stem();
-    const qreal sgn1 = c1->up() ? -1.0 : 1.0;
-    const qreal sgn2 = c2->up() ? -1.0 : 1.0;
-    const qreal stemTipDistance = (s1 && s2) ? (s2->pagePos().y() + stemLen2) - (s1->pagePos().y() + stemLen1)
-                                  : (c2->stemPos().y() + stemLen2) - (c1->stemPos().y() + stemLen1);
+    const double sgn1 = c1->up() ? -1.0 : 1.0;
+    const double sgn2 = c2->up() ? -1.0 : 1.0;
+    const double stemTipDistance = (s1 && s2) ? (s2->pagePos().y() + stemLen2) - (s1->pagePos().y() + stemLen1)
+                                   : (c2->stemPos().y() + stemLen2) - (c1->stemPos().y() + stemLen1);
 
     // same staff & same direction: extend one of the stems
     if (c1->staffMove() == c2->staffMove() && c1->up() == c2->up()) {

@@ -159,7 +159,7 @@ void MasterScore::rebuildExcerptsMidiMapping()
                 LOGW() << "rebuildExcerptsMidiMapping: no part in master score is linked with " << p->partName();
                 continue;
             }
-            Q_ASSERT(p->instruments().size() == masterPart->instruments().size());
+            assert(p->instruments().size() == masterPart->instruments().size());
             for (const auto [tick, iMaster] : masterPart->instruments()) {
                 Instrument* iLocal = p->instrument(Fraction::fromTicks(tick));
                 const size_t nchannels = iMaster->channel().size();

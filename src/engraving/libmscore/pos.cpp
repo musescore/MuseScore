@@ -302,7 +302,7 @@ unsigned Pos::tick() const
 unsigned Pos::frame() const
 {
     if (_type == TType::TICKS) {
-        // qreal time = _frame / MScore::sampleRate;
+        // double time = _frame / MScore::sampleRate;
         // _frame = tempo->tick2time(_tick, time, &sn) * MScore::sampleRate;
         _frame = tempo->tick2time(_tick) * MScore::sampleRate;
     }

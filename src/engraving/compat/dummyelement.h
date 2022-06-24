@@ -23,7 +23,6 @@
 #define MU_ENGRAVING_DUMMYELEMENT_H
 
 #include <list>
-#include <QVariant>
 #include "libmscore/engravingitem.h"
 
 namespace mu::engraving {

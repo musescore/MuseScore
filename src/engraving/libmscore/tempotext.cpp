@@ -110,7 +110,7 @@ void TempoText::read(XmlReader& e)
     }
 }
 
-qreal TempoText::tempoBpm() const
+double TempoText::tempoBpm() const
 {
     //! NOTE: find tempo in format " = 180"
     std::regex regex("\\s*=\\s*(\\d+[.]{0,1}\\d*)");
@@ -121,7 +121,7 @@ qreal TempoText::tempoBpm() const
         return 0;
     }
 
-    qreal tempo = String::fromStdString(match[1].str()).toDouble();
+    double tempo = String::fromStdString(match[1].str()).toDouble();
     return tempo;
 }
 
@@ -131,9 +131,9 @@ qreal TempoText::tempoBpm() const
 
 struct TempoPattern {
     const char* pattern;
-    qreal f;
+    double f;
     TDuration d;
-    TempoPattern(const char* s, qreal v, DurationType val, int dots = 0)
+    TempoPattern(const char* s, double v, DurationType val, int dots = 0)
         : pattern(s), f(v), d(val)
     {
         d.setDots(dots);
@@ -361,7 +361,7 @@ void TempoText::setTempo(BeatsPerSecond v)
 //   undoSetTempo
 //---------------------------------------------------------
 
-void TempoText::undoSetTempo(qreal v)
+void TempoText::undoSetTempo(double v)
 {
     undoChangeProperty(Pid::TEMPO, v, propertyFlags(Pid::TEMPO));
 }

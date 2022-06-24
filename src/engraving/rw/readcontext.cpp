@@ -93,7 +93,7 @@ int ReadContext::fileDivision(int t) const
     return m_score->fileDivision(t);
 }
 
-qreal ReadContext::spatium() const
+double ReadContext::spatium() const
 {
     return m_score->spatium();
 }
@@ -276,7 +276,7 @@ void ReadContext::setLocation(const Location& l)
     setTrack(l.track() - _trackOffset);
     setTick(l.frac() - _tickOffset);
     if (!pasteMode()) {
-        Q_ASSERT(l.measure() == currentMeasureIndex());
+        assert(l.measure() == currentMeasureIndex());
         incTick(currentMeasure()->tick());
     }
 }

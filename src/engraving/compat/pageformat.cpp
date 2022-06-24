@@ -42,18 +42,18 @@ namespace mu::engraving::compat {
 
 void PageFormat::read206(XmlReader& e)
 {
-    qreal _oddRightMargin  = 0.0;
-    qreal _evenRightMargin = 0.0;
+    double _oddRightMargin  = 0.0;
+    double _evenRightMargin = 0.0;
     AsciiStringView type;
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "page-margins") {
             type = e.asciiAttribute("type", "both");
-            qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
+            double lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
-                qreal val = e.readDouble() * 0.5 / PPI;
+                double val = e.readDouble() * 0.5 / PPI;
                 if (t == "left-margin") {
                     lm = val;
                 } else if (t == "right-margin") {
@@ -87,8 +87,8 @@ void PageFormat::read206(XmlReader& e)
             e.unknown();
         }
     }
-    qreal w1        = _size.width() - _oddLeftMargin - _oddRightMargin;
-    qreal w2        = _size.width() - _evenLeftMargin - _evenRightMargin;
+    double w1        = _size.width() - _oddLeftMargin - _oddRightMargin;
+    double w2        = _size.width() - _evenLeftMargin - _evenRightMargin;
     _printableWidth = qMin(w1, w2);       // silently adjust right margins
 }
 

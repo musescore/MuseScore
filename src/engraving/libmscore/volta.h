@@ -102,6 +102,8 @@ public:
 };
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::Volta::Type);
+#endif
 
 #endif

@@ -70,7 +70,7 @@ void SlurSegment::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
     Pen pen(curColor());
-    qreal mag = staff() ? staff()->staffMag(slur()->tick()) : 1.0;
+    double mag = staff() ? staff()->staffMag(slur()->tick()) : 1.0;
 
     //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with tie.cpp)
     std::vector<double> dotted     = { 0.01, 1.99 };   // tighter than Qt PenStyle::DotLine equivalent - would be { 0.01, 2.99 }
@@ -309,18 +309,18 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
 //---------------------------------------------------------
 void SlurSegment::adjustEndpoints()
 {
-    const qreal staffLineMargin = 0.15;
+    const double staffLineMargin = 0.15;
     PointF p1 = ups(Grip::START).p;
     PointF p2 = ups(Grip::END).p;
 
-    qreal y1sp = p1.y() / spatium();
-    qreal y2sp = p2.y() / spatium();
+    double y1sp = p1.y() / spatium();
+    double y2sp = p2.y() / spatium();
 
     // point 1
     int lines = staff()->lines(tick());
-    auto adjustPoint = [staffLineMargin](bool up, qreal ysp) {
-        qreal y1offset = ysp - floor(ysp);
-        qreal adjust = 0;
+    auto adjustPoint = [staffLineMargin](bool up, double ysp) {
+        double y1offset = ysp - floor(ysp);
+        double adjust = 0;
         if (up) {
             if (y1offset < staffLineMargin) {
                 // endpoint too close to the line above
@@ -356,9 +356,9 @@ void SlurSegment::adjustEndpoints()
 
 void SlurSegment::computeBezier(mu::PointF p6o)
 {
-    qreal _spatium  = spatium();
-    qreal shoulderW;                // height as fraction of slur-length
-    qreal shoulderH;
+    double _spatium  = spatium();
+    double shoulderW;                // height as fraction of slur-length
+    double shoulderH;
     if (autoplace()) {
         adjustEndpoints();
     }
@@ -379,19 +379,19 @@ void SlurSegment::computeBezier(mu::PointF p6o)
     }
     pp1 = ups(Grip::START).p + ups(Grip::START).off;
     pp2 = ups(Grip::END).p + ups(Grip::END).off;
-    qreal sinb = atan(p2.y() / p2.x());
+    double sinb = atan(p2.y() / p2.x());
     Transform t;
     t.rotateRadians(-sinb);
     p2  = t.map(p2);
     p6o = t.map(p6o);
 
     double smallH = 0.5;
-    qreal d = p2.x() / _spatium;
+    double d = p2.x() / _spatium;
     if (d <= 2.0) {
         shoulderH = d * 0.5 * smallH * _spatium;
         shoulderW = .6;
     } else {
-        qreal dd = log10(1.0 + (d - 2.0) * .5) * 2.0;
+        double dd = log10(1.0 + (d - 2.0) * .5) * 2.0;
         if (dd > 3.0) {
             dd = 3.0;
         }
@@ -411,16 +411,16 @@ void SlurSegment::computeBezier(mu::PointF p6o)
         shoulderH = -shoulderH;
     }
 
-    qreal c    = p2.x();
-    qreal c1   = (c - c * shoulderW) * .5 + p6o.x();
-    qreal c2   = c1 + c * shoulderW + p6o.x();
+    double c    = p2.x();
+    double c1   = (c - c * shoulderW) * .5 + p6o.x();
+    double c2   = c1 + c * shoulderW + p6o.x();
 
     PointF p5 = PointF(c * .5, 0.0);
 
     PointF p3(c1, -shoulderH);
     PointF p4(c2, -shoulderH);
 
-    qreal w = score()->styleMM(Sid::SlurMidWidth) - score()->styleMM(Sid::SlurEndWidth);
+    double w = score()->styleMM(Sid::SlurMidWidth) - score()->styleMM(Sid::SlurEndWidth);
     if (staff()) {
         w *= staff()->staffMag(slur()->tick());
     }
@@ -443,7 +443,7 @@ void SlurSegment::computeBezier(mu::PointF p6o)
     PointF pp4  = p4 + p4o;
     PointF ppp4 = pp4 - pp3;
 
-    qreal r2 = atan(ppp4.y() / ppp4.x());
+    double r2 = atan(ppp4.y() / ppp4.x());
     t.reset();
     t.rotateRadians(-r2);
     PointF p6  = PointF(t.map(ppp4).x() * .5, 0.0);
@@ -480,13 +480,13 @@ void SlurSegment::computeBezier(mu::PointF p6o)
     _shape.clear();
     PointF start = pp1;
     int nbShapes  = 32;    // (pp2.x() - pp1.x()) / _spatium;
-    qreal minH    = qAbs(3 * w);
+    double minH    = qAbs(3 * w);
     const CubicBezier b(pp1, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {
         const PointF point = b.pointAtPercent(i / float(nbShapes));
         RectF re     = RectF(start, point).normalized();
         if (re.height() < minH) {
-            qreal d1 = (minH - re.height()) * .5;
+            double d1 = (minH - re.height()) * .5;
             re.adjust(0.0, -d1, 0.0, d1);
         }
         _shape.add(re);
@@ -520,9 +520,9 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
     computeBezier();
 
     if (autoplace() && system()) {
-        const qreal maxHeightAdjust = 4 * spatium();
-        const qreal maxEndpointAdjust = 3 * spatium();
-        const qreal slurEndSectionPercent = 0.3;
+        const double maxHeightAdjust = 4 * spatium();
+        const double maxEndpointAdjust = 3 * spatium();
+        const double slurEndSectionPercent = 0.3;
 
         bool up = slur()->up();
         Segment* ls = system()->lastMeasure()->last();
@@ -531,14 +531,14 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
         Segment* es = slur()->endSegment();
         PointF pp1 = ups(Grip::START).p;
         PointF pp2 = ups(Grip::END).p;
-        qreal slurWidth = pp2.x() - pp1.x();
-        qreal midpointDist = 0.0;
-        qreal end1Dist = 0.0;
-        qreal end2Dist = 0.0;
-        qreal segRelativeX = 0.0;
+        double slurWidth = pp2.x() - pp1.x();
+        double midpointDist = 0.0;
+        double end1Dist = 0.0;
+        double end2Dist = 0.0;
+        double segRelativeX = 0.0;
         bool intersection = false;
         bool adjusted[3] = { false, false, false };
-        const qreal collisionMargin = 0.5 * spatium();
+        const double collisionMargin = 0.5 * spatium();
         for (int tries = 0; tries < 3; ++tries) {
             intersection = false;
             end1Dist = end2Dist = midpointDist = 0.0;
@@ -559,8 +559,8 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
                 if (s->segmentType() & SegmentType::BarLineType) {
                     continue;
                 }
-                qreal x1 = s->x() + s->measure()->x();
-                qreal x2 = x1 + s->width();
+                double x1 = s->x() + s->measure()->x();
+                double x2 = x1 + s->width();
                 if (pp1.x() > x2) {
                     continue;
                 }
@@ -573,7 +573,7 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
                 if (segShape.intersects(_shape)) {
                     intersection = true;
 
-                    qreal dist = 0.0;
+                    double dist = 0.0;
                     if (up) {
                         dist = _shape.minVerticalDistance(segShape) + collisionMargin;
                         dist += (y() - s->y()) / 1.5;
@@ -598,7 +598,7 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
             if (!intersection) {
                 break;
             }
-            qreal maxDist = qMax(qMax(end1Dist, end2Dist), midpointDist);
+            double maxDist = qMax(qMax(end1Dist, end2Dist), midpointDist);
             // find the worst collision:
             if (maxDist == end1Dist) {
                 // move first endpoint
@@ -680,7 +680,7 @@ Slur::Slur(const Slur& s)
 //   fixArticulations
 //---------------------------------------------------------
 
-static void fixArticulations(PointF& pt, Chord* c, qreal _up, bool stemSide = false)
+static void fixArticulations(PointF& pt, Chord* c, double _up, bool stemSide = false)
 {
     //
     // handle special case of tenuto and staccato
@@ -726,9 +726,9 @@ void Slur::slurPosChord(SlurPos* sp)
     }
     Note* _startNote = stChord->downNote();
     Note* _endNote   = enChord->downNote();
-    qreal hw         = _startNote->bboxRightPos();
-    qreal __up       = _up ? -1.0 : 1.0;
-    qreal _spatium = spatium();
+    double hw         = _startNote->bboxRightPos();
+    double __up       = _up ? -1.0 : 1.0;
+    double _spatium = spatium();
 
     Measure* measure = endChord()->measure();
     sp->system1 = measure->system();
@@ -736,12 +736,12 @@ void Slur::slurPosChord(SlurPos* sp)
         LOGD("no system1");
         return;
     }
-    Q_ASSERT(sp->system1);
+    assert(sp->system1);
     sp->system2 = sp->system1;
     PointF pp(sp->system1->pagePos());
 
-    qreal xo;
-    qreal yo;
+    double xo;
+    double yo;
 
     //------p1
     if (_up) {
@@ -772,12 +772,12 @@ void Slur::slurPosChord(SlurPos* sp)
 
 void Slur::slurPos(SlurPos* sp)
 {
-    qreal _spatium = spatium();
-    const qreal stemSideInset = 0.5;
-    const qreal beamClearance = 0.5;
-    const qreal hookClearanceX = 0.3;
-    const qreal beamAnchorInset = 0.15;
-    const qreal straightStemXOffset = 0.5; // how far down a straight stem a slur attaches (percent)
+    double _spatium = spatium();
+    const double stemSideInset = 0.5;
+    const double beamClearance = 0.5;
+    const double hookClearanceX = 0.3;
+    const double beamAnchorInset = 0.15;
+    const double straightStemXOffset = 0.5; // how far down a straight stem a slur attaches (percent)
     // hack alert!! -- fakeCutout
     // The fakeCutout const describes the slope of a line from the top of the stem to the full width of the hook.
     // this is necessary because hooks don't have SMuFL cutouts
@@ -785,7 +785,7 @@ void Slur::slurPos(SlurPos* sp)
     // so we need to adjust the slope of our hook-avoidance line. this will be unnecessary when hooks have
     // SMuFL anchors
     bool bulkyHook = score()->scoreFont()->family() == "Gonville" || score()->scoreFont()->family() == "MuseJazz";
-    const qreal fakeCutoutSlope = bulkyHook ? 1.5 : 1.0;
+    const double fakeCutoutSlope = bulkyHook ? 1.5 : 1.0;
 
     if (endCR() == 0) {
         sp->p1 = startCR()->pagePos();
@@ -834,11 +834,11 @@ void Slur::slurPos(SlurPos* sp)
 
     // adjust for cross-staff
     if (scr->vStaffIdx() != vStaffIdx() && sp->system1) {
-        qreal diff = sp->system1->staff(scr->vStaffIdx())->y() - sp->system1->staff(vStaffIdx())->y();
+        double diff = sp->system1->staff(scr->vStaffIdx())->y() - sp->system1->staff(vStaffIdx())->y();
         sp->p1.ry() += diff;
     }
     if (ecr->vStaffIdx() != vStaffIdx() && sp->system2) {
-        qreal diff = sp->system2->staff(ecr->vStaffIdx())->y() - sp->system2->staff(vStaffIdx())->y();
+        double diff = sp->system2->staff(ecr->vStaffIdx())->y() - sp->system2->staff(vStaffIdx())->y();
         sp->p2.ry() += diff;
     }
 
@@ -870,9 +870,9 @@ void Slur::slurPos(SlurPos* sp)
         }
     }
 
-    qreal __up = _up ? -1.0 : 1.0;
-    qreal hw1 = note1 ? note1->tabHeadWidth(stt) : scr->width();        // if stt == 0, tabHeadWidth()
-    qreal hw2 = note2 ? note2->tabHeadWidth(stt) : ecr->width();        // defaults to headWidth()
+    double __up = _up ? -1.0 : 1.0;
+    double hw1 = note1 ? note1->tabHeadWidth(stt) : scr->width();        // if stt == 0, tabHeadWidth()
+    double hw2 = note2 ? note2->tabHeadWidth(stt) : ecr->width();        // defaults to headWidth()
     PointF pt;
     switch (sa1) {
     case SlurAnchor::STEM:                //sc can't be null
@@ -885,13 +885,13 @@ void Slur::slurPos(SlurPos* sp)
         // clear the stem (x)
         // allow slight overlap (y)
         // don't allow overlap with hook if not disabling the autoplace checks against start/end segments in SlurSegment::layoutSegment()
-        qreal yadj = -stemSideInset;
+        double yadj = -stemSideInset;
         yadj *= _spatium * __up;
         pt += PointF(0.35 * _spatium, yadj);
         // account for articulations
         fixArticulations(pt, sc, __up, true);
         // adjust for hook
-        qreal fakeCutout = 0.0;
+        double fakeCutout = 0.0;
         if (!score()->styleB(Sid::useStraightNoteFlags)) {
             // regular flags
             if (sc->hook() && sc->hook()->bbox().translated(sc->hook()->pos()).contains(pt)) {
@@ -926,7 +926,7 @@ void Slur::slurPos(SlurPos* sp)
             pt.rx() = hw2 * 0.5;
         }
         // don't allow overlap with beam
-        qreal yadj;
+        double yadj;
         if (ec->beam() && ec->beam()->elements().front() != ec) {
             yadj = 0.75;
         } else {
@@ -976,8 +976,8 @@ void Slur::slurPos(SlurPos* sp)
                 // and slur direction is same as start chord (stem side)
 
                 // in these cases, layout start of slur to stem
-                qreal beamWidthSp = score()->styleS(Sid::beamWidth).val() * beam1->mag();
-                qreal sh = stem1->height() + ((beamWidthSp / 2 + beamClearance) * _spatium);
+                double beamWidthSp = score()->styleS(Sid::beamWidth).val() * beam1->mag();
+                double sh = stem1->height() + ((beamWidthSp / 2 + beamClearance) * _spatium);
                 if (_up) {
                     po.ry() = sc->downNote()->pos().y() - sh;
                 } else {
@@ -1024,11 +1024,11 @@ void Slur::slurPos(SlurPos* sp)
                     }
 
                     // differential in note positions
-                    qreal yd  = (n2 ? n2->pos().y() : ecr->pos().y()) - n1->pos().y();
+                    double yd  = (n2 ? n2->pos().y() : ecr->pos().y()) - n1->pos().y();
                     yd *= .5;
 
                     // float along stem according to differential
-                    qreal sh = stem1->height();
+                    double sh = stem1->height();
                     if (_up && yd < 0.0) {
                         po.ry() = qMax(po.y() + yd, sc->downNote()->pos().y() - sh - _spatium);
                     } else if (!_up && yd > 0.0) {
@@ -1093,8 +1093,8 @@ void Slur::slurPos(SlurPos* sp)
                     // and start chordrest is not a grace chord
 
                     // in these cases, layout end of slur to stem
-                    qreal beamWidthSp = beam2 ? score()->styleS(Sid::beamWidth).val() * beam2->mag() : 0;
-                    qreal sh = stem2->height() + ((beamClearance + (beamWidthSp / 2)) * _spatium);
+                    double beamWidthSp = beam2 ? score()->styleS(Sid::beamWidth).val() * beam2->mag() : 0;
+                    double sh = stem2->height() + ((beamClearance + (beamWidthSp / 2)) * _spatium);
                     if (_up) {
                         po.ry() = ec->downNote()->pos().y() - sh;
                     } else {
@@ -1134,10 +1134,10 @@ void Slur::slurPos(SlurPos* sp)
                         }
                         Note* n2 = ec->up() ? ec->upNote() : ec->downNote();
 
-                        qreal yd = n2->pos().y() - (n1 ? n1->pos().y() : startCR()->pos().y());
+                        double yd = n2->pos().y() - (n1 ? n1->pos().y() : startCR()->pos().y());
                         yd *= .5;
 
-                        qreal mh = stem2->height();
+                        double mh = stem2->height();
                         if (_up && yd > 0.0) {
                             po.ry() = qMax(po.y() - yd, ec->downNote()->pos().y() - mh - _spatium);
                         } else if (!_up && yd < 0.0) {
@@ -1255,10 +1255,10 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 
 SpannerSegment* Slur::layoutSystem(System* system)
 {
-    const qreal horizontalTieClearance = 0.35 * spatium();
-    const qreal tieClearance = 0.65 * spatium();
-    const qreal continuedSlurOffsetY = spatium() * .4;
-    const qreal continuedSlurMaxDiff = 2.5 * spatium();
+    const double horizontalTieClearance = 0.35 * spatium();
+    const double tieClearance = 0.65 * spatium();
+    const double continuedSlurOffsetY = spatium() * .4;
+    const double continuedSlurMaxDiff = 2.5 * spatium();
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
@@ -1390,7 +1390,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
     } else if (sst == SpannerSegmentType::END || sst == SpannerSegmentType::MIDDLE) {
         // beginning of system
         ChordRest* firstCr = system->firstChordRest(track());
-        qreal y = p1.y();
+        double y = p1.y();
         if (firstCr && firstCr == endCR()) {
             constrainLeftAnchor = true;
         }
@@ -1401,7 +1401,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                 Note* upNote = chord->upNote();
                 Note* downNote = chord->downNote();
                 // account for only the stem length that is above the top note (or below the bottom note)
-                qreal stemLength = chord->stem() ? chord->stem()->length() - (downNote->pos().y() - upNote->pos().y()) : 0.0;
+                double stemLength = chord->stem() ? chord->stem()->length() - (downNote->pos().y() - upNote->pos().y()) : 0.0;
                 if (_up) {
                     y = chord->upNote()->pos().y() - (chord->upNote()->height() / 2);
                     if (chord->up() && chord->stem() && firstCr != endCR()) {
@@ -1480,7 +1480,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
     } else {
         // at end of system
         ChordRest* lastCr = system->lastChordRest(track());
-        qreal y = p1.y();
+        double y = p1.y();
         if (lastCr && lastCr == startCR()) {
             y += 0.25 * spatium() * (_up ? -1 : 1);
         } else if (lastCr && lastCr->isChord()) {
@@ -1489,7 +1489,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                 Note* upNote = chord->upNote();
                 Note* downNote = chord->downNote();
                 // account for only the stem length that is above the top note (or below the bottom note)
-                qreal stemLength = chord->stem() ? chord->stem()->length() - (downNote->pos().y() - upNote->pos().y()) : 0.0;
+                double stemLength = chord->stem() ? chord->stem()->length() - (downNote->pos().y() - upNote->pos().y()) : 0.0;
                 if (_up) {
                     y = chord->upNote()->pos().y() - (chord->upNote()->height() / 2);
                     if (chord->up() && chord->stem()) {
@@ -1503,7 +1503,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                 }
                 y += continuedSlurOffsetY * (_up ? -1 : 1);
             }
-            qreal diff = _up ? y - p1.y() : p1.y() - y;
+            double diff = _up ? y - p1.y() : p1.y() - y;
             if (diff > continuedSlurMaxDiff) {
                 y = p1.y() + (y > p1.y() ? continuedSlurMaxDiff : -continuedSlurMaxDiff);
             }
@@ -1556,7 +1556,7 @@ void Slur::layout()
         setTrack2(track());
     }
 
-    qreal _spatium = spatium();
+    double _spatium = spatium();
 
     if (score()->isPaletteScore() || tick() == Fraction(-1, 1)) {
         //
@@ -1682,21 +1682,21 @@ void Slur::layout()
         // case 2: start segment
         else if (i == 0) {
             segment->setSpannerSegmentType(SpannerSegmentType::BEGIN);
-            qreal x = system->bbox().width();
+            double x = system->bbox().width();
             segment->layoutSegment(sPos.p1, PointF(x, sPos.p1.y()));
         }
         // case 3: middle segment
         else if (i != 0 && system != sPos.system2) {
             segment->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
-            qreal x1 = system->firstNoteRestSegmentX(true);
-            qreal x2 = system->bbox().width();
-            qreal y  = staffIdx() > system->staves().size() ? system->y() : system->staff(staffIdx())->y();
+            double x1 = system->firstNoteRestSegmentX(true);
+            double x2 = system->bbox().width();
+            double y  = staffIdx() > system->staves().size() ? system->y() : system->staff(staffIdx())->y();
             segment->layoutSegment(PointF(x1, y), PointF(x2, y));
         }
         // case 4: end segment
         else {
             segment->setSpannerSegmentType(SpannerSegmentType::END);
-            qreal x = system->firstNoteRestSegmentX(true);
+            double x = system->firstNoteRestSegmentX(true);
             segment->layoutSegment(PointF(x, sPos.p2.y()), sPos.p2);
         }
         if (system == sPos.system2) {

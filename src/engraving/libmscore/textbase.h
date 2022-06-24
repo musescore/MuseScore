@@ -74,8 +74,8 @@ class CharFormat
 {
     FontStyle _style          { FontStyle::Normal };
     VerticalAlignment _valign { VerticalAlignment::AlignNormal };
-    qreal _fontSize           { 12.0 };
-    qreal _textLineSpacing    { 1.0 };
+    double _fontSize           { 12.0 };
+    double _textLineSpacing    { 1.0 };
     String _fontFamily;
 
 public:
@@ -94,12 +94,12 @@ public:
     void setStrike(bool val) { _style = val ? _style + FontStyle::Strike : _style - FontStyle::Strike; }
 
     VerticalAlignment valign() const { return _valign; }
-    qreal fontSize() const { return _fontSize; }
+    double fontSize() const { return _fontSize; }
     String fontFamily() const { return _fontFamily; }
     void setValign(VerticalAlignment val) { _valign = val; }
-    void setFontSize(qreal val) { _fontSize = val; }
+    void setFontSize(double val) { _fontSize = val; }
     void setFontFamily(const String& val) { _fontFamily = val; }
-    void setTextLineSpacing(qreal val) { _textLineSpacing = val; }
+    void setTextLineSpacing(double val) { _textLineSpacing = val; }
 
     QVariant formatValue(FormatId) const;
     void setFormatValue(FormatId, QVariant);
@@ -228,8 +228,8 @@ public:
 class TextBlock
 {
     std::list<TextFragment> _fragments;
-    qreal _y = 0;
-    qreal _lineSpacing = 0.0;
+    double _y = 0;
+    double _lineSpacing = 0.0;
     mu::RectF _bbox;
     bool _eol = false;
 
@@ -252,15 +252,15 @@ public:
     void removeEmptyFragment();
     String remove(int column, TextCursor*);
     String remove(int start, int n, TextCursor*);
-    int column(qreal x, TextBase*) const;
+    int column(double x, TextBase*) const;
     TextBlock split(int column, TextCursor* cursor);
-    qreal xpos(size_t col, const TextBase*) const;
+    double xpos(size_t col, const TextBase*) const;
     const CharFormat* formatAt(int) const;
     const TextFragment* fragment(int col) const;
     std::list<TextFragment>::iterator fragment(int column, int* rcol, int* ridx);
-    qreal y() const { return _y; }
-    void setY(qreal val) { _y = val; }
-    qreal lineSpacing() const { return _lineSpacing; }
+    double y() const { return _y; }
+    void setY(double val) { _y = val; }
+    double lineSpacing() const { return _lineSpacing; }
     String text(int, int, bool = false) const;
     bool eol() const { return _eol; }
     void setEol(bool val) { _eol = val; }
@@ -275,7 +275,7 @@ class TextBase : public EngravingItem
 {
     // sorted by size to allow for most compact memory layout
     M_PROPERTY(FrameType,  frameType,              setFrameType)
-    M_PROPERTY(qreal,      textLineSpacing,        setTextLineSpacing)
+    M_PROPERTY(double,      textLineSpacing,        setTextLineSpacing)
     M_PROPERTY(mu::draw::Color,      bgColor,                setBgColor)
     M_PROPERTY(mu::draw::Color,      frameColor,             setFrameColor)
     M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)
@@ -308,7 +308,7 @@ class TextBase : public EngravingItem
     String stripText(bool, bool, bool) const;
     Sid offsetSid() const;
 
-    static String getHtmlStartTag(qreal, qreal&, const String&, String&, FontStyle, VerticalAlignment);
+    static String getHtmlStartTag(double, double&, const String&, String&, FontStyle, VerticalAlignment);
     static String getHtmlEndTag(FontStyle, VerticalAlignment);
 
     AccessibleItem* createAccessible() override;
@@ -345,7 +345,7 @@ public:
     Text& operator=(const Text&) = delete;
 
     virtual void draw(mu::draw::Painter*) const override;
-    virtual void drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling) override;
+    virtual void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
     static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const String& text);
 
     Align align() const { return _align; }
@@ -363,20 +363,20 @@ public:
 
     virtual void layout() override;
     virtual void layout1();
-    qreal lineSpacing() const;
-    qreal lineHeight() const;
-    virtual qreal baseLine() const override;
+    double lineSpacing() const;
+    double lineHeight() const;
+    virtual double baseLine() const override;
 
     bool empty() const { return xmlText().isEmpty(); }
     void clear() { setXmlText(String()); }
 
     FontStyle fontStyle() const;
     String family() const;
-    qreal size() const;
+    double size() const;
 
     void setFontStyle(const FontStyle& val);
     void setFamily(const String& val);
-    void setSize(const qreal& val);
+    void setSize(const double& val);
 
     bool layoutToParentWidth() const { return _layoutToParentWidth; }
     void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v; }

@@ -77,7 +77,7 @@ String Arpeggio::arpeggioTypeName() const
 //   setHeight
 //---------------------------------------------------------
 
-void Arpeggio::setHeight(qreal h)
+void Arpeggio::setHeight(double h)
 {
     _height = h;
 }
@@ -141,15 +141,15 @@ void Arpeggio::read(XmlReader& e)
 
 void Arpeggio::symbolLine(SymId end, SymId fill)
 {
-    qreal top = calcTop();
-    qreal bottom = calcBottom();
-    qreal w   = bottom - top;
-    qreal mag = magS();
+    double top = calcTop();
+    double bottom = calcBottom();
+    double w   = bottom - top;
+    double mag = magS();
     ScoreFont* f = score()->scoreFont();
 
     symbols.clear();
-    qreal w1 = f->advance(end, mag);
-    qreal w2 = f->advance(fill, mag);
+    double w1 = f->advance(end, mag);
+    double w2 = f->advance(fill, mag);
     int n    = lrint((w - w1) / w2);
     for (int i = 0; i < n; ++i) {
         symbols.push_back(fill);
@@ -161,15 +161,15 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
 //   calcTop
 //---------------------------------------------------------
 
-qreal Arpeggio::calcTop() const
+double Arpeggio::calcTop() const
 {
-    qreal top = -_userLen1;
+    double top = -_userLen1;
     if (!explicitParent()) {
         return top;
     }
     switch (arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        qreal lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
+        double lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
         return top - lineWidth / 2.0;
     }
     case ArpeggioType::NORMAL:
@@ -200,16 +200,16 @@ qreal Arpeggio::calcTop() const
 //   calcBottom
 //---------------------------------------------------------
 
-qreal Arpeggio::calcBottom() const
+double Arpeggio::calcBottom() const
 {
-    qreal top = -_userLen1;
-    qreal bottom = _height + _userLen2;
+    double top = -_userLen1;
+    double bottom = _height + _userLen2;
     if (!explicitParent()) {
         return bottom;
     }
     switch (arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        qreal lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
+        double lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
         return bottom - top + lineWidth;
     }
     case ArpeggioType::NORMAL:
@@ -229,8 +229,8 @@ qreal Arpeggio::calcBottom() const
 
 void Arpeggio::layout()
 {
-    qreal top = calcTop();
-    qreal bottom = calcBottom();
+    double top = calcTop();
+    double bottom = calcBottom();
     if (score()->styleB(Sid::ArpeggioHiddenInStdIfTab)) {
         if (staff() && staff()->isPitchedStaff(tick())) {
             for (Staff* s : staff()->staffList()) {
@@ -270,24 +270,24 @@ void Arpeggio::layout()
     break;
 
     case ArpeggioType::UP_STRAIGHT: {
-        qreal _spatium = spatium();
-        qreal x1 = _spatium * .5;
-        qreal w  = symBbox(SymId::arrowheadBlackUp).width();
+        double _spatium = spatium();
+        double x1 = _spatium * .5;
+        double w  = symBbox(SymId::arrowheadBlackUp).width();
         setbbox(RectF(x1 - w * .5, top, w, bottom));
     }
     break;
 
     case ArpeggioType::DOWN_STRAIGHT: {
-        qreal _spatium = spatium();
-        qreal x1 = _spatium * .5;
-        qreal w  = symBbox(SymId::arrowheadBlackDown).width();
+        double _spatium = spatium();
+        double x1 = _spatium * .5;
+        double w  = symBbox(SymId::arrowheadBlackDown).width();
         setbbox(RectF(x1 - w * .5, top, w, bottom));
     }
     break;
 
     case ArpeggioType::BRACKET: {
-        qreal _spatium = spatium();
-        qreal w  = score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
+        double _spatium = spatium();
+        double w  = score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
         setbbox(RectF(0.0, top, w, bottom));
         break;
     }
@@ -303,12 +303,12 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
 
-    qreal _spatium = spatium();
+    double _spatium = spatium();
 
-    qreal y1 = _bbox.top();
-    qreal y2 = _bbox.bottom();
+    double y1 = _bbox.top();
+    double y2 = _bbox.bottom();
 
-    qreal lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
+    double lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
 
     painter->setPen(Pen(curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->save();
@@ -334,7 +334,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     case ArpeggioType::UP_STRAIGHT:
     {
         RectF r(symBbox(SymId::arrowheadBlackUp));
-        qreal x1 = _spatium * .5;
+        double x1 = _spatium * .5;
         drawSymbol(SymId::arrowheadBlackUp, painter, PointF(x1 - r.width() * .5, y1 - r.top()));
         y1 -= r.top() * .5;
         painter->drawLine(LineF(x1, y1, x1, y2));
@@ -344,7 +344,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     case ArpeggioType::DOWN_STRAIGHT:
     {
         RectF r(symBbox(SymId::arrowheadBlackDown));
-        qreal x1 = _spatium * .5;
+        double x1 = _spatium * .5;
 
         drawSymbol(SymId::arrowheadBlackDown, painter, PointF(x1 - r.width() * .5, y2 - r.bottom()));
         y2 += r.top() * .5;
@@ -354,7 +354,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
 
     case ArpeggioType::BRACKET:
     {
-        qreal w = score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
+        double w = score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
         painter->drawLine(LineF(0.0, y1, w, y1));
         painter->drawLine(LineF(0.0, y2, w, y2));
         painter->drawLine(LineF(0.0, y1 - lineWidth / 2, 0.0, y2 + lineWidth / 2));
@@ -382,7 +382,7 @@ std::vector<PointF> Arpeggio::gripsPositions(const EditData&) const
 
 void Arpeggio::editDrag(EditData& ed)
 {
-    qreal d = ed.delta.y();
+    double d = ed.delta.y();
     if (ed.curGrip == Grip::START) {
         _userLen1 -= d;
     } else if (ed.curGrip == Grip::END) {
@@ -496,7 +496,7 @@ bool Arpeggio::edit(EditData& ed)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void Arpeggio::spatiumChanged(qreal oldValue, qreal newValue)
+void Arpeggio::spatiumChanged(double oldValue, double newValue)
 {
     _userLen1 *= (newValue / oldValue);
     _userLen2 *= (newValue / oldValue);
@@ -561,9 +561,9 @@ void Arpeggio::reset()
 //   insetTop
 //---------------------------------------------------------
 
-qreal Arpeggio::insetTop() const
+double Arpeggio::insetTop() const
 {
-    qreal top = chord()->upNote()->y() - chord()->upNote()->height() / 2;
+    double top = chord()->upNote()->y() - chord()->upNote()->height() / 2;
 
     // use wiggle width, not height, since it's rotated 90 degrees
     if (arpeggioType() == ArpeggioType::UP) {
@@ -579,9 +579,9 @@ qreal Arpeggio::insetTop() const
 //   insetBottom
 //---------------------------------------------------------
 
-qreal Arpeggio::insetBottom() const
+double Arpeggio::insetBottom() const
 {
-    qreal bottom = chord()->downNote()->y() + chord()->downNote()->height() / 2;
+    double bottom = chord()->downNote()->y() + chord()->downNote()->height() / 2;
 
     // use wiggle width, not height, since it's rotated 90 degrees
     if (arpeggioType() == ArpeggioType::DOWN) {
@@ -597,7 +597,7 @@ qreal Arpeggio::insetBottom() const
 //   insetWidth
 //---------------------------------------------------------
 
-qreal Arpeggio::insetWidth() const
+double Arpeggio::insetWidth() const
 {
     switch (arpeggioType()) {
     case ArpeggioType::NORMAL:
@@ -630,14 +630,14 @@ qreal Arpeggio::insetWidth() const
 //   insetDistance
 //---------------------------------------------------------
 
-qreal Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, qreal mag_) const
+double Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, double mag_) const
 {
     if (accidentals.size() == 0) {
         return 0.0;
     }
 
-    qreal arpeggioTop = insetTop() * mag_;
-    qreal arpeggioBottom = insetBottom() * mag_;
+    double arpeggioTop = insetTop() * mag_;
+    double arpeggioBottom = insetBottom() * mag_;
     ArpeggioType type = arpeggioType();
     bool hasTopArrow = type == ArpeggioType::UP
                        || type == ArpeggioType::UP_STRAIGHT
@@ -652,8 +652,8 @@ qreal Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, qreal mag_)
             bool currentIsFurtherX = accidental->x() < furthestAccidental->x();
             bool currentIsSameX = accidental->x() == furthestAccidental->x();
             auto accidentalBbox = symBbox(accidental->symbol());
-            qreal currentTop = accidental->note()->pos().y() + accidentalBbox.top() * mag_;
-            qreal currentBottom = accidental->note()->pos().y() + accidentalBbox.bottom() * mag_;
+            double currentTop = accidental->note()->pos().y() + accidentalBbox.top() * mag_;
+            double currentBottom = accidental->note()->pos().y() + accidentalBbox.bottom() * mag_;
             bool collidesWithTop = currentTop <= arpeggioTop && hasTopArrow;
             bool collidesWithBottom = currentBottom >= arpeggioBottom && hasBottomArrow;
 
@@ -667,21 +667,21 @@ qreal Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, qreal mag_)
 
     // this cutout means the vertical lines for a ♯, ♭, and ♮ are in the same position
     // if an accidental does not have a cutout (e.g., ♭), this value is 0
-    qreal accidentalCutOutX = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).x() * mag_;
-    qreal accidentalCutOutYTop = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).y() * mag_;
-    qreal accidentalCutOutYBottom = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutSW).y() * mag_;
+    double accidentalCutOutX = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).x() * mag_;
+    double accidentalCutOutYTop = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).y() * mag_;
+    double accidentalCutOutYBottom = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutSW).y() * mag_;
 
-    qreal maximumInset = (score()->styleMM(Sid::ArpeggioAccidentalDistance)
-                          - score()->styleMM(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
+    double maximumInset = (score()->styleMM(Sid::ArpeggioAccidentalDistance)
+                           - score()->styleMM(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
 
     if (accidentalCutOutX > maximumInset) {
         accidentalCutOutX = maximumInset;
     }
 
     RectF bbox = symBbox(furthestAccidental->symbol());
-    qreal center = furthestAccidental->note()->pos().y() * mag_;
-    qreal top = center + bbox.top() * mag_;
-    qreal bottom = center + bbox.bottom() * mag_;
+    double center = furthestAccidental->note()->pos().y() * mag_;
+    double top = center + bbox.top() * mag_;
+    double bottom = center + bbox.bottom() * mag_;
     bool collidesWithTop = hasTopArrow && top <= arpeggioTop;
     bool collidesWithBottom = hasBottomArrow && bottom >= arpeggioBottom;
     bool cutoutCollidesWithTop = collidesWithTop && top - accidentalCutOutYTop >= arpeggioTop;

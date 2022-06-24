@@ -104,7 +104,7 @@ static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
 
 bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
 {
-    Q_ASSERT(dst->isChordRestType());
+    assert(dst->isChordRestType());
 
     std::vector<Harmony*> pastedHarmony;
     std::vector<Chord*> graceNotes;
@@ -183,7 +183,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                             e.unknown();
                         }
                         voice_idx_t voiceId = static_cast<voice_idx_t>(e.intAttribute("id", -1));
-                        Q_ASSERT(voiceId < VOICES);
+                        assert(voiceId < VOICES);
                         voiceOffset[voiceId] = e.readInt();
                     }
                     if (!makeGap1(dstTick, dstStaffIdx, tickLen, voiceOffset)) {

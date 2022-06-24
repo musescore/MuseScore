@@ -401,7 +401,7 @@ TEST_F(MeasureTests, checkMeasure)
     m = m->nextMeasure();
 //      s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(3840));
 //      tst = s->element(2);
-//      Q_ASSERT(tst);
+//      assert(tst);
 
 //      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 480/*&& toRest(tst)->durationType() == DurationType::V_HALF*/);
 

@@ -163,7 +163,7 @@ public:
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     void change(EngravingItem* o, EngravingItem* n) override;
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
+    void spatiumChanged(double oldValue, double newValue) override;
 
     System* system() const { return toSystem(explicitParent()); }
     bool hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) const;
@@ -206,11 +206,11 @@ public:
     SegmentList& segments() { return m_segments; }
     const SegmentList& segments() const { return m_segments; }
 
-    qreal userStretch() const;
-    void setUserStretch(qreal v) { m_userStretch = v; }
+    double userStretch() const;
+    void setUserStretch(double v) { m_userStretch = v; }
 
-    void setLayoutStretch(qreal stretchCoeff) { m_layoutStretch = stretchCoeff; }
-    qreal layoutStretch() const { return m_layoutStretch; }
+    void setLayoutStretch(double stretchCoeff) { m_layoutStretch = stretchCoeff; }
+    double layoutStretch() const { return m_layoutStretch; }
 
     void layoutMeasureElements();
     Fraction computeTicks();
@@ -229,8 +229,8 @@ public:
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 
-    Segment* searchSegment(qreal x, SegmentType st, track_idx_t strack, track_idx_t etrack, const Segment* preferredSegment = nullptr,
-                           qreal spacingFactor = 0.5) const;
+    Segment* searchSegment(double x, SegmentType st, track_idx_t strack, track_idx_t etrack, const Segment* preferredSegment = nullptr,
+                           double spacingFactor = 0.5) const;
 
     void insertStaff(Staff*, staff_idx_t staff);
     void insertMStaff(MStaff* staff, staff_idx_t idx);
@@ -243,7 +243,7 @@ public:
     void removeStaves(staff_idx_t s, staff_idx_t e);
     void insertStaves(staff_idx_t s, staff_idx_t e);
 
-    qreal tick2pos(Fraction) const;
+    double tick2pos(Fraction) const;
     Segment* tick2segment(const Fraction& tick, SegmentType st = SegmentType::ChordRest);
 
     void sortStaves(std::vector<staff_idx_t>& dst);
@@ -266,7 +266,7 @@ public:
 
     void connectTremolo();
 
-    qreal createEndBarLines(bool);
+    double createEndBarLines(bool);
     void barLinesSetSpan(Segment*);
     void setEndBarLineType(BarLineType val, track_idx_t track, bool visible = true, mu::draw::Color color = mu::draw::Color());
 
@@ -338,10 +338,10 @@ public:
     BarLineType endBarLineType() const;
     bool endBarLineVisible() const;
     void triggerLayout() const override;
-    qreal basicStretch() const;
-    qreal basicWidth() const;
+    double basicStretch() const;
+    double basicWidth() const;
     float durationStretch(Fraction curTicks, const Fraction minTicks) const;
-    void computeWidth(Fraction minTicks, qreal stretchCoeff);
+    void computeWidth(Fraction minTicks, double stretchCoeff);
     void checkHeader();
     void checkTrailer();
     void layoutStaffLines();
@@ -354,7 +354,7 @@ public:
     //! puts segments on the positions according to their length
     void layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts);
 
-    qreal computeFirstSegmentXPosition(Segment* segment);
+    double computeFirstSegmentXPosition(Segment* segment);
 
     void layoutSegmentsWithDuration(const std::vector<int>& visibleParts);
 
@@ -362,7 +362,7 @@ public:
 
     Fraction quantumOfSegmentCell() const;
 
-    void stretchMeasureInPracticeMode(qreal stretch);
+    void stretchMeasureInPracticeMode(double stretch);
     double squeezableSpace() const { return _squeezableSpace; }
 
 private:
@@ -377,8 +377,8 @@ private:
     void push_front(Segment* e);
 
     void fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests = true);
-    void computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff);
-    void setWidthToTargetValue(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff, qreal targetWidth);
+    void computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, double stretchCoeff);
+    void setWidthToTargetValue(Segment* s, double x, bool isSystemHeader, Fraction minTicks, double stretchCoeff, double targetWidth);
 
     MStaff* mstaff(staff_idx_t staffIndex) const;
 
@@ -386,7 +386,7 @@ private:
     SegmentList m_segments;
     Measure* m_mmRest;         // multi measure rest which replaces a measure range
 
-    qreal m_userStretch;
+    double m_userStretch;
 
     Fraction m_timesig;
 

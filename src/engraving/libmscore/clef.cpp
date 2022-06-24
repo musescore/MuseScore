@@ -104,9 +104,9 @@ Clef::Clef(Segment* parent)
 //   mag
 //---------------------------------------------------------
 
-qreal Clef::mag() const
+double Clef::mag() const
 {
-    qreal mag = staff() ? staff()->staffMag(tick()) : 1.0;
+    double mag = staff() ? staff()->staffMag(tick()) : 1.0;
     if (m_isSmall) {
         mag *= score()->styleD(Sid::smallClefMag);
     }
@@ -121,7 +121,7 @@ void Clef::layout()
 {
     // determine current number of lines and line distance
     int lines;
-    qreal lineDist;
+    double lineDist;
     Segment* clefSeg  = segment();
     int stepOffset;
 
@@ -165,8 +165,8 @@ void Clef::layout()
         stepOffset = 0;
     }
 
-    qreal _spatium = spatium();
-    qreal yoff     = 0.0;
+    double _spatium = spatium();
+    double yoff     = 0.0;
     if (clefType() != ClefType::INVALID && clefType() != ClefType::MAX) {
         symId = ClefInfo::symId(clefType());
         yoff = lineDist * (5 - ClefInfo::line(clefType()));
@@ -216,7 +216,7 @@ void Clef::layout()
     // clefs on palette or at start of system/measure are left aligned
     // other clefs are right aligned
     RectF r(symBbox(symId));
-    qreal x = segment() && segment()->rtick().isNotZero() ? -r.right() : 0.0;
+    double x = segment() && segment()->rtick().isNotZero() ? -r.right() : 0.0;
     setPos(x, yoff * _spatium + (stepOffset * 0.5 * _spatium));
 
     setbbox(r);
@@ -388,7 +388,7 @@ ClefType Clef::clefType() const
 //   spatiumChanged
 //---------------------------------------------------------
 
-void Clef::spatiumChanged(qreal oldValue, qreal newValue)
+void Clef::spatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::spatiumChanged(oldValue, newValue);
     layout();

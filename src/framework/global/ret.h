@@ -26,7 +26,10 @@
 #include <string>
 #include <map>
 #include <any>
+
+#ifndef NO_QT_SUPPORT
 #include <QString>
+#endif
 
 namespace mu {
 class Ret
@@ -134,10 +137,13 @@ inline mu::Ret make_ret(Ret::Code e, const std::string& text)
     return Ret(static_cast<int>(e), text);
 }
 
+#ifndef NO_QT_SUPPORT
 inline mu::Ret make_ret(Ret::Code e, const QString& text)
 {
     return Ret(static_cast<int>(e), text.toStdString());
 }
+
+#endif
 
 inline bool check_ret(const Ret& r, Ret::Code c)
 {

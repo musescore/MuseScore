@@ -144,7 +144,7 @@ void Breath::read(XmlReader& e)
 //   mag
 //---------------------------------------------------------
 
-qreal Breath::mag() const
+double Breath::mag() const
 {
     return staff() ? staff()->staffMag(tick()) : 1.0;
 }
@@ -170,7 +170,7 @@ mu::PointF Breath::pagePos() const
         return pos();
     }
     System* system = segment()->measure()->system();
-    qreal yp = y();
+    double yp = y();
     if (system) {
         yp += system->staff(staffIdx())->y() + system->y();
     }

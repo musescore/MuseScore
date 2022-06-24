@@ -62,7 +62,7 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
     }
 
     if (type != ElementType::SCORE) {
-        Q_ASSERT(parent);
+        assert(parent);
     }
 
     doSetParent(parent);
@@ -408,7 +408,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
         if (isStyled(Pid::OFFSET)) {
             // TODO: maybe it just makes more sense to do this in EngravingItem::undoChangeProperty,
             // but some of the overrides call ScoreElement explicitly
-            qreal sp;
+            double sp;
             if (isEngravingItem()) {
                 sp = toEngravingItem(this)->spatium();
             } else {
@@ -532,7 +532,7 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
 
     P_TYPE type = propertyType(pid);
     if (P_TYPE::MILLIMETRE == type) {
-        qreal f1 = p.toReal();
+        double f1 = p.toReal();
         if (d.isValid() && qAbs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
             return;
         }
@@ -546,7 +546,7 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
                 return;
             }
         }
-        qreal q = offsetIsSpatiumDependent() ? score()->spatium() : DPMM;
+        double q = offsetIsSpatiumDependent() ? score()->spatium() : DPMM;
         p = PropertyValue(p1 / q);
         d = PropertyValue();
     }
@@ -605,12 +605,12 @@ void EngravingObject::readAddConnector(ConnectorInfoReader* info, bool pasteMode
 //---------------------------------------------------------
 void EngravingObject::linkTo(EngravingObject* element)
 {
-    Q_ASSERT(element != this);
-    Q_ASSERT(!_links);
+    assert(element != this);
+    assert(!_links);
 
     if (element->links()) {
         _links = element->_links;
-        Q_ASSERT(_links->contains(element));
+        assert(_links->contains(element));
     } else {
         if (isStaff()) {
             _links = new LinkedObjects(score(), -1);       // don’t use lid
@@ -620,7 +620,7 @@ void EngravingObject::linkTo(EngravingObject* element)
         _links->push_back(element);
         element->_links = _links;
     }
-    Q_ASSERT(!_links->contains(this));
+    assert(!_links->contains(this));
     _links->push_back(this);
 }
 
@@ -634,7 +634,7 @@ void EngravingObject::unlink()
         return;
     }
 
-    Q_ASSERT(_links->contains(this));
+    assert(_links->contains(this));
     _links->remove(this);
 
     // if link list is empty, remove list

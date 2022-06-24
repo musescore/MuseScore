@@ -77,7 +77,7 @@ SysStaff::~SysStaff()
 //   yBottom
 //---------------------------------------------------------
 
-qreal SysStaff::yBottom() const
+double SysStaff::yBottom() const
 {
     return skyline().south().valid() ? skyline().south().max() : _height;
 }
@@ -166,7 +166,7 @@ void System::clear()
 
 void System::appendMeasure(MeasureBase* mb)
 {
-    Q_ASSERT(!mb->isMeasure() || !(score()->styleB(Sid::createMultiMeasureRests) && toMeasure(mb)->hasMMRest()));
+    assert(!mb->isMeasure() || !(score()->styleB(Sid::createMultiMeasureRests) && toMeasure(mb)->hasMMRest()));
     mb->setParent(this);
     ml.push_back(mb);
 }
@@ -257,9 +257,9 @@ void System::adjustStavesNumber(size_t nstaves)
 //   instrumentNamesWidth
 //---------------------------------------------------------
 
-qreal System::instrumentNamesWidth()
+double System::instrumentNamesWidth()
 {
-    qreal namesWidth = 0.0;
+    double namesWidth = 0.0;
 
     for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
         const SysStaff* staff = this->staff(staffIdx);
@@ -280,17 +280,17 @@ qreal System::instrumentNamesWidth()
 //   layoutBrackets
 //---------------------------------------------------------
 
-qreal System::layoutBrackets(const LayoutContext& ctx)
+double System::layoutBrackets(const LayoutContext& ctx)
 {
     size_t nstaves  = _staves.size();
     size_t columns = getBracketsColumnsCount();
 
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
-    qreal bracketWidth[columns];
+    double bracketWidth[columns];
 #else
     // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
     //    heap allocation is slow, an optimization might be used.
-    std::vector<qreal> bracketWidth(columns);
+    std::vector<double> bracketWidth(columns);
 #endif
     for (size_t i = 0; i < columns; ++i) {
         bracketWidth[i] = 0.0;
@@ -318,11 +318,11 @@ qreal System::layoutBrackets(const LayoutContext& ctx)
         delete b;
     }
 
-    qreal totalBracketWidth = 0.0;
+    double totalBracketWidth = 0.0;
 
-    qreal bd = score()->styleMM(Sid::bracketDistance);
+    double bd = score()->styleMM(Sid::bracketDistance);
     if (!_brackets.empty()) {
-        for (qreal w : bracketWidth) {
+        for (double w : bracketWidth) {
             totalBracketWidth += w + bd;
         }
     }
@@ -334,7 +334,7 @@ qreal System::layoutBrackets(const LayoutContext& ctx)
 //   totalBracketOffset
 //---------------------------------------------------------
 
-qreal System::totalBracketOffset(const LayoutContext& ctx)
+double System::totalBracketOffset(const LayoutContext& ctx)
 {
     // TODO: This trick doesn't work
     // just toggling the style setting does nothing, so this method
@@ -342,7 +342,7 @@ qreal System::totalBracketOffset(const LayoutContext& ctx)
     bool hideEmptyStaves = score()->styleB(Sid::hideEmptyStaves);
     score()->setStyleValue(Sid::hideEmptyStaves, false);
 
-    qreal offset = layoutBrackets(ctx);
+    double offset = layoutBrackets(ctx);
 
     score()->setStyleValue(Sid::hideEmptyStaves, hideEmptyStaves);
     return offset;
@@ -353,28 +353,28 @@ qreal System::totalBracketOffset(const LayoutContext& ctx)
 ///   Layout the System
 //---------------------------------------------------------
 
-void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirstSystem, bool firstSystemIndent)
+void System::layoutSystem(const LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)
 {
     if (_staves.empty()) {                 // ignore vbox
         return;
     }
 
-    qreal instrumentNameOffset = score()->styleMM(Sid::instrumentNameOffset);
+    double instrumentNameOffset = score()->styleMM(Sid::instrumentNameOffset);
 
     size_t nstaves  = _staves.size();
 
     //---------------------------------------------------
     //  find x position of staves
     //---------------------------------------------------
-    qreal maxNamesWidth = instrumentNamesWidth();
+    double maxNamesWidth = instrumentNamesWidth();
 
     if (isFirstSystem && firstSystemIndent) {
         maxNamesWidth = qMax(maxNamesWidth, styleP(Sid::firstSystemIndentationValue) * mag());
     }
 
-    qreal maxBracketsWidth = totalBracketOffset(ctx);
-    qreal bracketsWidth = layoutBrackets(ctx);
-    qreal bracketWidthDifference = maxBracketsWidth - bracketsWidth;
+    double maxBracketsWidth = totalBracketOffset(ctx);
+    double bracketsWidth = layoutBrackets(ctx);
+    double bracketWidthDifference = maxBracketsWidth - bracketsWidth;
 
     if (qFuzzyIsNull(maxNamesWidth)) {
         if (score()->styleB(Sid::alignSystemToMargin)) {
@@ -395,13 +395,13 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
             continue;
         }
         ++nVisible;
-        qreal staffMag = staff->staffMag(Fraction(0, 1));         // ??? TODO
+        double staffMag = staff->staffMag(Fraction(0, 1));         // ??? TODO
         int staffLines = staff->lines(Fraction(0, 1));
         if (staffLines <= 1) {
-            qreal h = staff->lineDistance(Fraction(0, 1)) * staffMag * spatium();
+            double h = staff->lineDistance(Fraction(0, 1)) * staffMag * spatium();
             s->bbox().setRect(_leftMargin + xo1, -h, 0.0, 2 * h);
         } else {
-            qreal h = (staffLines - 1) * staff->lineDistance(Fraction(0, 1));
+            double h = (staffLines - 1) * staff->lineDistance(Fraction(0, 1));
             h = h * staffMag * spatium();
             s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0, h);
         }
@@ -442,9 +442,9 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
 //   setMeasureHeight
 //---------------------------------------------------------
 
-void System::setMeasureHeight(qreal height)
+void System::setMeasureHeight(double height)
 {
-    qreal _spatium { spatium() };
+    double _spatium { spatium() };
     for (MeasureBase* m : ml) {
         if (m->isMeasure()) {
             // note that the factor 2 * _spatium must be corrected for when exporting
@@ -470,8 +470,8 @@ void System::layoutBracketsVertical()
     for (Bracket* b : qAsConst(_brackets)) {
         int staffIdx1 = static_cast<int>(b->firstStaff());
         int staffIdx2 = static_cast<int>(b->lastStaff());
-        qreal sy = 0;                           // assume bracket not visible
-        qreal ey = 0;
+        double sy = 0;                           // assume bracket not visible
+        double ey = 0;
         // if start staff not visible, try next staff
         while (staffIdx1 <= staffIdx2 && !_staves[staffIdx1]->show()) {
             ++staffIdx1;
@@ -530,7 +530,7 @@ void System::layoutInstrumentNames()
                 //
                 // override Text->layout()
                 //
-                qreal y1, y2;
+                double y1, y2;
                 switch (t->layoutPos()) {
                 default:
                 case 0:                         // center at part
@@ -713,11 +713,11 @@ size_t System::getBracketsColumnsCount()
     return columns;
 }
 
-void System::setBracketsXPosition(const qreal xPosition)
+void System::setBracketsXPosition(const double xPosition)
 {
-    qreal bracketDistance = score()->styleMM(Sid::bracketDistance);
+    double bracketDistance = score()->styleMM(Sid::bracketDistance);
     for (Bracket* b1 : qAsConst(_brackets)) {
-        qreal xOffset = 0;
+        double xOffset = 0;
         for (const Bracket* b2 : qAsConst(_brackets)) {
             bool b1FirstStaffInB2 = (b1->firstStaff() >= b2->firstStaff() && b1->firstStaff() <= b2->lastStaff());
             bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
@@ -790,11 +790,11 @@ void System::layout2(const LayoutContext& ctx)
         }
     }
 
-    qreal _spatium            = spatium();
-    qreal y                   = 0.0;
-    qreal minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
-    qreal staffDistance       = score()->styleMM(Sid::staffDistance);
-    qreal akkoladeDistance    = score()->styleMM(Sid::akkoladeDistance);
+    double _spatium            = spatium();
+    double y                   = 0.0;
+    double minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
+    double staffDistance       = score()->styleMM(Sid::staffDistance);
+    double akkoladeDistance    = score()->styleMM(Sid::akkoladeDistance);
     if (score()->enableVerticalSpread()) {
         staffDistance       = score()->styleMM(Sid::minStaffSpread);
         akkoladeDistance    = score()->styleMM(Sid::minStaffSpread);
@@ -811,9 +811,9 @@ void System::layout2(const LayoutContext& ctx)
         Staff* staff  = score()->staff(si1);
         auto ni       = std::next(i);
 
-        qreal dist = staff->height();
-        qreal yOffset;
-        qreal h;
+        double dist = staff->height();
+        double yOffset;
+        double h;
         if (staff->lines(Fraction(0, 1)) == 1) {
             yOffset = _spatium * BARLINE_SPAN_1LINESTAFF_TO * 0.5;
             h = _spatium * (BARLINE_SPAN_1LINESTAFF_TO - BARLINE_SPAN_1LINESTAFF_FROM) * 0.5;
@@ -833,7 +833,7 @@ void System::layout2(const LayoutContext& ctx)
 
         if (staff->part() == staff2->part()) {
             Measure* m = firstMeasure();
-            qreal mag = m ? staff->staffMag(m->tick()) : 1.0;
+            double mag = m ? staff->staffMag(m->tick()) : 1.0;
             dist += akkoladeDistance * mag;
         } else {
             dist += staffDistance;
@@ -870,9 +870,9 @@ void System::layout2(const LayoutContext& ctx)
             // the result is space is good to start and grows as needed
             // it does not, however, shrink when possible - only by trigger a full layout
             // (such as by toggling to page view and back)
-            qreal d = ss->skyline().minDistance(System::staff(si2)->skyline());
+            double d = ss->skyline().minDistance(System::staff(si2)->skyline());
             if (score()->lineMode()) {
-                qreal previousDist = ss->continuousDist();
+                double previousDist = ss->continuousDist();
                 if (d > previousDist) {
                     ss->setContinuousDist(d);
                 } else {
@@ -1018,14 +1018,14 @@ void System::setInstrumentNames(const LayoutContext& ctx, bool longName, Fractio
  considered "inside" the staff is increased by "margin".
 */
 
-int System::y2staff(qreal y) const
+int System::y2staff(double y) const
 {
     y -= pos().y();
     int idx = 0;
-    qreal margin = spatium() * 2;
+    double margin = spatium() * 2;
     foreach (SysStaff* s, _staves) {
-        qreal y1 = s->bbox().top() - margin;
-        qreal y2 = s->bbox().bottom() + margin;
+        double y1 = s->bbox().top() - margin;
+        double y2 = s->bbox().bottom() + margin;
         if (y >= y1 && y < y2) {
             return idx;
         }
@@ -1045,7 +1045,7 @@ int System::y2staff(qreal y) const
 ///   \returns Number of the found staff.
 //---------------------------------------------------------
 
-staff_idx_t System::searchStaff(qreal y, staff_idx_t preferredStaff /* = invalid */, qreal spacingFactor) const
+staff_idx_t System::searchStaff(double y, staff_idx_t preferredStaff /* = invalid */, double spacingFactor) const
 {
     staff_idx_t i = 0;
     const size_t nstaves = score()->nstaves();
@@ -1063,10 +1063,10 @@ staff_idx_t System::searchStaff(qreal y, staff_idx_t preferredStaff /* = invalid
             }
         }
 
-        qreal sy2;
+        double sy2;
         if (ni != nstaves) {
             SysStaff* nstaff = staff(ni);
-            qreal s1y2       = stff->bbox().y() + stff->bbox().height();
+            double s1y2       = stff->bbox().y() + stff->bbox().height();
             if (i == preferredStaff) {
                 sy2 = s1y2 + (nstaff->bbox().y() - s1y2);
             } else if (ni == preferredStaff) {
@@ -1213,14 +1213,14 @@ void System::remove(EngravingItem* el)
     case ElementType::GLISSANDO_SEGMENT:
         if (!mu::remove(_spannerSegments, toSpannerSegment(el))) {
             LOGD("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
-            Q_ASSERT(score() == el->score());
+            assert(score() == el->score());
         }
         break;
     case ElementType::SYSTEM_DIVIDER:
         if (el == _systemDividerLeft) {
             _systemDividerLeft = 0;
         } else {
-            Q_ASSERT(_systemDividerRight == el);
+            assert(_systemDividerRight == el);
             _systemDividerRight = 0;
         }
         break;
@@ -1372,7 +1372,7 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 //    return page coordinates
 //---------------------------------------------------------
 
-qreal System::staffYpage(staff_idx_t staffIdx) const
+double System::staffYpage(staff_idx_t staffIdx) const
 {
     if (staffIdx >= _staves.size()) {
         return pagePos().y();
@@ -1386,7 +1386,7 @@ qreal System::staffYpage(staff_idx_t staffIdx) const
 //    return canvas coordinates
 //---------------------------------------------------------
 
-qreal System::staffCanvasYpage(staff_idx_t staffIdx) const
+double System::staffCanvasYpage(staff_idx_t staffIdx) const
 {
     return _staves[staffIdx]->y() + y() + page()->canvasPos().y();
 }
@@ -1481,18 +1481,18 @@ EngravingItem* System::prevSegmentElement()
 //    s2   - bottom system
 //---------------------------------------------------------
 
-qreal System::minDistance(System* s2) const
+double System::minDistance(System* s2) const
 {
     if (vbox() && !s2->vbox()) {
-        return qMax(qreal(vbox()->bottomGap()), s2->minTop());
+        return qMax(double(vbox()->bottomGap()), s2->minTop());
     } else if (!vbox() && s2->vbox()) {
-        return qMax(qreal(s2->vbox()->topGap()), minBottom());
+        return qMax(double(s2->vbox()->topGap()), minBottom());
     } else if (vbox() && s2->vbox()) {
-        return qreal(s2->vbox()->topGap() + vbox()->bottomGap());
+        return double(s2->vbox()->topGap() + vbox()->bottomGap());
     }
 
-    qreal minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
-    qreal dist = score()->enableVerticalSpread() ? styleP(Sid::minSystemSpread) : styleP(Sid::minSystemDistance);
+    double minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
+    double dist = score()->enableVerticalSpread() ? styleP(Sid::minSystemSpread) : styleP(Sid::minSystemDistance);
     size_t firstStaff = 0;
     size_t lastStaff = 0;
 
@@ -1508,7 +1508,7 @@ qreal System::minDistance(System* s2) const
     }
 
     Staff* staff = score()->staff(firstStaff);
-    qreal userDist = staff ? staff->userDist() : 0.0;
+    double userDist = staff ? staff->userDist() : 0.0;
     dist = qMax(dist, userDist);
     fixedDownDistance = false;
 
@@ -1539,7 +1539,7 @@ qreal System::minDistance(System* s2) const
         }
 
         SysStaff* sysStaff = this->staff(lastStaff);
-        qreal sld = sysStaff ? sysStaff->skyline().minDistance(s2->staff(firstStaff)->skyline()) : 0;
+        double sld = sysStaff ? sysStaff->skyline().minDistance(s2->staff(firstStaff)->skyline()) : 0;
         sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
         dist = qMax(dist, sld);
     }
@@ -1551,10 +1551,10 @@ qreal System::minDistance(System* s2) const
 //    return minimum distance to the above south skyline
 //---------------------------------------------------------
 
-qreal System::topDistance(staff_idx_t staffIdx, const SkylineLine& s) const
+double System::topDistance(staff_idx_t staffIdx, const SkylineLine& s) const
 {
-    Q_ASSERT(!vbox());
-    Q_ASSERT(!s.isNorth());
+    assert(!vbox());
+    assert(!s.isNorth());
     // in continuous view, we only build a partial skyline for performance reasons
     // this means we cannot expect the minDistance calculation to produce meaningful results
     // so just give up on autoplace for spanners in continuous view
@@ -1569,10 +1569,10 @@ qreal System::topDistance(staff_idx_t staffIdx, const SkylineLine& s) const
 //   bottomDistance
 //---------------------------------------------------------
 
-qreal System::bottomDistance(staff_idx_t staffIdx, const SkylineLine& s) const
+double System::bottomDistance(staff_idx_t staffIdx, const SkylineLine& s) const
 {
-    Q_ASSERT(!vbox());
-    Q_ASSERT(s.isNorth());
+    assert(!vbox());
+    assert(s.isNorth());
     // see note on topDistance() above
     if (score()->lineMode()) {
         return 0.0;
@@ -1617,7 +1617,7 @@ staff_idx_t System::lastVisibleSysStaff() const
 //    Return the minimum top margin.
 //---------------------------------------------------------
 
-qreal System::minTop() const
+double System::minTop() const
 {
     staff_idx_t si = firstVisibleSysStaff();
     SysStaff* s = si == mu::nidx ? nullptr : staff(si);
@@ -1632,7 +1632,7 @@ qreal System::minTop() const
 //    Return the minimum bottom margin.
 //---------------------------------------------------------
 
-qreal System::minBottom() const
+double System::minBottom() const
 {
     if (vbox()) {
         return vbox()->bottomGap();
@@ -1650,13 +1650,13 @@ qreal System::minBottom() const
 //    Return the distance needed due to spacers
 //---------------------------------------------------------
 
-qreal System::spacerDistance(bool up) const
+double System::spacerDistance(bool up) const
 {
     staff_idx_t staff = up ? firstVisibleSysStaff() : lastVisibleSysStaff();
     if (staff == mu::nidx) {
         return 0.0;
     }
-    qreal dist = 0.0;
+    double dist = 0.0;
     for (MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             Measure* m = toMeasure(mb);
@@ -1743,15 +1743,15 @@ Spacer* System::downSpacer(staff_idx_t staffIdx) const
 //    or the position just after the last non-chordrest segment
 //---------------------------------------------------------
 
-qreal System::firstNoteRestSegmentX(bool leading)
+double System::firstNoteRestSegmentX(bool leading)
 {
-    qreal margin = score()->spatium();
+    double margin = score()->spatium();
     for (const MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             const Measure* measure = static_cast<const Measure*>(mb);
             for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
                 if (seg->isChordRestType()) {
-                    qreal noteRestPos = seg->measure()->pos().x() + seg->pos().x();
+                    double noteRestPos = seg->measure()->pos().x() + seg->pos().x();
                     if (!leading) {
                         return noteRestPos;
                     }
@@ -1763,7 +1763,7 @@ qreal System::firstNoteRestSegmentX(bool leading)
                     }
                     if (seg) {
                         // find maximum width
-                        qreal width = 0.0;
+                        double width = 0.0;
                         size_t n = score()->nstaves();
                         for (staff_idx_t i = 0; i < n; ++i) {
                             if (!staff(i)->show()) {
@@ -1793,16 +1793,16 @@ qreal System::firstNoteRestSegmentX(bool leading)
 //    or the position just before the first non-chordrest segment
 //---------------------------------------------------------
 
-qreal System::lastNoteRestSegmentX(bool trailing)
+double System::lastNoteRestSegmentX(bool trailing)
 {
-    qreal margin = score()->spatium() / 4;  // TODO: this can be parameterizable
+    double margin = score()->spatium() / 4;  // TODO: this can be parameterizable
     //for (const MeasureBase* mb : measures()) {
     for (auto measureBaseIter = measures().rbegin(); measureBaseIter != measures().rend(); measureBaseIter++) {
         if ((*measureBaseIter)->isMeasure()) {
             const Measure* measure = static_cast<const Measure*>(*measureBaseIter);
             for (const Segment* seg = measure->last(); seg; seg = seg->prev()) {
                 if (seg->isChordRestType()) {
-                    qreal noteRestPos = seg->measure()->pos().x() + seg->pos().x();
+                    double noteRestPos = seg->measure()->pos().x() + seg->pos().x();
                     if (!trailing) {
                         return noteRestPos;
                     }

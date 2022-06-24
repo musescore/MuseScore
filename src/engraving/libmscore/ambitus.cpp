@@ -48,7 +48,7 @@ static const NoteHeadType NOTEHEADTYPE_DEFAULT  = NoteHeadType::HEAD_AUTO;
 static const DirectionH DIR_DEFAULT     = DirectionH::AUTO;
 static const bool HASLINE_DEFAULT         = true;
 static const Spatium LINEWIDTH_DEFAULT(0.12);
-static const qreal LINEOFFSET_DEFAULT      = 0.8;               // the distance between notehead and line
+static const double LINEOFFSET_DEFAULT      = 0.8;               // the distance between notehead and line
 
 //---------------------------------------------------------
 //   Ambitus
@@ -103,7 +103,7 @@ Ambitus::~Ambitus()
 //   mag
 //---------------------------------------------------------
 
-qreal Ambitus::mag() const
+double Ambitus::mag() const
 {
     return staff() ? staff()->staffMag(tick()) : 1.0;
 }
@@ -345,12 +345,12 @@ void Ambitus::layout()
 {
     int bottomLine, topLine;
     ClefType clf;
-    qreal headWdt     = headWidth();
+    double headWdt     = headWidth();
     Key key;
-    qreal lineDist;
+    double lineDist;
     int numOfLines;
     Segment* segm        = segment();
-    qreal _spatium    = spatium();
+    double _spatium    = spatium();
     Staff* stf         = nullptr;
     if (segm && track() != mu::nidx) {
         Fraction tick    = segm->tick();
@@ -370,8 +370,8 @@ void Ambitus::layout()
     // if pitch == INVALID_PITCH or tpc == Tpc::TPC_INVALID, set to some default:
     // for use in palettes and when actual range cannot be calculated (new ambitus or no notes in staff)
     //
-    qreal xAccidOffTop    = 0;
-    qreal xAccidOffBottom = 0;
+    double xAccidOffTop    = 0;
+    double xAccidOffBottom = 0;
     if (stf) {
         key = stf->key(segm->tick());
     } else {
@@ -438,7 +438,7 @@ void Ambitus::layout()
     //
     // Note: manages colliding accidentals
     //
-    qreal accNoteDist = point(score()->styleS(Sid::accidentalNoteDistance));
+    double accNoteDist = point(score()->styleS(Sid::accidentalNoteDistance));
     xAccidOffTop      = _topAccid->width() + accNoteDist;
     xAccidOffBottom   = _bottomAccid->width() + accNoteDist;
 
@@ -486,9 +486,9 @@ void Ambitus::layout()
     // compute line from top note centre to bottom note centre
     mu::LineF fullLine(_topPos.x() + headWdt * 0.5, _topPos.y(), _bottomPos.x() + headWdt * 0.5, _bottomPos.y());
     // shorten line on each side by offsets
-    qreal yDelta = _bottomPos.y() - _topPos.y();
+    double yDelta = _bottomPos.y() - _topPos.y();
     if (yDelta != 0.0) {
-        qreal off = _spatium * LINEOFFSET_DEFAULT;
+        double off = _spatium * LINEOFFSET_DEFAULT;
         mu::PointF p1 = fullLine.pointAt(off / yDelta);
         mu::PointF p2 = fullLine.pointAt(1 - (off / yDelta));
         _line = mu::LineF(p1, p2);
@@ -511,8 +511,8 @@ void Ambitus::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
-    qreal _spatium = spatium();
-    qreal lw = lineWidth().val() * _spatium;
+    double _spatium = spatium();
+    double lw = lineWidth().val() * _spatium;
     painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
     drawSymbol(noteHead(), painter, _topPos);
     drawSymbol(noteHead(), painter, _bottomPos);
@@ -524,26 +524,26 @@ void Ambitus::draw(mu::draw::Painter* painter) const
     if (segment() && track() != mu::nidx) {
         Fraction tick  = segment()->tick();
         Staff* staff   = score()->staff(staffIdx());
-        qreal lineDist = staff->lineDistance(tick);
+        double lineDist = staff->lineDistance(tick);
         int numOfLines = staff->lines(tick);
-        qreal step     = lineDist * _spatium;
-        qreal stepTolerance    = step * 0.1;
-        qreal ledgerLineLength = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
-        qreal ledgerLineWidth  = score()->styleS(Sid::ledgerLineWidth).val() * _spatium;
+        double step     = lineDist * _spatium;
+        double stepTolerance    = step * 0.1;
+        double ledgerLineLength = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
+        double ledgerLineWidth  = score()->styleS(Sid::ledgerLineWidth).val() * _spatium;
         painter->setPen(Pen(curColor(), ledgerLineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
 
         if (_topPos.y() - stepTolerance <= -step) {
-            qreal xMin = _topPos.x() - ledgerLineLength;
-            qreal xMax = _topPos.x() + headWidth() + ledgerLineLength;
-            for (qreal y = -step; y >= _topPos.y() - stepTolerance; y -= step) {
+            double xMin = _topPos.x() - ledgerLineLength;
+            double xMax = _topPos.x() + headWidth() + ledgerLineLength;
+            for (double y = -step; y >= _topPos.y() - stepTolerance; y -= step) {
                 painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
             }
         }
 
         if (_bottomPos.y() + stepTolerance >= numOfLines * step) {
-            qreal xMin = _bottomPos.x() - ledgerLineLength;
-            qreal xMax = _bottomPos.x() + headWidth() + ledgerLineLength;
-            for (qreal y = numOfLines * step; y <= _bottomPos.y() + stepTolerance; y += step) {
+            double xMin = _bottomPos.x() - ledgerLineLength;
+            double xMax = _bottomPos.x() + headWidth() + ledgerLineLength;
+            for (double y = numOfLines * step; y <= _bottomPos.y() + stepTolerance; y += step) {
                 painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
             }
         }
@@ -594,10 +594,10 @@ SymId Ambitus::noteHead() const
 //    returns the width of the notehead symbol
 //---------------------------------------------------------
 
-qreal Ambitus::headWidth() const
+double Ambitus::headWidth() const
 {
 //      int head  = noteHead();
-//      qreal val = symbols[score()->symIdx()][head].width(magS());
+//      double val = symbols[score()->symIdx()][head].width(magS());
 //      return val;
     return symWidth(noteHead());
 }
@@ -612,7 +612,7 @@ mu::PointF Ambitus::pagePos() const
         return pos();
     }
     System* system = segment()->measure()->system();
-    qreal yp = y();
+    double yp = y();
     if (system) {
         yp += system->staff(staffIdx())->y() + system->y();
     }

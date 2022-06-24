@@ -24,8 +24,6 @@
 #include "containers.h"
 #include "textstream.h"
 
-#include <QStringList>
-
 #include "log.h"
 
 using namespace mu;
@@ -75,7 +73,7 @@ void XmlStreamWriter::startDocument()
     m_impl->stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 }
 
-void XmlStreamWriter::writeDoctype(const QString& type)
+void XmlStreamWriter::writeDoctype(const String& type)
 {
     m_impl->stream << "<!DOCTYPE " << type << '>' << '\n';
 }
@@ -146,7 +144,7 @@ void XmlStreamWriter::startElement(const String& name, const Attributes& attrs)
     startElement(AsciiStringView(ba.constChar(), ba.size()), attrs);
 }
 
-void XmlStreamWriter::startElementRaw(const QString& name)
+void XmlStreamWriter::startElementRaw(const String& name)
 {
     m_impl->putLevel();
     m_impl->stream << '<' << name << '>' << '\n';
@@ -204,26 +202,26 @@ void XmlStreamWriter::element(const AsciiStringView& name, const Attributes& att
     m_impl->stream << "</" << name << '>' << '\n';
 }
 
-void XmlStreamWriter::elementRaw(const QString& nameWithAttributes, const Value& body)
+void XmlStreamWriter::elementRaw(const String& nameWithAttributes, const Value& body)
 {
     m_impl->putLevel();
     if (body.index() == 0) {
         m_impl->stream << '<' << nameWithAttributes << "/>\n";
     } else {
-        QString ename(QString(nameWithAttributes).split(' ')[0]);
+        String ename(String(nameWithAttributes).split(' ')[0]);
         m_impl->stream << '<' << nameWithAttributes << '>';
         writeValue(body);
         m_impl->stream << "</" << ename << '>' << '\n';
     }
 }
 
-void XmlStreamWriter::elementStringRaw(const QString& nameWithAttributes, const QString& body)
+void XmlStreamWriter::elementStringRaw(const String& nameWithAttributes, const String& body)
 {
     m_impl->putLevel();
     if (body.isEmpty()) {
         m_impl->stream << '<' << nameWithAttributes << "/>\n";
     } else {
-        QString ename(QString(nameWithAttributes).split(' ')[0]);
+        String ename(String(nameWithAttributes).split(' ')[0]);
         m_impl->stream << '<' << nameWithAttributes << '>';
         m_impl->stream << body;
         m_impl->stream << "</" << ename << '>' << '\n';

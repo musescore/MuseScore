@@ -120,10 +120,10 @@ void SlurTieSegment::move(const PointF& s)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void SlurTieSegment::spatiumChanged(qreal oldValue, qreal newValue)
+void SlurTieSegment::spatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::spatiumChanged(oldValue, newValue);
-    qreal diff = newValue / oldValue;
+    double diff = newValue / oldValue;
     for (UP& u : _ups) {
         u.off *= diff;
     }
@@ -351,7 +351,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 
     xml.startElement(this, { { "no", no } });
 
-    qreal _spatium = score()->spatium();
+    double _spatium = score()->spatium();
     if (!ups(Grip::START).off.isNull()) {
         xml.tagPoint("o1", ups(Grip::START).off / _spatium);
     }
@@ -374,7 +374,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 
 void SlurTieSegment::read(XmlReader& e)
 {
-    qreal _spatium = score()->spatium();
+    double _spatium = score()->spatium();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "o1") {
@@ -395,7 +395,7 @@ void SlurTieSegment::read(XmlReader& e)
 //   drawEditMode
 //---------------------------------------------------------
 
-void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal /*currentViewScaling*/)
+void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed, double /*currentViewScaling*/)
 {
     using namespace mu::draw;
     PolygonF polygon(7);

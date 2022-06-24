@@ -234,17 +234,6 @@ mu::io::path_t mu::io::escapeFileName(const mu::io::path_t& fn_)
     return fn;
 }
 
-paths_t mu::io::pathsFromStrings(const QStringList& list)
-{
-    paths_t result;
-
-    for (const QString& path : list) {
-        result.push_back(path);
-    }
-
-    return result;
-}
-
 paths_t mu::io::pathsFromString(const std::string& str, const std::string& delim)
 {
     if (str.empty()) {

@@ -95,7 +95,7 @@ BeamMode Groups::endBeam(const ChordRest* cr, const ChordRest* prev)
     if (cr->isGrace() || cr->beamMode() != BeamMode::AUTO) {
         return cr->beamMode();
     }
-    Q_ASSERT(cr->staff());
+    assert(cr->staff());
 
     TDuration d      = cr->durationType();
     const Groups& g  = cr->staff()->group(cr->tick());

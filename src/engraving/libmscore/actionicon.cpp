@@ -65,12 +65,12 @@ void ActionIcon::setAction(const std::string& actionCode, char16_t icon)
     m_icon = icon;
 }
 
-qreal ActionIcon::fontSize() const
+double ActionIcon::fontSize() const
 {
     return m_iconFont.pointSizeF();
 }
 
-void ActionIcon::setFontSize(qreal size)
+void ActionIcon::setFontSize(double size)
 {
     m_iconFont.setPointSizeF(size);
 }
