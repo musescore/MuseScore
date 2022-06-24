@@ -2864,8 +2864,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                                 || e->isSystemText()
                                 || e->isTripletFeel()
                                 || e->isTempoText()
-                                || (e->isVolta() && e->systemFlag())
-                                || (e->isTextLine() && e->systemFlag())) {
+                                || isSystemTextLine(e)) {
                                 if (e->track() == staff2track(systemObjectStaves[i]->idx()) && e->isLinked()) {
                                     if (moveTo[i] == mu::nidx) {
                                         s->removeAnnotation(e);
