@@ -79,6 +79,12 @@ public:
 
     virtual std::pair<unsigned int, unsigned int> availableBufferSizeRange(const AudioDeviceID& deviceId) const = 0;
 
+    virtual unsigned int sampleRate(const AudioDeviceID& deviceId) const = 0;
+    virtual bool setSampleRate(const AudioDeviceID& deviceId, unsigned int sampleRate) = 0;
+    virtual async::Notification sampleRateChanged() const = 0;
+
+    virtual std::vector<unsigned int> availableSampleRates(const AudioDeviceID& deviceId) const = 0;
+
     virtual void resume() = 0;
     virtual void suspend() = 0;
 };

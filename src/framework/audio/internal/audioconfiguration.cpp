@@ -41,7 +41,8 @@ static const audioch_t AUDIO_CHANNELS = 2;
 //TODO: add other setting: audio device etc
 static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
 static const Settings::Key AUDIO_OUTPUT_DEVICE_ID_KEY("audio", "io/outputDevice");
-static const Settings::Key AUDIO_BUFFER_SIZE_KEY("audio", "driver_buffer");
+static const Settings::Key AUDIO_BUFFER_SIZE_KEY("audio", "io/bufferSize");
+static const Settings::Key AUDIO_SAMPLE_RATE_KEY("audio", "io/sampleRate");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
@@ -51,14 +52,26 @@ static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
 
 void AudioConfiguration::init()
 {
+    int defaultBufferSize = 0;
+#ifdef Q_OS_WASM
+    defaultBufferSize = 8192;
+#else
+    defaultBufferSize = 1024;
+#endif
+    settings()->setDefaultValue(AUDIO_BUFFER_SIZE_KEY, Val(defaultBufferSize));
+    settings()->valueChanged(AUDIO_BUFFER_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_driverBufferSizeChanged.notify();
+    });
+
     settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
 
     settings()->valueChanged(AUDIO_OUTPUT_DEVICE_ID_KEY).onReceive(nullptr, [this](const Val&) {
         m_audioOutputDeviceIdChanged.notify();
     });
 
-    settings()->valueChanged(AUDIO_BUFFER_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
-        m_driverBufferSizeChanged.notify();
+    settings()->setDefaultValue(AUDIO_SAMPLE_RATE_KEY, Val(48000));
+    settings()->valueChanged(AUDIO_SAMPLE_RATE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_driverSampleRateChanged.notify();
     });
 
     settings()->setDefaultValue(USER_SOUNDFONTS_PATHS, Val(globalConfiguration()->userDataPath() + "/SoundFonts"));
@@ -126,6 +139,21 @@ void AudioConfiguration::setDriverBufferSize(unsigned int size)
 async::Notification AudioConfiguration::driverBufferSizeChanged() const
 {
     return m_driverBufferSizeChanged;
+}
+
+unsigned int AudioConfiguration::sampleRate() const
+{
+    return settings()->value(AUDIO_SAMPLE_RATE_KEY).toInt();
+}
+
+void AudioConfiguration::setSampleRate(unsigned int sampleRate)
+{
+    settings()->setSharedValue(AUDIO_SAMPLE_RATE_KEY, Val(static_cast<int>(sampleRate)));
+}
+
+async::Notification AudioConfiguration::sampleRateChanged() const
+{
+    return m_driverSampleRateChanged;
 }
 
 SoundFontPaths AudioConfiguration::soundFontDirectories() const

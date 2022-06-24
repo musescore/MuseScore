@@ -52,6 +52,10 @@ public:
     void setDriverBufferSize(unsigned int size) override;
     async::Notification driverBufferSizeChanged() const override;
 
+    unsigned int sampleRate() const override;
+    void setSampleRate(unsigned int sampleRate) override;
+    async::Notification sampleRateChanged() const override;
+
     io::paths_t soundFontDirectories() const override;
     io::paths_t userSoundFontDirectories() const override;
     void setUserSoundFontDirectories(const io::paths_t& paths) override;
@@ -78,6 +82,7 @@ private:
 
     async::Notification m_audioOutputDeviceIdChanged;
     async::Notification m_driverBufferSizeChanged;
+    async::Notification m_driverSampleRateChanged;
 };
 }
 
