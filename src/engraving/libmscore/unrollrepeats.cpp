@@ -61,7 +61,6 @@
 #include "repeatlist.h"
 #include "beam.h"
 #include "stafftype.h"
-#include "revisions.h"
 #include "lyrics.h"
 #include "segment.h"
 #include "tempotext.h"
