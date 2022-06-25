@@ -897,6 +897,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
     Part* part = new Part(_score);
     part->setPlainLongName(tR->name());
+    part->setPlainShortName(tR->shortName());
     part->setPartName(tR->name());
     part->setId(idx);
 
@@ -924,7 +925,12 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
     if (midiChannel == 9) {
         part->instrument()->setDrumset(gpDrumset);
-        part->setShortName(tR->instrument());
+
+        String drumInstrName = tR->instrument();
+        if (!drumInstrName.empty()) {
+            part->setShortName(drumInstrName);
+        }
+
         Staff* staff = part->staff(0);
         staff->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
         part->instrument()->setDrumset(gpDrumset);
