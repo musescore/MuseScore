@@ -109,6 +109,7 @@ void DockWindow::componentComplete()
                                                       this);
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
+    connect(this, &QQuickItem::windowChanged, this, &DockWindow::windowPropertyChanged);
 }
 
 void DockWindow::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -159,6 +160,11 @@ QQmlListProperty<mu::dock::DockToolBarView> DockWindow::toolBarsProperty()
 QQmlListProperty<mu::dock::DockPageView> DockWindow::pagesProperty()
 {
     return m_pages.property();
+}
+
+QQuickWindow* DockWindow::windowProperty() const
+{
+    return window();
 }
 
 void DockWindow::init()
