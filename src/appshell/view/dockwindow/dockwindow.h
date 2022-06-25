@@ -57,6 +57,8 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarView> toolBars READ toolBarsProperty)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPageView> pages READ pagesProperty)
 
+    Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
+
     INJECT(dock, ui::IUiConfiguration, uiConfiguration)
     INJECT(dock, workspace::IWorkspaceManager, workspaceManager)
     INJECT(dock, IDockWindowProvider, dockWindowProvider)
@@ -70,6 +72,8 @@ public:
 
     QQmlListProperty<mu::dock::DockToolBarView> toolBarsProperty();
     QQmlListProperty<mu::dock::DockPageView> pagesProperty();
+
+    QQuickWindow* windowProperty() const;
 
     Q_INVOKABLE void init();
     Q_INVOKABLE void loadPage(const QString& uri, const QVariantMap& params);
@@ -92,6 +96,7 @@ public:
 signals:
     void pageLoaded();
     void currentPageUriChanged(const QString& uri);
+    void windowPropertyChanged(QQuickWindow* window);
 
 private slots:
     void onQuit();
