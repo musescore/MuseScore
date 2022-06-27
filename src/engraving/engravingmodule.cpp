@@ -50,7 +50,9 @@ static std::shared_ptr<EngravingConfiguration> s_configuration = std::make_share
 
 static void engraving_init_qrc()
 {
+#ifndef NO_QT_SUPPORT
     Q_INIT_RESOURCE(engraving);
+#endif
 }
 
 std::string EngravingModule::moduleName() const
@@ -96,9 +98,14 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
     MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
     MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItem::enabled = false;
+#endif
     gpaletteScore = compat::ScoreAccess::createMasterScore();
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItem::enabled = true;
+#endif
+
     if (EngravingObject::elementsProvider()) {
         EngravingObject::elementsProvider()->unreg(gpaletteScore);
     }

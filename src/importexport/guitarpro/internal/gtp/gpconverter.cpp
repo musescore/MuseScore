@@ -283,7 +283,7 @@ void GPConverter::setupTabDisplayStyle()
         importLinkedStaffForce = true;
     }
 
-    for (int partNum = 0; partNum < _score->parts().size(); partNum++) {
+    for (size_t partNum = 0; partNum < _score->parts().size(); partNum++) {
         Part* part = _score->parts()[partNum];
         Fraction fr = Fraction(0, 1);
         int lines = part->instrument()->stringData()->strings();

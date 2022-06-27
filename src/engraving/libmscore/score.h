@@ -829,7 +829,7 @@ public:
 
     void print(mu::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
-    QSet<ChordRest*> getSelectedChordRests() const;
+    std::set<ChordRest*> getSelectedChordRests() const;
     void getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const;
 
     void select(EngravingItem* obj, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
@@ -868,7 +868,7 @@ public:
     MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
     EngravingItem* getScoreElementOfMeasureBase(MeasureBase*) const;
 
-    int fileDivision(int t) const { return static_cast<int>(((qint64)t * Constants::division + _fileDivision / 2) / _fileDivision); }
+    int fileDivision(int t) const { return static_cast<int>(((int64_t)t * Constants::division + _fileDivision / 2) / _fileDivision); }
     void setFileDivision(int t) { _fileDivision = t; }
 
     bool dirty() const;
@@ -1286,7 +1286,7 @@ public:
     static bool loading() { return _loading > 0; }
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)
+DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)
 } // namespace mu::engraving
 
 #endif
