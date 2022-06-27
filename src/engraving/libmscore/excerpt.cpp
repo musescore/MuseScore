@@ -1198,7 +1198,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                 dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
             }
         }
-        if (dstTrack == mu::nidx) {
+        if (dstTrack == mu::nidx || staffIdx == srcStaffIdx) {
             continue;
         }
         cloneSpanner(s, score, dstTrack, dstTrack2);
@@ -1406,7 +1406,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             }
         }
 
-        if (dstTrack == mu::nidx) {
+        if (dstTrack == mu::nidx || staffIdx == srcStaffIdx) {
             continue;
         }
 

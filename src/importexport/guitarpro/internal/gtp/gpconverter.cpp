@@ -1731,7 +1731,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
 
     bend->points().push_back(PitchValue(0, gpBend->originValue));
 
-    const auto& lastPoint = bend->points().back();
+    PitchValue lastPoint = bend->points().back();
 
     if (bendHasMiddleValue) {
         if (PitchValue value(gpBend->middleOffset1, gpBend->middleValue);
@@ -1770,7 +1770,6 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elem
                                  bool forceSplitByRests)
 {
     track_idx_t track = cr->track();
-    LOGE() << "@# add line element for track : " << cr->track();
 
     auto& lastTypeForTrack = m_lastImportTypes[track][muType];
 
