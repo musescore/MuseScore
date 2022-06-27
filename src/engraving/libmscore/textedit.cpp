@@ -249,8 +249,7 @@ bool TextBase::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
-
+    bool shiftPressed = ed.modifiers & ShiftModifier;
     if (shiftPressed && ed.key == Qt::Key_F2) {
         return false; // Toggle Special Characters dialog
     }
@@ -292,15 +291,15 @@ bool TextBase::edit(EditData& ed)
     TextCursor* cursor = ted->cursor();
 
     String s         = ed.s;
-    bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
-    bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
+    bool ctrlPressed  = ed.modifiers & ControlModifier;
+    bool shiftPressed = ed.modifiers & ShiftModifier;
     bool altPressed = ed.modifiers & Qt::AltModifier;
 
     TextCursor::MoveMode mm = shiftPressed ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor;
 
     bool wasHex = false;
     if (hexState >= 0) {
-        if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier | Qt::KeypadModifier)) {
+        if (ed.modifiers == (ControlModifier | ShiftModifier | KeypadModifier)) {
             switch (ed.key) {
             case Qt::Key_0:
             case Qt::Key_1:
@@ -319,7 +318,7 @@ bool TextBase::edit(EditData& ed)
             default:
                 break;
             }
-        } else if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
+        } else if (ed.modifiers == (ControlModifier | ShiftModifier)) {
             switch (ed.key) {
             case Qt::Key_A:
             case Qt::Key_B:
@@ -488,7 +487,7 @@ bool TextBase::edit(EditData& ed)
             } else {
                 if (isFingering() && ed.view()) {
                     score()->endCmd();
-                    ed.view()->textTab(ed.modifiers & Qt::ShiftModifier);
+                    ed.view()->textTab(ed.modifiers & ShiftModifier);
                     return true;
                 }
                 s = " ";

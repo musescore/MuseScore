@@ -2078,42 +2078,6 @@ void EngravingItem::triggerLayoutAll() const
 }
 
 //---------------------------------------------------------
-//   control
-//---------------------------------------------------------
-
-bool EditData::control(bool textEditing) const
-{
-    if (textEditing) {
-        return modifiers & CONTROL_MODIFIER;
-    } else {
-        return modifiers & Qt::ControlModifier;
-    }
-}
-
-//---------------------------------------------------------
-//   clear
-//---------------------------------------------------------
-
-void EditData::clear()
-{
-    *this = EditData(view_);
-}
-
-//---------------------------------------------------------
-//   getData
-//---------------------------------------------------------
-
-std::shared_ptr<ElementEditData> EditData::getData(const EngravingItem* e) const
-{
-    for (std::shared_ptr<ElementEditData> ed : data) {
-        if (ed->e == e) {
-            return ed;
-        }
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
 //   addData
 //---------------------------------------------------------
 

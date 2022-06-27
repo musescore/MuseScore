@@ -89,7 +89,7 @@ BspTree::BspTree()
 
 static inline int intmaxlog(int n)
 {
-    return n > 0 ? qMax(int(::ceil(::log(double(n)) / ::log(double(2)))), 5) : 0;
+    return n > 0 ? std::max(int(::ceil(::log(double(n)) / ::log(double(2)))), 5) : 0;
 }
 
 //---------------------------------------------------------

@@ -241,7 +241,7 @@ bool LineSegment::isEditAllowed(EditData& ed) const
     const bool moveStart = ed.curGrip == Grip::START;
     const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
 
-    if (!((ed.modifiers & Qt::ShiftModifier) && ((isSingleBeginType() && moveStart)
+    if (!((ed.modifiers & ShiftModifier) && ((isSingleBeginType() && moveStart)
                                                  || (isSingleEndType() && moveEnd)))) {
         return false;
     }
@@ -598,7 +598,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
     }
     // don't change anchors on keyboard adjustment or if Ctrl is pressed
     // (Ctrl+Left/Right is handled elsewhere!)
-    if (ed.key == Qt::Key_Left || ed.key == Qt::Key_Right || ed.modifiers & Qt::ControlModifier) {
+    if (ed.key == Qt::Key_Left || ed.key == Qt::Key_Right || ed.modifiers & ControlModifier) {
         return;
     }
 

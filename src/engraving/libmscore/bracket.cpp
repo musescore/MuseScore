@@ -446,7 +446,7 @@ bool Bracket::isEditAllowed(EditData& ed) const
         return true;
     }
 
-    if (!(ed.modifiers & Qt::ShiftModifier)) {
+    if (!(ed.modifiers & ShiftModifier)) {
         return false;
     }
 

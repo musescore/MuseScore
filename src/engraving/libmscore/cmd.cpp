@@ -3125,7 +3125,7 @@ void Score::cmdExplode()
                     size_t nnotes = notes.size();
                     // keep note "i" from top, which is backwards from nnotes - 1
                     // reuse notes if there are more instruments than notes
-                    size_t stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, static_cast<size_t>(1));
+                    size_t stavesPerNote = std::max((lastStaff - srcStaff) / nnotes, static_cast<size_t>(1));
                     size_t keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), static_cast<size_t>(0));
                     Note* keepNote = c->notes()[keepIndex];
                     for (Note* n : notes) {

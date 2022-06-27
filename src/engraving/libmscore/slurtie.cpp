@@ -190,13 +190,13 @@ void SlurTieSegment::editDrag(EditData& ed)
         //
         if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
             Spanner* spanner = slurTie();
-            Qt::KeyboardModifiers km = ed.modifiers;
+            KeyboardModifiers km = ed.modifiers;
             EngravingItem* e = ed.view()->elementNear(ed.pos);
             if (e && e->isNote()) {
                 Note* note = toNote(e);
                 Fraction tick = note->chord()->tick();
                 if ((g == Grip::END && tick > slurTie()->tick()) || (g == Grip::START && tick < slurTie()->tick2())) {
-                    if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+                    if (km != (ShiftModifier | ControlModifier)) {
                         Chord* c = note->chord();
                         ed.view()->setDropTarget(note);
                         if (c->part() == spanner->part() && c != spanner->endCR()) {
