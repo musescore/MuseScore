@@ -25,6 +25,7 @@
 #include "ui_specialcharactersdialog.h"
 
 #include "engraving/infrastructure/draw/font.h"
+#include "uicomponents/view/topleveldialog.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -37,7 +38,7 @@ class PaletteWidget;
 
 namespace mu::engraving {
 class TextBase;
-class SpecialCharactersDialog : public QDialog, public Ui::SpecialCharactersDialog
+class SpecialCharactersDialog : public mu::uicomponents::TopLevelDialog, public Ui::SpecialCharactersDialog
 {
     Q_OBJECT
 
