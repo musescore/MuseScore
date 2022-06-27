@@ -31,6 +31,8 @@
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 
+#include "log.h"
+
 using namespace mu::io;
 using namespace mu::engraving;
 
