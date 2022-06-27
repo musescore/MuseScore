@@ -67,7 +67,7 @@ class Beam final : public EngravingItem
     double _grow2            { 1.0f };
     double _beamDist         { 0.0f };
     int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
-    qreal _beamWidth        { 0.0f }; // how wide each beam is
+    double _beamWidth        { 0.0f }; // how wide each beam is
     mu::PointF _startAnchor;
     mu::PointF _endAnchor;
 

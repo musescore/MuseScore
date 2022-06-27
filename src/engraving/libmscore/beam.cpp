@@ -983,8 +983,8 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
     double startY = (isStartDictator ? dictator : pointer) * spatium() / 4 + tolerance;
     double endY = (isStartDictator ? pointer : dictator) * spatium() / 4 + tolerance;
     // using <= or >= for doubles is not a very good plan because 0 != 0.000000000001
-    auto fuzzyCompare = [](qreal a, qreal b) {
-        qreal diff = a - b;
+    auto fuzzyCompare = [](double a, double b) {
+        double diff = a - b;
         if (abs(diff) < 0.001) {
             return 0;
         } else {
@@ -1002,9 +1002,9 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
         PointF anchor = chordBeamAnchor(chord) - pagePos();
         double reduction = 0;
         if (chordRest != _elements.back() && chordRest != _elements.front()) {
-            qreal minLength = chord->beams() < 6
-                              ? middleStemMinLength[chord->beams() - 1]
-                              : middleStemMinLength[4] + ((chord->beams() - 5) * 0.75);
+            double minLength = chord->beams() < 6
+                               ? middleStemMinLength[chord->beams() - 1]
+                               : middleStemMinLength[4] + ((chord->beams() - 5) * 0.75);
             minLength *= spatium();
             reduction = chord->stem()->length() - minLength;
         }
@@ -1452,7 +1452,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
                     } else if ((topSlant < 0 && bottomSlant < 0) || (topSlant > 0 && bottomSlant > 0)) {
                         int slant = (abs(topSlant) < abs(bottomSlant)) ? topSlant : bottomSlant;
                         slant = std::min(std::abs(slant), getMaxSlope());
-                        qreal slope = slant * ((topSlant < 0) ? -quarterSpace : quarterSpace);
+                        double slope = slant * ((topSlant < 0) ? -quarterSpace : quarterSpace);
                         _startAnchor.ry() += (slope / 2);
                         _endAnchor.ry() -= (slope / 2);
                     } else {

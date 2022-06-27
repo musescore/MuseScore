@@ -189,7 +189,8 @@ public:
     double defaultStemLength() const { return _defaultStemLength; }
     double minStemLength() const { return _minStemLength; }
     void setBeamExtension(double extension);
-    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing, bool useWideBeams);
+    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing, bool useWideBeams,
+                               bool isFullSize);
 
     void layoutStem();
     void layoutArpeggio2();
