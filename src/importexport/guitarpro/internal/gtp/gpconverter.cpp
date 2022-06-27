@@ -1736,7 +1736,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
 
     bend->points().push_back(PitchValue(0, gpBend->originValue));
 
-    const auto& lastPoint = bend->points().back();
+    PitchValue lastPoint = bend->points().back();
 
     if (bendHasMiddleValue) {
         if (PitchValue value(gpBend->middleOffset1, gpBend->middleValue);
