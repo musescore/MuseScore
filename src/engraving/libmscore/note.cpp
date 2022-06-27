@@ -1355,7 +1355,7 @@ void Note::draw(mu::draw::Painter* painter) const
         f.setPointSizeF(f.pointSizeF() * magS() * MScore::pixelRatio);
         painter->setFont(f);
         painter->setPen(c);
-        painter->drawText(PointF(bbox().x(), tab->fretFontYOffset()), _fretString);
+        painter->drawText(PointF(bbox().x(), tab->fretFontYOffset() * magS()), _fretString);
     }
     // NOT tablature
     else {
