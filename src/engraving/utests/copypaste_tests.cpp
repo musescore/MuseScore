@@ -26,6 +26,8 @@
 #include <QClipboard>
 #include <QMimeData>
 
+#include "infrastructure/internal/qmimedataadapter.h"
+
 #include "engraving/rw/xml.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
@@ -86,7 +88,8 @@ void CopyPasteTests::copypaste(const char* idx)
     score->select(m4->first()->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData, 0);
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)),
@@ -217,7 +220,8 @@ void CopyPasteTests::copypastevoice(const char* idx, int voice)
     score->select(m2->first()->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData, 0);
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)),
@@ -254,7 +258,8 @@ TEST_F(CopyPasteTests, copypaste2Voice)
     score->select(secondCRSeg->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData, 0);
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copypaste13.mscx"),
@@ -294,7 +299,8 @@ TEST_F(CopyPasteTests, copypaste2Voice5)
     score->select(dest);
 
     score->startCmd();
-    score->cmdPaste(mimeData, 0);
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copypaste17.mscx"),
@@ -333,7 +339,8 @@ TEST_F(CopyPasteTests, copypaste2Voice6)
     score->select(dest);
 
     score->startCmd();
-    score->cmdPaste(mimeData, 0);
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste20.mscx"),
@@ -369,7 +376,8 @@ TEST_F(CopyPasteTests, copypasteOnlySecondVoice)
     score->select(m2, SelectType::RANGE);
 
     score->startCmd();
-    score->cmdPaste(mimeData, 0);
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste18.mscx"),
@@ -405,7 +413,8 @@ void CopyPasteTests::copypastestaff(const char* idx)
     score->select(m2, SelectType::RANGE, 1);
 
     score->startCmd();
-    score->cmdPaste(mimeData, 0);
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste%1.mscx").arg(String::fromUtf8(idx)),
@@ -442,7 +451,8 @@ TEST_F(CopyPasteTests, copypastePartial)
     score->select(m1->first(SegmentType::ChordRest)->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData, 0);
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_partial_01.mscx"),
@@ -476,7 +486,8 @@ void CopyPasteTests::copypastetuplet(const char* idx)
     EngravingItem* dest = m2->first(SegmentType::ChordRest)->element(0);
     score->select(dest);
     score->startCmd();
-    score->cmdPaste(mimeData, 0);
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_tuplet_%1.mscx").arg(String::fromUtf8(idx)),
@@ -512,7 +523,8 @@ void CopyPasteTests::copypastenote(const String& idx, Fraction scale)
     ChordRest* cr = m1->first(SegmentType::ChordRest)->nextChordRest(0);
     score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
     score->startCmd();
-    score->cmdPaste(&mimeData, 0, scale);
+    QMimeDataAdapter ma(&mimeData);
+    score->cmdPaste(&ma, 0, scale);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "copypasteNote" + idx + ".mscx",
                                             COPYPASTE_DATA_DIR + "copypasteNote" + idx + "-ref.mscx"));
@@ -608,7 +620,8 @@ TEST_F(CopyPasteTests, DISABLED_copypastetremolo)
     score->select(m2->first()->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData, 0);
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
 
     // create a range selection on 2nd to 4th beat (voice 0) of first measure
@@ -627,7 +640,7 @@ TEST_F(CopyPasteTests, DISABLED_copypastetremolo)
     score->select(m3->first()->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData, 0);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_tremolo.mscx"),

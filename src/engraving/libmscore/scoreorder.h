@@ -34,11 +34,12 @@ namespace mu::engraving {
 
 struct ScoreGroup
 {
-    String family { String("") };
-    String section { String("") };
-    QString unsorted { QString() };    // isNull()   : not an unsorted group
-                                       // isEmpty()  : equal to <unsorted/>
-                                       // !isEmpty() : equal to <unsorted group="unsorted"/>
+    String family;
+    String section;
+    String unsorted;            // isEmpty()  : equal to <unsorted/>
+                                // !isEmpty() : equal to <unsorted group="unsorted"/>
+    bool notUnsorted = true;    // not an unsorted group
+
     bool bracket { false };
     bool barLineSpan { true };
     bool thinBracket { true };

@@ -40,6 +40,7 @@ set (ENGRAVING_INFRASTRUCTURE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.cpp
     ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.h
+    ${CMAKE_CURRENT_LIST_DIR}/interactive/imimedata.h
 
     ${CMAKE_CURRENT_LIST_DIR}/io/mscio.h
     ${CMAKE_CURRENT_LIST_DIR}/io/mscreader.cpp
@@ -72,6 +73,8 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qmimedataadapter.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qmimedataadapter.h
         )
 
     if (USE_SYSTEM_FREETYPE)

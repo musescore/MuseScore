@@ -19,23 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_QIMAGEPROVIDER_H
-#define MU_DRAW_QIMAGEPROVIDER_H
+#ifndef MU_ENGRAVING_IMIMEDATA_H
+#define MU_ENGRAVING_IMIMEDATA_H
 
-#include "infrastructure/draw/iimageprovider.h"
+#include <string>
+#include <vector>
+#include <memory>
+#include "types/bytearray.h"
+#include "infrastructure/draw/pixmap.h"
 
-namespace mu::draw {
-class QImageProvider : public IImageProvider
+namespace mu::engraving {
+class IMimeData
 {
 public:
-    std::shared_ptr<Pixmap> createPixmap(const ByteArray& data) const override;
-    std::shared_ptr<Pixmap> createPixmap(int w, int h, int dpm, const Color& color) const override;
+    virtual ~IMimeData() = default;
 
-    Pixmap scaled(const Pixmap& origin, const Size& s) const override;
+    virtual std::vector<std::string> formats() const = 0;
 
-    IPaintProviderPtr painterForImage(std::shared_ptr<Pixmap> pixmap) override;
-    void saveAsPng(std::shared_ptr<Pixmap> px, io::IODevice* device) override;
+    virtual bool hasFormat(const std::string& mimeType) const = 0;
+    virtual ByteArray data(const std::string& mimeType) const = 0;
+
+    virtual bool hasImage() const = 0;
+    virtual std::shared_ptr<draw::Pixmap> imageData() const = 0;
 };
 }
 
-#endif // MU_DRAW_QIMAGEPROVIDER_H
+#endif // MU_ENGRAVING_IMIMEDATA_H

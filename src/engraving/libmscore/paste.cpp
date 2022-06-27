@@ -1109,7 +1109,7 @@ inline static bool canPasteStaff(const ByteArray& mimeData, const Fraction& scal
 //   cmdPaste
 //---------------------------------------------------------
 
-void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
+void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
 {
     if (ms == 0) {
         LOGD("no application mime data");
@@ -1117,8 +1117,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         return;
     }
     if ((_selection.isSingle() || _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
-        QByteArray ba(ms->data(mimeSymbolFormat));
-        ByteArray data = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
+        ByteArray data = ms->data(mimeSymbolFormat);
 
         PointF dragOffset;
         Fraction duration(1, 4);
@@ -1180,8 +1179,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             MScore::setError(MsError::DEST_TUPLET);
             return;
         } else {
-            QByteArray ba(ms->data(mimeStaffListFormat));
-            ByteArray data = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
+            ByteArray data = ms->data(mimeStaffListFormat);
             if (MScore::debugMode) {
                 LOGD("paste <%s>", data.data());
             }
@@ -1213,8 +1211,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             MScore::setError(MsError::NO_DEST);
             return;
         } else {
-            QByteArray ba(ms->data(mimeSymbolListFormat));
-            ByteArray data = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
+            ByteArray data = ms->data(mimeSymbolListFormat);
             if (MScore::debugMode) {
                 LOGD("paste <%s>", data.data());
             }
@@ -1226,7 +1223,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         Buffer buffer(&ba);
         buffer.open(IODevice::WriteOnly);
 
-        auto px = imageProvider()->pixmapFromQVariant(ms->imageData());
+        auto px = ms->imageData();
         imageProvider()->saveAsPng(px, &buffer);
 
         Image* image = new Image(this->dummy());
@@ -1255,8 +1252,8 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         delete image;
     } else {
         LOGD("cannot paste selState %d staffList %s", int(_selection.state()), (ms->hasFormat(mimeStaffListFormat)) ? "true" : "false");
-        for (const QString& s : ms->formats()) {
-            LOGD("  format %s", qPrintable(s));
+        for (const std::string& s : ms->formats()) {
+            LOGD() << " format: " << s;
         }
     }
 }

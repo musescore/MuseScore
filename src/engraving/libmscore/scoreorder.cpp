@@ -60,6 +60,7 @@ ScoreOrder ScoreOrder::clone() const
         newGroup.family = sg.family;
         newGroup.section = sg.section;
         newGroup.unsorted = sg.unsorted;
+        newGroup.notUnsorted = sg.notUnsorted;
         newGroup.bracket = sg.bracket;
         newGroup.barLineSpan = sg.barLineSpan;
         newGroup.thinBracket = sg.thinBracket;
@@ -169,6 +170,7 @@ void ScoreOrder::readSection(XmlReader& reader)
             sg.family = String(UNSORTED_ID);
             sg.section = sectionId;
             sg.unsorted = group;
+            sg.notUnsorted = false;
             sg.bracket = true;
             sg.barLineSpan = readBoolAttribute(reader, "barLineSpan", true);
             sg.thinBracket = readBoolAttribute(reader, "thinBrackets", true);
@@ -251,6 +253,7 @@ ScoreGroup ScoreOrder::newUnsortedGroup(const String group, const String section
     sg.family = String(UNSORTED_ID);
     sg.section = section;
     sg.unsorted = group;
+    sg.notUnsorted = false;
     sg.bracket = false;
     sg.barLineSpan = false;
     sg.thinBracket = false;
@@ -548,7 +551,7 @@ void ScoreOrder::write(XmlWriter& xml) const
         }
         if (sg.family == SOLOISTS_ID) {
             xml.tag("soloists");
-        } else if (sg.unsorted.isNull()) {
+        } else if (sg.notUnsorted) {
             xml.tag("family", sg.family);
         } else if (sg.unsorted.isEmpty()) {
             xml.tag("unsorted");

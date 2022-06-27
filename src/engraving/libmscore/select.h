@@ -193,7 +193,7 @@ public:
 
     //! NOTE If locked, the selected items should not be changed.
     void lock(const String& reason) { _lockReason = reason; }
-    void unlock(const String& reason) { Q_UNUSED(reason); _lockReason.clear(); }    // reason for clarity
+    void unlock(const String& /*reason*/) { _lockReason.clear(); }    // reason for clarity
     bool isLocked() const { return !_lockReason.isEmpty(); }
     const String& lockReason() const { return _lockReason; }
 

@@ -28,6 +28,7 @@
 #include "changeMap.h"
 
 #include <cmath>
+#include <cassert>
 
 #include "containers.h"
 
