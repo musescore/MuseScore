@@ -433,7 +433,7 @@ void GuitarPro6::readGPX(QByteArray* buffer, const IGPDomBuilder::GPProperties& 
             }
         }
         // recurse on the decompressed file stored as a byte array
-        readGPX(&bcfsBuffer);
+        readGPX(&bcfsBuffer, gpProperties);
     } else if (fileHeader == GPX_HEADER_UNCOMPRESSED) {
         // this is an uncompressed file - strip the header off
         *buffer = buffer->right(buffer->length() - sizeof(int));
