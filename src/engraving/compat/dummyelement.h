@@ -54,7 +54,7 @@ public:
     bool setProperty(Pid, const PropertyValue&) override { return false; }
 
 private:
-    AccessibleItem* createAccessible() override;
+    AccessibleItemPtr createAccessible() override;
 
     RootItem* m_root = nullptr;
     Page* m_page = nullptr;

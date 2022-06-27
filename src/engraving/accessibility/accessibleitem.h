@@ -97,6 +97,8 @@ protected:
     mu::async::Channel<IAccessible::Property, Val> m_accessiblePropertyChanged;
     mu::async::Channel<IAccessible::State, bool> m_accessibleStateChanged;
 };
+using AccessibleItemPtr = std::shared_ptr<AccessibleItem>;
+using AccessibleItemWeakPtr = std::weak_ptr<AccessibleItem>;
 }
 
 #endif // MU_ENGRAVING_ACCESSIBLEITEM_H

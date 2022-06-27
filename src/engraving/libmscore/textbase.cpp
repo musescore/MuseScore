@@ -3047,9 +3047,9 @@ String TextBase::getHtmlEndTag(FontStyle style, VerticalAlignment vAlign)
     return s;
 }
 
-AccessibleItem* TextBase::createAccessible()
+AccessibleItemPtr TextBase::createAccessible()
 {
-    return new AccessibleItem(this, AccessibleItem::EditableText);
+    return std::make_shared<AccessibleItem>(this, AccessibleItem::EditableText);
 }
 
 void TextBase::notifyAboutTextCursorChanged()
