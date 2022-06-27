@@ -279,6 +279,10 @@ void GPConverter::setupTabDisplayStyle()
     std::vector<GPDomModel::TabImportOption>& partsImportOpts = properties.partsImportOptions;
     bool importLinkedStaffForce = properties.createLinkedTabForce;
 
+    if (!importLinkedStaffForce) {
+        return;
+    }
+
     if (partsImportOpts.size() != _score->parts().size()) {
         importLinkedStaffForce = true;
     }
@@ -1770,7 +1774,6 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elem
                                  bool forceSplitByRests)
 {
     track_idx_t track = cr->track();
-    LOGE() << "@# add line element for track : " << cr->track();
 
     auto& lastTypeForTrack = m_lastImportTypes[track][muType];
 
@@ -1846,7 +1849,6 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elem
         newElem->setTick(tick);
         newElem->setTick2(tick + cr->actualTicks());
         newElem->setTrack(track);
-        LOGE() << "@# new elem track & track2 === " << track;
         newElem->setTrack2(track);
         newElem->setStartElement(cr);
         newElem->setEndElement(cr);
