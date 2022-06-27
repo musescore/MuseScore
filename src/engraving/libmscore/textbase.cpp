@@ -58,7 +58,7 @@ namespace mu::engraving {
 #ifdef Q_OS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
 #else
-#define CONTROL_MODIFIER Qt::ControlModifier
+#define CONTROL_MODIFIER ControlModifier
 #endif
 
 static const double subScriptSize     = 0.6;
@@ -2442,7 +2442,7 @@ std::vector<LineF> TextBase::dragAnchorLines() const
 
 bool TextBase::mousePress(EditData& ed)
 {
-    bool shift = ed.modifiers & Qt::ShiftModifier;
+    bool shift = ed.modifiers & ShiftModifier;
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     if (!ted->cursor()->set(ed.startMove, shift ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor)) {
         return false;

@@ -416,7 +416,7 @@ EngravingItem* KeySig::drop(EditData& data)
     }
     KeySigEvent k = ks->keySigEvent();
     delete ks;
-    if (data.modifiers & Qt::ControlModifier) {
+    if (data.modifiers & ControlModifier) {
         // apply only to this stave
         if (!(k == keySigEvent())) {
             score()->undoChangeKeySig(staff(), tick(), k);

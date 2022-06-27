@@ -450,8 +450,8 @@ mu::RectF Dynamic::drag(EditData& ed)
     //
     // move anchor
     //
-    Qt::KeyboardModifiers km = ed.modifiers;
-    if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+    KeyboardModifiers km = ed.modifiers;
+    if (km != (ShiftModifier | ControlModifier)) {
         staff_idx_t si = staffIdx();
         Segment* seg = segment();
         score()->dragPosition(canvasPos(), &si, &seg);

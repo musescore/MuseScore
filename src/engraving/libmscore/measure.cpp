@@ -1497,7 +1497,7 @@ bool Measure::acceptDrop(EditData& data) const
 
     case ElementType::KEYSIG:
     case ElementType::TIMESIG:
-        if (data.modifiers & Qt::ControlModifier) {
+        if (data.modifiers & ControlModifier) {
             viewer->setDropRectangle(staffR);
         } else {
             viewer->setDropRectangle(canvasBoundingRect());
@@ -1634,7 +1634,7 @@ EngravingItem* Measure::drop(EditData& data)
         KeySigEvent k = toKeySig(e)->keySigEvent();
         delete e;
 
-        if (data.modifiers & Qt::ControlModifier) {
+        if (data.modifiers & ControlModifier) {
             // apply only to this stave
             score()->undoChangeKeySig(staff, tick(), k);
         } else {
@@ -1648,7 +1648,7 @@ EngravingItem* Measure::drop(EditData& data)
     }
 
     case ElementType::TIMESIG:
-        score()->cmdAddTimeSig(this, staffIdx, toTimeSig(e), data.modifiers & Qt::ControlModifier);
+        score()->cmdAddTimeSig(this, staffIdx, toTimeSig(e), data.modifiers & ControlModifier);
         break;
 
     case ElementType::LAYOUT_BREAK: {

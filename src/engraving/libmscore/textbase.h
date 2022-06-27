@@ -492,9 +492,9 @@ public:
 };
 
 // allow shortcut key controller to handle
-inline bool isTextNavigationKey(int key, Qt::KeyboardModifiers modifiers)
+inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)
 {
-    if (modifiers & Qt::ControlModifier) {
+    if (modifiers & ControlModifier) {
         static const std::set<int> standardTextOperationsKeys {
             Qt::Key_Space, // Ctrl + Space inserts the space symbol
             Qt::Key_A // select all

@@ -2046,7 +2046,7 @@ EngravingItem* Note::drop(EditData& data)
         nval.pitch = n->pitch();
         nval.headGroup = n->headGroup();
         ChordRest* cr = nullptr;
-        if (data.modifiers & Qt::ShiftModifier) {
+        if (data.modifiers & ShiftModifier) {
             // add note to chord
             score()->addNote(ch, nval);
         } else {
@@ -2781,7 +2781,7 @@ void Note::editDrag(EditData& editData)
     Chord* ch = chord();
     Segment* seg = ch->segment();
 
-    if (editData.modifiers & Qt::ShiftModifier) {
+    if (editData.modifiers & ShiftModifier) {
         const Spatium deltaSp = Spatium(editData.delta.x() / spatium());
         seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
     } else if (ch->notes().size() == 1) {
