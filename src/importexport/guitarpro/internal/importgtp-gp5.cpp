@@ -957,7 +957,7 @@ bool GuitarPro5::read(IODevice* io, bool createLinkedTabForce)
     /// сopied from gpconverter.cpp
     /// creating linked TAB staff
     if (createLinkedTabForce) {
-        for (int i = 0; i < score->parts().size(); i++) {
+        for (size_t i = 0; i < score->parts().size(); i++) {
             Part* part = score->parts()[i];
             Fraction fr = Fraction(0, 1);
             int lines = part->instrument()->stringData()->strings();

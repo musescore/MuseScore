@@ -23,6 +23,8 @@
 #ifndef __TEXTBASE_H__
 #define __TEXTBASE_H__
 
+#include <variant>
+
 #include "infrastructure/draw/fontmetrics.h"
 
 #include "infrastructure/draw/color.h"
@@ -57,6 +59,8 @@ enum class VerticalAlignment : signed char {
 enum class FormatId : char {
     Bold, Italic, Underline, Strike, Valign, FontSize, FontFamily
 };
+
+using FormatValue = std::variant<std::monostate, bool, int, double, String>;
 
 //---------------------------------------------------------
 //   MultiClick
@@ -101,8 +105,8 @@ public:
     void setFontFamily(const String& val) { _fontFamily = val; }
     void setTextLineSpacing(double val) { _textLineSpacing = val; }
 
-    QVariant formatValue(FormatId) const;
-    void setFormatValue(FormatId, QVariant);
+    FormatValue formatValue(FormatId) const;
+    void setFormatValue(FormatId, const FormatValue& val);
 };
 
 //---------------------------------------------------------
@@ -187,8 +191,8 @@ public:
     String selectedText(bool withFormat = false) const;
     String extractText(int r1, int c1, int r2, int c2, bool withFormat = false) const;
     void updateCursorFormat();
-    void setFormat(FormatId, QVariant);
-    void changeSelectionFormat(FormatId id, QVariant val);
+    void setFormat(FormatId, FormatValue val);
+    void changeSelectionFormat(FormatId id, const FormatValue& val);
     const CharFormat selectedFragmentsFormat() const;
 
 private:
@@ -217,7 +221,7 @@ public:
     void draw(mu::draw::Painter*, const TextBase*) const;
     mu::draw::Font font(const TextBase*) const;
     int columns() const;
-    void changeFormat(FormatId id, QVariant data);
+    void changeFormat(FormatId id, const FormatValue& data);
 };
 
 //---------------------------------------------------------
@@ -264,7 +268,7 @@ public:
     String text(int, int, bool = false) const;
     bool eol() const { return _eol; }
     void setEol(bool val) { _eol = val; }
-    void changeFormat(FormatId, QVariant val, int start, int n);
+    void changeFormat(FormatId, const FormatValue& val, int start, int n);
 };
 
 //---------------------------------------------------------

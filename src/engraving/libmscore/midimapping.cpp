@@ -110,14 +110,14 @@ int MasterScore::getNextFreeMidiMapping(int p, int ch)
         return p * 16 + ch;
     } else if (ch != -1 && p == -1) {
         for (int port = 0;; port++) {
-            if (!occupiedMidiChannels.contains(port * 16 + ch)) {
+            if (!mu::contains(occupiedMidiChannels, port * 16 + ch)) {
                 occupiedMidiChannels.insert(port * 16 + ch);
                 return port * 16 + ch;
             }
         }
     } else if (ch == -1 && p != -1) {
         for (int channel = 0; channel < 16; channel++) {
-            if (channel != 9 && !occupiedMidiChannels.contains(p * 16 + channel)) {
+            if (channel != 9 && !mu::contains(occupiedMidiChannels, p * 16 + channel)) {
                 occupiedMidiChannels.insert(p * 16 + channel);
                 return p * 16 + channel;
             }
@@ -125,7 +125,7 @@ int MasterScore::getNextFreeMidiMapping(int p, int ch)
     }
 
     for (;; searchMidiMappingFrom++) {
-        if (searchMidiMappingFrom % 16 != 9 && !occupiedMidiChannels.contains(searchMidiMappingFrom)) {
+        if (searchMidiMappingFrom % 16 != 9 && !mu::contains(occupiedMidiChannels, int(searchMidiMappingFrom))) {
             occupiedMidiChannels.insert(searchMidiMappingFrom);
             return searchMidiMappingFrom;
         }
@@ -139,7 +139,7 @@ int MasterScore::getNextFreeMidiMapping(int p, int ch)
 int MasterScore::getNextFreeDrumMidiMapping()
 {
     for (int i = 0;; i++) {
-        if (!occupiedMidiChannels.contains(i * 16 + 9)) {
+        if (!mu::contains(occupiedMidiChannels, i * 16 + 9)) {
             occupiedMidiChannels.insert(i * 16 + 9);
             return i * 16 + 9;
         }
@@ -259,7 +259,6 @@ int MasterScore::updateMidiMapping()
     int maxport = 0;
     occupiedMidiChannels.clear();
     searchMidiMappingFrom = 0;
-    occupiedMidiChannels.reserve(int(_midiMapping.size()));   // Bringing down the complexity of insertion to amortized O(1)
 
     for (const MidiMapping& mm :_midiMapping) {
         if (mm.port() == -1 || mm.channel() == -1) {

@@ -68,13 +68,13 @@ IGPDomBuilder::GPProperties GuitarPro7::readProperties(QByteArray* data)
 {
     IGPDomBuilder::GPProperties properties;
     size_t partsInfoSize = data->size();
-    const int numInstrOffset = 8;
+    const size_t numInstrOffset = 8;
     if (partsInfoSize <= numInstrOffset) {
         LOGE() << "failed to read gp properties";
         return properties;
     }
 
-    int numberOfInstruments = static_cast<int>(data->at(numInstrOffset));
+    size_t numberOfInstruments = static_cast<size_t>(data->at(numInstrOffset));
     if (partsInfoSize <= numInstrOffset + numberOfInstruments) {
         LOGE() << "failed to read gp properties";
         return properties;

@@ -243,9 +243,9 @@ public:
     Hook* hook() const { return _hook; }
 
     //@ add an element to the Chord
-    Q_INVOKABLE void add(EngravingItem*) override;
+    void add(EngravingItem*) override;
     //@ remove the element from the Chord
-    Q_INVOKABLE void remove(EngravingItem*) override;
+    void remove(EngravingItem*) override;
 
     Note* selectedNote() const;
     void layout() override;

@@ -136,6 +136,14 @@ inline void join(std::vector<T>& l1, const std::vector<T>& l2)
     l1.insert(l1.end(), l2.begin(), l2.end());
 }
 
+template<typename T>
+inline void DeleteAll(const std::vector<T*>& v)
+{
+    for (T* i : v) {
+        delete i;
+    }
+}
+
 // list
 template<typename T>
 inline bool contains(const std::list<T>& l, const T& v)

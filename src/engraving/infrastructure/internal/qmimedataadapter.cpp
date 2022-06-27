@@ -28,7 +28,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-QMimeDataAdapter::QMimeDataAdapter(const QMimeData *d)
+QMimeDataAdapter::QMimeDataAdapter(const QMimeData* d)
     : m_data(d)
 {
 }
