@@ -42,11 +42,6 @@ AccessibleItem::~AccessibleItem()
 {
     m_element = nullptr;
 
-    AccessibleRoot* root = accessibleRoot();
-    if (root && root->focusedElement() == this) {
-        root->setFocusedElement(nullptr);
-    }
-
     if (m_registred && accessibilityController()) {
         accessibilityController()->unreg(this);
         m_registred = false;
@@ -84,7 +79,7 @@ AccessibleRoot* AccessibleItem::accessibleRoot() const
     }
 
     RootItem* rootItem = m_element->explicitParent() ? score->rootItem() : score->dummy()->rootItem();
-    return dynamic_cast<AccessibleRoot*>(rootItem->accessible());
+    return dynamic_cast<AccessibleRoot*>(rootItem->accessible().get());
 }
 
 const EngravingItem* AccessibleItem::element() const
@@ -113,7 +108,7 @@ const IAccessible* AccessibleItem::accessibleParent() const
         return nullptr;
     }
 
-    return static_cast<EngravingItem*>(p)->accessible();
+    return static_cast<EngravingItem*>(p)->accessible().get();
 }
 
 size_t AccessibleItem::accessibleChildCount() const
@@ -127,7 +122,7 @@ size_t AccessibleItem::accessibleChildCount() const
     size_t count = 0;
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
-            AccessibleItem* access = toEngravingItem(obj)->accessible();
+            AccessibleItemPtr access = toEngravingItem(obj)->accessible();
             if (access && access->registered()) {
                 ++count;
             }
@@ -147,10 +142,10 @@ const IAccessible* AccessibleItem::accessibleChild(size_t i) const
     size_t count = 0;
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
-            AccessibleItem* access = toEngravingItem(obj)->accessible();
+            AccessibleItemPtr access = toEngravingItem(obj)->accessible();
             if (access && access->registered()) {
                 if (count == i) {
-                    return access;
+                    return access.get();
                 }
                 ++count;
             }
@@ -341,7 +336,7 @@ bool AccessibleItem::accessibleState(State st) const
         return false;
     }
 
-    auto root = accessibleRoot();
+    AccessibleRoot* root = accessibleRoot();
     if (!root || !root->enabled()) {
         return false;
     }
@@ -349,7 +344,11 @@ bool AccessibleItem::accessibleState(State st) const
     switch (st) {
     case IAccessible::State::Enabled: return true;
     case IAccessible::State::Active: return true;
-    case IAccessible::State::Focused: return root->focusedElement() == this;
+    case IAccessible::State::Focused: {
+        if (AccessibleItemPtr focusedElement = root->focusedElement().lock()) {
+            return focusedElement->element() == element();
+        }
+    }
     case IAccessible::State::Selected: return m_element->selected();
     default:
         break;

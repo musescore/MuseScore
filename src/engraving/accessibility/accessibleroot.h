@@ -34,8 +34,8 @@ public:
     AccessibleRoot(RootItem* e);
     ~AccessibleRoot() override;
 
-    void setFocusedElement(AccessibleItem* e);
-    AccessibleItem* focusedElement() const;
+    void setFocusedElement(AccessibleItemPtr e);
+    AccessibleItemWeakPtr focusedElement() const;
 
     void setMapToScreenFunc(const AccessibleMapToScreenFunc& func);
     RectF toScreenRect(const RectF& rect, bool* ok = nullptr) const;
@@ -50,11 +50,11 @@ public:
     QString staffInfo() const;
 
 private:
-    void updateStaffInfo(const AccessibleItem* newAccessibleItem, const AccessibleItem* oldAccessibleItem);
+    void updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem);
 
     bool m_enabled = false;
 
-    AccessibleItem* m_focusedElement = nullptr;
+    AccessibleItemWeakPtr m_focusedElement;
 
     AccessibleMapToScreenFunc m_accessibleMapToScreenFunc;
 
