@@ -47,6 +47,7 @@
 #include "infrastructure/io/mscwriter.h"
 #include "infrastructure/io/mscreader.h"
 #include "infrastructure/draw/iimageprovider.h"
+#include "infrastructure/interactive/imimedata.h"
 
 #include "rw/readcontext.h"
 
@@ -944,7 +945,7 @@ public:
     void spatiumChanged(double oldValue, double newValue);
     void styleChanged() override;
 
-    void cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
+    void cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst);

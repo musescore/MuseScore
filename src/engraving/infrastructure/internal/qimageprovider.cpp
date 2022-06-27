@@ -36,20 +36,6 @@ Pixmap QImageProvider::scaled(const Pixmap& origin, const Size& s) const
     return Pixmap::fromQPixmap(qtPixmap);
 }
 
-// Temporary method, because now both our Pixmap and QImage can be used
-std::shared_ptr<Pixmap> QImageProvider::pixmapFromQVariant(const QVariant& val)
-{
-    IF_ASSERT_FAILED(val.canConvert<Pixmap>() || val.canConvert<QImage>()) {
-    }
-
-    if (val.canConvert<Pixmap>()) {
-        return std::make_shared<Pixmap>(val.value<Pixmap>());
-    } else if (val.canConvert<QImage>()) {
-        return std::make_shared<Pixmap>(Pixmap::fromQPixmap(QPixmap::fromImage(val.value<QImage>())));
-    }
-    return nullptr;
-}
-
 std::shared_ptr<IPaintProvider> QImageProvider::painterForImage(std::shared_ptr<Pixmap> pixmap)
 {
     return QImagePainterProvider::make(pixmap);

@@ -150,7 +150,7 @@ std::vector<EngravingItem*> BspTree::items(const RectF& rec)
     FindItemBspTreeVisitor findVisitor;
     climbTree(&findVisitor, rec);
     std::vector<EngravingItem*> l;
-    for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
+    for (EngravingItem* e : findVisitor.foundItems) {
         e->itemDiscovered = false;
         if (e->pageBoundingRect().intersects(rec)) {
             l.push_back(e);
@@ -169,7 +169,7 @@ std::vector<EngravingItem*> BspTree::items(const PointF& pos)
     climbTree(&findVisitor, pos);
 
     std::vector<EngravingItem*> l;
-    for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
+    for (EngravingItem* e : findVisitor.foundItems) {
         e->itemDiscovered = false;
         if (e->contains(pos)) {
             l.push_back(e);

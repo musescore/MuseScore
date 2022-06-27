@@ -38,6 +38,7 @@
 #include "engraving/rw/xml.h"
 #include "engraving/infrastructure/draw/pen.h"
 #include "engraving/infrastructure/draw/painterpath.h"
+#include "engraving/infrastructure/internal/qmimedataadapter.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/page.h"
@@ -3333,7 +3334,8 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
         toTextBase(m_editData.element)->paste(m_editData, txt);
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
-        score()->cmdPaste(mimeData, nullptr, scale);
+        QMimeDataAdapter ma(mimeData);
+        score()->cmdPaste(&ma, nullptr, scale);
     }
     apply();
 }
