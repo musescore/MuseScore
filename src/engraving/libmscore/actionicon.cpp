@@ -109,7 +109,7 @@ void ActionIcon::draw(Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     painter->setFont(m_iconFont);
-    painter->drawText(bbox(), Qt::AlignCenter, Char(m_icon));
+    painter->drawText(bbox(), draw::AlignCenter, Char(m_icon));
 }
 
 engraving::PropertyValue ActionIcon::getProperty(Pid pid) const

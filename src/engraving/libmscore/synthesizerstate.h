@@ -59,7 +59,7 @@ public:
     SynthesizerGroup()
         : std::list<IdValue>() {}
     SynthesizerGroup(const char* n, std::list<IdValue> l)
-        : std::list<IdValue>(l), _name(n) {}
+        : std::list<IdValue>(l), _name(String::fromUtf8(n)) {}
 };
 
 //---------------------------------------------------------
