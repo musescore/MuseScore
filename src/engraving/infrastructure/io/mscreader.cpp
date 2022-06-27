@@ -250,11 +250,11 @@ Ret MscReader::ZipFileReader::open(IODevice* device, const path_t& filePath)
     if (!m_device) {
         m_device = new File(filePath);
         m_selfDeviceOwner = true;
-    }
-
-    if (!FileInfo::exists(filePath)) {
-        LOGD() << "not exists path: " << filePath;
-        return scoreFileErrorToRet(Score::FileError::FILE_NOT_FOUND, filePath);
+        
+        if (!FileInfo::exists(filePath)) {
+            LOGD() << "not exists path: " << filePath;
+            return scoreFileErrorToRet(Score::FileError::FILE_NOT_FOUND, filePath);
+        }
     }
 
     if (!m_device->isOpen()) {
@@ -394,11 +394,11 @@ Ret MscReader::XmlFileReader::open(IODevice* device, const path_t& filePath)
     if (!m_device) {
         m_device = new File(filePath);
         m_selfDeviceOwner = true;
-    }
-
-    if (!FileInfo::exists(filePath)) {
-        LOGD() << "not exists path: " << filePath;
-        return scoreFileErrorToRet(Score::FileError::FILE_NOT_FOUND, filePath);
+        
+        if (!FileInfo::exists(filePath)) {
+            LOGD() << "not exists path: " << filePath;
+            return scoreFileErrorToRet(Score::FileError::FILE_NOT_FOUND, filePath);
+        }
     }
 
     if (!m_device->isOpen()) {
