@@ -43,22 +43,27 @@ const SpannerMap::SpannerRange& SpannerMap::range(int tickFrom, int tickTo) cons
     static SpannerRange result;
 
     if (empty()) {
-        static SpannerRange empty;
-        return empty;
-    }
-
-    auto firstNotLess = lower_bound(tickFrom);
-    auto firstGreater = upper_bound(tickTo);
-
-    if (firstNotLess == cbegin()) {
-        result.first = firstNotLess;
-        result.last = firstGreater;
+        result.first = cend();
+        result.last = cend();
         return result;
     }
 
-    auto firstLess = std::prev(firstNotLess);
+    auto firstNotLess = std::lower_bound(cbegin(), cend(), tickFrom, [](const auto& pair, int tick) {
+        int spannerFrom = pair.second->tick().ticks();
+        int spannerTo = pair.second->tick().ticks() + pair.second->ticks().ticks();
+        return spannerFrom < tick && spannerTo < tick;
+    });
 
-    result.first = firstLess;
+    auto firstGreater = upper_bound(tickTo);
+
+    if (firstNotLess == firstGreater
+        || firstNotLess->first >= tickTo) {
+        result.first = cend();
+        result.last = cend();
+        return result;
+    }
+
+    result.first = firstNotLess;
     result.last = firstGreater;
     return result;
 }
