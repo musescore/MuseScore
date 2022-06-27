@@ -81,6 +81,7 @@ class Beam final : public EngravingItem
     int _minMove             { 0 };                // set in layout1()
     int _maxMove             { 0 };
     TDuration _maxDuration;
+    bool _noSlope = false;
     qreal _slope             { 0.0 };
     std::vector<int> _notes;
 
@@ -190,6 +191,9 @@ public:
     void setBeamPos(const PairF& bp);
 
     qreal beamDist() const { return _beamDist; }
+
+    bool noSlope() const { return _noSlope; }
+    void setNoSlope(bool b);
 
     inline const mu::PointF startAnchor() const { return _startAnchor; }
     inline const mu::PointF endAnchor() const { return _endAnchor; }

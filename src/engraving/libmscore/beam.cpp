@@ -554,7 +554,7 @@ int Beam::getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int sta
 
 int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const
 {
-    if (score()->styleB(Sid::beamNoSlope)) {
+    if (noSlope()) {
         return 0;
     }
     if (dictator == middleLine && pointer == middleLine) {
@@ -1041,7 +1041,8 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
         Chord* chord = toChord(chordRest);
         PointF anchor = chordBeamAnchor(chord) - pagePos();
         if (endX != startX) {
-            // avoid division by zero for zero-length beams (why do these exist?)
+            // avoid division by zero for zero-length beams (can exist as a pre-layout state used
+            // for horizontal spacing computations)
             qreal proportionAlongX = (anchor.x() - startX) / (endX - startX);
             while (true) {
                 qreal desiredY = proportionAlongX * (endY - startY) + startY;
@@ -1210,7 +1211,7 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCount, int
 
 void Beam::addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval)
 {
-    if (interval == 0 || (beamCount > 2 && _beamSpacing != 4) || score()->styleB(Sid::beamNoSlope)) {
+    if (interval == 0 || (beamCount > 2 && _beamSpacing != 4) || noSlope()) {
         return;
     }
     bool isOnMiddleLine = pointer == middleLine && (qAbs(pointer - dictator) < 2);
@@ -1226,7 +1227,7 @@ void Beam::addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int mi
 void Beam::add8thSpaceSlant(PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
                             int interval, int middleLine, bool isFlat)
 {
-    if (beamCount != 3 || score()->styleB(Sid::beamNoSlope) || _beamSpacing != 3) {
+    if (beamCount != 3 || noSlope() || _beamSpacing != 3) {
         return;
     }
     if ((isFlat && dictator != middleLine) || (dictator != pointer) || interval == 0) {
@@ -1391,97 +1392,100 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
             _startAnchor.ry() = (maxY + minY) / 2;
             _endAnchor.ry() = (maxY + minY) / 2;
             _slope = 0;
-            int topFirstLine = topFirst ? topFirst->downNote()->line() : 0;
-            int topLastLine = topLast ? topLast->downNote()->line() : 0;
-            int bottomFirstLine = bottomFirst ? bottomFirst->upNote()->line() : 0;
-            int bottomLastLine = bottomLast ? bottomLast->upNote()->line() : 0;
-            bool constrainTopToQuarter = false;
-            bool constrainBottomToQuarter = false;
-            if ((topFirstLine > topLastLine && secondTopIsSame)
-                || (topFirstLine < topLastLine && penultimateTopIsSame)) {
-                constrainTopToQuarter = true;
-            }
-            if ((bottomFirstLine < bottomLastLine && secondBottomIsSame)
-                || (bottomFirstLine > bottomLastLine && penultimateBottomIsSame)) {
-                constrainBottomToQuarter = true;
-            }
-            if (chordRests.size() == 2 && chordRests[0]->staffMove() != chordRests[1]->staffMove()) {
-                // if there are only two notes, one on each staff, special case
-                // take max slope into account
-                int desiredSlant = round((chordRests[0]->stemPos().y() - chordRests[1]->stemPos().y()) / spatium());
-                int slant = std::min(std::abs(desiredSlant), getMaxSlope());
-                slant *= (desiredSlant < 0) ? -quarterSpace : quarterSpace;
-                _startAnchor.ry() += (slant / 2);
-                _endAnchor.ry() -= (slant / 2);
-            } else if (!topLast || !bottomLast) {
-                // otherwise, if there is only one note on one of the staves, use slope from other staff
-                int startNote = 0;
-                int endNote = 0;
-                bool forceHoriz = false;
-                if (!topLast) {
-                    startNote = bottomFirstLine;
-                    endNote = bottomLastLine;
-                    if (minMiddleBottomLine <= std::min(startNote, endNote)) {
-                        // there is a note closer to the beam than the start and end notes
-                        // we force horizontal beam here.
-                        forceHoriz = true;
+
+            if (!noSlope()) {
+                int topFirstLine = topFirst ? topFirst->downNote()->line() : 0;
+                int topLastLine = topLast ? topLast->downNote()->line() : 0;
+                int bottomFirstLine = bottomFirst ? bottomFirst->upNote()->line() : 0;
+                int bottomLastLine = bottomLast ? bottomLast->upNote()->line() : 0;
+                bool constrainTopToQuarter = false;
+                bool constrainBottomToQuarter = false;
+                if ((topFirstLine > topLastLine && secondTopIsSame)
+                    || (topFirstLine < topLastLine && penultimateTopIsSame)) {
+                    constrainTopToQuarter = true;
+                }
+                if ((bottomFirstLine < bottomLastLine && secondBottomIsSame)
+                    || (bottomFirstLine > bottomLastLine && penultimateBottomIsSame)) {
+                    constrainBottomToQuarter = true;
+                }
+                if (chordRests.size() == 2 && chordRests[0]->staffMove() != chordRests[1]->staffMove()) {
+                    // if there are only two notes, one on each staff, special case
+                    // take max slope into account
+                    int desiredSlant = round((chordRests[0]->stemPos().y() - chordRests[1]->stemPos().y()) / spatium());
+                    int slant = std::min(std::abs(desiredSlant), getMaxSlope());
+                    slant *= (desiredSlant < 0) ? -quarterSpace : quarterSpace;
+                    _startAnchor.ry() += (slant / 2);
+                    _endAnchor.ry() -= (slant / 2);
+                } else if (!topLast || !bottomLast) {
+                    // otherwise, if there is only one note on one of the staves, use slope from other staff
+                    int startNote = 0;
+                    int endNote = 0;
+                    bool forceHoriz = false;
+                    if (!topLast) {
+                        startNote = bottomFirstLine;
+                        endNote = bottomLastLine;
+                        if (minMiddleBottomLine <= std::min(startNote, endNote)) {
+                            // there is a note closer to the beam than the start and end notes
+                            // we force horizontal beam here.
+                            forceHoriz = true;
+                        }
+                    } else if (!bottomLast) {
+                        startNote = topFirstLine;
+                        endNote = topLastLine;
+                        if (maxMiddleTopLine >= std::max(startNote, endNote)) {
+                            // same as above, for the top staff
+                            // force horizontal.
+                            forceHoriz = true;
+                        }
                     }
-                } else if (!bottomLast) {
-                    startNote = topFirstLine;
-                    endNote = topLastLine;
-                    if (maxMiddleTopLine >= std::max(startNote, endNote)) {
-                        // same as above, for the top staff
-                        // force horizontal.
-                        forceHoriz = true;
-                    }
-                }
-                if (!forceHoriz) {
-                    int slant = startNote - endNote;
-                    slant = std::min(std::abs(slant), getMaxSlope());
-                    if ((!bottomLast && constrainTopToQuarter)
-                        || (!topLast && constrainBottomToQuarter)) {
-                        slant = 1;
-                    }
-                    qreal slope = slant * (startNote > endNote ? quarterSpace : -quarterSpace);
-                    _startAnchor.ry() += (slope / 2);
-                    _endAnchor.ry() -= (slope / 2);
-                } // otherwise, do nothing, beam is already horizontal.
-            } else {
-                // otherwise, there are at least two notes on each staff
-                // (that is, topLast and bottomLast are both set)
-                bool forceHoriz = false;
-                if (topFirstLine == topLastLine || bottomFirstLine == bottomLastLine) {
-                    // if outside notes on top or bottom staff are on the same staff line, slope = 0
-                    // no further adjustment needed, the beam is already well-placed and horizontal
-                    forceHoriz = true;
-                }
-                // otherwise, we have to compare the slopes from the top staff and bottom staff.
-                int topSlant = topFirstLine - topLastLine;
-                if (constrainTopToQuarter && topSlant != 0) {
-                    topSlant = topFirstLine < topLastLine ? -1 : 1;
-                }
-                int bottomSlant = bottomFirstLine - bottomLastLine;
-                if (constrainBottomToQuarter && bottomSlant != 0) {
-                    bottomSlant = bottomFirstLine < bottomLastLine ? -1 : 1;
-                }
-                if ((maxMiddleTopLine >= std::max(topFirstLine, topLastLine)
-                     || (minMiddleBottomLine <= std::min(bottomFirstLine, bottomLastLine)))) {
-                    forceHoriz = true;
-                }
-                if (topSlant == 0 || bottomSlant == 0 || forceHoriz) {
-                    // if one of the slants is 0, the whole slant is zero
-                } else if ((topSlant < 0 && bottomSlant < 0) || (topSlant > 0 && bottomSlant > 0)) {
-                    int slant = (abs(topSlant) < abs(bottomSlant)) ? topSlant : bottomSlant;
-                    slant = std::min(std::abs(slant), getMaxSlope());
-                    qreal slope = slant * ((topSlant < 0) ? -quarterSpace : quarterSpace);
-                    _startAnchor.ry() += (slope / 2);
-                    _endAnchor.ry() -= (slope / 2);
+                    if (!forceHoriz) {
+                        int slant = startNote - endNote;
+                        slant = std::min(std::abs(slant), getMaxSlope());
+                        if ((!bottomLast && constrainTopToQuarter)
+                            || (!topLast && constrainBottomToQuarter)) {
+                            slant = 1;
+                        }
+                        qreal slope = slant * (startNote > endNote ? quarterSpace : -quarterSpace);
+                        _startAnchor.ry() += (slope / 2);
+                        _endAnchor.ry() -= (slope / 2);
+                    } // otherwise, do nothing, beam is already horizontal.
                 } else {
-                    // if the two slopes are in opposite directions, flat!
-                    // nothing needs to be done, the beam is already horizontal and placed nicely
+                    // otherwise, there are at least two notes on each staff
+                    // (that is, topLast and bottomLast are both set)
+                    bool forceHoriz = false;
+                    if (topFirstLine == topLastLine || bottomFirstLine == bottomLastLine) {
+                        // if outside notes on top or bottom staff are on the same staff line, slope = 0
+                        // no further adjustment needed, the beam is already well-placed and horizontal
+                        forceHoriz = true;
+                    }
+                    // otherwise, we have to compare the slopes from the top staff and bottom staff.
+                    int topSlant = topFirstLine - topLastLine;
+                    if (constrainTopToQuarter && topSlant != 0) {
+                        topSlant = topFirstLine < topLastLine ? -1 : 1;
+                    }
+                    int bottomSlant = bottomFirstLine - bottomLastLine;
+                    if (constrainBottomToQuarter && bottomSlant != 0) {
+                        bottomSlant = bottomFirstLine < bottomLastLine ? -1 : 1;
+                    }
+                    if ((maxMiddleTopLine >= std::max(topFirstLine, topLastLine)
+                         || (minMiddleBottomLine <= std::min(bottomFirstLine, bottomLastLine)))) {
+                        forceHoriz = true;
+                    }
+                    if (topSlant == 0 || bottomSlant == 0 || forceHoriz) {
+                        // if one of the slants is 0, the whole slant is zero
+                    } else if ((topSlant < 0 && bottomSlant < 0) || (topSlant > 0 && bottomSlant > 0)) {
+                        int slant = (abs(topSlant) < abs(bottomSlant)) ? topSlant : bottomSlant;
+                        slant = std::min(std::abs(slant), getMaxSlope());
+                        qreal slope = slant * ((topSlant < 0) ? -quarterSpace : quarterSpace);
+                        _startAnchor.ry() += (slope / 2);
+                        _endAnchor.ry() -= (slope / 2);
+                    } else {
+                        // if the two slopes are in opposite directions, flat!
+                        // nothing needs to be done, the beam is already horizontal and placed nicely
+                    }
                 }
+                _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
             }
-            _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
             fragments[frag]->py1[fragmentIndex] = _startAnchor.y() - pagePos().y();
             fragments[frag]->py2[fragmentIndex] = _endAnchor.y() - pagePos().y();
             createBeamSegments(chordRests);
@@ -1699,12 +1703,12 @@ void Beam::editDrag(EditData& ed)
     qreal y1 = f->py1[idx];
     qreal y2 = f->py2[idx];
 
-    if (ed.curGrip == Grip::START) {
+    if (ed.curGrip == Grip::MIDDLE || noSlope()) {
+        y1 += dy;
+        y2 += dy;
+    } else if (ed.curGrip == Grip::START) {
         y1 += dy;
     } else if (ed.curGrip == Grip::END) {
-        y2 += dy;
-    } else if (ed.curGrip == Grip::MIDDLE) {
-        y1 += dy;
         y2 += dy;
     }
 
@@ -1922,8 +1926,26 @@ void Beam::setBeamPos(const PairF& bp)
     _userModified[idx] = true;
     setGenerated(false);
     qreal _spatium = spatium();
-    f->py1[idx] = bp.first * _spatium;
-    f->py2[idx] = bp.second * _spatium;
+    if (noSlope()) {
+        f->py1[idx] = f->py2[idx] = (bp.first + bp.second) * 0.5 * _spatium;
+    } else {
+        f->py1[idx] = bp.first * _spatium;
+        f->py2[idx] = bp.second * _spatium;
+    }
+}
+
+void Beam::setNoSlope(bool b)
+{
+    _noSlope = b;
+
+    // Make flat if usermodified
+    if (_noSlope) {
+        int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+        if (_userModified[idx]) {
+            BeamFragment* f = fragments.back();
+            f->py1[idx] = f->py2[idx] = (f->py1[idx] + f->py2[idx]) * 0.5;
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -1959,7 +1981,7 @@ PropertyValue Beam::getProperty(Pid propertyId) const
     case Pid::GROW_RIGHT:     return growRight();
     case Pid::USER_MODIFIED:  return userModified();
     case Pid::BEAM_POS:       return PropertyValue::fromValue(beamPos());
-    case Pid::BEAM_NO_SLOPE:  return _slope == 0;
+    case Pid::BEAM_NO_SLOPE:  return noSlope();
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -1991,6 +2013,9 @@ bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
         if (userModified()) {
             setBeamPos(v.value<PairF>());
         }
+        break;
+    case Pid::BEAM_NO_SLOPE:
+        setNoSlope(v.toBool());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
