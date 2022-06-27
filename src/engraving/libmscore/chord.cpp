@@ -1427,7 +1427,7 @@ int Chord::calcMinStemLength()
         minStemLength += (outSidePadding + qMax(noteSidePadding, outsideStaffOffset));
 
         if (_hook) {
-            qreal smuflAnchor = _hook->smuflAnchor().y() * (_up ? 1 : -1);
+            double smuflAnchor = _hook->smuflAnchor().y() * (_up ? 1 : -1);
             int hookOffset = (_hook->height() + smuflAnchor) / _spatium * 4 - 2;
             // TODO: when the SMuFL metadata includes a cutout for flags, replace this with that metadata
             // https://github.com/w3c/smufl/issues/203
@@ -1607,7 +1607,7 @@ double Chord::calcDefaultStemLength()
     }
     // extraHeight represents the extra vertical distance between notehead and stem start
     // eg. slashed noteheads etc
-    qreal extraHeight = abs(_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / _relativeMag / _spatium;
+    double extraHeight = abs(_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / _relativeMag / _spatium;
     int shortestStem = score()->styleB(Sid::useWideBeams) ? 12 : (score()->styleD(Sid::shortestStem) + extraHeight) * 4;
     int chordHeight = (downLine() - upLine()) * 2; // convert to quarter spaces
     int stemLength = defaultStemLength;
@@ -1622,7 +1622,7 @@ double Chord::calcDefaultStemLength()
 
     if (up()) {
         int stemEndPosition = upLine() * 2 - defaultStemLength;
-        qreal stemEndPositionMag = upLine() * 2.0 - (defaultStemLength * _relativeMag);
+        double stemEndPositionMag = upLine() * 2.0 - (defaultStemLength * _relativeMag);
         int idealStemLength = defaultStemLength;
 
         if (stemEndPositionMag <= -shortStemStart) {
@@ -1643,7 +1643,7 @@ double Chord::calcDefaultStemLength()
         stemLength = qMax(idealStemLength, minStemLengthQuarterSpaces);
     } else {
         int stemEndPosition = downLine() * 2 + defaultStemLength;
-        qreal stemEndPositionMag = downLine() * 2.0 + (defaultStemLength * _relativeMag);
+        double stemEndPositionMag = downLine() * 2.0 + (defaultStemLength * _relativeMag);
         int idealStemLength = defaultStemLength;
 
         int downShortStemStart = (staffLineCount - 1) * 4 + shortStemStart;
@@ -1665,7 +1665,7 @@ double Chord::calcDefaultStemLength()
     if (beams() == 4) {
         stemLength = calc4BeamsException(stemLength);
     }
-    qreal finalStemLength = (chordHeight / 4.0 * _spatium) + ((stemLength / 4.0 * _spatium) * _relativeMag);
+    double finalStemLength = (chordHeight / 4.0 * _spatium) + ((stemLength / 4.0 * _spatium) * _relativeMag);
     return finalStemLength;
 }
 
