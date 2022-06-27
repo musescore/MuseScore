@@ -519,10 +519,10 @@ bool Lyrics::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    static const std::set<Qt::KeyboardModifiers> navigationModifiers {
-        Qt::NoModifier,
-        Qt::KeypadModifier,
-        Qt::ShiftModifier
+    static const std::set<KeyboardModifiers> navigationModifiers {
+        NoModifier,
+        KeypadModifier,
+        ShiftModifier
     };
 
     if (navigationModifiers.find(ed.modifiers) != navigationModifiers.end()) {

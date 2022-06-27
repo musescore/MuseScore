@@ -452,7 +452,7 @@ void Arpeggio::startEdit(EditData& ed)
 
 bool Arpeggio::isEditAllowed(EditData& ed) const
 {
-    if (ed.curGrip != Grip::END || !(ed.modifiers & Qt::ShiftModifier)) {
+    if (ed.curGrip != Grip::END || !(ed.modifiers & ShiftModifier)) {
         return false;
     }
 

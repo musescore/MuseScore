@@ -1125,7 +1125,7 @@ void Rest::editDrag(EditData& editData)
 {
     Segment* seg = segment();
 
-    if (editData.modifiers & Qt::ShiftModifier) {
+    if (editData.modifiers & ShiftModifier) {
         const Spatium deltaSp = Spatium(editData.delta.x() / spatium());
         seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
     } else {

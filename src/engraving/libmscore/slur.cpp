@@ -145,7 +145,7 @@ bool SlurSegment::isEditAllowed(EditData& ed) const
     const bool moveStart = ed.curGrip == Grip::START;
     const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::DRAG;
 
-    if (!((ed.modifiers & Qt::ShiftModifier) && (isSingleType()
+    if (!((ed.modifiers & ShiftModifier) && (isSingleType()
                                                  || (isBeginType() && moveStart) || (isEndType() && moveEnd)))) {
         return false;
     }

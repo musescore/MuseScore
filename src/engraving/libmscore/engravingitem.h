@@ -26,10 +26,6 @@
 #include "engravingobject.h"
 #include "elementgroup.h"
 
-#include "mscore.h"
-#include "shape.h"
-#include "sig.h"
-
 #include "infrastructure/draw/color.h"
 #include "infrastructure/draw/geometry.h"
 #include "infrastructure/draw/painter.h"
@@ -39,6 +35,12 @@
 
 #include "types/symid.h"
 #include "types/fraction.h"
+#include "types/types.h"
+
+#include "mscore.h"
+#include "shape.h"
+#include "sig.h"
+#include "editdata.h"
 
 namespace mu::engraving {
 class Factory;
@@ -46,30 +48,11 @@ class AccessibleItem;
 }
 
 namespace mu::engraving {
-#ifdef Q_OS_MAC
-#define CONTROL_MODIFIER Qt::AltModifier
-#else
-#define CONTROL_MODIFIER Qt::ControlModifier
-#endif
-
 enum class Pid;
 class StaffType;
 class XmlReader;
 class XmlWriter;
 class MuseScoreView;
-
-//---------------------------------------------------------
-//   Grip
-//---------------------------------------------------------
-
-enum class Grip {
-    NO_GRIP = -1,
-    START = 0, END = 1,                           // arpeggio etc.
-    MIDDLE = 2, APERTURE = 3,                     // Line
-    /*START, END , */
-    BEZIER1 = 2, SHOULDER = 3, BEZIER2 = 4, DRAG = 5,       // Slur
-    GRIPS = 6                       // number of grips for slur
-};
 
 //---------------------------------------------------------
 //   OffsetChange
@@ -133,62 +116,6 @@ enum class KerningType
     NOT_SET,
 };
 
-class ElementEditData;
-
-//---------------------------------------------------------
-//   EditData
-//    used in editDrag
-//---------------------------------------------------------
-
-class EditData
-{
-    std::list<std::shared_ptr<ElementEditData> > data;
-    MuseScoreView* view_ { 0 };
-
-public:
-    MuseScoreView* view() const { return view_; }
-
-    std::vector<mu::RectF> grip;
-    int grips                        { 0 };                 // number of grips
-    Grip curGrip                     { Grip::NO_GRIP };
-
-    mu::PointF pos;
-    mu::PointF startMove;
-    mu::PointF normalizedStartMove; ///< Introduced for transition of drag logic. Don't use in new code.
-    mu::Point startMovePixel;
-    mu::PointF lastPos;
-    mu::PointF delta;               ///< This property is deprecated, use evtDelta or moveDelta instead. In normal drag equals to moveDelta, in edit drag - to evtDelta
-    mu::PointF evtDelta;            ///< Mouse offset for the last mouse move event
-    mu::PointF moveDelta;           ///< Mouse offset from the start of mouse move
-    bool hRaster                     { false };
-    bool vRaster                     { false };
-
-    int key                          { 0 };
-    Qt::KeyboardModifiers modifiers  { /*0*/ };   // '0' initialized via default constructor, doing it here too results in compiler warning with Qt 5.15
-    String s;
-    String preeditString;
-
-    Qt::MouseButtons buttons         { Qt::NoButton };
-
-    // drop data:
-    PointF dragOffset;
-    EngravingItem* element                 { 0 };
-    EngravingItem* dropElement             { 0 };
-
-    EditData(MuseScoreView* v = nullptr)
-        : view_(v) {}
-
-    void clear();
-
-    std::shared_ptr<ElementEditData> getData(const EngravingItem*) const;
-    void addData(std::shared_ptr<ElementEditData>);
-    bool control(bool textEditing = false) const;
-    bool shift() const { return modifiers & Qt::ShiftModifier; }
-    bool isStartEndGrip() { return curGrip == Grip::START || curGrip == Grip::END; }
-};
-
-using ElementEditDataPtr = std::shared_ptr<ElementEditData>;
-
 class EngravingItemList : public std::list<EngravingItem*>
 {
 public:
@@ -210,10 +137,10 @@ class EngravingItem : public EngravingObject
 
     mutable mu::RectF _bbox;  ///< Bounding box relative to _pos + _offset
     double _mag;                     ///< standard magnification (derived value)
-    mu::PointF _pos;          ///< Reference position, relative to _parent, set by autoplace
-    mu::PointF _offset;       ///< offset from reference position, set by autoplace or user
+    PointF _pos;          ///< Reference position, relative to _parent, set by autoplace
+    PointF _offset;       ///< offset from reference position, set by autoplace or user
     OffsetChange _offsetChanged;    ///< set by user actions that change offset, used by autoplace
-    mu::PointF _changedPos;   ///< position set when changing offset
+    PointF _changedPos;   ///< position set when changing offset
     Spatium _minDistance;           ///< autoplace min distance
     track_idx_t _track = mu::nidx; ///< staffIdx * VOICES + voice
     mutable ElementFlags _flags;
@@ -322,32 +249,32 @@ public:
     Spatium minDistance() const { return _minDistance; }
     void setMinDistance(Spatium v) { _minDistance = v; }
     OffsetChange offsetChanged() const { return _offsetChanged; }
-    void setOffsetChanged(bool v, bool absolute = true, const mu::PointF& diff = mu::PointF());
+    void setOffsetChanged(bool v, bool absolute = true, const PointF& diff = PointF());
 
-    const mu::PointF& ipos() const { return _pos; }
-    virtual const mu::PointF pos() const { return _pos + _offset; }
+    const PointF& ipos() const { return _pos; }
+    virtual const PointF pos() const { return _pos + _offset; }
     virtual double x() const { return _pos.x() + _offset.x(); }
     virtual double y() const { return _pos.y() + _offset.y(); }
     virtual void setPos(double x, double y) { _pos.setX(x), _pos.setY(y); }
-    virtual void setPos(const mu::PointF& p) { _pos = p; }
-    mu::PointF& rpos() { return _pos; }
+    virtual void setPos(const PointF& p) { _pos = p; }
+    PointF& rpos() { return _pos; }
     double& rxpos() { return _pos.rx(); }
     double& rypos() { return _pos.ry(); }
-    virtual void move(const mu::PointF& s) { _pos += s; }
+    virtual void move(const PointF& s) { _pos += s; }
     bool skipDraw() const { return _skipDraw; }
 
-    virtual mu::PointF pagePos() const;            ///< position in page coordinates
-    virtual mu::PointF canvasPos() const;          ///< position in canvas coordinates
+    virtual PointF pagePos() const;            ///< position in page coordinates
+    virtual PointF canvasPos() const;          ///< position in canvas coordinates
     double pageX() const;
     double canvasX() const;
 
-    mu::PointF mapFromCanvas(const mu::PointF& p) const { return p - canvasPos(); }
-    mu::PointF mapToCanvas(const mu::PointF& p) const { return p + canvasPos(); }
+    PointF mapFromCanvas(const PointF& p) const { return p - canvasPos(); }
+    PointF mapToCanvas(const PointF& p) const { return p + canvasPos(); }
 
-    const mu::PointF& offset() const { return _offset; }
-    virtual void setOffset(const mu::PointF& o) { _offset = o; }
+    const PointF& offset() const { return _offset; }
+    virtual void setOffset(const PointF& o) { _offset = o; }
     void setOffset(double x, double y) { _offset.setX(x), _offset.setY(y); }
-    mu::PointF& roffset() { return _offset; }
+    PointF& roffset() { return _offset; }
     double& rxoffset() { return _offset.rx(); }
     double& ryoffset() { return _offset.ry(); }
 
@@ -370,7 +297,7 @@ public:
     mu::RectF canvasBoundingRect() const { return bbox().translated(canvasPos()); }
     virtual void setbbox(const mu::RectF& r) const { _bbox = r; }
     virtual void addbbox(const mu::RectF& r) const { _bbox.unite(r); }
-    bool contains(const mu::PointF& p) const;
+    bool contains(const PointF& p) const;
     bool intersects(const mu::RectF& r) const;
     virtual Shape shape() const { return Shape(bbox(), this); }
     virtual double baseLine() const { return -height(); }
@@ -378,7 +305,7 @@ public:
     virtual int subtype() const { return -1; }                    // for select gui
 
     virtual void draw(mu::draw::Painter*) const {}
-    void drawAt(mu::draw::Painter* p, const mu::PointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
+    void drawAt(mu::draw::Painter* p, const PointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
 
     virtual void writeProperties(XmlWriter& xml) const;
     virtual bool readProperties(XmlReader&);
@@ -387,9 +314,8 @@ public:
     virtual void read(XmlReader&);
 
 //       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
-    virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged)
+    virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> /*isDragged*/)
     {
-        Q_UNUSED(isDragged);
         return std::unique_ptr<ElementGroup>(new SingleElementGroup(this));
     }
 
@@ -433,7 +359,7 @@ public:
     virtual Grip initialEditModeGrip() const { return Grip::NO_GRIP; }
     virtual Grip defaultGrip() const { return Grip::NO_GRIP; }
     /** Returns grips positions in page coordinates. */
-    virtual std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const { return std::vector<mu::PointF>(); }
+    virtual std::vector<PointF> gripsPositions(const EditData& = EditData()) const { return std::vector<PointF>(); }
 
     bool hasGrips() const;
 
@@ -480,10 +406,10 @@ public:
     void undoSetVisible(bool v);
     void undoAddElement(EngravingItem* element);
 
-    static ElementType readType(XmlReader& node, mu::PointF*, Fraction*);
-    static EngravingItem* readMimeData(Score* score, const mu::ByteArray& data, mu::PointF*, Fraction*);
+    static ElementType readType(XmlReader& node, PointF*, Fraction*);
+    static EngravingItem* readMimeData(Score* score, const mu::ByteArray& data, PointF*, Fraction*);
 
-    virtual mu::ByteArray mimeData(const mu::PointF&) const;
+    virtual mu::ByteArray mimeData(const PointF&) const;
 /**
  Return true if this element accepts a drop at canvas relative \a pos
  of given element \a type and \a subtype.
@@ -564,10 +490,10 @@ public:
     bool custom(Pid) const;
     virtual bool isUserModified() const;
 
-    void drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o = mu::PointF(), double scale = 1.0) const;
-    void drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, int n) const;
-    void drawSymbols(const SymIdList&, mu::draw::Painter* p, const mu::PointF& o = mu::PointF(), double scale = 1.0) const;
-    void drawSymbols(const SymIdList&, mu::draw::Painter* p, const mu::PointF& o, const mu::SizeF& scale) const;
+    void drawSymbol(SymId id, mu::draw::Painter* p, const PointF& o = PointF(), double scale = 1.0) const;
+    void drawSymbol(SymId id, mu::draw::Painter* p, const PointF& o, int n) const;
+    void drawSymbols(const SymIdList&, mu::draw::Painter* p, const PointF& o = PointF(), double scale = 1.0) const;
+    void drawSymbols(const SymIdList&, mu::draw::Painter* p, const PointF& o, const mu::SizeF& scale) const;
     double symHeight(SymId id) const;
     double symWidth(SymId id) const;
     double symWidth(const SymIdList&) const;
@@ -646,7 +572,7 @@ class ElementEditData
 public:
     EngravingItem* e = nullptr;
     std::list<PropertyData> propertyData;
-    mu::PointF initOffset;   ///< for dragging: difference between actual offset and editData.moveDelta
+    PointF initOffset;   ///< for dragging: difference between actual offset and editData.moveDelta
 
     virtual ~ElementEditData() = default;
     void pushProperty(Pid pid)
