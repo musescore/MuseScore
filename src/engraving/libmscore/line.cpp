@@ -242,7 +242,7 @@ bool LineSegment::isEditAllowed(EditData& ed) const
     const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
 
     if (!((ed.modifiers & ShiftModifier) && ((isSingleBeginType() && moveStart)
-                                                 || (isSingleEndType() && moveEnd)))) {
+                                             || (isSingleEndType() && moveEnd)))) {
         return false;
     }
 

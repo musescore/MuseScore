@@ -556,7 +556,7 @@ void Ambitus::draw(mu::draw::Painter* painter) const
 
 void Ambitus::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    Q_UNUSED(all);
+    UNUSED(all);
     func(data, this);
     if (_topAccid->accidentalType() != AccidentalType::NONE) {
         func(data, _topAccid);

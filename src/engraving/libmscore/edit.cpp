@@ -155,9 +155,9 @@ void Score::getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const
 //   getSelectedChordRests
 //---------------------------------------------------------
 
-QSet<ChordRest*> Score::getSelectedChordRests() const
+std::set<ChordRest*> Score::getSelectedChordRests() const
 {
-    QSet<ChordRest*> set;
+    std::set<ChordRest*> set;
     for (EngravingItem* e : selection().elements()) {
         if (e->isNote()) {
             e = e->parentItem();

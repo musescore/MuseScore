@@ -21,6 +21,8 @@
  */
 
 #include "chordline.h"
+
+#include "translation.h"
 #include "rw/xml.h"
 #include "chord.h"
 #include "measure.h"
@@ -33,10 +35,10 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 const char* scorelineNames[] = {
-    QT_TRANSLATE_NOOP("Ms", "Fall"),
-    QT_TRANSLATE_NOOP("Ms", "Doit"),
-    QT_TRANSLATE_NOOP("Ms", "Plop"),
-    QT_TRANSLATE_NOOP("Ms", "Scoop"),
+    QT_TRANSLATE_NOOP("engraving", "Fall"),
+    QT_TRANSLATE_NOOP("engraving", "Doit"),
+    QT_TRANSLATE_NOOP("engraving", "Plop"),
+    QT_TRANSLATE_NOOP("engraving", "Scoop"),
 };
 
 //---------------------------------------------------------
@@ -366,7 +368,7 @@ String ChordLine::accessibleInfo() const
 {
     String rez = EngravingItem::accessibleInfo();
     if (chordLineType() != ChordLineType::NOTYPE) {
-        rez = String("%1: %2").arg(rez, String::fromUtf8(scorelineNames[static_cast<int>(chordLineType()) - 1]));
+        rez = String(u"%1: %2").arg(rez, String::fromUtf8(scorelineNames[static_cast<int>(chordLineType()) - 1]));
     }
     return rez;
 }

@@ -23,6 +23,8 @@
 #ifndef __REST_H__
 #define __REST_H__
 
+#include "containers.h"
+
 #include "chordrest.h"
 #include "notedot.h"
 
@@ -38,7 +40,7 @@ class Rest : public ChordRest
 {
 public:
 
-    ~Rest() { qDeleteAll(m_dots); }
+    ~Rest() { DeleteAll(m_dots); }
 
     void hack_toRestType();
 

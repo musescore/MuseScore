@@ -277,7 +277,7 @@ TextBlock& TextCursor::curLine() const
 //   changeSelectionFormat
 //---------------------------------------------------------
 
-void TextCursor::changeSelectionFormat(FormatId id, QVariant val)
+void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
 {
     size_t r1 = selectLine();
     size_t r2 = row();
@@ -358,10 +358,10 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
 }
 
 //---------------------------------------------------------
-//   setFormat
+//   PointF
 //---------------------------------------------------------
 
-void TextCursor::setFormat(FormatId id, QVariant val)
+void TextCursor::setFormat(FormatId id, FormatValue val)
 {
     if (!hasSelection()) {
         if (!editing()) {
@@ -1325,7 +1325,7 @@ String TextBlock::remove(int start, int n, TextCursor* cursor)
 //   changeFormat
 //---------------------------------------------------------
 
-void TextBlock::changeFormat(FormatId id, QVariant data, int start, int n)
+void TextBlock::changeFormat(FormatId id, const FormatValue& data, int start, int n)
 {
     int col = 0;
     for (auto i = _fragments.begin(); i != _fragments.end(); ++i) {
@@ -1371,8 +1371,7 @@ void TextBlock::changeFormat(FormatId id, QVariant data, int start, int n)
 //---------------------------------------------------------
 //   formatValue
 //---------------------------------------------------------
-
-QVariant CharFormat::formatValue(FormatId id) const
+FormatValue CharFormat::formatValue(FormatId id) const
 {
     switch (id) {
     case FormatId::Bold: return bold();
@@ -1381,39 +1380,39 @@ QVariant CharFormat::formatValue(FormatId id) const
     case FormatId::Strike: return strike();
     case FormatId::Valign: return static_cast<int>(valign());
     case FormatId::FontSize: return fontSize();
-    case FormatId::FontFamily: return fontFamily().toQString();
+    case FormatId::FontFamily: return fontFamily();
     }
 
-    return QVariant();
+    return FormatValue();
 }
 
 //---------------------------------------------------------
 //   setFormatValue
 //---------------------------------------------------------
 
-void CharFormat::setFormatValue(FormatId id, QVariant data)
+void CharFormat::setFormatValue(FormatId id, const FormatValue& val)
 {
     switch (id) {
     case FormatId::Bold:
-        setBold(data.toBool());
+        setBold(std::get<bool>(val));
         break;
     case FormatId::Italic:
-        setItalic(data.toBool());
+        setItalic(std::get<bool>(val));
         break;
     case FormatId::Underline:
-        setUnderline(data.toBool());
+        setUnderline(std::get<bool>(val));
         break;
     case FormatId::Strike:
-        setStrike(data.toBool());
+        setStrike(std::get<bool>(val));
         break;
     case FormatId::Valign:
-        _valign = static_cast<VerticalAlignment>(data.toInt());
+        _valign = static_cast<VerticalAlignment>(std::get<int>(val));
         break;
     case FormatId::FontSize:
-        _fontSize = data.toDouble();
+        _fontSize = std::get<double>(val);
         break;
     case FormatId::FontFamily:
-        _fontFamily = data.toString();
+        _fontFamily = std::get<String>(val);
         break;
     }
 }
@@ -1422,7 +1421,7 @@ void CharFormat::setFormatValue(FormatId id, QVariant data)
 //   changeFormat
 //---------------------------------------------------------
 
-void TextFragment::changeFormat(FormatId id, QVariant data)
+void TextFragment::changeFormat(FormatId id, const FormatValue& data)
 {
     format.setFormatValue(id, data);
 }
