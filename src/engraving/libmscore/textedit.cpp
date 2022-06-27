@@ -249,8 +249,13 @@ bool TextBase::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
     bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
+
+    if (shiftPressed && ed.key == Qt::Key_F2) {
+        return false; // Toggle Special Characters dialog
+    }
+
+    bool ctrlPressed = ed.modifiers & Qt::ControlModifier;
 
     if (ctrlPressed && !shiftPressed) {
         static QSet<int> ignore = {

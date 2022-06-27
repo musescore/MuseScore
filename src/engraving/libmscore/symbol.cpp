@@ -236,6 +236,36 @@ FSymbol::FSymbol(const FSymbol& s)
 }
 
 //---------------------------------------------------------
+//   toString
+// FSymbol is a single code point but code points above 2^16 cannot be
+// represented by a single Char, hence we return a String instead. Char
+// and String use the UTF-16 encoding internally (like QChar, QString).
+//---------------------------------------------------------
+
+String FSymbol::toString() const
+{
+    if (_code & 0xffff0000) {
+        String s;
+        s = Char(Char::highSurrogate(_code));
+        s += Char(Char::lowSurrogate(_code));
+        return s;
+    }
+    return Char(_code);
+}
+
+//---------------------------------------------------------
+//   accessibleInfo
+// Screen readers know how to pronounce the common font symbols so we can
+// return just the character itself. Similarly, common characters should
+// be rendered correctly by Braille terminals.
+//---------------------------------------------------------
+
+String FSymbol::accessibleInfo() const
+{
+    return toString();
+}
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -245,14 +275,8 @@ void FSymbol::draw(mu::draw::Painter* painter) const
     mu::draw::Font f(_font);
     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
     painter->setFont(f);
-    if (_code & 0xffff0000) {
-        s = Char(Char::highSurrogate(_code));
-        s += Char(Char::lowSurrogate(_code));
-    } else {
-        s = Char(_code);
-    }
     painter->setPen(curColor());
-    painter->drawText(PointF(0, 0), s);
+    painter->drawText(PointF(0, 0), toString());
 }
 
 //---------------------------------------------------------
@@ -296,15 +320,7 @@ void FSymbol::read(XmlReader& e)
 
 void FSymbol::layout()
 {
-    String s;
-    if (_code & 0xffff0000) {
-        s = Char(Char::highSurrogate(_code));
-        s += Char(Char::lowSurrogate(_code));
-    } else {
-        s = Char(_code);
-    }
-
-    setbbox(mu::draw::FontMetrics::boundingRect(_font, s));
+    setbbox(mu::draw::FontMetrics::boundingRect(_font, toString()));
 }
 
 //---------------------------------------------------------
