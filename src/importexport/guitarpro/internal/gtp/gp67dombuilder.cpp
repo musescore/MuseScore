@@ -66,6 +66,16 @@ void GP67DomBuilder::buildGPDomModel(QDomElement* qdomElem)
     buildGPTracks(&eachTrack);
 }
 
+void GP67DomBuilder::setProperties(const IGPDomBuilder::GPProperties& properties)
+{
+    _gpDom->setProperties(properties);
+}
+
+IGPDomBuilder::GPProperties GP67DomBuilder::properties() const
+{
+    return _gpDom->properties();
+}
+
 std::unique_ptr<GPDomModel> GP67DomBuilder::getGPDomModel()
 {
     return std::move(_gpDom);

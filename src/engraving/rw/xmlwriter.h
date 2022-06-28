@@ -44,7 +44,7 @@ public:
     const std::vector<std::pair<const EngravingObject*, AsciiStringView> >& elements() const { return _elements; }
     void setRecordElements(bool record) { _recordElements = record; }
 
-    void startElementRaw(const QString& name);
+    void startElementRaw(const String& name);
     void startElement(const AsciiStringView& name, const Attributes& attrs = {});
     void startElement(const EngravingObject* se, const Attributes& attrs = {});
     void startElement(const AsciiStringView& name, const EngravingObject* se, const Attributes& attrs = {});
@@ -53,7 +53,7 @@ public:
     void tag(const AsciiStringView& name, const Value& body);
     void tag(const AsciiStringView& name, const Value& val, const Value& def);
     void tag(const AsciiStringView& name, const Attributes& attrs, const Value& body);
-    void tagRaw(const QString& elementWithAttrs, const Value& body = Value());
+    void tagRaw(const String& elementWithAttrs, const Value& body = Value());
 
     void tagProperty(Pid id, const PropertyValue& data, const PropertyValue& def = PropertyValue());
     void tagProperty(const AsciiStringView&, const PropertyValue& data, const PropertyValue& def = PropertyValue());
@@ -61,14 +61,14 @@ public:
     void tagFraction(const AsciiStringView& name, const Fraction& v, const Fraction& def = Fraction());
     void tagPoint(const AsciiStringView& name, const mu::PointF& v);
 
-    void writeXml(const QString&, QString s);
+    void writeXml(const String&, String s);
 
     void comment(const String& text);
 
     WriteContext* context() const;
     void setContext(WriteContext* context);
 
-    static QString xmlString(const QString&);
+    static String xmlString(const String&);
 
 private:
     void tagProperty(const AsciiStringView& name, P_TYPE type, const PropertyValue& data);

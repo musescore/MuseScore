@@ -102,7 +102,7 @@ BeatType TimeSigFrac::rtick2beatType(int rtick) const
 
 BeatType TimeSigFrac::strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCrossed, int* subbeatTick, bool saveLast) const
 {
-    Q_ASSERT(rtick2 > rtick1);
+    assert(rtick2 > rtick1);
 
     BeatType strongest = BeatType::SUBBEAT;
 
@@ -129,7 +129,7 @@ BeatType TimeSigFrac::strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCr
 
 int TimeSigFrac::subbeatTicks(int level) const
 {
-    Q_ASSERT(level <= maxSubbeatLevel());
+    assert(level <= maxSubbeatLevel());
     int subbeatTicks = dUnitTicks();
     while (level > 0) {
         subbeatTicks /= 2;
@@ -194,7 +194,7 @@ int TimeSigFrac::rtick2subbeatLevel(int rtick) const
 
 int TimeSigFrac::strongestSubbeatLevelInRange(int rtick1, int rtick2, int* subbeatTick) const
 {
-    Q_ASSERT(rtick2 > rtick1);
+    assert(rtick2 > rtick1);
 
     for (int level = 0, subbeatTicks = dUnitTicks();;) {
         int n = rtick1 / subbeatTicks;

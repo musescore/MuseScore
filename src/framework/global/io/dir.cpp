@@ -33,7 +33,7 @@ Dir::Dir(const path_t& path)
 
 path_t Dir::absolutePath() const
 {
-    return fileSystem()->absolutePath(m_path);
+    return fileSystem()->absoluteFilePath(m_path);
 }
 
 bool Dir::exists() const

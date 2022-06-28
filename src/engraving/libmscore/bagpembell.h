@@ -61,7 +61,7 @@ struct BEDrawingDataY;
 class BagpipeEmbellishment final : public EngravingItem
 {
     int _embelType;
-    void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&, SymId, const qreal x, const bool drawFlag) const;
+    void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&, SymId, const double x, const bool drawFlag) const;
 
 public:
     BagpipeEmbellishment(EngravingItem* parent)
@@ -71,7 +71,7 @@ public:
 
     int embelType() const { return _embelType; }
     void setEmbelType(int val) { _embelType = val; }
-    qreal mag() const override;
+    double mag() const override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
     void layout() override;

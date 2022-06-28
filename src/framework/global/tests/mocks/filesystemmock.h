@@ -38,11 +38,9 @@ public:
 
     MOCK_METHOD(RetVal<uint64_t>, fileSize, (const io::path_t& path), (const, override));
 
-    MOCK_METHOD(RetVal<QByteArray>, readFile, (const io::path_t&), (const, override));
-    MOCK_METHOD(Ret, writeToFile, (const io::path_t&, const QByteArray&), (const, override));
-
+    MOCK_METHOD(RetVal<ByteArray>, readFile, (const io::path_t&), (const, override));
     MOCK_METHOD(bool, readFile, (const io::path_t& filePath, ByteArray & data), (const, override));
-    MOCK_METHOD(bool, writeFile, (const io::path_t& filePath, const ByteArray& data), (const, override));
+    MOCK_METHOD(Ret, writeFile, (const io::path_t& filePath, const ByteArray& data), (const, override));
 
     MOCK_METHOD(Ret, makePath, (const io::path_t&), (const, override));
 
@@ -53,6 +51,7 @@ public:
 
     MOCK_METHOD(io::path_t, canonicalFilePath, (const io::path_t& filePath), (const, override));
     MOCK_METHOD(io::path_t, absolutePath, (const io::path_t& filePath), (const, override));
+    MOCK_METHOD(io::path_t, absoluteFilePath, (const io::path_t& filePath), (const, override));
     MOCK_METHOD(DateTime, birthTime, (const io::path_t& filePath), (const, override));
     MOCK_METHOD(DateTime, lastModified, (const io::path_t& filePath), (const, override));
     MOCK_METHOD(bool, isWritable, (const io::path_t& filePath), (const, override));

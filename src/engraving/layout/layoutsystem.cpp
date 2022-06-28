@@ -79,11 +79,11 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     Fraction lcmTick = ctx.curMeasure->tick();
     system->setInstrumentNames(ctx, ctx.startWithLongNames, lcmTick);
 
-    qreal curSysWidth    = 0;
-    qreal layoutSystemMinWidth = 0;
+    double curSysWidth    = 0;
+    double layoutSystemMinWidth = 0;
     bool firstMeasure = true;
     bool createHeader = false;
-    qreal systemWidth = score->styleD(Sid::pagePrintableWidth) * DPI;
+    double systemWidth = score->styleD(Sid::pagePrintableWidth) * DPI;
     system->setWidth(systemWidth);
 
     // save state of measure
@@ -95,14 +95,14 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     // In principle, it just needs to be longer than any possible note.
     Fraction prevMinTicks = Fraction(1, 1);
     bool changeMinSysTicks = false;
-    qreal oldStretch = 1;
+    double oldStretch = 1;
     System* oldSystem = nullptr;
 
     while (ctx.curMeasure) {      // collect measure for system
         oldSystem = ctx.curMeasure->system();
         system->appendMeasure(ctx.curMeasure);
 
-        qreal ww  = 0;          // width of current measure
+        double ww  = 0;          // width of current measure
 
         // After appending a new measure, the shortest note in the system may change, in which case
         // we need to recompute the layout of the previous measures. When updating the width of these
@@ -117,9 +117,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                         break; // Cause I want to change only previous measures, not current one
                     }
                     if (mb->isMeasure()) {
-                        qreal prevWidth = toMeasure(mb)->width();
+                        double prevWidth = toMeasure(mb)->width();
                         toMeasure(mb)->computeWidth(minTicks, 1);
-                        qreal newWidth = toMeasure(mb)->width();
+                        double newWidth = toMeasure(mb)->width();
                         curSysWidth += newWidth - prevWidth;
                     }
                 }
@@ -206,9 +206,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                 minTicks = prevMinTicks; // If the last measure caused it to change, now we need to restore it!
                 for (MeasureBase* mb : system->measures()) {
                     if (mb->isMeasure()) {
-                        qreal prevWidth = toMeasure(mb)->width();
+                        double prevWidth = toMeasure(mb)->width();
                         toMeasure(mb)->computeWidth(minTicks, 1);
-                        qreal newWidth = toMeasure(mb)->width();
+                        double newWidth = toMeasure(mb)->width();
                         curSysWidth += newWidth - prevWidth;
                     }
                 }
@@ -227,7 +227,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             // we need to find the right time to re-enable the trailer,
             // since it seems to be disabled somewhere else
             if (m->trailer()) {
-                qreal ow = m->width();
+                double ow = m->width();
                 m->removeSystemTrailer();
                 curSysWidth += m->width() - ow;
             }
@@ -355,7 +355,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     // prevMeasure is the last measure in the system
     if (ctx.prevMeasure && ctx.prevMeasure->isMeasure()) {
         LayoutBeams::breakCrossMeasureBeams(ctx, toMeasure(ctx.prevMeasure));
-        qreal w = toMeasure(ctx.prevMeasure)->createEndBarLines(true);
+        double w = toMeasure(ctx.prevMeasure)->createEndBarLines(true);
         curSysWidth += w;
     }
 
@@ -375,7 +375,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     if (lm) {
         Measure* nm = lm->nextMeasure();
         if (nm) {
-            qreal w = lm->width();
+            double w = lm->width();
             lm->addSystemTrailer(nm);
             if (lm->trailer()) {
                 lm->computeWidth(minTicks, 1);
@@ -388,7 +388,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     // Gradient descent method: calls the computeWidth() function with a stretch parameter
     // proportional to the difference between the current length and the target length.
     // After few iterations, the length will converge to the target length.
-    qreal newRest = systemWidth - curSysWidth;
+    double newRest = systemWidth - curSysWidth;
     if ((ctx.curMeasure == 0 || (lm && lm->sectionBreak()))
         && ((curSysWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
         // We do not stretch last system of a section (or the last of the piece) if curSysWidth is <= lastSystemFillLimit
@@ -397,8 +397,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     if (MScore::noHorizontalStretch) { // Debug feature
         newRest = 0;
     }
-    qreal stretchCoeff = 1;
-    qreal prevWidth = 0;
+    double stretchCoeff = 1;
+    double prevWidth = 0;
     int iter = 0;
     double epsilon = score->spatium() * 0.05; // For reference: this is smaller than the width of a note stem
     static constexpr float multiplier = 1.4f; // Empirically optimized value which allows the fastest convergence of the following algorithm.
@@ -429,7 +429,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     firstMeasure = true;
     bool createBrackets = false;
     for (MeasureBase* mb : system->measures()) {
-        qreal ww = mb->width();
+        double ww = mb->width();
         if (mb->isMeasure()) {
             if (firstMeasure) {
                 pos.rx() += system->leftMargin();
@@ -1133,7 +1133,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         }
         while (!voltaSegments.empty()) {
             // we assume voltas are sorted left to right (by tick values)
-            qreal y = 0;
+            double y = 0;
             int idx = 0;
             Volta* prevVolta = 0;
             for (SpannerSegment* ss : voltaSegments) {
@@ -1241,13 +1241,13 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
 
     if (align && segments.size() > 1) {
         const size_t nstaves = system->staves().size();
-        constexpr qreal minY = -1000000.0;
-        const qreal defaultY = segments[0]->rypos();
-        std::vector<qreal> y(nstaves, minY);
+        constexpr double minY = -1000000.0;
+        const double defaultY = segments[0]->rypos();
+        std::vector<double> y(nstaves, minY);
 
         for (SpannerSegment* ss : segments) {
             if (ss->visible()) {
-                qreal& staffY = y[ss->staffIdx()];
+                double& staffY = y[ss->staffIdx()];
                 staffY = qMax(staffY, ss->rypos());
             }
         }
@@ -1255,7 +1255,7 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
             if (!ss->isStyled(Pid::OFFSET)) {
                 continue;
             }
-            const qreal staffY = y[ss->staffIdx()];
+            const double staffY = y[ss->staffIdx()];
             if (staffY > minY) {
                 ss->rypos() = staffY;
             } else {
@@ -1266,10 +1266,10 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
 
     if (segments.size() > 1) {
         //how far vertically an endpoint should adjust to avoid other slur endpoints:
-        const qreal slurCollisionVertOffset = 0.65 * system->spatium();
-        const qreal slurCollisionHorizOffset = 0.15 * system->spatium();
-        const qreal fuzzyHorizCompare = 0.1 * system->spatium();
-        auto compare = [fuzzyHorizCompare](qreal x1, qreal x2) { return std::abs(x1 - x2) < fuzzyHorizCompare; };
+        const double slurCollisionVertOffset = 0.65 * system->spatium();
+        const double slurCollisionHorizOffset = 0.15 * system->spatium();
+        const double fuzzyHorizCompare = 0.1 * system->spatium();
+        auto compare = [fuzzyHorizCompare](double x1, double x2) { return std::abs(x1 - x2) < fuzzyHorizCompare; };
         for (SpannerSegment* seg1 : segments) {
             if (!seg1->isSlurSegment()) {
                 continue;

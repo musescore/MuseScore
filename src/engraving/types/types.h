@@ -42,6 +42,17 @@
 #define MU_ENGRAVING_TYPES_H
 
 namespace mu::engraving {
+using staff_idx_t = size_t;
+
+using track_idx_t = size_t;
+using TracksMap = std::multimap<track_idx_t, track_idx_t>;
+
+using voice_idx_t = size_t;
+
+using system_idx_t = size_t;
+using part_idx_t = size_t;
+using page_idx_t = size_t;
+
 // ========================================
 // PropertyValue
 // ========================================
@@ -635,17 +646,6 @@ enum class BracketType : signed char {
 };
 
 using InstrumentTrackIdSet = std::unordered_set<InstrumentTrackId>;
-
-using staff_idx_t = size_t;
-
-using track_idx_t = size_t;
-using TracksMap = std::multimap<track_idx_t, track_idx_t>;
-
-using voice_idx_t = size_t;
-
-using system_idx_t = size_t;
-using part_idx_t = size_t;
-using page_idx_t = size_t;
 } // mu::engraving
 
 template<>

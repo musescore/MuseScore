@@ -228,14 +228,14 @@ void QPainterProvider::drawText(const RectF& rect, int flags, const String& text
 void QPainterProvider::drawTextWorkaround(const Font& f, const PointF& pos, const String& text)
 {
     m_painter->save();
-    qreal mm = m_painter->worldTransform().m11();
-    qreal dx = m_painter->worldTransform().dx();
-    qreal dy = m_painter->worldTransform().dy();
+    double mm = m_painter->worldTransform().m11();
+    double dx = m_painter->worldTransform().dx();
+    double dy = m_painter->worldTransform().dy();
     // diagonal elements will now be changed to 1.0
     m_painter->setWorldTransform(QTransform(1.0, 0.0, 0.0, 1.0, dx, dy));
 
     // correction factor for bold text drawing, due to the change of the diagonal elements
-    qreal factor = 1.0 / mm;
+    double factor = 1.0 / mm;
     QFont fnew(f.toQFont(), m_painter->device());
     fnew.setPointSizeF(f.pointSizeF() / factor);
     QRawFont fRaw = QRawFont::fromFont(fnew);
@@ -251,10 +251,10 @@ void QPainterProvider::drawTextWorkaround(const Font& f, const PointF& pos, cons
     // glyphruns with correct positions, but potentially wrong glyphs
     // (see bug https://musescore.org/en/node/117191 regarding positions and DPI)
     QList<QGlyphRun> glyphruns = textLayout.glyphRuns();
-    qreal offset = 0;
+    double offset = 0;
     // glyphrun drawing has an offset equal to the max ascent of the text fragment
     for (int i = 0; i < glyphruns.length(); i++) {
-        qreal value = glyphruns.at(i).rawFont().ascent() / factor;
+        double value = glyphruns.at(i).rawFont().ascent() / factor;
         if (value > offset) {
             offset = value;
         }
@@ -301,7 +301,7 @@ void QPainterProvider::drawPixmap(const PointF& point, const Pixmap& pm)
     QString key = QString::number(pm.key());
     QPixmap pixmap;
     if (!QPixmapCache::find(key, &pixmap)) {
-        pixmap.loadFromData(pm.data());
+        pixmap.loadFromData(pm.data().toQByteArrayNoCopy());
         QPixmapCache::insert(key, pixmap);
     }
 
@@ -313,7 +313,7 @@ void QPainterProvider::drawTiledPixmap(const RectF& rect, const Pixmap& pm, cons
     QString key = QString::number(pm.key());
     QPixmap pixmap;
     if (!QPixmapCache::find(key, &pixmap)) {
-        pixmap.loadFromData(pm.data());
+        pixmap.loadFromData(pm.data().toQByteArrayNoCopy());
         QPixmapCache::insert(key, pixmap);
     }
 

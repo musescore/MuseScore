@@ -66,7 +66,7 @@ int step2tpc(int step, AccidentalVal alter)
     };
 
     int i = (step * TPCS_PER_STEP) + (int(alter) - int(AccidentalVal::MIN));
-    Q_ASSERT(i >= 0 && (i < int(sizeof(spellings) / sizeof(*spellings))));
+    assert(i >= 0 && (i < int(sizeof(spellings) / sizeof(*spellings))));
     return spellings[i];
 }
 
@@ -207,7 +207,7 @@ int step2deltaPitchByKey(int step, Key key)
 
 int tpc2pitch(int tpc)
 {
-    Q_ASSERT(tpcIsValid(tpc));
+    assert(tpcIsValid(tpc));
 
     static int pitches[] = {
 //step: F   C   G   D   A   E   B
@@ -572,8 +572,8 @@ static int penalty(int lof1, int lof2, int k)
     IF_ASSERT_FAILED((k >= 0 && k < 15)) {
         return 0;
     }
-    Q_ASSERT(lof1 >= 0 && lof1 < 34);
-    Q_ASSERT(lof2 >= 0 && lof2 < 34);
+    assert(lof1 >= 0 && lof1 < 34);
+    assert(lof2 >= 0 && lof2 < 34);
     int penalty  = enharmonicSpelling[k][lof1] * 4 + enharmonicSpelling[k][lof2] * 4;
     int distance = lof2 > lof1 ? lof2 - lof1 : lof1 - lof2;
     if (distance > 12) {
@@ -600,7 +600,7 @@ int tpc(int idx, int pitch, int opt)
         tab = tab1;
     }
     int i = (pitch % 12) * 2 + ((opt & (1 << idx)) >> idx);
-    Q_ASSERT(i >= 0 && i < 24);
+    assert(i >= 0 && i < 24);
     return tab[i];
 }
 
@@ -640,13 +640,13 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
         int pa    = 0;
         int pb    = 0;
         int l     = pitch[0] * 2 + (i & 1);
-        Q_ASSERT(l >= 0 && l <= static_cast<int>(sizeof(tab1) / sizeof(*tab1)));
+        assert(l >= 0 && l <= static_cast<int>(sizeof(tab1) / sizeof(*tab1)));
         int lof1a = tab1[l];
         int lof1b = tab2[l];
 
         for (k = 1; k < 10; ++k) {
             int l1 = pitch[k] * 2 + ((i & (1 << k)) >> k);
-            Q_ASSERT(l1 >= 0 && l1 <= static_cast<int>(sizeof(tab1) / sizeof(*tab1)));
+            assert(l1 >= 0 && l1 <= static_cast<int>(sizeof(tab1) / sizeof(*tab1)));
             int lof2a = tab1[l1];
             int lof2b = tab2[l1];
             pa += penalty(lof1a, lof2a, key[k]);
@@ -877,7 +877,7 @@ int tpc2degree(int tpc, Key key)
 
 int tpcInterval(int startTpc, int interval, int alter)
 {
-    Q_ASSERT(interval > 0);
+    assert(interval > 0);
     static const int intervals[7] = {
 //          1  2  3   4  5  6  7
         0, 2, 4, -1, 1, 3, 5
@@ -908,7 +908,7 @@ int tpcInterval(int startTpc, int interval, int alter)
 
 int step2pitchInterval(int step, int alter)
 {
-    Q_ASSERT(step > 0);
+    assert(step > 0);
     static const int intervals[7] = {
 //          1  2  3  4  5  6  7
         0, 2, 4, 5, 7, 9, 11

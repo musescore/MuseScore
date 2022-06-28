@@ -36,17 +36,17 @@ class FontMetrics
 public:
     FontMetrics(const Font& font);
 
-    qreal lineSpacing() const;
-    qreal xHeight() const;
-    qreal height() const;
-    qreal ascent() const;
-    qreal descent() const;
+    double lineSpacing() const;
+    double xHeight() const;
+    double height() const;
+    double ascent() const;
+    double descent() const;
 
-    qreal width(const String& string) const;
-    qreal width(const Char& ch) const;
+    double width(const String& string) const;
+    double width(const Char& ch) const;
 
-    qreal horizontalAdvance(const String& string) const;
-    qreal horizontalAdvance(const Char& ch) const;
+    double horizontalAdvance(const String& string) const;
+    double horizontalAdvance(const Char& ch) const;
 
     RectF boundingRect(const String& string) const;
     RectF boundingRect(const Char& ch) const;
@@ -57,10 +57,10 @@ public:
     bool inFont(Char ch) const;
     bool inFontUcs4(uint ucs4) const;
 
-    static qreal width(const Font& f, const String& string);
+    static double width(const Font& f, const String& string);
     static RectF boundingRect(const Font& f, const String& string);
     static RectF tightBoundingRect(const Font& f, const String& string);
-    static qreal ascent(const Font& f);
+    static double ascent(const Font& f);
 
 private:
     Font m_font;

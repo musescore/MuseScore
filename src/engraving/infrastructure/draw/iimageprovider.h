@@ -48,7 +48,6 @@ public:
     virtual IPaintProviderPtr painterForImage(std::shared_ptr<Pixmap> pixmap) = 0;
 
     virtual void saveAsPng(std::shared_ptr<Pixmap> px, io::IODevice* device) = 0;
-    virtual std::shared_ptr<Pixmap> pixmapFromQVariant(const QVariant& val) = 0;
 };
 }
 

@@ -29,7 +29,7 @@
 
 namespace mu::engraving {
 // the amount of white space to leave before a system-initial chord with glissando
-static const qreal GLISS_STARTOFSYSTEM_WIDTH = 4;           // in sp
+static const double GLISS_STARTOFSYSTEM_WIDTH = 4;           // in sp
 
 class Glissando;
 class Note;
@@ -63,7 +63,7 @@ class Glissando final : public SLine
     M_PROPERTY(GlissandoType, glissandoType, setGlissandoType)
     M_PROPERTY(GlissandoStyle, glissandoStyle, setGlissandoStyle)
     M_PROPERTY(String, fontFace, setFontFace)
-    M_PROPERTY(qreal, fontSize, setFontSize)
+    M_PROPERTY(double, fontSize, setFontSize)
     M_PROPERTY(bool, showText, setShowText)
     M_PROPERTY(bool, playGlissando, setPlayGlissando)
     M_PROPERTY(FontStyle, fontStyle, setFontStyle)

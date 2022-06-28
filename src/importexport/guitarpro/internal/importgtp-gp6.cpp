@@ -369,7 +369,7 @@ QDomNode GuitarPro6::getNode(const QString& id, QDomNode currentDomNode)
 //   readGpif
 //---------------------------------------------------------
 
-void GuitarPro6::readGpif(QByteArray* data)
+void GuitarPro6::readGpif(QByteArray* data, const IGPDomBuilder::GPProperties& properties)
 {
     QDomDocument qdomDoc;
     qdomDoc.setContent(*data);
@@ -377,6 +377,7 @@ void GuitarPro6::readGpif(QByteArray* data)
 
     auto builder = createGPDomBuilder();
     builder->buildGPDomModel(&qdomElem);
+    builder->setProperties(properties);
 
     GPConverter scoreBuilder(score, builder->getGPDomModel());
     scoreBuilder.convertGP();
@@ -386,11 +387,11 @@ void GuitarPro6::readGpif(QByteArray* data)
 //   parseFile
 //---------------------------------------------------------
 
-void GuitarPro6::parseFile(const char* filename, QByteArray* data)
+void GuitarPro6::parseFile(const char* filename, QByteArray* data, const IGPDomBuilder::GPProperties& properties)
 {
     // test to check if we are dealing with the score
     if (!strcmp(filename, "score.gpif")) {
-        readGpif(data);
+        readGpif(data, properties);
     }
 }
 
@@ -398,7 +399,7 @@ void GuitarPro6::parseFile(const char* filename, QByteArray* data)
 //   readGPX
 //---------------------------------------------------------
 
-void GuitarPro6::readGPX(QByteArray* buffer)
+void GuitarPro6::readGPX(QByteArray* buffer, const IGPDomBuilder::GPProperties& gpProperties)
 {
     // start by reading the file header. It will tell us if the byte array is compressed.
     int fileHeader = readInteger(buffer, 0);
@@ -432,7 +433,7 @@ void GuitarPro6::readGPX(QByteArray* buffer)
             }
         }
         // recurse on the decompressed file stored as a byte array
-        readGPX(&bcfsBuffer);
+        readGPX(&bcfsBuffer, gpProperties);
     } else if (fileHeader == GPX_HEADER_UNCOMPRESSED) {
         // this is an uncompressed file - strip the header off
         *buffer = buffer->right(buffer->length() - sizeof(int));
@@ -458,7 +459,7 @@ void GuitarPro6::readGPX(QByteArray* buffer)
                     QByteArray filenameBytes = readString(buffer, indexFileName, 127);
                     char* filename           = filenameBytes.data();
                     QByteArray data          = getBytes(fileBytes, 0, fileSize);
-                    parseFile(filename, &data);
+                    parseFile(filename, &data, gpProperties);
                 }
                 delete fileBytes;
             }
@@ -470,7 +471,7 @@ void GuitarPro6::readGPX(QByteArray* buffer)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro6::read(IODevice* io)
+bool GuitarPro6::read(IODevice* io, bool createLinkedTabForce)
 {
     f = io;
     previousTempo = -1;
@@ -478,7 +479,10 @@ bool GuitarPro6::read(IODevice* io)
 
     // decompress and read files contained within GPX file
     QByteArray ba = buffer.toQByteArrayNoCopy();
-    readGPX(&ba);
+    IGPDomBuilder::GPProperties gpProperties;
+    gpProperties.createLinkedTabForce = createLinkedTabForce;
+
+    readGPX(&ba, gpProperties);
 
     return true;
 }

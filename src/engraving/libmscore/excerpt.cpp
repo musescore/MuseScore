@@ -300,7 +300,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     VBox* titleFrameScore = toVBox(measure);
 
     measure = score->first();
-    Q_ASSERT(measure->isVBox());
+    assert(measure->isVBox());
 
     VBox* titleFramePart = toVBox(measure);
     titleFramePart->copyValues(titleFrameScore);
@@ -394,7 +394,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
 void MasterScore::deleteExcerpt(Excerpt* excerpt)
 {
-    Q_ASSERT(excerpt->masterScore() == this);
+    assert(excerpt->masterScore() == this);
     Score* partScore = excerpt->excerptScore();
 
     if (!partScore) {
@@ -526,6 +526,10 @@ static void cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_i
         }
         if (!ns->endElement()) {
             LOGD("clone Slur: no end element");
+        }
+        if (!ns->startElement() && !ns->endElement()) {
+            delete ns;
+            return;
         }
     }
     score->undo(new AddElement(ns));

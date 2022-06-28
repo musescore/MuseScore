@@ -297,7 +297,7 @@ StringList MscReader::ZipFileReader::fileList() const
 
     for (const ZipReader::FileInfo& fi : fileInfoList) {
         if (fi.isFile) {
-            files << fi.filePath;
+            files << fi.filePath.toString();
         }
     }
 
@@ -310,7 +310,7 @@ ByteArray MscReader::ZipFileReader::fileData(const String& fileName) const
         return ByteArray();
     }
 
-    ByteArray data = m_zip->fileData(fileName);
+    ByteArray data = m_zip->fileData(fileName.toStdString());
     if (m_zip->status() != ZipReader::NoError) {
         LOGD() << "failed read data, status: " << m_zip->status();
         return ByteArray();
@@ -468,7 +468,7 @@ ByteArray MscReader::XmlFileReader::fileData(const String& fileName) const
             }
 
             String file = xml.attribute("name");
-            if (file.toQString() != fileName) {
+            if (file != fileName) {
                 xml.skipCurrentElement();
                 continue;
             }

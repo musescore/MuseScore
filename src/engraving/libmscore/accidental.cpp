@@ -383,7 +383,7 @@ void Accidental::layout()
         return;
     }
 
-    qreal m = explicitParent() ? parentItem()->mag() : 1.0;
+    double m = explicitParent() ? parentItem()->mag() : 1.0;
     if (m_isSmall) {
         m *= score()->styleD(Sid::smallNoteMag);
     }
@@ -443,9 +443,9 @@ void Accidental::layoutSingleGlyphAccidental()
 
 void Accidental::layoutMultiGlyphAccidental()
 {
-    qreal margin = score()->styleMM(Sid::bracketedAccidentalPadding);
+    double margin = score()->styleMM(Sid::bracketedAccidentalPadding);
     RectF r;
-    qreal x = 0.0;
+    double x = 0.0;
 
     // should always be true
     if (_bracket != AccidentalBracket::NONE) {

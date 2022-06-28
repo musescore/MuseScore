@@ -66,7 +66,7 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
 
-    qreal mag() const override;
+    double mag() const override;
 
     void initFrom(Ambitus* a);
 
@@ -96,7 +96,7 @@ public:
     // some utility functions
     Segment* segment() const { return (Segment*)explicitParent(); }
     SymId noteHead() const;
-    qreal headWidth() const;
+    double headWidth() const;
 
     // re-implemented virtual functions
     void      draw(mu::draw::Painter* painter) const override;

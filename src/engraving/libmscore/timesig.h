@@ -89,7 +89,7 @@ public:
     bool operator==(const TimeSig&) const;
     bool operator!=(const TimeSig& ts) const { return !(*this == ts); }
 
-    qreal mag() const override;
+    double mag() const override;
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;

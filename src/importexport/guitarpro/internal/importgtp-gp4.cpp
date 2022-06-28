@@ -622,7 +622,7 @@ int GuitarPro4::convertGP4SlideNum(int sl)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro4::read(IODevice* io)
+bool GuitarPro4::read(IODevice* io, bool /*createLinkedTabForce*/)
 {
     f      = io;
     curPos = 30;

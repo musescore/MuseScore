@@ -62,19 +62,19 @@ public:
 //---------------------------------------------------------
 
 // actual 3-staff bracket should be high 28.6 SP ca.: allow for some layout margin
-static const qreal BRACKET0_HEIGHT_MIN     = 27;
-static const qreal BRACKET0_HEIGHT_MAX     = 30;
+static const double BRACKET0_HEIGHT_MIN     = 27;
+static const double BRACKET0_HEIGHT_MAX     = 30;
 // actual 2-staff bracket should be high 18.1 SP ca.
-static const qreal BRACKET_HEIGHT_MIN      = 17;
-static const qreal BRACKET_HEIGHT_MAX      = 20;
+static const double BRACKET_HEIGHT_MIN      = 17;
+static const double BRACKET_HEIGHT_MAX      = 20;
 
 TEST_F(BarlineTests, barline01)
 {
     Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline01.mscx");
     EXPECT_TRUE(score);
 
-    qreal height, heightMin, heightMax;
-    qreal spatium = score->spatium();
+    double height, heightMin, heightMax;
+    double spatium = score->spatium();
     int sysNo = 0;
     for (System* sys : score->systems()) {
         // check number of the brackets of each system

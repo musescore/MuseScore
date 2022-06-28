@@ -75,21 +75,21 @@ public:
     void remove(const mu::RectF&);
     void remove(const Shape&);
 
-    void addHorizontalSpacing(EngravingItem* item, qreal left, qreal right);
+    void addHorizontalSpacing(EngravingItem* item, double left, double right);
 
     void translate(const mu::PointF&);
-    void translateX(qreal);
-    void translateY(qreal);
+    void translateX(double);
+    void translateY(double);
     Shape translated(const mu::PointF&) const;
 
-    qreal minHorizontalDistance(const Shape&, Score* score) const;
-    qreal minVerticalDistance(const Shape&) const;
-    qreal topDistance(const mu::PointF&) const;
-    qreal bottomDistance(const mu::PointF&) const;
-    qreal left() const;
-    qreal right() const;
-    qreal top() const;
-    qreal bottom() const;
+    double minHorizontalDistance(const Shape&, Score* score) const;
+    double minVerticalDistance(const Shape&) const;
+    double topDistance(const mu::PointF&) const;
+    double bottomDistance(const mu::PointF&) const;
+    double left() const;
+    double right() const;
+    double top() const;
+    double bottom() const;
 
     size_t size() const { return std::vector<ShapeElement>::size(); }
     bool empty() const { return std::vector<ShapeElement>::empty(); }
@@ -109,7 +109,7 @@ public:
 //   intersects
 //---------------------------------------------------------
 
-inline static bool intersects(qreal a, qreal b, qreal c, qreal d, qreal verticalClearance)
+inline static bool intersects(double a, double b, double c, double d, double verticalClearance)
 {
     // return (a >= c && a < d) || (b >= c && b < d) || (a < c && b >= b);
     // return (std::max(a,b) > std::min(c,d)) && (std::min(a,b) < std::max(c,d));

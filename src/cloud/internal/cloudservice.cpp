@@ -105,13 +105,13 @@ bool CloudService::readTokens()
         return false;
     }
 
-    RetVal<QByteArray> tokensData = fileSystem()->readFile(tokensPath);
+    RetVal<ByteArray> tokensData = fileSystem()->readFile(tokensPath);
     if (!tokensData.ret) {
         LOGE() << tokensData.ret.toString();
         return false;
     }
 
-    QJsonDocument tokensDoc = QJsonDocument::fromJson(tokensData.val);
+    QJsonDocument tokensDoc = QJsonDocument::fromJson(tokensData.val.toQByteArrayNoCopy());
     QJsonObject saveObject = tokensDoc.object();
 
     m_accessToken = saveObject[ACCESS_TOKEN_KEY].toString();
@@ -131,7 +131,8 @@ bool CloudService::saveTokens()
     tokensObject[REFRESH_TOKEN_KEY] = m_refreshToken;
     QJsonDocument tokensDoc(tokensObject);
 
-    Ret ret = fileSystem()->writeToFile(configuration()->tokensFilePath(), tokensDoc.toJson());
+    QByteArray json = tokensDoc.toJson();
+    Ret ret = fileSystem()->writeFile(configuration()->tokensFilePath(), ByteArray::fromQByteArrayNoCopy(json));
     if (!ret) {
         LOGE() << ret.toString();
     }

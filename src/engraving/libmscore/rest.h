@@ -23,6 +23,8 @@
 #ifndef __REST_H__
 #define __REST_H__
 
+#include "containers.h"
+
 #include "chordrest.h"
 #include "notedot.h"
 
@@ -38,7 +40,7 @@ class Rest : public ChordRest
 {
 public:
 
-    ~Rest() { qDeleteAll(m_dots); }
+    ~Rest() { DeleteAll(m_dots); }
 
     void hack_toRestType();
 
@@ -51,7 +53,7 @@ public:
     Rest* clone() const override { return new Rest(*this, false); }
     EngravingItem* linkedClone() override { return new Rest(*this, true); }
     Measure* measure() const override { return explicitParent() ? toMeasure(explicitParent()->explicitParent()) : 0; }
-    qreal mag() const override;
+    double mag() const override;
 
     void draw(mu::draw::Painter*) const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
@@ -85,11 +87,11 @@ public:
     int upLine() const override;
     int downLine() const override;
     mu::PointF stemPos() const override;
-    qreal stemPosX() const override;
+    double stemPosX() const override;
     mu::PointF stemPosBeam() const override;
-    qreal rightEdge() const override;
+    double rightEdge() const override;
 
-    void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
@@ -126,8 +128,8 @@ private:
     std::vector<NoteDot*> m_dots;
 
     mu::RectF drag(EditData&) override;
-    qreal upPos() const override;
-    qreal downPos() const override;
+    double upPos() const override;
+    double downPos() const override;
     void setOffset(const mu::PointF& o) override;
 
     bool sameVoiceKerningLimited() const override { return true; }

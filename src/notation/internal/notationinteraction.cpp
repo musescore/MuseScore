@@ -38,6 +38,7 @@
 #include "engraving/rw/xml.h"
 #include "engraving/infrastructure/draw/pen.h"
 #include "engraving/infrastructure/draw/painterpath.h"
+#include "engraving/infrastructure/internal/qmimedataadapter.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/page.h"
@@ -81,6 +82,11 @@ using namespace mu::io;
 using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::engraving;
+
+static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
+{
+    return mu::engraving::KeyboardModifier(int(km));
+}
 
 static qreal nudgeDistance(const mu::engraving::EditData& editData)
 {
@@ -851,7 +857,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
     m_dragData.reset();
     m_dragData.elements = elems;
     m_dragData.elementOffset = eoffset;
-    m_editData.modifiers = QGuiApplication::keyboardModifiers();
+    m_editData.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
 
     for (EngravingItem* e : m_dragData.elements) {
         bool draggable = isDraggable(e);
@@ -881,7 +887,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
         return;
     }
 
-    m_dragData.ed.modifiers = QGuiApplication::keyboardModifiers();
+    m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
     for (auto& group : m_dragData.dragGroups) {
         group->startDrag(m_dragData.ed);
     }
@@ -949,7 +955,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     m_dragData.ed.moveDelta = delta - m_dragData.elementOffset;
     m_dragData.ed.evtDelta = evtDelta;
     m_dragData.ed.pos = toPos;
-    m_dragData.ed.modifiers = QGuiApplication::keyboardModifiers();
+    m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
 
     if (isTextEditingStarted()) {
         m_editData.pos = toPos;
@@ -1086,7 +1092,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     }
 
     m_dropData.ed.pos = pos;
-    m_dropData.ed.modifiers = modifiers;
+    m_dropData.ed.modifiers = keyboardModifier(modifiers);
 
     switch (m_dropData.ed.dropElement->type()) {
     case ElementType::VOLTA:
@@ -1179,7 +1185,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     bool accepted = false;
 
     m_dropData.ed.pos       = pos;
-    m_dropData.ed.modifiers = modifiers;
+    m_dropData.ed.modifiers = keyboardModifier(modifiers);
     m_dropData.ed.dropElement->styleChanged();
 
     bool systemStavesOnly = false;
@@ -1709,7 +1715,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
 
     dropData->pos         = pt.isNull() ? target->pagePos() : pt;
     dropData->dragOffset  = QPointF();
-    dropData->modifiers   = modifiers;
+    dropData->modifiers   = keyboardModifier(modifiers);
     dropData->dropElement = e;
 
     if (target->acceptDrop(*dropData)) {
@@ -2763,7 +2769,7 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     mu::engraving::TextBase* textEl = mu::engraving::toTextBase(m_editData.element);
 
     textEl->mousePress(m_editData);
-    if (m_editData.buttons == Qt::MiddleButton) {
+    if (m_editData.buttons == mu::engraving::MiddleButton) {
         #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
         QClipboard::Mode mode = QClipboard::Clipboard;
         #else
@@ -2926,7 +2932,7 @@ bool NotationInteraction::isEditAllowed(QKeyEvent* event)
     }
 
     mu::engraving::EditData editData = m_editData;
-    editData.modifiers = event->modifiers();
+    editData.modifiers = keyboardModifier(event->modifiers());
     editData.key = event->key();
     editData.s = event->text();
 
@@ -2962,7 +2968,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
         return;
     }
 
-    m_editData.modifiers = event->modifiers();
+    m_editData.modifiers = keyboardModifier(event->modifiers());
 
     if (isDragStarted()) {
         return; // ignore all key strokes while dragging
@@ -3328,7 +3334,8 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
         toTextBase(m_editData.element)->paste(m_editData, txt);
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
-        score()->cmdPaste(mimeData, nullptr, scale);
+        QMimeDataAdapter ma(mimeData);
+        score()->cmdPaste(&ma, nullptr, scale);
     }
     apply();
 }

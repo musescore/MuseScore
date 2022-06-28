@@ -65,12 +65,12 @@ void ActionIcon::setAction(const std::string& actionCode, char16_t icon)
     m_icon = icon;
 }
 
-qreal ActionIcon::fontSize() const
+double ActionIcon::fontSize() const
 {
     return m_iconFont.pointSizeF();
 }
 
-void ActionIcon::setFontSize(qreal size)
+void ActionIcon::setFontSize(double size)
 {
     m_iconFont.setPointSizeF(size);
 }
@@ -109,7 +109,7 @@ void ActionIcon::draw(Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     painter->setFont(m_iconFont);
-    painter->drawText(bbox(), Qt::AlignCenter, Char(m_icon));
+    painter->drawText(bbox(), draw::AlignCenter, Char(m_icon));
 }
 
 engraving::PropertyValue ActionIcon::getProperty(Pid pid) const

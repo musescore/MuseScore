@@ -35,7 +35,6 @@ public:
 
     IPaintProviderPtr painterForImage(std::shared_ptr<Pixmap> pixmap) override;
     void saveAsPng(std::shared_ptr<Pixmap> px, io::IODevice* device) override;
-    std::shared_ptr<Pixmap> pixmapFromQVariant(const QVariant& val) override;
 };
 }
 

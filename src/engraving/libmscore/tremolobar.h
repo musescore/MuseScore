@@ -29,8 +29,8 @@ namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ TremoloBar
 //
-//   @P userMag    qreal
-//   @P lineWidth  qreal
+//   @P userMag    double
+//   @P lineWidth  double
 //   @P play       bool         play tremolo bar
 //---------------------------------------------------------
 
@@ -64,8 +64,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-    qreal userMag() const { return m_userMag; }
-    void setUserMag(qreal m) { m_userMag = m; }
+    double userMag() const { return m_userMag; }
+    void setUserMag(double m) { m_userMag = m; }
 
     void setLineWidth(Spatium v) { m_lw = v; }
     Spatium lineWidth() const { return m_lw; }
@@ -82,7 +82,7 @@ private:
     void updatePointsByTremoloBarType(const TremoloBarType type);
 
     Spatium m_lw;
-    qreal m_userMag = 1.0;           // allowed 0.1 - 10.0
+    double m_userMag = 1.0;           // allowed 0.1 - 10.0
     bool m_play = true;
 
     PitchValues m_points;

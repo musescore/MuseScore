@@ -21,7 +21,7 @@
  */
 #include "svgrenderer.h"
 
-#ifndef NO_ENGRAVING_QSVGRENDER
+#ifndef ENGRAVING_NO_QSVGRENDER
 #include <QPainter>
 #include <QSvgRenderer>
 
@@ -36,7 +36,7 @@ using namespace mu::draw;
 
 SvgRenderer::SvgRenderer(const ByteArray& data)
 {
-#ifndef NO_ENGRAVING_QSVGRENDER
+#ifndef ENGRAVING_NO_QSVGRENDER
     m_qSvgRenderer = new QSvgRenderer(data.toQByteArray());
 #else
     NOT_SUPPORTED;
@@ -46,14 +46,14 @@ SvgRenderer::SvgRenderer(const ByteArray& data)
 
 SvgRenderer::~SvgRenderer()
 {
-#ifndef NO_ENGRAVING_QSVGRENDER
+#ifndef ENGRAVING_NO_QSVGRENDER
     delete m_qSvgRenderer;
 #endif
 }
 
 mu::SizeF SvgRenderer::defaultSize() const
 {
-#ifndef NO_ENGRAVING_QSVGRENDER
+#ifndef ENGRAVING_NO_QSVGRENDER
     return SizeF::fromQSizeF(m_qSvgRenderer->defaultSize());
 #else
     NOT_SUPPORTED;
@@ -63,7 +63,7 @@ mu::SizeF SvgRenderer::defaultSize() const
 
 void SvgRenderer::render(Painter* painter, const RectF& rect)
 {
-#ifndef NO_ENGRAVING_QSVGRENDER
+#ifndef ENGRAVING_NO_QSVGRENDER
     IPaintProviderPtr paintProvider = painter->provider();
     std::shared_ptr<QPainterProvider> qPaintProvider = std::dynamic_pointer_cast<QPainterProvider>(paintProvider);
     if (qPaintProvider) {

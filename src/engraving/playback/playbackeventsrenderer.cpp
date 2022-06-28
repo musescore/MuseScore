@@ -37,6 +37,7 @@
 #include "renderers/arpeggiorenderer.h"
 #include "renderers/gracenotesrenderer.h"
 #include "renderers/glissandosrenderer.h"
+#include "filters/chordfilter.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;
@@ -163,6 +164,10 @@ void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tick
                          articulations,
                          profile);
 
+    if (!ChordFilter::isItemPlayable(chord, ctx)) {
+        return;
+    }
+
     ChordArticulationsParser::buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
 
     renderArticulations(chord, ctx, result[ctx.nominalTimestamp]);
@@ -196,7 +201,7 @@ void PlaybackEventsRenderer::renderRestEvents(const Rest* rest, const int tickPo
 
     int positionTick = rest->tick().ticks() + tickPositionOffset;
     int durationTicks = rest->ticks().ticks();
-    qreal beatsPerSecond = rest->score()->tempomap()->tempo(positionTick).val;
+    double beatsPerSecond = rest->score()->tempomap()->tempo(positionTick).val;
 
     timestamp_t nominalTimestamp = timestampFromTicks(rest->score(), positionTick);
     duration_t nominalDuration = durationFromTicks(beatsPerSecond, durationTicks);

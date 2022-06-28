@@ -87,7 +87,7 @@ Fraction Bracket::playTick() const
 //   setHeight
 //---------------------------------------------------------
 
-void Bracket::setHeight(qreal h)
+void Bracket::setHeight(double h)
 {
     h2 = h * .5;
 }
@@ -96,9 +96,9 @@ void Bracket::setHeight(qreal h)
 //   width
 //---------------------------------------------------------
 
-qreal Bracket::width() const
+double Bracket::width() const
 {
-    qreal w;
+    double w;
     switch (bracketType()) {
     case BracketType::BRACE:
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
@@ -179,7 +179,7 @@ void Bracket::layout()
     case BracketType::BRACE: {
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
             _braceSymbol = SymId::noSym;
-            qreal w = score()->styleMM(Sid::akkoladeWidth);
+            double w = score()->styleMM(Sid::akkoladeWidth);
 
 #define XM(a) (a + 700) * w / 700
 #define YM(a) (a + 7100) * h2 / 7100
@@ -211,46 +211,46 @@ void Bracket::layout()
             if (_braceSymbol == SymId::noSym) {
                 _braceSymbol = SymId::brace;
             }
-            qreal h = h2 * 2;
-            qreal w = symWidth(_braceSymbol) * _magx;
+            double h = h2 * 2;
+            double w = symWidth(_braceSymbol) * _magx;
             bbox().setRect(0, 0, w, h);
             _shape.add(bbox());
         }
     }
     break;
     case BracketType::NORMAL: {
-        qreal _spatium = spatium();
-        qreal w = score()->styleMM(Sid::bracketWidth) * .5;
-        qreal x = -w;
+        double _spatium = spatium();
+        double w = score()->styleMM(Sid::bracketWidth) * .5;
+        double x = -w;
 
-        qreal bd   = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
+        double bd   = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
         _shape.add(RectF(x, -bd, w * 2, 2 * (h2 + bd)));
         _shape.add(symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
         _shape.add(symBbox(SymId::bracketBottom).translated(PointF(-w, bd + 2 * h2)));
 
         w      += symWidth(SymId::bracketTop);
-        qreal y = -symHeight(SymId::bracketTop) - bd;
-        qreal h = (-y + h2) * 2;
+        double y = -symHeight(SymId::bracketTop) - bd;
+        double h = (-y + h2) * 2;
         bbox().setRect(x, y, w, h);
     }
     break;
     case BracketType::SQUARE: {
-        qreal w = score()->styleMM(Sid::staffLineWidth) * .5;
-        qreal x = -w;
-        qreal y = -w;
-        qreal h = (h2 + w) * 2;
+        double w = score()->styleMM(Sid::staffLineWidth) * .5;
+        double x = -w;
+        double y = -w;
+        double h = (h2 + w) * 2;
         w      += (.5 * spatium() + 3 * w);
         bbox().setRect(x, y, w, h);
         _shape.add(bbox());
     }
     break;
     case BracketType::LINE: {
-        qreal _spatium = spatium();
-        qreal w = 0.67 * score()->styleMM(Sid::bracketWidth) * .5;
-        qreal x = -w;
-        qreal bd = _spatium * .25;
-        qreal y = -bd;
-        qreal h = (-y + h2) * 2;
+        double _spatium = spatium();
+        double w = 0.67 * score()->styleMM(Sid::bracketWidth) * .5;
+        double x = -w;
+        double bd = _spatium * .25;
+        double y = -bd;
+        double h = (-y + h2) * 2;
         bbox().setRect(x, y, w, h);
         _shape.add(bbox());
     }
@@ -277,8 +277,8 @@ void Bracket::draw(mu::draw::Painter* painter) const
             painter->setBrush(Brush(curColor()));
             painter->drawPath(path);
         } else {
-            qreal h        = 2 * h2;
-            qreal mag      = h / (100 * magS());
+            double h        = 2 * h2;
+            double mag      = h / (100 * magS());
             painter->setPen(curColor());
             painter->save();
             painter->scale(_magx, mag);
@@ -288,24 +288,24 @@ void Bracket::draw(mu::draw::Painter* painter) const
     }
     break;
     case BracketType::NORMAL: {
-        qreal h        = 2 * h2;
-        qreal _spatium = spatium();
-        qreal w        = score()->styleMM(Sid::bracketWidth);
-        qreal bd       = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
+        double h        = 2 * h2;
+        double _spatium = spatium();
+        double w        = score()->styleMM(Sid::bracketWidth);
+        double bd       = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
-        qreal x    =  -w * .5;
-        qreal y1   = -bd;
-        qreal y2   = h + bd;
+        double x    =  -w * .5;
+        double y1   = -bd;
+        double y2   = h + bd;
         drawSymbol(SymId::bracketTop, painter, PointF(x, y1));
         drawSymbol(SymId::bracketBottom, painter, PointF(x, y2));
     }
     break;
     case BracketType::SQUARE: {
-        qreal h = 2 * h2;
-        qreal _spatium = spatium();
-        qreal w = score()->styleMM(Sid::staffLineWidth);
+        double h = 2 * h2;
+        double _spatium = spatium();
+        double w = score()->styleMM(Sid::staffLineWidth);
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::SquareCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, 0.0, 0.0, h));
@@ -314,11 +314,11 @@ void Bracket::draw(mu::draw::Painter* painter) const
     }
     break;
     case BracketType::LINE: {
-        qreal h = 2 * h2;
-        qreal w = 0.67 * score()->styleMM(Sid::bracketWidth);
+        double h = 2 * h2;
+        double w = 0.67 * score()->styleMM(Sid::bracketWidth);
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
-        qreal bd = score()->styleMM(Sid::staffLineWidth) * 0.5;
+        double bd = score()->styleMM(Sid::staffLineWidth) * 0.5;
         painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));
     }
     break;
@@ -383,7 +383,7 @@ void Bracket::editDrag(EditData& ed)
 
 void Bracket::endEditDrag(EditData&)
 {
-    qreal ay2 = ay1 + h2 * 2;
+    double ay2 = ay1 + h2 * 2;
 
     staff_idx_t staffIdx1 = staffIdx();
     staff_idx_t staffIdx2;
@@ -391,13 +391,13 @@ void Bracket::endEditDrag(EditData&)
     if (staffIdx1 + 1 >= n) {
         staffIdx2 = staffIdx1;
     } else {
-        qreal ay  = parentItem()->pagePos().y();
+        double ay  = parentItem()->pagePos().y();
         System* s = system();
-        qreal y   = s->staff(staffIdx1)->y() + ay;
-        qreal h1  = staff()->height();
+        double y   = s->staff(staffIdx1)->y() + ay;
+        double h1  = staff()->height();
 
         for (staffIdx2 = staffIdx1 + 1; staffIdx2 < n; ++staffIdx2) {
-            qreal h = s->staff(staffIdx2)->y() + ay - y;
+            double h = s->staff(staffIdx2)->y() + ay - y;
             if (ay2 < (y + (h + h1) * .5)) {
                 break;
             }
@@ -406,8 +406,8 @@ void Bracket::endEditDrag(EditData&)
         staffIdx2 -= 1;
     }
 
-    qreal sy = system()->staff(staffIdx1)->y();
-    qreal ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
+    double sy = system()->staff(staffIdx1)->y();
+    double ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
     h2 = (ey - sy) * .5;
     bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, staffIdx2 - staffIdx1 + 1);
 }
@@ -446,7 +446,7 @@ bool Bracket::isEditAllowed(EditData& ed) const
         return true;
     }
 
-    if (!(ed.modifiers & Qt::ShiftModifier)) {
+    if (!(ed.modifiers & ShiftModifier)) {
         return false;
     }
 

@@ -23,7 +23,6 @@
 #ifndef __INSTRUMENT_H__
 #define __INSTRUMENT_H__
 
-#include <QtGlobal>
 #include <list>
 
 #include "containers.h"
@@ -346,7 +345,7 @@ public:
     NamedEventList* midiAction(const String& s, int channel) const;
     int channelIdx(const String& s) const;
     void updateVelocity(int* velocity, int channel, const String& name);
-    qreal getVelocityMultiplier(const String& name);
+    double getVelocityMultiplier(const String& name);
     void updateGateTime(int* gateTime, int channelIdx, const String& name);
 
     String recognizeInstrumentId() const;

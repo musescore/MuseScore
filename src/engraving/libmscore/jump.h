@@ -113,6 +113,8 @@ struct JumpTypeTableItem {
 extern const std::vector<JumpTypeTableItem> jumpTypeTable;
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::Jump::Type);
+#endif
 
 #endif

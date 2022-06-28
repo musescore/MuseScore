@@ -132,7 +132,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<String, std
     mu::draw::Color frameColor = mu::draw::Color::black;
 
     bool systemFlag = false;
-    qreal lineWidth = -1.0;
+    double lineWidth = -1.0;
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -170,13 +170,13 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<String, std
         } else if (tag == "valign") {
             align.vertical = TConv::fromXml(e.readAsciiText(), AlignV::TOP);
         } else if (tag == "xoffset") {
-            qreal xo = e.readDouble();
+            double xo = e.readDouble();
             if (offsetType == OffsetType::ABS) {
                 xo /= INCH;
             }
             offset.setX(xo);
         } else if (tag == "yoffset") {
-            qreal yo = e.readDouble();
+            double yo = e.readDouble();
             if (offsetType == OffsetType::ABS) {
                 yo /= INCH;
             }
@@ -876,20 +876,20 @@ static void adjustPlacement(EngravingItem* e)
 
     // determine placement based on offset
     // anything below staff will be set to below
-    qreal staffHeight = e->staff()->height();
-    qreal threshold = staffHeight;
-    qreal offsetAdjust = 0.0;
+    double staffHeight = e->staff()->height();
+    double threshold = staffHeight;
+    double offsetAdjust = 0.0;
     PlacementV defaultPlacement = e->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
     PlacementV newPlacement;
     // most offsets will be recorded as relative to top staff line
     // exceptions are styled offsets on elements with default placement below
-    qreal normalize;
+    double normalize;
     if (defaultPlacement == PlacementV::BELOW && ee->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
         normalize = staffHeight;
     } else {
         normalize = 0.0;
     }
-    qreal ypos = ee->offset().y() + normalize;
+    double ypos = ee->offset().y() + normalize;
     if (ypos >= threshold) {
         newPlacement = PlacementV::BELOW;
         offsetAdjust -= staffHeight;
@@ -914,7 +914,7 @@ static void adjustPlacement(EngravingItem* e)
             } else {
                 normalize = 0.0;
             }
-            qreal yp = a->offset().y() + normalize;
+            double yp = a->offset().y() + normalize;
             a->ryoffset() += normalize + offsetAdjust;
 
             // if any segments are offset to opposite side of staff from placement,
@@ -2384,7 +2384,7 @@ void Read206::readTie206(XmlReader& e, ReadContext& ctx, Tie* t)
 static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx)
 {
     Segment* segment = 0;
-    qreal _spatium = m->spatium();
+    double _spatium = m->spatium();
 
     std::vector<Chord*> graceNotes;
     ctx.tuplets().clear();
@@ -3135,17 +3135,17 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readCho
         } else if (tag == "displayInConcertPitch") {
             style->set(Sid::concertPitch, bool(e.readInt()));
         } else if (tag == "pedalY") {
-            qreal y = e.readDouble();
+            double y = e.readDouble();
             style->set(Sid::pedalPosBelow, PointF(0.0, y));
         } else if (tag == "lyricsDistance") {
-            qreal y = e.readDouble();
+            double y = e.readDouble();
             style->set(Sid::lyricsPosBelow, PointF(0.0, y));
         } else if (tag == "lyricsMinBottomDistance") {
             // no longer meaningful since it is now measured from skyline rather than staff
             //style->set(Sid::lyricsMinBottomDistance, PointF(0.0, y));
             e.skipCurrentElement();
         } else if (tag == "ottavaHook") {
-            qreal y = qAbs(e.readDouble());
+            double y = qAbs(e.readDouble());
             style->set(Sid::ottavaHookAbove, y);
             style->set(Sid::ottavaHookBelow, -y);
         } else if (tag == "endBarDistance") {
@@ -3156,7 +3156,7 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readCho
         } else if (tag == "ChordList") {
             readChordListHook.read(e);
         } else if (tag == "harmonyY") {
-            qreal val = -e.readDouble();
+            double val = -e.readDouble();
             if (val > 0.0) {
                 style->set(Sid::harmonyPlacement, PlacementV::BELOW);
                 style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
@@ -3228,7 +3228,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "showMargins") {
             score->setShowPageborders(e.readInt());
         } else if (tag == "Style") {
-            qreal sp = score->style().value(Sid::spatium).toReal();
+            double sp = score->style().value(Sid::spatium).toReal();
             ReadChordListHook clhook(score);
             readStyle206(&score->style(), e, clhook);
             if (score->style().styleSt(Sid::MusicalTextFont) == "MuseJazz") {
@@ -3284,7 +3284,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             } else if (tag == "Slur") {
                 readSlur206(e, ctx, toSlur(s));
             } else {
-                Q_ASSERT(tag == "Pedal");
+                assert(tag == "Pedal");
                 readPedal(e, ctx, toPedal(s));
             }
             score->addSpanner(s);

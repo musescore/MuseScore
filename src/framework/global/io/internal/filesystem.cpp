@@ -116,9 +116,9 @@ Ret FileSystem::move(const io::path_t& src, const io::path_t& dst, bool replace)
     return make_ret(Ret::Code::Ok);
 }
 
-RetVal<QByteArray> FileSystem::readFile(const io::path_t& filePath) const
+RetVal<ByteArray> FileSystem::readFile(const io::path_t& filePath) const
 {
-    RetVal<QByteArray> result;
+    RetVal<ByteArray> result;
     Ret ret = exists(filePath);
     if (!ret) {
         result.ret = ret;
@@ -131,28 +131,14 @@ RetVal<QByteArray> FileSystem::readFile(const io::path_t& filePath) const
         return result;
     }
 
+    qint64 size = file.size();
+    result.val.resize(static_cast<size_t>(size));
+
+    file.read(reinterpret_cast<char*>(result.val.data()), size);
+    file.close();
+
     result.ret = make_ret(Err::NoError);
-    result.val = file.readAll();
-
-    file.close();
-
     return result;
-}
-
-Ret FileSystem::writeToFile(const io::path_t& filePath, const QByteArray& data) const
-{
-    Ret ret = make_ret(Err::NoError);
-
-    QFile file(filePath.toQString());
-    if (!file.open(QIODevice::WriteOnly)) {
-        ret = make_ret(Err::FSWriteError);
-        return ret;
-    }
-
-    file.write(data);
-    file.close();
-
-    return ret;
 }
 
 bool FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
@@ -168,14 +154,14 @@ bool FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
     file.read(reinterpret_cast<char*>(data.data()), size);
     file.close();
 
-    return true;
+    return make_ret(Err::NoError);
 }
 
-bool FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data) const
+Ret FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data) const
 {
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::WriteOnly)) {
-        return false;
+        return make_ret(Err::FSWriteError);
     }
 
     file.write(reinterpret_cast<const char*>(data.constData()), static_cast<qint64>(data.size()));
@@ -333,6 +319,11 @@ io::path_t FileSystem::canonicalFilePath(const io::path_t& filePath) const
 io::path_t FileSystem::absolutePath(const io::path_t& filePath) const
 {
     return QFileInfo(filePath.toQString()).absolutePath();
+}
+
+path_t FileSystem::absoluteFilePath(const path_t& filePath) const
+{
+    return QFileInfo(filePath.toQString()).absoluteFilePath();
 }
 
 DateTime FileSystem::birthTime(const io::path_t& filePath) const

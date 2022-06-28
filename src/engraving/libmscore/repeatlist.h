@@ -46,9 +46,9 @@ class RepeatSegment
 public:
     int tick;           // start tick
     int utick;
-    qreal utime;
-    qreal timeOffset;
-    qreal pause;
+    double utime;
+    double timeOffset;
+    double pause;
     int playbackCount;
 
     RepeatSegment(int playbackCount);
@@ -108,8 +108,8 @@ public:
 
     int utick2tick(int tick) const;
     int tick2utick(int tick) const;
-    int utime2utick(qreal secs) const;
-    qreal utick2utime(int) const;
+    int utime2utick(double secs) const;
+    double utick2utime(int) const;
     void updateTempo();
     int ticks() const;
 

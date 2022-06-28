@@ -279,7 +279,7 @@ public:
 
     GuitarPro(MasterScore*, int v);
     virtual ~GuitarPro();
-    virtual bool read(mu::io::IODevice*) = 0;
+    virtual bool read(mu::io::IODevice*, bool createLinkedTabForce) = 0;
     QString error(GuitarProError n) const { return QString(errmsg[int(n)]); }
 };
 
@@ -296,7 +296,7 @@ protected:
 public:
     GuitarPro1(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    virtual bool read(mu::io::IODevice*);
+    virtual bool read(mu::io::IODevice*, bool);
 };
 
 //---------------------------------------------------------
@@ -308,7 +308,7 @@ class GuitarPro2 : public GuitarPro1
 public:
     GuitarPro2(MasterScore* s, int v)
         : GuitarPro1(s, v) {}
-    virtual bool read(mu::io::IODevice*);
+    virtual bool read(mu::io::IODevice*, bool);
 };
 
 //---------------------------------------------------------
@@ -322,7 +322,7 @@ class GuitarPro3 : public GuitarPro1
 public:
     GuitarPro3(MasterScore* s, int v)
         : GuitarPro1(s, v) {}
-    virtual bool read(mu::io::IODevice*);
+    virtual bool read(mu::io::IODevice*, bool);
 };
 
 //---------------------------------------------------------
@@ -342,7 +342,7 @@ class GuitarPro4 : public GuitarPro
 public:
     GuitarPro4(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    virtual bool read(mu::io::IODevice*);
+    virtual bool read(mu::io::IODevice*, bool);
 };
 
 //---------------------------------------------------------
@@ -369,7 +369,7 @@ class GuitarPro5 : public GuitarPro
 public:
     GuitarPro5(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    virtual bool read(mu::io::IODevice*);
+    virtual bool read(mu::io::IODevice*, bool createLinkedTabForce);
 };
 
 //---------------------------------------------------------
@@ -378,8 +378,6 @@ public:
 
 class GuitarPro6 : public GuitarPro
 {
-    Fraction _lastTick;
-    Volta* _lastVolta{ nullptr };
     // an integer stored in the header indicating that the file is not compressed (BCFS).
     const int GPX_HEADER_UNCOMPRESSED = 1397113666;
     // an integer stored in the header indicating that the file is not compressed (BCFZ).
@@ -396,13 +394,11 @@ class GuitarPro6 : public GuitarPro
         QDomNode notes;
         QDomNode rhythms;
     };
-    Slur** legatos;
-    // a mapping from identifiers to fret diagrams
-    QMap<int, FretDiagram*> fretDiagrams;
-    void parseFile(const char* filename, QByteArray* data);
+
+    void parseFile(const char* filename, QByteArray* data, const IGPDomBuilder::GPProperties& properties = IGPDomBuilder::GPProperties());
     int readBit(QByteArray* buffer);
     QByteArray getBytes(QByteArray* buffer, int offset, int length);
-    void readGPX(QByteArray* buffer);
+    void readGPX(QByteArray* buffer, const IGPDomBuilder::GPProperties& gpProperties = IGPDomBuilder::GPProperties());
     int readInteger(QByteArray* buffer, int offset);
     QByteArray readString(QByteArray* buffer, int offset, int length);
     int readBits(QByteArray* buffer, int bitsToRead);
@@ -419,8 +415,7 @@ class GuitarPro6 : public GuitarPro
 
 protected:
     const static std::map<QString, QString> instrumentMapping;
-    int* previousDynamic;
-    void readGpif(QByteArray* data);
+    void readGpif(QByteArray* data, const IGPDomBuilder::GPProperties& properties = IGPDomBuilder::GPProperties());
 
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;
 
@@ -429,7 +424,7 @@ public:
         : GuitarPro(s, 6) {}
     GuitarPro6(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    bool read(mu::io::IODevice*) override;
+    bool read(mu::io::IODevice*, bool createLinkedTabForce) override;
 };
 
 class GuitarPro7 : public GuitarPro6
@@ -439,7 +434,8 @@ class GuitarPro7 : public GuitarPro6
 public:
     GuitarPro7(MasterScore* s)
         : GuitarPro6(s, 7) {}
-    bool read(mu::io::IODevice*) override;
+    bool read(mu::io::IODevice*, bool createLinkedTabForce) override;
+    IGPDomBuilder::GPProperties readProperties(QByteArray* data);
 };
 } // namespace Ms
 #endif

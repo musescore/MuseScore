@@ -89,9 +89,9 @@ String MScore::_globalShare;
 int MScore::_vRaster;
 int MScore::_hRaster;
 bool MScore::_verticalOrientation = false;
-qreal MScore::verticalPageGap = 5.0;
-qreal MScore::horizontalPageGapEven = 1.0;
-qreal MScore::horizontalPageGapOdd = 50.0;
+double MScore::verticalPageGap = 5.0;
+double MScore::horizontalPageGapEven = 1.0;
+double MScore::horizontalPageGapOdd = 50.0;
 
 bool MScore::warnPitchRange;
 int MScore::pedalEventsMinTicks;
@@ -100,9 +100,9 @@ bool MScore::harmonyPlayDisableCompatibility;
 bool MScore::harmonyPlayDisableNew;
 bool MScore::playRepeats;
 int MScore::playbackSpeedIncrement;
-qreal MScore::nudgeStep;
-qreal MScore::nudgeStep10;
-qreal MScore::nudgeStep50;
+double MScore::nudgeStep;
+double MScore::nudgeStep10;
+double MScore::nudgeStep50;
 int MScore::defaultPlayDuration;
 
 String MScore::lastError;

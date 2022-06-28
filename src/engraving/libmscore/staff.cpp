@@ -953,7 +953,7 @@ bool Staff::readProperties(XmlReader& e)
 //   height
 //---------------------------------------------------------
 
-qreal Staff::height() const
+double Staff::height() const
 {
     Fraction tick = Fraction(0, 1);
     return (lines(tick) - 1) * spatium(tick) * staffType(tick)->lineDistance().val();
@@ -963,12 +963,12 @@ qreal Staff::height() const
 //   spatium
 //---------------------------------------------------------
 
-qreal Staff::spatium(const Fraction& tick) const
+double Staff::spatium(const Fraction& tick) const
 {
     return score()->spatium() * staffMag(tick);
 }
 
-qreal Staff::spatium(const EngravingItem* e) const
+double Staff::spatium(const EngravingItem* e) const
 {
     return score()->spatium() * staffMag(e);
 }
@@ -977,17 +977,17 @@ qreal Staff::spatium(const EngravingItem* e) const
 //   mag
 //---------------------------------------------------------
 
-qreal Staff::staffMag(const StaffType* stt) const
+double Staff::staffMag(const StaffType* stt) const
 {
     return (stt->isSmall() ? score()->styleD(Sid::smallStaffMag) : 1.0) * stt->userMag();
 }
 
-qreal Staff::staffMag(const Fraction& tick) const
+double Staff::staffMag(const Fraction& tick) const
 {
     return staffMag(staffType(tick));
 }
 
-qreal Staff::staffMag(const EngravingItem* element) const
+double Staff::staffMag(const EngravingItem* element) const
 {
     return staffMag(staffTypeForElement(element));
 }
@@ -1254,7 +1254,7 @@ StaffType* Staff::setStaffType(const Fraction& tick, const StaffType& nst)
 
 void Staff::removeStaffType(const Fraction& tick)
 {
-    qreal old = spatium(tick);
+    double old = spatium(tick);
     const bool removed = _staffTypeList.removeStaffType(tick);
     if (!removed) {
         return;
@@ -1353,7 +1353,7 @@ void Staff::initFromStaffType(const StaffType* staffType)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void Staff::spatiumChanged(qreal oldValue, qreal newValue)
+void Staff::spatiumChanged(double oldValue, double newValue)
 {
     _userDist = (_userDist / oldValue) * newValue;
 }
@@ -1603,13 +1603,13 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::SMALL: {
-        qreal _spatium = spatium(Fraction(0, 1));
+        double _spatium = spatium(Fraction(0, 1));
         staffType(Fraction(0, 1))->setSmall(v.toBool());
         setLocalSpatium(_spatium, spatium(Fraction(0, 1)), Fraction(0, 1));
         break;
     }
     case Pid::MAG: {
-        qreal _spatium = spatium(Fraction(0, 1));
+        double _spatium = spatium(Fraction(0, 1));
         staffType(Fraction(0, 1))->setUserMag(v.toReal());
         setLocalSpatium(_spatium, spatium(Fraction(0, 1)), Fraction(0, 1));
     }
@@ -1788,7 +1788,7 @@ void Staff::setLines(const Fraction& tick, int val)
 //    distance between staff lines
 //---------------------------------------------------------
 
-qreal Staff::lineDistance(const Fraction& tick) const
+double Staff::lineDistance(const Fraction& tick) const
 {
     return staffType(tick)->lineDistance().val();
 }

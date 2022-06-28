@@ -89,7 +89,7 @@ public:
 
     Fraction absValue() const
     {
-        return Fraction(static_cast<int>(qAbs(m_numerator)), static_cast<int>(m_denominator));
+        return Fraction(static_cast<int>(std::abs(m_numerator)), static_cast<int>(m_denominator));
     }
 
     Fraction inverse() const
@@ -253,7 +253,7 @@ public:
     // A very small fraction, corresponds to 1 MIDI tick
     static Fraction eps() { return Fraction(1, Constants::division * 4); }
 
-    String toString() const { return String("%1/%2").arg(m_numerator, m_denominator); }
+    String toString() const { return String(u"%1/%2").arg(m_numerator, m_denominator); }
     static Fraction fromString(const String& str)
     {
         const size_t i = str.indexOf(u'/');

@@ -21,14 +21,14 @@
  */
 #include "htmlparser.h"
 
-#ifndef NO_ENGRAVING_QTEXTDOCUMENT
+#ifndef ENGRAVING_NO_QTEXTDOCUMENT
 #include <QTextDocumentFragment>
 #endif
 
 namespace mu::engraving {
 String HtmlParser::parse(const String& name)
 {
-#ifndef NO_ENGRAVING_QTEXTDOCUMENT
+#ifndef ENGRAVING_NO_QTEXTDOCUMENT
     return QTextDocumentFragment::fromHtml(name.toQString()).toPlainText();
 #else
     return name;

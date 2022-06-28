@@ -228,8 +228,8 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 
 PointF Pedal::linePos(Grip grip, System** sys) const
 {
-    qreal x = 0.0;
-    qreal nhw = score()->noteHeadWidth();
+    double x = 0.0;
+    double nhw = score()->noteHeadWidth();
     System* s = nullptr;
     if (grip == Grip::START) {
         ChordRest* c = toChordRest(startElement());

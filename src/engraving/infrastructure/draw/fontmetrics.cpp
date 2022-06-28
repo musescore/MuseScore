@@ -29,47 +29,47 @@ FontMetrics::FontMetrics(const Font& font)
 {
 }
 
-qreal FontMetrics::lineSpacing() const
+double FontMetrics::lineSpacing() const
 {
     return fontProvider()->lineSpacing(m_font);
 }
 
-qreal FontMetrics::xHeight() const
+double FontMetrics::xHeight() const
 {
     return fontProvider()->xHeight(m_font);
 }
 
-qreal FontMetrics::height() const
+double FontMetrics::height() const
 {
     return fontProvider()->height(m_font);
 }
 
-qreal FontMetrics::ascent() const
+double FontMetrics::ascent() const
 {
     return fontProvider()->ascent(m_font);
 }
 
-qreal FontMetrics::descent() const
+double FontMetrics::descent() const
 {
     return fontProvider()->descent(m_font);
 }
 
-qreal FontMetrics::width(const String& string) const
+double FontMetrics::width(const String& string) const
 {
     return horizontalAdvance(string);
 }
 
-qreal FontMetrics::width(const Char& ch) const
+double FontMetrics::width(const Char& ch) const
 {
     return horizontalAdvance(ch);
 }
 
-qreal FontMetrics::horizontalAdvance(const String& string) const
+double FontMetrics::horizontalAdvance(const String& string) const
 {
     return fontProvider()->horizontalAdvance(m_font, string);
 }
 
-qreal FontMetrics::horizontalAdvance(const Char& ch) const
+double FontMetrics::horizontalAdvance(const Char& ch) const
 {
     return fontProvider()->horizontalAdvance(m_font, ch);
 }
@@ -111,7 +111,7 @@ bool FontMetrics::inFontUcs4(uint ucs4) const
 
 // Static
 
-qreal FontMetrics::width(const Font& f, const String& string)
+double FontMetrics::width(const Font& f, const String& string)
 {
     return FontMetrics(f).width(string);
 }
@@ -126,7 +126,7 @@ RectF FontMetrics::tightBoundingRect(const Font& f, const String& string)
     return FontMetrics(f).tightBoundingRect(string);
 }
 
-qreal FontMetrics::ascent(const Font& f)
+double FontMetrics::ascent(const Font& f)
 {
     return FontMetrics(f).ascent();
 }

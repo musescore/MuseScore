@@ -73,7 +73,7 @@ void TimeSig::setParent(Segment* parent)
 //   mag
 //---------------------------------------------------------
 
-qreal TimeSig::mag() const
+double TimeSig::mag() const
 {
     return staff() ? staff()->staffMag(tick()) : 1.0;
 }
@@ -257,7 +257,7 @@ void TimeSig::read(XmlReader& e)
 void TimeSig::layout()
 {
     setPos(0.0, 0.0);
-    qreal _spatium = spatium();
+    double _spatium = spatium();
 
     setbbox(RectF());                    // prepare for an empty time signature
     pointLargeLeftParen = PointF();
@@ -265,7 +265,7 @@ void TimeSig::layout()
     pn = PointF();
     pointLargeRightParen = PointF();
 
-    qreal lineDist;
+    double lineDist;
     int numOfLines;
     TimeSigType sigType = timeSigType();
     const Staff* _staff       = staff();
@@ -296,7 +296,7 @@ void TimeSig::layout()
     // compute vert. displacement to center in the staff height
     // determine middle staff position:
 
-    qreal yoff = _spatium * (numOfLines - 1) * .5 * lineDist;
+    double yoff = _spatium * (numOfLines - 1) * .5 * lineDist;
 
     // C and Ccut are placed at the middle of the staff: use yoff directly
     if (sigType == TimeSigType::FOUR_FOUR) {
@@ -342,11 +342,11 @@ void TimeSig::layout()
         // number of lines is odd: 0.0 (strings are directly above and below the middle line)
         // number of lines even:   0.05 (strings are moved up/down to leave 1/10sp between them)
 
-        qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
+        double displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
 
         //align on the wider
-        qreal pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
-        qreal pnY = yoff + displ + denRect.height() * .5;
+        double pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
+        double pnY = yoff + displ + denRect.height() * .5;
 
         if (numRect.width() >= denRect.width()) {
             // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)

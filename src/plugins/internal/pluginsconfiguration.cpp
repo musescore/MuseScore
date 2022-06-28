@@ -138,7 +138,7 @@ mu::io::path_t PluginsConfiguration::pluginsFilePath() const
     return pluginsDataPath() + PLUGINS_FILE;
 }
 
-mu::RetVal<QByteArray> PluginsConfiguration::readPluginsConfiguration() const
+mu::RetVal<mu::ByteArray> PluginsConfiguration::readPluginsConfiguration() const
 {
     TRACEFUNC;
 
@@ -149,7 +149,7 @@ mu::RetVal<QByteArray> PluginsConfiguration::readPluginsConfiguration() const
 mu::Ret PluginsConfiguration::writePluginsConfiguration(const QByteArray& data)
 {
     mi::WriteResourceLockGuard lock_guard(multiInstancesProvider(), PLUGINS_RESOURCE_NAME);
-    return fileSystem()->writeToFile(pluginsFilePath(), data);
+    return fileSystem()->writeFile(pluginsFilePath(), ByteArray::fromQByteArrayNoCopy(data));
 }
 
 IPluginsConfiguration::PluginsConfigurationHash PluginsConfiguration::parsePluginsConfiguration(const QByteArray& json) const
@@ -183,11 +183,11 @@ IPluginsConfiguration::PluginsConfigurationHash PluginsConfiguration::parsePlugi
 
 void PluginsConfiguration::updatePluginsConfiguration()
 {
-    RetVal<QByteArray> retVal = readPluginsConfiguration();
+    RetVal<ByteArray> retVal = readPluginsConfiguration();
     if (!retVal.ret) {
         LOGE() << retVal.ret.toString();
         return;
     }
 
-    m_pluginsConfiguration = parsePluginsConfiguration(retVal.val);
+    m_pluginsConfiguration = parsePluginsConfiguration(retVal.val.toQByteArrayNoCopy());
 }

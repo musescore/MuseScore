@@ -26,7 +26,7 @@
 #include "mpe/events.h"
 #include "midi/miditypes.h"
 
-namespace mu::audio::synth {
+namespace mu::audio {
 struct SoundMappingKey {
     mpe::SoundId id = mpe::SoundId::Undefined;
     mpe::SoundSubCategories subCategories;
@@ -753,6 +753,12 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         { mpe::ArticulationType::Tremolo64th, midi::Program(20, 44) },
     };
 
+    static ArticulationMapping VIOLIN = {
+        { mpe::ArticulationType::SnapPizzicato, midi::Program(20, 45) },
+        { mpe::ArticulationType::Pizzicato, midi::Program(20, 45) },
+        { mpe::ArticulationType::Mute, midi::Program(20, 45) }
+    };
+
     static ArticulationMapping VIOLA_SECTION = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(30, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(30, 45) },
@@ -761,6 +767,12 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         { mpe::ArticulationType::Tremolo16th, midi::Program(30, 44) },
         { mpe::ArticulationType::Tremolo32nd, midi::Program(30, 44) },
         { mpe::ArticulationType::Tremolo64th, midi::Program(30, 44) },
+    };
+
+    static ArticulationMapping VIOLA = {
+        { mpe::ArticulationType::SnapPizzicato, midi::Program(30, 45) },
+        { mpe::ArticulationType::Pizzicato, midi::Program(30, 45) },
+        { mpe::ArticulationType::Mute, midi::Program(30, 45) }
     };
 
     static ArticulationMapping VIOLONCELLO_SECTION = {
@@ -773,6 +785,12 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         { mpe::ArticulationType::Tremolo64th, midi::Program(40, 44) },
     };
 
+    static ArticulationMapping VIOLONCELLO = {
+        { mpe::ArticulationType::SnapPizzicato, midi::Program(40, 45) },
+        { mpe::ArticulationType::Pizzicato, midi::Program(40, 45) },
+        { mpe::ArticulationType::Mute, midi::Program(40, 45) }
+    };
+
     static ArticulationMapping CONTRABASS_SECTION = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(50, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(50, 45) },
@@ -781,6 +799,12 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         { mpe::ArticulationType::Tremolo16th, midi::Program(50, 44) },
         { mpe::ArticulationType::Tremolo32nd, midi::Program(50, 44) },
         { mpe::ArticulationType::Tremolo64th, midi::Program(50, 44) },
+    };
+
+    static ArticulationMapping CONTRABASS = {
+        { mpe::ArticulationType::SnapPizzicato, midi::Program(50, 45) },
+        { mpe::ArticulationType::Pizzicato, midi::Program(50, 45) },
+        { mpe::ArticulationType::Mute, midi::Program(50, 45) },
     };
 
     static ArticulationMapping WINDS = {
@@ -811,18 +835,32 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         return VIOLIN_SECTION;
     }
 
+    if (setupData.id == mpe::SoundId::Violin) {
+        return VIOLIN;
+    }
+
     if (setupData.id == mpe::SoundId::ViolaSection) {
         return VIOLA_SECTION;
     }
 
-    if (setupData.id == mpe::SoundId::VioloncelloSection
-        || setupData.id == mpe::SoundId::Violoncello) {
+    if (setupData.id == mpe::SoundId::Viola) {
+        return VIOLA;
+    }
+
+    if (setupData.id == mpe::SoundId::VioloncelloSection) {
         return VIOLONCELLO_SECTION;
     }
 
-    if (setupData.id == mpe::SoundId::ContrabassSection
-        || setupData.id == mpe::SoundId::Contrabass) {
+    if (setupData.id == mpe::SoundId::Violoncello) {
+        return VIOLONCELLO;
+    }
+
+    if (setupData.id == mpe::SoundId::ContrabassSection) {
         return CONTRABASS_SECTION;
+    }
+
+    if (setupData.id == mpe::SoundId::Contrabass) {
+        return CONTRABASS;
     }
 
     if (setupData.category == mpe::SoundCategory::Strings) {
@@ -837,13 +875,6 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     return empty;
 }
 
-static const mpe::ArticulationTypeSet PORTAMENTO_CC_SUPPORTED_TYPES = {
-    mpe::ArticulationType::DiscreteGlissando, mpe::ArticulationType::ContinuousGlissando,
-    mpe::ArticulationType::Fall, mpe::ArticulationType::QuickFall, mpe::ArticulationType::Doit,
-    mpe::ArticulationType::Plop, mpe::ArticulationType::Scoop, mpe::ArticulationType::SlideOutDown,
-    mpe::ArticulationType::SlideInAbove, mpe::ArticulationType::SlideInBelow, mpe::ArticulationType::SlideOutUp
-};
-
 static const mpe::ArticulationTypeSet LEGATO_CC_SUPPORTED_TYPES = {
     mpe::ArticulationType::Legato, mpe::ArticulationType::Acciaccatura,
     mpe::ArticulationType::PreAppoggiatura, mpe::ArticulationType::PostAppoggiatura,
@@ -857,7 +888,11 @@ static const mpe::ArticulationTypeSet PEDAL_CC_SUPPORTED_TYPES = {
 };
 
 static const mpe::ArticulationTypeSet BEND_SUPPORTED_TYPES = {
-    mpe::ArticulationType::Bend
+    mpe::ArticulationType::Bend, mpe::ArticulationType::SlideOutUp,
+    mpe::ArticulationType::DiscreteGlissando, mpe::ArticulationType::ContinuousGlissando,
+    mpe::ArticulationType::Fall, mpe::ArticulationType::QuickFall, mpe::ArticulationType::Doit,
+    mpe::ArticulationType::Plop, mpe::ArticulationType::Scoop, mpe::ArticulationType::SlideOutDown,
+    mpe::ArticulationType::SlideInAbove, mpe::ArticulationType::SlideInBelow
 };
 
 static const mpe::ArticulationTypeSet AFTERTOUCH_SUPPORTED_TYPES = {

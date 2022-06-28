@@ -66,8 +66,8 @@ static const ElementStyle glissandoElementStyle {
     { Sid::glissandoText,      Pid::GLISS_TEXT },
 };
 
-static constexpr qreal GLISS_PALETTE_WIDTH = 4.0;
-static constexpr qreal GLISS_PALETTE_HEIGHT = 4.0;
+static constexpr double GLISS_PALETTE_WIDTH = 4.0;
+static constexpr double GLISS_PALETTE_HEIGHT = 4.0;
 
 const std::array<const char*, 2> Glissando::glissandoTypeNames = {
     QT_TRANSLATE_NOOP("Palette", "Straight glissando"),
@@ -93,7 +93,7 @@ void GlissandoSegment::layout()
         setMag(staff()->staffMag(tick()));
     }
     RectF r = RectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
-    qreal lw = glissando()->lineWidth() * .5;
+    double lw = glissando()->lineWidth() * .5;
     setbbox(r.adjusted(-lw, -lw, lw, lw));
 }
 
@@ -106,7 +106,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
     painter->save();
-    qreal _spatium = spatium();
+    double _spatium = spatium();
 
     Pen pen(curColor(visible(), glissando()->lineColor()));
     pen.setWidthF(glissando()->lineWidth());
@@ -114,19 +114,19 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
     painter->setPen(pen);
 
     // rotate painter so that the line become horizontal
-    qreal w     = pos2().x();
-    qreal h     = pos2().y();
-    qreal l     = sqrt(w * w + h * h);
-    qreal wi    = asin(-h / l) * 180.0 / M_PI;
+    double w     = pos2().x();
+    double h     = pos2().y();
+    double l     = sqrt(w * w + h * h);
+    double wi    = asin(-h / l) * 180.0 / M_PI;
     painter->rotate(-wi);
 
     if (glissando()->glissandoType() == GlissandoType::STRAIGHT) {
         painter->drawLine(LineF(0.0, 0.0, l, 0.0));
     } else if (glissando()->glissandoType() == GlissandoType::WAVY) {
         RectF b = symBbox(SymId::wiggleTrill);
-        qreal a  = symAdvance(SymId::wiggleTrill);
+        double a  = symAdvance(SymId::wiggleTrill);
         int n    = static_cast<int>(l / a);          // always round down (truncate) to avoid overlap
-        qreal x  = (l - n * a) * 0.5;     // centre line in available space
+        double x  = (l - n * a) * 0.5;     // centre line in available space
         SymIdList ids;
         for (int i = 0; i < n; ++i) {
             ids.push_back(SymId::wiggleTrill);
@@ -147,7 +147,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
 
         // if text longer than available space, skip it
         if (r.width() < l) {
-            qreal yOffset = r.height() + r.y();             // find text descender height
+            double yOffset = r.height() + r.y();             // find text descender height
             // raise text slightly above line and slightly more with WAVY than with STRAIGHT
             yOffset += _spatium * (glissando()->glissandoType() == GlissandoType::WAVY ? 0.4 : 0.1);
 
@@ -155,7 +155,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
             scaledFont.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
             painter->setFont(scaledFont);
 
-            qreal x = (l - r.width()) * 0.5;
+            double x = (l - r.width()) * 0.5;
             painter->drawText(PointF(x, -yOffset), glissando()->text());
         }
     }
@@ -245,7 +245,7 @@ LineSegment* Glissando::createLineSegment(System* parent)
 
 void Glissando::layout()
 {
-    qreal _spatium = spatium();
+    double _spatium = spatium();
 
     if (score()->isPaletteScore() || !startElement() || !endElement()) {    // for use in palettes or while dragging
         if (spannerSegments().empty()) {
@@ -290,7 +290,7 @@ void Glissando::layout()
     // on TAB's, glissando are by necessity on the same string, this gives an horizontal glissando line;
     // make bottom end point lower and top ending point higher
     if (cr1->staff()->isTabStaff(cr1->tick())) {
-        qreal yOff = cr1->staff()->lineDistance(cr1->tick()) * 0.4 * _spatium;
+        double yOff = cr1->staff()->lineDistance(cr1->tick()) * 0.4 * _spatium;
         offs1.ry() += yOff * upDown;
         offs2.ry() -= yOff * upDown;
     }
@@ -330,16 +330,16 @@ void Glissando::layout()
     // to be needed for anything else than Glissando, though
 
     // get total x-width and total y-height of all segments
-    qreal xTot = 0.0;
+    double xTot = 0.0;
     for (SpannerSegment* segm : spannerSegments()) {
         xTot += segm->ipos2().x();
     }
-    qreal y0   = segm1->ipos().y();
-    qreal yTot = segm2->ipos().y() + segm2->ipos2().y() - y0;
-    qreal ratio = yTot / xTot;
+    double y0   = segm1->ipos().y();
+    double yTot = segm2->ipos().y() + segm2->ipos2().y() - y0;
+    double ratio = yTot / xTot;
     // interpolate y-coord of intermediate points across total width and height
-    qreal xCurr = 0.0;
-    qreal yCurr;
+    double xCurr = 0.0;
+    double yCurr;
     for (unsigned i = 0; i + 1 < spannerSegments().size(); i++) {
         SpannerSegment* segm = segmentAt(i);
         xCurr += segm->ipos2().x();
@@ -406,7 +406,7 @@ void Glissando::layout()
 
     PointF anchor2SystPos = anchor2PagePos - system2PagePos;
     RectF r = RectF(anchor2SystPos - segm2->pos(), anchor2SystPos - segm2->pos() - segm2->pos2()).normalized();
-    qreal lw = lineWidth() * .5;
+    double lw = lineWidth() * .5;
     setbbox(r.adjusted(-lw, -lw, lw, lw));
 
     addLineAttachPoints();

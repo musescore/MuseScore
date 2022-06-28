@@ -67,7 +67,7 @@ TextCursor* TextEditData::cursor() const
 
 void TextBase::editInsertText(TextCursor* cursor, const String& s)
 {
-    Q_ASSERT(!layoutInvalid);
+    assert(!layoutInvalid);
     textInvalid = true;
 
     int col = 0;
@@ -93,7 +93,7 @@ void TextBase::startEdit(EditData& ed)
     ted->e = this;
     ted->cursor()->startEdit();
 
-    Q_ASSERT(!score()->undoStack()->active());        // make sure we are not in a Cmd
+    assert(!score()->undoStack()->active());        // make sure we are not in a Cmd
 
     ted->oldXmlText = xmlText();
     ted->startUndoIdx = score()->undoStack()->getCurIdx();
@@ -104,7 +104,7 @@ void TextBase::startEdit(EditData& ed)
     if (!ted->cursor()->set(ed.startMove)) {
         resetFormatting();
     }
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     // refresh edit bounding box
     score()->addRefresh(canvasBoundingRect().adjusted(-_spatium, -_spatium, _spatium, _spatium));
     ed.addData(ted);
@@ -167,7 +167,7 @@ void TextBase::endEdit(EditData& ed)
         // If this assertion fails, no undo command relevant to this text
         // resides on undo stack and reopen() would corrupt the previous
         // command. Text shouldn't happen to be empty in other cases though.
-        Q_ASSERT(newlyAdded || textWasEdited);
+        assert(newlyAdded || textWasEdited);
 
         undo->reopen();
         score()->undoRemoveElement(this);
@@ -204,7 +204,7 @@ void TextBase::endEdit(EditData& ed)
         triggerLayout();
     }
 
-    static const qreal w = 2.0;
+    static const double w = 2.0;
     score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
 
     commitText();
@@ -249,8 +249,12 @@ bool TextBase::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
-    bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
+    bool shiftPressed = ed.modifiers & ShiftModifier;
+    if (shiftPressed && ed.key == Qt::Key_F2) {
+        return false; // Toggle Special Characters dialog
+    }
+
+    bool ctrlPressed = ed.modifiers & Qt::ControlModifier;
 
     if (ctrlPressed && !shiftPressed) {
         static QSet<int> ignore = {
@@ -287,15 +291,15 @@ bool TextBase::edit(EditData& ed)
     TextCursor* cursor = ted->cursor();
 
     String s         = ed.s;
-    bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
-    bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
+    bool ctrlPressed  = ed.modifiers & ControlModifier;
+    bool shiftPressed = ed.modifiers & ShiftModifier;
     bool altPressed = ed.modifiers & Qt::AltModifier;
 
     TextCursor::MoveMode mm = shiftPressed ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor;
 
     bool wasHex = false;
     if (hexState >= 0) {
-        if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier | Qt::KeypadModifier)) {
+        if (ed.modifiers == (ControlModifier | ShiftModifier | KeypadModifier)) {
             switch (ed.key) {
             case Qt::Key_0:
             case Qt::Key_1:
@@ -314,7 +318,7 @@ bool TextBase::edit(EditData& ed)
             default:
                 break;
             }
-        } else if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
+        } else if (ed.modifiers == (ControlModifier | ShiftModifier)) {
             switch (ed.key) {
             case Qt::Key_A:
             case Qt::Key_B:
@@ -483,7 +487,7 @@ bool TextBase::edit(EditData& ed)
             } else {
                 if (isFingering() && ed.view()) {
                     score()->endCmd();
-                    ed.view()->textTab(ed.modifiers & Qt::ShiftModifier);
+                    ed.view()->textTab(ed.modifiers & ShiftModifier);
                     return true;
                 }
                 s = " ";
@@ -773,7 +777,7 @@ void TextBase::paste(EditData& ed, const String& txt)
                     static_cast<TextEditData*>(ed.getData(this).get())->cursor()->setFormat(format);
                     if (c.isHighSurrogate()) {
                         Char highSurrogate = c;
-                        Q_ASSERT(i + 1 < txt.size());
+                        assert(i + 1 < txt.size());
                         i++;
                         Char lowSurrogate = txt.at(i);
                         insertText(ed, String(Char::surrogateToUcs4(highSurrogate, lowSurrogate)));

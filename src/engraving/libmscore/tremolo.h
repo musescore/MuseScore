@@ -57,8 +57,8 @@ class Tremolo final : public EngravingItem
 
     mu::PainterPath basePath() const;
     void computeShape();
-    void layoutOneNoteTremolo(qreal x, qreal y, qreal h, qreal spatium);
-    void layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium);
+    void layoutOneNoteTremolo(double x, double y, double h, double spatium);
+    void layoutTwoNotesTremolo(double x, double y, double h, double spatium);
 
 public:
 
@@ -76,10 +76,10 @@ public:
     void setTremoloType(TremoloType t);
     TremoloType tremoloType() const { return _tremoloType; }
 
-    qreal minHeight() const;
+    double minHeight() const;
 
-    qreal chordMag() const;
-    qreal mag() const override;
+    double chordMag() const;
+    double mag() const override;
     void draw(mu::draw::Painter*) const override;
     void layout() override;
     void layout2();
@@ -107,8 +107,8 @@ public:
 
     bool crossStaffBeamBetween() const;
 
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
-    void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+    void spatiumChanged(double oldValue, double newValue) override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
     void styleChanged() override;
 
     String accessibleInfo() const override;

@@ -12,27 +12,27 @@ void FontProviderStub::insertSubstitution(const String&, const String&)
 {
 }
 
-qreal FontProviderStub::lineSpacing(const Font&) const
+double FontProviderStub::lineSpacing(const Font&) const
 {
     return 0.0;
 }
 
-qreal FontProviderStub::xHeight(const Font&) const
+double FontProviderStub::xHeight(const Font&) const
 {
     return 0.0;
 }
 
-qreal FontProviderStub::height(const Font&) const
+double FontProviderStub::height(const Font&) const
 {
     return 0.0;
 }
 
-qreal FontProviderStub::ascent(const Font&) const
+double FontProviderStub::ascent(const Font&) const
 {
     return 0.0;
 }
 
-qreal FontProviderStub::descent(const Font&) const
+double FontProviderStub::descent(const Font&) const
 {
     return 0.0;
 }
@@ -48,12 +48,12 @@ bool FontProviderStub::inFontUcs4(const Font&, uint) const
 }
 
 // Text
-qreal FontProviderStub::horizontalAdvance(const Font&, const String&) const
+double FontProviderStub::horizontalAdvance(const Font&, const String&) const
 {
     return 0.0;
 }
 
-qreal FontProviderStub::horizontalAdvance(const Font&, const Char&) const
+double FontProviderStub::horizontalAdvance(const Font&, const Char&) const
 {
     return 0.0;
 }
@@ -79,12 +79,12 @@ RectF FontProviderStub::tightBoundingRect(const Font&, const String&) const
 }
 
 // Score symbols
-RectF FontProviderStub::symBBox(const Font&, uint, qreal) const
+RectF FontProviderStub::symBBox(const Font&, uint, double) const
 {
     return RectF();
 }
 
-qreal FontProviderStub::symAdvance(const Font&, uint, qreal) const
+double FontProviderStub::symAdvance(const Font&, uint, double) const
 {
     return 0.0;
 }

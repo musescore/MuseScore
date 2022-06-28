@@ -418,7 +418,7 @@ Pid propertyId(const AsciiStringView& s)
 
 P_TYPE propertyType(Pid id)
 {
-    Q_ASSERT(propertyList[int(id)].id == id);
+    assert(propertyList[int(id)].id == id);
     return propertyList[int(id)].type;
 }
 
@@ -428,7 +428,7 @@ P_TYPE propertyType(Pid id)
 
 bool propertyLink(Pid id)
 {
-    Q_ASSERT(propertyList[int(id)].id == id);
+    assert(propertyList[int(id)].id == id);
     return propertyList[int(id)].link;
 }
 
@@ -438,7 +438,7 @@ bool propertyLink(Pid id)
 
 const char* propertyName(Pid id)
 {
-    Q_ASSERT(propertyList[int(id)].id == id);
+    assert(propertyList[int(id)].id == id);
     return propertyList[int(id)].name;
 }
 
@@ -448,7 +448,7 @@ const char* propertyName(Pid id)
 
 String propertyUserName(Pid id)
 {
-    Q_ASSERT(propertyList[int(id)].id == id);
+    assert(propertyList[int(id)].id == id);
     return QObject::tr(propertyList[int(id)].userName, "propertyName");
 }
 

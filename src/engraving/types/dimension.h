@@ -23,7 +23,6 @@
 #ifndef MU_ENGRAVING_DIMENSION_H
 #define MU_ENGRAVING_DIMENSION_H
 
-#include <QtGlobal>
 #include "realfn.h"
 
 namespace mu::engraving {
@@ -35,11 +34,11 @@ class Millimetre
 {
 public:
     Millimetre() = default;
-    explicit Millimetre(qreal v)
+    explicit Millimetre(double v)
         : m_val(v) {}
 
-    qreal val() const { return m_val; }
-    operator qreal() const {
+    double val() const { return m_val; }
+    operator double() const {
         return m_val;
     }
 
@@ -49,7 +48,7 @@ public:
     bool operator!=(const Millimetre& a) const { return m_val != a.m_val; }
     bool isZero() const { return RealIsNull(m_val); }
 
-    Millimetre& operator=(qreal v)
+    Millimetre& operator=(double v)
     {
         m_val = v;
         return *this;
@@ -61,7 +60,7 @@ public:
         return *this;
     }
 
-    Millimetre& operator+=(const qreal& a)
+    Millimetre& operator+=(const double& a)
     {
         m_val += a;
         return *this;
@@ -80,7 +79,7 @@ public:
         return *this;
     }
 
-    Millimetre& operator-=(const qreal& a)
+    Millimetre& operator-=(const double& a)
     {
         m_val -= a;
         return *this;
@@ -93,7 +92,7 @@ public:
         return r;
     }
 
-    Millimetre& operator/=(qreal d)
+    Millimetre& operator/=(double d)
     {
         m_val /= d;
         return *this;
@@ -104,7 +103,7 @@ public:
         return Millimetre(m_val / b.m_val);
     }
 
-    Millimetre operator/(qreal b) const
+    Millimetre operator/(double b) const
     {
         return Millimetre(m_val / b);
     }
@@ -120,13 +119,13 @@ public:
         return *this;
     }
 
-    Millimetre& operator*=(qreal d)
+    Millimetre& operator*=(double d)
     {
         m_val *= d;
         return *this;
     }
 
-    Millimetre operator*(qreal b) const
+    Millimetre operator*(double b) const
     {
         Millimetre r(*this);
         r *= b;
@@ -136,10 +135,10 @@ public:
     Millimetre operator-() const { return Millimetre(-m_val); }
 
 private:
-    qreal m_val = 0.0;
+    double m_val = 0.0;
 };
 
-inline Millimetre operator*(qreal a, const Millimetre& b)
+inline Millimetre operator*(double a, const Millimetre& b)
 {
     Millimetre r(b);
     r *= a;
@@ -156,14 +155,14 @@ class Spatium
 {
 public:
     Spatium() = default;
-    explicit Spatium(qreal v)
+    explicit Spatium(double v)
         : m_val(v) {}
 
-    qreal val() const { return m_val; }
+    double val() const { return m_val; }
 
-    Millimetre toMM(qreal spval) const { return Millimetre(m_val * spval); }
-    static Spatium fromMM(qreal mm, qreal spval) { return Spatium(mm / spval); }
-    static Spatium fromMM(Millimetre mm, qreal spval) { return Spatium(mm.val() / spval); }
+    Millimetre toMM(double spval) const { return Millimetre(m_val * spval); }
+    static Spatium fromMM(double mm, double spval) { return Spatium(mm / spval); }
+    static Spatium fromMM(Millimetre mm, double spval) { return Spatium(mm.val() / spval); }
 
     bool operator>(const Spatium& a) const { return m_val > a.m_val; }
     bool operator<(const Spatium& a) const { return m_val < a.m_val; }
@@ -197,18 +196,18 @@ public:
         return r;
     }
 
-    Spatium& operator/=(qreal d)
+    Spatium& operator/=(double d)
     {
         m_val /= d;
         return *this;
     }
 
-    qreal operator/(const Spatium& b) const
+    double operator/(const Spatium& b) const
     {
         return m_val / b.m_val;
     }
 
-    Spatium operator/(qreal b) const
+    Spatium operator/(double b) const
     {
         Spatium r(*this);
         r /= b;
@@ -221,7 +220,7 @@ public:
         return *this;
     }
 
-    Spatium& operator*=(qreal d)
+    Spatium& operator*=(double d)
     {
         m_val *= d;
         return *this;
@@ -234,7 +233,7 @@ public:
         return r;
     }
 
-    Spatium operator*(qreal b) const
+    Spatium operator*(double b) const
     {
         Spatium r(*this);
         r *= b;
@@ -244,7 +243,7 @@ public:
     Spatium operator-() const { return Spatium(-m_val); }
 
 private:
-    qreal m_val = 0.0;
+    double m_val = 0.0;
 };
 
 inline Spatium operator*(int a, const Spatium& b)
@@ -254,7 +253,7 @@ inline Spatium operator*(int a, const Spatium& b)
     return r;
 }
 
-inline Spatium operator*(qreal a, const Spatium& b)
+inline Spatium operator*(double a, const Spatium& b)
 {
     Spatium r(b);
     r *= a;

@@ -106,7 +106,7 @@ private:
     io::path_t sessionDataPath() const;
     io::path_t sessionFilePath() const;
 
-    RetVal<QByteArray> readSessionState() const;
+    RetVal<mu::ByteArray> readSessionState() const;
     Ret writeSessionState(const QByteArray& data);
 
     io::paths_t parseSessionProjectsPaths(const QByteArray& json) const;

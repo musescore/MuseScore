@@ -167,26 +167,26 @@ void Stem::draw(mu::draw::Painter* painter) const
     }
 
     // TODO: adjust bounding rectangle in layout() for dots and for slash
-    qreal sp = spatium();
+    double sp = spatium();
     bool isUp = up();
 
     // slashed half note stem
     if (chord()->durationType().type() == DurationType::V_HALF
         && staffType->minimStyle() == TablatureMinimStyle::SLASHED) {
         // position slashes onto stem
-        qreal y = isUp ? -length() + STAFFTYPE_TAB_SLASH_2STARTY_UP * sp
-                  : length() - STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
+        double y = isUp ? -length() + STAFFTYPE_TAB_SLASH_2STARTY_UP * sp
+                   : length() - STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
         // if stems through, try to align slashes within or across lines
         if (staffType->stemThrough()) {
-            qreal halfLineDist = staffType->lineDistance().val() * sp * 0.5;
-            qreal halfSlashHgt = STAFFTYPE_TAB_SLASH_2TOTHEIGHT * sp * 0.5;
+            double halfLineDist = staffType->lineDistance().val() * sp * 0.5;
+            double halfSlashHgt = STAFFTYPE_TAB_SLASH_2TOTHEIGHT * sp * 0.5;
             y = lrint((y + halfSlashHgt) / halfLineDist) * halfLineDist - halfSlashHgt;
         }
         // draw slashes
-        qreal hlfWdt= sp * STAFFTYPE_TAB_SLASH_WIDTH * 0.5;
-        qreal sln   = sp * STAFFTYPE_TAB_SLASH_SLANTY;
-        qreal thk   = sp * STAFFTYPE_TAB_SLASH_THICK;
-        qreal displ = sp * STAFFTYPE_TAB_SLASH_DISPL;
+        double hlfWdt= sp * STAFFTYPE_TAB_SLASH_WIDTH * 0.5;
+        double sln   = sp * STAFFTYPE_TAB_SLASH_SLANTY;
+        double thk   = sp * STAFFTYPE_TAB_SLASH_THICK;
+        double displ = sp * STAFFTYPE_TAB_SLASH_DISPL;
         PainterPath path;
         for (int i = 0; i < 2; ++i) {
             path.moveTo(hlfWdt, y);                   // top-right corner
@@ -206,9 +206,9 @@ void Stem::draw(mu::draw::Painter* painter) const
     // with tablatures and stems beside staves, dots are not drawn near 'notes', but near stems
     int nDots = chord()->dots();
     if (nDots > 0 && !staffType->stemThrough()) {
-        qreal x     = chord()->dotPosX();
-        qreal y     = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
-        qreal step  = score()->styleS(Sid::dotDotDistance).val() * sp;
+        double x     = chord()->dotPosX();
+        double y     = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
+        double step  = score()->styleS(Sid::dotDotDistance).val() * sp;
         for (int dot = 0; dot < nDots; dot++, x += step) {
             drawSymbol(SymId::augmentationDot, painter, PointF(x, y));
         }

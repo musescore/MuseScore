@@ -38,6 +38,36 @@ SpannerMap::SpannerMap()
     dirty = true;
 }
 
+const SpannerMap::SpannerRange& SpannerMap::range(int tickFrom, int tickTo) const
+{
+    static SpannerRange result;
+
+    if (empty()) {
+        result.first = cend();
+        result.last = cend();
+        return result;
+    }
+
+    auto firstNotLess = std::lower_bound(cbegin(), cend(), tickFrom, [](const auto& pair, int tick) {
+        int spannerFrom = pair.second->tick().ticks();
+        int spannerTo = pair.second->tick().ticks() + pair.second->ticks().ticks();
+        return spannerFrom < tick && spannerTo < tick;
+    });
+
+    auto firstGreater = upper_bound(tickTo);
+
+    if (firstNotLess == firstGreater
+        || firstNotLess->first >= tickTo) {
+        result.first = cend();
+        result.last = cend();
+        return result;
+    }
+
+    result.first = firstNotLess;
+    result.last = firstGreater;
+    return result;
+}
+
 //---------------------------------------------------------
 //   update
 //   updates the internal lookup tree, not the map itself
@@ -57,7 +87,7 @@ void SpannerMap::update() const
 //   findContained
 //---------------------------------------------------------
 
-const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained(int start, int stop)
+const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained(int start, int stop) const
 {
     if (dirty) {
         update();
@@ -71,7 +101,7 @@ const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained
 //   findOverlapping
 //---------------------------------------------------------
 
-const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findOverlapping(int start, int stop)
+const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findOverlapping(int start, int stop) const
 {
     if (dirty) {
         update();

@@ -113,12 +113,12 @@ void StaffState::draw(mu::draw::Painter* painter) const
 
 void StaffState::layout()
 {
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     path      = PainterPath();
     lw        = _spatium * 0.3;
-    qreal h  = _spatium * 4;
-    qreal w  = _spatium * 2.5;
-//      qreal w1 = w * .6;
+    double h  = _spatium * 4;
+    double w  = _spatium * 2.5;
+//      double w1 = w * .6;
 
     switch (staffStateType()) {
     case StaffStateType::INSTRUMENT:
