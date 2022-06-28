@@ -30,7 +30,7 @@ using namespace mu::inspector;
 using namespace mu::actions;
 using namespace mu::framework;
 
-static constexpr int REARRANGE_ORDER_STEP = 100;
+static constexpr int REARRANGE_ORDER_STEP = 50;
 
 AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -103,14 +103,86 @@ void AppearanceSettingsModel::loadOffsets()
     });
 }
 
-void AppearanceSettingsModel::pushBackInOrder()
+mu::engraving::Page* AppearanceSettingsModel::getPage()
 {
-    m_arrangeOrder->setValue(m_arrangeOrder->value().toInt() - REARRANGE_ORDER_STEP);
+    return toPage(m_elementList.first()->findAncestor(mu::engraving::ElementType::PAGE));
 }
 
-void AppearanceSettingsModel::pushFrontInOrder()
+std::vector<mu::engraving::EngravingItem*> AppearanceSettingsModel::getAllElementsInPage()
 {
-    m_arrangeOrder->setValue(m_arrangeOrder->value().toInt() + REARRANGE_ORDER_STEP);
+    return getPage()->elements();
+}
+
+std::vector<mu::engraving::EngravingItem*> AppearanceSettingsModel::getAllOverlappingElements()
+{
+    RectF bbox = m_elementList.first()->abbox();
+    for (EngravingItem* element : m_elementList) {
+        bbox |= element->abbox();
+    }
+    if (bbox.width() == 0 || bbox.height() == 0) {
+        LOGD() << "Bounding box appears to have a size of 0, so we'll get all the elements in the page";
+        return getAllElementsInPage();
+    }
+    return getPage()->items(bbox);
+}
+
+void AppearanceSettingsModel::pushBackwardsInOrder()
+{
+    std::vector<mu::engraving::EngravingItem*> elements = getAllOverlappingElements();
+    std::sort(elements.begin(), elements.end(), mu::engraving::elementLessThan);
+
+    int minZ = (*std::min_element(m_elementList.begin(), m_elementList.end(), mu::engraving::elementLessThan))->z();
+    int i;
+    for (i = 0; i < static_cast<int>(elements.size()); i++) {
+        if (elements[i]->z() == minZ) {
+            break;
+        }
+    }
+
+    EngravingItem* elementBehind = elements[i - 1 >= 0 ? i - 1 : 0];
+    m_arrangeOrder->setValue(elementBehind->z() - REARRANGE_ORDER_STEP);
+}
+
+void AppearanceSettingsModel::pushForwardsInOrder()
+{
+    std::vector<mu::engraving::EngravingItem*> elements = getAllOverlappingElements();
+    std::sort(elements.begin(), elements.end(), mu::engraving::elementLessThan);
+
+    int maxZ = (*std::max_element(m_elementList.begin(), m_elementList.end(), mu::engraving::elementLessThan))->z();
+    int elementsCount = static_cast<int>(elements.size());
+    int i;
+    for (i = elementsCount - 1; i > 0; i--) {
+        if (elements[i]->z() == maxZ) {
+            break;
+        }
+    }
+
+    EngravingItem* elementInFront = elements[i + 1 < elementsCount ? i + 1 : elementsCount - 1];
+    m_arrangeOrder->setValue(elementInFront->z() + REARRANGE_ORDER_STEP);
+}
+
+void AppearanceSettingsModel::pushToBackInOrder()
+{
+    std::vector<mu::engraving::EngravingItem*> elements = getAllElementsInPage();
+    EngravingItem* minElement = *std::min_element(elements.begin(), elements.end(), mu::engraving::elementLessThan);
+
+    if (m_elementList.contains(minElement)) {
+        m_arrangeOrder->setValue(minElement->z());
+    } else {
+        m_arrangeOrder->setValue(minElement->z() - REARRANGE_ORDER_STEP);
+    }
+}
+
+void AppearanceSettingsModel::pushToFrontInOrder()
+{
+    std::vector<mu::engraving::EngravingItem*> elements = getAllElementsInPage();
+    EngravingItem* maxElement = *std::max_element(elements.begin(), elements.end(), mu::engraving::elementLessThan);
+
+    if (m_elementList.contains(maxElement)) {
+        m_arrangeOrder->setValue(maxElement->z());
+    } else {
+        m_arrangeOrder->setValue(maxElement->z() + REARRANGE_ORDER_STEP);
+    }
 }
 
 void AppearanceSettingsModel::configureGrid()
