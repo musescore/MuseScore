@@ -105,9 +105,6 @@ signals:
     void needUseDefaultFontChanged(bool needUseDefaultFont);
     void currentShortestNoteChanged(int currentShortestNote);
     void needAskAboutApplyingNewStyleChanged(bool needAskAboutApplyingNewStyle);
-
-private:
-    int division() const;
 };
 }
 

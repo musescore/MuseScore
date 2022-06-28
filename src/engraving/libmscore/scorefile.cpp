@@ -365,10 +365,6 @@ bool Score::saveStyle(const String& name)
 //    return true on success
 //---------------------------------------------------------
 
-//! FIXME
-//extern String revision;
-static String revision;
-
 bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook)
 {
     WriteContext ctx;
@@ -386,7 +382,7 @@ bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, com
 
     if (!MScore::testMode) {
         xml.tag("programVersion", VERSION);
-        xml.tag("programRevision", revision);
+        xml.tag("programRevision", MUSESCORE_REVISION);
     }
     write(xml, onlySelection, hook);
 
@@ -395,7 +391,7 @@ bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, com
     if (!onlySelection) {
         //update version values for i.e. plugin access
         _mscoreVersion = VERSION;
-        _mscoreRevision = revision.toInt(0, 16);
+        _mscoreRevision = AsciiStringView(MUSESCORE_REVISION).toInt(nullptr, 16);
         _mscVersion = MSCVERSION;
     }
     return true;
