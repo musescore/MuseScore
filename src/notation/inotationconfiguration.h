@@ -126,9 +126,6 @@ public:
     virtual double guiScaling() const = 0;
     virtual double notationScaling() const = 0;
 
-    virtual std::string notationRevision() const = 0;
-    virtual int notationDivision() const = 0;
-
     virtual ValCh<framework::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(framework::Orientation orientation) = 0;
 

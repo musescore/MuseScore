@@ -270,7 +270,7 @@ std::string AppShellConfiguration::utmParameters(const std::string& utmMedium) c
 
 std::string AppShellConfiguration::sha() const
 {
-    return "sha=" + notationConfiguration()->notationRevision();
+    return "sha=" MUSESCORE_REVISION;
 }
 
 std::string AppShellConfiguration::currentLanguageCode() const

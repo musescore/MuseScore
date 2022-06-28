@@ -35,12 +35,6 @@ using namespace mu::framework;
 using namespace mu::async;
 using namespace mu::ui;
 
-// Global variable
-namespace mu::engraving {
-QString revision;
-}
-// -----
-
 static const std::string module_name("notation");
 
 static const Settings::Key LIGHT_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/lightTheme_score_background_color");
@@ -585,16 +579,6 @@ double NotationConfiguration::guiScaling() const
 double NotationConfiguration::notationScaling() const
 {
     return uiConfiguration()->physicalDpi() / mu::engraving::DPI;
-}
-
-std::string NotationConfiguration::notationRevision() const
-{
-    return mu::engraving::revision.toStdString();
-}
-
-int NotationConfiguration::notationDivision() const
-{
-    return mu::engraving::Constants::division;
 }
 
 ValCh<framework::Orientation> NotationConfiguration::canvasOrientation() const

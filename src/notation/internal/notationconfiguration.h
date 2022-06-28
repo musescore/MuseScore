@@ -132,9 +132,6 @@ public:
     double guiScaling() const override;
     double notationScaling() const override;
 
-    std::string notationRevision() const override;
-    int notationDivision() const override;
-
     ValCh<framework::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(framework::Orientation orientation) override;
 
