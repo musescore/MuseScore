@@ -383,7 +383,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
     } else if (tag == "html-data") {
         String ss = e.readXml();
         String s  = convertFromHtml(ss);
-// LOGD("html-data <%s>", qPrintable(s));
+// LOGD("html-data <%s>", muPrintable(s));
         t->setXmlText(s);
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
@@ -568,7 +568,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
                 };
                 auto it = accMap.find(text);
                 if (it == accMap.end()) {
-                    LOGD("invalid type %s", qPrintable(text));
+                    LOGD("invalid type %s", muPrintable(text));
                     a->setAccidentalType(AccidentalType::NONE);
                 } else {
                     a->setAccidentalType(it->second);
@@ -1448,7 +1448,7 @@ static void readHarmony114(XmlReader& e, const ReadContext& ctx, Harmony* h)
                 || degreeAlter < -2 || degreeAlter > 2
                 || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
                 LOGD("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
-                     degreeValue, degreeAlter, qPrintable(degreeType));
+                     degreeValue, degreeAlter, muPrintable(degreeType));
             } else {
                 if (degreeType == "add") {
                     h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
@@ -1536,7 +1536,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         if (sl.size() == 2) {
             m->setTicks(Fraction(sl[0].toInt(), sl[1].toInt()));
         } else {
-            LOGD("illegal measure size <%s>", qPrintable(e.attribute("len")));
+            LOGD("illegal measure size <%s>", muPrintable(e.attribute("len")));
         }
         ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
         ctx.sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
@@ -2675,7 +2675,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
     }
     double w1 = pf->size().width() - pf->oddLeftMargin() - _oddRightMargin;
     double w2 = pf->size().width() - pf->evenLeftMargin() - _evenRightMargin;
-    pf->setPrintableWidth(qMin(w1, w2));       // silently adjust right margins
+    pf->setPrintableWidth(std::min(w1, w2));       // silently adjust right margins
 }
 
 //---------------------------------------------------------
@@ -2910,7 +2910,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     }
 
     if (e.error() != XmlStreamReader::NoError) {
-        LOGD("%lld %lld: %s ", e.lineNumber(), e.columnNumber(), qPrintable(e.errorString()));
+        LOGD("%lld %lld: %s ", e.lineNumber(), e.columnNumber(), muPrintable(e.errorString()));
         return Score::FileError::FILE_BAD_FORMAT;
     }
 

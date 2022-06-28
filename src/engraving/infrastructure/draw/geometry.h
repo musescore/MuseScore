@@ -74,7 +74,7 @@ public:
     inline PointX<T>& operator*=(T c) { m_x *= c; m_y *= c; return *this; }
     inline PointX<T>& operator/=(T divisor) { m_x /= divisor; m_y /= divisor; return *this; }
 
-    inline T manhattanLength() const { return qAbs(m_x) + qAbs(m_y); }
+    inline T manhattanLength() const { return std::abs(m_x) + std::abs(m_y); }
 
     static inline double dotProduct(const PointX<T>& p1, const PointX<T>& p2) { return p1.m_x * p2.m_x + p1.m_y * p2.m_y; }
 
@@ -538,10 +538,10 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
         return RectX<T>();
     }
     RectX<T> tmp;
-    tmp.m_x = qMax(l1, l2);
-    tmp.m_y = qMax(t1, t2);
-    tmp.m_w = qMin(r1, r2) - tmp.m_x;
-    tmp.m_h = qMin(b1, b2) - tmp.m_y;
+    tmp.m_x = std::max(l1, l2);
+    tmp.m_y = std::max(t1, t2);
+    tmp.m_w = std::min(r1, r2) - tmp.m_x;
+    tmp.m_h = std::min(b1, b2) - tmp.m_y;
     return tmp;
 }
 

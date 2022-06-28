@@ -21,8 +21,7 @@
  */
 
 #include <cmath>
-
-#include <QStack>
+#include <stack>
 
 #include "draw/fontmetrics.h"
 #include "draw/pen.h"
@@ -313,10 +312,10 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
         return _format;
     }
 
-    size_t startColumn = hasSelection() ? qMin(selectColumn(), _column) : 0;
-    size_t startRow = hasSelection() ? qMin(selectLine(), _row) : 0;
+    size_t startColumn = hasSelection() ? std::min(selectColumn(), _column) : 0;
+    size_t startRow = hasSelection() ? std::min(selectLine(), _row) : 0;
 
-    size_t endSelectionRow = hasSelection() ? qMax(selectLine(), _row) : _text->rows() - 1;
+    size_t endSelectionRow = hasSelection() ? std::max(selectLine(), _row) : _text->rows() - 1;
 
     const TextFragment* tf = _text->textBlock(static_cast<int>(startRow)).fragment(static_cast<int>(startColumn));
     CharFormat resultFormat = tf ? tf->format : CharFormat();
@@ -328,7 +327,7 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
             continue;
         }
 
-        size_t endSelectionColumn = hasSelection() ? qMax(selectColumn(), _column) : block->columns();
+        size_t endSelectionColumn = hasSelection() ? std::max(selectColumn(), _column) : block->columns();
 
         for (size_t column = startColumn; column < endSelectionColumn; column++) {
             CharFormat format
@@ -921,7 +920,7 @@ void TextBlock::layout(TextBase* t)
 
         RectF temp(0.0, -fm.ascent(), 1.0, fm.descent());
         _bbox |= temp;
-        _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
+        _lineSpacing = std::max(_lineSpacing, fm.lineSpacing());
     } else {
         const auto fiLast = --_fragments.end();
         for (auto fi = _fragments.begin(); fi != _fragments.end(); ++fi) {
@@ -948,7 +947,7 @@ void TextBlock::layout(TextBase* t)
             }
 
             _bbox   |= fm.tightBoundingRect(f.text).translated(f.pos);
-            _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
+            _lineSpacing = std::max(_lineSpacing, fm.lineSpacing());
         }
     }
 
@@ -1745,7 +1744,7 @@ void TextBase::createLayout()
                         insert(&cursor, code);
                         cursor.setFormat(fmt); // restore format
                     } else {
-                        LOGD("unknown symbol <%s>", qPrintable(sym));
+                        LOGD("unknown symbol <%s>", muPrintable(sym));
                     }
                 }
             } else {
@@ -2038,7 +2037,7 @@ void TextBase::setSize(const double& val)
 //   XmlNesting
 //---------------------------------------------------------
 
-class XmlNesting : public QStack<String>
+class XmlNesting : public std::stack<String>
 {
     String* _s;
 
@@ -2059,7 +2058,8 @@ public:
 
     String popToken()
     {
-        String s = pop();
+        String s = top();
+        pop();
         *_s += u"</";
         *_s += s;
         *_s += u">";
@@ -2739,13 +2739,13 @@ bool TextBase::validateText(String& s)
     ByteArray ba = ss.toUtf8();
     XmlReader xml(ba);
     while (xml.readNextStartElement()) {
-        // LOGD("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
+        // LOGD("  token %d <%s>", int(xml.tokenType()), muPrintable(xml.name().toString()));
     }
     if (xml.error() == XmlReader::NoError) {
         s = d;
         return true;
     }
-    LOGD("xml error at line %lld column %lld: %s", xml.lineNumber(), xml.columnNumber(), qPrintable(xml.errorString()));
+    LOGD("xml error at line %lld column %lld: %s", xml.lineNumber(), xml.columnNumber(), muPrintable(xml.errorString()));
     LOGD("text: |%s|", muPrintable(ss));
     return false;
 }
@@ -3191,7 +3191,7 @@ void TextBase::editCut(EditData& ed)
     if (!s.isEmpty()) {
         ted->selectedText = cursor->selectedText(true);
         ed.curGrip = Grip::START;
-        ed.key     = Qt::Key_Delete;
+        ed.key     = Key_Delete;
         ed.s       = String();
         edit(ed);
     }

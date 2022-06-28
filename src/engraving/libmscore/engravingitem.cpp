@@ -37,8 +37,10 @@
 #include "rw/xml.h"
 #include "rw/writecontext.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #include "accessibility/accessibleroot.h"
+#endif
 
 #include "accidental.h"
 #include "ambitus.h"
@@ -188,6 +190,7 @@ void EngravingItem::setupAccessible()
         return;
     }
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     static std::list<ElementType> accessibleDisabled = {
         ElementType::LEDGER_LINE
     };
@@ -198,6 +201,7 @@ void EngravingItem::setupAccessible()
             m_accessible->setup();
         }
     }
+#endif
 }
 
 bool EngravingItem::accessibleEnabled() const
@@ -233,7 +237,11 @@ EngravingItemList EngravingItem::childrenItems() const
 
 AccessibleItemPtr EngravingItem::createAccessible()
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     return std::make_shared<AccessibleItem>(this);
+#else
+    return nullptr;
+#endif
 }
 
 //---------------------------------------------------------
@@ -715,7 +723,7 @@ PointF EngravingItem::pagePos() const
         } else if (explicitParent()->isFretDiagram()) {
             return p + parentItem()->pagePos();
         } else {
-            ASSERT_X(String("this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
+            ASSERT_X(String(u"this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
         }
         if (measure) {
             system = measure->system();
@@ -773,7 +781,7 @@ PointF EngravingItem::canvasPos() const
         } else if (explicitParent()->isFretDiagram()) {
             return p + parentItem()->canvasPos() + PointF(toFretDiagram(explicitParent())->centerX(), 0.0);
         } else {
-            ASSERT_X(String("this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
+            ASSERT_X(String(u"this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
         }
         if (measure) {
             const StaffLines* lines = measure->staffLines(idx);
@@ -1044,7 +1052,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             for (EngravingObject* eee : *_links) {
                 EngravingItem* ee = static_cast<EngravingItem*>(eee);
                 if (ee->type() != type()) {
-                    ASSERT_X(String("link %1(%2) type mismatch %3 linked to %4")
+                    ASSERT_X(String(u"link %1(%2) type mismatch %3 linked to %4")
                              .arg(String::fromAscii(ee->typeName()))
                              .arg(id)
                              .arg(String::fromAscii(ee->typeName()), String::fromAscii(typeName())));
@@ -1168,7 +1176,7 @@ Compound::Compound(const Compound& c)
 
 void Compound::draw(mu::draw::Painter* painter) const
 {
-    foreach (EngravingItem* e, elements) {
+    for (EngravingItem* e : elements) {
         PointF pt(e->pos());
         painter->translate(pt);
         e->draw(painter);
@@ -1235,7 +1243,7 @@ void Compound::setVisible(bool f)
 
 void Compound::clear()
 {
-    foreach (EngravingItem* e, elements) {
+    for (EngravingItem* e : elements) {
         if (e->selected()) {
             score()->deselect(e);
         }
@@ -1352,7 +1360,7 @@ void EngravingItem::add(EngravingItem* e)
 
 void EngravingItem::remove(EngravingItem* e)
 {
-    ASSERT_X(String("EngravingItem: cannot remove %1 from %2").arg(String::fromAscii(e->typeName()), String::fromAscii(typeName())));
+    ASSERT_X(String(u"EngravingItem: cannot remove %1 from %2").arg(String::fromAscii(e->typeName()), String::fromAscii(typeName())));
 }
 
 //---------------------------------------------------------
@@ -2037,7 +2045,7 @@ bool EngravingItem::isUserModified() const
         PropertyValue defaultValue = propertyDefault(pid);
 
         if (propertyType(pid) == P_TYPE::MILLIMETRE) {
-            if (qAbs(val.value<Millimetre>() - defaultValue.value<Millimetre>()) > 0.0001) {         // we don’t care spatium diffs that small
+            if (std::abs(val.value<Millimetre>() - defaultValue.value<Millimetre>()) > 0.0001) {         // we don’t care spatium diffs that small
                 return true;
             }
         } else {
@@ -2119,7 +2127,7 @@ void EngravingItem::startDrag(EditData& ed)
     eed->pushProperty(Pid::AUTOPLACE);
     eed->initOffset = offset();
     ed.addData(eed);
-    if (ed.modifiers & Qt::AltModifier) {
+    if (ed.modifiers & AltModifier) {
         setAutoplace(false);
     }
 }
@@ -2211,7 +2219,7 @@ void EngravingItem::endDrag(EditData& ed)
     if (!eed) {
         return;
     }
-    for (const PropertyData& pd : qAsConst(eed->propertyData)) {
+    for (const PropertyData& pd : eed->propertyData) {
         setPropertyFlags(pd.id, pd.f);     // reset initial property flags state
         PropertyFlags f = pd.f;
         if (f == PropertyFlags::STYLED) {
@@ -2286,7 +2294,7 @@ void EngravingItem::startEdit(EditData& ed)
 
 bool EngravingItem::isEditAllowed(EditData& ed) const
 {
-    return ed.key == Qt::Key_Home;
+    return ed.key == Key_Home;
 }
 
 //---------------------------------------------------------
@@ -2296,7 +2304,7 @@ bool EngravingItem::isEditAllowed(EditData& ed) const
 
 bool EngravingItem::edit(EditData& ed)
 {
-    if (ed.key == Qt::Key_Home) {
+    if (ed.key == Key_Home) {
         setOffset(PointF());
         return true;
     }
@@ -2317,7 +2325,7 @@ void EngravingItem::startEditDrag(EditData& ed)
     }
     eed->pushProperty(Pid::OFFSET);
     eed->pushProperty(Pid::AUTOPLACE);
-    if (ed.modifiers & Qt::AltModifier) {
+    if (ed.modifiers & AltModifier) {
         setAutoplace(false);
     }
 }
@@ -2343,7 +2351,7 @@ void EngravingItem::endEditDrag(EditData& ed)
     ElementEditDataPtr eed = ed.getData(this);
     bool changed = false;
     if (eed) {
-        for (const PropertyData& pd : qAsConst(eed->propertyData)) {
+        for (const PropertyData& pd : eed->propertyData) {
             setPropertyFlags(pd.id, pd.f);       // reset initial property flags state
             PropertyFlags f = pd.f;
             if (f == PropertyFlags::STYLED) {
@@ -2683,6 +2691,7 @@ void EngravingItem::setSelected(bool f)
 {
     setFlag(ElementFlag::SELECTED, f);
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     if (f) {
         initAccessibleIfNeed();
 
@@ -2702,10 +2711,12 @@ void EngravingItem::setSelected(bool f)
             }
         }
     }
+#endif
 }
 
 void EngravingItem::initAccessibleIfNeed()
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     if (!engravingConfiguration()->isAccessibleEnabled()) {
         return;
     }
@@ -2726,6 +2737,7 @@ void EngravingItem::initAccessibleIfNeed()
     }
 
     setupAccessible();
+#endif
 }
 
 KerningType EngravingItem::computeKerningType(const EngravingItem* nextItem) const

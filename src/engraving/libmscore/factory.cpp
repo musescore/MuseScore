@@ -22,8 +22,9 @@
 
 #include "factory.h"
 
-#include "score.h"
+#include "translation.h"
 
+#include "score.h"
 #include "page.h"
 #include "rest.h"
 #include "segment.h"

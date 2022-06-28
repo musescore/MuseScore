@@ -22,8 +22,6 @@
 
 #include "lyrics.h"
 
-#include <QRegularExpression>
-
 #include "translation.h"
 #include "rw/xml.h"
 
@@ -262,13 +260,15 @@ void Lyrics::layout()
     String trailing;
 
     if (score()->styleB(Sid::lyricsAlignVerseNumber)) {
-        QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)", QRegularExpression::UseUnicodePropertiesOption);
-        QRegularExpressionMatch punctuationMatch = punctuationPattern.match(text);
-        if (punctuationMatch.hasMatch()) {
+        std::regex punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)");
+        std::smatch match;
+        std::string textU8 = text.toStdString();
+        std::regex_search(textU8, match, punctuationPattern);
+        if (!match.empty()) {
             // leading and trailing punctuation
-            leading = punctuationMatch.captured(1);
-            trailing = punctuationMatch.captured(3);
-            //String actualLyric = punctuationMatch.captured(2);
+            leading = String::fromStdString(match[1].str());
+            trailing = String::fromStdString(match[3].str());
+            //String actualLyric = String::fromStdString(match[2].str());
             if (!leading.isEmpty() && leading.at(0).isDigit()) {
                 hasNumber = true;
             }
@@ -316,7 +316,7 @@ void Lyrics::layout()
         // should have text layout to be able to do it correctly.
         assert(rows() != 0);
         if (!leading.isEmpty() || !trailing.isEmpty()) {
-//                   LOGD("create leading, trailing <%s> -- <%s><%s>", qPrintable(text), qPrintable(leading), qPrintable(trailing));
+//                   LOGD("create leading, trailing <%s> -- <%s><%s>", muPrintable(text), muPrintable(leading), muPrintable(trailing));
             const TextBlock& tb = textBlock(0);
 
             const double leadingWidth = tb.xpos(leading.size(), this) - tb.boundingRect().x();
@@ -417,7 +417,7 @@ void Lyrics::layout2(int nAbove)
 void Lyrics::paste(EditData& ed, const String& txt)
 {
     MuseScoreView* scoreview = ed.view();
-    String regex = String("[^\\S") + Char(0xa0) + Char(0x202F) + u"]+";
+    String regex = String(u"[^\\S") + Char(0xa0) + Char(0x202F) + u"]+";
     StringList sl = txt.split(std::regex(regex.toStdString()), mu::SkipEmptyParts);
     if (sl.empty()) {
         return;
@@ -527,12 +527,12 @@ bool Lyrics::isEditAllowed(EditData& ed) const
 
     if (navigationModifiers.find(ed.modifiers) != navigationModifiers.end()) {
         static const std::set<int> navigationKeys {
-            Qt::Key_Underscore,
-            Qt::Key_Minus,
-            Qt::Key_Enter,
-            Qt::Key_Return,
-            Qt::Key_Up,
-            Qt::Key_Down
+            Key_Underscore,
+            Key_Minus,
+            Key_Enter,
+            Key_Return,
+            Key_Up,
+            Key_Down
         };
 
         if (navigationKeys.find(ed.key) != navigationKeys.end()) {
@@ -540,11 +540,11 @@ bool Lyrics::isEditAllowed(EditData& ed) const
         }
     }
 
-    if (ed.key == Qt::Key_Left) {
+    if (ed.key == Key_Left) {
         return cursor()->column() != 0 || cursor()->hasSelection();
     }
 
-    if (ed.key == Qt::Key_Right) {
+    if (ed.key == Key_Right) {
         bool cursorInLastColumn = cursor()->column() == cursor()->curLine().columns();
         return !cursorInLastColumn || cursor()->hasSelection();
     }

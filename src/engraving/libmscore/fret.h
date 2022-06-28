@@ -94,7 +94,7 @@ public:
     static const std::vector<FretItem::MarkerTypeNameItem> markerTypeNameMap;
     static const std::vector<FretItem::DotTypeNameItem> dotTypeNameMap;
 
-    static QChar markerToChar(FretMarkerType t);
+    static Char markerToChar(FretMarkerType t);
     static String markerTypeToName(FretMarkerType t);
     static FretMarkerType nameToMarkerType(String n);
     static String dotTypeToName(FretDotType t);

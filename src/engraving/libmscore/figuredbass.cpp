@@ -638,7 +638,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     painter->setBrush(BrushStyle::NoBrush);
     Pen pen(figuredBass()->curColor(), FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
     painter->setPen(pen);
-    painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, displayText());
+    painter->drawText(bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, displayText());
 
     // continuation line
     double lineEndX = 0.0;
@@ -681,7 +681,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     // closing cont.line parenthesis
     if (parenth[4] != Parenthesis::NONE) {
         int x = lineEndX > 0.0 ? lineEndX : textWidth;
-        painter->drawText(RectF(x, 0, bbox().width(), bbox().height()), Qt::AlignLeft | Qt::AlignTop,
+        painter->drawText(RectF(x, 0, bbox().width(), bbox().height()), draw::AlignLeft | draw::AlignTop,
                           Char(g_FBFonts.at(font).displayParenthesis[int(parenth[4])].unicode()));
     }
 }
@@ -1021,7 +1021,7 @@ FiguredBass::FiguredBass(Segment* parent)
     }
     setOnNote(true);
     setTicks(Fraction(0, 1));
-    qDeleteAll(items);
+    DeleteAll(items);
     items.clear();
 }
 
@@ -1311,7 +1311,7 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
 
 void FiguredBass::startEdit(EditData& ed)
 {
-    qDeleteAll(items);
+    DeleteAll(items);
     items.clear();
     layout1();   // re-layout without F.B.-specific formatting.
     TextBase::startEdit(ed);
@@ -1323,7 +1323,7 @@ bool FiguredBass::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    if (ed.key == Qt::Key_Semicolon || ed.key == Qt::Key_Colon) {
+    if (ed.key == Key_Semicolon || ed.key == Key_Colon) {
         return true;
     }
 
@@ -1351,14 +1351,14 @@ void FiguredBass::endEdit(EditData& ed)
 
     // split text into lines and create an item for each line
     StringList list = txt.split(u'\n', mu::SkipEmptyParts);
-    qDeleteAll(items);
+    DeleteAll(items);
     items.clear();
     String normalizedText;
     int idx = 0;
     for (String str : list) {
         FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
         if (!pItem->parse(str)) {               // if any item fails parsing
-            qDeleteAll(items);
+            DeleteAll(items);
             items.clear();                      // clear item list
             score()->startCmd();
             triggerLayout();
@@ -1463,7 +1463,7 @@ double FiguredBass::additionalContLineX(double pagePosY) const
             && fbi->prefix() == FiguredBassItem::Modifier::NONE
             && fbi->suffix() == FiguredBassItem::Modifier::NONE
             && fbi->parenth4() == FiguredBassItem::Parenthesis::NONE
-            && qAbs(pgPos.y() + fbi->ipos().y() - pagePosY) < 0.05) {
+            && std::abs(pgPos.y() + fbi->ipos().y() - pagePosY) < 0.05) {
             return pgPos.x() + fbi->ipos().x();
         }
     }
@@ -1675,7 +1675,7 @@ bool FiguredBass::readConfigFile(const String& fileName)
     String path;
 
     if (fileName.isEmpty()) {         // defaults to built-in xml
-        path = ":/fonts/fonts_figuredbass.xml";
+        path = u":/fonts/fonts_figuredbass.xml";
         g_FBFonts.clear();
     } else {
         path = fileName;

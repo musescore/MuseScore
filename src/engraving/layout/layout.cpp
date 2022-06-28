@@ -88,9 +88,9 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
 
     if (!m_score->last() || (options.isLinearMode() && !m_score->firstMeasure())) {
         LOGD("empty score");
-        qDeleteAll(m_score->_systems);
+        DeleteAll(m_score->_systems);
         m_score->_systems.clear();
-        qDeleteAll(m_score->pages());
+        DeleteAll(m_score->pages());
         m_score->pages().clear();
         LayoutPage::getNextPage(options, ctx);
         return;
@@ -208,10 +208,10 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
                 toMeasure(mb)->mmRest()->moveToDummy();
             }
         }
-        qDeleteAll(m_score->_systems);
+        DeleteAll(m_score->_systems);
         m_score->_systems.clear();
 
-        qDeleteAll(m_score->pages());
+        DeleteAll(m_score->pages());
         m_score->pages().clear();
 
         ctx.nextMeasure = options.showVBox ? m_score->first() : m_score->firstMeasure();
@@ -252,7 +252,7 @@ void Layout::doLayout(const LayoutOptions& options, LayoutContext& lc)
 
     if (!lc.curSystem) {
         // The end of the score. The remaining systems are not needed...
-        qDeleteAll(lc.systemList);
+        DeleteAll(lc.systemList);
         lc.systemList.clear();
         // ...and the remaining pages too
         while (lc.score()->npages() > lc.curPage) {
@@ -297,9 +297,9 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
                 ss->resetExplicitParent();
             }
         }
-        qDeleteAll(m_score->_systems);
+        DeleteAll(m_score->_systems);
         m_score->_systems.clear();
-        qDeleteAll(m_score->pages());
+        DeleteAll(m_score->pages());
         m_score->pages().clear();
         if (!m_score->firstMeasure()) {
             LOGD("no measures");

@@ -103,8 +103,8 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
                      bool showRests, bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers,
                      bool showBackTied)
 {
-    Q_UNUSED(invisible);
-    Q_UNUSED(color);
+    UNUSED(invisible);
+    UNUSED(color);
     _group   = sg;
     _xmlName = xml;
     _name    = name;
@@ -403,7 +403,7 @@ void StaffType::read(XmlReader& e)
     } else if (group == fileGroupNames[(int)StaffGroup::STANDARD]) {
         _group = StaffGroup::STANDARD;
     } else {
-        LOGD("StaffType::read: unknown group: %s", qPrintable(group));
+        LOGD("StaffType::read: unknown group: %s", muPrintable(group));
         _group = StaffGroup::STANDARD;
     }
 
@@ -623,7 +623,7 @@ void StaffType::setFretFontName(const String& name)
     String locName = name;
     // convert old names for two built-in fonts which have changed of name
     if (name == "MuseScore Tab Late Renaiss") {
-        locName = "MuseScore Phalèse";
+        locName = u"MuseScore Phalèse";
     }
     for (idx = 0; idx < _fretFonts.size(); idx++) {
         if (_fretFonts[idx].displayName == locName) {
@@ -772,7 +772,7 @@ double StaffType::chordStemLength(const Chord* chord) const
 //    construct the text string for a given fret / duration
 //---------------------------------------------------------
 
-static const String unknownFret = String("?");
+static const String unknownFret = String(u"?");
 
 String StaffType::fretString(int fret, int string, bool deadNote) const
 {
@@ -1278,7 +1278,7 @@ bool TablatureDurationFont::read(XmlReader& e)
 
 bool StaffType::readConfigFile(const String& fileName)
 {
-    String path;
+    io::path_t path;
 
     if (fileName.isEmpty()) {         // defaults to built-in xml
         path = ":/fonts/fonts_tablature.xml";
@@ -1291,7 +1291,7 @@ bool StaffType::readConfigFile(const String& fileName)
     File f(path);
     if (!f.exists() || !f.open(IODevice::ReadOnly)) {
         MScore::lastError = mtrc("engraving", "Cannot open tablature font description:\n%1").arg(f.filePath().toString());
-        LOGD("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
+        LOGD() << "readConfigFile failed: " << path;
         return false;
     }
 

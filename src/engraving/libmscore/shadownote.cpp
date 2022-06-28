@@ -151,7 +151,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
         }
 
         if (hasFlag() && up) {
-            posDot.rx() = qMax(posDot.rx(), noteheadWidth + symBbox(flagSym()).right());
+            posDot.rx() = std::max(posDot.rx(), noteheadWidth + symBbox(flagSym()).right());
         }
 
         for (int i = 0; i < m_duration.dots(); i++) {
@@ -289,7 +289,7 @@ void ShadowNote::layout()
         double dd = score()->styleMM(Sid::dotDotDistance) * mag();
         dotWidth = (noteheadWidth + d);
         if (hasFlag() && up) {
-            dotWidth = qMax(dotWidth, noteheadWidth + symBbox(flagSym()).right());
+            dotWidth = std::max(dotWidth, noteheadWidth + symBbox(flagSym()).right());
         }
         for (int i = 0; i < m_duration.dots(); i++) {
             dotWidth += dd * i;

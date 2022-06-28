@@ -130,7 +130,7 @@ RepeatList::RepeatList(Score* s)
 
 RepeatList::~RepeatList()
 {
-    qDeleteAll(*this);
+    DeleteAll(*this);
 }
 
 //---------------------------------------------------------
@@ -207,7 +207,7 @@ int RepeatList::utick2tick(int tick) const
         }
     }
 
-    ASSERT_X(String("tick %1 not found in RepeatList").arg(tick));
+    ASSERT_X(String(u"tick %1 not found in RepeatList").arg(tick));
     return 0;
 }
 
@@ -261,7 +261,7 @@ int RepeatList::utime2utick(double secs) const
         }
     }
 
-    ASSERT_X(String("time %1 not found in RepeatList").arg(secs));
+    ASSERT_X(String(u"time %1 not found in RepeatList").arg(secs));
     return 0;
 }
 
@@ -283,7 +283,7 @@ std::vector<RepeatSegment*>::const_iterator RepeatList::findRepeatSegmentFromUTi
 
 void RepeatList::flatten()
 {
-    qDeleteAll(*this);
+    DeleteAll(*this);
     clear();
 
     Measure* m = _score->firstMeasure();
@@ -358,7 +358,7 @@ void RepeatList::collectRepeatListElements()
 
     // Clear out previous listing
     for (const RepeatListElementList& srle : _rlElements) {
-        qDeleteAll(srle);
+        DeleteAll(srle);
     }
     _rlElements.clear();
 
@@ -759,7 +759,7 @@ void RepeatList::performJump(std::vector<RepeatListElementList>::const_iterator 
 ///
 void RepeatList::unwind()
 {
-    qDeleteAll(*this);
+    DeleteAll(*this);
     clear();
     _jumpsTaken.clear();
 

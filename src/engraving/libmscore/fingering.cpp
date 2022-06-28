@@ -169,7 +169,7 @@ void Fingering::layout()
                         top = stem->y() + stem->bbox().top();
                     } else {
                         Note* un = chord->upNote();
-                        top = qMin(0.0, un->y() + un->bbox().top());
+                        top = std::min(0.0, un->y() + un->bbox().top());
                     }
                     top -= md;
                     double diff = (bbox().bottom() + ipos().y() + yd + n->y()) - top;
@@ -205,7 +205,7 @@ void Fingering::layout()
                         bottom = stem->y() + stem->bbox().bottom();
                     } else {
                         Note* dn = chord->downNote();
-                        bottom = qMax(vStaff->height(), dn->y() + dn->bbox().bottom());
+                        bottom = std::max(vStaff->height(), dn->y() + dn->bbox().bottom());
                     }
                     bottom += md;
                     double diff = bottom - (bbox().top() + ipos().y() + yd + n->y());
@@ -279,7 +279,7 @@ String Fingering::accessibleInfo() const
     if (textStyleType() == TextStyleType::STRING_NUMBER) {
         rez += u' ' + mtrc("engraving", "String number");
     }
-    return String("%1: %2").arg(rez, plainText());
+    return String(u"%1: %2").arg(rez, plainText());
 }
 
 //---------------------------------------------------------

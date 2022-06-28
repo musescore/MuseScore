@@ -310,7 +310,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 }
                 int beat = (mcr->rtick() * stretch).ticks() / Constants::division;
                 if (mu::contains(beatSubdivision, beat)) {
-                    beatSubdivision[beat] = qMin(beatSubdivision[beat], mcr->durationType());
+                    beatSubdivision[beat] = std::min(beatSubdivision[beat], mcr->durationType());
                 } else {
                     beatSubdivision[beat] = mcr->durationType();
                 }
@@ -370,7 +370,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                     if ((tick.ticks() % Constants::division) == 0) {
                         int beat = tick.ticks() / Constants::division;
                         // get minimum duration for this & previous beat
-                        TDuration minDuration = qMin(beatSubdivision[beat], beatSubdivision[beat - 1]);
+                        TDuration minDuration = std::min(beatSubdivision[beat], beatSubdivision[beat - 1]);
                         // re-calculate beam as if this were the duration of current chordrest
                         TDuration saveDuration        = cr->actualDurationType();
                         TDuration saveCMDuration      = cr->crossMeasureDurationType();
@@ -535,7 +535,7 @@ void LayoutBeams::respace(const std::vector<ChordRest*>& elements)
         ChordRest* ncr = elements[i + 1];
         width[i]       = cr->shape().minHorizontalDistance(ncr->shape(), cr->score());
         ticksList[i]   = cr->ticks().ticks();
-        minTick = qMin(ticksList[i], minTick);
+        minTick = std::min(ticksList[i], minTick);
     }
 
     //---------------------------------------------------

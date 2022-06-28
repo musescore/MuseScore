@@ -403,8 +403,8 @@ Score::~Score()
         v->removeScore();
     }
     // deselectAll();
-    qDeleteAll(_systems);   // systems are layout-only objects so we delete
-                            // them prior to measures.
+    DeleteAll(_systems);   // systems are layout-only objects so we delete
+                           // them prior to measures.
     for (MeasureBase* m = _measures.first(); m;) {
         MeasureBase* nm = m->next();
         if (m->isMeasure() && toMeasure(m)->mmRest()) {
@@ -419,9 +419,9 @@ Score::~Score()
     }
     _spanner.clear();
 
-    qDeleteAll(_parts);
-    qDeleteAll(_staves);
-    qDeleteAll(_pages);
+    DeleteAll(_parts);
+    DeleteAll(_staves);
+    DeleteAll(_pages);
     _masterScore = 0;
 
     imageStore.clearUnused();
@@ -621,7 +621,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
             double length = 0.0;
             for (EngravingItem* e : s->elist()) {
                 if (e && e->isBreath()) {
-                    length = qMax(length, toBreath(e)->pause());
+                    length = std::max(length, toBreath(e)->pause());
                 }
             }
             if (length != 0.0) {
@@ -642,7 +642,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 EngravingItem* e = segment.element(i);
                 if (e && e->isBreath()) {
                     Breath* b = toBreath(e);
-                    length = qMax(length, b->pause());
+                    length = std::max(length, b->pause());
                 }
             }
             if (length != 0.0) {
@@ -662,7 +662,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
             double stretch = 0.0;
             for (EngravingItem* e : segment.annotations()) {
                 if (e->isFermata() && toFermata(e)->play()) {
-                    stretch = qMax(stretch, toFermata(e)->timeStretch());
+                    stretch = std::max(stretch, toFermata(e)->timeStretch());
                 } else if (e->isTempoText()) {
                     TempoText* tt = toTempoText(e);
                     if (tt->isRelative()) {
@@ -2386,7 +2386,7 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
                         assert(!chord || (chord->isChord()));
                         if (!chord) {
                             chord = Factory::copyChord(*c);
-                            qDeleteAll(chord->notes());
+                            DeleteAll(chord->notes());
                             chord->notes().clear();
                             chord->setTuplet(tupletDst[voice]);
                             chord->setTrack(dtrack + voice);
@@ -2914,7 +2914,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
 void Score::sortStaves(std::vector<staff_idx_t>& dst)
 {
     sortSystemObjects(dst);
-    qDeleteAll(systems());
+    DeleteAll(systems());
     systems().clear();    //??
     _parts.clear();
     Part* curPart = nullptr;
@@ -3934,7 +3934,7 @@ void Score::addLyrics(const Fraction& tick, staff_idx_t staffIdx, const String& 
     Segment* seg     = measure->findSegment(SegmentType::ChordRest, tick);
     if (seg == 0) {
         LOGD("no segment found for lyrics<%s> at tick %d",
-             qPrintable(txt), tick.ticks());
+             muPrintable(txt), tick.ticks());
         return;
     }
 
@@ -3953,7 +3953,7 @@ void Score::addLyrics(const Fraction& tick, staff_idx_t staffIdx, const String& 
     }
     if (!lyricsAdded) {
         LOGD("no chord/rest for lyrics<%s> at tick %d, staff %zu",
-             qPrintable(txt), tick.ticks(), staffIdx);
+             muPrintable(txt), tick.ticks(), staffIdx);
     }
 }
 

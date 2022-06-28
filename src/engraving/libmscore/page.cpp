@@ -251,9 +251,9 @@ double Page::headerExtension() const
         double headerCenterHeight = headerCenter ? headerCenter->height() : 0.0;
         double headerRightHeight = headerRight ? headerRight->height() : 0.0;
 
-        double headerHeight = qMax(headerLeftHeight, qMax(headerCenterHeight, headerRightHeight));
+        double headerHeight = std::max(headerLeftHeight, std::max(headerCenterHeight, headerRightHeight));
         double headerOffset = score()->styleV(Sid::headerOffset).value<PointF>().y() * DPMM;
-        return qMax(0.0, headerHeight - headerOffset);
+        return std::max(0.0, headerHeight - headerOffset);
     }
 
     return 0.0;
@@ -294,10 +294,10 @@ double Page::footerExtension() const
         double footerCenterHeight = footerCenter ? footerCenter->height() : 0.0;
         double footerRightHeight = footerRight ? footerRight->height() : 0.0;
 
-        double footerHeight = qMax(footerLeftHeight, qMax(footerCenterHeight, footerRightHeight));
+        double footerHeight = std::max(footerLeftHeight, std::max(footerCenterHeight, footerRightHeight));
 
         double footerOffset = score()->styleV(Sid::footerOffset).value<PointF>().y() * DPMM;
-        return qMax(0.0, footerHeight - footerOffset);
+        return std::max(0.0, footerHeight - footerOffset);
     }
 
     return 0.0;
@@ -417,12 +417,12 @@ String Page::replaceTextMacros(const String& s) const
             {
                 int no = static_cast<int>(_no) + 1 + score()->pageNumberOffset();
                 if (no > 0) {
-                    d += String("%1").arg(no);
+                    d += String::number(no);
                 }
             }
             break;
             case 'n':
-                d += String("%1").arg(score()->npages() + score()->pageNumberOffset());
+                d += String::number(score()->npages() + score()->pageNumberOffset());
                 break;
             case 'i': // not on first page
                 if (!_no) {
@@ -475,7 +475,7 @@ String Page::replaceTextMacros(const String& s) const
                 break;
             case 'v':
                 if (score()->dirty()) {
-                    d += String(VERSION);
+                    d += String::fromAscii(VERSION);
                 } else {
                     d += score()->mscoreVersion();
                 }
@@ -542,7 +542,7 @@ bool Page::isOdd() const
 void Page::write(XmlWriter& xml) const
 {
     xml.startElement(this);
-    foreach (System* system, _systems) {
+    for (System* system : _systems) {
         system->write(xml);
     }
     xml.endElement();

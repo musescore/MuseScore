@@ -112,6 +112,24 @@ enum AlignmentFlag {
 
 DECLARE_FLAGS(Alignment, AlignmentFlag)
 DECLARE_OPERATORS_FOR_FLAGS(Alignment)
+
+enum TextFlag {
+    TextSingleLine = 0x0100,
+    TextDontClip = 0x0200,
+    TextExpandTabs = 0x0400,
+    TextShowMnemonic = 0x0800,
+    TextWordWrap = 0x1000,
+    TextWrapAnywhere = 0x2000,
+    TextDontPrint = 0x4000,
+    TextIncludeTrailingSpaces = 0x08000000,
+    TextHideMnemonic = 0x8000,
+    TextJustificationForced = 0x10000,
+    TextForceLeftToRight = 0x20000,
+    TextForceRightToLeft = 0x40000,
+    // Ensures that the longest variant is always used when computing the
+    // size of a multi-variant string.
+    TextLongestVariant = 0x80000
+};
 }
 
 #endif // MU_DRAW_DRAWTYPES_H

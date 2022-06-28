@@ -454,7 +454,7 @@ bool Image::load(const io::path_t& ss)
 bool Image::loadFromData(const path_t& name, const ByteArray& ba)
 {
     _linkIsValid = false;
-    _linkPath = "";
+    _linkPath = u"";
     _storeItem = imageStore.add(name, ba);
     _storeItem->reference(this);
     if (name.withSuffix("svg")) {

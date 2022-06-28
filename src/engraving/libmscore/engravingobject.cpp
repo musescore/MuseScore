@@ -533,7 +533,7 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
     P_TYPE type = propertyType(pid);
     if (P_TYPE::MILLIMETRE == type) {
         double f1 = p.toReal();
-        if (d.isValid() && qAbs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
+        if (d.isValid() && std::abs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
             return;
         }
         p = PropertyValue(Spatium::fromMM(f1, score()->spatium()));
@@ -542,7 +542,7 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
         PointF p1 = p.value<PointF>();
         if (d.isValid()) {
             PointF p2 = d.value<PointF>();
-            if ((qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001)) {
+            if ((std::abs(p1.x() - p2.x()) < 0.0001) && (std::abs(p1.y() - p2.y()) < 0.0001)) {
                 return;
             }
         }
@@ -595,7 +595,7 @@ void EngravingObject::reset()
 
 void EngravingObject::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 {
-    Q_UNUSED(pasteMode);
+    UNUSED(pasteMode);
     LOGD("Cannot add connector %s to %s", info->connector()->typeName(), typeName());
 }
 
@@ -771,7 +771,7 @@ const char* EngravingObject::typeName() const
 
 String EngravingObject::typeUserName() const
 {
-    return qtrc("elementName", Factory::userName(type()));
+    return mtrc("engraving", Factory::userName(type()));
 }
 
 //---------------------------------------------------------

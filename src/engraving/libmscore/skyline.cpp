@@ -243,7 +243,7 @@ double SkylineLine::minDistance(const SkylineLine& sl) const
         }
         for (;;) {
             if ((x1 + i->w > x2) && (x1 < x2 + k->w)) {
-                dist = qMax(dist, i->y - k->y);
+                dist = std::max(dist, i->y - k->y);
             }
             if (x2 + k->w < x1 + i->w) {
                 x2 += k->w;
@@ -344,12 +344,12 @@ double SkylineLine::max() const
     if (north) {
         val = MAXIMUM_Y;
         for (const SkylineSegment& s : *this) {
-            val = qMin(val, s.y);
+            val = std::min(val, s.y);
         }
     } else {
         val = MINIMUM_Y;
         for (const SkylineSegment& s : *this) {
-            val = qMax(val, s.y);
+            val = std::max(val, s.y);
         }
     }
     return val;

@@ -456,7 +456,7 @@ bool Arpeggio::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    return ed.key == Qt::Key_Down || ed.key == Qt::Key_Up;
+    return ed.key == Key_Down || ed.key == Key_Up;
 }
 
 //---------------------------------------------------------
@@ -469,7 +469,7 @@ bool Arpeggio::edit(EditData& ed)
         return false;
     }
 
-    if (ed.key == Qt::Key_Down) {
+    if (ed.key == Key_Down) {
         Staff* s = staff();
         Part* part = s->part();
         size_t n = part->nstaves();
@@ -479,7 +479,7 @@ bool Arpeggio::edit(EditData& ed)
                 ++_span;
             }
         }
-    } else if (ed.key == Qt::Key_Up) {
+    } else if (ed.key == Key_Up) {
         if (_span > 1) {
             --_span;
         }

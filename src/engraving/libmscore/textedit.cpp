@@ -27,7 +27,7 @@
 #include "scorefont.h"
 #include "types/symnames.h"
 
-#include "accessibility/accessibleitem.h"
+//#include "accessibility/accessibleitem.h"
 
 #include "log.h"
 
@@ -245,30 +245,30 @@ void TextBase::insertText(EditData& ed, const String& s)
 
 bool TextBase::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Qt::Key_Shift || ed.key == Qt::Key_Escape) {
+    if (ed.key == Key_Shift || ed.key == Key_Escape) {
         return false;
     }
 
     bool shiftPressed = ed.modifiers & ShiftModifier;
-    if (shiftPressed && ed.key == Qt::Key_F2) {
+    if (shiftPressed && ed.key == Key_F2) {
         return false; // Toggle Special Characters dialog
     }
 
-    bool ctrlPressed = ed.modifiers & Qt::ControlModifier;
+    bool ctrlPressed = ed.modifiers & ControlModifier;
 
     if (ctrlPressed && !shiftPressed) {
-        static QSet<int> ignore = {
-            Qt::Key_B,
-            Qt::Key_C,
-            Qt::Key_I,
-            Qt::Key_U,
-            Qt::Key_V,
-            Qt::Key_X,
-            Qt::Key_Y,
-            Qt::Key_Z
+        static std::set<int> ignore = {
+            Key_B,
+            Key_C,
+            Key_I,
+            Key_U,
+            Key_V,
+            Key_X,
+            Key_Y,
+            Key_Z
         };
 
-        return !ignore.contains(ed.key);
+        return !mu::contains(ignore, ed.key);
     }
 
     return true;
@@ -301,16 +301,16 @@ bool TextBase::edit(EditData& ed)
     if (hexState >= 0) {
         if (ed.modifiers == (ControlModifier | ShiftModifier | KeypadModifier)) {
             switch (ed.key) {
-            case Qt::Key_0:
-            case Qt::Key_1:
-            case Qt::Key_2:
-            case Qt::Key_3:
-            case Qt::Key_4:
-            case Qt::Key_5:
-            case Qt::Key_6:
-            case Qt::Key_7:
-            case Qt::Key_8:
-            case Qt::Key_9:
+            case Key_0:
+            case Key_1:
+            case Key_2:
+            case Key_3:
+            case Key_4:
+            case Key_5:
+            case Key_6:
+            case Key_7:
+            case Key_8:
+            case Key_9:
                 s = QChar::fromLatin1(ed.key);
                 ++hexState;
                 wasHex = true;
@@ -320,12 +320,12 @@ bool TextBase::edit(EditData& ed)
             }
         } else if (ed.modifiers == (ControlModifier | ShiftModifier)) {
             switch (ed.key) {
-            case Qt::Key_A:
-            case Qt::Key_B:
-            case Qt::Key_C:
-            case Qt::Key_D:
-            case Qt::Key_E:
-            case Qt::Key_F:
+            case Key_A:
+            case Key_B:
+            case Key_C:
+            case Key_D:
+            case Key_E:
+            case Key_F:
                 s = QChar::fromLatin1(ed.key);
                 ++hexState;
                 wasHex = true;
@@ -340,8 +340,8 @@ bool TextBase::edit(EditData& ed)
 //printf("======%x\n", s.isEmpty() ? -1 : s[0].unicode());
 
         switch (ed.key) {
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
+        case Key_Enter:
+        case Key_Return:
             deleteSelectedText(ed);
             score()->undo(new SplitText(cursor), &ed);
 
@@ -349,7 +349,7 @@ bool TextBase::edit(EditData& ed)
 
             return true;
 
-        case Qt::Key_Delete:
+        case Key_Delete:
             if (!deleteSelectedText(ed)) {
                 // check for move down
                 if (cursor->column() == cursor->columns()) {               // if you are on the end of the line, delete the newline char
@@ -367,7 +367,7 @@ bool TextBase::edit(EditData& ed)
             }
             return true;
 
-        case Qt::Key_Backspace: {
+        case Key_Backspace: {
             int startPosition = cursor->currentPosition();
 
             if (ctrlPressed) {
@@ -400,7 +400,7 @@ bool TextBase::edit(EditData& ed)
             return true;
         }
 
-        case Qt::Key_Left:
+        case Key_Left:
             if (!_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left,
                                        mm) && type() == ElementType::LYRICS) {
                 return false;
@@ -411,7 +411,7 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Qt::Key_Right:
+        case Key_Right:
             if (!_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::Right,
                                        mm) && type() == ElementType::LYRICS) {
                 return false;
@@ -422,7 +422,7 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Qt::Key_Up:
+        case Key_Up:
 #if defined(Q_OS_MAC)
             if (!cursor->movePosition(TextCursor::MoveOperation::Up, mm)) {
                 cursor->movePosition(TextCursor::MoveOperation::StartOfLine, mm);
@@ -436,7 +436,7 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Qt::Key_Down:
+        case Key_Down:
 #if defined(Q_OS_MAC)
             if (!cursor->movePosition(TextCursor::MoveOperation::Down, mm)) {
                 cursor->movePosition(TextCursor::MoveOperation::EndOfLine, mm);
@@ -450,7 +450,7 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Qt::Key_Home:
+        case Key_Home:
             if (ctrlPressed) {
                 cursor->movePosition(TextCursor::MoveOperation::Start, mm);
             } else {
@@ -463,7 +463,7 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Qt::Key_End:
+        case Key_End:
             if (ctrlPressed) {
                 cursor->movePosition(TextCursor::MoveOperation::End, mm);
             } else {
@@ -476,12 +476,12 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Qt::Key_Tab:
+        case Key_Tab:
             s = " ";
             ed.modifiers = {};
             break;
 
-        case Qt::Key_Space:
+        case Key_Space:
             if (ed.modifiers & CONTROL_MODIFIER) {
                 s = String(Char(0xa0));               // non-breaking space
             } else {
@@ -495,19 +495,19 @@ bool TextBase::edit(EditData& ed)
             ed.modifiers = {};
             break;
 
-        case Qt::Key_Minus:
+        case Key_Minus:
             if (ed.modifiers == 0) {
                 s = "-";
             }
             break;
 
-        case Qt::Key_Underscore:
+        case Key_Underscore:
             if (ed.modifiers == 0) {
                 s = "_";
             }
             break;
 
-        case Qt::Key_A:
+        case Key_A:
             if (ctrlPressed && !shiftPressed) {
                 cursor->movePosition(TextCursor::MoveOperation::Start, TextCursor::MoveMode::MoveAnchor);
                 cursor->movePosition(TextCursor::MoveOperation::End, TextCursor::MoveMode::KeepAnchor);
@@ -516,14 +516,14 @@ bool TextBase::edit(EditData& ed)
                 notifyAboutTextCursorChanged();
             }
             break;
-        case Qt::Key_B:
-        case Qt::Key_C:
-        case Qt::Key_I:
-        case Qt::Key_U:
-        case Qt::Key_V:
-        case Qt::Key_X:
-        case Qt::Key_Y:
-        case Qt::Key_Z:
+        case Key_B:
+        case Key_C:
+        case Key_I:
+        case Key_U:
+        case Key_V:
+        case Key_X:
+        case Key_Y:
+        case Key_Z:
             if (ctrlPressed && !shiftPressed) {
                 return false; // handled at application level
             }
@@ -533,47 +533,47 @@ bool TextBase::edit(EditData& ed)
         }
         if (ctrlPressed && shiftPressed) {
             switch (ed.key) {
-            case Qt::Key_U:
+            case Key_U:
                 if (hexState == -1) {
                     hexState = 0;
                     s = "u";
                 }
                 break;
-            case Qt::Key_B:
+            case Key_B:
                 s = "\u266d";               // Unicode flat
                 break;
-            case Qt::Key_NumberSign: // e.g. QWERTY (US)
-            case Qt::Key_AsciiTilde: // e.g. QWERTY (GB)
-            case Qt::Key_Apostrophe: // e.g. QWERTZ (DE)
-            case Qt::Key_periodcentered: // e.g. QWERTY (ES)
-            case Qt::Key_3: // e.g. AZERTY (FR, BE)
+            case Key_NumberSign: // e.g. QWERTY (US)
+            case Key_AsciiTilde: // e.g. QWERTY (GB)
+            case Key_Apostrophe: // e.g. QWERTZ (DE)
+            case Key_periodcentered: // e.g. QWERTY (ES)
+            case Key_3: // e.g. AZERTY (FR, BE)
                 s = "\u266f";               // Unicode sharp
                 break;
-            case Qt::Key_H:
+            case Key_H:
                 s = "\u266e";               // Unicode natural
                 break;
-            case Qt::Key_Space:
+            case Key_Space:
                 insertSym(ed, SymId::space);
                 return true;
-            case Qt::Key_F:
+            case Key_F:
                 insertSym(ed, SymId::dynamicForte);
                 return true;
-            case Qt::Key_M:
+            case Key_M:
                 insertSym(ed, SymId::dynamicMezzo);
                 return true;
-            case Qt::Key_N:
+            case Key_N:
                 insertSym(ed, SymId::dynamicNiente);
                 return true;
-            case Qt::Key_P:
+            case Key_P:
                 insertSym(ed, SymId::dynamicPiano);
                 return true;
-            case Qt::Key_S:
+            case Key_S:
                 insertSym(ed, SymId::dynamicSforzando);
                 return true;
-            case Qt::Key_R:
+            case Key_R:
                 insertSym(ed, SymId::dynamicRinforzando);
                 return true;
-            case Qt::Key_Z:
+            case Key_Z:
                 // Ctrl+Z is normally "undo"
                 // but this code gets hit even if you are also holding Shift
                 // so Shift+Ctrl+Z works
@@ -581,7 +581,7 @@ bool TextBase::edit(EditData& ed)
                 return true;
             }
             if (ctrlPressed && altPressed) {
-                if (ed.key == Qt::Key_Minus) {
+                if (ed.key == Key_Minus) {
                     insertSym(ed, SymId::lyricsElision);
                     return true;
                 }
@@ -750,7 +750,7 @@ EngravingItem* TextBase::drop(EditData& ed)
 void TextBase::paste(EditData& ed, const String& txt)
 {
     if (MScore::debugMode) {
-        LOGD("<%s>", qPrintable(txt));
+        LOGD("<%s>", muPrintable(txt));
     }
 
     int state = 0;
@@ -856,7 +856,7 @@ void TextBase::endHexState(EditData& ed)
                 editInsertText(cursor, String(code));
             } else {
                 LOGD("cannot convert hex string <%s>, state %d (%zu-%zu)",
-                     qPrintable(ss.mid(1)), hexState, c1, c2);
+                     muPrintable(ss.mid(1)), hexState, c1, c2);
             }
         }
         hexState = -1;

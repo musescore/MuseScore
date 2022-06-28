@@ -22,6 +22,7 @@
 
 #include "instrument.h"
 
+#include "translation.h"
 #include "rw/xml.h"
 #include "io/htmlparser.h"
 #include "types/typesconv.h"
@@ -191,7 +192,7 @@ Instrument::Instrument(const Instrument& i)
 
 void Instrument::operator=(const Instrument& i)
 {
-    qDeleteAll(_channel);
+    DeleteAll(_channel);
     _channel.clear();
     delete _drumset;
 
@@ -226,7 +227,7 @@ void Instrument::operator=(const Instrument& i)
 
 Instrument::~Instrument()
 {
-    qDeleteAll(_channel);
+    DeleteAll(_channel);
     delete _drumset;
     _drumset = nullptr;
 }
@@ -251,7 +252,7 @@ void StaffName::write(XmlWriter& xml, const char* tag) const
         if (pos() == 0) {
             xml.writeXml(String::fromUtf8(tag), name());
         } else {
-            xml.writeXml(String("%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(pos()), name());
+            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(pos()), name());
         }
     }
 }
@@ -352,7 +353,7 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
 
 String Instrument::recognizeInstrumentId() const
 {
-    static const String defaultInstrumentId("keyboard.piano");
+    static const String defaultInstrumentId(u"keyboard.piano");
 
     std::list<String> nameList;
 
@@ -390,7 +391,7 @@ String Instrument::recognizeId() const
     InstrumentTemplate* t = searchTemplateForMusicXmlId(_instrumentId);
 
     if (!t) {
-        static const String defaultInstrumentId("piano");
+        static const String defaultInstrumentId(u"piano");
         return defaultInstrumentId;
     }
 
@@ -560,13 +561,13 @@ NamedEventList* Instrument::midiAction(const String& s, int channelIdx) const
 {
     // first look in channel list
 
-    foreach (const NamedEventList& a, _channel[channelIdx]->midiActions) {
+    for (const NamedEventList& a : _channel[channelIdx]->midiActions) {
         if (s == a.name) {
             return const_cast<NamedEventList*>(&a);
         }
     }
 
-    foreach (const NamedEventList& a, _midiActions) {
+    for (const NamedEventList& a : _midiActions) {
         if (s == a.name) {
             return const_cast<NamedEventList*>(&a);
         }
@@ -583,7 +584,7 @@ InstrChannel::InstrChannel()
     for (int i = 0; i < int(A::INIT_COUNT); ++i) {
         _init.push_back(MidiCoreEvent());
     }
-    _synti    = "Fluid";       // default synthesizer
+    _synti    = u"Fluid";       // default synthesizer
     _channel  = -1;
     _program  = -1;
     _bank     = 0;
@@ -878,7 +879,7 @@ void InstrChannel::read(XmlReader& e, Part* part)
     // synti = 0;
     _name = e.attribute("name");
     if (_name == "") {
-        _name = DEFAULT_NAME;
+        _name = String::fromUtf8(DEFAULT_NAME);
     }
 
     int midiPort = -1;
@@ -971,9 +972,9 @@ void InstrChannel::read(XmlReader& e, Part* part)
 
 void InstrChannel::switchExpressive(Synthesizer* synth, bool expressive, bool force /* = false */)
 {
-    Q_UNUSED(synth);
-    Q_UNUSED(expressive);
-    Q_UNUSED(force);
+    UNUSED(synth);
+    UNUSED(expressive);
+    UNUSED(force);
     //! TODO Needs poting to MU4
     NOT_IMPLEMENTED;
 
@@ -1293,7 +1294,7 @@ void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const String&
 
 double Instrument::getVelocityMultiplier(const String& name)
 {
-    for (const MidiArticulation& a : qAsConst(_articulation)) {
+    for (const MidiArticulation& a : _articulation) {
         if (a.name == name) {
             return double(a.velocity) / 100;
         }
@@ -1307,7 +1308,7 @@ double Instrument::getVelocityMultiplier(const String& name)
 
 void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const String& name)
 {
-    for (const MidiArticulation& a : qAsConst(_articulation)) {
+    for (const MidiArticulation& a : _articulation) {
         if (a.name == name) {
             *gateTime = a.gateTime;
             break;
@@ -1751,8 +1752,8 @@ void Instrument::updateInstrumentId()
     // channel to find the correct instrument.
     // There are some duplicate MusicXML IDs among other instruments too. In
     // that case we check the pitch range and use the shortest ID that matches.
-    const String arco = String("arco");
-    const bool groupHack = instrumentId() == String("strings.group");
+    const String arco = String(u"arco");
+    const bool groupHack = instrumentId() == String(u"strings.group");
     const int idxref = channelIdx(arco);
     const int val32ref = (idxref < 0) ? -1 : channel(idxref)->bank();
     String fallback;
@@ -1801,7 +1802,7 @@ void Instrument::updateInstrumentId()
         }
     }
 
-    _id = fallback.isEmpty() ? String("piano") : fallback;
+    _id = fallback.isEmpty() ? String(u"piano") : fallback;
 }
 
 //---------------------------------------------------------

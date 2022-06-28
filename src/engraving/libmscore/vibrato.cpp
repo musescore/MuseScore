@@ -285,7 +285,7 @@ void Vibrato::setVibratoType(const String& s)
             return;
         }
     }
-    LOGD("Vibrato::setSubtype: unknown <%s>", qPrintable(s));
+    LOGD("Vibrato::setSubtype: unknown <%s>", muPrintable(s));
 }
 
 //---------------------------------------------------------
@@ -417,6 +417,6 @@ void Vibrato::undoSetVibratoType(Type val)
 
 String Vibrato::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), vibratoTypeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), vibratoTypeUserName());
 }
 }

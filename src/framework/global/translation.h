@@ -24,7 +24,7 @@
 
 #include "types/string.h"
 
-#ifndef NO_QT_SUPPORT
+#ifndef GLOBAL_NO_QT_SUPPORT
 #include <QString>
 #endif
 
@@ -33,14 +33,15 @@ std::string trc(const char* context, const char* key, const char* disambiguation
 
 String mtrc(const char* context, const char* key, const char* disambiguation = nullptr, int n = -1);
 String mtrc(const char* context, const String& key, const char* disambiguation = nullptr, int n = -1);
+String mtrc(const char* context, const String& key, const String& disambiguation, int n = -1);
 
-#ifndef NO_QT_SUPPORT
+#ifndef GLOBAL_NO_QT_SUPPORT
 QString qtrc(const char* context, const char* key, const char* disambiguation = nullptr, int n = -1);
 QString qtrc(const char* context, const String& key, const char* disambiguation = nullptr, int n = -1);
 QString qtrc(const char* context, const String& key, const String& disambiguation, int n = -1);
 #endif
 
-#ifdef NO_QT_SUPPORT
+#ifdef GLOBAL_NO_QT_SUPPORT
 #define QT_TRANSLATE_NOOP(ctx, msg) msg
 #endif
 }

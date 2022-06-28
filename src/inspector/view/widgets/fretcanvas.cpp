@@ -119,7 +119,7 @@ void FretCanvas::draw(QPainter* painter)
             double y = -fretDist * .1;
             painter->drawText(QRectF(x, y, 0.0, 0.0),
                               Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip,
-                              mu::engraving::FretItem::markerToChar(mark.mtype));
+                              QChar(mu::engraving::FretItem::markerToChar(mark.mtype).unicode()));
         }
     }
 

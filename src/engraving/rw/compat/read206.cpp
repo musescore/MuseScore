@@ -303,7 +303,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<String, std
     if (ss == TextStyleType::TEXT_TYPES) {
         ss = e.context()->addUserTextStyle(name);
         if (ss == TextStyleType::TEXT_TYPES) {
-            LOGD("unhandled substyle <%s>", qPrintable(name));
+            LOGD("unhandled substyle <%s>", muPrintable(name));
             isExcessStyle = true;
         } else {
             int idx = int(ss) - int(TextStyleType::USER1);
@@ -449,7 +449,7 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e)
             };
             auto it = accMap.find(text);
             if (it == accMap.end()) {
-                LOGD("invalid type %s", qPrintable(text));
+                LOGD("invalid type %s", muPrintable(text));
                 a->setAccidentalType(AccidentalType::NONE);
             } else {
                 a->setAccidentalType(it->second);
@@ -1694,7 +1694,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
                     }
                 }
             } else {
-                LOGD("readChordRestProperties206(): unknown Slur type <%s>", qPrintable(atype));
+                LOGD("readChordRestProperties206(): unknown Slur type <%s>", muPrintable(atype));
             }
         }
         e.readNext();
@@ -2243,7 +2243,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
                     if (i == n) {
                         sym = SymNames::symIdByName(s);
                         if (sym == SymId::noSym) {
-                            LOGD("Articulation: unknown type <%s>", qPrintable(s));
+                            LOGD("Articulation: unknown type <%s>", muPrintable(s));
                         }
                     }
                 }
@@ -2403,7 +2403,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         if (sl.size() == 2) {
             m->setTicks(Fraction(sl.at(0).toInt(), sl.at(1).toInt()));
         } else {
-            LOGD("illegal measure size <%s>", qPrintable(e.attribute("len")));
+            LOGD("illegal measure size <%s>", muPrintable(e.attribute("len")));
         }
         irregular = true;
         ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
@@ -3145,7 +3145,7 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readCho
             //style->set(Sid::lyricsMinBottomDistance, PointF(0.0, y));
             e.skipCurrentElement();
         } else if (tag == "ottavaHook") {
-            double y = qAbs(e.readDouble());
+            double y = std::abs(e.readDouble());
             style->set(Sid::ottavaHookAbove, y);
             style->set(Sid::ottavaHookBelow, -y);
         } else if (tag == "endBarDistance") {
@@ -3334,7 +3334,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             } else if (s == "system") {
                 score->setLayoutMode(LayoutMode::SYSTEM);
             } else {
-                LOGD("layoutMode: %s", qPrintable(s));
+                LOGD("layoutMode: %s", muPrintable(s));
             }
         } else {
             e.unknown();
@@ -3342,7 +3342,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     }
     if (e.error() != XmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
-             qPrintable(e.docName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
+             muPrintable(e.docName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
         MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
             e.name().ascii());
         return false;

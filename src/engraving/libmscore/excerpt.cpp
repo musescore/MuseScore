@@ -254,7 +254,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
     score->setCurrentLayer(masterScore->currentLayer());
     score->layer().clear();
-    foreach (const Layer& l, masterScore->layer()) {
+    for (const Layer& l : masterScore->layer()) {
         score->layer().push_back(l);
     }
 
@@ -700,7 +700,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                 // this staff is within span
                                 // calculate adjusted span for excerpt
                                 int oSpan = oSpan2 - oIdx;
-                                adjustedBarlineSpan = qMin(oSpan, static_cast<int>(score->nstaves()));
+                                adjustedBarlineSpan = std::min(oSpan, static_cast<int>(score->nstaves()));
                             } else {
                                 // this staff is not within span
                                 oe = nullptr;
@@ -1069,12 +1069,12 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
                     // remove lyrics from chord
                     // since only one set of lyrics is used with linked staves
-                    foreach (Lyrics* l, ncr->lyrics()) {
+                    for (Lyrics* l : ncr->lyrics()) {
                         if (l) {
                             l->unlink();
                         }
                     }
-                    qDeleteAll(ncr->lyrics());
+                    DeleteAll(ncr->lyrics());
                     ncr->lyrics().clear();
 
                     for (EngravingItem* e : seg->annotations()) {
@@ -1468,7 +1468,7 @@ String Excerpt::formatName(const String& partName, const std::vector<Excerpt*>& 
     }
 
     if (count > 0) {
-        name += String(" %1").arg(count + 1);
+        name += String(u" %1").arg(count + 1);
     }
 
     return name;

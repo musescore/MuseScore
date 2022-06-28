@@ -438,7 +438,7 @@ PropertyValue Ottava::propertyDefault(Pid pid) const
     case Pid::BEGIN_HOOK_HEIGHT:
         return Spatium(.0);
     case Pid::END_TEXT:
-        return String("");
+        return String(u"");
     case Pid::PLACEMENT:
         return styleValue(Pid::PLACEMENT, getPropertyStyle(Pid::PLACEMENT));
 
@@ -453,7 +453,7 @@ PropertyValue Ottava::propertyDefault(Pid pid) const
 
 String Ottava::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), String::fromUtf8(ottavaDefault[static_cast<int>(ottavaType())].name));
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), String::fromUtf8(ottavaDefault[static_cast<int>(ottavaType())].name));
 }
 
 //---------------------------------------------------------

@@ -225,7 +225,7 @@ Segment::~Segment()
         delete e;
     }
 
-    qDeleteAll(_annotations);
+    DeleteAll(_annotations);
 }
 
 //---------------------------------------------------------
@@ -2336,7 +2336,7 @@ double Segment::minRight() const
 {
     double distance = 0.0;
     for (const Shape& sh : shapes()) {
-        distance = qMax(distance, sh.right());
+        distance = std::max(distance, sh.right());
     }
     if (isClefType()) {
         distance += score()->styleMM(Sid::clefBarlineDistance);
@@ -2502,7 +2502,7 @@ double Segment::minHorizontalCollidingDistance(Segment* ns) const
     double w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
         double d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx), score());
-        w       = qMax(w, d);
+        w       = std::max(w, d);
     }
     return w;
 }
@@ -2600,11 +2600,11 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
         // first chordrest of a staff should clear the widest header for any staff
         // so make sure segment is as wide as it needs to be
         if (systemHeaderGap) {
-            d = qMax(d, staffShape(staffIdx).right());
+            d = std::max(d, staffShape(staffIdx).right());
         }
-        ww      = qMax(ww, d);
+        ww      = std::max(ww, d);
     }
-    double w = qMax(ww, 0.0);        // non-negative
+    double w = std::max(ww, 0.0);        // non-negative
 
     if (isClefType() && ns && ns->isChordRestType()) {
         w = std::max(w, double(score()->styleMM(Sid::clefKeyRightMargin)));

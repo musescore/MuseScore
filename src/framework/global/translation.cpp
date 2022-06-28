@@ -20,15 +20,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "translation.h"
+
+#ifndef GLOBAL_NO_QT_SUPPORT
 #include <QCoreApplication>
+#endif
+
+#include "log.h"
 
 using namespace mu;
 
-std::string mu::trc(const char* context, const char* key, const char* disambiguation, int n)
+static String translate(const char* context, const char* key, const char* disambiguation, int n)
 {
-    return QCoreApplication::translate(context, key, disambiguation, n).toStdString();
+#ifndef GLOBAL_NO_QT_SUPPORT
+    return String::fromQString(QCoreApplication::translate(context, key, disambiguation, n));
+#else
+    UNUSED(context);
+    UNUSED(disambiguation);
+    UNUSED(n);
+    return String::fromUtf8(key);
+#endif
 }
 
+std::string mu::trc(const char* context, const char* key, const char* disambiguation, int n)
+{
+    return translate(context, key, disambiguation, n).toStdString();
+}
+
+#ifndef GLOBAL_NO_QT_SUPPORT
 QString mu::qtrc(const char* context, const char* key, const char* disambiguation, int n)
 {
     return QCoreApplication::translate(context, key, disambiguation, n);
@@ -47,13 +65,22 @@ QString mu::qtrc(const char* context, const String& key, const String& disambigu
     return QCoreApplication::translate(context, keyutf8.constChar(), disutf8.empty() ? nullptr : disutf8.constChar(), n);
 }
 
+#endif
+
 String mu::mtrc(const char* context, const char* key, const char* disambiguation, int n)
 {
-    return String::fromQString(QCoreApplication::translate(context, key, disambiguation, n));
+    return translate(context, key, disambiguation, n);
 }
 
 String mu::mtrc(const char* context, const String& key, const char* disambiguation, int n)
 {
     ByteArray keyutf8 = key.toUtf8();
-    return String::fromQString(QCoreApplication::translate(context, keyutf8.constChar(), disambiguation, n));
+    return translate(context, keyutf8.constChar(), disambiguation, n);
+}
+
+String mu::mtrc(const char* context, const String& key, const String& disambiguation, int n)
+{
+    ByteArray keyutf8 = key.toUtf8();
+    ByteArray disutf8 = disambiguation.toUtf8();
+    return translate(context, keyutf8.constChar(), disutf8.empty() ? nullptr : disutf8.constChar(), n);
 }

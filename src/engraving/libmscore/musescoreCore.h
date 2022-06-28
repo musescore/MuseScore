@@ -54,7 +54,7 @@ public:
 
     virtual int appendScore(MasterScore* s) { scoreList.push_back(s); return 0; }
     virtual MasterScore* openScore(const String& /*fn*/, bool /*switchTab*/, bool considerInCurrentSession = true,
-                                   const String& /*withFilename*/ = String()) { Q_UNUSED(considerInCurrentSession); return 0; }
+                                   const String& /*withFilename*/ = String()) { (void)(considerInCurrentSession); return 0; }
     std::vector<MasterScore*>& scores() { return scoreList; }
 };
 } // namespace mu::engraving

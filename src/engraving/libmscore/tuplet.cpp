@@ -784,7 +784,8 @@ public:
     TupletRect(const PointF& p1, const PointF& p2, double w)
     {
         double w2 = w * .5;
-        setCoords(qMin(p1.x(), p2.x()) - w2, qMin(p1.y(), p2.y()) - w2,  qMax(p1.x(), p2.x()) + w2, qMax(p1.y(), p2.y()) + w2);
+        setCoords(std::min(p1.x(), p2.x()) - w2, std::min(p1.y(), p2.y()) - w2,  std::max(p1.x(), p2.x()) + w2, std::max(p1.y(),
+                                                                                                                         p2.y()) + w2);
     }
 };
 
@@ -1261,7 +1262,7 @@ PropertyValue Tuplet::propertyDefault(Pid id) const
     case Pid::SYSTEM_FLAG:
         return false;
     case Pid::TEXT:
-        return String("");
+        return String(u"");
     case Pid::NORMAL_NOTES:
     case Pid::ACTUAL_NOTES:
         return 0;

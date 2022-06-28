@@ -23,8 +23,6 @@
 #include "utils.h"
 
 #include <cmath>
-#include <QtMath>
-#include <QRegularExpression>
 #include <map>
 
 #include "containers.h"
@@ -530,7 +528,7 @@ static const char* valu[] = {
 String pitch2string(int v)
 {
     if (v < 0 || v > 127) {
-        return String("----");
+        return String(u"----");
     }
     int octave = (v / 12) - 1;
     String o;
@@ -652,17 +650,15 @@ static int _majorVersion, _minorVersion, _patchVersion;
 
 int version()
 {
-    QRegularExpression versionRegEx("(\\d+)\\.(\\d+)\\.(\\d+)");
-    QRegularExpressionMatch versionMatch = versionRegEx.match(VERSION);
-    if (versionMatch.hasMatch()) {
-        StringList versionStringList = versionMatch.capturedTexts();
-        if (versionStringList.size() == 4) {
-            _majorVersion = versionStringList[1].toInt();
-            _minorVersion = versionStringList[2].toInt();
-            _patchVersion = versionStringList[3].toInt();
-            return _majorVersion * 10000 + _minorVersion * 100 + _patchVersion;
-        }
+    StringList l = String::fromAscii(VERSION).split(u'.');
+    if (l.size() > 2) {
+        _majorVersion = l.at(0).toInt();
+        _minorVersion = l.at(1).toInt();
+        _patchVersion = l.at(2).toInt();
+
+        return _majorVersion * 10000 + _minorVersion * 100 + _patchVersion;
     }
+
     LOGD() << "Could not parse version:" << VERSION;
     return 0;
 }
@@ -1033,7 +1029,7 @@ Segment* skipTuplet(Tuplet* tuplet)
 
 SymIdList timeSigSymIdsFromString(const String& string)
 {
-    static const std::map<QChar, SymId> dict = {
+    static const std::map<Char, SymId> dict = {
         { 43,    SymId::timeSigPlusSmall },             // '+'
         { 48,    SymId::timeSig0 },                     // '0'
         { 49,    SymId::timeSig1 },                     // '1'

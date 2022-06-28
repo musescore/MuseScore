@@ -106,8 +106,8 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
             if (chord->up()) {
                 ++upVoices;
                 upStemNotes.insert(upStemNotes.end(), chord->notes().begin(), chord->notes().end());
-                upDots   = qMax(upDots, chord->dots());
-                maxUpMag = qMax(maxUpMag, chord->mag());
+                upDots   = std::max(upDots, chord->dots());
+                maxUpMag = std::max(maxUpMag, chord->mag());
                 if (!upHooks) {
                     upHooks = chord->hook();
                 }
@@ -117,8 +117,8 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
             } else {
                 ++downVoices;
                 downStemNotes.insert(downStemNotes.end(), chord->notes().begin(), chord->notes().end());
-                downDots = qMax(downDots, chord->dots());
-                maxDownMag = qMax(maxDownMag, chord->mag());
+                downDots = std::max(downDots, chord->dots());
+                maxDownMag = std::max(maxDownMag, chord->mag());
                 if (!downHooks) {
                     downHooks = chord->hook();
                 }
@@ -144,7 +144,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
         }
         if (upVoices) {
             double hw = layoutChords2(upStemNotes, true);
-            maxUpWidth = qMax(maxUpWidth, hw);
+            maxUpWidth = std::max(maxUpWidth, hw);
         }
 
         // layout downstem noteheads
@@ -154,7 +154,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
         }
         if (downVoices) {
             double hw = layoutChords2(downStemNotes, false);
-            maxDownWidth = qMax(maxDownWidth, hw);
+            maxDownWidth = std::max(maxDownWidth, hw);
         }
 
         double sp                 = staff->spatium(tick);
@@ -406,15 +406,15 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
                         clearLeft = topDownNote->chord()->stem()->lineWidth() + 0.3 * sp;
                     }
                     if (bottomUpNote->chord()->stem()) {
-                        clearRight = bottomUpNote->chord()->stem()->lineWidth() + qMax(maxDownWidth - maxUpWidth, 0.0) + 0.3 * sp;
+                        clearRight = bottomUpNote->chord()->stem()->lineWidth() + std::max(maxDownWidth - maxUpWidth, 0.0) + 0.3 * sp;
                     } else {
                         downDots = 0;             // no need to adjust for dots in this case
                     }
-                    upOffset = qMax(clearLeft, clearRight);
+                    upOffset = std::max(clearLeft, clearRight);
                     if (downHooks) {
                         // we will need more space to avoid collision with hook
                         // but we won't need as much dot adjustment
-                        upOffset = qMax(upOffset, maxDownWidth + 0.1 * sp);
+                        upOffset = std::max(upOffset, maxDownWidth + 0.1 * sp);
                         dotAdjustThreshold = maxUpWidth - 0.3 * sp;
                     }
                     // if downstem chord is small, don't center
@@ -449,7 +449,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
                 }
                 dotAdjust *= mag;
                 // only by amount over threshold
-                dotAdjust = qMax(dotAdjust - dotAdjustThreshold, 0.0);
+                dotAdjust = std::max(dotAdjust - dotAdjustThreshold, 0.0);
             }
             if (separation == 1) {
                 dotAdjust += 0.1 * sp;
@@ -546,7 +546,7 @@ double LayoutChords::layoutChords2(std::vector<Note*>& notes, bool up)
         // there is a conflict
         // if this is same or adjacent line as previous note (and chords are on same staff!)
         // but no need to do anything about it if either note is invisible
-        bool conflict = (qAbs(ll - line) < 2) && (lmove == move) && note->visible() && lvisible;
+        bool conflict = (std::abs(ll - line) < 2) && (lmove == move) && note->visible() && lvisible;
 
         // this note is on opposite side of stem as previous note
         // if there is a conflict
@@ -584,7 +584,7 @@ double LayoutChords::layoutChords2(std::vector<Note*>& notes, bool up)
 
         // accumulate return value
         if (!mirror) {
-            maxWidth = qMax(maxWidth, note->bboxRightPos());
+            maxWidth = std::max(maxWidth, note->bboxRightPos());
         }
 
         // prepare for next iteration
@@ -639,16 +639,16 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, double& lx, double pd, d
         return false;
     }
 
-    double allowableOverlap = qMax(upper->descent, lower->ascent) - pd;
+    double allowableOverlap = std::max(upper->descent, lower->ascent) - pd;
 
     // accidentals that are "close" (small gap or even slight overlap)
-    if (qAbs(gap) <= 0.33 * sp) {
+    if (std::abs(gap) <= 0.33 * sp) {
         // acceptable with slight offset
         // if one of the accidentals can subsume the overlap
         // and both accidentals allow it
-        if (-gap <= allowableOverlap && qMin(upper->descent, lower->ascent) > 0.0) {
-            double align = qMin(left->width, right->width);
-            lx = qMin(lx, right->x + align - pd);
+        if (-gap <= allowableOverlap && std::min(upper->descent, lower->ascent) > 0.0) {
+            double align = std::min(left->width, right->width);
+            lx = std::min(lx, right->x + align - pd);
             return true;
         }
     }
@@ -661,24 +661,24 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, double& lx, double pd, d
     // accidentals with more significant overlap
     // acceptable if one accidental can subsume overlap
     if (left == lower && -gap <= allowableOverlap) {
-        double offset = qMax(left->rightClear, right->leftClear);
-        offset = qMin(offset, left->width) - overlapShift;
-        lx = qMin(lx, right->x + offset);
+        double offset = std::max(left->rightClear, right->leftClear);
+        offset = std::min(offset, left->width) - overlapShift;
+        lx = std::min(lx, right->x + offset);
         return true;
     }
 
     // accidentals with even more overlap
     // can work if both accidentals can subsume overlap
     if (left == lower && -gap <= upper->descent + lower->ascent - pd) {
-        double offset = qMin(left->rightClear, right->leftClear) - overlapShift;
+        double offset = std::min(left->rightClear, right->leftClear) - overlapShift;
         if (offset > 0.0) {
-            lx = qMin(lx, right->x + offset);
+            lx = std::min(lx, right->x + offset);
             return true;
         }
     }
 
     // otherwise, there is real conflict
-    lx = qMin(lx, right->x - pd);
+    lx = std::min(lx, right->x - pd);
     return true;
 }
 
@@ -714,7 +714,7 @@ static QPair<double, double> layoutAccidental(const MStyle& style, AcEl* me, AcE
         if ((ledgerAbove && me->top + lds <= pnd) || (ledgerBelow && staff->lines(tick) * lds - me->bottom <= pnd)) {
             ledgerAdjust = -style.styleS(Sid::ledgerLineLength).val() * sp;
             ledgerVerticalClear = style.styleS(Sid::ledgerLineWidth).val() * 0.5 * sp;
-            lx = qMin(lx, ledgerAdjust);
+            lx = std::min(lx, ledgerAdjust);
         }
     }
 
@@ -742,9 +742,9 @@ static QPair<double, double> layoutAccidental(const MStyle& style, AcEl* me, AcE
             }
             // undercut note above if possible
             if (lnBottom - me->top <= me->ascent - pnd) {
-                lx = qMin(lx, ln->x() + ln->chord()->x() + lnLedgerAdjust + me->rightClear);
+                lx = std::min(lx, ln->x() + ln->chord()->x() + lnLedgerAdjust + me->rightClear);
             } else {
-                lx = qMin(lx, ln->x() + ln->chord()->x() + lnLedgerAdjust);
+                lx = std::min(lx, ln->x() + ln->chord()->x() + lnLedgerAdjust);
             }
         } else if (lnTop > me->bottom) {
             break;
@@ -902,9 +902,9 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         DirectionV dotPosition = note->userDotPosition();
         if (chord->dots()) {
             if (chord->up()) {
-                upDotPosX = qMax(upDotPosX, xx);
+                upDotPosX = std::max(upDotPosX, xx);
             } else {
-                downDotPosX = qMax(downDotPosX, xx);
+                downDotPosX = std::max(downDotPosX, xx);
             }
 
             if (dotPosition == DirectionV::AUTO && nNotes > 1 && note->visible() && !note->dotsHidden()) {
@@ -964,7 +964,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         // it would be possible to dots for up & down chords separately
         // this would require space to have been allocated previously
         // when calculating chord offsets
-        segment->setDotPosX(staff->idx(), qMax(upDotPosX, downDotPosX));
+        segment->setDotPosX(staff->idx(), std::max(upDotPosX, downDotPosX));
     }
 
     if (nAcc == 0) {
@@ -1089,8 +1089,8 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
             // through accidentals in this column
             for (int j = columnBottom[pc]; j != -1; j = aclist[j].next) {
                 QPair<double, double> x = layoutAccidental(style, &aclist[j], 0, below, colOffset, leftNotes, pnd, pd, sp);
-                minX = qMin(minX, x.first);
-                maxX = qMin(maxX, x.second);
+                minX = std::min(minX, x.first);
+                maxX = std::min(maxX, x.second);
                 below = &aclist[j];
             }
 

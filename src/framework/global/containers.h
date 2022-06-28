@@ -136,14 +136,6 @@ inline void join(std::vector<T>& l1, const std::vector<T>& l2)
     l1.insert(l1.end(), l2.begin(), l2.end());
 }
 
-template<typename T>
-inline void DeleteAll(const std::vector<T*>& v)
-{
-    for (T* i : v) {
-        delete i;
-    }
-}
-
 // list
 template<typename T>
 inline bool contains(const std::list<T>& l, const T& v)
@@ -325,6 +317,21 @@ inline auto values(const std::multimap<K, V>& mm, const K& key) -> std::vector<t
         result.push_back(it->second);
     }
     return result;
+}
+
+template<typename ForwardIterator>
+inline void DeleteAll(ForwardIterator begin, ForwardIterator end)
+{
+    while (begin != end) {
+        delete *begin;
+        ++begin;
+    }
+}
+
+template<typename Container>
+inline void DeleteAll(const Container& c)
+{
+    DeleteAll(c.begin(), c.end());
 }
 }
 

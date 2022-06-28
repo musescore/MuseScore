@@ -148,7 +148,7 @@ void HairpinSegment::layout()
             if (sd && sd->addToSkyline() && sd->placement() == hairpin()->placement()) {
                 const double sdRight = sd->bbox().right() + sd->pos().x()
                                        + sd->segment()->pos().x() + sd->measure()->pos().x();
-                const double dist    = qMax(sdRight - pos().x() + minDynamicsDistance, 0.0);
+                const double dist    = std::max(sdRight - pos().x() + minDynamicsDistance, 0.0);
                 rxpos()  += dist;
                 rxpos2() -= dist;
                 // prepare to align vertically
@@ -173,9 +173,9 @@ void HairpinSegment::layout()
                 }
                 // prepare to align vertically
                 if (hairpin()->placeBelow()) {
-                    dymax = qMax(dymax, ed->pos().y());
+                    dymax = std::max(dymax, ed->pos().y());
                 } else {
-                    dymax = qMin(dymax, ed->pos().y());
+                    dymax = std::min(dymax, ed->pos().y());
                 }
             }
         }
@@ -319,7 +319,7 @@ void HairpinSegment::layout()
             }
             // align hairpin with dynamics
             if (!hairpin()->diagonal()) {
-                ymax = qMin(ymax, dymax - ddiff);
+                ymax = std::min(ymax, dymax - ddiff);
             }
         } else {
             d  = system()->bottomDistance(staffIdx(), sl);
@@ -328,7 +328,7 @@ void HairpinSegment::layout()
             }
             // align hairpin with dynamics
             if (!hairpin()->diagonal()) {
-                ymax = qMax(ymax, dymax - ddiff);
+                ymax = std::max(ymax, dymax - ddiff);
             }
         }
         double yd = ymax - pos().y();
@@ -348,9 +348,9 @@ void HairpinSegment::layout()
             if (sd && sd->autoplace() && sd->placement() == hairpin()->placement()) {
                 double ny = y() + ddiff - sd->offset().y();
                 if (sd->placeAbove()) {
-                    ny = qMin(ny, sd->ipos().y());
+                    ny = std::min(ny, sd->ipos().y());
                 } else {
-                    ny = qMax(ny, sd->ipos().y());
+                    ny = std::max(ny, sd->ipos().y());
                 }
                 if (sd->ipos().y() != ny) {
                     sd->rypos() = ny;
@@ -367,9 +367,9 @@ void HairpinSegment::layout()
             if (ed && ed->autoplace() && ed->placement() == hairpin()->placement()) {
                 double ny = y() + ddiff - ed->offset().y();
                 if (ed->placeAbove()) {
-                    ny = qMin(ny, ed->ipos().y());
+                    ny = std::min(ny, ed->ipos().y());
                 } else {
-                    ny = qMax(ny, ed->ipos().y());
+                    ny = std::max(ny, ed->ipos().y());
                 }
                 if (ed->ipos().y() != ny) {
                     ed->rypos() = ny;

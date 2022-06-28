@@ -56,10 +56,10 @@ std::array<ScoreFont::Code, size_t(SymId::lastSym) + 1> ScoreFont::s_symIdCodes 
 
 ScoreFont::ScoreFont(const char* name, const char* family, const char* path, const char* filename)
     : m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
-    m_name(name),
-    m_family(family),
-    m_fontPath(path),
-    m_filename(filename)
+    m_name(String::fromUtf8(name)),
+    m_family(String::fromUtf8(family)),
+    m_fontPath(String::fromUtf8(path)),
+    m_filename(String::fromUtf8(filename))
 {
 }
 
@@ -389,131 +389,131 @@ void ScoreFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternatesOb
 
     static const struct GlyphWithAlternates {
         const std::string key;
-        const String alternateKey;
+        const std::string alternateKey;
         const SymId alternateSymId;
     } glyphsWithAlternates[] = {
         { std::string("4stringTabClef"),
-          String("4stringTabClefSerif"),
+          std::string("4stringTabClefSerif"),
           SymId::fourStringTabClefSerif
         },
         { std::string("6stringTabClef"),
-          String("6stringTabClefSerif"),
+          std::string("6stringTabClefSerif"),
           SymId::sixStringTabClefSerif
         },
         { std::string("cClef"),
-          String("cClefFrench"),
+          std::string("cClefFrench"),
           SymId::cClefFrench
         },
         { std::string("cClef"),
-          String("cClefFrench20C"),
+          std::string("cClefFrench20C"),
           SymId::cClefFrench20C
         },
         { std::string("fClef"),
-          String("fClefFrench"),
+          std::string("fClefFrench"),
           SymId::fClefFrench
         },
         { std::string("fClef"),
-          String("fClef19thCentury"),
+          std::string("fClef19thCentury"),
           SymId::fClef19thCentury
         },
         { std::string("noteheadBlack"),
-          String("noteheadBlackOversized"),
+          std::string("noteheadBlackOversized"),
           SymId::noteheadBlack
         },
         { std::string("noteheadHalf"),
-          String("noteheadHalfOversized"),
+          std::string("noteheadHalfOversized"),
           SymId::noteheadHalf
         },
         { std::string("noteheadWhole"),
-          String("noteheadWholeOversized"),
+          std::string("noteheadWholeOversized"),
           SymId::noteheadWhole
         },
         { std::string("noteheadDoubleWhole"),
-          String("noteheadDoubleWholeOversized"),
+          std::string("noteheadDoubleWholeOversized"),
           SymId::noteheadDoubleWhole
         },
         { std::string("noteheadDoubleWholeSquare"),
-          String("noteheadDoubleWholeSquareOversized"),
+          std::string("noteheadDoubleWholeSquareOversized"),
           SymId::noteheadDoubleWholeSquare
         },
         { std::string("noteheadDoubleWhole"),
-          String("noteheadDoubleWholeAlt"),
+          std::string("noteheadDoubleWholeAlt"),
           SymId::noteheadDoubleWholeAlt
         },
         { std::string("brace"),
-          String("braceSmall"),
+          std::string("braceSmall"),
           SymId::braceSmall
         },
         { std::string("brace"),
-          String("braceLarge"),
+          std::string("braceLarge"),
           SymId::braceLarge
         },
         { std::string("brace"),
-          String("braceLarger"),
+          std::string("braceLarger"),
           SymId::braceLarger
         },
         { std::string("flag1024thDown"),
-          String("flag1024thDownStraight"),
+          std::string("flag1024thDownStraight"),
           SymId::flag1024thDownStraight
         },
         { std::string("flag1024thUp"),
-          String("flag1024thUpStraight"),
+          std::string("flag1024thUpStraight"),
           SymId::flag1024thUpStraight
         },
         { std::string("flag128thDown"),
-          String("flag128thDownStraight"),
+          std::string("flag128thDownStraight"),
           SymId::flag128thDownStraight
         },
         { std::string("flag128thUp"),
-          String("flag128thUpStraight"),
+          std::string("flag128thUpStraight"),
           SymId::flag128thUpStraight
         },
         { std::string("flag16thDown"),
-          String("flag16thDownStraight"),
+          std::string("flag16thDownStraight"),
           SymId::flag16thDownStraight
         },
         { std::string("flag16thUp"),
-          String("flag16thUpStraight"),
+          std::string("flag16thUpStraight"),
           SymId::flag16thUpStraight
         },
         { std::string("flag256thDown"),
-          String("flag256thDownStraight"),
+          std::string("flag256thDownStraight"),
           SymId::flag256thDownStraight
         },
         { std::string("flag256thUp"),
-          String("flag256thUpStraight"),
+          std::string("flag256thUpStraight"),
           SymId::flag256thUpStraight
         },
         { std::string("flag32ndDown"),
-          String("flag32ndDownStraight"),
+          std::string("flag32ndDownStraight"),
           SymId::flag32ndDownStraight
         },
         { std::string("flag32ndUp"),
-          String("flag32ndUpStraight"),
+          std::string("flag32ndUpStraight"),
           SymId::flag32ndUpStraight
         },
         { std::string("flag512thDown"),
-          String("flag512thDownStraight"),
+          std::string("flag512thDownStraight"),
           SymId::flag512thDownStraight
         },
         { std::string("flag512thUp"),
-          String("flag512thUpStraight"),
+          std::string("flag512thUpStraight"),
           SymId::flag512thUpStraight
         },
         { std::string("flag64thDown"),
-          String("flag64thDownStraight"),
+          std::string("flag64thDownStraight"),
           SymId::flag64thDownStraight
         },
         { std::string("flag64thUp"),
-          String("flag64thUpStraight"),
+          std::string("flag64thUpStraight"),
           SymId::flag64thUpStraight
         },
         { std::string("flag8thDown"),
-          String("flag8thDownStraight"),
+          std::string("flag8thDownStraight"),
           SymId::flag8thDownStraight
         },
         { std::string("flag8thUp"),
-          String("flag8thUpStraight"),
+          std::string("flag8thUpStraight"),
           SymId::flag8thUpStraight
         }
     };
@@ -526,7 +526,7 @@ void ScoreFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternatesOb
             JsonValue val;
             for (size_t i = 0; i < alternatesArray.size(); ++i) {
                 JsonValue v = alternatesArray.at(i);
-                if (v.toObject().value("name").toString() == glyph.alternateKey) {
+                if (v.toObject().value("name").toStdString() == glyph.alternateKey) {
                     val = v;
                     break;
                 }
@@ -600,7 +600,7 @@ void ScoreFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject)
         }
     }
 
-    m_engravingDefaults.insert({ Sid::MusicalTextFont, String("%1 Text").arg(m_family) });
+    m_engravingDefaults.insert({ Sid::MusicalTextFont, String(u"%1 Text").arg(m_family) });
 }
 
 void ScoreFont::computeMetrics(ScoreFont::Sym& sym, const Code& code)

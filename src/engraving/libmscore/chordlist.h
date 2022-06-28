@@ -30,6 +30,9 @@
 
 #include "style/style.h"
 
+#include "modularity/ioc.h"
+#include "iengravingconfiguration.h"
+
 namespace mu::engraving::compat {
 class ReadChordListHook;
 }
@@ -262,6 +265,8 @@ struct ChordFont {
 
 class ChordList : public std::map<int, ChordDescription>
 {
+    INJECT(engraving, IEngravingConfiguration, configuration)
+
     std::map<String, ChordSymbol> symbols;
     bool _autoAdjust = false;
     double _nmag = 1.0, _nadjust = 0.0;

@@ -248,7 +248,7 @@ void FretDiagram::setStrings(int n)
                 continue;
             }
 
-            _barres[fret].startString = qMax(0, _barres[fret].startString + difference);
+            _barres[fret].startString = std::max(0, _barres[fret].startString + difference);
             _barres[fret].endString   = _barres[fret].endString == -1 ? -1 : _barres[fret].endString + difference;
         }
     }
@@ -427,10 +427,10 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
         if (_orientation == Orientation::VERTICAL) {
             if (_numPos == 0) {
                 painter->drawText(RectF(-stringDist * .4, .0, .0, fretDist),
-                                  Qt::AlignVCenter | Qt::AlignRight | Qt::TextDontClip, text);
+                                  draw::AlignVCenter | draw::AlignRight | draw::TextDontClip, text);
             } else {
                 painter->drawText(RectF(x2 + (stringDist * .4), .0, .0, fretDist),
-                                  Qt::AlignVCenter | Qt::AlignLeft | Qt::TextDontClip,
+                                  draw::AlignVCenter | draw::AlignLeft | draw::TextDontClip,
                                   String::number(_fretOffset + 1));
             }
         } else if (_orientation == Orientation::HORIZONTAL) {
@@ -439,10 +439,9 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
             painter->rotate(90);
             if (_numPos == 0) {
                 painter->drawText(RectF(.0, stringDist * (_strings - 1), .0, .0),
-                                  Qt::AlignLeft | Qt::TextDontClip, text);
+                                  draw::AlignLeft | draw::TextDontClip, text);
             } else {
-                painter->drawText(RectF(.0, .0, .0, .0),
-                                  Qt::AlignBottom | Qt::AlignLeft | Qt::TextDontClip, text);
+                painter->drawText(RectF(.0, .0, .0, .0), draw::AlignBottom | draw::AlignLeft | draw::TextDontClip, text);
             }
             painter->restore();
         }
@@ -814,7 +813,7 @@ void FretDiagram::read(XmlReader& e)
                 if (t == "dot") {
                     setDot(no, e.readInt());
                 } else if (t == "marker") {
-                    setMarker(no, QChar(e.readInt()) == 'X' ? FretMarkerType::CROSS : FretMarkerType::CIRCLE);
+                    setMarker(no, Char(e.readInt()) == u'X' ? FretMarkerType::CROSS : FretMarkerType::CIRCLE);
                 }
                 /*else if (t == "fingering")
                       setFingering(no, e.readInt());*/
@@ -960,7 +959,7 @@ void FretDiagram::setBarre(int startString, int endString, int fret)
 
 void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
 {
-    Q_UNUSED(add);
+    UNUSED(add);
 
     FretItem::Barre b = barre(fret);
     if (!b.exists()) {
@@ -1262,7 +1261,7 @@ EngravingItem* FretDiagram::drop(EditData& data)
 
 void FretDiagram::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    Q_UNUSED(all);
+    UNUSED(all);
 
     func(data, this);
 
@@ -1462,7 +1461,7 @@ String FretDiagram::accessibleInfo() const
     } else {
         chordName = mtrc("engraving", "without chord symbol");
     }
-    return String("%1 %2").arg(typeUserName(), chordName);
+    return String(u"%1 %2").arg(typeUserName(), chordName);
 }
 
 //---------------------------------------------------------
@@ -1516,7 +1515,7 @@ String FretDiagram::screenReaderInfo() const
                 if (j == max - 1) {
                     fretInfo = mtrc("engraving", "%1 and %2").arg(fretInfo).arg(fretsWithDots[j]);
                 } else {
-                    fretInfo = String("%1 %2").arg(fretInfo).arg(fretsWithDots[j]);
+                    fretInfo = String(u"%1 %2").arg(fretInfo).arg(fretsWithDots[j]);
                 }
             }
         }
@@ -1524,7 +1523,7 @@ String FretDiagram::screenReaderInfo() const
         //: Omit the "%n " for the singular translation (and the "(s)" too)
         String dotsInfo = mtrc("engraving", "%n dot(s) on fret(s) %1", "", dotsCount).arg(fretInfo);
 
-        detailedInfo = String("%1 %2 %3 %4").arg(detailedInfo, stringIdent, markerName, dotsInfo);
+        detailedInfo = String(u"%1 %2 %3 %4").arg(detailedInfo, stringIdent, markerName, dotsInfo);
     }
 
     String barreInfo;
@@ -1549,10 +1548,10 @@ String FretDiagram::screenReaderInfo() const
             newBarreInfo = mtrc("engraving", "partial barré %1 %2 %3").arg(fretInfo, startPart, endPart);
         }
 
-        barreInfo = String("%1 %2").arg(barreInfo, newBarreInfo);
+        barreInfo = String(u"%1 %2").arg(barreInfo, newBarreInfo);
     }
 
-    detailedInfo = String("%1 %2").arg(detailedInfo, barreInfo);
+    detailedInfo = String(u"%1 %2").arg(detailedInfo, barreInfo);
 
     if (detailedInfo.trimmed().size() == 0) {
         detailedInfo = mtrc("engraving", "no content");
@@ -1562,11 +1561,11 @@ String FretDiagram::screenReaderInfo() const
                        ? mtrc("engraving", "with chord symbol %1").arg(_harmony->generateScreenReaderInfo())
                        : mtrc("engraving", "without chord symbol");
 
-    String basicInfo = String("%1 %2").arg(typeUserName(), chordName);
+    String basicInfo = String(u"%1 %2").arg(typeUserName(), chordName);
 
     String generalInfo = mtrc("engraving", "%n string(s) total", "", _strings);
 
-    String res = String("%1 %2 %3").arg(basicInfo, generalInfo, detailedInfo);
+    String res = String(u"%1 %2 %3").arg(basicInfo, generalInfo, detailedInfo);
 
     return res;
 }
@@ -1575,16 +1574,14 @@ String FretDiagram::screenReaderInfo() const
 //   markerToChar
 //---------------------------------------------------------
 
-QChar FretItem::markerToChar(FretMarkerType t)
+Char FretItem::markerToChar(FretMarkerType t)
 {
     switch (t) {
-    case FretMarkerType::CIRCLE:
-        return QChar('O');
-    case FretMarkerType::CROSS:
-        return QChar('X');
+    case FretMarkerType::CIRCLE: return Char(u'O');
+    case FretMarkerType::CROSS: return Char(u'X');
     case FretMarkerType::NONE:
     default:
-        return QChar();
+        return Char();
     }
 }
 

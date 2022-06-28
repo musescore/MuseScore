@@ -24,9 +24,12 @@
 //  algorithmus from Emilios Cambouropoulos as published in:
 //  "Automatic Pitch Spelling: From Numbers to Sharps and Flats"
 
+#include "pitchspelling.h"
+
+#include "translation.h"
+
 #include "note.h"
 #include "key.h"
-#include "pitchspelling.h"
 #include "staff.h"
 #include "chord.h"
 #include "score.h"
@@ -272,69 +275,69 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, Str
     switch (accVal) {
     case AccidentalVal::FLAT3:
         if (explicitAccidental) {
-            acc = QObject::tr("triple ♭");
+            acc = mtrc("engraving", "triple ♭");
         } else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
             switch (tpc) {
-            case TPC_A_BBB: acc = "sasas";
+            case TPC_A_BBB: acc = u"sasas";
                 break;
-            case TPC_E_BBB: acc = "seses";
+            case TPC_E_BBB: acc = u"seses";
                 break;
-            default: acc = "eseses";
+            default: acc = u"eseses";
             }
         } else {
-            acc = "bbb";
+            acc = u"bbb";
         }
         break;
     case AccidentalVal::FLAT2:
         if (explicitAccidental) {
-            acc = QObject::tr("double ♭");
+            acc = mtrc("engraving", "double ♭");
         } else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
             switch (tpc) {
-            case TPC_A_BB: acc = "sas";
+            case TPC_A_BB: acc = u"sas";
                 break;
-            case TPC_E_BB: acc = "ses";
+            case TPC_E_BB: acc = u"ses";
                 break;
-            default: acc = "eses";
+            default: acc = u"eses";
             }
         } else {
-            acc = "bb";
+            acc = u"bb";
         }
         break;
     case AccidentalVal::FLAT:
         if (explicitAccidental) {
-            acc = QObject::tr("♭");
+            acc = mtrc("engraving", "♭");
         } else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
-            acc = (tpc == TPC_A_B || tpc == TPC_E_B) ? "s" : "es";
+            acc = (tpc == TPC_A_B || tpc == TPC_E_B) ? u"s" : u"es";
         } else {
-            acc = "b";
+            acc = u"b";
         }
         break;
-    case  AccidentalVal::NATURAL: acc = "";
+    case  AccidentalVal::NATURAL: acc = u"";
         break;
     case  AccidentalVal::SHARP:
         if (explicitAccidental) {
-            acc = QObject::tr("♯");
+            acc = mtrc("engraving", "♯");
         } else {
-            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "is" : "#";
+            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? u"is" : u"#";
         }
         break;
     case  AccidentalVal::SHARP2:
         if (explicitAccidental) {
-            acc = QObject::tr("double ♯");
+            acc = mtrc("engraving", "double ♯");
         } else {
-            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "isis" : "##";
+            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? u"isis" : u"##";
         }
         break;
     case AccidentalVal::SHARP3:
         if (explicitAccidental) {
-            acc = QObject::tr("triple ♯");
+            acc = mtrc("engraving", "triple ♯");
         } else {
-            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "isisis" : "###";
+            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? u"isisis" : u"###";
         }
         break;
     default:
         LOGD("tpc2name(%d): acc %d", tpc, static_cast<int>(accVal));
-        acc = "";
+        acc = u"";
         break;
     }
 }
@@ -356,7 +359,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, Str
     case NoteSpellingType::GERMAN_PURE:
         s = String(Char::fromAscii(gnames[idx]));
         if (s == "H" && acc == AccidentalVal::FLAT) {
-            s = "B";
+            s = u"B";
             if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
                 acc = AccidentalVal::NATURAL;
             }
@@ -743,11 +746,11 @@ void Score::spellNotelist(std::vector<Note*>& notes)
             case 3:
                 k = end - start - 3;
                 changeAllTpcs(notes[end - 3], tab[(notes[end - 3]->pitch() % 12) * 2 + ((opt & (1 << k)) >> k)]);
-                Q_FALLTHROUGH();
+                FALLTHROUGH();
             case 2:
                 k = end - start - 2;
                 changeAllTpcs(notes[end - 2], tab[(notes[end - 2]->pitch() % 12) * 2 + ((opt & (1 << k)) >> k)]);
-                Q_FALLTHROUGH();
+                FALLTHROUGH();
             case 1:
                 k = end - start - 1;
                 changeAllTpcs(notes[end - 1], tab[(notes[end - 1]->pitch() % 12) * 2 + ((opt & (1 << k)) >> k)]);

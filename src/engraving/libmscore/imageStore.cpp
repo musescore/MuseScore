@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QtCore/QCryptographicHash>
-
 #include "io/fileinfo.h"
 #include "io/file.h"
 
@@ -97,9 +95,8 @@ void ImageStoreItem::load()
     }
     _buffer = inFile.readAll();
     inFile.close();
-    QCryptographicHash h(QCryptographicHash::Md4);
-    h.addData(_buffer.toQByteArrayNoCopy());
-    _hash = ByteArray::fromQByteArray(h.result());
+
+    _hash = cryptographicHash()->hash(_buffer, ICryptographicHash::Algorithm::Md4);
 }
 
 //---------------------------------------------------------
@@ -115,7 +112,7 @@ String ImageStoreItem::hashName() const
         p[i * 2 + 1] = hex[_hash[i] & 0xf];
     }
     p[32] = 0;
-    return String(p) + u"." + _type;
+    return String::fromAscii(p) + u"." + _type;
 }
 
 //---------------------------------------------------------
@@ -146,7 +143,7 @@ inline static int toInt(char c)
 
 ImageStore::~ImageStore()
 {
-    qDeleteAll(_items);
+    DeleteAll(_items);
 }
 
 //---------------------------------------------------------
@@ -186,17 +183,14 @@ ImageStoreItem* ImageStore::getImage(const path_t& path) const
 
 ImageStoreItem* ImageStore::add(const path_t& path, const ByteArray& ba)
 {
-    QCryptographicHash h(QCryptographicHash::Md4);
-    h.addData(ba.toQByteArrayNoCopy());
-    QByteArray hash = h.result();
-    ByteArray _hash = ByteArray::fromQByteArrayNoCopy(hash);
+    ByteArray hash = cryptographicHash()->hash(ba, ICryptographicHash::Algorithm::Md4);
     for (ImageStoreItem* item : _items) {
-        if (item->hash() == _hash) {
+        if (item->hash() == hash) {
             return item;
         }
     }
     ImageStoreItem* item = new ImageStoreItem(path);
-    item->set(ba, _hash);
+    item->set(ba, hash);
     _items.push_back(item);
     return item;
 }

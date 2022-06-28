@@ -28,6 +28,9 @@
 #include "types/bytearray.h"
 #include "io/path.h"
 
+#include "modularity/ioc.h"
+#include "icryptographichash.h"
+
 namespace mu::engraving {
 class Image;
 class Score;
@@ -38,6 +41,8 @@ class Score;
 
 class ImageStoreItem
 {
+    INJECT(engraving, ICryptographicHash, cryptographicHash)
+
     std::list<Image*> _references;
     io::path_t _path;                  // original location of image
     String _type;                  // image type (file extension)
@@ -68,6 +73,8 @@ public:
 
 class ImageStore
 {
+    INJECT(engraving, ICryptographicHash, cryptographicHash)
+
     typedef std::vector<ImageStoreItem*> ItemList;
     ItemList _items;
 
