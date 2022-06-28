@@ -28,17 +28,39 @@ import MuseScore.Ui 1.0
 Rectangle {
     id: root
 
+    property NavigationSection navigationSection: null
+    property NavigationControl scoreNavCtrl: null
+
     visible: false
     height: 50
 
     color: ui.theme.backgroundPrimaryColor
+
+    NavigationPanel {
+        id: navPanel
+
+        name: "SearchPopup"
+        section: navigationSection
+        enabled: root.visible
+        direction: NavigationPanel.Both
+        order: 3
+
+        onNavigationEvent: function(event) {
+            console.log("here 3")
+            if (event.type === NavigationEvent.AboutActive) {
+                event.setData("controlIndex", [textInputField.navigation.row, 
+                                               textInputField.navigation.column])
+            }
+        }
+    }
 
     QtObject {
         id: privateProperties
 
         function show() {
             visible = true
-            Qt.callLater(textInputField.forceActiveFocus)
+            Qt.callLater(textInputField.ensureActiveFocus);
+            Qt.callLater(textInputField.navigation.requestActive);
         }
 
         function hide() {
@@ -68,6 +90,10 @@ Rectangle {
 
             icon: IconCode.CLOSE_X_ROUNDED
 
+            navigation.panel: navPanel
+            navigation.column: 1
+            navigation.accessible.name: qsTrc("notation", "Close Search")
+
             onClicked: {
                 privateProperties.hide()
             }
@@ -83,8 +109,13 @@ Rectangle {
 
             width: 500
 
-            onCurrentTextEdited: function(newTextValue) {
-                model.search(newTextValue)
+            navigation.panel: navPanel
+            navigation.column: 2
+
+            onTextAccepted: function(textValue){
+                if(model.search(textValue)) {
+                    scoreNavCtrl.requestActive()
+                }
             }
         }
     }

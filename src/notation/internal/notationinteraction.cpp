@@ -1424,10 +1424,10 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         }
 
         auto isEntryDrumStaff = [score]() {
-            const mu::engraving::InputState& is = score->inputState();
-            const mu::engraving::Staff* staff = score->staff(is.track() / mu::engraving::VOICES);
-            return staff ? staff->staffType(is.tick())->group() == mu::engraving::StaffGroup::PERCUSSION : false;
-        };
+                                    const mu::engraving::InputState& is = score->inputState();
+                                    const mu::engraving::Staff* staff = score->staff(is.track() / mu::engraving::VOICES);
+                                    return staff ? staff->staffType(is.tick())->group() == mu::engraving::StaffGroup::PERCUSSION : false;
+                                };
 
         if (isEntryDrumStaff() && element->isChord()) {
             mu::engraving::InputState& is = score->inputState();
@@ -2293,18 +2293,18 @@ void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
     // TODO: rewrite, Score::move( ) logic needs to be here
 
     auto typeToString = [](MoveSelectionType type) {
-        switch (type) {
-        case MoveSelectionType::Undefined: return QString();
-        case MoveSelectionType::EngravingItem:   return QString();
-        case MoveSelectionType::Chord:     return QString("chord");
-        case MoveSelectionType::Measure:   return QString("measure");
-        case MoveSelectionType::Track:     return QString("track");
-        case MoveSelectionType::Frame:     return QString("frame");
-        case MoveSelectionType::System:    return QString("system");
-        case MoveSelectionType::String:   return QString();
-        }
-        return QString();
-    };
+                            switch (type) {
+                            case MoveSelectionType::Undefined: return QString();
+                            case MoveSelectionType::EngravingItem:   return QString();
+                            case MoveSelectionType::Chord:     return QString("chord");
+                            case MoveSelectionType::Measure:   return QString("measure");
+                            case MoveSelectionType::Track:     return QString("track");
+                            case MoveSelectionType::Frame:     return QString("frame");
+                            case MoveSelectionType::System:    return QString("system");
+                            case MoveSelectionType::String:   return QString();
+                            }
+                            return QString();
+                        };
 
     QString cmd;
     if (MoveDirection::Left == d) {
@@ -3189,16 +3189,16 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     }
 
     auto boxTypeToElementType = [](BoxType boxType) {
-        switch (boxType) {
-        case BoxType::Horizontal: return mu::engraving::ElementType::HBOX;
-        case BoxType::Vertical: return mu::engraving::ElementType::VBOX;
-        case BoxType::Text: return mu::engraving::ElementType::TBOX;
-        case BoxType::Measure: return mu::engraving::ElementType::MEASURE;
-        case BoxType::Unknown: return mu::engraving::ElementType::INVALID;
-        }
+                                    switch (boxType) {
+                                    case BoxType::Horizontal: return mu::engraving::ElementType::HBOX;
+                                    case BoxType::Vertical: return mu::engraving::ElementType::VBOX;
+                                    case BoxType::Text: return mu::engraving::ElementType::TBOX;
+                                    case BoxType::Measure: return mu::engraving::ElementType::MEASURE;
+                                    case BoxType::Unknown: return mu::engraving::ElementType::INVALID;
+                                    }
 
-        return ElementType::INVALID;
-    };
+                                    return ElementType::INVALID;
+                                };
 
     mu::engraving::ElementType elementType = boxTypeToElementType(boxType);
     if (elementType == mu::engraving::ElementType::INVALID) {
@@ -4003,14 +4003,14 @@ void NotationInteraction::resetBeamMode()
 void NotationInteraction::resetShapesAndPosition()
 {
     auto resetItem = [](EngravingItem* item) {
-        item->reset();
+                         item->reset();
 
-        if (item->isSpanner()) {
-            for (mu::engraving::SpannerSegment* spannerSegment : toSpanner(item)->spannerSegments()) {
-                spannerSegment->reset();
-            }
-        }
-    };
+                         if (item->isSpanner()) {
+                             for (mu::engraving::SpannerSegment* spannerSegment : toSpanner(item)->spannerSegments()) {
+                                 spannerSegment->reset();
+                             }
+                         }
+                     };
 
     startEdit();
 

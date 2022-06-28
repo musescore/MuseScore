@@ -36,7 +36,7 @@ TextInputFieldModel::TextInputFieldModel(QObject* parent)
 
 void TextInputFieldModel::init()
 {
-    shortcutsRegister()->shortcutsChanged().onNotify(this, [this](){
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
         loadShortcuts();
     });
 
@@ -49,7 +49,7 @@ bool TextInputFieldModel::isShortcutAllowedOverride(int key, Qt::KeyboardModifie
     int newKey = correctedKeyInput.first;
     int newModifiers = correctedKeyInput.second;
 
-    if (needIgnoreKey(newKey)) {
+    if (needIgnoreKey(newKey) || key == Qt::Key_Enter || key == Qt::Key_Return) {
         return true;
     }
 

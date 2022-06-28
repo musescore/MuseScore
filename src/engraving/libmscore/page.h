@@ -71,6 +71,7 @@ public:
     const std::vector<System*>& systems() const { return _systems; }
     std::vector<System*>& systems() { return _systems; }
     System* system(int idx) { return _systems[idx]; }
+    Measure* firstMeasure() const;
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
@@ -88,7 +89,7 @@ public:
     qreal footerExtension() const;
 
     void draw(mu::draw::Painter*) const override;
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(void* data, void (*func)(void*, EngravingItem*), bool all=true) override;
 
     std::vector<EngravingItem*> items(const mu::RectF& r);
     std::vector<EngravingItem*> items(const mu::PointF& p);

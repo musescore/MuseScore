@@ -58,6 +58,7 @@ FocusScope {
     readonly property alias clearTextButton: clearTextButtonItem
 
     signal currentTextEdited(var newTextValue)
+    signal textAccepted(var textValue)
     signal textCleared()
     signal textEditingFinished()
 
@@ -173,18 +174,25 @@ FocusScope {
                     event.accepted = true
                 } else {
                     event.accepted = false
-
                     root.focus = false
                     root.textEditingFinished()
                 }
             }
 
             Keys.onPressed: function(event) {
+                //enter and return don't go through this event
+                //https://stackoverflow.com/questions/9677371/qml-keys-onenterpressed-issue
                 if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
                         || event.key === Qt.Key_Escape) {
                     root.focus = false
                     root.textEditingFinished()
                 }
+
+            }
+            onAccepted: {
+                root.focus = false
+                root.textAccepted(text)
+                root.textEditingFinished()
             }
 
             onActiveFocusChanged: {

@@ -63,6 +63,20 @@ Page::Page(RootItem* parent)
 }
 
 //---------------------------------------------------------
+//   firstMeasure
+//---------------------------------------------------------
+Measure* Page::firstMeasure() const
+{
+    for (System* s : _systems) {
+        Measure* firstMeasure = s->firstMeasure();
+        if (firstMeasure) {
+            return firstMeasure;
+        }
+    }
+    return nullptr;
+}
+
+//---------------------------------------------------------
 //   items
 //---------------------------------------------------------
 
@@ -307,7 +321,7 @@ qreal Page::footerExtension() const
 //   scanElements
 //---------------------------------------------------------
 
-void Page::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void Page::scanElements(void* data, void (*func)(void*, EngravingItem*), bool all)
 {
     for (System* s :_systems) {
         for (MeasureBase* m : s->measures()) {

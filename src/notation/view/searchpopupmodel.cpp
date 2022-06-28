@@ -32,14 +32,22 @@ void SearchPopupModel::load()
     });
 }
 
-void SearchPopupModel::search(const QString& text)
+bool SearchPopupModel::search(const QString& text)
 {
     mu::engraving::EngravingItem* element = notation()->elements()->search(text.toStdString());
     if (element) {
+        if (element->isPage()) {
+            const mu::engraving::Page* p = static_cast<const mu::engraving::Page*>(element);
+            element = p->firstMeasure();
+            if (!element && !p->systems().empty() && !p->systems().front()->measures().empty()) {
+                element = p->systems().front()->measures().front();
+            }
+        }
         notation()->interaction()->select({ element }, SelectType::SINGLE);
-    } else {
-        notation()->interaction()->clearSelection();
+        notation()->interaction()->showItem(element);
+        return true;
     }
+    return false;
 }
 
 INotationPtr SearchPopupModel::notation() const
