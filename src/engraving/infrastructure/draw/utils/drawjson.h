@@ -22,7 +22,6 @@
 #ifndef MU_DRAW_DRAWJSON_H
 #define MU_DRAW_DRAWJSON_H
 
-#include <QByteArray>
 #include "../buffereddrawtypes.h"
 #include "retval.h"
 

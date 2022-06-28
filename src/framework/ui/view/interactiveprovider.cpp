@@ -473,6 +473,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
         dialog->exec();
     } else {
         dialog->show();
+        dialog->activateWindow(); // give keyboard focus to aid blind users
     }
 
     result.ret = make_ret(Ret::Code::Ok);

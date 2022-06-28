@@ -42,11 +42,11 @@ public:
 
     struct FileInfo
     {
-        QString filePath;
+        io::path_t filePath;
         bool isDir = false;
         bool isFile = false;
         bool isSymLink = false;
-        qint64 size = 0;
+        uint64_t size = 0;
 
         bool isValid() const { return isDir || isFile || isSymLink; }
     };
@@ -60,7 +60,7 @@ public:
     Status status() const;
 
     std::vector<FileInfo> fileInfoList() const;
-    ByteArray fileData(const QString& fileName) const;
+    ByteArray fileData(const std::string& fileName) const;
 
 private:
     struct Impl;

@@ -305,23 +305,23 @@ void Lyrics::layout()
 
     PointF o(propertyDefault(Pid::OFFSET).value<PointF>());
     rxpos() = o.x();
-    qreal x = pos().x();
+    double x = pos().x();
     TextBase::layout1();
 
-    qreal centerAdjust = 0.0;
-    qreal leftAdjust   = 0.0;
+    double centerAdjust = 0.0;
+    double leftAdjust   = 0.0;
 
     if (score()->styleB(Sid::lyricsAlignVerseNumber)) {
         // Calculate leading and trailing parts widths. Lyrics
         // should have text layout to be able to do it correctly.
-        Q_ASSERT(rows() != 0);
+        assert(rows() != 0);
         if (!leading.isEmpty() || !trailing.isEmpty()) {
 //                   LOGD("create leading, trailing <%s> -- <%s><%s>", qPrintable(text), qPrintable(leading), qPrintable(trailing));
             const TextBlock& tb = textBlock(0);
 
-            const qreal leadingWidth = tb.xpos(leading.size(), this) - tb.boundingRect().x();
+            const double leadingWidth = tb.xpos(leading.size(), this) - tb.boundingRect().x();
             const size_t trailingPos = text.size() - trailing.size();
-            const qreal trailingWidth = tb.boundingRect().right() - tb.xpos(trailingPos, this);
+            const double trailingWidth = tb.boundingRect().right() - tb.xpos(trailingPos, this);
 
             leftAdjust = leadingWidth;
             centerAdjust = leadingWidth - trailingWidth;
@@ -336,7 +336,7 @@ void Lyrics::layout()
         // however, lyrics that are melismas or have verse numbers will be forced to left alignment
         //
         // center under note head
-        qreal nominalWidth = symWidth(SymId::noteheadBlack);
+        double nominalWidth = symWidth(SymId::noteheadBlack);
         x += nominalWidth * .5 - cr->x() - centerAdjust * 0.5;
     } else if (!(align() == AlignH::RIGHT)) {
         // even for left aligned syllables, ignore leading verse numbers and/or punctuation
@@ -398,10 +398,10 @@ void Lyrics::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 
 void Lyrics::layout2(int nAbove)
 {
-    qreal lh = lineSpacing() * score()->styleD(Sid::lyricsLineHeight);
+    double lh = lineSpacing() * score()->styleD(Sid::lyricsLineHeight);
 
     if (placeBelow()) {
-        qreal yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
+        double yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
         rypos()  = lh * (_no - nAbove) + yo - chordRest()->y();
         rpos()  += styleValue(Pid::OFFSET, Sid::lyricsPosBelow).value<PointF>();
     } else {
@@ -519,10 +519,10 @@ bool Lyrics::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    static const std::set<Qt::KeyboardModifiers> navigationModifiers {
-        Qt::NoModifier,
-        Qt::KeypadModifier,
-        Qt::ShiftModifier
+    static const std::set<KeyboardModifiers> navigationModifiers {
+        NoModifier,
+        KeypadModifier,
+        ShiftModifier
     };
 
     if (navigationModifiers.find(ed.modifiers) != navigationModifiers.end()) {
@@ -729,7 +729,7 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
             // unsetting autoplace
             // rebase offset
             PointF off = offset();
-            qreal y = pos().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
+            double y = pos().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
             off.ry() = placeAbove() ? y : y - staff()->height();
             undoChangeProperty(Pid::OFFSET, off, PropertyFlags::UNSTYLED);
         }

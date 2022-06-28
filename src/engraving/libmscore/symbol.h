@@ -67,19 +67,19 @@ public:
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
 
-    qreal baseLine() const override { return 0.0; }
+    double baseLine() const override { return 0.0; }
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
 };
 
 //---------------------------------------------------------
 //   @@ FSymbol
-///    Symbol constructed from a font glyph.
+///    Symbol constructed from a font glyph (i.e. a text character or emoji).
 //---------------------------------------------------------
 
 class FSymbol final : public BSymbol
 {
     mu::draw::Font _font;
-    int _code;
+    int _code; // character code point (Unicode)
 
 public:
     FSymbol(EngravingItem* parent);
@@ -87,12 +87,15 @@ public:
 
     FSymbol* clone() const override { return new FSymbol(*this); }
 
+    String toString() const;
+    String accessibleInfo() const override;
+
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
     void layout() override;
 
-    qreal baseLine() const override { return 0.0; }
+    double baseLine() const override { return 0.0; }
     Segment* segment() const { return (Segment*)explicitParent(); }
     mu::draw::Font font() const { return _font; }
     int code() const { return _code; }

@@ -58,7 +58,7 @@ private:
     io::path_t pluginsDataPath() const;
     io::path_t pluginsFilePath() const;
 
-    RetVal<QByteArray> readPluginsConfiguration() const;
+    RetVal<mu::ByteArray> readPluginsConfiguration() const;
     Ret writePluginsConfiguration(const QByteArray& data);
 
     PluginsConfigurationHash parsePluginsConfiguration(const QByteArray& json) const;

@@ -79,13 +79,13 @@ void TBox::layout()
     bbox().setRect(0.0, 0.0, system()->width(), 0);
     m_text->layout();
 
-    qreal h = 0.;
+    double h = 0.;
     if (m_text->empty()) {
         h = mu::draw::FontMetrics::ascent(m_text->font());
     } else {
         h = m_text->height();
     }
-    qreal y = topMargin() * DPMM;
+    double y = topMargin() * DPMM;
     m_text->setPos(leftMargin() * DPMM, y);
     h += topMargin() * DPMM + bottomMargin() * DPMM;
     bbox().setRect(0.0, 0.0, system()->width(), h);

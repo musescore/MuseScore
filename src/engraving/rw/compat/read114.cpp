@@ -106,8 +106,8 @@ static int g_celloStrings[]  = { 36, 43, 50, 57 };
 
 struct PaperSize {
     const char* name;
-    qreal w, h;              // size in inch
-    PaperSize(const char* n, qreal wi, qreal hi)
+    double w, h;              // size in inch
+    PaperSize(const char* n, double wi, double hi)
         : name(n), w(wi), h(hi) {}
 };
 
@@ -1309,7 +1309,7 @@ static void readTextLine114(XmlReader& e, const ReadContext& ctx, TextLine* text
             textLine->setEndHookHeight(Spatium(e.readDouble()));
             textLine->setPropertyFlags(Pid::END_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
         } else if (tag == "hookUp") { // obsolete
-            textLine->setEndHookHeight(Spatium(qreal(-1.0)));
+            textLine->setEndHookHeight(Spatium(double(-1.0)));
         } else if (tag == "beginSymbol" || tag == "symbol") {   // "symbol" is obsolete
             String text(e.readText());
             textLine->setBeginText(String(u"<sym>%1</sym>").arg(
@@ -1512,7 +1512,7 @@ static void readHarmony114(XmlReader& e, const ReadContext& ctx, Harmony* h)
 static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx)
 {
     Segment* segment = 0;
-    qreal _spatium = m->spatium();
+    double _spatium = m->spatium();
 
     std::vector<Chord*> graceNotes;
 
@@ -1629,7 +1629,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 graceNotes.push_back(chord);
             } else {
                 segment->add(chord);
-                Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
+                assert(segment->segmentType() == SegmentType::ChordRest);
 
                 for (size_t i = 0; i < graceNotes.size(); ++i) {
                     Chord* gc = graceNotes[i];
@@ -2123,7 +2123,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
                 if (t == "off1") {
-                    qreal o = e.readDouble();
+                    double o = e.readDouble();
                     LOGD("TODO: off1 %f", o);
                 } else {
                     e.unknown();
@@ -2617,8 +2617,8 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
 
 static void readPageFormat(PageFormat* pf, XmlReader& e)
 {
-    qreal _oddRightMargin  = 0.0;
-    qreal _evenRightMargin = 0.0;
+    double _oddRightMargin  = 0.0;
+    double _evenRightMargin = 0.0;
     bool landscape         = false;
     AsciiStringView type;
 
@@ -2628,10 +2628,10 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
             landscape = e.readInt();
         } else if (tag == "page-margins") {
             type = e.asciiAttribute("type", "both");
-            qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
+            double lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
-                qreal val = e.readDouble() * 0.5 / PPI;
+                double val = e.readDouble() * 0.5 / PPI;
                 if (t == "left-margin") {
                     lm = val;
                 } else if (t == "right-margin") {
@@ -2673,8 +2673,8 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
     if (landscape) {
         pf->setSize(pf->size().transposed());
     }
-    qreal w1 = pf->size().width() - pf->oddLeftMargin() - _oddRightMargin;
-    qreal w2 = pf->size().width() - pf->evenLeftMargin() - _evenRightMargin;
+    double w1 = pf->size().width() - pf->oddLeftMargin() - _oddRightMargin;
+    double w2 = pf->size().width() - pf->evenLeftMargin() - _evenRightMargin;
     pf->setPrintableWidth(qMin(w1, w2));       // silently adjust right margins
 }
 
@@ -2772,7 +2772,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
             e.skipCurrentElement();             // obsolete
         } else if (tag == "tempolist") {
             // store the tempo list to create invisible tempo text later
-            qreal tempo = e.doubleAttribute("fix", 2.0);
+            double tempo = e.doubleAttribute("fix", 2.0);
             tm.setRelTempo(tempo);
             while (e.readNextStartElement()) {
                 if (e.name() == "tempo") {
@@ -2805,7 +2805,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         } else if (tag == "showMargins") {
             masterScore->setShowPageborders(e.readInt());
         } else if (tag == "Style") {
-            qreal sp = masterScore->spatium();
+            double sp = masterScore->spatium();
             compat::ReadChordListHook clhook(masterScore);
             readStyle(&masterScore->style(), e, clhook);
             //style()->load(e);
@@ -2868,7 +2868,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
             } else if (tag == "Trill") {
                 Read206::readTrill206(e, toTrill(s));
             } else {
-                Q_ASSERT(tag == "HairPin");
+                assert(tag == "HairPin");
                 Read206::readHairpin206(e, ctx, toHairpin(s));
             }
             if (s->track() == mu::nidx) {
@@ -2991,7 +2991,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         }
 
         if (s->isOttava() || s->isPedal() || s->isTrill() || s->isTextLine()) {
-            qreal yo = 0;
+            double yo = 0;
             if (s->isOttava()) {
                 // fix ottava position
                 yo = masterScore->styleValue(Pid::OFFSET, Sid::ottavaPosAbove).value<PointF>().y();

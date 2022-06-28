@@ -241,7 +241,7 @@ AccessibleItem* EngravingItem::createAccessible()
 //   spatiumChanged
 //---------------------------------------------------------
 
-void EngravingItem::spatiumChanged(qreal oldValue, qreal newValue)
+void EngravingItem::spatiumChanged(double oldValue, double newValue)
 {
     if (offsetIsSpatiumDependent()) {
         _offset *= (newValue / oldValue);
@@ -253,7 +253,7 @@ void EngravingItem::spatiumChanged(qreal oldValue, qreal newValue)
 //    the scale of a staff changed
 //---------------------------------------------------------
 
-void EngravingItem::localSpatiumChanged(qreal oldValue, qreal newValue)
+void EngravingItem::localSpatiumChanged(double oldValue, double newValue)
 {
     if (offsetIsSpatiumDependent()) {
         _offset *= (newValue / oldValue);
@@ -264,7 +264,7 @@ void EngravingItem::localSpatiumChanged(qreal oldValue, qreal newValue)
 //   spatium
 //---------------------------------------------------------
 
-qreal EngravingItem::spatium() const
+double EngravingItem::spatium() const
 {
     if (systemFlag() || (explicitParent() && parentItem()->systemFlag())) {
         return score()->spatium();
@@ -295,7 +295,7 @@ bool EngravingItem::offsetIsSpatiumDependent() const
 //   magS
 //---------------------------------------------------------
 
-qreal EngravingItem::magS() const
+double EngravingItem::magS() const
 {
     return mag() * (score()->spatium() / SPATIUM20);
 }
@@ -803,9 +803,9 @@ PointF EngravingItem::canvasPos() const
 //   pageX
 //---------------------------------------------------------
 
-qreal EngravingItem::pageX() const
+double EngravingItem::pageX() const
 {
-    qreal xp = x();
+    double xp = x();
     for (EngravingItem* e = parentItem(); e && e->parentItem(); e = e->parentItem()) {
         xp += e->x();
     }
@@ -816,9 +816,9 @@ qreal EngravingItem::pageX() const
 //    canvasX
 //---------------------------------------------------------
 
-qreal EngravingItem::canvasX() const
+double EngravingItem::canvasX() const
 {
-    qreal xp = x();
+    double xp = x();
     for (EngravingItem* e = parentItem(); e; e = e->parentItem()) {
         xp += e->x();
     }
@@ -874,7 +874,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         }
 
         EngravingItem* me = static_cast<EngravingItem*>(_links->mainElement());
-        Q_ASSERT(type() == me->type());
+        assert(type() == me->type());
         Staff* s = staff();
         if (!s) {
             s = score()->staff(xml.context()->curTrack() / VOICES);
@@ -1053,7 +1053,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             }
         }
 #endif
-        Q_ASSERT(!_links->contains(this));
+        assert(!_links->contains(this));
         _links->push_back(this);
     } else if (tag == "tick") {
         int val = e.readInt();
@@ -1185,7 +1185,7 @@ void Compound::draw(mu::draw::Painter* painter) const
  offset \a x and \a y are in Point units
 */
 
-void Compound::addElement(EngravingItem* e, qreal x, qreal y)
+void Compound::addElement(EngravingItem* e, double x, double y)
 {
     e->setPos(x, y);
     e->setParent(this);
@@ -1727,7 +1727,7 @@ void EngravingItem::undoAddElement(EngravingItem* element)
 //   drawSymbol
 //---------------------------------------------------------
 
-void EngravingItem::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, qreal scale) const
+void EngravingItem::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, double scale) const
 {
     score()->scoreFont()->draw(id, p, magS() * scale, o);
 }
@@ -1737,7 +1737,7 @@ void EngravingItem::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF&
     score()->scoreFont()->draw(id, p, magS(), o, n);
 }
 
-void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, const PointF& o, qreal scale) const
+void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, const PointF& o, double scale) const
 {
     score()->scoreFont()->draw(symbols, p, magS() * scale, o);
 }
@@ -1751,7 +1751,7 @@ void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, 
 //   symHeight
 //---------------------------------------------------------
 
-qreal EngravingItem::symHeight(SymId id) const
+double EngravingItem::symHeight(SymId id) const
 {
     return score()->scoreFont()->height(id, magS());
 }
@@ -1760,12 +1760,12 @@ qreal EngravingItem::symHeight(SymId id) const
 //   symWidth
 //---------------------------------------------------------
 
-qreal EngravingItem::symWidth(SymId id) const
+double EngravingItem::symWidth(SymId id) const
 {
     return score()->scoreFont()->width(id, magS());
 }
 
-qreal EngravingItem::symWidth(const SymIdList& symbols) const
+double EngravingItem::symWidth(const SymIdList& symbols) const
 {
     return score()->scoreFont()->width(symbols, magS());
 }
@@ -1774,7 +1774,7 @@ qreal EngravingItem::symWidth(const SymIdList& symbols) const
 //   symAdvance
 //---------------------------------------------------------
 
-qreal EngravingItem::symAdvance(SymId id) const
+double EngravingItem::symAdvance(SymId id) const
 {
     return score()->scoreFont()->advance(id, magS());
 }
@@ -2078,42 +2078,6 @@ void EngravingItem::triggerLayoutAll() const
 }
 
 //---------------------------------------------------------
-//   control
-//---------------------------------------------------------
-
-bool EditData::control(bool textEditing) const
-{
-    if (textEditing) {
-        return modifiers & CONTROL_MODIFIER;
-    } else {
-        return modifiers & Qt::ControlModifier;
-    }
-}
-
-//---------------------------------------------------------
-//   clear
-//---------------------------------------------------------
-
-void EditData::clear()
-{
-    *this = EditData(view_);
-}
-
-//---------------------------------------------------------
-//   getData
-//---------------------------------------------------------
-
-std::shared_ptr<ElementEditData> EditData::getData(const EngravingItem* e) const
-{
-    for (std::shared_ptr<ElementEditData> ed : data) {
-        if (ed->e == e) {
-            return ed;
-        }
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
 //   addData
 //---------------------------------------------------------
 
@@ -2126,7 +2090,7 @@ void EditData::addData(std::shared_ptr<ElementEditData> ed)
 //   drawEditMode
 //---------------------------------------------------------
 
-void EngravingItem::drawEditMode(draw::Painter* p, EditData& ed, qreal /*currentViewScaling*/)
+void EngravingItem::drawEditMode(draw::Painter* p, EditData& ed, double /*currentViewScaling*/)
 {
     using namespace mu::draw;
     Pen pen(engravingConfiguration()->defaultColor(), 0.0);
@@ -2177,17 +2141,17 @@ RectF EngravingItem::drag(EditData& ed)
     const ElementEditDataPtr eed = ed.getData(this);
 
     const PointF offset0 = ed.moveDelta + eed->initOffset;
-    qreal x = offset0.x();
-    qreal y = offset0.y();
+    double x = offset0.x();
+    double y = offset0.y();
 
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     if (ed.hRaster) {
-        qreal hRaster = _spatium / MScore::hRaster();
+        double hRaster = _spatium / MScore::hRaster();
         int n = lrint(x / hRaster);
         x = hRaster * n;
     }
     if (ed.vRaster) {
-        qreal vRaster = _spatium / MScore::vRaster();
+        double vRaster = _spatium / MScore::vRaster();
         int n = lrint(y / vRaster);
         y = vRaster * n;
     }
@@ -2265,11 +2229,11 @@ void EngravingItem::endDrag(EditData& ed)
 
 std::vector<LineF> EngravingItem::genericDragAnchorLines() const
 {
-    qreal xp = 0.0;
+    double xp = 0.0;
     for (EngravingItem* e = parentItem(); e; e = e->parentItem()) {
         xp += e->x();
     }
-    qreal yp;
+    double yp;
     if (explicitParent()->isSegment() || explicitParent()->isMeasure()) {
         Measure* meas = explicitParent()->isSegment() ? toSegment(explicitParent())->measure() : toMeasure(explicitParent());
         System* system = meas->system();
@@ -2409,7 +2373,7 @@ void EngravingItem::endEdit(EditData&)
 //   styleP
 //---------------------------------------------------------
 
-qreal EngravingItem::styleP(Sid idx) const
+double EngravingItem::styleP(Sid idx) const
 {
     return score()->styleMM(idx);
 }
@@ -2477,7 +2441,7 @@ void EngravingItem::setOffsetChanged(bool v, bool absolute, const PointF& diff)
 //    for nudge & other actions that result in relative adjustment, return the vertical difference
 //---------------------------------------------------------
 
-qreal EngravingItem::rebaseOffset(bool nox)
+double EngravingItem::rebaseOffset(bool nox)
 {
     PointF off = offset();
     PointF p = _changedPos - pos();
@@ -2493,7 +2457,7 @@ qreal EngravingItem::rebaseOffset(bool nox)
         // TODO: refactor to take advantage of existing cmdFlip() algorithms
         // TODO: adjustPlacement() (from read206.cpp) on read for 3.0 as well
         RectF r = bbox().translated(_changedPos);
-        qreal staffHeight = staff()->height();
+        double staffHeight = staff()->height();
         EngravingItem* e = isSpannerSegment() ? toSpannerSegment(this)->spanner() : this;
         bool multi = e->isSpanner() && toSpanner(e)->spannerSegments().size() > 1;
         bool above = e->placeAbove();
@@ -2535,15 +2499,15 @@ qreal EngravingItem::rebaseOffset(bool nox)
 //    returns true if shape needs to be rebased
 //---------------------------------------------------------
 
-bool EngravingItem::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool above, bool fix)
+bool EngravingItem::rebaseMinDistance(double& md, double& yd, double sp, double rebase, bool above, bool fix)
 {
     bool rc = false;
     PropertyFlags pf = propertyFlags(Pid::MIN_DISTANCE);
     if (pf == PropertyFlags::STYLED) {
         pf = PropertyFlags::UNSTYLED;
     }
-    qreal adjustedY = pos().y() + yd;
-    qreal diff = _changedPos.y() - adjustedY;
+    double adjustedY = pos().y() + yd;
+    double diff = _changedPos.y() - adjustedY;
     if (fix) {
         undoChangeProperty(Pid::MIN_DISTANCE, -999.0, pf);
         yd = 0.0;
@@ -2584,7 +2548,7 @@ bool EngravingItem::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal reba
 void EngravingItem::autoplaceSegmentElement(bool above, bool add)
 {
     // rebase vertical offset on drag
-    qreal rebase = 0.0;
+    double rebase = 0.0;
     if (offsetChanged() != OffsetChange::NONE) {
         rebase = rebaseOffset();
     }
@@ -2593,7 +2557,7 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
         Segment* s = toSegment(explicitParent());
         Measure* m = s->measure();
 
-        qreal sp = score()->spatium();
+        double sp = score()->spatium();
         staff_idx_t si = staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
@@ -2603,21 +2567,21 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
             return;
         }
 
-        qreal mag = staff()->staffMag(this);
+        double mag = staff()->staffMag(this);
         sp *= mag;
-        qreal minDistance = _minDistance.val() * sp;
+        double minDistance = _minDistance.val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
         RectF r = bbox().translated(m->pos() + s->pos() + pos());
 
         // Adjust bbox Y pos for staffType offset
         if (staffType()) {
-            qreal stYOffset = staffType()->yoffset().val() * sp;
+            double stYOffset = staffType()->yoffset().val() * sp;
             r.translate(0.0, stYOffset);
         }
 
         SkylineLine sk(!above);
-        qreal d;
+        double d;
         if (above) {
             sk.add(r.x(), r.bottom(), r.width());
             d = sk.minDistance(ss->skyline().north());
@@ -2627,7 +2591,7 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
         }
 
         if (d > -minDistance) {
-            qreal yd = d + minDistance;
+            double yd = d + minDistance;
             if (above) {
                 yd *= -1.0;
             }
@@ -2656,7 +2620,7 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
 void EngravingItem::autoplaceMeasureElement(bool above, bool add)
 {
     // rebase vertical offset on drag
-    qreal rebase = 0.0;
+    double rebase = 0.0;
     if (offsetChanged() != OffsetChange::NONE) {
         rebase = rebaseOffset();
     }
@@ -2672,15 +2636,15 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
             return;
         }
 
-        qreal sp = score()->spatium();
-        qreal minDistance = _minDistance.val() * sp;
+        double sp = score()->spatium();
+        double minDistance = _minDistance.val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
         // shape rather than bbox is good for tuplets especially
         Shape sh = shape().translated(m->pos() + pos());
 
         SkylineLine sk(!above);
-        qreal d;
+        double d;
         if (above) {
             sk.add(sh);
             d = sk.minDistance(ss->skyline().north());
@@ -2689,7 +2653,7 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
             d = ss->skyline().south().minDistance(sk);
         }
         if (d > -minDistance) {
-            qreal yd = d + minDistance;
+            double yd = d + minDistance;
             if (above) {
                 yd *= -1.0;
             }

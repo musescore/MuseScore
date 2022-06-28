@@ -26,6 +26,8 @@
 #include <QClipboard>
 #include <QMimeData>
 
+#include "infrastructure/internal/qmimedataadapter.h"
+
 #include "engraving/rw/xml.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/system.h"
@@ -78,7 +80,9 @@ void CopyPasteSymbolListTests::copypastecommon(MasterScore* score, const char16_
         LOGD("wrong type mime data");
         return;
     }
-    score->cmdPaste(ms, 0);
+
+    QMimeDataAdapter ma(ms);
+    score->cmdPaste(&ma, 0);
     score->endCmd();
     score->doLayout();
 

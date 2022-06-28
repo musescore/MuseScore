@@ -107,7 +107,7 @@ void NoteDot::read(XmlReader& e)
 //   mag
 //---------------------------------------------------------
 
-qreal NoteDot::mag() const
+double NoteDot::mag() const
 {
     return parentItem()->mag() * score()->styleD(Sid::dotMag);
 }

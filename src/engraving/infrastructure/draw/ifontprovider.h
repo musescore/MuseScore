@@ -40,18 +40,18 @@ public:
     virtual int addApplicationFont(const String& family, const String& path) = 0;
     virtual void insertSubstitution(const String& familyName, const String& substituteName) = 0;
 
-    virtual qreal lineSpacing(const Font& f) const = 0;
-    virtual qreal xHeight(const Font& f) const = 0;
-    virtual qreal height(const Font& f) const = 0;
-    virtual qreal ascent(const Font& f) const = 0;
-    virtual qreal descent(const Font& f) const = 0;
+    virtual double lineSpacing(const Font& f) const = 0;
+    virtual double xHeight(const Font& f) const = 0;
+    virtual double height(const Font& f) const = 0;
+    virtual double ascent(const Font& f) const = 0;
+    virtual double descent(const Font& f) const = 0;
 
     virtual bool inFont(const Font& f, Char ch) const = 0;
     virtual bool inFontUcs4(const Font& f, uint ucs4) const = 0;
 
     // Text
-    virtual qreal horizontalAdvance(const Font& f, const String& string) const = 0;
-    virtual qreal horizontalAdvance(const Font& f, const Char& ch) const = 0;
+    virtual double horizontalAdvance(const Font& f, const String& string) const = 0;
+    virtual double horizontalAdvance(const Font& f, const Char& ch) const = 0;
 
     virtual RectF boundingRect(const Font& f, const String& string) const = 0;
     virtual RectF boundingRect(const Font& f, const Char& ch) const = 0;
@@ -59,8 +59,8 @@ public:
     virtual RectF tightBoundingRect(const Font& f, const String& string) const = 0;
 
     // Score symbols
-    virtual RectF symBBox(const Font& f, uint ucs4, qreal DPI_F) const = 0;
-    virtual qreal symAdvance(const Font& f, uint ucs4, qreal DPI_F) const = 0;
+    virtual RectF symBBox(const Font& f, uint ucs4, double DPI_F) const = 0;
+    virtual double symAdvance(const Font& f, uint ucs4, double DPI_F) const = 0;
 };
 }
 

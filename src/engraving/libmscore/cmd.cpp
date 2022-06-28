@@ -416,7 +416,7 @@ void Score::update(bool resetCmdState)
             }
         } else if (cs.updateRange()) {
             // updateRange updates only current score
-            qreal d = spatium() * .5;
+            double d = spatium() * .5;
             _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
             for (MuseScoreView* v : viewer) {
                 v->dataChanged(_updateState.refresh);
@@ -798,7 +798,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
 Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, Fraction sd, DirectionV stemDirection,
                             bool forceAccidental, const std::set<SymId>& articulationIds, bool rhythmic, InputState* externalInputState)
 {
-    Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
+    assert(segment->segmentType() == SegmentType::ChordRest);
     InputState& is = externalInputState ? (*externalInputState) : _is;
 
     bool isRest   = nval.pitch == -1;
@@ -982,7 +982,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
 
 Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
 {
-    Q_ASSERT(_sd.numerator());
+    assert(_sd.numerator());
 
     Measure* measure = segment->measure();
     Fraction accumulated;
@@ -1134,7 +1134,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
 //      if (td > sd)
 //            td = sd;
 // ???  accumulated should already contain the total value of the created gap: line 749, 811 or 838
-//      this line creates a qreal-sized gap if the needed gap crosses a measure boundary
+//      this line creates a double-sized gap if the needed gap crosses a measure boundary
 //      by adding again the duration already added in line 838
 //      accumulated += td;
 
@@ -1181,7 +1181,7 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
         }
 
         Fraction newLen = len - Fraction::fromTicks(voiceOffset[track - strack]);
-        Q_ASSERT(newLen.numerator() != 0);
+        assert(newLen.numerator() != 0);
 
         if (newLen > Fraction(0, 1)) {
             const Fraction endTick = tick + newLen;
@@ -2139,7 +2139,7 @@ void Score::moveDown(ChordRest* cr)
 //   cmdAddStretch
 //---------------------------------------------------------
 
-void Score::cmdAddStretch(qreal val)
+void Score::cmdAddStretch(double val)
 {
     if (!selection().isRange()) {
         return;
@@ -2153,7 +2153,7 @@ void Score::cmdAddStretch(qreal val)
         if (m->tick() >= endTick) {
             break;
         }
-        qreal stretch = m->userStretch();
+        double stretch = m->userStretch();
         stretch += val;
         if (stretch < 0) {
             stretch = 0;
@@ -3125,7 +3125,7 @@ void Score::cmdExplode()
                     size_t nnotes = notes.size();
                     // keep note "i" from top, which is backwards from nnotes - 1
                     // reuse notes if there are more instruments than notes
-                    size_t stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, static_cast<size_t>(1));
+                    size_t stavesPerNote = std::max((lastStaff - srcStaff) / nnotes, static_cast<size_t>(1));
                     size_t keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), static_cast<size_t>(0));
                     Note* keepNote = c->notes()[keepIndex];
                     for (Note* n : notes) {
@@ -3219,7 +3219,7 @@ void Score::cmdImplode()
     Measure* endMeasure = endSegment ? endSegment->measure() : lastMeasure();
     Fraction startTick       = startSegment->tick();
     Fraction endTick         = endSegment ? endSegment->tick() : lastMeasure()->endTick();
-    Q_ASSERT(startMeasure && endMeasure);
+    assert(startMeasure && endMeasure);
 
     // if single staff selected, combine voices
     // otherwise combine staves
@@ -3585,7 +3585,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
 //---------------------------------------------------------
 Segment* Score::setChord(Segment* segment, track_idx_t track, Chord* chordTemplate, Fraction dur, DirectionV stemDirection)
 {
-    Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
+    assert(segment->segmentType() == SegmentType::ChordRest);
 
     Fraction tick = segment->tick();
     Chord* nr     = nullptr;   //current added chord used so we can select the last added chord and so we can apply ties

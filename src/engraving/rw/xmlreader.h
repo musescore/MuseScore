@@ -44,8 +44,10 @@ public:
     XmlReader(mu::io::IODevice* d)
         : XmlStreamReader(d) {}
 
+#ifndef NO_QT_SUPPORT
     XmlReader(const QByteArray& d)
         : XmlStreamReader(d) {}
+#endif
 
     XmlReader(const XmlReader&) = delete;
     XmlReader& operator=(const XmlReader&) = delete;
@@ -70,7 +72,7 @@ public:
     String docName() const { return m_docName; }
 
     // for reading old files (< 3.01)
-    void setOffsetLines(qint64 val) { m_offsetLines = val; }
+    void setOffsetLines(int64_t val) { m_offsetLines = val; }
 
     ReadContext* context() const;
     void setContext(ReadContext* context);
@@ -80,7 +82,7 @@ private:
     void htmlToString(int level, String*);
 
     String m_docName;    // used for error reporting
-    qint64 m_offsetLines = 0;
+    int64_t m_offsetLines = 0;
     mutable ReadContext* m_context = nullptr;
     mutable bool m_selfContext = false;
 };

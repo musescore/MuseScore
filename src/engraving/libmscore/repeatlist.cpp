@@ -174,12 +174,12 @@ void RepeatList::updateTempo()
     const TempoMap* tl = _score->tempomap();
 
     int utick = 0;
-    qreal t  = 0;
+    double t  = 0;
 
     for (RepeatSegment* s : *this) {
         s->utick      = utick;
         s->utime      = t;
-        qreal ct      = tl->tick2time(s->tick);
+        double ct      = tl->tick2time(s->tick);
         s->timeOffset = t - ct;
         utick        += s->len();
         t            += tl->tick2time(s->tick + s->len()) - ct;
@@ -232,14 +232,14 @@ int RepeatList::tick2utick(int tick) const
 //   utick2utime
 //---------------------------------------------------------
 
-qreal RepeatList::utick2utime(int tick) const
+double RepeatList::utick2utime(int tick) const
 {
     size_t n = size();
     unsigned ii = (idx1 < n) && (tick >= at(idx1)->utick) ? idx1 : 0;
     for (unsigned i = ii; i < n; ++i) {
         if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i + 1)->utick))) {
             int t     = tick - (at(i)->utick - at(i)->tick);
-            qreal tt = _score->tempomap()->tick2time(t) + at(i)->timeOffset;
+            double tt = _score->tempomap()->tick2time(t) + at(i)->timeOffset;
             return tt;
         }
     }
@@ -250,7 +250,7 @@ qreal RepeatList::utick2utime(int tick) const
 //   utime2utick
 //---------------------------------------------------------
 
-int RepeatList::utime2utick(qreal secs) const
+int RepeatList::utime2utick(double secs) const
 {
     size_t repeatSegmentsCount = size();
     unsigned ii = (idx2 < repeatSegmentsCount) && (secs >= at(idx2)->utime) ? idx2 : 0;
@@ -531,7 +531,7 @@ void RepeatList::collectRepeatListElements()
                             ) {
                             // Decrease position
                             // This should always be possible as the list always starts with a REPEAT_START element
-                            Q_ASSERT(insertionIt != sectionRLElements.begin());
+                            assert(insertionIt != sectionRLElements.begin());
                             --insertionIt;
                         } else {
                             // Found location after which we should go
@@ -1018,7 +1018,7 @@ void RepeatList::unwind()
         // Inform the last RepeatSegment that the Section Break pause property should be honored now
         rs = this->back();
         repeatListElementIt = sectionIt->cend() - 1;
-        Q_ASSERT((*repeatListElementIt)->repeatListElementType == RepeatListElementType::SECTION_BREAK);
+        assert((*repeatListElementIt)->repeatListElementType == RepeatListElementType::SECTION_BREAK);
 
         LayoutBreak const* const layoutBreak = toMeasureBase((*repeatListElementIt)->element)->sectionBreakElement();
         if (layoutBreak != nullptr) {

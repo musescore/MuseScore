@@ -44,7 +44,7 @@ public:
     void close();
     Status status() const;
 
-    void addFile(const QString& fileName, const ByteArray& data);
+    void addFile(const std::string& fileName, const ByteArray& data);
 
 private:
 

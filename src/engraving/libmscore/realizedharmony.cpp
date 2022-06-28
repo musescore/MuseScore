@@ -79,7 +79,7 @@ void RealizedHarmony::setLiteral(bool literal)
 //---------------------------------------------------
 const RealizedHarmony::PitchMap& RealizedHarmony::notes() const
 {
-    Q_ASSERT(!_dirty);
+    assert(!_dirty);
     //with the way that the code is currently structured, there should be no way to
     //get to this function with dirty flag set although in the future it may be
     //better to just update if dirty here
@@ -210,7 +210,7 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
     //otherwise checked by RealizedHarmony. This saves us 3 ints of space, but
     //has the added risk
     if (!_dirty) {
-        Q_ASSERT(
+        assert(
             _harmony->harmonyType() != HarmonyType::STANDARD
             || (_notes.begin()->second == rootTpc || _notes.begin()->second == bassTpc));
         return;

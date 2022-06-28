@@ -78,13 +78,13 @@ QJSValue ScriptEngine::require(const QString& filePath)
 {
     TRACEFUNC;
 
-    RetVal<QByteArray> data = readScriptContent(filePath);
+    RetVal<ByteArray> data = readScriptContent(filePath);
     if (!data.ret) {
         LOGE() << "failed read file, err: " << data.ret.toString() << ", file: " << filePath;
         return QJSValue();
     }
 
-    QByteArray content = QByteArray("(function() { \n") + data.val + QByteArray("}());");
+    QByteArray content = QByteArray("(function() { \n") + data.val.toQByteArrayNoCopy() + QByteArray("}());");
 
     ScriptEngine requireEngine(this);
     requireEngine.setScriptPath(filePath);
@@ -126,12 +126,12 @@ Ret ScriptEngine::evaluate()
         return make_ret(Ret::Code::InternalError);
     }
 
-    RetVal<QByteArray> content = readScriptContent(path);
+    RetVal<ByteArray> content = readScriptContent(path);
     if (!content.ret) {
         return content.ret;
     }
 
-    const QByteArray& contentData = content.val;
+    const QByteArray contentData = content.val.toQByteArray();
 
     IF_ASSERT_FAILED(!contentData.isEmpty()) {
         return make_ret(Ret::Code::InternalError);
@@ -226,7 +226,7 @@ void ScriptEngine::throwError(const QString& message)
     m_engine->throwError(message);
 }
 
-RetVal<QByteArray> ScriptEngine::readScriptContent(const io::path_t& scriptPath) const
+RetVal<ByteArray> ScriptEngine::readScriptContent(const io::path_t& scriptPath) const
 {
     TRACEFUNC;
     return fileSystem()->readFile(scriptPath);

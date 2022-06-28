@@ -25,13 +25,14 @@
 
 #include <cmath>
 
-#ifndef NO_QT_SUPPORT
-#include <QPainterPath>
-#endif
-
 #include "geometry.h"
 #include "bezier.h"
 #include "drawtypes.h"
+#include "realfn.h"
+
+#ifndef NO_QT_SUPPORT
+#include <QPainterPath>
+#endif
 
 namespace mu {
 class PainterPath
@@ -67,8 +68,7 @@ public:
         }
         bool operator==(const Element& e) const
         {
-            return qFuzzyCompare(x, e.x)
-                   && qFuzzyCompare(y, e.y) && type == e.type;
+            return RealIsEqual(x, e.x) && RealIsEqual(y, e.y) && type == e.type;
         }
 
         inline bool operator!=(const Element& e) const { return !operator==(e); }
@@ -181,7 +181,8 @@ private:
     friend class Transform;
 };
 }
-
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::PainterPath)
+#endif
 
 #endif // MU_DRAW_PAINTERPATH_H

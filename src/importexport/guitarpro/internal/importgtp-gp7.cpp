@@ -31,6 +31,8 @@
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 
+#include "log.h"
+
 using namespace mu::io;
 using namespace mu::engraving;
 
@@ -39,17 +41,53 @@ namespace mu::engraving {
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro7::read(IODevice* io)
+bool GuitarPro7::read(IODevice* io, bool createLinkedTabForce)
 {
     f = io;
     previousTempo = -1;
 
     mu::ZipReader zip(io);
     mu::ByteArray fileData = zip.fileData("Content/score.gpif");
+    mu::ByteArray partsData = zip.fileData("Content/PartConfiguration");
     zip.close();
+
+    QByteArray partsArray = partsData.toQByteArrayNoCopy();
+    IGPDomBuilder::GPProperties properties = readProperties(&partsArray);
+    properties.createLinkedTabForce = createLinkedTabForce;
+
     QByteArray ba = fileData.toQByteArrayNoCopy();
-    readGpif(&ba);
+    readGpif(&ba, properties);
     return true;
+}
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+IGPDomBuilder::GPProperties GuitarPro7::readProperties(QByteArray* data)
+{
+    IGPDomBuilder::GPProperties properties;
+    size_t partsInfoSize = data->size();
+    const size_t numInstrOffset = 8;
+    if (partsInfoSize <= numInstrOffset) {
+        LOGE() << "failed to read gp properties";
+        return properties;
+    }
+
+    size_t numberOfInstruments = static_cast<size_t>(data->at(numInstrOffset));
+    if (partsInfoSize <= numInstrOffset + numberOfInstruments) {
+        LOGE() << "failed to read gp properties";
+        return properties;
+    }
+
+    using import_option_t = IGPDomBuilder::TabImportOption;
+    std::vector<import_option_t>& partsImportOpts = properties.partsImportOptions;
+
+    for (int i = numInstrOffset + 1; i <= numInstrOffset + numberOfInstruments; i++) {
+        partsImportOpts.push_back(static_cast<import_option_t>(data->at(i)));
+    }
+
+    return properties;
 }
 
 std::unique_ptr<IGPDomBuilder> GuitarPro7::createGPDomBuilder() const

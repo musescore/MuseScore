@@ -22,6 +22,7 @@
 #ifndef MU_PROJECT_PROJECTTYPES_H
 #define MU_PROJECT_PROJECTTYPES_H
 
+#include <variant>
 #include <QString>
 
 #include "io/path.h"

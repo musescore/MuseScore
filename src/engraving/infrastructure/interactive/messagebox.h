@@ -25,7 +25,7 @@
 #include <set>
 #include <string>
 
-#ifndef NO_ENGRAVING_INTERACTIVE
+#ifndef ENGRAVING_NO_INTERACTIVE
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #endif
@@ -33,7 +33,7 @@
 namespace mu::engraving {
 class MessageBox
 {
-#ifndef NO_ENGRAVING_INTERACTIVE
+#ifndef ENGRAVING_NO_INTERACTIVE
     INJECT_STATIC(engraving, framework::IInteractive, interactive)
 #endif
 public:

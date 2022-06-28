@@ -671,8 +671,8 @@ void Selection::updateSelectedElements()
 
 void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffEnd <= _score->nstaves());
-    Q_ASSERT(!(endSegment && !startSegment));
+    assert(staffEnd > staffStart && staffEnd <= _score->nstaves());
+    assert(!(endSegment && !startSegment));
 
     _startSegment  = startSegment;
     _endSegment    = endSegment;
@@ -692,7 +692,7 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t
 
 void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart, staff_idx_t staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffEnd <= _score->nstaves());
+    assert(staffEnd > staffStart && staffEnd <= _score->nstaves());
 
     deselectAll();
     _plannedTick1 = tick1;
@@ -1438,7 +1438,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_
     }
     activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
     _score->setSelectionChanged(true);
-    Q_ASSERT(!(_endSegment && !_startSegment));
+    assert(!(_endSegment && !_startSegment));
 }
 
 SelectionFilter Selection::selectionFilter() const

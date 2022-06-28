@@ -49,11 +49,11 @@ public:
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 
     BeatsPerSecond tempo() const { return _tempo; }
-    qreal tempoBpm() const;
+    double tempoBpm() const;
     void setTempo(BeatsPerSecond v);
-    void undoSetTempo(qreal v);
+    void undoSetTempo(double v);
     bool isRelative() { return _isRelative; }
-    void setRelative(qreal v) { _isRelative = true; _relative = v; }
+    void setRelative(double v) { _isRelative = true; _relative = v; }
 
     bool followText() const { return _followText; }
     void setFollowText(bool v) { _followText = v; }
@@ -85,7 +85,7 @@ protected:
 
     BeatsPerSecond _tempo;             // beats per second
     bool _followText;         // parse text to determine tempo
-    qreal _relative;
+    double _relative;
     bool _isRelative;
 };
 } // namespace mu::engraving

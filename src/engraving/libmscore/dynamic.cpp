@@ -302,21 +302,21 @@ void Dynamic::layout()
                 // as it reflects the actual scaling of the text
                 // using chord()->mag(), mag() or fontSize will yield
                 // undesirable results with small staves or cue notes
-                qreal dynamicMag = spatium() / SPATIUM20;
+                double dynamicMag = spatium() / SPATIUM20;
 
-                qreal noteHeadWidth = score()->noteHeadWidth() * dynamicMag;
+                double noteHeadWidth = score()->noteHeadWidth() * dynamicMag;
                 rxpos() += noteHeadWidth * .5;
 
-                qreal opticalCenter = symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x() * dynamicMag;
+                double opticalCenter = symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x() * dynamicMag;
                 if (symId != SymId::noSym && opticalCenter) {
-                    static const qreal DEFAULT_DYNAMIC_FONT_SIZE = 10.0;
-                    qreal fontScaling = size() / DEFAULT_DYNAMIC_FONT_SIZE;
-                    qreal left = symBbox(symId).bottomLeft().x() * dynamicMag; // this is negative per SMuFL spec
+                    static const double DEFAULT_DYNAMIC_FONT_SIZE = 10.0;
+                    double fontScaling = size() / DEFAULT_DYNAMIC_FONT_SIZE;
+                    double left = symBbox(symId).bottomLeft().x() * dynamicMag; // this is negative per SMuFL spec
 
                     opticalCenter *= fontScaling;
                     left *= fontScaling;
 
-                    qreal offset = opticalCenter - left - bbox().width() * 0.5;
+                    double offset = opticalCenter - left - bbox().width() * 0.5;
                     rxpos() -= offset;
                 }
             } else {
@@ -342,9 +342,9 @@ void Dynamic::doAutoplace()
         return;
     }
 
-    qreal minDistance = score()->styleS(Sid::dynamicsMinDistance).val() * spatium();
+    double minDistance = score()->styleS(Sid::dynamicsMinDistance).val() * spatium();
     RectF r = bbox().translated(pos() + s->pos() + s->measure()->pos());
-    qreal yOff = offset().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
+    double yOff = offset().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
     r.translate(0.0, -yOff);
 
     Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
@@ -352,12 +352,12 @@ void Dynamic::doAutoplace()
     sk.add(r);
 
     if (placeAbove()) {
-        qreal d = sk.minDistance(sl.north());
+        double d = sk.minDistance(sl.north());
         if (d > -minDistance) {
             rypos() += -(d + minDistance);
         }
     } else {
-        qreal d = sl.south().minDistance(sk);
+        double d = sl.south().minDistance(sk);
         if (d > -minDistance) {
             rypos() += d + minDistance;
         }
@@ -450,8 +450,8 @@ mu::RectF Dynamic::drag(EditData& ed)
     //
     // move anchor
     //
-    Qt::KeyboardModifiers km = ed.modifiers;
-    if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+    KeyboardModifiers km = ed.modifiers;
+    if (km != (ShiftModifier | ControlModifier)) {
         staff_idx_t si = staffIdx();
         Segment* seg = segment();
         score()->dragPosition(canvasPos(), &si, &seg);

@@ -45,7 +45,7 @@ XmlWriter::~XmlWriter()
     }
 }
 
-void XmlWriter::startElementRaw(const QString& s)
+void XmlWriter::startElementRaw(const String& s)
 {
     XmlStreamWriter::startElementRaw(s);
 }
@@ -92,7 +92,7 @@ void XmlWriter::tag(const AsciiStringView& name, const Attributes& attrs, const 
     XmlStreamWriter::element(name, attrs, body);
 }
 
-void XmlWriter::tagRaw(const QString& elementWithAttrs, const Value& body)
+void XmlWriter::tagRaw(const String& elementWithAttrs, const Value& body)
 {
     XmlStreamWriter::elementRaw(elementWithAttrs, body);
 }
@@ -162,7 +162,7 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
         element(name, data.value<int>());
         break;
     case P_TYPE::REAL:
-        element(name, data.value<qreal>());
+        element(name, data.value<double>());
         break;
     case P_TYPE::STRING:
         element(name, data.value<QString>());
@@ -312,12 +312,12 @@ void XmlWriter::tagFraction(const AsciiStringView& name, const Fraction& v, cons
     element(name, v.toString());
 }
 
-void XmlWriter::writeXml(const QString& name, QString s)
+void XmlWriter::writeXml(const String& name, String s)
 {
-    for (int i = 0; i < s.size(); ++i) {
+    for (size_t i = 0; i < s.size(); ++i) {
         ushort c = s.at(i).unicode();
         if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) {
-            s[i] = '?';
+            s[i] = u'?';
         }
     }
 
@@ -329,7 +329,7 @@ void XmlWriter::comment(const String& text)
     XmlStreamWriter::comment(text);
 }
 
-QString XmlWriter::xmlString(const QString& s)
+String XmlWriter::xmlString(const String& s)
 {
     return XmlStreamWriter::escapeString(s);
 }

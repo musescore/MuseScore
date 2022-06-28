@@ -84,7 +84,7 @@ KeySig::KeySig(const KeySig& k)
 //   mag
 //---------------------------------------------------------
 
-qreal KeySig::mag() const
+double KeySig::mag() const
 {
     return staff() ? staff()->staffMag(tick()) : 1.0;
 }
@@ -95,27 +95,27 @@ qreal KeySig::mag() const
 
 void KeySig::addLayout(SymId sym, int line)
 {
-    qreal _spatium = spatium();
-    qreal step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
+    double _spatium = spatium();
+    double step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
     KeySym ks;
     ks.sym = sym;
-    qreal x = 0.0;
+    double x = 0.0;
     if (_sig.keySymbols().size() > 0) {
         KeySym& previous = _sig.keySymbols().back();
-        qreal accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
+        double accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
         if (previous.sym != sym) {
             accidentalGap *= 2;
         } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
             accidentalGap = score()->styleS(Sid::keysigNaturalDistance).val();
         }
-        qreal previousWidth = symWidth(previous.sym) / _spatium;
+        double previousWidth = symWidth(previous.sym) / _spatium;
         x = previous.xPos + previousWidth + accidentalGap;
         bool isAscending = line < previous.line;
         SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
         SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
         PointF cutout = symSmuflAnchor(sym, currentCutout);
-        qreal currentCutoutY = line * step + cutout.y();
-        qreal previousCutoutY = previous.line * step + symSmuflAnchor(previous.sym, previousCutout).y();
+        double currentCutoutY = line * step + cutout.y();
+        double previousCutoutY = previous.line * step + symSmuflAnchor(previous.sym, previousCutout).y();
         if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
             x -= cutout.x() / _spatium;
         }
@@ -131,8 +131,8 @@ void KeySig::addLayout(SymId sym, int line)
 
 void KeySig::layout()
 {
-    qreal _spatium = spatium();
-    qreal step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
+    double _spatium = spatium();
+    double step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
 
     setbbox(RectF());
 
@@ -164,7 +164,7 @@ void KeySig::layout()
     int t1 = int(_sig.key());
 
     if (isCustom() && !isAtonal()) {
-        qreal accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
+        double accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
         // add standard key accidentals first, if neccesary
         for (int i = 1; i <= abs(t1) && abs(t1) <= 7; ++i) {
             bool drop = false;
@@ -183,7 +183,7 @@ void KeySig::layout()
                 ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
                 if (_sig.keySymbols().size() > 0) {
                     KeySym& previous = _sig.keySymbols().back();
-                    qreal previousWidth = symWidth(previous.sym) / _spatium;
+                    double previousWidth = symWidth(previous.sym) / _spatium;
                     ks.xPos = previous.xPos + previousWidth + accidentalGap;
                 } else {
                     ks.xPos = 0;
@@ -202,7 +202,7 @@ void KeySig::layout()
             double xpos = cd.xAlt;
             if (_sig.keySymbols().size() > 0) {
                 KeySym& previous = _sig.keySymbols().back();
-                qreal previousWidth = symWidth(previous.sym) / _spatium;
+                double previousWidth = symWidth(previous.sym) / _spatium;
                 xpos += previous.xPos + previousWidth + accidentalGap;
             }
             // if translated symbol if out of range, add key accidental followed by untranslated symbol
@@ -366,8 +366,8 @@ void KeySig::layout()
 
     // compute bbox
     for (KeySym& ks : _sig.keySymbols()) {
-        qreal x = ks.xPos * _spatium;
-        qreal y = ks.line * step;
+        double x = ks.xPos * _spatium;
+        double y = ks.line * step;
         addbbox(symBbox(ks.sym).translated(x, y));
     }
 }
@@ -380,11 +380,11 @@ void KeySig::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     painter->setPen(curColor());
-    qreal _spatium = spatium();
-    qreal step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
+    double _spatium = spatium();
+    double step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
     for (const KeySym& ks: _sig.keySymbols()) {
-        qreal x = ks.xPos * _spatium;
-        qreal y = ks.line * step;
+        double x = ks.xPos * _spatium;
+        double y = ks.line * step;
         drawSymbol(ks.sym, painter, PointF(x, y));
     }
     if (!explicitParent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
@@ -416,7 +416,7 @@ EngravingItem* KeySig::drop(EditData& data)
     }
     KeySigEvent k = ks->keySigEvent();
     delete ks;
-    if (data.modifiers & Qt::ControlModifier) {
+    if (data.modifiers & ControlModifier) {
         // apply only to this stave
         if (!(k == keySigEvent())) {
             score()->undoChangeKeySig(staff(), tick(), k);

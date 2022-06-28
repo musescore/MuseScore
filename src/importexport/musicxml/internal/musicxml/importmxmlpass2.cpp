@@ -1692,21 +1692,22 @@ void MusicXMLParserPass2::part()
     _hasDrumset = hasDrumset(instruments);
 
     // set the parts first instrument
-    setPartInstruments(_logger, &_e, _pass1.getPart(id), id, _score, _pass1.getInstrList(id), _pass1.getIntervals(id), instruments);
+    Part* part = _pass1.getPart(id);
+    setPartInstruments(_logger, &_e, part, id, _score, _pass1.getInstrList(id), _pass1.getIntervals(id), instruments);
 
     // set the part name
     auto mxmlPart = _pass1.getMusicXmlPart(id);
-    _pass1.getPart(id)->setPartName(mxmlPart.getName());
+    part->setPartName(mxmlPart.getName());
     if (mxmlPart.getPrintName()) {
-        _pass1.getPart(id)->setLongName(mxmlPart.getName());
+        part->setLongName(mxmlPart.getName());
     }
     if (mxmlPart.getPrintAbbr()) {
-        _pass1.getPart(id)->setPlainShortName(mxmlPart.getAbbr());
+        part->setPlainShortName(mxmlPart.getAbbr());
     }
     // try to prevent an empty track name
-    if (_pass1.getPart(id)->partName() == "") {
+    if (part->partName() == "") {
         QString instrId = _pass1.getInstrList(id).instrument(Fraction(0, 1));
-        _pass1.getPart(id)->setPartName(instruments[instrId].name);
+        part->setPartName(instruments[instrId].name);
     }
 
 #ifdef DEBUG_VOICE_MAPPER
@@ -1738,10 +1739,10 @@ void MusicXMLParserPass2::part()
     }
 
     // stop all remaining extends for this part
-    Measure* lm = _pass1.getPart(id)->score()->lastMeasure();
+    Measure* lm = part->score()->lastMeasure();
     if (lm) {
         track_idx_t strack = _pass1.trackForPart(id);
-        track_idx_t etrack = strack + _pass1.getPart(id)->nstaves() * VOICES;
+        track_idx_t etrack = strack + part->nstaves() * VOICES;
         Fraction lastTick = lm->endTick();
         for (track_idx_t trk = strack; trk < etrack; trk++) {
             _extendedLyrics.setExtend(-1, trk, lastTick);
@@ -1777,8 +1778,18 @@ void MusicXMLParserPass2::part()
         // set staff type to percussion if incorrectly imported as pitched staff
         // Note: part has been read, staff type already set based on clef type and staff-details
         // but may be incorrect for a percussion staff that does not use a percussion clef
-        setStaffTypePercussion(_pass1.getPart(id), drumset);
+        setStaffTypePercussion(part, drumset);
     }
+
+    bool showPart = false;
+    for (Staff* staff : part->staves()) {
+        if (staff->visible()) {
+            showPart = true;
+            break;
+        }
+    }
+
+    part->setShow(showPart);
 
     addError(checkAtEndElement(_e, "part"));
 }
@@ -2326,6 +2337,13 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
     if (_score->staff(staffIdx)->isTabStaff(Fraction(0, 1))) {
         t = new StringData;
         t->setFrets(25);      // sensible default
+    }
+
+    QString visible = _e.attributes().value("print-object").toString();
+    if (visible == "no") {
+        _score->staff(staffIdx)->setVisible(false);
+    } else if (!visible.isEmpty() && visible != "yes") {
+        _logger->logError(QString("print-object should be \"yes\" or \"no\""));
     }
 
     int staffLines = 0;

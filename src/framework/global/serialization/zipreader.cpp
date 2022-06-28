@@ -102,8 +102,8 @@ std::vector<ZipReader::FileInfo> ZipReader::fileInfoList() const
     return ret;
 }
 
-ByteArray ZipReader::fileData(const QString& fileName) const
+ByteArray ZipReader::fileData(const std::string& fileName) const
 {
-    QByteArray ba = m_impl->zip->fileData(fileName);
+    QByteArray ba = m_impl->zip->fileData(QString::fromStdString(fileName));
     return ByteArray(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
 }

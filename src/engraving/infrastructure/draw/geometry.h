@@ -24,19 +24,20 @@
 
 #include <vector>
 #include <cmath>
-#include <QtGlobal>
-#include <QPair>
 
+#include "realfn.h"
+
+#ifndef NO_QT_SUPPORT
+#include <QPair>
 #include <QRectF>
 #include <QSizeF>
 #include <QPointF>
-#ifndef NO_QT_SUPPORT
 #include <QLineF>
 #include <QPolygonF>
 #endif
 
 namespace mu {
-inline bool isEqual(qreal a1, qreal a2) { return qFuzzyCompare(a1, a2); }
+inline bool isEqual(double a1, double a2) { return RealIsEqual(a1, a2); }
 inline bool isEqual(int a1, int a2) { return a1 == a2; }
 
 // ====================================
@@ -75,13 +76,13 @@ public:
 
     inline T manhattanLength() const { return qAbs(m_x) + qAbs(m_y); }
 
-    static inline qreal dotProduct(const PointX<T>& p1, const PointX<T>& p2) { return p1.m_x * p2.m_x + p1.m_y * p2.m_y; }
+    static inline double dotProduct(const PointX<T>& p1, const PointX<T>& p2) { return p1.m_x * p2.m_x + p1.m_y * p2.m_y; }
 
     inline void normalize()
     {
         // Need some extra precision if the length is very small.
         double len = double(m_x) * double(m_x) + double(m_y) * double(m_y);
-        if (qFuzzyIsNull(len - 1.0f) || qFuzzyIsNull(len)) {
+        if (RealIsNull(len - 1.0f) || RealIsNull(len)) {
             return;
         }
 
@@ -91,13 +92,13 @@ public:
         m_y /= len;
     }
 
-//#ifndef NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     static PointX<T> fromQPointF(const QPointF& p) { return PointX<T>(p.x(), p.y()); }
     inline QPointF toQPointF() const { return QPointF(m_x, m_y); }
     inline QPoint toQPoint() const { return QPoint(m_x, m_y); }
 
     inline PointX<T>& operator=(const QPointF& p) { m_x = p.x(); m_y = p.y(); return *this; }
-//#endif
+#endif
 
 private:
     //! NOTE We should not swap fields
@@ -115,7 +116,7 @@ inline PointX<T> operator*(T c, const PointX<T>& p) { return PointX<T>(p.x() * c
 template<typename T>
 inline PointX<T> operator/(const PointX<T>& p, T c) { return PointX<T>(p.x() / c, p.y() / c); }
 
-using PointF = PointX<qreal>;
+using PointF = PointX<double>;
 using Point = PointX<int>;
 
 #ifndef NO_QT_SUPPORT
@@ -125,15 +126,17 @@ inline QPointF operator+(const QPointF& p1, const PointF& p2) { return QPointF(p
 // ====================================
 // PairF
 // ====================================
-class PairF : public std::pair<qreal, qreal>
+class PairF : public std::pair<double, double>
 {
 public:
     PairF() = default;
-    PairF(qreal f, qreal s)
-        : std::pair<qreal, qreal>(f, s) {}
+    PairF(double f, double s)
+        : std::pair<double, double>(f, s) {}
 
-    static PairF fromQPairF(const QPair<qreal, qreal>& v) { return PairF(v.first, v.second); }
-    QPair<qreal, qreal> toQPairF() const { return QPair<qreal, qreal>(first, second); }
+#ifndef NO_QT_SUPPORT
+    static PairF fromQPairF(const QPair<double, double>& v) { return PairF(v.first, v.second); }
+    QPair<double, double> toQPairF() const { return QPair<double, double>(first, second); }
+#endif
 };
 
 // ====================================
@@ -153,10 +156,10 @@ public:
     inline const PointX<T>& p1() const { return m_p1; }
     inline const PointX<T>& p2() const { return m_p2; }
 
-    inline qreal x1() const { return m_p1.x(); }
-    inline qreal y1() const { return m_p1.y(); }
-    inline qreal x2() const { return m_p2.x(); }
-    inline qreal y2() const { return m_p2.y(); }
+    inline double x1() const { return m_p1.x(); }
+    inline double y1() const { return m_p1.y(); }
+    inline double x2() const { return m_p2.x(); }
+    inline double y2() const { return m_p2.y(); }
 
     inline void setP1(const PointX<T>& p) { m_p1 = p; }
     inline void setP2(const PointX<T>& p) { m_p2 = p; }
@@ -180,7 +183,7 @@ private:
     PointX<T> m_p2;
 };
 
-using LineF = LineX<qreal>;
+using LineF = LineX<double>;
 using Line = LineX<int>;
 
 // ====================================
@@ -207,10 +210,10 @@ public:
 
     inline SizeX<T> transposed() const { return SizeX<T>(m_h, m_w); }
 
-//#ifndef NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     static SizeX<T> fromQSizeF(const QSizeF& s) { return SizeX<T>(s.width(), s.height()); }
     inline QSizeF toQSizeF() const { return QSizeF(m_w, m_h); }
-//#endif
+#endif
 
 private:
     T m_w = T();
@@ -218,23 +221,23 @@ private:
 };
 
 template<typename T>
-inline SizeX<T> operator*(const SizeX<T>& s, qreal c) { return SizeX<T>(s.width() * c, s.height() * c); }
+inline SizeX<T> operator*(const SizeX<T>& s, double c) { return SizeX<T>(s.width() * c, s.height() * c); }
 
 template<typename T>
-inline SizeX<T> operator*(qreal c, const SizeX<T>& s) { return SizeX<T>(s.width() * c, s.height() * c); }
+inline SizeX<T> operator*(double c, const SizeX<T>& s) { return SizeX<T>(s.width() * c, s.height() * c); }
 
 template<typename T>
-inline SizeX<T> operator/(const SizeX<T>& s, T c) { Q_ASSERT(!isEqual(c, T())); return SizeX<T>(s.width() / c, s.height() / c); }
+inline SizeX<T> operator/(const SizeX<T>& s, T c) { assert(!isEqual(c, T())); return SizeX<T>(s.width() / c, s.height() / c); }
 
 using Size = SizeX<int>;
-using SizeF = SizeX<qreal>;
+using SizeF = SizeX<double>;
 
-class ScaleF : public SizeX<qreal>
+class ScaleF : public SizeX<double>
 {
 public:
     ScaleF() = default;
-    ScaleF(qreal w, qreal h)
-        : SizeX<qreal>(w, h) {}
+    ScaleF(double w, double h)
+        : SizeX<double>(w, h) {}
 
 #ifndef NO_QT_SUPPORT
     static ScaleF fromQSizeF(const QSizeF& s) { return ScaleF(s.width(), s.height()); }
@@ -278,7 +281,7 @@ public:
     inline PointX<T> center() const { return PointX<T>(m_x + m_w / 2, m_y + m_h / 2); }
 
     inline void setCoords(T xp1, T yp1, T xp2, T yp2) { m_x = xp1; m_y = yp1; m_w = xp2 - xp1; m_h = yp2 - yp1; }
-    inline void setRect(qreal ax, qreal ay, qreal aaw, qreal aah) { m_x = ax; m_y = ay; m_w = aaw; m_h = aah; }
+    inline void setRect(double ax, double ay, double aaw, double aah) { m_x = ax; m_y = ay; m_w = aaw; m_h = aah; }
 
     inline void setHeight(T h) { m_h = h; }
     inline void setWidth(T w) { m_w = w; }
@@ -303,10 +306,10 @@ public:
 
     inline bool operator!=(const RectX<T>& r) const { return !this->operator ==(r); }
 
-    inline void moveTo(qreal ax, qreal ay) { m_x = ax; m_y = ay; }
+    inline void moveTo(double ax, double ay) { m_x = ax; m_y = ay; }
     inline void moveTo(const PointX<T>& p) { m_x = p.x(); m_y = p.y(); }
     inline void moveCenter(const PointX<T>& p) { m_x = p.x() - m_w / 2; m_y = p.y() - m_h / 2; }
-    inline void moveTop(qreal pos) { m_y = pos; }
+    inline void moveTop(double pos) { m_y = pos; }
 
     inline void translate(T dx, T dy) { m_x += dx; m_y += dy; }
     inline void translate(const PointX<T>& p) { m_x += p.x(); m_y += p.y(); }
@@ -314,7 +317,7 @@ public:
     inline RectX<T> translated(T dx, T dy) const { return RectX<T>(m_x + dx, m_y + dy, m_w, m_h); }
     inline RectX<T> translated(const PointX<T>& p) const { return RectX<T>(m_x + p.x(), m_y + p.y(), m_w, m_h); }
 
-    inline void adjust(qreal xp1, qreal yp1, qreal xp2, qreal yp2) { m_x += xp1; m_y += yp1; m_w += xp2 - xp1; m_h += yp2 - yp1; }
+    inline void adjust(double xp1, double yp1, double xp2, double yp2) { m_x += xp1; m_y += yp1; m_w += xp2 - xp1; m_h += yp2 - yp1; }
     inline RectX<T> adjusted(T xp1, T yp1, T xp2, T yp2) const { return RectX<T>(m_x + xp1, m_y + yp1, m_w + xp2 - xp1, m_h + yp2 - yp1); }
 
     bool contains(const PointX<T>& p) const;
@@ -336,7 +339,7 @@ public:
 
     RectX<T> normalized() const;
 
-//#ifndef NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     static RectX<T> fromQRectF(const QRectF& r) { return RectX<T>(r.x(), r.y(), r.width(), r.height()); }
     inline QRectF toQRectF() const { return QRectF(m_x, m_y, m_w, m_h); }
     inline QRect toQRect() const { return QRect(m_x, m_y, m_w, m_h); }
@@ -344,7 +347,7 @@ public:
     inline RectX<T>& operator=(const QRectF& r) { m_x = r.x(); m_y = r.y(); m_w = r.width(); m_h = r.height(); return *this; }
 
     inline RectX<T> united(const QRectF& r) const { return united(RectX<T>(r)); }
-//#endif
+#endif
 
 private:
     T m_x = T();
@@ -353,7 +356,7 @@ private:
     T m_h = T();
 };
 
-using RectF = RectX<qreal>;
+using RectF = RectX<double>;
 class Rect : public RectX<int>
 {
 public:
@@ -438,7 +441,7 @@ public:
     }
 };
 
-using PolygonF = PolygonX<qreal>;
+using PolygonF = PolygonX<double>;
 using Polygon = PolygonX<int>;
 
 // Implementation ==========================================
@@ -461,26 +464,26 @@ RectX<T> RectX<T>::united(const RectX<T>& r) const
         right += m_w;
     }
     if (r.m_w < 0) {
-        left = qMin(left, r.m_x + r.m_w);
-        right = qMax(right, r.m_x);
+        left = std::min(left, r.m_x + r.m_w);
+        right = std::max(right, r.m_x);
     } else {
-        left = qMin(left, r.m_x);
-        right = qMax(right, r.m_x + r.m_w);
+        left = std::min(left, r.m_x);
+        right = std::max(right, r.m_x + r.m_w);
     }
 
-    qreal top = m_y;
-    qreal bottom = m_y;
+    double top = m_y;
+    double bottom = m_y;
     if (m_h < 0) {
         top += m_h;
     } else {
         bottom += m_h;
     }
     if (r.m_h < 0) {
-        top = qMin(top, r.m_y + r.m_h);
-        bottom = qMax(bottom, r.m_y);
+        top = std::min(top, r.m_y + r.m_h);
+        bottom = std::max(bottom, r.m_y);
     } else {
-        top = qMin(top, r.m_y);
-        bottom = qMax(bottom, r.m_y + r.m_h);
+        top = std::min(top, r.m_y);
+        bottom = std::max(bottom, r.m_y + r.m_h);
     }
     return RectX<T>(left, top, right - left, bottom - top);
 }

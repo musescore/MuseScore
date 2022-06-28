@@ -771,7 +771,7 @@ InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& name
                                     + (2 * (mu::contains(it->longNames, StaffName(name)) ? 1 : 0))
                                     + (1 * (mu::contains(it->shortNames, StaffName(name)) ? 1 : 0)); // least weight to short name
                 const int perfectMatchStrength = 7;
-                Q_ASSERT(matchStrength <= perfectMatchStrength);
+                assert(matchStrength <= perfectMatchStrength);
                 if (matchStrength > bestMatchStrength) {
                     bestMatch = it;
                     bestMatchStrength = matchStrength;

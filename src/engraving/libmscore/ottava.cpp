@@ -164,7 +164,7 @@ Sid OttavaSegment::getPropertyStyle(Pid pid) const
 
 Sid Ottava::getPropertyStyle(Pid pid) const
 {
-    Q_ASSERT(int(OttavaType::OTTAVA_22MB) - int(OttavaType::OTTAVA_8VA) == 5);
+    assert(int(OttavaType::OTTAVA_22MB) - int(OttavaType::OTTAVA_8VA) == 5);
 
     static const std::vector<Sid> ss = {
         Sid::ottava8VAPlacement,

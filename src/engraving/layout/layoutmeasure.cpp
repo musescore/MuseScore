@@ -560,7 +560,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
 //   layoutDrumsetChord
 //---------------------------------------------------------
 
-static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, qreal spatium)
+static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, double spatium)
 {
     for (Note* note : c->notes()) {
         int pitch = note->pitch();
@@ -572,7 +572,7 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
             note->setLine(line);
 
             int off  = st->stepOffset();
-            qreal ld = st->lineDistance().val();
+            double ld = st->lineDistance().val();
             note->rypos()  = (line + off * 2.0) * spatium * .5 * ld;
         }
     }
@@ -689,7 +689,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                     if (!cr) {
                         continue;
                     }
-                    qreal m = staff->staffMag(&segment);
+                    double m = staff->staffMag(&segment);
                     if (cr->isSmall()) {
                         m *= score->styleD(Sid::smallNoteMag);
                     }
@@ -721,7 +721,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                             Stem* stem1 = chord->tremolo()->chord1()->stem();
                             Stem* stem2 = chord->tremolo()->chord2()->stem();
                             if (stem1 && stem2) {
-                                std::pair<qreal, qreal> extendedLen = LayoutTremolo::extendedStemLenWithTwoNoteTremolo(
+                                std::pair<double, double> extendedLen = LayoutTremolo::extendedStemLenWithTwoNoteTremolo(
                                     chord->tremolo(),
                                     stem1->p2().y(),
                                     stem2->p2().y());

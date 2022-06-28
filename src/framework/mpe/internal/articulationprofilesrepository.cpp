@@ -93,7 +93,7 @@ ArticulationsProfilePtr ArticulationProfilesRepository::defaultProfile(const Art
 
 ArticulationsProfilePtr ArticulationProfilesRepository::loadProfile(const io::path_t& path) const
 {
-    RetVal<QByteArray> fileReading = fileSystem()->readFile(path);
+    RetVal<ByteArray> fileReading = fileSystem()->readFile(path);
 
     if (!fileReading.ret) {
         LOGE() << "Unable to read profile, path: " << path;
@@ -102,7 +102,7 @@ ArticulationsProfilePtr ArticulationProfilesRepository::loadProfile(const io::pa
 
     QJsonParseError err;
 
-    QJsonDocument file = QJsonDocument::fromJson(fileReading.val, &err);
+    QJsonDocument file = QJsonDocument::fromJson(fileReading.val.toQByteArrayNoCopy(), &err);
     if (err.error != QJsonParseError::NoError) {
         LOGE() << err.errorString();
         return nullptr;
@@ -143,7 +143,8 @@ void ArticulationProfilesRepository::saveProfile(const io::path_t& path, const A
 
     rootObj.insert(PATTERNS_KEY, articulationPatterns);
 
-    Ret fileWriting = fileSystem()->writeToFile(path, QJsonDocument(rootObj).toJson());
+    QByteArray json = QJsonDocument(rootObj).toJson();
+    Ret fileWriting = fileSystem()->writeFile(path, ByteArray::fromQByteArrayNoCopy(json));
 
     if (!fileWriting) {
         LOGE() << "Unable to write MPE Articulation Profile, err: " << fileWriting.toString();

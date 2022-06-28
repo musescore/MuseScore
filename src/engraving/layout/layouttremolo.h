@@ -31,7 +31,7 @@ class Tremolo;
 class LayoutTremolo
 {
 public:
-    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
+    static std::pair<double, double> extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, double stemLen1, double stemLen2);
 };
 }
 

@@ -24,6 +24,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 #ifndef GLOBAL_NO_QT_SUPPORT
 #include <QByteArray>

@@ -119,16 +119,16 @@ void TrillSegment::remove(EngravingItem* e)
 
 void TrillSegment::symbolLine(SymId start, SymId fill)
 {
-    qreal x1 = 0;
-    qreal x2 = pos2().x();
-    qreal w   = x2 - x1;
-    qreal mag = magS();
+    double x1 = 0;
+    double x2 = pos2().x();
+    double w   = x2 - x1;
+    double mag = magS();
     ScoreFont* f = score()->scoreFont();
 
     _symbols.clear();
     _symbols.push_back(start);
-    qreal w1 = f->advance(start, mag);
-    qreal w2 = f->advance(fill, mag);
+    double w1 = f->advance(start, mag);
+    double w2 = f->advance(fill, mag);
     int n    = lrint((w - w1) / w2);
     for (int i = 0; i < n; ++i) {
         _symbols.push_back(fill);
@@ -139,17 +139,17 @@ void TrillSegment::symbolLine(SymId start, SymId fill)
 
 void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 {
-    qreal x1 = 0;
-    qreal x2 = pos2().x();
-    qreal w   = x2 - x1;
-    qreal mag = magS();
+    double x1 = 0;
+    double x2 = pos2().x();
+    double w   = x2 - x1;
+    double mag = magS();
     ScoreFont* f = score()->scoreFont();
 
     _symbols.clear();
     _symbols.push_back(start);
-    qreal w1 = f->advance(start, mag);
-    qreal w2 = f->advance(fill, mag);
-    qreal w3 = f->advance(end, mag);
+    double w1 = f->advance(start, mag);
+    double w2 = f->advance(fill, mag);
+    double w3 = f->advance(end, mag);
     int n    = lrint((w - w1 - w3) / w2);
     for (int i = 0; i < n; ++i) {
         _symbols.push_back(fill);
@@ -177,7 +177,7 @@ void TrillSegment::layout()
         if (a) {
             a->layout();
             a->setMag(a->mag() * .6);
-            qreal _spatium = spatium();
+            double _spatium = spatium();
             a->setPos(_spatium * 1.3, -2.2 * _spatium);
             a->setParent(this);
         }
