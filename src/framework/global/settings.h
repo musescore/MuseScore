@@ -77,7 +77,7 @@ public:
     void reload();
     void load();
 
-    void reset(bool keepDefaultSettings = false);
+    void reset(bool keepDefaultSettings = false, bool notifyAboutChanges = true);
 
     Val value(const Key& key) const;
     Val defaultValue(const Key& key) const;

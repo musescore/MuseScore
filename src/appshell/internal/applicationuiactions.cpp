@@ -40,6 +40,10 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Quit")
              ),
+    UiAction("restart",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Restart")
+             ),
     UiAction("fullscreen",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Enter full screen"),
