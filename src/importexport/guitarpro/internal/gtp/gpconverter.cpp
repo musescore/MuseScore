@@ -980,6 +980,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
     if (midiChannel == 9) {
         part->instrument()->setDrumset(gpDrumset);
+
         String drumInstrName = tR->instrument();
         if (!drumInstrName.empty()) {
             part->setShortName(drumInstrName);
