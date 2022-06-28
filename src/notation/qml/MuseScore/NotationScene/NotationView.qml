@@ -223,6 +223,8 @@ FocusScope {
         SearchPopup {
             id: searchPopup
 
+            navigationSection: navSec
+            scoreNavCtrl: fakeNavCtrl
             Layout.fillWidth: true
         }
     }

@@ -39,7 +39,10 @@ class SearchPopupModel : public QObject, public actions::Actionable
 
 public:
     Q_INVOKABLE void load();
-    Q_INVOKABLE void search(const QString& text);
+    Q_INVOKABLE void cancelPreview();
+    Q_INVOKABLE void cancelSearch();
+    Q_INVOKABLE void finalize();
+    Q_INVOKABLE bool search(const QString& text);
 
 signals:
     void showPopupRequested();

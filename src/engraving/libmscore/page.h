@@ -47,7 +47,7 @@ class MeasureBase;
 class Page final : public EngravingItem
 {
     std::vector<System*> _systems;
-    page_idx_t _no;                        // page number
+    page_idx_t _no;                            // page number
 
     BspTree bspTree;
     bool bspTreeValid;
@@ -71,6 +71,7 @@ public:
     const std::vector<System*>& systems() const { return _systems; }
     std::vector<System*>& systems() { return _systems; }
     System* system(int idx) { return _systems[idx]; }
+    Measure* firstMeasure() const;
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
@@ -80,7 +81,7 @@ public:
     page_idx_t no() const { return _no; }
     void setNo(page_idx_t n) { _no = n; }
     bool isOdd() const;
-    double tm() const;              // margins in pixel
+    double tm() const;                  // margins in pixel
     double bm() const;
     double lm() const;
     double rm() const;
@@ -88,14 +89,14 @@ public:
     double footerExtension() const;
 
     void draw(mu::draw::Painter*) const override;
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
 
     std::vector<EngravingItem*> items(const mu::RectF& r);
     std::vector<EngravingItem*> items(const mu::PointF& p);
     void invalidateBspTree() { bspTreeValid = false; }
-    mu::PointF pagePos() const override { return mu::PointF(); }       ///< position in page coordinates
-    std::vector<EngravingItem*> elements() const;              ///< list of visible elements
-    mu::RectF tbbox();                             // tight bounding box, excluding white space
+    mu::PointF pagePos() const override { return mu::PointF(); }           ///< position in page coordinates
+    std::vector<EngravingItem*> elements() const;                  ///< list of visible elements
+    mu::RectF tbbox();                                 // tight bounding box, excluding white space
     Fraction endTick() const;
 };
 } // namespace mu::engraving

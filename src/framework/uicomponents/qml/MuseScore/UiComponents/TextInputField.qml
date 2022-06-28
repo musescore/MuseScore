@@ -31,7 +31,7 @@ FocusScope {
 
     property bool isIndeterminate: false
     readonly property string indeterminateText: "--"
-    property var currentText: ""
+    property var currentText: valueInput.text
     property alias validator: valueInput.validator
     property alias measureUnitsSymbol: measureUnitsLabel.text
 
@@ -58,8 +58,10 @@ FocusScope {
     readonly property alias clearTextButton: clearTextButtonItem
 
     signal currentTextEdited(var newTextValue)
+    signal textAccepted(var textValue)
     signal textCleared()
     signal textEditingFinished()
+    signal escapePressed()
 
     function selectAll() {
         valueInput.selectAll()
@@ -67,7 +69,6 @@ FocusScope {
 
     function clear() {
         valueInput.text = ""
-        currentText = ""
         textCleared()
     }
 
@@ -158,7 +159,7 @@ FocusScope {
             selectedTextColor: ui.theme.fontPrimaryColor
             visible: !root.isIndeterminate || activeFocus
 
-            text: root.currentText === undefined ? "" : root.currentText
+            text: ""
 
             TextInputFieldModel {
                 id: textInputFieldModel
@@ -173,18 +174,23 @@ FocusScope {
                     event.accepted = true
                 } else {
                     event.accepted = false
-
                     root.focus = false
                     root.textEditingFinished()
                 }
             }
 
             Keys.onPressed: function(event) {
-                if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
-                        || event.key === Qt.Key_Escape) {
+                if (event.key === Qt.Key_Escape) {
                     root.focus = false
+                    root.escapePressed()
                     root.textEditingFinished()
                 }
+
+            }
+            onAccepted: {
+                root.focus = false
+                root.textAccepted(text)
+                root.textEditingFinished()
             }
 
             onActiveFocusChanged: {

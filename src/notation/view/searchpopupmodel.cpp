@@ -32,14 +32,48 @@ void SearchPopupModel::load()
     });
 }
 
-void SearchPopupModel::search(const QString& text)
+//maybe add a reset function that jumps back to the noteInput cursor if the user presses escape
+
+void SearchPopupModel::cancelPreview()
+{
+    notation()->interaction()->clearSelection();
+}
+
+void SearchPopupModel::finalize()
+{
+    notation()->interaction()->noteInput()->endNoteInput();
+}
+
+void SearchPopupModel::cancelSearch()
+{
+    if (notation()->interaction()->noteInput()->isNoteInputMode()) {
+        notation()->interaction()->showItem(notation()->elements()->msScore()->inputState().segment()->findMeasureBase());
+    }
+}
+
+bool SearchPopupModel::search(const QString& text)
 {
     mu::engraving::EngravingItem* element = notation()->elements()->search(text.toStdString());
     if (element) {
-        notation()->interaction()->select({ element }, SelectType::SINGLE);
-    } else {
-        notation()->interaction()->clearSelection();
+        mu::engraving::EngravingItem* measure=nullptr;
+        if (element->isPage()) {
+            mu::engraving::Page* p = static_cast<mu::engraving::Page*>(element);
+            measure = p->firstMeasure();
+            if (!measure && !p->systems().empty() && !p->systems().front()->measures().empty()) {
+                measure = p->systems().front()->measures().front();
+            }
+        } else if (element->isRehearsalMark()) {
+            mu::engraving::RehearsalMark* r = static_cast<mu::engraving::RehearsalMark*>(element);
+            measure = r->findMeasure();
+        }
+        if (!measure) {
+            measure = element;
+        }
+        notation()->interaction()->select({ measure }, SelectType::SINGLE);
+        notation()->interaction()->showItem(element);
+        return true;
     }
+    return false;
 }
 
 INotationPtr SearchPopupModel::notation() const

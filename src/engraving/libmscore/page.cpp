@@ -63,6 +63,20 @@ Page::Page(RootItem* parent)
 }
 
 //---------------------------------------------------------
+//   firstMeasure
+//---------------------------------------------------------
+Measure* Page::firstMeasure() const
+{
+    for (System* s : _systems) {
+        Measure* firstMeasure = s->firstMeasure();
+        if (firstMeasure) {
+            return firstMeasure;
+        }
+    }
+    return nullptr;
+}
+
+//---------------------------------------------------------
 //   items
 //---------------------------------------------------------
 
@@ -180,16 +194,16 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
         if (!text) {
             text = Factory::createText((Page*)this, TextStyleType::HEADER);
             text->setFlag(ElementFlag::MOVABLE, false);
-            text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
+            text->setFlag(ElementFlag::GENERATED, true);           // set to disable editing
             text->setLayoutToParentWidth(true);
             score()->setHeaderText(text, area);
         }
     } else {
-        text = score()->footerText(area - MAX_HEADERS);     // because they are 3 4 5
+        text = score()->footerText(area - MAX_HEADERS);         // because they are 3 4 5
         if (!text) {
             text = Factory::createText((Page*)this, TextStyleType::FOOTER);
             text->setFlag(ElementFlag::MOVABLE, false);
-            text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
+            text->setFlag(ElementFlag::GENERATED, true);           // set to disable editing
             text->setLayoutToParentWidth(true);
             score()->setFooterText(text, area - MAX_HEADERS);
         }
@@ -309,7 +323,7 @@ double Page::footerExtension() const
 
 void Page::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (System* s :_systems) {
+    for (System* s : _systems) {
         for (MeasureBase* m : s->measures()) {
             m->scanElements(data, func, all);
         }
@@ -403,17 +417,17 @@ String Page::replaceTextMacros(const String& s) const
         if (c == '$' && (i < (n - 1))) {
             Char nc = s.at(i + 1);
             switch (nc.toAscii()) {
-            case 'p': // not on first page 1
+            case 'p':     // not on first page 1
                 if (!_no) {
                     break;
                 }
             // FALLTHROUGH
-            case 'N': // on page 1 only if there are multiple pages
+            case 'N':     // on page 1 only if there are multiple pages
                 if ((score()->npages() + score()->pageNumberOffset()) <= 1) {
                     break;
                 }
             // FALLTHROUGH
-            case 'P': // on all pages
+            case 'P':     // on all pages
             {
                 int no = static_cast<int>(_no) + 1 + score()->pageNumberOffset();
                 if (no > 0) {
@@ -424,7 +438,7 @@ String Page::replaceTextMacros(const String& s) const
             case 'n':
                 d += String("%1").arg(score()->npages() + score()->pageNumberOffset());
                 break;
-            case 'i': // not on first page
+            case 'i':     // not on first page
                 if (!_no) {
                     break;
                 }
@@ -465,7 +479,7 @@ String Page::replaceTextMacros(const String& s) const
                     d += masterScore()->fileInfo()->lastModified().date().toString(DateFormat::LocaleShortFormat);
                 }
                 break;
-            case 'C': // only on first page
+            case 'C':     // only on first page
                 if (_no) {
                     break;
                 }
@@ -485,7 +499,7 @@ String Page::replaceTextMacros(const String& s) const
                     d += revision;
                 } else {
                     int rev = score()->mscoreRevision();
-                    if (rev > 99999) { // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
+                    if (rev > 99999) {     // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
                         d += String::number(rev, 16);
                     } else {
                         d += String::number(rev, 10);
@@ -505,7 +519,7 @@ String Page::replaceTextMacros(const String& s) const
                     }
                     tag += s.at(k);
                 }
-                if (k != n) {       // found ':' ?
+                if (k != n) {           // found ':' ?
                     d += score()->metaTag(tag).toXmlEscaped();
                     i = k - 1;
                 }
