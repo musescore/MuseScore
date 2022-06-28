@@ -30,6 +30,8 @@ namespace mu::engraving {
 class EngravingConfigurationMock : public IEngravingConfiguration
 {
 public:
+    MOCK_METHOD(io::path_t, appDataPath, (), (const, override));
+
     MOCK_METHOD(io::path_t, defaultStyleFilePath, (), (const, override));
     MOCK_METHOD(void, setDefaultStyleFilePath, (const io::path_t&), (override));
 

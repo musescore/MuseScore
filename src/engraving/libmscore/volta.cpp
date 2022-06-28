@@ -412,7 +412,7 @@ void Volta::setTempo() const
 
 String Volta::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), text());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), text());
 }
 
 //---------------------------------------------------------

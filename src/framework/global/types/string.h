@@ -33,7 +33,7 @@
 #include "bytearray.h"
 #include "global/logstream.h"
 
-#ifndef NO_QT_SUPPORT
+#ifndef GLOBAL_NO_QT_SUPPORT
 #include <QString>
 #endif
 
@@ -83,7 +83,7 @@ public:
     Char(AsciiChar c)
         : m_ch(c.unicode()) {}
 
-#ifndef NO_QT_SUPPORT
+#ifndef GLOBAL_NO_QT_SUPPORT
     Char(QChar c)
         : m_ch(c.unicode()) {}
     operator QChar() const {
@@ -125,6 +125,8 @@ public:
     inline bool isDigit() const { return isDigit(m_ch); }
     static bool isDigit(char16_t c);
     int digitValue() const;
+    inline bool isPunct() const { return isPunct(m_ch); }
+    static bool isPunct(char16_t c);
 
     inline bool isLower() const { return toLower() == m_ch; }
     inline Char toLower() const { return toLower(m_ch); }
@@ -176,7 +178,7 @@ public:
     String(const Char& ch);
     String(const Char* unicode, size_t size = mu::nidx);
 
-#ifndef NO_QT_SUPPORT
+#ifndef GLOBAL_NO_QT_SUPPORT
     String(const QString& str) { *this = fromQString(str); }
     operator QString() const {
         return this->toQString();
@@ -340,7 +342,7 @@ public:
     bool removeAll(const String& str);
     void removeAt(size_t i);
 
-#ifndef NO_QT_SUPPORT
+#ifndef GLOBAL_NO_QT_SUPPORT
     StringList(const QStringList& l);
     QStringList toQStringList() const;
 #endif
@@ -363,7 +365,7 @@ public:
     AsciiStringView(const std::string& str)
         : m_size(str.size()), m_data(str.c_str()) {}
 
-#ifndef NO_QT_SUPPORT
+#ifndef GLOBAL_NO_QT_SUPPORT
     static AsciiStringView fromQLatin1String(const QLatin1String& str) { return AsciiStringView(str.latin1(), str.size()); }
     QLatin1String toQLatin1String() const { return QLatin1String(m_data, static_cast<int>(m_size)); }
 #endif

@@ -24,6 +24,7 @@
 #define __AL_SIG_H__
 
 #include <map>
+#include <cassert>
 
 #include "types/string.h"
 #include "types/fraction.h"

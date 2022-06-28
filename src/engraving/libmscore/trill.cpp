@@ -444,7 +444,7 @@ void Trill::setTrillType(const String& s)
             return;
         }
     }
-    LOGD("Trill::setSubtype: unknown <%s>", qPrintable(s));
+    LOGD("Trill::setSubtype: unknown <%s>", muPrintable(s));
 }
 
 //---------------------------------------------------------
@@ -555,6 +555,6 @@ PropertyValue Trill::propertyDefault(Pid propertyId) const
 
 String Trill::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), trillTypeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), trillTypeUserName());
 }
 }

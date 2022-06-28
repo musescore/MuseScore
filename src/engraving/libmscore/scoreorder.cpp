@@ -96,7 +96,7 @@ bool ScoreOrder::readBoolAttribute(XmlReader& reader, const char* attrName, bool
     } else if (attr.toLower() == "true") {
         return true;
     }
-    LOGD("invalid value \"%s\" for attribute \"%s\", using default \"%d\"", qPrintable(attr), qPrintable(attrName), defvalue);
+    LOGD("invalid value \"%s\" for attribute \"%s\", using default \"%d\"", muPrintable(attr), attrName, defvalue);
     return defvalue;
 }
 
@@ -108,7 +108,7 @@ void ScoreOrder::readInstrument(XmlReader& reader)
 {
     String instrumentId { reader.attribute("id") };
     if (!mu::engraving::searchTemplate(instrumentId)) {
-        LOGD("cannot find instrument templates for <%s>", qPrintable(instrumentId));
+        LOGD("cannot find instrument templates for <%s>", muPrintable(instrumentId));
         reader.skipCurrentElement();
         return;
     }
@@ -116,7 +116,7 @@ void ScoreOrder::readInstrument(XmlReader& reader)
         if (reader.name() == "family") {
             InstrumentOverwrite io;
             io.id = reader.attribute("id");
-            io.name = qtrc("OrderXML", reader.readText());
+            io.name = mtrc("OrderXML", reader.readText());
             instrumentMap.insert({ instrumentId, io });
         } else {
             reader.unknown();
@@ -159,7 +159,7 @@ void ScoreOrder::readSection(XmlReader& reader)
             sg.thinBracket = thinBrackets;
             groups.push_back(sg);
         } else if (reader.name() == "unsorted") {
-            String group { reader.attribute("group", String("")) };
+            String group { reader.attribute("group", String(u"")) };
 
             if (hasGroup(UNSORTED_ID, group)) {
                 reader.skipCurrentElement();
@@ -230,17 +230,17 @@ String ScoreOrder::getName() const
 String ScoreOrder::getFamilyName(const InstrumentTemplate* instrTemplate, bool soloist) const
 {
     if (!instrTemplate) {
-        return String("<unsorted>");
+        return String(u"<unsorted>");
     }
 
     if (soloist) {
-        return String("<soloists>");
+        return String(u"<soloists>");
     } else if (mu::contains(instrumentMap, instrTemplate->id)) {
         return instrumentMap.at(instrTemplate->id).id;
     } else if (instrTemplate->family) {
         return instrTemplate->family->id;
     }
-    return String("<unsorted>");
+    return String(u"<unsorted>");
 }
 
 //---------------------------------------------------------
@@ -266,7 +266,7 @@ ScoreGroup ScoreOrder::newUnsortedGroup(const String group, const String section
 
 ScoreGroup ScoreOrder::getGroup(const String family, const String instrumentGroup) const
 {
-    static const String UNSORTED = String("<unsorted>");
+    static const String UNSORTED = String(u"<unsorted>");
 
     ScoreGroup unsortedScoreGroup;
     for (const ScoreGroup& sg : groups) {
@@ -297,8 +297,8 @@ ScoreGroup ScoreOrder::getGroup(const String family, const String instrumentGrou
 
 int ScoreOrder::instrumentSortingIndex(const String& instrumentId, bool isSoloist) const
 {
-    static const String SoloistsGroup("<soloists>");
-    static const String UnsortedGroup("<unsorted>");
+    static const String SoloistsGroup(u"<soloists>");
+    static const String UnsortedGroup(u"<unsorted>");
 
     enum class Priority {
         Undefined,
@@ -386,7 +386,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 
     bool prvThnBracket { false };
     bool prvBarLineSpan { false };
-    String prvSection { "" };
+    String prvSection;
     int prvInstrument { 0 };
     Staff* prvStaff { nullptr };
 
@@ -479,10 +479,10 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 void ScoreOrder::read(XmlReader& reader)
 {
     id = reader.attribute("id");
-    const String sectionId { "" };
+    const String sectionId;
     while (reader.readNextStartElement()) {
         if (reader.name() == "name") {
-            name = qtrc("OrderXML", reader.readText());
+            name = mtrc("OrderXML", reader.readText());
         } else if (reader.name() == "section") {
             readSection(reader);
         } else if (reader.name() == "instrument") {
@@ -498,7 +498,7 @@ void ScoreOrder::read(XmlReader& reader)
         } else if (reader.name() == "soloists") {
             readSoloists(reader, sectionId);
         } else if (reader.name() == "unsorted") {
-            String group { reader.attribute("group", String("")) };
+            String group { reader.attribute("group", String(u"")) };
 
             if (!hasGroup(UNSORTED_ID, group)) {
                 groups.push_back(newUnsortedGroup(group, sectionId));
@@ -510,7 +510,7 @@ void ScoreOrder::read(XmlReader& reader)
         }
     }
 
-    String group { String("") };
+    String group { String(u"") };
     if (!hasGroup(UNSORTED_ID, group)) {
         groups.push_back(newUnsortedGroup(group, id));
     }
@@ -535,7 +535,7 @@ void ScoreOrder::write(XmlWriter& xml) const
         xml.endElement();
     }
 
-    String section { "" };
+    String section { u"" };
     for (const ScoreGroup& sg : groups) {
         if (sg.section != section) {
             if (!section.isEmpty()) {

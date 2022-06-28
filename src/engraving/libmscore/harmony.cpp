@@ -22,8 +22,6 @@
 
 #include "harmony.h"
 
-#include <QStack>
-
 #include "containers.h"
 #include "translation.h"
 #include "draw/fontmetrics.h"
@@ -65,7 +63,7 @@ String Harmony::harmonyName() const
     String s, r, e, b;
 
     if (_leftParen) {
-        s = "(";
+        s = u"(";
     }
 
     if (_rootTpc != Tpc::TPC_INVALID) {
@@ -97,7 +95,7 @@ String Harmony::harmonyName() const
         } else {
             // not in table, fallback to using HChord.name()
             r = hc.name(_rootTpc);
-            e = "";
+            e = u"";
         }
     }
 
@@ -168,7 +166,7 @@ void Harmony::resolveDegreeList()
     for (const auto& p : *cl) {
         const ChordDescription& cd = p.second;
         if ((cd.chord == hc) && !cd.names.empty()) {
-            LOGD("ResolveDegreeList: found in table as %s", qPrintable(cd.names.front()));
+            LOGD("ResolveDegreeList: found in table as %s", muPrintable(cd.names.front()));
             _id = cd.id;
             _degreeList.clear();
             return;
@@ -389,7 +387,7 @@ void Harmony::read(XmlReader& e)
                 || degreeAlter < -2 || degreeAlter > 2
                 || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
                 LOGD("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
-                     degreeValue, degreeAlter, qPrintable(degreeType));
+                     degreeValue, degreeAlter, muPrintable(degreeType));
             } else {
                 if (degreeType == "add") {
                     addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
@@ -762,7 +760,7 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
             if (s.at(0) == '/') {
                 idx = 0;
             } else {
-                LOGD("failed <%s>", qPrintable(ss));
+                LOGD("failed <%s>", muPrintable(ss));
                 _userName = s;
                 _textName = s;
                 return 0;
@@ -848,11 +846,11 @@ bool Harmony::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    if (ed.key == Qt::Key_Semicolon || ed.key == Qt::Key_Colon) {
+    if (ed.key == Key_Semicolon || ed.key == Key_Colon) {
         return false;
     }
 
-    if (ed.key == Qt::Key_Return || ed.key == Qt::Key_Enter) {
+    if (ed.key == Key_Return || ed.key == Key_Enter) {
         return true;
     }
 
@@ -869,7 +867,7 @@ bool Harmony::edit(EditData& ed)
         return false;
     }
 
-    if (ed.key == Qt::Key_Return || ed.key == Qt::Key_Enter) {
+    if (ed.key == Key_Return || ed.key == Key_Enter) {
         endEdit(ed);
         return true;
     }
@@ -1031,17 +1029,17 @@ String HDegree::text() const
     if (_type == HDegreeType::UNDEF) {
         return String();
     }
-    const char* d = 0;
+    String degree;
     switch (_type) {
     case HDegreeType::UNDEF: break;
-    case HDegreeType::ADD:         d= "add";
+    case HDegreeType::ADD:         degree = u"add";
         break;
-    case HDegreeType::ALTER:       d= "alt";
+    case HDegreeType::ALTER:       degree = u"alt";
         break;
-    case HDegreeType::SUBTRACT:    d= "sub";
+    case HDegreeType::SUBTRACT:    degree = u"sub";
         break;
     }
-    String degree(d);
+
     switch (_alter) {
     case -1:          degree += u"b";
         break;
@@ -1226,7 +1224,7 @@ const ChordDescription* Harmony::fromXml(const String& kind, const std::list<HDe
         String lowerCaseK = k.toLower();     // required for xmlKind Tristan
         StringList d = cd.xmlDegrees;
         if ((lowerCaseKind == lowerCaseK) && (d == degrees)) {
-//                  LOGD("harmony found in db: %s %s -> %d", qPrintable(kind), qPrintable(degrees), cd->id);
+//                  LOGD("harmony found in db: %s %s -> %d", muPrintable(kind), muPrintable(degrees), cd->id);
             return &cd;
         }
     }
@@ -1708,7 +1706,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
                      NoteCaseType noteCase)
 {
     ChordList* chordList = score()->chordList();
-    QStack<PointF> stack;
+    std::stack<PointF> stack;
     int fontIdx    = 0;
     double _spatium = spatium();
     double mag      = magS();
@@ -1738,7 +1736,8 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
             stack.push(PointF(x, y));
         } else if (a.type == RenderAction::RenderActionType::POP) {
             if (!stack.empty()) {
-                PointF pt = stack.pop();
+                PointF pt = stack.top();
+                stack.pop();
                 x = pt.x();
                 y = pt.y();
             } else {
@@ -1778,7 +1777,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
             // German spelling - use special symbol for accidental in TPC_B_B
             // to allow it to be rendered as either Bb or B
             if (tpc == Tpc::TPC_B_B && noteSpelling == NoteSpellingType::GERMAN) {
-                context = "german_B";
+                context = u"german_B";
             }
             if (acc != "") {
                 TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
@@ -2078,9 +2077,9 @@ String Harmony::typeUserName() const
 {
     switch (_harmonyType) {
     case HarmonyType::ROMAN:
-        return qtrc("engraving", "Roman numeral");
+        return mtrc("engraving", "Roman numeral");
     case HarmonyType::NASHVILLE:
-        return qtrc("engraving", "Nashville number");
+        return mtrc("engraving", "Nashville number");
     case HarmonyType::STANDARD:
         break;
     }
@@ -2093,7 +2092,7 @@ String Harmony::typeUserName() const
 
 String Harmony::accessibleInfo() const
 {
-    return String("%1: %2").arg(typeUserName(), harmonyName());
+    return String(u"%1: %2").arg(typeUserName(), harmonyName());
 }
 
 //---------------------------------------------------------
@@ -2102,7 +2101,7 @@ String Harmony::accessibleInfo() const
 
 String Harmony::screenReaderInfo() const
 {
-    return String("%1 %2").arg(typeUserName(), generateScreenReaderInfo());
+    return String(u"%1 %2").arg(typeUserName(), generateScreenReaderInfo());
 }
 
 //---------------------------------------------------------
@@ -2118,7 +2117,7 @@ String Harmony::generateScreenReaderInfo() const
         bool hasUpper = aux.contains(u'I') || aux.contains(u'V');
         bool hasLower = aux.contains(u'i') || aux.contains(u'v');
         if (hasLower && !hasUpper) {
-            rez = String("%1 %2").arg(rez, mtrc("engraving", "lower case"));
+            rez = String(u"%1 %2").arg(rez, mtrc("engraving", "lower case"));
         }
         aux = aux.toLower();
         static std::vector<std::pair<String, String> > rnaReplacements {
@@ -2153,19 +2152,19 @@ String Harmony::generateScreenReaderInfo() const
         }
         // construct string one  character at a time
         for (size_t i = 0; i < aux.size(); ++i) {
-            rez = String("%1 %2").arg(rez).arg(aux.at(i));
+            rez = String(u"%1 %2").arg(rez).arg(aux.at(i));
         }
     }
         return rez;
     case HarmonyType::NASHVILLE:
         if (!_function.isEmpty()) {
-            rez = String("%1 %2").arg(rez, _function);
+            rez = String(u"%1 %2").arg(rez, _function);
         }
         break;
     case HarmonyType::STANDARD:
     default:
         if (_rootTpc != Tpc::TPC_INVALID) {
-            rez = String("%1 %2").arg(rez, tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+            rez = String(u"%1 %2").arg(rez, tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
         }
     }
 
@@ -2180,13 +2179,13 @@ String Harmony::generateScreenReaderInfo() const
             }
             extension += s + u' ';
         }
-        rez = String("%1 %2").arg(rez, extension);
+        rez = String(u"%1 %2").arg(rez, extension);
     } else {
-        rez = String("%1 %2").arg(rez, hTextName());
+        rez = String(u"%1 %2").arg(rez, hTextName());
     }
 
     if (_baseTpc != Tpc::TPC_INVALID) {
-        rez = String("%1 / %2").arg(rez, tpc2name(_baseTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+        rez = String(u"%1 / %2").arg(rez, tpc2name(_baseTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
     }
 
     return rez;

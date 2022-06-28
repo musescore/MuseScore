@@ -433,7 +433,7 @@ void Score::putNote(const Position& p, bool replace)
             && !_is.rest()) {
             if (st->isTabStaff(cr->tick())) {            // TAB
                 // if a note on same string already exists, update to new pitch/fret
-                foreach (Note* note, toChord(cr)->notes()) {
+                for (Note* note : toChord(cr)->notes()) {
                     if (note->string() == nval.string) {                 // if string is the same
                         // if adding a new digit will keep fret number within fret limit,
                         // add a digit to existing fret number

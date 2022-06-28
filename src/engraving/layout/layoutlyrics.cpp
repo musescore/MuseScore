@@ -64,7 +64,7 @@ static double findLyricsMaxY(const MStyle& style, Segment& s, staff_idx_t staffI
                 if (l->autoplace() && l->placeBelow()) {
                     double y = ss->skyline().south().minDistance(sk);
                     if (y > -lyricsMinTopDistance) {
-                        yMax = qMax(yMax, y + lyricsMinTopDistance);
+                        yMax = std::max(yMax, y + lyricsMinTopDistance);
                     }
                 }
             }
@@ -102,7 +102,7 @@ static double findLyricsMinY(const MStyle& style, Segment& s, staff_idx_t staffI
                 if (l->autoplace() && l->placeAbove()) {
                     double y = sk.minDistance(ss->skyline().north());
                     if (y > -lyricsMinTopDistance) {
-                        yMin = qMin(yMin, -y - lyricsMinTopDistance);
+                        yMin = std::min(yMin, -y - lyricsMinTopDistance);
                     }
                 }
             }
@@ -115,7 +115,7 @@ static double findLyricsMaxY(const MStyle& style, Measure* m, staff_idx_t staffI
 {
     double yMax = 0.0;
     for (Segment& s : m->segments()) {
-        yMax = qMax(yMax, findLyricsMaxY(style, s, staffIdx));
+        yMax = std::max(yMax, findLyricsMaxY(style, s, staffIdx));
     }
     return yMax;
 }
@@ -124,7 +124,7 @@ static double findLyricsMinY(const MStyle& style, Measure* m, staff_idx_t staffI
 {
     double yMin = 0.0;
     for (Segment& s : m->segments()) {
-        yMin = qMin(yMin, findLyricsMinY(style, s, staffIdx));
+        yMin = std::min(yMin, findLyricsMinY(style, s, staffIdx));
     }
     return yMin;
 }
@@ -242,7 +242,7 @@ void LayoutLyrics::layoutLyrics(const LayoutOptions& options, const Score* score
                                     ++nA;
                                 }
                             }
-                            VnAbove[staffIdx] = qMax(VnAbove[staffIdx], nA);
+                            VnAbove[staffIdx] = std::max(VnAbove[staffIdx], nA);
                         }
                     }
                 }
@@ -292,8 +292,8 @@ void LayoutLyrics::layoutLyrics(const LayoutOptions& options, const Score* score
                 if (!mb->isMeasure()) {
                     continue;
                 }
-                yMax = qMax<double>(yMax, findLyricsMaxY(score->style(), toMeasure(mb), staffIdx));
-                yMin = qMin(yMin, findLyricsMinY(score->style(), toMeasure(mb), staffIdx));
+                yMax = std::max<double>(yMax, findLyricsMaxY(score->style(), toMeasure(mb), staffIdx));
+                yMin = std::min(yMin, findLyricsMinY(score->style(), toMeasure(mb), staffIdx));
             }
             for (MeasureBase* mb : system->measures()) {
                 if (!mb->isMeasure()) {

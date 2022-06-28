@@ -457,7 +457,7 @@ void Score::deletePostponed()
             }
         }
     }
-    qDeleteAll(_updateState._deleteList);
+    DeleteAll(_updateState._deleteList);
     _updateState._deleteList.clear();
 }
 
@@ -491,7 +491,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
     if (spanner->anchor() == Spanner::Anchor::SEGMENT) {
         spanner->setTick(segment->tick());
         Fraction lastTick = lastMeasure()->tick() + lastMeasure()->ticks();
-        Fraction tick2 = qMin(segment->measure()->tick() + segment->measure()->ticks(), lastTick);
+        Fraction tick2 = std::min(segment->measure()->tick() + segment->measure()->ticks(), lastTick);
         spanner->setTick2(tick2);
     } else {      // Anchor::MEASURE, Anchor::CHORD, Anchor::NOTE
         Measure* m = toMeasure(mb);
@@ -1407,7 +1407,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                     undoRemoveElement(tremolo);
                 }
             }
-            foreach (Note* n, c->notes()) {
+            for (Note* n : c->notes()) {
                 if (n->tieFor()) {
                     undoRemoveElement(n->tieFor());
                 }
@@ -1747,7 +1747,7 @@ void Score::upDown(bool up, UpDownMode mode)
             // because they're now harder to be re-entered due to the revised note-input workflow
             if (mode != UpDownMode::OCTAVE) {
                 auto l = oNote->linkList();
-                for (EngravingObject* e : qAsConst(l)) {
+                for (EngravingObject* e : l) {
                     Note* ln = toNote(e);
                     if (ln->accidental()) {
                         undo(new RemoveElement(ln->accidental()));
@@ -1807,7 +1807,7 @@ void Score::upDownDelta(int pitchDelta)
 
 void Score::toggleArticulation(SymId attr)
 {
-    QSet<Chord*> set;
+    std::set<Chord*> set;
     int numAdded = 0;
     int numRemoved = 0;
     for (EngravingItem* el : selection().elements()) {
@@ -1816,7 +1816,7 @@ void Score::toggleArticulation(SymId attr)
             // apply articulation on a given chord only once
             if (el->isNote()) {
                 cr = toNote(el)->chord();
-                if (set.contains(cr)) {
+                if (mu::contains(set, cr)) {
                     continue;
                 }
             }
@@ -1868,7 +1868,7 @@ void Score::toggleAccidental(AccidentalType at, const EditData& ed)
 
 void Score::changeAccidental(AccidentalType idx)
 {
-    foreach (Note* note, selection().noteList()) {
+    for (Note* note : selection().noteList()) {
         changeAccidental(note, idx);
     }
 }
@@ -2217,7 +2217,7 @@ void Score::cmdResetTextStyleOverrides()
         Pid::ALIGN
     };
 
-    for (Page* page : qAsConst(pages())) {
+    for (Page* page : pages()) {
         auto elements = page->elements();
 
         for (EngravingItem* element : elements) {
@@ -3095,10 +3095,10 @@ void Score::cmdExplode()
                 EngravingItem* e = s->element(srcTrack);
                 if (e && e->type() == ElementType::CHORD) {
                     Chord* c = toChord(e);
-                    n = qMax(n, int(c->notes().size()));
+                    n = std::max(n, int(c->notes().size()));
                 }
             }
-            lastStaff = qMin(nstaves(), srcStaff + n);
+            lastStaff = std::min(nstaves(), srcStaff + n);
         }
 
         const ByteArray mimeData(selection().mimeData());
@@ -3126,7 +3126,7 @@ void Score::cmdExplode()
                     // keep note "i" from top, which is backwards from nnotes - 1
                     // reuse notes if there are more instruments than notes
                     size_t stavesPerNote = std::max((lastStaff - srcStaff) / nnotes, static_cast<size_t>(1));
-                    size_t keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), static_cast<size_t>(0));
+                    size_t keepIndex = std::max(nnotes - 1 - (i / stavesPerNote), static_cast<size_t>(0));
                     Note* keepNote = c->notes()[keepIndex];
                     for (Note* n : notes) {
                         if (n != keepNote) {
@@ -3140,7 +3140,7 @@ void Score::cmdExplode()
         track_idx_t sTracks[VOICES];
         track_idx_t dTracks[VOICES];
         if (srcStaff == lastStaff - 1) {
-            lastStaff = qMin(nstaves(), srcStaff + VOICES);
+            lastStaff = std::min(nstaves(), srcStaff + VOICES);
         }
 
         for (voice_idx_t i = 0; i < VOICES; i++) {
@@ -4370,7 +4370,7 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
 
 void Score::cmdToggleVisible()
 {
-    QSet<EngravingItem*> spanners;
+    std::set<EngravingItem*> spanners;
     for (EngravingItem* e : selection().elements()) {
         if (e->isBracket()) {       // ignore
             continue;
@@ -4380,7 +4380,7 @@ void Score::cmdToggleVisible()
             continue;
         }
         bool spannerSegment = e->isSpannerSegment();
-        if (!spannerSegment || !spanners.contains(toSpannerSegment(e)->spanner())) {
+        if (!spannerSegment || !mu::contains(spanners, static_cast<EngravingItem*>(toSpannerSegment(e)->spanner()))) {
             e->undoChangeProperty(Pid::VISIBLE, !e->getProperty(Pid::VISIBLE).toBool());
         }
         if (spannerSegment) {
@@ -4424,7 +4424,7 @@ void Score::cmdToggleAutoplace(bool all)
         undoChangeStyleVal(Sid::autoplaceEnabled, val);
         setLayoutAll();
     } else {
-        QSet<EngravingItem*> spanners;
+        std::set<EngravingItem*> spanners;
         for (EngravingItem* e : selection().elements()) {
             if (e->isSpannerSegment()) {
                 if (EngravingItem* ee = e->propertyDelegate(Pid::AUTOPLACE)) {
@@ -4433,7 +4433,7 @@ void Score::cmdToggleAutoplace(bool all)
                 // spanner segments may each have their own autoplace setting
                 // but if they delegate to spanner, only toggle once
                 if (e->isSpanner()) {
-                    if (spanners.contains(e)) {
+                    if (mu::contains(spanners, e)) {
                         continue;
                     }
                     spanners.insert(e);

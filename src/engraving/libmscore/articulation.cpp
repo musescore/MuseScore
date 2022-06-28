@@ -52,13 +52,13 @@ static const ElementStyle articulationStyle {
 };
 
 static const std::map<Articulation::TextType, Articulation::TextTypeMapping> artTypeToInfo {
-    { Articulation::TextType::SLAP, { String("S"), String("Slap") } },
-    { Articulation::TextType::POP, { String("P"), String("Pop") } },
+    { Articulation::TextType::SLAP, { String(u"S"), String(u"Slap") } },
+    { Articulation::TextType::POP, { String(u"P"), String(u"Pop") } },
 };
 
 static const std::map<String, Articulation::TextType> artTextToType {
-    { String("Slap"), Articulation::TextType::SLAP },
-    { String("Pop"), Articulation::TextType::POP },
+    { String(u"Slap"), Articulation::TextType::SLAP },
+    { String(u"Pop"), Articulation::TextType::POP },
 };
 
 //---------------------------------------------------------
@@ -167,7 +167,7 @@ bool Articulation::readProperties(XmlReader& e)
 
     if (tag == "subtype") {
         AsciiStringView s = e.readAsciiText();
-        String typeName = String(s.ascii());
+        String typeName = String::fromAscii(s.ascii());
         if (artTextToType.find(typeName) != artTextToType.end()) {
             m_textType = artTextToType.at(typeName);
         } else {
@@ -266,7 +266,7 @@ void Articulation::draw(mu::draw::Painter* painter) const
         mu::draw::Font scaledFont(m_font);
         scaledFont.setPointSizeF(m_font.pointSizeF() * magS() * MScore::pixelRatio);
         painter->setFont(scaledFont);
-        painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, artTypeToInfo.at(m_textType).text);
+        painter->drawText(bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, artTypeToInfo.at(m_textType).text);
     } else {
         drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
     }
@@ -620,7 +620,6 @@ Sid Articulation::getPropertyStyle(Pid id) const
         }
     }
         assert(false);           // should never be reached
-        Q_FALLTHROUGH();
     default:
         return Sid::NOSTYLE;
     }
@@ -743,7 +742,7 @@ bool Articulation::isOrnament(int subtype)
 
 String Articulation::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
 }
 
 //---------------------------------------------------------

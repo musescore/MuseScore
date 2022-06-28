@@ -106,7 +106,7 @@ void StringData::write(XmlWriter& xml) const
 {
     xml.startElement("StringData");
     xml.tag("frets", _frets);
-    foreach (instrString strg, stringTable) {
+    for (const instrString& strg : stringTable) {
         if (strg.open) {
             xml.tag("string open=\"1\"", strg.pitch);
         } else {

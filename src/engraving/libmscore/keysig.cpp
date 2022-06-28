@@ -232,7 +232,7 @@ void KeySig::layout()
         }
     } else {
         int accidentals = 0, naturals = 0;
-        switch (qAbs(t1)) {
+        switch (std::abs(t1)) {
         case 7: accidentals = 0x7f;
             break;
         case 6: accidentals = 0x3f;
@@ -289,7 +289,7 @@ void KeySig::layout()
             if (t2 == Key::C) {
                 naturalsOn = false;
             } else {
-                switch (qAbs(int(t2))) {
+                switch (std::abs(int(t2))) {
                 case 7: naturals = 0x7f;
                     break;
                 case 6: naturals = 0x3f;
@@ -423,7 +423,7 @@ EngravingItem* KeySig::drop(EditData& data)
         }
     } else {
         // apply to all staves:
-        foreach (Staff* s, score()->masterScore()->staves()) {
+        for (Staff* s : score()->masterScore()->staves()) {
             score()->undoChangeKeySig(s, tick(), k);
         }
     }
@@ -808,13 +808,13 @@ String KeySig::accessibleInfo() const
 {
     String keySigType;
     if (isAtonal()) {
-        return String("%1: %2").arg(EngravingItem::accessibleInfo(), mtrc("engraving", keyNames[15]));
+        return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), mtrc("engraving", keyNames[15]));
     } else if (isCustom()) {
         return mtrc("engraving", "%1: Custom").arg(EngravingItem::accessibleInfo());
     }
 
     if (key() == Key::C) {
-        return String("%1: %2").arg(EngravingItem::accessibleInfo(), mtrc("engraving", keyNames[14]));
+        return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), mtrc("engraving", keyNames[14]));
     }
     int keyInt = static_cast<int>(key());
     if (keyInt < 0) {
@@ -822,6 +822,6 @@ String KeySig::accessibleInfo() const
     } else {
         keySigType = mtrc("engraving", keyNames[(keyInt - 1) * 2]);
     }
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), keySigType);
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), keySigType);
 }
 }

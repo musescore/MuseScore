@@ -401,8 +401,8 @@ Spanner::Spanner(const Spanner& s)
 
 Spanner::~Spanner()
 {
-    qDeleteAll(segments);
-    qDeleteAll(unusedSegments);
+    DeleteAll(segments);
+    DeleteAll(unusedSegments);
 }
 
 //---------------------------------------------------------
@@ -1369,8 +1369,8 @@ void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegm
 
 void Spanner::eraseSpannerSegments()
 {
-    qDeleteAll(segments);
-    qDeleteAll(unusedSegments);
+    DeleteAll(segments);
+    DeleteAll(unusedSegments);
     segments.clear();
     unusedSegments.clear();
 }

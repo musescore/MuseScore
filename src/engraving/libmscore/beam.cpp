@@ -128,11 +128,11 @@ Beam::~Beam()
     //
     // delete all references from chords
     //
-    for (ChordRest* cr : qAsConst(_elements)) {
+    for (ChordRest* cr : _elements) {
         cr->setBeam(0);
     }
-    qDeleteAll(_beamSegments);
-    qDeleteAll(fragments);
+    DeleteAll(_beamSegments);
+    DeleteAll(fragments);
 }
 
 //---------------------------------------------------------
@@ -258,7 +258,7 @@ void Beam::draw(mu::draw::Painter* painter) const
     // (expression can be simplified?)
 
     const LineF bs = _beamSegments.front()->line;
-    double d  = (qAbs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
+    double d  = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
     if (_beamSegments.size() > 1 && d > M_PI / 6.0) {
         d = M_PI / 6.0;
     }
@@ -309,7 +309,7 @@ void Beam::layout1()
         _cross = false;
         _minMove = 0;
         _maxMove = 0;
-        for (ChordRest* cr : qAsConst(_elements)) {
+        for (ChordRest* cr : _elements) {
             if (cr->isChord()) {
                 if (!_maxDuration.isValid() || (_maxDuration < cr->durationType())) {
                     _maxDuration = cr->durationType();
@@ -325,14 +325,14 @@ void Beam::layout1()
         } else if (_isGrace) {
             _up = true;
         } else {
-            for (ChordRest* cr :qAsConst(_elements)) {
+            for (ChordRest* cr :_elements) {
                 if (cr->isChord()) {
                     _up = toChord(cr)->up();
                     break;
                 }
             }
         }
-        for (ChordRest* cr : qAsConst(_elements)) {
+        for (ChordRest* cr : _elements) {
             cr->computeUp();
             if (cr->isChord()) {
                 toChord(cr)->layoutStem();
@@ -347,15 +347,15 @@ void Beam::layout1()
 
     _notes.clear();
     staff_idx_t staffIdx = mu::nidx;
-    for (ChordRest* cr : qAsConst(_elements)) {
+    for (ChordRest* cr : _elements) {
         double m = cr->isSmall() ? score()->styleD(Sid::smallNoteMag) : 1.0;
-        mag = qMax(mag, m);
+        mag = std::max(mag, m);
         if (cr->isChord()) {
             Chord* chord = toChord(cr);
             staffIdx = chord->vStaffIdx();
             int i = chord->staffMove();
-            _minMove = qMin(_minMove, i);
-            _maxMove = qMax(_maxMove, i);
+            _minMove = std::min(_minMove, i);
+            _maxMove = std::max(_maxMove, i);
 
             for (int distance : chord->noteDistances()) {
                 _notes.push_back(distance);
@@ -415,7 +415,7 @@ void Beam::layout1()
 
     _slope = 0.0;
 
-    for (ChordRest* cr : qAsConst(_elements)) {
+    for (ChordRest* cr : _elements) {
         const bool staffMove = cr->isChord() ? toChord(cr)->staffMove() : false;
         if (!_cross || !staffMove) {
             if (cr->up() != _up) {
@@ -442,7 +442,7 @@ void Beam::layout()
     std::vector<ChordRest*> crl;
 
     size_t n = 0;
-    for (ChordRest* cr : qAsConst(_elements)) {
+    for (ChordRest* cr : _elements) {
         if (cr->measure()->system() != system) {
             SpannerSegmentType st;
             if (n == 0) {
@@ -475,7 +475,7 @@ void Beam::layout()
 
         double lw2 = _beamWidth / 2.0;
 
-        for (const BeamSegment* bs : qAsConst(_beamSegments)) {
+        for (const BeamSegment* bs : _beamSegments) {
             PolygonF a(4);
             a[0] = PointF(bs->line.x1(), bs->line.y1());
             a[1] = PointF(bs->line.x2(), bs->line.y2());
@@ -496,9 +496,9 @@ int Beam::getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int sta
     // offset middle line by 1 or -1 since the anchor is at the middle of the beam,
     // not at the tip of the stem
     if (_up) {
-        return qMin(startMiddleLine, endMiddleLine) + 1;
+        return std::min(startMiddleLine, endMiddleLine) + 1;
     }
-    return qMax(startMiddleLine, endMiddleLine) - 1;
+    return std::max(startMiddleLine, endMiddleLine) - 1;
 }
 
 int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const
@@ -516,7 +516,7 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
     // p.s. _notes is a sorted vector
     if (_notes.size() > 2) {
         if (_up) {
-            int higherEnd = qMin(startNote, endNote);
+            int higherEnd = std::min(startNote, endNote);
             if (higherEnd > _notes[0]) {
                 return 0;
             }
@@ -542,7 +542,7 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
                 }
             }
         } else {
-            int lowerEnd = qMax(startNote, endNote);
+            int lowerEnd = std::max(startNote, endNote);
             if (lowerEnd < _notes[_notes.size() - 1]) {
                 return 0;
             }
@@ -574,8 +574,8 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
     int maxSlope = getMaxSlope();
 
     // calculate max slope based on note interval
-    int interval = qMin(qAbs(endNote - startNote), (int)_maxSlopes.size() - 1);
-    return qMin(maxSlope, _maxSlopes[interval]) * (_up ? 1 : -1);
+    int interval = std::min(std::abs(endNote - startNote), (int)_maxSlopes.size() - 1);
+    return std::min(maxSlope, _maxSlopes[interval]) * (_up ? 1 : -1);
 }
 
 int Beam::getMaxSlope() const
@@ -787,9 +787,9 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Bre
         if (previous->isChord()) {
             previousChordLevel = toChord(previous)->beams();
             if (isAfter32Break) {
-                previousChordLevel = qMin(previousChordLevel, 1);
+                previousChordLevel = std::min(previousChordLevel, 1);
             } else if (isAfter64Break) {
-                previousChordLevel = qMin(previousChordLevel, 2);
+                previousChordLevel = std::min(previousChordLevel, 2);
             }
             break;
         }
@@ -906,7 +906,7 @@ void Beam::calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, in
 
 void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
 {
-    qDeleteAll(_beamSegments);
+    DeleteAll(_beamSegments);
     _beamSegments.clear();
 
     bool levelHasBeam = false;
@@ -1015,7 +1015,7 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
                     if (isFlat) {
                         dictator += _up ? -1 : 1;
                         pointer += _up ? -1 : 1;
-                    } else if (qAbs(dictator - pointer) == 1) {
+                    } else if (std::abs(dictator - pointer) == 1) {
                         dictator += _up ? -1 : 1;
                     } else {
                         pointer += _up ? -1 : 1;
@@ -1134,7 +1134,7 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCount, int
         int dictatorInner = dictator + (beamCount - 1) * (_up ? _beamSpacing : -_beamSpacing);
         // use dictatorInner for both to simulate flat beams
         int outerDictatorOffset = getOuterBeamPosOffset(dictatorInner, beamCount, staffLines);
-        if (qAbs(outerDictatorOffset) <= _beamSpacing) {
+        if (std::abs(outerDictatorOffset) <= _beamSpacing) {
             has3BeamsInsideStaff = false;
             break;
         }
@@ -1176,7 +1176,7 @@ void Beam::addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int mi
     if (interval == 0 || (beamCount > 2 && _beamSpacing != 4) || noSlope()) {
         return;
     }
-    bool isOnMiddleLine = pointer == middleLine && (qAbs(pointer - dictator) < 2);
+    bool isOnMiddleLine = pointer == middleLine && (std::abs(pointer - dictator) < 2);
     if (isOnMiddleLine) {
         if (interval == 1 || (beamCount == 2 && _beamSpacing != 4)) {
             dictator = middleLine + (_up ? -1 : 1);
@@ -1328,7 +1328,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
                         }
                         bottomLast = c;
                     }
-                    maxY = qMin(maxY, chordBeamAnchor(toChord(c)).y());
+                    maxY = std::min(maxY, chordBeamAnchor(toChord(c)).y());
                 } else {
                     // this chord is on the top staff
                     if (penultimateTopIsSame) {
@@ -1354,7 +1354,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
                         }
                         topLast = c;
                     }
-                    minY = qMax(minY, chordBeamAnchor(toChord(c)).y());
+                    minY = std::max(minY, chordBeamAnchor(toChord(c)).y());
                 }
             }
             _startAnchor.ry() = (maxY + minY) / 2;
@@ -1473,7 +1473,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
             startNote = _up ? startChord->upString() : startChord->downString();
             endNote = _up ? endChord->upString() : endChord->downString();
         }
-        const int interval = qAbs(startNote - endNote);
+        const int interval = std::abs(startNote - endNote);
         const bool isStartDictator = _up ? startNote < endNote : startNote > endNote;
         const double quarterSpace = spatium() / 4;
         PointF startAnchor = _startAnchor - pagePos();
@@ -1536,7 +1536,7 @@ void Beam::spatiumChanged(double oldValue, double newValue)
     int idx = (!_up) ? 0 : 1;
     if (_userModified[idx]) {
         double diff = newValue / oldValue;
-        for (BeamFragment* f : qAsConst(fragments)) {
+        for (BeamFragment* f : fragments) {
             f->py1[idx] = f->py1[idx] * diff;
             f->py2[idx] = f->py2[idx] * diff;
         }
@@ -2029,14 +2029,14 @@ void Beam::addSkyline(Skyline& sk)
     }
     double lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
     const LineF bs = _beamSegments.front()->line;
-    double d  = (qAbs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
+    double d  = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
     if (_beamSegments.size() > 1 && d > M_PI / 6.0) {
         d = M_PI / 6.0;
     }
     double ww      = lw2 / sin(M_PI_2 - atan(d));
     double _spatium = spatium();
 
-    for (const BeamSegment* beamSegment : qAsConst(_beamSegments)) {
+    for (const BeamSegment* beamSegment : _beamSegments) {
         double x = beamSegment->line.x1();
         double y = beamSegment->line.y1();
         double w = beamSegment->line.x2() - x;
@@ -2170,7 +2170,7 @@ void Beam::initBeamEditData(EditData& ed)
     double ydiff = 100000000.0;
     int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     int i = 0;
-    for (BeamFragment* f : qAsConst(fragments)) {
+    for (BeamFragment* f : fragments) {
         double d = fabs(f->py1[idx] - pt.y());
         if (d < ydiff) {
             ydiff = d;

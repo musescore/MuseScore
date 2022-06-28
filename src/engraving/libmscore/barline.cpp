@@ -305,7 +305,7 @@ BarLine::BarLine(const BarLine& bl)
 
 BarLine::~BarLine()
 {
-    qDeleteAll(_el);
+    DeleteAll(_el);
 }
 
 void BarLine::setParent(Segment* parent)
@@ -1007,7 +1007,7 @@ void BarLine::startEdit(EditData& ed)
 
 bool BarLine::isEditAllowed(EditData& ed) const
 {
-    return (ed.key == Qt::Key_Up && spanStaff()) || (ed.key == Qt::Key_Down && !spanStaff())
+    return (ed.key == Key_Up && spanStaff()) || (ed.key == Key_Down && !spanStaff())
            || EngravingItem::isEditAllowed(ed);
 }
 
@@ -1018,7 +1018,7 @@ bool BarLine::edit(EditData& ed)
     }
 
     bool local = ed.control() || segment()->isBarLineType() || spanStaff() != score()->staff(staffIdx())->barLineSpan();
-    if ((ed.key == Qt::Key_Up && spanStaff()) || (ed.key == Qt::Key_Down && !spanStaff())) {
+    if ((ed.key == Key_Up && spanStaff()) || (ed.key == Key_Down && !spanStaff())) {
         if (local) {
             BarLine* b = toBarLine(segment()->element(staffIdx() * VOICES));
             if (b) {
@@ -1580,7 +1580,7 @@ EngravingItem* BarLine::prevSegmentElement()
 
 String BarLine::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), BarLine::userTypeName(barLineType()));
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), BarLine::userTypeName(barLineType()));
 }
 
 //---------------------------------------------------------
@@ -1596,7 +1596,7 @@ String BarLine::accessibleExtraInfo() const
         if (!score()->selectionFilter().canSelect(e)) {
             continue;
         }
-        rez = String("%1 %2").arg(rez, e->screenReaderInfo());
+        rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
     }
 
     for (const EngravingItem* e : seg->annotations()) {
@@ -1604,7 +1604,7 @@ String BarLine::accessibleExtraInfo() const
             continue;
         }
         if (e->track() == track()) {
-            rez = String("%1 %2").arg(rez, e->screenReaderInfo());
+            rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
         }
     }
     Measure* m = seg->measure();
@@ -1616,12 +1616,12 @@ String BarLine::accessibleExtraInfo() const
                 continue;
             }
             if (e->type() == ElementType::JUMP) {
-                rez= String("%1 %2").arg(rez, e->screenReaderInfo());
+                rez= String(u"%1 %2").arg(rez, e->screenReaderInfo());
             }
             if (e->type() == ElementType::MARKER) {
                 const Marker* m1 = toMarker(e);
                 if (m1->markerType() == Marker::Type::FINE) {
-                    rez = String("%1 %2").arg(rez, e->screenReaderInfo());
+                    rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
                 }
             }
         }
@@ -1636,7 +1636,7 @@ String BarLine::accessibleExtraInfo() const
                     if (toMarker(e)->markerType() == Marker::Type::FINE) {
                         continue;             //added above^
                     }
-                    rez = String("%1 %2").arg(rez, e->screenReaderInfo());
+                    rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
                 }
             }
         }

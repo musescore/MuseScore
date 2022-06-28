@@ -19,33 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "cryptographichash.h"
 
-#include "qimagepainterprovider.h"
+#include <QCryptographicHash>
 
-#include "log.h"
+using namespace mu;
 
-namespace mu::draw {
-QImagePainterProvider::QImagePainterProvider(std::shared_ptr<Pixmap> px)
-    : QPainterProvider(new QPainter()), m_px(px)
+static QCryptographicHash::Algorithm toAlgorithm(CryptographicHash::Algorithm a)
 {
-    m_image = Pixmap::toQPixmap(*px.get()).toImage();
-    m_painter->begin(&m_image);
+    switch (a) {
+    case CryptographicHash::Algorithm::Md4: return QCryptographicHash::Algorithm::Md4;
+    }
+    return QCryptographicHash::Algorithm::Md4;
 }
 
-QImagePainterProvider::~QImagePainterProvider()
+ByteArray CryptographicHash::hash(const ByteArray& data, Algorithm alg) const
 {
-    delete m_painter;
-}
-
-bool QImagePainterProvider::endTarget(bool endDraw)
-{
-    UNUSED(endDraw)
-    * m_px = Pixmap::fromQPixmap(QPixmap::fromImage(m_image));
-    return true;
-}
-
-IPaintProviderPtr QImagePainterProvider::make(std::shared_ptr<Pixmap> px)
-{
-    return std::make_shared<QImagePainterProvider>(px);
-}
+    QCryptographicHash h(toAlgorithm(alg));
+    h.addData(data.toQByteArrayNoCopy());
+    return ByteArray::fromQByteArray(h.result());
 }

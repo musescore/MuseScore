@@ -417,7 +417,7 @@ void TimeSig::setFrom(const TimeSig* ts)
 
 String TimeSig::ssig() const
 {
-    return String("%1/%2").arg(_sig.numerator()).arg(_sig.denominator());
+    return String(u"%1/%2").arg(_sig.numerator()).arg(_sig.denominator());
 }
 
 //---------------------------------------------------------
@@ -578,7 +578,7 @@ String TimeSig::accessibleInfo() const
     default:
         timeSigString = mtrc("engraving", "%1/%2 time").arg(numerator(), denominator());
     }
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), timeSigString);
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), timeSigString);
 }
 
 //---------------------------------------------------------

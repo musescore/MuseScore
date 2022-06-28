@@ -159,7 +159,7 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
             return;
         }
         // show up to 6 lines
-        lines = qMin(staffType()->lines(), 6);
+        lines = std::min(staffType()->lines(), 6);
     }
     // calculate starting point Y for the lines from half the icon height (2.5) so staff lines appear vertically centered
     double startY = 1.25 - (lines - 1) * lineDist * 0.5;

@@ -112,7 +112,7 @@ void RehearsalMark::layout()
                 // special case for right aligned rehearsal marks at start of system
                 // left align with start of measure if that is further left
                 if (align() == AlignH::RIGHT) {
-                    rxpos() = qMin(rpos().x(), measureX + width());
+                    rxpos() = std::min(rpos().x(), measureX + width());
                 }
             }
         }

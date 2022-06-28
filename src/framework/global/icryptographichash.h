@@ -19,33 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_GLOBAL_ICRYPTOGRAPHICHASH_H
+#define MU_GLOBAL_ICRYPTOGRAPHICHASH_H
 
-#include "qimagepainterprovider.h"
+#include "modularity/imoduleexport.h"
+#include "types/bytearray.h"
 
-#include "log.h"
-
-namespace mu::draw {
-QImagePainterProvider::QImagePainterProvider(std::shared_ptr<Pixmap> px)
-    : QPainterProvider(new QPainter()), m_px(px)
+namespace mu {
+class ICryptographicHash : MODULE_EXPORT_INTERFACE
 {
-    m_image = Pixmap::toQPixmap(*px.get()).toImage();
-    m_painter->begin(&m_image);
+    INTERFACE_ID(ICryptographicHash)
+public:
+    virtual ~ICryptographicHash() = default;
+
+    enum class Algorithm {
+        Md4
+    };
+
+    virtual ByteArray hash(const ByteArray& data, Algorithm alg) const = 0;
+};
 }
 
-QImagePainterProvider::~QImagePainterProvider()
-{
-    delete m_painter;
-}
-
-bool QImagePainterProvider::endTarget(bool endDraw)
-{
-    UNUSED(endDraw)
-    * m_px = Pixmap::fromQPixmap(QPixmap::fromImage(m_image));
-    return true;
-}
-
-IPaintProviderPtr QImagePainterProvider::make(std::shared_ptr<Pixmap> px)
-{
-    return std::make_shared<QImagePainterProvider>(px);
-}
-}
+#endif // MU_GLOBAL_ICRYPTOGRAPHICHASH_H

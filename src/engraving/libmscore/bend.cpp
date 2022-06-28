@@ -177,7 +177,7 @@ void Bend::layout()
         m_notePos = PointF();
     } else {
         m_notePos   = note->pos();
-        m_notePos.ry() = qMax(m_notePos.y(), 0.0);
+        m_notePos.ry() = std::max(m_notePos.y(), 0.0);
         m_noteWidth = note->width();
     }
     RectF bb;
@@ -210,7 +210,7 @@ void Bend::layout()
             int idx = (pitch + 12) / 25;
             const char* l = label[idx];
             bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
-                                     Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip,
+                                     draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
                                      String::fromAscii(l)));
             y = y2;
         }
@@ -237,7 +237,7 @@ void Bend::layout()
             int idx = (m_points[pt + 1].pitch + 12) / 25;
             const char* l = label[idx];
             bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
-                                     Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip,
+                                     draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
                                      String::fromAscii(l)));
         } else {
             // down
@@ -303,7 +303,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             int idx = (pitch + 12) / 25;
             const char* l = label[idx];
             painter->drawText(RectF(x2, y2, .0, .0),
-                              Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip,
+                              draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
                               String::fromAscii(l));
 
             y = y2;
@@ -335,7 +335,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             const char* l = label[idx];
             double ty = y2;       // - _spatium;
             painter->drawText(RectF(x2, ty, .0, .0),
-                              Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip,
+                              draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
                               String::fromAscii(l));
         } else {
             // down

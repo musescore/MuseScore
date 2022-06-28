@@ -43,7 +43,7 @@ using namespace mu::engraving::rw;
 bool Read400::read400(Score* score, XmlReader& e, ReadContext& ctx)
 {
     if (!e.readNextStartElement()) {
-        LOGD("%s: xml file is empty", qPrintable(e.docName()));
+        LOGD("%s: xml file is empty", muPrintable(e.docName()));
         return false;
     }
 
@@ -65,7 +65,7 @@ bool Read400::read400(Score* score, XmlReader& e, ReadContext& ctx)
             }
         }
     } else {
-        LOGD("%s: invalid structure of xml file", qPrintable(e.docName()));
+        LOGD("%s: invalid structure of xml file", muPrintable(e.docName()));
         return false;
     }
 
@@ -213,7 +213,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
             } else if (s == "system") {
                 score->setLayoutMode(LayoutMode::SYSTEM);
             } else {
-                LOGD("layoutMode: %s", qPrintable(s));
+                LOGD("layoutMode: %s", muPrintable(s));
             }
         } else {
             e.unknown();
@@ -222,7 +222,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
     ctx.reconnectBrokenConnectors();
     if (e.error() != XmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
-             qPrintable(e.docName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
+             muPrintable(e.docName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
         if (e.error() == XmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {

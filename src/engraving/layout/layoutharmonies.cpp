@@ -113,10 +113,10 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
                     continue;
                 }
                 if (e->placeAbove() && above) {
-                    ref = first ? e->y() : qMin(ref, e->y());
+                    ref = first ? e->y() : std::min(ref, e->y());
                     first = false;
                 } else if (e->placeBelow() && !above) {
-                    ref = first ? e->y() : qMax(ref, e->y());
+                    ref = first ? e->y() : std::max(ref, e->y());
                     first = false;
                 }
             }

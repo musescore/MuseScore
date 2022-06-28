@@ -248,7 +248,6 @@ struct MScoreError {
 
 class MScore
 {
-    static String _globalShare;
     static int _hRaster, _vRaster;
     static bool _verticalOrientation;
 
@@ -260,7 +259,6 @@ public:
     static void init();
     static void registerUiTypes();
 
-    static const String& globalShare() { return _globalShare; }
     static double hRaster() { return _hRaster; }
     static double vRaster() { return _vRaster; }
     static void setHRaster(int val) { _hRaster = val; }

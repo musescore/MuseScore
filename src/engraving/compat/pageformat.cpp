@@ -89,7 +89,7 @@ void PageFormat::read206(XmlReader& e)
     }
     double w1        = _size.width() - _oddLeftMargin - _oddRightMargin;
     double w2        = _size.width() - _evenLeftMargin - _evenRightMargin;
-    _printableWidth = qMin(w1, w2);       // silently adjust right margins
+    _printableWidth = std::min(w1, w2);       // silently adjust right margins
 }
 
 static void initPageFormat(MStyle* style, PageFormat* pf)

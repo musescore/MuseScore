@@ -136,6 +136,11 @@ int Char::digitValue() const
     return m_ch - '0';
 }
 
+bool Char::isPunct(char16_t c)
+{
+    return QChar::isPunct(c);
+}
+
 char16_t Char::toLower(char16_t ch)
 {
     //! TODO

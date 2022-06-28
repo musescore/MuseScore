@@ -30,6 +30,7 @@
 #include "style/style.h"
 #include "rw/xml.h"
 #include "layout/layoutcontext.h"
+#include "realfn.h"
 
 #include "factory.h"
 #include "measure.h"
@@ -70,7 +71,7 @@ namespace mu::engraving {
 
 SysStaff::~SysStaff()
 {
-    qDeleteAll(instrumentNames);
+    DeleteAll(instrumentNames);
 }
 
 //---------------------------------------------------------
@@ -127,8 +128,8 @@ System::~System()
             mb->resetExplicitParent();
         }
     }
-    qDeleteAll(_staves);
-    qDeleteAll(_brackets);
+    DeleteAll(_staves);
+    DeleteAll(_brackets);
     delete _systemDividerLeft;
     delete _systemDividerRight;
 }
@@ -308,13 +309,13 @@ double System::layoutBrackets(const LayoutContext& ctx)
                 }
                 Bracket* b = createBracket(ctx, bi, i, static_cast<int>(staffIdx), bl, this->firstMeasure());
                 if (b != nullptr) {
-                    bracketWidth[i] = qMax(bracketWidth[i], b->width());
+                    bracketWidth[i] = std::max(bracketWidth[i], b->width());
                 }
             }
         }
     }
 
-    for (Bracket* b : qAsConst(bl)) {
+    for (Bracket* b : bl) {
         delete b;
     }
 
@@ -369,14 +370,14 @@ void System::layoutSystem(const LayoutContext& ctx, double xo1, const bool isFir
     double maxNamesWidth = instrumentNamesWidth();
 
     if (isFirstSystem && firstSystemIndent) {
-        maxNamesWidth = qMax(maxNamesWidth, styleP(Sid::firstSystemIndentationValue) * mag());
+        maxNamesWidth = std::max(maxNamesWidth, styleP(Sid::firstSystemIndentationValue) * mag());
     }
 
     double maxBracketsWidth = totalBracketOffset(ctx);
     double bracketsWidth = layoutBrackets(ctx);
     double bracketWidthDifference = maxBracketsWidth - bracketsWidth;
 
-    if (qFuzzyIsNull(maxNamesWidth)) {
+    if (RealIsNull(maxNamesWidth)) {
         if (score()->styleB(Sid::alignSystemToMargin)) {
             _leftMargin = bracketWidthDifference;
         } else {
@@ -419,8 +420,8 @@ void System::layoutSystem(const LayoutContext& ctx, double xo1, const bool isFir
     //     be hidden, so layout all instrument names
     //---------------------------------------------------
 
-    for (SysStaff* s : qAsConst(_staves)) {
-        for (InstrumentName* t : qAsConst(s->instrumentNames)) {
+    for (SysStaff* s : _staves) {
+        for (InstrumentName* t : s->instrumentNames) {
             t->layout();
 
             switch (t->align().horizontal) {
@@ -467,7 +468,7 @@ void System::setMeasureHeight(double height)
 
 void System::layoutBracketsVertical()
 {
-    for (Bracket* b : qAsConst(_brackets)) {
+    for (Bracket* b : _brackets) {
         int staffIdx1 = static_cast<int>(b->firstStaff());
         int staffIdx2 = static_cast<int>(b->lastStaff());
         double sy = 0;                           // assume bracket not visible
@@ -517,7 +518,7 @@ void System::layoutInstrumentNames()
             // move the InstrumentName elements to the first visible staff of the part.
             if (visible != staffIdx) {
                 SysStaff* vs = staff(visible);
-                for (InstrumentName* t : qAsConst(s->instrumentNames)) {
+                for (InstrumentName* t : s->instrumentNames) {
                     t->setTrack(visible * VOICES);
                     t->setSysStaff(vs);
                     vs->instrumentNames.push_back(t);
@@ -526,7 +527,7 @@ void System::layoutInstrumentNames()
                 s = vs;
             }
 
-            for (InstrumentName* t : qAsConst(s->instrumentNames)) {
+            for (InstrumentName* t : s->instrumentNames) {
                 //
                 // override Text->layout()
                 //
@@ -707,7 +708,7 @@ size_t System::getBracketsColumnsCount()
     size_t nstaves = _staves.size();
     for (staff_idx_t idx = 0; idx < nstaves; ++idx) {
         for (auto bi : score()->staff(idx)->brackets()) {
-            columns = qMax(columns, bi->column() + 1);
+            columns = std::max(columns, bi->column() + 1);
         }
     }
     return columns;
@@ -716,9 +717,9 @@ size_t System::getBracketsColumnsCount()
 void System::setBracketsXPosition(const double xPosition)
 {
     double bracketDistance = score()->styleMM(Sid::bracketDistance);
-    for (Bracket* b1 : qAsConst(_brackets)) {
+    for (Bracket* b1 : _brackets) {
         double xOffset = 0;
-        for (const Bracket* b2 : qAsConst(_brackets)) {
+        for (const Bracket* b2 : _brackets) {
             bool b1FirstStaffInB2 = (b1->firstStaff() >= b2->firstStaff() && b1->firstStaff() <= b2->lastStaff());
             bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
             if (b1->column() > b2->column()
@@ -852,12 +853,12 @@ void System::layout2(const LayoutContext& ctx)
                     fixedSpace = true;
                     break;
                 } else {
-                    dist = qMax(dist, staff->height() + sp->gap());
+                    dist = std::max(dist, staff->height() + sp->gap());
                 }
             }
             sp = m->vspacerUp(si2);
             if (sp) {
-                dist = qMax(dist, sp->gap() + staff->height());
+                dist = std::max(dist, sp->gap() + staff->height());
             }
         }
         if (!fixedSpace) {
@@ -879,7 +880,7 @@ void System::layout2(const LayoutContext& ctx)
                     d = previousDist;
                 }
             }
-            dist = qMax(dist, d + minVerticalDistance);
+            dist = std::max(dist, d + minVerticalDistance);
         }
         ss->setYOff(yOffset);
         ss->bbox().setRect(_leftMargin, y - yOffset, width() - _leftMargin, h);
@@ -961,8 +962,8 @@ void System::setInstrumentNames(const LayoutContext& ctx, bool longName, Fractio
     }
     if (!score()->showInstrumentNames()
         || (style()->styleB(Sid::hideInstrumentNameIfOneInstrument) && score()->parts().size() == 1)) {
-        for (SysStaff* staff : qAsConst(_staves)) {
-            foreach (InstrumentName* t, staff->instrumentNames) {
+        for (SysStaff* staff : _staves) {
+            for (InstrumentName* t : staff->instrumentNames) {
                 ctx.score()->removeElement(t);
             }
         }
@@ -970,10 +971,10 @@ void System::setInstrumentNames(const LayoutContext& ctx, bool longName, Fractio
     }
 
     int staffIdx = 0;
-    for (SysStaff* staff : qAsConst(_staves)) {
+    for (SysStaff* staff : _staves) {
         Staff* s = score()->staff(staffIdx);
         if (!s->isTop() || !s->show()) {
-            for (InstrumentName* t : qAsConst(staff->instrumentNames)) {
+            for (InstrumentName* t : staff->instrumentNames) {
                 ctx.score()->removeElement(t);
             }
             ++staffIdx;
@@ -1023,7 +1024,7 @@ int System::y2staff(double y) const
     y -= pos().y();
     int idx = 0;
     double margin = spatium() * 2;
-    foreach (SysStaff* s, _staves) {
+    for (SysStaff* s : _staves) {
         double y1 = s->bbox().top() - margin;
         double y2 = s->bbox().bottom() + margin;
         if (y >= y1 && y < y2) {
@@ -1484,9 +1485,9 @@ EngravingItem* System::prevSegmentElement()
 double System::minDistance(System* s2) const
 {
     if (vbox() && !s2->vbox()) {
-        return qMax(double(vbox()->bottomGap()), s2->minTop());
+        return std::max(double(vbox()->bottomGap()), s2->minTop());
     } else if (!vbox() && s2->vbox()) {
-        return qMax(double(s2->vbox()->topGap()), minBottom());
+        return std::max(double(s2->vbox()->topGap()), minBottom());
     } else if (vbox() && s2->vbox()) {
         return double(s2->vbox()->topGap() + vbox()->bottomGap());
     }
@@ -1509,7 +1510,7 @@ double System::minDistance(System* s2) const
 
     Staff* staff = score()->staff(firstStaff);
     double userDist = staff ? staff->userDist() : 0.0;
-    dist = qMax(dist, userDist);
+    dist = std::max(dist, userDist);
     fixedDownDistance = false;
 
     for (MeasureBase* mb1 : ml) {
@@ -1522,7 +1523,7 @@ double System::minDistance(System* s2) const
                     fixedDownDistance = true;
                     break;
                 } else {
-                    dist = qMax(dist, sp->gap().val());
+                    dist = std::max(dist, sp->gap().val());
                 }
             }
         }
@@ -1533,7 +1534,7 @@ double System::minDistance(System* s2) const
                 Measure* m = toMeasure(mb2);
                 Spacer* sp = m->vspacerUp(firstStaff);
                 if (sp) {
-                    dist = qMax(dist, sp->gap().val());
+                    dist = std::max(dist, sp->gap().val());
                 }
             }
         }
@@ -1541,7 +1542,7 @@ double System::minDistance(System* s2) const
         SysStaff* sysStaff = this->staff(lastStaff);
         double sld = sysStaff ? sysStaff->skyline().minDistance(s2->staff(firstStaff)->skyline()) : 0;
         sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
-        dist = qMax(dist, sld);
+        dist = std::max(dist, sld);
     }
     return dist;
 }
@@ -1666,7 +1667,7 @@ double System::spacerDistance(bool up) const
                     dist = sp->gap();
                     break;
                 } else {
-                    dist = qMax(dist, sp->gap().val());
+                    dist = std::max(dist, sp->gap().val());
                 }
             }
         }
@@ -1771,10 +1772,10 @@ double System::firstNoteRestSegmentX(bool leading)
                             }
                             EngravingItem* e = seg->element(i * VOICES);
                             if (e && e->addToSkyline()) {
-                                width = qMax(width, e->pos().x() + e->bbox().right());
+                                width = std::max(width, e->pos().x() + e->bbox().right());
                             }
                         }
-                        return qMin(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
+                        return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
                     } else {
                         return margin;
                     }
@@ -1813,7 +1814,7 @@ double System::lastNoteRestSegmentX(bool trailing)
                         seg = seg->nextActive();
                     }
                     if (seg) {
-                        return qMax(seg->measure()->pos().x() + seg->pos().x() - margin, noteRestPos);
+                        return std::max(seg->measure()->pos().x() + seg->pos().x() - margin, noteRestPos);
                     } else {
                         return bbox().x() - margin;
                     }

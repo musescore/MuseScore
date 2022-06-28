@@ -1083,7 +1083,7 @@ void Score::updateVelo()
 
                     // TODO this should be a (configurable?) constant somewhere
                     static Fraction ARTICULATION_CHANGE_TIME_MAX = Fraction(1, 16);
-                    Fraction ARTICULATION_CHANGE_TIME = qMin(s->ticks(), ARTICULATION_CHANGE_TIME_MAX);
+                    Fraction ARTICULATION_CHANGE_TIME = std::min(s->ticks(), ARTICULATION_CHANGE_TIME_MAX);
                     int start = veloMultiplier * MidiRenderer::ARTICULATION_CONV_FACTOR;
                     int change = (veloMultiplier - 1) * MidiRenderer::ARTICULATION_CONV_FACTOR;
                     mult.addFixed(chord->tick(), start);
@@ -1392,7 +1392,7 @@ void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
         Chord* c2 = toChord(s2El);
         if (c2->type() == ElementType::CHORD) {
             int notes2 = int(c2->notes().size());
-            int tnotes = qMax(notes, notes2);
+            int tnotes = std::max(notes, notes2);
             int tticks = chord->ticks().ticks() * 2;       // use twice the size
             int n = tticks / t;
             n /= 2;
@@ -2243,7 +2243,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
         if (graceChord->noteType() == NoteType::ACCIACCATURA || nb > 1) {      // treat multiple subsequent grace notes as acciaccaturas
             int graceTimeMS = 65 * nb;           // value determined empirically (TODO: make instrument-specific, like articulations)
             // 1000 occurs below as a unit for ontime
-            ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
+            ontime = std::min(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
             weightb = 0.0;
             weighta = 1.0;
         } else if (chord->dots() == 1) {

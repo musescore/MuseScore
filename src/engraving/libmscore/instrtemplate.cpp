@@ -153,7 +153,7 @@ static TraitType traitTypeFromString(const String& str)
 void InstrumentGroup::read(XmlReader& e)
 {
     id       = e.attribute("id");
-    name     = qtrc("InstrumentsXML", e.attribute("name"));
+    name     = mtrc("InstrumentsXML", e.attribute("name"));
     extended = e.intAttribute("extended", 0);
 
     while (e.readNextStartElement()) {
@@ -178,7 +178,7 @@ void InstrumentGroup::read(XmlReader& e)
                 LOGD("instrument reference not found <%s>", e.text().toUtf8().data());
             }
         } else if (tag == "name") {
-            name = qtrc("InstrumentsXML", e.readAsciiText().ascii());
+            name = mtrc("InstrumentsXML", e.readAsciiText().ascii());
         } else if (tag == "extended") {
             extended = e.readInt();
         } else {
@@ -196,7 +196,7 @@ void InstrumentGroup::read(XmlReader& e)
 
 void InstrumentGroup::clear()
 {
-    qDeleteAll(instrumentTemplates);
+    DeleteAll(instrumentTemplates);
     instrumentTemplates.clear();
 }
 
@@ -368,10 +368,10 @@ void InstrumentTemplate::write(XmlWriter& xml) const
         }
     }
     if (minPitchA != 0 || maxPitchA != 127) {
-        xml.tag("aPitchRange", String("%1-%2").arg(int(minPitchA)).arg(int(maxPitchA)));
+        xml.tag("aPitchRange", String(u"%1-%2").arg(int(minPitchA)).arg(int(maxPitchA)));
     }
     if (minPitchP != 0 || maxPitchP != 127) {
-        xml.tag("pPitchRange", String("%1-%2").arg(int(minPitchP)).arg(int(maxPitchP)));
+        xml.tag("pPitchRange", String(u"%1-%2").arg(int(minPitchP)).arg(int(maxPitchP)));
     }
     if (transpose.diatonic) {
         xml.tag("transposeDiatonic", transpose.diatonic);
@@ -438,7 +438,7 @@ void InstrumentTemplate::write1(XmlWriter& xml) const
 static String translateInstrumentName(const String& instrumentId, const String& nameType, const String& text)
 {
     String disambiguation = instrumentId + u'|' + nameType;
-    return qtrc("InstrumentsXML", text, disambiguation);
+    return mtrc("InstrumentsXML", text, disambiguation);
 }
 
 void InstrumentTemplate::read(XmlReader& e)
@@ -585,7 +585,7 @@ void InstrumentTemplate::read(XmlReader& e)
             if (ttt) {
                 init(*ttt);
             } else {
-                LOGD("InstrumentTemplate:: init instrument <%s> not found", qPrintable(val));
+                LOGD("InstrumentTemplate:: init instrument <%s> not found", muPrintable(val));
             }
         } else if (tag == "musicXMLid") {
             musicXMLid = e.readText();
@@ -623,7 +623,7 @@ void InstrumentTemplate::read(XmlReader& e)
     }
 
     if (staffCount == 0) {
-        LOGD(" 2Instrument: staves == 0 <%s>", qPrintable(id));
+        LOGD(" 2Instrument: staves == 0 <%s>", muPrintable(id));
     }
 }
 
@@ -652,11 +652,11 @@ void clearInstrumentTemplates()
     for (InstrumentGroup* g : instrumentGroups) {
         g->clear();
     }
-    qDeleteAll(instrumentGroups);
+    DeleteAll(instrumentGroups);
     instrumentGroups.clear();
-    qDeleteAll(instrumentGenres);
+    DeleteAll(instrumentGenres);
     instrumentGenres.clear();
-    qDeleteAll(instrumentFamilies);
+    DeleteAll(instrumentFamilies);
     instrumentFamilies.clear();
     midiArticulations.clear();
     instrumentOrders.clear();
@@ -670,7 +670,7 @@ bool loadInstrumentTemplates(const String& instrTemplates)
 {
     File qf(instrTemplates);
     if (!qf.open(IODevice::ReadOnly)) {
-        LOGD("cannot load instrument templates at <%s>", qPrintable(instrTemplates));
+        LOGD("cannot load instrument templates at <%s>", muPrintable(instrTemplates));
         return false;
     }
 
@@ -901,7 +901,7 @@ void InstrumentGenre::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            name = qtrc("InstrumentsXML", e.readText());
+            name = mtrc("InstrumentsXML", e.readText());
         } else {
             e.unknown();
         }
@@ -926,7 +926,7 @@ void InstrumentFamily::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            name = qtrc("InstrumentsXML", e.readText());
+            name = mtrc("InstrumentsXML", e.readText());
         } else {
             e.unknown();
         }

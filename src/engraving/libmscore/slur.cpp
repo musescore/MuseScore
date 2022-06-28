@@ -134,11 +134,11 @@ static ChordRest* searchCR(Segment* segment, track_idx_t startTrack, track_idx_t
 
 bool SlurSegment::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Qt::Key_X && !ed.modifiers) {
+    if (ed.key == Key_X && !ed.modifiers) {
         return true;
     }
 
-    if (ed.key == Qt::Key_Home && !ed.modifiers) {
+    if (ed.key == Key_Home && !ed.modifiers) {
         return true;
     }
 
@@ -151,10 +151,10 @@ bool SlurSegment::isEditAllowed(EditData& ed) const
     }
 
     static const std::set<int> navigationKeys {
-        Qt::Key_Left,
-        Qt::Key_Up,
-        Qt::Key_Down,
-        Qt::Key_Right
+        Key_Left,
+        Key_Up,
+        Key_Down,
+        Key_Right
     };
 
     return mu::contains(navigationKeys, ed.key);
@@ -173,12 +173,12 @@ bool SlurSegment::edit(EditData& ed)
 
     Slur* sl = slur();
 
-    if (ed.key == Qt::Key_X && !ed.modifiers) {
+    if (ed.key == Key_X && !ed.modifiers) {
         sl->undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<DirectionV>(sl->up() ? DirectionV::DOWN : DirectionV::UP));
         sl->layout();
         return true;
     }
-    if (ed.key == Qt::Key_Home && !ed.modifiers) {
+    if (ed.key == Key_Home && !ed.modifiers) {
         ups(ed.curGrip).off = PointF();
         sl->layout();
         return true;
@@ -195,16 +195,16 @@ bool SlurSegment::edit(EditData& ed)
         e1 = sl->startCR();
     }
 
-    if (ed.key == Qt::Key_Left) {
+    if (ed.key == Key_Left) {
         cr = prevChordRest(e);
-    } else if (ed.key == Qt::Key_Right) {
+    } else if (ed.key == Key_Right) {
         cr = nextChordRest(e);
-    } else if (ed.key == Qt::Key_Up) {
+    } else if (ed.key == Key_Up) {
         Part* part     = e->part();
         track_idx_t startTrack = part->startTrack();
         track_idx_t endTrack   = e->track();
         cr = searchCR(e->segment(), endTrack, startTrack);
-    } else if (ed.key == Qt::Key_Down) {
+    } else if (ed.key == Key_Down) {
         track_idx_t startTrack = e->track() + 1;
         Part* part     = e->part();
         track_idx_t endTrack   = part->endTrack();
@@ -268,7 +268,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
             EngravingItem* ee = 0;
             if (scr) {
                 std::list<EngravingObject*> sel = scr->linkList();
-                for (EngravingObject* lcr : qAsConst(sel)) {
+                for (EngravingObject* lcr : sel) {
                     EngravingItem* le = toEngravingItem(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track()) {
                         se = le;
@@ -278,7 +278,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
             }
             if (ecr) {
                 std::list<EngravingObject*> sel = ecr->linkList();
-                for (EngravingObject* lcr : qAsConst(sel)) {
+                for (EngravingObject* lcr : sel) {
                     EngravingItem* le = toEngravingItem(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track2()) {
                         ee = le;
@@ -480,7 +480,7 @@ void SlurSegment::computeBezier(mu::PointF p6o)
     _shape.clear();
     PointF start = pp1;
     int nbShapes  = 32;    // (pp2.x() - pp1.x()) / _spatium;
-    double minH    = qAbs(3 * w);
+    double minH    = std::abs(3 * w);
     const CubicBezier b(pp1, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {
         const PointF point = b.pointAtPercent(i / float(nbShapes));
@@ -584,13 +584,13 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
                     if (dist > 0.0) {
                         if (segRelativeX < slurEndSectionPercent) {
                             // collision in the first third
-                            end1Dist = qMin(qMax(end1Dist, dist), maxEndpointAdjust);
+                            end1Dist = std::min(std::max(end1Dist, dist), maxEndpointAdjust);
                         } else if (segRelativeX > (1 - slurEndSectionPercent)) {
                             // collision in the final third
-                            end2Dist = qMin(qMax(end2Dist, dist), maxEndpointAdjust);
+                            end2Dist = std::min(std::max(end2Dist, dist), maxEndpointAdjust);
                         } else {
                             // collision in the middle third
-                            midpointDist = qMin(qMax(midpointDist, dist), maxHeightAdjust);
+                            midpointDist = std::min(std::max(midpointDist, dist), maxHeightAdjust);
                         }
                     }
                 }
@@ -598,7 +598,7 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
             if (!intersection) {
                 break;
             }
-            double maxDist = qMax(qMax(end1Dist, end2Dist), midpointDist);
+            double maxDist = std::max(std::max(end1Dist, end2Dist), midpointDist);
             // find the worst collision:
             if (maxDist == end1Dist) {
                 // move first endpoint
@@ -606,7 +606,7 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
                     ups(Grip::START).p.ry() += end1Dist * (up ? -1 : 1);
                     adjusted[0] = true;
                 } else if (!adjusted[1]) {
-                    _extraHeight = 4 * qMin(end1Dist, maxHeightAdjust) / 3;
+                    _extraHeight = 4 * std::min(end1Dist, maxHeightAdjust) / 3;
                     adjusted[1] = true;
                 } else if (!adjusted[2]) {
                     ups(Grip::END).p.ry() += end1Dist * (up ? -1 : 1);
@@ -618,7 +618,7 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
                     ups(Grip::END).p.ry() += end2Dist * (up ? -1 : 1);
                     adjusted[2] = true;
                 } else if (!adjusted[1]) {
-                    _extraHeight = 4 * qMin(end2Dist, maxHeightAdjust) / 3;
+                    _extraHeight = 4 * std::min(end2Dist, maxHeightAdjust) / 3;
                     adjusted[1] = true;
                 } else if (!adjusted[0]) {
                     ups(Grip::START).p.ry() += end2Dist * (up ? -1 : 1);
@@ -633,18 +633,18 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
                 } else {
                     if (segRelativeX < .5) {
                         if (!adjusted[0]) {
-                            ups(Grip::START).p.ry() += qMin(midpointDist, maxHeightAdjust) * (up ? -1 : 1);
+                            ups(Grip::START).p.ry() += std::min(midpointDist, maxHeightAdjust) * (up ? -1 : 1);
                             adjusted[0] = true;
                         } else {
-                            ups(Grip::END).p.ry() += qMin(midpointDist, maxHeightAdjust) * (up ? -1 : 1);
+                            ups(Grip::END).p.ry() += std::min(midpointDist, maxHeightAdjust) * (up ? -1 : 1);
                             adjusted[2] = true;
                         }
                     } else {
                         if (!adjusted[2]) {
-                            ups(Grip::END).p.ry() += qMin(midpointDist, maxHeightAdjust) * (up ? -1 : 1);
+                            ups(Grip::END).p.ry() += std::min(midpointDist, maxHeightAdjust) * (up ? -1 : 1);
                             adjusted[2] = true;
                         } else {
-                            ups(Grip::START).p.ry() += qMin(midpointDist, maxHeightAdjust) * (up ? -1 : 1);
+                            ups(Grip::START).p.ry() += std::min(midpointDist, maxHeightAdjust) * (up ? -1 : 1);
                             adjusted[0] = true;
                         }
                     }
@@ -699,9 +699,9 @@ static void fixArticulations(PointF& pt, Chord* c, double _up, bool stemSide = f
             pt.rx() = a->x();
         }
         if (a->up()) {
-            pt.ry() = qMin(pt.y(), a->y() + (a->height() + c->score()->spatium() * .3) * _up);
+            pt.ry() = std::min(pt.y(), a->y() + (a->height() + c->score()->spatium() * .3) * _up);
         } else {
-            pt.ry() = qMax(pt.y(), a->y() + (a->height() + c->score()->spatium() * .3) * _up);
+            pt.ry() = std::max(pt.y(), a->y() + (a->height() + c->score()->spatium() * .3) * _up);
         }
     }
 }
@@ -898,7 +898,7 @@ void Slur::slurPos(SlurPos* sp)
                 // TODO: in the utopian far future where all hooks have SMuFL cutouts, this fakeCutout business will no
                 // longer be used. for the time being fakeCutout describes a point on the line y=mx+b, out from the top of the stem
                 // where y = yadj, m = fakeCutoutSlope, and x = y/m + fakeCutout
-                fakeCutout = qMin(0.0, qAbs(yadj) - (sc->hook()->width() / fakeCutoutSlope));
+                fakeCutout = std::min(0.0, std::abs(yadj) - (sc->hook()->width() / fakeCutoutSlope));
                 pt.rx() = (sc->hook()->width() + sc->hook()->pos().x() - sc->x() + fakeCutout + (hookClearanceX * _spatium)) * sc->mag();
             }
         } else {
@@ -1030,9 +1030,9 @@ void Slur::slurPos(SlurPos* sp)
                     // float along stem according to differential
                     double sh = stem1->height();
                     if (_up && yd < 0.0) {
-                        po.ry() = qMax(po.y() + yd, sc->downNote()->pos().y() - sh - _spatium);
+                        po.ry() = std::max(po.y() + yd, sc->downNote()->pos().y() - sh - _spatium);
                     } else if (!_up && yd > 0.0) {
-                        po.ry() = qMin(po.y() + yd, sc->upNote()->pos().y() + sh + _spatium);
+                        po.ry() = std::min(po.y() + yd, sc->upNote()->pos().y() + sh + _spatium);
                     }
 
                     // account for articulations
@@ -1139,9 +1139,9 @@ void Slur::slurPos(SlurPos* sp)
 
                         double mh = stem2->height();
                         if (_up && yd > 0.0) {
-                            po.ry() = qMax(po.y() - yd, ec->downNote()->pos().y() - mh - _spatium);
+                            po.ry() = std::max(po.y() - yd, ec->downNote()->pos().y() - mh - _spatium);
                         } else if (!_up && yd < 0.0) {
-                            po.ry() = qMin(po.y() - yd, ec->upNote()->pos().y() + mh + _spatium);
+                            po.ry() = std::min(po.y() - yd, ec->upNote()->pos().y() + mh + _spatium);
                         }
 
                         // account for articulations

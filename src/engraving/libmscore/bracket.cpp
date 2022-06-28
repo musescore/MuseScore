@@ -145,7 +145,7 @@ void Bracket::setStaffSpan(size_t a, size_t b)
         }
 
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") {
-            v = qMin(4, v);
+            v = std::min(4, v);
         }
 
         // 1.625 is a "magic" number based on akkoladeDistance/4.0 (default value 6.5).
@@ -439,10 +439,10 @@ EngravingItem* Bracket::drop(EditData& data)
 
 bool Bracket::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Qt::Key_Up && span() > 1) {
+    if (ed.key == Key_Up && span() > 1) {
         return true;
     }
-    if (ed.key == Qt::Key_Down && _lastStaff < system()->staves().size() - 1) {
+    if (ed.key == Key_Down && _lastStaff < system()->staves().size() - 1) {
         return true;
     }
 
@@ -450,10 +450,10 @@ bool Bracket::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    if (ed.key == Qt::Key_Left) {
+    if (ed.key == Key_Left) {
         return true;
     }
-    if (ed.key == Qt::Key_Right) {
+    if (ed.key == Key_Right) {
         if (bracketItem()->column() == 0) {
             return true;
         }
@@ -474,20 +474,20 @@ bool Bracket::edit(EditData& ed)
         return false;
     }
 
-    if (ed.key == Qt::Key_Up && span() > 1) {
+    if (ed.key == Key_Up && span() > 1) {
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) - 1);
         return true;
     }
-    if (ed.key == Qt::Key_Down && _lastStaff < system()->staves().size() - 1) {
+    if (ed.key == Key_Down && _lastStaff < system()->staves().size() - 1) {
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) + 1);
         return true;
     }
 
-    if (ed.key == Qt::Key_Left) {
+    if (ed.key == Key_Left) {
         bracketItem()->undoChangeProperty(Pid::BRACKET_COLUMN, bracketItem()->column() + 1);
         return true;
     }
-    if (ed.key == Qt::Key_Right) {
+    if (ed.key == Key_Right) {
         if (bracketItem()->column() == 0) {
             return true;
         }

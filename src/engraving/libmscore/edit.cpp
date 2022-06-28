@@ -2303,7 +2303,7 @@ void Score::deleteItem(EngravingItem* el)
                 std::list<EngravingObject*> tl = tuplet->linkList();
                 for (EngravingObject* e : rest->linkList()) {
                     DurationElement* de = toDurationElement(e);
-                    for (EngravingObject* ee : qAsConst(tl)) {
+                    for (EngravingObject* ee : tl) {
                         Tuplet* t = toTuplet(ee);
                         if (t->score() == de->score() && t->track() == de->track()) {
                             de->setTuplet(t);
@@ -3138,7 +3138,7 @@ void Score::cmdDeleteSelection()
                         } else {
                             linkedSpanners.push_back(spanner);
                         }
-                        for (EngravingObject* se : qAsConst(linkedSpanners)) {
+                        for (EngravingObject* se : linkedSpanners) {
                             deletedSpanners.insert(toSpanner(se));
                         }
                     }
@@ -3396,7 +3396,7 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
     ChordRest* cr;
     if (ocr->isChord()) {
         cr = Factory::createChord(this->dummy()->segment());
-        foreach (Note* oldNote, toChord(ocr)->notes()) {
+        for (Note* oldNote : toChord(ocr)->notes()) {
             Note* note = Factory::createNote(toChord(cr));
             note->setPitch(oldNote->pitch());
             note->setTpc1(oldNote->tpc1());
@@ -3547,7 +3547,8 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
 
 void Score::cmdDeleteTuplet(Tuplet* tuplet, bool replaceWithRest)
 {
-    foreach (DurationElement* de, tuplet->elements()) {
+    std::vector<DurationElement*> elements = tuplet->elements();
+    for (DurationElement* de : elements) {
         if (de->isChordRest()) {
             removeChordRest(toChordRest(de), true);
         } else {
@@ -4868,7 +4869,7 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
 void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
 {
     auto sl = cr->staff()->staffList();
-    for (Staff* staff : qAsConst(sl)) {
+    for (Staff* staff : sl) {
         ChordRest* ncr;
         if (cr->isGrace()) {
             ncr = findLinkedChord(toChord(cr), staff);
@@ -4901,7 +4902,7 @@ void Score::undoExchangeVoice(Measure* measure, voice_idx_t srcVoice, voice_idx_
     Fraction tick = measure->tick();
 
     for (staff_idx_t staffIdx = srcStaff; staffIdx < dstStaff; ++staffIdx) {
-        QSet<Staff*> staffList;
+        std::set<Staff*> staffList;
         for (Staff* s : staff(staffIdx)->staffList()) {
             staffList.insert(s);
         }
@@ -5572,7 +5573,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 if (element->isSlur() && sp != nsp) {
                     if (sp->startElement()) {
                         std::list<EngravingObject*> sel = sp->startElement()->linkList();
-                        for (EngravingObject* ee : qAsConst(sel)) {
+                        for (EngravingObject* ee : sel) {
                             EngravingItem* e = static_cast<EngravingItem*>(ee);
                             if (e->score() == nsp->score() && e->track() == nsp->track()) {
                                 nsp->setStartElement(e);
@@ -5582,7 +5583,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                     }
                     if (sp->endElement()) {
                         std::list<EngravingObject*> eel = sp->endElement()->linkList();
-                        for (EngravingObject* ee : qAsConst(eel)) {
+                        for (EngravingObject* ee : eel) {
                             EngravingItem* e = static_cast<EngravingItem*>(ee);
                             if (e->score() == nsp->score() && e->track() == nsp->track2()) {
                                 nsp->setEndElement(e);

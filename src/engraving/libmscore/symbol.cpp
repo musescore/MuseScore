@@ -77,7 +77,7 @@ AsciiStringView Symbol::symName() const
 
 String Symbol::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), String::fromUtf8(SymNames::userNameForSymId(_sym)));
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), String::fromUtf8(SymNames::userNameForSymId(_sym)));
 }
 
 //---------------------------------------------------------
@@ -158,7 +158,7 @@ void Symbol::read(XmlReader& e)
                 // TODO: does it make sense? user names are probably localized
                 symId = SymNames::symIdByUserName(val);
                 if (symId == SymId::noSym) {
-                    LOGD("unknown symbol <%s>, falling back to no symbol", qPrintable(val));
+                    LOGD("unknown symbol <%s>, falling back to no symbol", muPrintable(val));
                     // set a default symbol, or layout() will crash
                     symId = SymId::noSym;
                 }

@@ -441,12 +441,12 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                         }
                     }
                 } else {
-                    ASSERT_X(String("premature end of measure list in track %1, rest %2/%3")
+                    ASSERT_X(String(u"premature end of measure list in track %1, rest %2/%3")
                              .arg(_track).arg(duration.numerator(), duration.denominator()));
                 }
             }
             if (e->isChordRest()) {
-                Fraction dd = qMin(rest, duration) * ratio;
+                Fraction dd = std::min(rest, duration) * ratio;
                 std::vector<TDuration> dl = toDurationList(dd, false);
                 for (const TDuration& k : dl) {
                     Segment* segment = measure->undoGetSegmentR(SegmentType::ChordRest, measure->ticks() - rest);
@@ -539,7 +539,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                     duration -= m->ticks();
                     remains.set(0, 1);
                 } else if (e->isChordRest()) {
-                    Fraction du               = qMin(remains, duration);
+                    Fraction du               = std::min(remains, duration);
                     std::vector<TDuration> dl = toDurationList(du, e->isChord());
                     if (dl.empty()) {
                         MScore::setError(MsError::CORRUPTED_MEASURE);
@@ -656,7 +656,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
 
 ScoreRange::~ScoreRange()
 {
-    qDeleteAll(tracks);
+    DeleteAll(tracks);
 }
 
 //---------------------------------------------------------
@@ -778,7 +778,7 @@ void ScoreRange::fill(const Fraction& f)
     }
 
     Fraction diff = ticks() - oldDuration;
-    for (Spanner* sp : qAsConst(spanner)) {
+    for (Spanner* sp : spanner) {
         if (sp->tick2() >= oldEndTick && sp->tick() < oldEndTick) {
             sp->setTicks(sp->ticks() + diff);
         }

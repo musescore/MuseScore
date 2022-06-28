@@ -500,16 +500,16 @@ inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)
 {
     if (modifiers & ControlModifier) {
         static const std::set<int> standardTextOperationsKeys {
-            Qt::Key_Space, // Ctrl + Space inserts the space symbol
-            Qt::Key_A // select all
+            Key_Space, // Ctrl + Space inserts the space symbol
+            Key_A // select all
         };
 
         return standardTextOperationsKeys.find(key) == standardTextOperationsKeys.end();
     }
 
     static const std::set<int> navigationKeys {
-        Qt::Key_Space,
-        Qt::Key_Tab
+        Key_Space,
+        Key_Tab
     };
 
     return navigationKeys.find(key) != navigationKeys.end();

@@ -23,7 +23,6 @@
 #ifndef __EASEINOUT_H__
 #define __EASEINOUT_H__
 
-#include <QtGlobal>
 #include <vector>
 #include "infrastructure/draw/geometry.h"
 

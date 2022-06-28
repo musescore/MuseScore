@@ -46,7 +46,7 @@ VerticalGapData::VerticalGapData(MStyle* style, bool first, System* sys, Staff* 
 
         if (spacer) {
             _fixedSpacer = spacer->spacerType() == SpacerType::FIXED;
-            _normalisedSpacing = qMax(_normalisedSpacing, spacer->gap().val());
+            _normalisedSpacing = std::max(_normalisedSpacing, spacer->gap().val());
             if (_fixedSpacer) {
                 _maxActualSpacing = _normalisedSpacing;
             }
@@ -63,7 +63,7 @@ void VerticalGapData::updateFactor(double factor)
     if (_fixedHeight) {
         return;
     }
-    double f = qMax(factor, _factor);
+    double f = std::max(factor, _factor);
     _normalisedSpacing *= _factor / f;
     _factor = f;
 }

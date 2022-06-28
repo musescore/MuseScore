@@ -33,7 +33,7 @@ static const ElementStyle tripletFeelStyle {
 
 static std::map<TripletFeelType, String> tupletSymbols =
 {
-    { TripletFeelType::TRIPLET_8TH,     String("%1textBlackNoteShortStem%2"
+    { TripletFeelType::TRIPLET_8TH,     String(u"%1textBlackNoteShortStem%2"
                                                "%1textCont8thBeamShortStem%2"
                                                "%1textBlackNoteFrac8thShortStem%2"
                                                " = "
@@ -43,7 +43,7 @@ static std::map<TripletFeelType, String> tupletSymbols =
                                                "%1note8thUp%2"
                                                "%1textTupletBracketEndShortStem%2") },
 
-    { TripletFeelType::TRIPLET_16TH,    String("%1textBlackNoteShortStem%2"
+    { TripletFeelType::TRIPLET_16TH,    String(u"%1textBlackNoteShortStem%2"
                                                "%1textCont16thBeamShortStem%2"
                                                "%1textBlackNoteFrac16thShortStem%2"
                                                " = "
@@ -52,7 +52,7 @@ static std::map<TripletFeelType, String> tupletSymbols =
                                                "%1textTuplet3ShortStem%2"
                                                "%1textBlackNoteFrac16thShortStem%2") },
 
-    { TripletFeelType::DOTTED_8TH,      String("%1textBlackNoteShortStem%2"
+    { TripletFeelType::DOTTED_8TH,      String(u"%1textBlackNoteShortStem%2"
                                                "%1textCont8thBeamShortStem%2"
                                                "%1textBlackNoteFrac8thShortStem%2"
                                                " = "
@@ -62,7 +62,7 @@ static std::map<TripletFeelType, String> tupletSymbols =
                                                "%1textCont8thBeamShortStem%2"
                                                "%1textBlackNoteFrac16thShortStem%2") },
 
-    { TripletFeelType::DOTTED_16TH,     String("%1textBlackNoteShortStem%2"
+    { TripletFeelType::DOTTED_16TH,     String(u"%1textBlackNoteShortStem%2"
                                                "%1textCont16thBeamShortStem%2"
                                                "%1textBlackNoteFrac16thShortStem%2"
                                                " = "
@@ -72,7 +72,7 @@ static std::map<TripletFeelType, String> tupletSymbols =
                                                "%1textCont16thBeamLongStem%2"
                                                "%1textBlackNoteFrac32ndLongStem%2") },
 
-    { TripletFeelType::SCOTTISH_8TH,    String("%1textBlackNoteShortStem%2"
+    { TripletFeelType::SCOTTISH_8TH,    String(u"%1textBlackNoteShortStem%2"
                                                "%1textCont8thBeamShortStem%2"
                                                "%1textBlackNoteFrac8thShortStem%2"
                                                " = "
@@ -81,7 +81,7 @@ static std::map<TripletFeelType, String> tupletSymbols =
                                                "%1textBlackNoteFrac8thShortStem%2"
                                                "%1textAugmentationDot%2") },
 
-    { TripletFeelType::SCOTTISH_16TH,   String("%1textBlackNoteShortStem%2"
+    { TripletFeelType::SCOTTISH_16TH,   String(u"%1textBlackNoteShortStem%2"
                                                "%1textCont16thBeamShortStem%2"
                                                "%1textBlackNoteFrac16thShortStem%2"
                                                " = "
@@ -90,7 +90,7 @@ static std::map<TripletFeelType, String> tupletSymbols =
                                                "%1textBlackNoteFrac16thLongStem%2"
                                                "%1textAugmentationDot%2") },
 
-    { TripletFeelType::NONE,            String("%1textBlackNoteShortStem%2"
+    { TripletFeelType::NONE,            String(u"%1textBlackNoteShortStem%2"
                                                "%1textCont8thBeamShortStem%2"
                                                "%1textBlackNoteFrac8thShortStem%2"
                                                " = "
@@ -102,13 +102,13 @@ static std::map<TripletFeelType, String> tupletSymbols =
 // TODO: move to s_symNames
 static std::map<TripletFeelType, String> tupletNames =
 {
-    { TripletFeelType::TRIPLET_8TH,     String("Triplet 8th") },
-    { TripletFeelType::TRIPLET_16TH,    String("Triplet 16th") },
-    { TripletFeelType::DOTTED_8TH,      String("Dotted 8th") },
-    { TripletFeelType::DOTTED_16TH,     String("Dotted 16th") },
-    { TripletFeelType::SCOTTISH_8TH,    String("Scottish 8th") },
-    { TripletFeelType::SCOTTISH_16TH,   String("Scottish 16th") },
-    { TripletFeelType::NONE,            String("No Triplet Feel") }
+    { TripletFeelType::TRIPLET_8TH,     String(u"Triplet 8th") },
+    { TripletFeelType::TRIPLET_16TH,    String(u"Triplet 16th") },
+    { TripletFeelType::DOTTED_8TH,      String(u"Dotted 8th") },
+    { TripletFeelType::DOTTED_16TH,     String(u"Dotted 16th") },
+    { TripletFeelType::SCOTTISH_8TH,    String(u"Scottish 8th") },
+    { TripletFeelType::SCOTTISH_16TH,   String(u"Scottish 16th") },
+    { TripletFeelType::NONE,            String(u"No Triplet Feel") }
 };
 
 TripletFeel::TripletFeel(Segment* parent, TripletFeelType tripletFillType)
@@ -154,7 +154,7 @@ void TripletFeel::setTripletProperty()
         break;
     }
 
-    setXmlText(tupletSymbols[m_tripletFeelType].arg(String("<sym>staffPosLower3</sym><sym>"), String("</sym>")));
+    setXmlText(tupletSymbols[m_tripletFeelType].arg(String(u"<sym>staffPosLower3</sym><sym>"), String(u"</sym>")));
 }
 
 //---------------------------------------------------------
@@ -210,6 +210,6 @@ String TripletFeel::typeUserName() const
 
 String TripletFeel::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
 }
 }
