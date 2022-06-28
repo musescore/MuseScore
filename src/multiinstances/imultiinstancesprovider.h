@@ -68,6 +68,7 @@ public:
 
     // Quit for all
     virtual void quitForAll() = 0;
+    virtual void quitAllAndRestartLast() = 0;
 };
 }
 
