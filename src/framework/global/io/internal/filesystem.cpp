@@ -321,6 +321,11 @@ io::path_t FileSystem::absolutePath(const io::path_t& filePath) const
     return QFileInfo(filePath.toQString()).absolutePath();
 }
 
+path_t FileSystem::absoluteFilePath(const path_t& filePath) const
+{
+    return QFileInfo(filePath.toQString()).absoluteFilePath();
+}
+
 DateTime FileSystem::birthTime(const io::path_t& filePath) const
 {
     return DateTime::fromQDateTime(QFileInfo(filePath.toQString()).birthTime());
