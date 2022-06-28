@@ -830,7 +830,7 @@ void ChordRest::undoSetBeamMode(BeamMode mode)
 //   localSpatiumChanged
 //---------------------------------------------------------
 
-void ChordRest::localSpatiumChanged(qreal oldValue, qreal newValue)
+void ChordRest::localSpatiumChanged(double oldValue, double newValue)
 {
     DurationElement::localSpatiumChanged(oldValue, newValue);
     for (EngravingItem* e : lyrics()) {
@@ -1294,14 +1294,14 @@ Shape ChordRest::shape() const
 {
     Shape shape;
     {
-        qreal x1 = 1000000.0;
-        qreal x2 = -1000000.0;
+        double x1 = 1000000.0;
+        double x2 = -1000000.0;
         for (Lyrics* l : _lyrics) {
             if (!l || !l->addToSkyline()) {
                 continue;
             }
-            qreal lmargin = score()->styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
-            qreal rmargin = lmargin;
+            double lmargin = score()->styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
+            double rmargin = lmargin;
             Lyrics::Syllabic syl = l->syllabic();
             if ((syl == Lyrics::Syllabic::BEGIN || syl == Lyrics::Syllabic::MIDDLE) && score()->styleB(Sid::lyricsDashForce)) {
                 rmargin = qMax(rmargin, styleP(Sid::lyricsDashMinLength));
@@ -1317,8 +1317,8 @@ Shape ChordRest::shape() const
     }
 
     {
-        qreal x1 = 1000000.0;
-        qreal x2 = -1000000.0;
+        double x1 = 1000000.0;
+        double x2 = -1000000.0;
         for (EngravingItem* e : segment()->annotations()) {
             if (!e || !e->addToSkyline()) {
                 continue;
@@ -1327,7 +1327,7 @@ Shape ChordRest::shape() const
                 Harmony* h = toHarmony(e);
                 // calculate bbox only (do not reset position)
                 h->layout1();
-                const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;
+                const double margin = styleP(Sid::minHarmonyDistance) * 0.5;
                 x1 = qMin(x1, e->bbox().x() - margin + e->pos().x());
                 x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
                 shape.addHorizontalSpacing(e, x1, x2);
@@ -1336,7 +1336,7 @@ Shape ChordRest::shape() const
     }
 
     if (isMelismaEnd()) {
-        qreal right = rightEdge();
+        double right = rightEdge();
         shape.addHorizontalSpacing(nullptr, right, right);
     }
 

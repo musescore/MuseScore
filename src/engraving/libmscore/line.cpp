@@ -120,7 +120,7 @@ std::vector<PointF> LineSegment::gripsPositions(const EditData&) const
 //   leftAnchorPosition
 //---------------------------------------------------------
 
-PointF LineSegment::leftAnchorPosition(const qreal& systemPositionY) const
+PointF LineSegment::leftAnchorPosition(const double& systemPositionY) const
 {
     if (isMiddleType() || isEndType()) {
         return PointF(system()->firstMeasure()->abbox().left(), systemPositionY);
@@ -142,7 +142,7 @@ PointF LineSegment::leftAnchorPosition(const qreal& systemPositionY) const
 //   rightAnchorPosition
 //---------------------------------------------------------
 
-PointF LineSegment::rightAnchorPosition(const qreal& systemPositionY) const
+PointF LineSegment::rightAnchorPosition(const double& systemPositionY) const
 {
     if (isMiddleType() || isBeginType()) {
         return PointF(system()->lastNoteRestSegmentX(true), systemPositionY);
@@ -175,7 +175,7 @@ std::vector<LineF> LineSegment::gripAnchorLines(Grip grip) const
     }
 
     // note-anchored spanners are relative to the system
-    qreal y;
+    double y;
     if (spanner()->anchor() == Spanner::Anchor::NOTE) {
         y = system()->pos().y();
     } else {
@@ -241,8 +241,8 @@ bool LineSegment::isEditAllowed(EditData& ed) const
     const bool moveStart = ed.curGrip == Grip::START;
     const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
 
-    if (!((ed.modifiers & Qt::ShiftModifier) && ((isSingleBeginType() && moveStart)
-                                                 || (isSingleEndType() && moveEnd)))) {
+    if (!((ed.modifiers & ShiftModifier) && ((isSingleBeginType() && moveStart)
+                                             || (isSingleEndType() && moveEnd)))) {
         return false;
     }
 
@@ -455,7 +455,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     Segment* const oldSeg = left ? l->startSegment() : score()->tick2leftSegmentMM(l->tick2() - Fraction::eps());
     const staff_idx_t oldStaffIndex = left ? staffIdx() : track2staff(l->effectiveTrack2());
 
-    const qreal spacingFactor = left ? 0.5 : 1.0;   // defines the point where canvas is divided between segments, systems etc.
+    const double spacingFactor = left ? 0.5 : 1.0;   // defines the point where canvas is divided between segments, systems etc.
 
     System* sys = oldSeg->system();
     const std::vector<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
@@ -598,7 +598,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
     }
     // don't change anchors on keyboard adjustment or if Ctrl is pressed
     // (Ctrl+Left/Right is handled elsewhere!)
-    if (ed.key == Qt::Key_Left || ed.key == Qt::Key_Right || ed.modifiers & Qt::ControlModifier) {
+    if (ed.key == Qt::Key_Left || ed.key == Qt::Key_Right || ed.modifiers & ControlModifier) {
         return;
     }
 
@@ -640,7 +640,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
             // Set offset for the new line segment for grip to appear under the mouse cursor
             System* sys;
             const PointF lp = line()->linePos(grip, &sys);
-            const qreal xoff = sys->mapFromCanvas(ed.pos).x() - lp.x();
+            const double xoff = sys->mapFromCanvas(ed.pos).x() - lp.x();
 
             if (left) {
                 newLineSegment->rxoffset() = xoff;
@@ -750,10 +750,10 @@ void LineSegment::editDrag(EditData& ed)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void LineSegment::spatiumChanged(qreal ov, qreal nv)
+void LineSegment::spatiumChanged(double ov, double nv)
 {
     EngravingItem::spatiumChanged(ov, nv);
-    qreal scale = nv / ov;
+    double scale = nv / ov;
     line()->setLineWidth(line()->lineWidth() * scale);
     _offset2 *= scale;
 }
@@ -762,7 +762,7 @@ void LineSegment::spatiumChanged(qreal ov, qreal nv)
 //   localSpatiumChanged
 //---------------------------------------------------------
 
-void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
+void LineSegment::localSpatiumChanged(double ov, double nv)
 {
     EngravingItem::localSpatiumChanged(ov, nv);
     _offset2 *= nv / ov;
@@ -840,8 +840,8 @@ SLine::SLine(const SLine& s)
 
 PointF SLine::linePos(Grip grip, System** sys) const
 {
-    qreal x = 0.0;
-    qreal sp = staff() ? staff()->spatium(tick()) : 0;
+    double x = 0.0;
+    double sp = staff() ? staff()->spatium(tick()) : 0;
     switch (anchor()) {
     case Spanner::Anchor::SEGMENT:
     {
@@ -871,7 +871,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
 
                     track_idx_t startTrack = staffIdx() * VOICES;
                     track_idx_t endTrack   = startTrack + VOICES;
-                    qreal width    = 0.0;
+                    double width    = 0.0;
 
                     // don’t consider full measure rests, which are centered
                     // (TODO: what if there is only a full measure rest?)
@@ -911,7 +911,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                         ns = ns->next();
                     }
                     if (crFound) {
-                        qreal nextNoteDistance = ns->x() - s->x() + lineWidth();
+                        double nextNoteDistance = ns->x() - s->x() + lineWidth();
                         if (x > nextNoteDistance) {
                             x = qMax(width, nextNoteDistance);
                         }
@@ -942,7 +942,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 // lay out to just before next chordrest on this staff, or barline
                 // tick2 actually tells us the right chordrest to look for
                 if (cr && endElement()->explicitParent() && endElement()->explicitParent()->type() == ElementType::SEGMENT) {
-                    qreal x2 = cr->x() /* TODO + cr->space().rw() */;
+                    double x2 = cr->x() /* TODO + cr->space().rw() */;
                     Segment* currentSeg = toSegment(endElement()->explicitParent());
                     Segment* seg = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
                     if (!seg) {
@@ -961,8 +961,8 @@ PointF SLine::linePos(Grip grip, System** sys) const
                         }
                         // allow lyrics hyphen to extend to barline
                         // other lines stop 1sp short
-                        qreal gap = (type() == ElementType::LYRICSLINE) ? 0.0 : sp;
-                        qreal x3 = seg->enabled() ? seg->x() : seg->measure()->width();
+                        double gap = (type() == ElementType::LYRICSLINE) ? 0.0 : sp;
+                        double x3 = seg->enabled() ? seg->x() : seg->measure()->width();
                         x2 = qMax(x2, x3 - gap);
                     }
                     x = x2 - endElement()->parentItem()->x();
@@ -989,7 +989,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
         if (grip == Grip::START) {
             m = startMeasure();
             // start after clef/keysig/timesig/barline
-            qreal offset = 0.0;
+            double offset = 0.0;
             Segment* s = m->first(SegmentType::ChordRest);
             if (s) {
                 s = s->prev();
@@ -1006,7 +1006,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 x = m->mmRest()->pos().x();
             }
         } else {
-            qreal _spatium = spatium();
+            double _spatium = spatium();
 
             if (score()->styleB(Sid::createMultiMeasureRests)) {
                 // find the actual measure where the volta should stop
@@ -1033,7 +1033,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                     seg = nm->first(SegmentType::BeginBarLine | SegmentType::StartRepeatBarLine);
                 }
             }
-            qreal mwidth = seg && seg->measure() == m ? seg->x() : m->bbox().right();
+            double mwidth = seg && seg->measure() == m ? seg->x() : m->bbox().right();
             x = m->pos().x() + mwidth;
             // align to barline
             if (seg && (seg->segmentType() & SegmentType::BarLineType)) {
@@ -1065,7 +1065,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
         if (score()->styleB(Sid::createMultiMeasureRests)) {
             m = m->mmRest1();
         }
-        Q_ASSERT(m->system());
+        assert(m->system());
         *sys = m->system();
     }
     break;
@@ -1085,7 +1085,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
         // return the position of the anchor note relative to the system
 //                  PointF     elemPagePos = e->pagePos();                   // DEBUG
 //                  PointF     systPagePos = s->pagePos();
-//                  qreal       staffYPage  = s->staffYpage(e->staffIdx());
+//                  double       staffYPage  = s->staffYpage(e->staffIdx());
         PointF p = n->pagePos() - s->pagePos();
         if (!isGlissando()) {
             p.rx() += n->headWidth() * 0.5;
@@ -1137,7 +1137,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         PointF p2 = linePos(Grip::END,   &s);
-        qreal len = p2.x() - p1.x();
+        double len = p2.x() - p1.x();
         lineSegm->setPos(p1);
         lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
     }
@@ -1146,13 +1146,13 @@ SpannerSegment* SLine::layoutSystem(System* system)
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(p1);
-        qreal x2 = system->lastNoteRestSegmentX(true);
+        double x2 = system->lastNoteRestSegmentX(true);
         lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
     }
     break;
     case SpannerSegmentType::MIDDLE: {
-        qreal x1 = system->firstNoteRestSegmentX(true);
-        qreal x2 = system->lastNoteRestSegmentX(true);
+        double x1 = system->firstNoteRestSegmentX(true);
+        double x2 = system->lastNoteRestSegmentX(true);
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(PointF(x1, p1.y()));
@@ -1162,8 +1162,8 @@ SpannerSegment* SLine::layoutSystem(System* system)
     case SpannerSegmentType::END: {
         System* s;
         PointF p2 = linePos(Grip::END,   &s);
-        qreal x1 = system->firstNoteRestSegmentX(true);
-        qreal len = p2.x() - x1;
+        double x1 = system->firstNoteRestSegmentX(true);
+        double len = p2.x() - x1;
         lineSegm->setPos(PointF(p2.x() - len, p2.y()));
         lineSegm->setPos2(PointF(len, 0.0));
     }
@@ -1251,7 +1251,7 @@ void SLine::layout()
         if (sysIdx1 == sysIdx2) {
             // single segment
             lineSegm->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-            qreal len = p2.x() - p1.x();
+            double len = p2.x() - p1.x();
             // enforcing a minimum length would be possible but inadvisable
             // the line length calculations are tuned well enough that this should not be needed
             //if (anchor() == Anchor::SEGMENT && type() != ElementType::PEDAL)
@@ -1262,20 +1262,20 @@ void SLine::layout()
             // start segment
             lineSegm->setSpannerSegmentType(SpannerSegmentType::BEGIN);
             lineSegm->setPos(p1);
-            qreal x2 = system->lastNoteRestSegmentX(true);
+            double x2 = system->lastNoteRestSegmentX(true);
             lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
         } else if (i > 0 && i != sysIdx2) {
             // middle segment
             lineSegm->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
-            qreal x1 = system->firstNoteRestSegmentX(true);
-            qreal x2 = system->lastNoteRestSegmentX(true);
+            double x1 = system->firstNoteRestSegmentX(true);
+            double x2 = system->lastNoteRestSegmentX(true);
             lineSegm->setPos(PointF(x1, p1.y()));
             lineSegm->setPos2(PointF(x2 - x1, 0.0));
         } else if (i == sysIdx2) {
             // end segment
-            qreal minLen = 0.0;
-            qreal x1 = system->firstNoteRestSegmentX(true);
-            qreal len = qMax(minLen, p2.x() - x1);
+            double minLen = 0.0;
+            double x1 = system->firstNoteRestSegmentX(true);
+            double len = qMax(minLen, p2.x() - x1);
             lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
             lineSegm->setPos(PointF(p2.x() - len, p2.y()));
             lineSegm->setPos2(PointF(len, 0.0));
@@ -1337,7 +1337,7 @@ void SLine::writeProperties(XmlWriter& xml) const
     //
     // write user modified layout and other segment properties
     //
-    qreal _spatium = score()->spatium();
+    double _spatium = score()->spatium();
     for (const SpannerSegment* seg : spannerSegments()) {
         xml.startElement("Segment", seg);
         xml.tag("subtype", int(seg->spannerSegmentType()));
@@ -1406,7 +1406,7 @@ bool SLine::readProperties(XmlReader& e)
 //    used to create an element suitable for palette
 //---------------------------------------------------------
 
-void SLine::setLen(qreal l)
+void SLine::setLen(double l)
 {
     if (spannerSegments().empty()) {
         add(createLineSegment(score()->dummy()->system()));

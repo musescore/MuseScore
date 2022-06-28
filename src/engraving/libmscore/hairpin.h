@@ -49,7 +49,7 @@ class HairpinSegment final : public TextLineBaseSegment
 {
     bool drawCircledTip;
     mu::PointF circledTip;
-    qreal circledTipRadius;
+    double circledTipRadius;
 
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
@@ -164,6 +164,8 @@ public:
 };
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::HairpinType);
+#endif
 
 #endif

@@ -150,17 +150,17 @@ TEST_F(TemplatesRepositoryTest, Templates)
         buildCategory("Solo", { "Guitar.mscx" })
     };
 
-    QByteArray standardTemplatesJson = categoriesToJson(standardTemplates);
+    ByteArray standardTemplatesJson = ByteArray::fromQByteArray(categoriesToJson(standardTemplates));
     ON_CALL(*m_fileSystem, readFile(categoriesJsonPaths[0]))
-    .WillByDefault(Return(RetVal<QByteArray>::make_ok(standardTemplatesJson)));
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(standardTemplatesJson)));
 
     QVariantList userTemplates {
         buildCategory("Popular", { "Rock_Band.mscz" })
     };
 
-    QByteArray userTemplatesJson = categoriesToJson(userTemplates);
+    ByteArray userTemplatesJson = ByteArray::fromQByteArray(categoriesToJson(userTemplates));
     ON_CALL(*m_fileSystem, readFile(categoriesJsonPaths[1]))
-    .WillByDefault(Return(RetVal<QByteArray>::make_ok(userTemplatesJson)));
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(userTemplatesJson)));
 
     // [GIVEN] Expected templates after reading
     Templates expectedTemplates {

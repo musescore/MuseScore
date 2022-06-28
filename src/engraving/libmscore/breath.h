@@ -35,7 +35,7 @@ class Factory;
 struct BreathType {
     SymId id;
     bool isCaesura;
-    qreal pause;
+    double pause;
 };
 
 //---------------------------------------------------------
@@ -45,7 +45,7 @@ struct BreathType {
 
 class Breath final : public EngravingItem
 {
-    qreal _pause;
+    double _pause;
     SymId _symId;
 
     friend class Factory;
@@ -57,12 +57,12 @@ public:
 
     Breath* clone() const override { return new Breath(*this); }
 
-    qreal mag() const override;
+    double mag() const override;
 
     void setSymId(SymId id) { _symId = id; }
     SymId symId() const { return _symId; }
-    qreal pause() const { return _pause; }
-    void setPause(qreal v) { _pause = v; }
+    double pause() const { return _pause; }
+    void setPause(double v) { _pause = v; }
 
     Segment* segment() const { return (Segment*)explicitParent(); }
 

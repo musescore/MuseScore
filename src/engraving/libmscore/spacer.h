@@ -71,7 +71,7 @@ public:
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
-    void spatiumChanged(qreal, qreal) override;
+    void spatiumChanged(double, double) override;
 
     void setGap(Millimetre sp);
     Millimetre gap() const { return _gap; }

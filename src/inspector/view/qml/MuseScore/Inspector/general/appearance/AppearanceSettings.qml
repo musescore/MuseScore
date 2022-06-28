@@ -96,15 +96,27 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: offsetSection.navigationRowEnd
 
-        onPushBackRequested: {
+        onPushBackwardsRequested: {
             if (root.model) {
-                root.model.pushBackInOrder()
+                root.model.pushBackwardsInOrder()
             }
         }
 
-        onPushFrontRequested: {
+        onPushForwardsRequested: {
             if (root.model) {
-                root.model.pushFrontInOrder()
+                root.model.pushForwardsInOrder()
+            }
+        }
+
+        onPushToBackRequested: {
+            if (root.model) {
+                root.model.pushToBackInOrder()
+            }
+        }
+
+        onPushToFrontRequested: {
+            if (root.model) {
+                root.model.pushToFrontInOrder()
             }
         }
     }

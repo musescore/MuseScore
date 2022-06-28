@@ -89,7 +89,7 @@ BspTree::BspTree()
 
 static inline int intmaxlog(int n)
 {
-    return n > 0 ? qMax(int(::ceil(::log(qreal(n)) / ::log(qreal(2)))), 5) : 0;
+    return n > 0 ? std::max(int(::ceil(::log(double(n)) / ::log(double(2)))), 5) : 0;
 }
 
 //---------------------------------------------------------
@@ -150,7 +150,7 @@ std::vector<EngravingItem*> BspTree::items(const RectF& rec)
     FindItemBspTreeVisitor findVisitor;
     climbTree(&findVisitor, rec);
     std::vector<EngravingItem*> l;
-    for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
+    for (EngravingItem* e : findVisitor.foundItems) {
         e->itemDiscovered = false;
         if (e->pageBoundingRect().intersects(rec)) {
             l.push_back(e);
@@ -169,7 +169,7 @@ std::vector<EngravingItem*> BspTree::items(const PointF& pos)
     climbTree(&findVisitor, pos);
 
     std::vector<EngravingItem*> l;
-    for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
+    for (EngravingItem* e : findVisitor.foundItems) {
         e->itemDiscovered = false;
         if (e->contains(pos)) {
             l.push_back(e);
@@ -225,7 +225,7 @@ void BspTree::initialize(const RectF& rec, int dep, int index)
     if (dep) {
         Node::Type type;
         RectF rect1, rect2;
-        qreal offset1, offset2;
+        double offset1, offset2;
 
         if (node->type == Node::Type::HORIZONTAL) {
             type = Node::Type::VERTICAL;

@@ -48,6 +48,10 @@ const UiActionList PaletteUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Edit Drumset…"),
              QT_TRANSLATE_NOOP("action", "Edit drumset")
+             ),
+    UiAction("show-keys",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Insert special characters")
              )
 };
 

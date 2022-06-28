@@ -56,12 +56,15 @@ XmlStreamReader::XmlStreamReader(const ByteArray& data)
     setData(data);
 }
 
+#ifndef NO_QT_SUPPORT
 XmlStreamReader::XmlStreamReader(const QByteArray& data)
 {
     m_xml = new Xml();
     ByteArray ba = ByteArray::fromQByteArrayNoCopy(data);
     setData(ba);
 }
+
+#endif
 
 XmlStreamReader::~XmlStreamReader()
 {

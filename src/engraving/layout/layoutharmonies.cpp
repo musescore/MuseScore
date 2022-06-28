@@ -99,14 +99,14 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
             elements[s].push_back(e);
         }
 
-        qreal getReferenceHeight(bool above) const
+        double getReferenceHeight(bool above) const
         {
             // The reference height is the height of
             //    the lowest element if placed above
             // or
             //    the highest element if placed below.
             bool first { true };
-            qreal ref { 0.0 };
+            double ref { 0.0 };
             for (auto s : mu::keys(elements)) {
                 EngravingItem* e { getReferenceElement(s, above, true) };
                 if (!e) {
@@ -123,7 +123,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
             return ref;
         }
 
-        bool align(bool above, qreal reference, qreal maxShift)
+        bool align(bool above, double reference, double maxShift)
         {
             // Align the elements. If a segment contains multiple elements,
             // only the reference elements is used in the algorithm. All other
@@ -143,7 +143,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
                     be = getReferenceElement(s, above, true);
                 }
                 if (be && ((above && (be->y() < (reference + maxShift))) || ((!above && (be->y() > (reference - maxShift)))))) {
-                    qreal shift = be->rypos();
+                    double shift = be->rypos();
                     be->rypos() = reference - be->ryoffset();
                     shift -= be->rypos();
                     for (EngravingItem* e : elements[s]) {

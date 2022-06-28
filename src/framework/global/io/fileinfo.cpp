@@ -27,110 +27,110 @@ using namespace mu;
 using namespace mu::io;
 
 FileInfo::FileInfo(const path_t& filePath)
-    : m_filePath(filePath.toQString())
+    : m_filePath(filePath.toString())
 {
 }
 
-QString FileInfo::path() const
+String FileInfo::path() const
 {
-    int lastSep = m_filePath.lastIndexOf(QLatin1Char('/'));
-    if (lastSep == -1) {
+    size_t lastSep = m_filePath.lastIndexOf(u'/');
+    if (lastSep == mu::nidx) {
 #if defined(Q_OS_WIN)
-        if (m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
+        if (m_filePath.size() >= 2 && m_filePath.at(1) == u':') {
             return m_filePath.left(2);
         }
 #endif
-        return QString(QLatin1Char('.'));
+        return String(u'.');
     }
     if (lastSep == 0) {
-        return QString(QLatin1Char('/'));
+        return String(u'/');
     }
 #if defined(Q_OS_WIN)
-    if (lastSep == 2 && m_filePath.at(1) == QLatin1Char(':')) {
+    if (lastSep == 2 && m_filePath.at(1) == u':') {
         return m_filePath.left(lastSep + 1);
     }
 #endif
     return m_filePath.left(lastSep);
 }
 
-QString FileInfo::filePath() const
+String FileInfo::filePath() const
 {
     return m_filePath;
 }
 
-QString FileInfo::canonicalFilePath() const
+String FileInfo::canonicalFilePath() const
 {
-    return fileSystem()->canonicalFilePath(m_filePath).toQString();
+    return fileSystem()->canonicalFilePath(m_filePath).toString();
 }
 
-QString FileInfo::absolutePath() const
+String FileInfo::absolutePath() const
 {
-    return fileSystem()->absolutePath(m_filePath).toQString();
+    return fileSystem()->absolutePath(m_filePath).toString();
 }
 
-QString FileInfo::fileName() const
+String FileInfo::fileName() const
 {
-    int lastSep = m_filePath.lastIndexOf(QLatin1Char('/'));
+    size_t lastSep = m_filePath.lastIndexOf(u'/');
 #if defined(Q_OS_WIN)
-    if (lastSep == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
+    if (lastSep == mu::nidx && m_filePath.size() >= 2 && m_filePath.at(1) == u':') {
         return m_filePath.mid(2);
     }
 #endif
     return m_filePath.mid(lastSep + 1);
 }
 
-QString FileInfo::baseName() const
+String FileInfo::baseName() const
 {
-    int lastSep = m_filePath.lastIndexOf(QLatin1Char('/'));
-    int from = lastSep + 1;
-    int firstDot = m_filePath.indexOf(QLatin1Char('.'), from);
-    int to = firstDot > 0 ? firstDot : m_filePath.size();
-    int length = to - from;
+    size_t lastSep = m_filePath.lastIndexOf(u'/');
+    size_t from = lastSep + 1;
+    size_t firstDot = m_filePath.indexOf(u'.', from);
+    size_t to = firstDot > 0 ? firstDot : m_filePath.size();
+    size_t length = to - from;
 
 #if defined(Q_OS_WIN)
-    if (lastSep == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
+    if (lastSep == mu::nidx && m_filePath.size() >= 2 && m_filePath.at(1) == u':') {
         return m_filePath.mid(2, length - 2);
     }
 #endif
     return m_filePath.mid(from, length);
 }
 
-QString FileInfo::completeBaseName() const
+String FileInfo::completeBaseName() const
 {
-    int lastSep = m_filePath.lastIndexOf(QLatin1Char('/'));
-    int from = lastSep + 1;
-    int lastDot = m_filePath.lastIndexOf(QLatin1Char('.'));
-    int to = lastDot > 0 ? lastDot : m_filePath.size();
-    int length = to - from;
+    size_t lastSep = m_filePath.lastIndexOf(u'/');
+    size_t from = lastSep + 1;
+    size_t lastDot = m_filePath.lastIndexOf(u'.');
+    size_t to = lastDot > 0 ? lastDot : m_filePath.size();
+    size_t length = to - from;
 
 #if defined(Q_OS_WIN)
-    if (lastSep == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
+    if (lastSep == mu::nidx && m_filePath.size() >= 2 && m_filePath.at(1) == u':') {
         return m_filePath.mid(2, length - 2);
     }
 #endif
     return m_filePath.mid(from, length);
 }
 
-QString FileInfo::suffix() const
+String FileInfo::suffix() const
 {
     return doSuffix(m_filePath);
 }
 
-QString FileInfo::suffix(const path_t& filePath)
+String FileInfo::suffix(const path_t& filePath)
 {
-    return doSuffix(filePath.toQString());
+    return doSuffix(filePath.toString());
 }
 
-QString FileInfo::doSuffix(const QString& filePath)
+String FileInfo::doSuffix(const String& filePath)
 {
-    int lastDot = filePath.lastIndexOf(QLatin1Char('.'));
-    if (lastDot == -1) {
-        return QString();
+    size_t lastDot = filePath.lastIndexOf(u'.');
+    if (lastDot == mu::nidx) {
+        return String();
     }
 
-    int lastSep = filePath.lastIndexOf(QLatin1Char('/'));
+    size_t lastSep = filePath.lastIndexOf(u'/');
     if (lastDot < lastSep) {
-        return QString();
+        return String();
     }
 
     return filePath.mid(lastDot + 1);
@@ -154,15 +154,15 @@ bool FileInfo::isRelative() const
 bool FileInfo::isAbsolute() const
 {
 #ifdef Q_OS_WIN
-    return (m_filePath.length() >= 3
+    return (m_filePath.size() >= 3
             && m_filePath.at(0).isLetter()
-            && m_filePath.at(1) == ':'
-            && m_filePath.at(2) == '/')
+            && m_filePath.at(1) == u':'
+            && m_filePath.at(2) == u'/')
            || (!m_filePath.isEmpty()
-               && (m_filePath.at(0) == '/'
-                   || m_filePath.at(0) == ':'));
+               && (m_filePath.at(0) == u'/'
+                   || m_filePath.at(0) == u':'));
 #else
-    return !m_filePath.isEmpty() && (m_filePath.at(0) == '/' || m_filePath.at(0) == ':');
+    return !m_filePath.empty() && (m_filePath.at(0) == u'/' || m_filePath.at(0) == u':');
 #endif
 }
 

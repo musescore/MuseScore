@@ -22,8 +22,6 @@
 #ifndef MU_DRAW_DRAWCOMP_H
 #define MU_DRAW_DRAWCOMP_H
 
-#include <functional>
-
 #include "../buffereddrawtypes.h"
 
 namespace mu::draw {

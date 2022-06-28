@@ -28,11 +28,14 @@
 #include <string>
 #include <string_view>
 #include <regex>
-#include <QString>
 
 #include "containers.h"
 #include "bytearray.h"
 #include "global/logstream.h"
+
+#ifndef NO_QT_SUPPORT
+#include <QString>
+#endif
 
 namespace mu {
 enum CaseSensitivity {
@@ -80,11 +83,13 @@ public:
     Char(AsciiChar c)
         : m_ch(c.unicode()) {}
 
+#ifndef NO_QT_SUPPORT
     Char(QChar c)
         : m_ch(c.unicode()) {}
     operator QChar() const {
         return QChar(m_ch);
     }
+#endif
 
     inline bool operator ==(Char c) const { return m_ch == c.m_ch; }
     inline bool operator !=(Char c) const { return !operator ==(c); }
@@ -171,20 +176,32 @@ public:
     String(const Char& ch);
     String(const Char* unicode, size_t size = mu::nidx);
 
+#ifndef NO_QT_SUPPORT
+    String(const QString& str) { *this = fromQString(str); }
+    operator QString() const {
+        return this->toQString();
+    }
+
+    String& operator=(const QString& str) { *this = fromQString(str); return *this; }
+    static String fromQString(const QString& str);
+    QString toQString() const;
+
+    inline bool operator ==(const QString& s) const { return toQString() == s; }
+    inline bool operator !=(const QString& s) const { return !operator ==(s); }
+#endif
+
     String& operator=(const char16_t* str);
     void reserve(size_t i);
 
     inline bool operator ==(const String& s) const { return constStr() == s.constStr(); }
     inline bool operator !=(const String& s) const { return !operator ==(s); }
-    inline bool operator ==(const QString& s) const { return toQString() == s; }
-    inline bool operator !=(const QString& s) const { return !operator ==(s); }
+
     bool operator ==(const AsciiStringView& s) const;
     inline bool operator !=(const AsciiStringView& s) const { return !operator ==(s); }
     inline bool operator ==(const char16_t* s) const { return constStr() == s; }
     inline bool operator !=(const char16_t* s) const { return !operator ==(s); }
     bool operator ==(const char* s) const;
     inline bool operator !=(const char* s) const { return !operator ==(s); }
-
     inline bool operator <(const String& s) const { return constStr() < s.constStr(); }
     inline bool operator >(const String& s) const { return constStr() > s.constStr(); }
     inline bool operator <=(const String& s) const { return constStr() <= s.constStr(); }
@@ -197,6 +214,9 @@ public:
     inline String operator+(const mu::String& s) const { String t(*this); t += s; return t; }
     inline String operator+(const char16_t* s) const { String t(*this); t += s; return t; }
     inline String operator+(char16_t s) const { String t(*this); t += s; return t; }
+
+    char16_t operator [](size_t i) const;
+    char16_t& operator [](size_t i);
 
     String& append(Char ch);
     String& append(const String& s);
@@ -215,17 +235,6 @@ public:
     static String fromUcs4(const char32_t* str, size_t size = mu::nidx);
     std::u32string toStdU32String() const;
 
-//#ifndef NO_QT_SUPPORT
-    String(const QString& str) { *this = fromQString(str); }
-    operator QString() const {
-        return this->toQString();
-    }
-
-    String& operator=(const QString& str) { *this = fromQString(str); return *this; }
-    static String fromQString(const QString& str);
-    QString toQString() const;
-//#endif
-
     size_t size() const;
     bool empty() const;
     inline bool isEmpty() const { return empty(); }
@@ -234,8 +243,8 @@ public:
     bool contains(const Char& ch) const;
     bool contains(const String& str, CaseSensitivity cs = CaseSensitive) const;
     int count(const Char& ch) const;
-    size_t indexOf(const Char& ch) const;
-    size_t indexOf(const char16_t* str) const;
+    size_t indexOf(const Char& ch, size_t from = 0) const;
+    size_t indexOf(const char16_t* str, size_t from = 0) const;
     size_t lastIndexOf(const Char& ch) const;
 
     //! NOTE Now implemented only compare with ASCII
@@ -317,7 +326,6 @@ class StringList : public std::vector<String>
 {
 public:
     StringList() = default;
-    StringList(const QStringList& l);
 
     StringList& operator <<(const String& s) { push_back(s); return *this; }
     StringList& append(const String& s) { push_back(s); return *this; }
@@ -332,7 +340,10 @@ public:
     bool removeAll(const String& str);
     void removeAt(size_t i);
 
+#ifndef NO_QT_SUPPORT
+    StringList(const QStringList& l);
     QStringList toQStringList() const;
+#endif
 };
 
 // ============================
@@ -352,10 +363,10 @@ public:
     AsciiStringView(const std::string& str)
         : m_size(str.size()), m_data(str.c_str()) {}
 
-//#ifndef NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     static AsciiStringView fromQLatin1String(const QLatin1String& str) { return AsciiStringView(str.latin1(), str.size()); }
     QLatin1String toQLatin1String() const { return QLatin1String(m_data, static_cast<int>(m_size)); }
-//#endif
+#endif
 
     inline bool operator ==(const AsciiStringView& s) const { return m_size == s.m_size && std::memcmp(m_data, s.m_data, m_size) == 0; }
     inline bool operator !=(const AsciiStringView& s) const { return !this->operator ==(s); }

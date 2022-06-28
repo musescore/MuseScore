@@ -466,7 +466,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::SlurDottedWidth,         "slurDottedWidth",         Spatium(.10) },
     { Sid::MinTieLength,            "minTieLength",            Spatium(1.0) },
     { Sid::SlurMinDistance,         "slurMinDistance",         Spatium(0.5) },
-    { Sid::SectionPause,            "sectionPause",            PropertyValue(qreal(3.0)) },
+    { Sid::SectionPause,            "sectionPause",            PropertyValue(double(3.0)) },
     { Sid::MusicalSymbolFont,       "musicalSymbolFont",       PropertyValue(String("Leland")) },
     { Sid::MusicalTextFont,         "musicalTextFont",         PropertyValue(String("Leland Text")) },
 
@@ -574,11 +574,11 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::tremoloNoteSidePadding,  "tremoloNoteSidePadding",  Spatium(1.25) },
     { Sid::tremoloOutSidePadding,   "tremoloOutSidePadding",   Spatium(0.5) },
 
-    { Sid::linearStretch,           "linearStretch",           PropertyValue(qreal(1.5)) },
+    { Sid::linearStretch,           "linearStretch",           PropertyValue(double(1.5)) },
     { Sid::crossMeasureValues,      "crossMeasureValues",      false },
     { Sid::keySigNaturals,          "keySigNaturals",          PropertyValue(int(KeySigNatural::NONE)) },
 
-    { Sid::tupletMaxSlope,          "tupletMaxSlope",          PropertyValue(qreal(0.5)) },
+    { Sid::tupletMaxSlope,          "tupletMaxSlope",          PropertyValue(double(0.5)) },
     { Sid::tupletOufOfStaff,        "tupletOufOfStaff",        true },
     { Sid::tupletVHeadDistance,     "tupletVHeadDistance",     Spatium(.5) },
     { Sid::tupletVStemDistance,     "tupletVStemDistance",     Spatium(.5) },

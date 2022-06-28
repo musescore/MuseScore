@@ -6645,12 +6645,16 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
     //       currently exported as a two staff part ...
     for (size_t i = 0; i < staves; i++) {
         Staff* st = part->staff(i);
-        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1))) {
+        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !st->show()) {
+            XmlWriter::Attributes attributes;
             if (staves > 1) {
-                xml.startElement("staff-details", { { "number", i + 1 } });
-            } else {
-                xml.startElement("staff-details");
+                attributes.push_back({ "number", i + 1 });
             }
+            if (!st->show()) {
+                attributes.push_back({ "print-object", "no" });
+            }
+            xml.startElement("staff-details", attributes);
+
             xml.tag("staff-lines", st->lines(Fraction(0, 1)));
             if (st->isTabStaff(Fraction(0, 1)) && instrument->stringData()) {
                 std::vector<instrString> l = instrument->stringData()->stringList();
@@ -7287,7 +7291,7 @@ void ExportMusicXml::write(mu::io::IODevice* dev)
 
     _xml.setDevice(dev);
     _xml.startDocument();
-    _xml.writeDoctype("score-partwise PUBLIC \"-//Recordare//DTD MusicXML 4.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\"");
+    _xml.writeDoctype(u"score-partwise PUBLIC \"-//Recordare//DTD MusicXML 4.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\"");
 
     _xml.startElement("score-partwise", { { "version", "4.0" } });
 
@@ -7405,7 +7409,7 @@ bool saveMxl(Score* score, const QString& name)
     MQZipWriter uz(name);
 
     FileInfo fi(name);
-    QString fn = fi.completeBaseName() + ".xml";
+    QString fn = fi.completeBaseName() + u".xml";
     writeMxlArchive(score, uz, fn);
 
     return true;

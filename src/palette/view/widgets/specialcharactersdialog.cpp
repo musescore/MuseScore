@@ -408,7 +408,7 @@ static constexpr UnicodeRange unicodeRanges[] = {
 //---------------------------------------------------------
 
 SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
-    : QDialog(parent)
+    : TopLevelDialog(parent)
 {
     setObjectName(SPECIAL_CHARACTERS_DIALOG_NAME);
     setWindowFlags(Qt::Tool);
@@ -492,7 +492,7 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
 }
 
 SpecialCharactersDialog::SpecialCharactersDialog(const SpecialCharactersDialog& other)
-    : QDialog(other.parentWidget())
+    : TopLevelDialog(other.parentWidget())
 {
 }
 

@@ -28,14 +28,14 @@
 using namespace mu;
 using namespace mu::draw;
 
-static int rtoi(qreal v)
+static int rtoi(double v)
 {
     return static_cast<int>(v * 1000.0);
 }
 
-static qreal itor(int v)
+static double itor(int v)
 {
-    return static_cast<qreal>(v) / 1000.0;
+    return static_cast<double>(v) / 1000.0;
 }
 
 static JsonObject toObj(const Pen& pen)
@@ -203,8 +203,8 @@ static void fromObj(const JsonObject& obj, PainterPath& path)
         }
 
         PainterPath::ElementType type = static_cast<PainterPath::ElementType>(elArr.at(0).toInt());
-        qreal x = itor(elArr.at(1).toInt());
-        qreal y = itor(elArr.at(2).toInt());
+        double x = itor(elArr.at(1).toInt());
+        double y = itor(elArr.at(2).toInt());
 
         switch (type) {
         case PainterPath::ElementType::MoveToElement: {
@@ -375,7 +375,7 @@ ByteArray DrawBufferJson::toJson(const DrawData& buf)
     JsonArray objsArr;
     for (const DrawData::Object& obj : buf.objects) {
         JsonObject objObj;
-        objObj["a_name"] = QString::fromStdString(obj.name);
+        objObj["a_name"] = obj.name;
         objObj["a_pagePos"] = toArr(obj.pagePos);
         JsonArray datasArr;
         for (const DrawData::Data& data : obj.datas) {

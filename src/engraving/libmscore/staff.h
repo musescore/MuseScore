@@ -118,7 +118,7 @@ private:
     void fillBrackets(size_t idx);
     void cleanBrackets();
 
-    qreal staffMag(const StaffType*) const;
+    double staffMag(const StaffType*) const;
 
 public:
 
@@ -210,7 +210,7 @@ public:
     void setBarLineSpan(int val) { _barLineSpan = val; }
     void setBarLineFrom(int val) { _barLineFrom = val; }
     void setBarLineTo(int val) { _barLineTo = val; }
-    qreal height() const override;
+    double height() const override;
 
     int channel(const Fraction&, voice_idx_t voice) const;
 
@@ -248,7 +248,7 @@ public:
 
     int lines(const Fraction&) const;
     void setLines(const Fraction&, int lines);
-    qreal lineDistance(const Fraction&) const;
+    double lineDistance(const Fraction&) const;
 
     bool isLinesInvisible(const Fraction&) const;
     void setIsLinesInvisible(const Fraction&, bool val);
@@ -257,10 +257,10 @@ public:
     int middleLine(const Fraction&) const;
     int bottomLine(const Fraction&) const;
 
-    qreal staffMag(const Fraction&) const;
-    qreal staffMag(const EngravingItem* element) const;
-    qreal spatium(const Fraction&) const;
-    qreal spatium(const EngravingItem*) const;
+    double staffMag(const Fraction&) const;
+    double staffMag(const EngravingItem* element) const;
+    double spatium(const Fraction&) const;
+    double spatium(const EngravingItem*) const;
     //===========
 
     ChangeMap& velocities() { return _velocities; }
@@ -277,7 +277,7 @@ public:
     Millimetre userDist() const { return _userDist; }
     void setUserDist(Millimetre val) { _userDist = val; }
 
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
     void setLocalSpatium(double oldVal, double newVal, Fraction tick);
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;

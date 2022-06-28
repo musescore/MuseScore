@@ -35,8 +35,8 @@ public:
 
     bool load(const io::path_t& path);
 
-    QRectF bbox(uint ucs4, qreal DPI_F) const;
-    qreal advance(uint ucs4, qreal DPI_F) const;
+    QRectF bbox(uint ucs4, double DPI_F) const;
+    double advance(uint ucs4, double DPI_F) const;
 
 private:
 

@@ -397,7 +397,7 @@ bool Palette::readFromFile(const QString& p)
     // load images
     //
     for (const QString& s : images) {
-        imageStore.add(s, f.fileData(s));
+        imageStore.add(s, f.fileData(s.toStdString()));
     }
 
     if (rootfile.isEmpty()) {
@@ -405,7 +405,7 @@ bool Palette::readFromFile(const QString& p)
         return false;
     }
 
-    ba = f.fileData(rootfile);
+    ba = f.fileData(rootfile.toStdString());
     e.setData(ba);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -472,7 +472,7 @@ bool Palette::writeToFile(const QString& p) const
     // save images
     for (ImageStoreItem* ip : images) {
         QString ipath = QString("Pictures/") + ip->hashName();
-        f.addFile(ipath, ip->buffer());
+        f.addFile(ipath.toStdString(), ip->buffer());
     }
     {
         Buffer cbuf1;

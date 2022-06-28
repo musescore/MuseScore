@@ -96,14 +96,14 @@ Bend::Bend(Note* parent)
 //   font
 //---------------------------------------------------------
 
-mu::draw::Font Bend::font(qreal sp) const
+mu::draw::Font Bend::font(double sp) const
 {
     mu::draw::Font f(_fontFace);
     f.setBold(_fontStyle & FontStyle::Bold);
     f.setItalic(_fontStyle & FontStyle::Italic);
     f.setUnderline(_fontStyle & FontStyle::Underline);
     f.setStrike(_fontStyle & FontStyle::Strike);
-    qreal m = _fontSize;
+    double m = _fontSize;
     m *= sp / SPATIUM20;
 
     f.setPointSizeF(m);
@@ -161,7 +161,7 @@ void Bend::layout()
         return;
     }
 
-    qreal _spatium = spatium();
+    double _spatium = spatium();
 
     if (staff() && !staff()->isTabStaff(tick())) {
         if (!explicitParent()) {
@@ -170,7 +170,7 @@ void Bend::layout()
         }
     }
 
-    qreal _lw = _lineWidth;
+    double _lw = _lineWidth;
     Note* note = toNote(explicitParent());
     if (note == 0) {
         m_noteWidth = 0.0;
@@ -185,11 +185,11 @@ void Bend::layout()
     mu::draw::FontMetrics fm(font(_spatium));
 
     size_t n   = m_points.size();
-    qreal x = m_noteWidth;
-    qreal y = -_spatium * .8;
-    qreal x2, y2;
+    double x = m_noteWidth;
+    double y = -_spatium * .8;
+    double x2, y2;
 
-    qreal aw = _spatium * .5;
+    double aw = _spatium * .5;
     PolygonF arrowUp;
     arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
     PolygonF arrowDown;
@@ -225,8 +225,8 @@ void Bend::layout()
             // up
             x2 = x + _spatium * .5;
             y2 = -m_notePos.y() - _spatium * 2;
-            qreal dx = x2 - x;
-            qreal dy = y2 - y;
+            double dx = x2 - x;
+            double dy = y2 - y;
 
             PainterPath path;
             path.moveTo(x, y);
@@ -243,8 +243,8 @@ void Bend::layout()
             // down
             x2 = x + _spatium * .5;
             y2 = y + _spatium * 3;
-            qreal dx = x2 - x;
-            qreal dy = y2 - y;
+            double dx = x2 - x;
+            double dy = y2 - y;
 
             PainterPath path;
             path.moveTo(x, y);
@@ -269,8 +269,8 @@ void Bend::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
-    qreal _spatium = spatium();
-    qreal _lw = _lineWidth;
+    double _spatium = spatium();
+    double _lw = _lineWidth;
 
     Pen pen(curColor(), _lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
@@ -279,11 +279,11 @@ void Bend::draw(mu::draw::Painter* painter) const
     mu::draw::Font f = font(_spatium * MScore::pixelRatio);
     painter->setFont(f);
 
-    qreal x  = m_noteWidth + _spatium * .2;
-    qreal y  = -_spatium * .8;
-    qreal x2, y2;
+    double x  = m_noteWidth + _spatium * .2;
+    double y  = -_spatium * .8;
+    double x2, y2;
 
-    qreal aw = score()->styleMM(Sid::bendArrowWidth);
+    double aw = score()->styleMM(Sid::bendArrowWidth);
     PolygonF arrowUp;
     arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
     PolygonF arrowDown;
@@ -319,8 +319,8 @@ void Bend::draw(mu::draw::Painter* painter) const
             // up
             x2 = x + _spatium * .5;
             y2 = -m_notePos.y() - _spatium * 2;
-            qreal dx = x2 - x;
-            qreal dy = y2 - y;
+            double dx = x2 - x;
+            double dy = y2 - y;
 
             PainterPath path;
             path.moveTo(x, y);
@@ -333,7 +333,7 @@ void Bend::draw(mu::draw::Painter* painter) const
 
             int idx = (m_points[pt + 1].pitch + 12) / 25;
             const char* l = label[idx];
-            qreal ty = y2;       // - _spatium;
+            double ty = y2;       // - _spatium;
             painter->drawText(RectF(x2, ty, .0, .0),
                               Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip,
                               String::fromAscii(l));
@@ -341,8 +341,8 @@ void Bend::draw(mu::draw::Painter* painter) const
             // down
             x2 = x + _spatium * .5;
             y2 = y + _spatium * 3;
-            qreal dx = x2 - x;
-            qreal dy = y2 - y;
+            double dx = x2 - x;
+            double dy = y2 - y;
 
             PainterPath path;
             path.moveTo(x, y);

@@ -55,9 +55,9 @@ enum class AccidentalBracket : char {
 
 struct SymElement {
     SymId sym;
-    qreal x;
-    qreal y;
-    SymElement(SymId _sym, qreal _x, qreal _y)
+    double x;
+    double y;
+    SymElement(SymId _sym, double _x, double _y)
         : sym(_sym), x(_x), y(_y) {}
 };
 
@@ -137,6 +137,8 @@ public:
 extern AccidentalVal sym2accidentalVal(SymId id);
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::AccidentalRole);
+#endif
 
 #endif

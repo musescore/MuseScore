@@ -101,8 +101,8 @@ ZipWriter::Status ZipWriter::status() const
     return static_cast<Status>(m_impl->zip->status());
 }
 
-void ZipWriter::addFile(const QString& fileName, const ByteArray& data)
+void ZipWriter::addFile(const std::string& fileName, const ByteArray& data)
 {
-    m_impl->zip->addFile(fileName, data.toQByteArrayNoCopy());
+    m_impl->zip->addFile(QString::fromStdString(fileName), data.toQByteArrayNoCopy());
     flush();
 }

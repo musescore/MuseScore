@@ -311,14 +311,14 @@ bool LanguagesService::checkLanguageFilesHash(const QString& languageCode, const
             continue;
         }
 
-        RetVal<QByteArray> fileBytes = fileSystem()->readFile(filePath);
+        RetVal<ByteArray> fileBytes = fileSystem()->readFile(filePath);
         if (!fileBytes.ret) {
             LOGW() << fileBytes.ret.toString();
             return false;
         }
 
         localHash.reset();
-        localHash.addData(fileBytes.val);
+        localHash.addData(fileBytes.val.toQByteArrayNoCopy());
         QString fileHash = QString(localHash.result().toHex());
         QString actualHash = filesHash[fileName];
         if (actualHash != fileHash) {

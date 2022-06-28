@@ -59,17 +59,17 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
     void layout() override;
-    qreal mag() const override;
+    double mag() const override;
 
     //@ sets the key of the key signature
-    Q_INVOKABLE void setKey(Key);
+    void setKey(Key);
 
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return explicitParent() ? (Measure*)explicitParent()->explicitParent() : nullptr; }
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
     //@ returns the key of the key signature (from -7 (flats) to +7 (sharps) )
-    Q_INVOKABLE Key key() const { return _sig.key(); }
+    Key key() const { return _sig.key(); }
     bool isCustom() const { return _sig.custom(); }
     bool isAtonal() const { return _sig.isAtonal(); }
     bool isChange() const;

@@ -92,7 +92,7 @@ QUrl LanguagesConfiguration::languageFileServerUrl(const QString& languageCode) 
     return QUrl(LANGUAGES_SERVER_URL + fileName.toQString());
 }
 
-RetVal<QByteArray> LanguagesConfiguration::readLanguagesState() const
+RetVal<ByteArray> LanguagesConfiguration::readLanguagesState() const
 {
     mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), LANGUAGES_RESOURCE_NAME);
     return fileSystem()->readFile(languagesUserAppDataPath() + LANGUAGES_STATE_FILE);
@@ -101,20 +101,20 @@ RetVal<QByteArray> LanguagesConfiguration::readLanguagesState() const
 Ret LanguagesConfiguration::writeLanguagesState(const QByteArray& data)
 {
     mi::WriteResourceLockGuard lock_guard(multiInstancesProvider(), LANGUAGES_RESOURCE_NAME);
-    return fileSystem()->writeToFile(languagesUserAppDataPath() + LANGUAGES_STATE_FILE, data);
+    return fileSystem()->writeFile(languagesUserAppDataPath() + LANGUAGES_STATE_FILE, ByteArray::fromQByteArrayNoCopy(data));
 }
 
 ValCh<LanguagesHash> LanguagesConfiguration::languages() const
 {
     TRACEFUNC;
-    RetVal<QByteArray> rv = readLanguagesState();
+    RetVal<ByteArray> rv = readLanguagesState();
     if (!rv.ret) {
         LOGE() << rv.ret.toString();
         return ValCh<LanguagesHash>();
     }
 
     ValCh<LanguagesHash> result;
-    result.val = parseLanguagesConfig(rv.val);
+    result.val = parseLanguagesConfig(rv.val.toQByteArrayNoCopy());
     result.ch = m_languagesHashChanged;
 
     return result;

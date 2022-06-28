@@ -66,7 +66,7 @@ public:
 
     // isBeatedCompound? Note: Conductors will beat the simple unit at slow tempos (<60 compound units per minute)
     // However, the meter is still considered to be compound (at least for our purposes).
-    bool isBeatedCompound(qreal tempo) const { return tempo2beatsPerMinute(tempo) >= 60.0; }
+    bool isBeatedCompound(double tempo) const { return tempo2beatsPerMinute(tempo) >= 60.0; }
 
     int dUnitTicks()        const;
     int ticksPerMeasure()   const { return numerator() * dUnitTicks(); }
@@ -79,11 +79,11 @@ public:
     int maxSubbeatLevel()         const;
 
     bool isTriple()         const { return beatsPerMeasure() % 3 == 0; }
-    bool isDuple() const { Q_ASSERT(!isTriple()); return beatsPerMeasure() % 2 == 0; }   // note: always test isTriple() first
+    bool isDuple() const { assert(!isTriple()); return beatsPerMeasure() % 2 == 0; }   // note: always test isTriple() first
 
     // MuseScore stores tempos in quarter-notes-per-second, so conversions to conventional beats-per-minute format are provided here:
-    qreal tempo2beatsPerMinute(qreal tempo)   const { return tempo * denominator() * 15.0 / dUnitsPerBeat(); }
-    qreal beatsPerMinute2tempo(qreal bpm)     const { return bpm * dUnitsPerBeat() / (15.0 * denominator()); }
+    double tempo2beatsPerMinute(double tempo)   const { return tempo * denominator() * 15.0 / dUnitsPerBeat(); }
+    double beatsPerMinute2tempo(double bpm)     const { return bpm * dUnitsPerBeat() / (15.0 * denominator()); }
 
     BeatType rtick2beatType(int rtick)  const;
     int rtick2subbeatLevel(int rtick)   const;   // returns negative value if not on a well-defined subbeat

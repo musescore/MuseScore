@@ -39,7 +39,7 @@ class NoteDot final : public EngravingItem
 public:
 
     NoteDot* clone() const override { return new NoteDot(*this); }
-    qreal mag() const override;
+    double mag() const override;
 
     void draw(mu::draw::Painter*) const override;
     void read(XmlReader&) override;

@@ -56,7 +56,7 @@ const StaffType& StaffTypeList::staffType(const Fraction& tick) const
 
 StaffType& StaffTypeList::staffType(const Fraction& tick)
 {
-    Q_ASSERT(!tick.negative());
+    assert(!tick.negative());
 
     if (staffTypeChanges.empty()) {
         return firstStaffType;
@@ -75,7 +75,7 @@ StaffType& StaffTypeList::staffType(const Fraction& tick)
 
 StaffType* StaffTypeList::setStaffType(const Fraction& tick, const StaffType& st)
 {
-    Q_ASSERT(!tick.negative());
+    assert(!tick.negative());
 
     if (tick.isZero()) {
         firstStaffType = st;
@@ -100,7 +100,7 @@ StaffType* StaffTypeList::setStaffType(const Fraction& tick, const StaffType& st
 
 bool StaffTypeList::removeStaffType(const Fraction& tick)
 {
-    Q_ASSERT(!tick.negative());
+    assert(!tick.negative());
     if (tick.isZero()) {
         firstStaffType = StaffType();
         return true;

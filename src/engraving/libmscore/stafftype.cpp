@@ -76,7 +76,7 @@ StaffType::StaffType()
     setFretFontName(_fretFonts[0].displayName);
 }
 
-StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, qreal lineDist,
+StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
                      bool genClef, bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines, bool invisible,
                      const mu::draw::Color& color)
     : _group(sg), _xmlName(xml), _name(name),
@@ -94,11 +94,11 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
 {
 }
 
-StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, qreal lineDist,
+StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
                      bool genClef,
                      bool showBarLines, bool stemless, bool genTimesig, bool invisible, const mu::draw::Color& color,
-                     const String& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
-                     const String& fretFontName, qreal fretFontSize, qreal fretFontUserY,
+                     const String& durFontName, double durFontSize, double durFontUserY, double genDur,
+                     const String& fretFontName, double fretFontSize, double fretFontUserY,
                      TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines,
                      bool showRests, bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers,
                      bool showBackTied)
@@ -495,9 +495,9 @@ void StaffType::read(XmlReader& e)
 //    get y dot position of first repeat barline dot
 //---------------------------------------------------------
 
-qreal StaffType::doty1() const
+double StaffType::doty1() const
 {
-    return _lineDistance.val() * (static_cast<qreal>((_lines - 1) / 2) - 0.5);
+    return _lineDistance.val() * (static_cast<double>((_lines - 1) / 2) - 0.5);
 }
 
 //---------------------------------------------------------
@@ -505,9 +505,9 @@ qreal StaffType::doty1() const
 //    get y dot position of second repeat barline dot
 //---------------------------------------------------------
 
-qreal StaffType::doty2() const
+double StaffType::doty2() const
 {
-    return _lineDistance.val() * (static_cast<qreal>(_lines / 2) + 0.5);
+    return _lineDistance.val() * (static_cast<double>(_lines / 2) + 0.5);
 }
 
 //---------------------------------------------------------
@@ -642,7 +642,7 @@ void StaffType::setFretFontName(const String& name)
 //   durationBoxH / durationBoxY
 //---------------------------------------------------------
 
-qreal StaffType::durationBoxH() const
+double StaffType::durationBoxH() const
 {
     if (!_genDurations && !_stemless) {
         return 0.0;
@@ -651,7 +651,7 @@ qreal StaffType::durationBoxH() const
     return _durationBoxH;
 }
 
-qreal StaffType::durationBoxY() const
+double StaffType::durationBoxY() const
 {
     if (!_genDurations && !_stemless) {
         return 0.0;
@@ -664,14 +664,14 @@ qreal StaffType::durationBoxY() const
 //   setDurationFontSize / setFretFontSize
 //---------------------------------------------------------
 
-void StaffType::setDurationFontSize(qreal val)
+void StaffType::setDurationFontSize(double val)
 {
     _durationFontSize = val;
     _durationFont.setPointSizeF(val);
     _durationMetricsValid = false;
 }
 
-void StaffType::setFretFontSize(qreal val)
+void StaffType::setFretFontSize(double val)
 {
     _fretFontSize = val;
     _fretFont.setPointSizeF(val);
@@ -688,14 +688,14 @@ void StaffType::setFretFontSize(qreal val)
 //          returns the vertical position of stem start point
 //---------------------------------------------------------
 
-qreal StaffType::chordRestStemPosY(const ChordRest* chordRest) const
+double StaffType::chordRestStemPosY(const ChordRest* chordRest) const
 {
     if (stemThrough()) {            // does not make sense for "stems through staves" setting; just return top line vert. position
         return 0.0;
     }
 
     // if stems beside staff, position are fixed, but take into account delta for half notes
-    qreal delta                                 // displacement for half note stems (if used)
+    double delta                                 // displacement for half note stems (if used)
         =   // if half notes have not a short stem OR not a half note => 0
           (minimStyle() != TablatureMinimStyle::SHORTER || chordRest->durationType().type() != DurationType::V_HALF)
           ? 0.0
@@ -707,8 +707,8 @@ qreal StaffType::chordRestStemPosY(const ChordRest* chordRest) const
     if (!onLines() && chordRest->up()) {
         delta -= _lineDistance.val() * 0.5;
     }
-    qreal y = (chordRest->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (_lines - 1) * _lineDistance.val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
-              + delta;
+    double y = (chordRest->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (_lines - 1) * _lineDistance.val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
+               + delta;
     return y;
 }
 
@@ -719,7 +719,7 @@ qreal StaffType::chordRestStemPosY(const ChordRest* chordRest) const
 
 PointF StaffType::chordStemPos(const Chord* chord) const
 {
-    qreal y;
+    double y;
     if (stemThrough()) {
         // if stems are through staff, stem goes from farthest note string
         y = (chord->up() ? chord->downString() : chord->upString()) * _lineDistance.val();
@@ -738,7 +738,7 @@ PointF StaffType::chordStemPos(const Chord* chord) const
 
 PointF StaffType::chordStemPosBeam(const Chord* chord) const
 {
-    qreal y = (stemsDown() ? chord->downString() : chord->upString()) * _lineDistance.val();
+    double y = (stemsDown() ? chord->downString() : chord->upString()) * _lineDistance.val();
 
     return PointF(chordStemPosX(chord), y);
 }
@@ -748,9 +748,9 @@ PointF StaffType::chordStemPosBeam(const Chord* chord) const
 //          return length of stem
 //---------------------------------------------------------
 
-qreal StaffType::chordStemLength(const Chord* chord) const
+double StaffType::chordStemLength(const Chord* chord) const
 {
-    qreal stemLen;
+    double stemLen;
     // if stems are through staff, length should be computed by relevant chord algorithm;
     // here, just return default length (= 1 'octave' = 3.5 line spaces)
     if (stemThrough()) {
@@ -913,9 +913,9 @@ int StaffType::visualStringToPhys(int line) const
 //          peculiarities of bass string notations.
 //---------------------------------------------------------
 
-qreal StaffType::physStringToYOffset(int strg) const
+double StaffType::physStringToYOffset(int strg) const
 {
-    qreal yOffset = strg;                       // the y offset of the visual string, as a multiple of line distance
+    double yOffset = strg;                       // the y offset of the visual string, as a multiple of line distance
     if (yOffset < 0) {                          // if above top physical string, limit to top string
         yOffset = 0;
     }
@@ -926,7 +926,7 @@ qreal StaffType::physStringToYOffset(int strg) const
         }
     }
     // if TAB upside down, flip around top line
-    yOffset = _upsideDown ? (qreal)(_lines - 1) - yOffset : yOffset;
+    yOffset = _upsideDown ? (double)(_lines - 1) - yOffset : yOffset;
     return yOffset * _lineDistance.val();
 }
 
@@ -970,9 +970,9 @@ void TabDurationSymbol::layout()
         setbbox(RectF());
         return;
     }
-    qreal _spatium    = spatium();
-    qreal hbb, wbb, xbb, ybb;       // bbox sizes
-    qreal xpos, ypos;               // position coords
+    double _spatium    = spatium();
+    double hbb, wbb, xbb, ybb;       // bbox sizes
+    double xpos, ypos;               // position coords
 
     _beamGrid = TabBeamGrid::NONE;
     Chord* chord = explicitParent() && explicitParent()->isChord() ? toChord(explicitParent()) : nullptr;
@@ -1013,7 +1013,7 @@ void TabDurationSymbol::layout()
         }
     }
     // set this' mag from parent chord mag (include staff mag)
-    qreal mag = chord != nullptr ? chord->mag() : 1.0;
+    double mag = chord != nullptr ? chord->mag() : 1.0;
     setMag(mag);
     mag = magS();             // local mag * score mag
     // set magnified bbox and position
@@ -1041,8 +1041,8 @@ void TabDurationSymbol::layout2()
     if (chord == nullptr || prevChord == nullptr) {
         return;
     }
-    qreal mags        = magS();
-    qreal beamLen     = prevChord->pagePos().x() - chord->pagePos().x();            // negative
+    double mags        = magS();
+    double beamLen     = prevChord->pagePos().x() - chord->pagePos().x();            // negative
     // page pos. difference already includes any magnification in effect:
     // scale it down, as it will be magnified again during drawing
     _beamLength = beamLen / mags;
@@ -1072,8 +1072,8 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
         }
     }
 
-    qreal mag = magS();
-    qreal imag = 1.0 / mag;
+    double mag = magS();
+    double imag = 1.0 / mag;
 
     Pen pen(curColor());
     painter->setPen(pen);
@@ -1087,12 +1087,12 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
     } else {
         // if beam grid, draw stem line
         TablatureDurationFont& font = _tab->_durationFonts[_tab->_durationFontIdx];
-        qreal _spatium = spatium();
+        double _spatium = spatium();
         pen.setCapStyle(PenCapStyle::FlatCap);
         pen.setWidthF(font.gridStemWidth * _spatium);
         painter->setPen(pen);
         // take stem height from bbox, but de-magnify it, as drawing is already magnified
-        qreal h     = bbox().y() / mag;
+        double h     = bbox().y() / mag;
         painter->drawLine(PointF(0.0, h), PointF(0.0, 0.0));
         // if beam grid is medial/final, draw beam lines too: lines go from mid of
         // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)
@@ -1104,8 +1104,8 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
             h += (font.gridBeamWidth * _spatium) * 0.5;
             // draw beams equally spaced within the stem height (this is
             // different from modern engraving, but common in historic prints)
-            qreal step  = -h / _beamLevel;
-            qreal y     = h;
+            double step  = -h / _beamLevel;
+            double y     = h;
             for (int i = 0; i < _beamLevel; i++, y += step) {
                 painter->drawLine(PointF(_beamLength, y), PointF(0.0, y));
             }
@@ -1355,7 +1355,7 @@ std::vector<String> StaffType::fontNames(bool bDuration)
 //---------------------------------------------------------
 
 bool StaffType::fontData(bool bDuration, size_t nIdx, String* pFamily, String* pDisplayName,
-                         qreal* pSize, qreal* pYOff)
+                         double* pSize, double* pYOff)
 {
     if (bDuration) {
         if (nIdx < _durationFonts.size()) {
@@ -1481,7 +1481,7 @@ void StaffType::initStaffTypes()
 //   spatium
 //---------------------------------------------------------
 
-qreal StaffType::spatium(Score* score) const
+double StaffType::spatium(Score* score) const
 {
     return score->spatium() * (isSmall() ? score->styleD(Sid::smallStaffMag) : 1.0) * userMag();
 }

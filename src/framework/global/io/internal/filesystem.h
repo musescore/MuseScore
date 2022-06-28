@@ -41,11 +41,9 @@ public:
     RetVal<io::paths_t> scanFiles(const io::path_t& rootDir, const std::vector<std::string>& filters,
                                   ScanMode mode = ScanMode::FilesInCurrentDirAndSubdirs) const override;
 
-    RetVal<QByteArray> readFile(const io::path_t& filePath) const override;
-    Ret writeToFile(const io::path_t& filePath, const QByteArray& data) const override;
-
+    RetVal<ByteArray> readFile(const io::path_t& filePath) const override;
     bool readFile(const io::path_t& filePath, ByteArray& data) const override;
-    bool writeFile(const io::path_t& filePath, const ByteArray& data) const override;
+    Ret writeFile(const io::path_t& filePath, const ByteArray& data) const override;
 
     void setAttribute(const io::path_t& path, Attribute attribute) const override;
     bool setPermissionsAllowedForAll(const io::path_t& path) const override;

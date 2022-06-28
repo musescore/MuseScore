@@ -117,6 +117,8 @@ struct VibratoTableItem {
 extern const std::vector<VibratoTableItem> vibratoTable;
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::Vibrato::Type);
+#endif
 
 #endif

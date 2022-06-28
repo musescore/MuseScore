@@ -132,6 +132,8 @@ struct TrillTableItem {
 extern const std::vector<TrillTableItem> trillTable;
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::Trill::Type);
+#endif
 
 #endif

@@ -142,8 +142,8 @@ private:
     Modifier _suffix;                           // the accidental coming after the body
     ContLine _contLine;                         // whether the item has continuation line or not
     Parenthesis parenth[5];                     // each of the parenthesis: before, between and after parts
-    qreal textWidth;                            // the text width (in raster units), set during layout()
-                                                //    used by draw()
+    double textWidth;                            // the text width (in raster units), set during layout()
+                                                 //    used by draw()
     friend class FiguredBass;
     FiguredBassItem(FiguredBass* parent = 0, int line = 0);
     FiguredBassItem(const FiguredBassItem&);
@@ -226,8 +226,8 @@ public:
 struct FiguredBassFont {
     String family;
     String displayName;
-    qreal defPitch;
-    qreal defLineHeight;
+    double defPitch;
+    double defLineHeight;
     Char displayAccidental[int(FiguredBassItem::Modifier::NUMOF)];
     Char displayParenthesis[int(FiguredBassItem::Parenthesis::NUMOF)];
     Char displayDigit[int(FiguredBassItem::Style::NUMOF)][10][int(FiguredBassItem::Combination::NUMOF)];
@@ -250,7 +250,7 @@ class FiguredBass final : public TextBase
     bool _onNote;                               // true if this element is on a staff note | false if it is between notes
     Fraction _ticks;                            // the duration (used for cont. lines and for multiple F.B.
                                                 // under the same note)
-    qreal _printedLineLength;                   // the length of lines actually printed (i.e. continuation lines)
+    double _printedLineLength;                   // the length of lines actually printed (i.e. continuation lines)
 
     friend class Factory;
     FiguredBass(Segment* parent = 0);
@@ -271,7 +271,7 @@ public:
     // static functions for font config files
     static bool       readConfigFile(const String& fileName);
     static std::list<String> fontNames();
-    static bool       fontData(int nIdx, String* pFamily, String* pDisplayName, qreal* pSize, qreal* pLineHeight);
+    static bool       fontData(int nIdx, String* pFamily, String* pDisplayName, double* pSize, double* pLineHeight);
 
     // standard re-implemented virtual functions
     FiguredBass* clone() const override { return new FiguredBass(*this); }
@@ -292,7 +292,7 @@ public:
     // read / write MusicXML
     void writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
 
-    qreal lineLength(size_t idx) const
+    double lineLength(size_t idx) const
     {
         if (idx < _lineLengths.size()) {
             return _lineLengths.at(idx);
@@ -300,7 +300,7 @@ public:
         return 0;
     }
 
-    qreal             printedLineLength() const { return _printedLineLength; }
+    double             printedLineLength() const { return _printedLineLength; }
     bool              onNote() const { return _onNote; }
     size_t            numOfItems() const { return items.size(); }
     void              setOnNote(bool val) { _onNote = val; }
@@ -308,7 +308,7 @@ public:
     Fraction          ticks() const { return _ticks; }
     void              setTicks(const Fraction& v) { _ticks = v; }
 
-    qreal             additionalContLineX(qreal pagePosY) const;  // returns the X coord (in page coord) of cont. line at pagePosY, if any
+    double             additionalContLineX(double pagePosY) const;  // returns the X coord (in page coord) of cont. line at pagePosY, if any
     FiguredBass* nextFiguredBass() const;                         // returns next *adjacent* f.b. item, if any
 
     PropertyValue  getProperty(Pid propertyId) const override;
@@ -319,8 +319,10 @@ public:
 };
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::Modifier);
 Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::Parenthesis);
 Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::ContLine);
+#endif
 
 #endif

@@ -112,7 +112,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "markIrregularMeasures") {
             score->_markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
-            qreal sp = score->style().value(Sid::spatium).toReal();
+            double sp = score->style().value(Sid::spatium).toReal();
 
             ReadStyleHook::readStyleTag(score, e);
 

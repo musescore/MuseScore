@@ -241,15 +241,13 @@ QVariantMap BackendApi::readBeatsColors(const io::path_t& filePath)
         return QVariantMap();
     }
 
-    RetVal<QByteArray> fileData = fileSystem()->readFile(filePath);
+    RetVal<ByteArray> fileData = fileSystem()->readFile(filePath);
     if (!fileData.ret) {
         LOGW() << fileData.ret.toString();
         return QVariantMap();
     }
 
-    QString content(fileData.val);
-
-    QJsonDocument document = QJsonDocument::fromJson(content.toUtf8());
+    QJsonDocument document = QJsonDocument::fromJson(fileData.val.toQByteArrayNoCopy());
     QJsonObject obj = document.object();
     QJsonArray colors = obj.value("highlight").toArray();
 

@@ -84,6 +84,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/string.h
     ${CMAKE_CURRENT_LIST_DIR}/types/datetime.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/datetime.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/flags.h
 
     ${CMAKE_CURRENT_LIST_DIR}/io/ioenums.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp

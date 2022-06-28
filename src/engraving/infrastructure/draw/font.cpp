@@ -50,12 +50,12 @@ String Font::family() const
     return m_family;
 }
 
-qreal Font::pointSizeF() const
+double Font::pointSizeF() const
 {
     return m_pointSizeF;
 }
 
-void Font::setPointSizeF(qreal s)
+void Font::setPointSizeF(double s)
 {
     m_pointSizeF = s;
 }

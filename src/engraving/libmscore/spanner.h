@@ -62,7 +62,7 @@ public:
     // Score Tree functions
     virtual EngravingObject* scanParent() const override;
 
-    virtual qreal mag() const override;
+    virtual double mag() const override;
     virtual Fraction tick() const override;
 
     Spanner* spanner() const { return _spanner; }
@@ -82,9 +82,9 @@ public:
 
     const mu::PointF& userOff2() const { return _offset2; }
     void setUserOff2(const mu::PointF& o) { _offset2 = o; }
-    void setUserXoffset2(qreal x) { _offset2.setX(x); }
-    qreal& rUserXoffset2() { return _offset2.rx(); }
-    qreal& rUserYoffset2() { return _offset2.ry(); }
+    void setUserXoffset2(double x) { _offset2.setX(x); }
+    double& rUserXoffset2() { return _offset2.rx(); }
+    double& rUserYoffset2() { return _offset2.ry(); }
 
     void setPos2(const mu::PointF& p) { _p2 = p; }
     //TODO: rename to spanSegPosWithUserOffset()
@@ -92,14 +92,14 @@ public:
     //TODO: rename to spanSegPos()
     const mu::PointF& ipos2() const { return _p2; }
     mu::PointF& rpos2() { return _p2; }
-    qreal& rxpos2() { return _p2.rx(); }
-    qreal& rypos2() { return _p2.ry(); }
+    double& rxpos2() { return _p2.rx(); }
+    double& rypos2() { return _p2.ry(); }
 
     bool isEditable() const override { return true; }
 
     mu::ByteArray mimeData(const mu::PointF& dragOffset) const override;
 
-    void spatiumChanged(qreal ov, qreal nv) override;
+    void spatiumChanged(double ov, double nv) override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid id, const PropertyValue& v) override;
@@ -192,7 +192,7 @@ public:
     virtual EngravingObject* scanParent() const override;
     virtual EngravingObjectList scanChildren() const override;
 
-    virtual qreal mag() const override;
+    virtual double mag() const override;
 
     virtual void setScore(Score* s) override;
 

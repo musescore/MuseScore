@@ -105,17 +105,17 @@ public:
     void setBeam(Beam* b);
     virtual Beam* beam() const final { return !(measure() && measure()->stemless(staffIdx())) ? _beam : nullptr; }
     int beams() const { return _durationType.hooks(); }
-    virtual qreal upPos()   const = 0;
-    virtual qreal downPos() const = 0;
+    virtual double upPos()   const = 0;
+    virtual double downPos() const = 0;
 
     int line(bool up) const { return up ? upLine() : downLine(); }
     int line() const { return _up ? upLine() : downLine(); }
     virtual int upLine() const = 0;
     virtual int downLine() const = 0;
     virtual mu::PointF stemPos() const = 0;
-    virtual qreal stemPosX() const = 0;
+    virtual double stemPosX() const = 0;
     virtual mu::PointF stemPosBeam() const = 0;
-    virtual qreal rightEdge() const = 0;
+    virtual double rightEdge() const = 0;
 
     void setUp(bool val) { _up = val; }
     bool up() const { return _up; }
@@ -181,7 +181,7 @@ public:
     TDuration crossMeasureDurationType() const { return _crossMeasureTDur; }
     void setCrossMeasureDurationType(TDuration v) { _crossMeasureTDur = v; }
 
-    void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;

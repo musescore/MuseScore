@@ -73,8 +73,8 @@ public:
     void setActionType(ActionIconType val);
     void setAction(const std::string& actionCode, char16_t icon);
 
-    qreal fontSize() const;
-    void setFontSize(qreal size);
+    double fontSize() const;
+    void setFontSize(double size);
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
@@ -84,7 +84,7 @@ public:
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
 
-    static constexpr qreal DEFAULT_FONT_SIZE = 16.0;
+    static constexpr double DEFAULT_FONT_SIZE = 16.0;
 
 private:
     ActionIconType m_actionType { ActionIconType::UNDEFINED };

@@ -63,27 +63,27 @@ void QFontProvider::insertSubstitution(const String& familyName, const String& s
     QFont::insertSubstitution(familyName, substituteName);
 }
 
-qreal QFontProvider::lineSpacing(const Font& f) const
+double QFontProvider::lineSpacing(const Font& f) const
 {
     return QFontMetricsF(f.toQFont(), &device).lineSpacing();
 }
 
-qreal QFontProvider::xHeight(const Font& f) const
+double QFontProvider::xHeight(const Font& f) const
 {
     return QFontMetricsF(f.toQFont(), &device).xHeight();
 }
 
-qreal QFontProvider::height(const Font& f) const
+double QFontProvider::height(const Font& f) const
 {
     return QFontMetricsF(f.toQFont(), &device).height();
 }
 
-qreal QFontProvider::ascent(const Font& f) const
+double QFontProvider::ascent(const Font& f) const
 {
     return QFontMetricsF(f.toQFont(), &device).ascent();
 }
 
-qreal QFontProvider::descent(const Font& f) const
+double QFontProvider::descent(const Font& f) const
 {
     return QFontMetricsF(f.toQFont(), &device).descent();
 }
@@ -105,12 +105,12 @@ bool QFontProvider::inFontUcs4(const Font& f, uint ucs4) const
     return symBBox(f, ucs4, 1.).isValid();
 }
 
-qreal QFontProvider::horizontalAdvance(const Font& f, const String& string) const
+double QFontProvider::horizontalAdvance(const Font& f, const String& string) const
 {
     return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(string);
 }
 
-qreal QFontProvider::horizontalAdvance(const Font& f, const Char& ch) const
+double QFontProvider::horizontalAdvance(const Font& f, const Char& ch) const
 {
     return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(ch);
 }
@@ -136,7 +136,7 @@ RectF QFontProvider::tightBoundingRect(const Font& f, const String& string) cons
 }
 
 // Score symbols
-RectF QFontProvider::symBBox(const Font& f, uint ucs4, qreal dpi_f) const
+RectF QFontProvider::symBBox(const Font& f, uint ucs4, double dpi_f) const
 {
     FontEngineFT* engine = symEngine(f);
     if (!engine) {
@@ -163,14 +163,14 @@ RectF QFontProvider::symBBox(const Font& f, uint ucs4, qreal dpi_f) const
     return rect;
 }
 
-qreal QFontProvider::symAdvance(const Font& f, uint ucs4, qreal dpi_f) const
+double QFontProvider::symAdvance(const Font& f, uint ucs4, double dpi_f) const
 {
     FontEngineFT* engine = symEngine(f);
     if (!engine) {
         return 0.0;
     }
 
-    qreal symAdvance = engine->advance(ucs4, dpi_f);
+    double symAdvance = engine->advance(ucs4, dpi_f);
     if (RealIsNull(symAdvance)) {
         for (const auto& fontName : QFont::substitutes(f.family())) {
             Font subFont(f);

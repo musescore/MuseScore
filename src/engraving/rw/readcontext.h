@@ -75,7 +75,7 @@ public:
     int fileDivision() const;
     int fileDivision(int t) const;
 
-    qreal spatium() const;
+    double spatium() const;
 
     compat::DummyElement* dummy() const;
 

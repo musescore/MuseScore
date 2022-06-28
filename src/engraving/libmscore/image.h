@@ -62,13 +62,13 @@ public:
     void draw(mu::draw::Painter*) const override;
 
     bool isImageFramed() const;
-    qreal imageAspectRatio() const;
+    double imageAspectRatio() const;
     void setSize(const mu::SizeF& s) { _size = s; }
     mu::SizeF size() const { return _size; }
-    void updateImageHeight(const qreal& height);
-    void updateImageWidth(const qreal& width);
-    qreal imageHeight() const;
-    qreal imageWidth() const;
+    void updateImageHeight(const double& height);
+    void updateImageWidth(const double& width);
+    double imageHeight() const;
+    double imageWidth() const;
     bool lockAspectRatio() const { return _lockAspectRatio; }
     void setLockAspectRatio(bool v) { _lockAspectRatio = v; }
     bool autoScale() const { return _autoScale; }

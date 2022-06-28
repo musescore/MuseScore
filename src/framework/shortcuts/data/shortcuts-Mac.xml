@@ -806,6 +806,7 @@
     </SC>
   <SC>
     <key>edit-element</key>
+    <seq>F2</seq>
     <seq>Alt+Shift+E</seq>
     </SC>
   <SC>
@@ -814,7 +815,7 @@
     </SC>
   <SC>
     <key>show-keys</key>
-    <seq>F2</seq>
+    <seq>Shift+F2</seq>
     </SC>
   <SC>
     <key>rest-1</key>

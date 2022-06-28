@@ -295,7 +295,7 @@ bool MscWriter::ZipFileWriter::addFileData(const String& fileName, const ByteArr
         return false;
     }
 
-    m_zip->addFile(fileName, data);
+    m_zip->addFile(fileName.toStdString(), data);
     if (m_zip->status() != ZipWriter::NoError) {
         LOGE() << "failed write files to zip, status: " << m_zip->status();
         return false;
@@ -317,7 +317,7 @@ bool MscWriter::DirWriter::open(io::IODevice* device, const io::path_t& filePath
 
     m_rootPath = containerPath(filePath);
 
-    Dir dir(m_rootPath.toQString());
+    Dir dir(m_rootPath);
     if (!dir.removeRecursively()) {
         LOGE() << "failed clear dir: " << dir.absolutePath();
         return false;

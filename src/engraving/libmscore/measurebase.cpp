@@ -283,7 +283,7 @@ const MeasureBase* MeasureBase::findPotentialSectionBreak() const
 //   pause
 //---------------------------------------------------------
 
-qreal MeasureBase::pause() const
+double MeasureBase::pause() const
 {
     const LayoutBreak* layoutBreak = sectionBreakElement();
     return layoutBreak ? layoutBreak->pause() : 0.0;
@@ -302,9 +302,9 @@ void MeasureBase::layout()
             continue;
         }
         if (element->isLayoutBreak()) {
-            qreal _spatium = spatium();
-            qreal x;
-            qreal y;
+            double _spatium = spatium();
+            double x;
+            double y;
             if (toLayoutBreak(element)->isNoBreak()) {
                 x = width() + score()->styleMM(Sid::barWidth) - element->width() * .5;
             } else {

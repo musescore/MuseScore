@@ -21,6 +21,8 @@
  */
 
 #include "chordline.h"
+
+#include "translation.h"
 #include "rw/xml.h"
 #include "chord.h"
 #include "measure.h"
@@ -33,10 +35,10 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 const char* scorelineNames[] = {
-    QT_TRANSLATE_NOOP("Ms", "Fall"),
-    QT_TRANSLATE_NOOP("Ms", "Doit"),
-    QT_TRANSLATE_NOOP("Ms", "Plop"),
-    QT_TRANSLATE_NOOP("Ms", "Scoop"),
+    QT_TRANSLATE_NOOP("engraving", "Fall"),
+    QT_TRANSLATE_NOOP("engraving", "Doit"),
+    QT_TRANSLATE_NOOP("engraving", "Plop"),
+    QT_TRANSLATE_NOOP("engraving", "Scoop"),
 };
 
 //---------------------------------------------------------
@@ -82,8 +84,8 @@ void ChordLine::setChordLineType(ChordLineType st)
 void ChordLine::layout()
 {
     if (!modified) {
-        qreal x2 = 0;
-        qreal y2 = 0;
+        double x2 = 0;
+        double y2 = 0;
         double horBaseLength = 1.2 * _baseLength; // let the symbols extend a bit more horizontally
         x2 += isToTheLeft() ? -horBaseLength : horBaseLength;
         y2 += isBelow() ? _baseLength : -_baseLength;
@@ -105,7 +107,7 @@ void ChordLine::layout()
         }
     }
 
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     if (explicitParent()) {
         Note* note = _note ? _note : chord()->upNote();
         double x = note->pos().x();
@@ -146,8 +148,8 @@ void ChordLine::read(XmlReader& e)
                 const AsciiStringView nextTag(e.name());
                 if (nextTag == "Element") {
                     int type = e.intAttribute("type");
-                    qreal x  = e.doubleAttribute("x");
-                    qreal y  = e.doubleAttribute("y");
+                    double x  = e.doubleAttribute("x");
+                    double y  = e.doubleAttribute("y");
                     switch (PainterPath::ElementType(type)) {
                     case PainterPath::ElementType::MoveToElement:
                         path.moveTo(x, y);
@@ -222,7 +224,7 @@ void ChordLine::write(XmlWriter& xml) const
 void ChordLine::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     painter->scale(_spatium, _spatium);
     painter->setPen(Pen(curColor(), .15, PenStyle::SolidLine));
     painter->setBrush(BrushStyle::NoBrush);
@@ -250,7 +252,7 @@ void ChordLine::editDrag(EditData& ed)
 {
     auto n = path.elementCount();
     PainterPath p;
-    qreal sp = spatium();
+    double sp = spatium();
     _lengthX += ed.delta.x();
     _lengthY += ed.delta.y();
 
@@ -266,8 +268,8 @@ void ChordLine::editDrag(EditData& ed)
         _lengthX = slideBoundary;
     }
 
-    qreal dx = ed.delta.x() / sp;
-    qreal dy = ed.delta.y() / sp;
+    double dx = ed.delta.x() / sp;
+    double dy = ed.delta.y() / sp;
     for (size_t i = 0; i < n; ++i) {
         const PainterPath::Element& e = (_straight ? path.elementAt(1) : path.elementAt(i));
         if (_straight) {
@@ -284,8 +286,8 @@ void ChordLine::editDrag(EditData& ed)
             }
         }
 
-        qreal x = e.x;
-        qreal y = e.y;
+        double x = e.x;
+        double y = e.y;
         if (ed.curGrip == Grip(i)) {
             x += dx;
             y += dy;
@@ -301,10 +303,10 @@ void ChordLine::editDrag(EditData& ed)
             break;
         case PainterPath::ElementType::CurveToElement:
         {
-            qreal x2 = path.elementAt(i + 1).x;
-            qreal y2 = path.elementAt(i + 1).y;
-            qreal x3 = path.elementAt(i + 2).x;
-            qreal y3 = path.elementAt(i + 2).y;
+            double x2 = path.elementAt(i + 1).x;
+            double y2 = path.elementAt(i + 1).y;
+            double x3 = path.elementAt(i + 2).x;
+            double y3 = path.elementAt(i + 2).y;
             if (Grip(i + 1) == ed.curGrip) {
                 x2 += dx;
                 y2 += dy;
@@ -328,12 +330,12 @@ void ChordLine::editDrag(EditData& ed)
 
 std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
 {
-    qreal sp = spatium();
+    double sp = spatium();
     auto n   = path.elementCount();
     PointF cp(pagePos());
     if (_straight) {
         // limit the number of grips to one
-        qreal offset = 0.5 * sp;
+        double offset = 0.5 * sp;
         PointF p;
 
         if (_chordLineType == ChordLineType::FALL) {
@@ -366,7 +368,7 @@ String ChordLine::accessibleInfo() const
 {
     String rez = EngravingItem::accessibleInfo();
     if (chordLineType() != ChordLineType::NOTYPE) {
-        rez = String("%1: %2").arg(rez, String::fromUtf8(scorelineNames[static_cast<int>(chordLineType()) - 1]));
+        rez = String(u"%1: %2").arg(rez, String::fromUtf8(scorelineNames[static_cast<int>(chordLineType()) - 1]));
     }
     return rez;
 }

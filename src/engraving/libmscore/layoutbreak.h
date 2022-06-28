@@ -51,8 +51,8 @@ public:
     void read(XmlReader&) override;
 
     MeasureBase* measure() const { return (MeasureBase*)explicitParent(); }
-    qreal pause() const { return _pause; }
-    void setPause(qreal v) { _pause = v; }
+    double pause() const { return _pause; }
+    void setPause(double v) { _pause = v; }
     bool startWithLongNames() const { return _startWithLongNames; }
     void setStartWithLongNames(bool v) { _startWithLongNames = v; }
     bool startWithMeasureOne() const { return _startWithMeasureOne; }
@@ -81,12 +81,12 @@ private:
 
     void draw(mu::draw::Painter*) const override;
     void layout0();
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
+    void spatiumChanged(double oldValue, double newValue) override;
 
-    qreal lw;
+    double lw;
     mu::RectF m_iconBorderRect;
     mu::PainterPath m_iconPath;
-    qreal _pause;
+    double _pause;
     bool _startWithLongNames;
     bool _startWithMeasureOne;
     bool _firstSystemIndentation;

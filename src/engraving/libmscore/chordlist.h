@@ -120,7 +120,7 @@ struct RenderAction {
     };
 
     RenderActionType type = RenderActionType::SET;
-    qreal movex = 0.0, movey = 0.0; // MOVE
+    double movex = 0.0, movey = 0.0; // MOVE
     String text;                    // SET
 
     RenderAction() {}
@@ -253,7 +253,7 @@ struct ChordSymbol {
 struct ChordFont {
     String family;
     String fontClass;
-    qreal mag;
+    double mag;
 };
 
 //---------------------------------------------------------
@@ -264,9 +264,9 @@ class ChordList : public std::map<int, ChordDescription>
 {
     std::map<String, ChordSymbol> symbols;
     bool _autoAdjust = false;
-    qreal _nmag = 1.0, _nadjust = 0.0;
-    qreal _emag = 1.0, _eadjust = 0.0;
-    qreal _mmag = 1.0, _madjust = 0.0;
+    double _nmag = 1.0, _nadjust = 0.0;
+    double _emag = 1.0, _eadjust = 0.0;
+    double _mmag = 1.0, _madjust = 0.0;
 
     bool _customChordList = false; // if true, chordlist will be saved as part of score
 
@@ -279,10 +279,10 @@ public:
     static int privateID;
 
     bool autoAdjust() const { return _autoAdjust; }
-    qreal nominalMag() const { return _nmag; }
-    qreal nominalAdjust() const { return _nadjust; }
-    void configureAutoAdjust(qreal emag = 1.0, qreal eadjust = 0.0, qreal mmag = 1.0, qreal madjust = 0.0);
-    qreal position(const StringList& names, ChordTokenClass ctc) const;
+    double nominalMag() const { return _nmag; }
+    double nominalAdjust() const { return _nadjust; }
+    void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0);
+    double position(const StringList& names, ChordTokenClass ctc) const;
 
     bool read(const String&);
     bool read(io::IODevice* device);

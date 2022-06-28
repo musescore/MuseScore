@@ -23,8 +23,6 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
-#include <QObject>
-
 #include "types/string.h"
 #include "config.h"
 
@@ -112,12 +110,12 @@ static constexpr int MAX_TAGS = 32;
 static constexpr int MAX_HEADERS = 3;
 static constexpr int MAX_FOOTERS = 3;
 
-static constexpr qreal INCH      = 25.4;
-static constexpr qreal PPI       = 72.0; // printer points per inch
-static constexpr qreal DPI_F     = 5;
-static constexpr qreal DPI       = 72.0 * DPI_F;
-static constexpr qreal SPATIUM20 = 5.0 * (DPI / 72.0);
-static constexpr qreal DPMM      = DPI / INCH;
+static constexpr double INCH      = 25.4;
+static constexpr double PPI       = 72.0; // printer points per inch
+static constexpr double DPI_F     = 5;
+static constexpr double DPI       = 72.0 * DPI_F;
+static constexpr double SPATIUM20 = 5.0 * (DPI / 72.0);
+static constexpr double DPMM      = DPI / INCH;
 
 static constexpr int MAX_STAVES = 4;
 
@@ -263,13 +261,13 @@ public:
     static void registerUiTypes();
 
     static const String& globalShare() { return _globalShare; }
-    static qreal hRaster() { return _hRaster; }
-    static qreal vRaster() { return _vRaster; }
+    static double hRaster() { return _hRaster; }
+    static double vRaster() { return _vRaster; }
     static void setHRaster(int val) { _hRaster = val; }
     static void setVRaster(int val) { _vRaster = val; }
-    static void setNudgeStep(qreal val) { nudgeStep = val; }
-    static void setNudgeStep10(qreal val) { nudgeStep10 = val; }
-    static void setNudgeStep50(qreal val) { nudgeStep50 = val; }
+    static void setNudgeStep(double val) { nudgeStep = val; }
+    static void setNudgeStep10(double val) { nudgeStep10 = val; }
+    static void setNudgeStep50(double val) { nudgeStep50 = val; }
 
     static bool verticalOrientation() { return _verticalOrientation; }
     static void setVerticalOrientation(bool val) { _verticalOrientation = val; }
@@ -281,9 +279,9 @@ public:
     static bool harmonyPlayDisableNew;
     static bool playRepeats;
     static int playbackSpeedIncrement;
-    static qreal nudgeStep;
-    static qreal nudgeStep10;
-    static qreal nudgeStep50;
+    static double nudgeStep;
+    static double nudgeStep10;
+    static double nudgeStep50;
     static int defaultPlayDuration;
     static String lastError;
 
@@ -308,9 +306,9 @@ public:
     static bool svgPrinting;
     static double pixelRatio;
 
-    static qreal verticalPageGap;
-    static qreal horizontalPageGapEven;
-    static qreal horizontalPageGapOdd;
+    static double verticalPageGap;
+    static double horizontalPageGapEven;
+    static double horizontalPageGapOdd;
 
     static void setError(MsError e) { _error = e; }
     static const char* errorMessage();
@@ -321,7 +319,7 @@ public:
 //   center
 //---------------------------------------------------------
 
-static constexpr qreal center(qreal x1, qreal x2)
+static constexpr double center(double x1, double x2)
 {
     return x1 + (x2 - x1) * .5;
 }

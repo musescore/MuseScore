@@ -302,8 +302,8 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
                     double timeStep = std::abs(timeDelta / pitchDelta * 20.0);
                     double t = 0.0;
                     std::vector<int> onTimes;
-                    EaseInOut easeInOut(static_cast<qreal>(glissando->easeIn()) / 100.0,
-                                        static_cast<qreal>(glissando->easeOut()) / 100.0);
+                    EaseInOut easeInOut(static_cast<double>(glissando->easeIn()) / 100.0,
+                                        static_cast<double>(glissando->easeOut()) / 100.0);
                     easeInOut.timeList(static_cast<int>((timeDelta + timeStep * 0.5) / timeStep), int(timeDelta), &onTimes);
                     double nTimes = static_cast<double>(onTimes.size() - 1);
                     for (double time : onTimes) {
@@ -334,7 +334,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
 //   collectNote
 //---------------------------------------------------------
 
-static void collectNote(EventMap* events, int channel, const Note* note, qreal velocityMultiplier, int tickOffset, Staff* staff,
+static void collectNote(EventMap* events, int channel, const Note* note, double velocityMultiplier, int tickOffset, Staff* staff,
                         SndConfig config)
 {
     if (!note->play() || note->hidden()) {      // do not play overlapping notes
@@ -346,7 +346,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
     int ticks;
     int tieLen = 0;
     if (chord->isGrace()) {
-        Q_ASSERT(!graceNotesMerged(chord));      // this function should not be called on a grace note if grace notes are merged
+        assert(!graceNotesMerged(chord));      // this function should not be called on a grace note if grace notes are merged
         chord = toChord(chord->explicitParent());
     }
 
@@ -452,7 +452,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
             }
         }
 
-        qreal CONVERSION_FACTOR = MidiRenderer::ARTICULATION_CONV_FACTOR;
+        double CONVERSION_FACTOR = MidiRenderer::ARTICULATION_CONV_FACTOR;
         for (auto& change : multChanges) {
             // Ignore fix events: they are available as cached ramp starts
             // and considering them ends up with multiplying twice effectively
@@ -470,7 +470,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
                 }
                 lastVal = mult;
 
-                qreal realMult = mult / CONVERSION_FACTOR;
+                double realMult = mult / CONVERSION_FACTOR;
                 if (velocityMap.find(t) != velocityMap.end()) {
                     lastVelocity = velocityMap[t];
                     velocityMap[t] *= realMult;
@@ -761,7 +761,7 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m
             int channel = instr->channel(chord->upNote()->subchannel())->channel();
             events->registerChannel(channel);
 
-            qreal veloMultiplier = 1;
+            double veloMultiplier = 1;
             for (Articulation* a : chord->articulations()) {
                 if (a->playArticulation()) {
                     veloMultiplier *= instr->getVelocityMultiplier(a->articulationName());
@@ -866,7 +866,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
             events->registerChannel(channel);
 
             // Get a velocity multiplier
-            qreal veloMultiplier = 1;
+            double veloMultiplier = 1;
             for (Articulation* a : chord->articulations()) {
                 if (a->playArticulation()) {
                     veloMultiplier *= instr->getVelocityMultiplier(a->articulationName());
@@ -1070,7 +1070,7 @@ void Score::updateVelo()
                     Chord* chord = toChord(el);
                     Instrument* instr = chord->part()->instrument();
 
-                    qreal veloMultiplier = 1;
+                    double veloMultiplier = 1;
                     for (Articulation* a : chord->articulations()) {
                         if (a->playArticulation()) {
                             veloMultiplier *= instr->getVelocityMultiplier(a->articulationName());
@@ -1293,9 +1293,9 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
     }
 
     int swingBeat           = swingUnit * 2;
-    qreal ticksDuration     = (qreal)chord->actualTicks().ticks();
-    qreal swingTickAdjust   = ((qreal)swingBeat) * (((qreal)(swingRatio - 50)) / 100.0);
-    qreal swingActualAdjust = (swingTickAdjust / ticksDuration) * 1000.0;
+    double ticksDuration     = (double)chord->actualTicks().ticks();
+    double swingTickAdjust   = ((double)swingBeat) * (((double)(swingRatio - 50)) / 100.0);
+    double swingActualAdjust = (swingTickAdjust / ticksDuration) * 1000.0;
     ChordRest* ncr          = nextChordRest(chord);
 
     //Check the position of the chord to apply changes accordingly
@@ -1791,8 +1791,8 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
         for (Spanner* spanner : note->spannerFor()) {
             if (spanner->type() == ElementType::GLISSANDO) {
                 Glissando* glissando = toGlissando(spanner);
-                EaseInOut easeInOut(static_cast<qreal>(glissando->easeIn()) / 100.0,
-                                    static_cast<qreal>(glissando->easeOut()) / 100.0);
+                EaseInOut easeInOut(static_cast<double>(glissando->easeIn()) / 100.0,
+                                    static_cast<double>(glissando->easeOut()) / 100.0);
                 easeInOut.timeList(b, millespernote * b, &onTimes);
                 isGlissando = true;
                 break;
@@ -2223,8 +2223,8 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 
     int graceDuration = 0;
     bool drumset = (getDrumset(chord) != nullptr);
-    const qreal ticksPerSecond = tempo(tick).val * Constants::division;
-    const qreal chordTimeMS = (chord->actualTicks().ticks() / ticksPerSecond) * 1000;
+    const double ticksPerSecond = tempo(tick).val * Constants::division;
+    const double chordTimeMS = (chord->actualTicks().ticks() / ticksPerSecond) * 1000;
     if (drumset) {
         int flamDuration = 15;     //ms
         graceDuration = flamDuration / chordTimeMS * 1000;     //ratio 1/1000 from the main note length
