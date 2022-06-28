@@ -83,6 +83,15 @@ int AppShell::run(int argc, char** argv)
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
+    //! NOTE: For unknown reasons, Linux scaling for 1 is defined as 1.003 in fractional scaling.
+    //!       Because of this, some elements are drawn with a shift on the score.
+    //!       Let's make a Linux hack and round values above 0.75(see RoundPreferFloor)
+#ifdef Q_OS_LINUX
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
+#elif defined(Q_OS_WIN)
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+#endif
+
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(appName);
     QCoreApplication::setOrganizationName("MuseScore");
@@ -160,8 +169,6 @@ int AppShell::run(int argc, char** argv)
             }, Qt::QueuedConnection);
     } break;
     case framework::IApplication::RunMode::Editor: {
-        QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
-
         // ====================================================
         // Setup Qml Engine
         // ====================================================
