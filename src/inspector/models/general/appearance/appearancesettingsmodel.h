@@ -45,8 +45,10 @@ class AppearanceSettingsModel : public AbstractInspectorModel
 public:
     explicit AppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    Q_INVOKABLE void pushBackInOrder();
-    Q_INVOKABLE void pushFrontInOrder();
+    Q_INVOKABLE void pushBackwardsInOrder();
+    Q_INVOKABLE void pushForwardsInOrder();
+    Q_INVOKABLE void pushToBackInOrder();
+    Q_INVOKABLE void pushToFrontInOrder();
 
     Q_INVOKABLE void configureGrid();
 
@@ -75,6 +77,9 @@ private:
     void updatePropertiesOnNotationChanged() override;
 
     void loadOffsets();
+    mu::engraving::Page* getPage();
+    std::vector<mu::engraving::EngravingItem*> getAllElementsInPage();
+    std::vector<mu::engraving::EngravingItem*> getAllOverlappingElements();
 
     PropertyItem* m_leadingSpace = nullptr;
     PropertyItem* m_barWidth = nullptr;
