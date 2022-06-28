@@ -30,8 +30,8 @@ class OveConfiguration : public IOveConfiguration
 public:
     void init();
 
-    std::string importOvertuneCharset() const override;
-    void setImportOvertuneCharset(const std::string& charset) override;
+    std::string importOvertureCharset() const override;
+    void setImportOvertureCharset(const std::string& charset) override;
 };
 }
 
