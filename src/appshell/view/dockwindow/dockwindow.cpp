@@ -75,6 +75,14 @@ static void clearRegistry()
     for (KDDockWidgets::DockWidgetBase* dock : registry->dockwidgets()) {
         registry->unregisterDockWidget(dock);
     }
+
+    for (KDDockWidgets::Frame* frame : registry->frames()) {
+        for (KDDockWidgets::DockWidgetBase* dock : frame->dockWidgets()) {
+            frame->removeWidget(dock);
+        }
+
+        registry->unregisterFrame(frame);
+    }
 }
 }
 
@@ -276,8 +284,6 @@ QQuickItem& DockWindow::asItem() const
 void DockWindow::restoreDefaultLayout()
 {
     TRACEFUNC;
-
-    clearRegistry();
 
     if (m_currentPage) {
         for (DockBase* dock : m_currentPage->allDocks()) {
@@ -579,6 +585,8 @@ void DockWindow::reloadCurrentPage()
     }
 
     TRACEFUNC;
+
+    clearRegistry();
 
     for (DockBase* dock : m_currentPage->allDocks()) {
         dock->deinit();
