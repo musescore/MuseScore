@@ -50,6 +50,7 @@ public:
 
     io::path_t canonicalFilePath(const io::path_t& filePath) const override;
     io::path_t absolutePath(const io::path_t& filePath) const override;
+    io::path_t absoluteFilePath(const io::path_t& filePath) const override;
     DateTime birthTime(const io::path_t& filePath) const override;
     DateTime lastModified(const io::path_t& filePath) const override;
     bool isWritable(const path_t& filePath) const override;
