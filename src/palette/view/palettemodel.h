@@ -34,7 +34,9 @@
 
 namespace mu::engraving {
 class Selection;
+}
 
+namespace mu::palette {
 //---------------------------------------------------------
 //   PaletteCellFilter
 ///   Interface for filtering elements in a palette
@@ -50,13 +52,13 @@ signals:
     void filterChanged();
 
 protected:
-    virtual bool acceptCell(const mu::palette::PaletteCell&) const = 0;
+    virtual bool acceptCell(const PaletteCell&) const = 0;
 
 public:
     PaletteCellFilter(QObject* parent = nullptr)
         : QObject(parent) {}
 
-    bool accept(const mu::palette::PaletteCell&) const;
+    bool accept(const PaletteCell&) const;
 
     void addChainedFilter(PaletteCellFilter*);
     void connectToModel(const QAbstractItemModel*);
@@ -70,7 +72,7 @@ class VisibilityCellFilter : public PaletteCellFilter
 {
     bool acceptedValue;
 
-    bool acceptCell(const mu::palette::PaletteCell& cell) const override { return cell.visible == acceptedValue; }
+    bool acceptCell(const PaletteCell& cell) const override { return cell.visible == acceptedValue; }
 
 public:
     VisibilityCellFilter(bool acceptedVal, QObject* parent = nullptr)
@@ -85,7 +87,7 @@ class CustomizedCellFilter : public PaletteCellFilter
 {
     bool acceptedValue;
 
-    bool acceptCell(const mu::palette::PaletteCell& cell) const override { return cell.custom == acceptedValue; }
+    bool acceptCell(const PaletteCell& cell) const override { return cell.custom == acceptedValue; }
 
 public:
     CustomizedCellFilter(bool acceptedVal, QObject* parent = nullptr)
@@ -100,7 +102,7 @@ class PaletteTreeModel : public QAbstractItemModel, public mu::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
+    INJECT(palette, IPaletteConfiguration, configuration)
 
 public:
     enum PaletteTreeModelRoles {
@@ -119,15 +121,15 @@ public:
     Q_ENUM(PaletteTreeModelRoles)
 
 private:
-    mu::palette::PaletteTreePtr _paletteTree;
+    PaletteTreePtr _paletteTree;
     bool _treeChanged = false;
     bool _treeChangedSignalBlocked = false;
 
-    std::vector<mu::palette::PalettePtr>& palettes() { return _paletteTree->palettes; }
-    const std::vector<mu::palette::PalettePtr>& palettes() const { return _paletteTree->palettes; }
+    std::vector<PalettePtr>& palettes() { return _paletteTree->palettes; }
+    const std::vector<PalettePtr>& palettes() const { return _paletteTree->palettes; }
 
-    mu::palette::Palette* iptrToPalette(void* iptr, int* idx = nullptr);
-    const mu::palette::Palette* iptrToPalette(void* iptr, int* idx = nullptr) const
+    Palette* iptrToPalette(void* iptr, int* idx = nullptr);
+    const Palette* iptrToPalette(void* iptr, int* idx = nullptr) const
     {
         return const_cast<PaletteTreeModel*>(this)->iptrToPalette(iptr, idx);
     }
@@ -146,13 +148,13 @@ signals:
     void treeChanged();
 
 public:
-    explicit PaletteTreeModel(mu::palette::PaletteTreePtr tree, QObject* parent = nullptr);
+    explicit PaletteTreeModel(PaletteTreePtr tree, QObject* parent = nullptr);
 
     bool blockTreeChanged(bool block);
 
-    void setPaletteTree(mu::palette::PaletteTreePtr tree);
-    const mu::palette::PaletteTree* paletteTree() const { return _paletteTree.get(); }
-    const mu::palette::PaletteTreePtr paletteTreePtr() const { return _paletteTree; }
+    void setPaletteTree(PaletteTreePtr tree);
+    const PaletteTree* paletteTree() const { return _paletteTree.get(); }
+    const PaletteTreePtr paletteTreePtr() const { return _paletteTree; }
 
     bool paletteTreeChanged() const { return _treeChanged; }
 
@@ -176,7 +178,7 @@ public:
     bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) override;
 
     QModelIndexList match(const QModelIndex& start, int role, const QVariant& value, int hits, Qt::MatchFlags flags) const override;
-    QModelIndex findPaletteCell(const mu::palette::PaletteCell& cell, const QModelIndex& parent) const;
+    QModelIndex findPaletteCell(const PaletteCell& cell, const QModelIndex& parent) const;
     PaletteCellFilter* getFilter(const QModelIndex&) const;
 
     bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
@@ -184,13 +186,13 @@ public:
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
-    const mu::palette::Palette* findPalette(const QModelIndex&) const;
-    mu::palette::Palette* findPalette(const QModelIndex& index);
-    mu::palette::PaletteCellConstPtr findCell(const QModelIndex&) const;
-    mu::palette::PaletteCellPtr findCell(const QModelIndex& index);
-    bool insertPalette(mu::palette::PalettePtr pp, int row, const QModelIndex& parent = QModelIndex());
+    const Palette* findPalette(const QModelIndex&) const;
+    Palette* findPalette(const QModelIndex& index);
+    PaletteCellConstPtr findCell(const QModelIndex&) const;
+    PaletteCellPtr findCell(const QModelIndex& index);
+    bool insertPalette(PalettePtr pp, int row, const QModelIndex& parent = QModelIndex());
 
-    void updateCellsState(const Selection&);
+    void updateCellsState(const engraving::Selection&);
     void retranslate();
 };
 
@@ -229,6 +231,6 @@ public:
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 };
-} // namespace Ms
+}
 
 #endif

@@ -39,6 +39,7 @@ using namespace mu::palette;
 
 namespace mu::engraving {
 extern MasterScore* gpaletteScore;
+}
 
 //---------------------------------------------------------
 //   createSymbolPalette
@@ -160,5 +161,4 @@ void SymbolDialog::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange) {
         retranslate();
     }
-}
 }

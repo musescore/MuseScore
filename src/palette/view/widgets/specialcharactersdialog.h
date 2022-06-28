@@ -32,12 +32,13 @@
 
 class QListWidget;
 
-namespace mu::palette {
-class PaletteWidget;
-}
-
 namespace mu::engraving {
 class TextBase;
+}
+
+namespace mu::palette {
+class PaletteWidget;
+
 class SpecialCharactersDialog : public mu::uicomponents::TopLevelDialog, public Ui::SpecialCharactersDialog
 {
     Q_OBJECT
@@ -61,14 +62,14 @@ private:
     void populateCommon();
 
     mu::draw::Font m_font;
-    mu::palette::PaletteWidget* m_pCommon = nullptr;
-    mu::palette::PaletteWidget* m_pSmufl = nullptr;
-    mu::palette::PaletteWidget* m_pUnicode = nullptr;
+    PaletteWidget* m_pCommon = nullptr;
+    PaletteWidget* m_pSmufl = nullptr;
+    PaletteWidget* m_pUnicode = nullptr;
     QListWidget* m_lws = nullptr;
     QListWidget* m_lwu = nullptr;
 };
 }
 
-Q_DECLARE_METATYPE(mu::engraving::SpecialCharactersDialog)
+Q_DECLARE_METATYPE(mu::palette::SpecialCharactersDialog)
 
 #endif // MU_PALETTE_SPECIALCHARACTERSDIALOG_H

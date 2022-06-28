@@ -280,7 +280,7 @@ void PaletteCell::write(XmlWriter& xml) const
 
 PaletteCellPtr PaletteCell::fromMimeData(const QByteArray& data)
 {
-    return mu::engraving::fromMimeData<PaletteCell>(data, "Cell");
+    return ::fromMimeData<PaletteCell>(data, "Cell");
 }
 
 PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
@@ -312,7 +312,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
 
 QByteArray PaletteCell::toMimeData() const
 {
-    return mu::engraving::toMimeData(this);
+    return ::toMimeData(this);
 }
 
 AccessiblePaletteCellInterface::AccessiblePaletteCellInterface(PaletteCell* cell)
