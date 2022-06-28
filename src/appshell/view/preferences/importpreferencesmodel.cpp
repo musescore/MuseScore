@@ -94,9 +94,9 @@ QString ImportPreferencesModel::currentGuitarProCharset() const
     return QString::fromStdString(guitarProConfiguration()->importGuitarProCharset());
 }
 
-QString ImportPreferencesModel::currentOvertuneCharset() const
+QString ImportPreferencesModel::currentOvertureCharset() const
 {
-    return QString::fromStdString(oveConfiguration()->importOvertuneCharset());
+    return QString::fromStdString(oveConfiguration()->importOvertureCharset());
 }
 
 bool ImportPreferencesModel::importLayout() const
@@ -144,14 +144,14 @@ void ImportPreferencesModel::setCurrentGuitarProCharset(QString charset)
     emit currentGuitarProCharsetChanged(charset);
 }
 
-void ImportPreferencesModel::setCurrentOvertuneCharset(QString charset)
+void ImportPreferencesModel::setCurrentOvertureCharset(QString charset)
 {
-    if (charset == currentOvertuneCharset()) {
+    if (charset == currentOvertureCharset()) {
         return;
     }
 
-    oveConfiguration()->setImportOvertuneCharset(charset.toStdString());
-    emit currentOvertuneCharsetChanged(charset);
+    oveConfiguration()->setImportOvertureCharset(charset.toStdString());
+    emit currentOvertureCharsetChanged(charset);
 }
 
 void ImportPreferencesModel::setImportLayout(bool import)
