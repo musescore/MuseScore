@@ -23,9 +23,8 @@
 
 #include <QTextCodec>
 
-#include "libmscore/mscore.h"
+#include "engraving/types/constants.h"
 
-#include "log.h"
 #include "translation.h"
 
 using namespace mu::appshell;
@@ -54,16 +53,18 @@ QVariantList ImportPreferencesModel::charsets() const
 
 QVariantList ImportPreferencesModel::shortestNotes() const
 {
+    constexpr int division =  engraving::Constants::division;
+
     QVariantList result = {
-        QVariantMap { { "title", qtrc("appshell", "Quarter") }, { "value", division() } },
-        QVariantMap { { "title", qtrc("appshell", "Eighth") }, { "value", division() / 2 } },
-        QVariantMap { { "title", qtrc("appshell", "16th") }, { "value", division() / 4 } },
-        QVariantMap { { "title", qtrc("appshell", "32nd") }, { "value", division() / 8 } },
-        QVariantMap { { "title", qtrc("appshell", "64th") }, { "value", division() / 16 } },
-        QVariantMap { { "title", qtrc("appshell", "128th") }, { "value", division() / 32 } },
-        QVariantMap { { "title", qtrc("appshell", "256th") }, { "value", division() / 64 } },
-        QVariantMap { { "title", qtrc("appshell", "512th") }, { "value", division() / 128 } },
-        QVariantMap { { "title", qtrc("appshell", "1024th") }, { "value", division() / 256 } }
+        QVariantMap { { "title", qtrc("appshell", "Quarter") }, { "value", division } },
+        QVariantMap { { "title", qtrc("appshell", "Eighth") }, { "value", division / 2 } },
+        QVariantMap { { "title", qtrc("appshell", "16th") }, { "value", division / 4 } },
+        QVariantMap { { "title", qtrc("appshell", "32nd") }, { "value", division / 8 } },
+        QVariantMap { { "title", qtrc("appshell", "64th") }, { "value", division / 16 } },
+        QVariantMap { { "title", qtrc("appshell", "128th") }, { "value", division / 32 } },
+        QVariantMap { { "title", qtrc("appshell", "256th") }, { "value", division / 64 } },
+        QVariantMap { { "title", qtrc("appshell", "512th") }, { "value", division / 128 } },
+        QVariantMap { { "title", qtrc("appshell", "1024th") }, { "value", division / 256 } }
     };
 
     return result;
@@ -202,9 +203,4 @@ void ImportPreferencesModel::setNeedAskAboutApplyingNewStyle(bool value)
 
     musicXmlConfiguration()->setNeedAskAboutApplyingNewStyle(value);
     emit needAskAboutApplyingNewStyleChanged(value);
-}
-
-int ImportPreferencesModel::division() const
-{
-    return notationConfiguration()->notationDivision();
 }
