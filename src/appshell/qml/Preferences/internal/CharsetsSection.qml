@@ -30,10 +30,10 @@ BaseSection {
 
     property var charsets: null
     property string currentGuitarProCharset: ""
-    property string currentOvertuneCharset: ""
+    property string currentOvertureCharset: ""
 
     signal guitarProCharsetChangeRequested(string charset)
-    signal overtuneCharsetChangeRequested(string charset)
+    signal overtureCharsetChangeRequested(string charset)
 
     ComboBoxWithTitle {
         title: qsTrc("appshell", "Guitar Pro import character set:")
@@ -55,7 +55,7 @@ BaseSection {
         title: qsTrc("appshell", "Overture import character set:")
         columnWidth: root.columnWidth
 
-        currentIndex: control.indexOfValue(root.currentOvertuneCharset)
+        currentIndex: control.indexOfValue(root.currentOvertureCharset)
         model: root.charsets
 
         navigation.name: "OvertureBox"
@@ -63,7 +63,7 @@ BaseSection {
         navigation.row: 1
 
         onValueEdited: function(newIndex, newValue) {
-            root.overtuneCharsetChangeRequested(newValue)
+            root.overtureCharsetChangeRequested(newValue)
         }
     }
 }
