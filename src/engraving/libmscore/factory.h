@@ -31,10 +31,8 @@
 
 namespace mu::engraving {
 class Instrument;
-}
-
-namespace mu::engraving {
 class RootItem;
+
 class Factory
 {
 public:

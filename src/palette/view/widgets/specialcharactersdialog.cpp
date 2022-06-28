@@ -45,7 +45,6 @@ using namespace mu::notation;
 using namespace mu::palette;
 using namespace mu::ui;
 
-namespace mu::engraving {
 static constexpr SymId commonScoreSymbols[] = {
     SymId::accidentalFlat,
     SymId::accidentalNatural,
@@ -726,5 +725,4 @@ void SpecialCharactersDialog::setFont(const mu::draw::Font& font)
     populateUnicode();
     populateCommon();
     update();
-}
 }

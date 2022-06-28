@@ -24,7 +24,6 @@
 #define __TIMEDIALOG_H__
 
 #include "ui_timedialog.h"
-#include "engraving/types/fraction.h"
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
@@ -33,12 +32,6 @@
 namespace mu::palette {
 class PaletteWidget;
 class PaletteScrollArea;
-}
-
-namespace mu::engraving {
-class TimeSig;
-class Score;
-class Chord;
 
 class TimeDialog : public QWidget, Ui::TimeDialogBase
 {
@@ -46,8 +39,8 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase
 
     Q_PROPERTY(bool showTimePalette READ showTimePalette WRITE setShowTimePalette)
 
-    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
-    INJECT(palette, mu::palette::IPaletteProvider, paletteProvider)
+    INJECT(palette, IPaletteConfiguration, configuration)
+    INJECT(palette, IPaletteProvider, paletteProvider)
 
 public:
     TimeDialog(QWidget* parent = 0);
@@ -70,8 +63,8 @@ private:
     int denominator() const;
     int denominator2Idx(int) const;
 
-    mu::palette::PaletteScrollArea* _timePalette = nullptr;
-    mu::palette::PaletteWidget* sp = nullptr;
+    PaletteScrollArea* _timePalette = nullptr;
+    PaletteWidget* sp = nullptr;
     bool _dirty = false;
 };
 }
