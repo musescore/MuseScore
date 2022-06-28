@@ -40,6 +40,8 @@ class IEngravingConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IEngravingConfiguration() = default;
 
+    virtual io::path_t appDataPath() const = 0;
+
     virtual io::path_t defaultStyleFilePath() const = 0;
     virtual void setDefaultStyleFilePath(const io::path_t& path) = 0;
 

@@ -216,7 +216,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
             } else if (s == "system") {
                 score->setLayoutMode(LayoutMode::SYSTEM);
             } else {
-                LOGD("layoutMode: %s", qPrintable(s));
+                LOGD("layoutMode: %s", muPrintable(s));
             }
         } else {
             e.unknown();
@@ -225,7 +225,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     e.context()->reconnectBrokenConnectors();
     if (e.error() != XmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
-             qPrintable(e.docName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
+             muPrintable(e.docName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
         if (e.error() == XmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {

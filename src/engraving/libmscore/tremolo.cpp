@@ -303,9 +303,9 @@ void Tremolo::layoutOneNoteTremolo(double x, double y, double h, double spatium)
 
     if (up) {
         double height = isBuzzRoll() ? 0 : minHeight();
-        y = qMin(y, ((staff()->lines(tick()) - 1) - height) * spatium);
+        y = std::min(y, ((staff()->lines(tick()) - 1) - height) * spatium);
     } else {
-        y = qMax(y, 0.0);
+        y = std::max(y, 0.0);
     }
     setPos(x, y);
 }
@@ -406,7 +406,7 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     // TODO const double MAX_H_LENGTH = spatium * score()->styleS(Sid::tremoloBeamLengthMultiplier).val();
     const double MAX_H_LENGTH = spatium * 12.0;
 
-    const double defaultLength = qMin(H_MULTIPLIER * (x2 - x1), MAX_H_LENGTH);
+    const double defaultLength = std::min(H_MULTIPLIER * (x2 - x1), MAX_H_LENGTH);
     double xScaleFactor = defaultStyle ? defaultLength / H_MULTIPLIER : (x2 - x1);
     const double w2 = spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
     xScaleFactor /= (2.0 * w2);
@@ -459,7 +459,7 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     // 2. The chords are on different staves and the tremolo is between them.
     // The layout should be improved by extending both stems, so changes are not needed here.
     if (_chord1->up() != _chord2->up() && defaultStyle && !crossStaffBeamBetween()) {
-        dy = qMin(qMax(dy, -1.0 * spatium / defaultLength * dx), 1.0 * spatium / defaultLength * dx);
+        dy = std::min(std::max(dy, -1.0 * spatium / defaultLength * dx), 1.0 * spatium / defaultLength * dx);
     }
     double ds = dy / dx;
     shearTransform.shear(0.0, ds);
@@ -641,7 +641,7 @@ String Tremolo::subtypeName() const
 
 String Tremolo::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), subtypeName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), subtypeName());
 }
 
 //---------------------------------------------------------

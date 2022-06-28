@@ -159,7 +159,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                                 fixedDistance = true;
                                 break;
                             } else {
-                                distance = qMax(distance, sp->gap().val());
+                                distance = std::max(distance, sp->gap().val());
                             }
                         }
                     }
@@ -170,7 +170,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                     if (headerExtension > 0.0) {
                         top += headerExtension + headerFooterPadding;
                     }
-                    distance = qMax(distance, top);
+                    distance = std::max(distance, top);
                 }
             }
         }
@@ -219,24 +219,24 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                     dist += footerExtension;
                 }
             } else if (!ctx.prevSystem->hasFixedDownDistance()) {
-                double margin = qMax(ctx.curSystem->minBottom(), ctx.curSystem->spacerDistance(false));
+                double margin = std::max(ctx.curSystem->minBottom(), ctx.curSystem->spacerDistance(false));
                 // ensure it doesn't collide with footer
                 if (footerExtension > 0) {
                     margin += footerExtension + headerFooterPadding;
                 }
-                dist += qMax(margin, slb);
+                dist += std::max(margin, slb);
             }
             breakPage = (y + dist) >= endY && breakPages;
         }
         if (breakPage) {
-            double dist = qMax(ctx.prevSystem->minBottom(), ctx.prevSystem->spacerDistance(false));
+            double dist = std::max(ctx.prevSystem->minBottom(), ctx.prevSystem->spacerDistance(false));
             double footerPadding = 0.0;
             // ensure it doesn't collide with footer
             if (footerExtension > 0) {
                 footerPadding = footerExtension + headerFooterPadding;
                 dist += footerPadding;
             }
-            dist = qMax(dist, slb);
+            dist = std::max(dist, slb);
             layoutPage(ctx, ctx.page, endY - (y + dist), footerPadding);
             // if we collected a system we cannot fit onto this page,
             // we need to collect next page in order to correctly set system positions
@@ -411,7 +411,7 @@ void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, double restHei
                 System* s = sList[k];
                 double d = s->distance() + fill;
                 if ((d - s->height()) > maxDist) {          // but don't exceed max system distance
-                    d = qMax(maxDist + s->height(), s->distance());
+                    d = std::max(maxDist + s->height(), s->distance());
                 }
                 s->setDistance(d);
             }
@@ -428,7 +428,7 @@ void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, double restHei
         for (System* s : qAsConst(sList)) {                           // allocate it to systems equally
             double d = s->distance() + fill;
             if ((d - s->height()) > maxDist) {              // but don't exceed max system distance
-                d = qMax(maxDist + s->height(), s->distance());
+                d = std::max(maxDist + s->height(), s->distance());
             }
             s->setDistance(d);
         }
@@ -521,10 +521,10 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, double f
                 for (const BracketItem* bi : staff->brackets()) {
                     if (bi->bracketType() == BracketType::NORMAL) {
                         addSpaceAroundNormalBracket |= int(staff->idx()) > (endNormalBracket - 1);
-                        endNormalBracket = qMax(endNormalBracket, int(staff->idx() + bi->bracketSpan()));
+                        endNormalBracket = std::max(endNormalBracket, int(staff->idx() + bi->bracketSpan()));
                     } else if (bi->bracketType() == BracketType::BRACE) {
                         addSpaceAroundCurlyBracket |= int(staff->idx()) > (endCurlyBracket - 1);
-                        endCurlyBracket = qMax(endCurlyBracket, int(staff->idx() + bi->bracketSpan()));
+                        endCurlyBracket = std::max(endCurlyBracket, int(staff->idx() + bi->bracketSpan()));
                     }
                 }
 
@@ -571,10 +571,10 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, double f
     const double staffLowerBorder = score->styleMM(Sid::staffLowerBorder);
     const double combinedBottomMargin = page->bm() + footerPadding;
     const double marginToStaff = page->bm() + staffLowerBorder;
-    double spaceRemaining{ qMin(page->height() - combinedBottomMargin - yBottom, page->height() - marginToStaff - prevYBottom) };
+    double spaceRemaining{ std::min(page->height() - combinedBottomMargin - yBottom, page->height() - marginToStaff - prevYBottom) };
 
     if (nextSpacer) {
-        spaceRemaining -= qMax(0.0, nextSpacer->gap() - spacerOffset - staffLowerBorder);
+        spaceRemaining -= std::max(0.0, nextSpacer->gap() - spacerOffset - staffLowerBorder);
     }
     if (spaceRemaining <= 0.0) {
         return;
@@ -628,7 +628,7 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, double f
     // If there is still space left, distribute the space of the staves.
     // However, there is a limit on how much space is added per gap.
     const double maxPageFill { score->styleMM(Sid::maxPageFillSpread) };
-    spaceRemaining = qMin(maxPageFill * static_cast<double>(vgdl.size()), spaceRemaining);
+    spaceRemaining = std::min(maxPageFill * static_cast<double>(vgdl.size()), spaceRemaining);
     pass = 0;
     ngaps = 1;
     while (!RealIsNull(spaceRemaining) && !RealIsNull(maxPageFill) && (ngaps > 0) && (++pass < maxPasses)) {

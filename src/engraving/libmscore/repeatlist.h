@@ -23,7 +23,6 @@
 #ifndef __REPEATLIST_H__
 #define __REPEATLIST_H__
 
-#include <QtGlobal>
 #include <set>
 #include <vector>
 

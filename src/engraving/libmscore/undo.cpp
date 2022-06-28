@@ -291,7 +291,7 @@ UndoStack::~UndoStack()
     for (auto c : list) {
         c->cleanup(idx++ < curIdx);
     }
-    qDeleteAll(list);
+    DeleteAll(list);
 }
 
 //---------------------------------------------------------
@@ -857,7 +857,7 @@ const char* AddElement::name() const
     static char buffer[64];
     if (element->isTextBase()) {
         snprintf(buffer, 64, "Add:    %s <%s> %p", element->typeName(),
-                 qPrintable(toTextBase(element)->plainText()), element);
+                 muPrintable(toTextBase(element)->plainText()), element);
     } else if (element->isSegment()) {
         snprintf(buffer, 64, "Add:    <%s-%s> %p", element->typeName(), toSegment(element)->subTypeName(), element);
     } else {
@@ -1009,7 +1009,7 @@ const char* RemoveElement::name() const
     static char buffer[64];
     if (element->isTextBase()) {
         snprintf(buffer, 64, "Remove: %s <%s> %p", element->typeName(),
-                 qPrintable(toTextBase(element)->plainText()), element);
+                 muPrintable(toTextBase(element)->plainText()), element);
     } else if (element->isSegment()) {
         snprintf(buffer, 64, "Remove: <%s-%s> %p", element->typeName(), toSegment(element)->subTypeName(), element);
     } else {

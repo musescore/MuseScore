@@ -91,7 +91,7 @@ Staff::Staff(const Staff& staff)
 
 Staff::~Staff()
 {
-    qDeleteAll(brackets());
+    DeleteAll(brackets());
 }
 
 //---------------------------------------------------------
@@ -195,7 +195,7 @@ void Staff::setBracketType(size_t idx, BracketType val)
 
 void Staff::swapBracket(size_t oldIdx, size_t newIdx)
 {
-    size_t idx = qMax(oldIdx, newIdx);
+    size_t idx = std::max(oldIdx, newIdx);
     fillBrackets(idx);
     _brackets[oldIdx]->setColumn(newIdx);
     _brackets[newIdx]->setColumn(oldIdx);
@@ -209,7 +209,7 @@ void Staff::swapBracket(size_t oldIdx, size_t newIdx)
 
 void Staff::changeBracketColumn(size_t oldColumn, size_t newColumn)
 {
-    size_t idx = qMax(oldColumn, newColumn);
+    size_t idx = std::max(oldColumn, newColumn);
     fillBrackets(idx);
     int step = newColumn > oldColumn ? 1 : -1;
     for (size_t i = oldColumn; i != newColumn; i += step) {
@@ -404,7 +404,7 @@ size_t Staff::bracketLevels() const
 {
     size_t columns = 0;
     for (auto bi : _brackets) {
-        columns = qMax(columns, bi->column());
+        columns = std::max(columns, bi->column());
     }
     return columns;
 }

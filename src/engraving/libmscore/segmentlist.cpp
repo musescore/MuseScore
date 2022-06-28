@@ -81,7 +81,7 @@ void SegmentList::check()
         case SegmentType::KeySigAnnounce:
             break;
         default:
-            ASSERT_X(String("SegmentList::check: invalid segment type: %1").arg(int(s->segmentType())));
+            ASSERT_X(String(u"SegmentList::check: invalid segment type: %1").arg(int(s->segmentType())));
             break;
         }
         Segment* ss = s->next();
@@ -105,7 +105,7 @@ void SegmentList::check()
         ASSERT_X("SegmentList::check: last has next");
     }
     if (n != _size) {
-        ASSERT_X(String("SegmentList::check: counted %1 but _size is %d2").arg(n, _size));
+        ASSERT_X(String(u"SegmentList::check: counted %1 but _size is %d2").arg(n, _size));
         _size = n;
     }
 }
@@ -149,7 +149,7 @@ void SegmentList::remove(Segment* e)
         }
     }
     if (!found) {
-        ASSERT_X(String("segment %1 not in list").arg(String::fromAscii(e->subTypeName())));
+        ASSERT_X(String(u"segment %1 not in list").arg(String::fromAscii(e->subTypeName())));
     }
 #endif
     --_size;

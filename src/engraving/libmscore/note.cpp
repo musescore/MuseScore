@@ -28,12 +28,10 @@
 #include "note.h"
 
 #include <assert.h>
-#include <QtMath>
 
 #include "translation.h"
 #include "draw/brush.h"
 #include "rw/xml.h"
-#include "accessibility/accessiblenote.h"
 #include "types/typesconv.h"
 
 #include "accidental.h"
@@ -566,9 +564,9 @@ Note::Note(Chord* ch)
 Note::~Note()
 {
     delete _accidental;
-    qDeleteAll(_el);
+    DeleteAll(_el);
     delete _tieFor;
-    qDeleteAll(_dots);
+    DeleteAll(_dots);
     _leftParenthesis = nullptr;
     _rightParenthesis = nullptr;
 }
@@ -1756,8 +1754,8 @@ public:
 
     static inline EditMode editModeByDragDirection(const double& deltaX, const double& deltaY)
     {
-        double x = qAbs(deltaX);
-        double y = qAbs(deltaY);
+        double x = std::abs(deltaX);
+        double y = std::abs(deltaY);
 
         mu::PointF normalizedVector(x, y);
 
@@ -1765,7 +1763,7 @@ public:
 
         float radians = PointF::dotProduct(normalizedVector, PointF(1, 0));
 
-        double degrees = (qAcos(radians) * 180.0) / M_PI;
+        double degrees = (std::acos(radians) * 180.0) / M_PI;
 
         LOGD() << "NOTE DRAG DEGREES " << degrees;
 

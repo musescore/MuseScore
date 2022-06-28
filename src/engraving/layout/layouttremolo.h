@@ -23,7 +23,6 @@
 #define MU_ENGRAVING_LAYOUTTREMOLO_H
 
 #include <utility>
-#include <QtGlobal>
 
 namespace mu::engraving {
 class Tremolo;

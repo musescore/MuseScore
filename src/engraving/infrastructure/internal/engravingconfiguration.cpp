@@ -73,6 +73,11 @@ void EngravingConfiguration::init()
     }
 }
 
+mu::io::path_t EngravingConfiguration::appDataPath() const
+{
+    return globalConfiguration()->appDataPath();
+}
+
 mu::io::path_t EngravingConfiguration::defaultStyleFilePath() const
 {
     return settings()->value(DEFAULT_STYLE_FILE_PATH).toPath();

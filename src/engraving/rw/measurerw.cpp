@@ -83,7 +83,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
         if (sl.size() == 2) {
             measure->_len = Fraction(sl.at(0).toInt(), sl.at(1).toInt());
         } else {
-            LOGD("illegal measure size <%s>", qPrintable(e.attribute("len")));
+            LOGD("illegal measure size <%s>", muPrintable(e.attribute("len")));
         }
         irregular = true;
         if (measure->_len.numerator() <= 0 || measure->_len.denominator() <= 0 || measure->_len.denominator() > 128) {

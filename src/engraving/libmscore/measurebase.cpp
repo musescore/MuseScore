@@ -73,7 +73,7 @@ MeasureBase::MeasureBase(const MeasureBase& m)
 
 void MeasureBase::clearElements()
 {
-    qDeleteAll(_el);
+    DeleteAll(_el);
     _el.clear();
 }
 
@@ -106,7 +106,7 @@ void MeasureBase::setScore(Score* score)
 
 MeasureBase::~MeasureBase()
 {
-    qDeleteAll(_el);
+    DeleteAll(_el);
 }
 
 //---------------------------------------------------------

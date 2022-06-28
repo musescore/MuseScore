@@ -118,7 +118,7 @@ void XmlWriter::tagProperty(Pid id, const PropertyValue& val, const PropertyValu
         LOGD() << "property value type mismatch, prop: " << name;
     }
 
-    const QString writableVal(propertyToString(id, val, /* mscx */ true));
+    const String writableVal(propertyToString(id, val, /* mscx */ true));
     if (writableVal.isEmpty()) {
         //! NOTE The data type is MILLIMETRE, but we write SPATIUM
         //! (the conversion from Millimetre to Spatium occurred higher up the stack)
@@ -165,7 +165,7 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
         element(name, data.value<double>());
         break;
     case P_TYPE::STRING:
-        element(name, data.value<QString>());
+        element(name, data.value<String>());
         break;
     // geometry
     case P_TYPE::POINT: {

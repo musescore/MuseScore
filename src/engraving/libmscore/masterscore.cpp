@@ -74,7 +74,7 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
 #elif defined(Q_OS_LINUX)
     metaTags().insert({ u"platform", u"Linux" });
 #else
-    metaTags().insert({ "platform", "Unknown" });
+    metaTags().insert({ u"platform", u"Unknown" });
 #endif
     metaTags().insert({ u"movementNumber", u"" });
     metaTags().insert({ u"movementTitle", u"" });
@@ -107,7 +107,7 @@ MasterScore::~MasterScore()
     delete _sigmap;
     delete _tempomap;
     delete _undoStack;
-    qDeleteAll(_excerpts);
+    DeleteAll(_excerpts);
 }
 
 //---------------------------------------------------------
@@ -248,7 +248,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     // Write Excerpts
     {
         if (!onlySelection) {
-            for (const Excerpt* excerpt : qAsConst(this->excerpts())) {
+            for (const Excerpt* excerpt : this->excerpts()) {
                 Score* partScore = excerpt->excerptScore();
                 if (partScore != this) {
                     // Write excerpt style

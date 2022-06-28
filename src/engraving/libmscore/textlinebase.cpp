@@ -342,11 +342,11 @@ void TextLineBaseSegment::layout()
 
     // line has text or hooks or is not diagonal - calculate reasonable bbox
 
-    double x1 = qMin(0.0, pp2.x());
-    double x2 = qMax(0.0, pp2.x());
+    double x1 = std::min(0.0, pp2.x());
+    double x2 = std::max(0.0, pp2.x());
     double y0 = -textLineBase()->lineWidth();
-    double y1 = qMin(0.0, pp2.y()) + y0;
-    double y2 = qMax(0.0, pp2.y()) - y0;
+    double y1 = std::min(0.0, pp2.y()) + y0;
+    double y2 = std::max(0.0, pp2.y()) - y0;
 
     double l = 0.0;
     if (!_text->empty()) {
@@ -358,14 +358,14 @@ void TextLineBaseSegment::layout()
         }
         double h = _text->height();
         if (textLineBase()->beginTextPlace() == TextPlace::ABOVE) {
-            y1 = qMin(y1, -h);
+            y1 = std::min(y1, -h);
         } else if (textLineBase()->beginTextPlace() == TextPlace::BELOW) {
-            y2 = qMax(y2, h);
+            y2 = std::max(y2, h);
         } else {
-            y1 = qMin(y1, -h * .5);
-            y2 = qMax(y2, h * .5);
+            y1 = std::min(y1, -h * .5);
+            y2 = std::max(y2, h * .5);
         }
-        x2 = qMax(x2, _text->width());
+        x2 = std::max(x2, _text->width());
     }
 
     if (textLineBase()->endHookType() != HookType::NONE) {
@@ -717,7 +717,7 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::BEGIN_FONT_SIZE:
         if (v.toReal() <= 0) {
-            ASSERT_X(String("font size is %1").arg(v.toReal()));
+            ASSERT_X(String(u"font size is %1").arg(v.toReal()));
         }
         setBeginFontSize(v.toReal());
         break;

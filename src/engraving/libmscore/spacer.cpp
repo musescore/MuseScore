@@ -79,7 +79,7 @@ void Spacer::layout0()
     path    = PainterPath();
     double w = _spatium;
     double b = w * .5;
-    double h = explicitParent() ? _gap : qMin(_gap.val(), spatium() * 4.0);      // limit length for palette
+    double h = explicitParent() ? _gap : std::min(_gap.val(), spatium() * 4.0);      // limit length for palette
 
     switch (spacerType()) {
     case SpacerType::DOWN:

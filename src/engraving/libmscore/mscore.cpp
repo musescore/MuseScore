@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QCoreApplication>
-
 #include "translation.h"
 #include "style/style.h"
 #include "io/dir.h"
@@ -85,7 +83,6 @@ bool MScore::useFallbackFont     = true;
 bool MScore::saveTemplateMode = false;
 bool MScore::noGui = false;
 
-String MScore::_globalShare;
 int MScore::_vRaster;
 int MScore::_hRaster;
 bool MScore::_verticalOrientation = false;
@@ -177,30 +174,13 @@ void MScore::init()
         return;
     }
 
-#ifdef Q_OS_WIN
-    io::Dir dir(QCoreApplication::applicationDirPath() + String("/../" INSTALL_NAME));
-    _globalShare = dir.absolutePath().toString() + u"/";
-
-#elif defined(Q_OS_MAC)
-    io::Dir dir(QCoreApplication::applicationDirPath() + String("/../Resources"));
-    _globalShare = dir.absolutePath().toString() + u"/";
-#else
-    // Try relative path (needed for portable AppImage and non-standard installations)
-    io::Dir dir(QCoreApplication::applicationDirPath() + String("/../share/" INSTALL_NAME));
-    if (dir.exists()) {
-        _globalShare = dir.absolutePath().toString() + u"/";
-    } else { // Fall back to default location (e.g. if binary has moved relative to share)
-        _globalShare = String(INSTPREFIX "/share/" INSTALL_NAME);
-    }
-#endif
-
     defaultPlayDuration = 300;        // ms
     warnPitchRange      = true;
     pedalEventsMinTicks = 1;
     playRepeats         = true;
     playbackSpeedIncrement = 5;
 
-    lastError           = "";
+    lastError           = u"";
 
     //
     //  initialize styles

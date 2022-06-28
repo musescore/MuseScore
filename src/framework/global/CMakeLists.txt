@@ -77,6 +77,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/sharedhashmap.h
     ${CMAKE_CURRENT_LIST_DIR}/sharedmap.h
     ${CMAKE_CURRENT_LIST_DIR}/containers.h
+    ${CMAKE_CURRENT_LIST_DIR}/icryptographichash.h
 
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.h
@@ -131,6 +132,8 @@ if (NOT NO_GLOBAL_INTERNAL)
         ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/cryptographichash.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/cryptographichash.h
 
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.cpp
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h

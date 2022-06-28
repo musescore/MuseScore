@@ -22,6 +22,7 @@
 
 #include "bagpembell.h"
 
+#include "translation.h"
 #include "draw/pen.h"
 #include "rw/xml.h"
 
@@ -514,7 +515,7 @@ void BagpipeEmbellishment::layout()
 
     // draw the notes including stem, (optional) flag and (optional) ledger line
     double x = dx.xl;
-    foreach (int note, nl) {
+    for (int note : nl) {
         int line = BagpipeNoteInfoList[note].line;
         BEDrawingDataY dy(line, score()->spatium());
 
@@ -622,7 +623,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
 
     // draw the notes including stem, (optional) flag and (optional) ledger line
     double x = dx.xl;
-    foreach (int note, nl) {
+    for (int note : nl) {
         int line = BagpipeNoteInfoList[note].line;
         BEDrawingDataY dy(line, score()->spatium());
         drawGraceNote(painter, dx, dy, flagsym, x, drawFlag);

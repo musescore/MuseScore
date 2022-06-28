@@ -1144,7 +1144,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                         break;
                     }
                 }
-                y = qMin(y, ss->rypos());
+                y = std::min(y, ss->rypos());
                 ++idx;
                 prevVolta = volta;
             }
@@ -1213,7 +1213,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
 void LayoutSystem::doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick)
 {
-    Q_UNUSED(etick);
+    UNUSED(etick);
 
     for (Segment* s : sl) {
         for (EngravingItem* e : s->elist()) {
@@ -1248,7 +1248,7 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
         for (SpannerSegment* ss : segments) {
             if (ss->visible()) {
                 double& staffY = y[ss->staffIdx()];
-                staffY = qMax(staffY, ss->rypos());
+                staffY = std::max(staffY, ss->rypos());
             }
         }
         for (SpannerSegment* ss : segments) {

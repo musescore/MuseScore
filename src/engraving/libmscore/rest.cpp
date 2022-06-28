@@ -29,6 +29,7 @@
 #include "containers.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "realfn.h"
 
 #include "factory.h"
 #include "score.h"
@@ -544,7 +545,7 @@ int Rest::computeLineOffset(int lines)
         int line = up ? 10 : -10;
 
         // For compatibility reasons apply automatic collision avoidance only if y-offset is unchanged
-        if (qFuzzyIsNull(offset().y()) && autoplace()) {
+        if (RealIsNull(offset().y()) && autoplace()) {
             track_idx_t firstTrack = staffIdx() * 4;
             int extraOffsetForFewLines = lines < 5 ? 2 : 0;
             bool isMeasureRest = durationType().type() == DurationType::V_MEASURE;
@@ -863,7 +864,7 @@ String Rest::screenReaderInfo() const
     Measure* m = measure();
     bool voices = m ? m->hasVoices(staffIdx()) : false;
     String voice = voices ? mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1) : u"";
-    return String("%1 %2 %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
+    return String(u"%1 %2 %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
 }
 
 //---------------------------------------------------------

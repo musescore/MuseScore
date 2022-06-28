@@ -36,7 +36,7 @@ int ticks_beat(int n)
 {
     int m = (Constants::division * 4) / n;
     if ((Constants::division* 4) % n) {
-        ASSERT_X(String("Mscore: ticks_beat(): bad divisor %1").arg(n));
+        ASSERT_X(String(u"Mscore: ticks_beat(): bad divisor %1").arg(n));
     }
     return m;
 }
@@ -326,14 +326,14 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
     }
     auto e = upper_bound(t);
     if (empty() || e == begin()) {
-        ASSERT_X(String("tickValue(0x%1) not found").arg(t));
+        ASSERT_X(String(u"tickValue(0x%1) not found").arg(t));
     }
     --e;
     int delta  = t - e->first;
     int ticksB = ticks_beat(e->second.timesig().denominator());   // ticks in beat
     int ticksM = ticksB * e->second.timesig().numerator();        // ticks in measure (bar)
     if (ticksM == 0) {
-        LOGD("TimeSigMap::tickValues: at %d %s", t, qPrintable(e->second.timesig().toString()));
+        LOGD("TimeSigMap::tickValues: at %d %s", t, muPrintable(e->second.timesig().toString()));
         *bar  = 0;
         *beat = 0;
         *tick = 0;
@@ -355,7 +355,7 @@ String TimeSigMap::pos(int t) const
 {
     int bar, beat, tick;
     tickValues(t, &bar, &beat, &tick);
-    return String("%1:%2:%3").arg(bar + 1, beat, tick);
+    return String(u"%1:%2:%3").arg(bar + 1, beat, tick);
 }
 
 //---------------------------------------------------------
@@ -568,7 +568,7 @@ void TimeSigMap::dump() const
     LOGD("TimeSigMap:");
     for (auto i = begin(); i != end(); ++i) {
         LOGD("%6d timesig: %s measure: %d",
-             i->first, qPrintable(i->second.timesig().toString()), i->second.bar());
+             i->first, muPrintable(i->second.timesig().toString()), i->second.bar());
     }
 }
 

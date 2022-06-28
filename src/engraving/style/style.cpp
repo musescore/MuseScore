@@ -291,7 +291,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             //readTextStyle206(this, e);        // obsolete
             e.readText();
         } else if (tag == "ottavaHook") {             // obsolete, for 3.0dev bw. compatibility, should be removed in final release
-            double y = qAbs(e.readDouble());
+            double y = std::abs(e.readDouble());
             set(Sid::ottavaHookAbove, y);
             set(Sid::ottavaHookBelow, -y);
         } else if (tag == "Spatium") {

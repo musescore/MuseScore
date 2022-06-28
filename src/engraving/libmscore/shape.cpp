@@ -122,11 +122,11 @@ double Shape::minHorizontalDistance(const Shape& a, Score* score) const
                 || (r1.width() == 0 || r2.width() == 0) // Temporary hack: shapes of zero-width are assumed to collide with everyghin
                 || (!item1 && item2 && item2->isLyrics()) // Temporary hack: avoids collision with melisma line
                 || kerningType == KerningType::NON_KERNING) {
-                dist = qMax(dist, r1.right() - r2.left() + padding);
+                dist = std::max(dist, r1.right() - r2.left() + padding);
             }
             if (kerningType == KerningType::KERNING_UNTIL_ORIGIN) { //prepared for future user option, for now always false
                 double origin = r1.left();
-                dist = qMax(dist, origin - r2.left());
+                dist = std::max(dist, origin - r2.left());
             }
         }
     }
@@ -159,7 +159,7 @@ double Shape::minVerticalDistance(const Shape& a) const
             double ax1 = r1.left();
             double ax2 = r1.right();
             if (mu::engraving::intersects(ax1, ax2, bx1, bx2, 0.0)) {
-                dist = qMax(dist, r1.bottom() - r2.top());
+                dist = std::max(dist, r1.bottom() - r2.top());
             }
         }
     }
@@ -245,7 +245,7 @@ double Shape::topDistance(const PointF& p) const
     double dist = 1000000.0;
     for (const RectF& r : *this) {
         if (p.x() >= r.left() && p.x() < r.right()) {
-            dist = qMin(dist, r.top() - p.y());
+            dist = std::min(dist, r.top() - p.y());
         }
     }
     return dist;
@@ -262,7 +262,7 @@ double Shape::bottomDistance(const PointF& p) const
     double dist = 1000000.0;
     for (const RectF& r : *this) {
         if (p.x() >= r.left() && p.x() < r.right()) {
-            dist = qMin(dist, p.y() - r.bottom());
+            dist = std::min(dist, p.y() - r.bottom());
         }
     }
     return dist;

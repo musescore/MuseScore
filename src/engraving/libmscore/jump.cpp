@@ -259,7 +259,7 @@ PropertyValue Jump::propertyDefault(Pid propertyId) const
     case Pid::JUMP_TO:
     case Pid::PLAY_UNTIL:
     case Pid::CONTINUE_AT:
-        return String("");
+        return String(u"");
     case Pid::PLAY_REPEATS:
         return false;
     case Pid::PLACEMENT:
@@ -295,6 +295,6 @@ EngravingItem* Jump::prevSegmentElement()
 
 String Jump::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), this->jumpTypeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), this->jumpTypeUserName());
 }
 }

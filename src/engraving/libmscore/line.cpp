@@ -231,7 +231,7 @@ void LineSegment::startEditDrag(EditData& ed)
     eed->pushProperty(Pid::OFFSET);
     eed->pushProperty(Pid::OFFSET2);
     eed->pushProperty(Pid::AUTOPLACE);
-    if (ed.modifiers & Qt::AltModifier) {
+    if (ed.modifiers & AltModifier) {
         setAutoplace(false);
     }
 }
@@ -285,13 +285,13 @@ bool LineSegment::edit(EditData& ed)
             LOGD("LineSegment::edit: no start/end segment");
             return true;
         }
-        if (ed.key == Qt::Key_Left) {
+        if (ed.key == Key_Left) {
             if (moveStart) {
                 s1 = prevSeg1(s1, track);
             } else if (moveEnd) {
                 s2 = prevSeg1(s2, track2);
             }
-        } else if (ed.key == Qt::Key_Right) {
+        } else if (ed.key == Key_Right) {
             if (moveStart) {
                 s1 = nextSeg1(s1, track);
             } else if (moveEnd) {
@@ -322,28 +322,28 @@ bool LineSegment::edit(EditData& ed)
         }
 
         switch (ed.key) {
-        case Qt::Key_Left:
+        case Key_Left:
             if (moveStart) {
                 note1 = prevChordNote(note1);
             } else if (moveEnd) {
                 note2 = prevChordNote(note2);
             }
             break;
-        case Qt::Key_Right:
+        case Key_Right:
             if (moveStart) {
                 note1 = nextChordNote(note1);
             } else if (moveEnd) {
                 note2 = nextChordNote(note2);
             }
             break;
-        case Qt::Key_Up:
+        case Key_Up:
             if (moveStart) {
                 note1 = toNote(score()->upAlt(note1));
             } else if (moveEnd) {
                 note2 = toNote(score()->upAlt(note2));
             }
             break;
-        case Qt::Key_Down:
+        case Key_Down:
             if (moveStart) {
                 note1 = toNote(score()->downAlt(note1));
             } else if (moveEnd) {
@@ -377,7 +377,7 @@ bool LineSegment::edit(EditData& ed)
         Measure* m1 = l->startMeasure();
         Measure* m2 = l->endMeasure();
 
-        if (ed.key == Qt::Key_Left) {
+        if (ed.key == Key_Left) {
             if (moveStart) {
                 if (m1->prevMeasure()) {
                     m1 = m1->prevMeasure();
@@ -388,7 +388,7 @@ bool LineSegment::edit(EditData& ed)
                     m2 = m;
                 }
             }
-        } else if (ed.key == Qt::Key_Right) {
+        } else if (ed.key == Key_Right) {
             if (moveStart) {
                 if (m1->nextMeasure()) {
                     m1 = m1->nextMeasure();
@@ -598,7 +598,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
     }
     // don't change anchors on keyboard adjustment or if Ctrl is pressed
     // (Ctrl+Left/Right is handled elsewhere!)
-    if (ed.key == Qt::Key_Left || ed.key == Qt::Key_Right || ed.modifiers & ControlModifier) {
+    if (ed.key == Key_Left || ed.key == Key_Right || ed.modifiers & ControlModifier) {
         return;
     }
 
@@ -883,10 +883,10 @@ PointF SLine::linePos(Grip grip, System** sys) const
                         }
                         if (cr1->isChord()) {
                             for (Note* n : toChord(cr1)->notes()) {
-                                width = qMax(width, n->shape().right() + n->pos().x() + cr1->pos().x());
+                                width = std::max(width, n->shape().right() + n->pos().x() + cr1->pos().x());
                             }
                         } else if (cr1->isRest() && (cr1->actualDurationType() != DurationType::V_MEASURE)) {
-                            width = qMax(width, cr1->bbox().right() + cr1->pos().x());
+                            width = std::max(width, cr1->bbox().right() + cr1->pos().x());
                         }
                     }
 
@@ -913,7 +913,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                     if (crFound) {
                         double nextNoteDistance = ns->x() - s->x() + lineWidth();
                         if (x > nextNoteDistance) {
-                            x = qMax(width, nextNoteDistance);
+                            x = std::max(width, nextNoteDistance);
                         }
                     }
                 }
@@ -951,7 +951,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                     } else if (currentSeg->measure() == seg->measure()) {
                         // next chordrest found in same measure;
                         // end line 1sp to left
-                        x2 = qMax(x2, seg->x() - sp);
+                        x2 = std::max(x2, seg->x() - sp);
                     } else {
                         // next chordrest is in next measure
                         // lay out to end (barline) of current measure instead
@@ -963,7 +963,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                         // other lines stop 1sp short
                         double gap = (type() == ElementType::LYRICSLINE) ? 0.0 : sp;
                         double x3 = seg->enabled() ? seg->x() : seg->measure()->width();
-                        x2 = qMax(x2, x3 - gap);
+                        x2 = std::max(x2, x3 - gap);
                     }
                     x = x2 - endElement()->parentItem()->x();
                 }
@@ -1255,7 +1255,7 @@ void SLine::layout()
             // enforcing a minimum length would be possible but inadvisable
             // the line length calculations are tuned well enough that this should not be needed
             //if (anchor() == Anchor::SEGMENT && type() != ElementType::PEDAL)
-            //      len = qMax(1.0 * spatium(), len);
+            //      len = std::max(1.0 * spatium(), len);
             lineSegm->setPos(p1);
             lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
         } else if (i == sysIdx1) {
@@ -1275,7 +1275,7 @@ void SLine::layout()
             // end segment
             double minLen = 0.0;
             double x1 = system->firstNoteRestSegmentX(true);
-            double len = qMax(minLen, p2.x() - x1);
+            double len = std::max(minLen, p2.x() - x1);
             lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
             lineSegm->setPos(PointF(p2.x() - len, p2.y()));
             lineSegm->setPos2(PointF(len, 0.0));

@@ -57,7 +57,7 @@ void Score::checkScore()
 
         if (s->segmentType() & (SegmentType::ChordRest)) {
             bool empty = true;
-            foreach (EngravingItem* e, s->elist()) {
+            for (EngravingItem* e : s->elist()) {
                 if (e) {
                     empty = false;
                     break;
@@ -143,7 +143,7 @@ bool Score::sanityCheck()
                     = mtrc("engraving", "Measure %1, staff %2 incomplete. Expected: %3; Found: %4")
                       .arg(mNumber).arg(staffIdx + 1).arg(mLen.toString(), voices[0].toString());
                 LOGE() << msg;
-                error += String("%1\n").arg(msg);
+                error += String(u"%1\n").arg(msg);
 #ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
 #endif
@@ -162,7 +162,7 @@ bool Score::sanityCheck()
                     String msg = mtrc("engraving", "Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5")
                                  .arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(mLen.toString(), voices[v].toString());
                     LOGE() << msg;
-                    error += String("%1\n").arg(msg);
+                    error += String(u"%1\n").arg(msg);
 #ifndef NDEBUG
                     m->setCorrupted(staffIdx, true);
 #endif

@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QMimeData>
-
 #include "io/buffer.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
@@ -956,7 +954,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                 // in any case, look for a f.b. in annotations:
                                 // if there is a f.b. element in the right track,
                                 // this is an (actual) f.b. location
-                                foreach (EngravingItem* a, prevSegm->annotations()) {
+                                for (EngravingItem* a : prevSegm->annotations()) {
                                     if (a->isFiguredBass() && a->track() == destTrack) {
                                         onNoteFB = toFiguredBass(a);
                                         done1 = true;

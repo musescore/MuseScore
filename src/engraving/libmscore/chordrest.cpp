@@ -133,8 +133,8 @@ void ChordRest::undoUnlink()
 
 ChordRest::~ChordRest()
 {
-    qDeleteAll(_lyrics);
-    qDeleteAll(_el);
+    DeleteAll(_lyrics);
+    DeleteAll(_el);
     delete _tabDur;
     if (_beam && _beam->contains(this)) {
         delete _beam;     // Beam destructor removes references to the deleted object
@@ -707,7 +707,7 @@ String ChordRest::durationUserName() const
     default:
         dotString += TConv::toUserName(durationType().type());
     }
-    return String("%1%2").arg(tupletType, dotString);
+    return String(u"%1%2").arg(tupletType, dotString);
 }
 
 //---------------------------------------------------------
@@ -730,7 +730,7 @@ void ChordRest::add(EngravingItem* e)
         e->added();
         break;
     default:
-        ASSERT_X(u"ChordRest::add: unknown element " + String(e->typeName()));
+        ASSERT_X(u"ChordRest::add: unknown element " + String::fromAscii(e->typeName()));
         break;
     }
 }
@@ -754,7 +754,7 @@ void ChordRest::remove(EngravingItem* e)
     }
     break;
     default:
-        ASSERT_X(u"ChordRest::remove: unknown element " + String(e->typeName()));
+        ASSERT_X(u"ChordRest::remove: unknown element " + String::fromAscii(e->typeName()));
     }
 }
 
@@ -1215,7 +1215,7 @@ String ChordRest::accessibleExtraInfo() const
         if (!score()->selectionFilter().canSelect(l)) {
             continue;
         }
-        rez = String("%1 %2").arg(rez, l->screenReaderInfo());
+        rez = String(u"%1 %2").arg(rez, l->screenReaderInfo());
     }
 
     if (segment()) {
@@ -1224,7 +1224,7 @@ String ChordRest::accessibleExtraInfo() const
                 continue;
             }
             if (e->track() == track()) {
-                rez = String("%1 %2").arg(rez, e->screenReaderInfo());
+                rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
             }
         }
 
@@ -1304,11 +1304,11 @@ Shape ChordRest::shape() const
             double rmargin = lmargin;
             Lyrics::Syllabic syl = l->syllabic();
             if ((syl == Lyrics::Syllabic::BEGIN || syl == Lyrics::Syllabic::MIDDLE) && score()->styleB(Sid::lyricsDashForce)) {
-                rmargin = qMax(rmargin, styleP(Sid::lyricsDashMinLength));
+                rmargin = std::max(rmargin, styleP(Sid::lyricsDashMinLength));
             }
             // for horizontal spacing we only need the lyrics width:
-            x1 = qMin(x1, l->bbox().x() - lmargin + l->pos().x());
-            x2 = qMax(x2, l->bbox().x() + l->bbox().width() + rmargin + l->pos().x());
+            x1 = std::min(x1, l->bbox().x() - lmargin + l->pos().x());
+            x2 = std::max(x2, l->bbox().x() + l->bbox().width() + rmargin + l->pos().x());
             if (l->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS)) {
                 x2 += spatium();
             }
@@ -1328,8 +1328,8 @@ Shape ChordRest::shape() const
                 // calculate bbox only (do not reset position)
                 h->layout1();
                 const double margin = styleP(Sid::minHarmonyDistance) * 0.5;
-                x1 = qMin(x1, e->bbox().x() - margin + e->pos().x());
-                x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
+                x1 = std::min(x1, e->bbox().x() - margin + e->pos().x());
+                x2 = std::max(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
                 shape.addHorizontalSpacing(e, x1, x2);
             }
         }
@@ -1386,9 +1386,9 @@ int ChordRest::lastVerse(PlacementV p) const
 
 void ChordRest::removeMarkings(bool /* keepTremolo */)
 {
-    qDeleteAll(el());
+    DeleteAll(el());
     el().clear();
-    qDeleteAll(lyrics());
+    DeleteAll(lyrics());
     lyrics().clear();
 }
 

@@ -22,6 +22,7 @@
 
 #include "property.h"
 
+#include "translation.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
@@ -449,7 +450,7 @@ const char* propertyName(Pid id)
 String propertyUserName(Pid id)
 {
     assert(propertyList[int(id)].id == id);
-    return QObject::tr(propertyList[int(id)].userName, "propertyName");
+    return mtrc("engraving", propertyList[int(id)].userName, "propertyName");
 }
 
 //---------------------------------------------------------
@@ -631,11 +632,11 @@ String propertyToString(Pid id, const PropertyValue& value, bool mscx)
         switch (value.type()) {
         case P_TYPE::POINT: {
             const PointF p(value.value<PointF>());
-            return String("%1;%2").arg(String::number(p.x()), String::number(p.y()));
+            return String(u"%1;%2").arg(String::number(p.x()), String::number(p.y()));
         }
         case P_TYPE::SIZE: {
             const SizeF s(value.value<SizeF>());
-            return String("%1x%2").arg(String::number(s.width()), String::number(s.height()));
+            return String(u"%1x%2").arg(String::number(s.width()), String::number(s.height()));
         }
         case P_TYPE::STRING: {
             return value.value<String>();

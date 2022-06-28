@@ -152,10 +152,10 @@ Fraction XmlReader::readFraction()
 void XmlReader::unknown()
 {
     if (XmlStreamReader::error()) {
-        LOGD("%s ", qPrintable(errorString()));
+        LOGD("%s ", muPrintable(errorString()));
     }
     if (!m_docName.isEmpty()) {
-        LOGD("tag in <%s> line %ld col %lld: %s", qPrintable(m_docName.toUtf8().constChar()), lineNumber() + m_offsetLines,
+        LOGD("tag in <%s> line %ld col %lld: %s", muPrintable(m_docName), lineNumber() + m_offsetLines,
              columnNumber(), name().ascii());
     } else {
         LOGD("line %lld col %ld: %s", lineNumber() + m_offsetLines, columnNumber(), name().ascii());

@@ -344,6 +344,6 @@ EngravingItem* Marker::prevSegmentElement()
 
 String Marker::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), markerTypeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), markerTypeUserName());
 }
 }

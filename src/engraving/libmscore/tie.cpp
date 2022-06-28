@@ -113,11 +113,11 @@ void TieSegment::draw(mu::draw::Painter* painter) const
 
 bool TieSegment::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Qt::Key_X && !ed.modifiers) {
+    if (ed.key == Key_X && !ed.modifiers) {
         return true;
     }
 
-    if (ed.key == Qt::Key_Home && !ed.modifiers) {
+    if (ed.key == Key_Home && !ed.modifiers) {
         return true;
     }
 
@@ -137,12 +137,12 @@ bool TieSegment::edit(EditData& ed)
 
     SlurTie* sl = tie();
 
-    if (ed.key == Qt::Key_X && !ed.modifiers) {
+    if (ed.key == Key_X && !ed.modifiers) {
         sl->setSlurDirection(sl->up() ? DirectionV::DOWN : DirectionV::UP);
         sl->layout();
         return true;
     }
-    if (ed.key == Qt::Key_Home && !ed.modifiers) {
+    if (ed.key == Key_Home && !ed.modifiers) {
         ups(ed.curGrip).off = PointF();
         sl->layout();
         return true;
@@ -349,7 +349,7 @@ void TieSegment::computeBezier(PointF shoulderOffset)
     PointF start;
     start = t.map(start);
 
-    double minH = qAbs(3.0 * w);
+    double minH = std::abs(3.0 * w);
     int nbShapes = 15;
     const CubicBezier b(tieStart, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {
@@ -659,7 +659,7 @@ void TieSegment::adjustX()
                     // turn the hook upside down for downstems
                     double hookY = chord->hook()->pos().y() - (chord->up() ? 0 : hookHeight);
                     if (p1.y() > hookY - collisionYMargin && p1.y() < hookY + hookHeight + collisionYMargin) {
-                        xo = qMax(xo, chord->hook()->x() + chord->hook()->width() + chordOffset);
+                        xo = std::max(xo, chord->hook()->x() + chord->hook()->width() + chordOffset);
                     }
                 }
 
@@ -668,15 +668,15 @@ void TieSegment::adjustX()
                     double stemLen = chord->stem()->bbox().height();
                     double stemY = chord->stem()->pos().y() - (chord->up() ? stemLen : 0);
                     if (p1.y() > stemY - collisionYMargin && p1.y() < stemY + stemLen + collisionYMargin) {
-                        xo = qMax(xo, chord->stem()->x() + chord->stem()->width() + chordOffset);
+                        xo = std::max(xo, chord->stem()->x() + chord->stem()->width() + chordOffset);
                     }
                 }
 
                 // adjust for ledger lines
                 for (LedgerLine* currLedger = chord->ledgerLines(); currLedger; currLedger = currLedger->next()) {
                     // search through ledger lines and see if any are within .5sp of tie start
-                    if (qAbs(p1.y() - currLedger->y()) < spatium() * 0.5) {
-                        xo = qMax(xo, (currLedger->x() + currLedger->len() + chordOffset));
+                    if (std::abs(p1.y() - currLedger->y()) < spatium() * 0.5) {
+                        xo = std::max(xo, (currLedger->x() + currLedger->len() + chordOffset));
                         break;
                     }
                 }
@@ -685,8 +685,8 @@ void TieSegment::adjustX()
                     // adjust for dots
                     if (note->dots().size() > 0) {
                         double dotY = note->pos().y() + note->dots().back()->y();
-                        if (qAbs(p1.y() - dotY) < spatium() * 0.5) {
-                            xo = qMax(xo, note->x() + note->dots().back()->x() + note->dots().back()->width() + chordOffset);
+                        if (std::abs(p1.y() - dotY) < spatium() * 0.5) {
+                            xo = std::max(xo, note->x() + note->dots().back()->x() + note->dots().back()->width() + chordOffset);
                         }
                     }
 
@@ -697,7 +697,7 @@ void TieSegment::adjustX()
                     double noteTop = note->y() + note->bbox().top();
                     double noteHeight = note->height();
                     if (p1.y() > noteTop - collisionYMargin && p1.y() < noteTop + noteHeight + collisionYMargin) {
-                        xo = qMax(xo, note->x() + note->width() + chordOffset);
+                        xo = std::max(xo, note->x() + note->width() + chordOffset);
                     }
                 }
             }
@@ -749,8 +749,8 @@ void TieSegment::adjustX()
                 double chordOffset = (ec->x() + en->x()) - chord->x(); // en->x() for right-offset notes
                 for (LedgerLine* currLedger = chord->ledgerLines(); currLedger; currLedger = currLedger->next()) {
                     // search through ledger lines and see if any are within .5sp of tie end
-                    if (qAbs(p2.y() - currLedger->y()) < spatium() * 0.5) {
-                        xo = qMin(xo, currLedger->x() - chordOffset);
+                    if (std::abs(p2.y() - currLedger->y()) < spatium() * 0.5) {
+                        xo = std::min(xo, currLedger->x() - chordOffset);
                     }
                 }
 
@@ -759,7 +759,7 @@ void TieSegment::adjustX()
                     double stemLen = chord->stem()->bbox().height();
                     double stemY = chord->stem()->pos().y() - (chord->up() ? stemLen : 0);
                     if (p2.y() > stemY - offsetMargin && p2.y() < stemY + stemLen + offsetMargin) {
-                        xo = qMin(xo, chord->stem()->x() - chordOffset);
+                        xo = std::min(xo, chord->stem()->x() - chordOffset);
                     }
                 }
 
@@ -770,7 +770,7 @@ void TieSegment::adjustX()
                         double accTop = (note->y() + acc->y()) + acc->bbox().top();
                         double accHeight = acc->height();
                         if (p2.y() >= accTop && p2.y() <= accTop + accHeight) {
-                            xo = qMin(xo, note->x() + acc->x() - chordOffset);
+                            xo = std::min(xo, note->x() + acc->x() - chordOffset);
                         }
                     }
 
@@ -781,7 +781,7 @@ void TieSegment::adjustX()
                     double noteTop = note->y() + note->bbox().top();
                     double noteHeight = note->headHeight();
                     if (p2.y() >= noteTop - collisionYMargin && p2.y() <= noteTop + noteHeight + collisionYMargin) {
-                        xo = qMin(xo, note->x() - chordOffset);
+                        xo = std::min(xo, note->x() - chordOffset);
                     }
                 }
             }
@@ -916,8 +916,8 @@ void Tie::slurPos(SlurPos* sp)
 
     // ensure that horizontal ties remain horizontal
     if (isHorizontal) {
-        y1 = _up ? qMin(y1, y2) : qMax(y1, y2);
-        y2 = _up ? qMin(y1, y2) : qMax(y1, y2);
+        y1 = _up ? std::min(y1, y2) : std::max(y1, y2);
+        y2 = _up ? std::min(y1, y2) : std::max(y1, y2);
     }
 
     if (_isInside) {
@@ -1044,7 +1044,7 @@ void Tie::calculateDirection()
                         continue;
                     }
                     int noteDiff = compareNotesPos(notes[i], notes[j]);
-                    if (!multiplePivots && qAbs(noteDiff) <= 1) {
+                    if (!multiplePivots && std::abs(noteDiff) <= 1) {
                         // TODO: Fix unison ties somehow--if noteDiff == 0 then we need to determine which of the unison is 'lower'
                         if (pivotPoint) {
                             multiplePivots = true;

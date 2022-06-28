@@ -373,7 +373,7 @@ Measure::~Measure()
         delete s;
         s = ns;
     }
-    qDeleteAll(m_mstaves);
+    DeleteAll(m_mstaves);
 }
 
 void Measure::setParent(System* s)
@@ -685,7 +685,7 @@ void Measure::layoutMMRestRange()
     String s;
     if (mmRestCount() > 1) {
         // middle char is an en dash (not em)
-        s = String("%1–%2").arg(no() + 1).arg(no() + mmRestCount());
+        s = String(u"%1–%2").arg(no() + 1).arg(no() + mmRestCount());
     } else {
         // If the minimum range to create a mmrest is set to 1,
         // then simply show the measure number as there is no range
@@ -3199,7 +3199,7 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff)
 
 String Measure::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), String::number(no() + 1));
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), String::number(no() + 1));
 }
 
 //-----------------------------------------------------------------------------
@@ -3572,7 +3572,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
                 }
             }
             bl->layout();
-            blw = qMax(blw, bl->width());
+            blw = std::max(blw, bl->width());
         }
         // right align within segment
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -4434,9 +4434,9 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
         } else if (segment->isClefType() || segment->isHeaderClefType()) {
             x += score()->styleMM(Sid::clefLeftMargin);
         } else if (segment->isKeySigType()) {
-            x = qMax(x, score()->styleMM(Sid::keysigLeftMargin).val());
+            x = std::max(x, score()->styleMM(Sid::keysigLeftMargin).val());
         } else if (segment->isTimeSigType()) {
-            x = qMax(x, score()->styleMM(Sid::timesigLeftMargin).val());
+            x = std::max(x, score()->styleMM(Sid::timesigLeftMargin).val());
         }
     }
     if (prevMeas && prevMeas->repeatEnd() && segment->isStartRepeatBarLineType() && (prevMeas->system() == system())) {

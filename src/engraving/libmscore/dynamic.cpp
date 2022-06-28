@@ -379,7 +379,7 @@ void Dynamic::setDynamicType(const String& tag)
             return;
         }
     }
-    LOGD("setDynamicType: other <%s>", qPrintable(tag));
+    LOGD("setDynamicType: other <%s>", muPrintable(tag));
     setDynamicType(DynamicType::OTHER);
     setXmlText(tag);
 }
@@ -588,7 +588,7 @@ String Dynamic::accessibleInfo() const
     } else {
         s = TConv::toUserName(dynamicType());
     }
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), s);
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
 
 //---------------------------------------------------------
@@ -604,6 +604,6 @@ String Dynamic::screenReaderInfo() const
     } else {
         s = TConv::toUserName(dynamicType());
     }
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), s);
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
 }

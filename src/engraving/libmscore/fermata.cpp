@@ -412,7 +412,7 @@ FermataType Fermata::fermataType() const
 
 String Fermata::accessibleInfo() const
 {
-    return String("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
 }
 
 void Fermata::added()
