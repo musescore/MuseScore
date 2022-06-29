@@ -673,3 +673,19 @@ TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
         EXPECT_DOUBLE_EQ(v, 0.0);
     }
 }
+
+TEST_F(Global_Types_StringTests, String_Remove)
+{
+    //! GIVEN Some String
+    String str("123abc");
+    //! DO
+    size_t size = str.size();
+    //! CHECK
+    EXPECT_EQ(size, 6);
+
+    //! DO
+    const String s = str.remove(u'2');
+
+    //! CHECK
+    EXPECT_EQ(s, "13abc");
+}
