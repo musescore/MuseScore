@@ -35,6 +35,8 @@ set(MODULE_BIG_QRC
     fonts_MScore.qrc
     fonts_MuseJazz.qrc
     fonts_Petaluma.qrc
+    fonts_FinaleMaestro.qrc
+    fonts_FinaleBroadway.qrc
     fonts_Tabulature.qrc
     )
 

@@ -54,6 +54,8 @@ void FontsSetup::setup()
         ":/fonts/mscore/MScoreText.ttf",
         ":/fonts/petaluma/PetalumaText.otf",
         ":/fonts/petaluma/PetalumaScript.otf",
+        ":/fonts/finalemaestro/FinaleMaestroText.otf",
+        ":/fonts/finalebroadway/FinaleBroadwayText.otf",
     };
 
     for (const QString& font: fonts) {
