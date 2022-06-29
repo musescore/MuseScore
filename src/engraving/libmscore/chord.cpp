@@ -1431,7 +1431,7 @@ int Chord::calcMinStemLength()
             int hookOffset = (_hook->height() + smuflAnchor) / _spatium * 4 - 2;
             // TODO: when the SMuFL metadata includes a cutout for flags, replace this with that metadata
             // https://github.com/w3c/smufl/issues/203
-            int cutout = up() ? 4 * _relativeMag : 6 * _relativeMag;
+            int cutout = floor(up() ? 4 * _relativeMag : 6 * _relativeMag);
             if (beams() >= 2) {
                 cutout -= 2;
             }

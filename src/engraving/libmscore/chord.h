@@ -145,6 +145,7 @@ class Chord final : public ChordRest
     int calcMinStemLength();
     int calc4BeamsException(int stemLength) const;
     double calcDefaultStemLength();
+    void calcRelativeMag();
 
 public:
 
@@ -167,7 +168,6 @@ public:
     void setScore(Score* s) override;
     double chordMag() const;
     double mag() const override;
-    void calcRelativeMag();
     double relativeMag() const { return _relativeMag; }
 
     void write(XmlWriter& xml) const override;
