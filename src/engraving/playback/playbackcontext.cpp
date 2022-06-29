@@ -225,6 +225,10 @@ void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment,
             return;
         }
     }
+
+    if (m_dynamicsMap.empty()) {
+        m_dynamicsMap.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
+    }
 }
 
 void PlaybackContext::removeDynamicData(const int from, const int to)

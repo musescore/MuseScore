@@ -37,8 +37,9 @@ public:
 
     void init(VstPluginType&& type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount = 2);
 
-    bool handleNoteOnEvents(const mpe::PlaybackEvent& event, const audio::msecs_t from, const audio::msecs_t to);
-    bool handleNoteOffEvents(const mpe::PlaybackEvent& event, const audio::msecs_t from, const audio::msecs_t to);
+    bool handleEvent(const VstEvent& event);
+    bool handleParamChange(const PluginParamInfo& param);
+    void setVolumeGain(const audio::gain_t newVolumeGain);
 
     audio::samples_t process(float* output, audio::samples_t samplesPerChannel);
     void flush();
@@ -46,7 +47,7 @@ public:
     void setBlockSize(unsigned int samples);
     void setSampleRate(unsigned int sampleRate);
 
-    bool isPluginInputAvailable() const;
+    ParamsMapping paramsMapping(const std::set<Steinberg::Vst::CtrlNumber>& controllers) const;
 
 private:
     struct SamplesInfo {
@@ -66,16 +67,13 @@ private:
     void extractInputSamples(const audio::samples_t& sampleCount, const float* sourceBuffer);
     bool fillOutputBuffer(unsigned int samples, float* output);
 
-    int noteIndex(const mpe::pitch_level_t pitchLevel) const;
-    float noteVelocityFraction(const mpe::dynamic_level_t dynamicLevel) const;
-
     void ensureActivity();
     void disableActivity();
 
     void flushBuffers();
 
     bool m_isActive = false;
-    mutable bool m_isPluginInputAvailable = false;
+    audio::gain_t m_volumeGain = 1.f; // 0.0 - 1.0
 
     VstPluginPtr m_pluginPtr = nullptr;
     mutable PluginComponentPtr m_pluginComponent = nullptr;

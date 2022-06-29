@@ -42,6 +42,15 @@ VstPlugin::VstPlugin(const audio::AudioResourceId& resourceId)
     });
 }
 
+const audio::AudioResourceId& VstPlugin::resourceId() const
+{
+    ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    return m_resourceId;
+}
+
 const std::string& VstPlugin::name() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);

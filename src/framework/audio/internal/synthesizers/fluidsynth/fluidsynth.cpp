@@ -354,8 +354,8 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 
     const FluidSequencer::EventSequence& sequence = m_sequencer.eventsToBePlayed(nextMsecs);
 
-    for (const midi::Event& event : sequence) {
-        handleEvent(event);
+    for (const FluidSequencer::EventType& event : sequence) {
+        handleEvent(std::get<midi::Event>(event));
     }
 
     int result = fluid_synth_write_float(m_fluid->synth, samplesPerChannel,
