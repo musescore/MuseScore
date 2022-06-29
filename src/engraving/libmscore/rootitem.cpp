@@ -55,7 +55,7 @@ EngravingObject* RootItem::scanParent() const
     return m_score->scanParent();
 }
 
-AccessibleItem* RootItem::createAccessible()
+AccessibleItemPtr RootItem::createAccessible()
 {
-    return new AccessibleRoot(this);
+    return std::make_shared<AccessibleRoot>(this);
 }

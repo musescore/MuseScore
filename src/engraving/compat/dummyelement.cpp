@@ -117,7 +117,7 @@ EngravingItem* DummyElement::clone() const
     return nullptr;
 }
 
-AccessibleItem* DummyElement::createAccessible()
+AccessibleItemPtr DummyElement::createAccessible()
 {
-    return new AccessibleItem(this, accessibility::IAccessible::Panel);
+    return std::make_shared<AccessibleItem>(this, accessibility::IAccessible::Panel);
 }

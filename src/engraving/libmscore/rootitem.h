@@ -46,7 +46,7 @@ public:
 
 private:
 
-    AccessibleItem* createAccessible() override;
+    AccessibleItemPtr createAccessible() override;
 
     Score* m_score = nullptr;
     compat::DummyElement* m_dummy = nullptr;

@@ -179,7 +179,6 @@ EngravingItem::EngravingItem(const EngravingItem& e)
 
 EngravingItem::~EngravingItem()
 {
-    delete m_accessible;
     Score::onElementDestruction(this);
 }
 
@@ -232,9 +231,9 @@ EngravingItemList EngravingItem::childrenItems() const
     return list;
 }
 
-AccessibleItem* EngravingItem::createAccessible()
+AccessibleItemPtr EngravingItem::createAccessible()
 {
-    return new AccessibleItem(this);
+    return std::make_shared<AccessibleItem>(this);
 }
 
 //---------------------------------------------------------
@@ -1984,7 +1983,7 @@ EngravingItem* EngravingItem::prevSegmentElement()
     return score()->firstElement();
 }
 
-AccessibleItem* EngravingItem::accessible() const
+AccessibleItemPtr EngravingItem::accessible() const
 {
     return m_accessible;
 }
