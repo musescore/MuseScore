@@ -145,7 +145,7 @@ static void applyLyricsMax(const MStyle& style, Segment& s, staff_idx_t staffIdx
             double lyricsMinBottomDistance = style.styleMM(Sid::lyricsMinBottomDistance);
             for (Lyrics* l : cr->lyrics()) {
                 if (l->autoplace() && l->placeBelow()) {
-                    l->rypos() += yMax - l->propertyDefault(Pid::OFFSET).value<PointF>().y();
+                    l->movePosY(yMax - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
                     if (l->addToSkyline()) {
                         PointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
                         sk.add(l->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
@@ -172,7 +172,7 @@ static void applyLyricsMin(ChordRest* cr, staff_idx_t staffIdx, double yMin)
     Skyline& sk = cr->measure()->system()->staff(staffIdx)->skyline();
     for (Lyrics* l : cr->lyrics()) {
         if (l->autoplace() && l->placeAbove()) {
-            l->rypos() += yMin - l->propertyDefault(Pid::OFFSET).value<PointF>().y();
+            l->movePosY(yMin - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
             if (l->addToSkyline()) {
                 PointF offset = l->pos() + cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
                 sk.add(l->bbox().translated(offset));

@@ -3259,18 +3259,18 @@ void Measure::layoutMeasureElements()
                     }
                     mmrest->setWidth(w);
                     mmrest->layout();
-                    mmrest->rxpos() = headerException ? (x1 - s.x()) : (x1 - s.x() + d);
+                    mmrest->setPosX(headerException ? (x1 - s.x()) : (x1 - s.x() + d));
                 } else if (e->isMeasureRepeat() && !(toMeasureRepeat(e)->numMeasures() % 2)) {
                     // two- or four-measure repeat, center on following barline
                     double measureWidth = x2 - s.x() + .5 * (styleP(Sid::barWidth));
-                    e->rxpos() = measureWidth - .5 * e->width();
+                    e->setPosX(measureWidth - .5 * e->width());
                 } else {
                     // full measure rest or one-measure repeat, center within this measure
-                    e->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x();
+                    e->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x());
                 }
                 s.createShape(staffIdx);            // DEBUG
             } else if (e->isRest()) {
-                e->rxpos() = 0;
+                e->setPosX(0);
             } else if (e->isChord()) {
                 Chord* c = toChord(e);
                 if (c->tremolo()) {
@@ -3282,10 +3282,10 @@ void Measure::layoutMeasureElements()
                     }
                 }
             } else if (e->isBarLine()) {
-                e->rypos() = 0.0;
+                e->setPosY(0.0);
                 // for end barlines, x position was set in createEndBarLines
                 if (s.segmentType() != SegmentType::EndBarLine) {
-                    e->rxpos() = 0.0;
+                    e->setPosX(0.0);
                 }
             }
         }
@@ -3579,7 +3579,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
             track_idx_t track = staffIdx * VOICES;
             BarLine* bl = toBarLine(seg->element(track));
             if (bl) {
-                bl->rxpos() += blw - bl->width();
+                bl->movePosX(blw - bl->width());
             }
         }
         seg->createShapes();
@@ -3647,7 +3647,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
     // fix segment layout
     Segment* s = seg->prevActive();
     if (s) {
-        double x    = s->rxpos();
+        double x = s->xpos();
         computeWidth(s, x, false, system()->minSysTicks(), layoutStretch());
     }
 
@@ -4176,7 +4176,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
     double durStretch = 1;
 
     while (s) {
-        s->rxpos() = x;
+        s->setPosX(x);
         // skip disabled / invisible segments
         // segments with all elements invisible are skipped, though these are already
         // skipped in computeMinWidth() -- the only way this would be an issue here is
@@ -4297,7 +4297,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
                             ss->setWidth(ww1);
                         }
                         xx += ww1;
-                        ns1->rxpos() = xx;
+                        ns1->setPosX(xx);
                         ss = ns1;
                     }
                     if (s->isChordRestType()) {
@@ -4332,7 +4332,7 @@ void Measure::computeWidth(Fraction minTicks, double stretchCoeff)
 
     // skip disabled segment
     for (s = first(); s && (!s->enabled() || s->allElementsInvisible()); s = s->next()) {
-        s->rxpos() = computeFirstSegmentXPosition(s);  // this is where placement of hidden key/time sigs is set
+        s->setPosX(computeFirstSegmentXPosition(s));  // this is where placement of hidden key/time sigs is set
         s->setWidth(0);                                // it shouldn't affect the width of the bar no matter what it is
     }
     if (!s) {
@@ -4467,7 +4467,7 @@ void Measure::layoutSegmentsWithDuration(const std::vector<int>& visibleParts)
 
     auto [spacing, width] = current->computeCellWidth(visibleParts);
     currentXPos = computeFirstSegmentXPosition(current);
-    current->rxpos() = currentXPos;
+    current->setPosX(currentXPos);
     current->setWidth(width);
     current->setSpacing(spacing);
     currentXPos += width;
@@ -4483,7 +4483,7 @@ void Measure::layoutSegmentsWithDuration(const std::vector<int>& visibleParts)
         current->setWidth(width + spacing);
         current->setSpacing(spacing);
         currentXPos += spacing;
-        current->rxpos() = currentXPos;
+        current->setPosX(currentXPos);
         currentXPos += width;
         current = current->next();
     }
@@ -4574,7 +4574,7 @@ void Measure::stretchMeasureInPracticeMode(double targetWidth)
             double widthWithoutSpacing = s->width() - spacing;
             double segmentStretch = s->stretch();
             x += spacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
-            s->rxpos() = x;
+            s->setPosX(x);
             x += widthWithoutSpacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
             s = s->nextEnabled();
         }
@@ -4630,11 +4630,11 @@ void Measure::stretchMeasureInPracticeMode(double targetWidth)
                     //
                     // center full measure rest
                     //
-                    e->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x();
+                    e->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x());
                     s.createShape(staffIdx);  // DEBUG
                 }
             } else if (t == ElementType::REST) {
-                e->rxpos() = 0;
+                e->setPosX(0);
             } else if (t == ElementType::CHORD) {
                 Chord* c = toChord(e);
                 if (c->tremolo()) {
@@ -4646,10 +4646,10 @@ void Measure::stretchMeasureInPracticeMode(double targetWidth)
                     }
                 }
             } else if (t == ElementType::BAR_LINE) {
-                e->rypos() = 0.0;
+                e->setPosY(0.0);
                 // for end barlines, x position was set in createEndBarLines
                 if (s.segmentType() != SegmentType::EndBarLine) {
-                    e->rxpos() = 0.0;
+                    e->setPosX(0.0);
                 }
             }
         }

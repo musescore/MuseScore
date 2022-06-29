@@ -109,7 +109,7 @@ void StaffLines::layoutForWidth(double w)
         const StaffType* st = s->staffType(measure()->tick());
         dist         *= st->lineDistance().val();
         _lines        = st->lines();
-        rypos()       = st->yoffset().val() * _spatium;
+        setPosY(st->yoffset().val() * _spatium);
 //            if (_lines == 1)
 //                  rypos() = 2 * _spatium;
     } else {
@@ -156,7 +156,7 @@ void StaffLines::layoutPartialWidth(double w, double wPartial, bool alignRight)
         const StaffType* st = s->staffType(measure()->tick());
         dist         *= st->lineDistance().val();
         _lines        = st->lines();
-        rypos()       = st->yoffset().val() * _spatium;
+        setPosY(st->yoffset().val() * _spatium);
     } else {
         _lines = 5;
         setColor(engravingConfiguration()->defaultColor());

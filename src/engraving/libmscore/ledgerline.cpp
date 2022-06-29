@@ -87,7 +87,7 @@ void LedgerLine::layout()
 
     //Adjust Y position to staffType offset
     if (staffType()) {
-        rypos() += staffType()->yoffset().val() * spatium();
+        movePosY(staffType()->yoffset().val() * spatium());
     }
 
     if (vertical) {

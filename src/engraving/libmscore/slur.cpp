@@ -514,7 +514,7 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
 
     //Adjust Y pos to staff type yOffset before other calculations
     if (staffType()) {
-        rypos() += staffType()->yoffset().val() * spatium();
+        movePosY(staffType()->yoffset().val() * spatium());
     }
 
     computeBezier();

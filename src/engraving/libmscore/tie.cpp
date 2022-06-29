@@ -399,7 +399,7 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
 
     //Adjust Y pos to staff type offset before other calculations
     if (staffType) {
-        rypos() += staffType->yoffset().val() * spatium();
+        movePosY(staffType->yoffset().val() * spatium());
     }
 
     if (isNudged() || isEdited()) {

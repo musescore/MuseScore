@@ -143,9 +143,9 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
                     be = getReferenceElement(s, above, true);
                 }
                 if (be && ((above && (be->y() < (reference + maxShift))) || ((!above && (be->y() > (reference - maxShift)))))) {
-                    double shift = be->rypos();
-                    be->rypos() = reference - be->ryoffset();
-                    shift -= be->rypos();
+                    double shift = be->ypos();
+                    be->setPosY(reference - be->ryoffset());
+                    shift -= be->ypos();
                     for (EngravingItem* e : elements[s]) {
                         if ((above && e->placeBelow()) || (!above && e->placeAbove())) {
                             continue;
@@ -154,7 +154,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
                         handled.push_back(e);
                         moved = true;
                         if (e != be) {
-                            e->rypos() -= shift;
+                            e->movePosY(-shift);
                         }
                     }
                     for (auto e : handled) {

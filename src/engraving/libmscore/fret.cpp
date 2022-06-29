@@ -554,7 +554,7 @@ void FretDiagram::layout()
         if (d > -minDistance) {
             double yd = d + minDistance;
             yd *= -1.0;
-            _harmony->rypos() += yd;
+            _harmony->movePosY(yd);
             r.translate(PointF(0.0, yd));
         }
         if (_harmony->addToSkyline()) {

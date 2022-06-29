@@ -2184,7 +2184,7 @@ void Note::setDotY(DirectionV pos)
     }
     for (NoteDot* dot : qAsConst(_dots)) {
         dot->layout();
-        dot->rypos() = y;
+        dot->setPosY(y);
     }
 }
 
@@ -2294,7 +2294,7 @@ void Note::layout2()
         // apply to dots
         double xx = x + d;
         for (NoteDot* dot : qAsConst(_dots)) {
-            dot->rxpos() = xx;
+            dot->setPosX(xx);
             xx += dd;
         }
     }
@@ -2315,9 +2315,9 @@ void Note::layout2()
                     const StaffType* tab = st->staffTypeForElement(this);
                     w = tabHeadWidth(tab);
                 }
-                e->rxpos() += w;
+                e->movePosX(w);
             } else if (sym->sym() == SymId::noteheadParenthesisLeft) {
-                e->rxpos() -= symWidth(SymId::noteheadParenthesisLeft);
+                e->movePosX(-symWidth(SymId::noteheadParenthesisLeft));
             }
         } else if (e->isFingering()) {
             // don't set mag; fingerings should not scale with note
@@ -2601,7 +2601,7 @@ int Note::line() const
 void Note::setString(int val)
 {
     _string = val;
-    rypos() = _string * spatium() * 1.5;
+    setPosY(_string * spatium() * 1.5);
 }
 
 //---------------------------------------------------------
@@ -2954,7 +2954,7 @@ void Note::updateRelLine(int relLine, bool undoable)
 
     int off  = st->stepOffset();
     double ld = st->lineDistance().val();
-    rypos()  = (_line + off * 2.0) * spatium() * .5 * ld;
+    setPosY((_line + off * 2.0) * spatium() * .5 * ld);
 }
 
 //---------------------------------------------------------

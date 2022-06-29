@@ -395,22 +395,22 @@ void LyricsLineSegment::layout()
         offsetX           += score()->styleMM(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
 
         //               delta from curr.pos. | add initial padding
-        rxpos()           += offsetX;
+        movePosX(offsetX);
         rxpos2()          -= offsetX;
     }
 
     // VERTICAL POSITION: at the base line of the syllable text
     if (!isEndType()) {
-        rypos() = lyr->ipos().y();
+        setPosY(lyr->ipos().y());
         ryoffset() = lyr->offset().y();
     } else {
         // use Y position of *next* syllable if there is one on same system
         Lyrics* nextLyr1 = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
         if (nextLyr1 && nextLyr1->segment()->system() == system()) {
-            rypos() = nextLyr1->ipos().y();
+            setPosY(nextLyr1->ipos().y());
             ryoffset() = nextLyr1->offset().y();
         } else {
-            rypos() = lyr->ipos().y();
+            setPosY(lyr->ipos().y());
             ryoffset() = lyr->offset().y();
         }
     }
@@ -426,7 +426,7 @@ void LyricsLineSegment::layout()
         } else {
             _numOfDashes = 1;
         }
-        rypos()      -= lyricsLine()->lineWidth() * .5;     // let the line 'sit on' the base line
+        movePosY(-lyricsLine()->lineWidth() * .5);     // let the line 'sit on' the base line
         // if not final segment, shorten it (why? -AS)
         /*
         if (isBeginType() || isMiddleType()) {
@@ -435,7 +435,7 @@ void LyricsLineSegment::layout()
         */
     } else {                              // dash(es)
         // set conventional dash Y pos
-        rypos() -= lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio);
+        movePosY(-lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio));
         _dashLength = score()->styleMM(Sid::lyricsDashMaxLength) * mag();      // and dash length
         if (len < minDashLen) {                                               // if no room for a dash
             // if at end of system or dash is forced
@@ -456,13 +456,13 @@ void LyricsLineSegment::layout()
         }
         // adjust next lyrics horiz. position if too little a space forced to skip the dash
         if (_numOfDashes == 0 && nextLyr != nullptr && len > 0) {
-            nextLyr->rxpos() -= (toX - fromX);
+            nextLyr->movePosX(-(toX - fromX));
         }
     }
 
     // apply yoffset for staff type change (keeps lyrics lines aligned with lyrics)
     if (staffType()) {
-        rypos() += staffType()->yoffset().val() * spatium();
+        movePosY(staffType()->yoffset().val() * spatium());
     }
 
     // set bounding box

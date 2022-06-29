@@ -1785,7 +1785,7 @@ void Chord::layoutStem()
         score()->undoRemoveElement(_hook);
     }
 
-    _stem->rxpos() = stemPosX();
+    _stem->setPosX(stemPosX());
 
     _defaultStemLength = calcDefaultStemLength();
     // This calls _stem->layout()
@@ -2212,7 +2212,7 @@ void Chord::layoutPitched()
         }
     }
     for (Fingering* f : alignNote) {
-        f->rxpos() = xNote;
+        f->setPosX(xNote);
     }
 }
 
@@ -2443,7 +2443,7 @@ void Chord::layoutTablature()
 //                  _tabDur->setMag(mag());           // useless to set grace mag: graces have no dur. symbol
             _tabDur->layout();
             if (minY < 0) {                           // if some fret extends above tab body (like bass strings)
-                _tabDur->rypos() += minY;             // raise duration symbol
+                _tabDur->movePosY(minY);             // raise duration symbol
                 _tabDur->bbox().translate(0, minY);
             }
         } else {                                // symbol not needed: if exists, delete
@@ -3101,7 +3101,7 @@ void Chord::setSlash(bool flag, bool stemless)
         // for drum staves, no offset, but use normal head
         if (!staffType->isDrumStaff()) {
             // undoChangeProperty(Pid::OFFSET, PointF(0.0, y));
-            rypos() += y;
+            movePosY(y);
         } else {
             head = NoteHeadGroup::HEAD_NORMAL;
         }
@@ -3974,11 +3974,11 @@ void Chord::layoutArticulations3(Slur* slur)
             double d = score()->styleS(Sid::articulationMinDistance).val() * spatium();
             if (slur->up()) {
                 d += std::max(aShape.minVerticalDistance(sShape), 0.0);
-                a->rypos() -= d;
+                a->movePosY(-d);
                 aShape.translateY(-d);
             } else {
                 d += std::max(sShape.minVerticalDistance(aShape), 0.0);
-                a->rypos() += d;
+                a->movePosY(d);
                 aShape.translateY(d);
             }
             if (sstaff && a->addToSkyline()) {
@@ -4051,7 +4051,7 @@ void GraceNotesGroup::layout()
         double offset;
         offset = -std::max(chordShape.minHorizontalDistance(_shape, score()), 0.0);
         _shape.add(chordShape.translated(mu::PointF(offset, 0.0)));
-        double xpos = offset - parent()->rxoffset() - parent()->rxpos();
+        double xpos = offset - parent()->rxoffset() - parent()->xpos();
         chord->setPos(xpos, 0.0);
     }
 }

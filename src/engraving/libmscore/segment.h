@@ -156,7 +156,22 @@ public:
     Measure* measure() const { return toMeasure(explicitParent()); }
     System* system() const { return toSystem(explicitParent()->explicitParent()); }
     double x() const override { return ipos().x(); }
-    void setX(double v) { rxpos() = v; }
+
+    virtual void setPos(double x, double y)
+    {
+        if (RealIsEqual(x, 878.7)) {
+            int k = -1;
+        }
+        _pos.setX(x), _pos.setY(y);
+    }
+
+    virtual void setPos(const PointF& p)
+    {
+        if (RealIsEqual(p.x(), 878.7)) {
+            int k = -1;
+        }
+        _pos = p;
+    }
 
     mu::RectF contentRect() const;
 

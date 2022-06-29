@@ -104,7 +104,7 @@ void Stem::layout()
                 y1 = note->stemDownNW().y();
             }
 
-            rypos() = note->rypos();
+            setPosY(note->ypos());
         }
 
         if (chord()->hook() && !chord()->beam()) {

@@ -438,7 +438,7 @@ void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, double restHei
     for (int i = 0; i < gaps; ++i) {
         System* s1  = page->systems().at(i);
         System* s2  = page->systems().at(i + 1);
-        s1->rypos() = y;
+        s1->setPosY(y);
         y          += s1->distance();
 
         if (!(s1->vbox() || s2->vbox())) {
@@ -447,7 +447,7 @@ void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, double restHei
             checkDivider(ctx, false, s1, yOffset);
         }
     }
-    page->systems().back()->rypos() = y;
+    page->systems().back()->setPosY(y);
 }
 
 void LayoutPage::checkDivider(const LayoutContext& ctx, bool left, System* s, double yOffset, bool remove)
@@ -461,14 +461,14 @@ void LayoutPage::checkDivider(const LayoutContext& ctx, bool left, System* s, do
             s->add(divider);
         }
         divider->layout();
-        divider->rypos() = divider->height() * .5 + yOffset;
+        divider->setPosY(divider->height() * .5 + yOffset);
         if (left) {
-            divider->rypos() += ctx.score()->styleD(Sid::dividerLeftY) * SPATIUM20;
-            divider->rxpos() =  ctx.score()->styleD(Sid::dividerLeftX) * SPATIUM20;
+            divider->movePosY(ctx.score()->styleD(Sid::dividerLeftY) * SPATIUM20);
+            divider->setPosX(ctx.score()->styleD(Sid::dividerLeftX) * SPATIUM20);
         } else {
-            divider->rypos() += ctx.score()->styleD(Sid::dividerRightY) * SPATIUM20;
-            divider->rxpos() =  ctx.score()->styleD(Sid::pagePrintableWidth) * DPI - divider->width();
-            divider->rxpos() += ctx.score()->styleD(Sid::dividerRightX) * SPATIUM20;
+            divider->movePosY(ctx.score()->styleD(Sid::dividerRightY) * SPATIUM20);
+            divider->setPosX(ctx.score()->styleD(Sid::pagePrintableWidth) * DPI - divider->width());
+            divider->movePosX(ctx.score()->styleD(Sid::dividerRightX) * SPATIUM20);
         }
     } else if (divider) {
         if (divider->generated()) {
@@ -657,7 +657,7 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, double f
         if (prvSystem == vgd->system) {
             staffShift += vgd->actualAddedSpace();
         } else {
-            vgd->system->rypos() += systemShift;
+            vgd->system->movePosY(systemShift);
             if (prvSystem) {
                 prvSystem->setDistance(vgd->system->y() - prvSystem->y());
                 prvSystem->setHeight(prvSystem->height() + staffShift);

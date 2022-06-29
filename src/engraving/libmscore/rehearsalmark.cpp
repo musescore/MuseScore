@@ -101,18 +101,18 @@ void RehearsalMark::layout()
 
             if (!header || repeat || !systemFirst) {
                 // no header, or header with repeat, or header mid-system - align with barline
-                rxpos() = barlineX;
+                setPosX(barlineX);
             } else {
                 // header at start of system
                 // align to a point just after the header
                 EngravingItem* e = header->element(track());
                 double w = e ? e->width() : header->width();
-                rxpos() = header->x() + w - s->x();
+                setPosX(header->x() + w - s->x());
 
                 // special case for right aligned rehearsal marks at start of system
                 // left align with start of measure if that is further left
                 if (align() == AlignH::RIGHT) {
-                    rxpos() = std::min(rpos().x(), measureX + width());
+                    setPosX(std::min(xpos(), measureX + width()));
                 }
             }
         }

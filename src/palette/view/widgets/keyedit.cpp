@@ -278,7 +278,7 @@ void KeyCanvas::snap(Accidental* a)
     double y = a->ipos().y();
     int line = round(y / spatium2);
     y = line * spatium2;
-    a->rypos() = y;
+    a->setPosY(y);
     // take default xposition unless Control is pressed
     int i = accidentals.indexOf(a);
     if (i > 0) {
@@ -287,7 +287,7 @@ void KeyCanvas::snap(Accidental* a)
         double prevX = prev->ipos().x();
         qreal prevWidth = prev->symWidth(prev->symbol());
         if (!QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
-            a->rxpos() = prevX + prevWidth + accidentalGap * _spatium;
+            a->setPosX(prevX + prevWidth + accidentalGap * _spatium);
         }
     }
 }

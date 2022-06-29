@@ -452,10 +452,10 @@ void TempoText::layout()
     if (autoplace() && s->rtick().isZero()) {
         Segment* p = segment()->prev(SegmentType::TimeSig);
         if (p) {
-            rxpos() -= s->x() - p->x();
+            movePosX(-s->x() - p->x());
             EngravingItem* e = p->element(staffIdx() * VOICES);
             if (e) {
-                rxpos() += e->x();
+                movePosX(e->x());
             }
         }
     }

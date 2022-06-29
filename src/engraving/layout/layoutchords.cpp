@@ -463,21 +463,21 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
                 Chord* chord = toChord(e);
                 if (chord->up()) {
                     if (upOffset != 0.0) {
-                        chord->rxpos() += upOffset + centerAdjustUp + oversizeUp;
+                        chord->movePosX(upOffset + centerAdjustUp + oversizeUp);
                         if (downDots && !upDots) {
-                            chord->rxpos() += dotAdjust;
+                            chord->movePosX(dotAdjust);
                         }
                     } else {
-                        chord->rxpos() += centerUp;
+                        chord->movePosX(centerUp);
                     }
                 } else {
                     if (downOffset != 0.0) {
-                        chord->rxpos() += downOffset + centerAdjustDown;
+                        chord->movePosX(downOffset + centerAdjustDown);
                         if (upDots && !downDots) {
-                            chord->rxpos() += dotAdjust;
+                            chord->movePosX(dotAdjust);
                         }
                     } else {
-                        chord->rxpos() += centerDown;
+                        chord->movePosX(centerDown);
                     }
                 }
             }
@@ -569,7 +569,7 @@ double LayoutChords::layoutChords2(std::vector<Note*>& notes, bool up)
         // be sure chord position is initialized
         // chord may be moved to the right later
         // if there are conflicts between voices
-        chord->rxpos() = 0.0;
+        chord->setPosX(0.0);
 
         // let user mirror property override the default we calculated
         if (note->userMirror() == DirectionH::AUTO) {
@@ -876,16 +876,16 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         }
 
         double ny = (note->line() + stepOffset) * stepDistance;
-        if (note->rypos() != ny) {
-            note->rypos() = ny;
+        if (note->ypos() != ny) {
+            note->setPosY(ny);
             if (chord->stem()) {
                 chord->stem()->layout();
                 if (chord->hook()) {
-                    chord->hook()->rypos() = chord->stem()->flagPosition().y();
+                    chord->hook()->setPosY(chord->stem()->flagPosition().y());
                 }
             }
         }
-        note->rxpos()  = x;
+        note->setPosX(x);
 
         // find leftmost non-mirrored note to set as X origin for accidental layout
         // a mirrored note that extends to left of segment X origin
@@ -1243,7 +1243,7 @@ void LayoutChords::repositionGraceNotesAfter(Segment* segment)
         }
         GraceNotesGroup* gng = toGraceNotesGroup(item);
         for (Chord* chord : *gng) {
-            double offset = segment->rxpos() - chord->parentItem()->parentItem()->rxpos();
+            double offset = segment->xpos() - chord->parentItem()->parentItem()->xpos();
             // Difference between the segment they "belong" and the segment they are "appended" to.
             chord->setPos(chord->pos().x() + offset, 0.0);
         }

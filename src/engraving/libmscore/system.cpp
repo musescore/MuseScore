@@ -426,13 +426,13 @@ void System::layoutSystem(const LayoutContext& ctx, double xo1, const bool isFir
 
             switch (t->align().horizontal) {
             case AlignH::LEFT:
-                t->rxpos() = 0;
+                t->setPosX(0);
                 break;
             case AlignH::HCENTER:
-                t->rxpos() = maxNamesWidth * .5;
+                t->setPosX(maxNamesWidth * .5);
                 break;
             case AlignH::RIGHT:
-                t->rxpos() = maxNamesWidth;
+                t->setPosX(maxNamesWidth);
                 break;
             }
         }
@@ -492,7 +492,7 @@ void System::layoutBracketsVertical()
             sy = _staves[staffIdx1]->bbox().top();
             ey = _staves[staffIdx2]->bbox().bottom();
         }
-        b->rypos() = sy;
+        b->setPosY(sy);
         b->setHeight(ey - sy);
         b->layout();
     }
@@ -567,7 +567,7 @@ void System::layoutInstrumentNames()
                     y2 = staff(staffIdx + 2)->bbox().bottom();
                     break;
                 }
-                t->rypos() = y1 + (y2 - y1) * .5 + t->offset().y();
+                t->setPosY(y1 + (y2 - y1) * .5 + t->offset().y());
             }
         }
         staffIdx += nstaves;
@@ -727,7 +727,7 @@ void System::setBracketsXPosition(const double xPosition)
                 xOffset += b2->width() + bracketDistance;
             }
         }
-        b1->rxpos() = xPosition - xOffset - b1->width();
+        b1->setPosX(xPosition - xOffset - b1->width());
     }
 }
 
