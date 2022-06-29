@@ -27,11 +27,11 @@ import MuseScore.UiComponents 1.0
 FocusScope {
     id: root
 
-    property alias progressStatus: progressStatusLabel.text
-
     property real from: 0.0
     property real to: 1.0
     property real value: 0.0
+
+    property string progressStatus: root.value * 100 + "%"
 
     property alias navigation: navCtrl
 
@@ -108,6 +108,8 @@ FocusScope {
             horizontalAlignment: Text.AlignHCenter
 
             z: progressRect.z + 1
+
+            text: root.progressStatus
         }
     }
 }
