@@ -22,6 +22,8 @@
 
 #include "lyrics.h"
 
+#include <QRegularExpression>
+
 #include "translation.h"
 #include "rw/xml.h"
 
@@ -260,15 +262,13 @@ void Lyrics::layout()
     String trailing;
 
     if (score()->styleB(Sid::lyricsAlignVerseNumber)) {
-        std::regex punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)");
-        std::smatch match;
-        std::string textU8 = text.toStdString();
-        std::regex_search(textU8, match, punctuationPattern);
-        if (!match.empty()) {
+        QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)", QRegularExpression::UseUnicodePropertiesOption);
+        QRegularExpressionMatch punctuationMatch = punctuationPattern.match(text);
+        if (punctuationMatch.hasMatch()) {
             // leading and trailing punctuation
-            leading = String::fromStdString(match[1].str());
-            trailing = String::fromStdString(match[3].str());
-            //String actualLyric = String::fromStdString(match[2].str());
+            leading = punctuationMatch.captured(1);
+            trailing = punctuationMatch.captured(3);
+            //String actualLyric = punctuationMatch.captured(2);
             if (!leading.isEmpty() && leading.at(0).isDigit()) {
                 hasNumber = true;
             }
