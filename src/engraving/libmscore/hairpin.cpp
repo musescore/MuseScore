@@ -149,7 +149,7 @@ void HairpinSegment::layout()
                 const double sdRight = sd->bbox().right() + sd->pos().x()
                                        + sd->segment()->pos().x() + sd->measure()->pos().x();
                 const double dist    = std::max(sdRight - pos().x() + minDynamicsDistance, 0.0);
-                rxpos()  += dist;
+                movePosX(dist);
                 rxpos2() -= dist;
                 // prepare to align vertically
                 dymax = sd->pos().y();
@@ -285,7 +285,7 @@ void HairpinSegment::layout()
         setbbox(r.adjusted(-w * .5, -w * .5, w, w));
     }
     if (!explicitParent()) {
-        rpos() = PointF();
+        setPos(PointF());
         roffset() = PointF();
         return;
     }
@@ -340,7 +340,7 @@ void HairpinSegment::layout()
                 bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < staff()->height();
                 rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
             }
-            rypos() += yd;
+            movePosY(yd);
         }
 
         if (hairpin()->addToSkyline() && !hairpin()->diagonal()) {
@@ -353,7 +353,7 @@ void HairpinSegment::layout()
                     ny = std::max(ny, sd->ipos().y());
                 }
                 if (sd->ipos().y() != ny) {
-                    sd->rypos() = ny;
+                    sd->setPosY(ny);
                     if (sd->addToSkyline()) {
                         Segment* s = sd->segment();
                         Measure* m = s->measure();
@@ -372,7 +372,7 @@ void HairpinSegment::layout()
                     ny = std::max(ny, ed->ipos().y());
                 }
                 if (ed->ipos().y() != ny) {
-                    ed->rypos() = ny;
+                    ed->setPosY(ny);
                     if (ed->addToSkyline()) {
                         Segment* s = ed->segment();
                         Measure* m = s->measure();

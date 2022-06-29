@@ -573,7 +573,7 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
 
             int off  = st->stepOffset();
             double ld = st->lineDistance().val();
-            note->rypos()  = (line + off * 2.0) * spatium * .5 * ld;
+            note->setPosY((line + off * 2.0) * spatium * .5 * ld);
         }
     }
 }

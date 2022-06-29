@@ -571,6 +571,6 @@ void LayoutBeams::respace(const std::vector<ChordRest*>& elements)
         x += width[i - 1];
         ChordRest* cr = elements[i];
         double dx = x - cr->segment()->pos().x();
-        cr->rxpos() += dx;
+        cr->movePosX(dx);
     }
 }

@@ -360,7 +360,7 @@ void KeySig::layout()
 
         // Follow stepOffset
         if (staffType()) {
-            rypos() = staffType()->stepOffset() * 0.5 * _spatium;
+            setPosY(staffType()->stepOffset() * 0.5 * _spatium);
         }
     }
 

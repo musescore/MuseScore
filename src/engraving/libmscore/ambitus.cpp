@@ -403,7 +403,7 @@ void Ambitus::layout()
         } else {
             _topAccid->setbbox(RectF());
         }
-        _topAccid->rypos() = _topPos.y();
+        _topAccid->setPosY(_topPos.y());
     }
 
     // bottom notehead
@@ -430,7 +430,7 @@ void Ambitus::layout()
         } else {
             _bottomAccid->setbbox(RectF());
         }
-        _bottomAccid->rypos() = _bottomPos.y();
+        _bottomAccid->setPosY(_bottomPos.y());
     }
 
     //
@@ -462,24 +462,24 @@ void Ambitus::layout()
         // left align noteheads and right align accidentals 'hanging' on the left
         _topPos.setX(0.0);
         _bottomPos.setX(0.0);
-        _topAccid->rxpos()       = -xAccidOffTop;
-        _bottomAccid->rxpos()    = -xAccidOffBottom;
+        _topAccid->setPosX(-xAccidOffTop);
+        _bottomAccid->setPosX(-xAccidOffBottom);
         break;
     case DirectionH::LEFT:                       // top notehead at the left of bottom notehead
         // place top notehead at left margin; bottom notehead at right of top head;
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
         _topPos.setX(0.0);
         _bottomPos.setX(headWdt);
-        _topAccid->rxpos() = -xAccidOffTop;
-        _bottomAccid->rxpos() = collision ? -xAccidOffBottom : headWdt - xAccidOffBottom;
+        _topAccid->setPosX(-xAccidOffTop);
+        _bottomAccid->setPosX(collision ? -xAccidOffBottom : headWdt - xAccidOffBottom);
         break;
     case DirectionH::RIGHT:                      // top notehead at the right of bottom notehead
         // bottom notehead at left margin; top notehead at right of bottomnotehead
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
         _bottomPos.setX(0.0);
         _topPos.setX(headWdt);
-        _bottomAccid->rxpos() = -xAccidOffBottom;
-        _topAccid->rxpos() = headWdt - xAccidOffTop;
+        _bottomAccid->setPosX(-xAccidOffBottom);
+        _topAccid->setPosX(headWdt - xAccidOffTop);
         break;
     }
 

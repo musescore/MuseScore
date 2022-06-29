@@ -1848,7 +1848,7 @@ void TextBase::layout()
 //      else if (isStyled(Pid::OFFSET))                                   // TODO: should be set already
 //            setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
     if (placeBelow()) {
-        rypos() = staff() ? staff()->height() : 0.0;
+        setPosY(staff() ? staff()->height() : 0.0);
     }
     layout1();
 }

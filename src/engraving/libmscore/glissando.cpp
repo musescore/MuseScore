@@ -321,7 +321,7 @@ void Glissando::layout()
         // but in practice we are not (and would be difficult to get right in current layout algorithms)
         // so, a compromise is to at least use the available space to the left -
         // the default layout for lines left a margin after the header
-        segm2->rxpos() -= _spatium;
+        segm2->movePosX(-_spatium);
         segm2->rxpos2()+= _spatium;
     }
 
@@ -348,7 +348,7 @@ void Glissando::layout()
         // next segment shall start where this segment stopped
         segm = segmentAt(i + 1);
         segm->rypos2() += segm->ipos().y() - yCurr;          // adjust next segm. vertical length
-        segm->rypos() = yCurr;                               // position next segm. start point at yCurr
+        segm->setPosY(yCurr);                                // position next segm. start point at yCurr
     }
 
     // STAY CLEAR OF NOTE APPENDAGES

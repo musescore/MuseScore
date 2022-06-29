@@ -340,7 +340,7 @@ void Rest::layout()
     }
     double _spatium = spatium();
 
-    rxpos() = 0.0;
+    setPosX(0.0);
     const StaffType* stt = staffType();
     if (stt && stt->isTabStaff()) {
         // if rests are shown and note values are shown as duration symbols
@@ -388,7 +388,7 @@ void Rest::layout()
 
     int yo;
     m_sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines, &yo);
-    rypos() = (double(yo) + double(lineOffset) * .5) * lineDist * _spatium;
+    setPosY((double(yo) + double(lineOffset) * .5) * lineDist * _spatium);
     if (!shouldNotBeDrawn()) {
         setbbox(symBbox(m_sym));
     }
@@ -840,7 +840,7 @@ void Rest::setAccent(bool flag)
             if (durationType() >= DurationType::V_HALF) {
                 yOffset -= staff()->spatium(tick()) * 0.5;
             }
-            rypos() += yOffset;
+            movePosY(yOffset);
         }
     }
 }

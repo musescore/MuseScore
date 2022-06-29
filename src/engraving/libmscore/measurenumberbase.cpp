@@ -140,7 +140,7 @@ void MeasureNumberBase::layout()
             yoff += staff()->height();
         }
 
-        rypos() = yoff;
+        setPosY(yoff);
     } else {
         double yoff = 0.0;
 
@@ -149,7 +149,7 @@ void MeasureNumberBase::layout()
             yoff -= 2.0 * spatium();
         }
 
-        rypos() = yoff;
+        setPosY(yoff);
     }
 
     if (hPlacement() == PlacementH::CENTER) {
@@ -192,9 +192,9 @@ void MeasureNumberBase::layout()
         double x1 = s1 ? s1->x() + s1->minRight() : 0;
         double x2 = s2 ? s2->x() - s2->minLeft() : mea->width();
 
-        rxpos() = (x1 + x2) * 0.5;
+        setPosX((x1 + x2) * 0.5);
     } else if (hPlacement() == PlacementH::RIGHT) {
-        rxpos() = measure()->width();
+        setPosX(measure()->width());
     }
 }
 } // namespace MS

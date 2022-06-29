@@ -44,6 +44,10 @@ void Paint::paintElement(mu::draw::Painter& painter, const EngravingItem* elemen
     painter.translate(elementPosition);
     element->draw(&painter);
     painter.translate(-elementPosition);
+
+    static int count = 0;
+    ++count;
+    std::cout << count << " " << element->typeName() << " x: " << elementPosition.x() << " y: " << elementPosition.y() << std::endl;
 }
 
 void Paint::paintElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements, bool isPrinting)

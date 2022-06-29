@@ -1479,7 +1479,7 @@ PointF Harmony::calculateBoundingRect()
             if (align() == AlignH::RIGHT) {
                 xx = fd->width() / 2.0;
             }
-            yy = rypos();
+            yy = this->ypos();
         } else {
             if (align() == AlignH::RIGHT) {
                 xx = cw;

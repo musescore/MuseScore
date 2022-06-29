@@ -1645,7 +1645,7 @@ void SpannerSegment::autoplaceSpannerSegment()
                 bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < staff()->height();
                 rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
             }
-            rypos() += yd;
+            movePosY(yd);
         }
     }
     setOffsetChanged(false);

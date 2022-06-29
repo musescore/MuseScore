@@ -169,7 +169,7 @@ void TrillSegment::layout()
         setMag(staff()->staffMag(tick()));
     }
     if (spanner()->placeBelow()) {
-        rypos() = staff() ? staff()->height() : 0.0;
+        setPosY(staff() ? staff()->height() : 0.0);
     }
 
     if (isSingleType() || isBeginType()) {

@@ -250,15 +250,25 @@ public:
     OffsetChange offsetChanged() const { return _offsetChanged; }
     void setOffsetChanged(bool v, bool absolute = true, const PointF& diff = PointF());
 
+    inline void doSetPos(double x, double y)
+    {
+        _pos.setX(x),
+        _pos.setY(y);
+    }
+
     const PointF& ipos() const { return _pos; }
     virtual const PointF pos() const { return _pos + _offset; }
     virtual double x() const { return _pos.x() + _offset.x(); }
     virtual double y() const { return _pos.y() + _offset.y(); }
-    virtual void setPos(double x, double y) { _pos.setX(x), _pos.setY(y); }
-    virtual void setPos(const PointF& p) { _pos = p; }
-    PointF& rpos() { return _pos; }
-    double& rxpos() { return _pos.rx(); }
-    double& rypos() { return _pos.ry(); }
+    virtual void setPos(double x, double y) { doSetPos(x, y); }
+    virtual void setPos(const PointF& p) { doSetPos(p.x(), p.y()); }
+    void setPosX(double x) { doSetPos(x, _pos.y()); }
+    void setPosY(double y) { doSetPos(_pos.x(), y); }
+    void movePos(const PointF& p) { doSetPos(_pos.x() + p.x(), _pos.y() + p.y()); }
+    void movePosX(double x) { doSetPos(_pos.x() + x, _pos.y()); }
+    void movePosY(double y) { doSetPos(_pos.x(), _pos.y() + y); }
+    double xpos() { return _pos.x(); }
+    double ypos() { return _pos.y(); }
     virtual void move(const PointF& s) { _pos += s; }
     bool skipDraw() const { return _skipDraw; }
 

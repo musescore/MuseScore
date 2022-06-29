@@ -305,7 +305,7 @@ void Dynamic::layout()
                 double dynamicMag = spatium() / SPATIUM20;
 
                 double noteHeadWidth = score()->noteHeadWidth() * dynamicMag;
-                rxpos() += noteHeadWidth * .5;
+                movePosX(noteHeadWidth * .5);
 
                 double opticalCenter = symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x() * dynamicMag;
                 if (symId != SymId::noSym && opticalCenter) {
@@ -317,10 +317,10 @@ void Dynamic::layout()
                     left *= fontScaling;
 
                     double offset = opticalCenter - left - bbox().width() * 0.5;
-                    rxpos() -= offset;
+                    movePosX(-offset);
                 }
             } else {
-                rxpos() += e->width() * .5;
+                movePosX(e->width() * .5);
             }
             break;
         }
@@ -354,12 +354,12 @@ void Dynamic::doAutoplace()
     if (placeAbove()) {
         double d = sk.minDistance(sl.north());
         if (d > -minDistance) {
-            rypos() += -(d + minDistance);
+            movePosY(-(d + minDistance));
         }
     } else {
         double d = sl.south().minDistance(sk);
         if (d > -minDistance) {
-            rypos() += d + minDistance;
+            movePosY(d + minDistance);
         }
     }
 }

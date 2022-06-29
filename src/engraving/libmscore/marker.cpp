@@ -193,7 +193,7 @@ void Marker::layout()
     // force to center over barline if left-aligned
 
     if (!score()->isPaletteScore() && layoutToParentWidth() && align() == AlignH::LEFT) {
-        rxpos() -= width() * 0.5;
+        movePosX(-width() * 0.5);
     }
 
     autoplaceMeasureElement();

@@ -304,7 +304,7 @@ void Lyrics::layout()
     }
 
     PointF o(propertyDefault(Pid::OFFSET).value<PointF>());
-    rxpos() = o.x();
+    setPosX(o.x());
     double x = pos().x();
     TextBase::layout1();
 
@@ -343,7 +343,7 @@ void Lyrics::layout()
         x -= leftAdjust;
     }
 
-    rxpos() = x;
+    setPosX(x);
 
     if (_ticks > Fraction(0, 1) || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
         if (!_separator) {
@@ -402,11 +402,11 @@ void Lyrics::layout2(int nAbove)
 
     if (placeBelow()) {
         double yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
-        rypos()  = lh * (_no - nAbove) + yo - chordRest()->y();
-        rpos()  += styleValue(Pid::OFFSET, Sid::lyricsPosBelow).value<PointF>();
+        setPosY(lh * (_no - nAbove) + yo - chordRest()->y());
+        movePos(styleValue(Pid::OFFSET, Sid::lyricsPosBelow).value<PointF>());
     } else {
-        rypos() = -lh * (nAbove - _no - 1) - chordRest()->y();
-        rpos() += styleValue(Pid::OFFSET, Sid::lyricsPosAbove).value<PointF>();
+        setPosY(-lh * (nAbove - _no - 1) - chordRest()->y());
+        movePos(styleValue(Pid::OFFSET, Sid::lyricsPosAbove).value<PointF>());
     }
 }
 
