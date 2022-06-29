@@ -2354,7 +2354,7 @@ void Score::resetDefaults()
                     if (e->isDynamic()) {
                         Dynamic* d = toDynamic(e);
                         if (d->xmlText().contains(u"<sym>") && !d->xmlText().contains(u"<font")) {
-                            d->setAlign(Align(AlignH::HCENTER, AlignV::BOTTOM));
+                            d->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
                         }
                         d->setSize(10.0);
                     }
