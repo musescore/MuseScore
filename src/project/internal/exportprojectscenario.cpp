@@ -49,6 +49,8 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
         return false;
     }
 
+    interactive()->open("musescore://project/export/progress?modal=true");
+
     io::path_t chosenPath = askExportPath(notations, exportType, unitType);
     if (chosenPath.empty()) {
         return false;
