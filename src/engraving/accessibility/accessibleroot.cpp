@@ -45,24 +45,22 @@ AccessibleRoot::~AccessibleRoot()
     m_element = nullptr;
 }
 
-void AccessibleRoot::setFocusedElement(AccessibleItem* e)
+void AccessibleRoot::setFocusedElement(AccessibleItemPtr e)
 {
-    AccessibleItem* old = m_focusedElement;
-    m_focusedElement = nullptr;
-
+    AccessibleItemWeakPtr old = m_focusedElement;
     updateStaffInfo(e, old);
 
-    if (old) {
-        old->notifyAboutFocus(false);
+    if (auto oldItem = old.lock()) {
+        oldItem->notifyAboutFocus(false);
     }
 
     m_focusedElement = e;
-    if (m_focusedElement) {
-        m_focusedElement->notifyAboutFocus(true);
+    if (auto newItem = m_focusedElement.lock()) {
+        newItem->notifyAboutFocus(true);
     }
 }
 
-AccessibleItem* AccessibleRoot::focusedElement() const
+AccessibleItemWeakPtr AccessibleRoot::focusedElement() const
 {
     return m_focusedElement;
 }
@@ -111,16 +109,19 @@ QString AccessibleRoot::staffInfo() const
     return m_staffInfo;
 }
 
-void AccessibleRoot::updateStaffInfo(const AccessibleItem* newAccessibleItem, const AccessibleItem* oldAccessibleItem)
+void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem)
 {
     m_staffInfo = "";
 
-    if (newAccessibleItem && newAccessibleItem->element()->hasStaff()) {
-        staff_idx_t newStaffIdx = newAccessibleItem->element()->staffIdx();
-        staff_idx_t oldStaffIdx = oldAccessibleItem ? oldAccessibleItem->element()->staffIdx() : nidx;
+    AccessibleItemPtr newItem = newAccessibleItem.lock();
+    AccessibleItemPtr oldItem = oldAccessibleItem.lock();
+
+    if (newItem && newItem->element()->hasStaff()) {
+        staff_idx_t newStaffIdx = newItem->element()->staffIdx();
+        staff_idx_t oldStaffIdx = oldItem ? oldItem->element()->staffIdx() : nidx;
 
         if (newStaffIdx != oldStaffIdx) {
-            auto element = newAccessibleItem->element();
+            auto element = newItem->element();
             QString staff = qtrc("engraving", "Staff %1").arg(QString::number(element->staffIdx() + 1));
 
             QString staffName = element->staff()->part()->longName(element->tick());
