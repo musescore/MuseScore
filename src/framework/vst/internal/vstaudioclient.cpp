@@ -189,6 +189,10 @@ void VstAudioClient::setBlockSize(unsigned int samples)
 
 void VstAudioClient::setSampleRate(unsigned int sampleRate)
 {
+    if (m_samplesInfo.sampleRate == sampleRate) {
+        return;
+    }
+
     m_samplesInfo.sampleRate = sampleRate;
 
     updateProcessSetup();
