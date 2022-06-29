@@ -730,6 +730,15 @@ String& String::remove(size_t position, size_t n)
     return *this;
 }
 
+void String::chop(size_t n)
+{
+    if (n >= size()) {
+        n = size();
+    }
+
+    remove(size() - n);
+}
+
 void String::truncate(size_t position)
 {
     mutStr().resize(position);

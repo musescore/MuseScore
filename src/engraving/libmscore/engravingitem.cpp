@@ -813,21 +813,8 @@ PointF EngravingItem::canvasPos() const
 double EngravingItem::pageX() const
 {
     double xp = x();
-    if (type() == ElementType::BAR_LINE) {
-        std::cout << typeName() << " x: " << x() << std::endl;
-    }
     for (EngravingItem* e = parentItem(); e && e->parentItem(); e = e->parentItem()) {
         xp += e->x();
-        if (type() == ElementType::BAR_LINE) {
-            std::cout << e->typeName() << " x: " << e->x() << std::endl;
-        }
-
-        if (type() == ElementType::BAR_LINE) {
-            if (e->type() == ElementType::SEGMENT) {
-                e->x();
-                int k = -1;
-            }
-        }
     }
     return xp;
 }
