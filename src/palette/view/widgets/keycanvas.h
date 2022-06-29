@@ -32,7 +32,9 @@
 namespace mu::engraving {
 class Accidental;
 class Clef;
+}
 
+namespace mu::palette {
 //---------------------------------------------------------
 //   KeyCanvas
 //---------------------------------------------------------
@@ -41,17 +43,17 @@ class KeyCanvas : public QFrame
 {
     Q_OBJECT
 
-    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
-    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(palette, IPaletteConfiguration, configuration)
+    INJECT(palette, engraving::IEngravingConfiguration, engravingConfiguration)
 
-    Accidental* dragElement = nullptr;
-    Accidental* moveElement = nullptr;
+    engraving::Accidental* dragElement = nullptr;
+    engraving::Accidental* moveElement = nullptr;
     QTransform _matrix, imatrix;
     double extraMag = 1.0;
-    QList<Accidental*> accidentals;
+    QList<engraving::Accidental*> accidentals;
     QPointF startMove;
     QPointF base;
-    Clef* clef = nullptr;
+    engraving::Clef* clef = nullptr;
 
     virtual void paintEvent(QPaintEvent*);
     virtual void mousePressEvent(QMouseEvent*);
@@ -61,7 +63,7 @@ class KeyCanvas : public QFrame
     virtual void dragEnterEvent(QDragEnterEvent*);
     virtual void dragMoveEvent(QDragMoveEvent*);
     virtual void dropEvent(QDropEvent*);
-    void snap(Accidental*);
+    void snap(engraving::Accidental*);
 
 private slots:
     void deleteElement();
@@ -69,7 +71,7 @@ private slots:
 public:
     KeyCanvas(QWidget* parent = 0);
     void clear();
-    const QList<Accidental*> getAccidentals() const { return accidentals; }
+    const QList<engraving::Accidental*> getAccidentals() const { return accidentals; }
 };
 } // namespace Ms
 #endif

@@ -27,16 +27,13 @@
 #include "engraving/rw/xml.h"
 #include "engraving/rw/readcontext.h"
 
-using namespace mu;
-using namespace mu::io;
-
-namespace mu::engraving {
+namespace mu::palette {
 template<class T>
 QByteArray toMimeData(T* t)
 {
-    Buffer buffer;
-    buffer.open(IODevice::WriteOnly);
-    XmlWriter xml(&buffer);
+    io::Buffer buffer;
+    buffer.open(io::IODevice::WriteOnly);
+    engraving::XmlWriter xml(&buffer);
     xml.context()->setClipboardmode(true);
     t->write(xml);
     buffer.close();
@@ -46,7 +43,7 @@ QByteArray toMimeData(T* t)
 template<class T>
 std::shared_ptr<T> fromMimeData(const QByteArray& data, const AsciiStringView& tagName)
 {
-    XmlReader e(data);
+    engraving::XmlReader e(data);
     e.context()->setPasteMode(true);
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());

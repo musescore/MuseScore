@@ -38,8 +38,8 @@
 
 using namespace mu;
 using namespace mu::palette;
+using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   PaletteTreeModel::PaletteTreeModel
 //---------------------------------------------------------
@@ -1150,4 +1150,3 @@ bool PaletteCellFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
 
     return false;
 }
-} // namespace Ms

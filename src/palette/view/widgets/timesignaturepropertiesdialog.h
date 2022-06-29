@@ -31,7 +31,9 @@
 
 namespace mu::engraving {
 class TimeSig;
+}
 
+namespace mu::palette {
 //---------------------------------------------------------
 //   TimeSigProperties
 //---------------------------------------------------------
@@ -58,11 +60,11 @@ private:
 
     mu::notation::INotationPtr notation() const;
 
-    TimeSig* m_originTimeSig = nullptr;
-    TimeSig* m_editedTimeSig = nullptr;
+    engraving::TimeSig* m_originTimeSig = nullptr;
+    engraving::TimeSig* m_editedTimeSig = nullptr;
 };
 }
 
-Q_DECLARE_METATYPE(mu::engraving::TimeSignaturePropertiesDialog)
+Q_DECLARE_METATYPE(mu::palette::TimeSignaturePropertiesDialog)
 
 #endif // MU_PALETTE_TIMESIGNATUREPROPERTIESDIALOG_H

@@ -27,10 +27,6 @@
 
 namespace mu::palette {
 class PaletteWidget;
-}
-
-namespace mu::engraving {
-class EngravingItem;
 
 //---------------------------------------------------------
 //   SymbolDialog
@@ -57,7 +53,7 @@ private:
     void createSymbols();
 
     QString range;
-    mu::palette::PaletteWidget* m_symbolsWidget = nullptr;
+    PaletteWidget* m_symbolsWidget = nullptr;
 };
 }
 

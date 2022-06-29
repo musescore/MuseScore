@@ -39,7 +39,7 @@ class PaletteRootModel : public QObject, public actions::Actionable, public asyn
     INJECT(palette, IPaletteProvider, paletteProvider)
     INJECT(palette, actions::IActionsDispatcher, dispatcher)
 
-    Q_PROPERTY(mu::engraving::PaletteProvider * paletteProvider READ paletteProvider_property CONSTANT)
+    Q_PROPERTY(PaletteProvider * paletteProvider READ paletteProvider_property CONSTANT)
 
     Q_PROPERTY(bool paletteEnabled READ paletteEnabled NOTIFY paletteEnabledChanged)
     Q_PROPERTY(bool needShowShadowOverlay READ needShowShadowOverlay NOTIFY needShowShadowOverlayChanged)
@@ -47,7 +47,7 @@ class PaletteRootModel : public QObject, public actions::Actionable, public asyn
 public:
     explicit PaletteRootModel(QObject* parent = nullptr);
 
-    mu::engraving::PaletteProvider* paletteProvider_property() const;
+    PaletteProvider* paletteProvider_property() const;
 
     bool paletteEnabled() const;
     bool needShowShadowOverlay() const;
