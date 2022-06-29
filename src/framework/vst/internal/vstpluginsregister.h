@@ -36,7 +36,7 @@ class VstPluginsRegister : public IVstPluginsRegister
 {
     INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
 public:
-    void registerInstrPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId, VstPluginPtr pluginPtr) override;
+    void registerInstrPlugin(const audio::TrackId trackId, VstPluginPtr pluginPtr) override;
     void registerFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder,
                           VstPluginPtr pluginPtr) override;
     void registerMasterFxPlugin(const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder,
@@ -56,11 +56,9 @@ private:
     mutable std::mutex m_mutex;
 
     using FxPluginKey = std::pair<audio::AudioResourceId, audio::AudioFxChainOrder>;
-
-    using VstiInstancesMap = std::map<audio::AudioResourceId, VstPluginPtr>;
     using VstFxInstancesMap = std::map<FxPluginKey, VstPluginPtr>;
 
-    std::map<audio::TrackId, VstiInstancesMap> m_vstiPluginsMap;
+    std::map<audio::TrackId, VstPluginPtr> m_vstiPluginsMap;
     std::map<audio::TrackId, VstFxInstancesMap> m_vstFxPluginsMap;
     VstFxInstancesMap m_masterPluginsMap;
 };

@@ -29,6 +29,12 @@ using namespace mu;
 using namespace mu::vst;
 using namespace mu::audio::synth;
 
+static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
+    Steinberg::Vst::kCtrlVolume,
+    Steinberg::Vst::kCtrlExpression,
+    Steinberg::Vst::kCtrlSustainOnOff
+};
+
 VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params)
     : AbstractSynthesizer(params), m_pluginPtr(pluginPtr), m_vstAudioClient(std::make_unique<VstAudioClient>())
 {
@@ -41,12 +47,16 @@ Ret VstSynthesiser::init()
 
     m_vstAudioClient->init(VstPluginType::Instrument, m_pluginPtr);
 
-    if (m_pluginPtr->isLoaded()) {
+    auto load = [this]() {
         m_pluginPtr->updatePluginConfig(m_params.configuration);
+        m_vstAudioClient->setBlockSize(m_samplesPerChannel);
+        m_sequencer.init(m_vstAudioClient->paramsMapping(SUPPORTED_CONTROLLERS));
+    };
+
+    if (m_pluginPtr->isLoaded()) {
+        load();
     } else {
-        m_pluginPtr->loadingCompleted().onNotify(this, [this]() {
-            m_pluginPtr->updatePluginConfig(m_params.configuration);
-        });
+        m_pluginPtr->loadingCompleted().onNotify(this, load);
     }
 
     m_pluginPtr->pluginSettingsChanged().onReceive(this, [this](const audio::AudioUnitConfig& newConfig) {
@@ -58,9 +68,18 @@ Ret VstSynthesiser::init()
         m_paramsChanges.send(m_params);
     });
 
-    m_vstAudioClient->setBlockSize(m_samplesPerChannel);
-
     return make_ret(Ret::Code::Ok);
+}
+
+void VstSynthesiser::toggleVolumeGain(const bool isActive)
+{
+    static constexpr audio::gain_t NON_ACTIVE_GAIN = 0.5f;
+
+    if (isActive) {
+        m_vstAudioClient->setVolumeGain(m_currentGain);
+    } else {
+        m_vstAudioClient->setVolumeGain(NON_ACTIVE_GAIN);
+    }
 }
 
 bool VstSynthesiser::isValid() const
@@ -88,19 +107,6 @@ std::string VstSynthesiser::name() const
 
 void VstSynthesiser::revokePlayingNotes()
 {
-    for (const mpe::PlaybackEvent& event : m_playingEvents) {
-        if (!std::holds_alternative<mpe::NoteEvent>(event)) {
-            continue;
-        }
-
-        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
-        mpe::timestamp_t from = noteEvent.arrangementCtx().actualTimestamp;
-        mpe::timestamp_t to = from + noteEvent.arrangementCtx().actualDuration;
-
-        m_vstAudioClient->handleNoteOffEvents(event, from, to);
-    }
-
-    m_playingEvents.clear();
     m_vstAudioClient->flush();
 }
 
@@ -109,30 +115,38 @@ void VstSynthesiser::flushSound()
     revokePlayingNotes();
 }
 
-bool VstSynthesiser::hasAnythingToPlayback(const audio::msecs_t from, const audio::msecs_t to) const
-{
-    if (m_vstAudioClient->isPluginInputAvailable()) {
-        return true;
-    }
-
-    if (!m_offStreamEvents.empty() || !m_playingEvents.empty()) {
-        return true;
-    }
-
-    if (!m_isActive || m_mainStreamEvents.empty()) {
-        return false;
-    }
-
-    audio::msecs_t startMsec = m_mainStreamEvents.from;
-    audio::msecs_t endMsec = m_mainStreamEvents.to;
-
-    return from >= startMsec && to <= endMsec;
-}
-
 void VstSynthesiser::setupSound(const mpe::PlaybackSetupData& /*setupData*/)
 {
     NOT_SUPPORTED;
     return;
+}
+
+void VstSynthesiser::setupEvents(const mpe::PlaybackData& playbackData)
+{
+    m_sequencer.load(playbackData);
+}
+
+bool VstSynthesiser::isActive() const
+{
+    return m_sequencer.isActive();
+}
+
+void VstSynthesiser::setIsActive(const bool isActive)
+{
+    AbstractSynthesizer::setIsActive(isActive);
+
+    m_sequencer.setActive(isActive);
+    toggleVolumeGain(isActive);
+}
+
+audio::msecs_t VstSynthesiser::playbackPosition() const
+{
+    return m_sequencer.playbackPosition();
+}
+
+void VstSynthesiser::setPlaybackPosition(const audio::msecs_t newPosition)
+{
+    m_sequencer.setPlaybackPosition(newPosition);
 }
 
 void VstSynthesiser::setSampleRate(unsigned int sampleRate)
@@ -159,75 +173,19 @@ audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samples
 
     audio::msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
 
-    if (!hasAnythingToPlayback(m_playbackPosition, m_playbackPosition + nextMsecs)) {
-        return 0;
-    }
+    const VstSequencer::EventSequence& sequence = m_sequencer.eventsToBePlayed(nextMsecs);
 
-    if (isActive()) {
-        handleMainStreamEvents(nextMsecs);
-    } else {
-        handleOffStreamEvents(nextMsecs);
+    for (const VstSequencer::EventType& event : sequence) {
+        if (std::holds_alternative<VstEvent>(event)) {
+            m_vstAudioClient->handleEvent(std::get<VstEvent>(event));
+        } else if (std::holds_alternative<PluginParamInfo>(event)) {
+            m_vstAudioClient->handleParamChange(std::get<PluginParamInfo>(event));
+        } else {
+            audio::gain_t newGain = std::get<audio::gain_t>(event);
+            m_vstAudioClient->setVolumeGain(newGain);
+            m_currentGain = newGain;
+        }
     }
 
     return m_vstAudioClient->process(buffer, samplesPerChannel);
-}
-
-void VstSynthesiser::handleMainStreamEvents(const audio::msecs_t nextMsecs)
-{
-    audio::msecs_t from = m_playbackPosition;
-
-    if (m_playbackPosition == 0) {
-        from = actualPlaybackPositionStart();
-    }
-
-    audio::msecs_t to = from + nextMsecs;
-
-    EventsMapIteratorList range = m_mainStreamEvents.findEventsRange(from, to);
-
-    for (const auto& it : range) {
-        for (const mpe::PlaybackEvent& event : it->second) {
-            if (m_vstAudioClient->handleNoteOnEvents(event, from, from + nextMsecs)) {
-                m_playingEvents.emplace_back(event);
-            }
-        }
-    }
-
-    handleAlreadyPlayingEvents(from, from + nextMsecs);
-
-    setPlaybackPosition(to);
-}
-
-void VstSynthesiser::handleOffStreamEvents(const audio::msecs_t nextMsecs)
-{
-    audio::msecs_t from = m_offStreamEvents.from;
-    audio::msecs_t to = m_offStreamEvents.to;
-
-    EventsMapIteratorList range = m_offStreamEvents.findEventsRange(from, to);
-
-    for (const auto& it : range) {
-        for (const mpe::PlaybackEvent& event : it->second) {
-            if (m_vstAudioClient->handleNoteOnEvents(event, from, from + nextMsecs)) {
-                m_playingEvents.emplace_back(event);
-            }
-        }
-    }
-
-    handleAlreadyPlayingEvents(from, from + nextMsecs);
-
-    m_offStreamEvents.from += nextMsecs;
-    if (m_offStreamEvents.from >= m_offStreamEvents.to) {
-        m_offStreamEvents.clear();
-    }
-}
-
-void VstSynthesiser::handleAlreadyPlayingEvents(const audio::msecs_t from, const audio::msecs_t to)
-{
-    auto it = m_playingEvents.cbegin();
-    while (it != m_playingEvents.cend()) {
-        if (m_vstAudioClient->handleNoteOffEvents(*it, from, to)) {
-            it = m_playingEvents.erase(it);
-        } else {
-            ++it;
-        }
-    }
 }

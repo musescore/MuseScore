@@ -34,10 +34,11 @@
 #include "audiotypes.h"
 
 namespace mu::audio {
-template<class EventType>
+template<class ... Types>
 class AbstractEventSequencer : public async::Asyncable
 {
 public:
+    using EventType = std::variant<Types...>;
     using EventSequence = std::set<EventType>;
     using EventSequenceMap = std::map<msecs_t, EventSequence>;
 
