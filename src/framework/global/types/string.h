@@ -113,7 +113,7 @@ public:
     inline bool isNull() const { return m_ch == 0; }
 
     inline bool isAscii() const { return isAscii(m_ch); }
-    static inline bool isAscii(char16_t c) { return c <= 0xff; }
+    static inline bool isAscii(char16_t c) { return c <= 0x7f; }
     inline char toAscii(bool* ok = nullptr) const { return toAscii(m_ch, ok); }
     static char toAscii(char16_t c, bool* ok = nullptr);
     static inline Char fromAscii(char c) { return static_cast<char16_t>(c); }
@@ -267,6 +267,7 @@ public:
     String& remove(const Char& ch);
     String& remove(char16_t ch);
     String& remove(size_t position, size_t n = mu::nidx);
+    void chop(size_t n);
     void truncate(size_t position);
 
     String arg(const String& val) const;
