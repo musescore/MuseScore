@@ -813,8 +813,21 @@ PointF EngravingItem::canvasPos() const
 double EngravingItem::pageX() const
 {
     double xp = x();
+    if (type() == ElementType::BAR_LINE) {
+        std::cout << typeName() << " x: " << x() << std::endl;
+    }
     for (EngravingItem* e = parentItem(); e && e->parentItem(); e = e->parentItem()) {
         xp += e->x();
+        if (type() == ElementType::BAR_LINE) {
+            std::cout << e->typeName() << " x: " << e->x() << std::endl;
+        }
+
+        if (type() == ElementType::BAR_LINE) {
+            if (e->type() == ElementType::SEGMENT) {
+                e->x();
+                int k = -1;
+            }
+        }
     }
     return xp;
 }
@@ -2473,7 +2486,7 @@ double EngravingItem::rebaseOffset(bool nox)
             off.ry() += above ? -staffHeight : staffHeight;
             undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(off + p));
             _offsetChanged = OffsetChange::ABSOLUTE_OFFSET;             //saveChangedValue;
-            rypos() += above ? staffHeight : -staffHeight;
+            movePosY(above ? staffHeight : -staffHeight);
             PropertyFlags pf = e->propertyFlags(Pid::PLACEMENT);
             if (pf == PropertyFlags::STYLED) {
                 pf = PropertyFlags::UNSTYLED;
@@ -2610,7 +2623,7 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
                     r.translate(0.0, rebase);
                 }
             }
-            rypos() += yd;
+            movePosY(yd);
             r.translate(PointF(0.0, yd));
         }
         if (add && addToSkyline()) {
@@ -2672,7 +2685,7 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
                     sh.translateY(rebase);
                 }
             }
-            rypos() += yd;
+            movePosY(yd);
             sh.translateY(yd);
         }
         if (add && addToSkyline()) {

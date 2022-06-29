@@ -265,12 +265,12 @@ void TextLineBaseSegment::layout()
     double _spatium = tl->spatium();
 
     if (spanner()->placeBelow()) {
-        rypos() = staff() ? staff()->height() : 0.0;
+        setPosY(staff() ? staff()->height() : 0.0);
     }
 
     // adjust Y pos to staffType offset
     if (staffType()) {
-        rypos() += staffType()->yoffset().val() * spatium();
+        movePosY(staffType()->yoffset().val() * spatium());
     }
 
     if (!tl->diagonal()) {

@@ -1144,7 +1144,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                         break;
                     }
                 }
-                y = std::min(y, ss->rypos());
+                y = std::min(y, ss->ypos());
                 ++idx;
                 prevVolta = volta;
             }
@@ -1152,7 +1152,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             for (int i = 0; i < idx; ++i) {
                 SpannerSegment* ss = voltaSegments[i];
                 if (ss->autoplace() && ss->isStyled(Pid::OFFSET)) {
-                    ss->rypos() = y;
+                    ss->setPosY(y);
                 }
                 if (ss->addToSkyline()) {
                     system->staff(staffIdx)->skyline().add(ss->shape().translated(ss->pos()));
@@ -1242,13 +1242,13 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
     if (align && segments.size() > 1) {
         const size_t nstaves = system->staves().size();
         constexpr double minY = -1000000.0;
-        const double defaultY = segments[0]->rypos();
+        const double defaultY = segments[0]->ypos();
         std::vector<double> y(nstaves, minY);
 
         for (SpannerSegment* ss : segments) {
             if (ss->visible()) {
                 double& staffY = y[ss->staffIdx()];
-                staffY = std::max(staffY, ss->rypos());
+                staffY = std::max(staffY, ss->ypos());
             }
         }
         for (SpannerSegment* ss : segments) {
@@ -1257,9 +1257,9 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
             }
             const double staffY = y[ss->staffIdx()];
             if (staffY > minY) {
-                ss->rypos() = staffY;
+                ss->setPosY(staffY);
             } else {
-                ss->rypos() = defaultY;
+                ss->setPosY(defaultY);
             }
         }
     }

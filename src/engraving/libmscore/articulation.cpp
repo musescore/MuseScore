@@ -793,7 +793,7 @@ void Articulation::doAutoplace()
                     r.translate(0.0, rebase);
                 }
             }
-            rypos() += yd;
+            movePosY(yd);
             r.translate(PointF(0.0, yd));
         }
     }

@@ -396,7 +396,7 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
     } else {
         newcr = toChordRest(cr->clone());
     }
-    newcr->rxpos() = 0.0;
+    newcr->setPosX(0.0);
     newcr->setDurationType(d);
     newcr->setTicks(d.fraction());
     newcr->setTuplet(cr->tuplet());

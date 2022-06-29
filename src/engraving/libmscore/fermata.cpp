@@ -233,9 +233,9 @@ void Fermata::layout()
     EngravingItem* e = s->element(track());
     if (e) {
         if (e->isChord()) {
-            rxpos() += score()->noteHeadWidth() * staff()->staffMag(Fraction(0, 1)) * .5;
+            movePosX(score()->noteHeadWidth() * staff()->staffMag(Fraction(0, 1)) * .5);
         } else {
-            rxpos() += e->x() + e->width() * staff()->staffMag(Fraction(0, 1)) * .5;
+            movePosX(e->x() + e->width() * staff()->staffMag(Fraction(0, 1)) * .5);
         }
     }
 
@@ -245,7 +245,7 @@ void Fermata::layout()
             _symId = SymNames::symIdByName(name.left(name.size() - 5) + u"Above");
         }
     } else {
-        rypos() += staff()->height();
+        movePosY(staff()->height());
         if (name.endsWith(u"Above")) {
             _symId = SymNames::symIdByName(name.left(name.size() - 5) + u"Below");
         }

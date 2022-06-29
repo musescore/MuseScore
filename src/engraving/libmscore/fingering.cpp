@@ -115,7 +115,7 @@ void Fingering::layout()
     }
 
     TextBase::layout();
-    rypos() = 0.0;      // handle placement below
+    setPosY(0.0);      // handle placement below
 
     if (autoplace() && note()) {
         Note* n      = note();
@@ -145,15 +145,15 @@ void Fingering::layout()
             Staff* vStaff = chord->staff();           // TODO: use current height at tick
 
             if (n->mirror()) {
-                rxpos() -= n->ipos().x();
+                movePosX(-n->ipos().x());
             }
-            rxpos() += headWidth * .5;
+            movePosX(headWidth * .5);
             if (above) {
                 if (tight) {
                     if (chord->stem()) {
-                        rxpos() -= 0.8 * sp;
+                        movePosX(-0.8 * sp);
                     }
-                    rypos() -= 1.5 * sp;
+                    movePosY(-1.5 * sp);
                 } else {
                     RectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
                     SkylineLine sk(false);
@@ -182,14 +182,14 @@ void Fingering::layout()
                         bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
                         rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
                     }
-                    rypos() += yd;
+                    movePosY(yd);
                 }
             } else {
                 if (tight) {
                     if (chord->stem()) {
-                        rxpos() += 0.8 * sp;
+                        movePosX(0.8 * sp);
                     }
-                    rypos() += 1.5 * sp;
+                    movePosY(1.5 * sp);
                 } else {
                     RectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
                     SkylineLine sk(true);
@@ -218,16 +218,16 @@ void Fingering::layout()
                         bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
                         rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
                     }
-                    rypos() += yd;
+                    movePosY(yd);
                 }
             }
         } else if (textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
             // place to left of note
             double left = n->shape().left();
             if (left - n->x() > 0.0) {
-                rxpos() -= left;
+                movePosX(-left);
             } else {
-                rxpos() -= n->x();
+                movePosX(-n->x());
             }
         }
         // for other fingering styles, do not autoplace
