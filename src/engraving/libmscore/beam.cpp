@@ -978,11 +978,13 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
         bool breakBeam = false;
         bool previousBreak32 = false;
         bool previousBreak64 = false;
+        int prevRests = 0;
 
         for (uint i = 0; i < chordRests.size(); i++) {
             ChordRest* chordRest = chordRests[i];
             ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
             if (!chordRest->isChord()) {
+                prevRests++;
                 continue;
             }
             Chord* chord = toChord(chordRest);
@@ -1002,7 +1004,7 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
             } else {
                 if (startChord && endChord) {
                     if (startChord == endChord) {
-                        bool isBeamletBefore = calcIsBeamletBefore(startChord, i - 1, level, previousBreak32, previousBreak64);
+                        bool isBeamletBefore = calcIsBeamletBefore(startChord, i - 1 - prevRests, level, previousBreak32, previousBreak64);
                         createBeamletSegment(startChord, isBeamletBefore, level);
                     } else {
                         createBeamSegment(startChord, endChord, level);
@@ -1013,6 +1015,7 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
             }
             previousBreak32 = isBroken32;
             previousBreak64 = isBroken64;
+            prevRests = 0;
         }
 
         // if the beam ends on the last chord
