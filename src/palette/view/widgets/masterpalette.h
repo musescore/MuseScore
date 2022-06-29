@@ -25,20 +25,16 @@
 
 #include "ui_masterpalette.h"
 
-#include "palettewidget.h"
+#include "internal/palette.h"
 
 #include "uicomponents/view/topleveldialog.h"
 
 namespace mu::palette {
-class PaletteWidget;
-}
-
-namespace mu::engraving {
 class TimeDialog;
 class KeyEditor;
 class SymbolDialog;
 
-class MasterPalette : public mu::uicomponents::TopLevelDialog, Ui::MasterPalette
+class MasterPalette : public uicomponents::TopLevelDialog, Ui::MasterPalette
 {
     Q_OBJECT
 
@@ -66,7 +62,7 @@ private slots:
     void closeEvent(QCloseEvent* event) override;
 
 private:
-    void addPalette(mu::palette::PalettePtr palette);
+    void addPalette(PalettePtr palette);
     void retranslate(bool firstTime = false);
 
     TimeDialog* m_timeDialog = nullptr;

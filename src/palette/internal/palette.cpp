@@ -307,7 +307,7 @@ bool Palette::read(XmlReader& e)
 
 QByteArray Palette::toMimeData() const
 {
-    return mu::engraving::toMimeData(this);
+    return ::toMimeData(this);
 }
 
 void Palette::write(XmlWriter& xml) const
@@ -344,7 +344,7 @@ void Palette::write(XmlWriter& xml) const
 
 PalettePtr Palette::fromMimeData(const QByteArray& data)
 {
-    return mu::engraving::fromMimeData<Palette>(data, "Palette");
+    return ::fromMimeData<Palette>(data, "Palette");
 }
 
 bool Palette::readFromFile(const QString& p)

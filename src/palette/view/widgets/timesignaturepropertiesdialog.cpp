@@ -42,7 +42,6 @@ using namespace mu::ui;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //    TimeSigProperties
 //---------------------------------------------------------
@@ -244,5 +243,4 @@ void TimeSignaturePropertiesDialog::accept()
 INotationPtr TimeSignaturePropertiesDialog::notation() const
 {
     return globalContext()->currentNotation();
-}
 }

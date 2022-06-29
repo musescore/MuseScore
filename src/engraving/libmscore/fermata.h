@@ -29,15 +29,12 @@
 #include "types/types.h"
 
 namespace mu::engraving {
-class Factory;
-}
-
-namespace mu::engraving {
 class ChordRest;
-class Segment;
+class Factory;
 class Measure;
-class System;
 class Page;
+class Segment;
+class System;
 
 //---------------------------------------------------------
 //    Fermata

@@ -49,7 +49,6 @@ using namespace mu::engraving;
 
 static const QString EDIT_DRUMSET_DIALOG_NAME("EditDrumsetDialog");
 
-namespace mu::engraving {
 enum Column : char {
     PITCH, NOTE, SHORTCUT, NAME
 };
@@ -657,9 +656,9 @@ void EditDrumsetDialog::load()
                 auto result = interactive()->warning(
                     mu::trc("palette", "Drumset file too old"),
                     mu::trc("palette", "MuseScore may not be able to load this drumset file."), {
-                        IInteractive::Button::Cancel,
-                        IInteractive::Button::Ignore
-                    }, IInteractive::Button::Cancel);
+                    IInteractive::Button::Cancel,
+                    IInteractive::Button::Ignore
+                }, IInteractive::Button::Cancel);
 
                 if (result.standardButton() != IInteractive::Button::Ignore) { // covers Cancel and Esc
                     return;
@@ -716,5 +715,4 @@ void EditDrumsetDialog::save()
 void EditDrumsetDialog::customQuarterChanged(int)
 {
     updateExample();
-}
 }

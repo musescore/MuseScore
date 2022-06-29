@@ -173,7 +173,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
 int MasterPalette::static_metaTypeId()
 {
-    return qRegisterMetaType<mu::engraving::MasterPalette>("MasterPalette");
+    return qRegisterMetaType<MasterPalette>("MasterPalette");
 }
 
 //---------------------------------------------------------
