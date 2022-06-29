@@ -48,6 +48,7 @@ class VstPlugin : public async::Asyncable
 public:
     VstPlugin(const audio::AudioResourceId& resourceId);
 
+    const audio::AudioResourceId& resourceId() const;
     const std::string& name() const;
 
     PluginViewPtr view() const;
