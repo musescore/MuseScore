@@ -44,6 +44,8 @@ static void init_fonts_qrc()
     Q_INIT_RESOURCE(fonts_MuseJazz);
     Q_INIT_RESOURCE(fonts_Smufl);
     Q_INIT_RESOURCE(fonts_Petaluma);
+    Q_INIT_RESOURCE(fonts_FinaleMaestro);
+    Q_INIT_RESOURCE(fonts_FinaleBroadway);
     Q_INIT_RESOURCE(fonts_Tabulature);
 }
 
