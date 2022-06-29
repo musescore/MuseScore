@@ -96,8 +96,8 @@ class Beam final : public EngravingItem
     int computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const;
     int getMaxSlope() const;
     int getBeamCount(std::vector<ChordRest*> chordRests) const;
-    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, double startX, double endX,
-                                      bool isFlat, bool isStartDictator) const;
+    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, const double startX,
+                                      const double endX, bool isFlat, bool isStartDictator) const;
     bool isBeamInsideStaff(int yPos, int staffLines) const;
     int getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const;
     bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, int beamCount) const;

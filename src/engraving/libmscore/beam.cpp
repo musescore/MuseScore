@@ -1028,28 +1028,34 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
     } while (levelHasBeam);
 }
 
-void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests, int& dictator, int& pointer, double startX, double endX,
+void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests, int& dictator, int& pointer,
+                                        const double startX, const double endX,
                                         bool isFlat, bool isStartDictator) const
 {
     if (_cross) {
         return;
     }
+
     if (endX == startX) {
         // zero-length beams?
         return;
     }
+
     // tolerance eliminates all possibilities of floating point rounding errors
-    double tolerance = _beamWidth * 0.25 * (_up ? -1 : 1);
+    const double tolerance = _beamWidth * 0.25 * (_up ? -1 : 1);
+
     double startY = (isStartDictator ? dictator : pointer) * spatium() / 4 + tolerance;
     double endY = (isStartDictator ? pointer : dictator) * spatium() / 4 + tolerance;
 
     // stems in the middle of the beam can be shortened to a minimum of.....
     // 1 beam 2 beams etc
-    const static double middleStemMinLength[5] = { 2.75, 3.25, 3.75, 4.5, 5.25 };
+    constexpr double middleStemMinLength[5] = { 2.75, 3.25, 3.75, 4.5, 5.25 };
+
     for (ChordRest* chordRest : chordRests) {
         if (!chordRest->isChord()) {
             continue;
         }
+
         Chord* chord = toChord(chordRest);
         PointF anchor = chordBeamAnchor(chord, ChordBeamAnchorType::Middle) - pagePos();
         double reduction = 0;
@@ -1060,30 +1066,30 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
             minLength *= spatium();
             reduction = chord->stem()->length() - minLength;
         }
-        if (endX != startX) {
-            // avoid division by zero for zero-length beams (can exist as a pre-layout state used
-            // for horizontal spacing computations)
-            double proportionAlongX = (anchor.x() - startX) / (endX - startX);
 
-            while (true) {
-                double desiredY = proportionAlongX * (endY - startY) + startY;
-                bool beamClearsAnchor = (_up && RealIsEqualOrLess(desiredY, anchor.y() + reduction))
-                                        || (!_up && RealIsEqualOrMore(desiredY, anchor.y() - reduction));
-                if (beamClearsAnchor) {
-                    break;
-                } else {
-                    if (isFlat) {
-                        dictator += _up ? -1 : 1;
-                        pointer += _up ? -1 : 1;
-                    } else if (std::abs(dictator - pointer) == 1) {
-                        dictator += _up ? -1 : 1;
-                    } else {
-                        pointer += _up ? -1 : 1;
-                    }
-                    startY = (isStartDictator ? dictator : pointer) * spatium() / 4 + tolerance;
-                    endY = (isStartDictator ? pointer : dictator) * spatium() / 4 + tolerance;
-                }
+        // avoid division by zero for zero-length beams (can exist as a pre-layout state used
+        // for horizontal spacing computations)
+        const double proportionAlongX = (anchor.x() - startX) / (endX - startX);
+
+        while (true) {
+            double desiredY = proportionAlongX * (endY - startY) + startY;
+            bool beamClearsAnchor = (_up && RealIsEqualOrLess(desiredY, anchor.y() + reduction))
+                                    || (!_up && RealIsEqualOrMore(desiredY, anchor.y() - reduction));
+            if (beamClearsAnchor) {
+                break;
             }
+
+            if (isFlat) {
+                dictator += _up ? -1 : 1;
+                pointer += _up ? -1 : 1;
+            } else if (std::abs(dictator - pointer) == 1) {
+                dictator += _up ? -1 : 1;
+            } else {
+                pointer += _up ? -1 : 1;
+            }
+
+            startY = (isStartDictator ? dictator : pointer) * spatium() / 4 + tolerance;
+            endY = (isStartDictator ? pointer : dictator) * spatium() / 4 + tolerance;
         }
     }
 }
