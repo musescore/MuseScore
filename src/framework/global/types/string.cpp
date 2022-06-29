@@ -714,7 +714,7 @@ String& String::remove(char16_t ch)
 {
     auto it = constStr().find(ch);
     if (it != std::u16string::npos) {
-        mutStr().erase(it);
+        mutStr().erase(it, 1);
     }
     return *this;
 }
