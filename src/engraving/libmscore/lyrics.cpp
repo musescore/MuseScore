@@ -262,16 +262,34 @@ void Lyrics::layout()
     String trailing;
 
     if (score()->styleB(Sid::lyricsAlignVerseNumber)) {
-        QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)", QRegularExpression::UseUnicodePropertiesOption);
-        QRegularExpressionMatch punctuationMatch = punctuationPattern.match(text);
-        if (punctuationMatch.hasMatch()) {
-            // leading and trailing punctuation
-            leading = punctuationMatch.captured(1);
-            trailing = punctuationMatch.captured(3);
-            //String actualLyric = punctuationMatch.captured(2);
-            if (!leading.isEmpty() && leading.at(0).isDigit()) {
-                hasNumber = true;
+        size_t leadingIdx = 0;
+        for (size_t i = 0; i < text.size(); ++i) {
+            Char ch = text.at(i);
+            if (ch.isLetter()) {
+                leadingIdx = i;
+                break;
             }
+        }
+
+        if (leadingIdx != 0) {
+            leading = text.mid(0, leadingIdx);
+        }
+
+        size_t trailingIdx = text.size() - 1;
+        for (int i = static_cast<int>(text.size() - 1); i >= 0; --i) {
+            Char ch = text.at(i);
+            if (ch.isLetter()) {
+                trailingIdx = i;
+                break;
+            }
+        }
+
+        if (trailingIdx != text.size() - 1) {
+            trailing = text.mid(trailingIdx + 1);
+        }
+
+        if (!leading.isEmpty() && leading.at(0).isDigit()) {
+            hasNumber = true;
         }
     }
 
