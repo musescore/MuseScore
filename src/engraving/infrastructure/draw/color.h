@@ -53,6 +53,7 @@ public:
     bool operator<(const Color& other) const;
 
     std::string toString() const;
+    static Color fromString(const std::string& str);
 
     void setNamedColor(const std::string& color);
     void setNamedColor(const char* color);

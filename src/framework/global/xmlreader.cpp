@@ -57,12 +57,12 @@ static XmlReader::TokenType convertTokenType(QXmlStreamReader::TokenType type)
 XmlReader::XmlReader(const io::path_t& path)
 {
     m_device = std::make_unique<QFile>(path.toString());
-    m_device->open(Device::ReadOnly);
+    m_device->open(QIODevice::ReadOnly);
 
     m_reader = std::make_unique<QXmlStreamReader>(m_device.get());
 }
 
-XmlReader::XmlReader(Device* device)
+XmlReader::XmlReader(QIODevice* device)
 {
     m_reader = std::make_unique<QXmlStreamReader>(device);
 }

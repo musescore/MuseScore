@@ -348,6 +348,7 @@ bool AccessibleItem::accessibleState(State st) const
         if (AccessibleItemPtr focusedElement = root->focusedElement().lock()) {
             return focusedElement->element() == element();
         }
+        return false;
     }
     case IAccessible::State::Selected: return m_element->selected();
     default:

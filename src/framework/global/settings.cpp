@@ -108,6 +108,21 @@ void Settings::reset(bool keepDefaultSettings)
     }
 }
 
+static Val compat_QVariantToVal(const QVariant& var)
+{
+    if (!var.isValid()) {
+        return Val();
+    }
+
+    switch (var.type()) {
+    case QVariant::ByteArray: return Val(var.toByteArray().toStdString());
+    default:
+        break;
+    }
+
+    return Val::fromQVariant(var);
+}
+
 Settings::Items Settings::readItems() const
 {
     Items result;
@@ -117,7 +132,7 @@ Settings::Items Settings::readItems() const
     for (const QString& key : m_settings->allKeys()) {
         Item item;
         item.key = Key(std::string(), key.toStdString());
-        item.value = Val::fromQVariant(m_settings->value(key));
+        item.value = compat_QVariantToVal(m_settings->value(key));
 
         result[item.key] = item;
     }

@@ -40,7 +40,7 @@ bool AbstractAudioWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret AbstractAudioWriter::write(INotationPtr, io::Device&, const Options& options)
+mu::Ret AbstractAudioWriter::write(INotationPtr, QIODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) != UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
@@ -55,7 +55,7 @@ mu::Ret AbstractAudioWriter::write(INotationPtr, io::Device&, const Options& opt
     return Ret(Ret::Code::NotSupported);
 }
 
-mu::Ret AbstractAudioWriter::writeList(const INotationPtrList&, io::Device&, const Options& options)
+mu::Ret AbstractAudioWriter::writeList(const INotationPtrList&, QIODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) == UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
@@ -80,11 +80,11 @@ mu::framework::ProgressChannel AbstractAudioWriter::progress() const
     return m_progress;
 }
 
-void AbstractAudioWriter::doWriteAndWait(io::Device& destinationDevice, const audio::SoundTrackFormat& format)
+void AbstractAudioWriter::doWriteAndWait(QIODevice& destinationDevice, const audio::SoundTrackFormat& format)
 {
-    //!Note Temporary workaround, since io::Device is the alias for QIODevice, which falls with SIGSEGV
-    //!     on any call from background thread. Once we have our own implementation of io::Device
-    //!     we can pass io::Device directly into IPlayback::IAudioOutput::saveSoundTrack
+    //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
+    //!     on any call from background thread. Once we have our own implementation of QIODevice
+    //!     we can pass QIODevice directly into IPlayback::IAudioOutput::saveSoundTrack
     QFile* file = qobject_cast<QFile*>(&destinationDevice);
 
     QFileInfo info(*file);

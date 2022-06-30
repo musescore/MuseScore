@@ -62,7 +62,7 @@ void SymbolDialog::createSymbols()
     // init the font if not done yet
     ScoreFont::fontByName(f->name());
     m_symbolsWidget->clear();
-    for (auto name : (*mu::smuflRanges())[range]) {
+    for (auto name : mu::smuflRanges().at(range)) {
         SymId id = SymNames::symIdByName(name);
         if (search->text().isEmpty()
             || SymNames::translatedUserNameForSymId(id).toQString().contains(search->text(), Qt::CaseInsensitive)) {

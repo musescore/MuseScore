@@ -22,13 +22,12 @@
 #ifndef MU_FRAMEWORK_IINTERACTIVE_H
 #define MU_FRAMEWORK_IINTERACTIVE_H
 
-#include <QString>
-
 #include "modularity/imoduleexport.h"
 #include "io/path.h"
 #include "val.h"
 #include "retval.h"
 #include "uri.h"
+#include "types/flags.h"
 
 namespace mu::framework {
 class IInteractive : MODULE_EXPORT_INTERFACE
@@ -120,7 +119,7 @@ public:
         WithIcon = 0x1,
         WithShowAgain = 0x2
     };
-    Q_DECLARE_FLAGS(Options, Option)
+    DECLARE_FLAGS(Options, Option)
 
     virtual Result question(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
                             const Options& options = {}) const = 0;
@@ -182,7 +181,7 @@ public:
     /// and selects the file at filePath on OSs that support it
     virtual Ret revealInFileBrowser(const io::path_t& filePath) const = 0;
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS(IInteractive::Options)
+DECLARE_OPERATORS_FOR_FLAGS(IInteractive::Options)
 }
 
 #endif // MU_FRAMEWORK_IINTERACTIVE_H

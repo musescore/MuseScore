@@ -41,7 +41,7 @@ std::vector<INotationWriter::UnitType> PngWriter::supportedUnitTypes() const
     return { UnitType::PER_PAGE };
 }
 
-mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const Options& options)
+mu::Ret PngWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);

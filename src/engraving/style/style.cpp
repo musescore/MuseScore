@@ -208,7 +208,7 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
         { u"FontStrike",    FontStyle::Strike }
     } };
 
-    const String tag(e.name().toQLatin1String());
+    const String tag = String::fromAscii(e.name().ascii());
     FontStyle readFontStyle = FontStyle::Normal;
     String typeName;
     for (auto& fontStyle : styleNamesEndings) {

@@ -42,7 +42,7 @@ bool BrailleWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret BrailleWriter::write(notation::INotationPtr notation, io::Device& destinationDevice, const Options&)
+mu::Ret BrailleWriter::write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -57,7 +57,7 @@ mu::Ret BrailleWriter::write(notation::INotationPtr notation, io::Device& destin
     return exporter.write(destinationDevice);
 }
 
-mu::Ret BrailleWriter::writeList(const notation::INotationPtrList&, io::Device&, const Options&)
+mu::Ret BrailleWriter::writeList(const notation::INotationPtrList&, QIODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);

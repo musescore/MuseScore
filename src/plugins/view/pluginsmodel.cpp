@@ -143,7 +143,7 @@ void PluginsModel::editShortcut(QString codeKey)
 
     QVariantMap params;
     params["shortcutCodeKey"] = codeKey;
-    uri.addParam("params", Val(params));
+    uri.addParam("params", Val::fromQVariant(params));
 
     RetVal<Val> retVal = interactive()->open(uri);
 

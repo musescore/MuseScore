@@ -21,51 +21,49 @@
  */
 #include "smuflranges.h"
 
-#include <QFile>
-#include <QJsonDocument>
-#include <QJsonParseError>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QJsonValue>
+#include "io/file.h"
+#include "serialization/json.h"
 
 #include "log.h"
+
+using namespace mu;
+using namespace mu::io;
 
 //---------------------------------------------------------
 //   smuflRanges
 //    read smufl ranges.json file
 //---------------------------------------------------------
 
-QMap<QString, QStringList>* mu::smuflRanges()
+const std::map<String, StringList>& mu::smuflRanges()
 {
-    static QMap<QString, QStringList> ranges;
-    QStringList allSymbols;
+    static std::map<String, StringList> ranges;
+    StringList allSymbols;
 
     if (ranges.empty()) {
-        QFile fi(":fonts/smufl/ranges.json");
-        if (!fi.open(QIODevice::ReadOnly)) {
-            LOGD("ScoreFont: open ranges file <%s> failed", qPrintable(fi.fileName()));
+        File fi(":fonts/smufl/ranges.json");
+        if (!fi.open(IODevice::ReadOnly)) {
+            LOGE() << "failed open: " << fi.filePath();
         }
-        QJsonParseError error;
-        QJsonObject o = QJsonDocument::fromJson(fi.readAll(), &error).object();
-        if (error.error != QJsonParseError::NoError) {
-            LOGD("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
-                 error.offset, qPrintable(error.errorString()));
+        std::string error;
+        JsonObject o = JsonDocument::fromJson(fi.readAll(), &error).rootObject();
+        if (!error.empty()) {
+            LOGE() << "failed parse, err: " << error << ", file: " << fi.filePath();
         }
 
         for (auto s : o.keys()) {
-            QJsonObject range = o.value(s).toObject();
-            QString desc      = range.value("description").toString();
-            QJsonArray glyphs = range.value("glyphs").toArray();
+            JsonObject range = o.value(s).toObject();
+            String desc      = range.value("description").toString();
+            JsonArray glyphs = range.value("glyphs").toArray();
             if (glyphs.size() > 0) {
-                QStringList glyphNames;
-                for (QJsonValue g : glyphs) {
-                    glyphNames.append(g.toString());
+                StringList glyphNames;
+                for (size_t i = 0; i < glyphs.size(); ++i) {
+                    glyphNames.append(glyphs.at(i).toString());
                 }
-                ranges.insert(desc, glyphNames);
+                ranges.insert({ desc, glyphNames });
                 allSymbols << glyphNames;
             }
         }
-        ranges.insert(SMUFL_ALL_SYMBOLS, allSymbols);     // TODO: make translatable as well as ranges.json
+        ranges.insert({ String::fromAscii(SMUFL_ALL_SYMBOLS), allSymbols });     // TODO: make translatable as well as ranges.json
     }
-    return &ranges;
+    return ranges;
 }

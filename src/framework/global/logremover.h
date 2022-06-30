@@ -22,11 +22,10 @@
 #ifndef MU_LOGREMOVER_H
 #define MU_LOGREMOVER_H
 
-#include <QStringList>
-#include <QDate>
-
 #include <gtest/gtest_prod.h>
 
+#include "types/string.h"
+#include "types/datetime.h"
 #include "io/path.h"
 
 namespace mu {
@@ -34,15 +33,15 @@ class LogRemover
 {
 public:
 
-    static void removeLogs(const io::path_t& logsDir, int olderThanDays, const QString& pattern);
+    static void removeLogs(const io::path_t& logsDir, int olderThanDays, const String& pattern);
 
 private:
 
-    FRIEND_TEST(LogRemoverTests, ParseDate);
+    FRIEND_TEST(Global_LogRemoverTests, ParseDate);
 
-    static void scanDir(const io::path_t& logsDir, QStringList& files);
-    static QDate parseDate(const QString& fileName);
-    static void removeFiles(const QStringList& files);
+    static void scanDir(const io::path_t& logsDir, io::paths_t& files);
+    static Date parseDate(const String& fileName);
+    static void removeFiles(const io::paths_t& files);
 };
 }
 

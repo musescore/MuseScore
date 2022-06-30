@@ -27,7 +27,6 @@
 #include <locale>
 #include <cctype>
 #include <iomanip>
-#include <QStringList>
 
 #include "global/thirdparty/utfcpp-3.2.1/utf8.h"
 
@@ -39,7 +38,10 @@ using namespace mu;
 
 static long int toInt_helper(const char* str, bool* ok, int base)
 {
-    if (!str) {
+    if (!str || std::strlen(str) == 0) {
+        if (ok) {
+            *ok = false;
+        }
         return 0;
     }
     const char* currentLoc = setlocale(LC_NUMERIC, "C");
@@ -324,6 +326,9 @@ String& String::prepend(const String& s)
 
 String String::fromUtf8(const char* str)
 {
+    if (!str) {
+        return String();
+    }
     String s;
     UtfCodec::utf8to16(std::string_view(str), s.mutStr());
     return s;
@@ -499,9 +504,11 @@ size_t String::indexOf(const char16_t* str, size_t from) const
     return constStr().find(str, from);
 }
 
-size_t String::lastIndexOf(const Char& ch) const
+size_t String::lastIndexOf(const Char& ch, size_t from) const
 {
-    for (int i = static_cast<int>(constStr().size() - 1); i >= 0; --i) {
+    from = std::min(from, constStr().size() - 1);
+
+    for (int i = static_cast<int>(from); i >= 0; --i) {
         if (constStr().at(i) == ch.unicode()) {
             return i;
         }
@@ -989,6 +996,14 @@ StringList::StringList(const QStringList& l)
     for (const QString& s : l) {
         push_back(String::fromQString(s));
     }
+}
+
+StringList& StringList::append(const StringList& l)
+{
+    for (const String& s : l) {
+        push_back(s);
+    }
+    return *this;
 }
 
 StringList StringList::filter(const String& str) const

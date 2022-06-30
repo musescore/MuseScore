@@ -25,7 +25,6 @@
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "io/path.h"
-#include "io/device.h"
 
 #include "inotation.h"
 #include "iexcerptnotation.h"

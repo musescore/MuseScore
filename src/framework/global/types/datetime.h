@@ -40,12 +40,16 @@ public:
     Date() = default;
     Date(int y, int m, int d);
 
+    bool isNull() const;
+
     int year() const;
     int month() const;
     int day() const;
 
     inline bool operator ==(const Date& d) const { return m_year == d.m_year && m_month == d.m_month && m_day == d.m_day; }
     inline bool operator !=(const Date& d) const { return !this->operator ==(d); }
+
+    int64_t daysTo(const Date& d) const;
 
     static Date currentDate();
 

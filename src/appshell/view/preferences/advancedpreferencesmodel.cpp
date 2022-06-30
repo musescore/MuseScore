@@ -125,7 +125,6 @@ QString AdvancedPreferencesModel::typeToString(Val::Type type) const
     case Val::Type::Double: return "Double";
     case Val::Type::String: return "String";
     case Val::Type::Color: return "Color";
-    case Val::Type::Variant: return "Variant";
     }
     return "Undefined";
 }

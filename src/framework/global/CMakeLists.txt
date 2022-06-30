@@ -30,8 +30,6 @@ set(MODULE_SRC
     ${ASYNC_SRC}
     ${HAW_LOGGER_SRC}
     ${HAW_PROFILER_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/globalmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/globalmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/globaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iapplication.h
     ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
@@ -62,8 +60,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/retval.h
     ${CMAKE_CURRENT_LIST_DIR}/uri.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uri.h
-    ${CMAKE_CURRENT_LIST_DIR}/invoker.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/invoker.h
     ${CMAKE_CURRENT_LIST_DIR}/progress.h
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.cpp
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.h
@@ -122,8 +118,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/json.h
 )
 
-if (NOT NO_GLOBAL_INTERNAL)
+if (NOT GLOBAL_NO_INTERNAL)
     set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/globalmodule.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/globalmodule.h
         ${CMAKE_CURRENT_LIST_DIR}/settings.cpp
         ${CMAKE_CURRENT_LIST_DIR}/settings.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/application.cpp
@@ -134,6 +132,8 @@ if (NOT NO_GLOBAL_INTERNAL)
         ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/cryptographichash.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/cryptographichash.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/invoker.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/invoker.h
 
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.cpp
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h

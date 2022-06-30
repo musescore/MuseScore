@@ -23,6 +23,7 @@
 
 #include <chrono>
 #include <iomanip>
+#include <cassert>
 
 using namespace mu;
 // ==================================
@@ -104,6 +105,11 @@ Date::Date(int y, int m, int d)
 {
 }
 
+bool Date::isNull() const
+{
+    return m_year == 0 && m_month == 0 && m_day == 0;
+}
+
 int Date::year() const
 {
     return m_year;
@@ -117,6 +123,27 @@ int Date::month() const
 int Date::day() const
 {
     return m_day;
+}
+
+int64_t Date::daysTo(const Date& d) const
+{
+    if (isNull() || d.isNull()) {
+        return 0;
+    }
+
+    std::tm meTM = {};
+    toTM(meTM, *this);
+
+    std::tm otherTM = {};
+    toTM(otherTM, *this);
+
+    std::time_t meTime = std::mktime(&meTM);
+    std::time_t otherTime = std::mktime(&otherTM);
+    if (meTime != (std::time_t)(-1) && otherTime != (std::time_t)(-1)) {
+        double difference = std::difftime(meTime, otherTime) / (60 * 60 * 24);
+        return difference;
+    }
+    return 0;
 }
 
 Date Date::currentDate()

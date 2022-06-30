@@ -25,17 +25,17 @@
 #include "logremover.h"
 
 namespace mu {
-class LogRemoverTests : public ::testing::Test
+class Global_LogRemoverTests : public ::testing::Test
 {
 public:
 };
 
-TEST_F(LogRemoverTests, ParseDate)
+TEST_F(Global_LogRemoverTests, ParseDate)
 {
-    EXPECT_EQ(LogRemover::parseDate("path/to/logs/MuseScore_210629_154033.log"), QDate(2021, 6, 29));
-    EXPECT_EQ(LogRemover::parseDate("path/to_to/logs/MuseScore_210709_154033.log"), QDate(2021, 7, 9));
-    EXPECT_EQ(LogRemover::parseDate("path/to/logs/MuseScore_210709__154033.log"), QDate());
-    EXPECT_EQ(LogRemover::parseDate("path/to/logs/MuseScore_210709_154033_.log"), QDate());
-    EXPECT_EQ(LogRemover::parseDate("path/to/logs/MuseScore_210709_154033-.log"), QDate(2021, 7, 9));
+    EXPECT_EQ(LogRemover::parseDate(u"path/to/logs/MuseScore_210629_154033.log"), Date(2021, 6, 29));
+    EXPECT_EQ(LogRemover::parseDate(u"path/to_to/logs/MuseScore_210709_154033.log"), Date(2021, 7, 9));
+    EXPECT_EQ(LogRemover::parseDate(u"path/to/logs/MuseScore_210709__154033.log"), Date());
+    EXPECT_EQ(LogRemover::parseDate(u"path/to/logs/MuseScore_210709_154033_.log"), Date());
+    EXPECT_EQ(LogRemover::parseDate(u"path/to/logs/MuseScore_210709_154033-.log"), Date(2021, 7, 9));
 }
 }

@@ -33,7 +33,6 @@
 using namespace mu;
 using namespace mu::network;
 using namespace mu::framework;
-using namespace mu::io;
 
 static constexpr int NET_TIMEOUT_MS = 60000;
 
@@ -79,13 +78,13 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
                                 const RequestHeaders& headers)
 {
     if (outgoingData && outgoingData->device()) {
-        if (!openDevice(outgoingData->device(), Device::ReadOnly)) {
+        if (!openDevice(outgoingData->device(), QIODevice::ReadOnly)) {
             return make_ret(Err::FiledOpenIODeviceRead);
         }
     }
 
     if (incomingData) {
-        if (!openDevice(incomingData, Device::WriteOnly)) {
+        if (!openDevice(incomingData, QIODevice::WriteOnly)) {
             return make_ret(Err::FiledOpenIODeviceWrite);
         }
         m_incomingData = incomingData;
@@ -167,7 +166,7 @@ void NetworkManager::abort()
     emit aborted();
 }
 
-bool NetworkManager::openDevice(Device* device, Device::OpenModeFlag flags)
+bool NetworkManager::openDevice(QIODevice* device, QIODevice::OpenModeFlag flags)
 {
     IF_ASSERT_FAILED(device) {
         return false;
@@ -180,7 +179,7 @@ bool NetworkManager::openDevice(Device* device, Device::OpenModeFlag flags)
     return device->open(flags);
 }
 
-void NetworkManager::closeDevice(Device* device)
+void NetworkManager::closeDevice(QIODevice* device)
 {
     if (device && device->isOpen()) {
         device->close();

@@ -181,7 +181,7 @@ void XmlStreamReader::tryParseEntity(Xml* xml)
 
     const char* str = xml->node->Value();
     if (std::strncmp(str, ENTITY, 6) == 0) {
-        String val(str);
+        String val = String::fromUtf8(str);
         StringList list = val.split(' ');
         if (list.size() == 3) {
             String name = list.at(1);
@@ -271,7 +271,7 @@ String XmlStreamReader::attribute(const char* name) const
     if (!e) {
         return String();
     }
-    return String(e->Attribute(name));
+    return String::fromUtf8(e->Attribute(name));
 }
 
 String XmlStreamReader::attribute(const char* name, const String& def) const
@@ -332,7 +332,7 @@ std::vector<XmlStreamReader::Attribute> XmlStreamReader::attributes() const
     for (const XMLAttribute* xa = e->FirstAttribute(); xa; xa = xa->Next()) {
         Attribute a;
         a.name = xa->Name();
-        a.value = xa->Value();
+        a.value = String::fromUtf8(xa->Value());
         attrs.push_back(std::move(a));
     }
     return attrs;

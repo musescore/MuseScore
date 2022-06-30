@@ -21,75 +21,71 @@
  */
 #include "dataformatter.h"
 
-#include <QString>
-#include <QDateTime>
-#include <QRegularExpression>
-
 #include "translation.h"
 
 using namespace mu;
 
 double DataFormatter::roundDouble(const double& val, const int decimals)
 {
-    return QString::number(val, 'f', decimals).toDouble();
+    return String::number(val, decimals).toDouble();
 }
 
-QString DataFormatter::formatReal(double val, int prec)
+String DataFormatter::formatReal(double val, int prec)
 {
-    return QString::number(val, 'f', prec);
+    return String::number(val, prec);
 }
 
-QString DataFormatter::formatTimeSince(const QDate& dateTime)
+String DataFormatter::formatTimeSince(const Date& dateTime)
 {
-    QDateTime currentDateTime = QDateTime::currentDateTime();
+    DateTime currentDateTime = DateTime::currentDateTime();
     int days = dateTime.daysTo(currentDateTime.date());
 
     if (days == 0) {
-        return qtrc("global", "Today");
+        return mtrc("global", "Today");
     }
 
     if (days == 1) {
-        return qtrc("global", "Yesterday");
+        return mtrc("global", "Yesterday");
     }
 
     if (days < 7) {
-        return qtrc("global", "%1 days ago").arg(days);
+        return mtrc("global", "%1 days ago").arg(days);
     }
 
     int weeks = days / 7;
 
     if (weeks == 1) {
-        return qtrc("global", "Last week");
+        return mtrc("global", "Last week");
     }
 
     if (weeks == 2) {
-        return qtrc("global", "Two weeks ago");
+        return mtrc("global", "Two weeks ago");
     }
 
     if (weeks == 3) {
-        return qtrc("global", "Three weeks ago");
+        return mtrc("global", "Three weeks ago");
     }
 
     if (weeks == 4) {
-        return qtrc("global", "Four weeks ago");
+        return mtrc("global", "Four weeks ago");
     }
 
-    QDate currentDate = currentDateTime.date();
+    Date currentDate = currentDateTime.date();
     constexpr int monthInYear = 12;
     int months = (currentDate.year() - dateTime.year()) * monthInYear + (currentDate.month() - dateTime.month());
 
     if (months == 1) {
-        return qtrc("global", "Last month");
+        return mtrc("global", "Last month");
     }
 
     if (months < monthInYear) {
-        return qtrc("global", "%1 months ago").arg(months);
+        return mtrc("global", "%1 months ago").arg(months);
     }
 
     int years = currentDate.year() - dateTime.year();
     if (years == 1) {
-        return qtrc("global", "1 year ago");
+        return mtrc("global", "1 year ago");
     }
 
-    return qtrc("global", "%1 years ago").arg(years);
+    return mtrc("global", "%1 years ago").arg(years);
 }

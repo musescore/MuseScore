@@ -440,7 +440,13 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     QSplitter* ws = new QSplitter;
     m_lws = new QListWidget;
 
-    m_lws->addItems(mu::smuflRanges()->keys());
+    QStringList keys;
+    std::vector<String> symbols = mu::keys(mu::smuflRanges());
+    for (const String& s : symbols) {
+        keys << s.toQString();
+    }
+
+    m_lws->addItems(keys);
     m_lws->setCurrentRow(0);
 
     ws->addWidget(m_lws);
@@ -689,8 +695,9 @@ void SpecialCharactersDialog::populateCommon()
 void SpecialCharactersDialog::populateSmufl()
 {
     int row = m_lws->currentRow();
-    QString key = mu::smuflRanges()->keys().at(row);
-    QStringList smuflNames = (*mu::smuflRanges())[key];
+
+    QString key = mu::keys(mu::smuflRanges()).at(row).toQString();
+    QStringList smuflNames = mu::smuflRanges().at(key).toQStringList();
 
     m_pSmufl->clear();
     for (const QString& name : smuflNames) {

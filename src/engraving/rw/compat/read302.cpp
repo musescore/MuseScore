@@ -21,6 +21,7 @@
  */
 #include "read302.h"
 
+#include "translation.h"
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
@@ -229,8 +230,8 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         if (e.error() == XmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {
-            MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
-                e.name().toQLatin1String());
+            MScore::lastError = mtrc("engraving", "XML read error at line %1, column %2: %3").arg(e.lineNumber(), e.columnNumber()).arg(
+                String::fromAscii(e.name().ascii()));
         }
         return false;
     }
@@ -249,7 +250,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->setUpTempoMap();
 
-    for (Part* p : qAsConst(score->_parts)) {
+    for (Part* p : score->_parts) {
         p->updateHarmonyChannels(false);
     }
 

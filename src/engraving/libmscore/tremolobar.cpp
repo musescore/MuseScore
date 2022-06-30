@@ -98,7 +98,7 @@ void TremoloBar::layout()
     double pitchFactor = -_spatium * .02;
 
     m_polygon.clear();
-    for (auto v : qAsConst(m_points)) {
+    for (auto v : m_points) {
         m_polygon << PointF(v.time * timeFactor, v.pitch * pitchFactor);
     }
 

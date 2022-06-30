@@ -827,7 +827,9 @@ String Note::tpcUserName(const bool explicitAccidental) const
 
     String pitchOffset;
     if (tuning() != 0) {
-        pitchOffset = QString::asprintf("%+.3f", tuning());
+        char buffer[50];
+        sprintf(buffer, "%+.3f", tuning());
+        pitchOffset = String::fromAscii(buffer);
     }
 
     if (!concertPitch() && transposition()) {
@@ -2002,7 +2004,7 @@ EngravingItem* Note::drop(EditData& data)
 
     case ElementType::GLISSANDO:
     {
-        for (auto ee : qAsConst(_spannerFor)) {
+        for (auto ee : _spannerFor) {
             if (ee->type() == ElementType::GLISSANDO) {
                 LOGD("there is already a glissando");
                 delete e;
@@ -2182,7 +2184,7 @@ void Note::setDotY(DirectionV pos)
             score()->undoRemoveElement(_dots.back());
         }
     }
-    for (NoteDot* dot : qAsConst(_dots)) {
+    for (NoteDot* dot : _dots) {
         dot->layout();
         dot->setPosY(y);
     }
@@ -2214,17 +2216,17 @@ void Note::layout()
         }
         // not complete but we need systems to be laid out to add parenthesis
         if (_fixed) {
-            _fretString = "/";
+            _fretString = u"/";
         } else {
             _fretString = tab->fretString(_fret, _string, _deadNote);
             if (m_displayFret == DisplayFretOption::ArtificialHarmonic) {
-                _fretString = String("%1 <%2>").arg(_fretString, String::number(m_harmonicFret));
+                _fretString = String(u"%1 <%2>").arg(_fretString, String::number(m_harmonicFret));
             } else if (m_displayFret == DisplayFretOption::NaturalHarmonic) {
-                _fretString = String("<%1>").arg(String::number(m_harmonicFret));
+                _fretString = String(u"<%1>").arg(String::number(m_harmonicFret));
             }
         }
         if (parenthesis) {
-            _fretString = String("(%1)").arg(_fretString);
+            _fretString = String(u"(%1)").arg(_fretString);
         }
         double w = tabHeadWidth(tab);     // !! use _fretString
         bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
@@ -2293,7 +2295,7 @@ void Note::layout2()
         }
         // apply to dots
         double xx = x + d;
-        for (NoteDot* dot : qAsConst(_dots)) {
+        for (NoteDot* dot : _dots) {
             dot->setPosX(xx);
             xx += dd;
         }
@@ -2462,19 +2464,19 @@ String Note::noteTypeUserName() const
 {
     switch (noteType()) {
     case NoteType::ACCIACCATURA:
-        return QObject::tr("Acciaccatura");
+        return mtrc("engraving", "Acciaccatura");
     case NoteType::APPOGGIATURA:
-        return QObject::tr("Appoggiatura");
+        return mtrc("engraving", "Appoggiatura");
     case NoteType::GRACE8_AFTER:
     case NoteType::GRACE16_AFTER:
     case NoteType::GRACE32_AFTER:
-        return QObject::tr("Grace note after");
+        return mtrc("engraving", "Grace note after");
     case NoteType::GRACE4:
     case NoteType::GRACE16:
     case NoteType::GRACE32:
-        return QObject::tr("Grace note before");
+        return mtrc("engraving", "Grace note before");
     default:
-        return QObject::tr("Note");
+        return mtrc("engraving", "Note");
     }
 }
 
@@ -3258,7 +3260,7 @@ void Note::setScore(Score* s)
     if (_accidental) {
         _accidental->setScore(s);
     }
-    for (NoteDot* dot : qAsConst(_dots)) {
+    for (NoteDot* dot : _dots) {
         dot->setScore(s);
     }
     for (EngravingItem* el : _el) {
@@ -3301,7 +3303,7 @@ String Note::accessibleInfo() const
     }
 
     return mtrc("engraving", "%1; Pitch: %2; Duration: %3%4%5")
-           .arg(noteTypeUserName(), pitchName, duration, onofftime, (chord()->isGrace() ? u"" : String("; %1").arg(voice)));
+           .arg(noteTypeUserName(), pitchName, duration, onofftime, (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
 }
 
 //---------------------------------------------------------
@@ -3326,7 +3328,7 @@ String Note::screenReaderInfo() const
     } else {
         pitchName = tpcUserName(true);
     }
-    return String("%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? u"" : String("; %1").arg(voice)));
+    return String(u"%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
 }
 
 //---------------------------------------------------------
@@ -3337,14 +3339,14 @@ String Note::accessibleExtraInfo() const
 {
     String rez;
     if (accidental()) {
-        rez = String("%1 %2").arg(rez, accidental()->screenReaderInfo());
+        rez = String(u"%1 %2").arg(rez, accidental()->screenReaderInfo());
     }
     if (!el().empty()) {
         for (EngravingItem* e : el()) {
             if (!score()->selectionFilter().canSelect(e)) {
                 continue;
             }
-            rez = String("%1 %2").arg(rez, e->screenReaderInfo());
+            rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
         }
     }
     if (tieFor()) {
@@ -3375,7 +3377,7 @@ String Note::accessibleExtraInfo() const
     // only read extra information for top note of chord
     // (it is reached directly on next/previous element)
     if (this == chord()->upNote()) {
-        rez = String("%1 %2").arg(rez, chord()->accessibleExtraInfo());
+        rez = String(u"%1 %2").arg(rez, chord()->accessibleExtraInfo());
     }
 
     return rez;
@@ -3480,7 +3482,7 @@ EngravingItem* Note::nextElement()
         } else if (tieValid(_tieFor)) {
             return _tieFor->frontSegment();
         } else if (!_spannerFor.empty()) {
-            for (auto i : qAsConst(_spannerFor)) {
+            for (auto i : _spannerFor) {
                 if (i->type() == ElementType::GLISSANDO) {
                     return i->spannerSegments().front();
                 }
@@ -3491,7 +3493,7 @@ EngravingItem* Note::nextElement()
 
     case ElementType::TIE_SEGMENT:
         if (!_spannerFor.empty()) {
-            for (auto i : qAsConst(_spannerFor)) {
+            for (auto i : _spannerFor) {
                 if (i->type() == ElementType::GLISSANDO) {
                     return i->spannerSegments().front();
                 }
@@ -3510,7 +3512,7 @@ EngravingItem* Note::nextElement()
             return _tieFor->frontSegment();
         }
         if (!_spannerFor.empty()) {
-            for (auto i : qAsConst(_spannerFor)) {
+            for (auto i : _spannerFor) {
                 if (i->isGlissando()) {
                     return i->spannerSegments().front();
                 }
@@ -3526,7 +3528,7 @@ EngravingItem* Note::nextElement()
             return _tieFor->frontSegment();
         }
         if (!_spannerFor.empty()) {
-            for (auto i : qAsConst(_spannerFor)) {
+            for (auto i : _spannerFor) {
                 if (i->isGlissando()) {
                     return i->spannerSegments().front();
                 }
@@ -3590,7 +3592,7 @@ EngravingItem* Note::prevElement()
 EngravingItem* Note::lastElementBeforeSegment()
 {
     if (!_spannerFor.empty()) {
-        for (auto i : qAsConst(_spannerFor)) {
+        for (auto i : _spannerFor) {
             if (i->type() == ElementType::GLISSANDO) {
                 return i->spannerSegments().front();
             }

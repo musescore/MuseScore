@@ -77,6 +77,11 @@ std::string Color::toString() const
     return rgb2hex(m_rgba);
 }
 
+Color Color::fromString(const std::string& str)
+{
+    return Color(str.c_str());
+}
+
 bool Color::isValid() const
 {
     return m_isValid;

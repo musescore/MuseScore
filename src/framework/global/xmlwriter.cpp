@@ -31,17 +31,17 @@ using namespace mu::io;
 XmlWriter::XmlWriter(const io::path_t& path)
 {
     m_device = std::make_unique<QFile>(path.toString());
-    m_device->open(Device::WriteOnly);
+    m_device->open(QIODevice::WriteOnly);
 
     initWriter(m_device.get());
 }
 
-XmlWriter::XmlWriter(Device* device)
+XmlWriter::XmlWriter(QIODevice* device)
 {
     initWriter(device);
 }
 
-void XmlWriter::initWriter(Device* device)
+void XmlWriter::initWriter(QIODevice* device)
 {
     m_writer = std::make_unique<QXmlStreamWriter>(device);
     m_writer->setAutoFormatting(true);

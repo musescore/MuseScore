@@ -101,7 +101,8 @@ QString SettingListModel::typeToString(Val::Type t) const
     case Val::Type::Double:    return "Double";
     case Val::Type::String:    return "String";
     case Val::Type::Color:     return "Color";
-    case Val::Type::Variant:   return "Variant";
+    case Val::Type::List:      return "List";
+    case Val::Type::Map:       return "Map";
     }
     return "Undefined";
 }

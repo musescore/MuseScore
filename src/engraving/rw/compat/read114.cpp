@@ -1208,7 +1208,7 @@ static void readVolta114(XmlReader& e, const ReadContext& ctx, Volta* volta)
             String s = e.readText();
             StringList sl = s.split(u',', mu::SkipEmptyParts);
             volta->endings().clear();
-            for (const String& l : qAsConst(sl)) {
+            for (const String& l : sl) {
                 int i = l.simplified().toInt();
                 volta->endings().push_back(i);
             }
@@ -2688,7 +2688,7 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
         String tag = String::fromAscii(e.name().ascii());
 
         if (tag == "lyricsDistance") {          // was renamed
-            tag = "lyricsPosBelow";
+            tag = u"lyricsPosBelow";
         }
 
         if (tag == "TextStyle") {
@@ -2712,13 +2712,13 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
         } else if (tag == "stemDir") {
             int voice = e.intAttribute("voice", 1) - 1;
             switch (voice) {
-            case 0: tag = "StemDir1";
+            case 0: tag = u"StemDir1";
                 break;
-            case 1: tag = "StemDir2";
+            case 1: tag = u"StemDir2";
                 break;
-            case 2: tag = "StemDir3";
+            case 2: tag = u"StemDir3";
                 break;
-            case 3: tag = "StemDir4";
+            case 3: tag = u"StemDir4";
                 break;
             }
         }
@@ -3088,8 +3088,8 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         masterScore->style().set(Sid::dontHideStavesInFirstSystem, false);
     }
     if (masterScore->styleB(Sid::showPageNumberOne)) {      // http://musescore.org/en/node/21207
-        masterScore->style().set(Sid::evenFooterL, String("$P"));
-        masterScore->style().set(Sid::oddFooterR, String("$P"));
+        masterScore->style().set(Sid::evenFooterL, String(u"$P"));
+        masterScore->style().set(Sid::oddFooterR, String(u"$P"));
     }
     if (masterScore->styleI(Sid::minEmptyMeasures) == 0) {
         masterScore->style().set(Sid::minEmptyMeasures, 1);
@@ -3105,7 +3105,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         BeatsPerSecond tempo   = i.second.tempo;
         if (masterScore->tempomap()->tempo(tick.ticks()) != tempo) {
             TempoText* tt = Factory::createTempoText(masterScore->dummy()->segment());
-            tt->setXmlText(String("<sym>metNoteQuarterUp</sym> = %1").arg(qRound(tempo.toBPM().val)));
+            tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(std::round(tempo.toBPM().val)));
             tt->setTempo(tempo);
             tt->setTrack(0);
             tt->setVisible(false);

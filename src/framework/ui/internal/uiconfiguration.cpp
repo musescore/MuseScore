@@ -351,7 +351,7 @@ ThemeList UiConfiguration::readThemes() const
 
     ThemeList result;
 
-    QByteArray json = settings()->value(UI_THEMES_KEY).toQString().toUtf8();
+    QByteArray json = QByteArray::fromStdString(settings()->value(UI_THEMES_KEY).toString());
     if (json.isEmpty()) {
         return result;
     }
