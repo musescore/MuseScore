@@ -59,13 +59,13 @@ void LogRemover::removeLogs(const io::path_t& logsDir, int olderThanDays, const 
 
 mu::Date LogRemover::parseDate(const String& fileName)
 {
-    int endIdx = fileName.lastIndexOf(u'_');
-    if (endIdx == -1) {
+    size_t endIdx = fileName.lastIndexOf(u'_');
+    if (endIdx == mu::nidx) {
         return Date();
     }
 
-    int startIdx = fileName.lastIndexOf(u'_', endIdx - 1);
-    if (startIdx == -1) {
+    size_t startIdx = fileName.lastIndexOf(u'_', endIdx - 1);
+    if (startIdx == mu::nidx) {
         return Date();
     }
 
