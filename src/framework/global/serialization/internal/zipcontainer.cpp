@@ -419,7 +419,7 @@ void ZipContainer::Impl::scanFiles()
     int num_dir_entries = 0;
     EndOfDirectory eod;
     while (start_of_directory_local == -1) {
-        const int pos = device->size() - int(sizeof(EndOfDirectory)) - i;
+        const int pos = int(device->size()) - int(sizeof(EndOfDirectory)) - i;
         if (pos < 0 || i > 65535) {
             LOGW("Zip: EndOfDirectory not found");
             return;
@@ -446,7 +446,7 @@ void ZipContainer::Impl::scanFiles()
     device->seek(start_of_directory_local);
     for (i = 0; i < num_dir_entries; ++i) {
         FileHeader header;
-        int read = device->read((uint8_t*)&header.h, sizeof(CentralFileHeader));
+        int read = (int)device->read((uint8_t*)&header.h, sizeof(CentralFileHeader));
         if (read < (int)sizeof(CentralFileHeader)) {
             LOGW("Zip: Failed to read complete header, index may be incomplete");
             break;
@@ -564,7 +564,7 @@ void ZipContainer::Impl::addEntry(EntryType type, const std::string& fileName, c
     writeUInt(header.h.signature, 0x02014b50);
 
     writeUShort(header.h.version_needed, ZIP_VERSION);
-    writeUInt(header.h.uncompressed_size, contents.size());
+    writeUInt(header.h.uncompressed_size, (uint)contents.size());
 
     std::time_t t = std::time(0);   // get time now
     std::tm* now = std::localtime(&t);
@@ -573,13 +573,13 @@ void ZipContainer::Impl::addEntry(EntryType type, const std::string& fileName, c
     if (compression == ZipContainer::AlwaysCompress) {
         writeUShort(header.h.compression_method, CompressionMethodDeflated);
 
-        ulong len = contents.size();
+        ulong len = (ulong)contents.size();
         // shamelessly copied form zlib
         len += (len >> 12) + (len >> 14) + 11;
         int res;
         do {
             data.resize(len);
-            res = deflate((uint8_t*)data.data(), &len, (const uint8_t*)contents.constData(), contents.size());
+            res = deflate((uint8_t*)data.data(), &len, (const uint8_t*)contents.constData(), (ulong)contents.size());
 
             switch (res) {
             case Z_OK:
@@ -596,9 +596,9 @@ void ZipContainer::Impl::addEntry(EntryType type, const std::string& fileName, c
         } while (res == Z_BUF_ERROR);
     }
 // TODO add a check if data.size() > contents.size().  Then try to store the original and revert the compression method to be uncompressed
-    writeUInt(header.h.compressed_size, data.size());
+    writeUInt(header.h.compressed_size, (uint)data.size());
     uint crc_32 = ::crc32(0, 0, 0);
-    crc_32 = ::crc32(crc_32, (const uint8_t*)contents.constData(), contents.size());
+    crc_32 = ::crc32(crc_32, (const uint8_t*)contents.constData(), (uint)contents.size());
     writeUInt(header.h.crc_32, crc_32);
 
     // if bit 11 is set, the filename and comment fields must be encoded using UTF-8
@@ -615,7 +615,7 @@ void ZipContainer::Impl::addEntry(EntryType type, const std::string& fileName, c
         LOGW("Zip: File comment is too long, chopping it to 65535 bytes");
         header.file_comment.truncate(0xffff - header.file_name.size()); // ### don't break the utf-8 sequence, if any
     }
-    writeUShort(header.h.file_name_length, header.file_name.size());
+    writeUShort(header.h.file_name_length, (ushort)header.file_name.size());
     //h.extra_field_length[2];
 
     writeUShort(header.h.version_made, HostUnix << 8);
@@ -645,7 +645,7 @@ void ZipContainer::Impl::addEntry(EntryType type, const std::string& fileName, c
     device->write((const uint8_t*)&h, sizeof(LocalFileHeader));
     device->write(header.file_name);
     device->write(data);
-    start_of_directory = device->pos();
+    start_of_directory = (uint)device->pos();
     dirtyFileTree = true;
 }
 
@@ -665,7 +665,7 @@ std::vector<ZipContainer::FileInfo> ZipContainer::fileInfoList() const
 {
     p->scanFiles();
     std::vector<FileInfo> files;
-    const int numFileHeaders = p->fileHeaders.size();
+    const int numFileHeaders = (int)p->fileHeaders.size();
     files.reserve(numFileHeaders);
     for (int i = 0; i < numFileHeaders; ++i) {
         files.push_back(p->fillFileInfo(i));
@@ -676,7 +676,7 @@ std::vector<ZipContainer::FileInfo> ZipContainer::fileInfoList() const
 int ZipContainer::count() const
 {
     p->scanFiles();
-    return p->fileHeaders.size();
+    return (int)p->fileHeaders.size();
 }
 
 ByteArray ZipContainer::fileData(const std::string& fileName) const
@@ -808,18 +808,18 @@ void ZipContainer::close()
         p->device->write(header.extra_field);
         p->device->write(header.file_comment);
     }
-    int dir_size = p->device->pos() - p->start_of_directory;
+    int dir_size = (int)p->device->pos() - (int)p->start_of_directory;
     // write end of directory
     EndOfDirectory eod;
     memset(&eod, 0, sizeof(EndOfDirectory));
     writeUInt(eod.signature, 0x06054b50);
     //uint8_t this_disk[2];
     //uint8_t start_of_directory_disk[2];
-    writeUShort(eod.num_dir_entries_this_disk, p->fileHeaders.size());
-    writeUShort(eod.num_dir_entries, p->fileHeaders.size());
+    writeUShort(eod.num_dir_entries_this_disk, (ushort)p->fileHeaders.size());
+    writeUShort(eod.num_dir_entries, (ushort)p->fileHeaders.size());
     writeUInt(eod.directory_size, dir_size);
     writeUInt(eod.dir_start_offset, p->start_of_directory);
-    writeUShort(eod.comment_length, p->comment.size());
+    writeUShort(eod.comment_length, (ushort)p->comment.size());
 
     p->device->write((const uint8_t*)&eod, sizeof(EndOfDirectory));
     p->device->write(p->comment);
