@@ -2906,6 +2906,9 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool create
         return Score::FileError::FILE_OPEN_ERROR;
     }
 
+    score->loadStyle(u":/engraving/styles/gp-style.mss");
+    score->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
+
     char header[5];
     io->read((uint8_t*)(header), 4);
     header[4] = 0;
@@ -2983,13 +2986,9 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool create
         return Score::FileError::FILE_NO_ERROR;
     }
 
-    score->loadStyle(u":/engraving/styles/gp-style.mss");
-
     if (!mu::engraving::MScore::lastError.isEmpty()) {
         LOGE() << mu::engraving::MScore::lastError;
     }
-
-    score->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
     addMetaInfo(score, gp);
 
