@@ -58,6 +58,7 @@ public:
     virtual engraving::InstrumentTrackId instrumentTrackIdForAudioTrackId(audio::TrackId trackId) const = 0;
 
     virtual void playElement(const notation::EngravingItem* element) = 0;
+    virtual void seekElement(const notation::EngravingItem* element) = 0;
 
     virtual bool actionChecked(const actions::ActionCode& actionCode) const = 0;
     virtual async::Channel<actions::ActionCode> actionCheckedChanged() const = 0;
