@@ -72,7 +72,7 @@ static QString userAgent()
 void CloudConfiguration::init()
 {
     if (settings()->value(CLIENT_ID_KEY).isNull()) {
-        settings()->setSharedValue(CLIENT_ID_KEY, Val(QVariant(generateClientId())));
+        settings()->setSharedValue(CLIENT_ID_KEY, Val(generateClientId().toStdString()));
     }
 }
 
@@ -89,7 +89,7 @@ RequestHeaders CloudConfiguration::headers() const
 
 QByteArray CloudConfiguration::clientId() const
 {
-    return settings()->value(CLIENT_ID_KEY).toQVariant().toByteArray();
+    return QByteArray::fromStdString(settings()->value(CLIENT_ID_KEY).toString());
 }
 
 QByteArray CloudConfiguration::uploadingLicense() const

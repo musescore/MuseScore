@@ -333,7 +333,7 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path_t& h
         INotationWriter::Options options {
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
             { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(false) },
-            { INotationWriter::OptionKey::BEATS_COLORS, Val(beatsColors) }
+            { INotationWriter::OptionKey::BEATS_COLORS, Val::fromQVariant(beatsColors) }
         };
 
         Ret writeRet = svgWriter->write(notation, svgDevice, options);
@@ -382,7 +382,7 @@ Ret BackendApi::exportScorePdf(const INotationPtr notation, BackendJsonWriter& j
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::exportScorePdf(const INotationPtr notation, Device& destinationDevice)
+Ret BackendApi::exportScorePdf(const INotationPtr notation, QIODevice& destinationDevice)
 {
     TRACEFUNC
 
@@ -498,7 +498,7 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
     return result;
 }
 
-Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device& destinationDevice)
+Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, QIODevice& destinationDevice)
 {
     mu::engraving::MasterScore* score = notation->elements()->msScore()->masterScore();
 
@@ -537,7 +537,7 @@ Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, Device& destinationDevice,
+Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, QIODevice& destinationDevice,
                                        const std::string& scoreFileName)
 {
     QJsonObject jsonForPdfs;

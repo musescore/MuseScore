@@ -26,7 +26,6 @@
 #include <memory>
 
 #include "io/path.h"
-#include "io/device.h"
 
 class QXmlStreamReader;
 class QByteArray;
@@ -36,7 +35,7 @@ class XmlReader
 {
 public:
     XmlReader(const io::path_t& path);
-    XmlReader(io::Device* device);
+    XmlReader(QIODevice* device);
     XmlReader(const QByteArray& bytes);
     ~XmlReader();
 
@@ -80,7 +79,7 @@ private:
     QString readElementText(ReadStringBehavior behavior = ErrorOnUnexpectedElement);
     QStringRef attributeValue(std::string_view name) const;
 
-    std::unique_ptr<io::Device> m_device;
+    std::unique_ptr<QIODevice> m_device;
     std::unique_ptr<QXmlStreamReader> m_reader;
 };
 }

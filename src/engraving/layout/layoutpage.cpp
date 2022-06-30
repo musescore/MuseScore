@@ -425,7 +425,7 @@ void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, double restHei
 
     if (restHeight > 0.0) {                                 // space left?
         double fill = restHeight / static_cast<double>(sList.size());
-        for (System* s : qAsConst(sList)) {                           // allocate it to systems equally
+        for (System* s : sList) {                           // allocate it to systems equally
             double d = s->distance() + fill;
             if ((d - s->height()) > maxDist) {              // but don't exceed max system distance
                 d = std::max(maxDist + s->height(), s->distance());
@@ -645,7 +645,7 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, double f
         spaceRemaining -= addedSpace;
     }
 
-    QSet<System*> systems;
+    std::set<System*> systems;
     double systemShift { 0.0 };
     double staffShift  { 0.0 };
     System* prvSystem { nullptr };

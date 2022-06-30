@@ -3,7 +3,6 @@
 #include <cassert>
 
 #include "queuedinvoker.h"
-#include <qlogging.h>
 
 using namespace deto::async;
 
@@ -38,7 +37,7 @@ void AbstractInvoker::invoke(int type, const NotifyData& data)
 
     for (const CallBack& c : callbacks) {
         if (!it->second.containsReceiver(c.receiver)) {
-            qDebug("Skipping removed receiver");
+            std::cout << "Skipping removed receiver";
             continue;
         }
         if (c.threadID == threadID) {

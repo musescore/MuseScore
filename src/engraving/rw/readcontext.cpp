@@ -40,7 +40,7 @@ ReadContext::ReadContext(Score* score)
 ReadContext::~ReadContext()
 {
     if (!_connectors.empty() || !_pendingConnectors.empty()) {
-        qDebug("XmlReader::~XmlReader: there are unpaired connectors left");
+        LOGD("XmlReader::~XmlReader: there are unpaired connectors left");
         for (auto& c : _connectors) {
             EngravingItem* conn = c->releaseConnector();
             if (conn && !conn->isTuplet()) { // tuplets are added to score even when not finished
@@ -414,7 +414,7 @@ void ReadContext::reconnectBrokenConnectors()
     if (_connectors.empty()) {
         return;
     }
-    qDebug("Reconnecting broken connectors (%d nodes)", int(_connectors.size()));
+    LOGD("Reconnecting broken connectors (%d nodes)", int(_connectors.size()));
     std::vector<std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> > > brokenPairs;
     for (size_t i = 1; i < _connectors.size(); ++i) {
         for (size_t j = 0; j < i; ++j) {

@@ -30,7 +30,9 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
+#endif
 
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
@@ -119,5 +121,7 @@ EngravingItem* DummyElement::clone() const
 
 AccessibleItemPtr DummyElement::createAccessible()
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     return std::make_shared<AccessibleItem>(this, accessibility::IAccessible::Panel);
+#endif
 }

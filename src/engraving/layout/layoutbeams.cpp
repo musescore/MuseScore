@@ -213,7 +213,7 @@ void LayoutBeams::beamGraceNotes(Score* score, Chord* mainNote, bool after)
         beam->setIsGrace(true);
     }
 
-    for (ChordRest* cr : qAsConst(graceNotes)) {
+    for (ChordRest* cr : graceNotes) {
         bm = Groups::endBeam(cr);
         if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
             if (beam) {

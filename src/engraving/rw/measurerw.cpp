@@ -21,6 +21,7 @@
  */
 #include "measurerw.h"
 
+#include "translation.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
 
@@ -87,7 +88,8 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
         }
         irregular = true;
         if (measure->_len.numerator() <= 0 || measure->_len.denominator() <= 0 || measure->_len.denominator() > 128) {
-            e.raiseError(QObject::tr("MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(measure->_len.toString()));
+            e.raiseError(mtrc("engraving",
+                              "MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(measure->_len.toString()));
             return;
         }
         ctx.sigmap()->add(measure->tick().ticks(), SigEvent(measure->_len, measure->m_timesig));
@@ -551,7 +553,7 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
 {
     if (MScore::debugMode) {
         const int mno = measure->no() + 1;
-        xml.comment(String("Measure %1").arg(mno));
+        xml.comment(String(u"Measure %1").arg(mno));
     }
     if (measure->_len != measure->m_timesig) {
         // this is an irregular measure

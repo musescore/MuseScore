@@ -46,7 +46,9 @@
 #include "undo.h"
 #include "mscore.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
+#endif
 
 #include "log.h"
 
@@ -91,8 +93,8 @@ static bool isSorted(size_t r1, size_t c1, size_t r2, size_t c2)
 
 static void swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 {
-    qSwap(r1, r2);
-    qSwap(c1, c2);
+    std::swap(r1, r2);
+    std::swap(c1, c2);
 }
 
 //---------------------------------------------------------
@@ -813,7 +815,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
                 }
                 const Char& c2 = text.at(i + 1);
                 ++i;
-                uint v = QChar::surrogateToUcs4(c, c2);
+                uint v = Char::surrogateToUcs4(c, c2);
                 if (!fm.inFontUcs4(v)) {
                     fail = true;
                     break;
@@ -826,7 +828,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
             }
         }
         if (fail) {
-            family = ScoreFont::fallbackTextFont();
+            family = String::fromUtf8(ScoreFont::fallbackTextFont());
         }
     } else {
         family = format.fontFamily();
@@ -981,7 +983,7 @@ void TextBlock::layout(TextBase* t)
 std::list<TextFragment> TextBlock::fragmentsWithoutEmpty()
 {
     std::list<TextFragment> list;
-    for (const auto& x : qAsConst(_fragments)) {
+    for (const auto& x : _fragments) {
         if (!x.text.isEmpty()) {
             list.push_back(x);
         }
@@ -1475,7 +1477,7 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
     return tl;
 }
 
-static String toSymbolXml(QChar c)
+static String toSymbolXml(Char c)
 {
     SymId symId = ScoreFont::fallbackFont()->fromCode(c.unicode());
     return u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";
@@ -2025,7 +2027,7 @@ void TextBase::setFontStyle(const FontStyle& val)
 
 void TextBase::setFamily(const String& val)
 {
-    _cursor->setFormat(FormatId::FontFamily, val.toQString());
+    _cursor->setFormat(FormatId::FontFamily, val);
 }
 
 void TextBase::setSize(const double& val)
@@ -2076,7 +2078,7 @@ public:
             }
             ps << s;
         }
-        for (const String& s : qAsConst(ps)) {
+        for (const String& s : ps) {
             pushToken(s);
         }
     }
@@ -2171,10 +2173,10 @@ void TextBase::genText() const
             }
 
             if (format.fontSize() != fmt.fontSize()) {
-                _text += String("<font size=\"%1\"/>").arg(format.fontSize());
+                _text += String(u"<font size=\"%1\"/>").arg(format.fontSize());
             }
             if (format.fontFamily() != "ScoreText" && format.fontFamily() != fmt.fontFamily()) {
-                _text += String("<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
+                _text += String(u"<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
             }
 
             VerticalAlignment va = format.valign();
@@ -2204,7 +2206,7 @@ void TextBase::genText() const
             fmt = format;
         }
         if (block.eol()) {
-            _text += QChar::LineFeed;
+            _text += Char::LineFeed;
         }
     }
     while (!xmlNesting.empty()) {
@@ -2529,7 +2531,7 @@ String TextBase::plainText() const
             s += f.text;
         }
         if (block.eol()) {
-            s += QChar::LineFeed;
+            s += Char::LineFeed;
         }
     }
     return s;
@@ -2609,7 +2611,7 @@ String TextBase::accessibleInfo() const
         s.truncate(20);
         s += u"…";
     }
-    return String("%1: %2").arg(rez, s);
+    return String(u"%1: %2").arg(rez, s);
 }
 
 //---------------------------------------------------------
@@ -2635,7 +2637,7 @@ String TextBase::screenReaderInfo() const
         break;
     }
     String s = plainText().simplified();
-    return String("%1: %2").arg(rez, s);
+    return String(u"%1: %2").arg(rez, s);
 }
 
 //---------------------------------------------------------
@@ -2995,11 +2997,11 @@ String TextBase::getHtmlStartTag(double newSize, double& curSize, const String& 
     String s;
     if (fabs(newSize - curSize) > 0.1) {
         curSize = newSize;
-        s += String("<font size=\"%1\"/>").arg(newSize);
+        s += String(u"<font size=\"%1\"/>").arg(newSize);
     }
     if (newFamily != curFamily && newFamily != "ScoreText") {
         curFamily = newFamily;
-        s += String("<font face=\"%1\"/>").arg(newFamily);
+        s += String(u"<font face=\"%1\"/>").arg(newFamily);
     }
     if (style & FontStyle::Bold) {
         s += u"<b>";
@@ -3049,33 +3051,38 @@ String TextBase::getHtmlEndTag(FontStyle style, VerticalAlignment vAlign)
 
 AccessibleItemPtr TextBase::createAccessible()
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     return std::make_shared<AccessibleItem>(this, AccessibleItem::EditableText);
+#endif
 }
 
 void TextBase::notifyAboutTextCursorChanged()
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     if (accessible()) {
-        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextCursor,
-                                                       Val());
+        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextCursor, Val());
     }
+#endif
 }
 
 void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const String& text)
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     if (accessible()) {
         auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
-        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextInsert,
-                                                       Val(range.toMap()));
+        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextInsert, Val::fromQVariant(range.toMap()));
     }
+#endif
 }
 
 void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const String& text)
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     if (accessible()) {
         auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
-        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextRemove,
-                                                       Val(range.toMap()));
+        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextRemove, Val::fromQVariant(range.toMap()));
     }
+#endif
 }
 
 //---------------------------------------------------------
@@ -3458,10 +3465,10 @@ String TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) c
             }
 
             if (!removeSize && (format.fontSize() != fmt.fontSize())) {
-                _txt += String("<font size=\"%1\"/>").arg(format.fontSize());
+                _txt += String(u"<font size=\"%1\"/>").arg(format.fontSize());
             }
             if (!removeFace && (format.fontFamily() != fmt.fontFamily())) {
-                _txt += String("<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
+                _txt += String(u"<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
             }
 
             VerticalAlignment va = format.valign();
@@ -3485,7 +3492,7 @@ String TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) c
             fmt = format;
         }
         if (block.eol()) {
-            _txt += QChar::LineFeed;
+            _txt += Char::LineFeed;
         }
     }
     while (!xmlNesting.empty()) {

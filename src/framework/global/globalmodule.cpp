@@ -21,9 +21,6 @@
  */
 #include "globalmodule.h"
 
-#include <QTimer>
-#include <QDateTime>
-
 #include "modularity/ioc.h"
 #include "internal/globalconfiguration.h"
 
@@ -35,7 +32,7 @@
 
 #include "internal/application.h"
 #include "internal/interactive.h"
-#include "invoker.h"
+#include "internal/invoker.h"
 
 #include "runtime.h"
 #include "async/processevents.h"
@@ -92,7 +89,7 @@ void GlobalModule::onInit(const IApplication::RunMode& mode)
     fileSystem()->makePath(logPath);
 
     //! Remove old logs
-    LogRemover::removeLogs(logPath, 7, "MuseScore_yyMMdd_HHmmss.log");
+    LogRemover::removeLogs(logPath, 7, u"MuseScore_yyMMdd_HHmmss.log");
 
     //! File, this creates a file named "data/logs/MuseScore_yyMMdd_HHmmss.log"
     io::path_t logFilePath = logPath + "/MuseScore_"

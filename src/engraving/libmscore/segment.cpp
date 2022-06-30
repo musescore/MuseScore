@@ -691,7 +691,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     default:
-        ASSERT_X(String("Segment::add() unknown %1").arg(String::fromAscii(el->typeName())));
+        ASSERT_X(String(u"Segment::add() unknown %1").arg(String::fromAscii(el->typeName())));
         return;
     }
 
@@ -809,7 +809,7 @@ void Segment::remove(EngravingItem* el)
         break;
 
     default:
-        ASSERT_X(String("Segment::remove() unknown %1").arg(String::fromAscii(el->typeName())));
+        ASSERT_X(String(u"Segment::remove() unknown %1").arg(String::fromAscii(el->typeName())));
         return;
     }
     triggerLayout();
@@ -1186,7 +1186,7 @@ bool Segment::allElementsInvisible() const
     }
 
     for (EngravingItem* e : _elist) {
-        if (e && e->visible() && !qFuzzyCompare(e->width(), 0.0)) {
+        if (e && e->visible() && !RealIsEqual(e->width(), 0.0)) {
             return false;
         }
     }

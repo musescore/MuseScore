@@ -42,7 +42,7 @@ const char* SymNames::userNameForSymId(SymId id)
 
 String SymNames::translatedUserNameForSymId(SymId id)
 {
-    return mu::qtrc("symUserNames", userNameForSymId(id));
+    return mtrc("symUserNames", userNameForSymId(id));
 }
 
 SymId SymNames::symIdByName(const AsciiStringView& name, SymId def)

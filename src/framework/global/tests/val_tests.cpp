@@ -25,7 +25,7 @@
 
 using namespace mu;
 
-class ValTests : public ::testing::Test
+class Global_ValTests : public ::testing::Test
 {
 public:
 };
@@ -36,9 +36,8 @@ public:
 //Double,
 //String,
 //Color
-//Variant
 
-TEST_F(ValTests, Val_Undefined)
+TEST_F(Global_ValTests, Val_Undefined)
 {
     //! GIVEN Undefined value
 
@@ -53,7 +52,7 @@ TEST_F(ValTests, Val_Undefined)
     EXPECT_EQ(v.toQColor(), QColor());
 }
 
-TEST_F(ValTests, Val_Bool)
+TEST_F(Global_ValTests, Val_Bool)
 {
     //! GIVEN Value as bool
 
@@ -68,7 +67,7 @@ TEST_F(ValTests, Val_Bool)
     EXPECT_EQ(v.toQColor(), QColor());
 }
 
-TEST_F(ValTests, Val_Int)
+TEST_F(Global_ValTests, Val_Int)
 {
     //! GIVEN Value as int
 
@@ -83,7 +82,7 @@ TEST_F(ValTests, Val_Int)
     EXPECT_EQ(v.toQColor(), QColor());
 }
 
-TEST_F(ValTests, Val_Double)
+TEST_F(Global_ValTests, Val_Double)
 {
     //! GIVEN Value as double
 
@@ -98,7 +97,7 @@ TEST_F(ValTests, Val_Double)
     EXPECT_EQ(v.toQColor(), QColor());
 }
 
-TEST_F(ValTests, Val_String)
+TEST_F(Global_ValTests, Val_String)
 {
     //! GIVEN Value as string
 
@@ -106,12 +105,12 @@ TEST_F(ValTests, Val_String)
 
     EXPECT_EQ(v.type(), Val::Type::String);
     EXPECT_EQ(v.isNull(), false);
-    EXPECT_EQ(v.toBool(), true);
+    EXPECT_EQ(v.toBool(), false);
     EXPECT_EQ(v.toString(), "hello");
     EXPECT_EQ(v.toQColor(), QColor());
 }
 
-TEST_F(ValTests, Val_Color)
+TEST_F(Global_ValTests, Val_Color)
 {
     //! GIVEN Value as color
 
@@ -119,38 +118,7 @@ TEST_F(ValTests, Val_Color)
 
     EXPECT_EQ(v.type(), Val::Type::Color);
     EXPECT_EQ(v.isNull(), false);
-    EXPECT_EQ(v.toBool(), true);
+    EXPECT_EQ(v.toBool(), false);
     EXPECT_EQ(v.toString(), "#800000");
     EXPECT_EQ(v.toQColor(), QColor("#800000"));
-}
-
-TEST_F(ValTests, Val_Variant)
-{
-    //! GIVEN Value as variant
-    QVariantMap obj;
-    obj["AAA"] = "some value";
-    obj["BBB"] = "another value";
-    obj["CCC"] = "test value";
-
-    Val v(obj);
-
-    EXPECT_EQ(v.type(), Val::Type::Variant);
-    EXPECT_EQ(v.isNull(), false);
-    EXPECT_EQ(v.toBool(), true);
-    EXPECT_EQ(v.toQVariant(), obj);
-}
-
-TEST_F(ValTests, Val_Variant_Number)
-{
-    //! Given Value as variant with number type
-    QVariant number(100500.539);
-    Val v(number);
-
-    EXPECT_EQ(v.type(), Val::Type::Variant);
-    EXPECT_EQ(v.isNull(), false);
-    EXPECT_EQ(v.toBool(), true);
-    EXPECT_EQ(v.toInt(), 100501);
-    EXPECT_EQ(v.toDouble(), 100500.539);
-    EXPECT_EQ(v.toString(), "100500.539");
-    EXPECT_EQ(v.toQVariant(), number);
 }

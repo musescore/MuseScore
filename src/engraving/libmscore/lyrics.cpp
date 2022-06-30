@@ -22,8 +22,6 @@
 
 #include "lyrics.h"
 
-#include <QRegularExpression>
-
 #include "translation.h"
 #include "rw/xml.h"
 

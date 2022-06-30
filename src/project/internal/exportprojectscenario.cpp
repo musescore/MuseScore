@@ -85,7 +85,7 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                                             ? chosenPath
                                             : completeExportPath(chosenPath, notation, isMainNotation(notation), static_cast<int>(page));
 
-                auto exportFunction = [writer, notation, options](io::Device& destinationDevice) {
+                auto exportFunction = [writer, notation, options](QIODevice& destinationDevice) {
                         return writer->write(notation, destinationDevice, options);
                     };
 
@@ -105,7 +105,7 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                                         ? chosenPath
                                         : completeExportPath(chosenPath, notation, isMainNotation(notation));
 
-            auto exportFunction = [writer, notation, options](io::Device& destinationDevice) {
+            auto exportFunction = [writer, notation, options](QIODevice& destinationDevice) {
                     return writer->write(notation, destinationDevice, options);
                 };
 
@@ -118,7 +118,7 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
             { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
         };
 
-        auto exportFunction = [writer, notations, options](io::Device& destinationDevice) {
+        auto exportFunction = [writer, notations, options](QIODevice& destinationDevice) {
                 return writer->writeList(notations, destinationDevice, options);
             };
 
@@ -261,7 +261,7 @@ bool ExportProjectScenario::askForRetry(const QString& filename) const
     return result.standardButton() == IInteractive::Button::Retry;
 }
 
-bool ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::function<bool(io::Device&)> exportFunction) const
+bool ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::function<bool(QIODevice&)> exportFunction) const
 {
     IF_ASSERT_FAILED(exportFunction) {
         return false;

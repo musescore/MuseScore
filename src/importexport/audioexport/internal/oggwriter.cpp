@@ -27,7 +27,7 @@
 using namespace mu::iex::audioexport;
 using namespace mu::io;
 
-mu::Ret OggWriter::write(notation::INotationPtr, Device& destinationDevice, const Options&)
+mu::Ret OggWriter::write(notation::INotationPtr, QIODevice& destinationDevice, const Options&)
 {
     static const audio::SoundTrackFormat format {
         audio::SoundTrackType::OGG,

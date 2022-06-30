@@ -121,7 +121,7 @@ Interactive::Result Interactive::warning(const std::string& title, const std::st
 
 IInteractive::Result Interactive::warning(const std::string& title, const Text& text, const ButtonDatas& buttons,
                                           int defBtn,
-                                          const QFlags<IInteractive::Option>& options) const
+                                          const Options& options) const
 {
     return standardDialogResult(provider()->warning(title, text.text, buttons, defBtn, options));
 }

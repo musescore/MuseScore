@@ -106,7 +106,7 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
     return result;
 }
 
-RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackName, io::Device* device, const AudioParams& requiredParams)
+RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackName, QIODevice* device, const AudioParams& requiredParams)
 {
     ONLY_AUDIO_WORKER_THREAD;
 

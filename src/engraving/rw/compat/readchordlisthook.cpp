@@ -69,7 +69,7 @@ void ReadChordListHook::validate()
         if (!newChordDescriptionFile.startsWith(u"chords_") && style.styleSt(Sid::chordStyle) == "std") {
             // should not normally happen,
             // but treat as "old" (114) score just in case
-            style.set(Sid::chordStyle, String("custom"));
+            style.set(Sid::chordStyle, String(u"custom"));
             style.set(Sid::chordsXmlFile, true);
             LOGD("StyleData::load: custom chord description file %s with chordStyle == std", muPrintable(newChordDescriptionFile));
         }

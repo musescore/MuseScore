@@ -167,7 +167,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
 
         void addToSkyline(const System* system)
         {
-            for (EngravingItem* e : qAsConst(modified)) {
+            for (EngravingItem* e : modified) {
                 const Segment* s = toSegment(e->explicitParent());
                 const MeasureBase* m = toMeasureBase(s->explicitParent());
                 system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));

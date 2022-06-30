@@ -96,7 +96,7 @@ bool graceNotesMerged(Chord* chord);
 
 void Score::updateSwing()
 {
-    for (Staff* s : qAsConst(_staves)) {
+    for (Staff* s : _staves) {
         s->clearSwingList();
     }
     Measure* fm = firstMeasure();
@@ -120,7 +120,7 @@ void Score::updateSwing()
             sp.swingRatio = st->swingParameters().swingRatio;
             sp.swingUnit = st->swingParameters().swingUnit;
             if (st->systemFlag()) {
-                for (Staff* sta : qAsConst(_staves)) {
+                for (Staff* sta : _staves) {
                     sta->insertIntoSwingList(s->tick(), sp);
                 }
             } else {
@@ -136,7 +136,7 @@ void Score::updateSwing()
 
 void Score::updateCapo()
 {
-    for (Staff* s : qAsConst(_staves)) {
+    for (Staff* s : _staves) {
         s->clearCapoList();
     }
     Measure* fm = firstMeasure();
@@ -424,7 +424,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         }
 
         velo *= velocityMultiplier;
-        playNote(events, note, channel, p, qBound(1, velo, 127), on, off, staffIdx);
+        playNote(events, note, channel, p, std::clamp(velo, 1, 127), on, off, staffIdx);
     }
 
     // Single-note dynamics
@@ -483,7 +483,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         for (auto point = velocityMap.cbegin(); point != velocityMap.cend(); ++point) {
             // NOTE:JT if we ever want to use poly aftertouch instead of CC, this is where we want to
             // be using it. Instead of ME_CONTROLLER, use ME_POLYAFTER (but duplicate for each note in chord)
-            NPlayEvent event = NPlayEvent(ME_CONTROLLER, channel, config.controller, qBound(0, point->second, 127));
+            NPlayEvent event = NPlayEvent(ME_CONTROLLER, channel, config.controller, std::clamp(point->second, 0, 127));
             event.setOriginatingStaff(staffIdx);
             events->insert(std::make_pair(point->first + tickOffset, event));
         }
@@ -568,7 +568,7 @@ static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMa
         event.setValue(0x40 + 0x10 + i);
     }
 
-    event.setChannel(static_cast<uchar>(channel));
+    event.setChannel(static_cast<uint8_t>(channel));
     events->insert(std::pair<int, NPlayEvent>(tick, event));
 
     event.setValue(k);
@@ -688,7 +688,7 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     RealizedHarmony r = h->getRealizedHarmony();
     std::vector<int> pitches = r.pitches();
 
-    NPlayEvent ev(ME_NOTEON, static_cast<uchar>(channel->channel()), 0, velocity);
+    NPlayEvent ev(ME_NOTEON, static_cast<uint8_t>(channel->channel()), 0, velocity);
     ev.setHarmony(h);
     Fraction duration = r.getActualDuration(h->tick().ticks() + tickOffset);
 
@@ -699,7 +699,7 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     ev.setTuning(0.0);
 
     //add play events
-    for (int p : qAsConst(pitches)) {
+    for (int p : pitches) {
         ev.setPitch(p);
         ev.setVelo(velocity);
         events->insert(std::pair<int, NPlayEvent>(onTime, ev));
@@ -962,7 +962,7 @@ void Score::updateHairpin(Hairpin* h)
         }
         break;
     case DynamicRange::SYSTEM:
-        for (Staff* s : qAsConst(_staves)) {
+        for (Staff* s : _staves) {
             s->velocities().addRamp(tick, tick2, veloChange, method, direction);
         }
         break;
@@ -983,7 +983,7 @@ void Score::updateVelo()
         return;
     }
 
-    for (Staff* st : qAsConst(_staves)) {
+    for (Staff* st : _staves) {
         st->velocities().clear();
         st->velocityMultiplications().clear();
     }
@@ -1012,7 +1012,7 @@ void Score::updateVelo()
                     continue;
                 }
 
-                v = qBound(1, v, 127);             //  illegal values
+                v = std::clamp(v, 1, 127);             //  illegal values
 
                 // If a dynamic has 'velocity change' update its ending
                 int change = d->changeInVelocity();
@@ -1103,7 +1103,7 @@ void Score::updateVelo()
         }
     }
 
-    for (Staff* st : qAsConst(_staves)) {
+    for (Staff* st : _staves) {
         st->velocities().cleanup();
         st->velocityMultiplications().cleanup();
     }
@@ -1242,14 +1242,14 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
                     int midiPitch = (p * 16384) / 1200 + 8192;
                     int msb = midiPitch / 128;
                     int lsb = midiPitch % 128;
-                    NPlayEvent ev(ME_PITCHBEND, static_cast<uchar>(channel), lsb, msb);
+                    NPlayEvent ev(ME_PITCHBEND, static_cast<uint8_t>(channel), lsb, msb);
                     ev.setOriginatingStaff(staff);
                     events->insert(std::pair<int, NPlayEvent>(i + tickOffset, ev));
                 }
                 lastPointTick = nextPointTick;
                 j++;
             }
-            NPlayEvent ev(ME_PITCHBEND, static_cast<uchar>(channel), 0, 64);       // no pitch bend
+            NPlayEvent ev(ME_PITCHBEND, static_cast<uint8_t>(channel), 0, 64);       // no pitch bend
             ev.setOriginatingStaff(staff);
             events->insert(std::pair<int, NPlayEvent>(etick + tickOffset, ev));
         } else {
@@ -1262,9 +1262,9 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
         for (const auto& pe : pedalEvents.second) {
             NPlayEvent event;
             if (pe.second.first == true) {
-                event = NPlayEvent(ME_CONTROLLER, static_cast<uchar>(channel), CTRL_SUSTAIN, 127);
+                event = NPlayEvent(ME_CONTROLLER, static_cast<uint8_t>(channel), CTRL_SUSTAIN, 127);
             } else {
-                event = NPlayEvent(ME_CONTROLLER, static_cast<uchar>(channel), CTRL_SUSTAIN, 0);
+                event = NPlayEvent(ME_CONTROLLER, static_cast<uint8_t>(channel), CTRL_SUSTAIN, 0);
             }
             event.setOriginatingStaff(pe.second.second);
             events->insert(std::pair<int, NPlayEvent>(pe.first, event));

@@ -573,7 +573,7 @@ bool Spanner::eitherEndVisible() const
 void Spanner::setScore(Score* s)
 {
     EngravingItem::setScore(s);
-    foreach (SpannerSegment* seg, segments) {
+    for (SpannerSegment* seg : segments) {
         seg->setScore(s);
     }
 }

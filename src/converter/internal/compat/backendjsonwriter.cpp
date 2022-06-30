@@ -24,7 +24,7 @@
 using namespace mu::converter;
 using namespace mu::io;
 
-BackendJsonWriter::BackendJsonWriter(Device* destinationDevice)
+BackendJsonWriter::BackendJsonWriter(QIODevice* destinationDevice)
 {
     m_destinationDevice = destinationDevice;
     m_destinationDevice->open(QIODevice::WriteOnly);

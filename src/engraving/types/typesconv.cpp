@@ -940,7 +940,7 @@ ChangeMethod TConv::fromXml(const AsciiStringView& tag, ChangeMethod def)
 
 String TConv::toXml(const PitchValue& v)
 {
-    return String("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"").arg(v.time).arg(v.pitch).arg(v.vibrato);
+    return String(u"point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"").arg(v.time).arg(v.pitch).arg(v.vibrato);
 }
 
 String TConv::toXml(AccidentalRole v)

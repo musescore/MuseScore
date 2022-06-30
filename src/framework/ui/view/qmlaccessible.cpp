@@ -295,7 +295,7 @@ void AccessibleItem::setValue(QVariant value)
 
     m_value = value;
     emit valueChanged(m_value);
-    m_accessiblePropertyChanged.send(IAccessible::Property::Value, Val(value));
+    m_accessiblePropertyChanged.send(IAccessible::Property::Value, Val::fromQVariant(value));
 }
 
 void AccessibleItem::setMaximumValue(QVariant maximumValue)
