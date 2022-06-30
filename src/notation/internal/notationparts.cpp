@@ -819,10 +819,10 @@ void NotationParts::removeStaves(const IDList& stavesIds)
         class BracketData
         {
         public:
-            int column;
-            int span;
+            size_t column;
+            size_t span;
 
-            BracketData(int c, int s)
+            BracketData(size_t c, size_t s)
                 : column(c), span(s) {}
         };
 
@@ -835,7 +835,7 @@ void NotationParts::removeStaves(const IDList& stavesIds)
         }
         score()->cmdRemoveStaff(staff->idx());
         for (BracketData bd : newBrackets) {
-            score()->undoAddBracket(score()->staff(staffIdx), bd.column, BracketType::BRACE, bd.span);
+            score()->undoAddBracket(score()->staff(staffIdx), static_cast<int>(bd.column), BracketType::BRACE, bd.span);
         }
     }
 

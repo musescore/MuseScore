@@ -3013,13 +3013,13 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool create
         for (size_t partNum = 0; partNum < score->parts().size(); partNum++) {
             Part* part = score->parts()[partNum];
             Fraction fr = Fraction(0, 1);
-            int lines = static_cast<int>(part->instrument()->stringData()->strings());
-            int stavesNum = static_cast<int>(part->nstaves());
+            size_t lines = part->instrument()->stringData()->strings();
+            size_t stavesNum = part->nstaves();
 
-            part->setStaves(stavesNum * 2);
+            part->setStaves(static_cast<int>(stavesNum) * 2);
 
-            for (int i = 0; i < stavesNum; i++) {
-                staff_idx_t staffIdx = static_cast<int>(stavesNum + i);
+            for (size_t i = 0; i < stavesNum; i++) {
+                staff_idx_t staffIdx = stavesNum + i;
 
                 for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
                     Spanner* s = it->second;
@@ -3053,7 +3053,7 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool create
                 }
 
                 dstStaff->setStaffType(fr, *StaffType::preset(tabType));
-                dstStaff->setLines(fr, lines);
+                dstStaff->setLines(fr, static_cast<int>(lines));
                 Excerpt::cloneStaff(srcStaff, dstStaff);
             }
         }
