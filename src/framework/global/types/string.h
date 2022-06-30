@@ -35,6 +35,7 @@
 
 #ifndef GLOBAL_NO_QT_SUPPORT
 #include <QString>
+#include <QStringList>
 #endif
 
 namespace mu {
@@ -76,6 +77,24 @@ private:
 class Char
 {
 public:
+
+    enum SpecialCharacter {
+        Null = 0x0000,
+        Tabulation = 0x0009,
+        LineFeed = 0x000a,
+        FormFeed = 0x000c,
+        CarriageReturn = 0x000d,
+        Space = 0x0020,
+        Nbsp = 0x00a0,
+        SoftHyphen = 0x00ad,
+        ReplacementCharacter = 0xfffd,
+        ObjectReplacementCharacter = 0xfffc,
+        ByteOrderMark = 0xfeff,
+        ByteOrderSwapped = 0xfffe,
+        ParagraphSeparator = 0x2029,
+        LineSeparator = 0x2028,
+        LastValidCodePoint = 0x10ffff
+    };
 
     Char() = default;
     Char(char16_t c)
@@ -247,7 +266,7 @@ public:
     int count(const Char& ch) const;
     size_t indexOf(const Char& ch, size_t from = 0) const;
     size_t indexOf(const char16_t* str, size_t from = 0) const;
-    size_t lastIndexOf(const Char& ch) const;
+    size_t lastIndexOf(const Char& ch, size_t from = mu::nidx) const;
 
     //! NOTE Now implemented only compare with ASCII
     bool startsWith(const String& str, CaseSensitivity cs = CaseSensitive) const;
@@ -330,8 +349,11 @@ class StringList : public std::vector<String>
 public:
     StringList() = default;
 
-    StringList& operator <<(const String& s) { push_back(s); return *this; }
+    StringList& operator <<(const String& s) { return append(s); }
     StringList& append(const String& s) { push_back(s); return *this; }
+
+    StringList& operator <<(const StringList& l) { return append(l); }
+    StringList& append(const StringList& l);
 
     size_t indexOf(const String& s) const { return mu::indexOf(*this, s); }
     bool contains(const String& s) const { return mu::contains(*this, s); }

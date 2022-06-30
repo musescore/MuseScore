@@ -24,6 +24,7 @@
 
 #include <cmath>
 
+#include "translation.h"
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
@@ -239,7 +240,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<String, std
         }
     }
     if (family == "MuseJazz") {
-        family = "MuseJazz Text";
+        family = u"MuseJazz Text";
     }
 
     struct StyleTable {
@@ -749,7 +750,7 @@ void Read206::readPart206(Part* part, XmlReader& e, ReadContext& ctx)
             readInstrument206(i, part, e);
             Drumset* ds = i->drumset();
             Staff* s = part->staff(0);
-            int lld = s ? qRound(s->lineDistance(Fraction(0, 1))) : 1;
+            int lld = s ? std::round(s->lineDistance(Fraction(0, 1))) : 1;
             if (ds && s && lld > 1) {
                 for (int j = 0; j < DRUM_INSTRUMENTS; ++j) {
                     ds->drum(j).line /= lld;
@@ -1274,10 +1275,10 @@ public:
     {
         // Create a new xml document containing only the (text) xml chunk
         String name = String::fromAscii(origReader.name().ascii());
-        qint64 additionalLines = origReader.lineNumber() - 2;     // Subtracting the 2 new lines that will be added
+        int64_t additionalLines = origReader.lineNumber() - 2;     // Subtracting the 2 new lines that will be added
         xmlTag = origReader.readXml();
-        xmlTag.prepend(u"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<" + name + ">");
-        xmlTag.append(u"</" + name + ">\n");
+        xmlTag.prepend(u"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<" + name + u">");
+        xmlTag.append(u"</" + name + u">\n");
         ByteArray data = xmlTag.toUtf8();
         tagReader.setData(data);  // Add the xml data to the XmlReader
         // the additional lines are needed to output the correct line number
@@ -2009,7 +2010,7 @@ static void readVolta206(XmlReader& e, const ReadContext& ctx, Volta* volta)
             String s = e.readText();
             StringList sl = s.split(u',', mu::SkipEmptyParts);
             volta->endings().clear();
-            for (const String& l : qAsConst(sl)) {
+            for (const String& l : sl) {
                 int i = l.simplified().toInt();
                 volta->endings().push_back(i);
             }
@@ -2051,7 +2052,7 @@ static void readOttava(XmlReader& e, const ReadContext& ctx, Ottava* ottava)
             if (!ok) {
                 idx = 0;            // OttavaType::OTTAVA_8VA;
                 int i = 0;
-                for (auto p :  { "8va", "8vb", "15ma", "15mb", "22ma", "22mb" }) {
+                for (auto p :  { u"8va", u"8vb", u"15ma", u"15mb", u"22ma", u"22mb" }) {
                     if (p == s) {
                         idx = i;
                         break;
@@ -3343,8 +3344,8 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     if (e.error() != XmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
              muPrintable(e.docName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
-        MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
-            e.name().ascii());
+        MScore::lastError = mtrc("engraving", "XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
+            String::fromAscii(e.name().ascii()));
         return false;
     }
 

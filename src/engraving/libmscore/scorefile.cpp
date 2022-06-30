@@ -329,7 +329,7 @@ bool Score::loadStyle(const String& fn, bool ign, const bool overlap)
             return false;
         }
     }
-    MScore::lastError = strerror(errno);
+    MScore::lastError = String::fromUtf8(strerror(errno));
     return false;
 }
 
@@ -390,7 +390,7 @@ bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, com
 
     if (!onlySelection) {
         //update version values for i.e. plugin access
-        _mscoreVersion = VERSION;
+        _mscoreVersion = String::fromAscii(VERSION);
         _mscoreRevision = AsciiStringView(MUSESCORE_REVISION).toInt(nullptr, 16);
         _mscVersion = MSCVERSION;
     }

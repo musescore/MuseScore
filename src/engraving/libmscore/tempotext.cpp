@@ -302,7 +302,7 @@ void TempoText::updateTempo()
         String pattern = String::fromUtf8(pa.pattern);
         std::regex re;
         if (!mu::contains(regexps, String::fromUtf8(pa.pattern))) {
-            re = std::regex(String("%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pattern).toStdString());
+            re = std::regex(String(u"%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pattern).toStdString());
             regexps[pattern] = re;
         }
         re = mu::value(regexps, pattern);
@@ -322,10 +322,10 @@ void TempoText::updateTempo()
         } else {
             for (const TempoPattern& pa2 : tp) {
                 String pattern2 = String::fromUtf8(pa2.pattern);
-                String key = String("%1_%2").arg(pattern, pattern2);
+                String key = String(u"%1_%2").arg(pattern, pattern2);
                 std::regex re2;
                 if (!mu::contains(regexps2, key)) {
-                    re2 = std::regex(String("%1\\s*=\\s*%2\\s*").arg(pattern, pattern2).toStdString());
+                    re2 = std::regex(String(u"%1\\s*=\\s*%2\\s*").arg(pattern, pattern2).toStdString());
                     regexps2[key] = re2;
                 }
                 re2 = mu::value(regexps2, key);
@@ -470,13 +470,13 @@ String TempoText::duration2userName(const TDuration t)
 {
     String dots;
     switch (t.dots()) {
-    case 1: dots = QObject::tr("Dotted %1").arg(TConv::toUserName(t.type()));
+    case 1: dots = mtrc("engraving", "Dotted %1").arg(TConv::toUserName(t.type()));
         break;
-    case 2: dots = QObject::tr("Double dotted %1").arg(TConv::toUserName(t.type()));
+    case 2: dots = mtrc("engraving", "Double dotted %1").arg(TConv::toUserName(t.type()));
         break;
-    case 3: dots = QObject::tr("Triple dotted %1").arg(TConv::toUserName(t.type()));
+    case 3: dots = mtrc("engraving", "Triple dotted %1").arg(TConv::toUserName(t.type()));
         break;
-    case 4: dots = QObject::tr("Quadruple dotted %1").arg(TConv::toUserName(t.type()));
+    case 4: dots = mtrc("engraving", "Quadruple dotted %1").arg(TConv::toUserName(t.type()));
         break;
     default:
         dots = TConv::toUserName(t.type());
@@ -495,9 +495,9 @@ String TempoText::accessibleInfo() const
     TDuration t2;
     int len1;
     int len2;
-    QString text = plainText();
-    String firstPart = text.split(" = ").front();
-    String secondPart = text.split(" = ").back();
+    String text = plainText();
+    String firstPart = text.split(u" = ").front();
+    String secondPart = text.split(u" = ").back();
     int x1 = findTempoDuration(firstPart, len1, t1);
     int x2 = -1;
     if (_relative) {
@@ -510,12 +510,12 @@ String TempoText::accessibleInfo() const
         dots1 = duration2userName(t1);
         if (x2 != -1) {
             dots2 = duration2userName(t2);
-            return String("%1: %2 %3 = %4 %5").arg(EngravingItem::accessibleInfo(),
-                                                   dots1, mtrc("engraving", "note"),
-                                                   dots2, mtrc("engraving", "note"));
+            return String(u"%1: %2 %3 = %4 %5").arg(EngravingItem::accessibleInfo(),
+                                                    dots1, mtrc("engraving", "note"),
+                                                    dots2, mtrc("engraving", "note"));
         } else {
-            return String("%1: %2 %3 = %4").arg(EngravingItem::accessibleInfo(),
-                                                dots1, mtrc("engraving", "note"), secondPart);
+            return String(u"%1: %2 %3 = %4").arg(EngravingItem::accessibleInfo(),
+                                                 dots1, mtrc("engraving", "note"), secondPart);
         }
     } else {
         return TextBase::accessibleInfo();

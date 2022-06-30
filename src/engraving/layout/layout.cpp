@@ -190,7 +190,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
             ctx.tick = ctx.nextMeasure->tick();
         }
     } else {
-        for (System* s : qAsConst(m_score->_systems)) {
+        for (System* s : m_score->_systems) {
             for (Bracket* b : s->brackets()) {
                 if (b->selected()) {
                     bool selected = b->selected();
@@ -292,7 +292,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
 {
     Page* page = 0;
     if (layoutAll) {
-        for (System* s : qAsConst(m_score->_systems)) {
+        for (System* s : m_score->_systems) {
             for (SpannerSegment* ss : s->spannerSegments()) {
                 ss->resetExplicitParent();
             }

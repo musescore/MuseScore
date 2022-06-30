@@ -235,7 +235,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     }
 
     for (QString range : validNoteheadRanges) {
-        for (auto symName : (*mu::smuflRanges())[range]) {
+        for (auto symName : mu::smuflRanges().at(range)) {
             SymId id = SymNames::symIdByName(symName);
             if (!excludeSym.contains(symName) && !primaryNoteheads.contains(symName)) {
                 resNoteheads.append(SymbolIcon::generateIcon(id, w, h, defaultScale));

@@ -151,9 +151,9 @@ MasterPalette::MasterPalette(QWidget* parent)
     child->setData(0, Qt::UserRole, m_idxAllSymbols);
     m_symbolItem->addChild(child);
 
-    QStringList symbols = mu::smuflRanges()->keys();
-    for (int i = 0; i < symbols.count(); i++) {
-        QString symbol = symbols[i];
+    std::vector<String> symbols = mu::keys(mu::smuflRanges());
+    for (int i = 0; i < symbols.size(); i++) {
+        QString symbol = symbols[i].toQString();
         if (symbol == mu::SMUFL_ALL_SYMBOLS) {
             continue;
         }
@@ -200,8 +200,8 @@ void MasterPalette::currentChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
 
     if (idx > m_idxAllSymbols) {
         if (!m_symbolWidgets.contains(idx)) {
-            QStringList symbols = mu::smuflRanges()->keys();
-            SymbolDialog* dialog = new SymbolDialog(symbols[idx - m_idxAllSymbols - 1]);
+            std::vector<String> symbols = mu::keys(mu::smuflRanges());
+            SymbolDialog* dialog = new SymbolDialog(symbols[idx - m_idxAllSymbols - 1].toQString());
             m_symbolWidgets[idx] = dialog;
             stack->addWidget(dialog);
         }

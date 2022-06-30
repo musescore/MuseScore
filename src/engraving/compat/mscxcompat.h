@@ -22,7 +22,6 @@
 #ifndef MU_ENGRAVING_MSCXCOMPAT_H
 #define MU_ENGRAVING_MSCXCOMPAT_H
 
-#include <QByteArray>
 #include "libmscore/masterscore.h"
 #include "engravingproject.h"
 

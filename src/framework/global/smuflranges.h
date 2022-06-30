@@ -22,13 +22,12 @@
 #ifndef SMUFLRANGES_H
 #define SMUFLRANGES_H
 
-#include <QMap>
-#include <QString>
-#include <QStringList>
+#include <map>
+#include "types/string.h"
 
 //! NOTE temporary place for this method
 namespace mu {
-extern QMap<QString, QStringList>* smuflRanges();
+const std::map<String, StringList>& smuflRanges();
 constexpr const char* SMUFL_ALL_SYMBOLS = "All symbols";
 }
 

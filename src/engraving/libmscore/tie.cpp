@@ -272,7 +272,7 @@ void TieSegment::computeBezier(PointF shoulderOffset)
     double smallH = 0.38; // I don't know what this means currently
     double tieWidthInSp = tieEndNormalized.x() / _spatium;
     shoulderH = tieWidthInSp * 0.4 * smallH;  // magic math?
-    shoulderH = qBound(shoulderHeightMin, shoulderH, shoulderHeightMax);
+    shoulderH = std::clamp(shoulderH, shoulderHeightMin, shoulderHeightMax);
     shoulderH *= _spatium;  // shoulderH is now canvas units
     shoulderW = .6;
 
@@ -437,7 +437,7 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
 
     auto spansBarline = [staffLineOffset, lines](double a, double b) {
         if (b < a) {
-            qSwap(a, b);
+            std::swap(a, b);
         }
         if (b < -staffLineOffset || a > (lines - 1) + staffLineOffset) {
             return false;

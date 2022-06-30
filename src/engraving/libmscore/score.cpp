@@ -280,7 +280,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
         || nb->type() == ElementType::TBOX || nb->type() == ElementType::FBOX) {
         nb->setParent(ob->system());
     }
-    foreach (EngravingItem* e, nb->el()) {
+    for (EngravingItem* e : nb->el()) {
         e->setParent(nb);
     }
     fixupSystems();
@@ -320,10 +320,10 @@ Score::Score()
     Score::validScores.insert(this);
     _masterScore = 0;
     Layer l;
-    l.name          = "default";
+    l.name          = u"default";
     l.tags          = 1;
     _layer.push_back(l);
-    _layerTags[0]   = "default";
+    _layerTags[0]   = u"default";
 
     _scoreFont = ScoreFont::fontByName(u"Leland");
 
@@ -535,7 +535,7 @@ void Score::setUpTempoMap()
         return;
     }
 
-    for (Staff* staff : qAsConst(_staves)) {
+    for (Staff* staff : _staves) {
         staff->clearTimeSig();
     }
 
@@ -1443,7 +1443,7 @@ void Score::spatiumChanged(double oldValue, double newValue)
     data[0] = oldValue;
     data[1] = newValue;
     scanElements(data, spatiumHasChanged, true);
-    for (Staff* staff : qAsConst(_staves)) {
+    for (Staff* staff : _staves) {
         staff->spatiumChanged(oldValue, newValue);
     }
     _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
@@ -1588,7 +1588,7 @@ void Score::addElement(EngravingItem* element)
     {
         Ottava* o = toOttava(element);
         addSpanner(o);
-        foreach (SpannerSegment* ss, o->spannerSegments()) {
+        for (SpannerSegment* ss : o->spannerSegments()) {
             if (ss->system()) {
                 ss->system()->add(ss);
             }
@@ -2988,7 +2988,7 @@ void Score::cmdConcertPitchChanged(bool flag)
 
     undoChangeStyleVal(Sid::concertPitch, flag);         // change style flag
 
-    for (Staff* staff : qAsConst(_staves)) {
+    for (Staff* staff : _staves) {
         if (staff->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {         // TODO
             continue;
         }
@@ -3838,7 +3838,7 @@ void Score::lassoSelect(const RectF& bbox)
 {
     select(0, SelectType::SINGLE, 0);
     RectF fr(bbox.normalized());
-    foreach (Page* page, pages()) {
+    for (Page* page : pages()) {
         RectF pr(page->bbox());
         RectF frr(fr.translated(-page->pos()));
         if (pr.right() < frr.left()) {

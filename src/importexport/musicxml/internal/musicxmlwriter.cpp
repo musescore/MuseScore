@@ -42,7 +42,7 @@ bool MusicXmlWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret MusicXmlWriter::write(notation::INotationPtr notation, Device& destinationDevice, const Options&)
+mu::Ret MusicXmlWriter::write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -55,7 +55,7 @@ mu::Ret MusicXmlWriter::write(notation::INotationPtr notation, Device& destinati
     return mu::engraving::saveXml(score, &destinationDevice);
 }
 
-mu::Ret MusicXmlWriter::writeList(const notation::INotationPtrList&, io::Device&, const Options&)
+mu::Ret MusicXmlWriter::writeList(const notation::INotationPtrList&, QIODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);

@@ -518,7 +518,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
     staff_idx_t staffIdx = 0;
     bool systemIsEmpty = true;
 
-    for (Staff* staff : qAsConst(score->staves())) {
+    for (Staff* staff : score->staves()) {
         SysStaff* ss  = system->staff(staffIdx);
 
         Staff::HideMode hideMode = staff->hideWhenEmpty();
@@ -594,7 +594,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
     }
     Staff* firstVisible = nullptr;
     if (systemIsEmpty) {
-        for (Staff* staff : qAsConst(score->staves())) {
+        for (Staff* staff : score->staves()) {
             SysStaff* ss  = system->staff(staff->idx());
             if (staff->showIfEmpty() && !ss->show()) {
                 ss->setShow(true);

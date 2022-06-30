@@ -46,7 +46,7 @@ public:
 
     RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, const mpe::PlaybackData& playbackData,
                                            const AudioParams& requiredParams) override;
-    RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, io::Device* device, const AudioParams& requiredParams) override;
+    RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, QIODevice* device, const AudioParams& requiredParams) override;
 
     TrackName trackName(const TrackId id) const override;
     TrackIdList trackIdList() const override;

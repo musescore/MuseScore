@@ -44,6 +44,7 @@ set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
 add_definitions(
     -DNO_QT_SUPPORT
     -DGLOBAL_NO_QT_SUPPORT
+    -DGLOBAL_NO_INTERNAL
     -DENGRAVING_NO_INTERACTIVE
     -DENGRAVING_NO_QSVGRENDER
     -DENGRAVING_NO_QTEXTDOCUMENT
@@ -56,7 +57,7 @@ set(ENGRAVING_NO_INTERNAL ON)
 set(ENGRAVING_NO_ACCESSIBILITY ON)
 add_subdirectory(${MU_ROOT}/src/engraving engraving)
 
-set(NO_GLOBAL_INTERNAL ON)
+set(GLOBAL_NO_INTERNAL ON)
 add_subdirectory(${MU_ROOT}/src/framework/global global)
 
 

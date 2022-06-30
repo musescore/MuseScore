@@ -23,7 +23,7 @@
 
 #include "paintdebugger.h"
 
-#include "accessibility/accessibleitem.h"
+//#include "accessibility/accessibleitem.h"
 #include "libmscore/page.h"
 #include "libmscore/score.h"
 #include "libmscore/system.h"

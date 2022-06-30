@@ -22,7 +22,6 @@
 #include "path.h"
 
 #include <QDir>
-#include <QFileInfo>
 #include <QRegularExpression>
 
 #include "stringutils.h"
@@ -32,11 +31,6 @@ using namespace mu;
 using namespace mu::io;
 
 path_t::path_t(const String& s)
-    : m_path(s.toStdString())
-{
-}
-
-path_t::path_t(const QString& s)
     : m_path(s.toStdString())
 {
 }
@@ -90,14 +84,25 @@ String path_t::toString() const
     return String::fromStdString(m_path);
 }
 
-QString path_t::toQString() const
-{
-    return QString::fromStdString(m_path);
-}
-
 std::string path_t::toStdString() const
 {
     return m_path;
+}
+
+const char* path_t::c_str() const
+{
+    return m_path.c_str();
+}
+
+#ifndef GLOBAL_NO_QT_SUPPORT
+path_t::path_t(const QString& s)
+    : m_path(s.toStdString())
+{
+}
+
+QString path_t::toQString() const
+{
+    return QString::fromStdString(m_path);
 }
 
 std::wstring path_t::toStdWString() const
@@ -105,10 +110,7 @@ std::wstring path_t::toStdWString() const
     return QString::fromStdString(m_path).toStdWString();
 }
 
-const char* path_t::c_str() const
-{
-    return m_path.c_str();
-}
+#endif
 
 std::string mu::io::suffix(const mu::io::path_t& path)
 {

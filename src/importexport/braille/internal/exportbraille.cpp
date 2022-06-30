@@ -483,8 +483,8 @@ class ExportBrailleImpl
     void resetOctaves();
     void resetOctave(size_t stave);
 
-    void credits(io::Device& device);
-    void instruments(io::Device& device);
+    void credits(QIODevice& device);
+    void instruments(QIODevice& device);
 
     //utils. should we move these in libmscore?
     int computeInterval(Note* rootNote, Note* note, bool ignoreOctaves);
@@ -547,7 +547,7 @@ public:
         }
     }
 
-    bool write(io::Device& device);
+    bool write(QIODevice& device);
 };
 
 ExportBraille::ExportBraille(Score* score)
@@ -560,7 +560,7 @@ ExportBraille::~ExportBraille()
     delete m_impl;
 }
 
-bool ExportBraille::write(io::Device& device)
+bool ExportBraille::write(QIODevice& device)
 {
     return m_impl->write(device);
 }
@@ -577,7 +577,7 @@ void ExportBrailleImpl::resetOctaves()
     }
 }
 
-void ExportBrailleImpl::credits(io::Device& device)
+void ExportBrailleImpl::credits(QIODevice& device)
 {
     QTextStream out(&device);
     // find the vboxes in every page and write their elements as credit-words
@@ -612,7 +612,7 @@ void ExportBrailleImpl::credits(io::Device& device)
     out.flush();
 }
 
-void ExportBrailleImpl::instruments(io::Device& device)
+void ExportBrailleImpl::instruments(QIODevice& device)
 {
     //Print staff number to instrument mapping.
     QTextStream out(&device);
@@ -623,7 +623,7 @@ void ExportBrailleImpl::instruments(io::Device& device)
     out.flush();
 }
 
-bool ExportBrailleImpl::write(io::Device& device)
+bool ExportBrailleImpl::write(QIODevice& device)
 {
     credits(device);
     instruments(device);

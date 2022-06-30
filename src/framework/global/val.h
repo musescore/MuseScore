@@ -23,16 +23,23 @@
 #define MU_FRAMEWORK_VAL_H
 
 #include <string>
-
-#ifndef NO_QT_SUPPORT
-#include <QColor>
-#endif
-
-#include <QVariant>
+#include <variant>
+#include <type_traits>
+#include <vector>
+#include <map>
 
 #include "io/path.h"
 
+#ifndef GLOBAL_NO_QT_SUPPORT
+#include <QString>
+#include <QColor>
+#include <QVariant>
+#endif
+
 namespace mu {
+class Val;
+using ValList = std::vector<Val>;
+using ValMap = std::map<std::string, Val>;
 class Val
 {
 public:
@@ -42,19 +49,22 @@ public:
         Int,
         Double,
         String,
-        Color,
-        Variant
+        List,
+        Map,
+#ifndef GLOBAL_NO_QT_SUPPORT
+        Color
+#endif
     };
 
     Val() = default;
-
-    explicit Val(const char* str);
-    explicit Val(const std::string& str);
-    explicit Val(std::string&& str);
-    explicit Val(double val);
     explicit Val(bool val);
     explicit Val(int val);
+    explicit Val(double val);
+    explicit Val(const std::string& str);
+    explicit Val(const char* str);
     explicit Val(const io::path_t& path);
+    explicit Val(const ValList& list);
+    explicit Val(const ValMap& map);
 
     template<class E, typename = std::enable_if_t<std::is_enum_v<E> > >
     explicit Val(E val)
@@ -66,12 +76,14 @@ public:
     Type type() const;
 
     bool isNull() const;
-    std::string toString() const;
-    double toDouble() const;
-    float toFloat() const;
     bool toBool() const;
     int toInt() const;
+    double toDouble() const;
+    float toFloat() const;
+    std::string toString() const;
     io::path_t toPath() const;
+    ValList toList() const;
+    ValMap toMap() const;
 
     template<class E, typename = std::enable_if_t<std::is_enum_v<E> > >
     E toEnum() const
@@ -79,24 +91,26 @@ public:
         return static_cast<E>(toInt());
     }
 
-    explicit Val(QVariant val);
-    explicit Val(QString val);
-
-    QString toQString() const;
-    QVariant toQVariant() const;
-
-    static Val fromQVariant(const QVariant& var);
-
-#ifndef NO_QT_SUPPORT
-    explicit Val(QColor color);
-    QColor toQColor() const;
-#endif
-
     bool operator ==(const Val& v) const;
     bool operator <(const Val& v) const;
 
+#ifndef GLOBAL_NO_QT_SUPPORT
+    explicit Val(const QString& str);
+    explicit Val(const QColor& color);
+
+    QString toQString() const;
+    QColor toQColor() const;
+
+    QVariant toQVariant() const;
+    static Val fromQVariant(const QVariant& var);
+#endif
+
 private:
-    QVariant m_val; //! NOTE In C++17 can be replaced by std::any or std::variant
+
+    Type valueType() const;
+
+    using Value = std::variant<std::monostate, bool, int, double, std::string, ValList, ValMap>;
+    Value m_val;
     Type m_type = Type::Undefined;
 };
 }

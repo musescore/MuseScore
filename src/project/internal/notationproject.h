@@ -77,7 +77,7 @@ public:
     ValNt<bool> needSave() const override;
 
     Ret save(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) override;
-    Ret writeToDevice(io::Device* device) override;
+    Ret writeToDevice(QIODevice* device) override;
 
     ProjectMeta metaInfo() const override;
     void setMetaInfo(const ProjectMeta& meta, bool undoable = false) override;

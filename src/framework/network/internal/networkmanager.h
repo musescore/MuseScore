@@ -66,8 +66,8 @@ private:
 
     QNetworkReply* receiveReply(RequestType requestType, const QNetworkRequest& request, OutgoingDevice* outgoingData = nullptr);
 
-    bool openDevice(io::Device* device, QIODevice::OpenModeFlag flags);
-    void closeDevice(io::Device* device);
+    bool openDevice(QIODevice* device, QIODevice::OpenModeFlag flags);
+    void closeDevice(QIODevice* device);
 
     bool isAborted() const;
 

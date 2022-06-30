@@ -21,8 +21,6 @@
  */
 #include "verticalgapdata.h"
 
-#include <QtMath>
-
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
 #include "libmscore/spacer.h"
@@ -241,7 +239,7 @@ double VerticalGapDataList::smallest(double limit) const
         if (vgd->isFixedHeight()) {
             continue;
         }
-        if ((qCeil(limit) == qCeil(vgd->spacing()))) {
+        if ((std::ceil(limit) == std::ceil(vgd->spacing()))) {
             continue;
         }
         if (!vdp || (vgd->spacing() < vdp->spacing())) {

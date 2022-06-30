@@ -32,7 +32,6 @@
 #include "midi/miditypes.h"
 #include "mpe/events.h"
 #include "io/path.h"
-#include "io/device.h"
 #include "async/channel.h"
 
 namespace mu::audio {
@@ -264,7 +263,7 @@ private:
     std::map<audioch_t, AudioSignalVal> m_signalValuesMap;
 };
 
-using PlaybackData = std::variant<mpe::PlaybackData, io::Device*>;
+using PlaybackData = std::variant<mpe::PlaybackData, QIODevice*>;
 using PlaybackSetupData = mpe::PlaybackSetupData;
 
 enum class PlaybackStatus {

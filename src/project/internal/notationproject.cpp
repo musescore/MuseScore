@@ -451,7 +451,7 @@ mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
     return make_ret(notation::Err::UnknownError);
 }
 
-mu::Ret NotationProject::writeToDevice(io::Device* device)
+mu::Ret NotationProject::writeToDevice(QIODevice* device)
 {
     IF_ASSERT_FAILED(!m_path.empty()) {
         return make_ret(notation::Err::UnknownError);

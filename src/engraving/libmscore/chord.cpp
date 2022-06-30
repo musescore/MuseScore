@@ -1425,7 +1425,7 @@ int Chord::calcMinStemLength()
             outsideStaffOffset = line - staff()->lines(tick()) * 4 + 4;
         }
 
-        minStemLength += (outSidePadding + qMax(noteSidePadding, outsideStaffOffset));
+        minStemLength += (outSidePadding + std::max(noteSidePadding, outsideStaffOffset));
 
         if (_hook) {
             double smuflAnchor = _hook->smuflAnchor().y() * (_up ? 1 : -1);
@@ -1453,9 +1453,9 @@ int Chord::calcMinStemLength()
     }
     if (_beam) {
         static const int minInnerStemLengths[4] = { 10, 9, 8, 7 };
-        int innerStemLength = minInnerStemLengths[qMin(beams(), 3)] * _relativeMag;
+        int innerStemLength = minInnerStemLengths[std::min(beams(), 3)] * _relativeMag;
         int beamsHeight = beams() * (score()->styleB(Sid::useWideBeams) ? 4 : 3) - 1;
-        minStemLength = qMax(minStemLength, innerStemLength);
+        minStemLength = std::max(minStemLength, innerStemLength);
         minStemLength += beamsHeight * _relativeMag;
     }
     return minStemLength;
@@ -1627,7 +1627,7 @@ double Chord::calcDefaultStemLength()
         int idealStemLength = defaultStemLength;
 
         if (stemEndPositionMag <= -shortStemStart) {
-            int reduction = maxReduction(qAbs((int)floor(stemEndPositionMag) + shortStemStart));
+            int reduction = maxReduction(std::abs((int)floor(stemEndPositionMag) + shortStemStart));
             if (tab) {
                 reduction *= 2;
             }
@@ -1649,7 +1649,7 @@ double Chord::calcDefaultStemLength()
 
         int downShortStemStart = (staffLineCount - 1) * 4 + shortStemStart;
         if (stemEndPositionMag >= downShortStemStart) {
-            int reduction = maxReduction(qAbs((int)ceil(stemEndPositionMag) - downShortStemStart));
+            int reduction = maxReduction(std::abs((int)ceil(stemEndPositionMag) - downShortStemStart));
             if (tab) {
                 reduction *= 2;
             }

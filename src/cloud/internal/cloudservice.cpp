@@ -309,7 +309,7 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-void CloudService::uploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+void CloudService::uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
     auto uploadCallback = [this, &scoreSourceDevice, title, sourceUrl]() {
         return doUploadScore(scoreSourceDevice, title, sourceUrl);
@@ -323,7 +323,7 @@ void CloudService::uploadScore(io::Device& scoreSourceDevice, const QString& tit
     executeRequest(uploadCallback);
 }
 
-CloudService::RequestStatus CloudService::doUploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+CloudService::RequestStatus CloudService::doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
     QUrl uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
     if (uploadUrl.isEmpty()) {

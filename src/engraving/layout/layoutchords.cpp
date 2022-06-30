@@ -686,9 +686,9 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, double& lx, double pd, d
 //   layoutAccidental
 //---------------------------------------------------------
 
-static QPair<double, double> layoutAccidental(const MStyle& style, AcEl* me, AcEl* above, AcEl* below, double colOffset,
-                                              std::vector<Note*>& leftNotes, double pnd,
-                                              double pd, double sp)
+static std::pair<double, double> layoutAccidental(const MStyle& style, AcEl* me, AcEl* above, AcEl* below, double colOffset,
+                                                  std::vector<Note*>& leftNotes, double pnd,
+                                                  double pd, double sp)
 {
     double lx = colOffset;
     Accidental* acc = me->note->accidental();
@@ -769,7 +769,7 @@ static QPair<double, double> layoutAccidental(const MStyle& style, AcEl* me, AcE
         me->x = lx - pnd - acc->width() - acc->bbox().x();
     }
 
-    return QPair<double, double>(me->x, me->x + me->width);
+    return std::pair<double, double>(me->x, me->x + me->width);
 }
 
 //---------------------------------------------------------
@@ -1088,7 +1088,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
             AcEl* below = 0;
             // through accidentals in this column
             for (int j = columnBottom[pc]; j != -1; j = aclist[j].next) {
-                QPair<double, double> x = layoutAccidental(style, &aclist[j], 0, below, colOffset, leftNotes, pnd, pd, sp);
+                std::pair<double, double> x = layoutAccidental(style, &aclist[j], 0, below, colOffset, leftNotes, pnd, pd, sp);
                 minX = std::min(minX, x.first);
                 maxX = std::min(maxX, x.second);
                 below = &aclist[j];
@@ -1154,7 +1154,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         }
     }
 
-    for (const AcEl& e : qAsConst(aclist)) {
+    for (const AcEl& e : aclist) {
         // even though we initially calculate accidental position relative to segment
         // we must record pos for accidental relative to note,
         // since pos is always interpreted relative to parent

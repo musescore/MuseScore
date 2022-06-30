@@ -1371,7 +1371,7 @@ void ChangeElement::flip(EditData*)
             ns->system()->add(ns);
         }
     }
-    qSwap(oldElement, newElement);
+    std::swap(oldElement, newElement);
     oldElement->triggerLayout();
     newElement->triggerLayout();
     // score->setLayoutAll();
@@ -2077,7 +2077,7 @@ void InsertRemoveMeasures::insertMeasures()
                 continue;
             }
             Chord* chord = toChord(e);
-            foreach (Note* n, chord->notes()) {
+            for (Note* n : chord->notes()) {
                 Tie* tie = n->tieFor();
                 if (!tie) {
                     continue;

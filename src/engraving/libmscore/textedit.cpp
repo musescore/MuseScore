@@ -293,7 +293,7 @@ bool TextBase::edit(EditData& ed)
     String s         = ed.s;
     bool ctrlPressed  = ed.modifiers & ControlModifier;
     bool shiftPressed = ed.modifiers & ShiftModifier;
-    bool altPressed = ed.modifiers & Qt::AltModifier;
+    bool altPressed = ed.modifiers & AltModifier;
 
     TextCursor::MoveMode mm = shiftPressed ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor;
 
@@ -311,7 +311,7 @@ bool TextBase::edit(EditData& ed)
             case Key_7:
             case Key_8:
             case Key_9:
-                s = QChar::fromLatin1(ed.key);
+                s = Char::fromAscii(ed.key);
                 ++hexState;
                 wasHex = true;
                 break;
@@ -326,7 +326,7 @@ bool TextBase::edit(EditData& ed)
             case Key_D:
             case Key_E:
             case Key_F:
-                s = QChar::fromLatin1(ed.key);
+                s = Char::fromAscii(ed.key);
                 ++hexState;
                 wasHex = true;
                 break;
@@ -477,7 +477,7 @@ bool TextBase::edit(EditData& ed)
             break;
 
         case Key_Tab:
-            s = " ";
+            s = u" ";
             ed.modifiers = {};
             break;
 
@@ -490,20 +490,20 @@ bool TextBase::edit(EditData& ed)
                     ed.view()->textTab(ed.modifiers & ShiftModifier);
                     return true;
                 }
-                s = " ";
+                s = u" ";
             }
             ed.modifiers = {};
             break;
 
         case Key_Minus:
             if (ed.modifiers == 0) {
-                s = "-";
+                s = u"-";
             }
             break;
 
         case Key_Underscore:
             if (ed.modifiers == 0) {
-                s = "_";
+                s = u"_";
             }
             break;
 
@@ -536,21 +536,21 @@ bool TextBase::edit(EditData& ed)
             case Key_U:
                 if (hexState == -1) {
                     hexState = 0;
-                    s = "u";
+                    s = u"u";
                 }
                 break;
             case Key_B:
-                s = "\u266d";               // Unicode flat
+                s = u"\u266d";               // Unicode flat
                 break;
             case Key_NumberSign: // e.g. QWERTY (US)
             case Key_AsciiTilde: // e.g. QWERTY (GB)
             case Key_Apostrophe: // e.g. QWERTZ (DE)
             case Key_periodcentered: // e.g. QWERTY (ES)
             case Key_3: // e.g. AZERTY (FR, BE)
-                s = "\u266f";               // Unicode sharp
+                s = u"\u266f";               // Unicode sharp
                 break;
             case Key_H:
-                s = "\u266e";               // Unicode natural
+                s = u"\u266e";               // Unicode natural
                 break;
             case Key_Space:
                 insertSym(ed, SymId::space);

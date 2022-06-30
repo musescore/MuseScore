@@ -21,8 +21,6 @@
  */
 #include "fileinfo.h"
 
-#include <QFileInfo>
-
 using namespace mu;
 using namespace mu::io;
 
