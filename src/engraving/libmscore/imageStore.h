@@ -29,7 +29,7 @@
 #include "io/path.h"
 
 #include "modularity/ioc.h"
-#include "icryptographichash.h"
+#include "global/icryptographichash.h"
 
 namespace mu::engraving {
 class Image;
