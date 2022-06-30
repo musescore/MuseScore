@@ -212,18 +212,45 @@ void PlaybackController::playElement(const notation::EngravingItem* element)
         return;
     }
 
+    if (!configuration()->playNotesWhenEditing()) {
+        return;
+    }
+
+    notationPlayback()->triggerEventsForItem(element);
+}
+
+void PlaybackController::seekElement(const notation::EngravingItem* element)
+{
+    IF_ASSERT_FAILED(element) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(notationPlayback()) {
+        return;
+    }
+
     RetVal<midi::tick_t> tick = notationPlayback()->playPositionTickByElement(element);
     if (!tick.ret) {
         return;
     }
 
     seek(tick.val);
+}
 
-    if (!configuration()->playNotesWhenEditing()) {
+void PlaybackController::seekRangeSelection()
+{
+    if (!selection()->isRange()) {
         return;
     }
 
-    notationPlayback()->triggerEventsForItem(element);
+    midi::tick_t startTick = selectionRange()->startTick().ticks();
+
+    RetVal<midi::tick_t> tick = notationPlayback()->playPositionTickByRawTick(startTick);
+    if (!tick.ret) {
+        return;
+    }
+
+    seek(tick.val);
 }
 
 INotationPlaybackPtr PlaybackController::notationPlayback() const
@@ -306,11 +333,9 @@ void PlaybackController::onSelectionChanged()
         return;
     }
 
-    msecs_t startMsecs = playbackStartMsecs();
-
     playback()->player()->resetLoop(m_currentSequenceId);
-    playback()->player()->seek(m_currentSequenceId, startMsecs);
 
+    seekRangeSelection();
     updateMuteStates();
 }
 
@@ -406,10 +431,6 @@ msecs_t PlaybackController::playbackStartMsecs() const
 {
     if (!m_notation) {
         return 0;
-    }
-
-    if (selection()->isRange()) {
-        return tickToMsecs(selectionRange()->startTick().ticks());
     }
 
     LoopBoundaries loop = notationPlayback()->loopBoundaries().val;

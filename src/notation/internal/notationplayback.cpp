@@ -193,34 +193,28 @@ tick_t NotationPlayback::secToTick(float sec) const
     return score()->repeatList().utick2tick(utick);
 }
 
+RetVal<midi::tick_t> NotationPlayback::playPositionTickByRawTick(midi::tick_t tick) const
+{
+    if (!score()) {
+        return make_ret(Err::Undefined);
+    }
+
+    midi::tick_t playbackTick = score()->repeatList().tick2utick(tick);
+
+    return RetVal<midi::tick_t>::make_ok(std::move(playbackTick));
+}
+
 RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const EngravingItem* element) const
 {
-    RetVal<tick_t> result;
-    result.ret = make_ret(Err::Undefined);
-    result.val = 0;
-
     IF_ASSERT_FAILED(element) {
-        return result;
+        return make_ret(Err::Undefined);
     }
 
     if (!score()) {
-        return result;
+        return make_ret(Err::Undefined);
     }
 
-    //! NOTE Copied from void ScoreView::mousePressEvent(QMouseEvent* ev)  case ViewState::PLAY: {
-    if (!(element->isPlayable() || element->isRest())) {
-        return result;
-    }
-
-    if (element->isNote()) {
-        element = element->parentItem();
-    }
-
-    const mu::engraving::ChordRest* cr = mu::engraving::toChordRest(element);
-
-    int ticks = score()->repeatList().tick2utick(cr->tick().ticks());
-
-    return result.make_ok(std::move(ticks));
+    return playPositionTickByRawTick(element->tick().ticks());
 }
 
 void NotationPlayback::addLoopBoundary(LoopBoundaryType boundaryType, tick_t tick)

@@ -63,6 +63,7 @@ public:
     midi::tick_t secToPlayedTick(float sec) const override;
     midi::tick_t secToTick(float sec) const override;
 
+    RetVal<midi::tick_t> playPositionTickByRawTick(midi::tick_t tick) const override;
     RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const override;
 
     void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) override;
