@@ -536,7 +536,7 @@ NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF
     return result;
 }
 
-bool NotationInteraction::elementIsLess(const mu::engraving::EngravingItem* e1, const mu::engraving::EngravingItem* e2)
+bool NotationInteraction::elementIsLess(const EngravingItem* e1, const EngravingItem* e2)
 {
     if (e1->selectable() && !e2->selectable()) {
         return false;
@@ -544,13 +544,19 @@ bool NotationInteraction::elementIsLess(const mu::engraving::EngravingItem* e1, 
     if (!e1->selectable() && e2->selectable()) {
         return true;
     }
-    if (e1->isNote() && e2->isStem()) {
+    if (e1->isNote() && (e2->isStem() || e2->isHook())) {
         return false;
     }
-    if (e2->isNote() && e1->isStem()) {
+    if (e2->isNote() && (e1->isStem() || e1->isHook())) {
         return true;
     }
-    if (e1->isText() && e1->isBox()) {
+    if (e1->isStem() && e2->isHook()) {
+        return false;
+    }
+    if (e2->isStem() && e1->isHook()) {
+        return true;
+    }
+    if (e1->isText() && e2->isBox()) {
         return false;
     }
     if (e1->isBox() && e2->isText()) {
@@ -559,17 +565,17 @@ bool NotationInteraction::elementIsLess(const mu::engraving::EngravingItem* e1, 
     if (e1->z() == e2->z()) {
         // same stacking order, prefer non-hidden elements
         if (e1->type() == e2->type()) {
-            if (e1->type() == mu::engraving::ElementType::NOTEDOT) {
-                const mu::engraving::NoteDot* n1 = static_cast<const mu::engraving::NoteDot*>(e1);
-                const mu::engraving::NoteDot* n2 = static_cast<const mu::engraving::NoteDot*>(e2);
+            if (e1->isNoteDot()) {
+                const NoteDot* n1 = toNoteDot(e1);
+                const NoteDot* n2 = toNoteDot(e2);
                 if (n1->note() && n1->note()->hidden()) {
                     return false;
                 } else if (n2->note() && n2->note()->hidden()) {
                     return true;
                 }
-            } else if (e1->type() == mu::engraving::ElementType::NOTE) {
-                const mu::engraving::Note* n1 = static_cast<const mu::engraving::Note*>(e1);
-                const mu::engraving::Note* n2 = static_cast<const mu::engraving::Note*>(e2);
+            } else if (e1->isNote()) {
+                const Note* n1 = toNote(e1);
+                const Note* n2 = toNote(e2);
                 if (n1->hidden()) {
                     return false;
                 } else if (n2->hidden()) {
