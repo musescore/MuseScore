@@ -140,6 +140,15 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
 
     m_processData.numSamples = samplesPerChannel;
 
+    //! NOTE: From the VST3 documentation:
+    //!
+    //! Note that the ProcessData->numSamples
+    //! which indicates how many samples are used in a process call can change from call to call,
+    //! but never bigger than the maxSamplesPerBlock
+    if (samplesPerChannel != m_samplesInfo.samplesPerBlock) {
+        setBlockSize(samplesPerChannel);
+    }
+
     if (m_type == VstPluginType::Fx) {
         extractInputSamples(samplesPerChannel, output);
     }
@@ -173,12 +182,17 @@ void VstAudioClient::setBlockSize(unsigned int samples)
     }
 
     m_samplesInfo.samplesPerBlock = samples;
+    m_needUnprepareProcessData = true;
 
     updateProcessSetup();
 }
 
 void VstAudioClient::setSampleRate(unsigned int sampleRate)
 {
+    if (m_samplesInfo.sampleRate == sampleRate) {
+        return;
+    }
+
     m_samplesInfo.sampleRate = sampleRate;
 
     updateProcessSetup();
@@ -214,6 +228,11 @@ void VstAudioClient::setUpProcessData()
 
     m_processData.inputEvents = &m_eventList;
     m_processData.processContext = &m_processContext;
+
+    if (m_needUnprepareProcessData) {
+        m_processData.unprepare();
+        m_needUnprepareProcessData = false;
+    }
 
     m_processData.prepare(*m_pluginComponent, m_samplesInfo.samplesPerBlock, Steinberg::Vst::kSample32);
 
@@ -274,6 +293,8 @@ void VstAudioClient::updateProcessSetup()
     if (!processor) {
         return;
     }
+
+    disableActivity();
 
     VstProcessSetup setup;
     setup.processMode = Steinberg::Vst::kRealtime;
@@ -367,15 +388,7 @@ void VstAudioClient::ensureActivity()
         return;
     }
 
-    IAudioProcessorPtr processor = pluginProcessor();
-    if (!processor) {
-        return;
-    }
-    processor->setProcessing(true);
-
     updateProcessSetup();
-
-    m_isActive = true;
 }
 
 void VstAudioClient::disableActivity()
@@ -388,7 +401,10 @@ void VstAudioClient::disableActivity()
     if (!processor) {
         return;
     }
+
     processor->setProcessing(false);
+    m_pluginComponent->setActive(false);
+
     m_isActive = false;
 }
 
