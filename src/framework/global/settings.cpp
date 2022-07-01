@@ -24,6 +24,7 @@
 #include "config.h"
 #include "log.h"
 
+#include <QDateTime>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QDir>
@@ -116,6 +117,15 @@ static Val compat_QVariantToVal(const QVariant& var)
 
     switch (var.type()) {
     case QVariant::ByteArray: return Val(var.toByteArray().toStdString());
+    case QVariant::DateTime: return Val(var.toDateTime().toString(Qt::ISODate));
+    case QVariant::StringList: {
+        QStringList sl = var.toStringList();
+        ValList vl;
+        for (const QString& s : sl) {
+            vl.push_back(Val(s));
+        }
+        return Val(vl);
+    }
     default:
         break;
     }

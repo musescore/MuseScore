@@ -47,6 +47,7 @@ public:
         Undefined = 0,
         Bool,
         Int,
+        Int64,
         Double,
         String,
         List,
@@ -59,6 +60,7 @@ public:
     Val() = default;
     explicit Val(bool val);
     explicit Val(int val);
+    explicit Val(int64_t val);
     explicit Val(double val);
     explicit Val(const std::string& str);
     explicit Val(const char* str);
@@ -78,6 +80,7 @@ public:
     bool isNull() const;
     bool toBool() const;
     int toInt() const;
+    int64_t toInt64() const;
     double toDouble() const;
     float toFloat() const;
     std::string toString() const;
@@ -109,7 +112,8 @@ private:
 
     Type valueType() const;
 
-    using Value = std::variant<std::monostate, bool, int, double, std::string, ValList, ValMap>;
+    //! NOTE Should be sync with valueType method
+    using Value = std::variant<std::monostate, bool, int, int64_t, double, std::string, ValList, ValMap>;
     Value m_val;
     Type m_type = Type::Undefined;
 };

@@ -37,6 +37,9 @@ Val::Val(bool val)
 Val::Val(int val)
     : m_val(val), m_type(Type::Int) {}
 
+Val::Val(int64_t val)
+    : m_val(val), m_type(Type::Int64) {}
+
 Val::Val(double val)
     : m_val(val), m_type(Type::Double) {}
 
@@ -57,15 +60,16 @@ Val::Val(const ValMap& map)
 
 Val::Type Val::valueType() const
 {
-    // std::monostate, bool, int, double, std::string, ValList, ValMap
+    // std::monostate, bool, int, int64_t, double, std::string, ValList, ValMap
     switch (m_val.index()) {
     case 0: return Type::Undefined;
     case 1: return Type::Bool;
     case 2: return Type::Int;
-    case 3: return Type::Double;
-    case 4: return Type::String;
-    case 5: return Type::List;
-    case 6: return Type::Map;
+    case 3: return Type::Int64;
+    case 4: return Type::Double;
+    case 5: return Type::String;
+    case 6: return Type::List;
+    case 7: return Type::Map;
     }
     return Type::Undefined;
 }
@@ -90,6 +94,7 @@ bool Val::toBool() const
     switch (valueType()) {
     case Type::Bool: return std::get<bool>(m_val);
     case Type::Int: return std::get<int>(m_val) > 0;
+    case Type::Int64: return std::get<int64_t>(m_val) > 0;
     case Type::Double: return std::get<double>(m_val) > 0.0;
     case Type::String: {
         std::string str = std::get<std::string>(m_val);
@@ -106,6 +111,20 @@ int Val::toInt() const
     switch (valueType()) {
     case Type::Bool: return toBool() ? 1 : 0;
     case Type::Int: return std::get<int>(m_val);
+    case Type::Int64: return static_cast<int>(toInt64());
+    case Type::Double: return static_cast<int>(toDouble());
+    default:
+        break;
+    }
+    return 0;
+}
+
+int64_t Val::toInt64() const
+{
+    switch (valueType()) {
+    case Type::Bool: return toBool() ? 1 : 0;
+    case Type::Int: return toInt();
+    case Type::Int64: return std::get<int64_t>(m_val);
     case Type::Double: return static_cast<int>(toDouble());
     default:
         break;
@@ -118,6 +137,7 @@ double Val::toDouble() const
     switch (valueType()) {
     case Type::Bool: return toBool() ? 1.0 : 0.0;
     case Type::Int: return static_cast<double>(toInt());
+    case Type::Int64: return static_cast<double>(toInt64());
     case Type::Double: return std::get<double>(m_val);
     default:
         break;
@@ -206,6 +226,7 @@ bool Val::operator <(const Val& v) const
     case Type::Undefined: return false;
     case Type::Bool: return toBool() < v.toBool();
     case Type::Int: return toInt() < v.toInt();
+    case Type::Int64: return toInt64() < v.toInt64();
     case Type::Double: return toDouble() < v.toDouble();
     case Type::String: return toString() < v.toString();
     case Type::List: return toList() < v.toList();
@@ -241,6 +262,7 @@ QVariant Val::toQVariant() const
     case Val::Type::Undefined: return QVariant();
     case Val::Type::Bool: return QVariant(toBool());
     case Val::Type::Int: return QVariant(toInt());
+    case Val::Type::Int64: return QVariant(static_cast<qlonglong>(toInt64()));
     case Val::Type::Double: return QVariant(toDouble());
     case Val::Type::String: return QVariant(toQString());
     case Val::Type::Color: return QVariant(toQColor());
@@ -273,6 +295,9 @@ Val Val::fromQVariant(const QVariant& var)
     switch (var.type()) {
     case QVariant::Bool: return Val(var.toBool());
     case QVariant::Int: return Val(var.toInt());
+    case QVariant::UInt: return Val(var.toInt());
+    case QVariant::LongLong: return Val(static_cast<int64_t>(var.toLongLong()));
+    case QVariant::ULongLong: return Val(static_cast<int64_t>(var.toLongLong()));
     case QVariant::Double: return Val(var.toDouble());
     case QVariant::String: return Val(var.toString().toStdString());
     case QVariant::List: {
@@ -295,7 +320,7 @@ Val Val::fromQVariant(const QVariant& var)
     }
     default: {
         LOGE() << "not supported type: " << var.typeName();
-        UNREACHABLE;
+        //UNREACHABLE;
         return Val();
     }
     }
