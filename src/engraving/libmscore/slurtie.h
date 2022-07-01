@@ -103,6 +103,10 @@ protected:
     virtual void changeAnchor(EditData&, EngravingItem*) = 0;
     std::vector<mu::LineF> gripAnchorLines(Grip grip) const override;
 
+    bool _lockEndPoints = false;
+    PointF _endPointOff1 = PointF(0.0, 0.0);
+    PointF _endPointOff2 = PointF(0.0, 0.0);
+
 public:
 
     virtual void spatiumChanged(double, double) override;

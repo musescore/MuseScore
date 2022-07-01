@@ -385,9 +385,18 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
         adjustEndpoints();
     }
 
+    if (_lockEndPoints) {
+        ups(Grip::START).off += _endPointOff1;
+        ups(Grip::END).off += _endPointOff2;
+    }
     // Get start and end points (have been calculated before)
     PointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
     PointF pp2 = ups(Grip::END).p + ups(Grip::END).off;
+    // Keep track of the original value before it gets changed
+    PointF oldp1 = pp1;
+    PointF oldp2 = pp2;
+    // If end point adjustment is locked, restore the endpoints to
+    // where they were before
 
     // Check slur integrity
     if (pp2 == pp1) {
@@ -586,7 +595,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
                     // and a bit also the left point to compensate asymmetry
                     p3 += PointF(-abs(shStep), shStep) / 2.0;
                 }
-            } else {
+            } else if (!_lockEndPoints) {
                 /*********************************************************
                 * STAGE 2.3: In the odd iterations, adjust the end points
                 * of the slur.
@@ -663,6 +672,13 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     adjustEndpoints();
     pp1 = ups(Grip::START).p + ups(Grip::START).off;
     pp2 = ups(Grip::END).p + ups(Grip::END).off;
+    if (!_lockEndPoints) {
+        _endPointOff1 = pp1 - oldp1;
+        _endPointOff2 = pp2 - oldp2;
+    } else {
+        _endPointOff1 = PointF(0.0, 0.0);
+        _endPointOff2 = PointF(0.0, 0.0);
+    }
     // Recompute the transformation because pp1 and pp1 may have changed
     toSlurCoordinates.reset();
     toSlurCoordinates.rotateRadians(-slurAngle);

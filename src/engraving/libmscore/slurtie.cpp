@@ -184,7 +184,9 @@ void SlurTieSegment::editDrag(EditData& ed)
 
     switch (g) {
     case Grip::START:
+        _lockEndPoints = true;
     case Grip::END:
+        _lockEndPoints = true;
         //
         // move anchor for slurs/ties
         //
@@ -306,6 +308,7 @@ PropertyValue SlurTieSegment::propertyDefault(Pid id) const
 
 void SlurTieSegment::reset()
 {
+    _lockEndPoints = false;
     EngravingItem::reset();
     undoResetProperty(Pid::SLUR_UOFF1);
     undoResetProperty(Pid::SLUR_UOFF2);
