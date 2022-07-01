@@ -145,6 +145,10 @@ Item {
             onResetToDefaultSelectedShortcuts: {
                 shortcutsModel.resetToDefaultSelectedShortcuts()
             }
+
+            onToggleVisibility: {
+                shortcutsView.categorized = !shortcutsView.categorized
+            }
         }
     }
 }

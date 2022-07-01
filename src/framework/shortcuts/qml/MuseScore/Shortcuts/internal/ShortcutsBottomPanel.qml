@@ -37,6 +37,7 @@ RowLayout {
     signal importShortcutsFromFileRequested()
     signal exportShortcutsToFileRequested()
     signal resetToDefaultSelectedShortcuts()
+    signal toggleVisibility();
 
     property NavigationPanel navigation: NavigationPanel {
         name: "ShortcutsBottomPanel"
@@ -82,6 +83,22 @@ RowLayout {
     Item { Layout.fillWidth: true }
 
     FlatButton {
+        id: toggleVisible
+
+        Layout.preferredWidth: root.buttonWidth
+
+        text: qsTrc("shortcuts", "Toggle Visibility")
+
+        navigation.name: "VisibButton"
+        navigation.panel: root.navigation
+        navigation.column: 2
+
+        onClicked: {
+            root.toggleVisibility()
+        }
+    }
+
+    FlatButton {
         id: resetButton
 
         minWidth: root.buttonMinWidth
@@ -90,7 +107,7 @@ RowLayout {
 
         navigation.name: "ResetButton"
         navigation.panel: root.navigation
-        navigation.column: 2
+        navigation.column: 3
 
         onClicked: {
             root.resetToDefaultSelectedShortcuts()

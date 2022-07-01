@@ -27,6 +27,7 @@
 #include <cstring>
 #include <QString>
 #include <QMetaType>
+#include <set>
 
 #include "actions/actiontypes.h"
 #include "context/shortcutcontext.h"
@@ -188,6 +189,27 @@ enum class Checkable {
     Yes
 };
 
+enum class ActionCategory {
+    Undefined = -1,
+    Internal,
+    Tablature,
+    Viewingnavigation,
+    Playback,
+    Layoutformatting,
+    Selectingediting,
+    Application,
+    Accessibility,
+    File,
+    Selectionnavigation,
+    Textlyrics,
+    Chordsymbolsfiguredbass,
+    Measures,
+    Musicalsymbols,
+    Selectingeditiing,
+    Dialogspanels,
+    Noteinput
+};
+
 struct UiAction
 {
     actions::ActionCode code;
@@ -195,33 +217,76 @@ struct UiAction
     std::string scCtx = "any";
     MnemonicString title;
     TranslatableString description;
+    ActionCategory category;
     IconCode::Code iconCode = IconCode::Code::NONE;
     Checkable checkable = Checkable::No;
     std::vector<std::string> shortcuts;
 
     UiAction() = default;
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
-        : code(code), uiCtx(ctx), scCtx(scCtx), checkable(ch) {}
+    UiAction(const actions::ActionCode& code, ActionCategory cat = ActionCategory::Internal, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
+        : code(code), category(cat), uiCtx(ctx), scCtx(scCtx), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
+    UiAction(const actions::ActionCode& code, ActionCategory cat = ActionCategory::Internal, UiContext ctx, std::string scCtx, const MnemonicString& title,
              Checkable ch = Checkable::No)
-        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), checkable(ch) {}
+        : code(code), category(cat), uiCtx(ctx), scCtx(scCtx), title(title), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
+    UiAction(const actions::ActionCode& code, ActionCategory cat = ActionCategory::Internal, UiContext ctx, std::string scCtx, const MnemonicString& title,
              const TranslatableString& desc, Checkable ch = Checkable::No)
-        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc),  checkable(ch) {}
+        : code(code), category(cat), uiCtx(ctx), scCtx(scCtx), title(title), description(desc),  checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
+    UiAction(const actions::ActionCode& code, ActionCategory cat = ActionCategory::Internal, UiContext ctx, std::string scCtx, const MnemonicString& title,
              const TranslatableString& desc, IconCode::Code icon, Checkable ch = Checkable::No)
-        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), checkable(ch) {}
+        : code(code), category(cat), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title, IconCode::Code icon,
+    UiAction(const actions::ActionCode& code, ActionCategory cat = ActionCategory::Internal, UiContext ctx, std::string scCtx, const MnemonicString& title, IconCode::Code icon,
              Checkable ch = Checkable::No)
-        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), iconCode(icon), checkable(ch) {}
+        : code(code), category(cat), uiCtx(ctx), scCtx(scCtx), title(title), iconCode(icon), checkable(ch) {}
 
     bool isValid() const
     {
         return !code.empty();
+    }
+
+    QString getCategory() const {
+        switch (category)
+        {
+        case ActionCategory::Layoutformatting:
+            return "Layout & formatting";
+        case ActionCategory::Chordsymbolsfiguredbass:
+            return "Chord symbols & figured bass";
+        case ActionCategory::Selectingeditiing:
+            return "Selecting & editiing";
+        case ActionCategory::Accessibility:
+            return "Accessibility";
+        case ActionCategory::File:
+            return "File";
+        case ActionCategory::Playback:
+            return "Playback";
+        case ActionCategory::Musicalsymbols:
+            return "Musical symbols";
+        case ActionCategory::Application:
+            return "Application";
+        case ActionCategory::Textlyrics:
+            return "Text & lyrics";
+        case ActionCategory::Viewingnavigation:
+            return "Viewing & navigation";
+        case ActionCategory::Selectingediting:
+            return "Selecting & editing";
+        case ActionCategory::Measures:
+            return "Measures";
+        case ActionCategory::Noteinput:
+            return "Note input";
+        case ActionCategory::Selectionnavigation:
+            return "Selection & navigation";
+        case ActionCategory::Dialogspanels:
+            return "Dialogs & panels";
+        case ActionCategory::Tablature:
+            return "Tablature";
+        default:
+            return "Default";
+        };
+
+        return "Not possible";
     }
 
     bool operator==(const UiAction& other) const
@@ -229,6 +294,7 @@ struct UiAction
         return code == other.code
                && uiCtx == other.uiCtx
                && scCtx == other.scCtx
+               && category == other.category
                && title == other.title
                && description == other.description
                && iconCode == other.iconCode

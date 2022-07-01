@@ -22,6 +22,8 @@
 
 #include "shortcutsmodel.h"
 
+#include "framework/ui/uitypes.h"
+#include "ui/view/iconcodes.h"
 #include "translation.h"
 #include "types/mnemonicstring.h"
 #include "types/translatablestring.h"
@@ -59,9 +61,20 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
         return QString::fromStdString(action.code) + action.title.qTranslatedWithoutMnemonic() + action.description.qTranslated()
                + sequencesToNativeText(shortcut.sequences);
     }
+    case RoleSection:
+        return SectionName(shortcut);
+    case RoleSectionValue:
+        return SectionName(shortcut).toString() + sequencesToNativeText(shortcut.sequences);
+    case RoleSectionKey:
+        return SectionName(shortcut).toString() + this->action(shortcut.action).title;
     }
 
     return QVariant();
+}
+
+const QVariant ShortcutsModel::SectionName(const Shortcut& shortcut) const
+{
+    return this->action(shortcut.action).getCategory();
 }
 
 const UiAction& ShortcutsModel::action(const std::string& actionCode) const
@@ -91,7 +104,10 @@ QHash<int, QByteArray> ShortcutsModel::roleNames() const
         { RoleTitle, "title" },
         { RoleIcon, "icon" },
         { RoleSequence, "sequence" },
-        { RoleSearchKey, "searchKey" }
+        { RoleSearchKey, "searchKey" },
+        { RoleSection, "ownerSection" },
+        { RoleSectionKey, "sectionkey" },
+        { RoleSectionValue, "sectionvalue" }
     };
 
     return roles;
@@ -121,7 +137,7 @@ void ShortcutsModel::load()
     });
 
     std::sort(m_shortcuts.begin(), m_shortcuts.end(), [this](const Shortcut& s1, const Shortcut& s2) {
-        return actionText(s1.action) < actionText(s2.action);
+        return SectionName(s1).toString() + actionText(s1.action) < SectionName(s2).toString() + actionText(s2.action);
     });
 
     endResetModel();

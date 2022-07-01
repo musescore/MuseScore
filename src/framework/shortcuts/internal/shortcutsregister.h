@@ -29,6 +29,7 @@
 #include "async/asyncable.h"
 #include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
+#include "ui/iuiactionsregister.h"
 
 namespace mu::framework {
 class XmlReader;
