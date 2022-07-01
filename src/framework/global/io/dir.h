@@ -40,6 +40,7 @@ public:
     Dir() = default;
     Dir(const path_t& path);
 
+    path_t path() const;
     path_t absolutePath() const;
 
     bool exists() const;
@@ -49,6 +50,8 @@ public:
 
     static RetVal<io::paths_t> scanFiles(const io::path_t& rootDir, const std::vector<std::string>& filters,
                                          ScanMode mode = ScanMode::FilesInCurrentDirAndSubdirs);
+
+    static path_t fromNativeSeparators(const path_t& pathName);
 
 private:
     path_t m_path;

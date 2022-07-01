@@ -25,6 +25,9 @@
 
 #include "io/fileinfo.h"
 
+#include <QFileInfo>
+#include <QDir>
+
 using namespace mu::io;
 
 class Global_IO_FileInfoTests : public ::testing::Test
@@ -368,5 +371,17 @@ TEST_F(Global_IO_FileInfoTests, IsAbsolute)
         bool ret = FileInfo(filePath).isAbsolute();
         //! CHECK
         EXPECT_TRUE(ret);
+    }
+}
+
+TEST_F(Global_IO_FileInfoTests, DirPath)
+{
+    {
+        //! GIVE Some file path
+        path_t filePath = "/path/to/filename.ext1";
+        //! DO
+        path_t dirPath = FileInfo(filePath).dir().path();
+        //! CHECK
+        EXPECT_EQ(dirPath, "/path/to");
     }
 }

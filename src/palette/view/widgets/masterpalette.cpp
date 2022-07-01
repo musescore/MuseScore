@@ -152,14 +152,14 @@ MasterPalette::MasterPalette(QWidget* parent)
     m_symbolItem->addChild(child);
 
     std::vector<String> symbols = mu::keys(mu::smuflRanges());
-    for (int i = 0; i < symbols.size(); i++) {
+    for (size_t i = 0; i < symbols.size(); i++) {
         QString symbol = symbols[i].toQString();
         if (symbol == mu::SMUFL_ALL_SYMBOLS) {
             continue;
         }
 
         QTreeWidgetItem* chld = new QTreeWidgetItem(QStringList(symbol));
-        chld->setData(0, Qt::UserRole, m_idxAllSymbols + i + 1);
+        chld->setData(0, Qt::UserRole, m_idxAllSymbols + static_cast<int>(i) + 1);
 
         m_symbolItem->addChild(chld);
     }

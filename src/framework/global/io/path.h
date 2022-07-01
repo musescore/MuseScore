@@ -100,7 +100,7 @@ path_t filename(const path_t& path, bool includingExtension = true);
 path_t basename(const path_t& path);
 path_t completeBasename(const path_t& path);
 path_t absolutePath(const path_t& path);
-path_t dirname(const path_t& path);
+//path_t dirname(const path_t& path);
 path_t dirpath(const path_t& path);
 path_t absoluteDirpath(const path_t& path);
 
