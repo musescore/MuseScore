@@ -22,6 +22,9 @@
 #ifndef MU_IO_FILEINFO_H
 #define MU_IO_FILEINFO_H
 
+#include "types/string.h"
+#include "dir.h"
+
 #include "modularity/ioc.h"
 #include "ifilesystem.h"
 
@@ -52,6 +55,8 @@ public:
 
     DateTime birthTime() const;
     DateTime lastModified() const;
+
+    Dir dir() const;
 
 private:
     static String doSuffix(const String& filePath);

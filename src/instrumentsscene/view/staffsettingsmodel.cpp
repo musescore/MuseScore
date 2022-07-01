@@ -45,8 +45,8 @@ void StaffSettingsModel::load(const QString& staffId)
     m_type = staff->staffType()->type();
 
     m_voicesVisibility.clear();
-    for (const QVariant& voice: staff->visibilityVoices()) {
-        m_voicesVisibility << voice.toBool();
+    for (const bool& voice : staff->visibilityVoices()) {
+        m_voicesVisibility << voice;
     }
 
     emit cutawayEnabledChanged();

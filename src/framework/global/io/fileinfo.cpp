@@ -127,6 +127,10 @@ String FileInfo::doSuffix(const String& filePath)
     }
 
     size_t lastSep = filePath.lastIndexOf(u'/');
+    if (lastSep == mu::nidx) {
+        lastSep = 0;
+    }
+
     if (lastDot < lastSep) {
         return String();
     }
@@ -172,4 +176,14 @@ bool FileInfo::exists() const
 bool FileInfo::exists(const path_t& filePath)
 {
     return fileSystem()->exists(filePath);
+}
+
+Dir FileInfo::dir() const
+{
+    size_t lastSep = m_filePath.lastIndexOf(u'/');
+    if (lastSep == mu::nidx) {
+        return Dir(".");
+    }
+    String dirPath = m_filePath.mid(0, lastSep);
+    return Dir(io::path_t(dirPath));
 }

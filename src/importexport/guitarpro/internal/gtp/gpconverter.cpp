@@ -275,7 +275,6 @@ void GPConverter::fixPercussion()
 void GPConverter::setupTabDisplayStyle()
 {
     GPDomModel::GPProperties properties = _gpDom->properties();
-    using parts_import_t = GPDomModel::TabImportOption;
     std::vector<GPDomModel::TabImportOption>& partsImportOpts = properties.partsImportOptions;
     bool importLinkedStaffForce = properties.createLinkedTabForce;
 

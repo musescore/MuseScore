@@ -19,46 +19,69 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_ZIPREADER_H
-#define MU_GLOBAL_ZIPREADER_H
+#ifndef MU_GLOBAL_ZIPCONTAINER_H
+#define MU_GLOBAL_ZIPCONTAINER_H
 
-#include <vector>
-
-#include "io/path.h"
+#include <ctime>
+#include <string>
 #include "io/iodevice.h"
 
 namespace mu {
-class ZipReader
+class ZipContainer
 {
 public:
+    explicit ZipContainer(io::IODevice* device);
+    ~ZipContainer();
+
+    enum Status {
+        NoError,
+        FileOpenError,
+        FileReadError,
+        FileWriteError,
+        FileError
+    };
 
     struct FileInfo
     {
-        io::path_t filePath;
+        std::string filePath;
         bool isDir = false;
-        bool isFile = false;
+        bool isFile  = false;
         bool isSymLink = false;
-        uint64_t size = 0;
+        uint crc = 0;
+        int64_t size = 0;
+        std::tm lastModified;
 
         bool isValid() const { return isDir || isFile || isSymLink; }
     };
 
-    explicit ZipReader(const io::path_t& filePath);
-    explicit ZipReader(io::IODevice* device);
-    ~ZipReader();
+    Status status() const;
 
-    bool exists() const;
     void close();
-    bool hasError() const;
 
+    // Read
     std::vector<FileInfo> fileInfoList() const;
+    int count() const;
+
     ByteArray fileData(const std::string& fileName) const;
 
+    // Write
+    enum CompressionPolicy {
+        AlwaysCompress,
+        NeverCompress,
+        AutoCompress
+    };
+
+    void setCompressionPolicy(CompressionPolicy policy);
+    CompressionPolicy compressionPolicy() const;
+
+    void addFile(const std::string& fileName, const ByteArray& data);
+    void addDirectory(const std::string& dirName);
+
 private:
+
     struct Impl;
-    Impl* m_impl = nullptr;
-    io::path_t m_filePath;
+    Impl* p = nullptr;
 };
 }
 
-#endif // MU_GLOBAL_ZIPREADER_H
+#endif // MU_GLOBAL_ZIPCONTAINER_H

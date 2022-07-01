@@ -291,8 +291,8 @@ StringList MscReader::ZipFileReader::fileList() const
 
     StringList files;
     std::vector<ZipReader::FileInfo> fileInfoList = m_zip->fileInfoList();
-    if (m_zip->status() != ZipReader::NoError) {
-        LOGD() << "failed read meta, status: " << m_zip->status();
+    if (m_zip->hasError()) {
+        LOGD() << "failed read meta";
     }
 
     for (const ZipReader::FileInfo& fi : fileInfoList) {
@@ -311,8 +311,8 @@ ByteArray MscReader::ZipFileReader::fileData(const String& fileName) const
     }
 
     ByteArray data = m_zip->fileData(fileName.toStdString());
-    if (m_zip->status() != ZipReader::NoError) {
-        LOGD() << "failed read data, status: " << m_zip->status();
+    if (m_zip->hasError()) {
+        LOGD() << "failed read data";
         return ByteArray();
     }
     return data;
