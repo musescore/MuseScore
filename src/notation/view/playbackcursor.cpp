@@ -23,8 +23,14 @@
 
 #include "engraving/libmscore/system.h"
 #include "engraving/libmscore/scorefont.h"
+#include "engraving/libmscore/tie.h"
 
 using namespace mu::notation;
+
+PlaybackCursor::~PlaybackCursor()
+{
+    resetPlayedNotes();
+}
 
 void PlaybackCursor::paint(mu::draw::Painter* painter)
 {
@@ -42,14 +48,14 @@ void PlaybackCursor::setNotation(INotationPtr notation)
 
 void PlaybackCursor::move(midi::tick_t tick)
 {
-    m_rect = resolveCursorRectByTick(tick);
+    updateCursorByTick(tick);
 }
 
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
-mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
+void PlaybackCursor::updateCursorByTick(midi::tick_t _tick)
 {
     if (!m_notation) {
-        return RectF();
+        return;
     }
 
     const mu::engraving::Score* score = m_notation->elements()->msScore();
@@ -58,12 +64,12 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
 
     Measure* measure = score->tick2measureMM(tick);
     if (!measure) {
-        return RectF();
+        return;
     }
 
     mu::engraving::System* system = measure->system();
     if (!system) {
-        return RectF();
+        return;
     }
 
     qreal x = 0.0;
@@ -103,7 +109,7 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
     }
 
     if (!s) {
-        return RectF();
+        return;
     }
 
     double y = system->staffYpage(0) + system->page()->pos().y();
@@ -128,7 +134,57 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
     x -= _spatium;
     y -= 3 * _spatium;
 
-    return RectF(x, y, w, h);
+    m_rect = RectF(x, y, w, h);
+
+    resetPlayedNotes();
+
+    if (!visible()) {
+        return;
+    }
+
+    for (EngravingItem* element : s->elist()) {
+        if (!element) {
+            continue;
+        }
+
+        if (!element->isChord()) {
+            continue;
+        }
+
+        const Chord* chord = toChord(element);
+        for (Note* note1 : chord->notes()) {
+            while (note1) {
+                for (EngravingObject* eO : note1->linkList()) {
+                    if (!eO->isNote()) {
+                        continue;
+                    }
+
+                    Note* currentNote = toNote(eO);
+                    m_playingNotes.push_back(currentNote);
+                }
+
+                note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
+            }
+        }
+    }
+
+    colorPlayingNotes();
+}
+
+void PlaybackCursor::colorPlayingNotes()
+{
+    for (Note* note: m_playingNotes) {
+        note->setMark(true);
+    }
+}
+
+void PlaybackCursor::resetPlayedNotes()
+{
+    for (Note* note: m_playingNotes) {
+        note->setMark(false);
+    }
+
+    m_playingNotes.clear();
 }
 
 bool PlaybackCursor::visible() const
@@ -139,6 +195,10 @@ bool PlaybackCursor::visible() const
 void PlaybackCursor::setVisible(bool arg)
 {
     m_visible = arg;
+
+    if (!m_visible) {
+        resetPlayedNotes();
+    }
 }
 
 const mu::RectF& PlaybackCursor::rect() const

@@ -37,6 +37,7 @@ class PlaybackCursor
 
 public:
     PlaybackCursor() = default;
+    ~PlaybackCursor();
 
     void paint(draw::Painter* painter);
 
@@ -50,10 +51,14 @@ public:
 
 private:
     QColor color() const;
-    RectF resolveCursorRectByTick(midi::tick_t tick) const;
+    void updateCursorByTick(midi::tick_t tick);
+
+    void colorPlayingNotes();
+    void resetPlayedNotes();
 
     bool m_visible = false;
     RectF m_rect;
+    std::vector<Note*> m_playingNotes;
 
     INotationPtr m_notation;
 };
