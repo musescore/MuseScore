@@ -89,6 +89,8 @@ private:
     VstProcessData m_processData;
     VstProcessContext m_processContext;
 
+    bool m_needUnprepareProcessData = false;
+
     VstPluginType m_type = VstPluginType::Undefined;
     audio::audioch_t m_audioChannelsCount = 0;
 };
