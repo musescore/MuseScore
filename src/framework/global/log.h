@@ -53,9 +53,9 @@
 
 
 #if __has_cpp_attribute(fallthrough)
-#define FALLTHROUGH() [[fallthrough]]
+#define MU_FALLTHROUGH() [[fallthrough]]
 #else
-#define FALLTHROUGH() (void)0
+#define MU_FALLTHROUGH() (void)0
 #endif
 
 #endif // MU_FRAMEWORK_LOG_H
