@@ -309,26 +309,33 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
     cloneStaves(masterScore, score, srcStaves, excerpt->tracksMapping());
 
-    // create excerpt title and title frame for all scores if not already there
-    MeasureBase* measure = masterScore->first();
+    MeasureBase* scoreMeasure = score->first();
 
-    if (!measure || !measure->isVBox()) {
-        LOGD("original score has no header frame");
-        masterScore->insertMeasure(ElementType::VBOX, measure);
-        measure = masterScore->first();
+    if (!scoreMeasure || !scoreMeasure->isVBox()) {
+        Score::InsertMeasureOptions options;
+        options.addToAllScores = false;
+
+        score->insertMeasure(ElementType::VBOX, scoreMeasure, options);
+        scoreMeasure = score->first();
     }
-    VBox* titleFrameScore = toVBox(measure);
 
-    measure = score->first();
-    assert(measure->isVBox());
+    VBox* titleFrameScore = toVBox(scoreMeasure);
 
-    VBox* titleFramePart = toVBox(measure);
-    titleFramePart->copyValues(titleFrameScore);
+    MeasureBase* masterMeasure = masterScore->first();
+    if (titleFrameScore && masterMeasure && masterMeasure->isVBox()) {
+        VBox* titleFrameMaster = toVBox(masterMeasure);
+
+        titleFrameScore->copyValues(titleFrameMaster);
+    }
+
     String partLabel = excerpt->name();
     if (!partLabel.empty()) {
-        Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
-        txt->setPlainText(partLabel);
-        measure->add(txt);
+        if (titleFrameScore) {
+            Text* txt = Factory::createText(titleFrameScore, TextStyleType::INSTRUMENT_EXCERPT);
+            txt->setPlainText(partLabel);
+            titleFrameScore->add(txt);
+        }
+
         score->setMetaTag(u"partName", partLabel);
     }
 
