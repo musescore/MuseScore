@@ -116,13 +116,21 @@ char Char::toAscii(char16_t c, bool* ok)
 bool Char::isLetter(char16_t c)
 {
     //! TODO
+#ifndef GLOBAL_NO_QT_SUPPORT
     return QChar::isLetter(c);
+#else
+    return std::isalpha(static_cast<unsigned char>(c));
+#endif
 }
 
 bool Char::isSpace(char16_t c)
 {
     //! TODO
+#ifndef GLOBAL_NO_QT_SUPPORT
     return QChar::isSpace(c);
+#else
+    return std::isspace(static_cast<unsigned char>(c));
+#endif
 }
 
 bool Char::isDigit(char16_t c)
@@ -138,21 +146,33 @@ int Char::digitValue() const
     return m_ch - '0';
 }
 
-bool Char::isPunct(char16_t c)
+bool Char::isPunct(char16_t ch)
 {
-    return QChar::isPunct(c);
+#ifndef GLOBAL_NO_QT_SUPPORT
+    return QChar::isPunct(ch);
+#else
+    return std::ispunct(static_cast<unsigned char>(ch));
+#endif
 }
 
 char16_t Char::toLower(char16_t ch)
 {
     //! TODO
+#ifndef GLOBAL_NO_QT_SUPPORT
     return QChar::toLower(ch);
+#else
+    return std::tolower(static_cast<unsigned char>(ch));
+#endif
 }
 
 char16_t Char::toUpper(char16_t ch)
 {
     //! TODO
+#ifndef GLOBAL_NO_QT_SUPPORT
     return QChar::toUpper(ch);
+#else
+    return std::toupper(static_cast<unsigned char>(ch));
+#endif
 }
 
 // ============================
@@ -419,6 +439,7 @@ std::u32string String::toStdU32String() const
     return s32;
 }
 
+#ifndef GLOBAL_NO_QT_SUPPORT
 String String::fromQString(const QString& str)
 {
     const QChar* qu = str.unicode();
@@ -436,6 +457,8 @@ QString String::toQString() const
     static_assert(sizeof(QChar) == sizeof(char16_t));
     return QString(reinterpret_cast<const QChar*>(u), static_cast<int>(size()));
 }
+
+#endif
 
 size_t String::size() const
 {
@@ -868,7 +891,11 @@ String String::trimmed() const
 String String::simplified() const
 {
     //! TODO
+#ifndef GLOBAL_NO_QT_SUPPORT
     return String::fromQString(toQString().simplified());
+#else
+    return *this;
+#endif
 }
 
 String String::toXmlEscaped(char16_t c)
@@ -910,15 +937,29 @@ String String::toXmlEscaped() const
 String String::toLower() const
 {
     //! TODO
+#ifndef GLOBAL_NO_QT_SUPPORT
     QString qs = toQString();
     return String::fromQString(qs.toLower());
+#else
+    String s = *this;
+    std::u16string& us = s.mutStr();
+    std::transform(us.begin(), us.end(), us.begin(), [](char16_t c){ return Char::toLower(c); });
+    return s;
+#endif
 }
 
 String String::toUpper() const
 {
     //! TODO
+#ifndef GLOBAL_NO_QT_SUPPORT
     QString qs = toQString();
     return String::fromQString(qs.toUpper());
+#else
+    String s = *this;
+    std::u16string& us = s.mutStr();
+    std::transform(us.begin(), us.end(), us.begin(), [](char16_t c){ return Char::toUpper(c); });
+    return s;
+#endif
 }
 
 int String::toInt(bool* ok, int base) const
@@ -989,15 +1030,6 @@ double String::toDouble(bool* ok) const
 // ============================
 // StringList
 // ============================
-
-StringList::StringList(const QStringList& l)
-{
-    reserve(l.size());
-    for (const QString& s : l) {
-        push_back(String::fromQString(s));
-    }
-}
-
 StringList& StringList::append(const StringList& l)
 {
     for (const String& s : l) {
@@ -1051,6 +1083,15 @@ void StringList::removeAt(size_t i)
     erase(begin() + i);
 }
 
+#ifndef GLOBAL_NO_QT_SUPPORT
+StringList::StringList(const QStringList& l)
+{
+    reserve(l.size());
+    for (const QString& s : l) {
+        push_back(String::fromQString(s));
+    }
+}
+
 QStringList StringList::toQStringList() const
 {
     QStringList l;
@@ -1061,6 +1102,7 @@ QStringList StringList::toQStringList() const
     return l;
 }
 
+#endif
 // ============================
 // AsciiChar
 // ============================

@@ -296,8 +296,8 @@ bool MscWriter::ZipFileWriter::addFileData(const String& fileName, const ByteArr
     }
 
     m_zip->addFile(fileName.toStdString(), data);
-    if (m_zip->status() != ZipWriter::NoError) {
-        LOGE() << "failed write files to zip, status: " << m_zip->status();
+    if (m_zip->hasError()) {
+        LOGE() << "failed write files to zip";
         return false;
     }
     return true;

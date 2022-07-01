@@ -445,7 +445,7 @@ bool Palette::writeToFile(const QString& p) const
     }
 
     ZipWriter f(path);
-    if (f.status() != ZipWriter::NoError) {
+    if (f.hasError()) {
         showWritingPaletteError(path);
         return false;
     }
@@ -486,7 +486,7 @@ bool Palette::writeToFile(const QString& p) const
         f.addFile("palette.xml", cbuf1.data());
     }
     f.close();
-    if (f.status() != ZipWriter::NoError) {
+    if (f.hasError()) {
         showWritingPaletteError(path);
         return false;
     }

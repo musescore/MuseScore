@@ -31,6 +31,11 @@ Dir::Dir(const path_t& path)
 {
 }
 
+path_t Dir::path() const
+{
+    return m_path;
+}
+
 path_t Dir::absolutePath() const
 {
     return fileSystem()->absoluteFilePath(m_path);
@@ -54,4 +59,31 @@ Ret Dir::mkpath(const path_t& path)
 RetVal<io::paths_t> Dir::scanFiles(const io::path_t& rootDir, const std::vector<std::string>& filters, ScanMode mode)
 {
     return fileSystem()->scanFiles(rootDir, filters, mode);
+}
+
+path_t Dir::fromNativeSeparators(const path_t& pathName)
+{
+#if defined(Q_OS_WIN)
+    String path = pathName.toString();
+    size_t i = path.indexOf(u'\\');
+    if (i != mu::nidx) {
+        String n(path);
+        if (n.startsWith(u"\\\\?\\")) {
+            n.remove(0, 4);
+            i = n.indexOf(u'\\');
+            if (i == mu::nidx) {
+                return n;
+            }
+        }
+
+        for (i = 0; i < n.size(); ++i) {
+            if (n.at(i) == u'\\') {
+                n[i] = u'/';
+            }
+        }
+
+        return n;
+    }
+#endif
+    return pathName;
 }
