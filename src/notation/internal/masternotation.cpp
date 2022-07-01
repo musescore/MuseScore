@@ -45,6 +45,7 @@
 
 using namespace mu::notation;
 using namespace mu::async;
+using namespace mu::engraving;
 
 static ExcerptNotation* get_impl(const IExcerptNotationPtr& excerpt)
 {
@@ -130,8 +131,15 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
     mu::engraving::Fraction firstMeasureTicks = pickupMeasure ? mu::engraving::Fraction(scoreOptions.measureTimesigNumerator,
                                                                                         scoreOptions.measureTimesigDenominator) : timesig;
 
-    mu::engraving::KeySigEvent ks;
-    ks.setKey(scoreOptions.key);
+    KeySigEvent ks;
+    if (scoreOptions.key == Key::INVALID) {
+        // Make atonal key signature
+        ks.setCustom(true);
+        ks.setMode(KeyMode::NONE);
+    } else {
+        ks.setKey(scoreOptions.key);
+        ks.setMode(scoreOptions.keyMode);
+    }
 
     for (int i = 0; i < measures; ++i) {
         mu::engraving::Fraction tick = firstMeasureTicks + timesig * (i - 1);
