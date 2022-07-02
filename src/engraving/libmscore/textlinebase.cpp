@@ -120,91 +120,77 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     if (staff()) {
         textlineLineWidth *= mag();
     }
-    Pen pen(color, textlineLineWidth, tl->lineStyle());
-    Pen solidPen(color, textlineLineWidth, PenStyle::SolidLine);
 
-    //Replace generic Qt dash patterns with improved equivalents to show true dots
-    std::vector<double> dotted        = { 0.01, 1.99 };   // 0.01 for cap dots. tighter than default Qt Dotline (would be { 0.01, 2.99 }).
-    std::vector<double> dashed        = { 3.0, 3.0 };     // Compensating for caps. Qt default PenStyle::DashLine is { 4.0, 2.0 }
-    std::vector<double> dashDotted    = { 3.0, 3.0, 0.01, 2.99 };
-    std::vector<double> dashDotDotted = { 3.0, 3.0, 0.01, 2.99, 0.01, 2.99 };
-    std::vector<double> customDashes  = { tl->dashLineLen(), tl->dashGapLen() };
+    Pen pen(color, textlineLineWidth);
+    Pen solidPen(color, textlineLineWidth);
 
     switch (tl->lineStyle()) {
-    case PenStyle::DashLine:
-        pen.setDashPattern(dashed);
+    case LineType::SOLID:
         break;
-    case PenStyle::DotLine:
-        pen.setDashPattern(dotted);
-        pen.setCapStyle(PenCapStyle::RoundCap);         // round dots
+    case LineType::DASHED:
+        pen.setDashPattern({ tl->dashLineLen(), tl->dashGapLen() });
         break;
-    case PenStyle::DashDotLine:
-        pen.setDashPattern(dashDotted);
-        break;
-    case PenStyle::DashDotDotLine:
-        pen.setDashPattern(dashDotDotted);
-        break;
-    case PenStyle::CustomDashLine:
-        pen.setDashPattern(customDashes);
-        break;
-    default:
+    case LineType::DOTTED:
+        pen.setDashPattern({ 0.01, 1.99 });
+        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
         break;
     }
 
     //Draw lines
-    if (twoLines) {     // hairpins
+    if (twoLines) { // hairpins
         painter->setPen(pen);
         painter->drawLines(&points[0], 1);
         painter->drawLines(&points[2], 1);
-    } else {
-        int start = 0;
-        int end = npoints;
-        //draw centered hooks as solid
-        painter->setPen(solidPen);
-        if (tl->beginHookType() == HookType::HOOK_90T && (isSingleType() || isBeginType())) {
-            painter->drawLines(&points[0], 1);
+        return;
+    }
+
+    int start = 0;
+    int end = npoints;
+    //draw centered hooks as solid
+    painter->setPen(solidPen);
+    if (tl->beginHookType() == HookType::HOOK_90T && (isSingleType() || isBeginType())) {
+        painter->drawLines(&points[0], 1);
+        start++;
+    }
+    if (tl->endHookType() == HookType::HOOK_90T && (isSingleType() || isEndType())) {
+        painter->drawLines(&points[npoints - 1], 1);
+        end--;
+    }
+    //draw rest of line as regular
+    //calculate new gap
+    if (tl->lineStyle() == LineType::DASHED) {
+        double adjustedLineLength = lineLength / textlineLineWidth;
+        double dash = tl->dashLineLen();
+        double gap = tl->dashGapLen();
+        int numPairs;
+        double newGap = 0;
+        std::vector<double> nDashes { dash, newGap };
+        if (tl->beginHookType() == HookType::HOOK_45 || tl->beginHookType() == HookType::HOOK_90) {
+            double absD
+                = sqrt(PointF::dotProduct(points[start + 1] - points[start], points[start + 1] - points[start])) / textlineLineWidth;
+            numPairs = std::max(double(1), absD / (dash + gap));
+            nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
+            pen.setDashPattern(nDashes);
+            painter->setPen(pen);
+            painter->drawLine(points[start + 1], points[start]);
             start++;
         }
-        if (tl->endHookType() == HookType::HOOK_90T && (isSingleType() || isEndType())) {
-            painter->drawLines(&points[npoints - 1], 1);
+        if (tl->endHookType() == HookType::HOOK_45 || tl->endHookType() == HookType::HOOK_90) {
+            double absD = sqrt(PointF::dotProduct(points[end] - points[end - 1], points[end] - points[end - 1])) / textlineLineWidth;
+            numPairs = std::max(double(1), absD / (dash + gap));
+            nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
+            pen.setDashPattern(nDashes);
+            painter->setPen(pen);
+            painter->drawLines(&points[end - 1], 1);
             end--;
         }
-        //draw rest of line as regular
-        //calculate new gap
-        if (tl->lineStyle() == PenStyle::CustomDashLine) {
-            double adjustedLineLength = lineLength / textlineLineWidth;
-            double dash = tl->dashLineLen();
-            double gap = tl->dashGapLen();
-            int numPairs;
-            double newGap = 0;
-            std::vector<double> nDashes { dash, newGap };
-            if (tl->beginHookType() == HookType::HOOK_45 || tl->beginHookType() == HookType::HOOK_90) {
-                double absD
-                    = sqrt(PointF::dotProduct(points[start + 1] - points[start], points[start + 1] - points[start])) / textlineLineWidth;
-                numPairs = std::max(double(1), absD / (dash + gap));
-                nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
-                pen.setDashPattern(nDashes);
-                painter->setPen(pen);
-                painter->drawLine(points[start + 1], points[start]);
-                start++;
-            }
-            if (tl->endHookType() == HookType::HOOK_45 || tl->endHookType() == HookType::HOOK_90) {
-                double absD = sqrt(PointF::dotProduct(points[end] - points[end - 1], points[end] - points[end - 1])) / textlineLineWidth;
-                numPairs = std::max(double(1), absD / (dash + gap));
-                nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
-                pen.setDashPattern(nDashes);
-                painter->setPen(pen);
-                painter->drawLines(&points[end - 1], 1);
-                end--;
-            }
-            numPairs = std::max(double(1), adjustedLineLength / (dash + gap));
-            nDashes[1] = (adjustedLineLength - dash * (numPairs + 1)) / numPairs;
-            pen.setDashPattern(nDashes);
-        }
-        painter->setPen(pen);
-        for (int i = start; i < end; ++i) {
-            painter->drawLines(&points[i], 1);
-        }
+        numPairs = std::max(double(1), adjustedLineLength / (dash + gap));
+        nDashes[1] = (adjustedLineLength - dash * (numPairs + 1)) / numPairs;
+        pen.setDashPattern(nDashes);
+    }
+    painter->setPen(pen);
+    for (int i = start; i < end; ++i) {
+        painter->drawLines(&points[i], 1);
     }
 }
 

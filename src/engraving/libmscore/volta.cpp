@@ -61,6 +61,8 @@ static const ElementStyle voltaStyle {
     { Sid::voltaOffset,                        Pid::END_TEXT_OFFSET },
     { Sid::voltaLineWidth,                     Pid::LINE_WIDTH },
     { Sid::voltaLineStyle,                     Pid::LINE_STYLE },
+    { Sid::voltaDashLineLen,                   Pid::DASH_LINE_LEN },
+    { Sid::voltaDashGapLen,                    Pid::DASH_GAP_LEN },
     { Sid::voltaHook,                          Pid::BEGIN_HOOK_HEIGHT },
     { Sid::voltaHook,                          Pid::END_HOOK_HEIGHT },
     { Sid::voltaPosAbove,                      Pid::OFFSET },

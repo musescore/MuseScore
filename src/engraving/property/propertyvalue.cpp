@@ -151,6 +151,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::DYNAMIC_TYPE:     return static_cast<int>(value<DynamicType>());
     case P_TYPE::DYNAMIC_RANGE:    return static_cast<int>(value<DynamicRange>());
     case P_TYPE::DYNAMIC_SPEED:    return static_cast<int>(value<DynamicSpeed>());
+    case P_TYPE::LINE_TYPE:        return static_cast<int>(value<LineType>());
     case P_TYPE::HOOK_TYPE:        return static_cast<int>(value<HookType>());
     case P_TYPE::KEY_MODE:         return static_cast<int>(value<KeyMode>());
     case P_TYPE::TEXT_STYLE:       return static_cast<int>(value<TextStyleType>());
@@ -241,6 +242,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::DYNAMIC_TYPE:     return PropertyValue(DynamicType(v.toInt()));
     case P_TYPE::DYNAMIC_RANGE:    return PropertyValue(DynamicRange(v.toInt()));
     case P_TYPE::DYNAMIC_SPEED:    return PropertyValue(DynamicSpeed(v.toInt()));
+    case P_TYPE::LINE_TYPE:        return PropertyValue(LineType(v.toInt()));
     case P_TYPE::HOOK_TYPE:        return PropertyValue(HookType(v.toInt()));
     case P_TYPE::KEY_MODE:         return PropertyValue(KeyMode(v.toInt()));
     case P_TYPE::TEXT_STYLE:       return PropertyValue(TextStyleType(v.toInt()));

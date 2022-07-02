@@ -1363,7 +1363,7 @@ static void readPedal114(XmlReader& e, const ReadContext& ctx, Pedal* pedal)
             pedal->setLineWidth(Millimetre(e.readDouble()));
             pedal->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (tag == "lineStyle") {
-            pedal->setLineStyle(mu::draw::PenStyle(e.readInt()));
+            pedal->readProperty(e, Pid::LINE_STYLE);
             pedal->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
         } else if (tag == "beginSymbol" || tag == "symbol") {   // "symbol" is obsolete
             String text(e.readText());
