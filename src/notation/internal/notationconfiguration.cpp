@@ -89,6 +89,8 @@ static const Settings::Key NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY(module_name,
 
 static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
 
+static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style/styleFile");
+
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
 
 void NotationConfiguration::init()
@@ -903,4 +905,14 @@ io::path_t NotationConfiguration::secondScoreOrderListPath() const
 void NotationConfiguration::setSecondScoreOrderListPath(const io::path_t& path)
 {
     settings()->setSharedValue(SECOND_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
+}
+
+mu::io::path_t NotationConfiguration::styleFileImportPath() const
+{
+    return settings()->value(STYLE_FILE_IMPORT_PATH_KEY).toString();
+}
+
+void NotationConfiguration::setStyleFileImportPath(const io::path_t& path)
+{
+    settings()->setSharedValue(STYLE_FILE_IMPORT_PATH_KEY, Val(path.toStdString()));
 }
