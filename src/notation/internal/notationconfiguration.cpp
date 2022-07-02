@@ -389,7 +389,9 @@ int NotationConfiguration::borderWidth() const
 
 QColor NotationConfiguration::playbackCursorColor() const
 {
-    return selectionColor();
+    QColor color = selectionColor();
+    color.setAlpha(178);
+    return color;
 }
 
 int NotationConfiguration::cursorOpacity() const
