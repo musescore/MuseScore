@@ -955,12 +955,9 @@ ElementType NotationViewInputController::selectionType() const
         return ElementType::STAFF;
     } else if (auto selectedElement = selection->element()) {
         return selectedElement->type();
-    } else {
-        return ElementType::PAGE;
     }
 
-    UNREACHABLE;
-    return type;
+    return ElementType::PAGE;
 }
 
 mu::PointF NotationViewInputController::selectionElementPos() const
