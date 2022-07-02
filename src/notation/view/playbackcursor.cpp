@@ -49,7 +49,7 @@ void PlaybackCursor::move(midi::tick_t tick)
 mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
 {
     if (!m_notation) {
-        return {};
+        return RectF();
     }
 
     const mu::engraving::Score* score = m_notation->elements()->msScore();
@@ -58,12 +58,12 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
 
     Measure* measure = score->tick2measureMM(tick);
     if (!measure) {
-        return {};
+        return RectF();
     }
 
     mu::engraving::System* system = measure->system();
     if (!system) {
-        return {};
+        return RectF();
     }
 
     qreal x = 0.0;
@@ -103,7 +103,7 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
     }
 
     if (!s) {
-        return {};
+        return RectF();
     }
 
     double y = system->staffYpage(0) + system->page()->pos().y();

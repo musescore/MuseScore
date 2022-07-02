@@ -455,7 +455,7 @@ bool validateSelectedTuplets(Iter beginIt,
                 if (!isFirstChord) {
                     return false;
                 }
-                if (!isMoreTupletVoicesAllowed(fit->second, it->second->second.notes.size())) {
+                if (!isMoreTupletVoicesAllowed(static_cast<int>(fit->second), it->second->second.notes.size())) {
                     return false;
                 }
                 ++(fit->second);
