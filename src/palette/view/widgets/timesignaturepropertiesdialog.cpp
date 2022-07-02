@@ -38,6 +38,7 @@
 
 static QString TIME_SIGNATURE_PROPERTIES_DIALOG_NAME("TimeSignaturePropertiesDialog");
 
+using namespace mu::palette;
 using namespace mu::ui;
 using namespace mu::notation;
 using namespace mu::engraving;
