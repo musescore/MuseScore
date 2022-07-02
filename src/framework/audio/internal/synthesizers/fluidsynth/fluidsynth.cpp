@@ -44,8 +44,6 @@ using namespace mu::mpe;
 static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 4.8;
 static constexpr int DEFAULT_MIDI_VOLUME = 100;
 
-static std::vector<double> FLUID_STANDARD_TUNING(12, -150.0);
-
 /// @note
 ///  Fluid does not support MONO, so they start counting audio channels from 1, which means "1 pair of audio channels"
 /// @see https://www.fluidsynth.org/api/settings_synth.html
@@ -196,9 +194,24 @@ void FluidSynth::updateCurrentExpressionLevel(const midi::Event& event)
 void FluidSynth::setSampleRate(unsigned int sampleRate)
 {
     m_sampleRate = sampleRate;
-    if (m_fluid->settings) {
-        fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
+
+    if (!m_fluid->settings || !m_fluid->synth) {
+        return;
     }
+
+    //! HACK: we can't set the sample rate of a fluid synth after it has been created.
+    //! Recreating the synth is not an option, because then we would need to backup
+    //! the whole state (loaded sounds, midi controllers...) and restore it.
+    //! So we leave the sample rate as it is, and compensate by adjusting the tuning.
+
+    double synthSampleRate = 0.0;
+    fluid_settings_getnum(m_fluid->settings, "synth.sample-rate", &synthSampleRate);
+
+    // Convert Hz to cents
+    double sampleRateCorrection = 1200 * std::log2(synthSampleRate / m_sampleRate);
+
+    std::vector<double> tuning(12, sampleRateCorrection);
+    fluid_synth_activate_octave_tuning(m_fluid->synth, 0, 0, "standard", tuning.data(), 0);
 }
 
 Ret FluidSynth::addSoundFonts(const std::vector<io::path_t>& sfonts)
@@ -242,15 +255,13 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
 
     const Programs& programs = findPrograms(setupData);
     for (const Program& program : programs) {
-        m_channels.emplace(static_cast<int>(m_channels.size()), program);
+        m_channels.emplace(static_cast<channel_t>(m_channels.size()), program);
     }
 
     m_articulationMapping = articulationSounds(setupData);
     for (const auto& pair : m_articulationMapping) {
-        m_channels.emplace(static_cast<int>(m_channels.size()), pair.second);
+        m_channels.emplace(static_cast<channel_t>(m_channels.size()), pair.second);
     }
-
-    fluid_synth_activate_octave_tuning(m_fluid->synth, 0, 0, "standard", FLUID_STANDARD_TUNING.data(), 0);
 
     for (const auto& pair : m_channels) {
         fluid_synth_set_interp_method(m_fluid->synth, pair.first, FLUID_INTERP_DEFAULT);
