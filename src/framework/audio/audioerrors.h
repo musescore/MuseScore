@@ -44,8 +44,7 @@ enum class Err {
     NoLoadedSoundFonts = 331,
     SoundFontFailedLoad = 332,
     SoundFontFailedUnload = 333,
-    UndefinedSoundFontFormat = 334,
-    UnknownSynthType = 335,
+    UnknownSynthType = 334,
 
     // common
     InvalidTrackId = 340,
