@@ -1385,8 +1385,7 @@ bool SLine::readProperties(XmlReader& e)
         setAnchor(Anchor(e.readInt()));
     } else if (tag == "lineWidth") {
         _lineWidth = e.readDouble() * spatium();
-    } else if (tag == "lineStyle") {
-        _lineStyle = mu::draw::PenStyle(e.readInt());
+    } else if (readProperty(tag, e, Pid::LINE_STYLE)) {
     } else if (tag == "dashLineLength") {
         _dashLineLen = e.readDouble();
     } else if (tag == "dashGapLength") {
@@ -1475,7 +1474,7 @@ PropertyValue SLine::getProperty(Pid id) const
     case Pid::LINE_WIDTH:
         return _lineWidth;
     case Pid::LINE_STYLE:
-        return PropertyValue(int(_lineStyle));
+        return _lineStyle;
     case Pid::DASH_LINE_LEN:
         return dashLineLen();
     case Pid::DASH_GAP_LEN:
@@ -1502,7 +1501,7 @@ bool SLine::setProperty(Pid id, const PropertyValue& v)
         _lineWidth = v.value<Millimetre>();
         break;
     case Pid::LINE_STYLE:
-        _lineStyle = mu::draw::PenStyle(v.toInt());
+        _lineStyle = v.value<LineType>();
         break;
     case Pid::DASH_LINE_LEN:
         setDashLineLen(v.toDouble());
@@ -1537,7 +1536,7 @@ PropertyValue SLine::propertyDefault(Pid pid) const
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);
         }
-        return static_cast<int>(mu::draw::PenStyle::SolidLine);
+        return LineType::SOLID;
     case Pid::DASH_LINE_LEN:
     case Pid::DASH_GAP_LEN:
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {

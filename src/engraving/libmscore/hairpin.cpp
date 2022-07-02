@@ -73,6 +73,8 @@ static const ElementStyle hairpinStyle {
     { Sid::hairpinPlacement,                   Pid::PLACEMENT },
     { Sid::hairpinPosBelow,                    Pid::OFFSET },
     { Sid::hairpinLineStyle,                   Pid::LINE_STYLE },
+    { Sid::hairpinLineDashLineLen,             Pid::DASH_LINE_LEN },
+    { Sid::hairpinLineDashGapLen,              Pid::DASH_GAP_LEN },
 };
 
 //---------------------------------------------------------
@@ -509,7 +511,8 @@ void HairpinSegment::draw(mu::draw::Painter* painter) const
     if (staff()) {
         w *= staff()->staffMag(hairpin()->tick());
     }
-    Pen pen(color, w, hairpin()->lineStyle());
+
+    Pen pen(color, w);
     painter->setPen(pen);
 
     if (drawCircledTip) {
@@ -573,6 +576,10 @@ Sid HairpinSegment::getPropertyStyle(Pid pid) const
         break;
     case Pid::LINE_STYLE:
         return hairpin()->isLineType() ? Sid::hairpinLineLineStyle : Sid::hairpinLineStyle;
+    case Pid::DASH_LINE_LEN:
+        return hairpin()->isLineType() ? Sid::hairpinLineDashLineLen : Sid::NOSTYLE;
+    case Pid::DASH_GAP_LEN:
+        return hairpin()->isLineType() ? Sid::hairpinLineDashGapLen : Sid::NOSTYLE;
     default:
         break;
     }
@@ -609,6 +616,10 @@ Sid Hairpin::getPropertyStyle(Pid pid) const
         break;
     case Pid::LINE_STYLE:
         return isLineType() ? Sid::hairpinLineLineStyle : Sid::hairpinLineStyle;
+    case Pid::DASH_LINE_LEN:
+        return isLineType() ? Sid::hairpinLineDashLineLen : Sid::NOSTYLE;
+    case Pid::DASH_GAP_LEN:
+        return isLineType() ? Sid::hairpinLineDashGapLen : Sid::NOSTYLE;
     default:
         break;
     }
@@ -842,12 +853,6 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
     case Pid::DYNAMIC_RANGE:
         return DynamicRange::PART;
-
-    case Pid::LINE_STYLE:
-        if (isLineType()) {
-            return int(mu::draw::PenStyle::CustomDashLine);
-        }
-        return int(mu::draw::PenStyle::SolidLine);
 
     case Pid::BEGIN_TEXT:
         if (_hairpinType == HairpinType::CRESC_LINE) {

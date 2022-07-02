@@ -79,6 +79,9 @@ public:
     static String toXml(HookType v);
     static HookType fromXml(const AsciiStringView& tag, HookType def);
 
+    static AsciiStringView toXml(LineType v);
+    static LineType fromXml(const AsciiStringView& tag, LineType def);
+
     static String toUserName(KeyMode v);
     static AsciiStringView toXml(KeyMode v);
     static KeyMode fromXml(const AsciiStringView& tag, KeyMode def);

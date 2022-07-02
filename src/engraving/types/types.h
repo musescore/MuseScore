@@ -422,6 +422,11 @@ enum class DynamicSpeed : char {
     SLOW, NORMAL, FAST
 };
 
+// P_TYPE::LINE_TYPE
+enum class LineType : char {
+    SOLID, DASHED, DOTTED
+};
+
 // P_TYPE::HOOK_TYPE
 enum class HookType : char {
     NONE, HOOK_90, HOOK_45, HOOK_90T

@@ -4795,7 +4795,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
     using namespace mu::draw;
     int n;
     // special case: a dashed line w/o hooks is written as dashes
-    const auto isDashes = tl->lineStyle() == PenStyle::DashLine && (tl->beginHookType() == HookType::NONE)
+    const auto isDashes = tl->lineStyle() == LineType::DASHED && (tl->beginHookType() == HookType::NONE)
                           && (tl->endHookType() == HookType::NONE);
 
     if (isDashes) {
@@ -4837,17 +4837,15 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         if (!isDashes) {
             QString lineType;
             switch (tl->lineStyle()) {
-            case PenStyle::SolidLine:
+            case LineType::SOLID:
                 lineType = "solid";
                 break;
-            case PenStyle::DashLine:
+            case LineType::DASHED:
                 lineType = "dashed";
                 break;
-            case PenStyle::DotLine:
+            case LineType::DOTTED:
                 lineType = "dotted";
                 break;
-            default:
-                lineType = "solid";
             }
             rest += QString(" line-type=\"%1\"").arg(lineType);
         }

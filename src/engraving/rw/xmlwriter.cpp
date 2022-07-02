@@ -270,6 +270,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::DYNAMIC_SPEED: {
         element(name, TConv::toXml(data.value<DynamicSpeed>()));
     } break;
+    case P_TYPE::LINE_TYPE: {
+        element(name, TConv::toXml(data.value<LineType>()));
+    } break;
     case P_TYPE::HOOK_TYPE: {
         element(name, TConv::toXml(data.value<HookType>()));
     } break;
