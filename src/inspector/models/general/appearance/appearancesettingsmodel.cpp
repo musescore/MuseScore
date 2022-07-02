@@ -29,6 +29,7 @@
 using namespace mu::inspector;
 using namespace mu::actions;
 using namespace mu::framework;
+using namespace mu::engraving;
 
 static constexpr int REARRANGE_ORDER_STEP = 50;
 
@@ -42,17 +43,17 @@ AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementReposi
 
 void AppearanceSettingsModel::createProperties()
 {
-    m_leadingSpace = buildPropertyItem(mu::engraving::Pid::LEADING_SPACE);
-    m_barWidth = buildPropertyItem(mu::engraving::Pid::USER_STRETCH);
-    m_minimumDistance = buildPropertyItem(mu::engraving::Pid::MIN_DISTANCE);
-    m_color = buildPropertyItem(mu::engraving::Pid::COLOR);
-    m_arrangeOrder = buildPropertyItem(mu::engraving::Pid::Z);
+    m_leadingSpace = buildPropertyItem(Pid::LEADING_SPACE);
+    m_barWidth = buildPropertyItem(Pid::USER_STRETCH);
+    m_minimumDistance = buildPropertyItem(Pid::MIN_DISTANCE);
+    m_color = buildPropertyItem(Pid::COLOR);
+    m_arrangeOrder = buildPropertyItem(Pid::Z);
 
-    m_horizontalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_horizontalOffset = buildPropertyItem(Pid::OFFSET, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_verticalOffset = buildPropertyItem(Pid::OFFSET, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 }
@@ -103,17 +104,17 @@ void AppearanceSettingsModel::loadOffsets()
     });
 }
 
-mu::engraving::Page* AppearanceSettingsModel::getPage()
+Page* AppearanceSettingsModel::getPage()
 {
-    return toPage(m_elementList.first()->findAncestor(mu::engraving::ElementType::PAGE));
+    return toPage(m_elementList.first()->findAncestor(ElementType::PAGE));
 }
 
-std::vector<mu::engraving::EngravingItem*> AppearanceSettingsModel::getAllElementsInPage()
+std::vector<EngravingItem*> AppearanceSettingsModel::getAllElementsInPage()
 {
     return getPage()->elements();
 }
 
-std::vector<mu::engraving::EngravingItem*> AppearanceSettingsModel::getAllOverlappingElements()
+std::vector<EngravingItem*> AppearanceSettingsModel::getAllOverlappingElements()
 {
     RectF bbox = m_elementList.first()->abbox();
     for (EngravingItem* element : m_elementList) {
@@ -128,10 +129,10 @@ std::vector<mu::engraving::EngravingItem*> AppearanceSettingsModel::getAllOverla
 
 void AppearanceSettingsModel::pushBackwardsInOrder()
 {
-    std::vector<mu::engraving::EngravingItem*> elements = getAllOverlappingElements();
-    std::sort(elements.begin(), elements.end(), mu::engraving::elementLessThan);
+    std::vector<EngravingItem*> elements = getAllOverlappingElements();
+    std::sort(elements.begin(), elements.end(), elementLessThan);
 
-    int minZ = (*std::min_element(m_elementList.begin(), m_elementList.end(), mu::engraving::elementLessThan))->z();
+    int minZ = (*std::min_element(m_elementList.begin(), m_elementList.end(), elementLessThan))->z();
     int i;
     for (i = 0; i < static_cast<int>(elements.size()); i++) {
         if (elements[i]->z() == minZ) {
@@ -145,10 +146,10 @@ void AppearanceSettingsModel::pushBackwardsInOrder()
 
 void AppearanceSettingsModel::pushForwardsInOrder()
 {
-    std::vector<mu::engraving::EngravingItem*> elements = getAllOverlappingElements();
-    std::sort(elements.begin(), elements.end(), mu::engraving::elementLessThan);
+    std::vector<EngravingItem*> elements = getAllOverlappingElements();
+    std::sort(elements.begin(), elements.end(), elementLessThan);
 
-    int maxZ = (*std::max_element(m_elementList.begin(), m_elementList.end(), mu::engraving::elementLessThan))->z();
+    int maxZ = (*std::max_element(m_elementList.begin(), m_elementList.end(), elementLessThan))->z();
     int elementsCount = static_cast<int>(elements.size());
     int i;
     for (i = elementsCount - 1; i > 0; i--) {
@@ -163,8 +164,8 @@ void AppearanceSettingsModel::pushForwardsInOrder()
 
 void AppearanceSettingsModel::pushToBackInOrder()
 {
-    std::vector<mu::engraving::EngravingItem*> elements = getAllElementsInPage();
-    EngravingItem* minElement = *std::min_element(elements.begin(), elements.end(), mu::engraving::elementLessThan);
+    std::vector<EngravingItem*> elements = getAllElementsInPage();
+    EngravingItem* minElement = *std::min_element(elements.begin(), elements.end(), elementLessThan);
 
     if (m_elementList.contains(minElement)) {
         m_arrangeOrder->setValue(minElement->z());
@@ -175,8 +176,8 @@ void AppearanceSettingsModel::pushToBackInOrder()
 
 void AppearanceSettingsModel::pushToFrontInOrder()
 {
-    std::vector<mu::engraving::EngravingItem*> elements = getAllElementsInPage();
-    EngravingItem* maxElement = *std::max_element(elements.begin(), elements.end(), mu::engraving::elementLessThan);
+    std::vector<EngravingItem*> elements = getAllElementsInPage();
+    EngravingItem* maxElement = *std::max_element(elements.begin(), elements.end(), elementLessThan);
 
     if (m_elementList.contains(maxElement)) {
         m_arrangeOrder->setValue(maxElement->z());
