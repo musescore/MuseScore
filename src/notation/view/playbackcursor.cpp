@@ -109,8 +109,7 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
     double y = system->staffYpage(0) + system->page()->pos().y();
     double _spatium = score->spatium();
 
-    qreal mag = _spatium / mu::engraving::SPATIUM20;
-    double w  = _spatium * 2.0 + score->scoreFont()->width(mu::engraving::SymId::noteheadBlack, mag);
+    double w  = 8;
     double h  = 6 * _spatium;
     //
     // set cursor height for whole system
@@ -149,8 +148,5 @@ const mu::RectF& PlaybackCursor::rect() const
 
 QColor PlaybackCursor::color() const
 {
-    QColor color = configuration()->playbackCursorColor();
-    color.setAlpha(configuration()->cursorOpacity());
-
-    return color;
+    return configuration()->playbackCursorColor();
 }
