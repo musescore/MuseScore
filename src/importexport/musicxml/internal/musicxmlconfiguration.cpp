@@ -35,7 +35,6 @@ static const Settings::Key MUSICXML_EXPORT_BREAKS_TYPE_KEY(module_name, "export/
 static const Settings::Key MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY(module_name, "export/musicXML/exportInvisibleElements");
 static const Settings::Key MIGRATION_APPLY_EDWIN_FOR_XML(module_name, "import/compatibility/apply_edwin_for_xml");
 static const Settings::Key MIGRATION_NOT_ASK_AGAIN_KEY(module_name, "import/compatibility/do_not_ask_me_again");
-static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style/styleFile");
 
 void MusicXmlConfiguration::init()
 {
@@ -115,14 +114,4 @@ bool MusicXmlConfiguration::needAskAboutApplyingNewStyle() const
 void MusicXmlConfiguration::setNeedAskAboutApplyingNewStyle(bool value)
 {
     settings()->setSharedValue(MIGRATION_NOT_ASK_AGAIN_KEY, Val(!value));
-}
-
-mu::io::path_t MusicXmlConfiguration::styleFileImportPath() const
-{
-    return settings()->value(STYLE_FILE_IMPORT_PATH_KEY).toString();
-}
-
-void MusicXmlConfiguration::setStyleFileImportPath(const io::path_t& path)
-{
-    settings()->setSharedValue(STYLE_FILE_IMPORT_PATH_KEY, Val(path.toStdString()));
 }

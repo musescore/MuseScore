@@ -50,9 +50,6 @@ public:
 
     bool needAskAboutApplyingNewStyle() const override;
     void setNeedAskAboutApplyingNewStyle(bool value) override;
-
-    io::path_t styleFileImportPath() const override;
-    void setStyleFileImportPath(const io::path_t& path) override;
 };
 }
 

@@ -87,7 +87,7 @@ QString ImportPreferencesModel::fileDirectory(const QString& filePath) const
 
 QString ImportPreferencesModel::styleFileImportPath() const
 {
-    return musicXmlConfiguration()->styleFileImportPath().toQString();
+    return notationConfiguration()->styleFileImportPath().toQString();
 }
 
 QString ImportPreferencesModel::currentOvertureCharset() const
@@ -126,7 +126,7 @@ void ImportPreferencesModel::setStyleFileImportPath(QString path)
         return;
     }
 
-    musicXmlConfiguration()->setStyleFileImportPath(path.toStdString());
+    notationConfiguration()->setStyleFileImportPath(path.toStdString());
     emit styleFileImportPathChanged(path);
 }
 
