@@ -25,7 +25,7 @@
 #include "modularity/imoduleexport.h"
 
 #include "ret.h"
-#include "async/channel.h"
+#include "async/notification.h"
 #include "synthtypes.h"
 
 namespace mu::audio {

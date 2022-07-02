@@ -45,7 +45,6 @@ class FluidSynth : public AbstractSynthesizer
 public:
     FluidSynth(const audio::AudioSourceParams& params);
 
-    SoundFontFormats soundFontFormats() const;
     Ret addSoundFonts(const std::vector<io::path_t>& sfonts);
 
     std::string name() const override;

@@ -75,11 +75,6 @@ bool FluidSynth::isValid() const
     return m_fluid->synth != nullptr;
 }
 
-SoundFontFormats FluidSynth::soundFontFormats() const
-{
-    return { SoundFontFormat::SF2, SoundFontFormat::SF3 };
-}
-
 Ret FluidSynth::init()
 {
     auto fluid_log_out = [](int level, const char* message, void*) {
