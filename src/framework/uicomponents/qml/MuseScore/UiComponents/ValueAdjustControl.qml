@@ -53,6 +53,14 @@ Column {
             iconCode: IconCode.SMALL_ARROW_UP
         }
 
+        onEnabledChanged: {
+            // If the button becomes disabled, the mouse area does not emit the
+            // `released` signal anymore, so we'll stop the repeat timer here.
+            if (!enabled) {
+                continuousIncreaseTimer.running = false
+            }
+        }
+
         MouseArea {
             id: increaseMouseArea
             anchors.fill: parent
@@ -109,6 +117,14 @@ Column {
         StyledIconLabel {
             anchors.centerIn: parent
             iconCode: IconCode.SMALL_ARROW_DOWN
+        }
+
+        onEnabledChanged: {
+            // If the button becomes disabled, the mouse area does not emit the
+            // `released` signal anymore, so we'll stop the repeat timer here.
+            if (!enabled) {
+                continuousDecreaseTimer.running = false
+            }
         }
 
         MouseArea {
