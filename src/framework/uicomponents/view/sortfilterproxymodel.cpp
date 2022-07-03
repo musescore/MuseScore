@@ -104,13 +104,13 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& so
             continue;
         }
 
-        CompareType::Type compreType = value->compareType().value<CompareType::Type>();
+        CompareType::Type compareType = value->compareType().value<CompareType::Type>();
 
-        if (CompareType::Contains == compreType) {
+        if (CompareType::Contains == compareType) {
             if (!data.toString().contains(value->roleValue().toString(), Qt::CaseInsensitive)) {
                 return false;
             }
-        } else if (CompareType::Equal == compreType) {
+        } else if (CompareType::Equal == compareType) {
             if (data != value->roleValue()) {
                 return false;
             }

@@ -33,8 +33,8 @@ class SortFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QQmlListProperty<mu::uicomponents::FilterValue> filters READ filters)
-    Q_PROPERTY(QQmlListProperty<mu::uicomponents::SorterValue> sorters READ sorters)
+    Q_PROPERTY(QQmlListProperty<mu::uicomponents::FilterValue> filters READ filters CONSTANT)
+    Q_PROPERTY(QQmlListProperty<mu::uicomponents::SorterValue> sorters READ sorters CONSTANT)
     Q_PROPERTY(QList<int> excludeIndexes READ excludeIndexes WRITE setExcludeIndexes NOTIFY excludeIndexesChanged)
 
 public:
@@ -51,7 +51,7 @@ public slots:
     void setExcludeIndexes(QList<int> excludeIndexes);
 
 signals:
-    void filtersChanged(QQmlListProperty<FilterValue> filters);
+    void filtersChanged(QQmlListProperty<mu::uicomponents::FilterValue> filters);
     void excludeIndexesChanged(QList<int> excludeIndexes);
 
 protected:
