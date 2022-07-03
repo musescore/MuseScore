@@ -40,6 +40,7 @@ const QString SCORE_SUFFIX_KEY("suffix");
 const QString SCORE_THUMBNAIL_KEY("thumbnail");
 const QString SCORE_TIME_SINCE_MODIFIED_KEY("timeSinceModified");
 const QString SCORE_ADD_NEW_KEY("isAddNew");
+const QString SCORE_NO_RESULT_FOUND_KEY("isNoResultFound");
 }
 
 RecentProjectsModel::RecentProjectsModel(QObject* parent)
@@ -116,6 +117,7 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
     QVariantMap addItem;
     addItem[SCORE_NAME_KEY] = qtrc("project", "New score");
     addItem[SCORE_ADD_NEW_KEY] = true;
+    addItem[SCORE_NO_RESULT_FOUND_KEY] = false;
     recentScores << addItem;
 
     for (const ProjectMeta& meta : recentProjectsList) {
@@ -133,9 +135,16 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
 
         obj[SCORE_TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(meta.filePath).lastModified().date()).toQString();
         obj[SCORE_ADD_NEW_KEY] = false;
+        obj[SCORE_NO_RESULT_FOUND_KEY] = false;
 
         recentScores << obj;
     }
+
+    QVariantMap noResultsFoundItem;
+    noResultsFoundItem[SCORE_NAME_KEY] = "";
+    noResultsFoundItem[SCORE_ADD_NEW_KEY] = false;
+    noResultsFoundItem[SCORE_NO_RESULT_FOUND_KEY] = true;
+    recentScores << noResultsFoundItem;
 
     setRecentScores(recentScores);
 }
