@@ -142,6 +142,8 @@ FocusScope {
         model: SortFilterProxyModel {
             sourceModel: recentScoresModel
 
+            excludeIndexes: [0, recentScoresModel.rowCount() - 1]           // New score and no result items
+
             filters: [
                 FilterValue {
                     roleName: "name"
