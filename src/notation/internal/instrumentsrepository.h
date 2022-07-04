@@ -39,9 +39,13 @@ public:
     void init();
 
     const InstrumentTemplateList& instrumentTemplates() const override;
+    const InstrumentTemplate& instrumentTemplate(const std::string& instrumentId) const override;
+
+    const ScoreOrderList& orders() const override;
+    const ScoreOrder& order(const std::string& orderId) const override;
+
     const InstrumentGenreList& genres() const override;
     const InstrumentGroupList& groups() const override;
-    const ScoreOrderList& orders() const override;
 
 private:
     void load();

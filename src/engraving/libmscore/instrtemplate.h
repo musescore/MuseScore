@@ -126,6 +126,8 @@ public:
 
     String groupId;
 
+    bool isValid() const;
+
     void write(XmlWriter& xml) const;
     void write1(XmlWriter& xml) const;
     void read(XmlReader&);

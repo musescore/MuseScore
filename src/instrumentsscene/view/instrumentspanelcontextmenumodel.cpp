@@ -73,13 +73,15 @@ void InstrumentsPanelContextMenuModel::loadItems()
 
     ScoreOrder currentOrder = m_masterNotation->parts()->scoreOrder();
     m_orders = instrumentsRepository()->orders();
-    if (m_orders.isEmpty() || !m_orders.contains(customOrder())) {
-        m_orders.append(customOrder());
+
+    const ScoreOrder& custom = customOrder();
+    if (m_orders.empty() || !mu::contains(m_orders, custom)) {
+        m_orders.push_back(custom);
     }
 
-    if (!m_orders.contains(currentOrder)) {
+    if (!mu::contains(m_orders, currentOrder)) {
         currentOrder.customized = false;
-        m_orders.append(currentOrder);
+        m_orders.push_back(currentOrder);
     }
 
     buildMenu();

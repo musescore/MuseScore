@@ -292,6 +292,11 @@ InstrumentTemplate& InstrumentTemplate::operator=(const InstrumentTemplate& temp
     return *this;
 }
 
+bool InstrumentTemplate::isValid() const
+{
+    return !id.empty();
+}
+
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
