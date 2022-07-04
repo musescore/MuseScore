@@ -33,7 +33,7 @@ Rectangle {
 
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
-    property string description: instrumentsModel.selectedInstrumentDescription
+    property string description: instrumentsModel.selectedInstrument ? instrumentsModel.selectedInstrument.description : ""
 
     property bool hasSelectedInstruments: instrumentsOnScoreView.hasInstruments
 
@@ -46,7 +46,7 @@ Rectangle {
             return instrumentsOnScoreView.instruments()
         }
 
-        return instrumentsModel.selectedInstruments()
+        return [ instrumentsModel.selectedInstrument ]
     }
 
     function currentOrder() {
@@ -76,8 +76,7 @@ Rectangle {
         id: prv
 
         function addSelectedInstrumentsToScore() {
-            var selectedInstruments = instrumentsModel.selectedInstruments()
-            instrumentsOnScoreView.addInstruments(selectedInstruments)
+            instrumentsOnScoreView.addInstruments(instrumentsModel.selectedInstrumentIdList())
 
             Qt.callLater(instrumentsOnScoreView.scrollViewToEnd)
         }
