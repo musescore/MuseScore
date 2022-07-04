@@ -82,7 +82,7 @@ void MasterNotationParts::removeStaves(const IDList& stavesIds)
     endGlobalEdit();
 }
 
-void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
+void MasterNotationParts::insertStaff(Staff* staff, const ID& destinationPartId, size_t index)
 {
     TRACEFUNC;
 
@@ -91,11 +91,19 @@ void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     //! NOTE: will be generated later after adding to the score
     staff->setId(mu::engraving::INVALID_ID);
 
-    NotationParts::appendStaff(staff, destinationPartId);
+    NotationParts::insertStaff(staff, destinationPartId, index);
+
+    size_t firstStaffInPartIndex = 0;
+    for (const Part* part : partList()) {
+        if (part->id() == destinationPartId) {
+            break;
+        }
+        firstStaffInPartIndex += part->nstaves();
+    }
 
     for (INotationPartsPtr parts : excerptsParts()) {
         Staff* excerptStaff = mu::engraving::toStaff(staff->linkedClone());
-        parts->appendStaff(excerptStaff, destinationPartId);
+        parts->insertStaff(excerptStaff, destinationPartId, index - firstStaffInPartIndex);
     }
 
     endGlobalEdit();

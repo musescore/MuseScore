@@ -3822,6 +3822,52 @@ void Score::setScoreOrder(ScoreOrder order)
 }
 
 //---------------------------------------------------------
+//   updateBracesAndBarlines
+//---------------------------------------------------------
+
+void Score::updateBracesAndBarlines(Part* part, size_t newIndex)
+{
+    bool noBracesFound = true;
+    for (size_t indexInPart = 0; indexInPart < part->nstaves(); ++indexInPart) {
+        size_t indexInScore = part->staves()[indexInPart]->idx();
+        for (BracketItem* bi : staff(indexInScore)->brackets()) {
+            noBracesFound = false;
+            if (bi->bracketType() == BracketType::BRACE) {
+                if ((indexInPart <= newIndex) && (newIndex <= (bi->bracketSpan()))) {
+                    bi->undoChangeProperty(Pid::BRACKET_SPAN, bi->bracketSpan() + 1);
+                }
+            }
+        }
+    }
+
+    auto updateBracketSpan = [this, part](size_t modIndex, size_t refIndex) {
+        Staff* modStaff = staff(part->staves()[modIndex]->idx());
+        Staff* refStaff = staff(part->staves()[refIndex]->idx());
+        if (modStaff->getProperty(Pid::STAFF_BARLINE_SPAN) != refStaff->getProperty(Pid::STAFF_BARLINE_SPAN)) {
+            modStaff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, refStaff->getProperty(Pid::STAFF_BARLINE_SPAN));
+        }
+    };
+
+    if (newIndex >= 2) {
+        updateBracketSpan(newIndex - 1, newIndex - 2);
+    }
+
+    if (part->nstaves() == 2) {
+        InstrumentTemplate* tp = searchTemplate(part->instrumentId());
+        if (tp) {
+            if (tp->barlineSpan[0] > 0) {
+                staff(part->staves()[0]->idx())->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, tp->barlineSpan[0]);
+            }
+            if (noBracesFound && (tp->bracket[0] != BracketType::NO_BRACKET)) {
+                undoAddBracket(part->staves()[0], 0, tp->bracket[0], part->nstaves());
+            }
+        }
+    } else {
+        updateBracketSpan(newIndex, newIndex - 1);
+    }
+}
+
+//---------------------------------------------------------
 //   setBracketsAndBarlines
 //---------------------------------------------------------
 
@@ -5220,6 +5266,24 @@ void Score::addRefresh(const mu::RectF& r)
 {
     _updateState.refresh.unite(r);
     cmdState().setUpdateMode(UpdateMode::Update);
+}
+
+//---------------------------------------------------------
+//   staffIdx
+//
+//  Return index for the staff in the score.
+//---------------------------------------------------------
+
+staff_idx_t Score::staffIdx(const Staff* staff) const
+{
+    staff_idx_t idx = 0;
+    for (Staff* s : _staves) {
+        if (s == staff) {
+            break;
+        }
+        ++idx;
+    }
+    return idx;
 }
 
 //---------------------------------------------------------

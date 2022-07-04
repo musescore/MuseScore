@@ -499,7 +499,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     notifyAboutStaffChanged(staff);
 }
 
-void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
+void NotationParts::insertStaff(Staff* staff, const ID& destinationPartId, size_t index)
 {
     TRACEFUNC;
 
@@ -510,7 +510,7 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 
     startEdit();
 
-    doAppendStaff(staff, destinationPart);
+    doInsertStaff(staff, destinationPart, index);
     updateTracks();
 
     apply();
@@ -530,7 +530,7 @@ void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, con
 
     startEdit();
 
-    doAppendStaff(staff, destinationPart);
+    doInsertStaff(staff, destinationPart, destinationPart->nstaves());
 
     ///! NOTE: need to unlink before linking
     staff->setLinks(nullptr);
@@ -731,9 +731,8 @@ void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
     }
 }
 
-void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
+void NotationParts::doInsertStaff(Staff* staff, Part* destinationPart, size_t staffLocalIndex)
 {
-    size_t staffLocalIndex = destinationPart->nstaves();
     mu::engraving::KeyList keyList = score()->keyList();
 
     staff->setScore(score());
@@ -744,6 +743,7 @@ void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
     track_idx_t staffGlobalIndex = staff->idx();
     score()->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
 
+    score()->updateBracesAndBarlines(destinationPart, staffLocalIndex);
     setBracketsAndBarlines();
 
     destinationPart->instrument()->setClefType(staffLocalIndex, staff->defaultClefType());
@@ -816,7 +816,27 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     startEdit();
 
     for (Staff* staff: stavesToRemove) {
+        class BracketData
+        {
+        public:
+            int column;
+            int span;
+
+            BracketData(int c, int s)
+                : column(c), span(s) {}
+        };
+
+        std::vector<BracketData> newBrackets;
+        staff_idx_t staffIdx = score()->staffIdx(staff);
+        for (BracketItem* bi : staff->brackets()) {
+            if ((bi->bracketType() == BracketType::BRACE) && (bi->bracketSpan() > 1)) {
+                newBrackets.push_back(BracketData(bi->column(), bi->bracketSpan() - 1));
+            }
+        }
         score()->cmdRemoveStaff(staff->idx());
+        for (BracketData bd : newBrackets) {
+            score()->undoAddBracket(score()->staff(staffIdx), bd.column, BracketType::BRACE, bd.span);
+        }
     }
 
     setBracketsAndBarlines();
