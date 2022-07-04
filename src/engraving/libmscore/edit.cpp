@@ -5327,7 +5327,8 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
             && et != ElementType::TREMOLOBAR
             && et != ElementType::FRET_DIAGRAM
             && et != ElementType::FERMATA
-            && et != ElementType::HARMONY)
+            && et != ElementType::HARMONY
+            && et != ElementType::HARP_DIAGRAM)
         ) {
         undo(new AddElement(element));
         return;
@@ -5502,7 +5503,8 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                      || element->isSticking()
                      || element->isFretDiagram()
                      || element->isFermata()
-                     || element->isHarmony()) {
+                     || element->isHarmony()
+                     || element->isHarpPedalDiagram()) {
                 Segment* segment
                     = element->explicitParent()->isFretDiagram() ? toSegment(element->explicitParent()->explicitParent()) : toSegment(
                           element->explicitParent());

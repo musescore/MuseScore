@@ -41,6 +41,7 @@
 #include "glissando.h"
 #include "hairpin.h"
 #include "harmony.h"
+#include "harppedaldiagram.h"
 #include "fret.h"
 #include "hook.h"
 #include "input.h"
@@ -1032,6 +1033,8 @@ ByteArray Selection::symbolListMimeData() const
         case ElementType::HAIRPIN:
             seg = toHairpin(e)->startSegment();
             break;
+        case ElementType::HARP_DIAGRAM:
+            seg = toHarpPedalDiagram(e)->segment();
         default:
             continue;
         }

@@ -33,7 +33,7 @@ enum class PedalPosition {
 };
 
 // Use for indexes of _pedalState
-enum HarpStrings {
+enum HarpString {
     D, C, B, E, F, G, A
 };
 
@@ -56,6 +56,8 @@ public:
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
+    void layout() override;
+
     //TODO
     // xml read/write
     void read(XmlReader&) override;
@@ -73,12 +75,16 @@ public:
 
     std::vector<PedalPosition> getPedalState() { return _pedalState; }
     void setPedalState(std::vector<PedalPosition> state);
-    void setPedal(HarpStrings harpString, PedalPosition pedal);
+    void setPedal(HarpString harpString, PedalPosition pedal);
 
 private:
     //friend class Factory;
 
     void updateDiagramText();
+
+    const String getStringName(HarpString str);
+
+    HarpPedalDiagram* searchPrevDiagram();
 };
 } // namespace mu::engraving
 
