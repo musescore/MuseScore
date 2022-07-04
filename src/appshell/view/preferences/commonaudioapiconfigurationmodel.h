@@ -41,9 +41,6 @@ class CommonAudioApiConfigurationModel : public QObject, public async::Asyncable
     Q_PROPERTY(unsigned int bufferSize READ bufferSize NOTIFY bufferSizeChanged)
     Q_PROPERTY(QList<unsigned int> bufferSizeList READ bufferSizeList NOTIFY bufferSizeListChanged)
 
-    Q_PROPERTY(unsigned int sampleRate READ sampleRate NOTIFY sampleRateChanged)
-    Q_PROPERTY(QVariantList sampleRateList READ sampleRateList NOTIFY sampleRateListChanged)
-
     INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
     INJECT(appshell, audio::IAudioDriver, audioDriver)
 
@@ -60,19 +57,12 @@ public:
     QList<unsigned int> bufferSizeList() const;
     Q_INVOKABLE void bufferSizeSelected(const QString& bufferSizeStr);
 
-    int sampleRate() const;
-    QVariantList sampleRateList() const;
-    Q_INVOKABLE void sampleRateSelected(const QString& sampleRateStr);
-
 signals:
     void currentDeviceIdChanged();
     void deviceListChanged();
 
     void bufferSizeChanged();
     void bufferSizeListChanged();
-
-    void sampleRateChanged();
-    void sampleRateListChanged();
 };
 }
 

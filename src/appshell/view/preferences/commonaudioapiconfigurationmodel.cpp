@@ -44,15 +44,10 @@ void CommonAudioApiConfigurationModel::load()
     audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
         emit currentDeviceIdChanged();
         emit bufferSizeChanged();
-        emit sampleRateChanged();
     });
 
     audioDriver()->outputDeviceBufferSizeChanged().onNotify(this, [this]() {
         emit bufferSizeChanged();
-    });
-
-    audioDriver()->outputDeviceSampleRateChanged().onNotify(this, [this]() {
-        emit sampleRateChanged();
     });
 }
 
@@ -102,30 +97,4 @@ QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
 void CommonAudioApiConfigurationModel::bufferSizeSelected(const QString& bufferSizeStr)
 {
     audioConfiguration()->setDriverBufferSize(bufferSizeStr.toInt());
-}
-
-int CommonAudioApiConfigurationModel::sampleRate() const
-{
-    return audioDriver()->outputDeviceSampleRate();
-}
-
-QVariantList CommonAudioApiConfigurationModel::sampleRateList() const
-{
-    QVariantList result;
-
-    std::vector<unsigned int> sampleRates = audioDriver()->availableOutputDeviceSampleRates();
-    for (unsigned int sampleRate : sampleRates) {
-        QVariantMap obj;
-        obj["value"] = sampleRate;
-        obj["text"] = QString::number(sampleRate) + " " + qtrc("global", "Hz");
-
-        result << obj;
-    }
-
-    return result;
-}
-
-void CommonAudioApiConfigurationModel::sampleRateSelected(const QString& sampleRateStr)
-{
-    audioConfiguration()->setSampleRate(sampleRateStr.toInt());
 }
