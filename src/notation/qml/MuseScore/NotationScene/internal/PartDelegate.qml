@@ -32,7 +32,7 @@ ListItemBlank {
     property string title: ""
     property int currentPartIndex: -1
 
-    property bool isCreated: false
+    property bool isCustom: false
 
     property int sideMargin: 0
 
@@ -71,7 +71,9 @@ ListItemBlank {
     }
 
     onDoubleClicked: {
-        root.startEditTitle()
+        if (root.isCustom) {
+            root.startEditTitle()
+        }
     }
 
     onIsSelectedChanged: {
@@ -138,11 +140,16 @@ ListItemBlank {
         }
 
         MenuButton {
-            menuModel: [
-                { "id": "duplicate", "title": qsTrc("notation", "Duplicate"), "enabled": root.isCreated },
-                { "id": "delete", "title": qsTrc("notation", "Delete"), "enabled": root.isCreated },
-                { "id": "rename", "title": qsTrc("notation", "Rename") },
-            ]
+            Component.onCompleted: {
+                var operations = [ { "id": "duplicate", "title": qsTrc("notation", "Duplicate") }]
+
+                if (root.isCustom) {
+                    operations.push({ "id": "rename", "title": qsTrc("notation", "Rename") })
+                    operations.push({ "id": "delete", "title": qsTrc("notation", "Delete") })
+                }
+
+                menuModel = operations
+            }
 
             navigation.name: title
             navigation.panel: root.navigation.panel
@@ -154,12 +161,12 @@ ListItemBlank {
                 case "duplicate":
                     root.copyPartRequested()
                     break
+                case "rename":
+                    root.startEditTitle()
+                    break
                 case "delete":
                     root.removePartRequested()
                     break
-                case "rename":
-                    root.startEditTitle()
-                    break;
                 }
             }
         }

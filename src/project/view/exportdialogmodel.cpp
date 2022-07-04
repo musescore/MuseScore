@@ -119,6 +119,10 @@ void ExportDialogModel::load()
         m_notations << excerpt->notation();
     }
 
+    for (IExcerptNotationPtr excerpt : masterNotation->potentialExcerpts()) {
+        m_notations << excerpt->notation();
+    }
+
     endResetModel();
 
     selectCurrentNotation();
@@ -310,6 +314,21 @@ bool ExportDialogModel::exportScores()
     if (notations.empty()) {
         return false;
     }
+
+    ExcerptNotationList excerptsToInit;
+    ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
+
+    for (const INotationPtr& notation : notations) {
+        auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
+            return excerpt->notation() == notation;
+        });
+
+        if (it != potentialExcerpts.cend()) {
+            excerptsToInit.push_back(*it);
+        }
+    }
+
+    masterNotation()->initExcerpts(excerptsToInit);
 
     return exportProjectScenario()->exportScores(notations, m_selectedExportType, m_selectedUnitType,
                                                  shouldDestinationFolderBeOpenedOnExport());

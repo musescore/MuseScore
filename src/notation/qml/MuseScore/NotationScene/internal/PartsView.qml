@@ -32,10 +32,6 @@ Item {
 
     property alias navigationPanel: view.navigationPanel
 
-    function focusOnFirst() {
-        root.model.selectPart(0)
-    }
-
     QtObject {
         id: prv
 
@@ -96,7 +92,7 @@ Item {
             }
         }
 
-        ScrollBar.vertical: StyledScrollBar {}
+        ScrollBar.vertical: StyledScrollBar { policy: ScrollBar.AlwaysOn }
 
         Connections {
             target: root.model
@@ -114,7 +110,7 @@ Item {
             title: model.title
             currentPartIndex: view.currentIndex
             isSelected: model.isSelected
-            isCreated: model.isCreated
+            isCustom: model.isCustom
 
             navigation.name: model.title + model.index
             navigation.panel: view.navigationPanel
@@ -145,10 +141,6 @@ Item {
 
             onCopyPartRequested: {
                 root.model.copyPart(model.index)
-            }
-
-            onRemoveSelectionRequested: {
-                root.model.removeSelectedParts()
             }
         }
     }

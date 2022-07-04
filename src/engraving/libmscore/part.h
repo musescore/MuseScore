@@ -89,7 +89,7 @@ public:
     Part(Score* score = nullptr);
     void initFromInstrTemplate(const InstrumentTemplate*);
 
-    ID id() const;
+    const ID& id() const;
     void setId(const ID& id);
 
     Part* clone() const;

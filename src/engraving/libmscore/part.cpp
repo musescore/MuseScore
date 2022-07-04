@@ -71,7 +71,7 @@ void Part::initFromInstrTemplate(const InstrumentTemplate* t)
     setInstrument(Instrument::fromTemplate(t));
 }
 
-ID Part::id() const
+const ID& Part::id() const
 {
     return _id;
 }
@@ -154,7 +154,9 @@ Part* Part::masterPart()
 bool Part::readProperties(XmlReader& e)
 {
     const AsciiStringView tag(e.name());
-    if (tag == "Staff") {
+    if (tag == "id") {
+        _id = e.readInt();
+    } else if (tag == "Staff") {
         Staff* staff = Factory::createStaff(this);
         score()->appendStaff(staff);
         staff->read(e);
@@ -189,6 +191,8 @@ bool Part::readProperties(XmlReader& e)
 
 void Part::read(XmlReader& e)
 {
+    _id = e.intAttribute("id", 0);
+
     while (e.readNextStartElement()) {
         if (!readProperties(e)) {
             e.unknown();
@@ -205,25 +209,31 @@ void Part::read(XmlReader& e)
 
 void Part::write(XmlWriter& xml) const
 {
-    xml.startElement(this);
+    xml.startElement(this, { { "id", _id.toUint64() } });
 
     for (const Staff* staff : _staves) {
         staff->write(xml);
     }
+
     if (!_show) {
         xml.tag("show", _show);
     }
+
     if (_soloist) {
         xml.tag("soloist", _soloist);
     }
+
     xml.tag("trackName", _partName);
+
     if (_color != DEFAULT_COLOR) {
         xml.tag("color", _color);
     }
+
     if (_preferSharpFlat != PreferSharpFlat::DEFAULT) {
         xml.tag("preferSharpFlat",
                 _preferSharpFlat == PreferSharpFlat::SHARPS ? "sharps" : "flats");
     }
+
     instrument()->write(xml, this);
 
     xml.endElement();

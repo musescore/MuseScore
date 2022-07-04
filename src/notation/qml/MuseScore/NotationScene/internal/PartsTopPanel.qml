@@ -30,12 +30,8 @@ Item {
     id: root
 
     property int sideMargin: 0
-    property int buttonsMargin: 0
-
-    property bool isRemovingAvailable: false
 
     signal createNewPartRequested()
-    signal removeSelectedPartsRequested()
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "PartsControlPanel"
@@ -60,8 +56,8 @@ Item {
     FlatButton {
         text: qsTrc("notation", "Create new part")
 
-        anchors.right: deleteButton.left
-        anchors.rightMargin: 8
+        anchors.right: parent.right
+        anchors.rightMargin: root.sideMargin
 
         navigation.name: "CreateNewPartButton"
         navigation.panel: root.navigationPanel
@@ -69,26 +65,6 @@ Item {
 
         onClicked: {
             root.createNewPartRequested()
-        }
-    }
-
-    FlatButton {
-        id: deleteButton
-
-        anchors.right: parent.right
-        anchors.rightMargin: root.buttonsMargin
-
-        icon: IconCode.DELETE_TANK
-
-        enabled: root.isRemovingAvailable
-
-        navigation.name: "DeleteButton"
-        navigation.panel: root.navigationPanel
-        navigation.column: 1
-        navigation.accessible.name: qsTrc("global", "Delete")
-
-        onClicked: {
-            root.removeSelectedPartsRequested()
         }
     }
 }

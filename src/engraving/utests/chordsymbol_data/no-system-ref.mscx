@@ -22,7 +22,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>Standard</name>
@@ -59,7 +59,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>Standard</name>
@@ -102,10 +102,6 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <VBox>
-        <height>10</height>
-        <linkedMain/>
-        </VBox>
       <Measure>
         <voice>
           <Clef>
@@ -212,7 +208,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Flute</metaTag>
-      <Part>
+      <Part id="1">
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
@@ -253,8 +249,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <linked>
-            </linked>
           <Text>
             <style>instrument_excerpt</style>
             <text>Flute</text>
@@ -323,7 +317,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Alto Saxophone</metaTag>
-      <Part>
+      <Part id="2">
         <Staff id="1">
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">
@@ -369,11 +363,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <linked>
-            <location>
-              <staves>-1</staves>
-              </location>
-            </linked>
           <Text>
             <style>instrument_excerpt</style>
             <text>Alto Saxophone</text>
