@@ -96,8 +96,8 @@ class Beam final : public EngravingItem
     int computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const;
     int getMaxSlope() const;
     int getBeamCount(std::vector<ChordRest*> chordRests) const;
-    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, double startX, double endX,
-                                      bool isFlat, bool isStartDictator) const;
+    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, const double startX,
+                                      const double endX, bool isFlat, bool isStartDictator) const;
     bool isBeamInsideStaff(int yPos, int staffLines) const;
     int getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const;
     bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, int beamCount) const;
@@ -107,7 +107,7 @@ class Beam final : public EngravingItem
                                bool isAscending);
     void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval);
     void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
-    void extendStem(Chord* chord, int extraBeamAdjust);
+    void extendStem(Chord* chord, double addition);
     bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
     void createBeamSegment(Chord* startChord, Chord* endChord, int level);
     void createBeamletSegment(Chord* chord, bool isBefore, int level);
@@ -147,7 +147,14 @@ public:
 
     void layout1();
     void layout() override;
-    mu::PointF chordBeamAnchor(Chord* chord) const;
+
+    enum class ChordBeamAnchorType {
+        Start, End, Middle
+    };
+
+    qreal chordBeamAnchorX(const Chord* chord, ChordBeamAnchorType anchorType) const;
+    qreal chordBeamAnchorY(const Chord* chord) const;
+    PointF chordBeamAnchor(const Chord* chord, ChordBeamAnchorType anchorType) const;
 
     const std::vector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }
