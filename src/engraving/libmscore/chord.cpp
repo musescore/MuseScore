@@ -1452,10 +1452,10 @@ int Chord::calcMinStemLength()
     }
     if (_beam) {
         static const int minInnerStemLengths[4] = { 10, 9, 8, 7 };
-        int innerStemLength = minInnerStemLengths[std::min(beams(), 3)] * _relativeMag;
+        int innerStemLength = minInnerStemLengths[std::min(beams(), 3)];
         int beamsHeight = beams() * (score()->styleB(Sid::useWideBeams) ? 4 : 3) - 1;
         minStemLength = std::max(minStemLength, innerStemLength);
-        minStemLength += beamsHeight * _relativeMag;
+        minStemLength += beamsHeight;
     }
     return minStemLength;
 }
@@ -1503,7 +1503,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
     // [extensionOutsideStaff][beamCount]
     static const int maxReductions[4][5] = {
         //1sp 1.5sp 2sp 2.5sp >=3sp -- extensionOutsideStaff
-        { 0, 1, 2, 3, 4 }, // 0 beams
+        { 1, 2, 3, 4, 4 }, // 0 beams
         { 0, 1, 2, 3, 3 }, // 1 beam
         { 0, 1, 1, 1, 1 }, // 2 beams
         { 0, 0, 0, 1, 1 }, // 3 beams
@@ -1512,7 +1512,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
     if (beamCount >= 4) {
         return 0;
     }
-    int extensionHalfSpaces = ceil(extensionOutsideStaff / 2.0);
+    int extensionHalfSpaces = floor(extensionOutsideStaff / 2.0);
     extensionHalfSpaces = std::min(extensionHalfSpaces, 4);
     int reduction = maxReductions[beamCount][extensionHalfSpaces];
     if (_relativeMag < 1) {
@@ -1605,8 +1605,8 @@ double Chord::calcDefaultStemLength()
     }
     // extraHeight represents the extra vertical distance between notehead and stem start
     // eg. slashed noteheads etc
-    double extraHeight = abs(_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / _relativeMag / _spatium;
-    int shortestStem = score()->styleB(Sid::useWideBeams) ? 12 : (score()->styleD(Sid::shortestStem) + extraHeight) * 4;
+    double extraHeight = (_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / _relativeMag / _spatium;
+    int shortestStem = score()->styleB(Sid::useWideBeams) ? 12 : (score()->styleD(Sid::shortestStem) + abs(extraHeight)) * 4;
     int chordHeight = (downLine() - upLine()) * 2; // convert to quarter spaces
     int stemLength = defaultStemLength;
 
@@ -1633,7 +1633,8 @@ double Chord::calcDefaultStemLength()
             }
             idealStemLength = std::max(idealStemLength - reduction, shortestStem);
         } else if (stemEndPosition > middleLine) {
-            idealStemLength += stemEndPosition - middleLine;
+            // this case will be taken care of below; even if we were to adjust here we'd have
+            // to adjust again later if the line spacing != 1.0 or if _relativeMag != 1.0
         } else {
             idealStemLength -= stemOpticalAdjustment(stemEndPosition);
             idealStemLength = std::max(idealStemLength, shortestStem);
@@ -1652,7 +1653,8 @@ double Chord::calcDefaultStemLength()
             }
             idealStemLength = std::max(idealStemLength - reduction, shortestStem);
         } else if (stemEndPosition < middleLine) {
-            idealStemLength += middleLine - stemEndPosition;
+            // this case will be taken care of below; even if we were to adjust here we'd have
+            // to adjust again later if the line spacing != 1.0 or if _relativeMag != 1.0
         } else {
             idealStemLength -= stemOpticalAdjustment(stemEndPosition);
             idealStemLength = std::max(idealStemLength, shortestStem);
@@ -1663,8 +1665,42 @@ double Chord::calcDefaultStemLength()
     if (beams() == 4) {
         stemLength = calc4BeamsException(stemLength);
     }
+
     double finalStemLength = (chordHeight / 4.0 * _spatium) + ((stemLength / 4.0 * _spatium) * _relativeMag);
-    return finalStemLength;
+
+    // when the chord's magnitude is < 1, the stem length with mag can find itself below the middle line.
+    // in those cases, we have to add the extra amount to it to bring it to a minimum.
+    Note* startNote = _up ? downNote() : upNote();
+    double upValue = _up ? -1. : 1.;
+    double stemStart = startNote->pos().y();
+    double stemEndMag = stemStart + (finalStemLength * upValue);
+    double lineDistance = (staff() ? staff()->lineDistance(tick()) : 1.0) * _spatium;
+    double topLine = 0.0;
+    double bottomLine = lineDistance * (staffLineCount - 1.0);
+    double target = 0.0;
+    if (RealIsEqualOrMore(lineDistance / _spatium, 1.0)) {
+        // need to extend 2sp into the staff, or to opposite line if staff is < 2sp tall
+        if (bottomLine < 2 * _spatium) {
+            target = _up ? topLine : bottomLine;
+        } else {
+            target = _up ? bottomLine - (2 * _spatium) : topLine + (2 * _spatium);
+        }
+    } else {
+        // need to extend to second line in staff, or to opposite line if staff has < 3 lines
+        if (staffLineCount < 3) {
+            target = _up ? topLine : bottomLine;
+        } else {
+            target = _up ? bottomLine - (2 * lineDistance) : topLine + (2 * lineDistance);
+        }
+    }
+    double extraLength = 0.0;
+    if (_up && stemEndMag > target) {
+        extraLength = stemEndMag - target;
+    } else if (!_up && stemEndMag < target) {
+        extraLength = target - stemEndMag;
+    }
+
+    return finalStemLength + extraLength;
 }
 
 Chord* Chord::prev() const
