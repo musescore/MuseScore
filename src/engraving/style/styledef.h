@@ -1514,6 +1514,9 @@ enum class Sid {
     autoplaceEnabled,
     defaultsVersion,
 
+    slurCenterClearance,
+    slurAdjust,
+
     STYLES
     ///\}
 };

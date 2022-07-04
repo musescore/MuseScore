@@ -98,6 +98,7 @@ public:
     bool contains(const mu::PointF&) const;
     bool intersects(const mu::RectF& rr) const;
     bool intersects(const Shape&) const;
+    bool clearsVertically(const Shape&a) const;
 
     void paint(mu::draw::Painter& painter) const;
 #ifndef NDEBUG

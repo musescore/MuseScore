@@ -42,6 +42,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/barline.h"
+#include "libmscore/slur.h"
 
 #include "layoutsystem.h"
 #include "layoutbeams.h"
@@ -320,6 +321,34 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
         System* s = ctx.page->systems().back();
         double height = s ? s->pos().y() + s->height() + s->minBottom() : ctx.page->tm();
         ctx.page->bbox().setRect(0.0, 0.0, options.loWidth, height + ctx.page->bm());
+    }
+
+    // HACK: we relayout here cross-staff slurs because only now the information
+    // about staff distances is fully available.
+    for (System* system : ctx.page->systems()) {
+        long int stick = 0;
+        long int etick = 0;
+        if (system->firstMeasure()) {
+            stick = system->firstMeasure()->tick().ticks();
+        }
+        etick = system->endTick().ticks();
+        if (stick == 0 && etick == 0) {
+            continue;
+        }
+        auto spanners = ctx.score()->spannerMap().findOverlapping(stick, etick);
+        std::vector<Spanner*> spanner;
+        for (auto interval : spanners) {
+            Spanner* sp = interval.value;
+            if (sp->tick().ticks() < etick && sp->tick2().ticks() >= stick) {
+                if (sp->isSlur()) {
+                    ChordRest* scr = sp->startCR();
+                    ChordRest* ecr = sp->endCR();
+                    if (scr && ecr && scr->vStaffIdx() != ecr->vStaffIdx()) {
+                        toSlur(sp)->layout();
+                    }
+                }
+            }
+        }
     }
 
     ctx.page->invalidateBspTree();

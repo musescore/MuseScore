@@ -166,6 +166,30 @@ double Shape::minVerticalDistance(const Shape& a) const
     return dist;
 }
 
+//----------------------------------------------------------------
+// clearsVertically()
+// a is located below this shape
+// returns true if, within the horizontal width of both shapes,
+// all parts of this shape are above all parts of a
+//----------------------------------------------------------------
+bool Shape::clearsVertically(const Shape& a) const
+{
+    for (const RectF r1 : a) {
+        double left1 = r1.left();
+        double right1 = r1.right();
+        for (const RectF r2 : *this) {
+            double left2 = r2.left();
+            double right2 = r2.right();
+            if (mu::engraving::intersects(left1, right1, left2, right2, 0.0)) {
+                if (std::min(r1.top(), r1.bottom()) <= std::max(r2.top(), r2.bottom())) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
 //---------------------------------------------------------
 //   left
 //    compute left border

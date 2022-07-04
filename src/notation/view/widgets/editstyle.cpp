@@ -604,6 +604,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::wahShowTabCommon, false, wahShowTabCommon, 0 },
         { StyleId::golpeShowTabSimple, false, golpeShowTabSimple, 0 },
         { StyleId::golpeShowTabCommon, false, golpeShowTabCommon, 0 },
+        { StyleId::slurCenterClearance, false, slurCenterClearance, 0 },
+        { StyleId::slurAdjust, false, slurAdjust, 0 },
     };
 
     // ====================================================

@@ -51,6 +51,8 @@ public:
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
+    void editDrag(EditData& ed) override;
+
     Slur* slur() const { return toSlur(spanner()); }
     void adjustEndpoints();
     void computeBezier(mu::PointF so = mu::PointF()) override;

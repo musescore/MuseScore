@@ -1501,5 +1501,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::golpeShowTabCommon, "golpeShowTabCommon", true },
 
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
-    { Sid::defaultsVersion,               "defaultsVersion",               MSCVERSION }
+    { Sid::defaultsVersion,               "defaultsVersion",               MSCVERSION },
+
+    { Sid::slurCenterClearance,        "slurCenterClearance",        Spatium(0.75) },
+    { Sid::slurAdjust,             "slurAdjust",             0.5 }
 } };
