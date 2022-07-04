@@ -69,7 +69,7 @@ public:
     virtual void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) = 0;
     virtual void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) = 0;
 
-    virtual void appendStaff(Staff* staff, const ID& destinationPartId) = 0;
+    virtual void insertStaff(Staff* staff, const ID& destinationPartId, size_t index = 0) = 0;
     virtual void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) = 0;
 
     virtual void insertPart(Part* part, size_t index) = 0;

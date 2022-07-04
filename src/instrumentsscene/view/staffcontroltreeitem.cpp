@@ -44,10 +44,17 @@ void StaffControlTreeItem::appendNewItem()
         return;
     }
 
-    size_t lastStaffIndex = part->nstaves();
+    size_t insertStaffIndex = part->nstaves();
+    const AbstractInstrumentsPanelTreeItem* par = parentItem();
+    for (int row = 0; row < par->childCount() - 1; ++row) {
+        if (par->childAtRow(row)->isSelected()) {
+            insertStaffIndex = row + 1;
+        }
+    }
 
     Staff* staff = engraving::Factory::createStaff(const_cast<Part*>(part));
-    staff->setDefaultClefType(part->instrument()->clefType(lastStaffIndex));
 
-    masterNotation()->parts()->appendStaff(staff, m_partId);
+    staff->setDefaultClefType(part->staff(insertStaffIndex - 1)->defaultClefType());
+
+    masterNotation()->parts()->insertStaff(staff, m_partId, insertStaffIndex);
 }
