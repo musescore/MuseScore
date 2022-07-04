@@ -95,6 +95,7 @@ enum class P_TYPE {
     DYNAMIC_TYPE,
     DYNAMIC_RANGE,
     DYNAMIC_SPEED,
+    LINE_TYPE,
     HOOK_TYPE,
     KEY_MODE,
     TEXT_STYLE,
@@ -238,6 +239,8 @@ public:
     PropertyValue(DynamicSpeed v)
         : m_type(P_TYPE::DYNAMIC_SPEED), m_data(make_data<DynamicSpeed>(v)) {}
 
+    PropertyValue(LineType v)
+        : m_type(P_TYPE::LINE_TYPE), m_data(make_data<LineType>(v)) {}
     PropertyValue(HookType v)
         : m_type(P_TYPE::HOOK_TYPE), m_data(make_data<HookType>(v)) {}
 

@@ -62,7 +62,6 @@ Column {
             { iconCode: IconCode.LINE_NORMAL, value: LineTypes.LINE_STYLE_SOLID, title: qsTrc("inspector", "Normal") },
             { iconCode: IconCode.LINE_DASHED, value: LineTypes.LINE_STYLE_DASHED, title: qsTrc("inspector", "Dashed") },
             { iconCode: IconCode.LINE_DOTTED, value: LineTypes.LINE_STYLE_DOTTED, title: qsTrc("inspector", "Dotted") },
-            { text: qsTrc("inspector", "Custom"), value: LineTypes.LINE_STYLE_CUSTOM, title: qsTrc("inspector", "Custom") }
         ]
     }
 
