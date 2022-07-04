@@ -404,7 +404,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
         String family { getFamilyName(ii.instrTemplate, part->soloist()) };
         const ScoreGroup sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
 
-        int staffIdx { 0 };
+        size_t staffIdx { 0 };
         bool blockThinBracket { false };
         size_t braceSpan { 0 };
         for (Staff* staff : part->staves()) {
