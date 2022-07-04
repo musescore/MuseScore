@@ -26,6 +26,7 @@
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
+#include "draw/pen.h"
 
 #include "staff.h"
 #include "clef.h"
@@ -379,13 +380,30 @@ void KeySig::layout()
 void KeySig::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     painter->setPen(curColor());
     double _spatium = spatium();
     double step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
+    int lines = staff() ? staff()->staffTypeForElement(this)->lines() : 5;
+    double ledgerLineWidth = score()->styleMM(Sid::ledgerLineWidth) * mag();
+    double ledgerExtraLen = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
     for (const KeySym& ks: _sig.keySymbols()) {
         double x = ks.xPos * _spatium;
         double y = ks.line * step;
         drawSymbol(ks.sym, painter, PointF(x, y));
+        // ledger lines
+        double _symWidth = symWidth(ks.sym);
+        double x1 = x - ledgerExtraLen;
+        double x2 = x + _symWidth + ledgerExtraLen;
+        painter->setPen(Pen(curColor(), ledgerLineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
+        for (int i = -2; i >= ks.line; i -= 2) { // above
+            y = i * step;
+            painter->drawLine(LineF(x1, y, x2, y));
+        }
+        for (int i = lines * 2; i <= ks.line; i += 2) { // below
+            y = i * step;
+            painter->drawLine(LineF(x1, y, x2, y));
+        }
     }
     if (!explicitParent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
         // empty custom or atonal key signature - draw something for palette
