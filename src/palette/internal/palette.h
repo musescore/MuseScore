@@ -79,6 +79,9 @@ public:
         BagpipeEmbellishment,
         Layout,
         Beam,
+        Guitar,
+        Keyboard,
+        Pitch,
         Custom
     };
     Q_ENUM(Type)
