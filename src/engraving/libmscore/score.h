@@ -448,7 +448,7 @@ private:
     bool _resetDefaults{ false };
     int _mscVersion { MSCVERSION };     ///< version of current loading *.msc file
 
-    bool _isOpen { true };
+    bool _isOpen { false };
 
     std::map<String, String> _metaTags;
 

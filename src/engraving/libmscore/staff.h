@@ -129,7 +129,7 @@ public:
     void initFromStaffType(const StaffType* staffType);
     void init(const Staff*);
 
-    ID id() const;
+    const ID& id() const;
     void setId(const ID& id);
 
     void setScore(Score* score) override;
