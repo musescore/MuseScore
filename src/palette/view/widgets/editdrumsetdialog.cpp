@@ -42,6 +42,7 @@
 
 #include <QMessageBox>
 
+using namespace mu::palette;
 using namespace mu::io;
 using namespace mu::framework;
 using namespace mu::notation;
