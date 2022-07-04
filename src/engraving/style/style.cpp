@@ -112,37 +112,48 @@ bool MStyle::readProperties(XmlReader& e)
         Sid idx = t.styleIdx();
         if (t.name() == tag) {
             P_TYPE type = t.valueType();
-            if (P_TYPE::SPATIUM == type) {
+            switch (type) {
+            case P_TYPE::SPATIUM:
                 set(idx, Spatium(e.readDouble()));
-            } else if (P_TYPE::REAL == type) {
+                break;
+            case P_TYPE::REAL:
                 set(idx, e.readDouble());
-            } else if (P_TYPE::BOOL == type) {
+                break;
+            case P_TYPE::BOOL:
                 set(idx, bool(e.readInt()));
-            } else if (P_TYPE::INT == type) {
+                break;
+            case P_TYPE::INT:
                 set(idx, e.readInt());
-            } else if (P_TYPE::DIRECTION_V == type) {
+                break;
+            case P_TYPE::DIRECTION_V:
                 set(idx, DirectionV(e.readInt()));
-            } else if (P_TYPE::STRING == type) {
+                break;
+            case P_TYPE::STRING:
                 set(idx, e.readText());
-            } else if (P_TYPE::ALIGN == type) {
+                break;
+            case P_TYPE::ALIGN: {
                 Align align = TConv::fromXml(e.readText(), Align());
                 set(idx, align);
-            } else if (P_TYPE::POINT == type) {
+            } break;
+            case P_TYPE::POINT: {
                 double x = e.doubleAttribute("x", 0.0);
                 double y = e.doubleAttribute("y", 0.0);
                 set(idx, PointF(x, y));
                 e.readText();
-            } else if (P_TYPE::SIZE == type) {
+            } break;
+            case P_TYPE::SIZE: {
                 double x = e.doubleAttribute("w", 0.0);
                 double y = e.doubleAttribute("h", 0.0);
                 set(idx, SizeF(x, y));
                 e.readText();
-            } else if (P_TYPE::SCALE == type) {
+            } break;
+            case P_TYPE::SCALE: {
                 double sx = e.doubleAttribute("w", 0.0);
                 double sy = e.doubleAttribute("h", 0.0);
                 set(idx, ScaleF(sx, sy));
                 e.readText();
-            } else if (P_TYPE::COLOR == type) {
+            } break;
+            case P_TYPE::COLOR: {
                 mu::draw::Color c;
                 c.setRed(e.intAttribute("r"));
                 c.setGreen(e.intAttribute("g"));
@@ -150,13 +161,20 @@ bool MStyle::readProperties(XmlReader& e)
                 c.setAlpha(e.intAttribute("a", 255));
                 set(idx, c);
                 e.readText();
-            } else if (P_TYPE::PLACEMENT_V == type) {
+            } break;
+            case P_TYPE::PLACEMENT_V:
                 set(idx, PlacementV(e.readText().toInt()));
-            } else if (P_TYPE::PLACEMENT_H == type) {
+                break;
+            case P_TYPE::PLACEMENT_H:
                 set(idx, PlacementH(e.readText().toInt()));
-            } else if (P_TYPE::HOOK_TYPE == type) {
+                break;
+            case P_TYPE::HOOK_TYPE:
                 set(idx, HookType(e.readText().toInt()));
-            } else {
+                break;
+            case P_TYPE::LINE_TYPE:
+                set(idx, TConv::fromXml(e.readAsciiText(), LineType::SOLID));
+                break;
+            default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
             return true;
@@ -354,6 +372,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
                 continue;
             }
             xml.tag(st.name(), TConv::toXml(a));
+        } else if (P_TYPE::LINE_TYPE == type) {
+            xml.tagProperty(st.name(), value(idx));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

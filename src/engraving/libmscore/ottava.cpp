@@ -64,6 +64,8 @@ static const ElementStyle ottavaStyle {
     { Sid::ottavaTextAlign,                    Pid::END_TEXT_ALIGN },
     { Sid::ottavaLineWidth,                    Pid::LINE_WIDTH },
     { Sid::ottavaLineStyle,                    Pid::LINE_STYLE },
+    { Sid::ottavaDashLineLen,                  Pid::DASH_LINE_LEN },
+    { Sid::ottavaDashGapLen,                   Pid::DASH_GAP_LEN },
     { Sid::ottavaPosAbove,                     Pid::OFFSET },
 };
 

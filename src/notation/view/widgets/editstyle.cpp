@@ -150,12 +150,32 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "user12"
 };
 
+class EditStyle::LineStyleSelect : public QObject
+{
+public:
+    LineStyleSelect(QObject* parent, QComboBox* lineStyleComboBox, const QList<QWidget*>& dashSpecificWidgets)
+        : QObject(parent), lineStyleComboBox(lineStyleComboBox), dashSpecificWidgets(dashSpecificWidgets)
+    {
+        connect(lineStyleComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LineStyleSelect::update);
+    }
+
+    void update() const
+    {
+        bool isDash = lineStyleComboBox->currentIndex() == int(LineType::DASHED);
+
+        for (QWidget* w : dashSpecificWidgets) {
+            w->setVisible(isDash);
+        }
+    }
+
+    QComboBox* lineStyleComboBox = nullptr;
+    QList<QWidget*> dashSpecificWidgets;
+};
+
 static constexpr const char* lineStyles[] = {
     QT_TRANSLATE_NOOP("notation", "Continuous"),
     QT_TRANSLATE_NOOP("notation", "Dashed"),
     QT_TRANSLATE_NOOP("notation", "Dotted"),
-    QT_TRANSLATE_NOOP("notation", "Dash-dotted"),
-    QT_TRANSLATE_NOOP("notation", "Dash-dot-dotted")
 };
 
 static QString toUserString(DirectionV val)
@@ -235,8 +255,14 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::tabClef,                 false, ctg,                     0 },
         { StyleId::keySigNaturals,          false, ksng,                    0 },
         { StyleId::voltaLineStyle,          false, voltaLineStyle,          resetVoltaLineStyle },
+        { StyleId::voltaDashLineLen,        false, voltaLineStyleDashSize,  resetVoltaLineStyleDashSize },
+        { StyleId::voltaDashGapLen,         false, voltaLineStyleGapSize,   resetVoltaLineStyleGapSize },
         { StyleId::ottavaLineStyle,         false, ottavaLineStyle,         resetOttavaLineStyle },
+        { StyleId::ottavaDashLineLen,       false, ottavaLineStyleDashSize, resetOttavaLineStyleDashSize },
+        { StyleId::ottavaDashGapLen,        false, ottavaLineStyleGapSize,  resetOttavaLineStyleGapSize },
         { StyleId::pedalLineStyle,          false, pedalLineStyle,          resetPedalLineStyle },
+        { StyleId::pedalDashLineLen,        false, pedalLineStyleDashSize,  resetPedalLineStyleDashSize },
+        { StyleId::pedalDashGapLen,         false, pedalLineStyleGapSize,   resetPedalLineStyleGapSize },
 
         { StyleId::staffUpperBorder,        false, staffUpperBorder,        resetStaffUpperBorder },
         { StyleId::staffLowerBorder,        false, staffLowerBorder,        resetStaffLowerBorder },
@@ -584,17 +610,41 @@ EditStyle::EditStyle(QWidget* parent)
     // Combo Boxes
     // ====================================================
 
-    lineStyleComboBoxes = {
-        voltaLineStyle,
-        ottavaLineStyle,
-        pedalLineStyle
+    m_lineStyleSelects = {
+        new LineStyleSelect(this, voltaLineStyle, {
+            label_volta_lineStyle_dashSize,
+            voltaLineStyleDashSize,
+            resetVoltaLineStyleDashSize,
+            label_volta_lineStyle_gapSize,
+            voltaLineStyleGapSize,
+            resetVoltaLineStyleGapSize
+        }),
+
+        new LineStyleSelect(this, ottavaLineStyle, {
+            label_ottava_lineStyle_dashSize,
+            ottavaLineStyleDashSize,
+            resetOttavaLineStyleDashSize,
+            label_ottava_lineStyle_gapSize,
+            ottavaLineStyleGapSize,
+            resetOttavaLineStyleGapSize
+        }),
+
+        new LineStyleSelect(this, pedalLineStyle, {
+            label_pedalLine_lineStyle_dashSize,
+            pedalLineStyleDashSize,
+            resetPedalLineStyleDashSize,
+            label_pedalLine_lineStyle_gapSize,
+            pedalLineStyleGapSize,
+            resetPedalLineStyleGapSize
+        })
     };
 
-    for (QComboBox* cb : lineStyleComboBoxes) {
-        cb->clear();
+    for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
+        lineStyleSelect->lineStyleComboBox->clear();
+
         int idx = 0;
         for (const char* p : lineStyles) {
-            cb->addItem(qtrc("notation", p), idx);
+            lineStyleSelect->lineStyleComboBox->addItem(qtrc("notation", p), idx);
             ++idx;
         }
     }
@@ -1019,10 +1069,10 @@ void EditStyle::retranslate()
 
     buttonApplyToAllParts->setText(tr("Apply to all Parts"));
 
-    for (QComboBox* cb : lineStyleComboBoxes) {
+    for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
         int idx = 0;
         for (const char* p : lineStyles) {
-            cb->setItemText(idx, qtrc("notation", p));
+            lineStyleSelect->lineStyleComboBox->setItemText(idx, qtrc("notation", p));
             ++idx;
         }
     }
@@ -1473,6 +1523,7 @@ PropertyValue EditStyle::getValue(StyleId idx)
     } break;
     case P_TYPE::PLACEMENT_H:
     case P_TYPE::PLACEMENT_V:
+    case P_TYPE::LINE_TYPE:
     case P_TYPE::INT: {
         if (qobject_cast<QComboBox*>(sw.widget)) {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
@@ -1578,6 +1629,7 @@ void EditStyle::setValues()
         case P_TYPE::PLACEMENT_H:
         case P_TYPE::PLACEMENT_V:
         case P_TYPE::BARLINE_TYPE:
+        case P_TYPE::LINE_TYPE:
         case P_TYPE::HOOK_TYPE:
         case P_TYPE::DYNAMIC_TYPE:
         case P_TYPE::ACCIDENTAL_ROLE:
@@ -1720,6 +1772,10 @@ void EditStyle::setValues()
     toggleHeaderOddEven(styleValue(StyleId::headerOddEven).toBool());
     toggleFooterOddEven(styleValue(StyleId::footerOddEven).toBool());
     disableVerticalSpread->setChecked(!styleValue(StyleId::enableVerticalSpread).toBool());
+
+    for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
+        lineStyleSelect->update();
+    }
 }
 
 //---------------------------------------------------------

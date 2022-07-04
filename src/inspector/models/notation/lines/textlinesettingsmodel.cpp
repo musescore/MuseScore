@@ -296,7 +296,7 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
     m_lineStyle->setIsEnabled(isLineAvailable);
 
     auto currentStyle = static_cast<LineTypes::LineStyle>(m_lineStyle->value().toInt());
-    bool areDashPropertiesAvailable = currentStyle == LineTypes::LineStyle::LINE_STYLE_CUSTOM;
+    bool areDashPropertiesAvailable = currentStyle == LineTypes::LineStyle::LINE_STYLE_DASHED;
 
     m_dashLineLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
     m_dashGapLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);

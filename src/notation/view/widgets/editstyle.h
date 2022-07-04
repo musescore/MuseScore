@@ -86,7 +86,9 @@ private:
     QVector<StyleWidget> styleWidgets;
     const StyleWidget& styleWidget(StyleId id) const;
 
-    std::vector<QComboBox*> lineStyleComboBoxes;
+    class LineStyleSelect;
+    std::vector<LineStyleSelect*> m_lineStyleSelects;
+
     std::vector<QComboBox*> verticalPlacementComboBoxes;
     std::vector<QComboBox*> horizontalPlacementComboBoxes;
 

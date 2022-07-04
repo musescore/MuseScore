@@ -95,7 +95,7 @@ class SLine : public Spanner
 {
     Millimetre _lineWidth;
     mu::draw::Color _lineColor { engravingConfiguration()->defaultColor() };
-    mu::draw::PenStyle _lineStyle { mu::draw::PenStyle::SolidLine };
+    LineType _lineStyle { LineType::SOLID };
     double _dashLineLen      { 5.0 };
     double _dashGapLen       { 5.0 };
     bool _diagonal          { false };
@@ -125,10 +125,10 @@ public:
 
     Millimetre lineWidth() const { return _lineWidth; }
     mu::draw::Color lineColor() const { return _lineColor; }
-    mu::draw::PenStyle lineStyle() const { return _lineStyle; }
+    LineType lineStyle() const { return _lineStyle; }
     void setLineWidth(const Millimetre& v) { _lineWidth = v; }
     void setLineColor(const mu::draw::Color& v) { _lineColor = v; }
-    void setLineStyle(mu::draw::PenStyle v) { _lineStyle = v; }
+    void setLineStyle(LineType v) { _lineStyle = v; }
 
     double dashLineLen() const { return _dashLineLen; }
     void setDashLineLen(double val) { _dashLineLen = val; }
