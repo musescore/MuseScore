@@ -37,11 +37,8 @@ StyledPopupView {
         id: customiseModel
     }
 
-    Component.onCompleted: {
-        customiseModel.load()
-    }
-
     onOpened: {
+        customiseModel.load()
         view.focusOnFirst()
     }
 

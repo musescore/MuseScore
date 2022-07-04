@@ -71,11 +71,6 @@ RetVal<QByteArray> Workspace::rawData(const DataKey& key) const
         return RetVal<QByteArray>(make_ret(Err::NotLoaded));
     }
 
-    QByteArray data = m_file.data(key_to_string(key));
-    if (data.isEmpty()) {
-        return RetVal<QByteArray>(make_ret(Err::NoData));
-    }
-
     RetVal<QByteArray> rv;
     rv.ret = make_ret(Ret::Code::Ok);
     rv.val = m_file.data(key_to_string(key));

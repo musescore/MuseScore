@@ -92,7 +92,7 @@ public:
     void applySettings() override;
     void rollbackSettings() override;
 
-    void revertToFactorySettings(bool keepDefaultSettings = false) const override;
+    void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true) const override;
 
     io::paths_t sessionProjectsPaths() const override;
     Ret setSessionProjectsPaths(const io::paths_t& paths) override;
