@@ -43,6 +43,10 @@ void ApplicationActionController::init()
         quit(isAllInstances);
     });
 
+    dispatcher()->reg(this, "restart", [this]() {
+        restart();
+    });
+
     dispatcher()->reg(this, "fullscreen", this, &ApplicationActionController::toggleFullScreen);
 
     dispatcher()->reg(this, "about", this, &ApplicationActionController::openAboutDialog);
@@ -150,6 +154,19 @@ void ApplicationActionController::quit(bool isAllInstances)
     }
 }
 
+void ApplicationActionController::restart()
+{
+    if (projectFilesController()->closeOpenedProject()) {
+        if (multiInstancesProvider()->instances().size() == 1) {
+            application()->restart();
+        } else {
+            multiInstancesProvider()->quitAllAndRestartLast();
+
+            QCoreApplication::quit();
+        }
+    }
+}
+
 void ApplicationActionController::toggleFullScreen()
 {
     mainWindow()->toggleFullScreen();
@@ -208,19 +225,40 @@ void ApplicationActionController::openPreferencesDialog()
 
 void ApplicationActionController::revertToFactorySettings()
 {
-    std::string question = trc("appshell", "This will reset all your preferences.\n"
-                                           "Custom palettes, custom shortcuts, and the list of recent scores will be deleted. "
-                                           "Reverting will not remove any scores from your computer.\n"
-                                           "Are you sure you want to proceed?");
+    std::string title = trc("appshell", "Are you sure you want to revert to factory settings?");
+    std::string question = trc("appshell", "This action will reset all your app preferences and delete all custom palettes and custom shortcuts. "
+                                           "The list of recent scores will also be cleared.\n\n"
+                                           "This action will not delete any of your scores.");
 
-    IInteractive::Result result = interactive()->question(std::string(), question, {
-        IInteractive::Button::Yes,
-        IInteractive::Button::No
-    });
+    int revertBtn = int(IInteractive::Button::CustomButton) + 1;
+    IInteractive::Result result = interactive()->warning(title, question,
+                                                         { interactive()->buttonData(IInteractive::Button::Cancel),
+                                                           IInteractive::ButtonData(revertBtn, trc("appshell", "Revert"), true) },
+                                                         revertBtn, IInteractive::WithIcon
+                                                         );
 
-    if (result.standardButton() == IInteractive::Button::Yes) {
-        configuration()->revertToFactorySettings();
+    if (result.standardButton() == IInteractive::Button::Cancel) {
+        return;
     }
+
+    static constexpr bool KEEP_DEFAULT_SETTINGS = false;
+    static constexpr bool NOTIFY_ABOUT_CHANGES = false;
+    configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES);
+
+    title = trc("appshell", "Would you like to restart MuseScore now?");
+    question = trc("appshell", "MuseScore needs to be restarted for these changes to take effect.");
+
+    int restartBtn = int(IInteractive::Button::CustomButton) + 1;
+    result = interactive()->question(title, question,
+                                     { interactive()->buttonData(IInteractive::Button::Cancel),
+                                       IInteractive::ButtonData(restartBtn, trc("appshell", "Restart"), true) },
+                                     restartBtn);
+
+    if (result.standardButton() == IInteractive::Button::Cancel) {
+        return;
+    }
+
+    restart();
 }
 
 void ApplicationActionController::checkForUpdate()

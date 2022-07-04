@@ -89,7 +89,7 @@ void Settings::load()
     m_items = readItems();
 }
 
-void Settings::reset(bool keepDefaultSettings)
+void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges)
 {
     m_settings->clear();
 
@@ -99,6 +99,10 @@ void Settings::reset(bool keepDefaultSettings)
     if (!keepDefaultSettings) {
         QDir(dataPath()).removeRecursively();
         QDir().mkpath(dataPath());
+    }
+
+    if (!notifyAboutChanges) {
+        return;
     }
 
     for (auto it = m_items.begin(); it != m_items.end(); ++it) {

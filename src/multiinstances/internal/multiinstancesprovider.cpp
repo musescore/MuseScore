@@ -48,6 +48,7 @@ static const QString METHOD_SETTINGS_COMMIT_TRANSACTION("SETTINGS_COMMIT_TRANSAC
 static const QString METHOD_SETTINGS_ROLLBACK_TRANSACTION("SETTINGS_ROLLBACK_TRANSACTION");
 static const QString METHOD_SETTINGS_SET_VALUE("SETTINGS_SET_VALUE");
 static const QString METHOD_QUIT("METHOD_QUIT");
+static const QString METHOD_QUIT_WITH_RESTART_LAST_INSTANCE("METHOD_QUIT_WITH_RESTART_LAST_INSTANCE");
 static const QString METHOD_RESOURCE_CHANGED("RESOURCE_CHANGED");
 
 MultiInstancesProvider::~MultiInstancesProvider()
@@ -128,6 +129,8 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         settings()->setLocalValue(key, val);
     } else if (msg.method == METHOD_QUIT) {
         dispatcher()->dispatch("quit", actions::ActionData::make_arg1<bool>(false));
+    } else if (msg.method == METHOD_QUIT_WITH_RESTART_LAST_INSTANCE) {
+        dispatcher()->dispatch("restart");
     } else if (msg.method == METHOD_RESOURCE_CHANGED) {
         resourceChanged().send(msg.args.at(0).toStdString());
     }
@@ -385,4 +388,13 @@ void MultiInstancesProvider::quitForAll()
     }
 
     m_ipcChannel->broadcast(METHOD_QUIT);
+}
+
+void MultiInstancesProvider::quitAllAndRestartLast()
+{
+    if (!isInited()) {
+        return;
+    }
+
+    m_ipcChannel->broadcast(METHOD_QUIT_WITH_RESTART_LAST_INSTANCE);
 }

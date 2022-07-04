@@ -31,7 +31,6 @@ enum class Err {
     UnknownError    = int(Ret::Code::WorkspaceFirst),
 
     NotLoaded       = 1502,
-    NoData          = 1503,
 
     FailedPack      = 1510,
     FailedUnPack    = 1511,

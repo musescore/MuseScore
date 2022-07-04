@@ -234,9 +234,9 @@ void AppShellConfiguration::rollbackSettings()
     settings()->rollbackTransaction();
 }
 
-void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings) const
+void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges) const
 {
-    settings()->reset(keepDefaultSettings);
+    settings()->reset(keepDefaultSettings, notifyAboutChanges);
 }
 
 mu::io::paths_t AppShellConfiguration::sessionProjectsPaths() const
