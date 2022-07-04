@@ -23,13 +23,14 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
-#include "modularity/ioc.h"
 #include "bsymbol.h"
+
+#include "modularity/ioc.h"
+#include "draw/iimageprovider.h"
 
 namespace mu::draw {
 class Pixmap;
 class SvgRenderer;
-class IImageProvider;
 }
 
 namespace mu::engraving {
