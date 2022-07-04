@@ -49,15 +49,8 @@ class PaletteElementEditor : public QObject, public async::Asyncable
     INJECT(palette, framework::IInteractive, interactive)
     INJECT(palette, IPaletteProvider, paletteProvider)
 
-    AbstractPaletteController* _controller = nullptr;
-    QPersistentModelIndex _paletteIndex;
-    Palette::Type _type = Palette::Type::Unknown;
-
     Q_PROPERTY(bool valid READ valid CONSTANT)
     Q_PROPERTY(QString actionName READ actionName CONSTANT) // TODO: make NOTIFY instead of CONSTANT for retranslations
-
-private slots:
-    void onElementAdded(const engraving::ElementPtr element);
 
 public:
     PaletteElementEditor(QObject* parent = nullptr)
@@ -70,6 +63,13 @@ public:
     QString actionName() const;
 
     Q_INVOKABLE void open();
+
+private:
+    void onElementAdded(const engraving::ElementPtr element);
+
+    AbstractPaletteController* _controller = nullptr;
+    QPersistentModelIndex _paletteIndex;
+    Palette::Type _type = Palette::Type::Unknown;
 };
 
 // ========================================================
@@ -125,7 +125,7 @@ public:
         return false;
     }
 
-    Q_INVOKABLE PaletteElementEditor* elementEditor(const QModelIndex& index);
+    Q_INVOKABLE mu::palette::PaletteElementEditor* elementEditor(const QModelIndex& index);
 };
 
 // ========================================================
@@ -207,10 +207,10 @@ class PaletteProvider : public QObject, public IPaletteProvider, public async::A
     INJECT(palette, framework::IInteractive, interactive)
 
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
-    Q_PROPERTY(AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
+    Q_PROPERTY(mu::palette::AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
 
-    Q_PROPERTY(FilterPaletteTreeModel * customElementsPaletteModel READ customElementsPaletteModel CONSTANT)
-    Q_PROPERTY(AbstractPaletteController * customElementsPaletteController READ customElementsPaletteController CONSTANT)
+    Q_PROPERTY(mu::palette::FilterPaletteTreeModel * customElementsPaletteModel READ customElementsPaletteModel CONSTANT)
+    Q_PROPERTY(mu::palette::AbstractPaletteController * customElementsPaletteController READ customElementsPaletteController CONSTANT)
 
     Q_PROPERTY(bool isSinglePalette READ isSinglePalette NOTIFY isSinglePaletteChanged)
     Q_PROPERTY(bool isSingleClickToOpenPalette READ isSingleClickToOpenPalette NOTIFY isSingleClickToOpenPaletteChanged)
@@ -227,11 +227,12 @@ public:
 
     async::Channel<engraving::ElementPtr> addCustomItemRequested() const override;
 
-    Q_INVOKABLE QModelIndex poolPaletteIndex(const QModelIndex& index, FilterPaletteTreeModel* poolPalette) const;
+    Q_INVOKABLE QModelIndex poolPaletteIndex(const QModelIndex& index, mu::palette::FilterPaletteTreeModel* poolPalette) const;
     Q_INVOKABLE QModelIndex customElementsPaletteIndex(const QModelIndex& index);
 
-    Q_INVOKABLE FilterPaletteTreeModel* poolPaletteModel(const QModelIndex& index) const;
-    Q_INVOKABLE AbstractPaletteController* poolPaletteController(FilterPaletteTreeModel*, const QModelIndex& rootIndex) const;
+    Q_INVOKABLE mu::palette::FilterPaletteTreeModel* poolPaletteModel(const QModelIndex& index) const;
+    Q_INVOKABLE mu::palette::AbstractPaletteController* poolPaletteController(mu::palette::FilterPaletteTreeModel*,
+                                                                              const QModelIndex& rootIndex) const;
 
     Q_INVOKABLE QAbstractItemModel* availableExtraPalettesModel() const;
     Q_INVOKABLE bool addPalette(const QPersistentModelIndex&);
