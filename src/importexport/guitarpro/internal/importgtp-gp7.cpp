@@ -41,7 +41,7 @@ namespace mu::engraving {
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro7::read(IODevice* io, bool createLinkedTabForce)
+bool GuitarPro7::read(IODevice* io)
 {
     f = io;
     previousTempo = -1;
@@ -52,11 +52,10 @@ bool GuitarPro7::read(IODevice* io, bool createLinkedTabForce)
     zip.close();
 
     QByteArray partsArray = partsData.toQByteArrayNoCopy();
-    IGPDomBuilder::GPProperties properties = readProperties(&partsArray);
-    properties.createLinkedTabForce = createLinkedTabForce;
+    m_properties = readProperties(&partsArray);
 
     QByteArray ba = fileData.toQByteArrayNoCopy();
-    readGpif(&ba, properties);
+    readGpif(&ba);
     return true;
 }
 
@@ -64,9 +63,9 @@ bool GuitarPro7::read(IODevice* io, bool createLinkedTabForce)
 //   readProperties
 //---------------------------------------------------------
 
-IGPDomBuilder::GPProperties GuitarPro7::readProperties(QByteArray* data)
+GuitarPro::GPProperties GuitarPro7::readProperties(QByteArray* data)
 {
-    IGPDomBuilder::GPProperties properties;
+    GPProperties properties;
     size_t partsInfoSize = data->size();
     const size_t numInstrOffset = 8;
     if (partsInfoSize <= numInstrOffset) {
@@ -80,11 +79,10 @@ IGPDomBuilder::GPProperties GuitarPro7::readProperties(QByteArray* data)
         return properties;
     }
 
-    using import_option_t = IGPDomBuilder::TabImportOption;
-    std::vector<import_option_t>& partsImportOpts = properties.partsImportOptions;
+    std::vector<TabImportOption> partsImportOpts = properties.partsImportOptions;
 
     for (size_t i = numInstrOffset + 1; i <= numInstrOffset + numberOfInstruments; i++) {
-        partsImportOpts.push_back(static_cast<import_option_t>(data->at(i)));
+        partsImportOpts.push_back(static_cast<TabImportOption>(data->at(i)));
     }
 
     return properties;

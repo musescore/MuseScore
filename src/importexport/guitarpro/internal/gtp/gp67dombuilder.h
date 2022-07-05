@@ -17,9 +17,6 @@ public:
     void buildGPDomModel(QDomElement* qdomElem) override;
     std::unique_ptr<GPDomModel> getGPDomModel() override;
 
-    void setProperties(const GPProperties& properties) override;
-    GPProperties properties() const override;
-
 protected:
 
     void buildGPScore(QDomNode* scoreNode);
