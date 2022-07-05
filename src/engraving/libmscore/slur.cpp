@@ -431,25 +431,19 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     qreal _spatium  = spatium();
     qreal shoulderW; // height as fraction of slur-length
     qreal shoulderH;
-    double smallH = 0.5;
     double d = p2.x() / _spatium;
-    if (d <= 2.0) {
-        shoulderH = d * 0.5 * smallH * _spatium;
-        shoulderW = .6;
+
+    if (d < 2) {
+        shoulderW = 0.60;
+    } else if (d < 10) {
+        shoulderW = 0.5;
+    } else if (d < 18) {
+        shoulderW = 0.6;
     } else {
-        double dd = log10(1.0 + (d - 2.0) * .5) * 2.0;
-        if (dd > 3.0) {
-            dd = 3.0;
-        }
-        shoulderH = (dd + smallH) * _spatium + _extraHeight;
-        if (d > 18.0) {
-            shoulderW = 0.7;
-        } else if (d > 10) {
-            shoulderW = 0.6;
-        } else {
-            shoulderW = 0.5;
-        }
+        shoulderW = 0.7;
     }
+    shoulderH = sqrt(d / 4) * _spatium;
+
     shoulderH -= p6offset.y();
     if (!slur()->up()) {
         shoulderH = -shoulderH;
@@ -489,7 +483,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     double clearance = score()->styleMM(Sid::slurCenterClearance);
     double adjust = score()->styleD(Sid::slurAdjust);
     if (startSeg && endSeg && autoplace()) {
-        static constexpr unsigned maxIter = 100;
+        static constexpr unsigned maxIter = 30;
         const double vertClearance = slur()->up() ? clearance : -clearance;
         const double step = slur()->up() ? -0.25 * spatium() : 0.25 * spatium();
         // Divide slur in several rectangles to localize collisions
