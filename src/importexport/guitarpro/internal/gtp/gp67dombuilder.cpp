@@ -66,16 +66,6 @@ void GP67DomBuilder::buildGPDomModel(QDomElement* qdomElem)
     buildGPTracks(&eachTrack);
 }
 
-void GP67DomBuilder::setProperties(const IGPDomBuilder::GPProperties& properties)
-{
-    _gpDom->setProperties(properties);
-}
-
-IGPDomBuilder::GPProperties GP67DomBuilder::properties() const
-{
-    return _gpDom->properties();
-}
-
 std::unique_ptr<GPDomModel> GP67DomBuilder::getGPDomModel()
 {
     return std::move(_gpDom);
@@ -778,7 +768,7 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* 
         } else if (nodeName == "Ornament") {
             note->setOrnament(ornamentType(innerNode.toElement().text()));
         } else {
-            LOGD() << "unknown GP Note Tag" << nodeName << "\n";
+            //LOGD() << "unknown GP Note Tag" << nodeName << "\n";
         }
 
         innerNode = innerNode.nextSibling();
@@ -824,7 +814,7 @@ std::pair<int, std::shared_ptr<GPRhythm> > GP67DomBuilder::createGPRhythm(QDomNo
             int denom = innerNode.attributes().namedItem("den").toAttr().value().toInt();
             rhythm->setTuplet({ num, denom });
         } else {
-            LOGD() << "unknown GP Rhytms tag" << nodeName << "\n";
+            //LOGD() << "unknown GP Rhytms tag" << nodeName << "\n";
         }
 
         innerNode = innerNode.nextSibling();
@@ -944,7 +934,7 @@ void GP67DomBuilder::readNoteProperties(QDomNode* propertiesNode, GPNote* note)
                 note->setLeftHandTapped(true);
             }
         } else {
-            LOGD() << "unknown GP Note Property tag" << propertyName << "\n";
+            //LOGD() << "unknown GP Note Property tag" << propertyName << "\n";
         }
 
         propetryNode = propetryNode.nextSibling();
@@ -1118,7 +1108,7 @@ void GP67DomBuilder::readBeatProperties(const QDomNode& propertiesNode, GPBeat* 
         } else if (propertyName == "BarreString") {
             beat->setBarreString(propertyNode.firstChild().toElement().text().toInt());
         } else {
-            LOGD() << "unknown GP Beat property info tag: " << propertyName << "\n";
+            //LOGD() << "unknown GP Beat property info tag: " << propertyName << "\n";
         }
 
         propertyNode = propertyNode.nextSibling();
@@ -1149,7 +1139,7 @@ void GP67DomBuilder::readTrackProperties(QDomNode* propertiesNode, GPTrack* trac
         } else if (propertyName == "DiagramCollection" || propertyName == "DiagramWorkingSet") {
             readDiagram(propertyNode.firstChild(), track);
         } else {
-            LOGD() << "unknown GP trackProperty info tag: " << propertyName << "\n";
+            //LOGD() << "unknown GP trackProperty info tag: " << propertyName << "\n";
         }
 
         propertyNode = propertyNode.nextSibling();

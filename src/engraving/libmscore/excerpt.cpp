@@ -619,10 +619,6 @@ static void cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_i
         if (!ns->endElement()) {
             LOGD("clone Slur: no end element");
         }
-        if (!ns->startElement() && !ns->endElement()) {
-            delete ns;
-            return;
-        }
     }
     score->undo(new AddElement(ns));
 }

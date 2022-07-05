@@ -727,7 +727,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro5::read(IODevice* io, bool createLinkedTabForce)
+bool GuitarPro5::read(IODevice* io)
 {
     f = io;
 
@@ -951,32 +951,6 @@ bool GuitarPro5::read(IODevice* io, bool createLinkedTabForce)
                 }
                 score->addElement(st);
             }
-        }
-    }
-
-    /// сopied from gpconverter.cpp
-    /// creating linked TAB staff
-    if (createLinkedTabForce) {
-        for (size_t i = 0; i < score->parts().size(); i++) {
-            Part* part = score->parts()[i];
-            Fraction fr = Fraction(0, 1);
-            int lines = part->instrument()->stringData()->strings();
-
-            part->setStaves(2);
-
-            Staff* s = part->staff(0);
-            Staff* s1 = part->staff(1);
-
-            StaffTypes tabType = StaffTypes::TAB_6SIMPLE;
-            if (lines == 4) {
-                tabType = StaffTypes::TAB_4SIMPLE;
-            } else if (lines == 5) {
-                tabType = StaffTypes::TAB_5SIMPLE;
-            }
-
-            s1->setStaffType(fr, *StaffType::preset(tabType));
-            s1->setLines(fr, lines);
-            Excerpt::cloneStaff(s, s1);
         }
     }
 

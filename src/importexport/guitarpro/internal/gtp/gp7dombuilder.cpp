@@ -56,7 +56,7 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(QDomNode*
         } else if (sUnused.find(nodeName) != sUnused.end()) {
             // Ignored nodes
         } else {
-            LOGD() << "unknown GP track tag: " << nodeName << "\n";
+            //LOGD() << "unknown GP track tag: " << nodeName << "\n";
         }
 
         trackChildNode = trackChildNode.nextSibling();
