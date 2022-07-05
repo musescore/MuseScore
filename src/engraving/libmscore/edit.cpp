@@ -565,7 +565,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
         }
     }
 
-    Slur* slur = slurTemplate ? slurTemplate->clone() : Factory::createSlur(firstChordRest->score()->dummy());
+    Slur* slur = slurTemplate ? slurTemplate->clone() : Factory::createSlur(firstChordRest->measure()->system());
     slur->setScore(firstChordRest->score());
     slur->setTick(firstChordRest->tick());
     slur->setTick2(secondChordRest->tick());
