@@ -47,12 +47,12 @@ void CommonAudioApiConfigurationModel::load()
         emit sampleRateChanged();
     });
 
-    audioDriver()->bufferSizeChanged().onNotify(this, [this]() {
+    audioDriver()->outputDeviceBufferSizeChanged().onNotify(this, [this]() {
         emit bufferSizeChanged();
     });
 
-    audioDriver()->sampleRateChanged().onNotify(this, [this]() {
-        emit sampleRateChanged(); // todo
+    audioDriver()->outputDeviceSampleRateChanged().onNotify(this, [this]() {
+        emit sampleRateChanged();
     });
 }
 
@@ -84,24 +84,16 @@ void CommonAudioApiConfigurationModel::deviceSelected(const QString& deviceId)
 
 unsigned int CommonAudioApiConfigurationModel::bufferSize() const
 {
-    return audioDriver()->bufferSize(currentDeviceId().toStdString());
+    return audioDriver()->outputDeviceBufferSize();
 }
 
 QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
 {
     QList<unsigned int> result;
-    std::pair<unsigned int, unsigned int> bufferSizeRange = audioDriver()->availableBufferSizeRange(currentDeviceId().toStdString());
+    std::vector<unsigned int> bufferSizes = audioDriver()->availableOutputDeviceBufferSizes();
 
-    unsigned int start = bufferSizeRange.first;
-    unsigned int end = bufferSizeRange.second;
-
-    if (start == end) { //todo
-        return {};
-    }
-
-    for (unsigned int bufferSize = end; bufferSize >= start;) {
-        result.prepend(bufferSize);
-        bufferSize /= 2;
+    for (unsigned int bufferSize : bufferSizes) {
+        result << bufferSize;
     }
 
     return result;
@@ -114,14 +106,14 @@ void CommonAudioApiConfigurationModel::bufferSizeSelected(const QString& bufferS
 
 int CommonAudioApiConfigurationModel::sampleRate() const
 {
-    return audioDriver()->sampleRate(currentDeviceId().toStdString());
+    return audioDriver()->outputDeviceSampleRate();
 }
 
 QVariantList CommonAudioApiConfigurationModel::sampleRateList() const
 {
     QVariantList result;
 
-    std::vector<unsigned int> sampleRates = audioDriver()->availableSampleRates(currentDeviceId().toStdString());
+    std::vector<unsigned int> sampleRates = audioDriver()->availableOutputDeviceSampleRates();
     for (unsigned int sampleRate : sampleRates) {
         QVariantMap obj;
         obj["value"] = sampleRate;

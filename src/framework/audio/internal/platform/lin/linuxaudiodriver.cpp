@@ -290,6 +290,110 @@ mu::async::Notification LinuxAudioDriver::availableOutputDevicesChanged() const
     return m_availableOutputDevicesChanged;
 }
 
+unsigned int LinuxAudioDriver::outputDeviceBufferSize() const
+{
+    return s_format.samples;
+}
+
+bool LinuxAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
+{
+    if (s_format.samples == bufferSize) {
+        return true;
+    }
+
+    bool reopen = isOpened();
+    close();
+    s_format.samples = bufferSize;
+
+    bool ok = true;
+    if (reopen) {
+        ok = open(s_format, &s_format);
+    }
+
+    if (ok) {
+        m_bufferSizeChanged.notify();
+    }
+
+    return ok;
+}
+
+mu::async::Notification LinuxAudioDriver::outputDeviceBufferSizeChanged() const
+{
+    return m_bufferSizeChanged;
+}
+
+std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() const
+{
+    std::vector<unsigned int> sizes;
+    int n = 16;
+
+    for (int i = 0; i < 50; ++i) {
+        sizes.push_back(n);
+        n += n < 64 ? 16 : (n < 512 ? 32 : (n < 1024 ? 64 : (n < 2048 ? 128 : 256)));
+    }
+
+    return sizes;
+}
+
+unsigned int LinuxAudioDriver::outputDeviceSampleRate() const
+{
+    return s_format.sampleRate;
+}
+
+bool LinuxAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
+{
+    if (s_format.sampleRate == sampleRate) {
+        return true;
+    }
+
+    bool reopen = isOpened();
+    close();
+    s_format.sampleRate = sampleRate;
+
+    bool ok = true;
+    if (reopen) {
+        ok = open(s_format, &s_format);
+    }
+
+    if (ok) {
+        m_sampleRateChanged.notify();
+    }
+
+    return ok;
+}
+
+mu::async::Notification LinuxAudioDriver::outputDeviceSampleRateChanged() const
+{
+    return m_sampleRateChanged;
+}
+
+std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceSampleRates() const
+{
+    std::vector<double> sampleRates;
+    constexpr double baseRates[] = { 8000.0, 11025.0, 12000.0 };
+    constexpr double maxRate = 768000.0;
+
+    for (auto rate : baseRates) {
+        for (; rate <= maxRate; rate *= 2) {
+            sampleRates.insert(std::upper_bound(sampleRates.begin(), sampleRates.end(), rate), rate);
+        }
+    }
+
+    std::vector<unsigned int> result;
+
+    snd_pcm_hw_params_t* hwParams;
+    snd_pcm_hw_params_alloca(&hwParams);
+
+    for (double rateToTry : sampleRates) {
+        if (snd_pcm_hw_params_any(s_alsaData->alsaDeviceHandle, hwParams) >= 0
+            && snd_pcm_hw_params_test_rate(s_alsaData->alsaDeviceHandle, hwParams, (unsigned int)rateToTry, 0) == 0) {
+            result.push_back(rateToTry);
+        }
+    }
+
+    return result;
+}
+
 void LinuxAudioDriver::resume()
 {
 }
