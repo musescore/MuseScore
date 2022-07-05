@@ -47,7 +47,7 @@ void AudioOutputController::init()
 
     configuration()->driverBufferSizeChanged().onNotify(this, [this]() {
         unsigned int bufferSize = configuration()->driverBufferSize();
-        bool ok = audioDriver()->setBufferSize(audioDriver()->outputDevice(), bufferSize);
+        bool ok = audioDriver()->setOutputDeviceBufferSize(bufferSize);
         if (ok) {
             async::Async::call(this, [bufferSize](){
                 AudioEngine::instance()->setReadBufferSize(bufferSize);

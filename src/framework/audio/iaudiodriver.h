@@ -73,17 +73,17 @@ public:
     virtual AudioDeviceList availableOutputDevices() const = 0;
     virtual async::Notification availableOutputDevicesChanged() const = 0;
 
-    virtual unsigned int bufferSize(const AudioDeviceID& deviceId) const = 0;
-    virtual bool setBufferSize(const AudioDeviceID& deviceId, unsigned int bufferSize) = 0;
-    virtual async::Notification bufferSizeChanged() const = 0;
+    virtual unsigned int outputDeviceBufferSize() const = 0;
+    virtual bool setOutputDeviceBufferSize(unsigned int bufferSize) = 0;
+    virtual async::Notification outputDeviceBufferSizeChanged() const = 0;
 
-    virtual std::pair<unsigned int, unsigned int> availableBufferSizeRange(const AudioDeviceID& deviceId) const = 0;
+    virtual std::vector<unsigned int> availableOutputDeviceBufferSizes() const = 0;
 
-    virtual unsigned int sampleRate(const AudioDeviceID& deviceId) const = 0;
-    virtual bool setSampleRate(const AudioDeviceID& deviceId, unsigned int sampleRate) = 0;
-    virtual async::Notification sampleRateChanged() const = 0;
+    virtual unsigned int outputDeviceSampleRate() const = 0;
+    virtual bool setOutputDeviceSampleRate(unsigned int sampleRate) = 0;
+    virtual async::Notification outputDeviceSampleRateChanged() const = 0;
 
-    virtual std::vector<unsigned int> availableSampleRates(const AudioDeviceID& deviceId) const = 0;
+    virtual std::vector<unsigned int> availableOutputDeviceSampleRates() const = 0;
 
     virtual void resume() = 0;
     virtual void suspend() = 0;

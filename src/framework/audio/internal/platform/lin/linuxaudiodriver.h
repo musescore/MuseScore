@@ -51,6 +51,18 @@ public:
     AudioDeviceList availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
 
+    unsigned int outputDeviceBufferSize() const override;
+    bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
+    async::Notification outputDeviceBufferSizeChanged() const override;
+
+    std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+
+    unsigned int outputDeviceSampleRate() const override;
+    bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
+    async::Notification outputDeviceSampleRateChanged() const override;
+
+    std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
+
     void resume() override;
     void suspend() override;
 
@@ -62,6 +74,9 @@ private:
     async::Notification m_availableOutputDevicesChanged;
 
     std::string m_deviceId;
+
+    async::Notification m_bufferSizeChanged;
+    async::Notification m_sampleRateChanged;
 };
 }
 
