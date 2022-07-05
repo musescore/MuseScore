@@ -113,9 +113,9 @@ void PedalSettingsModel::loadProperties()
     m_lineType->setIsEnabled(true);
 
     if (isStarSymbolVisible()) {
-        m_lineType->setValue(HOOK_STAR);
+        m_lineType->updateCurrentValue(HOOK_STAR);
     } else {
-        m_lineType->setValue(endHookType()->value());
+        m_lineType->updateCurrentValue(endHookType()->value());
     }
 }
 
