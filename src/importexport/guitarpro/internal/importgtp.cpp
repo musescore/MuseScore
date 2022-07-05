@@ -1115,7 +1115,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro1::read(IODevice* io, bool /*createLinkedTabForce*/)
+bool GuitarPro1::read(IODevice* io)
 {
     f      = io;
     curPos = 30;
@@ -1530,7 +1530,7 @@ void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString v
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro2::read(IODevice* io, bool /*createLinkedTabForce*/)
+bool GuitarPro2::read(IODevice* io)
 {
     f      = io;
     curPos = 30;
@@ -2205,7 +2205,7 @@ int GuitarPro1::readBeatEffects(int, Segment*)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro3::read(IODevice* io, bool /*createLinkedTabForce*/)
+bool GuitarPro3::read(IODevice* io)
 {
     f      = io;
     curPos = 30;
@@ -2921,14 +2921,14 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool create
     if (strcmp(header, "PK\x3\x4") == 0) {
         gp = new GuitarPro7(score);
         gp->initGuitarProDrumset();
-        readResult = gp->read(io, createLinkedTabForce);
+        readResult = gp->read(io);
         gp->setTempo(0, 0);
     }
     // check to see if we are dealing with a GPX file via the extension
     else if (strcmp(header, "BCFZ") == 0) {
         gp = new GuitarPro6(score);
         gp->initGuitarProDrumset();
-        readResult = gp->read(io, createLinkedTabForce);
+        readResult = gp->read(io);
         gp->setTempo(0, 0);
     }
     // otherwise it's an older version - check the header
@@ -2965,7 +2965,7 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool create
             return Score::FileError::FILE_BAD_FORMAT;
         }
         gp->initGuitarProDrumset();
-        readResult = gp->read(io, createLinkedTabForce);
+        readResult = gp->read(io);
         gp->setTempo(0, 0);
     } else {
         return Score::FileError::FILE_BAD_FORMAT;
@@ -3009,105 +3009,55 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool create
         score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
     }
 
-    //
-    // create parts (excerpts)
-    //
-    std::vector<Part*> infoParts;
-#if 0 //! HACK Temporary disabled, something not corrected, so crashed
-    for (Part* part : score->parts()) {
-        const QString& longName = part->longName();
-        if (!longName.isEmpty() && longName[0] == '@') {
-            infoParts.push_back(part);
-            continue;
-        }
-        QMultiMap<int, int> tracks;
-        Score* pscore = score->createScore();
-        //TODO-ws		pscore->showLyrics = score->showLyrics;
-        pscore->style().set(Sid::createMultiMeasureRests, false);
-        pscore->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
+    if (createLinkedTabForce) {
+        for (size_t partNum = 0; partNum < score->parts().size(); partNum++) {
+            Part* part = score->parts()[partNum];
+            Fraction fr = Fraction(0, 1);
+            int lines = part->instrument()->stringData()->strings();
+            int stavesNum = part->nstaves();
 
-        QList<int> stavesMap;
-        Part* p = new Part(pscore);
-        p->setInstrument(*part->instrument());
-        //TODO-ws		pscore->tuning = gp->tunings[counter++];
+            part->setStaves(stavesNum * 2);
 
-        Staff* staff = part->staves()->front();
+            for (int i = 0; i < stavesNum; i++) {
+                staff_idx_t staffIdx = static_cast<int>(stavesNum + i);
 
-        Staff* s = Factory::createStaff(part);
-        const StaffType* st = staff->constStaffType(Fraction(0, 1));
-        s->setStaffType(Fraction(0, 1), *st);
+                for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
+                    Spanner* s = it->second;
 
-        s->linkTo(staff);
-        pscore->appendStaff(s);
-        stavesMap.append(staff->idx());
+                    if (s->staffIdx() >= staffIdx) {
+                        track_idx_t t = s->track() + VOICES;
+                        if (t >= score->ntracks()) {
+                            t = score->ntracks() - 1;
+                        }
 
-        for (int i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++) {
-            tracks.insert(i, j);
-        }
+                        s->setTrack(t);
+                        for (SpannerSegment* ss : s->spannerSegments()) {
+                            ss->setTrack(t);
+                        }
 
-        Excerpt* excerpt = new Excerpt(score);
-        excerpt->setExcerptScore(pscore);
-        excerpt->setTracksMapping(tracks);
-        pscore->setExcerpt(excerpt);
-        excerpt->setName(part->partName());
-        excerpt->parts().append(part);
-        score->excerpts().append(excerpt);
+                        if (s->track2() != mu::nidx) {
+                            t = s->track2() + VOICES;
+                            s->setTrack2(t < score->ntracks() ? t : s->track());
+                        }
+                    }
+                }
 
-        Excerpt::cloneStaves(score, pscore, stavesMap, tracks);
+                Staff* srcStaff = part->staff(i);
+                Staff* dstStaff = part->staff(stavesNum + i);
 
-        if (staff->part()->instrument()->stringData()->strings() > 0
-            && part->staves()->front()->constStaffType(Fraction(0, 1))->group() == StaffGroup::STANDARD) {
-            p->setStaves(2);
-            Staff* s1 = p->staff(1);
+                StaffTypes tabType = StaffTypes::TAB_6COMMON;
+                if (lines == 4) {
+                    tabType = StaffTypes::TAB_4COMMON;
+                } else if (lines == 5) {
+                    tabType = StaffTypes::TAB_5COMMON;
+                }
 
-            int lines = staff->part()->instrument()->stringData()->strings();
-            StaffTypes sts = StaffTypes::TAB_DEFAULT;
-            if (lines == 4) {
-                sts = StaffTypes::TAB_4COMMON;
+                dstStaff->setStaffType(fr, *StaffType::preset(tabType));
+                dstStaff->setLines(fr, lines);
+                Excerpt::cloneStaff(srcStaff, dstStaff);
             }
-            StaffType st1 = *StaffType::preset(sts);
-            s1->setStaffType(Fraction(0, 1), st1);
-            s1->setLines(Fraction(0, 1), lines);
-            Excerpt::cloneStaff(s, s1);
-            p->staves()->front()->addBracket(Factory::createBracketItem(pscore->dummy(), BracketType::NORMAL, 2));
         }
-        pscore->appendPart(p);
-
-        //
-        // create excerpt title
-        //
-        MeasureBase* measure = pscore->first();
-        if (!measure || (measure->type() != ElementType::VBOX)) {
-            MeasureBase* mb = Factory::createVBox(pscore->dummy()->system());
-            mb->setTick(Fraction(0, 1));
-            pscore->addMeasure(mb, measure);
-            measure = mb;
-        }
-        Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
-        txt->setPlainText(part->longName());
-        measure->add(txt);
-
-        //
-        // layout score
-        //
-        pscore->setPlaylistDirty();
-        pscore->setLayoutAll();
-        pscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
-        //            pscore->doLayout();
     }
-#endif
-
-    for (auto p : infoParts) {
-        auto staff = p->staves().back();
-        score->removeStaff(staff);
-        score->removePart(p);
-        delete staff;
-        delete p;
-    }
-    //      score->rebuildMidiMapping();
-    //      score->updateChannel();
-    //      album
-    //      copyright
 
     delete gp;
 
