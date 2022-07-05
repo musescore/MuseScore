@@ -123,6 +123,19 @@ class GuitarPro
     INJECT(iex_guitarpro, mu::iex::guitarpro::IGuitarProConfiguration, configuration)
 
 protected:
+
+    enum class TabImportOption {
+        STANDARD = 1,
+        TAB      = 2,
+        BOTH     = 3
+    };
+
+    struct GPProperties {
+        std::vector<TabImportOption> partsImportOptions;
+    };
+
+    GPProperties m_properties;
+
     std::list<Note*> slideList;   //list of start slide notes
 
     // note effect bit masks
@@ -279,7 +292,7 @@ public:
 
     GuitarPro(MasterScore*, int v);
     virtual ~GuitarPro();
-    virtual bool read(mu::io::IODevice*, bool createLinkedTabForce) = 0;
+    virtual bool read(mu::io::IODevice*) = 0;
     QString error(GuitarProError n) const { return QString(errmsg[int(n)]); }
 };
 
@@ -296,7 +309,7 @@ protected:
 public:
     GuitarPro1(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    virtual bool read(mu::io::IODevice*, bool);
+    bool read(mu::io::IODevice*) override;
 };
 
 //---------------------------------------------------------
@@ -308,7 +321,7 @@ class GuitarPro2 : public GuitarPro1
 public:
     GuitarPro2(MasterScore* s, int v)
         : GuitarPro1(s, v) {}
-    virtual bool read(mu::io::IODevice*, bool);
+    bool read(mu::io::IODevice*) override;
 };
 
 //---------------------------------------------------------
@@ -322,7 +335,7 @@ class GuitarPro3 : public GuitarPro1
 public:
     GuitarPro3(MasterScore* s, int v)
         : GuitarPro1(s, v) {}
-    virtual bool read(mu::io::IODevice*, bool);
+    bool read(mu::io::IODevice*) override;
 };
 
 //---------------------------------------------------------
@@ -342,7 +355,7 @@ class GuitarPro4 : public GuitarPro
 public:
     GuitarPro4(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    virtual bool read(mu::io::IODevice*, bool);
+    bool read(mu::io::IODevice*) override;
 };
 
 //---------------------------------------------------------
@@ -369,7 +382,7 @@ class GuitarPro5 : public GuitarPro
 public:
     GuitarPro5(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    virtual bool read(mu::io::IODevice*, bool createLinkedTabForce);
+    bool read(mu::io::IODevice*) override;
 };
 
 //---------------------------------------------------------
@@ -395,10 +408,10 @@ class GuitarPro6 : public GuitarPro
         QDomNode rhythms;
     };
 
-    void parseFile(const char* filename, QByteArray* data, const IGPDomBuilder::GPProperties& properties = IGPDomBuilder::GPProperties());
+    void parseFile(const char* filename, QByteArray* data);
     int readBit(QByteArray* buffer);
     QByteArray getBytes(QByteArray* buffer, int offset, int length);
-    void readGPX(QByteArray* buffer, const IGPDomBuilder::GPProperties& gpProperties = IGPDomBuilder::GPProperties());
+    void readGPX(QByteArray* buffer);
     int readInteger(QByteArray* buffer, int offset);
     QByteArray readString(QByteArray* buffer, int offset, int length);
     int readBits(QByteArray* buffer, int bitsToRead);
@@ -415,7 +428,7 @@ class GuitarPro6 : public GuitarPro
 
 protected:
     const static std::map<QString, QString> instrumentMapping;
-    void readGpif(QByteArray* data, const IGPDomBuilder::GPProperties& properties = IGPDomBuilder::GPProperties());
+    void readGpif(QByteArray* data);
 
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;
 
@@ -424,7 +437,7 @@ public:
         : GuitarPro(s, 6) {}
     GuitarPro6(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    bool read(mu::io::IODevice*, bool createLinkedTabForce) override;
+    bool read(mu::io::IODevice*) override;
 };
 
 class GuitarPro7 : public GuitarPro6
@@ -434,8 +447,8 @@ class GuitarPro7 : public GuitarPro6
 public:
     GuitarPro7(MasterScore* s)
         : GuitarPro6(s, 7) {}
-    bool read(mu::io::IODevice*, bool createLinkedTabForce) override;
-    IGPDomBuilder::GPProperties readProperties(QByteArray* data);
+    bool read(mu::io::IODevice*) override;
+    GPProperties readProperties(QByteArray* data);
 };
 } // namespace Ms
 #endif

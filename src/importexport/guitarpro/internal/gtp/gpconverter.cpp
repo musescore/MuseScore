@@ -231,7 +231,6 @@ void GPConverter::convertGP()
 
     clearDefectedSpanner();
     fixPercussion();
-    setupTabDisplayStyle();
 }
 
 void GPConverter::fixPercussion()
@@ -268,60 +267,6 @@ void GPConverter::fixPercussion()
 
             pChannel->setProgram(0);
         }
-    }
-}
-
-/// show standard/tab or st+tab, according to GP properties
-void GPConverter::setupTabDisplayStyle()
-{
-    GPDomModel::GPProperties properties = _gpDom->properties();
-    std::vector<GPDomModel::TabImportOption>& partsImportOpts = properties.partsImportOptions;
-    bool importLinkedStaffForce = properties.createLinkedTabForce;
-
-    if (!importLinkedStaffForce) {
-        return;
-    }
-
-    if (partsImportOpts.size() != _score->parts().size()) {
-        importLinkedStaffForce = true;
-    }
-
-    for (size_t partNum = 0; partNum < _score->parts().size(); partNum++) {
-        Part* part = _score->parts()[partNum];
-        Fraction fr = Fraction(0, 1);
-        int lines = part->instrument()->stringData()->strings();
-        int stavesNum = part->nstaves();
-
-        if (importLinkedStaffForce /*|| partsImportOpts[partNum] == parts_import_t::BOTH*/) {
-            part->setStaves(stavesNum * 2);
-            for (int i = 0; i < stavesNum; i++) {
-                Staff* s = part->staff(i);
-                Staff* s1 = part->staff(stavesNum + i);
-
-                StaffTypes tabType = StaffTypes::TAB_6SIMPLE;
-                if (lines == 4) {
-                    tabType = StaffTypes::TAB_4SIMPLE;
-                } else if (lines == 5) {
-                    tabType = StaffTypes::TAB_5SIMPLE;
-                }
-
-                s1->setStaffType(fr, *StaffType::preset(tabType));
-                s1->setLines(fr, lines);
-                Excerpt::cloneStaff(s, s1);
-            }
-        } /* else if (partsImportOpts[partNum] == parts_import_t::TAB) {
-            for (int i = 0; i < stavesNum; i++) {
-                Staff* s = part->staff(i);
-                StaffTypes tabType = StaffTypes::TAB_6COMMON;
-                if (lines == 4) {
-                    tabType = StaffTypes::TAB_4COMMON;
-                } else if (lines == 5) {
-                    tabType = StaffTypes::TAB_5COMMON;
-                }
-
-                s->setStaffType(fr, *StaffType::preset(tabType));
-            }
-        } */
     }
 }
 
