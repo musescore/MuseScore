@@ -588,7 +588,9 @@ void InstrumentTemplate::read(XmlReader& e)
             String val(e.readText());
             InstrumentTemplate* ttt = searchTemplate(val);
             if (ttt) {
+                String id_ = id;
                 init(*ttt);
+                id = id_;
             } else {
                 LOGD("InstrumentTemplate:: init instrument <%s> not found", muPrintable(val));
             }
