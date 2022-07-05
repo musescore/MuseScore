@@ -36,6 +36,8 @@ Item {
 
         active: false
 
+        anchors.fill: parent
+
         sourceComponent: StyledToolTip {
             onClosed: {
                 Qt.callLater(unloadToolTip)
@@ -74,7 +76,7 @@ Item {
                 return
             }
 
-            toolTip.parent = parent
+            root.parent = parent
             toolTip.title = title
             toolTip.description = description
             toolTip.shortcut = shortcut
