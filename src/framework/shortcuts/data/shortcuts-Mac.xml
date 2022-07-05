@@ -958,52 +958,52 @@
   <SC>
     <key>note-longa-TAB</key>
     <seq>Shift+9</seq>
-    <seq>NumPad+9</seq>
+    <seq>Num+9</seq>
     </SC>
   <SC>
     <key>note-breve-TAB</key>
     <seq>Shift+8</seq>
-    <seq>NumPad+8</seq>
+    <seq>Num+8</seq>
     </SC>
   <SC>
     <key>pad-note-1-TAB</key>
     <seq>Shift+7</seq>
-    <seq>NumPad+7</seq>
+    <seq>Num+7</seq>
     </SC>
   <SC>
     <key>pad-note-2-TAB</key>
     <seq>Shift+6</seq>
-    <seq>NumPad+6</seq>
+    <seq>Num+6</seq>
     </SC>
   <SC>
     <key>pad-note-4-TAB</key>
     <seq>Shift+5</seq>
-    <seq>NumPad+5</seq>
+    <seq>Num+5</seq>
     </SC>
   <SC>
     <key>pad-note-8-TAB</key>
     <seq>Shift+4</seq>
-    <seq>NumPad+4</seq>
+    <seq>Num+4</seq>
     </SC>
   <SC>
     <key>pad-note-16-TAB</key>
     <seq>Shift+3</seq>
-    <seq>NumPad+3</seq>
+    <seq>Num+3</seq>
     </SC>
   <SC>
     <key>pad-note-32-TAB</key>
     <seq>Shift+2</seq>
-    <seq>NumPad+2</seq>
+    <seq>Num+2</seq>
     </SC>
   <SC>
     <key>pad-note-64-TAB</key>
     <seq>Shift+1</seq>
-    <seq>NumPad+1</seq>
+    <seq>Num+1</seq>
     </SC>
   <SC>
     <key>pad-note-128-TAB</key>
     <seq>Shift+0</seq>
-    <seq>NumPad+0</seq>
+    <seq>Num+0</seq>
     </SC>
   <SC>
     <key>rest-TAB</key>
