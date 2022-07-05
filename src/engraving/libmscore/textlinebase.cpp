@@ -210,14 +210,11 @@ Shape TextLineBaseSegment::shape() const
     double lw  = textLineBase()->lineWidth();
     double lw2 = lw * .5;
     if (twoLines) {     // hairpins
-        shape.add(RectF(points[0].x(), points[0].y() - lw2,
-                        points[1].x() - points[0].x(), points[1].y() - points[0].y() + lw));
-        shape.add(RectF(points[2].x(), points[2].y() - lw2,
-                        points[3].x() - points[2].x(), points[3].y() - points[2].y() + lw));
+        shape.add(RectF(points[0], points[1]).normalized().adjusted(-lw2, -lw2, lw2, lw2));
+        shape.add(RectF(points[3], points[2]).normalized().adjusted(-lw2, -lw2, lw2, lw2));
     } else if (textLineBase()->lineVisible()) {
         for (int i = 0; i < npoints; ++i) {
-            shape.add(RectF(points[i].x() - lw2, points[i].y() - lw2,
-                            points[i + 1].x() - points[i].x() + lw, points[i + 1].y() - points[i].y() + lw));
+            shape.add(RectF(points[i], points[i + 1]).normalized().adjusted(-lw2, -lw2, lw2, lw2));
         }
     }
     return shape;
