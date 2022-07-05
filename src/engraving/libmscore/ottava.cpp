@@ -59,9 +59,9 @@ static const ElementStyle ottavaStyle {
     { Sid::ottavaFontStyle,                    Pid::BEGIN_FONT_STYLE },
     { Sid::ottavaFontStyle,                    Pid::CONTINUE_FONT_STYLE },
     { Sid::ottavaFontStyle,                    Pid::END_FONT_STYLE },
-    { Sid::ottavaTextAlign,                    Pid::BEGIN_TEXT_ALIGN },
-    { Sid::ottavaTextAlign,                    Pid::CONTINUE_TEXT_ALIGN },
-    { Sid::ottavaTextAlign,                    Pid::END_TEXT_ALIGN },
+    { Sid::ottavaTextAlignAbove,               Pid::BEGIN_TEXT_ALIGN },
+    { Sid::ottavaTextAlignAbove,               Pid::CONTINUE_TEXT_ALIGN },
+    { Sid::ottavaTextAlignAbove,               Pid::END_TEXT_ALIGN },
     { Sid::ottavaLineWidth,                    Pid::LINE_WIDTH },
     { Sid::ottavaLineStyle,                    Pid::LINE_STYLE },
     { Sid::ottavaDashLineLen,                  Pid::DASH_LINE_LEN },
@@ -166,7 +166,7 @@ Sid OttavaSegment::getPropertyStyle(Pid pid) const
 
 Sid Ottava::getPropertyStyle(Pid pid) const
 {
-    assert(int(OttavaType::OTTAVA_22MB) - int(OttavaType::OTTAVA_8VA) == 5);
+    static_assert(int(OttavaType::OTTAVA_22MB) - int(OttavaType::OTTAVA_8VA) == 5);
 
     static const std::vector<Sid> ss = {
         Sid::ottava8VAPlacement,
@@ -224,6 +224,10 @@ Sid Ottava::getPropertyStyle(Pid pid) const
         } else {
             return placeAbove() ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
         }
+    case Pid::BEGIN_TEXT_ALIGN:
+    case Pid::CONTINUE_TEXT_ALIGN:
+    case Pid::END_TEXT_ALIGN:
+        return placeAbove() ? Sid::ottavaTextAlignAbove : Sid::ottavaTextAlignBelow;
     default:
         return TextLineBase::getPropertyStyle(pid);
     }

@@ -615,7 +615,7 @@ const TextStyle ottavaTextStyle { {
     { Sid::ottavaFontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::ottavaFontStyle,                    Pid::BEGIN_FONT_STYLE },
     { Sid::ottavaColor,                        Pid::COLOR },
-    { Sid::ottavaTextAlign,                    Pid::BEGIN_TEXT_ALIGN },
+    { Sid::ottavaTextAlignAbove,               Pid::BEGIN_TEXT_ALIGN },
     { Sid::ottavaPosAbove,                     Pid::OFFSET },
     { Sid::ottavaFrameType,                    Pid::FRAME_TYPE },
     { Sid::ottavaFramePadding,                 Pid::FRAME_PADDING },
