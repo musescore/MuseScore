@@ -208,6 +208,17 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     painter->drawPolyline(&points[start], end - start);
 }
 
+static RectF boundingBoxOfLine(const PointF& p1, const PointF& p2, double lw2, bool isDottedLine)
+{
+    if (isDottedLine) {
+        return RectF(p1, p2).normalized().adjusted(-lw2, -lw2, lw2, lw2);
+    }
+
+    PointF a = lw2 * (p2 - p1).normalized();
+    PointF b(-a.y(), a.x());
+    return RectF(p1 - b, p1 + b).normalized().united(RectF(p2 - b, p2 + b).normalized());
+}
+
 //---------------------------------------------------------
 //   shape
 //---------------------------------------------------------
@@ -221,14 +232,14 @@ Shape TextLineBaseSegment::shape() const
     if (!_endText->empty()) {
         shape.add(_endText->bbox().translated(_endText->pos()));
     }
-    double lw  = textLineBase()->lineWidth();
-    double lw2 = lw * .5;
+    double lw2 = 0.5 * textLineBase()->lineWidth();
+    bool isDottedLine = textLineBase()->lineStyle() == LineType::DOTTED;
     if (twoLines) {     // hairpins
-        shape.add(RectF(points[0], points[1]).normalized().adjusted(-lw2, -lw2, lw2, lw2));
-        shape.add(RectF(points[3], points[2]).normalized().adjusted(-lw2, -lw2, lw2, lw2));
+        shape.add(boundingBoxOfLine(points[0], points[1], lw2, isDottedLine));
+        shape.add(boundingBoxOfLine(points[2], points[3], lw2, isDottedLine));
     } else if (textLineBase()->lineVisible()) {
         for (int i = 0; i < npoints - 1; ++i) {
-            shape.add(RectF(points[i], points[i + 1]).normalized().adjusted(-lw2, -lw2, lw2, lw2));
+            shape.add(boundingBoxOfLine(points[i], points[i + 1], lw2, isDottedLine));
         }
     }
     return shape;
