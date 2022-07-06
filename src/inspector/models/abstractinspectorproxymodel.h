@@ -64,7 +64,7 @@ public:
     void updateModels(const ElementKeySet& newElementKeySet);
 
 public slots:
-    void setDefaultSubModelType(InspectorModelType modelType);
+    void setDefaultSubModelType(mu::inspector::InspectorModelType modelType);
 
 signals:
     void modelsChanged();
