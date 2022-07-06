@@ -82,7 +82,7 @@ GuitarPro::GPProperties GuitarPro7::readProperties(QByteArray* data)
     std::vector<TabImportOption> partsImportOpts = properties.partsImportOptions;
 
     for (size_t i = numInstrOffset + 1; i <= numInstrOffset + numberOfInstruments; i++) {
-        partsImportOpts.push_back(static_cast<TabImportOption>(data->at(i)));
+        partsImportOpts.push_back(static_cast<TabImportOption>(data->at(static_cast<int>(i))));
     }
 
     return properties;
