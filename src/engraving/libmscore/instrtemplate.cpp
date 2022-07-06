@@ -292,6 +292,11 @@ InstrumentTemplate& InstrumentTemplate::operator=(const InstrumentTemplate& temp
     return *this;
 }
 
+bool InstrumentTemplate::isValid() const
+{
+    return !id.empty();
+}
+
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -583,7 +588,9 @@ void InstrumentTemplate::read(XmlReader& e)
             String val(e.readText());
             InstrumentTemplate* ttt = searchTemplate(val);
             if (ttt) {
+                String id_ = id;
                 init(*ttt);
+                id = id_;
             } else {
                 LOGD("InstrumentTemplate:: init instrument <%s> not found", muPrintable(val));
             }
