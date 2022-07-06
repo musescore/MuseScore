@@ -135,6 +135,7 @@ class Image;
 class ChordLine;
 class SlurTieSegment;
 class FretDiagram;
+class HarpPedalDiagram;
 class StaffTypeChange;
 class MeasureBase;
 class Page;
@@ -395,6 +396,7 @@ public:
     CONVERT(Image,         IMAGE)
     CONVERT(ChordLine,     CHORDLINE)
     CONVERT(FretDiagram,   FRET_DIAGRAM)
+    CONVERT(HarpPedalDiagram, HARP_DIAGRAM)
     CONVERT(Page,          PAGE)
     CONVERT(Text,          TEXT)
     CONVERT(MeasureNumber, MEASURE_NUMBER)
@@ -725,6 +727,7 @@ CONVERT(Arpeggio)
 CONVERT(Image)
 CONVERT(ChordLine)
 CONVERT(FretDiagram)
+CONVERT(HarpPedalDiagram)
 CONVERT(Page)
 CONVERT(SystemText)
 CONVERT(BracketItem)

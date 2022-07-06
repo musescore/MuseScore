@@ -94,6 +94,7 @@
 #include "textframe.h"
 #include "tuplet.h"
 #include "tripletfeel.h"
+#include "harppedaldiagram.h"
 
 #include "log.h"
 
@@ -163,6 +164,7 @@ static const ElementName elementNames[] = {
     { ElementType::STAFFTYPE_CHANGE,     "StaffTypeChange",      QT_TRANSLATE_NOOP("elementName", "Staff type change") },
     { ElementType::HARMONY,              "Harmony",              QT_TRANSLATE_NOOP("elementName", "Chord symbol") },
     { ElementType::FRET_DIAGRAM,         "FretDiagram",          QT_TRANSLATE_NOOP("elementName", "Fretboard diagram") },
+    { ElementType::HARP_DIAGRAM,         "HarpPedalDiagram",          QT_TRANSLATE_NOOP("elementName", "Harp Pedal Diagram") },
     { ElementType::BEND,                 "Bend",                 QT_TRANSLATE_NOOP("elementName", "Bend") },
     { ElementType::TREMOLOBAR,           "TremoloBar",           QT_TRANSLATE_NOOP("elementName", "Tremolo bar") },
     { ElementType::VOLTA,                "Volta",                QT_TRANSLATE_NOOP("elementName", "Volta") },
@@ -312,6 +314,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::TEMPO_TEXT:        return new TempoText(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::HARMONY:           return new Harmony(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::FRET_DIAGRAM:      return new FretDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::BEND:              return new Bend(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
     case ElementType::LYRICS:            return new Lyrics(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
@@ -515,6 +518,10 @@ MAKE_ITEM_IMPL(FiguredBass, Segment)
 CREATE_ITEM_IMPL(FretDiagram, ElementType::FRET_DIAGRAM, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(FretDiagram)
 MAKE_ITEM_IMPL(FretDiagram, Segment)
+
+CREATE_ITEM_IMPL(HarpPedalDiagram, ElementType::HARP_DIAGRAM, Segment, isAccessibleEnabled)
+COPY_ITEM_IMPL(HarpPedalDiagram)
+MAKE_ITEM_IMPL(HarpPedalDiagram, Segment);
 
 CREATE_ITEM_IMPL(KeySig, ElementType::KEYSIG, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(KeySig)

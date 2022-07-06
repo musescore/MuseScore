@@ -102,6 +102,7 @@ enum class ElementType {
     STAFFTYPE_CHANGE,
     HARMONY,
     FRET_DIAGRAM,
+    HARP_DIAGRAM,
     BEND,
     TREMOLOBAR,
     VOLTA,
