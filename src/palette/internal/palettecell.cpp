@@ -66,8 +66,8 @@ PaletteCell::PaletteCell(QObject* parent)
     id = makeId();
 }
 
-PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, const QString& _tag, QObject* parent)
-    : QObject(parent), element(e), name(_name), mag(_mag), tag(_tag)
+PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, const QPointF& _offset, const QString& _tag, QObject* parent)
+    : QObject(parent), element(e), name(_name), mag(_mag), xoffset(_offset.x()), yoffset(_offset.y()), tag(_tag)
 {
     id = makeId();
     drawStaff = needsStaff(element);

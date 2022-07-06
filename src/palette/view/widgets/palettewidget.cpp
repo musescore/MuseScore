@@ -153,9 +153,10 @@ ElementPtr PaletteWidget::elementForCellAt(int idx) const
     return cell ? cell->element : nullptr;
 }
 
-PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const QString& name, qreal mag, const QString& tag)
+PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const QString& name, qreal mag, const QPointF offset,
+                                            const QString& tag)
 {
-    PaletteCellPtr cell = m_palette->insertElement(idx, element, name, mag, tag);
+    PaletteCellPtr cell = m_palette->insertElement(idx, element, name, mag, offset, tag);
 
     update();
     updateGeometry();
@@ -163,9 +164,9 @@ PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const Q
     return cell;
 }
 
-PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& name, qreal mag, const QString& tag)
+PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF offset, const QString& tag)
 {
-    PaletteCellPtr cell = m_palette->appendElement(element, name, mag, tag);
+    PaletteCellPtr cell = m_palette->appendElement(element, name, mag, offset, tag);
 
     setFixedHeight(heightForWidth(width()));
     updateGeometry();
