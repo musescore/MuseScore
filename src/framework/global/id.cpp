@@ -34,6 +34,11 @@ ID::ID(const ID& id)
 {
 }
 
+ID::ID(const std::string& id)
+    : m_id(!id.empty() ? std::stoul(id) : 0)
+{
+}
+
 bool ID::isValid() const
 {
     return m_id != 0;
@@ -89,6 +94,11 @@ bool ID::operator>(const ID& id) const
 uint64_t ID::toUint64() const
 {
     return m_id;
+}
+
+std::string ID::toStdString() const
+{
+    return std::to_string(m_id);
 }
 
 #ifndef NO_QT_SUPPORT

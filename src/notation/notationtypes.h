@@ -140,7 +140,7 @@ using PartList = std::vector<const Part*>;
 using InstrumentList = QList<Instrument>;
 using InstrumentTemplateList = QList<const InstrumentTemplate*>;
 using InstrumentGenreList = QList<const InstrumentGenre*>;
-using ScoreOrderList = QList<ScoreOrder>;
+using ScoreOrderList = std::vector<mu::engraving::ScoreOrder>;
 using InstrumentGroupList = QList<const InstrumentGroup*>;
 using MidiArticulationList = QList<MidiArticulation>;
 using InstrumentTrackId = mu::engraving::InstrumentTrackId;
@@ -585,7 +585,7 @@ inline const ScoreOrder& customOrder()
 {
     static ScoreOrder order;
     order.id = "custom";
-    order.name = qtrc("OrderXML", "Custom");
+    order.name = mtrc("OrderXML", "Custom");
 
     return order;
 }
@@ -611,8 +611,5 @@ constexpr bool isFretIndexValid(int fretIndex)
     return 0 <= fretIndex && fretIndex < MAX_FRET;
 }
 }
-
-Q_DECLARE_METATYPE(mu::notation::InstrumentTemplate)
-Q_DECLARE_METATYPE(mu::notation::ScoreOrder)
 
 #endif // MU_NOTATION_NOTATIONTYPES_H

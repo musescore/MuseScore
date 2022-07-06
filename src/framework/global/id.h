@@ -31,6 +31,7 @@
 #endif
 
 #include "global/logstream.h"
+#include "types/string.h"
 
 namespace mu {
 class ID
@@ -38,6 +39,7 @@ class ID
 public:
     ID();
     ID(const ID& id);
+    ID(const std::string& id);
     constexpr ID(const uint64_t& id)
         : m_id(id) {}
 
@@ -56,6 +58,7 @@ public:
     bool operator>(const ID& id) const;
 
     uint64_t toUint64() const;
+    std::string toStdString() const;
 
 #ifndef NO_QT_SUPPORT
     ID(const QString& id);
