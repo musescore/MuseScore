@@ -22,8 +22,9 @@
 
 #include "chordline.h"
 
-#include "translation.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
+
 #include "chord.h"
 #include "measure.h"
 #include "system.h"
@@ -34,13 +35,6 @@ using namespace mu::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-const char* scorelineNames[] = {
-    QT_TRANSLATE_NOOP("engraving", "Fall"),
-    QT_TRANSLATE_NOOP("engraving", "Doit"),
-    QT_TRANSLATE_NOOP("engraving", "Plop"),
-    QT_TRANSLATE_NOOP("engraving", "Scoop"),
-};
-
 //---------------------------------------------------------
 //   ChordLine
 //---------------------------------------------------------
@@ -189,7 +183,7 @@ void ChordLine::read(XmlReader& e)
             }
             modified = true;
         } else if (tag == "subtype") {
-            setChordLineType(ChordLineType(e.readInt()));
+            setChordLineType(TConv::fromXml(e.readAsciiText(), ChordLineType::NOTYPE));
         } else if (tag == "straight") {
             setStraight(e.readInt());
         } else if (tag == "lengthX") {
@@ -377,7 +371,7 @@ String ChordLine::accessibleInfo() const
 {
     String rez = EngravingItem::accessibleInfo();
     if (chordLineType() != ChordLineType::NOTYPE) {
-        rez = String(u"%1: %2").arg(rez, String::fromUtf8(scorelineNames[static_cast<int>(chordLineType()) - 1]));
+        rez = String(u"%1: %2").arg(rez, TConv::translatedUserName(chordLineType()));
     }
     return rez;
 }

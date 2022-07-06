@@ -24,6 +24,7 @@
 #define __JUMP_H__
 
 #include "text.h"
+#include "types/types.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -45,28 +46,11 @@ class Jump final : public TextBase
     bool _playRepeats;
 
 public:
-    enum class Type : char {
-        DC,
-        DC_AL_FINE,
-        DC_AL_CODA,
-        DS_AL_CODA,
-        DS_AL_FINE,
-        DS,
-        DC_AL_DBLCODA,
-        DS_AL_DBLCODA,
-        DSS,
-        DSS_AL_CODA,
-        DSS_AL_DBLCODA,
-        DSS_AL_FINE,
-        DCODA,
-        DDBLCODA,
-        USER
-    };
 
     Jump(Measure* parent);
 
-    void setJumpType(Type t);
-    Type jumpType() const;
+    void setJumpType(JumpType t);
+    JumpType jumpType() const;
     String jumpTypeUserName() const;
 
     Jump* clone() const override { return new Jump(*this); }
@@ -102,19 +86,14 @@ public:
 };
 
 struct JumpTypeTableItem {
-    Jump::Type type;
+    JumpType type;
     AsciiStringView text;
     AsciiStringView jumpTo;
     AsciiStringView playUntil;
     AsciiStringView continueAt;
-    const char* userText = nullptr;
 };
 
 extern const std::vector<JumpTypeTableItem> jumpTypeTable;
 } // namespace mu::engraving
-
-#ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::Jump::Type);
-#endif
 
 #endif

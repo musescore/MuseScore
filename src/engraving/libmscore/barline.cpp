@@ -1620,7 +1620,7 @@ String BarLine::accessibleExtraInfo() const
             }
             if (e->type() == ElementType::MARKER) {
                 const Marker* m1 = toMarker(e);
-                if (m1->markerType() == Marker::Type::FINE) {
+                if (m1->markerType() == MarkerType::FINE) {
                     rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
                 }
             }
@@ -1633,7 +1633,7 @@ String BarLine::accessibleExtraInfo() const
                     continue;
                 }
                 if (e->isMarker()) {
-                    if (toMarker(e)->markerType() == Marker::Type::FINE) {
+                    if (toMarker(e)->markerType() == MarkerType::FINE) {
                         continue;             //added above^
                     }
                     rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());

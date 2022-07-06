@@ -41,12 +41,6 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using namespace mu::ui;
 
-const char* g_groupNames[mu::engraving::STAFF_GROUP_MAX] = {
-    QT_TRANSLATE_NOOP("notation", "STANDARD STAFF"),
-    QT_TRANSLATE_NOOP("notation", "PERCUSSION STAFF"),
-    QT_TRANSLATE_NOOP("notation", "TABLATURE STAFF")
-};
-
 //---------------------------------------------------------
 //   noteHeadSchemes
 //---------------------------------------------------------
@@ -87,7 +81,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     durFontName->setCurrentIndex(0);
 
     for (auto i : noteHeadSchemes) {
-        noteHeadScheme->addItem(TConv::toUserName(i), static_cast<int>(i));
+        noteHeadScheme->addItem(TConv::translatedUserName(i), static_cast<int>(i));
     }
 
     // load a sample standard score in preview
@@ -259,7 +253,7 @@ void EditStaffType::setValues()
     mu::engraving::StaffGroup group = staffType.group();
     int i = int(group);
     stack->setCurrentIndex(i);
-    groupName->setText(qApp->translate("staff group header name", g_groupNames[i]));
+    groupName->setText(TConv::translatedUserName(group));
 //      groupCombo->setCurrentIndex(i);
 
     name->setText(staffType.name());

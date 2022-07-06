@@ -33,6 +33,7 @@
 
 #include "translation.h"
 #include "interactive/messagebox.h"
+#include "types/typesconv.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -1066,7 +1067,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         trill->setTick(cr1->tick());
                         trill->setTick2(cr2->tick());
                         if (!(tro->trillSign)) {
-                            trill->setTrillType(u"prallprall");
+                            trill->setTrillType(TrillType::PRALLPRALL_LINE);
                         }
                         score->addElement(trill);
                     }

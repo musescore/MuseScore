@@ -24,6 +24,7 @@
 
 #include "translation.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "mscore.h"
 #include "engravingitem.h"
@@ -843,7 +844,7 @@ SegmentType Segment::segmentType(ElementType type)
     case ElementType::BREATH:
         return SegmentType::Breath;
     default:
-        LOGD("Segment:segmentType():  bad type: <%s>", Factory::name(type));
+        LOGD("Segment:segmentType():  bad type: <%s>", TConv::toXml(type));
         return SegmentType::Invalid;
     }
 }

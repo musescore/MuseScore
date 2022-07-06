@@ -27,6 +27,11 @@
 
 #include "log.h"
 
+#ifdef ENGRAVING_NO_TRANSLATION
+#undef QT_TRANSLATE_NOOP
+#define QT_TRANSLATE_NOOP(ctx, str) ""
+#endif
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -36,56 +41,29 @@ struct Item
     T type;
     AsciiStringView xml;
     const char* userName = nullptr;
-    SymId symId = SymId::noSym;
 };
 
-template<typename T>
-static String findUserNameByType(const std::vector<Item<T> >& cont, const T& v)
+template<typename T, typename C>
+static const char* findUserNameByType(const C& cont, const T& v)
 {
     auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
         return i.type == v;
     });
 
     IF_ASSERT_FAILED(it != cont.cend()) {
-        static String dummy;
+        static const char* dummy = "";
         return dummy;
     }
 
-    if (!it->userName) {
-        return String::fromAscii(it->xml.ascii());
+    if (!it->userName || std::strlen(it->userName) == 0) {
+        return it->xml.ascii();
     }
 
-    return mu::mtrc("engraving", it->userName);
+    return it->userName;
 }
 
-template<typename T>
-static SymId findSymIdByType(const std::vector<Item<T> >& cont, const T& v)
-{
-    auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
-        return i.type == v;
-    });
-
-    IF_ASSERT_FAILED(it != cont.cend()) {
-        return SymId::noSym;
-    }
-    return it->symId;
-}
-
-template<typename T>
-static T findTypeBySymId(const std::vector<Item<T> >& cont, const SymId& v, T def)
-{
-    auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
-        return i.symId == v;
-    });
-
-    IF_ASSERT_FAILED(it != cont.cend()) {
-        return def;
-    }
-    return it->type;
-}
-
-template<typename T>
-static AsciiStringView findXmlTagByType(const std::vector<Item<T> >& cont, const T& v)
+template<typename T, typename C>
+static AsciiStringView findXmlTagByType(const C& cont, const T& v)
 {
     auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
         return i.type == v;
@@ -98,8 +76,8 @@ static AsciiStringView findXmlTagByType(const std::vector<Item<T> >& cont, const
     return it->xml;
 }
 
-template<typename T>
-static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const String& tag, T def)
+template<typename T, typename C>
+static T findTypeByXmlTag(const C& cont, const String& tag, T def)
 {
     ByteArray ba = tag.toAscii();
     auto it = std::find_if(cont.cbegin(), cont.cend(), [ba](const Item<T>& i) {
@@ -112,21 +90,25 @@ static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const String& tag, 
     return it->type;
 }
 
-template<typename T>
-static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const AsciiStringView& tag, T def)
+template<typename T, typename C>
+static T findTypeByXmlTag(const C& cont, const AsciiStringView& tag, T def, bool silent = false)
 {
     auto it = std::find_if(cont.cbegin(), cont.cend(), [tag](const Item<T>& i) {
         return i.xml == tag;
     });
 
-    IF_ASSERT_FAILED(it != cont.cend()) {
+    if (it == cont.cend()) {
+        if (!silent) {
+            LOGE() << "not found type for tag: " << tag;
+            assert(it != cont.cend());
+        }
         return def;
     }
+
     return it->type;
 }
 
 // ==========================================================
-
 String TConv::toXml(const std::vector<int>& v)
 {
     StringList sl;
@@ -149,6 +131,146 @@ std::vector<int> TConv::fromXml(const String& tag, const std::vector<int>& def)
         list.push_back(i);
     }
     return list;
+}
+
+static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
+    { ElementType::INVALID,              "invalid",              QT_TRANSLATE_NOOP("engraving", "Invalid") },
+    { ElementType::BRACKET_ITEM,         "BracketItem",          QT_TRANSLATE_NOOP("engraving", "Bracket") },
+    { ElementType::PART,                 "Part",                 QT_TRANSLATE_NOOP("engraving", "Part") },
+    { ElementType::STAFF,                "Staff",                QT_TRANSLATE_NOOP("engraving", "Staff") },
+    { ElementType::SCORE,                "Score",                QT_TRANSLATE_NOOP("engraving", "Score") },
+    { ElementType::SYMBOL,               "Symbol",               QT_TRANSLATE_NOOP("engraving", "Symbol") },
+    { ElementType::TEXT,                 "Text",                 QT_TRANSLATE_NOOP("engraving", "Text") },
+    { ElementType::MEASURE_NUMBER,       "MeasureNumber",        QT_TRANSLATE_NOOP("engraving", "Measure number") },
+    { ElementType::MMREST_RANGE,         "MMRestRange",          QT_TRANSLATE_NOOP("engraving", "Multimeasure rest range") },
+    { ElementType::INSTRUMENT_NAME,      "InstrumentName",       QT_TRANSLATE_NOOP("engraving", "Instrument name") },
+    { ElementType::SLUR_SEGMENT,         "SlurSegment",          QT_TRANSLATE_NOOP("engraving", "Slur segment") },
+    { ElementType::TIE_SEGMENT,          "TieSegment",           QT_TRANSLATE_NOOP("engraving", "Tie segment") },
+    { ElementType::BAR_LINE,             "BarLine",              QT_TRANSLATE_NOOP("engraving", "Barline") },
+    { ElementType::STAFF_LINES,          "StaffLines",           QT_TRANSLATE_NOOP("engraving", "Staff lines") },
+    { ElementType::SYSTEM_DIVIDER,       "SystemDivider",        QT_TRANSLATE_NOOP("engraving", "System divider") },
+    { ElementType::STEM_SLASH,           "StemSlash",            QT_TRANSLATE_NOOP("engraving", "Stem slash") },
+    { ElementType::ARPEGGIO,             "Arpeggio",             QT_TRANSLATE_NOOP("engraving", "Arpeggio") },
+    { ElementType::ACCIDENTAL,           "Accidental",           QT_TRANSLATE_NOOP("engraving", "Accidental") },
+    { ElementType::LEDGER_LINE,          "LedgerLine",           QT_TRANSLATE_NOOP("engraving", "Ledger line") },
+    { ElementType::STEM,                 "Stem",                 QT_TRANSLATE_NOOP("engraving", "Stem") },
+    { ElementType::NOTE,                 "Note",                 QT_TRANSLATE_NOOP("engraving", "Note") },
+    { ElementType::CLEF,                 "Clef",                 QT_TRANSLATE_NOOP("engraving", "Clef") },
+    { ElementType::KEYSIG,               "KeySig",               QT_TRANSLATE_NOOP("engraving", "Key signature") },
+    { ElementType::AMBITUS,              "Ambitus",              QT_TRANSLATE_NOOP("engraving", "Ambitus") },
+    { ElementType::TIMESIG,              "TimeSig",              QT_TRANSLATE_NOOP("engraving", "Time signature") },
+    { ElementType::REST,                 "Rest",                 QT_TRANSLATE_NOOP("engraving", "Rest") },
+    { ElementType::MMREST,               "MMRest",               QT_TRANSLATE_NOOP("engraving", "Multimeasure rest") },
+    { ElementType::BREATH,               "Breath",               QT_TRANSLATE_NOOP("engraving", "Breath") },
+    { ElementType::MEASURE_REPEAT,       "MeasureRepeat",        QT_TRANSLATE_NOOP("engraving", "Measure repeat") },
+    { ElementType::TIE,                  "Tie",                  QT_TRANSLATE_NOOP("engraving", "Tie") },
+    { ElementType::ARTICULATION,         "Articulation",         QT_TRANSLATE_NOOP("engraving", "Articulation") },
+    { ElementType::FERMATA,              "Fermata",              QT_TRANSLATE_NOOP("engraving", "Fermata") },
+    { ElementType::CHORDLINE,            "ChordLine",            QT_TRANSLATE_NOOP("engraving", "Chord line") },
+    { ElementType::DYNAMIC,              "Dynamic",              QT_TRANSLATE_NOOP("engraving", "Dynamic") },
+    { ElementType::BEAM,                 "Beam",                 QT_TRANSLATE_NOOP("engraving", "Beam") },
+    { ElementType::HOOK,                 "Hook",                 QT_TRANSLATE_NOOP("engraving", "Flag") }, // internally called "Hook", but "Flag" in SMuFL, so here externally too
+    { ElementType::LYRICS,               "Lyrics",               QT_TRANSLATE_NOOP("engraving", "Lyrics") },
+    { ElementType::FIGURED_BASS,         "FiguredBass",          QT_TRANSLATE_NOOP("engraving", "Figured bass") },
+    { ElementType::MARKER,               "Marker",               QT_TRANSLATE_NOOP("engraving", "Marker") },
+    { ElementType::JUMP,                 "Jump",                 QT_TRANSLATE_NOOP("engraving", "Jump") },
+    { ElementType::FINGERING,            "Fingering",            QT_TRANSLATE_NOOP("engraving", "Fingering") },
+    { ElementType::TUPLET,               "Tuplet",               QT_TRANSLATE_NOOP("engraving", "Tuplet") },
+    { ElementType::TEMPO_TEXT,           "Tempo",                QT_TRANSLATE_NOOP("engraving", "Tempo") },
+    { ElementType::STAFF_TEXT,           "StaffText",            QT_TRANSLATE_NOOP("engraving", "Staff text") },
+    { ElementType::SYSTEM_TEXT,          "SystemText",           QT_TRANSLATE_NOOP("engraving", "System text") },
+    { ElementType::PLAYTECH_ANNOTATION,  "PlayTechAnnotation",   QT_TRANSLATE_NOOP("engraving", "Playing technique annotation") },
+    { ElementType::TRIPLET_FEEL,         "TripletFeel",          QT_TRANSLATE_NOOP("engraving", "Triplet feel") },
+    { ElementType::REHEARSAL_MARK,       "RehearsalMark",        QT_TRANSLATE_NOOP("engraving", "Rehearsal mark") },
+    { ElementType::INSTRUMENT_CHANGE,    "InstrumentChange",     QT_TRANSLATE_NOOP("engraving", "Instrument change") },
+    { ElementType::STAFFTYPE_CHANGE,     "StaffTypeChange",      QT_TRANSLATE_NOOP("engraving", "Staff type change") },
+    { ElementType::HARMONY,              "Harmony",              QT_TRANSLATE_NOOP("engraving", "Chord symbol") },
+    { ElementType::FRET_DIAGRAM,         "FretDiagram",          QT_TRANSLATE_NOOP("engraving", "Fretboard diagram") },
+    { ElementType::BEND,                 "Bend",                 QT_TRANSLATE_NOOP("engraving", "Bend") },
+    { ElementType::TREMOLOBAR,           "TremoloBar",           QT_TRANSLATE_NOOP("engraving", "Tremolo bar") },
+    { ElementType::VOLTA,                "Volta",                QT_TRANSLATE_NOOP("engraving", "Volta") },
+    { ElementType::HAIRPIN_SEGMENT,      "HairpinSegment",       QT_TRANSLATE_NOOP("engraving", "Hairpin segment") },
+    { ElementType::OTTAVA_SEGMENT,       "OttavaSegment",        QT_TRANSLATE_NOOP("engraving", "Ottava segment") },
+    { ElementType::TRILL_SEGMENT,        "TrillSegment",         QT_TRANSLATE_NOOP("engraving", "Trill segment") },
+    { ElementType::LET_RING_SEGMENT,     "LetRingSegment",       QT_TRANSLATE_NOOP("engraving", "Let ring segment") },
+    { ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, "GradualTempoChangeSegment", QT_TRANSLATE_NOOP("engraving",
+                                                                                                "Gradual tempo change segment") },
+    { ElementType::VIBRATO_SEGMENT,      "VibratoSegment",       QT_TRANSLATE_NOOP("engraving", "Vibrato segment") },
+    { ElementType::PALM_MUTE_SEGMENT,    "PalmMuteSegment",      QT_TRANSLATE_NOOP("engraving", "Palm mute segment") },
+    { ElementType::WHAMMY_BAR_SEGMENT,   "WhammyBarSegment",     QT_TRANSLATE_NOOP("engraving", "Whammy bar segment") },
+    { ElementType::RASGUEADO_SEGMENT,    "RasgueadoSegment",     QT_TRANSLATE_NOOP("engraving", "Rasgueado segment") },
+    { ElementType::HARMONIC_MARK_SEGMENT,    "HarmonicMarkSegment",    QT_TRANSLATE_NOOP("engraving", "Harmonic mark segment") },
+    { ElementType::TEXTLINE_SEGMENT,     "TextLineSegment",      QT_TRANSLATE_NOOP("engraving", "Text line segment") },
+    { ElementType::VOLTA_SEGMENT,        "VoltaSegment",         QT_TRANSLATE_NOOP("engraving", "Volta segment") },
+    { ElementType::PEDAL_SEGMENT,        "PedalSegment",         QT_TRANSLATE_NOOP("engraving", "Pedal segment") },
+    { ElementType::LYRICSLINE_SEGMENT,   "LyricsLineSegment",    QT_TRANSLATE_NOOP("engraving", "Melisma line segment") },
+    { ElementType::GLISSANDO_SEGMENT,    "GlissandoSegment",     QT_TRANSLATE_NOOP("engraving", "Glissando segment") },
+    { ElementType::LAYOUT_BREAK,         "LayoutBreak",          QT_TRANSLATE_NOOP("engraving", "Layout break") },
+    { ElementType::SPACER,               "Spacer",               QT_TRANSLATE_NOOP("engraving", "Spacer") },
+    { ElementType::STAFF_STATE,          "StaffState",           QT_TRANSLATE_NOOP("engraving", "Staff state") },
+    { ElementType::NOTEHEAD,             "NoteHead",             QT_TRANSLATE_NOOP("engraving", "Notehead") },
+    { ElementType::NOTEDOT,              "NoteDot",              QT_TRANSLATE_NOOP("engraving", "Note dot") },
+    { ElementType::TREMOLO,              "Tremolo",              QT_TRANSLATE_NOOP("engraving", "Tremolo") },
+    { ElementType::IMAGE,                "Image",                QT_TRANSLATE_NOOP("engraving", "Image") },
+    { ElementType::MEASURE,              "Measure",              QT_TRANSLATE_NOOP("engraving", "Measure") },
+    { ElementType::SELECTION,            "Selection",            QT_TRANSLATE_NOOP("engraving", "Selection") },
+    { ElementType::LASSO,                "Lasso",                QT_TRANSLATE_NOOP("engraving", "Lasso") },
+    { ElementType::SHADOW_NOTE,          "ShadowNote",           QT_TRANSLATE_NOOP("engraving", "Shadow note") },
+    { ElementType::TAB_DURATION_SYMBOL,  "TabDurationSymbol",    QT_TRANSLATE_NOOP("engraving", "Tab duration symbol") },
+    { ElementType::FSYMBOL,              "FSymbol",              QT_TRANSLATE_NOOP("engraving", "Font symbol") },
+    { ElementType::PAGE,                 "Page",                 QT_TRANSLATE_NOOP("engraving", "Page") },
+    { ElementType::HAIRPIN,              "HairPin",              QT_TRANSLATE_NOOP("engraving", "Hairpin") },
+    { ElementType::OTTAVA,               "Ottava",               QT_TRANSLATE_NOOP("engraving", "Ottava") },
+    { ElementType::PEDAL,                "Pedal",                QT_TRANSLATE_NOOP("engraving", "Pedal") },
+    { ElementType::TRILL,                "Trill",                QT_TRANSLATE_NOOP("engraving", "Trill") },
+    { ElementType::LET_RING,             "LetRing",              QT_TRANSLATE_NOOP("engraving", "Let ring") },
+    { ElementType::GRADUAL_TEMPO_CHANGE, "GradualTempoChange",   QT_TRANSLATE_NOOP("engraving", "Gradual tempo change") },
+    { ElementType::VIBRATO,              "Vibrato",              QT_TRANSLATE_NOOP("engraving", "Vibrato") },
+    { ElementType::PALM_MUTE,            "PalmMute",             QT_TRANSLATE_NOOP("engraving", "Palm mute") },
+    { ElementType::WHAMMY_BAR,           "WhammyBar",            QT_TRANSLATE_NOOP("engraving", "Whammy bar") },
+    { ElementType::RASGUEADO,            "Rasgueado",            QT_TRANSLATE_NOOP("engraving", "Rasgueado") },
+    { ElementType::HARMONIC_MARK,        "HarmonicMark",         QT_TRANSLATE_NOOP("engraving", "Harmonic Mark") },
+    { ElementType::TEXTLINE,             "TextLine",             QT_TRANSLATE_NOOP("engraving", "Text line") },
+    { ElementType::TEXTLINE_BASE,        "TextLineBase",         QT_TRANSLATE_NOOP("engraving", "Text line base") },    // remove
+    { ElementType::NOTELINE,             "NoteLine",             QT_TRANSLATE_NOOP("engraving", "Note line") },
+    { ElementType::LYRICSLINE,           "LyricsLine",           QT_TRANSLATE_NOOP("engraving", "Melisma line") },
+    { ElementType::GLISSANDO,            "Glissando",            QT_TRANSLATE_NOOP("engraving", "Glissando") },
+    { ElementType::BRACKET,              "Bracket",              QT_TRANSLATE_NOOP("engraving", "Bracket") },
+    { ElementType::SEGMENT,              "Segment",              QT_TRANSLATE_NOOP("engraving", "Segment") },
+    { ElementType::SYSTEM,               "System",               QT_TRANSLATE_NOOP("engraving", "System") },
+    { ElementType::COMPOUND,             "Compound",             QT_TRANSLATE_NOOP("engraving", "Compound") },
+    { ElementType::CHORD,                "Chord",                QT_TRANSLATE_NOOP("engraving", "Chord") },
+    { ElementType::SLUR,                 "Slur",                 QT_TRANSLATE_NOOP("engraving", "Slur") },
+    { ElementType::ELEMENT,              "EngravingItem",        QT_TRANSLATE_NOOP("engraving", "EngravingItem") },
+    { ElementType::ELEMENT_LIST,         "ElementList",          QT_TRANSLATE_NOOP("engraving", "EngravingItem list") },
+    { ElementType::STAFF_LIST,           "StaffList",            QT_TRANSLATE_NOOP("engraving", "Staff list") },
+    { ElementType::MEASURE_LIST,         "MeasureList",          QT_TRANSLATE_NOOP("engraving", "Measure list") },
+    { ElementType::HBOX,                 "HBox",                 QT_TRANSLATE_NOOP("engraving", "Horizontal frame") },
+    { ElementType::VBOX,                 "VBox",                 QT_TRANSLATE_NOOP("engraving", "Vertical frame") },
+    { ElementType::TBOX,                 "TBox",                 QT_TRANSLATE_NOOP("engraving", "Text frame") },
+    { ElementType::FBOX,                 "FBox",                 QT_TRANSLATE_NOOP("engraving", "Fretboard diagram frame") },
+    { ElementType::ACTION_ICON,          "ActionIcon",           QT_TRANSLATE_NOOP("engraving", "Action icon") },
+    { ElementType::OSSIA,                "Ossia",                QT_TRANSLATE_NOOP("engraving", "Ossia") },
+    { ElementType::BAGPIPE_EMBELLISHMENT, "BagpipeEmbellishment", QT_TRANSLATE_NOOP("engraving", "Bagpipe embellishment") },
+    { ElementType::STICKING,             "Sticking",             QT_TRANSLATE_NOOP("engraving", "Sticking") },
+    { ElementType::GRACE_NOTES_GROUP,    "GraceNotesGroup",      QT_TRANSLATE_NOOP("engraving", "Grace notes group") },
+    { ElementType::ROOT_ITEM,            "RootItem",             QT_TRANSLATE_NOOP("engraving", "Root item") },
+    { ElementType::DUMMY,                "Dummy",                QT_TRANSLATE_NOOP("engraving", "Dummy") },
+};
+
+String TConv::translatedUserName(ElementType v)
+{
+    return mtrc("engraving", findUserNameByType<ElementType>(ELEMENT_TYPES, v));
+}
+
+AsciiStringView TConv::toXml(ElementType v)
+{
+    return findXmlTagByType<ElementType>(ELEMENT_TYPES, v);
+}
+
+ElementType TConv::fromXml(const AsciiStringView& tag, ElementType def, bool silent)
+{
+    return findTypeByXmlTag<ElementType>(ELEMENT_TYPES, tag, def, silent);
 }
 
 static const std::vector<Item<AlignH> > ALIGN_H = {
@@ -196,7 +318,7 @@ Align TConv::fromXml(const String& str, Align def)
     return a;
 }
 
-String TConv::toUserName(SymId v)
+String TConv::translatedUserName(SymId v)
 {
     return SymNames::translatedUserNameForSymId(v);
 }
@@ -211,14 +333,14 @@ SymId TConv::fromXml(const AsciiStringView& tag, SymId def)
     return SymNames::symIdByName(tag, def);
 }
 
-static const std::vector<Item<Orientation> > ORIENTATION = {
+static const std::array<Item<Orientation>, 2> ORIENTATION = { {
     { Orientation::VERTICAL,    "vertical",     QT_TRANSLATE_NOOP("engraving", "Vertical") },
     { Orientation::HORIZONTAL,  "horizontal",   QT_TRANSLATE_NOOP("engraving", "Horizontal") },
-};
+} };
 
-String TConv::toUserName(Orientation v)
+String TConv::translatedUserName(Orientation v)
 {
-    return findUserNameByType<Orientation>(ORIENTATION, v);
+    return mtrc("engraving", findUserNameByType<Orientation>(ORIENTATION, v));
 }
 
 AsciiStringView TConv::toXml(Orientation v)
@@ -231,17 +353,17 @@ Orientation TConv::fromXml(const AsciiStringView& tag, Orientation def)
     return findTypeByXmlTag<Orientation>(ORIENTATION, tag, def);
 }
 
-static const std::vector<Item<NoteHeadType> > NOTEHEAD_TYPES = {
+static const std::array<Item<NoteHeadType>, 5> NOTEHEAD_TYPES = { {
     { NoteHeadType::HEAD_AUTO,      "auto",    QT_TRANSLATE_NOOP("engraving", "Auto") },
     { NoteHeadType::HEAD_WHOLE,     "whole",   QT_TRANSLATE_NOOP("engraving", "Whole") },
     { NoteHeadType::HEAD_HALF,      "half",    QT_TRANSLATE_NOOP("engraving", "Half") },
     { NoteHeadType::HEAD_QUARTER,   "quarter", QT_TRANSLATE_NOOP("engraving", "Quarter") },
     { NoteHeadType::HEAD_BREVIS,    "breve",   QT_TRANSLATE_NOOP("engraving", "Breve") },
-};
+} };
 
-String TConv::toUserName(NoteHeadType v)
+String TConv::translatedUserName(NoteHeadType v)
 {
-    return findUserNameByType<NoteHeadType>(NOTEHEAD_TYPES, v);
+    return mtrc("engraving", findUserNameByType<NoteHeadType>(NOTEHEAD_TYPES, v));
 }
 
 AsciiStringView TConv::toXml(NoteHeadType v)
@@ -267,9 +389,9 @@ static const std::vector<Item<NoteHeadScheme> > NOTEHEAD_SCHEMES = {
     { NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER, "shape-7-walker",      QT_TRANSLATE_NOOP("engraving", "7-shape (Walker)") }
 };
 
-String TConv::toUserName(NoteHeadScheme v)
+String TConv::translatedUserName(NoteHeadScheme v)
 {
-    return findUserNameByType<NoteHeadScheme>(NOTEHEAD_SCHEMES, v);
+    return mtrc("engraving", findUserNameByType<NoteHeadScheme>(NOTEHEAD_SCHEMES, v));
 }
 
 AsciiStringView TConv::toXml(NoteHeadScheme v)
@@ -367,9 +489,9 @@ static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
     { NoteHeadGroup::HEAD_CUSTOM,       "custom",       QT_TRANSLATE_NOOP("engraving",  "Custom") }
 };
 
-String TConv::toUserName(NoteHeadGroup v)
+String TConv::translatedUserName(NoteHeadGroup v)
 {
-    return findUserNameByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v);
+    return mtrc("engraving", findUserNameByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v));
 }
 
 AsciiStringView TConv::toXml(NoteHeadGroup v)
@@ -422,9 +544,9 @@ static const std::vector<Item<ClefType> > CLEF_TYPES = {
     { ClefType::TAB4_SERIF, "TAB4_SERIF", QT_TRANSLATE_NOOP("engraving", "Tablature Serif 4 lines") },
 };
 
-String TConv::toUserName(ClefType v)
+String TConv::translatedUserName(ClefType v)
 {
-    return findUserNameByType<ClefType>(CLEF_TYPES, v);
+    return mtrc("engraving", findUserNameByType<ClefType>(CLEF_TYPES, v));
 }
 
 AsciiStringView TConv::toXml(ClefType v)
@@ -452,58 +574,86 @@ ClefType TConv::fromXml(const AsciiStringView& tag, ClefType def)
     return def;
 }
 
-static const std::vector<Item<DynamicType> > DYNAMIC_TYPES = {
-    { DynamicType::OTHER,   "other-dynamics",   nullptr, SymId::noSym },
-    { DynamicType::PPPPPP,  "pppppp",           nullptr, SymId::dynamicPPPPPP },
-    { DynamicType::PPPPP,   "ppppp",            nullptr, SymId::dynamicPPPPP },
-    { DynamicType::PPPP,    "pppp",             nullptr, SymId::dynamicPPPP },
-    { DynamicType::PPP,     "ppp",              nullptr, SymId::dynamicPPP },
-    { DynamicType::PP,      "pp",               nullptr, SymId::dynamicPP },
-    { DynamicType::P,       "p",                nullptr, SymId::dynamicPiano },
-
-    { DynamicType::MP,      "mp",               nullptr, SymId::dynamicMP },
-    { DynamicType::MF,      "mf",               nullptr, SymId::dynamicMF },
-
-    { DynamicType::F,       "f",                nullptr, SymId::dynamicForte },
-    { DynamicType::FF,      "ff",               nullptr, SymId::dynamicFF },
-    { DynamicType::FFF,     "fff",              nullptr, SymId::dynamicFFF },
-    { DynamicType::FFFF,    "ffff",             nullptr, SymId::dynamicFFFF },
-    { DynamicType::FFFFF,   "fffff",            nullptr, SymId::dynamicFFFFF },
-    { DynamicType::FFFFFF,  "ffffff",           nullptr, SymId::dynamicFFFFFF },
-
-    { DynamicType::FP,      "fp",               nullptr, SymId::dynamicFortePiano },
-    { DynamicType::PF,      "pf",               nullptr, SymId::noSym },
-
-    { DynamicType::SF,      "sf",               nullptr, SymId::dynamicSforzando1 },
-    { DynamicType::SFZ,     "sfz",              nullptr, SymId::dynamicSforzato },
-    { DynamicType::SFF,     "sff",              nullptr, SymId::noSym },
-    { DynamicType::SFFZ,    "sffz",             nullptr, SymId::dynamicSforzatoFF },
-    { DynamicType::SFP,     "sfp",              nullptr, SymId::dynamicSforzandoPiano },
-    { DynamicType::SFPP,    "sfpp",             nullptr, SymId::dynamicSforzandoPianissimo },
-
-    { DynamicType::RFZ,     "rfz",              nullptr, SymId::dynamicRinforzando2 },
-    { DynamicType::RF,      "rf",               nullptr, SymId::dynamicRinforzando1 },
-    { DynamicType::FZ,      "fz",               nullptr, SymId::dynamicForzando },
-    { DynamicType::M,       "m",                nullptr, SymId::dynamicMezzo },
-    { DynamicType::R,       "r",                nullptr, SymId::dynamicRinforzando },
-    { DynamicType::S,       "s",                nullptr, SymId::dynamicSforzando },
-    { DynamicType::Z,       "z",                nullptr, SymId::dynamicZ },
-    { DynamicType::N,       "n",                nullptr, SymId::dynamicNiente },
+struct DynamicItem
+{
+    DynamicType type;
+    AsciiStringView xml;
+    SymId symId;
 };
 
-String TConv::toUserName(DynamicType v)
+static const std::vector<DynamicItem> DYNAMIC_TYPES = {
+    { DynamicType::OTHER,   "other-dynamics",   SymId::noSym },
+    { DynamicType::PPPPPP,  "pppppp",           SymId::dynamicPPPPPP },
+    { DynamicType::PPPPP,   "ppppp",            SymId::dynamicPPPPP },
+    { DynamicType::PPPP,    "pppp",             SymId::dynamicPPPP },
+    { DynamicType::PPP,     "ppp",              SymId::dynamicPPP },
+    { DynamicType::PP,      "pp",               SymId::dynamicPP },
+    { DynamicType::P,       "p",                SymId::dynamicPiano },
+
+    { DynamicType::MP,      "mp",               SymId::dynamicMP },
+    { DynamicType::MF,      "mf",               SymId::dynamicMF },
+
+    { DynamicType::F,       "f",                SymId::dynamicForte },
+    { DynamicType::FF,      "ff",               SymId::dynamicFF },
+    { DynamicType::FFF,     "fff",              SymId::dynamicFFF },
+    { DynamicType::FFFF,    "ffff",             SymId::dynamicFFFF },
+    { DynamicType::FFFFF,   "fffff",            SymId::dynamicFFFFF },
+    { DynamicType::FFFFFF,  "ffffff",           SymId::dynamicFFFFFF },
+
+    { DynamicType::FP,      "fp",               SymId::dynamicFortePiano },
+    { DynamicType::PF,      "pf",               SymId::noSym },
+
+    { DynamicType::SF,      "sf",               SymId::dynamicSforzando1 },
+    { DynamicType::SFZ,     "sfz",              SymId::dynamicSforzato },
+    { DynamicType::SFF,     "sff",              SymId::noSym },
+    { DynamicType::SFFZ,    "sffz",             SymId::dynamicSforzatoFF },
+    { DynamicType::SFP,     "sfp",              SymId::dynamicSforzandoPiano },
+    { DynamicType::SFPP,    "sfpp",             SymId::dynamicSforzandoPianissimo },
+
+    { DynamicType::RFZ,     "rfz",              SymId::dynamicRinforzando2 },
+    { DynamicType::RF,      "rf",               SymId::dynamicRinforzando1 },
+    { DynamicType::FZ,      "fz",               SymId::dynamicForzando },
+    { DynamicType::M,       "m",                SymId::dynamicMezzo },
+    { DynamicType::R,       "r",                SymId::dynamicRinforzando },
+    { DynamicType::S,       "s",                SymId::dynamicSforzando },
+    { DynamicType::Z,       "z",                SymId::dynamicZ },
+    { DynamicType::N,       "n",                SymId::dynamicNiente },
+};
+
+String TConv::translatedUserName(DynamicType v)
 {
-    return findUserNameByType<DynamicType>(DYNAMIC_TYPES, v);
+    auto it = std::find_if(DYNAMIC_TYPES.cbegin(), DYNAMIC_TYPES.cend(), [v](const DynamicItem& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != DYNAMIC_TYPES.cend()) {
+        return String();
+    }
+    return String::fromAscii(it->xml.ascii());
 }
 
 SymId TConv::symId(DynamicType v)
 {
-    return findSymIdByType<DynamicType>(DYNAMIC_TYPES, v);
+    auto it = std::find_if(DYNAMIC_TYPES.cbegin(), DYNAMIC_TYPES.cend(), [v](const DynamicItem& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != DYNAMIC_TYPES.cend()) {
+        return SymId::noSym;
+    }
+    return it->symId;
 }
 
-DynamicType TConv::dynamicType(SymId s)
+DynamicType TConv::dynamicType(SymId v)
 {
-    return findTypeBySymId<DynamicType>(DYNAMIC_TYPES, s, DynamicType::OTHER);
+    auto it = std::find_if(DYNAMIC_TYPES.cbegin(), DYNAMIC_TYPES.cend(), [v](const DynamicItem& i) {
+        return i.symId == v;
+    });
+
+    IF_ASSERT_FAILED(it != DYNAMIC_TYPES.cend()) {
+        return DynamicType::OTHER;
+    }
+    return it->type;
 }
 
 DynamicType TConv::dynamicType(const AsciiStringView& tag)
@@ -584,12 +734,27 @@ DynamicType TConv::dynamicType(const AsciiStringView& tag)
 
 AsciiStringView TConv::toXml(DynamicType v)
 {
-    return findXmlTagByType<DynamicType>(DYNAMIC_TYPES, v);
+    auto it = std::find_if(DYNAMIC_TYPES.cbegin(), DYNAMIC_TYPES.cend(), [v](const DynamicItem& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != DYNAMIC_TYPES.cend()) {
+        static AsciiStringView dummy;
+        return dummy;
+    }
+    return it->xml;
 }
 
 DynamicType TConv::fromXml(const AsciiStringView& tag, DynamicType def)
 {
-    return findTypeByXmlTag<DynamicType>(DYNAMIC_TYPES, tag, def);
+    auto it = std::find_if(DYNAMIC_TYPES.cbegin(), DYNAMIC_TYPES.cend(), [tag](const DynamicItem& i) {
+        return i.xml == tag;
+    });
+
+    IF_ASSERT_FAILED(it != DYNAMIC_TYPES.cend()) {
+        return def;
+    }
+    return it->type;
 }
 
 static const std::vector<Item<DynamicRange> > DYNAMIC_RANGES = {
@@ -598,9 +763,9 @@ static const std::vector<Item<DynamicRange> > DYNAMIC_RANGES = {
     { DynamicRange::SYSTEM, "system" },
 };
 
-String TConv::toUserName(DynamicRange v)
+String TConv::translatedUserName(DynamicRange v)
 {
-    return findUserNameByType<DynamicRange>(DYNAMIC_RANGES, v);
+    return mtrc("engraving", findUserNameByType<DynamicRange>(DYNAMIC_RANGES, v));
 }
 
 String TConv::toXml(DynamicRange v)
@@ -621,9 +786,9 @@ static const std::vector<Item<DynamicSpeed> > DYNAMIC_SPEEDS = {
     { DynamicSpeed::FAST,   "fast" },
 };
 
-String TConv::toUserName(DynamicSpeed v)
+String TConv::translatedUserName(DynamicSpeed v)
 {
-    return findUserNameByType<DynamicSpeed>(DYNAMIC_SPEEDS, v);
+    return mtrc("engraving", findUserNameByType<DynamicSpeed>(DYNAMIC_SPEEDS, v));
 }
 
 AsciiStringView TConv::toXml(DynamicSpeed v)
@@ -643,9 +808,9 @@ static const std::vector<Item<HookType> > HOOK_TYPES = {
     { HookType::HOOK_90T,   "hook_90t" },
 };
 
-String TConv::toUserName(HookType v)
+String TConv::translatedUserName(HookType v)
 {
-    return findUserNameByType<HookType>(HOOK_TYPES, v);
+    return mtrc("engraving", findUserNameByType<HookType>(HOOK_TYPES, v));
 }
 
 String TConv::toXml(HookType v)
@@ -709,9 +874,9 @@ static const std::vector<Item<KeyMode> > KEY_MODES = {
     { KeyMode::LOCRIAN,     "locrian" },
 };
 
-String TConv::toUserName(KeyMode v)
+String TConv::translatedUserName(KeyMode v)
 {
-    return findUserNameByType<KeyMode>(KEY_MODES, v);
+    return mtrc("engraving", findUserNameByType<KeyMode>(KEY_MODES, v));
 }
 
 AsciiStringView TConv::toXml(KeyMode v)
@@ -790,9 +955,9 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::USER12,            "user_12",              QT_TRANSLATE_NOOP("engraving", "User-12") },
 };
 
-String TConv::toUserName(TextStyleType v)
+String TConv::translatedUserName(TextStyleType v)
 {
-    return findUserNameByType<TextStyleType>(TEXTSTYLE_TYPES, v);
+    return mtrc("engraving", findUserNameByType<TextStyleType>(TEXTSTYLE_TYPES, v));
 }
 
 AsciiStringView TConv::toXml(TextStyleType v)
@@ -958,9 +1123,9 @@ std::map<int, double> TConv::easingValueCurve(const int ticksDuration, const int
     return buildEasedValueCurve(ticksDuration, stepsCount, amplitude, method);
 }
 
-String TConv::toUserName(ChangeMethod v)
+String TConv::translatedUserName(ChangeMethod v)
 {
-    return findUserNameByType<ChangeMethod>(CHANGE_METHODS, v);
+    return mtrc("engraving", findUserNameByType<ChangeMethod>(CHANGE_METHODS, v));
 }
 
 AsciiStringView TConv::toXml(ChangeMethod v)
@@ -1021,9 +1186,9 @@ static const std::vector<Item<DurationType> > DURATION_TYPES = {
     { DurationType::V_INVALID,  "",         QT_TRANSLATE_NOOP("engraving", "Invalid") },
 };
 
-String TConv::toUserName(DurationType v)
+String TConv::translatedUserName(DurationType v)
 {
-    return findUserNameByType<DurationType>(DURATION_TYPES, v);
+    return mtrc("engraving", findUserNameByType<DurationType>(DURATION_TYPES, v));
 }
 
 AsciiStringView TConv::toXml(DurationType v)
@@ -1375,17 +1540,28 @@ BarLineType TConv::fromXml(const AsciiStringView& tag, BarLineType def)
     return def;
 }
 
-static const std::vector<Item<TremoloType> > TREMOLO_TYPES = {
-    { TremoloType::R8, "r8" },
-    { TremoloType::R16, "r16" },
-    { TremoloType::R32, "r32" },
-    { TremoloType::R64, "r64" },
-    { TremoloType::C8, "c8" },
-    { TremoloType::C16, "c16" },
-    { TremoloType::C32, "c32" },
-    { TremoloType::C64, "c64" },
-    { TremoloType::BUZZ_ROLL, "buzzroll" },
-};
+static const std::array<Item<TremoloType>, 10> TREMOLO_TYPES = { {
+    { TremoloType::INVALID_TREMOLO, "", "" },
+    { TremoloType::R8,              "r8",       QT_TRANSLATE_NOOP("engraving", "Eighth through stem") },
+    { TremoloType::R16,             "r16",      QT_TRANSLATE_NOOP("engraving", "16th through stem") },
+    { TremoloType::R32,             "r32",      QT_TRANSLATE_NOOP("engraving", "32nd through stem") },
+    { TremoloType::R64,             "r64",      QT_TRANSLATE_NOOP("engraving", "64th through stem") },
+    { TremoloType::BUZZ_ROLL,       "buzzroll", QT_TRANSLATE_NOOP("engraving", "Buzz roll") },
+    { TremoloType::C8,              "c8",       QT_TRANSLATE_NOOP("engraving", "Eighth between notes") },
+    { TremoloType::C16,             "c16",      QT_TRANSLATE_NOOP("engraving", "16th between notes") },
+    { TremoloType::C32,             "c32",      QT_TRANSLATE_NOOP("engraving", "32nd between notes") },
+    { TremoloType::C64,             "c64",      QT_TRANSLATE_NOOP("engraving", "64th between notes") }
+} };
+
+const char* TConv::userName(TremoloType v)
+{
+    return findUserNameByType<TremoloType>(TREMOLO_TYPES, v);
+}
+
+String TConv::translatedUserName(TremoloType v)
+{
+    return mtrc("engraving", userName(v));
+}
 
 AsciiStringView TConv::toXml(TremoloType v)
 {
@@ -1426,4 +1602,660 @@ BracketType TConv::fromXml(const AsciiStringView& tag, BracketType def)
     }
 
     return def;
+}
+
+//! TODO Add xml names
+static const std::array<Item<ArpeggioType>, 6> ARPEGGIO_TYPES = { {
+    { ArpeggioType::NORMAL,         "0",     QT_TRANSLATE_NOOP("engraving", "Arpeggio") },
+    { ArpeggioType::UP,             "1",     QT_TRANSLATE_NOOP("engraving", "Up arpeggio") },
+    { ArpeggioType::DOWN,           "2",     QT_TRANSLATE_NOOP("engraving", "Down arpeggio") },
+    { ArpeggioType::BRACKET,        "3",     QT_TRANSLATE_NOOP("engraving", "Bracket arpeggio") },
+    { ArpeggioType::UP_STRAIGHT,    "4",     QT_TRANSLATE_NOOP("engraving", "Up arpeggio straight") },
+    { ArpeggioType::DOWN_STRAIGHT,  "5",     QT_TRANSLATE_NOOP("engraving", "Down arpeggio straight") }
+} };
+
+String TConv::translatedUserName(ArpeggioType v)
+{
+    return mtrc("engraving", findUserNameByType<ArpeggioType>(ARPEGGIO_TYPES, v));
+}
+
+AsciiStringView TConv::toXml(ArpeggioType v)
+{
+    return findXmlTagByType<ArpeggioType>(ARPEGGIO_TYPES, v);
+}
+
+ArpeggioType TConv::fromXml(const AsciiStringView& tag, ArpeggioType def)
+{
+    return findTypeByXmlTag<ArpeggioType>(ARPEGGIO_TYPES, tag, def);
+}
+
+struct EmbelItem
+{
+    const char* name = nullptr;
+    AsciiStringView notes;
+};
+
+static const std::vector<EmbelItem> EMBELLISHMENT_TYPES = {
+    // Single Grace notes
+    { QT_TRANSLATE_NOOP("engraving", "Single grace low G"), "LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Single grace low A"), "LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Single grace B"), "B" },
+    { QT_TRANSLATE_NOOP("engraving", "Single grace C"), "C" },
+    { QT_TRANSLATE_NOOP("engraving", "Single grace D"), "D" },
+    { QT_TRANSLATE_NOOP("engraving", "Single grace E"), "E" },
+    { QT_TRANSLATE_NOOP("engraving", "Single grace F"), "F" },
+    { QT_TRANSLATE_NOOP("engraving", "Single grace high G"), "HG" },
+    { QT_TRANSLATE_NOOP("engraving", "Single grace high A"), "HA" },
+
+    // Double Grace notes
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "D LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "D B" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "E LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "E B" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "E C" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "E D" },
+
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "F LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "F LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "F B" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "F C" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "F D" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "F E" },
+
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HG LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HG LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HG B" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HG C" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HG D" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HG E" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HG F" },
+
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HA LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HA B" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HA C" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HA D" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HA E" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HA F" },
+    { QT_TRANSLATE_NOOP("engraving", "Double grace"), "HA HG" },
+
+    // Half Doublings
+    { QT_TRANSLATE_NOOP("engraving", "Half doubling on low G"), "LG D" },
+    { QT_TRANSLATE_NOOP("engraving", "Half doubling on low A"), "LA D" },
+    { QT_TRANSLATE_NOOP("engraving", "Half doubling on B"), "B D" },
+    { QT_TRANSLATE_NOOP("engraving", "Half doubling on C"), "C D" },
+    { QT_TRANSLATE_NOOP("engraving", "Half doubling on D"), "D E" },
+    { QT_TRANSLATE_NOOP("engraving", "Half doubling on E"), "E F" },
+    { QT_TRANSLATE_NOOP("engraving", "Half doubling on F"), "F HG" },
+    // ? { QT_TRANSLATE_NOOP("engraving", "Half doubling on high G"), "HG F" },
+    // ? { QT_TRANSLATE_NOOP("engraving", "Half doubling on high A"), "HA HG" },
+
+    // Regular Doublings
+    { QT_TRANSLATE_NOOP("engraving", "Doubling on high G"), "HG F" },
+    { QT_TRANSLATE_NOOP("engraving", "Doubling on high A"), "HA HG" },
+
+    // Half Strikes
+    { QT_TRANSLATE_NOOP("engraving", "Half strike on low A"), "LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half strike on B"), "B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half strike on C"), "C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half strike on D"), "D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half strike on D"), "D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Half strike on E"), "E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Half strike on F"), "F E" },
+    { QT_TRANSLATE_NOOP("engraving", "Half strike on high G"), "HG F" },
+
+    // Regular Grip
+    { QT_TRANSLATE_NOOP("engraving", "Grip"), "D LG" },
+
+    // D Throw
+    { QT_TRANSLATE_NOOP("engraving", "Half D throw"), "D C" },
+
+    // Regular Doublings (continued)
+    { QT_TRANSLATE_NOOP("engraving", "Doubling on low G"),  "HG LG D" },
+    { QT_TRANSLATE_NOOP("engraving", "Doubling on low A"),  "HG LA D" },
+    { QT_TRANSLATE_NOOP("engraving", "Doubling on B"),      "HG B D" },
+    { QT_TRANSLATE_NOOP("engraving", "Doubling on C"),      "HG C D" },
+    { QT_TRANSLATE_NOOP("engraving", "Doubling on D"),      "HG D E" },
+    { QT_TRANSLATE_NOOP("engraving", "Doubling on E"),      "HG E F" },
+    { QT_TRANSLATE_NOOP("engraving", "Doubling on F"),      "HG F HG" },
+
+    // Thumb Doublings
+    { QT_TRANSLATE_NOOP("engraving", "Thumb doubling on low G"), "HA LG D" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb doubling on low A"), "HA LA D" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb doubling on B"), "HA B D" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb doubling on C"), "HA C D" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb doubling on D"), "HA D E" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb doubling on E"), "HA E F" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb doubling on F"), "HA F HG" },
+    // ? { QT_TRANSLATE_NOOP("engraving", "Thumb doubling on high G"), "HA HG F" },
+
+    // G Grace note Strikes
+    { QT_TRANSLATE_NOOP("engraving", "G grace note on low A"), "HG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note on B"), "HG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note on C"), "HG C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note on D"), "HG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note on D"), "HG D C" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note on E"), "HG E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note on F"), "HG F E" },
+
+    // Regular Double Strikes
+    { QT_TRANSLATE_NOOP("engraving", "Double strike on low A"), "LG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Double strike on B"), "LG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Double strike on C"), "LG C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Double strike on D"), "LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Double strike on D"), "C D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Double strike on E"), "LA E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Double strike on F"), "E F E" },
+    { QT_TRANSLATE_NOOP("engraving", "Double strike on high G"), "F HG F" },
+    { QT_TRANSLATE_NOOP("engraving", "Double strike on high A"), "HG HA HG" },
+
+    // Thumb Strikes
+    { QT_TRANSLATE_NOOP("engraving", "Thumb strike on low A"), "HA LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb strike on B"), "HA B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb strike on C"), "HA C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb strike on D"), "HA D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb strike on D"), "HA D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb strike on E"), "HA E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb strike on F"), "HA F E" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb strike on high G"), "HA HG F" },
+
+    // Regular Grips (continued)
+    { QT_TRANSLATE_NOOP("engraving", "Grip"), "LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Grip"), "LG B LG" },
+
+    // Taorluath and Birl
+    { QT_TRANSLATE_NOOP("engraving", "Birl"), "LG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "D throw"), "LG D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Half heavy D throw"), "D LG C" },
+    { QT_TRANSLATE_NOOP("engraving", "Taorluath"), "D LG E" },
+
+    // Birl, Bubbly, D Throws (continued) and Taorluaths (continued)
+    { QT_TRANSLATE_NOOP("engraving", "Birl"), "LA LG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Bubbly"), "D LG C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Heavy D throw"), "LG D LG C" },
+    { QT_TRANSLATE_NOOP("engraving", "Taorluath"), "LG D LG E" },
+    { QT_TRANSLATE_NOOP("engraving", "Taorluath"), "LG B LG E" },
+
+    // Half Double Strikes
+    { QT_TRANSLATE_NOOP("engraving", "Half double strike on low A"), "LA LG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half double strike on B"), "B LG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half double strike on C"), "C LG C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half double strike on D"), "D LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half double strike on D"), "D C D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Half double strike on E"), "E LA E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Half double strike on F"), "F E F E" },
+    { QT_TRANSLATE_NOOP("engraving", "Half double strike on high G"), "HG F HG F" },
+    { QT_TRANSLATE_NOOP("engraving", "Half double strike on high A"), "HA HG HA HG" },
+
+    // Half Grips
+    { QT_TRANSLATE_NOOP("engraving", "Half grip on low A"), "LA LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half grip on B"), "B LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half grip on C"), "C LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half grip on D"), "D LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half grip on D"), "D LG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half grip on E"), "E LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half grip on F"), "F LG F LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half grip on high G"), "HG LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half grip on high A"), "HA LG D LG" },
+
+    // Half Peles
+    { QT_TRANSLATE_NOOP("engraving", "Half pele on low A"), "LA E LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half pele on B"), "B E B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half pele on C"), "C E C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half pele on D"), "D E D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half pele on D"), "D E D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Half pele on E"), "E F E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Half pele on F"), "F HG F E" },
+    { QT_TRANSLATE_NOOP("engraving", "Half pele on high G"), "HG HA HG F" },
+
+    // G Grace note Grips
+    { QT_TRANSLATE_NOOP("engraving", "G grace note grip on low A"), "HG LA LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note grip on B"), "HG B LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note grip on C"), "HG C LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note grip on D"), "HG D LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note grip on D"), "HG D LG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note grip on E"), "HG E LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note grip on F"), "HG F LG F LG" },
+
+    // Thumb Grips
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grip on low A"), "HA LA LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grip on B"), "HA B LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grip on C"), "HA C LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grip on D"), "HA D LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grip on D"), "HA D LG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grip on E"), "HA E LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grip on F"), "HA F LG F LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grip on high G"), "HA HG LG F LG" },
+
+    // Bubbly
+    { QT_TRANSLATE_NOOP("engraving", "Bubbly"), "LG D LG C LG" },
+
+    //  Birls
+    { QT_TRANSLATE_NOOP("engraving", "Birl"), "HG LA LG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Birl"), "HA LA LG LA LG" },
+
+    // Regular Peles
+    { QT_TRANSLATE_NOOP("engraving", "Pele on low A"), "HG LA E LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Pele on B"), "HG B E B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Pele on C"), "HG C E C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Pele on D"), "HG D E D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Pele on D"), "HG D E D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Pele on E"), "HG E F E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Pele on F"), "HG F HG F E" },
+
+    // Thumb Grace Note Peles
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grace note pele on low A"), "HA LA E LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grace note pele on B"), "HA B E B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grace note pele on C"), "HA C E C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grace note pele on D"), "HA D E D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grace note pele on D"), "HA D E D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grace note pele on E"), "HA E F E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grace note pele on F"), "HA F HG F E" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb grace note pele on high G"), "HA HG HA HG F" },
+
+    // G Grace note Double Strikes
+    { QT_TRANSLATE_NOOP("engraving", "G grace note double strike on low A"), "HG LA LG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note double strike on B"), "HG B LG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note double strike on C"), "HG C LG C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note double strike on D"), "HG D LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note double strike on D"), "HG D C D C" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note double strike on E"), "HG E LA E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note double strike on F"), "HG F E F E" },
+
+    // Thumb Double Strikes
+    { QT_TRANSLATE_NOOP("engraving", "Thumb double strike on low A"), "HA LA LG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb double strike on B"), "HA B LG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb double strike on C"), "HA C LG C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb double strike on D"), "HA D LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb double strike on D"), "HA D C D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb double strike on E"), "HA E LA E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb double strike on F"), "HA F E F E" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb double strike on high G"), "HA HG F HG F" },
+
+    // Regular Triple Strikes
+    { QT_TRANSLATE_NOOP("engraving", "Triple strike on low A"), "LG LA LG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Triple strike on B"), "LG B LG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Triple strike on C"), "LG C LG C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Triple strike on D"), "LG D LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Triple strike on D"), "C D C D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Triple strike on E"), "LA E LA E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Triple strike on F"), "E F E F E" },
+    { QT_TRANSLATE_NOOP("engraving", "Triple strike on high G"), "F HG F HG F" },
+    { QT_TRANSLATE_NOOP("engraving", "Triple strike on high A"), "HG HA HG HA HG" },
+
+    // Half Triple Strikes
+    { QT_TRANSLATE_NOOP("engraving", "Half triple strike on low A"), "LA LG LA LG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half triple strike on B"), "B LG B LG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half triple strike on C"), "C LG C LG C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half triple strike on D"), "D LG D LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Half triple strike on D"), "D C D C D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Half triple strike on E"), "E LA E LA E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Half triple strike on F"), "F E F E F E" },
+    { QT_TRANSLATE_NOOP("engraving", "Half triple strike on high G"), "HG F HG F HG F" },
+    { QT_TRANSLATE_NOOP("engraving", "Half triple strike on high A"), "HA HG HA HG HA HG" },
+
+    // G Grace note Triple Strikes
+    { QT_TRANSLATE_NOOP("engraving", "G grace note triple strike on low A"), "HG LA LG LA LG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note triple strike on B"), "HG B LG B LG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note triple strike on C"), "HG C LG C LG C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note triple strike on D"), "HG D LG D LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note triple strike on D"), "HG D C D C D C" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note triple strike on E"), "HG E LA E LA E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "G grace note triple strike on F"), "HG F E F E F E" },
+
+    // Thumb Triple Strikes
+    { QT_TRANSLATE_NOOP("engraving", "Thumb triple strike on low A"),  "HA LA LG LA LG LA LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb triple strike on B"),      "HA B LG B LG B LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb triple strike on C"),      "HA C LG C LG C LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb triple strike on D"),      "HA D LG D LG D LG" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb triple strike on D"),      "HA D C D C D C" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb triple strike on E"),      "HA E LA E LA E LA" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb triple strike on F"),      "HA F E F E F E" },
+    { QT_TRANSLATE_NOOP("engraving", "Thumb triple strike on high G"), "HA HG F HG F HG F" },
+};
+
+const char* TConv::userName(EmbellishmentType v)
+{
+    return EMBELLISHMENT_TYPES.at(static_cast<size_t>(v)).name;
+}
+
+String TConv::translatedUserName(EmbellishmentType v)
+{
+    return mtrc("engraving", userName(v));
+}
+
+String TConv::toXml(EmbellishmentType v)
+{
+    return String::number(static_cast<size_t>(v));
+}
+
+EmbellishmentType TConv::fromXml(const AsciiStringView& tag, EmbellishmentType def)
+{
+    bool ok = false;
+    int v = tag.toInt(&ok);
+    if (ok) {
+        return static_cast<EmbellishmentType>(v);
+    }
+    return def;
+}
+
+StringList TConv::embellishmentNotes(EmbellishmentType v)
+{
+    return String::fromAscii(EMBELLISHMENT_TYPES.at(v).notes.ascii()).split(u' ');
+}
+
+size_t TConv::embellishmentsCount()
+{
+    return EMBELLISHMENT_TYPES.size();
+}
+
+//! TODO Add xml names
+static const std::array<Item<ChordLineType>, 6> CHORDLINE_TYPES = { {
+    { ChordLineType::NOTYPE,    "0",     "" },
+    { ChordLineType::FALL,      "1",     QT_TRANSLATE_NOOP("engraving", "Fall") },
+    { ChordLineType::DOIT,      "2",     QT_TRANSLATE_NOOP("engraving", "Doit") },
+    { ChordLineType::PLOP,      "3",     QT_TRANSLATE_NOOP("engraving", "Plop") },
+    { ChordLineType::SCOOP,     "4",     QT_TRANSLATE_NOOP("engraving", "Scoop") }
+} };
+
+const char* TConv::userName(ChordLineType v)
+{
+    return findUserNameByType<ChordLineType>(CHORDLINE_TYPES, v);
+}
+
+String TConv::translatedUserName(ChordLineType v)
+{
+    return mtrc("engraving", userName(v));
+}
+
+AsciiStringView TConv::toXml(ChordLineType v)
+{
+    return findXmlTagByType<ChordLineType>(CHORDLINE_TYPES, v);
+}
+
+ChordLineType TConv::fromXml(const AsciiStringView& tag, ChordLineType def)
+{
+    return findTypeByXmlTag<ChordLineType>(CHORDLINE_TYPES, tag, def);
+}
+
+struct DrumPitchItem {
+    DrumPitch pitch;
+    const char* userName = nullptr;
+};
+
+static const std::vector<DrumPitchItem> DRUMPITCHS = {
+    { DrumPitch(35),       QT_TRANSLATE_NOOP("engraving", "Acoustic Bass Drum") },
+    { DrumPitch(36),       QT_TRANSLATE_NOOP("engraving", "Bass Drum 1") },
+    { DrumPitch(37),       QT_TRANSLATE_NOOP("engraving", "Side Stick") },
+    { DrumPitch(38),       QT_TRANSLATE_NOOP("engraving", "Acoustic Snare") },
+
+    { DrumPitch(40),       QT_TRANSLATE_NOOP("engraving", "Electric Snare") },
+    { DrumPitch(41),       QT_TRANSLATE_NOOP("engraving", "Low Floor Tom") },
+    { DrumPitch(42),       QT_TRANSLATE_NOOP("engraving", "Closed Hi-Hat") },
+    { DrumPitch(43),       QT_TRANSLATE_NOOP("engraving", "High Floor Tom") },
+    { DrumPitch(44),       QT_TRANSLATE_NOOP("engraving", "Pedal Hi-Hat") },
+    { DrumPitch(45),       QT_TRANSLATE_NOOP("engraving", "Low Tom") },
+    { DrumPitch(46),       QT_TRANSLATE_NOOP("engraving", "Open Hi-Hat") },
+    { DrumPitch(47),       QT_TRANSLATE_NOOP("engraving", "Low-Mid Tom") },
+    { DrumPitch(48),       QT_TRANSLATE_NOOP("engraving", "Hi-Mid Tom") },
+    { DrumPitch(49),       QT_TRANSLATE_NOOP("engraving", "Crash Cymbal 1") },
+
+    { DrumPitch(50),       QT_TRANSLATE_NOOP("engraving", "High Tom") },
+    { DrumPitch(51),       QT_TRANSLATE_NOOP("engraving", "Ride Cymbal 1") },
+    { DrumPitch(52),       QT_TRANSLATE_NOOP("engraving", "Chinese Cymbal") },
+    { DrumPitch(53),       QT_TRANSLATE_NOOP("engraving", "Ride Bell") },
+    { DrumPitch(54),       QT_TRANSLATE_NOOP("engraving", "Tambourine") },
+    { DrumPitch(55),       QT_TRANSLATE_NOOP("engraving", "Splash Cymbal") },
+    { DrumPitch(56),       QT_TRANSLATE_NOOP("engraving", "Cowbell") },
+    { DrumPitch(57),       QT_TRANSLATE_NOOP("engraving", "Crash Cymbal 2") },
+
+    { DrumPitch(59),       QT_TRANSLATE_NOOP("engraving", "Ride Cymbal 2") },
+
+    { DrumPitch(63),       QT_TRANSLATE_NOOP("engraving", "Open Hi Conga") },
+    { DrumPitch(64),       QT_TRANSLATE_NOOP("engraving", "Low Conga") },
+};
+
+const char* TConv::userName(DrumPitch v)
+{
+    auto it = std::find_if(DRUMPITCHS.cbegin(), DRUMPITCHS.cend(), [v](const DrumPitchItem& i) {
+        return i.pitch == v;
+    });
+
+    IF_ASSERT_FAILED(it != DRUMPITCHS.cend()) {
+        static const char* dummy = "";
+        return dummy;
+    }
+    return it->userName;
+}
+
+//! TODO Add xml names
+static const std::array<Item<GlissandoType>, 2> GLISSANDO_TYPES = { {
+    { GlissandoType::STRAIGHT,  "0",     QT_TRANSLATE_NOOP("engraving", "Straight glissando") },
+    { GlissandoType::WAVY,      "1",     QT_TRANSLATE_NOOP("engraving", "Wavy glissando") }
+} };
+
+const char* TConv::userName(GlissandoType v)
+{
+    return findUserNameByType<GlissandoType>(GLISSANDO_TYPES, v);
+}
+
+String TConv::translatedUserName(GlissandoType v)
+{
+    return mtrc("engraving", userName(v));
+}
+
+AsciiStringView TConv::toXml(GlissandoType v)
+{
+    return findXmlTagByType<GlissandoType>(GLISSANDO_TYPES, v);
+}
+
+GlissandoType TConv::fromXml(const AsciiStringView& tag, GlissandoType def)
+{
+    return findTypeByXmlTag<GlissandoType>(GLISSANDO_TYPES, tag, def);
+}
+
+static const std::vector<Item<JumpType> > JUMP_TYPES = {
+    { JumpType::DC,             "", QT_TRANSLATE_NOOP("engraving", "Da Capo") },
+    { JumpType::DC_AL_FINE,     "", QT_TRANSLATE_NOOP("engraving", "Da Capo al Fine") },
+    { JumpType::DC_AL_CODA,     "", QT_TRANSLATE_NOOP("engraving", "Da Capo al Coda") },
+    { JumpType::DS_AL_CODA,     "", QT_TRANSLATE_NOOP("engraving", "D.S. al Coda") },
+    { JumpType::DS_AL_FINE,     "", QT_TRANSLATE_NOOP("engraving", "D.S. al Fine") },
+    { JumpType::DS,             "", QT_TRANSLATE_NOOP("engraving", "D.S.") },
+
+    { JumpType::DC_AL_DBLCODA,  "", QT_TRANSLATE_NOOP("engraving", "Da Capo al Double Coda") },
+    { JumpType::DS_AL_DBLCODA,  "", QT_TRANSLATE_NOOP("engraving", "Da Segno al Double Coda") },
+    { JumpType::DSS,            "", QT_TRANSLATE_NOOP("engraving", "Dal Segno Segno") },
+    { JumpType::DSS_AL_CODA,    "", QT_TRANSLATE_NOOP("engraving", "Dal Segno Segno al Coda") },
+    { JumpType::DSS_AL_DBLCODA, "", QT_TRANSLATE_NOOP("engraving", "Dal Segno Segno al Double Coda") },
+    { JumpType::DSS_AL_FINE,    "", QT_TRANSLATE_NOOP("engraving", "Dal Segno Segno al Fine") },
+    { JumpType::DCODA,          "", QT_TRANSLATE_NOOP("engraving", "Da Coda") },
+    { JumpType::DDBLCODA,       "", QT_TRANSLATE_NOOP("engraving", "Da Double Coda") },
+
+    { JumpType::USER,           "", QT_TRANSLATE_NOOP("engraving", "Custom") }
+};
+
+const char* TConv::userName(JumpType v)
+{
+    return findUserNameByType<JumpType>(JUMP_TYPES, v);
+}
+
+String TConv::translatedUserName(JumpType v)
+{
+    return mtrc("engraving", userName(v));
+}
+
+static const std::array<Item<MarkerType>, 9> MARKET_TYPES = { {
+    { MarkerType::SEGNO,        "segno",    QT_TRANSLATE_NOOP("engraving", "Segno") },
+    { MarkerType::VARSEGNO,     "varsegno", QT_TRANSLATE_NOOP("engraving", "Segno variation") },
+    { MarkerType::CODA,         "codab",    QT_TRANSLATE_NOOP("engraving", "Coda") },
+    { MarkerType::VARCODA,      "varcoda",  QT_TRANSLATE_NOOP("engraving", "Varied coda") },
+    { MarkerType::CODETTA,      "codetta",  QT_TRANSLATE_NOOP("engraving", "Codetta") },
+    { MarkerType::FINE,         "fine",     QT_TRANSLATE_NOOP("engraving", "Fine") },
+    { MarkerType::TOCODA,       "coda",     QT_TRANSLATE_NOOP("engraving", "To coda") },
+    { MarkerType::TOCODASYM,    "",         QT_TRANSLATE_NOOP("engraving", "To coda (symbol)") },
+    { MarkerType::USER,         "",         QT_TRANSLATE_NOOP("engraving", "Custom") }
+} };
+
+const char* TConv::userName(MarkerType v)
+{
+    return findUserNameByType<MarkerType>(MARKET_TYPES, v);
+}
+
+String TConv::translatedUserName(MarkerType v)
+{
+    return mtrc("engraving", userName(v));
+}
+
+AsciiStringView TConv::toXml(MarkerType v)
+{
+    return findXmlTagByType<MarkerType>(MARKET_TYPES, v);
+}
+
+MarkerType TConv::fromXml(const AsciiStringView& tag, MarkerType def)
+{
+    return findTypeByXmlTag<MarkerType>(MARKET_TYPES, tag, def);
+}
+
+static const std::array<Item<StaffGroup>, 3> STAFFGROUP_TYPES = { {
+    { StaffGroup::STANDARD,     "pitched",    QT_TRANSLATE_NOOP("engraving", "Standard") },
+    { StaffGroup::PERCUSSION,   "percussion", QT_TRANSLATE_NOOP("engraving", "Percussion") },
+    { StaffGroup::TAB,          "tablature",  QT_TRANSLATE_NOOP("engraving", "Tablature") },
+} };
+
+const char* TConv::userName(StaffGroup v)
+{
+    return findUserNameByType<StaffGroup>(STAFFGROUP_TYPES, v);
+}
+
+String TConv::translatedUserName(StaffGroup v)
+{
+    return mtrc("engraving", userName(v));
+}
+
+AsciiStringView TConv::toXml(StaffGroup v)
+{
+    return findXmlTagByType<StaffGroup>(STAFFGROUP_TYPES, v);
+}
+
+StaffGroup TConv::fromXml(const AsciiStringView& tag, StaffGroup def)
+{
+    return findTypeByXmlTag<StaffGroup>(STAFFGROUP_TYPES, tag, def);
+}
+
+const std::array<Item<TrillType>, 4> TRILL_TYPES = { {
+    { TrillType::TRILL_LINE,      "trill",      QT_TRANSLATE_NOOP("engraving", "Trill line") },
+    { TrillType::UPPRALL_LINE,    "upprall",    QT_TRANSLATE_NOOP("engraving", "Upprall line") },
+    { TrillType::DOWNPRALL_LINE,  "downprall",  QT_TRANSLATE_NOOP("engraving", "Downprall line") },
+    { TrillType::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("engraving", "Prallprall line") }
+} };
+
+const char* TConv::userName(TrillType v)
+{
+    return findUserNameByType<TrillType>(TRILL_TYPES, v);
+}
+
+String TConv::translatedUserName(TrillType v)
+{
+    return mtrc("engraving", userName(v));
+}
+
+AsciiStringView TConv::toXml(TrillType v)
+{
+    return findXmlTagByType<TrillType>(TRILL_TYPES, v);
+}
+
+TrillType TConv::fromXml(const AsciiStringView& tag, TrillType def)
+{
+    auto it = std::find_if(TRILL_TYPES.cbegin(), TRILL_TYPES.cend(), [tag](const Item<TrillType>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != TRILL_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+
+    if (tag == "0") {
+        return TrillType::TRILL_LINE;
+    } else if (tag == "pure") {
+        return TrillType::PRALLPRALL_LINE;     // obsolete, compatibility only
+    }
+
+    return def;
+}
+
+const std::array<Item<VibratoType>, 4> VIBRATO_TYPES = { {
+    { VibratoType::GUITAR_VIBRATO,        "guitarVibrato",       QT_TRANSLATE_NOOP("engraving", "Guitar vibrato") },
+    { VibratoType::GUITAR_VIBRATO_WIDE,   "guitarVibratoWide",   QT_TRANSLATE_NOOP("engraving", "Guitar vibrato wide") },
+    { VibratoType::VIBRATO_SAWTOOTH,      "vibratoSawtooth",     QT_TRANSLATE_NOOP("engraving", "Vibrato sawtooth") },
+    { VibratoType::VIBRATO_SAWTOOTH_WIDE, "vibratoSawtoothWide", QT_TRANSLATE_NOOP("engraving", "Tremolo sawtooth wide") }
+} };
+
+const char* TConv::userName(VibratoType v)
+{
+    return findUserNameByType<VibratoType>(VIBRATO_TYPES, v);
+}
+
+String TConv::translatedUserName(VibratoType v)
+{
+    return mtrc("engraving", userName(v));
+}
+
+AsciiStringView TConv::toXml(VibratoType v)
+{
+    return findXmlTagByType<VibratoType>(VIBRATO_TYPES, v);
+}
+
+VibratoType TConv::fromXml(const AsciiStringView& tag, VibratoType def)
+{
+    return findTypeByXmlTag<VibratoType>(VIBRATO_TYPES, tag, def);
+}
+
+const std::array<const char*, 17> KEY_NAMES = { {
+    QT_TRANSLATE_NOOP("engraving", "G major, E minor"),
+    QT_TRANSLATE_NOOP("engraving", "C♭ major, A♭ minor"),
+    QT_TRANSLATE_NOOP("engraving", "D major, B minor"),
+    QT_TRANSLATE_NOOP("engraving", "G♭ major, E♭ minor"),
+    QT_TRANSLATE_NOOP("engraving", "A major, F♯ minor"),
+    QT_TRANSLATE_NOOP("engraving", "D♭ major, B♭ minor"),
+    QT_TRANSLATE_NOOP("engraving", "E major, C♯ minor"),
+    QT_TRANSLATE_NOOP("engraving", "A♭ major, F minor"),
+    QT_TRANSLATE_NOOP("engraving", "B major, G♯ minor"),
+    QT_TRANSLATE_NOOP("engraving", "E♭ major, C minor"),
+    QT_TRANSLATE_NOOP("engraving", "F♯ major, D♯ minor"),
+    QT_TRANSLATE_NOOP("engraving", "B♭ major, G minor"),
+    QT_TRANSLATE_NOOP("engraving", "C♯ major, A♯ minor"),
+    QT_TRANSLATE_NOOP("engraving", "F major, D minor"),
+    QT_TRANSLATE_NOOP("engraving", "C major, A minor"),
+    QT_TRANSLATE_NOOP("engraving", "Open/Atonal"),
+    QT_TRANSLATE_NOOP("engraving", "Custom")
+} };
+
+const char* TConv::userName(Key v, bool isAtonal, bool isCustom)
+{
+    if (isAtonal) {
+        return KEY_NAMES[15];
+    } else if (isCustom) {
+        return KEY_NAMES[16];
+    }
+
+    if (v == Key::C) {
+        return KEY_NAMES[14];
+    }
+
+    int keyInt = static_cast<int>(v);
+    if (keyInt < 0) {
+        return KEY_NAMES[(7 + keyInt) * 2 + 1];
+    } else {
+        return KEY_NAMES[(keyInt - 1) * 2];
+    }
+}
+
+String TConv::translatedUserName(Key v, bool isAtonal, bool isCustom)
+{
+    return mtrc("engraving", userName(v, isAtonal, isCustom));
 }

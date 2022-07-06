@@ -2027,21 +2027,21 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             Marker* a = Factory::createMarker(m);
             a->setTrack(ctx.track());
 
-            Marker::Type mt = Marker::Type::SEGNO;
+            MarkerType mt = MarkerType::SEGNO;
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
                 if (t == "subtype") {
-                    String s(e.readText());
-                    a->setLabel(s);
-                    mt = a->markerType(s);
+                    AsciiStringView s(e.readAsciiText());
+                    a->setLabel(String::fromAscii(s.ascii()));
+                    mt = TConv::fromXml(s, MarkerType::USER);
                 } else if (!a->TextBase::readProperties(e)) {
                     e.unknown();
                 }
             }
             a->setMarkerType(mt);
 
-            if (a->markerType() == Marker::Type::SEGNO || a->markerType() == Marker::Type::CODA
-                || a->markerType() == Marker::Type::VARCODA || a->markerType() == Marker::Type::CODETTA) {
+            if (a->markerType() == MarkerType::SEGNO || a->markerType() == MarkerType::CODA
+                || a->markerType() == MarkerType::VARCODA || a->markerType() == MarkerType::CODETTA) {
                 // force the marker type for correct display
                 a->setXmlText(u"");
                 a->setMarkerType(a->markerType());

@@ -22,7 +22,6 @@
 
 #include "tremolo.h"
 
-#include "translation.h"
 #include "draw/transform.h"
 #include "draw/pen.h"
 #include "draw/brush.h"
@@ -55,18 +54,6 @@ static const ElementStyle tremoloStyle {
 //---------------------------------------------------------
 //   Tremolo
 //---------------------------------------------------------
-
-static const char* tremoloName[] = {
-    QT_TRANSLATE_NOOP("Tremolo", "Eighth through stem"),
-    QT_TRANSLATE_NOOP("Tremolo", "16th through stem"),
-    QT_TRANSLATE_NOOP("Tremolo", "32nd through stem"),
-    QT_TRANSLATE_NOOP("Tremolo", "64th through stem"),
-    QT_TRANSLATE_NOOP("Tremolo", "Buzz roll"),
-    QT_TRANSLATE_NOOP("Tremolo", "Eighth between notes"),
-    QT_TRANSLATE_NOOP("Tremolo", "16th between notes"),
-    QT_TRANSLATE_NOOP("Tremolo", "32nd between notes"),
-    QT_TRANSLATE_NOOP("Tremolo", "64th between notes")
-};
 
 Tremolo::Tremolo(Chord* parent)
     : EngravingItem(ElementType::TREMOLO, parent, ElementFlag::MOVABLE)
@@ -690,7 +677,7 @@ Fraction Tremolo::tremoloLen() const
 
 String Tremolo::subtypeName() const
 {
-    return mtrc("engraving", tremoloName[subtype()]);
+    return TConv::translatedUserName(tremoloType());
 }
 
 //---------------------------------------------------------

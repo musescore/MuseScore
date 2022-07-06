@@ -37,10 +37,6 @@ class Factory
 {
 public:
 
-    static ElementType name2type(const AsciiStringView& name, bool silent = false);
-    static const char* name(ElementType type);
-    static const char* userName(ElementType type);
-
     static EngravingItem* createItem(ElementType type, EngravingItem* parent, bool isAccessibleEnabled = true);
     static EngravingItem* createItemByName(const AsciiStringView& name, EngravingItem* parent, bool isAccessibleEnabled = true);
 

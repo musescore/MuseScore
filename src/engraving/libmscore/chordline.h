@@ -97,7 +97,5 @@ public:
     void setNote(Note* note) { _note = note; }
     Note* note() const { return _note; }
 };
-
-extern const char* scorelineNames[];
 } // namespace mu::engraving
 #endif

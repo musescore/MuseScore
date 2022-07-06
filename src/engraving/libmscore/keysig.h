@@ -101,7 +101,5 @@ public:
 
     SymId convertFromOldId(int val) const;
 };
-
-extern const char* keyNames[];
 } // namespace mu::engraving
 #endif

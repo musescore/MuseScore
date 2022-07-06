@@ -22,9 +22,9 @@
 
 #include "bagpembell.h"
 
-#include "translation.h"
 #include "draw/pen.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "score.h"
 #include "scorefont.h"
@@ -32,290 +32,6 @@
 using namespace mu;
 
 namespace mu::engraving {
-// Embellishment names and note sequences
-
-BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
-    // Single Grace notes
-    { QT_TRANSLATE_NOOP("bagpipe", "Single grace low G"), "LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Single grace low A"), "LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Single grace B"), "B" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Single grace C"), "C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Single grace D"), "D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Single grace E"), "E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Single grace F"), "F" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Single grace high G"), "HG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Single grace high A"), "HA" },
-
-    // Double Grace notes
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "D LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "D B" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "E LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "E B" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "E C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "E D" },
-
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F B" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F E" },
-
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG B" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG F" },
-
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA B" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA F" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA HG" },
-
-    // Half Doublings
-    { QT_TRANSLATE_NOOP("bagpipe", "Half doubling on low G"), "LG D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half doubling on low A"), "LA D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half doubling on B"), "B D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half doubling on C"), "C D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half doubling on D"), "D E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half doubling on E"), "E F" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half doubling on F"), "F HG" },
-    // ? { QT_TRANSLATE_NOOP("bagpipe", "Half doubling on high G"), "HG F" },
-    // ? { QT_TRANSLATE_NOOP("bagpipe", "Half doubling on high A"), "HA HG" },
-
-    // Regular Doublings
-    { QT_TRANSLATE_NOOP("bagpipe", "Doubling on high G"), "HG F" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Doubling on high A"), "HA HG" },
-
-    // Half Strikes
-    { QT_TRANSLATE_NOOP("bagpipe", "Half strike on low A"), "LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half strike on B"), "B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half strike on C"), "C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half strike on D"), "D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half strike on D"), "D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half strike on E"), "E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half strike on F"), "F E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half strike on high G"), "HG F" },
-
-    // Regular Grip
-    { QT_TRANSLATE_NOOP("bagpipe", "Grip"), "D LG" },
-
-    // D Throw
-    { QT_TRANSLATE_NOOP("bagpipe", "Half D throw"), "D C" },
-
-    // Regular Doublings (continued)
-    { QT_TRANSLATE_NOOP("bagpipe", "Doubling on low G"),  "HG LG D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Doubling on low A"),  "HG LA D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Doubling on B"),      "HG B D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Doubling on C"),      "HG C D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Doubling on D"),      "HG D E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Doubling on E"),      "HG E F" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Doubling on F"),      "HG F HG" },
-
-    // Thumb Doublings
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb doubling on low G"), "HA LG D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb doubling on low A"), "HA LA D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb doubling on B"), "HA B D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb doubling on C"), "HA C D" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb doubling on D"), "HA D E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb doubling on E"), "HA E F" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb doubling on F"), "HA F HG" },
-    // ? { QT_TRANSLATE_NOOP("bagpipe", "Thumb doubling on high G"), "HA HG F" },
-
-    // G Grace note Strikes
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note on low A"), "HG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note on B"), "HG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note on C"), "HG C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note on D"), "HG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note on D"), "HG D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note on E"), "HG E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note on F"), "HG F E" },
-
-    // Regular Double Strikes
-    { QT_TRANSLATE_NOOP("bagpipe", "Double strike on low A"), "LG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double strike on B"), "LG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double strike on C"), "LG C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double strike on D"), "LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double strike on D"), "C D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double strike on E"), "LA E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double strike on F"), "E F E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double strike on high G"), "F HG F" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Double strike on high A"), "HG HA HG" },
-
-    // Thumb Strikes
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb strike on low A"), "HA LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb strike on B"), "HA B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb strike on C"), "HA C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb strike on D"), "HA D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb strike on D"), "HA D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb strike on E"), "HA E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb strike on F"), "HA F E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb strike on high G"), "HA HG F" },
-
-    // Regular Grips (continued)
-    { QT_TRANSLATE_NOOP("bagpipe", "Grip"), "LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Grip"), "LG B LG" },
-
-    // Taorluath and Birl
-    { QT_TRANSLATE_NOOP("bagpipe", "Birl"), "LG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "D throw"), "LG D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half heavy D throw"), "D LG C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Taorluath"), "D LG E" },
-
-    // Birl, Bubbly, D Throws (continued) and Taorluaths (continued)
-    { QT_TRANSLATE_NOOP("bagpipe", "Birl"), "LA LG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Bubbly"), "D LG C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Heavy D throw"), "LG D LG C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Taorluath"), "LG D LG E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Taorluath"), "LG B LG E" },
-
-    // Half Double Strikes
-    { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on low A"), "LA LG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on B"), "B LG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on C"), "C LG C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on D"), "D LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on D"), "D C D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on E"), "E LA E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on F"), "F E F E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on high G"), "HG F HG F" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on high A"), "HA HG HA HG" },
-
-    // Half Grips
-    { QT_TRANSLATE_NOOP("bagpipe", "Half grip on low A"), "LA LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half grip on B"), "B LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half grip on C"), "C LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half grip on D"), "D LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half grip on D"), "D LG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half grip on E"), "E LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half grip on F"), "F LG F LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half grip on high G"), "HG LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half grip on high A"), "HA LG D LG" },
-
-    // Half Peles
-    { QT_TRANSLATE_NOOP("bagpipe", "Half pele on low A"), "LA E LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half pele on B"), "B E B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half pele on C"), "C E C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half pele on D"), "D E D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half pele on D"), "D E D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half pele on E"), "E F E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half pele on F"), "F HG F E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half pele on high G"), "HG HA HG F" },
-
-    // G Grace note Grips
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note grip on low A"), "HG LA LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note grip on B"), "HG B LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note grip on C"), "HG C LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note grip on D"), "HG D LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note grip on D"), "HG D LG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note grip on E"), "HG E LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note grip on F"), "HG F LG F LG" },
-
-    // Thumb Grips
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grip on low A"), "HA LA LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grip on B"), "HA B LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grip on C"), "HA C LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grip on D"), "HA D LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grip on D"), "HA D LG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grip on E"), "HA E LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grip on F"), "HA F LG F LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grip on high G"), "HA HG LG F LG" },
-
-    // Bubbly
-    { QT_TRANSLATE_NOOP("bagpipe", "Bubbly"), "LG D LG C LG" },
-
-    //  Birls
-    { QT_TRANSLATE_NOOP("bagpipe", "Birl"), "HG LA LG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Birl"), "HA LA LG LA LG" },
-
-    // Regular Peles
-    { QT_TRANSLATE_NOOP("bagpipe", "Pele on low A"), "HG LA E LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Pele on B"), "HG B E B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Pele on C"), "HG C E C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Pele on D"), "HG D E D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Pele on D"), "HG D E D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Pele on E"), "HG E F E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Pele on F"), "HG F HG F E" },
-
-    // Thumb Grace Note Peles
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grace note pele on low A"), "HA LA E LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grace note pele on B"), "HA B E B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grace note pele on C"), "HA C E C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grace note pele on D"), "HA D E D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grace note pele on D"), "HA D E D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grace note pele on E"), "HA E F E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grace note pele on F"), "HA F HG F E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb grace note pele on high G"), "HA HG HA HG F" },
-
-    // G Grace note Double Strikes
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note double strike on low A"), "HG LA LG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note double strike on B"), "HG B LG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note double strike on C"), "HG C LG C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note double strike on D"), "HG D LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note double strike on D"), "HG D C D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note double strike on E"), "HG E LA E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note double strike on F"), "HG F E F E" },
-
-    // Thumb Double Strikes
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb double strike on low A"), "HA LA LG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb double strike on B"), "HA B LG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb double strike on C"), "HA C LG C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb double strike on D"), "HA D LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb double strike on D"), "HA D C D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb double strike on E"), "HA E LA E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb double strike on F"), "HA F E F E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb double strike on high G"), "HA HG F HG F" },
-
-    // Regular Triple Strikes
-    { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on low A"), "LG LA LG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on B"), "LG B LG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on C"), "LG C LG C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on D"), "LG D LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on D"), "C D C D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on E"), "LA E LA E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on F"), "E F E F E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on high G"), "F HG F HG F" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on high A"), "HG HA HG HA HG" },
-
-    // Half Triple Strikes
-    { QT_TRANSLATE_NOOP("bagpipe", "Half triple strike on low A"), "LA LG LA LG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half triple strike on B"), "B LG B LG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half triple strike on C"), "C LG C LG C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half triple strike on D"), "D LG D LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half triple strike on D"), "D C D C D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half triple strike on E"), "E LA E LA E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half triple strike on F"), "F E F E F E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half triple strike on high G"), "HG F HG F HG F" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Half triple strike on high A"), "HA HG HA HG HA HG" },
-
-    // G Grace note Triple Strikes
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note triple strike on low A"), "HG LA LG LA LG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note triple strike on B"), "HG B LG B LG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note triple strike on C"), "HG C LG C LG C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note triple strike on D"), "HG D LG D LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note triple strike on D"), "HG D C D C D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note triple strike on E"), "HG E LA E LA E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "G grace note triple strike on F"), "HG F E F E F E" },
-
-    // Thumb Triple Strikes
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on low A"),  "HA LA LG LA LG LA LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on B"),      "HA B LG B LG B LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on C"),      "HA C LG C LG C LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on D"),      "HA D LG D LG D LG" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on D"),      "HA D C D C D C" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on E"),      "HA E LA E LA E LA" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on F"),      "HA F E F E F E" },
-    { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on high G"), "HA HG F HG F HG F" },
-};
-
 // Staff line and pitch for every bagpipe note
 BagpipeNoteInfo BagpipeEmbellishment::BagpipeNoteInfoList[] = {
     { "LG",  6,  65 },
@@ -330,16 +46,6 @@ BagpipeNoteInfo BagpipeEmbellishment::BagpipeNoteInfoList[] = {
 };
 
 //---------------------------------------------------------
-//   nEmbellishments
-//     return the number of embellishment in BagpipeEmbellishmentList
-//---------------------------------------------------------
-
-int BagpipeEmbellishment::nEmbellishments()
-{
-    return sizeof(BagpipeEmbellishmentList) / sizeof(*BagpipeEmbellishmentList);
-}
-
-//---------------------------------------------------------
 //   getNoteList
 //     return notes as list of indices in BagpipeNoteInfoList
 //---------------------------------------------------------
@@ -347,20 +53,20 @@ int BagpipeEmbellishment::nEmbellishments()
 noteList BagpipeEmbellishment::getNoteList() const
 {
     noteList nl;
-    if (_embelType >= 0 && _embelType < nEmbellishments()) {
-        StringList notes = String::fromAscii(BagpipeEmbellishmentList[_embelType].notes.ascii()).split(u' ');
-        int noteInfoSize = sizeof(BagpipeNoteInfoList) / sizeof(*BagpipeNoteInfoList);
-        for (const String& note : notes) {
-            // search for note in BagpipeNoteInfoList
-            for (int i = 0; i < noteInfoSize; ++i) {
-                if (String::fromAscii(BagpipeNoteInfoList[i].name.ascii()) == note) {
-                    // found it, append to list
-                    nl.push_back(i);
-                    break;
-                }
+
+    StringList notes = TConv::embellishmentNotes(_embelType);
+    int noteInfoSize = sizeof(BagpipeNoteInfoList) / sizeof(*BagpipeNoteInfoList);
+    for (const String& note : notes) {
+        // search for note in BagpipeNoteInfoList
+        for (int i = 0; i < noteInfoSize; ++i) {
+            if (String::fromAscii(BagpipeNoteInfoList[i].name.ascii()) == note) {
+                // found it, append to list
+                nl.push_back(i);
+                break;
             }
         }
     }
+
     return nl;
 }
 
@@ -371,7 +77,7 @@ noteList BagpipeEmbellishment::getNoteList() const
 void BagpipeEmbellishment::write(XmlWriter& xml) const
 {
     xml.startElement(this);
-    xml.tag("subtype", _embelType);
+    xml.tag("subtype", TConv::toXml(_embelType));
     xml.endElement();
 }
 
@@ -384,7 +90,7 @@ void BagpipeEmbellishment::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            _embelType = e.readInt();
+            _embelType = TConv::fromXml(e.readAsciiText(), EmbellishmentType(0));
         } else {
             e.unknown();
         }

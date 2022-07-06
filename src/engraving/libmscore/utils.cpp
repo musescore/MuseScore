@@ -484,33 +484,33 @@ int quantizeLen(int len, int raster)
     return int(((float)len / raster) + 0.5) * raster;   //round to the closest multiple of raster
 }
 
-static const char* vall[] = {
-    QT_TRANSLATE_NOOP("utils", "c"),
-    QT_TRANSLATE_NOOP("utils", "c♯"),
-    QT_TRANSLATE_NOOP("utils", "d"),
-    QT_TRANSLATE_NOOP("utils", "d♯"),
-    QT_TRANSLATE_NOOP("utils", "e"),
-    QT_TRANSLATE_NOOP("utils", "f"),
-    QT_TRANSLATE_NOOP("utils", "f♯"),
-    QT_TRANSLATE_NOOP("utils", "g"),
-    QT_TRANSLATE_NOOP("utils", "g♯"),
-    QT_TRANSLATE_NOOP("utils", "a"),
-    QT_TRANSLATE_NOOP("utils", "a♯"),
-    QT_TRANSLATE_NOOP("utils", "b")
+static const char16_t* vall[] = {
+    u"c",
+    u"c♯",
+    u"d",
+    u"d♯",
+    u"e",
+    u"f",
+    u"f♯",
+    u"g",
+    u"g♯",
+    u"a",
+    u"a♯",
+    u"b"
 };
-static const char* valu[] = {
-    QT_TRANSLATE_NOOP("utils", "C"),
-    QT_TRANSLATE_NOOP("utils", "C♯"),
-    QT_TRANSLATE_NOOP("utils", "D"),
-    QT_TRANSLATE_NOOP("utils", "D♯"),
-    QT_TRANSLATE_NOOP("utils", "E"),
-    QT_TRANSLATE_NOOP("utils", "F"),
-    QT_TRANSLATE_NOOP("utils", "F♯"),
-    QT_TRANSLATE_NOOP("utils", "G"),
-    QT_TRANSLATE_NOOP("utils", "G♯"),
-    QT_TRANSLATE_NOOP("utils", "A"),
-    QT_TRANSLATE_NOOP("utils", "A♯"),
-    QT_TRANSLATE_NOOP("utils", "B")
+static const char16_t* valu[] = {
+    u"C",
+    u"C♯",
+    u"D",
+    u"D♯",
+    u"E",
+    u"F",
+    u"F♯",
+    u"G",
+    u"G♯",
+    u"A",
+    u"A♯",
+    u"B"
 };
 
 /*!
@@ -534,7 +534,7 @@ String pitch2string(int v)
     String o;
     o = String::number(octave);
     int i = v % 12;
-    return mtrc("engraving", octave < 0 ? valu[i] : vall[i]) + o;
+    return (octave < 0 ? valu[i] : vall[i]) + o;
 }
 
 /*!

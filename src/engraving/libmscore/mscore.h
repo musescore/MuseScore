@@ -193,15 +193,6 @@ enum class UpDownMode : char {
 };
 
 //---------------------------------------------------------
-//   StaffGroup
-//---------------------------------------------------------
-
-enum class StaffGroup : char {
-    STANDARD, PERCUSSION, TAB
-};
-constexpr int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1; // out of enum to avoid compiler complains about not handled switch cases
-
-//---------------------------------------------------------
 //   MScoreError
 //---------------------------------------------------------
 
@@ -254,7 +245,6 @@ class MScore
 public:
 
     static MsError _error;
-    static std::vector<MScoreError> errorList;
 
     static void init();
     static void registerUiTypes();
@@ -309,8 +299,6 @@ public:
     static double horizontalPageGapOdd;
 
     static void setError(MsError e) { _error = e; }
-    static const char* errorMessage();
-    static const char* errorGroup();
 };
 
 //---------------------------------------------------------

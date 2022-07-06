@@ -14,6 +14,8 @@ else()
     add_definitions(-DNO_QT_SUPPORT)
 endif()
 
+    add_definitions(-DHAW_PROFILER_ENABLED)
+
 if (CC_IS_GCC)
     message(STATUS "Using Compiler GCC ${CMAKE_CXX_COMPILER_VERSION}")
 
