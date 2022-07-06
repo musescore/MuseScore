@@ -99,6 +99,7 @@ const char* PaletteCell::translationContext() const
     case ElementType::BREATH:
     case ElementType::FERMATA:
     case ElementType::SYMBOL:
+    case ElementType::HARP_DIAGRAM:
         // libmscore/sym.cpp, Sym::symUserNames
         return "symUserNames";
     case ElementType::CLEF:

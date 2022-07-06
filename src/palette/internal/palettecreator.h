@@ -58,6 +58,7 @@ public:
     static PalettePtr newBarLinePalette(bool defaultPalette = false);
     static PalettePtr newLinesPalette(bool defaultPalette = false);
     static PalettePtr newFretboardDiagramPalette();
+    static PalettePtr newHarpPalette();
 
     static PaletteTreePtr newMasterPaletteTree();
     static PaletteTreePtr newDefaultPaletteTree();

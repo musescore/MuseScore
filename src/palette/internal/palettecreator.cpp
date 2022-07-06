@@ -50,6 +50,7 @@
 #include "libmscore/glissando.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
+#include "libmscore/harppedaldiagram.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/jump.h"
 #include "libmscore/keysig.h"
@@ -142,6 +143,7 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newAccordionPalette());
     tree->append(newBagpipeEmbellishmentPalette());
     tree->append(newBeamPalette());
+    tree->append(newHarpPalette());
 
     return tree;
 }
@@ -174,6 +176,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newAccordionPalette());
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
+    defaultPalette->append(newHarpPalette());
 
     return defaultPalette;
 }
@@ -1668,6 +1671,26 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     fret = FretDiagram::createFromString(gpaletteScore, u"X212O2");
     fret->setHarmony(u"B7");
     sp->appendElement(fret, "B7");
+
+    return sp;
+}
+
+PalettePtr PaletteCreator::newHarpPalette()
+{
+    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Harp);
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Harp notation"));
+    sp->setGridSize(90, 30);
+    sp->setDrawGrid(true);
+    sp->setVisible(true);
+
+    auto pedalDiagram = Factory::makeHarpPedalDiagram(gpaletteScore->dummy()->segment());
+    pedalDiagram->updateDiagramText();
+    sp->appendElement(pedalDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal diagram"));
+
+    auto pedalTextDiagram = Factory::makeHarpPedalDiagram(gpaletteScore->dummy()->segment());
+    pedalTextDiagram->setIsDiagram(false);
+    pedalTextDiagram->updateDiagramText();
+    sp->appendElement(pedalTextDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal text"));
 
     return sp;
 }

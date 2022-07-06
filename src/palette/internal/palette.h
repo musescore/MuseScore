@@ -79,6 +79,7 @@ public:
         BagpipeEmbellishment,
         Layout,
         Beam,
+        Harp,
         Custom
     };
     Q_ENUM(Type)
