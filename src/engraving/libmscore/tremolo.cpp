@@ -319,6 +319,44 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     const bool defaultStyle = (!customStyleApplicable()) || (_style == TremoloStyle::DEFAULT);
     const bool isTraditionalAlternate = (_style == TremoloStyle::TRADITIONAL_ALTERNATE);
 
+    // make sure both stems are in the same direction
+    int up = 0;
+    bool isUp = _up;
+    if (_chord1->beam() && _chord1->beam() == _chord2->beam()) {
+        Beam* beam = _chord1->beam();
+        _up = beam->up();
+        _direction = beam->beamDirection();
+        // stem stuff is already taken care of by the beams
+    } else {
+        if (_chord1->stemDirection() == DirectionV::AUTO && _chord2->stemDirection() == DirectionV::AUTO
+            && _chord1->staffMove() == _chord2->staffMove()) {
+            std::vector<int> noteDistances;
+            for (int distance : _chord1->noteDistances()) {
+                noteDistances.push_back(distance);
+            }
+            for (int distance : _chord2->noteDistances()) {
+                noteDistances.push_back(distance);
+            }
+            std::sort(noteDistances.begin(), noteDistances.end());
+            up = Chord::computeAutoStemDirection(noteDistances);
+            isUp = up > 0;
+        } else if (_chord1->staffMove() > 0 || _chord2->staffMove() > 0) {
+            isUp = false;
+        } else if (_chord1->staffMove() < 0 || _chord2->staffMove() < 0) {
+            isUp = true;
+        } else if (_chord1->measure()->hasVoices(_chord1->staffIdx(), _chord1->tick(), _chord2->rtick() - _chord1->tick())) {
+            isUp = _chord1->track() % 2 == 0;
+        } else if (_chord1->stemDirection() != DirectionV::AUTO) {
+            isUp = _chord1->stemDirection() == DirectionV::UP;
+        } else if (_chord2->stemDirection() != DirectionV::AUTO) {
+            isUp = _chord2->stemDirection() == DirectionV::UP;
+        }
+        _up = isUp;
+        _chord1->setUp(_chord1->staffMove() == 0 ? isUp : !isUp); // if on a different staff, flip stem dir
+        _chord2->setUp(_chord2->staffMove() == 0 ? isUp : !isUp);
+        _chord1->layoutStem();
+        _chord2->layoutStem();
+    }
     //---------------------------------------------------
     //   Step 1: Calculate the position of the tremolo (x, y)
     //---------------------------------------------------
@@ -483,6 +521,26 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
 
     setbbox(path.boundingRect());
     setPos(x, y + beamYOffset);
+}
+
+//---------------------------------------------------------
+//   setBeamDirection
+//---------------------------------------------------------
+
+void Tremolo::setBeamDirection(DirectionV d)
+{
+    if (_direction == d) {
+        return;
+    }
+
+    _direction = d;
+
+    if (d != DirectionV::AUTO) {
+        _up = d == DirectionV::UP;
+    }
+
+    _chord1->setStemDirection(d);
+    _chord2->setStemDirection(d);
 }
 
 //---------------------------------------------------------
@@ -686,6 +744,9 @@ bool Tremolo::setProperty(Pid propertyId, const PropertyValue& val)
         if (customStyleApplicable()) {
             setStyle(TremoloStyle(val.toInt()));
         }
+        break;
+    case Pid::STEM_DIRECTION:
+        setBeamDirection(val.value<DirectionV>());
         break;
     default:
         return EngravingItem::setProperty(propertyId, val);

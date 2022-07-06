@@ -2091,6 +2091,12 @@ void Score::cmdFlip()
                 } else {
                     continue;
                 }
+            } else if (chord->tremolo()) {
+                if (!selection().isRange()) {
+                    e = chord->tremolo();
+                } else {
+                    continue;
+                }
             } else {
                 flipOnce(chord, [chord]() {
                     DirectionV dir = chord->up() ? DirectionV::DOWN : DirectionV::UP;
@@ -2104,6 +2110,12 @@ void Score::cmdFlip()
             flipOnce(beam, [beam]() {
                 DirectionV dir = beam->up() ? DirectionV::DOWN : DirectionV::UP;
                 beam->undoChangeProperty(Pid::STEM_DIRECTION, dir);
+            });
+        } else if (e->isTremolo()) {
+            auto tremolo = toTremolo(e);
+            flipOnce(tremolo, [tremolo]() {
+                DirectionV dir = tremolo->up() ? DirectionV::DOWN : DirectionV::UP;
+                tremolo->undoChangeProperty(Pid::STEM_DIRECTION, dir);
             });
         } else if (e->isSlurTieSegment()) {
             auto slurTieSegment = toSlurTieSegment(e)->slurTie();
