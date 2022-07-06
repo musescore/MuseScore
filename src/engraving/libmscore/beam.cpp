@@ -1067,7 +1067,7 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
                                ? middleStemMinLength[chord->beams() - 1]
                                : middleStemMinLength[4] + ((chord->beams() - 5) * 0.75);
             minLength *= spatium();
-            reduction = chord->stem()->length() - minLength;
+            reduction = (chord->stem() ? chord->stem()->length() : chord->defaultStemLength()) - minLength;
         }
 
         // avoid division by zero for zero-length beams (can exist as a pre-layout state used
