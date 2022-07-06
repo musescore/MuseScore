@@ -18,7 +18,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-ENV_FILE=./../musescore_tx2s3_environment.sh
+
+BUILD_TOOLS=$HOME/build_tools
+ENV_FILE=$BUILD_TOOLS/tx2s3_environment.sh
 source $ENV_FILE
 
 command -v lrelease >/dev/null 2>&1 || { echo "error: not found 'lrelease'" >&2; exit 1; }

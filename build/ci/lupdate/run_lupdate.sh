@@ -18,18 +18,10 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-ENV_FILE=./../musescore_lupdate_environment.sh
+
+BUILD_TOOLS=$HOME/build_tools
+ENV_FILE=$BUILD_TOOLS/lupdate_environment.sh
+
 source $ENV_FILE
 
-# Translation routines
-# update translation on transifex
-# remove obsolete strings
-OBSOLETE=-no-obsolete # '-noobsolete' in older QT versions
-
-./build/gen-qt-projectfile . > mscore.pro
-lupdate ${OBSOLETE} mscore.pro
-./build/gen-instruments-projectfile ./share/instruments > instruments.pro
-lupdate ${OBSOLETE} instruments.pro
-
-rm mscore.pro
-rm instruments.pro
+bash ./tools/translations/run_lupdate.sh
