@@ -43,6 +43,8 @@ DialogView {
 
     property alias navigationSection: navSec
 
+    property bool closeOnEscape : true
+
     onOpened: {
         navSec.requestActive()
     }
@@ -70,7 +72,7 @@ DialogView {
             }
 
             onNavigationEvent: function(event) {
-                if (event.type === NavigationEvent.Escape) {
+                if (event.type === NavigationEvent.Escape && root.closeOnEscape) {
                     root.close()
                 }
             }

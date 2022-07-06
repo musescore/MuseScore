@@ -73,6 +73,7 @@ class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString objectId READ objectId WRITE setObjectId NOTIFY objectIdChanged)
     Q_PROPERTY(bool modal READ modal WRITE setModal NOTIFY modalChanged)
+    Q_PROPERTY(bool frameless READ frameless WRITE setFrameless NOTIFY framelessChanged)
     Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
@@ -127,6 +128,7 @@ public:
     QString objectId() const;
     QString title() const;
     bool modal() const;
+    bool frameless() const;
     bool resizable() const;
     QVariantMap ret() const;
 
@@ -147,6 +149,7 @@ public slots:
     void setObjectId(QString objectId);
     void setTitle(QString title);
     void setModal(bool modal);
+    void setFrameless(bool frameless);
     void setResizable(bool resizable);
     void setRet(QVariantMap ret);
 
@@ -170,6 +173,7 @@ signals:
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
     void modalChanged(bool modal);
+    void framelessChanged(bool frameless);
     void resizableChanged(bool resizable);
     void retChanged(QVariantMap ret);
 
@@ -231,6 +235,7 @@ protected:
     QString m_objectId;
     QString m_title;
     bool m_modal = true;
+    bool m_frameless = false;
     bool m_resizable = false;
     QVariantMap m_ret;
     bool m_opensUpward = false;

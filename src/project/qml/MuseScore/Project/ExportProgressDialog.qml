@@ -34,6 +34,8 @@ StyledDialogView {
     margins: 12
 
     modal: true
+    frameless: true
+    closeOnEscape: false
 
     ExportProgressModel {
         id: model

@@ -115,7 +115,7 @@ MenuView {
         isOpened: root.isOpened
 
         animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
-        isCloseByEscape: false
+        closeOnEscape: false
 
         navigationSection.onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.Escape) {
