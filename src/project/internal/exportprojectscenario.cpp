@@ -21,6 +21,8 @@
  */
 #include "exportprojectscenario.h"
 
+#include "async/async.h"
+
 #include "translation.h"
 #include "log.h"
 
@@ -49,19 +51,17 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
         return false;
     }
 
-    interactive()->open("musescore://project/export/progress?modal=true");
-
     io::path_t chosenPath = askExportPath(notations, exportType, unitType);
     if (chosenPath.empty()) {
         return false;
     }
 
-    auto writer = writers()->writer(io::suffix(chosenPath));
-    if (!writer) {
+    m_currentWriter = writers()->writer(io::suffix(chosenPath));
+    if (!m_currentWriter) {
         return false;
     }
 
-    IF_ASSERT_FAILED(writer->supportsUnitType(unitType)) {
+    IF_ASSERT_FAILED(m_currentWriter->supportsUnitType(unitType)) {
         return false;
     }
 
@@ -87,8 +87,9 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                                             ? chosenPath
                                             : completeExportPath(chosenPath, notation, isMainNotation(notation), static_cast<int>(page));
 
-                auto exportFunction = [writer, notation, options](QIODevice& destinationDevice) {
-                        return writer->write(notation, destinationDevice, options);
+                auto exportFunction = [this, notation, options](QIODevice& destinationDevice) {
+                        showExportProgressIfNeed();
+                        return m_currentWriter->write(notation, destinationDevice, options);
                     };
 
                 doExportLoop(definitivePath, exportFunction);
@@ -107,8 +108,9 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                                         ? chosenPath
                                         : completeExportPath(chosenPath, notation, isMainNotation(notation));
 
-            auto exportFunction = [writer, notation, options](QIODevice& destinationDevice) {
-                    return writer->write(notation, destinationDevice, options);
+            auto exportFunction = [this, notation, options](QIODevice& destinationDevice) {
+                    showExportProgressIfNeed();
+                    return m_currentWriter->write(notation, destinationDevice, options);
                 };
 
             doExportLoop(definitivePath, exportFunction);
@@ -120,8 +122,9 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
             { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
         };
 
-        auto exportFunction = [writer, notations, options](QIODevice& destinationDevice) {
-                return writer->writeList(notations, destinationDevice, options);
+        auto exportFunction = [this, notations, options](QIODevice& destinationDevice) {
+                showExportProgressIfNeed();
+                return m_currentWriter->writeList(notations, destinationDevice, options);
             };
 
         doExportLoop(chosenPath, exportFunction);
@@ -133,6 +136,18 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
     }
 
     return true;
+}
+
+Progress ExportProjectScenario::progress() const
+{
+    return m_currentWriter ? m_currentWriter->progress() : Progress();
+}
+
+void ExportProjectScenario::abort()
+{
+    if (m_currentWriter) {
+        m_currentWriter->abort();
+    }
 }
 
 bool ExportProjectScenario::isCreatingOnlyOneFile(const INotationPtrList& notations, INotationWriter::UnitType unitType) const
@@ -298,6 +313,15 @@ bool ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::funct
     }
 
     return true;
+}
+
+void ExportProjectScenario::showExportProgressIfNeed() const
+{
+    if (m_currentWriter && m_currentWriter->supportsProgressNotifications()) {
+        async::Async::call(this, [this]() {
+            interactive()->open("musescore://project/export/progress");
+        });
+    }
 }
 
 void ExportProjectScenario::openFolder(const io::path_t& path) const

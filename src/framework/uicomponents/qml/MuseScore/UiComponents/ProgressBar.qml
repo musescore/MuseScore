@@ -31,7 +31,7 @@ FocusScope {
     property real to: 1.0
     property real value: 0.0
 
-    property string progressStatus: root.value * 100 + "%"
+    property alias progressStatus: progressStatusLabel.text
 
     property alias navigation: navCtrl
 
@@ -108,8 +108,6 @@ FocusScope {
             horizontalAlignment: Text.AlignHCenter
 
             z: progressRect.z + 1
-
-            text: root.progressStatus
         }
     }
 }

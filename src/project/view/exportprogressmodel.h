@@ -24,33 +24,36 @@
 
 #include <QObject>
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "internal/iexportprojectscenario.h"
 
 namespace mu::project {
-class ExportProgressModel : public QObject
+class ExportProgressModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(project, IExportProjectScenario, exportScenario)
 
-    Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
+    Q_PROPERTY(int progress READ progress NOTIFY progressChanged)
 
 public:
     explicit ExportProgressModel(QObject* parent = nullptr);
 
-    qreal progress() const;
+    int progress() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void cancel();
 
 signals:
     void progressChanged();
+    void exportFinished();
 
 private:
-    void setProgress(qreal progress);
+    void setProgress(int progress);
 
-    qreal m_progress = 0.0;
+    int m_progress = 0;
 };
 }
 

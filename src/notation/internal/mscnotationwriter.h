@@ -38,11 +38,7 @@ public:
     Ret write(notation::INotationPtr notation, QIODevice& device, const Options& options = Options()) override;
     Ret writeList(const INotationPtrList& notations, QIODevice& device, const Options& options = Options()) override;
 
-    void abort() override;
-    framework::ProgressChannel progress() const override;
-
 private:
-
     engraving::MscIoMode m_mode;
 };
 }

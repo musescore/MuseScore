@@ -25,18 +25,19 @@
 #include "log.h"
 
 using namespace mu::project;
+using namespace mu::framework;
 
 ExportProgressModel::ExportProgressModel(QObject* parent)
     : QObject(parent)
 {
 }
 
-qreal ExportProgressModel::progress() const
+int ExportProgressModel::progress() const
 {
     return m_progress;
 }
 
-void ExportProgressModel::setProgress(qreal progress)
+void ExportProgressModel::setProgress(int progress)
 {
     if (m_progress == progress) {
         return;
@@ -48,10 +49,26 @@ void ExportProgressModel::setProgress(qreal progress)
 
 void ExportProgressModel::load()
 {
-    NOT_IMPLEMENTED;
+    Progress progress = exportScenario()->progress();
+
+    progress.started.onNotify(this, [this]() {
+        setProgress(0);
+    });
+
+    progress.progressChanged.onReceive(this, [this](int64_t current, int64_t) {
+        setProgress(current);
+    });
+
+    progress.finished.onReceive(this, [this](const Ret& ret) {
+        if (!ret && !ret.text().empty()) {
+            LOGE() << ret.toString();
+        }
+
+        emit exportFinished();
+    });
 }
 
 void ExportProgressModel::cancel()
 {
-    NOT_IMPLEMENTED;
+    exportScenario()->abort();
 }

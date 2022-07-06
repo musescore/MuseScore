@@ -35,9 +35,6 @@ public:
 
     Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
     Ret writeList(const notation::INotationPtrList& notations, QIODevice& destinationDevice, const Options& options = Options()) override;
-
-    void abort() override;
-    framework::ProgressChannel progress() const override;
 };
 }
 
