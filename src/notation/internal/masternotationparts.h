@@ -37,7 +37,7 @@ public:
     void removeParts(const IDList& partsIds) override;
     void removeStaves(const IDList& stavesIds) override;
 
-    void insertStaff(Staff* staff, const ID& destinationPartId, size_t index=0) override;
+    void appendStaff(Staff* staff, const ID& destinationPartId) override;
     void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
 
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
