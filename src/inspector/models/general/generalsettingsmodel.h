@@ -65,6 +65,8 @@ protected:
     void resetProperties() override;
 
 private:
+    void updatePropertiesOnNotationChanged() override;
+
     PropertyItem* m_isVisible = nullptr;
     PropertyItem* m_isAutoPlaceAllowed = nullptr;
     PropertyItem* m_isPlayable = nullptr;

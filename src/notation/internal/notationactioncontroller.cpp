@@ -170,7 +170,7 @@ void NotationActionController::init()
     registerAction("put-note", &Controller::putNote);
     registerAction("remove-note", &Controller::removeNote);
 
-    registerAction("toggle-visible", &Interaction::toggleVisible);
+    registerAction("toggle-visible", &Interaction::toggleVisible, &Controller::isToggleVisibleAllowed);
 
     registerMoveSelectionAction("next-element", MoveSelectionType::EngravingItem, MoveDirection::Right, PlayMode::PlayNote);
     registerMoveSelectionAction("prev-element", MoveSelectionType::EngravingItem, MoveDirection::Left, PlayMode::PlayNote);
@@ -1809,6 +1809,15 @@ bool NotationActionController::isEditingElement() const
 bool NotationActionController::isNotEditingElement() const
 {
     return !isEditingElement();
+}
+
+bool NotationActionController::isToggleVisibleAllowed() const
+{
+    auto interaction = currentNotationInteraction();
+    if (interaction) {
+        return !(interaction->isTextEditingStarted());
+    }
+    return false;
 }
 
 void NotationActionController::registerAction(const mu::actions::ActionCode& code,
