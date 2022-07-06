@@ -51,7 +51,7 @@ void FretDiagramSettingsModel::createProperties()
         emit fretDiagramChanged(fretDiagram());
     });
 
-    m_startingFretNumber = buildPropertyItem(mu::engraving::Pid::FRET_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_fretNumber = buildPropertyItem(mu::engraving::Pid::FRET_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid,
                                newValue.toInt() - 1);
         emit fretDiagramChanged(fretDiagram());
@@ -82,7 +82,7 @@ void FretDiagramSettingsModel::loadProperties()
 
     loadPropertyItem(m_stringsCount);
     loadPropertyItem(m_fretsCount);
-    loadPropertyItem(m_startingFretNumber, [](const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_fretNumber, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() + 1;
     });
 
@@ -95,7 +95,7 @@ void FretDiagramSettingsModel::resetProperties()
     m_scale->resetToDefault();
     m_stringsCount->resetToDefault();
     m_fretsCount->resetToDefault();
-    m_startingFretNumber->resetToDefault();
+    m_fretNumber->resetToDefault();
     m_isNutVisible->resetToDefault();
     m_placement->resetToDefault();
 }
@@ -125,9 +125,9 @@ PropertyItem* FretDiagramSettingsModel::placement() const
     return m_placement;
 }
 
-PropertyItem* FretDiagramSettingsModel::startingFretNumber() const
+PropertyItem* FretDiagramSettingsModel::fretNumber() const
 {
-    return m_startingFretNumber;
+    return m_fretNumber;
 }
 
 QVariant FretDiagramSettingsModel::fretDiagram() const
