@@ -65,6 +65,11 @@ void GeneralSettingsModel::resetProperties()
     m_isSmall->resetToDefault();
 }
 
+void GeneralSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadPropertyItem(m_isVisible);
+}
+
 PropertyItem* GeneralSettingsModel::isVisible() const
 {
     return m_isVisible;
