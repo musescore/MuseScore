@@ -25,6 +25,7 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 StaffControlTreeItem::StaffControlTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::CONTROL_ADD_STAFF, masterNotation, notation, parent)
@@ -44,17 +45,10 @@ void StaffControlTreeItem::appendNewItem()
         return;
     }
 
-    size_t insertStaffIndex = part->nstaves();
-    const AbstractInstrumentsPanelTreeItem* par = parentItem();
-    for (int row = 0; row < par->childCount() - 1; ++row) {
-        if (par->childAtRow(row)->isSelected()) {
-            insertStaffIndex = row + 1;
-        }
-    }
+    staff_idx_t lastStaffIndex = part->nstaves();
 
-    Staff* staff = engraving::Factory::createStaff(const_cast<Part*>(part));
+    Staff* staff = Factory::createStaff(const_cast<Part*>(part));
+    staff->setDefaultClefType(part->instrument()->clefType(lastStaffIndex));
 
-    staff->setDefaultClefType(part->staff(insertStaffIndex - 1)->defaultClefType());
-
-    masterNotation()->parts()->insertStaff(staff, m_partId, insertStaffIndex);
+    masterNotation()->parts()->appendStaff(staff, m_partId);
 }
