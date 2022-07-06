@@ -35,31 +35,17 @@ namespace mu::engraving {
 
 class Marker final : public TextBase
 {
-public:
-    enum class Type : char {
-        SEGNO,
-        VARSEGNO,
-        CODA,
-        VARCODA,
-        CODETTA, // not in SMuFL, but still needed for 1.x compatibility, rendered as a double coda
-        FINE,
-        TOCODA,
-        TOCODASYM,
-        USER
-    };
-
 private:
-    Type _markerType;
+    MarkerType _markerType;
     String _label;                 ///< referenced from Jump() element
 
 public:
     Marker(EngravingItem* parent);
     Marker(EngravingItem* parent, TextStyleType);
 
-    void setMarkerType(Type t);
-    Type markerType() const { return _markerType; }
+    void setMarkerType(MarkerType t);
+    MarkerType markerType() const { return _markerType; }
     String markerTypeUserName() const;
-    Type markerType(const String&) const;
 
     Marker* clone() const override { return new Marker(*this); }
 
@@ -74,7 +60,7 @@ public:
     String label() const { return _label; }
     void setLabel(const String& s) { _label = s; }
     void undoSetLabel(const String& s);
-    void undoSetMarkerType(Type t);
+    void undoSetMarkerType(MarkerType t);
 
     void styleChanged() override;
 
@@ -86,21 +72,6 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 };
-
-//---------------------------------------------------------
-//   MarkerTypeItem
-//---------------------------------------------------------
-
-struct MarkerTypeItem {
-    Marker::Type type;
-    const char* name = nullptr;
-};
-
-extern const std::vector<MarkerTypeItem> markerTypeTable;
 } // namespace mu::engraving
-
-#ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::Marker::Type);
-#endif
 
 #endif

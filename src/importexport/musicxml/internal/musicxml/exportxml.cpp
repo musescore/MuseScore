@@ -5097,48 +5097,48 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
 
 static void directionJump(XmlWriter& xml, const Jump* const jp)
 {
-    Jump::Type jtp = jp->jumpType();
+    JumpType jtp = jp->jumpType();
     String words;
     String type;
     String sound;
     bool isDaCapo = false;
     bool isDalSegno = false;
-    if (jtp == Jump::Type::DC) {
+    if (jtp == JumpType::DC) {
         if (jp->xmlText() == "") {
             words = u"D.C.";
         } else {
             words = jp->xmlText();
         }
         isDaCapo = true;
-    } else if (jtp == Jump::Type::DC_AL_FINE) {
+    } else if (jtp == JumpType::DC_AL_FINE) {
         if (jp->xmlText() == "") {
             words = u"D.C. al Fine";
         } else {
             words = jp->xmlText();
         }
         isDaCapo = true;
-    } else if (jtp == Jump::Type::DC_AL_CODA) {
+    } else if (jtp == JumpType::DC_AL_CODA) {
         if (jp->xmlText() == "") {
             words = u"D.C. al Coda";
         } else {
             words = jp->xmlText();
         }
         isDaCapo = true;
-    } else if (jtp == Jump::Type::DS_AL_CODA) {
+    } else if (jtp == JumpType::DS_AL_CODA) {
         if (jp->xmlText() == "") {
             words = u"D.S. al Coda";
         } else {
             words = jp->xmlText();
         }
         isDalSegno = true;
-    } else if (jtp == Jump::Type::DS_AL_FINE) {
+    } else if (jtp == JumpType::DS_AL_FINE) {
         if (jp->xmlText() == "") {
             words = u"D.S. al Fine";
         } else {
             words = jp->xmlText();
         }
         isDalSegno = true;
-    } else if (jtp == Jump::Type::DS) {
+    } else if (jtp == JumpType::DS) {
         words = u"D.S.";
         isDalSegno = true;
     } else {
@@ -5183,11 +5183,11 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
 //   getEffectiveMarkerType
 //---------------------------------------------------------
 
-static Marker::Type getEffectiveMarkerType(const Marker* const m, const std::vector<const Jump*>& jumps)
+static MarkerType getEffectiveMarkerType(const Marker* const m, const std::vector<const Jump*>& jumps)
 {
-    Marker::Type mtp = m->markerType();
+    MarkerType mtp = m->markerType();
 
-    if (mtp != Marker::Type::USER) {
+    if (mtp != MarkerType::USER) {
         return mtp;
     }
 
@@ -5195,21 +5195,21 @@ static Marker::Type getEffectiveMarkerType(const Marker* const m, const std::vec
     const QString label = m->label();
 
     for (const Jump* j : jumps) {
-        Marker::Type guessedMarkerType = mtp;
+        MarkerType guessedMarkerType = mtp;
 
         if (j->jumpTo() == label) {
-            guessedMarkerType = Marker::Type::SEGNO;
+            guessedMarkerType = MarkerType::SEGNO;
         } else if (j->playUntil() == label) {
-            guessedMarkerType = j->continueAt().isEmpty() ? Marker::Type::FINE : Marker::Type::TOCODA;
+            guessedMarkerType = j->continueAt().isEmpty() ? MarkerType::FINE : MarkerType::TOCODA;
         } else if (j->continueAt() == label) {
-            guessedMarkerType = Marker::Type::CODA;
+            guessedMarkerType = MarkerType::CODA;
         }
 
         if (guessedMarkerType != mtp) {
-            if (mtp != Marker::Type::USER) {
+            if (mtp != MarkerType::USER) {
                 // Type guesses differ for different jump elements.
                 LOGD("Cannot guess type for marker with label=\"%s\"", qPrintable(label));
-                return Marker::Type::USER;
+                return MarkerType::USER;
             }
             mtp = guessedMarkerType;
         }
@@ -5239,15 +5239,15 @@ static QString findCodaLabel(const std::vector<const Jump*>& jumps, const QStrin
 
 static void directionMarker(XmlWriter& xml, const Marker* const m, const std::vector<const Jump*>& jumps)
 {
-    const Marker::Type mtp = getEffectiveMarkerType(m, jumps);
+    const MarkerType mtp = getEffectiveMarkerType(m, jumps);
     String words;
     String type;
     String sound;
 
     switch (mtp) {
-    case Marker::Type::CODA:
-    case Marker::Type::VARCODA:
-    case Marker::Type::CODETTA:
+    case MarkerType::CODA:
+    case MarkerType::VARCODA:
+    case MarkerType::CODETTA:
         type = u"coda";
         if (m->label() == "") {
             sound = u"coda=\"1\"";
@@ -5255,8 +5255,8 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
             sound = u"coda=\"" + m->label() + u"\"";
         }
         break;
-    case Marker::Type::SEGNO:
-    case Marker::Type::VARSEGNO:
+    case MarkerType::SEGNO:
+    case MarkerType::VARSEGNO:
         type = u"segno";
         if (m->label() == "") {
             sound = "segno=\"1\"";
@@ -5264,12 +5264,12 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
             sound = u"segno=\"" + m->label() + u"\"";
         }
         break;
-    case Marker::Type::FINE:
+    case MarkerType::FINE:
         words = u"Fine";
         sound = u"fine=\"yes\"";
         break;
-    case Marker::Type::TOCODA:
-    case Marker::Type::TOCODASYM: {
+    case MarkerType::TOCODA:
+    case MarkerType::TOCODASYM: {
         if (m->xmlText() == "") {
             words = "To Coda";
         } else {
@@ -5283,7 +5283,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
         }
         break;
     }
-    case Marker::Type::USER:
+    case MarkerType::USER:
         LOGD("marker type=%d not implemented", int(mtp));
         break;
     }
@@ -5354,24 +5354,24 @@ void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const
         {
             // filter out the markers at measure Start
             const Marker* const mk = toMarker(e);
-            const Marker::Type mtp = getEffectiveMarkerType(mk, _jumpElements);
+            const MarkerType mtp = getEffectiveMarkerType(mk, _jumpElements);
 
             switch (mtp) {
-            case Marker::Type::SEGNO:
-            case Marker::Type::VARSEGNO:
-            case Marker::Type::CODA:
-            case Marker::Type::VARCODA:
-            case Marker::Type::CODETTA:
+            case MarkerType::SEGNO:
+            case MarkerType::VARSEGNO:
+            case MarkerType::CODA:
+            case MarkerType::VARCODA:
+            case MarkerType::CODETTA:
                 LOGD(" -> handled");
                 attr.doAttr(_xml, false);
                 directionMarker(_xml, mk, _jumpElements);
                 break;
-            case Marker::Type::FINE:
-            case Marker::Type::TOCODA:
-            case Marker::Type::TOCODASYM:
+            case MarkerType::FINE:
+            case MarkerType::TOCODA:
+            case MarkerType::TOCODASYM:
                 // ignore
                 break;
-            case Marker::Type::USER:
+            case MarkerType::USER:
                 LOGD("repeatAtMeasureStart: marker %d not implemented", int(mtp));
                 break;
             }
@@ -5404,22 +5404,22 @@ void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, track_idx_t str
         {
             // filter out the markers at measure stop
             const Marker* const mk = toMarker(e);
-            const Marker::Type mtp = getEffectiveMarkerType(mk, _jumpElements);
+            const MarkerType mtp = getEffectiveMarkerType(mk, _jumpElements);
 
             switch (mtp) {
-            case Marker::Type::FINE:
-            case Marker::Type::TOCODA:
-            case Marker::Type::TOCODASYM:
+            case MarkerType::FINE:
+            case MarkerType::TOCODA:
+            case MarkerType::TOCODASYM:
                 directionMarker(_xml, mk, _jumpElements);
                 break;
-            case Marker::Type::SEGNO:
-            case Marker::Type::VARSEGNO:
-            case Marker::Type::CODA:
-            case Marker::Type::VARCODA:
-            case Marker::Type::CODETTA:
+            case MarkerType::SEGNO:
+            case MarkerType::VARSEGNO:
+            case MarkerType::CODA:
+            case MarkerType::VARCODA:
+            case MarkerType::CODETTA:
                 // ignore
                 break;
-            case Marker::Type::USER:
+            case MarkerType::USER:
                 LOGD("repeatAtMeasureStop: marker %d not implemented", int(mtp));
                 break;
             }

@@ -22,8 +22,8 @@
 
 #include "jump.h"
 
-#include "translation.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "score.h"
 #include "measure.h"
@@ -46,29 +46,21 @@ static const ElementStyle jumpStyle {
 //---------------------------------------------------------
 
 const std::vector<JumpTypeTableItem> jumpTypeTable {
-    { Jump::Type::DC,         "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo") },
-    { Jump::Type::DC_AL_FINE, "D.C. al Fine", "start", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine") },
-    { Jump::Type::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda") },
-    { Jump::Type::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda") },
-    { Jump::Type::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine") },
-    { Jump::Type::DS,         "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.") },
+    { JumpType::DC,         "D.C.",         "start", "end",  "" },
+    { JumpType::DC_AL_FINE, "D.C. al Fine", "start", "fine", "" },
+    { JumpType::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab" },
+    { JumpType::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab" },
+    { JumpType::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "" },
+    { JumpType::DS,         "D.S.",         "segno", "end",  "" },
 
-    { Jump::Type::DC_AL_DBLCODA,  "D.C. al Double Coda",   "start", "varcoda",  "codab",
-      QT_TRANSLATE_NOOP("jumpType", "Da Capo al Double Coda") },
-    { Jump::Type::DS_AL_DBLCODA,  "D.S. al Double Coda",   "segno", "varcoda",  "codab",
-      QT_TRANSLATE_NOOP("jumpType", "Da Segno al Double Coda") },
-    { Jump::Type::DSS,            "Dal Segno Segno",       "varsegno", "end",  "",
-      QT_TRANSLATE_NOOP("jumpType", "Dal Segno Segno") },
-    { Jump::Type::DSS_AL_CODA,    "D.S.S. al Coda",        "varsegno", "coda",  "codab",
-      QT_TRANSLATE_NOOP("jumpType", "Dal Segno Segno al Coda") },
-    { Jump::Type::DSS_AL_DBLCODA, "D.S.S. al Double Coda", "varsegno", "varcoda", "codab",
-      QT_TRANSLATE_NOOP("jumpType", "Dal Segno Segno al Double Coda") },
-    { Jump::Type::DSS_AL_FINE,    "D.S.S. al Fine",        "varsegno", "fine",  "",
-      QT_TRANSLATE_NOOP("jumpType", "Dal Segno Segno al Fine") },
-    { Jump::Type::DCODA,          "Da Coda",               "coda", "end",  "",
-      QT_TRANSLATE_NOOP("jumpType", "Da Coda") },
-    { Jump::Type::DDBLCODA,       "Da Double Coda",        "varcoda", "end",  "",
-      QT_TRANSLATE_NOOP("jumpType", "Da Double Coda") }
+    { JumpType::DC_AL_DBLCODA,  "D.C. al Double Coda",   "start", "varcoda",  "codab" },
+    { JumpType::DS_AL_DBLCODA,  "D.S. al Double Coda",   "segno", "varcoda",  "codab" },
+    { JumpType::DSS,            "Dal Segno Segno",       "varsegno", "end",  "" },
+    { JumpType::DSS_AL_CODA,    "D.S.S. al Coda",        "varsegno", "coda",  "codab" },
+    { JumpType::DSS_AL_DBLCODA, "D.S.S. al Double Coda", "varsegno", "varcoda", "codab" },
+    { JumpType::DSS_AL_FINE,    "D.S.S. al Fine",        "varsegno", "fine",  "" },
+    { JumpType::DCODA,          "Da Coda",               "coda", "end",  "" },
+    { JumpType::DDBLCODA,       "Da Double Coda",        "varcoda", "end",  "" }
 };
 
 //---------------------------------------------------------
@@ -87,7 +79,7 @@ Jump::Jump(Measure* parent)
 //   setJumpType
 //---------------------------------------------------------
 
-void Jump::setJumpType(Type t)
+void Jump::setJumpType(JumpType t)
 {
     for (const JumpTypeTableItem& p : jumpTypeTable) {
         if (p.type == t) {
@@ -105,23 +97,19 @@ void Jump::setJumpType(Type t)
 //   jumpType
 //---------------------------------------------------------
 
-Jump::Type Jump::jumpType() const
+JumpType Jump::jumpType() const
 {
     for (const JumpTypeTableItem& t : jumpTypeTable) {
         if (_jumpTo == t.jumpTo && _playUntil == t.playUntil && _continueAt == t.continueAt) {
             return t.type;
         }
     }
-    return Type::USER;
+    return JumpType::USER;
 }
 
 String Jump::jumpTypeUserName() const
 {
-    size_t idx = static_cast<size_t>(jumpType());
-    if (idx < jumpTypeTable.size()) {
-        return mtrc("engraving", jumpTypeTable[idx].userText);
-    }
-    return mtrc("engraving", "Custom");
+    return TConv::translatedUserName(jumpType());
 }
 
 //---------------------------------------------------------

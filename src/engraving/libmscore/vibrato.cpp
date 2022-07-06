@@ -23,7 +23,7 @@
 
 #include <cmath>
 
-#include "translation.h"
+#include "types/typesconv.h"
 #include "style/style.h"
 #include "rw/xml.h"
 
@@ -42,18 +42,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   vibratoTable
-//    must be in sync with Vibrato::Type
-//---------------------------------------------------------
-
-const std::vector<VibratoTableItem> vibratoTable = {
-    { Vibrato::Type::GUITAR_VIBRATO,        "guitarVibrato",       QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato") },
-    { Vibrato::Type::GUITAR_VIBRATO_WIDE,   "guitarVibratoWide",   QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato wide") },
-    { Vibrato::Type::VIBRATO_SAWTOOTH,      "vibratoSawtooth",     QT_TRANSLATE_NOOP("vibratoType", "Vibrato sawtooth") },
-    { Vibrato::Type::VIBRATO_SAWTOOTH_WIDE, "vibratoSawtoothWide", QT_TRANSLATE_NOOP("vibratoType", "Tremolo sawtooth wide") }
-};
-
 VibratoSegment::VibratoSegment(Vibrato* sp, System* parent)
     : LineSegment(ElementType::VIBRATO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
@@ -131,16 +119,16 @@ void VibratoSegment::layout()
 
     if (isSingleType() || isBeginType()) {
         switch (vibrato()->vibratoType()) {
-        case Vibrato::Type::GUITAR_VIBRATO:
+        case VibratoType::GUITAR_VIBRATO:
             symbolLine(SymId::guitarVibratoStroke, SymId::guitarVibratoStroke);
             break;
-        case Vibrato::Type::GUITAR_VIBRATO_WIDE:
+        case VibratoType::GUITAR_VIBRATO_WIDE:
             symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
             break;
-        case Vibrato::Type::VIBRATO_SAWTOOTH:
+        case VibratoType::VIBRATO_SAWTOOTH:
             symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
             break;
-        case Vibrato::Type::VIBRATO_SAWTOOTH_WIDE:
+        case VibratoType::VIBRATO_SAWTOOTH_WIDE:
             symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
             break;
         }
@@ -192,7 +180,7 @@ Vibrato::Vibrato(EngravingItem* parent)
     : SLine(ElementType::VIBRATO, parent)
 {
     initElementStyle(&vibratoStyle);
-    _vibratoType = Type::GUITAR_VIBRATO;
+    _vibratoType = VibratoType::GUITAR_VIBRATO;
     setPlayArticulation(true);
 }
 
@@ -244,7 +232,7 @@ void Vibrato::write(XmlWriter& xml) const
         return;
     }
     xml.startElement(this);
-    xml.tag("subtype", vibratoTypeName());
+    xml.tag("subtype", TConv::toXml(vibratoType()));
     writeProperty(xml, Pid::PLAY);
     for (const StyledProperty& spp : *styledProperties()) {
         writeProperty(xml, spp.pid);
@@ -264,7 +252,7 @@ void Vibrato::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            setVibratoType(e.readText());
+            setVibratoType(TConv::fromXml(e.readAsciiText(), VibratoType::GUITAR_VIBRATO));
         } else if (tag == "play") {
             setPlayArticulation(e.readBool());
         } else if (!SLine::readProperties(e)) {
@@ -274,51 +262,12 @@ void Vibrato::read(XmlReader& e)
 }
 
 //---------------------------------------------------------
-//   setVibratoType
-//---------------------------------------------------------
-
-void Vibrato::setVibratoType(const String& s)
-{
-    for (VibratoTableItem i : vibratoTable) {
-        if (s == String::fromUtf8(i.name)) {
-            _vibratoType = i.type;
-            return;
-        }
-    }
-    LOGD("Vibrato::setSubtype: unknown <%s>", muPrintable(s));
-}
-
-//---------------------------------------------------------
-//   type2name
-//---------------------------------------------------------
-
-String Vibrato::type2name(Vibrato::Type t)
-{
-    for (VibratoTableItem i : vibratoTable) {
-        if (i.type == t) {
-            return String::fromUtf8(i.name);
-        }
-    }
-    LOGD("unknown Vibrato subtype %d", int(t));
-    return u"?";
-}
-
-//---------------------------------------------------------
-//   vibratoTypeName
-//---------------------------------------------------------
-
-String Vibrato::vibratoTypeName() const
-{
-    return type2name(vibratoType());
-}
-
-//---------------------------------------------------------
 //   vibratoTypeName
 //---------------------------------------------------------
 
 String Vibrato::vibratoTypeUserName() const
 {
-    return mtrc("engraving", vibratoTable[static_cast<int>(vibratoType())].userName);
+    return TConv::translatedUserName(vibratoType());
 }
 
 //---------------------------------------------------------
@@ -366,7 +315,7 @@ bool Vibrato::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::VIBRATO_TYPE:
-        setVibratoType(Type(val.toInt()));
+        setVibratoType(VibratoType(val.toInt()));
         break;
     case Pid::PLAY:
         setPlayArticulation(val.toBool());
@@ -406,7 +355,7 @@ PropertyValue Vibrato::propertyDefault(Pid propertyId) const
 //   undoSetVibratoType
 //---------------------------------------------------------
 
-void Vibrato::undoSetVibratoType(Type val)
+void Vibrato::undoSetVibratoType(VibratoType val)
 {
     undoChangeProperty(Pid::VIBRATO_TYPE, int(val));
 }

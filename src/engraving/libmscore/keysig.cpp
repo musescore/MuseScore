@@ -22,7 +22,6 @@
 
 #include "keysig.h"
 
-#include "translation.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
@@ -43,25 +42,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-const char* keyNames[] = {
-    QT_TRANSLATE_NOOP("MuseScore", "G major, E minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "C♭ major, A♭ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "D major, B minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "G♭ major, E♭ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "A major, F♯ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "D♭ major, B♭ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "E major, C♯ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "A♭ major, F minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "B major, G♯ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "E♭ major, C minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "F♯ major, D♯ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "B♭ major, G minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "C♯ major, A♯ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "F major, D minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "C major, A minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "Open/Atonal")
-};
-
 //---------------------------------------------------------
 //   KeySig
 //---------------------------------------------------------
@@ -824,22 +804,7 @@ EngravingItem* KeySig::prevSegmentElement()
 
 String KeySig::accessibleInfo() const
 {
-    String keySigType;
-    if (isAtonal()) {
-        return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), mtrc("engraving", keyNames[15]));
-    } else if (isCustom()) {
-        return mtrc("engraving", "%1: Custom").arg(EngravingItem::accessibleInfo());
-    }
-
-    if (key() == Key::C) {
-        return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), mtrc("engraving", keyNames[14]));
-    }
-    int keyInt = static_cast<int>(key());
-    if (keyInt < 0) {
-        keySigType = mtrc("engraving", keyNames[(7 + keyInt) * 2 + 1]);
-    } else {
-        keySigType = mtrc("engraving", keyNames[(keyInt - 1) * 2]);
-    }
+    String keySigType = TConv::translatedUserName(key(), isAtonal(), isCustom());
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), keySigType);
 }
 }

@@ -114,7 +114,7 @@ private:
     ChordRest* addChordRest(const GPBeat* beats, const Context& ctx);
     void addOrnament(const GPNote* gpnote, Note* note);
     void addVibratoLeftHand(const GPNote* gpnote, Note* note);
-    void addVibratoByType(const Note* note, Vibrato::Type type);
+    void addVibratoByType(const Note* note, VibratoType type);
     void addTrill(const GPNote* gpnote, Note* note);
     void addHarmonic(const GPNote* gpnote, Note* note);
     void addFingering(const GPNote* gpnote, Note* note);

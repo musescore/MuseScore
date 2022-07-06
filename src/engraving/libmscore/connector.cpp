@@ -21,8 +21,11 @@
  */
 
 #include "connector.h"
+
 #include "rw/xml.h"
 #include "rw/writecontext.h"
+#include "types/typesconv.h"
+
 #include "engravingitem.h"
 #include "score.h"
 #include "engravingobject.h"
@@ -384,7 +387,7 @@ bool ConnectorInfoReader::read()
 {
     XmlReader& e = *_reader;
     const AsciiStringView name(e.asciiAttribute("type"));
-    _type = Factory::name2type(name);
+    _type = TConv::fromXml(name, ElementType::INVALID);
 
     e.context()->fillLocation(_currentLoc);
 

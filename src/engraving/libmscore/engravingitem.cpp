@@ -36,6 +36,7 @@
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
+#include "types/typesconv.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -1308,7 +1309,7 @@ ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset,
                 } else if (tag == "duration") {
                     *duration = e.readFraction();
                 } else {
-                    ElementType type = Factory::name2type(tag);
+                    ElementType type = TConv::fromXml(tag, ElementType::INVALID);
                     if (type == ElementType::INVALID) {
                         break;
                     }

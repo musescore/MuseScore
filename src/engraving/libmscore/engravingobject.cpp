@@ -25,9 +25,9 @@
 #include <iterator>
 #include <unordered_set>
 
-#include "translation.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "types/typesconv.h"
 
 #include "score.h"
 #include "undo.h"
@@ -766,12 +766,12 @@ void EngravingObject::styleChanged()
 
 const char* EngravingObject::typeName() const
 {
-    return Factory::name(type());
+    return TConv::toXml(type()).ascii();
 }
 
 String EngravingObject::typeUserName() const
 {
-    return mtrc("engraving", Factory::userName(type()));
+    return TConv::translatedUserName(type());
 }
 
 //---------------------------------------------------------

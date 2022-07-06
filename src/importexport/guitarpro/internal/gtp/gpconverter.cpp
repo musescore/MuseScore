@@ -59,23 +59,23 @@
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static Jump::Type jumpType(const String& typeString)
+static JumpType jumpType(const String& typeString)
 {
-    static std::map<String, Jump::Type> types {
-        { u"DaCapo", Jump::Type::DC },
-        { u"DaCapoAlFine", Jump::Type::DC_AL_FINE },
-        { u"DaCapoAlCoda", Jump::Type::DC_AL_CODA },
-        { u"DaCapoAlDoubleCoda", Jump::Type::DC_AL_DBLCODA },
-        { u"DaSegnoAlCoda", Jump::Type::DS_AL_CODA },
-        { u"DaSegnoAlDoubleCoda", Jump::Type::DS_AL_DBLCODA },
-        { u"DaSegnoAlFine", Jump::Type::DS_AL_FINE },
-        { u"DaSegnoSegno", Jump::Type::DSS },
-        { u"DaSegnoSegnoAlCoda", Jump::Type::DSS_AL_CODA },
-        { u"DaSegnoSegnoAlDoubleCoda", Jump::Type::DSS_AL_DBLCODA },
-        { u"DaSegnoSegnoAlFine", Jump::Type::DSS_AL_FINE },
-        { u"DaCoda", Jump::Type::DCODA },
-        { u"DaDoubleCoda", Jump::Type::DDBLCODA },
-        { u"DaCoda", Jump::Type::DCODA },
+    static std::map<String, JumpType> types {
+        { u"DaCapo", JumpType::DC },
+        { u"DaCapoAlFine", JumpType::DC_AL_FINE },
+        { u"DaCapoAlCoda", JumpType::DC_AL_CODA },
+        { u"DaCapoAlDoubleCoda", JumpType::DC_AL_DBLCODA },
+        { u"DaSegnoAlCoda", JumpType::DS_AL_CODA },
+        { u"DaSegnoAlDoubleCoda", JumpType::DS_AL_DBLCODA },
+        { u"DaSegnoAlFine", JumpType::DS_AL_FINE },
+        { u"DaSegnoSegno", JumpType::DSS },
+        { u"DaSegnoSegnoAlCoda", JumpType::DSS_AL_CODA },
+        { u"DaSegnoSegnoAlDoubleCoda", JumpType::DSS_AL_DBLCODA },
+        { u"DaSegnoSegnoAlFine", JumpType::DSS_AL_FINE },
+        { u"DaCoda", JumpType::DCODA },
+        { u"DaDoubleCoda", JumpType::DDBLCODA },
+        { u"DaCoda", JumpType::DCODA },
     };
 
     if (types.find(typeString) != types.end()) {
@@ -83,17 +83,17 @@ static Jump::Type jumpType(const String& typeString)
     }
 
     LOGE() << "wrong jump type";
-    return Jump::Type::USER;
+    return JumpType::USER;
 }
 
-static Marker::Type markerType(const String& typeString)
+static MarkerType markerType(const String& typeString)
 {
-    static std::map<String, Marker::Type> types {
-        { u"Segno", Marker::Type::SEGNO },
-        { u"SegnoSegno", Marker::Type::VARSEGNO },
-        { u"Coda", Marker::Type::CODA },
-        { u"DoubleCoda", Marker::Type::VARCODA },
-        { u"Fine", Marker::Type::FINE }
+    static std::map<String, MarkerType> types {
+        { u"Segno", MarkerType::SEGNO },
+        { u"SegnoSegno", MarkerType::VARSEGNO },
+        { u"Coda", MarkerType::CODA },
+        { u"DoubleCoda", MarkerType::VARCODA },
+        { u"Fine", MarkerType::FINE }
     };
 
     if (types.find(typeString) != types.end()) {
@@ -101,7 +101,7 @@ static Marker::Type markerType(const String& typeString)
     }
 
     LOGE() << "wrong direction marker type";
-    return Marker::Type::USER;
+    return MarkerType::USER;
 }
 
 static QString harmonicText(const GPBeat::HarmonicMarkType& type)
@@ -1499,15 +1499,15 @@ void GPConverter::addVibratoLeftHand(const GPNote* gpnote, Note* note)
     auto scoreVibratoType = [](GPNote::VibratoType gpType) {
         switch (gpType) {
         case GPNote::VibratoType::Slight:
-            return Vibrato::Type::GUITAR_VIBRATO;
+            return VibratoType::GUITAR_VIBRATO;
         case GPNote::VibratoType::Wide:
-            return Vibrato::Type::GUITAR_VIBRATO_WIDE;
+            return VibratoType::GUITAR_VIBRATO_WIDE;
         default:
-            return Vibrato::Type::GUITAR_VIBRATO;
+            return VibratoType::GUITAR_VIBRATO;
         }
     };
 
-    Vibrato::Type vibratoType = scoreVibratoType(gpnote->vibratoType());
+    VibratoType vibratoType = scoreVibratoType(gpnote->vibratoType());
     addVibratoByType(note, vibratoType);
 }
 
@@ -2334,7 +2334,7 @@ void GPConverter::addTuplet(const GPBeat* beat, ChordRest* cr)
     m_nextTupletInfo.duration += cr->actualTicks();
 }
 
-void GPConverter::addVibratoByType(const Note* note, Vibrato::Type type)
+void GPConverter::addVibratoByType(const Note* note, VibratoType type)
 {
     track_idx_t track = note->track();
     while (_vibratos.size() < track + 1) {
@@ -2393,9 +2393,9 @@ void GPConverter::addVibratoWTremBar(const GPBeat* beat, ChordRest* cr)
 
     auto scoreVibrato = [](GPBeat::VibratoWTremBar vr) {
         if (vr == GPBeat::VibratoWTremBar::Slight) {
-            return Vibrato::Type::VIBRATO_SAWTOOTH;
+            return VibratoType::VIBRATO_SAWTOOTH;
         } else {
-            return Vibrato::Type::VIBRATO_SAWTOOTH_WIDE;
+            return VibratoType::VIBRATO_SAWTOOTH_WIDE;
         }
     };
 

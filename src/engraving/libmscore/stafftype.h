@@ -177,8 +177,6 @@ enum class StaffTypes : signed char {
     TAB_DEFAULT = StaffTypes::TAB_6COMMON,
 };
 
-static const int STAFF_GROUP_NAME_MAX_LENGTH   = 32;
-
 //---------------------------------------------------------
 //   StaffType
 //---------------------------------------------------------
@@ -270,8 +268,6 @@ class StaffType
     void  setFretMetrics() const;
 
     static bool readConfigFile(const String& fileName);
-    static const char groupNames[STAFF_GROUP_MAX][STAFF_GROUP_NAME_MAX_LENGTH];           // used in UI
-    static const String fileGroupNames[STAFF_GROUP_MAX];                                 // used in .msc? files
 
 public:
     StaffType();

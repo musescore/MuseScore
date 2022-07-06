@@ -1371,14 +1371,14 @@ static void readMarker(Marker* m, XmlReader& e, const ReadContext& ctx)
 {
     TextReaderContext206 tctx(e);
     readTextPropertyStyle206(tctx.tag(), e, m, m);
-    Marker::Type mt = Marker::Type::SEGNO;
+    MarkerType mt = MarkerType::SEGNO;
 
     while (tctx.reader().readNextStartElement()) {
         const AsciiStringView tag(tctx.reader().name());
         if (tag == "label") {
-            String s(tctx.reader().readText());
-            m->setLabel(s);
-            mt = m->markerType(s);
+            AsciiStringView s(tctx.reader().readAsciiText());
+            m->setLabel(String::fromAscii(s.ascii()));
+            mt = TConv::fromXml(s, MarkerType::USER);
         } else if (!readTextProperties206(tctx.reader(), ctx, m)) {
             tctx.reader().unknown();
         }
@@ -2118,7 +2118,7 @@ void Read206::readTrill206(XmlReader& e, Trill* t)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            t->setTrillType(e.readText());
+            t->setTrillType(TConv::fromXml(e.readAsciiText(), TrillType::TRILL_LINE));
         } else if (tag == "Accidental") {
             Accidental* _accidental = Factory::createAccidental(t);
             readAccidental206(_accidental, e);

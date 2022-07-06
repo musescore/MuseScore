@@ -2869,22 +2869,22 @@ static Jump* findJump(const QString& repeat, Score* score)
     Jump* jp = 0;
     if (repeat == "daCapo") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DC);
+        jp->setJumpType(JumpType::DC);
     } else if (repeat == "daCapoAlCoda") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DC_AL_CODA);
+        jp->setJumpType(JumpType::DC_AL_CODA);
     } else if (repeat == "daCapoAlFine") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DC_AL_FINE);
+        jp->setJumpType(JumpType::DC_AL_FINE);
     } else if (repeat == "dalSegno") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DS);
+        jp->setJumpType(JumpType::DS);
     } else if (repeat == "dalSegnoAlCoda") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DS_AL_CODA);
+        jp->setJumpType(JumpType::DS_AL_CODA);
     } else if (repeat == "dalSegnoAlFine") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DS_AL_FINE);
+        jp->setJumpType(JumpType::DS_AL_FINE);
     }
     return jp;
 }
@@ -2905,16 +2905,16 @@ static Marker* findMarker(const QString& repeat, Score* score)
         // note: Marker::read() also contains code to set text style based on type
         // avoid duplicated code
         // apparently this MUST be after setTextStyle
-        m->setMarkerType(Marker::Type::SEGNO);
+        m->setMarkerType(MarkerType::SEGNO);
     } else if (repeat == "coda") {
         m = Factory::createMarker(score->dummy());
-        m->setMarkerType(Marker::Type::CODA);
+        m->setMarkerType(MarkerType::CODA);
     } else if (repeat == "fine") {
         m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
-        m->setMarkerType(Marker::Type::FINE);
+        m->setMarkerType(MarkerType::FINE);
     } else if (repeat == "toCoda") {
         m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
-        m->setMarkerType(Marker::Type::TOCODA);
+        m->setMarkerType(MarkerType::TOCODA);
     }
     return m;
 }

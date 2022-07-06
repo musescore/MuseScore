@@ -55,7 +55,7 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
 
     m_note = dynamic_cast<mu::engraving::Note*>(contextItem(globalContext()->currentNotation()->interaction()));
 
-    notehead->setText(TConv::toUserName(m_note->headGroup()));
+    notehead->setText(TConv::translatedUserName(m_note->headGroup()));
     sameNotehead->setAccessibleName(sameNotehead->text() + notehead->text());
 
     pitch->setText(m_note->tpcUserName());
@@ -67,7 +67,7 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     type->setText(m_note->noteTypeUserName());
     sameType->setAccessibleName(sameType->text() + type->text());
 
-    durationType->setText(tr("%1 Note").arg(TConv::toUserName(m_note->chord()->durationType().type())));
+    durationType->setText(tr("%1 Note").arg(TConv::translatedUserName(m_note->chord()->durationType().type())));
     sameDurationType->setAccessibleName(sameDurationType->text() + durationType->text());
 
     durationTicks->setText(m_note->chord()->durationUserName());

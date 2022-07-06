@@ -33,11 +33,11 @@ NICE-TO-HAVE TODO:
 
 #include <cmath>
 
-#include "translation.h"
 #include "draw/fontmetrics.h"
 #include "draw/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -68,11 +68,6 @@ static const ElementStyle glissandoElementStyle {
 
 static constexpr double GLISS_PALETTE_WIDTH = 4.0;
 static constexpr double GLISS_PALETTE_HEIGHT = 4.0;
-
-const std::array<const char*, 2> Glissando::glissandoTypeNames = {
-    QT_TRANSLATE_NOOP("Palette", "Straight glissando"),
-    QT_TRANSLATE_NOOP("Palette", "Wavy glissando")
-};
 
 //=========================================================
 //   GlissandoSegment
@@ -224,7 +219,7 @@ Glissando::Glissando(const Glissando& g)
 
 String Glissando::glissandoTypeName() const
 {
-    return mtrc("engraving", glissandoTypeNames[int(glissandoType())]);
+    return TConv::translatedUserName(glissandoType());
 }
 
 //---------------------------------------------------------
@@ -478,7 +473,7 @@ void Glissando::read(XmlReader& e)
             _showText = true;
             readProperty(e, Pid::GLISS_TEXT);
         } else if (tag == "subtype") {
-            _glissandoType = GlissandoType(e.readInt());
+            _glissandoType = TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT);
         } else if (tag == "glissandoStyle") {
             readProperty(e, Pid::GLISS_STYLE);
         } else if (tag == "easeInSpin") {

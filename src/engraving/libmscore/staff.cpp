@@ -489,7 +489,7 @@ Fraction Staff::currentClefTick(const Fraction& tick) const
 
 String Staff::staffName() const
 {
-    return TConv::toUserName(clefType(Fraction())._transposingClef);
+    return TConv::translatedUserName(clefType(Fraction())._transposingClef);
 }
 
 #ifndef NDEBUG

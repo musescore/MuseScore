@@ -603,9 +603,9 @@ String propertyToString(Pid id, const PropertyValue& value, bool mscx)
     case Pid::TREMOLO_TYPE:
         return String::fromAscii(TConv::toXml(TremoloType(value.toInt())).ascii());
     case Pid::TRILL_TYPE:
-        return Trill::type2name(Trill::Type(value.toInt()));
+        return String::fromAscii(TConv::toXml(TrillType(value.toInt())).ascii());
     case Pid::VIBRATO_TYPE:
-        return Vibrato::type2name(Vibrato::Type(value.toInt()));
+        return String::fromAscii(TConv::toXml(VibratoType(value.toInt())).ascii());
     default:
         break;
     }

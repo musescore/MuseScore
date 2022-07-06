@@ -70,8 +70,6 @@ class Glissando final : public SLine
     M_PROPERTY(int, easeIn, setEaseIn)
     M_PROPERTY(int, easeOut, setEaseOut)
 
-    static const std::array<const char*, 2> glissandoTypeNames;
-
 public:
     Glissando(EngravingItem* parent);
     Glissando(const Glissando&);
