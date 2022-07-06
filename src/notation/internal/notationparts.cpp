@@ -499,7 +499,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     notifyAboutStaffChanged(staff);
 }
 
-void NotationParts::insertStaff(Staff* staff, const ID& destinationPartId, size_t index)
+void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     TRACEFUNC;
 
@@ -510,7 +510,7 @@ void NotationParts::insertStaff(Staff* staff, const ID& destinationPartId, size_
 
     startEdit();
 
-    doInsertStaff(staff, destinationPart, index);
+    doAppendStaff(staff, destinationPart);
     updateTracks();
 
     apply();
@@ -530,7 +530,7 @@ void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, con
 
     startEdit();
 
-    doInsertStaff(staff, destinationPart, destinationPart->nstaves());
+    doAppendStaff(staff, destinationPart);
 
     ///! NOTE: need to unlink before linking
     staff->setLinks(nullptr);
@@ -731,8 +731,9 @@ void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
     }
 }
 
-void NotationParts::doInsertStaff(Staff* staff, Part* destinationPart, size_t staffLocalIndex)
+void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
 {
+    staff_idx_t staffLocalIndex = destinationPart->nstaves();
     mu::engraving::KeyList keyList = score()->keyList();
 
     staff->setScore(score());
@@ -740,7 +741,7 @@ void NotationParts::doInsertStaff(Staff* staff, Part* destinationPart, size_t st
 
     insertStaff(staff, staffLocalIndex);
 
-    track_idx_t staffGlobalIndex = staff->idx();
+    staff_idx_t staffGlobalIndex = staff->idx();
     score()->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
 
     score()->updateBracesAndBarlines(destinationPart, staffLocalIndex);
