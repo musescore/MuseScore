@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15 as Controls
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
@@ -32,8 +33,14 @@ StyledDialogView {
     contentHeight: 100
     margins: 12
 
+    modal: true
+
     ExportProgressModel {
         id: model
+
+        onExportFinished: {
+            root.close()
+        }
     }
 
     Component.onCompleted: {
@@ -52,11 +59,23 @@ StyledDialogView {
             text: qsTrc("project", "Exporting…")
         }
 
+        Controls.ProgressBar {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 30
+
+            indeterminate: true
+        }
+
+        /* TODO
         ProgressBar {
             Layout.fillWidth: true
             Layout.preferredHeight: 30
 
+            from: 0
+            to: 100
             value: model.progress
+
+            progressStatus: model.progress + "%"
         }
 
         FlatButton {
@@ -68,6 +87,6 @@ StyledDialogView {
                 model.cancel()
                 root.close()
             }
-        }
+        }*/
     }
 }
