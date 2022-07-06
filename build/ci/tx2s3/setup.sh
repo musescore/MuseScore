@@ -18,15 +18,13 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-TRANSIFEX_USER=""
-TRANSIFEX_PASSWORD=""
+TRANSIFEX_API_TOKEN=""
 S3_KEY=""
 S3_SECRET=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --tx_user) TRANSIFEX_USER="$2"; shift ;;
-        --tx_password) TRANSIFEX_PASSWORD="$2"; shift ;;
+        --tx_token) TRANSIFEX_API_TOKEN="$2"; shift ;;
         --s3_key) S3_KEY="$2"; shift ;;
         --s3_secret) S3_SECRET="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
@@ -34,36 +32,48 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-if [ -z "$TRANSIFEX_USER" ]; then echo "error: not set TRANSIFEX_USER"; exit 1; fi
-if [ -z "$TRANSIFEX_PASSWORD" ]; then echo "error: not set TRANSIFEX_PASSWORD"; exit 1; fi
+if [ -z "$TRANSIFEX_API_TOKEN" ]; then echo "error: not set TRANSIFEX_API_TOKEN"; exit 1; fi
 if [ -z "$S3_KEY" ]; then echo "error: not set S3_KEY"; exit 1; fi
 if [ -z "$S3_SECRET" ]; then echo "error: not set S3_SECRET"; exit 1; fi
 
-ENV_FILE=./../musescore_tx2s3_environment.sh
-rm -f ${ENV_FILE}
+BUILD_TOOLS=$HOME/build_tools
+mkdir -p $BUILD_TOOLS
 
-echo "Install Qt (lrelease)"
-qt_version="5151"
-QT_PATH="$HOME/Qt/${qt_version}"
-mkdir -p "${QT_PATH}"
-wget -q --show-progress -O qt5.zip "https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
-7z x -y qt5.zip -o"${QT_PATH}"
+ENV_FILE=$BUILD_TOOLS/tx2s3_environment.sh
+rm -f $ENV_FILE
 
-export PATH=${QT_PATH}/bin:$PATH
-echo export PATH="${QT_PATH}/bin:\${PATH}" >> ${ENV_FILE}
+echo "echo 'Setup environment for run lupdate'" >> ${ENV_FILE}
+
+##########################################################################
+# GET QT
+##########################################################################
+qt_version="5152"
+qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
+if [[ ! -d "${qt_dir}" ]]; then
+  mkdir -p "${qt_dir}"
+  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
+  wget -q --show-progress -O qt5.7z "${qt_url}"
+  7z x -y qt5.7z -o"${qt_dir}"
+fi
+
+export PATH=${qt_dir}/bin:$PATH
+echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
 
 lrelease -version
 
 echo "Install transifex-client" 
-apt install python3-setuptools
-pip3 install transifex-client
+CUR_DIR=$(pwd)
+mkdir -p $BUILD_TOOLS/tx
+cd $BUILD_TOOLS/tx
+curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
+cd $CUR_DIR
+ls $BUILD_TOOLS/tx/
+export PATH=$BUILD_TOOLS/tx:$PATH
+echo export PATH="$BUILD_TOOLS/tx:\${PATH}" >> ${ENV_FILE}
 
 cat >~/.transifexrc <<EOL
 [https://www.transifex.com]
-hostname = https://www.transifex.com
-password = ${TRANSIFEX_PASSWORD}
-token =
-username = ${TRANSIFEX_USER}
+token = $TRANSIFEX_API_TOKEN
 EOL
 
 echo "tx version: $(tx --version)"

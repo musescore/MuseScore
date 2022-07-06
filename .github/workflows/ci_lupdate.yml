@@ -1,9 +1,6 @@
 name: CI_Run_lupdate_to_tx
 
-on:
-  # pull_request:
-  #   branches:
-  #   - 3.x  
+on: 
   workflow_dispatch:
     inputs:
       publish:
@@ -12,7 +9,7 @@ on:
         default: 'off'
 jobs:
   lupdate:
-    runs-on: macos-10.15
+    runs-on: ubuntu-18.04
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
@@ -21,14 +18,10 @@ jobs:
         DO_PUBLISH='false'
         if [ "${{ github.event.inputs.publish }}" == "on" ]; then 
           DO_PUBLISH='true'
-          if [ -z "${{ secrets.TRANSIFEX_USER }}" ]; then 
-            echo "warning: not set TRANSIFEX_USER, publish disabled" 
+          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
+            echo "warning: not set TRANSIFEX_API_TOKEN, publish disabled" 
             DO_PUBLISH='false'
-          fi  
-          if [ -z "${{ secrets.TRANSIFEX_PASSWORD }}" ]; then 
-            echo "warning: not set TRANSIFEX_PASSWORD, publish disabled" 
-            DO_PUBLISH='false'
-          fi  
+          fi   
         fi
 
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
@@ -43,7 +36,7 @@ jobs:
     - name: Publish to Transifex
       if: env.DO_PUBLISH == 'true'
       run: |
-        sudo bash ./build/ci/lupdate/publish_to_tx.sh -u ${{ secrets.TRANSIFEX_USER }} -p ${{ secrets.TRANSIFEX_PASSWORD }}
+        sudo bash ./build/ci/lupdate/publish_to_tx.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }}
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:
