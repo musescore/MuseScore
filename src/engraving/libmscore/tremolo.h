@@ -57,7 +57,7 @@ class Tremolo final : public EngravingItem
     Tremolo(Chord* parent);
     Tremolo(const Tremolo&);
 
-    mu::PainterPath basePath() const;
+    mu::PainterPath basePath(double stretch = 0) const;
     void computeShape();
     void layoutOneNoteTremolo(double x, double y, double h, double spatium);
     void layoutTwoNotesTremolo(double x, double y, double h, double spatium);
