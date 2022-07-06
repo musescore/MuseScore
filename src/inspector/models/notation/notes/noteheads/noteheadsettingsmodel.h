@@ -35,6 +35,7 @@ class NoteheadSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * headDirection READ headDirection CONSTANT)
     Q_PROPERTY(PropertyItem * headGroup READ headGroup CONSTANT)
     Q_PROPERTY(PropertyItem * headType READ headType CONSTANT)
+    Q_PROPERTY(PropertyItem * headSystem READ headSystem CONSTANT)
     Q_PROPERTY(PropertyItem * dotPosition READ dotPosition CONSTANT)
     Q_PROPERTY(PropertyItem * horizontalOffset READ horizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
@@ -48,9 +49,12 @@ public:
     PropertyItem* headDirection() const;
     PropertyItem* headGroup() const;
     PropertyItem* headType() const;
+    PropertyItem* headSystem() const;
     PropertyItem* dotPosition() const;
     PropertyItem* horizontalOffset() const;
     PropertyItem* verticalOffset() const;
+
+    Q_INVOKABLE QVariantList possibleHeadSystemTypes() const;
 
 private:
     void createProperties() override;
@@ -64,6 +68,7 @@ private:
     PropertyItem* m_headDirection = nullptr;
     PropertyItem* m_headGroup = nullptr;
     PropertyItem* m_headType = nullptr;
+    PropertyItem* m_headSystem = nullptr;
     PropertyItem* m_dotPosition = nullptr;
     PropertyItem* m_horizontalOffset = nullptr;
     PropertyItem* m_verticalOffset = nullptr;
