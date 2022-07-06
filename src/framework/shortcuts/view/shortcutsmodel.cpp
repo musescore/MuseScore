@@ -77,6 +77,11 @@ const QVariant ShortcutsModel::SectionName(const Shortcut& shortcut) const
     return this->action(shortcut.action).getCategory();
 }
 
+QStringList ShortcutsModel::getSections() const
+{
+    return UiAction::categories;
+}
+
 const UiAction& ShortcutsModel::action(const std::string& actionCode) const
 {
     return uiactionsRegister()->action(actionCode);

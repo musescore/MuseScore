@@ -74,6 +74,7 @@ public:
     Q_INVOKABLE void resetToDefaultSelectedShortcuts();
 
     Q_INVOKABLE QVariantList shortcuts() const;
+    Q_INVOKABLE QStringList getSections() const;
 
 public slots:
     void setSelection(const QItemSelection& selection);

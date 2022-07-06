@@ -31,6 +31,7 @@ RowLayout {
     id: root
 
     property alias canResetCurrentShortcut: resetButton.enabled
+    property alias toggleText: toggleVisible.text
 
     property int buttonMinWidth: 0
 

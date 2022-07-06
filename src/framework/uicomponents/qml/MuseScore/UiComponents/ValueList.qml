@@ -34,7 +34,7 @@ Item {
     property alias model: sortFilterProxyModel.sourceModel
 
     property bool readOnly: false
-    property bool categorized: false
+    property int categorized: -1
 
     property string keyRoleName: "key"
     //: As in a "key/value" pair: for example, the "key" could be
@@ -51,12 +51,36 @@ Item {
     property alias hasSelection: selectionModel.hasSelection
     property alias keySorterRole: keySorter.roleName
     property alias valueSorterRole: valueSorter.roleName
+
+    property var allSections : []
     readonly property var selection: sortFilterProxyModel.mapSelectionToSource(selectionModel.selection)
 
     property NavigationSection navigationSection: null
     property int navigationOrderStart: 0
 
     signal handleItem(var index, var item)
+
+    function toggleExpandCollapse() {
+        if (categorized == -1) {
+            return
+        }
+
+        categorized = !categorized
+
+        if(!categorized) {
+            // 0: Collapse
+            for(var i = 0; i < allSections.length; i++) {
+                view.collapsed[allSections[i]] = true
+            }
+
+        } else {
+            for(var i = 0; i < allSections.length; i++) {
+                delete view.collapsed[allSections[i]]
+            }
+        }
+
+        view.collapsedChanged()
+    }
 
     QtObject {
         id: prv
@@ -192,17 +216,19 @@ Item {
         }
 
         function isSectionExpanded(section){
-            console.log("Checking " + section)
+            console.log("Checking " + section +  ": " + (section in collapsed))
             return !(section in collapsed)
         }
 
         function showSection(section){
             delete collapsed[section]
+            root.categorized = 2
             collapsedChanged()
         }
 
         function hideSection(section){
             collapsed[section] = true
+            root.categorized = 2
             collapsedChanged()
         }
 
@@ -244,7 +270,7 @@ Item {
 
             property var modelIndex: sortFilterProxyModel.index(model.index, 0)
 
-            height: root.categorized && !view.isSectionExpanded(model["ownerSection"]) ? 0 : 34
+            height: view.isSectionExpanded(model["ownerSection"]) ? 34 : 0
 
             Behavior on height {
                 NumberAnimation {duration : 200 }

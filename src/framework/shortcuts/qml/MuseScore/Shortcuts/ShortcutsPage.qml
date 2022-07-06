@@ -54,6 +54,8 @@ Item {
     Component.onCompleted: {
         shortcutsModel.load()
 
+        shortcutsView.allSections = shortcutsModel.getSections()
+        console.log("All sections are: " + shortcutsView.allSections)
         topPanel.setSearchText(root.shortcutCodeKey)
     }
 
@@ -125,7 +127,7 @@ Item {
         ShortcutsBottomPanel {
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
-
+            toggleText: shortcutsView.categorized == 0 ? qsTrc("shortcuts", "Expand All") : qsTrc("shortcuts", "Collapse All")
             canResetCurrentShortcut: shortcutsView.hasSelection
 
             buttonMinWidth: prv.buttonMinWidth
@@ -147,7 +149,7 @@ Item {
             }
 
             onToggleVisibility: {
-                shortcutsView.categorized = !shortcutsView.categorized
+                shortcutsView.toggleExpandCollapse()
             }
         }
     }

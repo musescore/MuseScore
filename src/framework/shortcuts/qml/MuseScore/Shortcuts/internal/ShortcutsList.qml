@@ -33,7 +33,7 @@ ValueList {
     valueTitle: qsTrc("shortcuts", "shortcut")
     iconRoleName: "icon"
     readOnly: true
-    categorized: true
+    categorized: 1 // 0: Collapsed | 1: Expanded | 2: Custom
 
     keySorterRole: "sectionkey"
     valueSorterRole: "sectionvalue"

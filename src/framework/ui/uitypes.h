@@ -37,6 +37,9 @@
 #include "types/translatablestring.h"
 #include "types/val.h"
 #include "view/iconcodes.h"
+#include "shortcuts/shortcutstypes.h"
+#include "context/shortcutcontext.h"
+#include "log.h"
 
 namespace mu::ui {
 using ThemeCode = std::string;
@@ -205,13 +208,19 @@ enum class ActionCategory {
     Chordsymbolsfiguredbass,
     Measures,
     Musicalsymbols,
-    Selectingeditiing,
     Dialogspanels,
-    Noteinput
+    Noteinput,
+    Plugins
 };
 
 struct UiAction
 {
+    inline static QStringList categories
+        = { "Undefined", "Internal", "Tablature", "Viewing & Navigation", "Playback", "Layout & Formatting", "Selecting & Editing",
+            "Application", "Accessibility", "File", "Selection & Navigation",
+            "Text & Lyrics", "Chord symbols & figured bass", "Measures", "Musical Symbols", "Dialogs & Panels",
+            "Note Input", "Plugins" };
+
     actions::ActionCode code;
     UiContext uiCtx = UiCtxAny;
     std::string scCtx = "any";
@@ -247,46 +256,15 @@ struct UiAction
         return !code.empty();
     }
 
-    QString getCategory() const {
-        switch (category)
-        {
-        case ActionCategory::Layoutformatting:
-            return "Layout & formatting";
-        case ActionCategory::Chordsymbolsfiguredbass:
-            return "Chord symbols & figured bass";
-        case ActionCategory::Selectingeditiing:
-            return "Selecting & editiing";
-        case ActionCategory::Accessibility:
-            return "Accessibility";
-        case ActionCategory::File:
-            return "File";
-        case ActionCategory::Playback:
-            return "Playback";
-        case ActionCategory::Musicalsymbols:
-            return "Musical symbols";
-        case ActionCategory::Application:
-            return "Application";
-        case ActionCategory::Textlyrics:
-            return "Text & lyrics";
-        case ActionCategory::Viewingnavigation:
-            return "Viewing & navigation";
-        case ActionCategory::Selectingediting:
-            return "Selecting & editing";
-        case ActionCategory::Measures:
-            return "Measures";
-        case ActionCategory::Noteinput:
-            return "Note input";
-        case ActionCategory::Selectionnavigation:
-            return "Selection & navigation";
-        case ActionCategory::Dialogspanels:
-            return "Dialogs & panels";
-        case ActionCategory::Tablature:
-            return "Tablature";
-        default:
-            return "Default";
-        };
+    QString getCategory() const
+    {
+        //LOGD() << "Categories: " << categories.length() << "| Requested Category: " << (int)category << " by: " << code;
 
-        return "Not possible";
+        if ((int)category + 1 >= 0 && (int)category + 1 < categories.length()) {
+            return categories[(int)category + 1];
+        }
+
+        return "NULL";
     }
 
     bool operator==(const UiAction& other) const
