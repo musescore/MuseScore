@@ -33,6 +33,7 @@
 #include "internal/application.h"
 #include "internal/interactive.h"
 #include "internal/invoker.h"
+#include "internal/cryptographichash.h"
 
 #include "runtime.h"
 #include "async/processevents.h"
@@ -64,6 +65,7 @@ void GlobalModule::registerExports()
     ioc()->registerExport<IGlobalConfiguration>(moduleName(), s_globalConf);
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
     ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
+    ioc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
 }
 
 void GlobalModule::onInit(const IApplication::RunMode& mode)
