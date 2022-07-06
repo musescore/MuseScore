@@ -244,8 +244,10 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
         auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
         hairpin->setHairpinType(pair.first);
         hairpin->setLen(w);
-        qreal mag = (pair.first == HairpinType::CRESC_LINE || pair.first == HairpinType::DECRESC_LINE) ? 0.9 : 1;
-        sp->appendElement(hairpin, pair.second, mag);
+        qreal mag = (pair.first == HairpinType::CRESC_LINE || pair.first == HairpinType::DECRESC_LINE) ? 1 : 0.9;
+        const QPointF offset = (pair.first == HairpinType::CRESC_LINE || pair.first == HairpinType::DECRESC_LINE)
+                               ? QPointF(1, 0.25) : QPointF(0, 0);
+        sp->appendElement(hairpin, pair.second, mag, offset);
     }
 
     if (!defaultPalette) {

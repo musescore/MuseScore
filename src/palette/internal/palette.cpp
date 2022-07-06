@@ -101,14 +101,15 @@ Palette::Type Palette::contentType() const
     return t;
 }
 
-PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QString& name, qreal mag, const QString& tag)
+PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QString& name, qreal mag, const QPointF& offset,
+                                      const QString& tag)
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
         element->layout();
     }
 
-    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, tag, this);
+    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, offset, tag, this);
 
     auto cellHandler = cellHandlerByPaletteType(m_type);
     if (cellHandler) {
@@ -119,14 +120,14 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QStr
     return cell;
 }
 
-PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QString& tag)
+PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF& offset, const QString& tag)
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
         element->layout();
     }
 
-    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, tag, this);
+    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, offset, tag, this);
 
     auto cellHandler = cellHandlerByPaletteType(m_type);
     if (cellHandler) {

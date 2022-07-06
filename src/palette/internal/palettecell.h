@@ -70,7 +70,8 @@ class PaletteCell : public QObject
 
 public:
     explicit PaletteCell(QObject* parent = nullptr);
-    PaletteCell(mu::engraving::ElementPtr e, const QString& _name, qreal _mag = 1.0, const QString& tag = "", QObject* parent = nullptr);
+    PaletteCell(mu::engraving::ElementPtr e, const QString& _name, qreal _mag = 1.0,
+                const QPointF& offset = QPointF(), const QString& tag = "", QObject* parent = nullptr);
 
     static QAccessibleInterface* accessibleInterface(QObject* object);
 
