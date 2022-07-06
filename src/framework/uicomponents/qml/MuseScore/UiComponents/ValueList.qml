@@ -60,13 +60,11 @@ Item {
 
     signal handleItem(var index, var item)
 
-    function toggleExpandCollapse() {
-        if (categorized == -1) {
-            return
-        }
+    Component.onCompleted: {
+        performExpandCollapse()
+    }
 
-        categorized = !categorized
-
+    function performExpandCollapse() {
         if(!categorized) {
             // 0: Collapse
             for(var i = 0; i < allSections.length; i++) {
@@ -80,6 +78,15 @@ Item {
         }
 
         view.collapsedChanged()
+    }
+
+    function toggleExpandCollapse() {
+        if (categorized == -1) {
+            return
+        }
+
+        categorized = !categorized
+        performExpandCollapse()
     }
 
     QtObject {
