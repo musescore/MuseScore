@@ -279,9 +279,6 @@
       </item>
      </widget>
      <widget class="QStackedWidget" name="pageStack">
-      <property name="currentIndex">
-       <number>26</number>
-      </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
         <property name="spacing">
@@ -318,8 +315,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>675</width>
-                <height>570</height>
+                <width>673</width>
+                <height>638</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -902,8 +899,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>659</width>
-                <height>630</height>
+                <width>673</width>
+                <height>674</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2216,8 +2213,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>717</width>
-             <height>362</height>
+             <width>737</width>
+             <height>674</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3849,8 +3846,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>381</width>
-                <height>768</height>
+                <width>673</width>
+                <height>882</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -5877,8 +5874,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>556</width>
-                <height>496</height>
+                <width>673</width>
+                <height>638</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -9635,8 +9632,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>595</width>
-             <height>420</height>
+             <width>703</width>
+             <height>674</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -10931,8 +10928,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>613</width>
-                <height>551</height>
+                <width>673</width>
+                <height>638</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -11852,8 +11849,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>597</width>
-                <height>479</height>
+                <width>671</width>
+                <height>636</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -13191,18 +13188,26 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetVoltaLineWidth</tabstop>
   <tabstop>voltaLineStyle</tabstop>
   <tabstop>resetVoltaLineStyle</tabstop>
+  <tabstop>voltaLineStyleDashSize</tabstop>
+  <tabstop>resetVoltaLineStyleDashSize</tabstop>
+  <tabstop>voltaLineStyleGapSize</tabstop>
+  <tabstop>resetVoltaLineStyleGapSize</tabstop>
   <tabstop>ottavaNumbersOnly</tabstop>
   <tabstop>resetOttavaNumbersOnly</tabstop>
   <tabstop>resetOttavaPosAbove</tabstop>
+  <tabstop>resetOttavaPosBelow</tabstop>
   <tabstop>ottavaHookAbove</tabstop>
   <tabstop>resetOttavaHookAbove</tabstop>
-  <tabstop>resetOttavaPosBelow</tabstop>
   <tabstop>ottavaHookBelow</tabstop>
   <tabstop>resetOttavaHookBelow</tabstop>
   <tabstop>ottavaLineWidth</tabstop>
   <tabstop>resetOttavaLineWidth</tabstop>
   <tabstop>ottavaLineStyle</tabstop>
   <tabstop>resetOttavaLineStyle</tabstop>
+  <tabstop>ottavaLineStyleDashSize</tabstop>
+  <tabstop>resetOttavaLineStyleDashSize</tabstop>
+  <tabstop>ottavaLineStyleGapSize</tabstop>
+  <tabstop>resetOttavaLineStyleGapSize</tabstop>
   <tabstop>pedalLinePlacement</tabstop>
   <tabstop>resetPedalLinePlacement</tabstop>
   <tabstop>resetPedalLinePosAbove</tabstop>
@@ -13211,6 +13216,10 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetPedalLineWidth</tabstop>
   <tabstop>pedalLineStyle</tabstop>
   <tabstop>resetPedalLineStyle</tabstop>
+  <tabstop>pedalLineStyleDashSize</tabstop>
+  <tabstop>resetPedalLineStyleDashSize</tabstop>
+  <tabstop>pedalLineStyleGapSize</tabstop>
+  <tabstop>resetPedalLineStyleGapSize</tabstop>
   <tabstop>trillLinePlacement</tabstop>
   <tabstop>resetTrillLinePlacement</tabstop>
   <tabstop>resetTrillLinePosAbove</tabstop>
@@ -13231,6 +13240,8 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetSystemTextLinePlacement</tabstop>
   <tabstop>resetSystemTextLinePosAbove</tabstop>
   <tabstop>resetSystemTextLinePosBelow</tabstop>
+  <tabstop>articMinVerticalDist</tabstop>
+  <tabstop>resetArticMinVerticalDist</tabstop>
   <tabstop>articNoteHeadDist</tabstop>
   <tabstop>resetArticNoteHeadDist</tabstop>
   <tabstop>articStemDist</tabstop>
@@ -13355,6 +13366,36 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetMaxFretShiftAbove</tabstop>
   <tabstop>maxFretShiftBelow</tabstop>
   <tabstop>resetMaxFretShiftBelow</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>slurShowTabCommon</tabstop>
+  <tabstop>slurShowTabSimple</tabstop>
+  <tabstop>fermataShowTabCommon</tabstop>
+  <tabstop>fermataShowTabSimple</tabstop>
+  <tabstop>dynamicsShowTabCommon</tabstop>
+  <tabstop>dynamicsShowTabSimple</tabstop>
+  <tabstop>hairpinShowTabCommon</tabstop>
+  <tabstop>hairpinShowTabSimple</tabstop>
+  <tabstop>accentShowTabCommon</tabstop>
+  <tabstop>accentShowTabSimple</tabstop>
+  <tabstop>staccatoShowTabCommon</tabstop>
+  <tabstop>staccatoShowTabSimple</tabstop>
+  <tabstop>harmonicMarkShowTabCommon</tabstop>
+  <tabstop>harmonicMarkShowTabSimple</tabstop>
+  <tabstop>letRingShowTabCommon</tabstop>
+  <tabstop>letRingShowTabSimple</tabstop>
+  <tabstop>palmMuteShowTabCommon</tabstop>
+  <tabstop>palmMuteShowTabSimple</tabstop>
+  <tabstop>rasgueadoShowTabCommon</tabstop>
+  <tabstop>rasgueadoShowTabSimple</tabstop>
+  <tabstop>mordentShowTabCommon</tabstop>
+  <tabstop>mordentShowTabSimple</tabstop>
+  <tabstop>turnShowTabCommon</tabstop>
+  <tabstop>turnShowTabSimple</tabstop>
+  <tabstop>wahShowTabCommon</tabstop>
+  <tabstop>wahShowTabSimple</tabstop>
+  <tabstop>golpeShowTabCommon</tabstop>
+  <tabstop>golpeShowTabSimple</tabstop>
+  <tabstop>resetTabStylesButton</tabstop>
   <tabstop>textStyles</tabstop>
   <tabstop>styleName</tabstop>
   <tabstop>resetTextStyleName</tabstop>
