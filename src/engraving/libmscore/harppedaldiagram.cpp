@@ -67,6 +67,7 @@ void HarpPedalDiagram::setPedalState(std::vector<PedalPosition> state)
 void HarpPedalDiagram::setIsDiagram(bool diagram)
 {
     _isDiagram = diagram;
+    setTextStyleType(TextStyleType::HARP_PEDAL_TEXT_DIAGRAM);
 }
 
 void HarpPedalDiagram::setPedal(HarpString harpString, PedalPosition pedal)

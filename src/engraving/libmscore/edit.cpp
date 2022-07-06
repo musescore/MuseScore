@@ -824,7 +824,8 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         undoAddElement(textBox);
         break;
     }
-    case TextStyleType::HARP_PEDAL_DIAGRAM: {
+    case TextStyleType::HARP_PEDAL_DIAGRAM:
+    case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM: {
         ChordRest* chordRest = getSelectedChordRest();
         if (!chordRest) {
             break;

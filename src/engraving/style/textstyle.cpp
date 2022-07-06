@@ -235,6 +235,23 @@ const TextStyle harpPedalDiagramTextStyle { {
     { Sid::harpPedalDiagramFrameBgColor,           Pid::FRAME_BG_COLOR },
 } };
 
+const TextStyle harpPedalTextDiagramTextStyle { {
+    { Sid::harpPedalTextDiagramFontFace,               Pid::FONT_FACE },
+    { Sid::harpPedalTextDiagramFontSize,               Pid::FONT_SIZE },
+    { Sid::harpPedalTextDiagramLineSpacing,            Pid::TEXT_LINE_SPACING },
+    { Sid::harpPedalTextDiagramFontSpatiumDependent,   Pid::SIZE_SPATIUM_DEPENDENT },
+    { Sid::harpPedalTextDiagramFontStyle,              Pid::FONT_STYLE },
+    { Sid::harpPedalTextDiagramColor,                  Pid::COLOR },
+    { Sid::harpPedalTextDiagramAlign,                  Pid::ALIGN },
+    { Sid::harpPedalTextDiagramOffset,                 Pid::OFFSET },
+    { Sid::harpPedalTextDiagramFrameType,              Pid::FRAME_TYPE },
+    { Sid::harpPedalTextDiagramFramePadding,           Pid::FRAME_PADDING },
+    { Sid::harpPedalTextDiagramFrameWidth,             Pid::FRAME_WIDTH },
+    { Sid::harpPedalTextDiagramFrameRound,             Pid::FRAME_ROUND },
+    { Sid::harpPedalTextDiagramFrameFgColor,           Pid::FRAME_FG_COLOR },
+    { Sid::harpPedalTextDiagramFrameBgColor,           Pid::FRAME_BG_COLOR },
+} };
+
 const TextStyle longInstrumentTextStyle { {
     { Sid::longInstrumentFontFace,             Pid::FONT_FACE },
     { Sid::longInstrumentFontSize,             Pid::FONT_SIZE },
@@ -1062,6 +1079,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::RH_GUITAR_FINGERING: return &rhGuitarFingeringTextStyle;
     case TextStyleType::STRING_NUMBER: return &stringNumberTextStyle;
     case TextStyleType::HARP_PEDAL_DIAGRAM: return &harpPedalDiagramTextStyle;
+    case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM: return &harpPedalTextDiagramTextStyle;
 
     case TextStyleType::TEXTLINE: return &textLineTextStyle;
     case TextStyleType::VOLTA: return &voltaTextStyle;
