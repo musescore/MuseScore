@@ -25,8 +25,8 @@
 #include <cmath>
 
 #include "containers.h"
-#include "translation.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "scorefont.h"
 #include "accidental.h"
@@ -43,15 +43,6 @@
 using namespace mu;
 
 namespace mu::engraving {
-const std::array<const char*, 6> Arpeggio::arpeggioTypeNames = {
-    QT_TRANSLATE_NOOP("Palette", "Arpeggio"),
-    QT_TRANSLATE_NOOP("Palette", "Up arpeggio"),
-    QT_TRANSLATE_NOOP("Palette", "Down arpeggio"),
-    QT_TRANSLATE_NOOP("Palette", "Bracket arpeggio"),
-    QT_TRANSLATE_NOOP("Palette", "Up arpeggio straight"),
-    QT_TRANSLATE_NOOP("Palette", "Down arpeggio straight")
-};
-
 //---------------------------------------------------------
 //   Arpeggio
 //---------------------------------------------------------
@@ -70,7 +61,7 @@ Arpeggio::Arpeggio(Chord* parent)
 
 String Arpeggio::arpeggioTypeName() const
 {
-    return mtrc("engraving", arpeggioTypeNames[int(_arpeggioType)]);
+    return TConv::translatedUserName(_arpeggioType);
 }
 
 //---------------------------------------------------------
@@ -117,7 +108,7 @@ void Arpeggio::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            _arpeggioType = ArpeggioType(e.readInt());
+            _arpeggioType = TConv::fromXml(e.readAsciiText(), ArpeggioType::NORMAL);
         } else if (tag == "userLen1") {
             _userLen1 = e.readDouble() * spatium();
         } else if (tag == "userLen2") {

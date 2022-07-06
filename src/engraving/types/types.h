@@ -53,6 +53,142 @@ using system_idx_t = size_t;
 using part_idx_t = size_t;
 using page_idx_t = size_t;
 
+//-------------------------------------------------------------------
+///   The value of this enum determines the "stacking order"
+///   of elements on the canvas.
+///   Note: keep in sync with array in TConv
+//-------------------------------------------------------------------
+enum class ElementType {
+    ///.\{
+    INVALID = 0,
+    BRACKET_ITEM,
+    PART,
+    STAFF,
+    SCORE,
+    SYMBOL,
+    TEXT,
+    MEASURE_NUMBER,
+    MMREST_RANGE,
+    INSTRUMENT_NAME,
+    SLUR_SEGMENT,
+    TIE_SEGMENT,
+    BAR_LINE,
+    STAFF_LINES,
+    SYSTEM_DIVIDER,
+    STEM_SLASH,
+    ARPEGGIO,
+    ACCIDENTAL,
+    LEDGER_LINE,
+    STEM,                     // list STEM before NOTE: notes in TAB might 'break' stems
+    NOTE,                     // and this requires stems to be drawn before notes
+    CLEF,                     // elements from CLEF to TIMESIG need to be in the order
+    KEYSIG,                   // in which they appear in a measure
+    AMBITUS,
+    TIMESIG,
+    REST,
+    MMREST,
+    BREATH,
+    MEASURE_REPEAT,
+    TIE,
+    ARTICULATION,
+    FERMATA,
+    CHORDLINE,
+    DYNAMIC,
+    BEAM,
+    HOOK,
+    LYRICS,
+    FIGURED_BASS,
+    MARKER,
+    JUMP,
+    FINGERING,
+    TUPLET,
+    TEMPO_TEXT,
+    STAFF_TEXT,
+    SYSTEM_TEXT,
+    PLAYTECH_ANNOTATION,
+    TRIPLET_FEEL,
+    REHEARSAL_MARK,
+    INSTRUMENT_CHANGE,
+    STAFFTYPE_CHANGE,
+    HARMONY,
+    FRET_DIAGRAM,
+    BEND,
+    TREMOLOBAR,
+    VOLTA,
+    HAIRPIN_SEGMENT,
+    OTTAVA_SEGMENT,
+    TRILL_SEGMENT,
+    LET_RING_SEGMENT,
+    GRADUAL_TEMPO_CHANGE_SEGMENT,
+    VIBRATO_SEGMENT,
+    PALM_MUTE_SEGMENT,
+    WHAMMY_BAR_SEGMENT,
+    RASGUEADO_SEGMENT,
+    HARMONIC_MARK_SEGMENT,
+    TEXTLINE_SEGMENT,
+    VOLTA_SEGMENT,
+    PEDAL_SEGMENT,
+    LYRICSLINE_SEGMENT,
+    GLISSANDO_SEGMENT,
+    LAYOUT_BREAK,
+    SPACER,
+    STAFF_STATE,
+    NOTEHEAD,
+    NOTEDOT,
+    TREMOLO,
+    IMAGE,
+    MEASURE,
+    SELECTION,
+    LASSO,
+    SHADOW_NOTE,
+    TAB_DURATION_SYMBOL,
+    FSYMBOL,
+    PAGE,
+    HAIRPIN,
+    OTTAVA,
+    PEDAL,
+    TRILL,
+    LET_RING,
+    GRADUAL_TEMPO_CHANGE,
+    VIBRATO,
+    PALM_MUTE,
+    WHAMMY_BAR,
+    RASGUEADO,
+    HARMONIC_MARK,
+    TEXTLINE,
+    TEXTLINE_BASE,
+    NOTELINE,
+    LYRICSLINE,
+    GLISSANDO,
+    BRACKET,
+    SEGMENT,
+    SYSTEM,
+    COMPOUND,
+    CHORD,
+    SLUR,
+    ELEMENT,
+    ELEMENT_LIST,
+    STAFF_LIST,
+    MEASURE_LIST,
+    HBOX,
+    VBOX,
+    TBOX,
+    FBOX,
+    ACTION_ICON,
+    OSSIA,
+    BAGPIPE_EMBELLISHMENT,
+    STICKING,
+    GRACE_NOTES_GROUP,
+
+    ROOT_ITEM,
+    DUMMY,
+
+    MAXTYPE
+    ///\}
+};
+
+using ElementTypeSet = std::unordered_set<ElementType>;
+
 // ========================================
 // PropertyValue
 // ========================================
@@ -447,6 +583,11 @@ enum class KeyMode : signed char {
     LOCRIAN
 };
 
+// P_TYPE::INT
+enum class ArpeggioType : unsigned char {
+    NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
+};
+
 //-------------------------------------------------------------------
 //   Tid
 ///   Enumerates the list of built-in text substyles
@@ -651,6 +792,93 @@ enum class BracketType : signed char {
 };
 
 using InstrumentTrackIdSet = std::unordered_set<InstrumentTrackId>;
+
+enum EmbellishmentType {};
+
+enum DrumPitch {};
+
+enum class GlissandoType {
+    STRAIGHT, WAVY
+};
+
+enum class JumpType : char {
+    DC,
+    DC_AL_FINE,
+    DC_AL_CODA,
+    DS_AL_CODA,
+    DS_AL_FINE,
+    DS,
+    DC_AL_DBLCODA,
+    DS_AL_DBLCODA,
+    DSS,
+    DSS_AL_CODA,
+    DSS_AL_DBLCODA,
+    DSS_AL_FINE,
+    DCODA,
+    DDBLCODA,
+    USER
+};
+
+enum class MarkerType : char {
+    SEGNO,
+    VARSEGNO,
+    CODA,
+    VARCODA,
+    CODETTA, // not in SMuFL, but still needed for 1.x compatibility, rendered as a double coda
+    FINE,
+    TOCODA,
+    TOCODASYM,
+    USER
+};
+
+enum class StaffGroup : char {
+    STANDARD, PERCUSSION, TAB
+};
+constexpr int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1; // out of enum to avoid compiler complains about not handled switch cases
+
+enum class TrillType : char {
+    TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,
+};
+
+enum class VibratoType : char {
+    GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
+};
+
+//---------------------------------------------------------
+//   Key
+//---------------------------------------------------------
+
+enum class Key {
+    C_B = -7,
+    G_B,
+    D_B,
+    A_B,
+    E_B,
+    B_B,
+    F,
+    C,      // == 0
+    G,
+    D,
+    A,
+    E,
+    B,
+    F_S,
+    C_S,
+    MIN     = Key::C_B,
+    MAX     = Key::C_S,
+    INVALID = Key::MIN - 1,
+    NUM_OF  = Key::MAX - Key::MIN + 1,
+    DELTA_ENHARMONIC = 12
+};
+
+static inline bool operator<(Key a, Key b) { return static_cast<int>(a) < static_cast<int>(b); }
+static inline bool operator>(Key a, Key b) { return static_cast<int>(a) > static_cast<int>(b); }
+static inline bool operator>(Key a, int b) { return static_cast<int>(a) > b; }
+static inline bool operator<(Key a, int b) { return static_cast<int>(a) < b; }
+static inline bool operator==(const Key a, const Key b) { return int(a) == int(b); }
+static inline bool operator!=(const Key a, const Key b) { return static_cast<int>(a) != static_cast<int>(b); }
+static inline Key operator+=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) + static_cast<int>(b)); }
+static inline Key operator-=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) - static_cast<int>(b)); }
 } // mu::engraving
 
 template<>
@@ -663,5 +891,12 @@ struct std::hash<mu::engraving::InstrumentTrackId>
         return h1 ^ (h2 << 1);
     }
 };
+
+#ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::engraving::JumpType)
+Q_DECLARE_METATYPE(mu::engraving::MarkerType)
+Q_DECLARE_METATYPE(mu::engraving::TrillType)
+Q_DECLARE_METATYPE(mu::engraving::VibratoType)
+#endif
 
 #endif // MU_ENGRAVING_TYPES_H

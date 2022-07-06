@@ -66,12 +66,8 @@ class Vibrato final : public SLine
 {
     Sid getPropertyStyle(Pid) const override;
 
-public:
-    enum class Type : char {
-        GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
-    };
 private:
-    Type _vibratoType;
+    VibratoType _vibratoType;
     bool _playArticulation;
 
 public:
@@ -86,14 +82,11 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    void setVibratoType(const String& s);
-    void undoSetVibratoType(Type val);
-    void setVibratoType(Type tt) { _vibratoType = tt; }
-    Type vibratoType() const { return _vibratoType; }
+    void undoSetVibratoType(VibratoType val);
+    void setVibratoType(VibratoType tt) { _vibratoType = tt; }
+    VibratoType vibratoType() const { return _vibratoType; }
     void setPlayArticulation(bool val) { _playArticulation = val; }
     bool playArticulation() const { return _playArticulation; }
-    static String type2name(Vibrato::Type t);
-    String vibratoTypeName() const;
     String vibratoTypeUserName() const;
 
     Segment* segment() const { return (Segment*)explicitParent(); }
@@ -103,22 +96,6 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     String accessibleInfo() const override;
 };
-
-//---------------------------------------------------------
-//   VibratoTableItem
-//---------------------------------------------------------
-
-struct VibratoTableItem {
-    Vibrato::Type type;
-    const char* name;
-    const char* userName;
-};
-
-extern const std::vector<VibratoTableItem> vibratoTable;
 } // namespace mu::engraving
-
-#ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::Vibrato::Type);
-#endif
 
 #endif

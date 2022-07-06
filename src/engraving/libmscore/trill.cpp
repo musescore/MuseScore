@@ -24,7 +24,7 @@
 
 #include <cmath>
 
-#include "translation.h"
+#include "types/typesconv.h"
 #include "style/style.h"
 #include "rw/xml.h"
 
@@ -44,18 +44,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   trillTable
-//    must be in sync with Trill::Type
-//---------------------------------------------------------
-
-const std::vector<TrillTableItem> trillTable = {
-    { Trill::Type::TRILL_LINE,      "trill",      QT_TRANSLATE_NOOP("trillType", "Trill line") },
-    { Trill::Type::UPPRALL_LINE,    "upprall",    QT_TRANSLATE_NOOP("trillType", "Upprall line") },
-    { Trill::Type::DOWNPRALL_LINE,  "downprall",  QT_TRANSLATE_NOOP("trillType", "Downprall line") },
-    { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line") }
-};
-
 //---------------------------------------------------------
 //   trillStyle
 //---------------------------------------------------------
@@ -182,17 +170,17 @@ void TrillSegment::layout()
             a->setParent(this);
         }
         switch (trill()->trillType()) {
-        case Trill::Type::TRILL_LINE:
+        case TrillType::TRILL_LINE:
             symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
             break;
-        case Trill::Type::PRALLPRALL_LINE:
+        case TrillType::PRALLPRALL_LINE:
             symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
             break;
-        case Trill::Type::UPPRALL_LINE:
+        case TrillType::UPPRALL_LINE:
             symbolLine(SymId::ornamentBottomLeftConcaveStroke,
                        SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
             break;
-        case Trill::Type::DOWNPRALL_LINE:
+        case TrillType::DOWNPRALL_LINE:
             symbolLine(SymId::ornamentLeftVerticalStroke,
                        SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
             break;
@@ -288,7 +276,7 @@ Sid Trill::getPropertyStyle(Pid pid) const
 Trill::Trill(EngravingItem* parent)
     : SLine(ElementType::TRILL, parent)
 {
-    _trillType     = Type::TRILL_LINE;
+    _trillType     = TrillType::TRILL_LINE;
     _accidental    = 0;
     _ornamentStyle = OrnamentStyle::DEFAULT;
     setPlayArticulation(true);
@@ -387,7 +375,7 @@ void Trill::write(XmlWriter& xml) const
         return;
     }
     xml.startElement(this);
-    xml.tag("subtype", trillTypeName());
+    xml.tag("subtype", TConv::toXml(trillType()));
     writeProperty(xml, Pid::PLAY);
     writeProperty(xml, Pid::ORNAMENT_STYLE);
     writeProperty(xml, Pid::PLACEMENT);
@@ -409,7 +397,7 @@ void Trill::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            setTrillType(e.readText());
+            setTrillType(TConv::fromXml(e.readAsciiText(), TrillType::TRILL_LINE));
         } else if (tag == "Accidental") {
             _accidental = Factory::createAccidental(this);
             _accidental->read(e);
@@ -425,59 +413,12 @@ void Trill::read(XmlReader& e)
 }
 
 //---------------------------------------------------------
-//   setTrillType
-//---------------------------------------------------------
-
-void Trill::setTrillType(const String& s)
-{
-    if (s == "0") {
-        _trillType = Type::TRILL_LINE;
-        return;
-    }
-    if (s == "pure") {
-        _trillType = Type::PRALLPRALL_LINE;     // obsolete, compatibility only
-        return;
-    }
-    for (TrillTableItem i : trillTable) {
-        if (s == String::fromUtf8(i.name)) {
-            _trillType = i.type;
-            return;
-        }
-    }
-    LOGD("Trill::setSubtype: unknown <%s>", muPrintable(s));
-}
-
-//---------------------------------------------------------
-//   type2name
-//---------------------------------------------------------
-
-String Trill::type2name(Trill::Type t)
-{
-    for (TrillTableItem i : trillTable) {
-        if (i.type == t) {
-            return String::fromUtf8(i.name);
-        }
-    }
-    LOGD("unknown Trill subtype %d", int(t));
-    return u"?";
-}
-
-//---------------------------------------------------------
-//   trillTypeName
-//---------------------------------------------------------
-
-String Trill::trillTypeName() const
-{
-    return type2name(trillType());
-}
-
-//---------------------------------------------------------
 //   trillTypeName
 //---------------------------------------------------------
 
 String Trill::trillTypeUserName() const
 {
-    return mtrc("engraving", trillTable[static_cast<int>(trillType())].userName);
+    return TConv::translatedUserName(trillType());
 }
 
 //---------------------------------------------------------
@@ -507,7 +448,7 @@ bool Trill::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::TRILL_TYPE:
-        setTrillType(Type(val.toInt()));
+        setTrillType(TrillType(val.toInt()));
         break;
     case Pid::PLAY:
         setPlayArticulation(val.toBool());

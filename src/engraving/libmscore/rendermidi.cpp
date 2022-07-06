@@ -1216,15 +1216,15 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
             // guitar vibrato, up only
             int spitch = 0;       // 1/8 (100 is a semitone)
             int epitch = 12;
-            if (t->vibratoType() == Vibrato::Type::GUITAR_VIBRATO_WIDE) {
+            if (t->vibratoType() == VibratoType::GUITAR_VIBRATO_WIDE) {
                 spitch = 0;         // 1/4
                 epitch = 25;
             }
             // vibrato with whammy bar up and down
-            else if (t->vibratoType() == Vibrato::Type::VIBRATO_SAWTOOTH_WIDE) {
+            else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH_WIDE) {
                 spitch = 25;         // 1/16
                 epitch = -25;
-            } else if (t->vibratoType() == Vibrato::Type::VIBRATO_SAWTOOTH) {
+            } else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH) {
                 spitch = 12;
                 epitch = -12;
             }
@@ -1929,13 +1929,13 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, S
 //   renderNoteArticulation
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, Trill::Type trillType, OrnamentStyle ornamentStyle)
+static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, TrillType trillType, OrnamentStyle ornamentStyle)
 {
-    std::map<Trill::Type, SymId> articulationMap = {
-        { Trill::Type::TRILL_LINE,      SymId::ornamentTrill },
-        { Trill::Type::UPPRALL_LINE,    SymId::ornamentUpPrall },
-        { Trill::Type::DOWNPRALL_LINE,  SymId::ornamentPrecompMordentUpperPrefix },
-        { Trill::Type::PRALLPRALL_LINE, SymId::ornamentTrill }
+    std::map<TrillType, SymId> articulationMap = {
+        { TrillType::TRILL_LINE,      SymId::ornamentTrill },
+        { TrillType::UPPRALL_LINE,    SymId::ornamentUpPrall },
+        { TrillType::DOWNPRALL_LINE,  SymId::ornamentPrecompMordentUpperPrefix },
+        { TrillType::PRALLPRALL_LINE, SymId::ornamentTrill }
     };
     auto it = articulationMap.find(trillType);
     if (it == articulationMap.cend()) {

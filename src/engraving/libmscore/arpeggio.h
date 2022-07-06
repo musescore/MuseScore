@@ -29,10 +29,6 @@ namespace mu::engraving {
 class Factory;
 class Chord;
 
-enum class ArpeggioType : char {
-    NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
-};
-
 //---------------------------------------------------------
 //   @@ Arpeggio
 //---------------------------------------------------------
@@ -61,8 +57,6 @@ class Arpeggio final : public EngravingItem
 
     double calcTop() const;
     double calcBottom() const;
-
-    static const std::array<const char*, 6> arpeggioTypeNames;
 
 private:
 

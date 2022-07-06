@@ -168,7 +168,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     updatePitchesList();
 
     for (auto g : noteHeadNames) {
-        noteHead->addItem(TConv::toUserName(g), int(g));
+        noteHead->addItem(TConv::translatedUserName(g), int(g));
     }
 
     connect(pitchList, &QTreeWidget::currentItemChanged, this, &EditDrumsetDialog::itemChanged);

@@ -3415,7 +3415,7 @@ int Note::qmlDotsCount()
 
 String Note::subtypeName() const
 {
-    return TConv::toUserName(_headGroup);
+    return TConv::translatedUserName(_headGroup);
 }
 
 //---------------------------------------------------------

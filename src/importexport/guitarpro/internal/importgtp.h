@@ -260,7 +260,7 @@ protected:
     void addTextToNote(QString text, Note* note);
     void addPalmMute(Note*);
     void addLetRing(Note*);
-    void addVibrato(Note*, Vibrato::Type type = Vibrato::Type::GUITAR_VIBRATO);
+    void addVibrato(Note*, VibratoType type = VibratoType::GUITAR_VIBRATO);
     void addTap(Note*);
     void addSlap(Note*);
     void addPop(Note*);

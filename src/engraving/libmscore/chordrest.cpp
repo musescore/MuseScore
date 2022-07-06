@@ -693,19 +693,19 @@ String ChordRest::durationUserName() const
 
     switch (dots()) {
     case 1:
-        dotString += mtrc("engraving", "Dotted %1").arg(TConv::toUserName(durationType().type()));
+        dotString += mtrc("engraving", "Dotted %1").arg(TConv::translatedUserName(durationType().type()));
         break;
     case 2:
-        dotString += mtrc("engraving", "Double dotted %1").arg(TConv::toUserName(durationType().type()));
+        dotString += mtrc("engraving", "Double dotted %1").arg(TConv::translatedUserName(durationType().type()));
         break;
     case 3:
-        dotString += mtrc("engraving", "Triple dotted %1").arg(TConv::toUserName(durationType().type()));
+        dotString += mtrc("engraving", "Triple dotted %1").arg(TConv::translatedUserName(durationType().type()));
         break;
     case 4:
-        dotString += mtrc("engraving", "Quadruple dotted %1").arg(TConv::toUserName(durationType().type()));
+        dotString += mtrc("engraving", "Quadruple dotted %1").arg(TConv::translatedUserName(durationType().type()));
         break;
     default:
-        dotString += TConv::toUserName(durationType().type());
+        dotString += TConv::translatedUserName(durationType().type());
     }
     return String(u"%1%2").arg(tupletType, dotString);
 }

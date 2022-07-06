@@ -5248,7 +5248,7 @@ String Score::getTextStyleUserName(TextStyleType tid)
         name = styleSt(sid[idx]);
     }
     if (name == u"") {
-        name = TConv::toUserName(tid);
+        name = TConv::translatedUserName(tid);
     }
     return name;
 }

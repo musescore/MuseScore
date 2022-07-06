@@ -11,8 +11,6 @@
 #include <chrono>
 #include <sstream>
 
-#define HAW_PROFILER_ENABLED
-
 #ifndef FUNC_INFO
 #if defined(_MSC_VER)
     #define FUNC_INFO __FUNCSIG__

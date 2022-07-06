@@ -2472,19 +2472,19 @@ QString ExportBrailleImpl::brailleFermata(Fermata* fermata)
 QString ExportBrailleImpl::brailleMarker(Marker* marker)
 {
     switch (marker->markerType()) {
-    case Marker::Type::SEGNO:
-    case Marker::Type::VARSEGNO:
+    case MarkerType::SEGNO:
+    case MarkerType::VARSEGNO:
         return BRAILLE_SEGNO;
-    case Marker::Type::CODA:
-    case Marker::Type::VARCODA:
-    case Marker::Type::CODETTA:
+    case MarkerType::CODA:
+    case MarkerType::VARCODA:
+    case MarkerType::CODETTA:
         return BRAILLE_CODA;
-    case Marker::Type::FINE:
+    case MarkerType::FINE:
         return BRAILLE_FINE;
-    case Marker::Type::TOCODA:
-    case Marker::Type::TOCODASYM:
+    case MarkerType::TOCODA:
+    case MarkerType::TOCODASYM:
         return BRAILLE_TOCODA;
-    case Marker::Type::USER:
+    case MarkerType::USER:
         return QString(">") + TextToUEBBraille().braille(marker->plainText().toQString().toLower()) + QString("> ");
     }
     return QString();
@@ -2493,28 +2493,28 @@ QString ExportBrailleImpl::brailleMarker(Marker* marker)
 QString ExportBrailleImpl::brailleJump(Jump* jump)
 {
     switch (jump->jumpType()) {
-    case Jump::Type::DC:
+    case JumpType::DC:
         return BRAILLE_DA_CAPO;
-    case Jump::Type::DC_AL_FINE:
+    case JumpType::DC_AL_FINE:
         return BRAILLE_DA_CAPO_AL_FINE;
-    case Jump::Type::DC_AL_CODA:
+    case JumpType::DC_AL_CODA:
         return BRAILLE_DA_CAPO_AL_CODA;
-    case Jump::Type::DS_AL_CODA:
+    case JumpType::DS_AL_CODA:
         return BRAILLE_DAL_SEGNO_AL_CODA;
-    case Jump::Type::DS_AL_FINE:
+    case JumpType::DS_AL_FINE:
         return BRAILLE_DAL_SEGNO_AL_FINE;
-    case Jump::Type::DS:
+    case JumpType::DS:
         return BRAILLE_DAL_SEGNO;
-    case Jump::Type::USER:
+    case JumpType::USER:
         return QString(">") + TextToUEBBraille().braille(jump->plainText().toQString().toLower()) + QString("> ");
-    case Jump::Type::DC_AL_DBLCODA:
-    case Jump::Type::DS_AL_DBLCODA:
-    case Jump::Type::DSS:
-    case Jump::Type::DSS_AL_CODA:
-    case Jump::Type::DSS_AL_DBLCODA:
-    case Jump::Type::DSS_AL_FINE:
-    case Jump::Type::DCODA:
-    case Jump::Type::DDBLCODA:
+    case JumpType::DC_AL_DBLCODA:
+    case JumpType::DS_AL_DBLCODA:
+    case JumpType::DSS:
+    case JumpType::DSS_AL_CODA:
+    case JumpType::DSS_AL_DBLCODA:
+    case JumpType::DSS_AL_FINE:
+    case JumpType::DCODA:
+    case JumpType::DDBLCODA:
         break;
     }
     return QString();

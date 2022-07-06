@@ -229,7 +229,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
     for (const char* dynamicType : defaultPalette ? defaultDynamics : masterDynamics) {
         auto dynamic = makeElement<Dynamic>(mu::engraving::gpaletteScore);
         dynamic->setDynamicType(String::fromAscii(dynamicType));
-        sp->appendElement(dynamic, TConv::toUserName(dynamic->dynamicType()));
+        sp->appendElement(dynamic, TConv::translatedUserName(dynamic->dynamicType()));
     }
 
     std::pair<HairpinType, const char*> hairpins[] = {
@@ -276,16 +276,16 @@ PalettePtr PaletteCreator::newKeySigPalette()
     for (int i = 0; i < 7; ++i) {
         auto k = Factory::makeKeySig(mu::engraving::gpaletteScore->dummy()->segment());
         k->setKey(Key(i + 1));
-        sp->appendElement(k, keyNames[i * 2]);
+        sp->appendElement(k, TConv::userName(Key(i + 1)));
     }
     for (int i = -7; i < 0; ++i) {
         auto k = Factory::makeKeySig(mu::engraving::gpaletteScore->dummy()->segment());
         k->setKey(Key(i));
-        sp->appendElement(k, keyNames[(7 + i) * 2 + 1]);
+        sp->appendElement(k, TConv::userName(Key(i)));
     }
     auto k = Factory::makeKeySig(mu::engraving::gpaletteScore->dummy()->segment());
     k->setKey(Key::C);
-    sp->appendElement(k, keyNames[14]);
+    sp->appendElement(k, TConv::userName(Key::C));
 
     // atonal key signature
     KeySigEvent nke;
@@ -294,7 +294,7 @@ PalettePtr PaletteCreator::newKeySigPalette()
     nke.setMode(KeyMode::NONE);
     auto nk = Factory::makeKeySig(mu::engraving::gpaletteScore->dummy()->segment());
     nk->setKeySigEvent(nke);
-    sp->appendElement(nk, keyNames[15]);
+    sp->appendElement(nk, TConv::userName(Key::C, true));
 
     return sp;
 }
@@ -397,37 +397,46 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         sp->appendElement(rm, mu::qtrc("symUserNames", SymNames::userNameForSymId(repeat.id)));
     }
 
-    const std::vector<MarkerTypeItem> defaultMarkers = {
-        { Marker::Type::SEGNO, QT_TRANSLATE_NOOP("markerType", "Segno") },
-        { Marker::Type::CODA, QT_TRANSLATE_NOOP("markerType", "Coda") },
-        { Marker::Type::FINE, QT_TRANSLATE_NOOP("markerType", "Fine") },
-        { Marker::Type::TOCODA, QT_TRANSLATE_NOOP("markerType", "To coda") }
+    const std::vector<MarkerType> defaultMarkers = {
+        MarkerType::SEGNO, MarkerType::CODA, MarkerType::FINE, MarkerType::TOCODA
     };
 
-    for (MarkerTypeItem markerTypeItem : (defaultPalette ? defaultMarkers : markerTypeTable)) {
-        if (markerTypeItem.type == Marker::Type::CODETTA || markerTypeItem.type == Marker::Type::USER) {// Codetta not in SMuFL
+    const std::vector<MarkerType> allMarkers = {
+        MarkerType::SEGNO,
+        MarkerType::VARSEGNO,
+        MarkerType::CODA,
+        MarkerType::VARCODA,
+        MarkerType::CODETTA,
+        MarkerType::FINE,
+        MarkerType::TOCODA,
+        MarkerType::TOCODASYM,
+        MarkerType::USER
+    };
+
+    for (MarkerType markerType : (defaultPalette ? defaultMarkers : allMarkers)) {
+        if (markerType == MarkerType::CODETTA || markerType == MarkerType::USER) {// Codetta not in SMuFL
             continue;
         }
 
         auto mk = makeElement<Marker>(gpaletteScore);
-        mk->setMarkerType(markerTypeItem.type);
+        mk->setMarkerType(markerType);
         mk->styleChanged();
-        sp->appendElement(mk, markerTypeItem.name);
+        sp->appendElement(mk, TConv::userName(markerType));
     }
 
     const std::vector<JumpTypeTableItem> defaultJumpTypeTable {
-        { Jump::Type::DC,         "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo") },
-        { Jump::Type::DC_AL_FINE, "D.C. al Fine", "start", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine") },
-        { Jump::Type::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda") },
-        { Jump::Type::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda") },
-        { Jump::Type::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine") },
-        { Jump::Type::DS,         "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.") },
+        { JumpType::DC,         "D.C.",         "start", "end",  "" },
+        { JumpType::DC_AL_FINE, "D.C. al Fine", "start", "fine", "" },
+        { JumpType::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab" },
+        { JumpType::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab" },
+        { JumpType::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "" },
+        { JumpType::DS,         "D.S.",         "segno", "end",  "" },
     };
 
     for (const JumpTypeTableItem& item : (defaultPalette ? defaultJumpTypeTable : jumpTypeTable)) {
         auto jp = makeElement<Jump>(gpaletteScore);
         jp->setJumpType(item.type);
-        sp->appendElement(jp, item.userText);
+        sp->appendElement(jp, TConv::userName(item.type));
     }
 
     for (const BarLineTableItem& bti : BarLine::barLineTable) {
@@ -485,14 +494,14 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 
     if (!defaultPalette) {
         auto vibrato = makeElement<Vibrato>(gpaletteScore);
-        vibrato->setVibratoType(Vibrato::Type::VIBRATO_SAWTOOTH);
+        vibrato->setVibratoType(VibratoType::VIBRATO_SAWTOOTH);
         vibrato->setLen(w);
-        sp->appendElement(vibrato, QT_TRANSLATE_NOOP("vibratoType", "Vibrato sawtooth"));
+        sp->appendElement(vibrato, TConv::userName(VibratoType::VIBRATO_SAWTOOTH));
 
         vibrato = makeElement<Vibrato>(gpaletteScore);
-        vibrato->setVibratoType(Vibrato::Type::VIBRATO_SAWTOOTH_WIDE);
+        vibrato->setVibratoType(VibratoType::VIBRATO_SAWTOOTH_WIDE);
         vibrato->setLen(w);
-        sp->appendElement(vibrato, QT_TRANSLATE_NOOP("vibratoType", "Tremolo sawtooth wide"));
+        sp->appendElement(vibrato, TConv::userName(VibratoType::VIBRATO_SAWTOOTH));
     }
 
     return sp;
@@ -647,7 +656,7 @@ PalettePtr PaletteCreator::newNoteHeadsPalette()
         }
         auto nh = makeElement<NoteHead>(gpaletteScore);
         nh->setSym(sym);
-        sp->appendElement(nh, TConv::toUserName((NoteHeadGroup(i))));
+        sp->appendElement(nh, TConv::translatedUserName((NoteHeadGroup(i))));
     }
 
     sp->appendActionIcon(ActionIconType::PARENTHESES, "add-parentheses");
@@ -796,15 +805,17 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
         sp->appendElement(ornament, ornament->typeUserName(), mag);
     }
 
-    for (TrillTableItem trillTableItem : trillTable) {
+    static const std::vector<TrillType> trillTypes = {
+        TrillType::TRILL_LINE, TrillType::UPPRALL_LINE, TrillType::DOWNPRALL_LINE, TrillType::PRALLPRALL_LINE,
+    };
+
+    for (TrillType trillType : trillTypes) {
         auto trill = makeElement<Trill>(gpaletteScore);
-        trill->setTrillType(trillTableItem.type);
+        trill->setTrillType(trillType);
         trill->setLen(gpaletteScore->spatium() * 8);
 
-        int trillType = trill->getProperty(Pid::TRILL_TYPE).toInt();
-        qreal mag = (trillType == static_cast<int>(Trill::Type::TRILL_LINE)
-                     || trillType == static_cast<int>(Trill::Type::PRALLPRALL_LINE) ? 1.0 : 0.8);
-        sp->appendElement(trill, trillTableItem.userName, mag);
+        qreal mag = (trillType == TrillType::TRILL_LINE || trillType == TrillType::PRALLPRALL_LINE) ? 1.0 : 0.8;
+        sp->appendElement(trill, TConv::userName(trillType), mag);
     }
 
     return sp;
@@ -992,19 +1003,19 @@ PalettePtr PaletteCreator::newArpeggioPalette()
 
     auto cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::FALL);
-    sp->appendElement(cl, scorelineNames[0]);
+    sp->appendElement(cl, TConv::userName(ChordLineType::FALL));
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::DOIT);
-    sp->appendElement(cl, scorelineNames[1]);
+    sp->appendElement(cl, TConv::userName(ChordLineType::DOIT));
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::PLOP);
-    sp->appendElement(cl, scorelineNames[2]);
+    sp->appendElement(cl, TConv::userName(ChordLineType::PLOP));
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::SCOOP);
-    sp->appendElement(cl, scorelineNames[3]);
+    sp->appendElement(cl, TConv::userName(ChordLineType::SCOOP));
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::FALL);
@@ -1057,7 +1068,7 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
     for (ClefType clefType : defaultPalette ? clefsDefault : clefsMaster) {
         auto clef = Factory::makeClef(gpaletteScore->dummy()->segment());
         clef->setClefType(ClefTypeList(clefType, clefType));
-        sp->appendElement(clef, TConv::toUserName(clefType));
+        sp->appendElement(clef, TConv::translatedUserName(clefType));
     }
     return sp;
 }
@@ -1092,10 +1103,10 @@ PalettePtr PaletteCreator::newBagpipeEmbellishmentPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    for (int i = 0; i < BagpipeEmbellishment::nEmbellishments(); ++i) {
+    for (size_t i = 0; i < TConv::embellishmentsCount(); ++i) {
         auto b = makeElement<BagpipeEmbellishment>(gpaletteScore);
-        b->setEmbelType(i);
-        sp->appendElement(b, BagpipeEmbellishment::BagpipeEmbellishmentList[i].name);
+        b->setEmbelType(EmbellishmentType(i));
+        sp->appendElement(b, TConv::userName(static_cast<EmbellishmentType>(i)));
     }
 
     return sp;
@@ -1258,17 +1269,19 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled start hook)"));
     }
 
-    const std::vector<TrillTableItem> defaultTrills = {
-        { Trill::Type::TRILL_LINE,      "trill",      QT_TRANSLATE_NOOP("trillType", "Trill line") },
-        { Trill::Type::DOWNPRALL_LINE,  "downprall",  QT_TRANSLATE_NOOP("trillType", "Downprall line") },
-        { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line") }
+    static const std::vector<TrillType> trillTypes = {
+        TrillType::TRILL_LINE, TrillType::UPPRALL_LINE, TrillType::DOWNPRALL_LINE, TrillType::PRALLPRALL_LINE,
     };
 
-    for (TrillTableItem trillTableItem : defaultPalette ? defaultTrills : trillTable) {
+    static const std::vector<TrillType> defaultTrills = {
+        { TrillType::TRILL_LINE, TrillType::DOWNPRALL_LINE, TrillType::PRALLPRALL_LINE }
+    };
+
+    for (TrillType trillType : defaultPalette ? defaultTrills : trillTypes) {
         auto trill = makeElement<Trill>(gpaletteScore);
-        trill->setTrillType(trillTableItem.type);
+        trill->setTrillType(trillType);
         trill->setLen(w);
-        sp->appendElement(trill, trillTableItem.userName);
+        sp->appendElement(trill, TConv::userName(trillType));
     }
 
     auto staffTextLine = makeElement<TextLine>(gpaletteScore);
@@ -1304,16 +1317,20 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     letRing->setLen(w);
     sp->appendElement(letRing, QT_TRANSLATE_NOOP("palette", "Let ring"));
 
-    const std::vector<VibratoTableItem> defaultVibratoTable = {
-        { Vibrato::Type::GUITAR_VIBRATO,        "guitarVibrato",       QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato") },
-        { Vibrato::Type::VIBRATO_SAWTOOTH,      "vibratoSawtooth",     QT_TRANSLATE_NOOP("vibratoType", "Vibrato sawtooth") },
+    static const std::vector<VibratoType> vibratoTable = {
+        { VibratoType::GUITAR_VIBRATO, VibratoType::GUITAR_VIBRATO_WIDE, VibratoType::VIBRATO_SAWTOOTH,
+          VibratoType::VIBRATO_SAWTOOTH_WIDE },
     };
 
-    for (VibratoTableItem vibratoTableItem : defaultPalette ? defaultVibratoTable : vibratoTable) {
+    static const std::vector<VibratoType> defaultVibratoTable = {
+        { VibratoType::GUITAR_VIBRATO, VibratoType::VIBRATO_SAWTOOTH },
+    };
+
+    for (VibratoType vibratoType : defaultPalette ? defaultVibratoTable : vibratoTable) {
         auto vibrato = makeElement<Vibrato>(gpaletteScore);
-        vibrato->setVibratoType(vibratoTableItem.type);
+        vibrato->setVibratoType(vibratoType);
         vibrato->setLen(w);
-        sp->appendElement(vibrato, vibratoTableItem.userName);
+        sp->appendElement(vibrato, TConv::userName(vibratoType));
     }
 
     auto pm = makeElement<PalmMute>(gpaletteScore);
@@ -1827,16 +1844,15 @@ PalettePtr PaletteCreator::newGuitarPalette()
     tb->points().push_back(PitchValue(60,    0, false));
     sp->appendElement(tb, QT_TRANSLATE_NOOP("palette", "Tremolo bar"), 0.8);
 
-    const std::vector<VibratoTableItem> vibratos = {
-        { Vibrato::Type::GUITAR_VIBRATO,        "guitarVibrato",       QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato") },
-        { Vibrato::Type::GUITAR_VIBRATO_WIDE,   "guitarVibratoWide",   QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato wide") }
+    static const std::vector<VibratoType> vibratos = {
+        { VibratoType::GUITAR_VIBRATO, VibratoType::GUITAR_VIBRATO_WIDE }
     };
 
-    for (VibratoTableItem vibratoTableItem : vibratos) {
+    for (VibratoType vibratoType : vibratos) {
         auto vibrato = makeElement<Vibrato>(gpaletteScore);
-        vibrato->setVibratoType(vibratoTableItem.type);
+        vibrato->setVibratoType(vibratoType);
         vibrato->setLen(gpaletteScore->spatium() * 8);
-        sp->appendElement(vibrato, vibratoTableItem.userName);
+        sp->appendElement(vibrato, TConv::userName(vibratoType));
     }
 
     const char* finger = "pimac";

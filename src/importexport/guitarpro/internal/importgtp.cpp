@@ -490,7 +490,7 @@ void GuitarPro::addLetRing(Note* note)
 //   addVibrato
 //---------------------------------------------------------
 
-void GuitarPro::addVibrato(Note* note, Vibrato::Type type)
+void GuitarPro::addVibrato(Note* note, VibratoType type)
 {
     track_idx_t track = note->track();
     while (_vibratos.size() < track + 1) {
@@ -1103,7 +1103,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
         art->setSymId(SymId::stringsDownBow);
         chord->add(art);
     } else if (beatEffect == 7) {
-        addVibrato(chord->upNote(), Vibrato::Type::VIBRATO_SAWTOOTH);
+        addVibrato(chord->upNote(), VibratoType::VIBRATO_SAWTOOTH);
     }
 }
 

@@ -28,6 +28,7 @@
 #include <QTextDocument>
 #include <QMouseEvent>
 
+#include "engraving/types/typesconv.h"
 #include "libmscore/barline.h"
 #include "libmscore/chord.h"
 #include "libmscore/jump.h"
@@ -1339,19 +1340,19 @@ void Timeline::keyMeta(Segment* seg, int* stagger, int pos)
     QString tooltip;
     if (newKey == Key::INVALID) {
         keyText = "X";
-        tooltip = qApp->translate("MuseScore", keyNames[15]);
+        tooltip = TConv::translatedUserName(Key::INVALID, true);
     } else if (newKey == Key::NUM_OF) {
         keyText = "?";
         tooltip = tr("Custom Key Signature");
     } else if (int(newKey) == 0) {
         keyText = "\u266E";
-        tooltip = qApp->translate("MuseScore", keyNames[14]);
+        tooltip = TConv::translatedUserName(Key::C);
     } else if (int(newKey) < 0) {
         keyText = QString::number(abs(int(newKey))) + "\u266D";
-        tooltip = qApp->translate("MuseScore", keyNames[(7 + int(newKey)) * 2 + 1]);
+        tooltip = TConv::translatedUserName(newKey);
     } else {
         keyText = QString::number(abs(int(newKey))) + "\u266F";
-        tooltip = qApp->translate("MuseScore", keyNames[(int(newKey) - 1) * 2]);
+        tooltip = TConv::translatedUserName(newKey);
     }
 
     int x = pos + (*stagger) * _spacing;
@@ -1455,9 +1456,9 @@ void Timeline::jumpMarkerMeta(Segment* seg, int* stagger, int pos)
             text.push_back(tf.text);
         }
         measure = marker->measure();
-        if (marker->markerType() == Marker::Type::FINE
-            || marker->markerType() == Marker::Type::TOCODA
-            || marker->markerType() == Marker::Type::TOCODASYM) {
+        if (marker->markerType() == MarkerType::FINE
+            || marker->markerType() == MarkerType::TOCODA
+            || marker->markerType() == MarkerType::TOCODASYM) {
             elementType = ElementType::MARKER;
             std::get<2>(_repeatInfo) = std::get<3>(_repeatInfo);
             std::get<3>(_repeatInfo) = nullptr;

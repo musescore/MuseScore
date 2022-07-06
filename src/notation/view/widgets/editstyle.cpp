@@ -871,7 +871,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     textStyles->clear();
     for (auto ss : mu::engraving::allTextStyles()) {
-        QListWidgetItem* item = new QListWidgetItem(TConv::toUserName(ss));
+        QListWidgetItem* item = new QListWidgetItem(TConv::translatedUserName(ss));
         item->setData(Qt::UserRole, int(ss));
         textStyles->addItem(item);
     }
@@ -1124,7 +1124,7 @@ void EditStyle::retranslate()
 
     int idx = 0;
     for (auto ss : mu::engraving::allTextStyles()) {
-        QString name = TConv::toUserName(ss);
+        QString name = TConv::translatedUserName(ss);
         textStyles->item(idx)->setText(name);
         ++idx;
     }
@@ -2188,7 +2188,7 @@ void EditStyle::textStyleChanged(int row)
         }
     }
 
-    styleName->setText(TConv::toUserName(tid));
+    styleName->setText(TConv::translatedUserName(tid));
     styleName->setEnabled(int(tid) >= int(mu::engraving::TextStyleType::USER1));
     resetTextStyleName->setEnabled(false);
 }
@@ -2238,7 +2238,7 @@ void EditStyle::editUserStyleName()
     int row = textStyles->currentRow();
     mu::engraving::TextStyleType tid = mu::engraving::TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
     textStyles->item(row)->setText(styleName->text());
-    resetTextStyleName->setEnabled(styleName->text() != TConv::toUserName(tid));
+    resetTextStyleName->setEnabled(styleName->text() != TConv::translatedUserName(tid));
 }
 
 //---------------------------------------------------------
@@ -2260,7 +2260,7 @@ void EditStyle::endEditUserStyleName()
     QString name = styleName->text();
     setStyleValue(sid[idx], name);
     if (name == "") {
-        name = TConv::toUserName(tid);
+        name = TConv::translatedUserName(tid);
         styleName->setText(name);
         textStyles->item(row)->setText(name);
         resetTextStyleName->setEnabled(false);

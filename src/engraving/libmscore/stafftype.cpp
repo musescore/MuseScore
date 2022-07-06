@@ -56,14 +56,6 @@ namespace mu::engraving {
 std::vector<TablatureFretFont> StaffType::_fretFonts = {};
 std::vector<TablatureDurationFont> StaffType::_durationFonts = {};
 
-const char StaffType::groupNames[STAFF_GROUP_MAX][STAFF_GROUP_NAME_MAX_LENGTH] = {
-    QT_TRANSLATE_NOOP("Staff type group name", "Standard"),
-    QT_TRANSLATE_NOOP("Staff type group name", "Percussion"),
-    QT_TRANSLATE_NOOP("Staff type group name", "Tablature")
-};
-
-const String StaffType::fileGroupNames[STAFF_GROUP_MAX] = { u"pitched", u"percussion", u"tablature" };
-
 //---------------------------------------------------------
 //   StaffType
 //---------------------------------------------------------
@@ -147,10 +139,7 @@ const char* StaffType::groupName() const
 
 const char* StaffType::groupName(StaffGroup r)
 {
-    if (r < StaffGroup::STANDARD || (int)r >= STAFF_GROUP_MAX) {
-        r = StaffGroup::STANDARD;
-    }
-    return groupNames[(int)r];
+    return TConv::userName(r);
 }
 
 int StaffType::middleLine() const
@@ -309,7 +298,7 @@ bool StaffType::isHiddenElementOnTab(const Score* score, Sid commonTabStyle, Sid
 
 void StaffType::write(XmlWriter& xml) const
 {
-    xml.startElement("StaffType", { { "group", fileGroupNames[(int)_group] } });
+    xml.startElement("StaffType", { { "group", TConv::toXml(_group) } });
     if (!_xmlName.isEmpty()) {
         xml.tag("name", _xmlName);
     }
@@ -395,17 +384,8 @@ void StaffType::write(XmlWriter& xml) const
 
 void StaffType::read(XmlReader& e)
 {
-    String group = e.attribute("group", fileGroupNames[(int)StaffGroup::STANDARD]);
-    if (group == fileGroupNames[(int)StaffGroup::TAB]) {
-        _group = StaffGroup::TAB;
-    } else if (group == fileGroupNames[(int)StaffGroup::PERCUSSION]) {
-        _group = StaffGroup::PERCUSSION;
-    } else if (group == fileGroupNames[(int)StaffGroup::STANDARD]) {
-        _group = StaffGroup::STANDARD;
-    } else {
-        LOGD("StaffType::read: unknown group: %s", muPrintable(group));
-        _group = StaffGroup::STANDARD;
-    }
+    AsciiStringView group = e.asciiAttribute("group");
+    _group = TConv::fromXml(group, StaffGroup::STANDARD);
 
     if (_group == StaffGroup::TAB) {
         setGenKeysig(false);

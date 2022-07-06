@@ -25,6 +25,11 @@
 #include "translation.h"
 #include "log.h"
 
+#ifdef ENGRAVING_NO_TRANSLATION
+#undef QT_TRANSLATE_NOOP
+#define QT_TRANSLATE_NOOP(ctx, str) ""
+#endif
+
 using namespace mu;
 using namespace mu::engraving;
 

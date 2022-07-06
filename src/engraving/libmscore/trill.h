@@ -72,13 +72,8 @@ class Trill final : public SLine
 {
     Sid getPropertyStyle(Pid) const override;
 
-public:
-    enum class Type : char {
-        TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,
-    };
-
 private:
-    Type _trillType;
+    TrillType _trillType;
     Accidental* _accidental;
     OrnamentStyle _ornamentStyle;   // for use in ornaments such as trill
     bool _playArticulation;
@@ -101,15 +96,12 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    void setTrillType(const String& s);
-    void setTrillType(Type tt) { _trillType = tt; }
-    Type trillType() const { return _trillType; }
+    void setTrillType(TrillType tt) { _trillType = tt; }
+    TrillType trillType() const { return _trillType; }
     void setOrnamentStyle(OrnamentStyle val) { _ornamentStyle = val; }
     OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
     void setPlayArticulation(bool val) { _playArticulation = val; }
     bool playArticulation() const { return _playArticulation; }
-    static String type2name(Trill::Type t);
-    String trillTypeName() const;
     String trillTypeUserName() const;
     Accidental* accidental() const { return _accidental; }
     void setAccidental(Accidental* a) { _accidental = a; }
@@ -122,18 +114,6 @@ public:
 
     String accessibleInfo() const override;
 };
-
-struct TrillTableItem {
-    Trill::Type type;
-    const char* name;
-    const char* userName;
-};
-
-extern const std::vector<TrillTableItem> trillTable;
 } // namespace mu::engraving
-
-#ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::Trill::Type);
-#endif
 
 #endif

@@ -470,16 +470,16 @@ String TempoText::duration2userName(const TDuration t)
 {
     String dots;
     switch (t.dots()) {
-    case 1: dots = mtrc("engraving", "Dotted %1").arg(TConv::toUserName(t.type()));
+    case 1: dots = mtrc("engraving", "Dotted %1").arg(TConv::translatedUserName(t.type()));
         break;
-    case 2: dots = mtrc("engraving", "Double dotted %1").arg(TConv::toUserName(t.type()));
+    case 2: dots = mtrc("engraving", "Double dotted %1").arg(TConv::translatedUserName(t.type()));
         break;
-    case 3: dots = mtrc("engraving", "Triple dotted %1").arg(TConv::toUserName(t.type()));
+    case 3: dots = mtrc("engraving", "Triple dotted %1").arg(TConv::translatedUserName(t.type()));
         break;
-    case 4: dots = mtrc("engraving", "Quadruple dotted %1").arg(TConv::toUserName(t.type()));
+    case 4: dots = mtrc("engraving", "Quadruple dotted %1").arg(TConv::translatedUserName(t.type()));
         break;
     default:
-        dots = TConv::toUserName(t.type());
+        dots = TConv::translatedUserName(t.type());
         break;
     }
     return dots;

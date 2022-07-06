@@ -49,16 +49,16 @@ PropertyItem* VibratoSettingsModel::placement() const
 
 QVariantList VibratoSettingsModel::possibleLineTypes() const
 {
-    QMap<mu::engraving::Vibrato::Type, QString> types {
-        { mu::engraving::Vibrato::Type::GUITAR_VIBRATO, mu::qtrc("inspector", "Vibrato") },
-        { mu::engraving::Vibrato::Type::GUITAR_VIBRATO_WIDE, mu::qtrc("inspector", "Vibrato wide") },
-        { mu::engraving::Vibrato::Type::VIBRATO_SAWTOOTH, mu::qtrc("inspector", "Vibrato sawtooth") },
-        { mu::engraving::Vibrato::Type::VIBRATO_SAWTOOTH_WIDE, mu::qtrc("inspector", "Vibrato sawtooth wide") }
+    QMap<mu::engraving::VibratoType, QString> types {
+        { mu::engraving::VibratoType::GUITAR_VIBRATO, mu::qtrc("inspector", "Vibrato") },
+        { mu::engraving::VibratoType::GUITAR_VIBRATO_WIDE, mu::qtrc("inspector", "Vibrato wide") },
+        { mu::engraving::VibratoType::VIBRATO_SAWTOOTH, mu::qtrc("inspector", "Vibrato sawtooth") },
+        { mu::engraving::VibratoType::VIBRATO_SAWTOOTH_WIDE, mu::qtrc("inspector", "Vibrato sawtooth wide") }
     };
 
     QVariantList result;
 
-    for (mu::engraving::Vibrato::Type type : types.keys()) {
+    for (mu::engraving::VibratoType type : types.keys()) {
         QVariantMap obj;
 
         obj["text"] = types[type];

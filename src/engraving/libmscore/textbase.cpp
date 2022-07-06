@@ -2600,7 +2600,7 @@ String TextBase::accessibleInfo() const
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:
-        rez = score() ? score()->getTextStyleUserName(textStyleType()) : TConv::toUserName(textStyleType());
+        rez = score() ? score()->getTextStyleUserName(textStyleType()) : TConv::translatedUserName(textStyleType());
         break;
     default:
         rez = EngravingItem::accessibleInfo();
@@ -2630,7 +2630,7 @@ String TextBase::screenReaderInfo() const
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:
-        rez = score() ? score()->getTextStyleUserName(textStyleType()) : TConv::toUserName(textStyleType());
+        rez = score() ? score()->getTextStyleUserName(textStyleType()) : TConv::translatedUserName(textStyleType());
         break;
     default:
         rez = EngravingItem::accessibleInfo();
@@ -2655,7 +2655,7 @@ int TextBase::subtype() const
 
 String TextBase::subtypeName() const
 {
-    return score() ? score()->getTextStyleUserName(textStyleType()) : TConv::toUserName(textStyleType());
+    return score() ? score()->getTextStyleUserName(textStyleType()) : TConv::translatedUserName(textStyleType());
 }
 
 //---------------------------------------------------------

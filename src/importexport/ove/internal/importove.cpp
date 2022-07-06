@@ -2185,49 +2185,49 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
         switch (type) {
         case ovebase::RepeatType::Segno: {
             Marker* marker = Factory::createMarker(measure);
-            marker->setMarkerType(Marker::Type::SEGNO);
+            marker->setMarkerType(MarkerType::SEGNO);
             e = marker;
             break;
         }
         case ovebase::RepeatType::Coda: {
             Marker* marker = Factory::createMarker(measure);
-            marker->setMarkerType(Marker::Type::CODA);
+            marker->setMarkerType(MarkerType::CODA);
             e = marker;
             break;
         }
         case ovebase::RepeatType::DSAlCoda: {
             Jump* jp = Factory::createJump(measure);
-            jp->setJumpType(Jump::Type::DS_AL_CODA);
+            jp->setJumpType(JumpType::DS_AL_CODA);
             e = jp;
             break;
         }
         case ovebase::RepeatType::DSAlFine: {
             Jump* jp = Factory::createJump(measure);
-            jp->setJumpType(Jump::Type::DS_AL_FINE);
+            jp->setJumpType(JumpType::DS_AL_FINE);
             e = jp;
             break;
         }
         case ovebase::RepeatType::DCAlCoda: {
             Jump* jp = Factory::createJump(measure);
-            jp->setJumpType(Jump::Type::DC_AL_CODA);
+            jp->setJumpType(JumpType::DC_AL_CODA);
             e = jp;
             break;
         }
         case ovebase::RepeatType::DCAlFine: {
             Jump* jp = Factory::createJump(measure);
-            jp->setJumpType(Jump::Type::DC_AL_FINE);
+            jp->setJumpType(JumpType::DC_AL_FINE);
             e = jp;
             break;
         }
         case ovebase::RepeatType::ToCoda: {
             Marker* m = Factory::createMarker(measure);
-            m->setMarkerType(Marker::Type::TOCODA);
+            m->setMarkerType(MarkerType::TOCODA);
             e = m;
             break;
         }
         case ovebase::RepeatType::Fine: {
             Marker* m = Factory::createMarker(measure);
-            m->setMarkerType(Marker::Type::FINE);
+            m->setMarkerType(MarkerType::FINE);
             e = m;
             break;
         }

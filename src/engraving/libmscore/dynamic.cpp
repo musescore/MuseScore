@@ -586,7 +586,7 @@ String Dynamic::accessibleInfo() const
             s += u"…";
         }
     } else {
-        s = TConv::toUserName(dynamicType());
+        s = TConv::translatedUserName(dynamicType());
     }
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
@@ -602,7 +602,7 @@ String Dynamic::screenReaderInfo() const
     if (dynamicType() == DynamicType::OTHER) {
         s = plainText().simplified();
     } else {
-        s = TConv::toUserName(dynamicType());
+        s = TConv::translatedUserName(dynamicType());
     }
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
