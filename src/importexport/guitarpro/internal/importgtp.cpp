@@ -3013,8 +3013,8 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool create
         for (size_t partNum = 0; partNum < score->parts().size(); partNum++) {
             Part* part = score->parts()[partNum];
             Fraction fr = Fraction(0, 1);
-            int lines = part->instrument()->stringData()->strings();
-            int stavesNum = part->nstaves();
+            int lines = static_cast<int>(part->instrument()->stringData()->strings());
+            int stavesNum = static_cast<int>(part->nstaves());
 
             part->setStaves(stavesNum * 2);
 
