@@ -22,8 +22,6 @@
 
 #include "publishtoolbarmodel.h"
 
-#include "log.h"
-
 using namespace mu::appshell;
 using namespace mu::uicomponents;
 
@@ -38,7 +36,8 @@ void PublishToolBarModel::load()
 
     MenuItemList items {
         makeMenuItem("print"),
-        makeMenuItem("file-publish"),
+        // Todo(save-to-cloud): hidden until fully implemented
+        //makeMenuItem("file-publish"),
         makeMenuItem("file-export")
     };
 
