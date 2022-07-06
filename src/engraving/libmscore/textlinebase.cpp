@@ -129,7 +129,8 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     const Pen solidPen(color, lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
     Pen pen(solidPen);
 
-    double dash, gap;
+    double dash = 0;
+    double gap = 0;
 
     switch (tl->lineStyle()) {
     case LineType::SOLID:

@@ -83,9 +83,6 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
         }
         }
     }
-
-    UNREACHABLE;
-    return make_ret(Ret::Code::InternalError);
 }
 
 RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
