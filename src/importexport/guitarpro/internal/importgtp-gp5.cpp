@@ -1468,7 +1468,7 @@ bool GuitarPro5::readNote(int string, Note* note)
             return false;
         }
     }
-    dead_end[{ note->staffIdx(), string }] = false;
+    dead_end[{ static_cast<int>(note->staffIdx()), string }] = false;
     return slur;
 }
 
