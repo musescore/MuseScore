@@ -831,7 +831,7 @@ void NotationParts::removeStaves(const IDList& stavesIds)
         staff_idx_t staffIdx = score()->staffIdx(staff);
         for (BracketItem* bi : staff->brackets()) {
             if ((bi->bracketType() == BracketType::BRACE) && (bi->bracketSpan() > 1)) {
-                newBrackets.push_back(BracketData(bi->column(), bi->bracketSpan() - 1));
+                newBrackets.push_back(BracketData(static_cast<int>(bi->column()), static_cast<int>(bi->bracketSpan()) - 1));
             }
         }
         score()->cmdRemoveStaff(staff->idx());

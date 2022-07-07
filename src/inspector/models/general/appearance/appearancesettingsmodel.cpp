@@ -90,6 +90,7 @@ void AppearanceSettingsModel::resetProperties()
 
 void AppearanceSettingsModel::updatePropertiesOnNotationChanged()
 {
+    loadPropertyItem(m_leadingSpace, formatDoubleFunc);
     loadOffsets();
 }
 
