@@ -51,8 +51,8 @@ public:
     QObject* appearanceSettingsModel() const;
 
 public slots:
-    void setPlaybackProxyModel(PlaybackProxyModel* playbackProxyModel);
-    void setAppearanceSettingsModel(AppearanceSettingsModel* appearanceSettingsModel);
+    void setPlaybackProxyModel(mu::inspector::PlaybackProxyModel* playbackProxyModel);
+    void setAppearanceSettingsModel(mu::inspector::AppearanceSettingsModel* appearanceSettingsModel);
 
 signals:
     void playbackProxyModelChanged(QObject* playbackProxyModel);
@@ -65,6 +65,8 @@ protected:
     void resetProperties() override;
 
 private:
+    void updatePropertiesOnNotationChanged() override;
+
     PropertyItem* m_isVisible = nullptr;
     PropertyItem* m_isAutoPlaceAllowed = nullptr;
     PropertyItem* m_isPlayable = nullptr;

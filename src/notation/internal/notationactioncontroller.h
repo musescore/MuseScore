@@ -155,6 +155,8 @@ private:
     bool isNotEditingElement() const;
     bool isNotNoteInputMode() const;
 
+    bool isToggleVisibleAllowed() const;
+
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
 
