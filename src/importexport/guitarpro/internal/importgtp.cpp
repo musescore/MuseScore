@@ -2897,10 +2897,65 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp)
 }
 
 //---------------------------------------------------------
-//   importGTP
+//   createLinkedTabs
 //---------------------------------------------------------
 
-Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool createLinkedTabForce)
+static void createLinkedTabs(MasterScore* score)
+{
+    for (size_t partNum = 0; partNum < score->parts().size(); partNum++) {
+        Part* part = score->parts()[partNum];
+        Fraction fr = Fraction(0, 1);
+        int lines = part->instrument()->stringData()->strings();
+        int stavesNum = part->nstaves();
+
+        part->setStaves(stavesNum * 2);
+
+        for (int i = 0; i < stavesNum; i++) {
+            staff_idx_t staffIdx = static_cast<int>(stavesNum + i);
+
+            for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
+                Spanner* s = it->second;
+
+                if (s->staffIdx() >= staffIdx) {
+                    track_idx_t t = s->track() + VOICES;
+                    if (t >= score->ntracks()) {
+                        t = score->ntracks() - 1;
+                    }
+
+                    s->setTrack(t);
+                    for (SpannerSegment* ss : s->spannerSegments()) {
+                        ss->setTrack(t);
+                    }
+
+                    if (s->track2() != mu::nidx) {
+                        t = s->track2() + VOICES;
+                        s->setTrack2(t < score->ntracks() ? t : s->track());
+                    }
+                }
+            }
+
+            Staff* srcStaff = part->staff(i);
+            Staff* dstStaff = part->staff(stavesNum + i);
+
+            StaffTypes tabType = StaffTypes::TAB_6COMMON;
+            if (lines == 4) {
+                tabType = StaffTypes::TAB_4COMMON;
+            } else if (lines == 5) {
+                tabType = StaffTypes::TAB_5COMMON;
+            }
+
+            dstStaff->setStaffType(fr, *StaffType::preset(tabType));
+            dstStaff->setLines(fr, lines);
+            Excerpt::cloneStaff(srcStaff, dstStaff);
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   importScore
+//---------------------------------------------------------
+
+static Score::FileError importScore(MasterScore* score, mu::io::IODevice* io)
 {
     if (!io->open(IODevice::ReadOnly)) {
         return Score::FileError::FILE_OPEN_ERROR;
@@ -3009,57 +3064,26 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool create
         score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
     }
 
-    if (createLinkedTabForce) {
-        for (size_t partNum = 0; partNum < score->parts().size(); partNum++) {
-            Part* part = score->parts()[partNum];
-            Fraction fr = Fraction(0, 1);
-            size_t lines = part->instrument()->stringData()->strings();
-            size_t stavesNum = part->nstaves();
+    delete gp;
 
-            part->setStaves(static_cast<int>(stavesNum) * 2);
+    return Score::FileError::FILE_NO_ERROR;
+}
 
-            for (size_t i = 0; i < stavesNum; i++) {
-                staff_idx_t staffIdx = stavesNum + i;
+//---------------------------------------------------------
+//   importGTP
+//---------------------------------------------------------
 
-                for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
-                    Spanner* s = it->second;
+Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool createLinkedTabForce)
+{
+    Score::FileError error = importScore(score, io);
 
-                    if (s->staffIdx() >= staffIdx) {
-                        track_idx_t t = s->track() + VOICES;
-                        if (t >= score->ntracks()) {
-                            t = score->ntracks() - 1;
-                        }
-
-                        s->setTrack(t);
-                        for (SpannerSegment* ss : s->spannerSegments()) {
-                            ss->setTrack(t);
-                        }
-
-                        if (s->track2() != mu::nidx) {
-                            t = s->track2() + VOICES;
-                            s->setTrack2(t < score->ntracks() ? t : s->track());
-                        }
-                    }
-                }
-
-                Staff* srcStaff = part->staff(i);
-                Staff* dstStaff = part->staff(stavesNum + i);
-
-                StaffTypes tabType = StaffTypes::TAB_6COMMON;
-                if (lines == 4) {
-                    tabType = StaffTypes::TAB_4COMMON;
-                } else if (lines == 5) {
-                    tabType = StaffTypes::TAB_5COMMON;
-                }
-
-                dstStaff->setStaffType(fr, *StaffType::preset(tabType));
-                dstStaff->setLines(fr, static_cast<int>(lines));
-                Excerpt::cloneStaff(srcStaff, dstStaff);
-            }
-        }
+    if (error != Score::FileError::FILE_NO_ERROR) {
+        return error;
     }
 
-    delete gp;
+    if (createLinkedTabForce) {
+        createLinkedTabs(score);
+    }
 
     return Score::FileError::FILE_NO_ERROR;
 }
