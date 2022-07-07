@@ -2910,8 +2910,8 @@ static void createLinkedTabs(MasterScore* score)
 
         part->setStaves(static_cast<int>(stavesNum * 2));
 
-        for (int i = 0; i < stavesNum; i++) {
-            staff_idx_t staffIdx = static_cast<int>(stavesNum + i);
+        for (size_t i = 0; i < stavesNum; i++) {
+            staff_idx_t staffIdx = stavesNum + i;
 
             for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
                 Spanner* s = it->second;
