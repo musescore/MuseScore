@@ -146,6 +146,9 @@ void PowerTab::readSongInfo(ptSongInfo& info)
             info.year   = readShort();
             break;
         }
+        case 3: {
+            break;
+        }
         default:
             assert(0);
         }
@@ -785,7 +788,6 @@ void PowerTab::addToScore(ptSection& sec)
         for (int i = 0; i < staves; ++i) {
             Part* part = new Part(score);
             Staff* s = Factory::createStaff(part);
-            part->insertStaff(s, mu::nidx);
             auto info = &curTrack->infos[i];
             std::string ss = info->name;
             part->setPartName(QString::fromUtf8(ss.data(), int(ss.size())));
@@ -1278,90 +1280,6 @@ Score::FileError PowerTab::read()
         Text* s = Factory::createText(m, TextStyleType::TITLE);
         s->setPlainText(QString::fromUtf8(name.data(), int(name.size())));
         m->add(s);
-    }
-
-//      static const char* tune[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-    int id = 0;
-    for (Part* part : score->parts()) {
-        TracksMap tracks;
-        Score* pscore = score->createScore();
-
-//TODO-ws            pscore->tuning.clear();
-        auto& info = song.track1.infos[id++];
-        for (auto it = info.strings.rbegin(); it != info.strings.rend(); ++it) {
-//TODO-ws                  pscore->tuning += tune[*it % 12];
-//                  pscore->tuning += " ";
-        }
-
-//TODO-ws          pscore->showLyrics = score->showLyrics;
-        pscore->style().set(Sid::createMultiMeasureRests, false);
-        pscore->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
-
-        std::vector<staff_idx_t> stavesMap;
-        Part* p = new Part(pscore);
-        p->setInstrument(*part->instrument());
-
-        Staff* staff = part->staves().front();
-
-        Staff* s = Factory::createStaff(p);
-        const StaffType* st = staff->staffType(Fraction(0, 1));
-        s->setStaffType(Fraction(0, 1), *st);
-
-        s->linkTo(staff);
-        pscore->appendStaff(s);
-        stavesMap.push_back(staff->idx());
-        for (track_idx_t i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++) {
-            tracks.insert({ i, j });
-        }
-
-        Excerpt* excerpt = new Excerpt(score);
-        excerpt->setTracksMapping(tracks);
-        excerpt->setExcerptScore(pscore);
-        //title?
-        excerpt->setName(part->instrument()->longNames().front().name());
-        pscore->setExcerpt(excerpt);
-        excerpt->parts().push_back(part);
-        score->excerpts().push_back(excerpt);
-
-        Excerpt::cloneStaves(score, pscore, stavesMap, tracks);
-
-        if (staff->part()->instrument()->stringData()->strings() > 0
-            && part->staves().front()->staffType(Fraction(0, 1))->group() == StaffGroup::STANDARD) {
-            p->setStaves(2);
-            Staff* s1 = p->staff(1);
-
-            size_t lines = staff->part()->instrument()->stringData()->strings();
-            StaffTypes sts = StaffTypes::TAB_DEFAULT;
-            if (lines == 4) {
-                sts = StaffTypes::TAB_4COMMON;
-            }
-            StaffType st1 = *StaffType::preset(sts);
-            s1->setStaffType(Fraction(0, 1), st1);
-            s1->setLines(Fraction(0, 1), static_cast<int>(lines));
-            Excerpt::cloneStaff(s, s1);
-            BracketItem* bi = Factory::createBracketItem(pscore->dummy(), BracketType::NORMAL, 2);
-            p->staves().front()->addBracket(bi);
-        }
-        pscore->appendPart(p);
-
-        //
-        // create excerpt title
-        //
-        MeasureBase* measure = pscore->first();
-        if (!measure || (measure->type() != ElementType::VBOX)) {
-            MeasureBase* mb = Factory::createVBox(pscore->dummy()->system());
-            mb->setTick(Fraction(0, 1));
-            pscore->addMeasure(mb, measure);
-            measure = mb;
-        }
-        Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
-        txt->setPlainText(part->longName());
-        measure->add(txt);
-
-        pscore->setPlaylistDirty();
-        pscore->setLayoutAll();
-        pscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
-        pscore->doLayout();
     }
     return Score::FileError::FILE_NO_ERROR;
 }
