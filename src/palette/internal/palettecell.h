@@ -93,19 +93,18 @@ public:
     mu::engraving::ElementPtr element;
     mu::engraving::ElementPtr untranslatedElement;
     QString id;
+
     QString name; // used for tool tip
     qreal mag { 1.0 };
+    double xoffset { 0.0 }; // in spatium units of "gscore"
+    double yoffset { 0.0 };
     QString tag;
 
     bool drawStaff { false };
-    double xoffset { 0.0 }; // in spatium units of "gscore"
-    double yoffset { 0.0 };
     bool readOnly { false };
-
     bool visible { true };
     bool custom { false };
     bool active { false };
-
     bool focused { false };
 
 private:
