@@ -374,16 +374,16 @@ void TextLineBaseSegment::layout()
     PointF pp1;
     PointF pp2(pos2());
 
-    // diagonal line with no text or hooks - just use the basic rectangle for line
-    if (_text->empty() && _endText->empty() && pp2.y() != 0
+    // line with no text or hooks - just use the basic rectangle for line
+    if (_text->empty() && _endText->empty()
         && (!isSingleBeginType() || tl->beginHookType() == HookType::NONE)
         && (!isSingleEndType() || tl->endHookType() == HookType::NONE)) {
-        npoints = 1;     // 2 points, but only one line must be drawn
+        npoints = 2;
         points[0] = pp1;
         points[1] = pp2;
         lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
 
-        setbbox(RectF(pp1, pp2).normalized());
+        setbbox(boundingBoxOfLine(pp1, pp2, tl->lineWidth() / 2, tl->lineStyle() == LineType::DOTTED));
         return;
     }
 
