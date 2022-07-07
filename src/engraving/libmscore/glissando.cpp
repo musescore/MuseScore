@@ -346,37 +346,19 @@ void Glissando::layout()
         segm->setPosY(yCurr);                                // position next segm. start point at yCurr
     }
 
-    // STAY CLEAR OF NOTE APPENDAGES
-
-    // initial note dots / ledger line / notehead
-    offs1 *= -1.0;            // discount changes already applied
-    int dots = static_cast<int>(anchor1->dots().size());
-    LedgerLine* ledLin = cr1->ledgerLines();
-
-    // If TAB: completely zero first offset since it was already applied as right edge of first note
-    if (cr1->staff()->isTabStaff(cr1->tick())) {
-        offs1.rx() = 0.0;
+    // KEEP CLEAR OF ALL ELEMENTS OF THE CHORD
+    // Remove offset already applied
+    offs1 *= -1.0;
+    offs2 *= -1.0;
+    // Look at chord shapes
+    offs1.rx() += cr1->shape().right() - anchor1->pos().x();
+    if (!cr2->staff()->isTabStaff(cr2->tick())) {
+        offs2.rx() -= cr2->shape().left() + anchor2->pos().x();
     }
-    // if dots, start at right of last dot
-    // if no dots, from right of ledger line, if any; from right of notehead, if no ledger line
-    else {
-        offs1.rx() += (dots && anchor1->dot(dots - 1) ? anchor1->dot(dots - 1)->pos().x() + anchor1->dot(dots - 1)->width()
-                       : (ledLin ? ledLin->pos().x() + ledLin->width() : anchor1->headWidth()));
-    }
-
-    // final note arpeggio / accidental / ledger line / accidental / arpeggio (i.e. from outermost to innermost)
-    offs2 *= -1.0;            // discount changes already applied
-    if (Arpeggio* ap = cr2->arpeggio()) {
-        offs2.rx() += ap->pos().x() + ap->offset().x();
-    } else if (Accidental* ac = anchor2->accidental()) {
-        offs2.rx() += ac->pos().x() + ac->offset().x();
-    } else if ((ledLin = cr2->ledgerLines()) != nullptr) {
-        offs2.rx() += ledLin->pos().x();
-    }
-
-    // add another a quarter spatium of 'air'
-    offs1.rx() += _spatium * 0.25;
-    offs2.rx() -= _spatium * 0.25;
+    // Add note distance
+    const double glissNoteDist = 0.25 * spatium(); // TODO: style
+    offs1.rx() += glissNoteDist;
+    offs2.rx() -= glissNoteDist;
 
     // apply offsets: shorten first segment by x1 (and proportionally y) and adjust its length accordingly
     offs1.ry() = segm1->ipos2().y() * offs1.x() / segm1->ipos2().x();
