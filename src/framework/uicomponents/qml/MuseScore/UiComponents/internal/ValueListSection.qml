@@ -66,7 +66,6 @@ ListItemBlank {
             StyledTextLabel {
                 id: titleLabel
                 text: "section"
-                font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
         }
