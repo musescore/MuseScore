@@ -318,8 +318,9 @@ Val Val::fromQVariant(const QVariant& var)
         }
         return Val(m);
     }
+    case QVariant::Color: return Val(var.value<QColor>());
     default: {
-        LOGE() << "not supported type: " << var.typeName();
+        LOGE() << "Not supported type: " << var.typeName();
         //UNREACHABLE;
         return Val();
     }
