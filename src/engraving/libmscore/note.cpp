@@ -2019,7 +2019,7 @@ EngravingItem* Note::drop(EditData& data)
         }
 
         // this is the glissando initial note, look for a suitable final note
-        Note* finalNote = Glissando::guessFinalNote(chord());
+        Note* finalNote = Glissando::guessFinalNote(chord(), this);
         if (finalNote) {
             // init glissando data
             Glissando* gliss = toGlissando(e);

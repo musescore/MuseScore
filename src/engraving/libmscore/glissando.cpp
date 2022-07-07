@@ -32,6 +32,7 @@ NICE-TO-HAVE TODO:
 #include "glissando.h"
 
 #include <cmath>
+#include <algorithm>
 
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
@@ -598,7 +599,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
 //    Returns:    the top note in a suitable following chord or nullptr if none found
 //---------------------------------------------------------
 
-Note* Glissando::guessFinalNote(Chord* chord)
+Note* Glissando::guessFinalNote(Chord* chord, Note* startNote)
 {
     switch (chord->noteType()) {
 //            case NoteType::INVALID:
@@ -677,7 +678,12 @@ Note* Glissando::guessFinalNote(Chord* chord)
                 if (graces.size() > 0) {
                     return graces.front()->upNote();
                 }
-                return target->upNote();              // if no grace before, return top note
+                // normal case: try to return the note in the next chord that is in the
+                // same position as the start note relative to the end chord
+                auto startNoteIter = find(chord->notes().begin(), chord->notes().end(), startNote);
+                int startNoteIdx = std::distance(chord->notes().begin(), startNoteIter);
+                int endNoteIdx = std::min(startNoteIdx, int(target->notes().size()) - 1);
+                return target->notes().at(endNoteIdx);
             }
         }
         segm = segm->next1();
