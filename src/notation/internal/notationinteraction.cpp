@@ -1679,7 +1679,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                         mu::engraving::Chord* chord = toChord(e);
                         for (mu::engraving::Note* n : chord->notes()) {
                             applyDropPaletteElement(score, n, element, modifiers);
-                            if (!(element->isAccidental() || element->isNoteHead())) {             // only these need to apply to every note
+                            if (!(element->isAccidental() || element->isNoteHead()
+                                  || element->isGlissando() || element->isChordLine())) { // only these need to apply to every note
                                 break;
                             }
                         }
