@@ -3,6 +3,10 @@
 #include <iostream>
 #include <cassert>
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 using namespace haw::logger;
 
 MemLogDest::MemLogDest(const LogLayout& l)
@@ -71,5 +75,12 @@ std::string ConsoleLogDest::name() const
 
 void ConsoleLogDest::write(const LogMsg& logMsg)
 {
-    std::clog << m_layout.output(logMsg) << std::endl;
+    #ifdef _WIN32
+    std::string stemp = m_layout.output(logMsg);
+    std::wstring temp = std::wstring(stemp.begin(), stemp.end());
+    OutputDebugString(temp.c_str());
+    OutputDebugString(L"\n");
+    #else
+    std::cout << m_layout.output(logMsg) << std::endl;
+    #endif
 }
