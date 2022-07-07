@@ -2905,10 +2905,10 @@ static void createLinkedTabs(MasterScore* score)
     for (size_t partNum = 0; partNum < score->parts().size(); partNum++) {
         Part* part = score->parts()[partNum];
         Fraction fr = Fraction(0, 1);
-        int lines = part->instrument()->stringData()->strings();
-        int stavesNum = part->nstaves();
+        size_t lines = part->instrument()->stringData()->strings();
+        size_t stavesNum = part->nstaves();
 
-        part->setStaves(stavesNum * 2);
+        part->setStaves(static_cast<int>(stavesNum * 2));
 
         for (int i = 0; i < stavesNum; i++) {
             staff_idx_t staffIdx = static_cast<int>(stavesNum + i);
@@ -2945,7 +2945,7 @@ static void createLinkedTabs(MasterScore* score)
             }
 
             dstStaff->setStaffType(fr, *StaffType::preset(tabType));
-            dstStaff->setLines(fr, lines);
+            dstStaff->setLines(fr, static_cast<int>(lines));
             Excerpt::cloneStaff(srcStaff, dstStaff);
         }
     }
