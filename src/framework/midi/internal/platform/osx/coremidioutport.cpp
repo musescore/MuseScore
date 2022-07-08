@@ -129,8 +129,8 @@ MidiDeviceList CoreMidiOutPort::devices() const
     MidiDeviceList ret;
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
-    int destinations = MIDIGetNumberOfDestinations();
-    for (int destIndex = 0; destIndex <= destinations; destIndex++) {
+    ItemCount destinations = MIDIGetNumberOfDestinations();
+    for (ItemCount destIndex = 0; destIndex <= destinations; destIndex++) {
         MIDIEndpointRef destRef = MIDIGetDestination(destIndex);
         if (destRef != 0) {
             CFStringRef stringRef = nullptr;

@@ -68,8 +68,8 @@ MidiDeviceList CoreMidiInPort::devices() const
     MidiDeviceList ret;
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
-    int sources = MIDIGetNumberOfSources();
-    for (int sourceIndex = 0; sourceIndex <= sources; sourceIndex++) {
+    ItemCount sources = MIDIGetNumberOfSources();
+    for (ItemCount sourceIndex = 0; sourceIndex <= sources; sourceIndex++) {
         MIDIEndpointRef sourceRef = MIDIGetSource(sourceIndex);
         if (sourceRef != 0) {
             CFStringRef stringRef = 0;
@@ -161,7 +161,7 @@ void CoreMidiInPort::initCore()
                 if (packet->wordCount != 0 && packet->wordCount <= 4) {
                     Event e = Event::fromRawData(packet->words, packet->wordCount);
                     if (e) {
-                        m_eventReceived.send(packet->timeStamp, e);
+                        m_eventReceived.send((tick_t)packet->timeStamp, e);
                     }
                 } else if (packet->wordCount > 4) {
                     LOGW() << "unsupported midi message size " << packet->wordCount << " bytes";
@@ -184,7 +184,7 @@ void CoreMidiInPort::initCore()
 
                     auto e = Event::fromMIDI10Package(message).toMIDI20();
                     if (e) {
-                        m_eventReceived.send(packet->timeStamp, e);
+                        m_eventReceived.send((tick_t)packet->timeStamp, e);
                     }
                 } else if (packet->length > 4) {
                     LOGW() << "unsupported midi message size " << packet->length << " bytes";
