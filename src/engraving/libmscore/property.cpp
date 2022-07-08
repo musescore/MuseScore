@@ -184,7 +184,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::HAIRPIN_HEIGHT,          false, "hairpinHeight",         P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "hairpin height") },
     { Pid::HAIRPIN_CONT_HEIGHT,     false, "hairpinContHeight",     P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "hairpin cont height") },
     { Pid::VELO_CHANGE,             true,  "veloChange",            P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "velocity change") },
-    { Pid::VELO_CHANGE_METHOD,      true,  "veloChangeMethod",      P_TYPE::CHANGE_METHOD,  DUMMY_QT_TR_NOOP("propertyName", "velocity change method") }, // left as a compatability property - we need to be able to read it correctly
+    { Pid::VELO_CHANGE_METHOD,      true,  "veloChangeMethod",      P_TYPE::CHANGE_METHOD,  DUMMY_QT_TR_NOOP("propertyName", "velocity change method") }, // left as a compatibility property - we need to be able to read it correctly
     { Pid::VELO_CHANGE_SPEED,       true,  "veloChangeSpeed",       P_TYPE::DYNAMIC_SPEED,   DUMMY_QT_TR_NOOP("propertyName", "velocity change speed") },
     { Pid::DYNAMIC_TYPE,            true,  "subtype",               P_TYPE::DYNAMIC_TYPE,   DUMMY_QT_TR_NOOP("propertyName", "dynamic type") },
     { Pid::DYNAMIC_RANGE,           true,  "dynType",               P_TYPE::DYNAMIC_RANGE,  DUMMY_QT_TR_NOOP("propertyName", "dynamic range") },
