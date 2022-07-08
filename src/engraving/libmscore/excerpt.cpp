@@ -153,8 +153,19 @@ bool Excerpt::isEmpty() const
     return excerptScore() ? excerptScore()->parts().empty() : true;
 }
 
+TracksMap& Excerpt::tracksMapping()
+{
+    updateTracksMapping();
+
+    return m_tracksMapping;
+}
+
 void Excerpt::setTracksMapping(const TracksMap& tracksMapping)
 {
+    if (m_tracksMapping == tracksMapping) {
+        return;
+    }
+
     m_tracksMapping = tracksMapping;
 
     for (Staff* staff : excerptScore()->staves()) {
@@ -162,14 +173,29 @@ void Excerpt::setTracksMapping(const TracksMap& tracksMapping)
         if (!masterStaff) {
             continue;
         }
-        staff->updateVisibilityVoices(masterStaff);
+        staff->updateVisibilityVoices(masterStaff, m_tracksMapping);
     }
 }
 
-void Excerpt::updateTracksMapping()
+void Excerpt::updateTracksMapping(bool voicesVisibilityChanged)
 {
+    Score* score = excerptScore();
+    if (!score) {
+        return;
+    }
+
     TracksMap tracks;
-    for (Staff* staff : excerptScore()->staves()) {
+
+    static std::vector<Staff*> staves;
+    if (staves == score->staves() && !voicesVisibilityChanged) {
+        return;
+    }
+
+    TRACEFUNC;
+
+    staves = score->staves();
+
+    for (Staff* staff : staves) {
         Staff* masterStaff = masterScore()->staffById(staff->id());
         if (!masterStaff) {
             continue;
@@ -208,7 +234,7 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
 
     // update tracks
     staff->setVoiceVisible(voiceIndex, visible);
-    updateTracksMapping();
+    updateTracksMapping(true /*voicesVisibilityChanged*/);
 
     // clone staff
     Staff* staffCopy = Factory::createStaff(staff->part());
@@ -244,19 +270,6 @@ void Excerpt::read(XmlReader& e)
             }
         }
     }
-}
-
-bool Excerpt::operator==(const Excerpt& other) const
-{
-    return m_masterScore == other.m_masterScore
-           && m_name == other.m_name
-           && m_parts == other.m_parts
-           && m_tracksMapping == other.m_tracksMapping;
-}
-
-bool Excerpt::operator!=(const Excerpt& other) const
-{
-    return !(*this == other);
 }
 
 void Excerpt::createExcerpt(Excerpt* excerpt)

@@ -4933,7 +4933,7 @@ void Score::undoExchangeVoice(Measure* measure, voice_idx_t srcVoice, voice_idx_
             Excerpt* ex = st->score()->excerpt();
 
             if (ex) {
-                TracksMap tracks = ex->tracksMapping();
+                const TracksMap& tracks = ex->tracksMapping();
                 std::vector<track_idx_t> srcTrackList = mu::values(tracks, srcTrack);
                 std::vector<track_idx_t> dstTrackList = mu::values(tracks, dstTrack);
 
@@ -5137,8 +5137,13 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
     track_idx_t strack = mu::nidx;
     if (ostaff) {
         strack = ostaff->idx() * VOICES + element->track() % VOICES;
-        if (ostaff->score()->excerpt() && !ostaff->score()->excerpt()->tracksMapping().empty() && strack != mu::nidx) {
-            strack = mu::key(ostaff->score()->excerpt()->tracksMapping(), strack, mu::nidx);
+
+        if (mu::engraving::Excerpt* excerpt = ostaff->score()->excerpt()) {
+            const TracksMap& tracks = excerpt->tracksMapping();
+
+            if (!tracks.empty() && strack != mu::nidx) {
+                strack = mu::key(tracks, strack, mu::nidx);
+            }
         }
     }
 
@@ -5348,7 +5353,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
             track_idx_t track = staff->idx() * VOICES + (strack % VOICES);
             tr.push_back(track);
         } else {
-            TracksMap mapping = staff->score()->excerpt()->tracksMapping();
+            const TracksMap& mapping = staff->score()->excerpt()->tracksMapping();
             if (mapping.empty()) {
                 // This can happen during reading the score and there is
                 // no Tracklist tag specified.
@@ -5720,8 +5725,11 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
     Staff* ostaff = cr->staff();
     track_idx_t strack = ostaff->idx() * VOICES + cr->voice();
 
-    if (ostaff->score()->excerpt() && !ostaff->score()->excerpt()->tracksMapping().empty()) {
-        strack = mu::key(ostaff->score()->excerpt()->tracksMapping(), strack, mu::nidx);
+    if (mu::engraving::Excerpt* excerpt = ostaff->score()->excerpt()) {
+        const TracksMap& tracks = excerpt->tracksMapping();
+        if (!tracks.empty()) {
+            strack = mu::key(tracks, strack, mu::nidx);
+        }
     }
 
     SegmentType segmentType = SegmentType::ChordRest;
@@ -5738,7 +5746,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
             track_idx_t track = staff->idx() * VOICES + (strack % VOICES);
             tracks.push_back(track);
         } else {
-            TracksMap mapping = staff->score()->excerpt()->tracksMapping();
+            const TracksMap& mapping = staff->score()->excerpt()->tracksMapping();
             if (mapping.empty()) {
                 // This can happen during reading the score and there is
                 // no Tracklist tag specified.
