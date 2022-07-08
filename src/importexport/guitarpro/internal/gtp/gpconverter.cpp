@@ -537,6 +537,11 @@ void GPConverter::convertNotes(const std::vector<std::shared_ptr<GPNote> >& note
     for (const auto& note : notes) {
         convertNote(note.get(), cr);
     }
+
+    //! NOTE: later notes order is used in linked staff to create ties, glissando
+    if (cr->isChord()) {
+        static_cast<Chord*>(cr)->sortNotes();
+    }
 }
 
 void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
@@ -973,8 +978,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         part->instrument()->setSingleNoteDynamics(false);
     }
 
-    // this code is almost a direct copy-paste code from android_improvement branch.
-    // it sets score lyrics from the first processed track.
+    // this code sets score lyrics from the first processed track.
 //    if (_score->OffLyrics.isEmpty())
 //        _score->OffLyrics = tR->lyrics();
 
