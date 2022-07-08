@@ -509,10 +509,7 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     }
 
     startEdit();
-
     doAppendStaff(staff, destinationPart);
-    updateTracks();
-
     apply();
 
     notifyAboutStaffAdded(staff, destinationPartId);
@@ -535,8 +532,6 @@ void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, con
     ///! NOTE: need to unlink before linking
     staff->setLinks(nullptr);
     mu::engraving::Excerpt::cloneStaff(sourceStaff, staff);
-
-    updateTracks();
 
     apply();
 
@@ -801,7 +796,6 @@ void NotationParts::doInsertPart(Part* part, size_t index)
     }
 
     part->setScore(score());
-    updateTracks();
 }
 
 void NotationParts::removeStaves(const IDList& stavesIds)
@@ -1095,15 +1089,6 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector
     score()->undo(new mu::engraving::SortStaves(score(), staffMapping));
 
     score()->undo(new mu::engraving::MapExcerptTracks(score(), trackMapping));
-}
-
-void NotationParts::updateTracks()
-{
-    if (!score()->excerpt()) {
-        return;
-    }
-
-    score()->excerpt()->updateTracksMapping();
 }
 
 int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrument,

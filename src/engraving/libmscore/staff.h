@@ -120,6 +120,10 @@ private:
 
     double staffMag(const StaffType*) const;
 
+    friend class Excerpt;
+    void setVoiceVisible(voice_idx_t voice, bool visible);
+    void updateVisibilityVoices(Staff* masterStaff, const TracksMap& tracks);
+
 public:
 
     Staff* clone() const override;
@@ -300,9 +304,7 @@ public:
 
     std::array<bool, VOICES> visibilityVoices() const;
     bool isVoiceVisible(voice_idx_t voice) const;
-    void setVoiceVisible(voice_idx_t voice, bool visible);
     bool canDisableVoice() const;
-    void updateVisibilityVoices(Staff* masterStaff);
 
 #ifndef NDEBUG
     void dumpClefs(const char* title) const;

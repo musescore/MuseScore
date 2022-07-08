@@ -111,8 +111,6 @@ private:
     void updateSoloist(const PartInstrumentList& parts);
     void sortParts(const PartInstrumentList& parts, const std::vector<mu::engraving::Staff*>& originalStaves);
 
-    void updateTracks();
-
     int resolveNewInstrumentNumber(const InstrumentTemplate& instrument, const PartInstrumentList& allNewInstruments) const;
 
     void setBracketsAndBarlines();
