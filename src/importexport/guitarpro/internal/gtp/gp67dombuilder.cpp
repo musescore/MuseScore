@@ -655,8 +655,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
         } else if (nodeName == "Golpe") {
             beat->setGolpe(golpeType(innerNode.toElement().text()));
         } else if (nodeName == "Lyrics") {
-            // this code is almost a copy-paste from android_improvement.
-            // it reads lyrics for the beat (only one line).
+            // this code reads lyrics for the beat (only one line).
 
             QDomElement lyrNode = innerNode.firstChildElement("Line");
             QString str = lyrNode.toElement().text();
