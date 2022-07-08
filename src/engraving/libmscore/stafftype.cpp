@@ -852,7 +852,7 @@ int StaffType::numOfTabLedgerLines(int string) const
 //   physStringToVisual / visualStringToPhys
 //
 //    returns the string ordinal in visual order (top to down) from a string ordinal in physical order
-//    or viceversa: manages upsideDown
+//    or vice-versa: manages upsideDown
 //---------------------------------------------------------
 
 int StaffType::physStringToVisual(int strg) const

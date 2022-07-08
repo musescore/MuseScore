@@ -105,7 +105,7 @@ MuseScore {
                         }
                   }
                   // if the tied back note is not part of
-                  // the current key sig, we need to remeber it.
+                  // the current key sig, we need to remember it.
                   //if( ! (note.tpc > keySig+12 && note.tpc < keySig+20)) {
                   //       curMeasureArray[noteClass]=noteName;
                   //}

@@ -39,7 +39,7 @@ namespace mu::engraving {
 //    This methods creates "walls". They are represented by
 //    rectangles of zero height, and it is assumed that rectangles
 //    of zero height vertically collide with everything. Use this
-//    method ONLY when you want to crate space that cannot tuck
+//    method ONLY when you want to create space that cannot tuck
 //    above/below other elements of the staff.
 //---------------------------------------------------------
 

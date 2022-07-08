@@ -166,7 +166,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
 
     BeatsColors beatsColors = parseBeatsColors(options.value(OptionKey::BEATS_COLORS, Val()).toQVariant());
 
-    // 2st pass: Set color for elements on beats
+    // 2nd pass: Set color for elements on beats
     int beatIndex = 0;
     for (const mu::engraving::RepeatSegment* repeatSegment : score->repeatList()) {
         for (const mu::engraving::Measure* measure : repeatSegment->measureList()) {
@@ -196,7 +196,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
         }
     }
 
-    // 3nd pass: the rest of the elements
+    // 3rd pass: the rest of the elements
     std::vector<mu::engraving::EngravingItem*> elements = page->elements();
     std::sort(elements.begin(), elements.end(), mu::engraving::elementLessThan);
 

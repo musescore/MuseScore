@@ -889,7 +889,7 @@ MQZipReader::MQZipReader(QIODevice* device)
 }
 
 /*!
-    Desctructor
+    Destructor
 */
 MQZipReader::~MQZipReader()
 {

@@ -209,7 +209,7 @@ mu::Ret AlsaMidiInPort::run()
 void AlsaMidiInPort::stop()
 {
     if (!m_thread) {
-        LOGW() << "already stoped";
+        LOGW() << "already stopped";
         return;
     }
 
