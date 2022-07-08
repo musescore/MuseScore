@@ -100,7 +100,7 @@ bool QFontProvider::inFontUcs4(const Font& f, uint ucs4) const
     }
 
     //! @NOTE some symbols in fonts dont have glyph. For example U+ee80
-    //! exists in Bravura.otf but doen't have glyph
+    //! exists in Bravura.otf but doesn't have glyph
     //! so QFontMetricsF returns true in that case
     return symBBox(f, ucs4, 1.).isValid();
 }

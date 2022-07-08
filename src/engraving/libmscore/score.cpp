@@ -5661,7 +5661,7 @@ void Score::createPaddingTable()
 
 //--------------------------------------------------------
 // setAutoSpatium()
-// Reduces the spatium size as necessary to accomodate all
+// Reduces the spatium size as necessary to accommodate all
 // staves in the page. Caution: the spatium is expressed in
 // DPI, page dimensions in inches, staff sizes in mm.
 //--------------------------------------------------------
