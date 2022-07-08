@@ -233,7 +233,7 @@ void Fermata::layout()
     EngravingItem* e = s->element(track());
     if (e) {
         if (e->isChord()) {
-            movePosX(score()->noteHeadWidth() * staff()->staffMag(Fraction(0, 1)) * .5);
+            movePosX(score()->noteHeadWidth() * staff()->staffMag(Fraction(0, 1)) * .5 + toChord(e)->pos().x());
         } else {
             movePosX(e->x() + e->width() * staff()->staffMag(Fraction(0, 1)) * .5);
         }
