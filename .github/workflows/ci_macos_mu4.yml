@@ -3,7 +3,7 @@ name: CI_MacOS MU4
 on:
   pull_request:
     branches:
-    - master
+    - master_off
     
   schedule: 
     - cron: '0 4 */1 */1 *' # At 04:00 on every day-of-month  
@@ -80,6 +80,15 @@ jobs:
           fi
         fi
 
+        DO_UPDATE_TS='false'
+        if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
+            DO_UPDATE_TS='true'
+            if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
+              echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
+              DO_UPDATE_TS='false'
+            fi 
+        fi
+
         DO_UPLOAD_SYMBOLS='false'
         SENTRY_PROJECT=${{ github.event.inputs.sentry_project }}
         SENTRY_URL=""
@@ -107,6 +116,8 @@ jobs:
         echo "BUILD_MODE: $BUILD_MODE"
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
+        echo "DO_UPDATE_TS=$DO_UPDATE_TS" >> $GITHUB_ENV
+        echo "DO_UPDATE_TS: $DO_UPDATE_TS"
         echo "DO_NOTARIZE=$DO_NOTARIZE" >> $GITHUB_ENV
         echo "DO_NOTARIZE: $DO_NOTARIZE"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
@@ -124,6 +135,15 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         bash ./build/ci/macos/setup.sh  
+    - name: Update .ts files
+      if: env.DO_UPDATE_TS == 'true'
+      run: |
+        bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s macos
+        bash ./build/ci/translation/tx_pull.sh
+    - name: Generate .qm files
+      if: env.DO_BUILD == 'true'
+      run: |
+        bash ./build/ci/translation/run_lrelease.sh      
     - name: Build
       if: env.DO_BUILD == 'true'    
       run: |
