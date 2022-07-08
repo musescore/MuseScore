@@ -33,7 +33,7 @@ ApplicationWindow {
     height: 480
 
     visible: true
-    title: qsTr("Muse Score")
+    title: qsTr("MuseScore")
 
     header: ToolBar {
         contentHeight: 40
