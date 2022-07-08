@@ -207,6 +207,18 @@ std::string CoreMidiOutPort::deviceID() const
     return m_deviceID;
 }
 
+static ByteCount packetListSize(const std::vector<Event>& events)
+{
+    if (events.empty()) {
+        return 0;
+    }
+
+    // TODO: should be dynamic per type of event
+    constexpr size_t eventSize = sizeof(Event().to_MIDI10Package());
+
+    return offsetof(MIDIPacketList, packet) + events.size() * (offsetof(MIDIPacket, data) + eventSize);
+}
+
 mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
 {
     if (!isConnected()) {
@@ -223,18 +235,24 @@ mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
 
         result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
     } else {
+        const std::vector<Event> events = e.toMIDI10();
+
+        ByteCount packetListSize = ::packetListSize(events);
+        if (packetListSize == 0) {
+            return make_ret(Err::MidiSendError, "midi 1.0 messages list was empty");
+        }
+
         MIDIPacketList packetList;
         MIDIPacket* packet = MIDIPacketListInit(&packetList);
 
-        auto events = e.toMIDI10();
-        for (auto& event : events) {
+        for (const Event& event : events) {
             uint32_t msg = event.to_MIDI10Package();
 
             if (!msg) {
                 return make_ret(Err::MidiSendError, "message wasn't converted");
             }
 
-            packet = MIDIPacketListAdd(&packetList, sizeof(packetList), packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
+            packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
         }
 
         result = MIDISend(m_core->outputPort, m_core->destinationId, &packetList);
