@@ -114,7 +114,7 @@ public:
 #ifdef Q_OS_LINUX
     void expectDispatchEventOnFocus(QEvent** event)
     {
-        //! For Linux it needs to send spontanous event for canceling reading the name of previous control on accessibility
+        //! For Linux it needs to send spontaneous event for canceling reading the name of previous control on accessibility
         QWindow* window = new QWindow();
         EXPECT_CALL(*m_mainWindow, qWindow()).WillOnce(Return(window));
         EXPECT_CALL(*m_application, notify(window, _)).WillOnce(DoAll(SaveArg<1>(event), Return(true)));
