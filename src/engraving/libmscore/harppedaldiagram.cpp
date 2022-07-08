@@ -22,13 +22,38 @@
 
 #include "harppedaldiagram.h"
 
+#include "score.h"
 #include "segment.h"
 
 #include "rw/xml.h"
 
-#include "log.h"
+using namespace mu;
+using namespace mu::engraving;
 
-namespace mu::engraving {
+// Position of separator character in diagram
+static const int SEPARATOR_IDX = 3;
+
+static const String harpStringTypeToString(HarpStringType type)
+{
+    switch (type) {
+    case HarpStringType::A:
+        return String("A");
+    case HarpStringType::B:
+        return String("B");
+    case HarpStringType::C:
+        return String("C");
+    case HarpStringType::D:
+        return String("D");
+    case HarpStringType::E:
+        return String("E");
+    case HarpStringType::F:
+        return String("F");
+    case HarpStringType::G:
+        return String("G");
+    }
+    return String("");
+}
+
 // STYLE
 static const ElementStyle harpPedalDiagramStyle {
     { Sid::harpPedalDiagramPlacement, Pid::PLACEMENT },
@@ -54,8 +79,6 @@ HarpPedalDiagram::HarpPedalDiagram(const HarpPedalDiagram& h)
 
 void HarpPedalDiagram::layout()
 {
-    updateDiagramText();
-
     TextBase::layout();
 }
 
@@ -67,10 +90,14 @@ void HarpPedalDiagram::setPedalState(std::vector<PedalPosition> state)
 void HarpPedalDiagram::setIsDiagram(bool diagram)
 {
     _isDiagram = diagram;
-    setTextStyleType(TextStyleType::HARP_PEDAL_TEXT_DIAGRAM);
+    if (_isDiagram) {
+        setTextStyleType(TextStyleType::HARP_PEDAL_DIAGRAM);
+    } else {
+        setTextStyleType(TextStyleType::HARP_PEDAL_TEXT_DIAGRAM);
+    }
 }
 
-void HarpPedalDiagram::setPedal(HarpString harpString, PedalPosition pedal)
+void HarpPedalDiagram::setPedal(HarpStringType harpString, PedalPosition pedal)
 {
     _pedalState.at(harpString) = pedal;
 }
@@ -80,92 +107,109 @@ void HarpPedalDiagram::updateDiagramText()
     String diagram = String("");
     if (_isDiagram) {
         for (int idx = 0; idx < _pedalState.size(); idx++) {
-            if (idx == 3) {
+            if (idx == SEPARATOR_IDX) {
                 // insert separator
-                diagram.append(String("<sym>harpPedalDivider</sym>"));
+                diagram.append(String("\ue683"));
             }
             switch (_pedalState[idx]) {
             case PedalPosition::FLAT:
-                diagram.append(String("<sym>harpPedalRaised</sym>"));
+                diagram.append(String("\ue680"));
                 break;
             case PedalPosition::NATURAL:
-                diagram.append(String("<sym>harpPedalCentered</sym>"));
+                diagram.append(String("\ue681"));
                 break;
             case PedalPosition::SHARP:
-                diagram.append(String("<sym>harpPedalLowered</sym>"));
+                diagram.append(String("\ue682"));
+                break;
+            case PedalPosition::UNSET:
                 break;
             }
         }
     } else {
         // find difference between pedal state of previous diagram and this one
-        // if no previous, assume starting from all natural
+        // if no previous, the pedals are "unset" meaning the whole diagram will be displayed
+
+        std::vector<PedalPosition> initState
+            = { PedalPosition::UNSET, PedalPosition::UNSET, PedalPosition::UNSET, PedalPosition::UNSET, PedalPosition::UNSET,
+                PedalPosition::UNSET, PedalPosition::UNSET };
         std::vector<PedalPosition> prevState;
         HarpPedalDiagram* prevDiagram = searchPrevDiagram();
 
         if (prevDiagram != nullptr) {
+            // If states are the same work backwards until we find the first difference then calculate from there
+            // This ensures the diagram is identical to the previous one
             prevState = prevDiagram->getPedalState();
+            while (prevState == _pedalState) {
+                // if states are the same but previous is a diagram write whole config out
+                if (prevDiagram->isDiagram()) {
+                    prevState = initState;
+                    break;
+                }
+                // Check if there's a diagram before.  If not, start of score and use init state
+                prevDiagram = prevDiagram->searchPrevDiagram();
+                if (prevDiagram != nullptr) {
+                    prevState = prevDiagram->getPedalState();
+                } else {
+                    // set to init state and break loop
+                    prevState = initState;
+                }
+            }
         } else {
-            prevState = { PedalPosition::FLAT, PedalPosition::FLAT, PedalPosition::FLAT, PedalPosition::FLAT,
-                          PedalPosition::FLAT, PedalPosition::FLAT, PedalPosition::FLAT };
+            prevState = initState;
         }
+
+        String topLine = String("");
+        String bottomLine = String("");
 
         for (int idx = 0; idx < _pedalState.size(); idx++) {
             if (_pedalState[idx] != prevState[idx]) {
-                String strName = getStringName(static_cast<HarpString>(idx));
+                String strName = harpStringTypeToString(HarpStringType(idx));
                 switch (_pedalState[idx]) {
                 case PedalPosition::FLAT:
-                    diagram.append(strName + String("<sym>accidentalFlat</sym>, "));
+                    strName.append(String("<sym>accidentalFlat</sym> "));
                     break;
                 case PedalPosition::NATURAL:
-                    diagram.append(strName + String("<sym>accidentalNatural</sym>, "));
+                    strName.append(String("<sym>accidentalNatural</sym> "));
                     break;
                 case PedalPosition::SHARP:
-                    diagram.append(strName + String("<sym>accidentalSharp</sym>, "));
+                    strName.append(String("<sym>accidentalSharp</sym> "));
                     break;
+                case PedalPosition::UNSET:
+                    break;
+                }
+                if (idx < SEPARATOR_IDX) {
+                    bottomLine.append(strName);
+                } else {
+                    topLine.append(strName);
                 }
             }
         }
-        // trailing comma
-        if (diagram.size() != 0) {
-            diagram.truncate(diagram.size() - 2);
-        }
+
+        diagram.append(topLine + String("\n") + bottomLine);
     }
 
     setXmlText(diagram);
-}
 
-const String HarpPedalDiagram::getStringName(HarpString str)
-{
-    switch (str) {
-    case HarpString::A:
-        return String("A");
-    case HarpString::B:
-        return String("B");
-    case HarpString::C:
-        return String("C");
-    case HarpString::D:
-        return String("D");
-    case HarpString::E:
-        return String("E");
-    case HarpString::F:
-        return String("F");
-    case HarpString::G:
-        return String("G");
-    }
+    layout();
 }
 
 // Goes through all previous segments until one with a harp pedal diagram is found
 
 HarpPedalDiagram* HarpPedalDiagram::searchPrevDiagram()
 {
-    EngravingItem* prevElem = this->prevElement();
+    if (segment() != nullptr) {
+        Segment* prevSeg = segment()->prev1();
 
-    while (prevElem != nullptr) {
-        if (prevElem->isType(ElementType::HARP_DIAGRAM)) {
-            return toHarpPedalDiagram(prevElem);
+        while (prevSeg != nullptr) {
+            for (EngravingItem* e : prevSeg->annotations()) {
+                if (e && e->type() == ElementType::HARP_DIAGRAM) {
+                    return toHarpPedalDiagram(e);
+                }
+            }
+            prevSeg = prevSeg->prev1();
         }
-        prevElem = prevElem->prevElement();
     }
+
     return nullptr;
 }
 
@@ -179,10 +223,9 @@ void HarpPedalDiagram::read(XmlReader& xml)
             while (xml.readNextStartElement()) {
                 const AsciiStringView stringTag = xml.name();
                 if (stringTag == "string") {
-                    HarpString str = HarpString(xml.intAttribute("name"));
+                    HarpStringType str = HarpStringType(xml.intAttribute("name"));
                     PedalPosition pos = PedalPosition(xml.readInt());
                     setPedal(str, pos);
-                    LOGD() << "String " << str << " : " << " Pedal state " << static_cast<int>(pos);
                 } else {
                     xml.unknown();
                 }
@@ -204,7 +247,6 @@ void HarpPedalDiagram::write(XmlWriter& xml) const
     // Write vector of harp strings.  Order is always D, C, B, E, F, G, A
     xml.startElement("pedalState");
     for (int idx = 0; idx < _pedalState.size(); idx++) {
-        LOGD() << "String " << idx << " : " << " Pedal state " << static_cast<int>(_pedalState[idx]);
         xml.tag("string", { { "name", idx } }, static_cast<int>(_pedalState[idx]));
     }
     xml.endElement();
@@ -248,4 +290,8 @@ PropertyValue HarpPedalDiagram::propertyDefault(Pid id) const
         return TextBase::propertyDefault(id);
     }
 }
-}   // namespace mu::engraving
+
+String HarpPedalDiagram::accessibleInfo() const
+{
+    return TextBase::accessibleInfo();
+}

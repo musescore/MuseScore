@@ -54,6 +54,7 @@
 #include "undo.h"
 #include "stem.h"
 #include "harmony.h"
+#include "harppedaldiagram.h"
 #include "hairpin.h"
 #include "figuredbass.h"
 #include "actionicon.h"
@@ -523,6 +524,9 @@ EngravingItem* ChordRest::drop(EditData& data)
             if (fromPalette) {
                 r->setXmlText(score()->createRehearsalMarkText(r));
             }
+        } else if (e->isHarpPedalDiagram()) {
+            HarpPedalDiagram* h = toHarpPedalDiagram(e);
+            h->updateDiagramText();
         }
         score()->undoAddElement(e);
         return e;

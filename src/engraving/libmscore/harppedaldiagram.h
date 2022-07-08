@@ -25,15 +25,20 @@
 
 #include "textbase.h"
 
+using namespace mu;
+using namespace mu::engraving;
+
 namespace mu::engraving {
 enum class PedalPosition {
     FLAT,
     NATURAL,
-    SHARP
+    SHARP,
+
+    UNSET                   // Only used in setDiagramText to represent the beginning of a score
 };
 
 // Use for indexes of _pedalState
-enum HarpString {
+enum HarpStringType {
     D, C, B, E, F, G, A
 };
 
@@ -44,11 +49,8 @@ class HarpPedalDiagram final : public TextBase
     bool _isDiagram = true;
 
 public:
-    // Constructors - too many?
     HarpPedalDiagram(Segment* parent);
     HarpPedalDiagram(const HarpPedalDiagram& h);
-    //HarpPedalDiagram(std::vector<PedalPosition> pedalState);
-    //HarpPedalDiagram(PedalPosition d, PedalPosition c, PedalPosition b, PedalPosition e, PedalPosition f, PedalPosition g, PedalPosition a);
 
     HarpPedalDiagram* clone() const override { return new HarpPedalDiagram(*this); }
     bool isEditable() const override { return false; }
@@ -58,8 +60,6 @@ public:
 
     void layout() override;
 
-    //TODO
-    // xml read/write
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
@@ -68,24 +68,18 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
 
     //String accessibleInfo() const;
-    //String screenReaderInfo() const;
 
     void setIsDiagram(bool diagram);
     bool isDiagram() { return _isDiagram; }
 
     std::vector<PedalPosition> getPedalState() { return _pedalState; }
     void setPedalState(std::vector<PedalPosition> state);
-    void setPedal(HarpString harpString, PedalPosition pedal);
-
-private:
-    //friend class Factory;
-
+    void setPedal(HarpStringType harpString, PedalPosition pedal);
     void updateDiagramText();
 
-    const String getStringName(HarpString str);
+private:
 
     HarpPedalDiagram* searchPrevDiagram();
 };
 } // namespace mu::engraving
-
 #endif // __HARPPEDALDIAGRAM_H__

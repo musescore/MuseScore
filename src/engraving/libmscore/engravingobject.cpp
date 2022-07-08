@@ -811,6 +811,7 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::MEASURE_NUMBER
            || type() == ElementType::MMREST_RANGE
            || type() == ElementType::STICKING
+           || type() == ElementType::HARP_DIAGRAM
     ;
 }
 
