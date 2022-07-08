@@ -36,6 +36,7 @@ struct mu::midi::CoreMidiOutPort::Core {
     MIDIClientRef client = 0;
     MIDIPortRef outputPort = 0;
     MIDIEndpointRef destinationId = 0;
+    MIDIProtocolID destinationProtocolId = kMIDIProtocol_1_0;
     int deviceID = -1;
 };
 
@@ -61,6 +62,15 @@ CoreMidiOutPort::~CoreMidiOutPort()
 void CoreMidiOutPort::init()
 {
     initCore();
+}
+
+void CoreMidiOutPort::getDestinationProtocolId()
+{
+    if (__builtin_available(macOS 11.0, *)) {
+        SInt32 protocol = 0;
+        OSStatus err = MIDIObjectGetIntegerProperty(m_core->destinationId, kMIDIPropertyProtocolID, &protocol);
+        m_core->destinationProtocolId = err == noErr ? (MIDIProtocolID)protocol : kMIDIProtocol_1_0;
+    }
 }
 
 void CoreMidiOutPort::initCore()
@@ -114,6 +124,11 @@ void CoreMidiOutPort::initCore()
             if (CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyDisplayName, 0) == kCFCompareEqualTo
                 || CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyName, 0) == kCFCompareEqualTo) {
                 self->devicesChanged().notify();
+            } else if (__builtin_available(macOS 11.0, *)) {
+                if (CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyProtocolID, 0) == kCFCompareEqualTo
+                    && self->isConnected() && propertyChangeNotification->object == self->m_core->destinationId) {
+                    self->getDestinationProtocolId();
+                }
             }
         } break;
 
@@ -197,6 +212,8 @@ mu::Ret CoreMidiOutPort::connect(const MidiDeviceID& deviceID)
         return make_ret(Err::MidiFailedConnect, "failed get destination");
     }
 
+    getDestinationProtocolId();
+
     m_deviceID = deviceID;
     return Ret(true);
 }
@@ -245,11 +262,12 @@ mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
 
     OSStatus result;
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
+
     if (__builtin_available(macOS 11.0, *)) {
         MIDIEventList eventList;
-        MIDIEventPacket* packet = MIDIEventListInit(&eventList, kMIDIProtocol_2_0);
+        MIDIEventPacket* packet = MIDIEventListInit(&eventList, m_core->destinationProtocolId);
         // TODO: Replace '4' with something specific for the type of element?
-        MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, 4 * sizeof(uint32_t), e.rawData());
+        MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, 4, e.rawData());
 
         result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
     } else {

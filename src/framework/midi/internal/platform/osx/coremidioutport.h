@@ -47,6 +47,7 @@ public:
 
 private:
     void initCore();
+    void getDestinationProtocolId();
 
     struct Core;
     std::unique_ptr<Core> m_core;
