@@ -1585,9 +1585,7 @@ int Chord::calc4BeamsException(int stemLength) const
 
 double Chord::calcDefaultStemLength()
 {
-    if (!_stem) {
-        return 0.0;
-    }
+    // returns default length even if the chord doesn't have a stem
 
     double _spatium = spatium();
 
@@ -1768,6 +1766,10 @@ void Chord::calcRelativeMag()
 //! May be called again when the chord is added to or removed from a beam.
 void Chord::layoutStem()
 {
+    // we should calculate default stem length for this chord even if it doesn't have a stem
+    // because this length is used for tremolos or other things that attach to where the stem WOULD be
+    _defaultStemLength = calcDefaultStemLength();
+
     if (!shouldHaveStem()) {
         removeStem();
         return;
@@ -1786,7 +1788,6 @@ void Chord::layoutStem()
 
     _stem->setPosX(stemPosX());
 
-    _defaultStemLength = calcDefaultStemLength();
     // This calls _stem->layout()
     _stem->setBaseLength(Millimetre(_defaultStemLength));
 
