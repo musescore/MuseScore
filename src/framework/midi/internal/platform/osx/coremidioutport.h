@@ -26,9 +26,14 @@
 
 #include "midi/imidioutport.h"
 
+#include "modularity/ioc.h"
+#include "imidiconfiguration.h"
+
 namespace mu::midi {
 class CoreMidiOutPort : public IMidiOutPort
 {
+    INJECT(midi, IMidiConfiguration, configuration)
+
 public:
     CoreMidiOutPort();
     ~CoreMidiOutPort() override;
@@ -42,6 +47,8 @@ public:
     void disconnect() override;
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
+
+    bool supportsMIDI20Output() const override;
 
     Ret sendEvent(const Event& e) override;
 

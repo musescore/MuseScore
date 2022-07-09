@@ -179,6 +179,26 @@ QStringList IOPreferencesModel::midiOutputDevices() const
     return list;
 }
 
+bool IOPreferencesModel::isMIDI20OutputSupported() const
+{
+    return midiOutPort()->supportsMIDI20Output();
+}
+
+bool IOPreferencesModel::useMIDI20Output() const
+{
+    return midiConfiguration()->useMIDI20Output();
+}
+
+void IOPreferencesModel::setUseMIDI20Output(bool use)
+{
+    if (use == useMIDI20Output()) {
+        return;
+    }
+
+    midiConfiguration()->setUseMIDI20Output(use);
+    emit useMIDI20OutputChanged();
+}
+
 mu::midi::MidiDeviceID IOPreferencesModel::midiInputDeviceId(int index) const
 {
     std::vector<MidiDevice> devices = midiInPort()->devices();

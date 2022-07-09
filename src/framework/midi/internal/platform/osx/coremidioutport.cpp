@@ -242,6 +242,15 @@ std::string CoreMidiOutPort::deviceID() const
     return m_deviceID;
 }
 
+bool CoreMidiOutPort::supportsMIDI20Output() const
+{
+    if (__builtin_available(macOS 11.0, *)) {
+        return true;
+    }
+
+    return false;
+}
+
 static ByteCount packetListSize(const std::vector<Event>& events)
 {
     if (events.empty()) {
@@ -264,8 +273,10 @@ mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
 
     if (__builtin_available(macOS 11.0, *)) {
+        MIDIProtocolID protocolId = configuration()->useMIDI20Output() ? m_core->destinationProtocolId : kMIDIProtocol_1_0;
+
         MIDIEventList eventList;
-        MIDIEventPacket* packet = MIDIEventListInit(&eventList, m_core->destinationProtocolId);
+        MIDIEventPacket* packet = MIDIEventListInit(&eventList, protocolId);
         // TODO: Replace '4' with something specific for the type of element?
         MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, 4, e.rawData());
 
