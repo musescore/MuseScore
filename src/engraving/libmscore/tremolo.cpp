@@ -198,35 +198,44 @@ void Tremolo::styleChanged()
 //   basePath
 //---------------------------------------------------------
 
-PainterPath Tremolo::basePath() const
+PainterPath Tremolo::basePath(double stretch) const
 {
     if (isBuzzRoll()) {
         return PainterPath();
     }
+    bool tradAlternate = twoNotes() && _style == TremoloStyle::TRADITIONAL_ALTERNATE;
+    if (tradAlternate && RealIsEqual(stretch, 0.)) {
+        // this shape will have to be constructed after the stretch
+        // is known
+        return PainterPath();
+    }
+
+    // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
+    static constexpr double stemGapSp = 0.65;
 
     const double sp = spatium() * chordMag();
 
     // overall width of two-note tremolos should not be changed if chordMag() isn't 1.0
     double w2  = sp * score()->styleS(Sid::tremoloWidth).val() * .5 / (twoNotes() ? chordMag() : 1.0);
-    double nw2 = w2 * score()->styleD(Sid::tremoloStrokeLengthMultiplier);
     double lw  = sp * score()->styleS(Sid::tremoloStrokeWidth).val();
     double td  = sp * score()->styleS(Sid::tremoloDistance).val();
 
     PainterPath ppath;
 
     // first line
-    if (explicitParent() && twoNotes() && (_style == TremoloStyle::DEFAULT)) {
-        ppath.addRect(-nw2, 0.0, 2.0 * nw2, lw);
-    } else {
-        ppath.addRect(-w2, 0.0, 2.0 * w2, lw);
-    }
+    ppath.addRect(-w2, 0.0, 2.0 * w2, lw);
 
     double ty = td;
 
     // other lines
     for (int i = 1; i < _lines; i++) {
-        if (explicitParent() && twoNotes() && (_style != TremoloStyle::TRADITIONAL)) {
-            ppath.addRect(-nw2, ty, 2.0 * nw2, lw);
+        if (tradAlternate) {
+            double stemWidth1 = _chord1->stem()->lineWidthMag() / stretch;
+            double stemWidth2 = _chord2->stem()->lineWidthMag() / stretch;
+            double inset = (stemGapSp * spatium()) / stretch;
+
+            ppath.addRect(-w2 + inset + stemWidth1, ty,
+                          2.0 * w2 - (inset * 2.) - (stemWidth2 + stemWidth1), lw);
         } else {
             ppath.addRect(-w2, ty, 2.0 * w2, lw);
         }
@@ -306,6 +315,9 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     const bool defaultStyle = (!customStyleApplicable()) || (_style == TremoloStyle::DEFAULT);
     const bool isTraditionalAlternate = (_style == TremoloStyle::TRADITIONAL_ALTERNATE);
 
+    // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
+    static constexpr double stemGapSp = 0.65;
+
     // make sure both stems are in the same direction
     int up = 0;
     bool isUp = _up;
@@ -347,9 +359,6 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     //---------------------------------------------------
     //   Step 1: Calculate the position of the tremolo (x, y)
     //---------------------------------------------------
-
-    y += (h - bbox().height()) * .5;
-
     Stem* stem1 = _chord1->stem();
     Stem* stem2 = _chord2->stem();
 
@@ -364,11 +373,13 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
         y1 = stem1->y() + stem1->p2().y();
         y2 = stem2->pagePos().y() - firstChordStaffY + stem2->p2().y();      // ->p2().y() is better than ->stemLen()
     } else {
-        firstChordStaffY = _chord1->pagePos().y() - _chord1->y();      // y coordinate of the staff of the first chord
+        Note* note1 = _up ? _chord1->downNote() : _chord1->upNote();
+
+        firstChordStaffY = note1->pagePos().y() - note1->y();      // y coordinate of the staff of the first chord
         const std::pair<double, double> extendedLen
             = LayoutTremolo::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength());
-        y1 = _chord1->stemPos().y() - firstChordStaffY + extendedLen.first;
-        y2 = _chord2->stemPos().y() - firstChordStaffY + extendedLen.second;
+        y1 = _chord1->stemPos().y() - firstChordStaffY + (extendedLen.first * (_up ? -1 : 1));
+        y2 = _chord2->stemPos().y() - firstChordStaffY + (extendedLen.second * (_up ? -1 : 1));
     }
 
     double lw = spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
@@ -402,23 +413,46 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     // the inner edge of the stems (default beam style)
     // the outer edge of the stems (non-default beam style)
     double x2 = _chord2->stemPosBeam().x();
-    if (stem2) {
+    if (!stem2 && _chord2->up()) {
+        double nhw = score()->noteHeadWidth();
+        if (_chord2->noteType() != NoteType::NORMAL) {
+            nhw *= score()->styleD(Sid::graceNoteMag);
+        }
+        nhw *= _chord2->mag();
+        x2 -= nhw;
+    } else if (stem2) {
         if (defaultStyle && _chord2->up()) {
             x2 -= stem2->lineWidthMag();
         } else if (!defaultStyle && !_chord2->up()) {
             x2 += stem2->lineWidthMag();
         }
     }
+
     double x1 = _chord1->stemPosBeam().x();
-    if (stem1) {
+    if (!stem1 && !_chord1->up()) {
+        double nhw = score()->noteHeadWidth();
+        if (_chord1->noteType() != NoteType::NORMAL) {
+            nhw *= score()->styleD(Sid::graceNoteMag);
+        }
+        nhw *= _chord1->mag();
+        x1 += nhw;
+    } else if (stem1) {
         if (defaultStyle && !_chord1->up()) {
             x1 += stem1->lineWidthMag();
         } else if (!defaultStyle && _chord1->up()) {
             x1 -= stem1->lineWidthMag();
         }
     }
+    x = (x2 + x1) * .5 - _chord1->pagePos().x();
 
-    x = (x1 + x2) * .5 - _chord1->pagePos().x();
+    double slope = (y2 - y1) / (x2 - x1);
+    // add offsets to the x endpoints
+    double offset = defaultStyle ? stemGapSp * spatium : 0.; // offset from stems (or original position)
+    x2 -= offset; // apply offset horizontally
+    x1 += offset;
+    // apply offset vertically to maintain the same slope
+    y1 += offset * slope;
+    y2 -= offset * slope;
 
     //---------------------------------------------------
     //   Step 2: Stretch the tremolo strokes horizontally
@@ -427,14 +461,15 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     //---------------------------------------------------
 
     Transform xScaleTransform;
-    const double H_MULTIPLIER = score()->styleD(Sid::tremoloStrokeLengthMultiplier);
-    // TODO const double MAX_H_LENGTH = spatium * score()->styleS(Sid::tremoloBeamLengthMultiplier).val();
-    const double MAX_H_LENGTH = spatium * 12.0;
+    const double MAX_H_LENGTH = spatium * 15.0;
 
-    const double defaultLength = std::min(H_MULTIPLIER * (x2 - x1), MAX_H_LENGTH);
-    double xScaleFactor = defaultStyle ? defaultLength / H_MULTIPLIER : (x2 - x1);
-    const double w2 = spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
-    xScaleFactor /= (2.0 * w2);
+    const double defaultLength = std::min(x2 - x1, MAX_H_LENGTH);
+    double xScaleFactor = defaultStyle ? defaultLength : (x2 - x1);
+    const double origTremWidth = spatium * score()->styleS(Sid::tremoloWidth).val();
+    xScaleFactor /= origTremWidth;
+    if (_style == TremoloStyle::TRADITIONAL_ALTERNATE) {
+        path = basePath(xScaleFactor);
+    }
 
     xScaleTransform.scale(xScaleFactor, 1.0);
     path = xScaleTransform.map(path);
