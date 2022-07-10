@@ -147,6 +147,8 @@ public:
 
 class Spanner;
 extern bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>& pitchOffsets);
+
+int articulationExcursion(const Note* noteL, const Note* noteR, int deltastep);
 } // namespace mu::engraving
 
 #endif

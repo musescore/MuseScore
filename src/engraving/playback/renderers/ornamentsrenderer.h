@@ -24,19 +24,28 @@
 #define MU_ENGRAVING_ORNAMENTSRENDERER_H
 
 #include "renderbase.h"
+#include "libmscore/rendermidi.h"
 
 namespace mu::engraving {
 struct DisclosureRule {
     int prefixDurationTicks = 0;
-    std::vector<mpe::pitch_level_t> prefixPitchOffsets;
+    std::vector<int> prefixStepOffsets;
 
     bool isAlterationsRepeatAllowed = false;
-    std::vector<mpe::pitch_level_t> alterationStepPitchOffsets;
+    std::vector<int> alterationStepOffsets;
 
     int suffixDurationTicks = 0;
-    std::vector<mpe::pitch_level_t> suffixPitchOffsets;
+    std::vector<int> suffixStepOffsets;
 
     int minSupportedNoteDurationTicks = 0;
+};
+
+struct ConvertedPitch {
+    std::vector<mpe::pitch_level_t> prefixPitchOffsets;
+    std::vector<mpe::pitch_level_t> alterationStepPitchOffsets;
+    std::vector<mpe::pitch_level_t> suffixPitchOffsets;
+
+    ConvertedPitch() = default;
 };
 
 class OrnamentsRenderer : public RenderBase<OrnamentsRenderer>
@@ -47,8 +56,9 @@ public:
     static void doRender(const EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
                          mpe::PlaybackEventList& result);
 
+    static void ornamentStep2Pitch(const Note* note, const DisclosureRule* rule, ConvertedPitch* result);
 private:
-    static void convert(const mpe::ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result);
+    static void convert(const mpe::ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result, const Note* note);
 
     static int alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks);
 

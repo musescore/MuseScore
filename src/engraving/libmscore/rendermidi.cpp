@@ -1518,11 +1518,16 @@ int convertLine(int lineL2, ClefType clefL, ClefType clefR)
 // for example middle C is line 10 in Treble clef, but is line -2 in Bass clef.
 //---------------------------------------------------------
 
-int convertLine(int lineL2, Note* noteL, Note* noteR)
+int convertLine(int lineL2, const Note* noteL, const Note* noteR)
 {
     return convertLine(lineL2,
                        noteL->chord()->staff()->clef(noteL->chord()->tick()),
                        noteR->chord()->staff()->clef(noteR->chord()->tick()));
+}
+
+int convertLine(int lineL2, Note* noteL, Note* noteR)
+{
+    return convertLine(lineL2, static_cast<const Note*>(noteL), static_cast<const Note*>(noteR));
 }
 
 //---------------------------------------------------------
@@ -1550,7 +1555,7 @@ int convertLine(int lineL2, Note* noteL, Note* noteR)
 // deltastep is the desired number of diatonic steps between the base note and this articulation step.
 //---------------------------------------------------------
 
-int articulationExcursion(Note* noteL, Note* noteR, int deltastep)
+int articulationExcursion(const Note* noteL, const Note* noteR, int deltastep)
 {
     if (0 == deltastep) {
         return 0;
@@ -1617,6 +1622,11 @@ int articulationExcursion(Note* noteL, Note* noteR, int deltastep)
         }
     }
     return halfsteps;
+}
+
+int articulationExcursion(Note* noteL, Note* noteR, int deltastep)
+{
+    return articulationExcursion(static_cast<const Note*>(noteL), static_cast<const Note*>(noteR), deltastep);
 }
 
 //---------------------------------------------------------
