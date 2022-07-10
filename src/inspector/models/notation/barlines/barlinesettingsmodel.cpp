@@ -72,6 +72,9 @@ void BarlineSettingsModel::loadProperties()
     });
 
     loadPropertyItem(m_hasToShowTips);
+
+    emit isStyleChangingAllowedChanged();
+    emit isFinalBarlineChanged();
 }
 
 void BarlineSettingsModel::resetProperties()
@@ -189,4 +192,39 @@ bool BarlineSettingsModel::isRepeatStyleChangingAllowed() const
 
     LineType currentType = static_cast<LineType>(m_type->value().toInt());
     return allowedLineTypes.contains(currentType);
+}
+
+bool BarlineSettingsModel::isStyleChangingAllowed() const
+{
+    for (mu::engraving::EngravingItem* item : m_elementList) {
+        if (!item->isBarLine()) {
+            continue;
+        }
+        mu::engraving::BarLine* barline = mu::engraving::toBarLine(item);
+        if (barline->segment()->segmentType() == SegmentType::StartRepeatBarLine && barline->segment()->prev()) {
+            return false; // initial barline before first measure
+        }
+    }
+    return true;
+}
+
+bool BarlineSettingsModel::shouldShowType(const int type) const
+{
+    auto lineType = static_cast<BarlineTypes::LineType>(type);
+    if (lineType != BarlineTypes::LineType::TYPE_START_REPEAT && lineType != BarlineTypes::LineType::TYPE_END_START_REPEAT) {
+        return true; // always OK
+    }
+    for (mu::engraving::EngravingItem* item : m_elementList) {
+        if (!item->isBarLine()) {
+            continue;
+        }
+        mu::engraving::BarLine* barline = mu::engraving::toBarLine(item);
+        if (barline->measure()->sectionBreak()) {
+            return false;
+        }
+        if (!(barline->measure()->next())) {
+            return false;
+        }
+    }
+    return true;
 }

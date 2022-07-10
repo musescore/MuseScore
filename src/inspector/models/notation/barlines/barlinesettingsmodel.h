@@ -35,12 +35,14 @@ class BarlineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * spanTo READ spanTo CONSTANT)
     Q_PROPERTY(PropertyItem * hasToShowTips READ hasToShowTips CONSTANT)
     Q_PROPERTY(bool isRepeatStyleChangingAllowed READ isRepeatStyleChangingAllowed NOTIFY isRepeatStyleChangingAllowedChanged)
+    Q_PROPERTY(bool isStyleChangingAllowed READ isStyleChangingAllowed NOTIFY isStyleChangingAllowedChanged)
 
 public:
     explicit BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     Q_INVOKABLE void applySpanPreset(const int presetType);
     Q_INVOKABLE void setSpanIntervalAsStaffDefault();
+    Q_INVOKABLE bool shouldShowType(const int type) const;
 
     void createProperties() override;
     void requestElements() override;
@@ -54,9 +56,12 @@ public:
     PropertyItem* hasToShowTips() const;
 
     bool isRepeatStyleChangingAllowed() const;
+    bool isStyleChangingAllowed() const;
 
 signals:
     void isRepeatStyleChangingAllowedChanged();
+    void isStyleChangingAllowedChanged();
+    void isFinalBarlineChanged();
 
 private:
     PropertyItem* m_type = nullptr;
