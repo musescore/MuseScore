@@ -217,14 +217,24 @@ Item {
                 console.log("Hiding: " + section)
                 hideSection(section)
             } else {
-                console.log("Opening: " + section + "with " + root.model["initial"])
+                console.log("Opening: " + section)
                 showSection(section)
             }
         }
 
-        function isSectionExpanded(section){
+        function isSectionExpanded(section) {
             console.log("Checking " + section +  ": " + (section in collapsed))
             return !(section in collapsed)
+        }
+
+        function areAllSectionsCollapsed() {
+            for(var i = 0; i < allSections.length; i++) {
+                if (!(allSections[i] in collapsed)) {
+                    return false
+                }
+            }
+
+            return true
         }
 
         function showSection(section){
@@ -235,7 +245,13 @@ Item {
 
         function hideSection(section){
             collapsed[section] = true
-            root.categorized = 2
+
+            if(view.areAllSectionsCollapsed()) {
+                root.categorized = 0
+            } else {
+                root.categorized = 2
+            }
+
             collapsedChanged()
         }
 
@@ -299,7 +315,7 @@ Item {
             valueItemWidth: prv.valueItemWidth
 
             navigation.panel: view.navigation
-            navigation.enabled: enabled
+            navigation.enabled: view.isSectionExpanded(model["ownerSection"])
             navigation.row: model.index
             navigation.column: 0
 
