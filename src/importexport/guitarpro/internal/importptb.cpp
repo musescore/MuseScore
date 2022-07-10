@@ -48,6 +48,8 @@
 #include "libmscore/timesig.h"
 #include "libmscore/tuplet.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -86,6 +88,11 @@ int PowerTab::readInt()
 
 std::string PowerTab::readString(int length)
 {
+    if (length == 0) {
+        LOGE() << "reading string of length zero";
+        return std::string();
+    }
+
     if (length == -1) {
         length = readUChar();
         if (length == 0xFF) {
@@ -438,7 +445,7 @@ void PowerTab::readPosition(int staff, int voice, ptSection& sec)
 
     ptBeat* beat{ nullptr };
     bool add = false;
-    if (voice == 0 || sec.beats[staff].empty()) {
+    if (voice == 0 || staff >= sec.beats.size() || sec.beats[staff].empty()) {
         beat = new ptBeat(staff, voice);
         beat->position = position;
         add = true;
@@ -975,19 +982,24 @@ void PowerTab::ptSection::copyTracks(ptTrack* track)
             if (!rt.is_rest) {
                 auto diagram = track->diagramMap.find({ { signature->second.key, signature->second.formula,
                                                           signature->second.formula_mod } });
-                for (unsigned int string = 0; string < diagram->second.frets.size(); ++string) {
-                    int fret = diagram->second.frets[string];
-                    if (fret >= 0xFE) {
-                        continue;
+
+                if (diagram != track->diagramMap.end()) {
+                    for (unsigned int string = 0; string < diagram->second.frets.size(); ++string) {
+                        int fret = diagram->second.frets[string];
+                        if (fret >= 0xFE) {
+                            continue;
+                        }
+                        ptNote note;
+                        note.value = fret;
+                        note.str = string;
+                        if (fret == 0xFE) {
+                            note.dead = true;
+                            note.value = 0;
+                        }
+                        beat->notes.emplace_back(note);
                     }
-                    ptNote note;
-                    note.value = fret;
-                    note.str = string;
-                    if (fret == 0xFE) {
-                        note.dead = true;
-                        note.value = 0;
-                    }
-                    beat->notes.emplace_back(note);
+                } else {
+                    LOGD() << "diagram wasn't found";
                 }
             }
             while (int(beats.size()) <= staff) {
