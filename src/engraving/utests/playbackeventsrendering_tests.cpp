@@ -238,9 +238,10 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern)
                 EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4));
             }
 
-            // [THEN] In modern trills each even note should be higher than the principal one on a single pitch level
+            // [THEN] In modern trills each even note should be higher than the principal one on a step in diatonic scale
+            //        When rendering a F4 note in C major, each even note should be a G4 which is higher than F4 for two single pitch level.
             if ((i + 1) % 2 == 0) {
-                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP * 2);
             }
         }
     }
@@ -326,22 +327,24 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
 
             // [THEN] The amount of trill alterations depends on various things, such as a tempo
             //        However, there is a couple of general rules of this disclosure in Baroque style:
-            //        - Trill should start from a principal note + 1 pitch level
+            //        - Trill should start from a principal note + 1 step in diatonic scale
             //        - Trill should end up on a principal note. For that reasons is highly common to put a triplet on the last notes
             if (i == 0) {
-                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP * 2);
             }
 
             if (i == pair.second.size() - 1) {
                 EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4));
             }
 
-            // [THEN] In baroque trills each odd note should be higher than the principal one on a single pitch level
+            // [THEN] In baroque trills each odd note should be higher than the principal one on a step in diatonic scale
+            //        When rendering a F4 note in C major, each odd note should be a G4 which is higher than F4 for two single pitch level.
             if (i % 2 == 0 && i < pair.second.size() - 2) {
-                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP * 2);
             }
 
-            // [THEN] However, the note before the last should be lowe than the principal one on a single pitch level
+            // [THEN] However, the note before the last should be lower than the principal one on a step in diatonic scale
+            //        When rendering a F4 note in C major, it should be a E4 which is one pitch level lower.
             if (i == pair.second.size() - 2) {
                 EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) - PITCH_LEVEL_STEP);
             }
@@ -369,11 +372,11 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
     ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
-    // [GIVEN] Expected disclosure
+    // [GIVEN] Expected disclosure, pitches should be rendered diatonically
     int expectedSubNotesCount = 4;
     duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
-    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
+    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP * 2;
     pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
     std::vector<pitch_level_t> expectedPitches = { plus,
                                                    nominalPitchLevel,
@@ -429,11 +432,11 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
     ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
-    // [GIVEN] Expected disclosure
+    // [GIVEN] Expected disclosure, pitches should be rendered diatonically
     int expectedSubNotesCount = 4;
     duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
-    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
+    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP * 2;
     pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
     std::vector<pitch_level_t> expectedPitches = { minus,
                                                    nominalPitchLevel,
@@ -490,11 +493,11 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
     ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
-    // [GIVEN] Expected disclosure
+    // [GIVEN] Expected disclosure, pitches should be rendered diatonically
     int expectedSubNotesCount = 4;
     duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
-    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
+    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP * 2;
     pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
     std::vector<pitch_level_t> expectedPitches = { minus,
                                                    nominalPitchLevel,
@@ -550,7 +553,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
     ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
-    // [GIVEN] Expected disclosure
+    // [GIVEN] Expected disclosure, pitches should be rendered diatonically
     int expectedSubNotesCount = 3;
 
     std::vector<duration_t> expectedDurations = {
@@ -566,7 +569,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
     };
 
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
-    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
+    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP * 2;
 
     std::vector<pitch_level_t> expectedPitches = {
         nominalPitchLevel,
@@ -623,7 +626,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
     ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
-    // [GIVEN] Expected disclosure
+    // [GIVEN] Expected disclosure, pitches should be rendered diatonically
     int expectedSubNotesCount = 3;
 
     std::vector<duration_t> expectedDurations = {
