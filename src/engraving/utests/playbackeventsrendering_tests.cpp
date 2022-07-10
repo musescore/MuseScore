@@ -248,6 +248,126 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern)
 }
 
 /**
+ * @brief PlaybackEventsRendererTests_SingleNote_Trill_Modern_Gmajor
+ * @details In this case we're gonna render a simple piece of score in G Major with a single measure,
+ *          which starts with the E4 quarter note marked by Trill articulation.
+ */
+TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern_Gmajor)
+{
+    // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff, G Major)
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_trill_Gmajor_default_tempo/single_note_trill_Gmajor_default_tempo.mscx");
+
+    Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    ASSERT_TRUE(firstSegment);
+
+    ChordRest* chord = firstSegment->nextChordRest(0);
+    ASSERT_TRUE(chord);
+
+    // [GIVEN] Expected trill disclosure
+    int expectedTrillSubNotesCount = 7;
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
+
+    // [WHEN] Request to render a chord with the E4 note on it
+    PlaybackEventsMap result;
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
+
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedTrillSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied - Trill
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Trill));
+
+            // [THEN] The amount of trill alterations depends on many things, such as a tempo
+            //        However, there is a couple of general rules of this disclosure:
+            //        - Trill should start from a principal note
+            //        - Trill should end up on a principal note. For that reasons is highly common to put a triplet on the last notes
+            if (i == 0 || i == result.size() - 1) {
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::E, 4));
+            }
+
+            // [THEN] In modern trills each even note should be higher than the principal one on a step in diatonic scale and also take key signatures into account
+            //        When rendering a E4 note in G Major, each even note should be a F4+ which is higher than E4 for two single pitch level.
+            if ((i + 1) % 2 == 0) {
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::E, 4) + PITCH_LEVEL_STEP * 2);
+            }
+        }
+    }
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_SingleNote_Trill_Modern_Accidental
+ * @details In this case we're gonna render a simple piece of score in C Major with a single measure,
+ *          which starts with a G4 sharp quarter note and an F4 quarter note marked by Trill articulation.
+ */
+TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern_Accidental)
+{
+    // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff, C Major)
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_trill_accidental_default_tempo/single_note_trill_accidental_default_tempo.mscx");
+
+    Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* secondSegment = firstSegment->nextCR();
+    ASSERT_TRUE(firstSegment);
+    ASSERT_TRUE(secondSegment);
+
+    ChordRest* chord = secondSegment->nextChordRest(0);
+    ASSERT_TRUE(chord);
+
+    // [GIVEN] Expected trill disclosure
+    int expectedTrillSubNotesCount = 7;
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
+
+    // [WHEN] Request to render a chord with the F4 note on it
+    PlaybackEventsMap result;
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
+
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedTrillSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied - Trill
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Trill));
+
+            // [THEN] The amount of trill alterations depends on many things, such as a tempo
+            //        However, there is a couple of general rules of this disclosure:
+            //        - Trill should start from a principal note
+            //        - Trill should end up on a principal note. For that reasons is highly common to put a triplet on the last notes
+            if (i == 0 || i == result.size() - 1) {
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4));
+            }
+
+            // [THEN] In modern trills each even note should be higher than the principal one on a step in diatonic scale and also take previous accidentals into account
+            //        When rendering a F4 note in C Major with the previous note being a G4+, each even note should be a G4+ which is higher than F4 for three single pitch level.
+            if ((i + 1) % 2 == 0) {
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP * 3);
+            }
+        }
+    }
+}
+
+/**
  * @brief PlaybackEventsRendererTests_SingleNote_Unexpandable_Trill
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 32-nd note marked by Trill articulation.
