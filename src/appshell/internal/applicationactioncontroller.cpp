@@ -271,6 +271,7 @@ void ApplicationActionController::checkForUpdate()
 
 bool ApplicationActionController::canReceiveAction(const mu::actions::ActionCode& code) const
 {
+    Q_UNUSED(code);
     auto focus = QGuiApplication::focusWindow();
     return !focus || focus->modality() == Qt::WindowModality::NonModal;
 }
