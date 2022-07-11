@@ -100,21 +100,12 @@ void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
         }
     }
 
-    switch (m_inputtedSequence.count()) {
-    case 0:
-        m_inputtedSequence = QKeySequence(newKey);
-        break;
-    case 1:
-        m_inputtedSequence = QKeySequence(m_inputtedSequence[0], newKey);
-        break;
-    case 2:
-        m_inputtedSequence = QKeySequence(m_inputtedSequence[0], m_inputtedSequence[1], newKey);
-        break;
-    case 3:
-        m_inputtedSequence = QKeySequence(m_inputtedSequence[0], m_inputtedSequence[1], m_inputtedSequence[2], newKey);
-        break;
+    QKeySequence newSequence = QKeySequence(newKey);
+    if (m_inputtedSequence == newSequence) {
+        return;
     }
 
+    m_inputtedSequence = newSequence;
     validateInputtedSequence();
 
     emit inputtedSequenceChanged(inputtedSequenceInNativeFormat());
@@ -159,7 +150,7 @@ bool EditShortcutModel::canApplyInputtedSequence() const
     return m_errorMessage.isEmpty() && !m_inputtedSequence.isEmpty();
 }
 
-void EditShortcutModel::replaceOriginSequence()
+void EditShortcutModel::applyInputedSequence()
 {
     m_originSequence = inputtedSequence();
     emit applyNewSequenceRequested(m_originSequence);
