@@ -23,11 +23,9 @@ HERE="${BASH_SOURCE%/*}" # path to dir that contains this script
 
 LUPDATE=lupdate
 SRC_DIR=$HERE/../../src 
-TS_DIR=$HERE/../../share/locale 
+TS_FILE=$HERE/../../share/locale/musescore_en.ts
 ARGS="-recursive -tr-function-alias translate+=trc -tr-function-alias translate+=mtrc -tr-function-alias translate+=qtrc -tr-function-alias qsTranslate+=qsTrc -extensions qml,cpp -no-obsolete"
 
-for f in $TS_DIR/musescore_*.ts
-do
-  echo "Processing $f ..."
-  $LUPDATE $ARGS $SRC_DIR -ts $f
-done
+# We only need to update one file, it will be sent to Transifex.
+# We get .ts files for other languages from Transifex
+$LUPDATE $ARGS $SRC_DIR -ts $TS_FILE
