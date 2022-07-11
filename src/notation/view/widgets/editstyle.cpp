@@ -2046,31 +2046,8 @@ void EditStyle::valueChanged(int i)
             for (auto j : scoreFont->engravingDefaults()) {
                 setStyleValue(j.first, j.second);
             }
-
-            // fix values, the distances are defined different in MuseScore
-            double barWidthD = styleValue(StyleId::barWidth).toDouble() + styleValue(StyleId::endBarWidth).toDouble() * .5;
-
-            double newEndBarDistance = styleValue(StyleId::endBarDistance).toDouble() + barWidthD;
-            setStyleValue(StyleId::endBarDistance, newEndBarDistance);
-
-            double newDoubleBarDistance = styleValue(StyleId::doubleBarDistance).toDouble() + barWidthD;
-            setStyleValue(StyleId::doubleBarDistance, newDoubleBarDistance);
-
-            // guess the repeat dot width = spatium * .3
-            double newRepeatBarlineDotSeparation = styleValue(StyleId::repeatBarlineDotSeparation).toDouble()
-                                                   + (styleValue(StyleId::barWidth).toDouble() + .3) * .5;
-            setStyleValue(StyleId::repeatBarlineDotSeparation, newRepeatBarlineDotSeparation);
-
-            // adjust mmrest, which is not in engravingDefaults
-            // TODO: create generalized method for setting style vals based on font
-            if (scoreFont->name() == "Bravura") {
-                setStyleValue(StyleId::mmRestHBarThickness, 1.0);
-                setStyleValue(StyleId::multiMeasureRestMargin, 3.0);
-            } else {
-                setStyleValue(StyleId::mmRestHBarThickness, defaultStyleValue(StyleId::mmRestHBarThickness));
-                setStyleValue(StyleId::multiMeasureRestMargin, defaultStyleValue(StyleId::multiMeasureRestMargin));
-            }
         }
+
         setValue = true;
     }
 
