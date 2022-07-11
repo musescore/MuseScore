@@ -67,7 +67,7 @@ newDetailsFile = False
 translationChanged = False
 
 #read languages.json and store language code and name
-langCode_file = open(os.path.dirname(sys.argv[0]) + "/languages.json", "r+")
+langCode_file = open("share/locale/languages.json", "r+")
 langCodeNameDict = json.load(langCode_file)  # language code --> name
 langCode_file.close()
 
@@ -86,7 +86,7 @@ else:
 
 translationChanged = newDetailsFile
 for lang_code, languageName in langCodeNameDict.items():
-    updateMscore = processTsFile("mscore", lang_code, data)
+    updateMscore = processTsFile("musescore", lang_code, data)
     translationChanged = updateMscore or translationChanged
 
     updateInstruments = processTsFile("instruments", lang_code, data)
@@ -97,8 +97,8 @@ for lang_code, languageName in langCodeNameDict.items():
         zipName = 'locale_' + lang_code + '.zip'
         zipPath = outputDir + zipName
         myzip = zipfile.ZipFile(zipPath, mode='w')
-        qmFilePath = outputDir + 'mscore_' + lang_code + ".qm"
-        myzip.write(qmFilePath, 'mscore_' + lang_code + ".qm")
+        qmFilePath = outputDir + 'musescore_' + lang_code + ".qm"
+        myzip.write(qmFilePath, 'musescore_' + lang_code + ".qm")
         qmFilePath = outputDir + 'instruments_' + lang_code + ".qm"
         myzip.write(qmFilePath, 'instruments_' + lang_code + ".qm")
         myzip.close()
