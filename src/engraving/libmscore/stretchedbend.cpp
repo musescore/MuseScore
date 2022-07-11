@@ -92,7 +92,6 @@ void StretchedBend::fillSegments()
 
     PointF dest(0, 0);
 
-    int firstPointPitch = m_points.front().pitch;
     int lastPointPitch = m_points.back().pitch;
     m_releasedToInitial = (0 == lastPointPitch);
 
@@ -111,7 +110,6 @@ void StretchedBend::fillSegments()
 
         BendSegmentType type = BendSegmentType::NO_TYPE;
         int tone = bendTone(nextPitch);
-        bool untilNextSegment = false;
 
         /// PRE-BEND (+BEND, +RELEASE)
         if (pt == 0 && pitch != 0) {
@@ -232,8 +230,6 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
     if (!layoutMode && !painter) {
         return;
     }
-
-    double prebendStrokeLength = m_spatium * .5;
 
     for (const BendSegment& bendSegment : m_bendSegments) {
         const PointF& src = bendSegment.src;
