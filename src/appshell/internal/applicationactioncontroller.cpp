@@ -22,6 +22,7 @@
 #include "applicationactioncontroller.h"
 
 #include <QCoreApplication>
+#include <QApplication>
 #include <QCloseEvent>
 #include <QFileOpenEvent>
 #include <QWindow>
@@ -266,4 +267,10 @@ void ApplicationActionController::checkForUpdate()
     NOT_IMPLEMENTED;
 
     interactive()->info(trc("appshell", "No update available"), "");
+}
+
+bool ApplicationActionController::canReceiveAction(const mu::actions::ActionCode& code) const
+{
+    auto focus = QGuiApplication::focusWindow();
+    return !focus || focus->modality() == Qt::WindowModality::NonModal;
 }
