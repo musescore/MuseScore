@@ -397,7 +397,7 @@ void StretchedBend::glueNeighbor()
             auto bend = t->bend();
 
             auto& lastPoints = bend->points();
-            for (int i = 1; i < lastPoints.size(); ++i) {
+            for (size_t i = 1; i < lastPoints.size(); ++i) {
                 m_points.push_back(lastPoints[i]);
             }
 
