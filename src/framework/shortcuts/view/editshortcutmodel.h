@@ -51,7 +51,6 @@ public:
 
     Q_INVOKABLE void inputKey(int key, Qt::KeyboardModifiers modifiers);
 
-    Q_INVOKABLE void addToOriginSequence();
     Q_INVOKABLE void replaceOriginSequence();
 
 signals:
