@@ -40,7 +40,11 @@ void RootTreeItem::moveChildren(int sourceRow, int count, AbstractInstrumentsPan
     IDList partIds;
 
     for (int i = sourceRow; i < sourceRow + count; ++i) {
-        partIds.push_back(childAtRow(i)->id());
+        ID partId = childAtRow(i)->id();
+
+        if (notation()->parts()->partExists(partId)) {
+            partIds.push_back(partId);
+        }
     }
 
     int destinationRow_ = destinationRow;

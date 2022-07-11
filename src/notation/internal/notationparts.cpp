@@ -851,6 +851,8 @@ void NotationParts::removeStaves(const IDList& stavesIds)
 
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
 {
+    TRACEFUNC;
+
     std::vector<Part*> sourceParts = parts(sourcePartsIds);
     if (sourceParts.empty()) {
         return;
@@ -865,16 +867,17 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
         return;
     }
 
-    TRACEFUNC;
+    for (const ID& sourcePartId: sourcePartsIds) {
+        allScorePartIds.removeOne(sourcePartId);
+    }
 
-    for (const Part* sourcePart: sourceParts) {
-        int srcIndex = allScorePartIds.indexOf(sourcePart->id());
-        int dstIndex = allScorePartIds.indexOf(destinationPartId);
-        dstIndex += (mode == InsertMode::Before) && (srcIndex < dstIndex) ? -1 : 0;
+    int dstIndex = allScorePartIds.indexOf(destinationPartId);
+    if (mode == InsertMode::After) {
+        dstIndex++;
+    }
 
-        if (dstIndex >= 0 && dstIndex < allScorePartIds.size()) {
-            allScorePartIds.move(srcIndex, dstIndex);
-        }
+    for (size_t i = 0; i < sourcePartsIds.size(); ++i, ++dstIndex) {
+        allScorePartIds.insert(dstIndex, sourcePartsIds[i]);
     }
 
     PartInstrumentList parts;
@@ -889,7 +892,6 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     startEdit();
 
     sortParts(parts, score()->staves());
-
     setBracketsAndBarlines();
 
     apply();
