@@ -47,11 +47,8 @@ public:
     bool canApplyInputtedSequence() const;
 
     Q_INVOKABLE void load(const QVariant& shortcut, const QVariantList& allShortcuts);
-    Q_INVOKABLE void clear();
-
     Q_INVOKABLE void inputKey(int key, Qt::KeyboardModifiers modifiers);
-
-    Q_INVOKABLE void replaceOriginSequence();
+    Q_INVOKABLE void applyInputedSequence();
 
 signals:
     void allShortcutsChanged(const QVariantList& shortcuts);
@@ -61,8 +58,9 @@ signals:
     void applyNewSequenceRequested(const QString& newSequence);
 
 private:
-    QString inputtedSequence() const;
+    void clear();
 
+    QString inputtedSequence() const;
     void validateInputtedSequence();
 
     QVariantList m_potentialConflictShortcuts;

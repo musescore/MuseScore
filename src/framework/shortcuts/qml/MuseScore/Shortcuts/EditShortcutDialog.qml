@@ -146,28 +146,7 @@ Dialog {
 
                 readonly property int buttonWidth: 100
 
-                FlatButton {
-                    width: parent.buttonWidth
-
-                    text: qsTrc("global", "Clear")
-
-                    onClicked: {
-                        model.clear()
-                    }
-                }
-
                 Item { Layout.fillWidth: true }
-
-                FlatButton {
-                    width: parent.buttonWidth
-
-                    text: qsTrc("global", "Replace")
-                    enabled: model.canApplyInputtedSequence
-
-                    onClicked: {
-                        model.replaceOriginSequence()
-                    }
-                }
 
                 FlatButton {
                     width: parent.buttonWidth
@@ -176,6 +155,17 @@ Dialog {
 
                     onClicked: {
                         root.reject()
+                    }
+                }
+
+                FlatButton {
+                    width: parent.buttonWidth
+
+                    text: qsTrc("global", "Replace")
+                    enabled: model.canApplyInputtedSequence
+
+                    onClicked: {
+                        model.applyInputedSequence()
                     }
                 }
             }
