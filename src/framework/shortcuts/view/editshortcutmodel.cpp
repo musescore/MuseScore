@@ -160,16 +160,6 @@ void EditShortcutModel::replaceOriginSequence()
     emit applyNewSequenceRequested(m_originSequence);
 }
 
-void EditShortcutModel::addToOriginSequence()
-{
-    if (!m_originSequence.isEmpty()) {
-        m_originSequence += "; ";
-    }
-    m_originSequence += inputtedSequence();
-
-    emit applyNewSequenceRequested(m_originSequence);
-}
-
 QString EditShortcutModel::inputtedSequence() const
 {
     return m_inputtedSequence.toString();

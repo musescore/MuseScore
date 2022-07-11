@@ -161,17 +161,6 @@ Dialog {
                 FlatButton {
                     width: parent.buttonWidth
 
-                    text: qsTrc("global", "Add")
-                    enabled: model.canApplyInputtedSequence
-
-                    onClicked: {
-                        model.addToOriginSequence()
-                    }
-                }
-
-                FlatButton {
-                    width: parent.buttonWidth
-
                     text: qsTrc("global", "Replace")
                     enabled: model.canApplyInputtedSequence
 
