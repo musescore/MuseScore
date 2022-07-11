@@ -27,6 +27,8 @@
 
 #include "selectnotedialog.h"
 
+#include "translation.h"
+
 #include "engraving/types/typesconv.h"
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/engravingitem.h"
@@ -67,7 +69,7 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     type->setText(m_note->noteTypeUserName());
     sameType->setAccessibleName(sameType->text() + type->text());
 
-    durationType->setText(tr("%1 Note").arg(TConv::translatedUserName(m_note->chord()->durationType().type())));
+    durationType->setText(qtrc("notation", "%1 Note").arg(TConv::translatedUserName(m_note->chord()->durationType().type())));
     sameDurationType->setAccessibleName(sameDurationType->text() + durationType->text());
 
     durationTicks->setText(m_note->chord()->durationUserName());

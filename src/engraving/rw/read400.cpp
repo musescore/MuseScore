@@ -226,13 +226,11 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
     }
     ctx.reconnectBrokenConnectors();
     if (e.error() != XmlStreamReader::NoError) {
-        LOGD("%s: xml read error at line %lld col %lld: %s",
-             muPrintable(e.docName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
         if (e.error() == XmlStreamReader::CustomError) {
-            MScore::lastError = e.errorString();
+            LOGE() << e.errorString();
         } else {
-            MScore::lastError = mtrc("engraving", "XML read error at line %1, column %2: %3").arg(e.lineNumber(), e.columnNumber()).arg(
-                String::fromAscii(e.name().ascii()));
+            LOGE() << String(u"XML read error at line %1, column %2: %3").arg(e.lineNumber(), e.columnNumber())
+                .arg(String::fromAscii(e.name().ascii()));
         }
         return false;
     }

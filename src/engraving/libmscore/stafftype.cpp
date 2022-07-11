@@ -1270,8 +1270,7 @@ bool StaffType::readConfigFile(const String& fileName)
 
     File f(path);
     if (!f.exists() || !f.open(IODevice::ReadOnly)) {
-        MScore::lastError = mtrc("engraving", "Cannot open tablature font description:\n%1").arg(f.filePath().toString());
-        LOGD() << "readConfigFile failed: " << path;
+        LOGE() << "Cannot open tablature font description: " << f.filePath();
         return false;
     }
 

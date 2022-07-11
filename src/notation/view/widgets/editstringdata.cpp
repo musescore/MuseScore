@@ -25,6 +25,7 @@
 #include <QKeyEvent>
 
 #include "translation.h"
+#include "global/utils.h"
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetnavigationfix.h"
 #include "editpitch.h"
@@ -48,7 +49,7 @@ EditStringData::EditStringData(QWidget* parent, std::vector<mu::engraving::instr
     _strings = strings;
     QStringList hdrLabels;
     int numOfStrings = static_cast<int>(_strings->size());
-    hdrLabels << tr("Open", "string data") << tr("Pitch", "string data");
+    hdrLabels << qtrc("notation", "Open", "string data") << qtrc("notation", "Pitch", "string data");
     stringList->setHorizontalHeaderLabels(hdrLabels);
     stringList->setRowCount(numOfStrings);
     // if any string, insert into string list control and select the first one
@@ -138,7 +139,9 @@ bool EditStringData::eventFilter(QObject* obj, QEvent* event)
 QString EditStringData::openColumnAccessibleText(const QTableWidgetItem* item) const
 {
     QString accessibleText = item->data(OPEN_ACCESSIBLE_TITLE_ROLE).toString() + ": "
-                             + (item->checkState() == Qt::Checked ? tr("checked") : tr("unchecked"));
+                             + (item->checkState() == Qt::Checked
+                                ? qtrc("notation", "checked")
+                                : qtrc("notation", "unchecked"));
     return accessibleText;
 }
 
@@ -263,26 +266,7 @@ void EditStringData::accept()
     }
 }
 
-//---------------------------------------------------------
-//   midiCodeToStr
-//    Converts a MIDI numeric pitch code to human-readable note name
-//---------------------------------------------------------
-static const char* s_esd_noteNames[] = {
-    QT_TRANSLATE_NOOP("editstringdata", "C"),
-    QT_TRANSLATE_NOOP("editstringdata", "C♯"),
-    QT_TRANSLATE_NOOP("editstringdata", "D"),
-    QT_TRANSLATE_NOOP("editstringdata", "E♭"),
-    QT_TRANSLATE_NOOP("editstringdata", "E"),
-    QT_TRANSLATE_NOOP("editstringdata", "F"),
-    QT_TRANSLATE_NOOP("editstringdata", "F♯"),
-    QT_TRANSLATE_NOOP("editstringdata", "G"),
-    QT_TRANSLATE_NOOP("editstringdata", "A♭"),
-    QT_TRANSLATE_NOOP("editstringdata", "A"),
-    QT_TRANSLATE_NOOP("editstringdata", "B♭"),
-    QT_TRANSLATE_NOOP("editstringdata", "B")
-};
-
 QString EditStringData::midiCodeToStr(int midiCode)
 {
-    return QString("%1 %2").arg(qApp->translate("editstringdata", s_esd_noteNames[midiCode % 12])).arg(midiCode / 12 - 1);
+    return QString("%1 %2").arg(QString::fromStdString(mu::pitchToString(midiCode))).arg(midiCode / 12 - 1);
 }

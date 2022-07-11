@@ -178,23 +178,12 @@ static constexpr const char* lineStyles[] = {
     QT_TRANSLATE_NOOP("notation", "Dotted"),
 };
 
-static QString toUserString(DirectionV val)
-{
-    switch (val) {
-    case DirectionV::AUTO: return qtrc("Direction", "Auto");
-    case DirectionV::UP:   return qtrc("Direction", "Up");
-    case DirectionV::DOWN: return qtrc("Direction", "Down");
-    }
-
-    return QString();
-}
-
 static void fillDirectionComboBox(QComboBox* comboBox)
 {
     comboBox->clear();
-    comboBox->addItem(toUserString(DirectionV::AUTO), static_cast<int>(DirectionV::AUTO));
-    comboBox->addItem(toUserString(DirectionV::UP),   static_cast<int>(DirectionV::UP));
-    comboBox->addItem(toUserString(DirectionV::DOWN), static_cast<int>(DirectionV::DOWN));
+    comboBox->addItem(TConv::translatedUserName(DirectionV::AUTO), static_cast<int>(DirectionV::AUTO));
+    comboBox->addItem(TConv::translatedUserName(DirectionV::UP),   static_cast<int>(DirectionV::UP));
+    comboBox->addItem(TConv::translatedUserName(DirectionV::DOWN), static_cast<int>(DirectionV::DOWN));
 }
 
 //---------------------------------------------------------
@@ -209,7 +198,7 @@ EditStyle::EditStyle(QWidget* parent)
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     setModal(true);
 
-    buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
+    buttonApplyToAllParts = buttonBox->addButton(qtrc("notation/editstyle", "Apply to all Parts"), QDialogButtonBox::ApplyRole);
     WidgetUtils::setWidgetIcon(buttonTogglePagelist, IconCode::Code::ARROW_RIGHT);
 
     // ====================================================
@@ -667,8 +656,8 @@ EditStyle::EditStyle(QWidget* parent)
 
     for (QComboBox* cb : verticalPlacementComboBoxes) {
         cb->clear();
-        cb->addItem(tr("Above"), int(mu::engraving::PlacementV::ABOVE));
-        cb->addItem(tr("Below"), int(mu::engraving::PlacementV::BELOW));
+        cb->addItem(qtrc("notation/editstyle", "Above"), int(mu::engraving::PlacementV::ABOVE));
+        cb->addItem(qtrc("notation/editstyle", "Below"), int(mu::engraving::PlacementV::BELOW));
     }
 
     horizontalPlacementComboBoxes = {
@@ -678,30 +667,30 @@ EditStyle::EditStyle(QWidget* parent)
 
     for (QComboBox* cb : horizontalPlacementComboBoxes) {
         cb->clear();
-        cb->addItem(tr("Left"),   int(mu::engraving::PlacementH::LEFT));
-        cb->addItem(tr("Center"), int(mu::engraving::PlacementH::CENTER));
-        cb->addItem(tr("Right"),  int(mu::engraving::PlacementH::RIGHT));
+        cb->addItem(qtrc("notation/editstyle", "Left"),   int(mu::engraving::PlacementH::LEFT));
+        cb->addItem(qtrc("notation/editstyle", "Center"), int(mu::engraving::PlacementH::CENTER));
+        cb->addItem(qtrc("notation/editstyle", "Right"),  int(mu::engraving::PlacementH::RIGHT));
     }
 
     mmRestRangeBracketType->clear();
-    mmRestRangeBracketType->addItem(tr("None"),        int(mu::engraving::MMRestRangeBracketType::NONE));
-    mmRestRangeBracketType->addItem(tr("Brackets"),    int(mu::engraving::MMRestRangeBracketType::BRACKETS));
-    mmRestRangeBracketType->addItem(tr("Parentheses"), int(mu::engraving::MMRestRangeBracketType::PARENTHESES));
+    mmRestRangeBracketType->addItem(qtrc("notation/editstyle", "None"),        int(mu::engraving::MMRestRangeBracketType::NONE));
+    mmRestRangeBracketType->addItem(qtrc("notation/editstyle", "Brackets"),    int(mu::engraving::MMRestRangeBracketType::BRACKETS));
+    mmRestRangeBracketType->addItem(qtrc("notation/editstyle", "Parentheses"), int(mu::engraving::MMRestRangeBracketType::PARENTHESES));
 
     autoplaceVerticalAlignRange->clear();
-    autoplaceVerticalAlignRange->addItem(tr("Segment"), int(mu::engraving::VerticalAlignRange::SEGMENT));
-    autoplaceVerticalAlignRange->addItem(tr("Measure"), int(mu::engraving::VerticalAlignRange::MEASURE));
-    autoplaceVerticalAlignRange->addItem(tr("System"),  int(mu::engraving::VerticalAlignRange::SYSTEM));
+    autoplaceVerticalAlignRange->addItem(qtrc("notation/editstyle", "Segment"), int(mu::engraving::VerticalAlignRange::SEGMENT));
+    autoplaceVerticalAlignRange->addItem(qtrc("notation/editstyle", "Measure"), int(mu::engraving::VerticalAlignRange::MEASURE));
+    autoplaceVerticalAlignRange->addItem(qtrc("notation/editstyle", "System"),  int(mu::engraving::VerticalAlignRange::SYSTEM));
 
     tupletNumberType->clear();
-    tupletNumberType->addItem(tr("Number"), int(TupletNumberType::SHOW_NUMBER));
-    tupletNumberType->addItem(tr("Ratio"), int(TupletNumberType::SHOW_RELATION));
-    tupletNumberType->addItem(tr("None", "no tuplet number type"), int(TupletNumberType::NO_TEXT));
+    tupletNumberType->addItem(qtrc("notation/editstyle", "Number"), int(TupletNumberType::SHOW_NUMBER));
+    tupletNumberType->addItem(qtrc("notation/editstyle", "Ratio"), int(TupletNumberType::SHOW_RELATION));
+    tupletNumberType->addItem(qtrc("notation/editstyle", "None", "no tuplet number type"), int(TupletNumberType::NO_TEXT));
 
     tupletBracketType->clear();
-    tupletBracketType->addItem(tr("Automatic"), int(TupletBracketType::AUTO_BRACKET));
-    tupletBracketType->addItem(tr("Bracket"), int(TupletBracketType::SHOW_BRACKET));
-    tupletBracketType->addItem(tr("None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
+    tupletBracketType->addItem(qtrc("notation/editstyle", "Automatic"), int(TupletBracketType::AUTO_BRACKET));
+    tupletBracketType->addItem(qtrc("notation/editstyle", "Bracket"), int(TupletBracketType::SHOW_BRACKET));
+    tupletBracketType->addItem(qtrc("notation/editstyle", "None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
 
     musicalSymbolFont->clear();
     int idx = 0;
@@ -763,22 +752,25 @@ EditStyle::EditStyle(QWidget* parent)
     harmonyPlay->setChecked(true);
 
     voicingSelectWidget->interpretBox->clear();
-    voicingSelectWidget->interpretBox->addItem(tr("Jazz"), int(0));   // two-item combobox for boolean style variant
-    voicingSelectWidget->interpretBox->addItem(tr("Literal"), int(1));   // true = literal
+    voicingSelectWidget->interpretBox->addItem(qtrc("notation/editstyle", "Jazz"), int(0));   // two-item combobox for boolean style variant
+    voicingSelectWidget->interpretBox->addItem(qtrc("notation/editstyle", "Literal"), int(1));   // true = literal
 
     voicingSelectWidget->voicingBox->clear();
-    voicingSelectWidget->voicingBox->addItem(tr("Automatic"), int(mu::engraving::Voicing::AUTO));
-    voicingSelectWidget->voicingBox->addItem(tr("Root Only"), int(mu::engraving::Voicing::ROOT_ONLY));
-    voicingSelectWidget->voicingBox->addItem(tr("Close"), int(mu::engraving::Voicing::CLOSE));
-    voicingSelectWidget->voicingBox->addItem(tr("Drop Two"), int(mu::engraving::Voicing::DROP_2));
-    voicingSelectWidget->voicingBox->addItem(tr("Six Note"), int(mu::engraving::Voicing::SIX_NOTE));
-    voicingSelectWidget->voicingBox->addItem(tr("Four Note"), int(mu::engraving::Voicing::FOUR_NOTE));
-    voicingSelectWidget->voicingBox->addItem(tr("Three Note"), int(mu::engraving::Voicing::THREE_NOTE));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Automatic"), int(mu::engraving::Voicing::AUTO));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Root Only"), int(mu::engraving::Voicing::ROOT_ONLY));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Close"), int(mu::engraving::Voicing::CLOSE));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Drop Two"), int(mu::engraving::Voicing::DROP_2));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Six Note"), int(mu::engraving::Voicing::SIX_NOTE));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Four Note"), int(mu::engraving::Voicing::FOUR_NOTE));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Three Note"), int(mu::engraving::Voicing::THREE_NOTE));
 
     voicingSelectWidget->durationBox->clear();
-    voicingSelectWidget->durationBox->addItem(tr("Until Next Chord Symbol"), int(mu::engraving::HDuration::UNTIL_NEXT_CHORD_SYMBOL));
-    voicingSelectWidget->durationBox->addItem(tr("Until End of Measure"), int(mu::engraving::HDuration::STOP_AT_MEASURE_END));
-    voicingSelectWidget->durationBox->addItem(tr("Chord/Rest Duration"), int(mu::engraving::HDuration::SEGMENT_DURATION));
+    voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Until Next Chord Symbol"),
+                                              int(mu::engraving::HDuration::UNTIL_NEXT_CHORD_SYMBOL));
+    voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Until End of Measure"),
+                                              int(mu::engraving::HDuration::STOP_AT_MEASURE_END));
+    voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Chord/Rest Duration"),
+                                              int(mu::engraving::HDuration::SEGMENT_DURATION));
 
     // ====================================================
     // Miscellaneous
@@ -877,9 +869,9 @@ EditStyle::EditStyle(QWidget* parent)
     }
 
     textStyleFrameType->clear();
-    textStyleFrameType->addItem(tr("None", "no frame for text"), int(mu::engraving::FrameType::NO_FRAME));
-    textStyleFrameType->addItem(tr("Rectangle"), int(mu::engraving::FrameType::SQUARE));
-    textStyleFrameType->addItem(tr("Circle"), int(mu::engraving::FrameType::CIRCLE));
+    textStyleFrameType->addItem(qtrc("notation/editstyle", "None", "no frame for text"), int(mu::engraving::FrameType::NO_FRAME));
+    textStyleFrameType->addItem(qtrc("notation/editstyle", "Rectangle"), int(mu::engraving::FrameType::SQUARE));
+    textStyleFrameType->addItem(qtrc("notation/editstyle", "Circle"), int(mu::engraving::FrameType::CIRCLE));
 
     WidgetUtils::setWidgetIcon(resetTextStyleName, IconCode::Code::UNDO);
     connect(resetTextStyleName, &QToolButton::clicked, this, &EditStyle::resetUserStyleName);
@@ -1068,7 +1060,7 @@ void EditStyle::retranslate()
 {
     retranslateUi(this);
 
-    buttonApplyToAllParts->setText(tr("Apply to all Parts"));
+    buttonApplyToAllParts->setText(qtrc("notation/editstyle", "Apply to all Parts"));
 
     for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
         int idx = 0;
@@ -1079,46 +1071,46 @@ void EditStyle::retranslate()
     }
 
     for (QComboBox* cb : verticalPlacementComboBoxes) {
-        cb->setItemText(0, tr("Above"));
-        cb->setItemText(1, tr("Below"));
+        cb->setItemText(0, qtrc("notation/editstyle", "Above"));
+        cb->setItemText(1, qtrc("notation/editstyle", "Below"));
     }
 
     for (QComboBox* cb : horizontalPlacementComboBoxes) {
-        cb->setItemText(0, tr("Left"));
-        cb->setItemText(1, tr("Center"));
-        cb->setItemText(2, tr("Right"));
+        cb->setItemText(0, qtrc("notation/editstyle", "Left"));
+        cb->setItemText(1, qtrc("notation/editstyle", "Center"));
+        cb->setItemText(2, qtrc("notation/editstyle", "Right"));
     }
 
-    mmRestRangeBracketType->setItemText(0, tr("None"));
-    mmRestRangeBracketType->setItemText(1, tr("Brackets"));
-    mmRestRangeBracketType->setItemText(2, tr("Parentheses"));
+    mmRestRangeBracketType->setItemText(0, qtrc("notation/editstyle", "None"));
+    mmRestRangeBracketType->setItemText(1, qtrc("notation/editstyle", "Brackets"));
+    mmRestRangeBracketType->setItemText(2, qtrc("notation/editstyle", "Parentheses"));
 
-    autoplaceVerticalAlignRange->setItemText(0, tr("Segment"));
-    autoplaceVerticalAlignRange->setItemText(1, tr("Measure"));
-    autoplaceVerticalAlignRange->setItemText(2, tr("System"));
+    autoplaceVerticalAlignRange->setItemText(0, qtrc("notation/editstyle", "Segment"));
+    autoplaceVerticalAlignRange->setItemText(1, qtrc("notation/editstyle", "Measure"));
+    autoplaceVerticalAlignRange->setItemText(2, qtrc("notation/editstyle", "System"));
 
-    tupletNumberType->setItemText(0, tr("Number"));
-    tupletNumberType->setItemText(1, tr("Ratio"));
-    tupletNumberType->setItemText(2, tr("None", "no tuplet number type"));
+    tupletNumberType->setItemText(0, qtrc("notation/editstyle", "Number"));
+    tupletNumberType->setItemText(1, qtrc("notation/editstyle", "Ratio"));
+    tupletNumberType->setItemText(2, qtrc("notation/editstyle", "None", "no tuplet number type"));
 
-    tupletBracketType->setItemText(0, tr("Automatic"));
-    tupletBracketType->setItemText(1, tr("Bracket"));
-    tupletBracketType->setItemText(2, tr("None", "no tuplet bracket type"));
+    tupletBracketType->setItemText(0, qtrc("notation/editstyle", "Automatic"));
+    tupletBracketType->setItemText(1, qtrc("notation/editstyle", "Bracket"));
+    tupletBracketType->setItemText(2, qtrc("notation/editstyle", "None", "no tuplet bracket type"));
 
-    voicingSelectWidget->interpretBox->setItemText(0, tr("Jazz"));
-    voicingSelectWidget->interpretBox->setItemText(1, tr("Literal"));
+    voicingSelectWidget->interpretBox->setItemText(0, qtrc("notation/editstyle", "Jazz"));
+    voicingSelectWidget->interpretBox->setItemText(1, qtrc("notation/editstyle", "Literal"));
 
-    voicingSelectWidget->voicingBox->setItemText(0, tr("Automatic"));
-    voicingSelectWidget->voicingBox->setItemText(1, tr("Root Only"));
-    voicingSelectWidget->voicingBox->setItemText(2, tr("Close"));
-    voicingSelectWidget->voicingBox->setItemText(3, tr("Drop Two"));
-    voicingSelectWidget->voicingBox->setItemText(4, tr("Six Note"));
-    voicingSelectWidget->voicingBox->setItemText(5, tr("Four Note"));
-    voicingSelectWidget->voicingBox->setItemText(6, tr("Three Note"));
+    voicingSelectWidget->voicingBox->setItemText(0, qtrc("notation/editstyle", "Automatic"));
+    voicingSelectWidget->voicingBox->setItemText(1, qtrc("notation/editstyle", "Root Only"));
+    voicingSelectWidget->voicingBox->setItemText(2, qtrc("notation/editstyle", "Close"));
+    voicingSelectWidget->voicingBox->setItemText(3, qtrc("notation/editstyle", "Drop Two"));
+    voicingSelectWidget->voicingBox->setItemText(4, qtrc("notation/editstyle", "Six Note"));
+    voicingSelectWidget->voicingBox->setItemText(5, qtrc("notation/editstyle", "Four Note"));
+    voicingSelectWidget->voicingBox->setItemText(6, qtrc("notation/editstyle", "Three Note"));
 
-    voicingSelectWidget->durationBox->setItemText(0, tr("Until Next Chord Symbol"));
-    voicingSelectWidget->durationBox->setItemText(1, tr("Until End of Measure"));
-    voicingSelectWidget->durationBox->setItemText(2, tr("Chord/Rest Duration"));
+    voicingSelectWidget->durationBox->setItemText(0, qtrc("notation/editstyle", "Until Next Chord Symbol"));
+    voicingSelectWidget->durationBox->setItemText(1, qtrc("notation/editstyle", "Until End of Measure"));
+    voicingSelectWidget->durationBox->setItemText(2, qtrc("notation/editstyle", "Chord/Rest Duration"));
 
     setHeaderFooterToolTip();
 
@@ -1129,9 +1121,9 @@ void EditStyle::retranslate()
         ++idx;
     }
 
-    textStyleFrameType->setItemText(0, tr("None", "no frame for text"));
-    textStyleFrameType->setItemText(1, tr("Rectangle"));
-    textStyleFrameType->setItemText(2, tr("Circle"));
+    textStyleFrameType->setItemText(0, qtrc("notation/editstyle", "None", "no frame for text"));
+    textStyleFrameType->setItemText(1, qtrc("notation/editstyle", "Rectangle"));
+    textStyleFrameType->setItemText(2, qtrc("notation/editstyle", "Circle"));
 }
 
 //---------------------------------------------------------
@@ -1144,48 +1136,48 @@ void EditStyle::setHeaderFooterToolTip()
     // jumping thru hoops here to make the job of translators easier, yet have a nice display
     QString toolTipHeaderFooter
         = QString("<html><head></head><body><p><b>")
-          + tr("Special symbols in header/footer")
+          + qtrc("notation/editstyle", "Special symbols in header/footer")
           + QString("</b></p>")
           + QString("<table><tr><td>$p</td><td>-</td><td><i>")
-          + tr("Page number, except on first page")
+          + qtrc("notation/editstyle", "Page number, except on first page")
           + QString("</i></td></tr><tr><td>$N</td><td>-</td><td><i>")
-          + tr("Page number, if there is more than one page")
+          + qtrc("notation/editstyle", "Page number, if there is more than one page")
           + QString("</i></td></tr><tr><td>$P</td><td>-</td><td><i>")
-          + tr("Page number, on all pages")
+          + qtrc("notation/editstyle", "Page number, on all pages")
           + QString("</i></td></tr><tr><td>$n</td><td>-</td><td><i>")
-          + tr("Number of pages")
+          + qtrc("notation/editstyle", "Number of pages")
           + QString("</i></td></tr><tr><td>$f</td><td>-</td><td><i>")
-          + tr("File name")
+          + qtrc("notation/editstyle", "File name")
           + QString("</i></td></tr><tr><td>$F</td><td>-</td><td><i>")
-          + tr("File path+name")
+          + qtrc("notation/editstyle", "File path+name")
           + QString("</i></td></tr><tr><td>$i</td><td>-</td><td><i>")
-          + tr("Part name, except on first page")
+          + qtrc("notation/editstyle", "Part name, except on first page")
           + QString("</i></td></tr><tr><td>$I</td><td>-</td><td><i>")
-          + tr("Part name, on all pages")
+          + qtrc("notation/editstyle", "Part name, on all pages")
           + QString("</i></td></tr><tr><td>$d</td><td>-</td><td><i>")
-          + tr("Current date")
+          + qtrc("notation/editstyle", "Current date")
           + QString("</i></td></tr><tr><td>$D</td><td>-</td><td><i>")
-          + tr("Creation date")
+          + qtrc("notation/editstyle", "Creation date")
           + QString("</i></td></tr><tr><td>$m</td><td>-</td><td><i>")
-          + tr("Last modification time")
+          + qtrc("notation/editstyle", "Last modification time")
           + QString("</i></td></tr><tr><td>$M</td><td>-</td><td><i>")
-          + tr("Last modification date")
+          + qtrc("notation/editstyle", "Last modification date")
           + QString("</i></td></tr><tr><td>$C</td><td>-</td><td><i>")
-          + tr("Copyright, on first page only")
+          + qtrc("notation/editstyle", "Copyright, on first page only")
           + QString("</i></td></tr><tr><td>$c</td><td>-</td><td><i>")
-          + tr("Copyright, on all pages")
+          + qtrc("notation/editstyle", "Copyright, on all pages")
           + QString("</i></td></tr><tr><td>$v</td><td>-</td><td><i>")
-          + tr("MuseScore version this score was last saved with")
+          + qtrc("notation/editstyle", "MuseScore version this score was last saved with")
           + QString("</i></td></tr><tr><td>$r</td><td>-</td><td><i>")
-          + tr("MuseScore revision this score was last saved with")
+          + qtrc("notation/editstyle", "MuseScore revision this score was last saved with")
           + QString("</i></td></tr><tr><td>$$</td><td>-</td><td><i>")
-          + tr("The $ sign itself")
+          + qtrc("notation/editstyle", "The $ sign itself")
           + QString("</i></td></tr><tr><td>$:tag:</td><td>-</td><td><i>")
-          + tr("Metadata tag, see below")
+          + qtrc("notation/editstyle", "Metadata tag, see below")
           + QString("</i></td></tr></table><p>")
-          + tr("Available metadata tags and their current values")
+          + qtrc("notation/editstyle", "Available metadata tags and their current values")
           + QString("<br />")
-          + tr("(in File > Score Properties…):")
+          + qtrc("notation/editstyle", "(in File > Score Properties…):")
           + QString("</p><table>");
 
     // show all tags for current score/part, see also Score::init()
@@ -2143,7 +2135,7 @@ void EditStyle::textStyleChanged(int row)
             PropertyValue val = styleValue(a.sid);
             textStyleSpatiumDependent->setChecked(val.toBool());
             resetTextStyleSpatiumDependent->setEnabled(val != defaultStyleValue(a.sid));
-            textStyleOffset->setSuffix(val.toBool() ? tr("sp") : tr("mm"));
+            textStyleOffset->setSuffix(val.toBool() ? qtrc("notation/editstyle", "sp") : qtrc("notation/editstyle", "mm"));
         }
         break;
 

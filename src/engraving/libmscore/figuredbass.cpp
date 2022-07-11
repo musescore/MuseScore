@@ -1683,8 +1683,7 @@ bool FiguredBass::readConfigFile(const String& fileName)
 
     File fi(path);
     if (!fi.open(IODevice::ReadOnly)) {
-        MScore::lastError = mtrc("engraving", "Cannot open figured bass description:\n%1").arg(fi.filePath().toString());
-        LOGD("FiguredBass::read failed: <%s>", muPrintable(path));
+        LOGE() << "Cannot open figured bass description: " << fi.filePath();
         return false;
     }
     XmlReader e(&fi);

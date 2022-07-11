@@ -24,6 +24,8 @@
 #include <QSignalMapper>
 #include <QToolButton>
 
+#include "translation.h"
+
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/stafftext.h"
 #include "engraving/libmscore/system.h"
@@ -77,13 +79,13 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     m_originStaffText = st;
 
     if (st->systemFlag()) {
-        setWindowTitle(tr("System Text Properties"));
+        setWindowTitle(qtrc("notation", "System Text Properties"));
         tabWidget->removeTab(tabWidget->indexOf(tabAeolusStops));     // Aeolus settings  for staff text only
         //if (!enableExperimental) tabWidget->removeTab(tabWidget->indexOf(tabMIDIAction));
         tabWidget->removeTab(tabWidget->indexOf(tabChangeChannel));     // Channel switching  for staff text only
         tabWidget->removeTab(tabWidget->indexOf(tabCapoSettings));     // Capos for staff text only
     } else {
-        setWindowTitle(tr("Staff Text Properties"));
+        setWindowTitle(qtrc("notation", "Staff Text Properties"));
         //tabWidget->removeTab(tabWidget->indexOf(tabSwingSettings)); // Swing settings for system text only, could be disabled here, if desired
 #ifndef AEOLUS
         tabWidget->removeTab(tabWidget->indexOf(tabAeolusStops));

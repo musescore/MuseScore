@@ -139,11 +139,9 @@ bool Score::sanityCheck()
                 }
             }
             if (voices[0] != mLen) {
-                String msg
-                    = mtrc("engraving", "Measure %1, staff %2 incomplete. Expected: %3; Found: %4")
-                      .arg(mNumber).arg(staffIdx + 1).arg(mLen.toString(), voices[0].toString());
-                LOGE() << msg;
-                error += String(u"%1\n").arg(msg);
+                LOGE() << String(u"Measure %1, staff %2 incomplete. Expected: %3; Found: %4")
+                    .arg(mNumber).arg(staffIdx + 1).arg(mLen.toString(), voices[0].toString());
+
 #ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
 #endif
@@ -159,10 +157,9 @@ bool Score::sanityCheck()
             }
             for (voice_idx_t v = 1; v < VOICES; ++v) {
                 if (voices[v] > mLen) {
-                    String msg = mtrc("engraving", "Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5")
-                                 .arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(mLen.toString(), voices[v].toString());
-                    LOGE() << msg;
-                    error += String(u"%1\n").arg(msg);
+                    LOGE() << String(u"Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5")
+                        .arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(mLen.toString(), voices[v].toString());
+
 #ifndef NDEBUG
                     m->setCorrupted(staffIdx, true);
 #endif
@@ -173,7 +170,6 @@ bool Score::sanityCheck()
         mNumber++;
     }
 
-    MScore::lastError = error;
     return result;
 }
 

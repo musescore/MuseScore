@@ -1341,11 +1341,16 @@ TextPlace TConv::fromXml(const AsciiStringView& tag, TextPlace def)
     return oldit->type;
 }
 
-static const std::vector<Item<DirectionV> > DIRECTIONV_TYPES = {
-    { DirectionV::AUTO, "auto" },
-    { DirectionV::UP, "up" },
-    { DirectionV::DOWN, "down" }
-};
+static const std::array<Item<DirectionV>, 3 > DIRECTIONV_TYPES = { {
+    { DirectionV::AUTO, "auto",     QT_TRANSLATE_NOOP("engraving", "Auto") },
+    { DirectionV::UP, "up",         QT_TRANSLATE_NOOP("engraving", "Up") },
+    { DirectionV::DOWN, "down",     QT_TRANSLATE_NOOP("engraving", "Down") },
+} };
+
+String TConv::translatedUserName(DirectionV v)
+{
+    return mtrc("engraving", findUserNameByType<DirectionV>(DIRECTIONV_TYPES, v));
+}
 
 AsciiStringView TConv::toXml(DirectionV v)
 {
@@ -1373,10 +1378,15 @@ DirectionV TConv::fromXml(const AsciiStringView& tag, DirectionV def)
 }
 
 static const std::vector<Item<DirectionH> > DIRECTIONH_TYPES = {
-    { DirectionH::AUTO, "auto" },
-    { DirectionH::RIGHT, "right" },
-    { DirectionH::LEFT, "left" }
+    { DirectionH::AUTO, "auto",     QT_TRANSLATE_NOOP("engraving", "Auto") },
+    { DirectionH::RIGHT, "right",    QT_TRANSLATE_NOOP("engraving", "Right") },
+    { DirectionH::LEFT, "left",      QT_TRANSLATE_NOOP("engraving", "Left") },
 };
+
+String TConv::translatedUserName(DirectionH v)
+{
+    return mtrc("engraving", findUserNameByType<DirectionH>(DIRECTIONH_TYPES, v));
+}
 
 AsciiStringView TConv::toXml(DirectionH v)
 {
@@ -1983,46 +1993,92 @@ ChordLineType TConv::fromXml(const AsciiStringView& tag, ChordLineType def)
 }
 
 struct DrumPitchItem {
-    DrumPitch pitch;
+    DrumNum num = DrumNum(0);
     const char* userName = nullptr;
 };
 
 static const std::vector<DrumPitchItem> DRUMPITCHS = {
-    { DrumPitch(35),       QT_TRANSLATE_NOOP("engraving", "Acoustic Bass Drum") },
-    { DrumPitch(36),       QT_TRANSLATE_NOOP("engraving", "Bass Drum 1") },
-    { DrumPitch(37),       QT_TRANSLATE_NOOP("engraving", "Side Stick") },
-    { DrumPitch(38),       QT_TRANSLATE_NOOP("engraving", "Acoustic Snare") },
+    { DrumNum(27),       QT_TRANSLATE_NOOP("engraving", "High Q") },
+    { DrumNum(28),       QT_TRANSLATE_NOOP("engraving", "Slap") },
+    { DrumNum(29),       QT_TRANSLATE_NOOP("engraving", "Scratch Push") },
 
-    { DrumPitch(40),       QT_TRANSLATE_NOOP("engraving", "Electric Snare") },
-    { DrumPitch(41),       QT_TRANSLATE_NOOP("engraving", "Low Floor Tom") },
-    { DrumPitch(42),       QT_TRANSLATE_NOOP("engraving", "Closed Hi-Hat") },
-    { DrumPitch(43),       QT_TRANSLATE_NOOP("engraving", "High Floor Tom") },
-    { DrumPitch(44),       QT_TRANSLATE_NOOP("engraving", "Pedal Hi-Hat") },
-    { DrumPitch(45),       QT_TRANSLATE_NOOP("engraving", "Low Tom") },
-    { DrumPitch(46),       QT_TRANSLATE_NOOP("engraving", "Open Hi-Hat") },
-    { DrumPitch(47),       QT_TRANSLATE_NOOP("engraving", "Low-Mid Tom") },
-    { DrumPitch(48),       QT_TRANSLATE_NOOP("engraving", "Hi-Mid Tom") },
-    { DrumPitch(49),       QT_TRANSLATE_NOOP("engraving", "Crash Cymbal 1") },
+    { DrumNum(30),       QT_TRANSLATE_NOOP("engraving", "Scratch Pull") },
+    { DrumNum(31),       QT_TRANSLATE_NOOP("engraving", "Sticks") },
+    { DrumNum(32),       QT_TRANSLATE_NOOP("engraving", "Square Click") },
+    { DrumNum(33),       QT_TRANSLATE_NOOP("engraving", "Metronome Click") },
+    { DrumNum(34),       QT_TRANSLATE_NOOP("engraving", "Metronome Bell") },
+    { DrumNum(35),       QT_TRANSLATE_NOOP("engraving", "Acoustic Bass Drum") },
+    { DrumNum(36),       QT_TRANSLATE_NOOP("engraving", "Bass Drum 1") },
+    { DrumNum(37),       QT_TRANSLATE_NOOP("engraving", "Side Stick") },
+    { DrumNum(38),       QT_TRANSLATE_NOOP("engraving", "Acoustic Snare") },
+    { DrumNum(39),       QT_TRANSLATE_NOOP("engraving", "Hand Clap") },
 
-    { DrumPitch(50),       QT_TRANSLATE_NOOP("engraving", "High Tom") },
-    { DrumPitch(51),       QT_TRANSLATE_NOOP("engraving", "Ride Cymbal 1") },
-    { DrumPitch(52),       QT_TRANSLATE_NOOP("engraving", "Chinese Cymbal") },
-    { DrumPitch(53),       QT_TRANSLATE_NOOP("engraving", "Ride Bell") },
-    { DrumPitch(54),       QT_TRANSLATE_NOOP("engraving", "Tambourine") },
-    { DrumPitch(55),       QT_TRANSLATE_NOOP("engraving", "Splash Cymbal") },
-    { DrumPitch(56),       QT_TRANSLATE_NOOP("engraving", "Cowbell") },
-    { DrumPitch(57),       QT_TRANSLATE_NOOP("engraving", "Crash Cymbal 2") },
+    { DrumNum(40),       QT_TRANSLATE_NOOP("engraving", "Electric Snare") },
+    { DrumNum(41),       QT_TRANSLATE_NOOP("engraving", "Low Floor Tom") },
+    { DrumNum(42),       QT_TRANSLATE_NOOP("engraving", "Closed Hi-Hat") },
+    { DrumNum(43),       QT_TRANSLATE_NOOP("engraving", "High Floor Tom") },
+    { DrumNum(44),       QT_TRANSLATE_NOOP("engraving", "Pedal Hi-Hat") },
+    { DrumNum(45),       QT_TRANSLATE_NOOP("engraving", "Low Tom") },
+    { DrumNum(46),       QT_TRANSLATE_NOOP("engraving", "Open Hi-Hat") },
+    { DrumNum(47),       QT_TRANSLATE_NOOP("engraving", "Low-Mid Tom") },
+    { DrumNum(48),       QT_TRANSLATE_NOOP("engraving", "Hi-Mid Tom") },
+    { DrumNum(49),       QT_TRANSLATE_NOOP("engraving", "Crash Cymbal 1") },
 
-    { DrumPitch(59),       QT_TRANSLATE_NOOP("engraving", "Ride Cymbal 2") },
+    { DrumNum(50),       QT_TRANSLATE_NOOP("engraving", "High Tom") },
+    { DrumNum(51),       QT_TRANSLATE_NOOP("engraving", "Ride Cymbal 1") },
+    { DrumNum(52),       QT_TRANSLATE_NOOP("engraving", "Chinese Cymbal") },
+    { DrumNum(53),       QT_TRANSLATE_NOOP("engraving", "Ride Bell") },
+    { DrumNum(54),       QT_TRANSLATE_NOOP("engraving", "Tambourine") },
+    { DrumNum(55),       QT_TRANSLATE_NOOP("engraving", "Splash Cymbal") },
+    { DrumNum(56),       QT_TRANSLATE_NOOP("engraving", "Cowbell") },
+    { DrumNum(57),       QT_TRANSLATE_NOOP("engraving", "Crash Cymbal 2") },
+    { DrumNum(58),       QT_TRANSLATE_NOOP("engraving", "Vibraslap") },
+    { DrumNum(59),       QT_TRANSLATE_NOOP("engraving", "Ride Cymbal 2") },
 
-    { DrumPitch(63),       QT_TRANSLATE_NOOP("engraving", "Open Hi Conga") },
-    { DrumPitch(64),       QT_TRANSLATE_NOOP("engraving", "Low Conga") },
+    { DrumNum(60),       QT_TRANSLATE_NOOP("engraving", "Hi Bongo") },
+    { DrumNum(61),       QT_TRANSLATE_NOOP("engraving", "Low Bongo") },
+    { DrumNum(62),       QT_TRANSLATE_NOOP("engraving", "Mute Hi Conga") },
+    { DrumNum(63),       QT_TRANSLATE_NOOP("engraving", "Open Hi Conga") },
+    { DrumNum(64),       QT_TRANSLATE_NOOP("engraving", "Low Conga") },
+    { DrumNum(65),       QT_TRANSLATE_NOOP("engraving", "High Timbale") },
+    { DrumNum(66),       QT_TRANSLATE_NOOP("engraving", "Low Timbale") },
+    { DrumNum(67),       QT_TRANSLATE_NOOP("engraving", "High Agogo") },
+    { DrumNum(68),       QT_TRANSLATE_NOOP("engraving", "Low Agogo") },
+    { DrumNum(69),       QT_TRANSLATE_NOOP("engraving", "Cabasa") },
+
+    { DrumNum(70),       QT_TRANSLATE_NOOP("engraving", "Maracas") },
+    { DrumNum(71),       QT_TRANSLATE_NOOP("engraving", "Short Whistle") },
+    { DrumNum(72),       QT_TRANSLATE_NOOP("engraving", "Long Whistle") },
+    { DrumNum(73),       QT_TRANSLATE_NOOP("engraving", "Short Güiro") },
+    { DrumNum(74),       QT_TRANSLATE_NOOP("engraving", "Long Güiro") },
+    { DrumNum(75),       QT_TRANSLATE_NOOP("engraving", "Claves") },
+    { DrumNum(76),       QT_TRANSLATE_NOOP("engraving", "Hi Wood Block") },
+    { DrumNum(77),       QT_TRANSLATE_NOOP("engraving", "Low Wood Block") },
+    { DrumNum(78),       QT_TRANSLATE_NOOP("engraving", "Mute Cuica") },
+    { DrumNum(79),       QT_TRANSLATE_NOOP("engraving", "Open Cuica") },
+
+    { DrumNum(80),       QT_TRANSLATE_NOOP("engraving", "Mute Triangle") },
+    { DrumNum(81),       QT_TRANSLATE_NOOP("engraving", "Open Triangle") },
+    { DrumNum(82),       QT_TRANSLATE_NOOP("engraving", "Shaker") },
+    { DrumNum(83),       QT_TRANSLATE_NOOP("engraving", "Sleigh Bell") },
+    { DrumNum(84),       QT_TRANSLATE_NOOP("engraving", "Mark Tree") },
+    { DrumNum(85),       QT_TRANSLATE_NOOP("engraving", "Castanets") },
+    { DrumNum(86),       QT_TRANSLATE_NOOP("engraving", "Mute Surdo") },
+    { DrumNum(87),       QT_TRANSLATE_NOOP("engraving", "Open Surdo") },
+
+    { DrumNum(91),       QT_TRANSLATE_NOOP("engraving", "Snare (Rim shot)") },
+
+    { DrumNum(93),       QT_TRANSLATE_NOOP("engraving", "Ride (Edge)") },
+
+    { DrumNum(99),       QT_TRANSLATE_NOOP("engraving", "Cowbell Low") },
+
+    { DrumNum(102),      QT_TRANSLATE_NOOP("engraving", "Cowbell High") },
 };
 
-const char* TConv::userName(DrumPitch v)
+const char* TConv::userName(DrumNum v)
 {
     auto it = std::find_if(DRUMPITCHS.cbegin(), DRUMPITCHS.cend(), [v](const DrumPitchItem& i) {
-        return i.pitch == v;
+        return i.num == v;
     });
 
     IF_ASSERT_FAILED(it != DRUMPITCHS.cend()) {

@@ -21,7 +21,7 @@
  */
 #include "importmidi_model.h"
 
-#include <QCoreApplication>
+#include "translation.h"
 
 #include "importmidi_inner.h"
 #include "importmidi_clef.h"
@@ -86,8 +86,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Import");
+            return qtrc("iex_midi", "Import");
         }
 
         QVariant value(int trackIndex) const override
@@ -109,8 +108,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
             : Column(opers) {}
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Channel");
+            return qtrc("iex_midi", "Channel");
         }
 
         bool isEditable(int /*trackIndex*/) const override { return false; }
@@ -142,8 +140,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
             int width() const override { return 180; }
             QString headerName() const override
             {
-                return QCoreApplication::translate(
-                    "MIDI import operations", "Staff name");
+                return qtrc("iex_midi", "Staff name");
             }
 
             bool isEditable(int /*trackIndex*/) const override { return false; }
@@ -174,8 +171,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
         int width() const override { return 130; }
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Sound");
+            return qtrc("iex_midi", "Sound");
         }
 
         bool isEditable(int /*trackIndex*/) const override { return false; }
@@ -207,8 +203,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
             int width() const override { return 220; }
             QString headerName() const override
             {
-                return QCoreApplication::translate(
-                    "MIDI import operations", "MuseScore instrument");
+                return qtrc("iex_midi", "MuseScore instrument");
             }
 
             bool isEditable(int trackIndex) const override
@@ -271,8 +266,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
             int width() const override { return 185; }
             QString headerName() const override
             {
-                return QCoreApplication::translate(
-                    "MIDI import operations", "Lyrics");
+                return qtrc("iex_midi", "Lyrics");
             }
 
             QVariant value(int trackIndex) const override
@@ -317,18 +311,17 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
         QuantValue(MidiOperations::Opers& opers)
             : Column(opers)
         {
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "Quarter"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "Eighth"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "16th"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "32nd"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "64th"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "128th"));
+            _values.push_back(qtrc("iex_midi", "Quarter"));
+            _values.push_back(qtrc("iex_midi", "Eighth"));
+            _values.push_back(qtrc("iex_midi", "16th"));
+            _values.push_back(qtrc("iex_midi", "32nd"));
+            _values.push_back(qtrc("iex_midi", "64th"));
+            _values.push_back(qtrc("iex_midi", "128th"));
         }
 
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Max. quantization");
+            return qtrc("iex_midi", "Max. quantization");
         }
 
         QVariant value(int trackIndex) const override
@@ -356,8 +349,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Max. voices");
+            return qtrc("iex_midi", "Max. voices");
         }
 
         QVariant value(int trackIndex) const override
@@ -385,19 +377,18 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
         Tuplets(MidiOperations::Opers& opers, int trackCount)
             : Column(opers), _trackCount(trackCount)
         {
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "2-plets"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "3-plets"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "4-plets"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "5-plets"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "7-plets"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "9-plets"));
+            _values.push_back(qtrc("iex_midi", "2-plets"));
+            _values.push_back(qtrc("iex_midi", "3-plets"));
+            _values.push_back(qtrc("iex_midi", "4-plets"));
+            _values.push_back(qtrc("iex_midi", "5-plets"));
+            _values.push_back(qtrc("iex_midi", "7-plets"));
+            _values.push_back(qtrc("iex_midi", "9-plets"));
         }
 
         int width() const override { return 140; }
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Tuplets");
+            return qtrc("iex_midi", "Tuplets");
         }
 
         QVariant value(int trackIndex) const override
@@ -541,29 +532,28 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
             TimeSig(MidiOperations::Opers& opers)
                 : Column(opers)
             {
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "2"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "3"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "4"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "5"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "6"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "7"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "9"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "12"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "15"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "21"));
+                _values.push_back(qtrc("iex_midi", "2"));
+                _values.push_back(qtrc("iex_midi", "3"));
+                _values.push_back(qtrc("iex_midi", "4"));
+                _values.push_back(qtrc("iex_midi", "5"));
+                _values.push_back(qtrc("iex_midi", "6"));
+                _values.push_back(qtrc("iex_midi", "7"));
+                _values.push_back(qtrc("iex_midi", "9"));
+                _values.push_back(qtrc("iex_midi", "12"));
+                _values.push_back(qtrc("iex_midi", "15"));
+                _values.push_back(qtrc("iex_midi", "21"));
                 _numeratorCount = _values.size();
 
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "2"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "4"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "8"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "16"));
-                _values.push_back(QCoreApplication::translate("MIDI import operations", "32"));
+                _values.push_back(qtrc("iex_midi", "2"));
+                _values.push_back(qtrc("iex_midi", "4"));
+                _values.push_back(qtrc("iex_midi", "8"));
+                _values.push_back(qtrc("iex_midi", "16"));
+                _values.push_back(qtrc("iex_midi", "32"));
             }
 
             QString headerName() const override
             {
-                return QCoreApplication::translate(
-                    "MIDI import operations", "Time signature");
+                return qtrc("iex_midi", "Time signature");
             }
 
             bool isForAllTracksOnly() const override { return true; }
@@ -623,8 +613,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
             QString headerName() const override
             {
-                return QCoreApplication::translate(
-                    "MIDI import operations", "Halving the\nmeasure count");
+                return qtrc("iex_midi", "Halving the\nmeasure count");
             }
 
             bool isForAllTracksOnly() const override { return true; }
@@ -650,8 +639,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Is human\nperformance");
+            return qtrc("iex_midi", "Is human\nperformance");
         }
 
         bool isForAllTracksOnly() const override { return true; }
@@ -676,8 +664,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Split staff");
+            return qtrc("iex_midi", "Split staff");
         }
 
         QVariant value(int trackIndex) const override
@@ -701,8 +688,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Clef\nchanges");
+            return qtrc("iex_midi", "Clef\nchanges");
         }
 
         bool isEditable(int trackIndex) const override
@@ -746,8 +732,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Simplify\ndurations");
+            return qtrc("iex_midi", "Simplify\ndurations");
         }
 
         QVariant value(int trackIndex) const override
@@ -771,8 +756,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Show\nstaccato");
+            return qtrc("iex_midi", "Show\nstaccato");
         }
 
         QVariant value(int trackIndex) const override
@@ -796,8 +780,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Dotted\nnotes");
+            return qtrc("iex_midi", "Dotted\nnotes");
         }
 
         QVariant value(int trackIndex) const override
@@ -822,8 +805,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
             QString headerName() const override
             {
-                return QCoreApplication::translate(
-                    "MIDI import operations", "Show\ntempo text");
+                return qtrc("iex_midi", "Show\ntempo text");
             }
 
             bool isForAllTracksOnly() const override { return true; }
@@ -850,8 +832,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
             QString headerName() const override
             {
-                return QCoreApplication::translate(
-                    "MIDI import operations", "Show\nchord symbols");
+                return qtrc("iex_midi", "Show\nchord symbols");
             }
 
             bool isForAllTracksOnly() const override { return true; }
@@ -877,8 +858,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Recognize\npickup measure");
+            return qtrc("iex_midi", "Recognize\npickup measure");
         }
 
         bool isForAllTracksOnly() const override { return true; }
@@ -899,15 +879,14 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
         Swing(MidiOperations::Opers& opers)
             : Column(opers)
         {
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "None (1:1)"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "Swing (2:1)"));
-            _values.push_back(QCoreApplication::translate("MIDI import operations", "Shuffle (3:1)"));
+            _values.push_back(qtrc("iex_midi", "None (1:1)"));
+            _values.push_back(qtrc("iex_midi", "Swing (2:1)"));
+            _values.push_back(qtrc("iex_midi", "Shuffle (3:1)"));
         }
 
         QString headerName() const override
         {
-            return QCoreApplication::translate(
-                "MIDI import operations", "Detect swing");
+            return qtrc("iex_midi", "Detect swing");
         }
 
         int width() const override { return 130; }
@@ -1234,13 +1213,12 @@ QVariant TracksModel::headerData(int section, Qt::Orientation orientation, int r
 
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         if (!_columns.empty()) {
-            return QCoreApplication::translate("MIDI import: tracks model",
-                                               _columns[section]->headerName().toUtf8().constData());
+            return _columns[section]->headerName();
         }
     } else if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
         if (_trackCount > 1) {
             if (section == 0) {
-                return QCoreApplication::translate("MIDI import: tracks model", "All");
+                return qtrc("iex_midi", "All");
             }
             return section;
         }

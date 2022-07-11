@@ -24,6 +24,7 @@
  MusicXML support.
  */
 
+#include "translation.h"
 #include "libmscore/accidental.h"
 #include "libmscore/articulation.h"
 #include "libmscore/chord.h"
@@ -188,19 +189,19 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
 
     QString strType;
     switch (type) {
-    case 0:  strType = tr("Debug");
+    case 0:  strType = qtrc("musicxml", "Debug");
         break;
-    case 1:  strType = tr("Warning");
+    case 1:  strType = qtrc("musicxml", "Warning");
         break;
-    case 2:  strType = tr("Critical");
+    case 2:  strType = qtrc("musicxml", "Critical");
         break;
-    case 3:  strType = tr("Fatal");
+    case 3:  strType = qtrc("musicxml", "Fatal");
         break;
-    default: strType = tr("Unknown");
+    default: strType = qtrc("musicxml", "Unknown");
         break;
     }
 
-    QString errorStr = QString(tr("%1 error: line %2 column %3 %4"))
+    QString errorStr = qtrc("musicxml", "%1 error: line %2 column %3 %4")
                        .arg(strType)
                        .arg(sourceLocation.line())
                        .arg(sourceLocation.column())
@@ -283,7 +284,7 @@ void domNotImplemented(const QDomElement& e)
 
 QString xmlReaderLocation(const QXmlStreamReader& e)
 {
-    return QObject::tr("line %1 column %2").arg(e.lineNumber()).arg(e.columnNumber());
+    return qtrc("musicxml", "line %1 column %2").arg(e.lineNumber()).arg(e.columnNumber());
 }
 
 //---------------------------------------------------------
@@ -296,7 +297,7 @@ QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName)
         return "";
     }
 
-    QString res = QObject::tr("expected token type and name 'EndElement %1', actual '%2 %3'")
+    QString res = qtrc("musicxml", "expected token type and name 'EndElement %1', actual '%2 %3'")
                   .arg(expName)
                   .arg(e.tokenString())
                   .arg(e.name().toString());

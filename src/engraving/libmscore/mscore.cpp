@@ -102,7 +102,6 @@ double MScore::nudgeStep10;
 double MScore::nudgeStep50;
 int MScore::defaultPlayDuration;
 
-String MScore::lastError;
 int MScore::sampleRate  = 44100;
 int MScore::mtcType;
 
@@ -133,8 +132,6 @@ void MScore::init()
     pedalEventsMinTicks = 1;
     playRepeats         = true;
     playbackSpeedIncrement = 5;
-
-    lastError           = u"";
 
     //
     //  initialize styles
