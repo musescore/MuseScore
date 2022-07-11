@@ -20,8 +20,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 BUILD_TOOLS=$HOME/build_tools
-ENV_FILE=$BUILD_TOOLS/lupdate_environment.sh
+ENV_FILE=$BUILD_TOOLS/tx/tx_environment.sh
 
 source $ENV_FILE
 
-bash ./tools/translations/run_lupdate.sh
+echo "Start tx push:"
+bash ./tools/translations/tx_push.sh 
