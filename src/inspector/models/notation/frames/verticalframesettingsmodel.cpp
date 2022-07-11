@@ -55,8 +55,8 @@ void VerticalFrameSettingsModel::requestElements()
 void VerticalFrameSettingsModel::loadProperties()
 {
     loadPropertyItem(m_frameHeight, formatDoubleFunc);
-    loadPropertyItem(m_gapAbove);
-    loadPropertyItem(m_gapBelow);
+    loadPropertyItem(m_gapAbove, formatDoubleFunc);
+    loadPropertyItem(m_gapBelow, formatDoubleFunc);
     loadPropertyItem(m_frameLeftMargin);
     loadPropertyItem(m_frameRightMargin);
     loadPropertyItem(m_frameTopMargin);

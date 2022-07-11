@@ -101,9 +101,9 @@ bool Val::toBool() const
         return str == VAL_TRUE;
     }
     default:
-        return isNull() ? false : true;
+        break;
     }
-    return false;
+    return isNull() ? false : true;
 }
 
 int Val::toInt() const
