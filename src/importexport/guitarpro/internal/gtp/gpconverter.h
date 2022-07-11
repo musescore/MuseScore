@@ -34,6 +34,7 @@ class LetRing;
 class PalmMute;
 class Vibrato;
 class Ottava;
+class Bend;
 
 class GPConverter
 {
@@ -217,6 +218,13 @@ private:
 
     Hairpin* _lastHairpin = nullptr;
     std::vector<Ottava*> m_lastOttavas;
+
+#ifdef ENGRAVING_USE_STRETCHED_BENDS
+    std::vector<StretchedBend*> m_bends;
+#else
+    std::vector<Bend*> m_bends;
+#endif
+
     Measure* _lastMeasure = nullptr;
     bool m_showCapo = true; // TODO-gp : settings
 };

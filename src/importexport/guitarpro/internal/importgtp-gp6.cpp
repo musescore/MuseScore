@@ -32,7 +32,6 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
-#include "libmscore/bend.h"
 #include "libmscore/box.h"
 #include "libmscore/bracket.h"
 #include "libmscore/bracketItem.h"
