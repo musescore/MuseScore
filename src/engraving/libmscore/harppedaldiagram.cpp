@@ -24,7 +24,7 @@
 
 #include "score.h"
 #include "segment.h"
-
+#include "types/typesconv.h"
 #include "rw/xml.h"
 
 using namespace mu;
@@ -303,5 +303,40 @@ PropertyValue HarpPedalDiagram::propertyDefault(Pid id) const
 
 String HarpPedalDiagram::accessibleInfo() const
 {
-    return TextBase::accessibleInfo();
+    String rez = score() ? score()->getTextStyleUserName(textStyleType()) : TConv::toUserName(textStyleType());
+    String s;
+
+    if (_isDiagram) {
+        // Read whole diagram
+        for (int idx = 0; idx < _pedalState.size(); idx++) {
+            s.append(harpStringTypeToString(HarpStringType(idx)));
+            switch (_pedalState[idx]) {
+            case PedalPosition::FLAT:
+                s.append(String("b"));
+                break;
+            case PedalPosition::NATURAL:
+                s.append(String(" nat "));
+                break;
+            case PedalPosition::SHARP:
+                s.append(String("# "));
+                break;
+            case PedalPosition::UNSET:
+                s.append(String(" unset "));
+                break;
+            }
+        }
+    } else {
+        // Take text diagram text and replace symbols with readable words
+        s = plainText().simplified();
+        static std::vector<std::pair<String, String> > symbolReplacements {
+            { u"\ued60", u"b " },
+            { u"\ued61", u" nat " },
+            { u"\ued62", u"# " }
+        };
+        for (auto const& r : symbolReplacements) {
+            s.replace(r.first, r.second);
+        }
+    }
+
+    return String(u"%1: %2").arg(rez, s);
 }
