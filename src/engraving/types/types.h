@@ -113,6 +113,7 @@ enum class ElementType {
     HARMONY,
     FRET_DIAGRAM,
     BEND,
+    STRETCHED_BEND,
     TREMOLOBAR,
     VOLTA,
     HAIRPIN_SEGMENT,

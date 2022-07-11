@@ -229,6 +229,12 @@ protected:
     QTextCodec* _codec { 0 };
     Slur** slurs       { nullptr };
 
+#ifdef ENGRAVING_USE_STRETCHED_BENDS
+    std::vector<StretchedBend*> m_bends;
+#else
+    std::vector<Bend*> m_bends;
+#endif
+
     void skip(qint64 len);
     void read(void* p, qint64 len);
     int readUChar();

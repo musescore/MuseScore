@@ -45,7 +45,7 @@ enum class BendType {
     CUSTOM
 };
 
-class Bend final : public EngravingItem
+class Bend : public EngravingItem // TODO: bring back "final" keyword
 {
     M_PROPERTY(String,     fontFace,  setFontFace)
     M_PROPERTY(double,      fontSize,  setFontSize)
@@ -70,9 +70,9 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-private:
+protected: /// TODO: bring back "private" keyword after removing StretchedBend class
     friend class Factory;
-    Bend(Note* parent);
+    Bend(Note* parent, ElementType type = ElementType::BEND);
 
     mu::draw::Font font(double) const;
     BendType parseBendTypeFromCurve() const;
@@ -82,7 +82,8 @@ private:
     PitchValues m_points;
 
     mu::PointF m_notePos;
-    double m_noteWidth;
+    double m_noteWidth = 0;
+    double m_noteHeight = 0;
 };
 } // namespace mu::engraving
 #endif

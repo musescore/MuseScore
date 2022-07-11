@@ -1207,6 +1207,9 @@ void Note::add(EngravingItem* e)
     case ElementType::NOTEDOT:
         _dots.push_back(toNoteDot(e));
         break;
+    case ElementType::STRETCHED_BEND:
+        m_bend = toStretchedBend(e);
+    // fallthrough
     case ElementType::FINGERING:
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
@@ -1252,6 +1255,9 @@ void Note::remove(EngravingItem* e)
         _dots.pop_back();
         break;
 
+    case ElementType::STRETCHED_BEND:
+        m_bend = nullptr;
+    // fallthrough
     case ElementType::TEXT:
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
