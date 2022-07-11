@@ -698,8 +698,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-8</l1>
-            <l2>-6</l2>
+            <l1>-6</l1>
+            <l2>-4</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -740,7 +740,7 @@
             </Chord>
           <Beam>
             <l1>-6</l1>
-            <l2>-8</l2>
+            <l2>-10</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

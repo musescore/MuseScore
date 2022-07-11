@@ -88,7 +88,7 @@
         <voice>
           <Beam>
             <l1>60</l1>
-            <l2>52</l2>
+            <l2>54</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
