@@ -89,6 +89,11 @@ void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
 
     newKey += newModifiers;
 
+    // remove shift-modifier for keys that don't need it: letters and special keys
+    if ((newKey & Qt::ShiftModifier) && ((key < 0x41) || (key > 0x5a) || (key >= 0x01000000))) {
+        newKey -= Qt::ShiftModifier;
+    }
+
     for (int i = 0; i < m_inputtedSequence.count(); i++) {
         if (m_inputtedSequence[i] == key) {
             return;
