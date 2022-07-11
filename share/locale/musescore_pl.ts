@@ -12,17 +12,17 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="184"/>
         <source>Auto</source>
-        <translation>automatyczny</translation>
+        <translation>Automatyczny</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="185"/>
         <source>Up</source>
-        <translation>góra</translation>
+        <translation>Góra</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="186"/>
         <source>Down</source>
-        <translation>dół</translation>
+        <translation>Dół</translation>
     </message>
 </context>
 <context>
@@ -31,13 +31,13 @@
         <location filename="../../src/engraving/libmscore/instrument.cpp" line="50"/>
         <source>normal</source>
         <extracomment>Channel name for otherwise unnamed channels</extracomment>
-        <translation>zwykły</translation>
+        <translation>Zwykły</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/instrument.cpp" line="52"/>
         <source>harmony</source>
         <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
-        <translation>akord</translation>
+        <translation>Akord</translation>
     </message>
 </context>
 <context>
@@ -320,7 +320,7 @@ przedtakt</translation>
     <name>Main.wasm</name>
     <message>
         <location filename="../../src/appshell/qml/Main.wasm.qml" line="36"/>
-        <source>Muse Score</source>
+        <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
 </context>
@@ -412,12 +412,12 @@ przedtakt</translation>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="286"/>
         <source>line %1 column %2</source>
-        <translation>linia %1, kolumna %2</translation>
+        <translation>wiersz %1, kolumna %2</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="299"/>
         <source>expected token type and name &apos;EndElement %1&apos;, actual &apos;%2 %3&apos;</source>
-        <translation type="unfinished"/>
+        <translation>oczekiwany typ i nazwa tokena &apos;EndElement %1&apos;, faktyczny: &apos;%2 %3&apos;</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="600"/>
@@ -477,12 +477,12 @@ przedtakt</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="611"/>
         <source>MuseScore Unpack Files</source>
-        <translation type="unfinished"/>
+        <translation>Pliki MuseScore Unpack</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="612"/>
         <source>MuseScore Dev Files</source>
-        <translation type="unfinished"/>
+        <translation>Pliki deweloperskie MuseScore&apos;a</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="613"/>
@@ -593,7 +593,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="68"/>
         <source>Save to cloud…</source>
-        <translation>Zapisz do chmury…</translation>
+        <translation>Zapisz w chmurze…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="73"/>
@@ -685,7 +685,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1552"/>
         <source>Enter durations with a single click or keypress</source>
-        <translation>Wprowadź wartości rytmiczne przez pojedyncze kliknięcie lub wciśnięcie klawisza</translation>
+        <translation>Wprowadź wartości rytmiczne przez pojedyncze kliknięcie lub naciśnięcie klawisza</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="338"/>
@@ -830,42 +830,42 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="72"/>
         <source>Next chord / Shift text right</source>
-        <translation type="unfinished"/>
+        <translation>Następny akord/przesuń tekst w prawo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="73"/>
         <source>Go to next chord or shift text right</source>
-        <translation type="unfinished"/>
+        <translation>Idź do następnego akordu lub przesuń tekst w prawo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="77"/>
         <source>Previous chord / Shift text left</source>
-        <translation type="unfinished"/>
+        <translation>Poprzedni akord/przesuń tekst w lewo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="78"/>
         <source>Go to previous chord or shift text left</source>
-        <translation type="unfinished"/>
+        <translation>Idź do poprzedniego akordu lub przesuń tekst w lewo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="82"/>
         <source>Next measure / Shift text right quickly</source>
-        <translation type="unfinished"/>
+        <translation>Następny takt/szybko przesuń tekst w prawo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="83"/>
         <source>Go to next measure or shift text right quickly</source>
-        <translation type="unfinished"/>
+        <translation>Idź do następnego taktu lub szybko przesuń tekst w prawo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="87"/>
         <source>Previous measure / Shift text left quickly</source>
-        <translation type="unfinished"/>
+        <translation>Poprzedni takt/szybko przesuń tekst w lewo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="88"/>
         <source>Go to previous measure or shift text left quickly</source>
-        <translation type="unfinished"/>
+        <translation>Idź do poprzedniego taktu lub szybko przesuń tekst w lewo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="92"/>
@@ -970,22 +970,22 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="204"/>
         <source>Halve duration</source>
-        <translation>Połowa długości</translation>
+        <translation>Zmniejsz wartość rytmiczną o połowę</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="208"/>
         <source>Double selected duration (dotted)</source>
-        <translation type="unfinished"/>
+        <translation>Zwiększ wartość rytmiczną dwukrotnie (z kropką)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="212"/>
         <source>Halve selected duration (dotted)</source>
-        <translation type="unfinished"/>
+        <translation>Zmniejsz wartość rytmiczną o połowę (z kropką)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="247"/>
         <source>Toggle visibility of elements</source>
-        <translation type="unfinished"/>
+        <translation>Przełącz widoczność elementów</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="259"/>
@@ -1045,7 +1045,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="343"/>
         <source>Combine rests and tied notes from selection and resplit at rhythmical boundaries</source>
-        <translation type="unfinished"/>
+        <translation>Połącz pauzy i nuty połączone ligaturą z zaznaczenia i ponownie podziel na granicach rytmicznych</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="351"/>
@@ -1155,32 +1155,32 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="478"/>
         <source>Insert one measure before selection</source>
-        <translation type="unfinished"/>
+        <translation>Wstaw takt przed zaznaczeniem</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="483"/>
         <source>Insert measures before selection…</source>
-        <translation type="unfinished"/>
+        <translation>Wstaw takty przed zaznaczeniem…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="487"/>
         <source>Insert measures after selection…</source>
-        <translation type="unfinished"/>
+        <translation>Wstaw takty po zaznaczeniu…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="491"/>
         <source>Insert measures at start of score…</source>
-        <translation type="unfinished"/>
+        <translation>Wstaw takty na początku partytury…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="495"/>
         <source>Insert one measure at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Wstaw takt na końcu partytury</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="499"/>
         <source>Insert measures at end of score…</source>
-        <translation type="unfinished"/>
+        <translation>Wstaw takty na końcu partytury…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="555"/>
@@ -1190,17 +1190,17 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="580"/>
         <source>Break beam left</source>
-        <translation type="unfinished"/>
+        <translation>Złam belkę po lewej</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="585"/>
         <source>Break inner beams (8th)</source>
-        <translation type="unfinished"/>
+        <translation>Złam wewnętrzne belki (ósemki)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="590"/>
         <source>Break inner beams (16th)</source>
-        <translation type="unfinished"/>
+        <translation>Złam wewnętrzne belki (szesnastki)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="595"/>
@@ -1400,12 +1400,12 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1763"/>
         <source>Cross-staff beaming</source>
-        <translation type="unfinished"/>
+        <translation>Belkowanie między pięcioliniami</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1764"/>
         <source>Move notes to staff above or below</source>
-        <translation type="unfinished"/>
+        <translation>Przesuń nuty do pięciolinii powyżej lub poniżej</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1769"/>
@@ -1426,27 +1426,27 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1835"/>
         <source>Show skylines</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż granice wydłużeń</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1840"/>
         <source>Show segment shapes</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż kształty segmentów</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1845"/>
         <source>Show bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż obwiednie elementów</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1850"/>
         <source>Show system bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż obwiednie systemów</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1855"/>
         <source>Show corrupted measures</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż uszkodzone takty</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="746"/>
@@ -1572,17 +1572,17 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1064"/>
         <source>Add octuplet</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj oktolę</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1068"/>
         <source>Nontuplet</source>
-        <translation type="unfinished"/>
+        <translation>Nowemola</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1069"/>
         <source>Add nontuplet</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj nowemolę</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1093"/>
@@ -1597,22 +1597,22 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1180"/>
         <source>Page: Top of first</source>
-        <translation type="unfinished"/>
+        <translation>Strona: góra pierwszej</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1184"/>
         <source>Page: Bottom of last</source>
-        <translation type="unfinished"/>
+        <translation>Strona: dół ostatniej</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1188"/>
         <source>Context sensitive help</source>
-        <translation type="unfinished"/>
+        <translation>Pomoc kontekstowa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1196"/>
         <source>Toggle score lock</source>
-        <translation type="unfinished"/>
+        <translation>Przełącz blokadę partytury</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1218"/>
@@ -1633,92 +1633,92 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1231"/>
         <source>Next text element</source>
-        <translation type="unfinished"/>
+        <translation>Następny element tekstowy</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1232"/>
         <source>Move to text element on next note</source>
-        <translation type="unfinished"/>
+        <translation>Przejdź do elementu tekstowego następnej nuty</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1236"/>
         <source>Previous text element</source>
-        <translation type="unfinished"/>
+        <translation>Poprzedni element tekstowy</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1237"/>
         <source>Move to text element on previous note</source>
-        <translation type="unfinished"/>
+        <translation>Przejdź do elementu tekstowego poprzedniej nuty</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1251"/>
         <source>Longa advance (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Przeskocz o longę (B.C./symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1256"/>
         <source>Breve advance (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Przeskocz o breve (B.C./symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1261"/>
         <source>Whole note advance (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Przeskocz o całą nutę (B.C./symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1266"/>
         <source>Half note advance (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Przeskocz o półnutę (B.C./symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1271"/>
         <source>Quarter note advance (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Przeskocz o ćwierćnutę (B.C./symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1276"/>
         <source>Eighth note advance (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Przeskocz o ósemkę (B.C./symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1281"/>
         <source>16th note advance (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Przeskocz o szesnastkę (B.C./symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1286"/>
         <source>32nd note advance (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Przeskocz o trzydziestodwójkę (B.C./symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1291"/>
         <source>64th note advance (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Przeskocz o sześćdziesięcioczwórkę (B.C./symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1296"/>
         <source>Next lyric verse</source>
-        <translation type="unfinished"/>
+        <translation>Następny wers słów</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1297"/>
         <source>Move to lyric in the next verse</source>
-        <translation type="unfinished"/>
+        <translation>Przejdź do słów w następnym wersie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1301"/>
         <source>Previous lyric verse</source>
-        <translation type="unfinished"/>
+        <translation>Poprzedni wers słów</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1302"/>
         <source>Move to lyric in the previous verse</source>
-        <translation type="unfinished"/>
+        <translation>Przejdź do słów w poprzednim wersie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1307"/>
         <source>Add hyphen and move to lyric on next note</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj łącznik i przejdź do słów następnej nuty</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1311"/>
@@ -1728,7 +1728,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1312"/>
         <source>Add melisma line and move to lyric on next note</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj linię melizmatu i przejdź do słów następnej nuty</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1316"/>
@@ -1738,12 +1738,12 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1317"/>
         <source>Adds a new verse and starts editing</source>
-        <translation type="unfinished"/>
+        <translation>Dodaje nowy wers i rozpoczyna jego edycję</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1336"/>
         <source>Strike</source>
-        <translation type="unfinished"/>
+        <translation>Uderzenie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1349"/>
@@ -1783,12 +1783,12 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1414"/>
         <source>Diatonic pitch up (keep degree alterations)</source>
-        <translation type="unfinished"/>
+        <translation>Diatonicznie wysokość w górę (pozostaw zmiany stopnia)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1418"/>
         <source>Diatonic pitch down (keep degree alterations)</source>
-        <translation type="unfinished"/>
+        <translation>Diatonicznie wysokość w dół (pozostaw zmiany stopnia)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
@@ -1803,12 +1803,12 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1450"/>
         <source>Toggle &apos;automatic placement&apos; for selected elements</source>
-        <translation type="unfinished"/>
+        <translation>Włącz Autopołożenie dla zaznaczonych elementów</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1454"/>
         <source>Toggle &apos;automatic placement&apos; (whole score)</source>
-        <translation type="unfinished"/>
+        <translation>Włącz Autopołożenie (cała partytura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1466"/>
@@ -1818,7 +1818,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1467"/>
         <source>Note duration: whole note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nuta: cała nuta (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1472"/>
@@ -1828,7 +1828,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1473"/>
         <source>Note duration: half note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nuta: półnuta (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1478"/>
@@ -1838,7 +1838,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1479"/>
         <source>Note duration: quarter note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nuta: ćwierćnuta (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1484"/>
@@ -1848,7 +1848,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1485"/>
         <source>Note duration: 8th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nuta: ósemka (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1490"/>
@@ -1858,7 +1858,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1491"/>
         <source>Note duration: 16th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nuta: szesnastka (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1496"/>
@@ -1868,7 +1868,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1497"/>
         <source>Note duration: 32nd note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nuta: trzydziestodwójka (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1502"/>
@@ -1878,7 +1878,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1503"/>
         <source>Note duration: 64th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nuta: sześćdziesięcioczwórka (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1508"/>
@@ -1888,7 +1888,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1509"/>
         <source>Note duration: 128th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nuta: stodwudziestoósemka (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1514"/>
@@ -1898,7 +1898,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1515"/>
         <source>Note duration: 256th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nuta: dwieściepięćdziesięcioczwórka (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1520"/>
@@ -1908,7 +1908,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1521"/>
         <source>Note duration: 512th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nuta: pięćsetdwunastka (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1526"/>
@@ -1918,27 +1918,27 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1527"/>
         <source>Note duration: 1024th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nuta: tysiącdwudziestoczwórka (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1545"/>
         <source>Default (step time)</source>
-        <translation type="unfinished"/>
+        <translation>Domyślny (krok po kroku)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1551"/>
         <source>Rhythm only (not pitch)</source>
-        <translation type="unfinished"/>
+        <translation>Tylko rytm (bez wysokości)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1557"/>
         <source>Re-pitch existing notes</source>
-        <translation type="unfinished"/>
+        <translation>Zmiana wysokości istniejących nut</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1563"/>
         <source>Real-time (metronome)</source>
-        <translation type="unfinished"/>
+        <translation>W czasie rzeczywistym (metronom)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1564"/>
@@ -1948,7 +1948,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1569"/>
         <source>Real-time (foot pedal)</source>
-        <translation type="unfinished"/>
+        <translation>W czasie rzeczywistym (pedał)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1570"/>
@@ -2078,7 +2078,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1698"/>
         <source>Toggle accidental: Flat</source>
-        <translation type="unfinished"/>
+        <translation>Przełącz znak chromatyczny: bemol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1703"/>
@@ -2088,7 +2088,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1704"/>
         <source>Toggle accidental: Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Przełącz znak chromatyczny: podwójny bemol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1709"/>
@@ -2098,7 +2098,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1710"/>
         <source>Toggle accidental: Natural</source>
-        <translation type="unfinished"/>
+        <translation>Przełącz znak chromatyczny: kasownik</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1715"/>
@@ -2108,7 +2108,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1716"/>
         <source>Toggle accidental: Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Przełącz znak chromatyczny: krzyżyk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1721"/>
@@ -2118,7 +2118,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1722"/>
         <source>Toggle accidental: Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Przełącz znak chromatyczny: podwójny krzyżyk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1752"/>
@@ -2948,7 +2948,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="63"/>
         <source>About &amp;MusicXML…</source>
-        <translation>O Music&amp;XML…</translation>
+        <translation>O &amp;MusicXML…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="67"/>
@@ -2964,7 +2964,7 @@ przedtakt</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="85"/>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="86"/>
         <source>Revert to factory settings</source>
-        <translation>Przywróć domyślne ustawienia</translation>
+        <translation>Przywróć ustawienia domyślne</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
@@ -3065,12 +3065,12 @@ przedtakt</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="181"/>
         <source>&amp;Preferences</source>
-        <translation>W&amp;łaściwości</translation>
+        <translation>&amp;Właściwości</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="182"/>
         <source>Open preferences dialog</source>
-        <translation type="unfinished"/>
+        <translation>Otwórz okno dialogowe właściwości</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="186"/>
@@ -3266,7 +3266,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="90"/>
         <source>Enable count-in when playing</source>
-        <translation type="unfinished"/>
+        <translation>Włącz wybijanie podczas odtwarzania</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="99"/>
@@ -3276,7 +3276,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="100"/>
         <source>Set loop marker left</source>
-        <translation type="unfinished"/>
+        <translation>Ustaw lewy znacznik pętli</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="105"/>
@@ -3286,7 +3286,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="106"/>
         <source>Set loop marker right</source>
-        <translation type="unfinished"/>
+        <translation>Ustaw prawy znacznik pętli</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="45"/>
@@ -3700,47 +3700,47 @@ przedtakt</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1252"/>
         <source>Advance of a longa (Figured bass/Chord symbol only)</source>
-        <translation>Postęp w londze (basso continuo/tylko symbol akordu)</translation>
+        <translation>Przeskocz o longę (tylko basso continuo/symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1257"/>
         <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
-        <translation>Postęp w podwójnej całej nucie (breve) (basso continuo/tylko symbol akordu)</translation>
+        <translation>Przeskocz o breve (tylko basso continuo/symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1262"/>
         <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
-        <translation>Postęp w całej nucie (basso continuo/tylko symbol akordu)</translation>
+        <translation>Przeskocz o całą nutę (tylko basso continuo/symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1267"/>
         <source>Advance of a half note (Figured bass/Chord symbol only)</source>
-        <translation>Postęp w półnucie (basso continuo/tylko symbol akordu)</translation>
+        <translation>Przeskocz o półnutę (tylko basso continuo/symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1272"/>
         <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
-        <translation>Postęp w ćwierćnucie (basso continuo/tylko symbol akordu)</translation>
+        <translation>Przeskocz o ćwierćnutę (tylko basso continuo/symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1277"/>
         <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
-        <translation>Postęp w ósemce (basso continuo/tylko symbol akordu)</translation>
+        <translation>Przeskocz o ósemkę (tylko basso continuo/symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1282"/>
         <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
-        <translation>Postęp w szesnastce (basso continuo/tylko symbol akordu)</translation>
+        <translation>Przeskocz o szesnastkę (tylko basso continuo/symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1287"/>
         <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
-        <translation>Postęp w trzydziestodwójce (basso continuo/tylko symbol akordu)</translation>
+        <translation>Przeskocz o trzydziestodwójkę (tylko basso continuo/symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1292"/>
         <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
-        <translation>Postęp w sześćdziesięcioczwórce (basso continuo/tylko symbol akordu)</translation>
+        <translation>Przeskocz o sześćdziesięcioczwórkę (tylko basso continuo/symbol akordu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1246"/>
@@ -3823,7 +3823,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/autobot/internal/autobotactions.cpp" line="33"/>
         <source>Show batch tests…</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż testy wsadowe…</translation>
     </message>
     <message>
         <location filename="../../src/autobot/internal/autobotactions.cpp" line="37"/>
@@ -3838,27 +3838,27 @@ przedtakt</translation>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="37"/>
         <source>Show profiler…</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż profiler…</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="41"/>
         <source>Show navigation tree…</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż drzewo nawigacji…</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="45"/>
         <source>Show accessible tree…</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż drzewo dostępnych elementów…</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="49"/>
         <source>Accessible dump</source>
-        <translation type="unfinished"/>
+        <translation>Zrzut dostępnych elementów</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="53"/>
         <source>Engraving elements</source>
-        <translation type="unfinished"/>
+        <translation>Układ elementów</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="34"/>
@@ -3912,19 +3912,19 @@ przedtakt</translation>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="97"/>
         <source>Visit %1 for new versions and more information.
 Get %2 with the program or %3 to its development.</source>
-        <translation type="unfinished"/>
+        <translation>Odwiedź %1, aby uzyskać nowe wersje i więcej informacji.
+Pobierz %2 z programem lub %3 do jego rozwoju.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="114"/>
         <source>For privacy information, see our %1</source>
-        <translation>Aby uzyskać informacje o prywatności, zobacz naszą %1</translation>
+        <translation>Aby uzyskać informacje o prywatności, zobacz naszą %1.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="127"/>
         <source>Copyright © 1999-2022 MuseScore BVBA and others.
 Published under the %1GNU General Public License version 3%2.</source>
-        <translation>Prawa autorskie © 1999-2022 MuseScore BVBA i inni.
-Opublikowano na licencji %1GNU General Public License version 3%2.
+        <translation>Prawa autorskie © 1999-2022 MuseScore BVBA i inni. Program na licencji %1GNU GPL 3%2.
 Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchniakowski.</translation>
     </message>
     <message>
@@ -3935,27 +3935,27 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="59"/>
         <source>MusicXML is an open file format for exchanging digital sheet music, supported by many applications.</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML jest otwartym formatem plików do wymiany cyfrowych partytur, obsługiwanym przez wiele aplikacji.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="71"/>
         <source>Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published by the W3C Music Notation Community Group under the W3C Community Final Specification Agreement:</source>
-        <translation type="unfinished"/>
+        <translation>Prawa autorskie © 2004-2017 Współtwórcy specyfikacji MusicXML opublikowanej przez W3C Music Notation Community Group na licencji W3C Community Final Specification Agreement:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
         <source>A human-readable summary is available:</source>
-        <translation type="unfinished"/>
+        <translation>Podsumowanie dostępne jest na:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="32"/>
         <source>Getting started</source>
-        <translation type="unfinished"/>
+        <translation>Pierwsze kroki</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="144"/>
         <source>Finish</source>
-        <translation type="unfinished"/>
+        <translation>Gotowe</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="31"/>
@@ -3965,7 +3965,7 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
         <source>Enjoy realistic playback for free by downloading our new Muse Sounds library</source>
-        <translation type="unfinished"/>
+        <translation>Korzystaj z darmowego realistycznego odtwarzania, pobierając naszą nową bibliotekę Muse Sounds</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
@@ -3991,12 +3991,12 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="115"/>
         <source>Further high contrast settings are available in Preferences.</source>
-        <translation type="unfinished"/>
+        <translation>Więcej ustawień trybu wysokiego kontrastu znajdziesz we Właściwościach.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="121"/>
         <source>Enable high contrast</source>
-        <translation type="unfinished"/>
+        <translation>Włącz tryb wysokiego kontrastu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="31"/>
@@ -4007,7 +4007,8 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
         <source>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
 (Video tutorials require an internet connection)</source>
-        <translation type="unfinished"/>
+        <translation>Za tym oknem dialogowym znajduje się sekcja &quot;Ucz się&quot;, w której znajdziesz samouczki na początek
+(Samouczki wideo wymagają połączenia z internetem)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="52"/>
@@ -4030,7 +4031,7 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="94"/>
         <source>Learn</source>
-        <translation type="unfinished"/>
+        <translation>Ucz się</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="110"/>
@@ -4193,12 +4194,12 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
         <source>Check to see if a new version of MuseScore is available</source>
-        <translation type="unfinished"/>
+        <translation>Sprawdź, czy dostępna jest nowa wersja MuseScore&apos;a</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore                           does not store any personal information. See our %1 for more info.</source>
-        <translation type="unfinished"/>
+        <translation>Sprawdzanie aktualizacji wymaga dostępu do internetu. Aby chronić Twoją prywatność, MuseScore nie przechowuje żadnych danych osobowych. Zobacz naszą %1, aby uzyskać więcej informacji.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -4244,7 +4245,7 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CommonAudioApiConfiguration.qml" line="53"/>
         <source>Audio device:</source>
-        <translation type="unfinished"/>
+        <translation>Urządzenie dźwiękowe:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/DefaultFilesSection.qml" line="31"/>
@@ -4372,7 +4373,7 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="45"/>
         <source>Advance to next note on key release (MIDI)</source>
-        <translation type="unfinished"/>
+        <translation>Przejdź do następnej nuty po zwolnieniu klawisza (MIDI)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="60"/>
@@ -4417,12 +4418,12 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ScrollPagesSection.qml" line="48"/>
         <source>Horizontal</source>
-        <translation>pozioma</translation>
+        <translation>Poziome</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ScrollPagesSection.qml" line="49"/>
         <source>Vertical</source>
-        <translation>pionowa</translation>
+        <translation>Pionowe</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ScrollPagesSection.qml" line="80"/>
@@ -4432,12 +4433,12 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemeAdditionalOptionsSection.qml" line="37"/>
         <source>Invert score</source>
-        <translation>Odwróć partyturę</translation>
+        <translation>Odwróć kolory partytury</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="32"/>
         <source>High Contrast Themes</source>
-        <translation>Motywy o wysokim kontraście</translation>
+        <translation>Motywy trybu wysokiego kontrastu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="32"/>
@@ -4447,12 +4448,12 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="93"/>
         <source>Enable high-contrast</source>
-        <translation>Włącz wysoki kontrast</translation>
+        <translation>Włącz tryb wysokiego kontrastu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="32"/>
         <source>UI colors</source>
-        <translation type="unfinished"/>
+        <translation>Kolory interfejsu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="29"/>
@@ -4498,12 +4499,12 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/appshell/qml/Preferences/StubPreferencesPage.qml" line="34"/>
         <source>Not implemented</source>
-        <translation>brak</translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="100"/>
         <source>Undo/redo toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Pasek narzędziowy cofnij/ponów</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/WindowContent.qml" line="64"/>
@@ -4513,22 +4514,22 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="73"/>
         <source>checked</source>
-        <translation type="unfinished"/>
+        <translation>zaznaczone</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="73"/>
         <source>unchecked</source>
-        <translation type="unfinished"/>
+        <translation>niezaznaczone</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="75"/>
         <source>selected</source>
-        <translation type="unfinished"/>
+        <translation>zaznaczono</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="75"/>
         <source>not selected</source>
-        <translation type="unfinished"/>
+        <translation>nie zaznaczono</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="83"/>
@@ -4538,47 +4539,49 @@ Polskie tłumaczenie MuseScore&apos;a 4: Grzegorz &quot;Gootector&quot; Pruchnia
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/KeySignatureSettings.qml" line="108"/>
         <source>Minor</source>
-        <translation>molowy</translation>
+        <translation>Molowa</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/RecentScoresView.qml" line="53"/>
         <source>Recent scores grid</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="228"/>
-        <source>Are you sure you want to revert to factory settings?</source>
-        <translation type="unfinished"/>
+        <translation>Siatka ostatnich partytur</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="229"/>
+        <source>Are you sure you want to revert to factory settings?</source>
+        <translation>Na pewno chcesz przywrócić ustawienia domyślne?</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="230"/>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation type="unfinished"/>
+        <translation>Ta czynność zresetuje wszystkie ustawienia aplikacji i usunie wszystkie niestandardowe palety i niestandardowe skróty. Lista ostatnich partytur również zostanie wyczyszczona.
+
+Ta czynność nie usunie żadnej z Twoich partytur.</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="236"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="237"/>
         <source>Revert</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="248"/>
-        <source>Would you like to restart MuseScore now?</source>
-        <translation type="unfinished"/>
+        <translation>Przywróć</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="249"/>
-        <source>MuseScore needs to be restarted for these changes to take effect.</source>
-        <translation type="unfinished"/>
+        <source>Would you like to restart MuseScore now?</source>
+        <translation>Chcesz teraz zrestartować MuseScore&apos;a?</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="254"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="250"/>
+        <source>MuseScore needs to be restarted for these changes to take effect.</source>
+        <translation>Aby zastosować zmiany, MuseScore musi zostać zrestartowany.</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="255"/>
         <source>Restart</source>
         <translation>Restartuj</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="268"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="269"/>
         <source>No update available</source>
         <translation>Brak dostępnej aktualizacji</translation>
     </message>
@@ -4731,12 +4734,12 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="375"/>
         <source>&amp;Engraving</source>
-        <translation>&amp;Engraving</translation>
+        <translation>&amp;Układ</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="376"/>
         <source>Auto&amp;bot</source>
-        <translation type="unfinished"/>
+        <translation>Auto&amp;bot</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="380"/>
@@ -4746,17 +4749,17 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
         <source>Keep going</source>
-        <translation type="unfinished"/>
+        <translation>Kontynuuj</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="106"/>
         <source>Are you sure you want to cancel?</source>
-        <translation type="unfinished"/>
+        <translation>Na pewno chcesz anulować?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="107"/>
         <source>If you choose to cancel, then make sure to check out our free playback libraries in Home &gt; Audio.</source>
-        <translation type="unfinished"/>
+        <translation>Jeśli zdecydujesz się anulować, sprawdź nasze bezpłatne biblioteki odtwarzania w Główna &gt; Dźwięk.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="90"/>
@@ -4777,12 +4780,12 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="93"/>
         <source>DevTools</source>
-        <translation type="unfinished"/>
+        <translation>DevTools</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="91"/>
         <source>Workspace: </source>
-        <translation>Obszar roboczy:</translation>
+        <translation>Obszar roboczy: </translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="131"/>
@@ -4817,7 +4820,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="58"/>
         <source>Your version of %1 is up to date</source>
-        <translation type="unfinished"/>
+        <translation>Twoja wersja %1 jest aktualna</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="59"/>
@@ -4883,7 +4886,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="157"/>
         <source>General</source>
-        <translation>Podstawowe</translation>
+        <translation>Ogólne</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="163"/>
@@ -4893,7 +4896,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="169"/>
         <source>MIDI device mapping</source>
-        <translation>Mapowanie urządzeń MIDI</translation>
+        <translation>Mapowanie urządzenia MIDI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="175"/>
@@ -5041,7 +5044,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="111"/>
         <source>You can assign soundfonts to instruments using the mixer panel.</source>
-        <translation type="unfinished"/>
+        <translation>Możesz przypisać SoundFonty do instrumentów za pomocą panelu miksera.</translation>
     </message>
 </context>
 <context>
@@ -5054,27 +5057,27 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/AccountBenefitsDescription.qml" line="55"/>
         <source>Get the most out of MuseScore with a free account</source>
-        <translation type="unfinished"/>
+        <translation>Wykorzystaj w pełni MuseScore&apos;a dzięki darmowemu kontu</translation>
     </message>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/AccountBenefitsDescription.qml" line="87"/>
         <source>Enjoy free cloud storage for your scores</source>
-        <translation type="unfinished"/>
+        <translation>Korzystaj z darmowej przestrzeni dyskowej w chmurze na swoje partytury</translation>
     </message>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/AccountBenefitsDescription.qml" line="88"/>
         <source>Get social by following other creators, and liking and commenting on your favourite works</source>
-        <translation type="unfinished"/>
+        <translation>Dołącz do społeczności i obserwuj innych twórców, lajkuj i komentuj swoje ulubione prace</translation>
     </message>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/AccountBenefitsDescription.qml" line="89"/>
         <source>Create a portfolio for your music and share it with millions of users worldwide</source>
-        <translation type="unfinished"/>
+        <translation>Stwórz portfolio dla swojej muzyki i udostępnij je milionom użytkowników na całym świecie</translation>
     </message>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/AccountBenefitsDescription.qml" line="90"/>
         <source>Upload high quality audio for superb playback</source>
-        <translation type="unfinished"/>
+        <translation>Przesyłaj wysokiej jakości dźwięk, aby zapewnić doskonałe odtwarzanie</translation>
     </message>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/AccountDetailsPage.qml" line="113"/>
@@ -5094,7 +5097,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/AuthorizationPage.qml" line="112"/>
         <source>Learn more</source>
-        <translation type="unfinished"/>
+        <translation>Dowiedz się więcej</translation>
     </message>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/AuthorizationPage.qml" line="130"/>
@@ -5117,12 +5120,12 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/dockwindow/dockpanelview.cpp" line="115"/>
         <source>Dock</source>
-        <translation type="unfinished"/>
+        <translation>Zadokuj</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/dockwindow/dockpanelview.cpp" line="115"/>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Oddokuj</translation>
     </message>
 </context>
 <context>
@@ -5473,7 +5476,7 @@ This action will not delete any of your scores.</source>
         <location filename="../../src/importexport/guitarpro/internal/importgtp.cpp" line="385"/>
         <location filename="../../src/importexport/guitarpro_old/internal/importgtp.cpp" line="382"/>
         <source>Mark Tree</source>
-        <translation type="unfinished"/>
+        <translation>Drzewo rurowe</translation>
     </message>
     <message>
         <location filename="../../src/importexport/guitarpro/internal/importgtp.cpp" line="386"/>
@@ -5666,8 +5669,8 @@ This action will not delete any of your scores.</source>
         <location filename="../../src/engraving/libmscore/barline.cpp" line="1655"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1245"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1256"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3353"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3365"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3359"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3371"/>
         <source>%1 Start of %2</source>
         <translation>%1 Początek %2</translation>
     </message>
@@ -5675,8 +5678,8 @@ This action will not delete any of your scores.</source>
         <location filename="../../src/engraving/libmscore/barline.cpp" line="1658"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1248"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1258"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3357"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3373"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3363"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3379"/>
         <source>%1 End of %2</source>
         <translation>%1 Koniec %2</translation>
     </message>
@@ -5695,12 +5698,12 @@ This action will not delete any of your scores.</source>
         <source>Cannot open chord description:
 %1</source>
         <translation>Nie można otworzyć opisu akordu:
-%1</translation>
+%1.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/chordlist.cpp" line="1887"/>
         <source>Failed open chord description: %1</source>
-        <translation type="unfinished"/>
+        <translation>Otwieranie opisu akordu zakończone niepowodzeniem: %1.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="662"/>
@@ -5779,12 +5782,12 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/engraving/libmscore/cmd.cpp" line="3023"/>
         <source>Current contents of measures will be replaced</source>
-        <translation type="unfinished"/>
+        <translation>Bieżąca zawartość taktów zostanie zastąpiona</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/cmd.cpp" line="3024"/>
         <source>Continue with inserting measure repeat?</source>
-        <translation type="unfinished"/>
+        <translation>Kontynuować wstawianie powtórzenia taktu?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/engravingitem.cpp" line="2765"/>
@@ -5800,7 +5803,8 @@ This action will not delete any of your scores.</source>
         <location filename="../../src/engraving/libmscore/figuredbass.cpp" line="1686"/>
         <source>Cannot open figured bass description:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Nie można otworzyć opisu basso continuo:
+%1.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/fingering.cpp" line="280"/>
@@ -5843,7 +5847,7 @@ This action will not delete any of your scores.</source>
         <location filename="../../src/engraving/libmscore/fret.cpp" line="1524"/>
         <source>%n dot(s) on fret(s) %1</source>
         <extracomment>Omit the &quot;%n &quot; for the singular translation (and the &quot;(s)&quot; too)</extracomment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n kropka(i) na progu(ach) %1</numerusform><numerusform>%n kropka(i) na progu(ach) %1</numerusform><numerusform>%n kropka(ek) na progu(ach) %1</numerusform><numerusform>%n kropka(i) na progu(ach) %1</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/fret.cpp" line="1536"/>
@@ -5878,7 +5882,7 @@ This action will not delete any of your scores.</source>
     <message numerus="yes">
         <location filename="../../src/engraving/libmscore/fret.cpp" line="1566"/>
         <source>%n string(s) total</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n strun(a) ogółem</numerusform><numerusform>%n strun(y) ogółem</numerusform><numerusform>%n strun(y) ogółem</numerusform><numerusform>%n strun(y) ogółem</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/hairpin.cpp" line="929"/>
@@ -5892,10 +5896,10 @@ This action will not delete any of your scores.</source>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/hairpin.cpp" line="935"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="489"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2077"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2099"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2235"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="490"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2078"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2100"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2236"/>
         <source>Custom</source>
         <translation>Niestandardowe</translation>
     </message>
@@ -5912,7 +5916,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/engraving/libmscore/harmony.cpp" line="2120"/>
         <source>lower case</source>
-        <translation>Mała litera</translation>
+        <translation>mała litera</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/instrchange.cpp" line="142"/>
@@ -5927,7 +5931,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/engraving/libmscore/measurerepeat.cpp" line="300"/>
         <source>%1; Duration: %2 measure(s)</source>
-        <translation type="unfinished"/>
+        <translation>%1; długość: %2 takt(y)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/note.cpp" line="837"/>
@@ -5935,90 +5939,91 @@ This action will not delete any of your scores.</source>
         <translation>%1 (brzmi jak %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2467"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2473"/>
         <source>Acciaccatura</source>
         <translation>Przednutka krótka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2469"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2475"/>
         <source>Appoggiatura</source>
         <translation>Przednutka długa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2473"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2479"/>
         <source>Grace note after</source>
         <translation>Przednutka po</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2477"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2483"/>
         <source>Grace note before</source>
         <translation>Przednutka przed</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2479"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2485"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="157"/>
         <source>Note</source>
         <translation>Nuta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3282"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3318"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3288"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3324"/>
         <location filename="../../src/engraving/libmscore/rest.cpp" line="854"/>
         <location filename="../../src/engraving/libmscore/rest.cpp" line="866"/>
         <source>Voice: %1</source>
         <translation>Głos: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3289"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3295"/>
         <source> (on %1‰ off %2‰)</source>
         <translation> (wł. %1‰ wył. %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3295"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3301"/>
         <source>Beat slash</source>
         <translation>Belka rytmiczna</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3295"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3301"/>
         <source>Rhythm slash</source>
         <translation>Notacja rytmiczna</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3299"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3326"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3305"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3332"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Struna: %2; Próg: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3305"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3311"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Wysokość: %2; Długość: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3322"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3328"/>
         <source>Beat Slash</source>
         <translation>Belka rytmiczna</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3322"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3328"/>
         <source>Rhythm Slash</source>
         <translation>Notacja rytmiczna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/noteentry.cpp" line="389"/>
         <source>Note input will remove measure repeat</source>
-        <translation type="unfinished"/>
+        <translation>Wprowadzanie nut usunie powtórzenie taktu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/noteentry.cpp" line="390"/>
         <source>There is a measure repeat here.</source>
-        <translation type="unfinished"/>
+        <translation>Tutaj jest powtórzenie taktu.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/noteentry.cpp" line="391"/>
         <source>
 Continue with adding note and delete measure repeat?</source>
-        <translation type="unfinished"/>
+        <translation>
+Kontynuować dodawanie nuty i usuwanie powtórzenia taktu?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/pitchspelling.cpp" line="278"/>
@@ -6063,12 +6068,12 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/engraving/libmscore/scorefile.cpp" line="354"/>
         <source>Failed open style file: %1 </source>
-        <translation type="unfinished"/>
+        <translation>Otwieranie pliku stylów zakończone niepowodzeniem: %1.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/scorefile.cpp" line="360"/>
         <source>Failed write style file: %1</source>
-        <translation type="unfinished"/>
+        <translation>Zapisywanie pliku stylów zakończone niepowodzeniem: %1.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/scoreorder.cpp" line="223"/>
@@ -6104,11 +6109,12 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1273"/>
         <source>Cannot open tablature font description:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Nie można otworzyć czcionki opisu tabulatury:
+%1.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1435"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2123"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2124"/>
         <source>Standard</source>
         <translation>Standardowy klucz</translation>
     </message>
@@ -6212,7 +6218,7 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/engraving/libmscore/tempotext.cpp" line="515"/>
         <location filename="../../src/engraving/libmscore/tempotext.cpp" line="518"/>
         <source>note</source>
-        <translation>Nuta</translation>
+        <translation>nuta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/timesig.cpp" line="579"/>
@@ -6233,13 +6239,13 @@ Continue with adding note and delete measure repeat?</source>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="137"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1186"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1187"/>
         <source>Invalid</source>
         <translation>Nieprawidłowy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="138"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="238"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="239"/>
         <source>Bracket</source>
         <translation>Klamra</translation>
     </message>
@@ -6250,7 +6256,7 @@ Continue with adding note and delete measure repeat?</source>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="140"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="917"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="918"/>
         <source>Staff</source>
         <translation>Pięciolinia</translation>
     </message>
@@ -6277,17 +6283,17 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="146"/>
         <source>Instrument name</source>
-        <translation type="unfinished"/>
+        <translation>Nazwa instrumentu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="147"/>
         <source>Slur segment</source>
-        <translation type="unfinished"/>
+        <translation>Segment łuku</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="148"/>
         <source>Tie segment</source>
-        <translation type="unfinished"/>
+        <translation>Segment ligatury</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="149"/>
@@ -6297,7 +6303,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="150"/>
         <source>Staff lines</source>
-        <translation type="unfinished"/>
+        <translation>Linie pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="151"/>
@@ -6307,11 +6313,11 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="152"/>
         <source>Stem slash</source>
-        <translation type="unfinished"/>
+        <translation>Przekreślona laseczka</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="153"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1609"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1610"/>
         <source>Arpeggio</source>
         <translation>Arpeggio</translation>
     </message>
@@ -6323,7 +6329,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="155"/>
         <source>Ledger line</source>
-        <translation type="unfinished"/>
+        <translation>Linia dodana</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="156"/>
@@ -6338,7 +6344,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="159"/>
         <source>Key signature</source>
-        <translation>Oznaczenia tonacji</translation>
+        <translation>Oznaczenie tonacji</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="160"/>
@@ -6358,7 +6364,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="163"/>
         <source>Multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>Pauza wielotaktowa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="164"/>
@@ -6368,7 +6374,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="165"/>
         <source>Measure repeat</source>
-        <translation type="unfinished"/>
+        <translation>Powtórzenie taktu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="166"/>
@@ -6388,7 +6394,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="169"/>
         <source>Chord line</source>
-        <translation type="unfinished"/>
+        <translation>Linia akordu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="170"/>
@@ -6427,19 +6433,19 @@ Continue with adding note and delete measure repeat?</source>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="177"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="930"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="931"/>
         <source>Fingering</source>
         <translation>Palcowanie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="178"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="928"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="929"/>
         <source>Tuplet</source>
         <translation>Grupa niemiarowa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="179"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="910"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="911"/>
         <source>Tempo</source>
         <translation>Oznaczenie tempa</translation>
     </message>
@@ -6456,12 +6462,12 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="182"/>
         <source>Playing technique annotation</source>
-        <translation type="unfinished"/>
+        <translation>Adnotacja dotycząca techniki gry</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="183"/>
         <source>Triplet feel</source>
-        <translation type="unfinished"/>
+        <translation>Triplet feel</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="184"/>
@@ -6490,1358 +6496,1358 @@ Continue with adding note and delete measure repeat?</source>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="189"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="940"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="190"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="941"/>
         <source>Bend</source>
         <translation>Podciągnięcie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="190"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
         <source>Tremolo bar</source>
         <translation>Wajcha tremolo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="936"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="192"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="937"/>
         <source>Volta</source>
         <translation>Volta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="192"/>
-        <source>Hairpin segment</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="193"/>
-        <source>Ottava segment</source>
-        <translation type="unfinished"/>
+        <source>Hairpin segment</source>
+        <translation>Segment crescendo/diminuendo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
-        <source>Trill segment</source>
-        <translation type="unfinished"/>
+        <source>Ottava segment</source>
+        <translation>Segment przenośnika oktawowego</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="195"/>
-        <source>Let ring segment</source>
-        <translation type="unfinished"/>
+        <source>Trill segment</source>
+        <translation>Segment trylu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="196"/>
-        <source>Gradual tempo change segment</source>
-        <translation type="unfinished"/>
+        <source>Let ring segment</source>
+        <translation>Segment wybrzmienia</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="198"/>
-        <source>Vibrato segment</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="197"/>
+        <source>Gradual tempo change segment</source>
+        <translation>Segment stopniowej zmiany tempa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="199"/>
-        <source>Palm mute segment</source>
-        <translation type="unfinished"/>
+        <source>Vibrato segment</source>
+        <translation>Segment vibrata</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
-        <source>Whammy bar segment</source>
-        <translation type="unfinished"/>
+        <source>Palm mute segment</source>
+        <translation>Segment palm mutingu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
-        <source>Rasgueado segment</source>
-        <translation type="unfinished"/>
+        <source>Whammy bar segment</source>
+        <translation>Segment ramienia tremolo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="202"/>
-        <source>Harmonic mark segment</source>
-        <translation type="unfinished"/>
+        <source>Rasgueado segment</source>
+        <translation>Segment rasgueado</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="203"/>
-        <source>Text line segment</source>
-        <translation type="unfinished"/>
+        <source>Harmonic mark segment</source>
+        <translation>Segment znaku harmonicznego</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="204"/>
-        <source>Volta segment</source>
-        <translation type="unfinished"/>
+        <source>Text line segment</source>
+        <translation>Segment linii tekstu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="205"/>
-        <source>Pedal segment</source>
-        <translation type="unfinished"/>
+        <source>Volta segment</source>
+        <translation>Segment volty</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="206"/>
-        <source>Melisma line segment</source>
-        <translation type="unfinished"/>
+        <source>Pedal segment</source>
+        <translation>Segment pedalizacji</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="207"/>
-        <source>Glissando segment</source>
-        <translation type="unfinished"/>
+        <source>Melisma line segment</source>
+        <translation>Segment linii melizmatu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="208"/>
-        <source>Layout break</source>
-        <translation type="unfinished"/>
+        <source>Glissando segment</source>
+        <translation>Segment glissanda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="209"/>
+        <source>Layout break</source>
+        <translation>Łamanie układu</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="210"/>
         <source>Spacer</source>
         <translation>Odstęp</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="210"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="211"/>
         <source>Staff state</source>
-        <translation type="unfinished"/>
+        <translation>Stan pięciolinii</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="211"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="212"/>
         <source>Notehead</source>
         <translation>Główka nuty</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="212"/>
-        <source>Note dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="213"/>
-        <source>Tremolo</source>
-        <translation>Tremolo/tremolando</translation>
+        <source>Note dot</source>
+        <translation>Kropka nuty</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="214"/>
+        <source>Tremolo</source>
+        <translation>Tremolo</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="215"/>
         <source>Image</source>
         <translation>Obraz</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="215"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1182"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1183"/>
         <source>Measure</source>
         <translation>Takt</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
         <source>Selection</source>
         <translation>Zaznaczenie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
         <source>Lasso</source>
         <translation>Tryb przechwytywania obrazu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
-        <source>Shadow note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="219"/>
-        <source>Tab duration symbol</source>
-        <translation type="unfinished"/>
+        <source>Shadow note</source>
+        <translation>Cień nuty</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="220"/>
-        <source>Font symbol</source>
-        <translation type="unfinished"/>
+        <source>Tab duration symbol</source>
+        <translation>Symbol trwania tabulatury</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
+        <source>Font symbol</source>
+        <translation>Symbol czcionki</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
         <source>Page</source>
         <translation>Strona</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="920"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="223"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="921"/>
         <source>Hairpin</source>
         <translation>Crescendo/diminuendo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="223"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="937"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="938"/>
         <source>Ottava</source>
-        <translation>Przenośniki oktawowe</translation>
+        <translation>Przenośnik oktawowy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="939"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="225"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="940"/>
         <source>Pedal</source>
         <translation>Pedalizacja</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="225"/>
-        <source>Trill</source>
-        <translation>Tryle</translation>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="226"/>
-        <source>Let ring</source>
-        <translation type="unfinished"/>
+        <source>Trill</source>
+        <translation>Tryl</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="227"/>
-        <source>Gradual tempo change</source>
-        <translation type="unfinished"/>
+        <source>Let ring</source>
+        <translation>Wybrzmienie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="228"/>
+        <source>Gradual tempo change</source>
+        <translation>Stopniowa zmiana tempa</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="229"/>
         <source>Vibrato</source>
         <translation>Vibrato</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="229"/>
-        <source>Palm mute</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="230"/>
-        <source>Whammy bar</source>
-        <translation type="unfinished"/>
+        <source>Palm mute</source>
+        <translation>Palm muting</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="231"/>
-        <source>Rasgueado</source>
-        <translation type="unfinished"/>
+        <source>Whammy bar</source>
+        <translation>Ramię tremolo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="232"/>
-        <source>Harmonic Mark</source>
-        <translation type="unfinished"/>
+        <source>Rasgueado</source>
+        <translation>Rasgueado</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="233"/>
+        <source>Harmonic Mark</source>
+        <translation>Znak harmoniczny</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="234"/>
         <source>Text line</source>
         <translation>Linia tekstu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="234"/>
-        <source>Text line base</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="235"/>
-        <source>Note line</source>
-        <translation type="unfinished"/>
+        <source>Text line base</source>
+        <translation>Linia bazowa tekstu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="236"/>
-        <source>Melisma line</source>
-        <translation type="unfinished"/>
+        <source>Note line</source>
+        <translation>Linia nuty</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="237"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="938"/>
+        <source>Melisma line</source>
+        <translation>Linia melizmatu</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="238"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="939"/>
         <source>Glissando</source>
         <translation>Glissando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="239"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="240"/>
         <source>Segment</source>
         <translation>Segment</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="240"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="915"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="241"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="916"/>
         <source>System</source>
         <translation>System</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="241"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="242"/>
         <source>Compound</source>
         <translation>Kompleks</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="242"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="243"/>
         <source>Chord</source>
         <translation>Akord</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="243"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="244"/>
         <source>Slur</source>
         <translation>Łuk</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="244"/>
-        <source>EngravingItem</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="245"/>
-        <source>EngravingItem list</source>
-        <translation type="unfinished"/>
+        <source>EngravingItem</source>
+        <translation>EngravingItem</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
-        <source>Staff list</source>
-        <translation type="unfinished"/>
+        <source>EngravingItem list</source>
+        <translation>EngravingItem list</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="247"/>
-        <source>Measure list</source>
-        <translation type="unfinished"/>
+        <source>Staff list</source>
+        <translation>Lista pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="248"/>
-        <source>Horizontal frame</source>
-        <translation type="unfinished"/>
+        <source>Measure list</source>
+        <translation>Lista taktu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="249"/>
-        <source>Vertical frame</source>
-        <translation type="unfinished"/>
+        <source>Horizontal frame</source>
+        <translation>Ramka pozioma</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="250"/>
-        <source>Text frame</source>
-        <translation type="unfinished"/>
+        <source>Vertical frame</source>
+        <translation>Ramka pionowa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
-        <source>Fretboard diagram frame</source>
-        <translation type="unfinished"/>
+        <source>Text frame</source>
+        <translation>Ramka tekstu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="252"/>
-        <source>Action icon</source>
-        <translation type="unfinished"/>
+        <source>Fretboard diagram frame</source>
+        <translation>Ramka diagramu akordu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="253"/>
+        <source>Action icon</source>
+        <translation>Ikona czynności</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
         <source>Ossia</source>
         <translation>Ossia</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="255"/>
         <source>Bagpipe embellishment</source>
-        <translation type="unfinished"/>
+        <translation>Ozdobnik dudowy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="255"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="929"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="256"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="930"/>
         <source>Sticking</source>
         <translation>Sticking</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="256"/>
-        <source>Grace notes group</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="257"/>
-        <source>Root item</source>
-        <translation type="unfinished"/>
+        <source>Grace notes group</source>
+        <translation>Grupa przednutek</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="258"/>
-        <source>Dummy</source>
-        <translation type="unfinished"/>
+        <source>Root item</source>
+        <translation>Element główny</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="337"/>
-        <source>Vertical</source>
-        <translation>pionowa</translation>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="259"/>
+        <source>Dummy</source>
+        <translation>Tymczasowy kontener</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="338"/>
-        <source>Horizontal</source>
-        <translation>pozioma</translation>
+        <source>Vertical</source>
+        <translation>Pionowa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="357"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="380"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="339"/>
+        <source>Horizontal</source>
+        <translation>Pozioma</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="358"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="381"/>
         <source>Auto</source>
         <translation>Automatyczny</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="358"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1181"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="359"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1182"/>
         <source>Whole</source>
         <translation>Cała nuta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="359"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1180"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="360"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1181"/>
         <source>Half</source>
         <translation>Półnuta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="360"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1171"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="361"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1172"/>
         <source>Quarter</source>
         <translation>Ćwierćnuta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="361"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1183"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="362"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1184"/>
         <source>Breve</source>
         <translation>Podwójna cała nuta (breve)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="381"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="408"/>
-        <source>Normal</source>
-        <translation>zwykły</translation>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="382"/>
-        <source>Pitch names</source>
-        <translation>nazwy wysokości</translation>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="409"/>
+        <source>Normal</source>
+        <translation>Zwykły</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="383"/>
-        <source>German Pitch names</source>
-        <translation>niemieckie nazwy wysokości</translation>
+        <source>Pitch names</source>
+        <translation>Nazwy wysokości</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="384"/>
-        <source>Solfège movable Do</source>
-        <translation>solfeżowy ruchomego Do</translation>
+        <source>German Pitch names</source>
+        <translation>Niemieckie nazwy wysokości</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="385"/>
-        <source>Solfège fixed Do</source>
-        <translation>solfeżowy stałego Do</translation>
+        <source>Solfège movable Do</source>
+        <translation>Solfeżowy ruchomego Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="386"/>
+        <source>Solfège fixed Do</source>
+        <translation>Solfeżowy stałego Do</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="387"/>
         <source>4-shape (Walker)</source>
         <translation>4-kształtny (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="387"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="388"/>
         <source>7-shape (Aikin)</source>
         <translation>7-kształtny (Aikin)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="388"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="389"/>
         <source>7-shape (Funk)</source>
         <translation>7-kształtny (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="389"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="390"/>
         <source>7-shape (Walker)</source>
         <translation>7-kształtny (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="409"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="410"/>
         <source>Cross</source>
         <translation>Krzyżyk</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="410"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="411"/>
         <source>Plus</source>
         <translation>Plus</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="411"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="412"/>
         <source>XCircle</source>
         <translation>X-kółko</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="412"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="413"/>
         <source>With X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="413"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="414"/>
         <source>Triangle up</source>
         <translation>Trójkąt w górę</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="414"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="415"/>
         <source>Triangle down</source>
         <translation>Trójkąt w dół</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="415"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="416"/>
         <source>Slashed (forwards)</source>
         <translation>Ukośnik</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="416"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="417"/>
         <source>Slashed (backwards)</source>
         <translation>Ukośnik</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="417"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="418"/>
         <source>Diamond</source>
         <translation>Romb</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="418"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="419"/>
         <source>Diamond (old)</source>
         <translation>Romb (stary)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="419"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="420"/>
         <source>Circled</source>
         <translation>Zakreślona</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="420"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="421"/>
         <source>Circled large</source>
         <translation>Duża zakreślona</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="421"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="422"/>
         <source>Large arrow</source>
         <translation>Duża strzałka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="422"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="423"/>
         <source>Alt. brevis</source>
         <translation>Alternatywna breve</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="424"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="425"/>
         <source>Slash</source>
         <translation>Ukośnik</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="426"/>
-        <source>Heavy Cross</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="427"/>
-        <source>Heavy Cross Hat</source>
-        <translation type="unfinished"/>
+        <source>Heavy Cross</source>
+        <translation>Gruby X</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="430"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="428"/>
+        <source>Heavy Cross Hat</source>
+        <translation>Gruby X z daszkiem</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="431"/>
         <source>Sol</source>
         <translation>Sol</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="431"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="432"/>
         <source>La</source>
         <translation>La</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="432"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="433"/>
         <source>Fa</source>
         <translation>Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="433"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="434"/>
         <source>Mi</source>
         <translation>Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="434"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="435"/>
         <source>Do</source>
         <translation>Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="435"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="436"/>
         <source>Re</source>
         <translation>Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="436"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="437"/>
         <source>Ti</source>
         <translation>Si</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="439"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="440"/>
         <source>Do (Walker)</source>
         <translation>Do (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="440"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="441"/>
         <source>Re (Walker)</source>
         <translation>Re (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="441"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="442"/>
         <source>Ti (Walker)</source>
         <translation>Si (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="442"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="443"/>
         <source>Do (Funk)</source>
         <translation>Do (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="443"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="444"/>
         <source>Re (Funk)</source>
         <translation>Re (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="444"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="445"/>
         <source>Ti (Funk)</source>
         <translation>Si (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="447"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="448"/>
         <source>Do (Name)</source>
         <translation>Do (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="448"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="449"/>
         <source>Di (Name)</source>
         <translation>Di (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="449"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="450"/>
         <source>Ra (Name)</source>
         <translation>Ra (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="450"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="451"/>
         <source>Re (Name)</source>
         <translation>Re (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="451"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="452"/>
         <source>Ri (Name)</source>
         <translation>Ri (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="452"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="453"/>
         <source>Me (Name)</source>
         <translation>Me (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="453"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="454"/>
         <source>Mi (Name)</source>
         <translation>Mi (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="454"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="455"/>
         <source>Fa (Name)</source>
         <translation>Fa (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="455"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="456"/>
         <source>Fi (Name)</source>
         <translation>Fi (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="456"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="457"/>
         <source>Se (Name)</source>
         <translation>Se (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="457"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="458"/>
         <source>Sol (Name)</source>
         <translation>Sol (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="458"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="459"/>
         <source>Le (Name)</source>
         <translation>Le (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="459"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="460"/>
         <source>La (Name)</source>
         <translation>La (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="460"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="461"/>
         <source>Li (Name)</source>
         <translation>Li (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="461"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="462"/>
         <source>Te (Name)</source>
         <translation>Te (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="462"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="463"/>
         <source>Ti (Name)</source>
         <translation>Ti (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="463"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="464"/>
         <source>Si (Name)</source>
         <translation>Si (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="465"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="466"/>
         <source>A♯ (Name)</source>
         <translation>Ais (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="466"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="467"/>
         <source>A (Name)</source>
         <translation>A (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="467"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="468"/>
         <source>A♭ (Name)</source>
         <translation>As (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="468"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="469"/>
         <source>B♯ (Name)</source>
         <translation>His (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="469"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="470"/>
         <source>B (Name)</source>
         <translation>H (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="470"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="471"/>
         <source>B♭ (Name)</source>
         <translation>B (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="471"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="472"/>
         <source>C♯ (Name)</source>
         <translation>Cis (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="472"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="473"/>
         <source>C (Name)</source>
         <translation>C (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="473"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="474"/>
         <source>C♭ (Name)</source>
         <translation>Ces (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="474"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="475"/>
         <source>D♯ (Name)</source>
         <translation>Dis (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="475"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="476"/>
         <source>D (Name)</source>
         <translation>D (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="476"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="477"/>
         <source>D♭ (Name)</source>
         <translation>Des (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="477"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="478"/>
         <source>E♯ (Name)</source>
         <translation>Eis (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="478"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="479"/>
         <source>E (Name)</source>
         <translation>E (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="479"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="480"/>
         <source>E♭ (Name)</source>
         <translation>Es (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="480"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="481"/>
         <source>F♯ (Name)</source>
         <translation>Fis (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="481"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="482"/>
         <source>F (Name)</source>
         <translation>F (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="482"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="483"/>
         <source>F♭ (Name)</source>
         <translation>Fes (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="483"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="484"/>
         <source>G♯ (Name)</source>
         <translation>Gis (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="484"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="485"/>
         <source>G (Name)</source>
         <translation>G (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="485"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="486"/>
         <source>G♭ (Name)</source>
         <translation>Ges (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="486"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="487"/>
         <source>H (Name)</source>
         <translation>H (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="487"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="488"/>
         <source>H♯ (Name)</source>
         <translation>His (Nazwa)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="508"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="509"/>
         <source>Treble clef</source>
         <translation>Klucz wiolinowy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="509"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="510"/>
         <source>Treble clef 15ma bassa</source>
         <translation>Klucz wiolinowy 15ma bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="510"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="511"/>
         <source>Treble clef 8va bassa</source>
         <translation>Klucz wiolinowy 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="511"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="512"/>
         <source>Treble clef 8va alta</source>
         <translation>Klucz wiolinowy 8va alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="512"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="513"/>
         <source>Treble clef 15ma alta</source>
         <translation>Klucz wiolinowy 15ma alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="513"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="514"/>
         <source>Double treble clef 8va bassa on 2nd line</source>
         <translation>Podwójny klucz wiolinowy 8va bassa na drugiej linii</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="514"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="515"/>
         <source>Treble clef optional 8va bassa</source>
         <translation>Opcjonalny klucz wiolinowy 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="515"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="516"/>
         <source>French violin clef</source>
         <translation>Klucz dyszkantowy (starofrancuski)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="516"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="517"/>
         <source>Soprano clef</source>
         <translation>Klucz sopranowy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="517"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="518"/>
         <source>Mezzo-soprano clef</source>
         <translation>Klucz mezzosopranowy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="518"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="519"/>
         <source>Alto clef</source>
         <translation>Klucz altowy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="519"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="520"/>
         <source>Tenor clef</source>
         <translation>Klucz tenorowy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="520"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="521"/>
         <source>Baritone clef (C clef)</source>
         <translation>Klucz barytonowy (klucz C)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="521"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="522"/>
         <source>C clef, H shape (19th century)</source>
         <translation>Klucz C, H-kształtny (XIX wiek)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="522"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="523"/>
         <source>Soprano clef (French, 18th century)</source>
         <translation>Klucz sopranowy (francuski, XVIII wiek)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="523"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="524"/>
         <source>Alto clef (French, 18th century)</source>
         <translation>Klucz altowy (francuski, XVIII wiek)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="524"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="525"/>
         <source>Tenor clef (French, 18th century)</source>
         <translation>Klucz tenorowy (francuski, XVIII wiek)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="525"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="526"/>
         <source>Soprano clef (French, 20th century)</source>
         <translation>Klucz sopranowy (francuski, XX wiek)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="526"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="527"/>
         <source>Alto clef (French, 20th century)</source>
         <translation>Klucz altowy (francuski, XX wiek)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="527"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="528"/>
         <source>Tenor clef (French, 20th century)</source>
         <translation>Klucz tenorowy (francuski, XX wiek)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="528"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="529"/>
         <source>Bass clef</source>
         <translation>Klucz basowy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="529"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="530"/>
         <source>Bass clef 15ma bassa</source>
         <translation>Klucz basowy 15ma bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="530"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="531"/>
         <source>Bass clef 8va bassa</source>
         <translation>Klucz basowy 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="531"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="532"/>
         <source>Bass clef 8va alta</source>
         <translation>Klucz basowy 8va alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="532"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="533"/>
         <source>Bass clef 15ma alta</source>
         <translation>Klucz basowy 15ma alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="533"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="534"/>
         <source>Baritone clef (F clef)</source>
         <translation>Klucz barytonowy (klucz F)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="534"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="535"/>
         <source>Subbass clef</source>
         <translation>Klucz subbasowy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="535"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="536"/>
         <source>F clef (French, 18th century)</source>
         <translation>Klucz F (francuski, XVIII wiek)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="536"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="537"/>
         <source>F clef (19th century)</source>
         <translation>Klucz F (XIX wiek)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="538"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2124"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="539"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2125"/>
         <source>Percussion</source>
         <translation>Klucz perkusyjny</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="539"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="540"/>
         <source>Percussion 2</source>
         <translation>Klucz perkusyjny</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="541"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2125"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="542"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2126"/>
         <source>Tablature</source>
         <translation>Klucz tabulatury</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="542"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="543"/>
         <source>Tablature 4 lines</source>
         <translation>Klucz tabulatury 4 linie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="543"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="544"/>
         <source>Tablature Serif</source>
         <translation>Szeryfowy klucz tabulatury</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="544"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="545"/>
         <source>Tablature Serif 4 lines</source>
         <translation>Szeryfowy klucz tabulatury 4 linie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="893"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="894"/>
         <source>Default</source>
         <translation>Domyślny</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="894"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="895"/>
         <source>Title</source>
         <translation>Tytuł</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="895"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="896"/>
         <source>Subtitle</source>
         <translation>Podtytuł</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="896"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="897"/>
         <source>Composer</source>
         <translation>Kompozytor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="897"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="898"/>
         <source>Poet</source>
         <translation>Autor słów</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="898"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="899"/>
         <source>Translator</source>
         <translation>Tłumacz</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="899"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="900"/>
         <source>Frame</source>
         <translation>Ramka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="900"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="901"/>
         <source>Instrument Name (Part)</source>
         <translation>Nazwa instrumentu (partia)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="901"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="902"/>
         <source>Instrument Name (Long)</source>
         <translation>Nazwa instrumentu (pełna)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="902"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="903"/>
         <source>Instrument Name (Short)</source>
         <translation>Nazwa instrumentu (skrót)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="903"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="904"/>
         <source>Instrument Change</source>
         <translation>Zmiana instrumentu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="904"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="905"/>
         <source>Header</source>
         <translation>Nagłówek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="905"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="906"/>
         <source>Footer</source>
         <translation>Stopka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="907"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="908"/>
         <source>Measure Number</source>
         <translation>Numer taktu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="908"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="909"/>
         <source>Multimeasure Rest Range</source>
         <translation>Zakres pauzy wielotaktowej</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="911"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="912"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="912"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="913"/>
         <source>Repeat Text Left</source>
         <translation>Lewy tekst repetycji</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="913"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="914"/>
         <source>Repeat Text Right</source>
         <translation>Prawy tekst repetycji</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="914"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="915"/>
         <source>Rehearsal Mark</source>
         <translation>Znaki rewizyjne</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="918"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="919"/>
         <source>Expression</source>
         <translation>Ozn. interpret.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="919"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="920"/>
         <source>Dynamics</source>
         <translation>Dynamika</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="921"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="922"/>
         <source>Lyrics Odd Lines</source>
         <translation>Słowa - nieparzyste linie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="922"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="923"/>
         <source>Lyrics Even Lines</source>
         <translation>Słowa - parzyste linie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="923"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="924"/>
         <source>Chord Symbol</source>
         <translation>Symbol akordu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="924"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="925"/>
         <source>Chord Symbol (Alternate)</source>
         <translation>Symbol akordu (alternatywny)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="925"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="926"/>
         <source>Roman Numeral Analysis</source>
         <translation>Cyfry rzymskie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="926"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="927"/>
         <source>Nashville Number</source>
         <translation>Numeracja Nashville</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="931"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="932"/>
         <source>LH Guitar Fingering</source>
         <translation>Gitara - palcowanie lewą ręką</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="932"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="933"/>
         <source>RH Guitar Fingering</source>
         <translation>Gitara - palcowanie prawą ręką</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="933"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="934"/>
         <source>String Number</source>
         <translation>Numer struny</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="935"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="936"/>
         <source>Text Line</source>
         <translation>Linie tekstu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="941"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="942"/>
         <source>Let Ring</source>
-        <translation>Let ring</translation>
+        <translation>Wybrzmienie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="942"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="943"/>
         <source>Palm Mute</source>
         <translation>Palm muting</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="944"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="945"/>
         <source>User-1</source>
         <translation>Użytkownik-1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="945"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="946"/>
         <source>User-2</source>
         <translation>Użytkownik-2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="946"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="947"/>
         <source>User-3</source>
         <translation>Użytkownik-3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="947"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="948"/>
         <source>User-4</source>
         <translation>Użytkownik-4</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="948"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="949"/>
         <source>User-5</source>
         <translation>Użytkownik-5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="949"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="950"/>
         <source>User-6</source>
         <translation>Użytkownik-6</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="950"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="951"/>
         <source>User-7</source>
         <translation>Użytkownik-7</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="951"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="952"/>
         <source>User-8</source>
         <translation>Użytkownik-8</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="952"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="953"/>
         <source>User-9</source>
         <translation>Użytkownik-9</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="953"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="954"/>
         <source>User-10</source>
         <translation>Użytkownik-10</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="954"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="955"/>
         <source>User-11</source>
         <translation>Użytkownik-11</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="955"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="956"/>
         <source>User-12</source>
         <translation>Użytkownik-12</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1172"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1173"/>
         <source>Eighth</source>
         <translation>Ósemka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1173"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1174"/>
         <source>1024th</source>
         <translation>Tysiącdwudziestoczwórka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1174"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1175"/>
         <source>512th</source>
         <translation>Pięćsetdwunastka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1175"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1176"/>
         <source>256th</source>
         <translation>Dwieściepięćdziesięcioszóstka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1176"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1177"/>
         <source>128th</source>
         <translation>Stodwudziestoósemka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1177"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1178"/>
         <source>64th</source>
         <translation>Sześćdziesięcioczwórka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1178"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1179"/>
         <source>32nd</source>
         <translation>Trzydziestodwójka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1179"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1180"/>
         <source>16th</source>
         <translation>Szesnastka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1184"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1185"/>
         <source>Longa</source>
         <translation>Longa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1185"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1186"/>
         <source>Zero</source>
         <translation>Zero</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1545"/>
-        <source>Eighth through stem</source>
-        <translation>Ósemka przez laseczkę</translation>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1546"/>
-        <source>16th through stem</source>
-        <translation>Szesnastka przez laseczkę</translation>
+        <source>Eighth through stem</source>
+        <translation>Ósemka na laseczce</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1547"/>
-        <source>32nd through stem</source>
-        <translation>Trzydziestodwójka przez laseczkę</translation>
+        <source>16th through stem</source>
+        <translation>Szesnastka na laseczce</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1548"/>
-        <source>64th through stem</source>
-        <translation>Sześćdziesięcioczwórka przez laseczkę</translation>
+        <source>32nd through stem</source>
+        <translation>Trzydziestodwójka na laseczce</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1549"/>
+        <source>64th through stem</source>
+        <translation>Sześćdziesięcioczwórka na laseczce</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1550"/>
         <source>Buzz roll</source>
         <translation>Tremolo dociskowe</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1550"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1551"/>
         <source>Eighth between notes</source>
         <translation>Ósemka między nutami</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1551"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1552"/>
         <source>16th between notes</source>
         <translation>Szesnastka między nutami</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1552"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1553"/>
         <source>32nd between notes</source>
         <translation>Trzydziestodwójka między nutami</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1553"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1554"/>
         <source>64th between notes</source>
         <translation>Sześćdziesięcioczwórka między nutami</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1610"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1611"/>
         <source>Up arpeggio</source>
         <translation>Arpeggio w górę</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1611"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1612"/>
         <source>Down arpeggio</source>
         <translation>Arpeggio w dół</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1612"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1613"/>
         <source>Bracket arpeggio</source>
         <translation>Arpeggio - klamra</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1613"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1614"/>
         <source>Up arpeggio straight</source>
         <translation>Proste arpeggio w górę</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1614"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1615"/>
         <source>Down arpeggio straight</source>
         <translation>Proste arpeggio w dół</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1640"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1641"/>
         <source>Single grace low G</source>
         <translation>Pojedyncza przednutka dolnego G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1641"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1642"/>
         <source>Single grace low A</source>
         <translation>Pojedyncza przednutka dolnego A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1642"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1643"/>
         <source>Single grace B</source>
         <translation>Pojedyncza przednutka H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1643"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1644"/>
         <source>Single grace C</source>
         <translation>Pojedyncza przednutka C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1644"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1645"/>
         <source>Single grace D</source>
         <translation>Pojedyncza przednutka D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1645"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1646"/>
         <source>Single grace E</source>
         <translation>Pojedyncza przednutka E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1646"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1647"/>
         <source>Single grace F</source>
         <translation>Pojedyncza przednutka F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1647"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1648"/>
         <source>Single grace high G</source>
         <translation>Pojedyncza przednutka górnego G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1648"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1649"/>
         <source>Single grace high A</source>
         <translation>Pojedyncza przednutka górnego A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1651"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1652"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1653"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1654"/>
@@ -7850,20 +7856,20 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1657"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1658"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1659"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1661"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1660"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1662"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1663"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1664"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1665"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1666"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1668"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1667"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1669"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1670"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1671"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1672"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1673"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1674"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1676"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1675"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1677"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1678"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1679"/>
@@ -7871,1166 +7877,1167 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1681"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1682"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1683"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1684"/>
         <source>Double grace</source>
         <translation>Przednutka podwójna</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1686"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1687"/>
         <source>Half doubling on low G</source>
         <translation>Pół dublingu na dolnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1687"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1688"/>
         <source>Half doubling on low A</source>
         <translation>Pół dublingu na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1688"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1689"/>
         <source>Half doubling on B</source>
         <translation>Pół dublingu na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1689"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1690"/>
         <source>Half doubling on C</source>
         <translation>Pół dublingu na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1690"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1691"/>
         <source>Half doubling on D</source>
         <translation>Pół dublingu na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1691"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1692"/>
         <source>Half doubling on E</source>
         <translation>Pół dublingu na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1692"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1693"/>
         <source>Half doubling on F</source>
         <translation>Pół dublingu na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1697"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1698"/>
         <source>Doubling on high G</source>
         <translation>Dubling na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1698"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1699"/>
         <source>Doubling on high A</source>
         <translation>Dubling na górnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1701"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1702"/>
         <source>Half strike on low A</source>
         <translation>Pół uderzenia na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1702"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1703"/>
         <source>Half strike on B</source>
         <translation>Pół uderzenia na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1703"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1704"/>
         <source>Half strike on C</source>
         <translation>Pół uderzenia na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1704"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1705"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1706"/>
         <source>Half strike on D</source>
         <translation>Pół uderzenia na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1706"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1707"/>
         <source>Half strike on E</source>
         <translation>Pół uderzenia na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1707"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1708"/>
         <source>Half strike on F</source>
         <translation>Pół uderzenia na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1708"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1709"/>
         <source>Half strike on high G</source>
         <translation>Pół uderzenia na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1711"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1766"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1712"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1767"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1768"/>
         <source>Grip</source>
         <translation>Grip</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1714"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1715"/>
         <source>Half D throw</source>
         <translation>Half D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1717"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1718"/>
         <source>Doubling on low G</source>
         <translation>Dubling na dolnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1718"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1719"/>
         <source>Doubling on low A</source>
         <translation>Dubling na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1719"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1720"/>
         <source>Doubling on B</source>
         <translation>Dubling na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1720"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1721"/>
         <source>Doubling on C</source>
         <translation>Dubling na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1721"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1722"/>
         <source>Doubling on D</source>
         <translation>Dubling na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1722"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1723"/>
         <source>Doubling on E</source>
         <translation>Dubling na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1723"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1724"/>
         <source>Doubling on F</source>
         <translation>Dubling na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1726"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1727"/>
         <source>Thumb doubling on low G</source>
         <translation>Dubling kciukiem na dolnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1727"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1728"/>
         <source>Thumb doubling on low A</source>
         <translation>Dubling kciukiem na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1728"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1729"/>
         <source>Thumb doubling on B</source>
         <translation>Dubling kciukiem na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1729"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1730"/>
         <source>Thumb doubling on C</source>
         <translation>Dubling kciukiem na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1730"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1731"/>
         <source>Thumb doubling on D</source>
         <translation>Dubling kciukiem na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1731"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1732"/>
         <source>Thumb doubling on E</source>
         <translation>Dubling kciukiem na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1732"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1733"/>
         <source>Thumb doubling on F</source>
         <translation>Dubling kciukiem na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1736"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1737"/>
         <source>G grace note on low A</source>
         <translation>Przednutka G na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1737"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1738"/>
         <source>G grace note on B</source>
         <translation>Przednutka G na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1738"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1739"/>
         <source>G grace note on C</source>
         <translation>Przednutka G na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1739"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1740"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1741"/>
         <source>G grace note on D</source>
         <translation>Przednutka G na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1741"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1742"/>
         <source>G grace note on E</source>
         <translation>Przednutka G na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1742"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1743"/>
         <source>G grace note on F</source>
         <translation>Przednutka G na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1745"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1746"/>
         <source>Double strike on low A</source>
         <translation>Podwójne uderzenie na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1746"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1747"/>
         <source>Double strike on B</source>
         <translation>Podwójne uderzenie na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1747"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1748"/>
         <source>Double strike on C</source>
         <translation>Podwójne uderzenie na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1748"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1749"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1750"/>
         <source>Double strike on D</source>
         <translation>Podwójne uderzenie na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1750"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1751"/>
         <source>Double strike on E</source>
         <translation>Podwójne uderzenie na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1751"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1752"/>
         <source>Double strike on F</source>
         <translation>Podwójne uderzenie na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1752"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1753"/>
         <source>Double strike on high G</source>
         <translation>Podwójne uderzenie na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1753"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1754"/>
         <source>Double strike on high A</source>
         <translation>Podwójne uderzenie na górnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1756"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1757"/>
         <source>Thumb strike on low A</source>
         <translation>Uderzenie kciukiem na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1757"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1758"/>
         <source>Thumb strike on B</source>
         <translation>Uderzenie kciukiem na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1758"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1759"/>
         <source>Thumb strike on C</source>
         <translation>Uderzenie kciukiem na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1759"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1760"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1761"/>
         <source>Thumb strike on D</source>
         <translation>Uderzenie kciukiem na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1761"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1762"/>
         <source>Thumb strike on E</source>
         <translation>Uderzenie kciukiem na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1762"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1763"/>
         <source>Thumb strike on F</source>
         <translation>Uderzenie kciukiem na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1763"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1764"/>
         <source>Thumb strike on high G</source>
         <translation>Uderzenie kciukiem na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1770"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1776"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1837"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1771"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1777"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1838"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1839"/>
         <source>Birl</source>
         <translation>Birl</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1771"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1772"/>
         <source>D throw</source>
         <translation>D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1772"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1773"/>
         <source>Half heavy D throw</source>
         <translation>Half heavy D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1773"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1779"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1774"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1780"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1781"/>
         <source>Taorluath</source>
         <translation>Taorluath</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1777"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1834"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1778"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1835"/>
         <source>Bubbly</source>
         <translation>Bubbly</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1778"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1779"/>
         <source>Heavy D throw</source>
         <translation>Heavy D throw</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1783"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1784"/>
         <source>Half double strike on low A</source>
         <translation>Pół podwójnego uderzenia na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1784"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1785"/>
         <source>Half double strike on B</source>
         <translation>Pół podwójnego uderzenia na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1785"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1786"/>
         <source>Half double strike on C</source>
         <translation>Pół podwójnego uderzenia na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1786"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1787"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1788"/>
         <source>Half double strike on D</source>
         <translation>Pół podwójnego uderzenia na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1788"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1789"/>
         <source>Half double strike on E</source>
         <translation>Pół podwójnego uderzenia na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1789"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1790"/>
         <source>Half double strike on F</source>
         <translation>Pół podwójnego uderzenia na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1790"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1791"/>
         <source>Half double strike on high G</source>
         <translation>Pół podwójnego uderzenia na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1791"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1792"/>
         <source>Half double strike on high A</source>
         <translation>Pół podwójnego uderzenia na górnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1794"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1795"/>
         <source>Half grip on low A</source>
         <translation>Half grip na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1795"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1796"/>
         <source>Half grip on B</source>
         <translation>Half grip na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1796"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1797"/>
         <source>Half grip on C</source>
         <translation>Half grip na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1797"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1798"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1799"/>
         <source>Half grip on D</source>
         <translation>Half grip na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1799"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1800"/>
         <source>Half grip on E</source>
         <translation>Half grip na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1800"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1801"/>
         <source>Half grip on F</source>
         <translation>Half grip na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1801"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1802"/>
         <source>Half grip on high G</source>
         <translation>Half grip na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1802"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1803"/>
         <source>Half grip on high A</source>
         <translation>Half grip na górnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1805"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1806"/>
         <source>Half pele on low A</source>
         <translation>Half pele na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1806"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1807"/>
         <source>Half pele on B</source>
         <translation>Half pele na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1807"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1808"/>
         <source>Half pele on C</source>
         <translation>Half pele na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1808"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1809"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1810"/>
         <source>Half pele on D</source>
         <translation>Half pele na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1810"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1811"/>
         <source>Half pele on E</source>
         <translation>Half pele na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1811"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1812"/>
         <source>Half pele on F</source>
         <translation>Half pele na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1812"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1813"/>
         <source>Half pele on high G</source>
         <translation>Half pele na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1815"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1816"/>
         <source>G grace note grip on low A</source>
         <translation>Grip przednutki G na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1816"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1817"/>
         <source>G grace note grip on B</source>
         <translation>Grip przednutki G na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1817"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1818"/>
         <source>G grace note grip on C</source>
         <translation>Grip przednutki G na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1818"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1819"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1820"/>
         <source>G grace note grip on D</source>
         <translation>Grip przednutki G na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1820"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1821"/>
         <source>G grace note grip on E</source>
         <translation>Grip przednutki G na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1821"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1822"/>
         <source>G grace note grip on F</source>
         <translation>Grip przednutki G na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1824"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1825"/>
         <source>Thumb grip on low A</source>
         <translation>Grip kciukiem na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1825"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1826"/>
         <source>Thumb grip on B</source>
         <translation>Grip kciukiem na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1826"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1827"/>
         <source>Thumb grip on C</source>
         <translation>Grip kciukiem na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1827"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1828"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1829"/>
         <source>Thumb grip on D</source>
         <translation>Grip kciukiem na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1829"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1830"/>
         <source>Thumb grip on E</source>
         <translation>Grip kciukiem na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1830"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1831"/>
         <source>Thumb grip on F</source>
         <translation>Grip kciukiem na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1831"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1832"/>
         <source>Thumb grip on high G</source>
         <translation>Grip kciukiem na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1841"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1842"/>
         <source>Pele on low A</source>
         <translation>Pele na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1842"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1843"/>
         <source>Pele on B</source>
         <translation>Pele na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1843"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1844"/>
         <source>Pele on C</source>
         <translation>Pele na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1844"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1845"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1846"/>
         <source>Pele on D</source>
         <translation>Pele na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1846"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1847"/>
         <source>Pele on E</source>
         <translation>Pele na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1847"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1848"/>
         <source>Pele on F</source>
         <translation>Pele na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1850"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1851"/>
         <source>Thumb grace note pele on low A</source>
         <translation>Thumb grace note pele na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1851"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1852"/>
         <source>Thumb grace note pele on B</source>
         <translation>Thumb grace note pele na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1852"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1853"/>
         <source>Thumb grace note pele on C</source>
         <translation>Thumb grace note pele na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1853"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1854"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1855"/>
         <source>Thumb grace note pele on D</source>
         <translation>Thumb grace note pele na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1855"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1856"/>
         <source>Thumb grace note pele on E</source>
         <translation>Thumb grace note pele na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1856"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1857"/>
         <source>Thumb grace note pele on F</source>
         <translation>Thumb grace note pele na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1857"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1858"/>
         <source>Thumb grace note pele on high G</source>
         <translation>Thumb grace note pele na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1860"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1861"/>
         <source>G grace note double strike on low A</source>
         <translation>Podwójne uderzenie przednutki G na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1861"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1862"/>
         <source>G grace note double strike on B</source>
         <translation>Podwójne uderzenie przednutki G na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1862"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1863"/>
         <source>G grace note double strike on C</source>
         <translation>Podwójne uderzenie przednutki G na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1863"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1864"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1865"/>
         <source>G grace note double strike on D</source>
         <translation>Podwójne uderzenie przednutki G na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1865"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1866"/>
         <source>G grace note double strike on E</source>
         <translation>Podwójne uderzenie przednutki G na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1866"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1867"/>
         <source>G grace note double strike on F</source>
         <translation>Podwójne uderzenie przednutki G na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1869"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1870"/>
         <source>Thumb double strike on low A</source>
         <translation>Podwójne uderzenie kciukiem na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1870"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1871"/>
         <source>Thumb double strike on B</source>
         <translation>Podwójne uderzenie kciukiem na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1871"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1872"/>
         <source>Thumb double strike on C</source>
         <translation>Podwójne uderzenie kciukiem na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1872"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1873"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1874"/>
         <source>Thumb double strike on D</source>
         <translation>Podwójne uderzenie kciukiem na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1874"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1875"/>
         <source>Thumb double strike on E</source>
         <translation>Podwójne uderzenie kciukiem na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1875"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1876"/>
         <source>Thumb double strike on F</source>
         <translation>Podwójne uderzenie kciukiem na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1876"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1877"/>
         <source>Thumb double strike on high G</source>
         <translation>Podwójne uderzenie kciukiem na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1879"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1880"/>
         <source>Triple strike on low A</source>
         <translation>Potrójne uderzenie na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1880"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1881"/>
         <source>Triple strike on B</source>
         <translation>Potrójne uderzenie na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1881"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1882"/>
         <source>Triple strike on C</source>
         <translation>Potrójne uderzenie na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1882"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1883"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1884"/>
         <source>Triple strike on D</source>
         <translation>Potrójne uderzenie na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1884"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1885"/>
         <source>Triple strike on E</source>
         <translation>Potrójne uderzenie na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1885"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1886"/>
         <source>Triple strike on F</source>
         <translation>Potrójne uderzenie na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1886"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1887"/>
         <source>Triple strike on high G</source>
         <translation>Potrójne uderzenie na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1887"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1888"/>
         <source>Triple strike on high A</source>
         <translation>Potrójne uderzenie na górnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1890"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1891"/>
         <source>Half triple strike on low A</source>
         <translation>Pół potrójnego uderzenia na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1891"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1892"/>
         <source>Half triple strike on B</source>
         <translation>Pół potrójnego uderzenia na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1892"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1893"/>
         <source>Half triple strike on C</source>
         <translation>Pół potrójnego uderzenia na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1893"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1894"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1895"/>
         <source>Half triple strike on D</source>
         <translation>Pół potrójnego uderzenia na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1895"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1896"/>
         <source>Half triple strike on E</source>
         <translation>Pół potrójnego uderzenia na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1896"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1897"/>
         <source>Half triple strike on F</source>
         <translation>Pół potrójnego uderzenia na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1897"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1898"/>
         <source>Half triple strike on high G</source>
         <translation>Pół potrójnego uderzenia na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1898"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1899"/>
         <source>Half triple strike on high A</source>
         <translation>Pół potrójnego uderzenia na górnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1901"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1902"/>
         <source>G grace note triple strike on low A</source>
         <translation>Potrójne uderzenie przednutki G na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1902"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1903"/>
         <source>G grace note triple strike on B</source>
         <translation>Potrójne uderzenie przednutki G na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1903"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1904"/>
         <source>G grace note triple strike on C</source>
         <translation>Potrójne uderzenie przednutki G na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1904"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1905"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1906"/>
         <source>G grace note triple strike on D</source>
         <translation>Potrójne uderzenie przednutki G na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1906"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1907"/>
         <source>G grace note triple strike on E</source>
         <translation>Potrójne uderzenie przednutki G na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1907"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1908"/>
         <source>G grace note triple strike on F</source>
         <translation>Potrójne uderzenie przednutki G na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1910"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1911"/>
         <source>Thumb triple strike on low A</source>
         <translation>Potrójne uderzenie kciukiem na dolnym A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1911"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1912"/>
         <source>Thumb triple strike on B</source>
         <translation>Potrójne uderzenie kciukiem na H</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1912"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1913"/>
         <source>Thumb triple strike on C</source>
         <translation>Potrójne uderzenie kciukiem na C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1913"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1914"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1915"/>
         <source>Thumb triple strike on D</source>
         <translation>Potrójne uderzenie kciukiem na D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1915"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1916"/>
         <source>Thumb triple strike on E</source>
         <translation>Potrójne uderzenie kciukiem na E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1916"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1917"/>
         <source>Thumb triple strike on F</source>
         <translation>Potrójne uderzenie kciukiem na F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1917"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1918"/>
         <source>Thumb triple strike on high G</source>
         <translation>Potrójne uderzenie kciukiem na górnym G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1958"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1959"/>
         <source>Fall</source>
         <translation>Fall</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1959"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1960"/>
         <source>Doit</source>
         <translation>Doit</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1960"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1961"/>
         <source>Plop</source>
         <translation>Plop</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1961"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1962"/>
         <source>Scoop</source>
         <translation>Scoop</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1990"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1991"/>
         <source>Acoustic Bass Drum</source>
         <translation>Akustyczny bęben basowy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1991"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1992"/>
         <source>Bass Drum 1</source>
         <translation>Bęben basowy 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1992"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1993"/>
         <source>Side Stick</source>
         <translation>Pałki perkusyjne</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1993"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1994"/>
         <source>Acoustic Snare</source>
         <translation>Werbel akustyczny</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1995"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1996"/>
         <source>Electric Snare</source>
         <translation>Werbel elektryczny</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1996"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1997"/>
         <source>Low Floor Tom</source>
         <translation>Niski kocioł</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1997"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1998"/>
         <source>Closed Hi-Hat</source>
         <translation>Hi-hat zamknięty</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1998"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1999"/>
         <source>High Floor Tom</source>
         <translation>Wysoki kocioł</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1999"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2000"/>
         <source>Pedal Hi-Hat</source>
         <translation>Hi-hat grany nogą</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2000"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2001"/>
         <source>Low Tom</source>
         <translation>Niski tom</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2001"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2002"/>
         <source>Open Hi-Hat</source>
         <translation>Hi-hat otwarty</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2002"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2003"/>
         <source>Low-Mid Tom</source>
         <translation>Niski-średni tom</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2003"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2004"/>
         <source>Hi-Mid Tom</source>
         <translation>Wysoki-średni tom</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2004"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2005"/>
         <source>Crash Cymbal 1</source>
         <translation>Talerz crash 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2006"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2007"/>
         <source>High Tom</source>
         <translation>Wysoki tom</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2007"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2008"/>
         <source>Ride Cymbal 1</source>
         <translation>Talerz ride 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2008"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2009"/>
         <source>Chinese Cymbal</source>
         <translation>Piatto china</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2009"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2010"/>
         <source>Ride Bell</source>
         <translation>Dzwon ride</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2010"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2011"/>
         <source>Tambourine</source>
         <translation>Tamburino</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2011"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2012"/>
         <source>Splash Cymbal</source>
         <translation>Talerz splash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2012"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2013"/>
         <source>Cowbell</source>
         <translation>Campanaccio</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2013"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2014"/>
         <source>Crash Cymbal 2</source>
         <translation>Talerz crash 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2015"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2016"/>
         <source>Ride Cymbal 2</source>
         <translation>Talerz ride 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2017"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2018"/>
         <source>Open Hi Conga</source>
         <translation>Wysokie kongi - otwarte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2018"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2019"/>
         <source>Low Conga</source>
         <translation>Niskie kongi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2036"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2037"/>
         <source>Straight glissando</source>
         <translation>Proste glissando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2037"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2038"/>
         <source>Wavy glissando</source>
         <translation>Faliste glissando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2061"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2062"/>
         <source>Da Capo</source>
         <translation>Da Capo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2062"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2063"/>
         <source>Da Capo al Fine</source>
         <translation>Da Capo al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2063"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2064"/>
         <source>Da Capo al Coda</source>
         <translation>Da Capo al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2064"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2065"/>
         <source>D.S. al Coda</source>
         <translation>Dal Segno al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2065"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2066"/>
         <source>D.S. al Fine</source>
         <translation>Dal Segno al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2066"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2067"/>
         <source>D.S.</source>
         <translation>Dal Segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2068"/>
-        <source>Da Capo al Double Coda</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2069"/>
-        <source>Da Segno al Double Coda</source>
-        <translation type="unfinished"/>
+        <source>Da Capo al Double Coda</source>
+        <translation>Da Capo al Double Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2070"/>
-        <source>Dal Segno Segno</source>
-        <translation type="unfinished"/>
+        <source>Da Segno al Double Coda</source>
+        <translation>Da Segno al Double Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2071"/>
-        <source>Dal Segno Segno al Coda</source>
-        <translation type="unfinished"/>
+        <source>Dal Segno Segno</source>
+        <translation>Dal Segno Segno</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2072"/>
-        <source>Dal Segno Segno al Double Coda</source>
-        <translation type="unfinished"/>
+        <source>Dal Segno Segno al Coda</source>
+        <translation>Dal Segno Segno al Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2073"/>
-        <source>Dal Segno Segno al Fine</source>
-        <translation type="unfinished"/>
+        <source>Dal Segno Segno al Double Coda</source>
+        <translation>Dal Segno Segno al Double Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2074"/>
-        <source>Da Coda</source>
-        <translation type="unfinished"/>
+        <source>Dal Segno Segno al Fine</source>
+        <translation>Dal Segno Segno al Fine</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2075"/>
-        <source>Da Double Coda</source>
-        <translation type="unfinished"/>
+        <source>Da Coda</source>
+        <translation>Da Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2091"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2076"/>
+        <source>Da Double Coda</source>
+        <translation>Da Double Coda</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
         <source>Segno</source>
         <translation>Segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
         <source>Segno variation</source>
         <translation>Wężowate segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2094"/>
         <source>Coda</source>
         <translation>Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2094"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2095"/>
         <source>Varied coda</source>
         <translation>Kwadratowa coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2095"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2096"/>
         <source>Codetta</source>
         <translation>Codetta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2096"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
         <source>Fine</source>
         <translation>Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2098"/>
         <source>To coda</source>
         <translation>Al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2098"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2099"/>
         <source>To coda (symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Al Coda (symbol)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2149"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2150"/>
         <source>Trill line</source>
         <translation>Linia trylu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2150"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2151"/>
         <source>Upprall line</source>
         <translation>Linia górnego mordentu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2151"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2152"/>
         <source>Downprall line</source>
         <translation>Linia dolnego mordentu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2152"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2153"/>
         <source>Prallprall line</source>
         <translation>Linia mordentu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2192"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2193"/>
         <source>Guitar vibrato</source>
         <translation>Vibrato na gitarze</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2193"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2194"/>
         <source>Guitar vibrato wide</source>
         <translation>Szerokie vibrato na gitarze</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2194"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2195"/>
         <source>Vibrato sawtooth</source>
         <translation>Vibrato piłokształtne</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2195"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2196"/>
         <source>Tremolo sawtooth wide</source>
         <translation>Szerokie vibrato piłokształtne</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2219"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2220"/>
         <source>G major, E minor</source>
         <translation>G-dur/e-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2220"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2221"/>
         <source>C♭ major, A♭ minor</source>
         <translation>Ces-dur/as-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2221"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2222"/>
         <source>D major, B minor</source>
         <translation>D-dur/h-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2222"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2223"/>
         <source>G♭ major, E♭ minor</source>
         <translation>Ges-dur/es-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2223"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2224"/>
         <source>A major, F♯ minor</source>
         <translation>A-dur/fis-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2224"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2225"/>
         <source>D♭ major, B♭ minor</source>
         <translation>Des-dur/b-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2225"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2226"/>
         <source>E major, C♯ minor</source>
         <translation>E-dur/cis-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2226"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2227"/>
         <source>A♭ major, F minor</source>
         <translation>As-dur/f-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2227"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2228"/>
         <source>B major, G♯ minor</source>
         <translation>H-dur/gis-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2228"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2229"/>
         <source>E♭ major, C minor</source>
         <translation>Es-dur/c-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2229"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2230"/>
         <source>F♯ major, D♯ minor</source>
         <translation>Fis-dur/dis-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2230"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2231"/>
         <source>B♭ major, G minor</source>
         <translation>B-dur/g-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2231"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2232"/>
         <source>C♯ major, A♯ minor</source>
         <translation>Cis-dur/ais-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2232"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2233"/>
         <source>F major, D minor</source>
         <translation>F-dur/d-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2233"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2234"/>
         <source>C major, A minor</source>
         <translation>C-dur/a-moll</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2234"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2235"/>
         <source>Open/Atonal</source>
         <translation>Otwarta/atonalna</translation>
     </message>
@@ -9112,18 +9119,18 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/MidiMappingBottomPanel.qml" line="83"/>
         <source>Clear all</source>
-        <translation type="unfinished"/>
+        <translation>Wyczyść wszystko</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/MuseScore/Ui/internal/StandardDialogPanel.qml" line="81"/>
         <source>Question</source>
-        <translation type="unfinished"/>
+        <translation>Pytanie</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/MuseScore/Ui/internal/StandardDialogPanel.qml" line="82"/>
         <location filename="../../src/framework/ui/qml/MuseScore/Ui/internal/StandardDialogPanel.qml" line="87"/>
         <source>Information</source>
-        <translation type="unfinished"/>
+        <translation>Informacja</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/MuseScore/Ui/internal/StandardDialogPanel.qml" line="83"/>
@@ -9150,22 +9157,22 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="66"/>
         <source>Open all</source>
-        <translation type="unfinished"/>
+        <translation>Otwórz wszystkie</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="78"/>
         <source>Open selected</source>
-        <translation type="unfinished"/>
+        <translation>Otwórz zaznaczone</translation>
     </message>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="70"/>
         <source>Enable</source>
-        <translation type="unfinished"/>
+        <translation>Włącz</translation>
     </message>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="70"/>
         <source>Disable</source>
-        <translation type="unfinished"/>
+        <translation>Wyłącz</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/internal/NewWorkspaceBottomPanel.qml" line="58"/>
@@ -9181,57 +9188,57 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="44"/>
         <source>Today</source>
-        <translation type="unfinished"/>
+        <translation>Dzisiaj</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="48"/>
         <source>Yesterday</source>
-        <translation type="unfinished"/>
+        <translation>Wczoraj</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="52"/>
         <source>%1 days ago</source>
-        <translation type="unfinished"/>
+        <translation>%1 dni temu</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="58"/>
         <source>Last week</source>
-        <translation type="unfinished"/>
+        <translation>Tydzień temu</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="62"/>
         <source>Two weeks ago</source>
-        <translation type="unfinished"/>
+        <translation>Dwa tygodnie temu</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="66"/>
         <source>Three weeks ago</source>
-        <translation type="unfinished"/>
+        <translation>Trzy tygodnie temu</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="70"/>
         <source>Four weeks ago</source>
-        <translation type="unfinished"/>
+        <translation>Cztery tygodnie temu</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="78"/>
         <source>Last month</source>
-        <translation type="unfinished"/>
+        <translation>Miesiąc temu</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="82"/>
         <source>%1 months ago</source>
-        <translation type="unfinished"/>
+        <translation>%1 miesięcy temu</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="87"/>
         <source>1 year ago</source>
-        <translation type="unfinished"/>
+        <translation>1 rok temu</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="90"/>
         <source>%1 years ago</source>
-        <translation type="unfinished"/>
+        <translation>%1 lat temu</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="29"/>
@@ -9314,25 +9321,25 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/importexport/capella/internal/capella.cpp" line="2814"/>
         <source>Import failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Importowanie zakończone niepowodzeniem: %1.</translation>
     </message>
 </context>
 <context>
     <name>iex_guitarpro</name>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="408"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="412"/>
         <source>Free time</source>
-        <translation type="unfinished"/>
+        <translation>Metrum swobodne</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="884"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="888"/>
         <source>Music by %1</source>
-        <translation type="unfinished"/>
+        <translation>Muzyka %1</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="889"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="893"/>
         <source>Words by %1</source>
-        <translation type="unfinished"/>
+        <translation>Słowa %1</translation>
     </message>
 </context>
 <context>
@@ -9340,12 +9347,12 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1250"/>
         <source>Import MIDI</source>
-        <translation type="unfinished"/>
+        <translation>Importuj MIDI</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1251"/>
         <source>Import failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Importowanie zakończone niepowodzeniem: %1.</translation>
     </message>
 </context>
 <context>
@@ -9379,13 +9386,13 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/DirectionSection.qml" line="47"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="106"/>
         <source>Down</source>
-        <translation>dół</translation>
+        <translation>Dół</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/DirectionSection.qml" line="48"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="107"/>
         <source>Up</source>
-        <translation>góra</translation>
+        <translation>Góra</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/DirectionSection.qml" line="61"/>
@@ -9393,7 +9400,7 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="235"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="184"/>
         <source>Left</source>
-        <translation>z lewej</translation>
+        <translation>Z lewej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/DirectionSection.qml" line="62"/>
@@ -9401,12 +9408,12 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="279"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="186"/>
         <source>Right</source>
-        <translation>z prawej</translation>
+        <translation>Z prawej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="116"/>
         <source>Reset &quot;%1&quot; to default value</source>
-        <translation type="unfinished"/>
+        <translation>Resetuj &quot;%1&quot; do wartości domyślnej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="119"/>
@@ -9422,12 +9429,12 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="147"/>
         <source>Save as default style for this score</source>
-        <translation type="unfinished"/>
+        <translation>Zapisz jako styl domyślny dla tej partytury</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="149"/>
         <source>This is set as the default style for this score</source>
-        <translation type="unfinished"/>
+        <translation>To jest ustawione jako styl domyślny dla tej partytury</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/OffsetSection.qml" line="41"/>
@@ -9439,14 +9446,14 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="98"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="193"/>
         <source>Horizontal</source>
-        <translation>pozioma</translation>
+        <translation>Pozioma</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/OffsetSection.qml" line="100"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="125"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="230"/>
         <source>Vertical</source>
-        <translation>pionowa</translation>
+        <translation>Pionowa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/PlacementSection.qml" line="31"/>
@@ -9457,13 +9464,13 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/PlacementSection.qml" line="34"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="68"/>
         <source>Above</source>
-        <translation>powyżej</translation>
+        <translation>Powyżej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/PlacementSection.qml" line="35"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="69"/>
         <source>Below</source>
-        <translation>poniżej</translation>
+        <translation>Poniżej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml" line="65"/>
@@ -9478,58 +9485,58 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="51"/>
         <source>Arrange</source>
-        <translation type="unfinished"/>
+        <translation>Organizuj</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="68"/>
         <source>Backwards</source>
-        <translation type="unfinished"/>
+        <translation>Do tyłu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="85"/>
         <source>Forwards</source>
-        <translation type="unfinished"/>
+        <translation>Do przodu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="107"/>
         <source>To Back</source>
-        <translation type="unfinished"/>
+        <translation>Do tła</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="124"/>
         <source>To Front</source>
-        <translation type="unfinished"/>
+        <translation>Do czcionki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml" line="58"/>
         <source>Leading</source>
-        <translation>Odstęp z lewej:</translation>
+        <translation>Odstęp z lewej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml" line="74"/>
         <source>Bar width</source>
-        <translation type="unfinished"/>
+        <translation>Szerokość belki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/VerticalSpacingSection.qml" line="40"/>
         <source>Minimum distance</source>
-        <translation>Minimalna odległość:</translation>
+        <translation>Minimalna odległość</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="61"/>
         <source>Visible</source>
-        <translation>Widoczna</translation>
+        <translation>Widoczne</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="74"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="48"/>
         <source>Cue size</source>
-        <translation type="unfinished"/>
+        <translation>Mały rozmiar</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="87"/>
         <source>Auto-place</source>
-        <translation type="unfinished"/>
+        <translation>Autopołożenie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="100"/>
@@ -9550,13 +9557,13 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/ArpeggioExpandableBlank.qml" line="42"/>
         <source>Spread delay</source>
-        <translation type="unfinished"/>
+        <translation>Rozciągnięcie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="54"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="52"/>
         <source>Applies to</source>
-        <translation type="unfinished"/>
+        <translation>Stosuje się do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="62"/>
@@ -9570,7 +9577,7 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="63"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="61"/>
         <source>Single instrument</source>
-        <translation type="unfinished"/>
+        <translation>Pojedynczy instrument</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="64"/>
@@ -9612,22 +9619,22 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="53"/>
         <source>Chromatic</source>
-        <translation>Chromatyczna</translation>
+        <translation>Chromatyczny</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="54"/>
         <source>White keys</source>
-        <translation>białe klawisze</translation>
+        <translation>Białe klawisze</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="55"/>
         <source>Black keys</source>
-        <translation>czarne klawisze</translation>
+        <translation>Czarne klawisze</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="56"/>
         <source>Diatonic</source>
-        <translation>Diatoniczna</translation>
+        <translation>Diatoniczny</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="57"/>
@@ -9637,64 +9644,64 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GradualTempoChangeBlank.qml" line="52"/>
         <source>Amount</source>
-        <translation type="unfinished"/>
+        <translation>Ilość</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GradualTempoChangeBlank.qml" line="67"/>
         <source>Easing method</source>
-        <translation type="unfinished"/>
+        <translation>Sposoby wygładzania</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="89"/>
         <source>Changes in dynamics range</source>
-        <translation type="unfinished"/>
+        <translation>Zmiany w zakresie dynamiki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="93"/>
         <source>Linear (default)</source>
-        <translation type="unfinished"/>
+        <translation>Liniowe (domyślne)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="94"/>
         <source>Exponential</source>
-        <translation>wykładnicza</translation>
+        <translation>Wykładnicze</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="95"/>
         <source>Ease-in</source>
-        <translation>łatwe wejście</translation>
+        <translation>Powolne rozpoczęcie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="96"/>
         <source>Ease-out</source>
-        <translation>łatwe wyjście</translation>
+        <translation>Powolne zakończenie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="97"/>
         <source>Ease-in and out</source>
-        <translation>łatwe wejście i wyjście</translation>
+        <translation>Powolne rozpoczęcie i zakończenie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml" line="84"/>
         <source>Tuning (cents)</source>
-        <translation type="unfinished"/>
+        <translation>Tuning (centy)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml" line="96"/>
         <source>Override dynamics</source>
-        <translation type="unfinished"/>
+        <translation>Zastąp dynamikę</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/PausesExpandableBlank.qml" line="51"/>
         <source>Pause time</source>
-        <translation type="unfinished"/>
+        <translation>Czas pauzy</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/PlaybackSettings.qml" line="63"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretDiagramTabPanel.qml" line="49"/>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="33"/>
         <source>General</source>
-        <translation>Podstawowe</translation>
+        <translation>Ogólne</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/PlaybackSettings.qml" line="71"/>
@@ -9711,7 +9718,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="80"/>
         <source>Where to insert measures:</source>
-        <translation type="unfinished"/>
+        <translation>Gdzie wstawić takty:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="108"/>
@@ -9728,7 +9735,7 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="49"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tuplets/TupletSettings.qml" line="69"/>
         <source>Bracket type</source>
-        <translation>Typ klamry:</translation>
+        <translation>Typ klamry</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="56"/>
@@ -9738,17 +9745,17 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="69"/>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="82"/>
         <source>None</source>
-        <translation>brak</translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="57"/>
         <source>Parentheses</source>
-        <translation>nawiasy</translation>
+        <translation>Nawiasy</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="58"/>
         <source>Brackets</source>
-        <translation>klamry</translation>
+        <translation>Klamry</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="95"/>
@@ -9763,7 +9770,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="171"/>
         <source>Update to match the notes on the staff</source>
-        <translation type="unfinished"/>
+        <translation>Zaktualizuj, aby dopasować nuty na pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="188"/>
@@ -9771,7 +9778,7 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="116"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="146"/>
         <source>Show less</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż mniej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="188"/>
@@ -9779,7 +9786,7 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="116"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="146"/>
         <source>Show more</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż więcej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="237"/>
@@ -9799,36 +9806,36 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="57"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="69"/>
         <source>Above staff</source>
-        <translation type="unfinished"/>
+        <translation>Powyżej pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="58"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="70"/>
         <source>Below staff</source>
-        <translation type="unfinished"/>
+        <translation>Poniżej pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="59"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="71"/>
         <source>Chord automatic</source>
-        <translation type="unfinished"/>
+        <translation>Automatycznie do akordu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="60"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="72"/>
         <source>Above chord</source>
-        <translation type="unfinished"/>
+        <translation>Powyżej akordu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="73"/>
         <source>Below chord</source>
-        <translation type="unfinished"/>
+        <translation>Poniżej akordu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="76"/>
         <source>Repeat style</source>
-        <translation type="unfinished"/>
+        <translation>Styl repetycji</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="98"/>
@@ -9853,38 +9860,38 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="174"/>
         <source>Span presets</source>
-        <translation type="unfinished"/>
+        <translation>Ustawienia połączenia</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="183"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="56"/>
         <source>Default</source>
-        <translation>domyślne</translation>
+        <translation>Domyślne</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="195"/>
         <source>Tick 1</source>
-        <translation>ptaszek 1</translation>
+        <translation>Ptaszek 1</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="207"/>
         <source>Tick 2</source>
-        <translation>ptaszek 2</translation>
+        <translation>Ptaszek 2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="224"/>
         <source>Short 1</source>
-        <translation>skrót 1</translation>
+        <translation>Skrót 1</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="236"/>
         <source>Short 2</source>
-        <translation>skrót 2</translation>
+        <translation>Skrót 2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="48"/>
         <source>Bend type</source>
-        <translation type="unfinished"/>
+        <translation>Typ podciągnięcia</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="55"/>
@@ -9923,7 +9930,7 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="66"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="78"/>
         <source>Click to add or remove points</source>
-        <translation type="unfinished"/>
+        <translation>Kliknij, aby dodać lub usunąć niektóre punkty:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml" line="58"/>
@@ -9933,62 +9940,62 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml" line="76"/>
         <source>Span</source>
-        <translation>Połączenie:</translation>
+        <translation>Połączenie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml" line="93"/>
         <source>You have multiple brackets selected. Select a single bracket to edit its settings.</source>
-        <translation type="unfinished"/>
+        <translation>Masz zaznaczonych wiele klamr. Zaznacz pojedynczą klamrę, aby edytować jej ustawienia.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="49"/>
         <source>Interpretation</source>
-        <translation>Interpretacja:</translation>
+        <translation>Interpretacja</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="56"/>
         <source>Literal</source>
-        <translation>dosłowna</translation>
+        <translation>Dosłowna</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="57"/>
         <source>Jazz</source>
-        <translation>jazzowa</translation>
+        <translation>Jazzowa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="63"/>
         <source>Voicing</source>
-        <translation>Udźwięcznienie:</translation>
+        <translation>Udźwięcznienie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="71"/>
         <source>Root only</source>
-        <translation type="unfinished"/>
+        <translation>Tylko główne</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="72"/>
         <source>Close</source>
-        <translation>zamknięte</translation>
+        <translation>Zamknięte</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="73"/>
         <source>Drop two</source>
-        <translation type="unfinished"/>
+        <translation>Druga nuta o oktawę w dół</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="74"/>
         <source>Six note</source>
-        <translation type="unfinished"/>
+        <translation>Sześcionutowy</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="75"/>
         <source>Four note</source>
-        <translation type="unfinished"/>
+        <translation>Czteronutowy</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="76"/>
         <source>Three note</source>
-        <translation type="unfinished"/>
+        <translation>Trzynutowy</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="81"/>
@@ -9998,38 +10005,38 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="88"/>
         <source>Until the next chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Do następnego symbolu akordu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="89"/>
         <source>Until the end of the bar</source>
-        <translation type="unfinished"/>
+        <translation>Do końca taktu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="90"/>
         <source>Until the end of the attached duration</source>
-        <translation type="unfinished"/>
+        <translation>Do końca załączonej długości</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="53"/>
         <source>Show courtesy clef on previous system</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż przypomnienia zmian kluczy w poprzednich systemach</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fermatas/FermataSettings.qml" line="49"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="138"/>
         <source>Placement on staff</source>
-        <translation type="unfinished"/>
+        <translation>Położenie na pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="53"/>
         <source>Width</source>
-        <translation>Szerokość:</translation>
+        <translation>Szerokość</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="76"/>
         <source>Display key, brackets and braces</source>
-        <translation type="unfinished"/>
+        <translation>Wyświetlaj klucz, klamry i akolady</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml" line="49"/>
@@ -10064,12 +10071,12 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="53"/>
         <source>Gap above</source>
-        <translation type="unfinished"/>
+        <translation>Przerwa powyżej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="68"/>
         <source>Gap below</source>
-        <translation type="unfinished"/>
+        <translation>Przerwa poniżej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
@@ -10096,7 +10103,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="103"/>
         <source>You have multiple fretboard diagrams selected. Select a single diagram to edit its settings.</source>
-        <translation type="unfinished"/>
+        <translation>Masz zaznaczonych wiele diagramów akordów. Zaznacz pojedynczy diagram, aby edytować jego ustawienia.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="59"/>
@@ -10114,7 +10121,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="103"/>
         <source>Visible frets</source>
-        <translation type="unfinished"/>
+        <translation>Widoczne progi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="122"/>
@@ -10129,7 +10136,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretDiagramTabPanel.qml" line="57"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Ustawienia</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="65"/>
@@ -10180,7 +10187,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="57"/>
         <source>Image height</source>
-        <translation type="unfinished"/>
+        <translation>Wysokość obrazu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="61"/>
@@ -10194,12 +10201,12 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="81"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="258"/>
         <source>Lock</source>
-        <translation type="unfinished"/>
+        <translation>Zablokuj</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="95"/>
         <source>Image width</source>
-        <translation type="unfinished"/>
+        <translation>Szerokość obrazu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="110"/>
@@ -10209,13 +10216,13 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="120"/>
         <source>Use staff space units</source>
-        <translation type="unfinished"/>
+        <translation>Użyj jednostek przestrzeni pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="53"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="125"/>
         <source>Style settings</source>
-        <translation type="unfinished"/>
+        <translation>Ustawienia stylu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="66"/>
@@ -10245,62 +10252,62 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature on previous system</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż przypomnienia zmian oznaczeń tonacji w poprzednich systemach</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="57"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>Skala</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="65"/>
         <source>Unknown</source>
-        <translation>nieznany</translation>
+        <translation>Nieznana</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="67"/>
         <source>Major</source>
-        <translation>durowy</translation>
+        <translation>Durowa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="68"/>
         <source>Minor</source>
-        <translation>molowy</translation>
+        <translation>Molowa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="69"/>
         <source>Dorian</source>
-        <translation>dorycki</translation>
+        <translation>Dorycka</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="70"/>
         <source>Phrygian</source>
-        <translation>frygijski</translation>
+        <translation>Frygijska</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="71"/>
         <source>Lydian</source>
-        <translation>lidyjski</translation>
+        <translation>Lidyjska</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="72"/>
         <source>Mixolydian</source>
-        <translation>miksolidyjski</translation>
+        <translation>Miksolidyjska</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="73"/>
         <source>Ionian</source>
-        <translation>joński</translation>
+        <translation>Jońska</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="74"/>
         <source>Locrian</source>
-        <translation>lokrycki</translation>
+        <translation>Lokrycka</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="49"/>
         <source>Glissando line</source>
-        <translation type="unfinished"/>
+        <translation>Linia glissanda</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="59"/>
@@ -10317,7 +10324,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="58"/>
         <source>Niente circle</source>
-        <translation type="unfinished"/>
+        <translation>Okrągła końcówka niente</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="71"/>
@@ -10336,34 +10343,34 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="142"/>
         <source>Height (new system)</source>
-        <translation type="unfinished"/>
+        <translation>Wysokość (nowy system)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="63"/>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="70"/>
         <source>Dashed</source>
-        <translation>kreskowana</translation>
+        <translation>Kreskowana</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="64"/>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="71"/>
         <source>Dotted</source>
-        <translation>kropkowana</translation>
+        <translation>Kropkowana</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="81"/>
         <source>Dash</source>
-        <translation>kreskowana</translation>
+        <translation>Kreska</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="103"/>
         <source>Gap</source>
-        <translation type="unfinished"/>
+        <translation>Przerwa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="52"/>
         <source>Beginning text</source>
-        <translation type="unfinished"/>
+        <translation>Tekst początkowy</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="61"/>
@@ -10390,17 +10397,17 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTypeSection.qml" line="64"/>
         <source>Start hook</source>
-        <translation type="unfinished"/>
+        <translation>Hak początkowy</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTypeSection.qml" line="100"/>
         <source>Hook height</source>
-        <translation type="unfinished"/>
+        <translation>Wysokość haka</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineWithHooksCommonStyleSettings.qml" line="49"/>
         <source>Show line</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż linię</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/OttavaStyleSettings.qml" line="51"/>
@@ -10411,7 +10418,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/OttavaStyleSettings.qml" line="61"/>
         <source>Show numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż tylko liczby</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/VoltaStyleSettings.qml" line="53"/>
@@ -10421,17 +10428,17 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/PedalSettings.qml" line="50"/>
         <source>Show pedal symbol</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż symbol pedału</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/PedalSettings.qml" line="81"/>
         <source>Show line with rosette</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż linię z rozetą</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="49"/>
         <source>Marker type: </source>
-        <translation type="unfinished"/>
+        <translation>Typ repetycji:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="60"/>
@@ -10477,42 +10484,42 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="48"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="58"/>
         <source>Number position</source>
-        <translation type="unfinished"/>
+        <translation>Pozycja liczby taktów</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="48"/>
         <source>Show number</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż liczbę</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="52"/>
         <source>Beam types</source>
-        <translation type="unfinished"/>
+        <translation>Typy belki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="87"/>
         <source>Feathered beams</source>
-        <translation type="unfinished"/>
+        <translation>Belki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="102"/>
         <source>Decelerate</source>
-        <translation type="unfinished"/>
+        <translation>Zmniejsz tempo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="103"/>
         <source>Accelerate</source>
-        <translation type="unfinished"/>
+        <translation>Zwiększ tempo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="136"/>
         <source>Feathering left</source>
-        <translation type="unfinished"/>
+        <translation>Lewa belka</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="156"/>
         <source>Feathering right</source>
-        <translation type="unfinished"/>
+        <translation>Prawa belka</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="182"/>
@@ -10522,57 +10529,57 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="209"/>
         <source>Beam height</source>
-        <translation type="unfinished"/>
+        <translation>Wysokość belki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="51"/>
         <source>Notehead parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Nawiasy główki nuty</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="58"/>
         <source>Normal notehead</source>
-        <translation type="unfinished"/>
+        <translation>Zwykła główka nuty</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="59"/>
         <source>Notehead with parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Główka nuty z nawiasami</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="75"/>
         <source>Hide notehead</source>
-        <translation type="unfinished"/>
+        <translation>Ukryj główkę nuty</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="86"/>
         <source>Small notehead</source>
-        <translation type="unfinished"/>
+        <translation>Mała główka nuty</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="97"/>
         <source>Duration dot position</source>
-        <translation type="unfinished"/>
+        <translation>Pozycja kropki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="132"/>
         <source>Notehead system</source>
-        <translation type="unfinished"/>
+        <translation>System główki nuty</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="144"/>
         <source>Notehead type (visual only)</source>
-        <translation type="unfinished"/>
+        <translation>Typ główki nuty (zmiana wizualna)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="155"/>
         <source>Note direction</source>
-        <translation type="unfinished"/>
+        <translation>Kierunek nuty</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="165"/>
         <source>Notehead offset</source>
-        <translation type="unfinished"/>
+        <translation>Przesunięcie główki nuty</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/BeamTypeSelector.qml" line="61"/>
@@ -10582,17 +10589,17 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/BeamTypeSelector.qml" line="62"/>
         <source>Break beam left</source>
-        <translation type="unfinished"/>
+        <translation>Złam belkę po lewej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/BeamTypeSelector.qml" line="63"/>
         <source>Break inner beams (8th)</source>
-        <translation type="unfinished"/>
+        <translation>Złam wewnętrzne belki (ósemki)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/BeamTypeSelector.qml" line="64"/>
         <source>Break inner beams (16th)</source>
-        <translation type="unfinished"/>
+        <translation>Złam wewnętrzne belki (szesnastki)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/BeamTypeSelector.qml" line="65"/>
@@ -10603,7 +10610,7 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadGroupSelector.qml" line="34"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="33"/>
         <source>Notehead type</source>
-        <translation type="unfinished"/>
+        <translation>Typ główki nuty</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="38"/>
@@ -10623,12 +10630,12 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="41"/>
         <source>Brevis</source>
-        <translation type="unfinished"/>
+        <translation>Breve</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="58"/>
         <source>Hide stem (also hides beam)</source>
-        <translation type="unfinished"/>
+        <translation>Ukryj laseczkę (ukrywa również belkę)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="74"/>
@@ -10639,13 +10646,13 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="89"/>
         <source>Flag style</source>
-        <translation type="unfinished"/>
+        <translation>Styl chorągiewki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="103"/>
         <source>Traditional</source>
         <comment>Note flags</comment>
-        <translation>tradycyjne</translation>
+        <translation>Tradycyjny</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="104"/>
@@ -10656,37 +10663,37 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="187"/>
         <source>Length</source>
-        <translation type="unfinished"/>
+        <translation>Długość</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="201"/>
         <source>Stem offset</source>
-        <translation type="unfinished"/>
+        <translation>Przesunięcie laseczki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="211"/>
         <source>Flag offset</source>
-        <translation type="unfinished"/>
+        <translation>Przesunięcie chorągiewki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="49"/>
         <source>Performance</source>
-        <translation type="unfinished"/>
+        <translation>Możliwości</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="56"/>
         <source>Standard</source>
-        <translation>Standardowy klucz</translation>
+        <translation>Standardowy</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="57"/>
         <source>Baroque</source>
-        <translation>barokowy</translation>
+        <translation>Barokowy</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="48"/>
         <source>Pause before new section starts</source>
-        <translation type="unfinished"/>
+        <translation>Zatrzymaj przed rozpoczęciem nowej sekcji</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="54"/>
@@ -10701,12 +10708,12 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="72"/>
         <source>Reset bar numbers for new section</source>
-        <translation type="unfinished"/>
+        <translation>Zresetuj numery taktów dla nowej sekcji</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="108"/>
         <source>Number of lines</source>
-        <translation type="unfinished"/>
+        <translation>Liczba linii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="126"/>
@@ -10726,7 +10733,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="168"/>
         <source>Staff line color</source>
-        <translation type="unfinished"/>
+        <translation>Kolor pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="179"/>
@@ -10737,23 +10744,23 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="188"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="160"/>
         <source>Pitch names</source>
-        <translation>nazwy wysokości</translation>
+        <translation>Nazwy wysokości</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="189"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="161"/>
         <source>German pitch names</source>
-        <translation type="unfinished"/>
+        <translation>Niemieckie nazwy wysokości</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="190"/>
         <source>Solfege movable Do</source>
-        <translation type="unfinished"/>
+        <translation>Solfeżowy ruchomego Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="191"/>
         <source>Solfege fixed Do</source>
-        <translation type="unfinished"/>
+        <translation>Solfeżowy stałego Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="192"/>
@@ -10812,12 +10819,12 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml" line="48"/>
         <source>Follow written tempo</source>
-        <translation type="unfinished"/>
+        <translation>Śledź wpisane tempo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml" line="57"/>
         <source>Override written tempo</source>
-        <translation type="unfinished"/>
+        <translation>Zastąp wpisane tempo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml" line="61"/>
@@ -10827,7 +10834,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature on previous system</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż przypomnienia zmian oznaczeń metrycznych w poprzednich systemach</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -10837,7 +10844,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="57"/>
         <source>Tremolo bar type</source>
-        <translation type="unfinished"/>
+        <translation>Typ wajchy tremolo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="64"/>
@@ -10857,7 +10864,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="67"/>
         <source>Inverted dip</source>
-        <translation type="unfinished"/>
+        <translation>Podciągnięcie i opuszczenie z wajchą</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="68"/>
@@ -10872,22 +10879,22 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="151"/>
         <source>You have multiple tremolo bars selected. Select a single one to edit its settings.</source>
-        <translation type="unfinished"/>
+        <translation>Masz zaznaczonych wiele wajch tremolo. Zaznacz pojedynczą wajchę tremolo, aby edytować jej ustawienia.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="49"/>
         <source>Style (between notes)</source>
-        <translation type="unfinished"/>
+        <translation>Styl (między nutami)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="57"/>
         <source>Traditional</source>
-        <translation>tradycyjne</translation>
+        <translation>Tradycyjny</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="58"/>
         <source>Traditional alternative</source>
-        <translation type="unfinished"/>
+        <translation>Tradycyjny alternatywny</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tuplets/TupletSettings.qml" line="58"/>
@@ -10902,17 +10909,17 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml" line="68"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation type="unfinished"/>
+        <translation>Pokazuj klamry, które obejmują pojedynczą pięciolinię</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="50"/>
         <source>Empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Puste pięciolinie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="79"/>
         <source>Show options for hiding empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż opcje ukrywania pustych pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="109"/>
@@ -10922,7 +10929,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="52"/>
         <source>Invisible</source>
-        <translation>Niewidoczny</translation>
+        <translation>Niewidoczne</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="65"/>
@@ -10937,12 +10944,12 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="91"/>
         <source>Page margins</source>
-        <translation type="unfinished"/>
+        <translation>Marginesy strony</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="49"/>
         <source>Font</source>
-        <translation type="unfinished"/>
+        <translation>Czcionka</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="95"/>
@@ -10962,7 +10969,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="98"/>
         <source>Strike-through</source>
-        <translation type="unfinished"/>
+        <translation>Przekreślona</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="129"/>
@@ -10983,22 +10990,22 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="185"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="221"/>
         <source>Center</source>
-        <translation>wyśrodkowany</translation>
+        <translation>Wyśrodkowany</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="220"/>
         <source>Bottom</source>
-        <translation>dół</translation>
+        <translation>Dół</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="222"/>
         <source>Baseline</source>
-        <translation type="unfinished"/>
+        <translation>Linia bazowa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="223"/>
         <source>Top</source>
-        <translation>góra</translation>
+        <translation>Góra</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="254"/>
@@ -11013,7 +11020,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
         <source>Match staff size</source>
-        <translation type="unfinished"/>
+        <translation>Dopasuj rozmiar pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="75"/>
@@ -11044,7 +11051,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="152"/>
         <source>Highlight</source>
-        <translation type="unfinished"/>
+        <translation>Wypełnienie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="195"/>
@@ -11059,7 +11066,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="229"/>
         <source>Text style</source>
-        <translation type="unfinished"/>
+        <translation>Styl tekstu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="237"/>
@@ -11104,7 +11111,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="246"/>
         <source>Instrument name (Part)</source>
-        <translation type="unfinished"/>
+        <translation>Nazwa instrumentu (partia)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="247"/>
@@ -11141,12 +11148,12 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="255"/>
         <source>Repeat text left</source>
-        <translation type="unfinished"/>
+        <translation>Lewy tekst repetycji</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="256"/>
         <source>Repeat text right</source>
-        <translation type="unfinished"/>
+        <translation>Prawy tekst repetycji</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="257"/>
@@ -11167,7 +11174,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="260"/>
         <source>Chord symbol (Alternate)</source>
-        <translation type="unfinished"/>
+        <translation>Symbol akordu (alternatywny)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="261"/>
@@ -11197,7 +11204,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/breathplaybackmodel.cpp" line="33"/>
         <source>Breaths &amp; pauses</source>
-        <translation type="unfinished"/>
+        <translation>Oddechy i cezury</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/fermataplaybackmodel.cpp" line="33"/>
@@ -11214,22 +11221,22 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="33"/>
         <location filename="../../src/inspector/models/notation/lines/gradualtempochangesettingsmodel.cpp" line="32"/>
         <source>Tempo change</source>
-        <translation type="unfinished"/>
+        <translation>Zmiana tempa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="53"/>
         <source>Ease in</source>
-        <translation type="unfinished"/>
+        <translation>Powolne rozpoczęcie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="54"/>
         <source>Ease out</source>
-        <translation type="unfinished"/>
+        <translation>Powolne zakończenie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/hairpinplaybackmodel.cpp" line="31"/>
         <source>Hairpins, crescendos &amp; diminuendos</source>
-        <translation type="unfinished"/>
+        <translation>Crescenda i diminuenda</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/noteplaybackmodel.cpp" line="32"/>
@@ -11281,17 +11288,17 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/notation/frames/horizontalframesettingsmodel.cpp" line="33"/>
         <source>Horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>Ramka pozioma</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/textframesettingsmodel.cpp" line="32"/>
         <source>Text frame</source>
-        <translation type="unfinished"/>
+        <translation>Ramka tekstu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/verticalframesettingsmodel.cpp" line="34"/>
         <source>Vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>Ramka pionowa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp" line="33"/>
@@ -11306,7 +11313,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/notation/instrumentname/instrumentnamesettingsmodel.cpp" line="33"/>
         <source>Instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Nazwy instrumentów</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/jumps/jumpsettingsmodel.cpp" line="32"/>
@@ -11321,12 +11328,12 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="56"/>
         <source>Straight</source>
-        <translation>Prosty</translation>
+        <translation>Prosta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="57"/>
         <source>Wavy</source>
-        <translation>faliste</translation>
+        <translation>Falista</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/hairpinlinesettingsmodel.cpp" line="40"/>
@@ -11341,7 +11348,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/letringsettingsmodel.cpp" line="31"/>
         <source>Let ring</source>
-        <translation type="unfinished"/>
+        <translation>Wybrzmienie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="36"/>
@@ -11354,7 +11361,7 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="44"/>
         <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="42"/>
         <source>Hooked 90</source>
-        <translation type="unfinished"/>
+        <translation>Zahaczony 90</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="43"/>
@@ -11362,7 +11369,7 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="53"/>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="45"/>
         <source>Hooked 45</source>
-        <translation type="unfinished"/>
+        <translation>Zahaczony 45</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="64"/>
@@ -11397,7 +11404,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/palmmutesettingsmodel.cpp" line="30"/>
         <source>Palm mute</source>
-        <translation type="unfinished"/>
+        <translation>Palm muting</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="39"/>
@@ -11409,12 +11416,12 @@ Continue with adding note and delete measure repeat?</source>
         <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="54"/>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="46"/>
         <source>Hooked 90 T-style</source>
-        <translation type="unfinished"/>
+        <translation>Zahaczony 90 styl T</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="55"/>
         <source>Asterisk</source>
-        <translation type="unfinished"/>
+        <translation>Gwiazdka</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="43"/>
@@ -11429,7 +11436,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="69"/>
         <source>Wide dashed</source>
-        <translation>kreskowana</translation>
+        <translation>Szeroka kreskowana</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="40"/>
@@ -11445,7 +11452,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="54"/>
         <source>Vibrato wide</source>
-        <translation type="unfinished"/>
+        <translation>Szerokie vibrato</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="55"/>
@@ -11470,17 +11477,17 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/notation/measurerepeats/measurerepeatsettingsmodel.cpp" line="32"/>
         <source>Measure repeat</source>
-        <translation type="unfinished"/>
+        <translation>Powtórzenie taktu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/mmrests/mmrestsettingsmodel.cpp" line="32"/>
         <source>Multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>Pauza wielotaktowa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notationsettingsproxymodel.cpp" line="38"/>
         <source>Notation</source>
-        <translation type="unfinished"/>
+        <translation>Notacja</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/beams/beamsettingsmodel.cpp" line="34"/>
@@ -11495,17 +11502,17 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="34"/>
         <source>Head</source>
-        <translation type="unfinished"/>
+        <translation>Główka</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="162"/>
         <source>Solfège movable do</source>
-        <translation type="unfinished"/>
+        <translation>Solfeżowy ruchomego Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="163"/>
         <source>Solfège fixed do</source>
-        <translation type="unfinished"/>
+        <translation>Solfeżowy stałego Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/notesettingsproxymodel.cpp" line="44"/>
@@ -11535,7 +11542,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/notation/stafftype/stafftypesettingsmodel.cpp" line="34"/>
         <source>Staff type changes</source>
-        <translation type="unfinished"/>
+        <translation>Zmiany typu pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/timesignatures/timesignaturesettingsmodel.cpp" line="34"/>
@@ -11560,7 +11567,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="67"/>
         <source>Number</source>
-        <translation>liczba</translation>
+        <translation>Liczba</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="68"/>
@@ -11570,7 +11577,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/inspector/models/score/scoreappearancesettingsmodel.cpp" line="33"/>
         <source>Score appearance</source>
-        <translation type="unfinished"/>
+        <translation>Wygląd partytury</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/score/scoredisplaysettingsmodel.cpp" line="34"/>
@@ -11583,28 +11590,28 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml" line="39"/>
         <source>Add or remove instruments</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj lub usuń instrumenty</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml" line="40"/>
         <location filename="../../src/stubs/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml" line="38"/>
         <source>Select instrument</source>
-        <translation type="unfinished"/>
+        <translation>Wybierz instrument</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="119"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the shortcut &lt;b&gt;‘i’&lt;/b&gt;</source>
-        <translation type="unfinished"/>
+        <translation>W Twojej partyturze nie ma instrumentów. Aby jakiś wybrać, naciśnij &lt;b&gt;Dodaj&lt;/b&gt; lub użyj skrótu &lt;b&gt;‘i’&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/FamilyView.qml" line="97"/>
         <source>Family</source>
-        <translation type="unfinished"/>
+        <translation>Rodzina</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="65"/>
         <source>Add instruments</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj instrumenty</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="67"/>
@@ -11614,32 +11621,32 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="83"/>
         <source>Move selected instruments up</source>
-        <translation type="unfinished"/>
+        <translation>Przesuń wybrane instrumenty w górę</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="101"/>
         <source>Move selected instruments down</source>
-        <translation type="unfinished"/>
+        <translation>Przesuń wybrane instrumenty w dół</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="119"/>
         <source>Remove selected instruments</source>
-        <translation type="unfinished"/>
+        <translation>Usuń wybrane instrumenty</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="64"/>
         <source>Name on main score</source>
-        <translation type="unfinished"/>
+        <translation>Nazwa na głównej partyturze</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="65"/>
         <source>Name on part score</source>
-        <translation type="unfinished"/>
+        <translation>Nazwa na partii</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="86"/>
         <source>Abbreviated name</source>
-        <translation type="unfinished"/>
+        <translation>Skrócona nazwa</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="105"/>
@@ -11649,27 +11656,27 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="130"/>
         <source>Replace instrument</source>
-        <translation type="unfinished"/>
+        <translation>Zamień instrument</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="146"/>
         <source>Reset all formatting</source>
-        <translation type="unfinished"/>
+        <translation>Resetuj całe formatowanie</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="85"/>
         <source>Your score</source>
-        <translation type="unfinished"/>
+        <translation>Twoja partytura</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="110"/>
         <source>Order: </source>
-        <translation type="unfinished"/>
+        <translation>Uszeregowanie:</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="126"/>
         <source>Remove selected instruments from score</source>
-        <translation type="unfinished"/>
+        <translation>Usuń wybrane instrumenty z partytury</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="171"/>
@@ -11689,7 +11696,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="219"/>
         <source>Choose your instruments by adding them to this list</source>
-        <translation type="unfinished"/>
+        <translation>Wybierz instrument(y), dodając je do listy</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="226"/>
@@ -11699,7 +11706,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="274"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Ustawienia</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml" line="74"/>
@@ -11715,7 +11722,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="94"/>
         <source>Voices visible in the score</source>
-        <translation type="unfinished"/>
+        <translation>Glosy widoczne w partyturze</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="143"/>
@@ -11725,17 +11732,17 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="159"/>
         <source>Hide all measures that do not contain notation (cutaway)</source>
-        <translation type="unfinished"/>
+        <translation>Ukryj wszystkie takty, które nie zawierają notacji (odcięcie)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="176"/>
         <source>Create a linked staff</source>
-        <translation type="unfinished"/>
+        <translation>Utwórz połączoną pięciolinię</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="187"/>
         <source>Note: linked staves contain identical information.</source>
-        <translation type="unfinished"/>
+        <translation>Uwaga: Połączone pięciolinie zawierają identyczne informacje.</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="205"/>
@@ -11745,27 +11752,27 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentsettingsmodel.cpp" line="90"/>
         <source>Are you sure you want to reset all formatting?</source>
-        <translation type="unfinished"/>
+        <translation>Na pewno chcesz zresetować całe formatowanie?</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentsettingsmodel.cpp" line="91"/>
         <source>This action can not be undone</source>
-        <translation type="unfinished"/>
+        <translation>Tej czynności nie można cofnąć</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="125"/>
         <source>Instrument ordering</source>
-        <translation type="unfinished"/>
+        <translation>Uszeregowanie instrumentów</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/staffcontroltreeitem.cpp" line="33"/>
         <source>Add staff</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj pięciolinię</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/stafftreeitem.cpp" line="58"/>
         <source>[LINK] %1</source>
-        <translation type="unfinished"/>
+        <translation>[LINK] %1</translation>
     </message>
 </context>
 <context>
@@ -11781,73 +11788,75 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/internal/ClassesPage.qml" line="185"/>
         <source>Open %1</source>
-        <translation type="unfinished"/>
+        <translation>Otwórz %1</translation>
     </message>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/internal/Playlist.qml" line="150"/>
         <source>Sorry, we are unable to load these videos right now</source>
-        <translation type="unfinished"/>
+        <translation>Niestety, obecnie nie możemy wczytać tych wideo</translation>
     </message>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/internal/Playlist.qml" line="155"/>
         <source>Please check your internet connection or try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Sprawdź swoje połączenie internetowe lub spróbuj ponownie później.</translation>
     </message>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="96"/>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="103"/>
         <source>Learn</source>
-        <translation type="unfinished"/>
+        <translation>Ucz się</translation>
     </message>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="116"/>
         <source>Learn search</source>
-        <translation type="unfinished"/>
+        <translation>Szukaj</translation>
     </message>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="154"/>
         <source>Learn tabs</source>
-        <translation type="unfinished"/>
+        <translation>Zakładki</translation>
     </message>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="165"/>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="206"/>
         <source>Get started</source>
-        <translation type="unfinished"/>
+        <translation>Pierwsze kroki</translation>
     </message>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="173"/>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="224"/>
         <source>Advanced</source>
-        <translation>Zaawansowany</translation>
+        <translation>Zaawansowane</translation>
     </message>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="181"/>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="249"/>
         <source>Classes</source>
-        <translation type="unfinished"/>
+        <translation>Klasy</translation>
     </message>
     <message>
         <location filename="../../src/learn/view/learnpagemodel.cpp" line="88"/>
         <source>Marc Sabatella</source>
-        <translation type="unfinished"/>
+        <translation>Marc Sabatella</translation>
     </message>
     <message>
         <location filename="../../src/learn/view/learnpagemodel.cpp" line="89"/>
         <source>Instructor</source>
-        <translation type="unfinished"/>
+        <translation>Instruktor</translation>
     </message>
     <message>
         <location filename="../../src/learn/view/learnpagemodel.cpp" line="90"/>
         <source>Creator, Mastering MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Twórca, Mastering MuseScore</translation>
     </message>
     <message>
         <location filename="../../src/learn/view/learnpagemodel.cpp" line="91"/>
         <source>Welcome to Mastering MuseScore – the most comprehensive resource for learning the world’s most popular music notation software! My name is Marc Sabatella, and I have been helping develop, support, and promote MuseScore since its initial release over ten years ago.
 
 Whether you are just getting started with music notation software, or are a power user eager to explore advanced engraving and playback techniques, my flagship online course Mastering MuseScore covers everything you need to know to get the most out of MuseScore. In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!</source>
-        <translation type="unfinished"/>
+        <translation>Witaj w Mastering MuseScore – najbardziej wszechstronnym źródle do nauki najpopularniejszego na świecie oprogramowania do notacji muzycznej! Jestem Marc Sabatella i pomagam rozwijać, wspierać i promować MuseScore&apos;a od jego pierwszej wersji, która została wydana ponad dziesięć lat temu.
+
+Niezależnie od tego, czy dopiero zaczynasz korzystać z oprogramowania do notacji muzycznej, czy też jesteś zaawansowanym użytkownikiem, który chce poznać zaawansowane narzędzia układu i techniki odtwarzania, mój flagowy kurs internetowy Mastering MuseScore obejmuje wszystko, co musisz wiedzieć, aby w pełni wykorzystać MuseScore&apos;a. Ponadto Mastering MuseScore oferuje wsparcie społeczności muzyków, z przestrzeniami dyskusyjnymi, transmisjami na żywo oraz innymi powiązanymi kursami i usługami, które pomogą Ci tworzyć najlepszą muzykę. Skorzystaj z tej okazji, aby nauczyć się MuseScore&apos;a od jednego z najbardziej znanych ekspertów!</translation>
     </message>
     <message>
         <location filename="../../src/learn/view/learnpagemodel.cpp" line="104"/>
@@ -11860,7 +11869,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/multiinstances/internal/multiinstancesuiactions.cpp" line="33"/>
         <source>Multiinstances</source>
-        <translation type="unfinished"/>
+        <translation>Multi-instancje</translation>
     </message>
 </context>
 <context>
@@ -11868,17 +11877,17 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/appshell/qml/DevTools/MPE/ArticulationsProfileEditorView.qml" line="66"/>
         <source>Profile path</source>
-        <translation type="unfinished"/>
+        <translation>Ścieżka profilu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/DevTools/MPE/ArticulationsProfileEditorView.qml" line="122"/>
         <source>Articulation Pattern List</source>
-        <translation type="unfinished"/>
+        <translation>Lista wzorów artykulacji</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/DevTools/MPE/ArticulationsProfileEditorView.qml" line="171"/>
         <source>Pattern Segments:</source>
-        <translation type="unfinished"/>
+        <translation>Segmenty wzoru:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/DevTools/MPE/ArticulationsProfileEditorView.qml" line="210"/>
@@ -11888,52 +11897,52 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/appshell/qml/DevTools/MPE/ArticulationsProfileEditorView.qml" line="222"/>
         <source>Show arrangement</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż układ</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/DevTools/MPE/ArticulationsProfileEditorView.qml" line="235"/>
         <source>Show pitch</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż wysokość</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/DevTools/MPE/ArticulationsProfileEditorView.qml" line="248"/>
         <source>Show expression</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż oznaczenie interpretacyjne</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/DevTools/MPE/ArticulationsProfileEditorView.qml" line="274"/>
         <source>Pattern Segment Positioning</source>
-        <translation type="unfinished"/>
+        <translation>Pozycjonowanie segmentu wzoru</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/DevTools/MPE/ArticulationsProfileEditorView.qml" line="293"/>
         <source>From</source>
-        <translation type="unfinished"/>
+        <translation>Od</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/DevTools/MPE/ArticulationsProfileEditorView.qml" line="332"/>
         <source>To</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/DevTools/MPE/ArticulationsProfileEditorView.qml" line="377"/>
         <source>Pattern Parameters</source>
-        <translation type="unfinished"/>
+        <translation>Parametry wzoru</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ArrangementPatternControl.qml" line="47"/>
         <source>Timestamp offset</source>
-        <translation type="unfinished"/>
+        <translation>Przesunięcie znacznika czasu</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ArrangementPatternControl.qml" line="107"/>
         <source>Duration factor</source>
-        <translation type="unfinished"/>
+        <translation>Współczynnik długości</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ArticulationPatternControlsTab.qml" line="44"/>
         <source>Arrangement</source>
-        <translation type="unfinished"/>
+        <translation>Układ</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ArticulationPatternControlsTab.qml" line="49"/>
@@ -11948,61 +11957,61 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ArticulationPatternPlot.qml" line="111"/>
         <source>Time line</source>
-        <translation type="unfinished"/>
+        <translation>Linia czasu</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ArticulationPatternPlot.qml" line="115"/>
         <source>Pitch curve</source>
-        <translation type="unfinished"/>
+        <translation>Krzywa wysokości</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ArticulationPatternPlot.qml" line="119"/>
         <source>Expression curve</source>
-        <translation type="unfinished"/>
+        <translation>Krzywa ekspresji</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ArticulationPatternsList.qml" line="36"/>
         <source>Copy pattern data</source>
-        <translation type="unfinished"/>
+        <translation>Skopiuj dane wzoru</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ArticulationPatternsTab.qml" line="44"/>
         <source>Single Note</source>
-        <translation type="unfinished"/>
+        <translation>Pojedyncza nuta</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ArticulationPatternsTab.qml" line="49"/>
         <source>Multi Note</source>
-        <translation type="unfinished"/>
+        <translation>Wiele nut</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ExpressionPatternControl.qml" line="48"/>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/PitchPatternControl.qml" line="48"/>
         <source>Point index</source>
-        <translation type="unfinished"/>
+        <translation>Indeks punktowy</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/ExpressionPatternControl.qml" line="83"/>
         <source>Dynamic offset</source>
-        <translation type="unfinished"/>
+        <translation>Przesunięcie dynamiki</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/qml/MuseScore/Mpe/PitchPatternControl.qml" line="83"/>
         <source>Pitch offset</source>
-        <translation type="unfinished"/>
+        <translation>Przesunięcie wysokości</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/view/articulationsprofileeditormodel.cpp" line="42"/>
         <location filename="../../src/framework/mpe/view/articulationsprofileeditormodel.cpp" line="51"/>
         <location filename="../../src/framework/mpe/view/articulationsprofileeditormodel.cpp" line="58"/>
         <source>MPE Articulations Profile</source>
-        <translation type="unfinished"/>
+        <translation>Profil artykulacji MPE</translation>
     </message>
     <message>
         <location filename="../../src/framework/mpe/view/articulationsprofileeditormodel.cpp" line="43"/>
         <location filename="../../src/framework/mpe/view/articulationsprofileeditormodel.cpp" line="52"/>
         <source>Open MPE Articulations Profile</source>
-        <translation type="unfinished"/>
+        <translation>Otwórz Profil artykulacji MPE</translation>
     </message>
 </context>
 <context>
@@ -12030,12 +12039,12 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="199"/>
         <source>Unknown</source>
-        <translation>nieznany</translation>
+        <translation>Nieznany</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="203"/>
         <source>%1 error: line %2 column %3 %4</source>
-        <translation>Błąd %1: linia %2, kolumna %3 %4.</translation>
+        <translation>Błąd %1: wiersz %2, kolumna %3 %4.</translation>
     </message>
 </context>
 <context>
@@ -12050,17 +12059,17 @@ Whether you are just getting started with music notation software, or are a powe
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="51"/>
         <source>Pitch</source>
         <comment>string data</comment>
-        <translation>wysokość</translation>
+        <translation>Wysokość</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="141"/>
         <source>checked</source>
-        <translation type="unfinished"/>
+        <translation>zaznaczone</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="141"/>
         <source>unchecked</source>
-        <translation type="unfinished"/>
+        <translation>niezaznaczone</translation>
     </message>
 </context>
 <context>
@@ -12075,55 +12084,55 @@ Whether you are just getting started with music notation software, or are a powe
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="670"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1082"/>
         <source>Above</source>
-        <translation>powyżej</translation>
+        <translation>Powyżej</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="671"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1083"/>
         <source>Below</source>
-        <translation>poniżej</translation>
+        <translation>Poniżej</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="681"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1087"/>
         <source>Left</source>
-        <translation>z lewej</translation>
+        <translation>Z lewej</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="682"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1088"/>
         <source>Center</source>
-        <translation>wyśrodkowany</translation>
+        <translation>Wyśrodkowany</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="683"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1089"/>
         <source>Right</source>
-        <translation>z prawej</translation>
+        <translation>Z prawej</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="687"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1092"/>
         <source>None</source>
-        <translation>brak</translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="688"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1093"/>
         <source>Brackets</source>
-        <translation>klamry</translation>
+        <translation>Klamry</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="689"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1094"/>
         <source>Parentheses</source>
-        <translation>nawiasy</translation>
+        <translation>Nawiasy</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="692"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1096"/>
         <source>Segment</source>
-        <translation>segment</translation>
+        <translation>Segment</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="693"/>
@@ -12135,26 +12144,26 @@ Whether you are just getting started with music notation software, or are a powe
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="694"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1098"/>
         <source>System</source>
-        <translation>system</translation>
+        <translation>System</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="697"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1100"/>
         <source>Number</source>
-        <translation>liczba</translation>
+        <translation>Liczba</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="698"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1101"/>
         <source>Ratio</source>
-        <translation>proporcja</translation>
+        <translation>Proporcja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="699"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1102"/>
         <source>None</source>
         <comment>no tuplet number type</comment>
-        <translation>brak</translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="702"/>
@@ -12162,105 +12171,105 @@ Whether you are just getting started with music notation software, or are a powe
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1104"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1111"/>
         <source>Automatic</source>
-        <translation>automatyczny</translation>
+        <translation>Automatyczny</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="703"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1105"/>
         <source>Bracket</source>
-        <translation>klamra</translation>
+        <translation>Klamra</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="704"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1106"/>
         <source>None</source>
         <comment>no tuplet bracket type</comment>
-        <translation>brak</translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="766"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1108"/>
         <source>Jazz</source>
-        <translation>jazzowa</translation>
+        <translation>Jazzowa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="767"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1109"/>
         <source>Literal</source>
-        <translation>dosłowna</translation>
+        <translation>Dosłowna</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="771"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1112"/>
         <source>Root Only</source>
-        <translation>tylko główne</translation>
+        <translation>Tylko główne</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="772"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1113"/>
         <source>Close</source>
-        <translation>Zamknij</translation>
+        <translation>Zamknięte</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="773"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1114"/>
         <source>Drop Two</source>
-        <translation>druga nuta o oktawę w dół</translation>
+        <translation>Druga nuta o oktawę w dół</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="774"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1115"/>
         <source>Six Note</source>
-        <translation>sześcionutowy</translation>
+        <translation>Sześcionutowy</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="775"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1116"/>
         <source>Four Note</source>
-        <translation>czteronutowy</translation>
+        <translation>Czteronutowy</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="776"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1117"/>
         <source>Three Note</source>
-        <translation>trzynutowy</translation>
+        <translation>Trzynutowy</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="779"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1119"/>
         <source>Until Next Chord Symbol</source>
-        <translation>do następnego symbolu akordu</translation>
+        <translation>Do następnego symbolu akordu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="780"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1120"/>
         <source>Until End of Measure</source>
-        <translation>do końca taktu</translation>
+        <translation>Do końca taktu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="781"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1121"/>
         <source>Chord/Rest Duration</source>
-        <translation>długość akordu/pauzy</translation>
+        <translation>Długość akordu/pauzy</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="880"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1132"/>
         <source>None</source>
         <comment>no frame for text</comment>
-        <translation>brak</translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="881"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1133"/>
         <source>Rectangle</source>
-        <translation>prostokąt</translation>
+        <translation>Prostokąt</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="882"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1134"/>
         <source>Circle</source>
-        <translation>koło</translation>
+        <translation>Koło</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1147"/>
@@ -12388,12 +12397,12 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="214"/>
         <source>checked</source>
-        <translation type="unfinished"/>
+        <translation>zaznaczone</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="214"/>
         <source>unchecked</source>
-        <translation type="unfinished"/>
+        <translation>niezaznaczone</translation>
     </message>
 </context>
 <context>
@@ -12469,7 +12478,7 @@ Whether you are just getting started with music notation software, or are a powe
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1203"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2534"/>
         <source>Time Signature</source>
-        <translation>Oznaczenia metryczne</translation>
+        <translation>Oznaczenie metryczne</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="768"/>
@@ -12551,22 +12560,22 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="83"/>
         <source>After selection</source>
-        <translation type="unfinished"/>
+        <translation>Po zaznaczeniu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="84"/>
         <source>Before selection</source>
-        <translation type="unfinished"/>
+        <translation>Przed zaznaczeniem</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="85"/>
         <source>At start of score</source>
-        <translation type="unfinished"/>
+        <translation>Na początku partytury</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="86"/>
         <source>At end of score</source>
-        <translation type="unfinished"/>
+        <translation>Na końcu partytury</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditGridSizeDialog.qml" line="54"/>
@@ -12594,37 +12603,37 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="47"/>
         <source>Customise control</source>
-        <translation type="unfinished"/>
+        <translation>Dostosuj kontrolę</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="58"/>
         <source>Add separator line</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj linię separatora</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="36"/>
         <source>Beam distance</source>
-        <translation>Dystans belki:</translation>
+        <translation>Dystans belki</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="44"/>
         <source>Regular</source>
-        <translation type="unfinished"/>
+        <translation>Regularna</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="45"/>
         <source>Wide</source>
-        <translation type="unfinished"/>
+        <translation>Szeroka</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="79"/>
         <source>Beam thickness</source>
-        <translation type="unfinished"/>
+        <translation>Grubość belki</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="99"/>
         <source>Broken beam minimum length</source>
-        <translation type="unfinished"/>
+        <translation>Minimalna długość złamanej belki</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="120"/>
@@ -12634,7 +12643,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="42"/>
         <source>Traditional</source>
-        <translation>tradycyjne</translation>
+        <translation>Tradycyjny</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="43"/>
@@ -12644,34 +12653,34 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="105"/>
         <source>Not saved</source>
-        <translation type="unfinished"/>
+        <translation>Niezapisana</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="146"/>
         <source>Scroll left</source>
-        <translation type="unfinished"/>
+        <translation>Przewiń w lewo</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="163"/>
         <source>Scroll right</source>
-        <translation type="unfinished"/>
+        <translation>Przewiń w prawo</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml" line="60"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="226"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="234"/>
         <source>Customise toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Dostosuj pasek narzędziowy</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="144"/>
         <source>Duplicate</source>
-        <translation type="unfinished"/>
+        <translation>Duplikuj</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="147"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Zmień nazwę</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="148"/>
@@ -12681,7 +12690,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="40"/>
         <source>Parts control</source>
-        <translation type="unfinished"/>
+        <translation>Kontrola partii</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="52"/>
@@ -12692,17 +12701,17 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="57"/>
         <source>Create new part</source>
-        <translation type="unfinished"/>
+        <translation>Utwórz nową partię</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsView.qml" line="55"/>
         <source>NAME</source>
-        <translation type="unfinished"/>
+        <translation>NAZWA</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsView.qml" line="81"/>
         <source>Parts view</source>
-        <translation type="unfinished"/>
+        <translation>Podgląd partii</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="78"/>
@@ -12712,12 +12721,12 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
         <source>Voices visible on this score</source>
-        <translation type="unfinished"/>
+        <translation>Glosy widoczne w partyturze</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
         <source>Voice </source>
-        <translation type="unfinished"/>
+        <translation>Głos</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NotationToolBar.qml" line="46"/>
@@ -12727,12 +12736,12 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="49"/>
         <source>Note Input toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Pasek narzędziowy wprowadzania nut</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="227"/>
         <source>Show/hide toolbar buttons</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż/ukryj przyciski paska narzędziowego</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="60"/>
@@ -12742,7 +12751,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/UndoRedoToolBar.qml" line="44"/>
         <source>Undo Redo toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Pasek narzędziowy cofnij/ponów</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="58"/>
@@ -12757,27 +12766,27 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="124"/>
         <source>Zoom menu</source>
-        <translation type="unfinished"/>
+        <translation>Menu powiększenia</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="492"/>
         <source>Insert after selection…</source>
-        <translation type="unfinished"/>
+        <translation>Wstaw po zaznaczeniu…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="493"/>
         <source>Insert before selection…</source>
-        <translation type="unfinished"/>
+        <translation>Wstaw przed zaznaczeniem…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="495"/>
         <source>Insert at start of score…</source>
-        <translation type="unfinished"/>
+        <translation>Wstaw na początku partytury…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="496"/>
         <source>Insert at end of score…</source>
-        <translation type="unfinished"/>
+        <translation>Wstaw na końcu partytury…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/excerptnotation.cpp" line="96"/>
@@ -12846,12 +12855,12 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1416"/>
         <source>The style file could not be loaded.</source>
-        <translation type="unfinished"/>
+        <translation>Nie można wczytać pliku stylu.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1422"/>
         <source>Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly.</source>
-        <translation type="unfinished"/>
+        <translation>Ten plik stylu pochodzi z innej wersji MuseScore&apos;a i nie ma gwarancji, że Twoja partytura będzie wyświetlana poprawnie.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1424"/>
@@ -12896,27 +12905,27 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="184"/>
         <source>Select</source>
-        <translation>Zaznacz:</translation>
+        <translation>Zaznacz</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="200"/>
         <source>After selection…</source>
-        <translation type="unfinished"/>
+        <translation>Po zaznaczeniu…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="201"/>
         <source>Before selection…</source>
-        <translation type="unfinished"/>
+        <translation>Przed zaznaczeniem…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="203"/>
         <source>At start of score…</source>
-        <translation type="unfinished"/>
+        <translation>Na początku partytury…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="204"/>
         <source>At end of score…</source>
-        <translation type="unfinished"/>
+        <translation>Na końcu partytury…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="287"/>
@@ -12926,7 +12935,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="292"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Zamknij inne zakładki</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="297"/>
@@ -12971,52 +12980,52 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="134"/>
         <source>Are you sure you want to delete this part?</source>
-        <translation type="unfinished"/>
+        <translation>Na pewno chcesz usunąć tę partię?</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="214"/>
         <source> (copy)</source>
-        <translation type="unfinished"/>
+        <translation> (kopiuj)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="77"/>
         <source>Large</source>
-        <translation type="unfinished"/>
+        <translation>Duży</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="78"/>
         <source>Normal</source>
-        <translation>zwykły</translation>
+        <translation>Zwykły</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="79"/>
         <source>Small</source>
-        <translation>Mała</translation>
+        <translation>Mały</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="99"/>
         <source>128 notes (full)</source>
-        <translation type="unfinished"/>
+        <translation>128-klawiszowa (pełna)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="100"/>
         <source>88 notes (piano)</source>
-        <translation type="unfinished"/>
+        <translation>88-klawiszowa (fortepianowa)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="101"/>
         <source>61 notes</source>
-        <translation type="unfinished"/>
+        <translation>61-klawiszowa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="102"/>
         <source>49 notes</source>
-        <translation type="unfinished"/>
+        <translation>49-klawiszowa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="103"/>
         <source>25 notes</source>
-        <translation type="unfinished"/>
+        <translation>25-klawiszowa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="122"/>
@@ -13156,32 +13165,32 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.cpp" line="514"/>
         <source>Invalid instrument name</source>
-        <translation type="unfinished"/>
+        <translation>Nieprawidłowa nazwa instrumentu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.cpp" line="515"/>
         <source>The instrument name is invalid.</source>
-        <translation>Nieprawidłowa nazwa instrumentu.</translation>
+        <translation>Nazwa instrumentu jest nieprawidłowa.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="68"/>
         <source>Open</source>
-        <translation>Otwarty</translation>
+        <translation>Otwarta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="176"/>
         <source>Continuous</source>
-        <translation>ciągła</translation>
+        <translation>Ciągła</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="177"/>
         <source>Dashed</source>
-        <translation>kreskowana</translation>
+        <translation>Kreskowana</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="178"/>
         <source>Dotted</source>
-        <translation>kropkowana</translation>
+        <translation>Kropkowana</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="228"/>
@@ -13234,7 +13243,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="56"/>
         <source>Name your custom palette</source>
-        <translation type="unfinished"/>
+        <translation>Nazwa Twojej niestandardowej zakładki palety</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="99"/>
@@ -13286,18 +13295,18 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PalettesPanelHeader.qml" line="120"/>
         <source>Add Palettes</source>
-        <translation>Dodaj zakładkę</translation>
+        <translation>Dodaj zakładkę palety</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PalettesPanelHeader.qml" line="160"/>
         <source>Search Palettes</source>
-        <translation type="unfinished"/>
+        <translation>Szukaj zakładek palety</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="408"/>
         <source>%1, contains %n matching element(s)</source>
         <comment>palette</comment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%1, zawiera %n pasujący element(y)</numerusform><numerusform>%1, zawiera %n pasujące element(y)</numerusform><numerusform>%1, zawiera %n pasujących element(ów)</numerusform><numerusform>%1, zawiera %n pasujące element(y)</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="409"/>
@@ -13309,7 +13318,7 @@ Whether you are just getting started with music notation software, or are a powe
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="544"/>
         <location filename="../../src/palette/view/palettemodel.cpp" line="836"/>
         <source>Untitled palette</source>
-        <translation type="unfinished"/>
+        <translation>Nienazwana zakładka palety</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="71"/>
@@ -13319,48 +13328,48 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="146"/>
         <source>Hide/delete palette</source>
-        <translation type="unfinished"/>
+        <translation>Ukryj/usuń zakładkę palety</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="146"/>
         <source>Hide palette</source>
-        <translation type="unfinished"/>
+        <translation>Ukryj zakładkę palety</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="147"/>
         <source>Insert new palette</source>
-        <translation type="unfinished"/>
+        <translation>Wstaw nową zakładkę palety</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="149"/>
         <source>Enable editing</source>
-        <translation type="unfinished"/>
+        <translation>Włącz edytowanie</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="151"/>
         <source>Reset palette</source>
-        <translation type="unfinished"/>
+        <translation>Resetuj zakładkę palety</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="152"/>
         <source>Save palette…</source>
-        <translation type="unfinished"/>
+        <translation>Zapisz zakładkę palety…</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="153"/>
         <source>Load palette…</source>
-        <translation type="unfinished"/>
+        <translation>Wczytaj zakładkę palety…</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="155"/>
         <source>Palette properties…</source>
-        <translation type="unfinished"/>
+        <translation>Właściwości zakładki palety…</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="31"/>
         <location filename="../../src/stubs/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="31"/>
         <source>Palette cell properties</source>
-        <translation type="unfinished"/>
+        <translation>Właściwości komórki palety</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="53"/>
@@ -13376,7 +13385,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="83"/>
         <source>X</source>
-        <translation type="unfinished"/>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="83"/>
@@ -13388,12 +13397,12 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="84"/>
         <source>Y</source>
-        <translation type="unfinished"/>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="85"/>
         <source>Content scale</source>
-        <translation>Zawartość skali:</translation>
+        <translation>Zawartość skali</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="122"/>
@@ -13404,17 +13413,17 @@ Whether you are just getting started with music notation software, or are a powe
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="31"/>
         <location filename="../../src/stubs/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="31"/>
         <source>Palette properties</source>
-        <translation type="unfinished"/>
+        <translation>Właściwości zakładki palety</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="68"/>
         <source>Cell size</source>
-        <translation type="unfinished"/>
+        <translation>Rozmiar komórki</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="83"/>
         <source>Width</source>
-        <translation>Szerokość:</translation>
+        <translation>Szerokość</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="84"/>
@@ -13424,7 +13433,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="85"/>
         <source>Element offset</source>
-        <translation type="unfinished"/>
+        <translation>Przesunięcie elementu</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="86"/>
@@ -13439,12 +13448,12 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="108"/>
         <source>Start typing to search all palettes</source>
-        <translation type="unfinished"/>
+        <translation>Zacznij pisać, aby przeszukać wszystkie zakładki palety</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="123"/>
         <source>No results found</source>
-        <translation type="unfinished"/>
+        <translation>Nie znaleziono wyników</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palette.cpp" line="501"/>
@@ -13463,7 +13472,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="190"/>
         <source>Beam properties</source>
-        <translation type="unfinished"/>
+        <translation>Właściwości belki</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="211"/>
@@ -13498,14 +13507,14 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="261"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1150"/>
         <source>Dynamic + hairpin</source>
-        <translation>Dynamika</translation>
+        <translation>Dynamika + crescendo/diminuendo</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="270"/>
         <location filename="../../src/palette/view/widgets/keyedit.cpp" line="303"/>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="185"/>
         <source>Key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Oznaczenia tonacji</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="305"/>
@@ -13520,7 +13529,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="372"/>
         <source>Repeats &amp; jumps</source>
-        <translation type="unfinished"/>
+        <translation>Repetycje</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="466"/>
@@ -13569,7 +13578,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="534"/>
         <source>Group measures</source>
-        <translation type="unfinished"/>
+        <translation>Grupuj takty</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="541"/>
@@ -13605,13 +13614,13 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="591"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1863"/>
         <source>RH guitar fingering %1</source>
-        <translation type="unfinished"/>
+        <translation>Gitara - palcowanie prawą ręką %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="599"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1871"/>
         <source>LH guitar fingering %1</source>
-        <translation type="unfinished"/>
+        <translation>Gitara - palcowanie lewą ręką %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="606"/>
@@ -13665,7 +13674,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="907"/>
         <source>Brackets</source>
-        <translation>klamry</translation>
+        <translation>Klamry</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="914"/>
@@ -13691,12 +13700,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="938"/>
         <source>Breaths &amp; pauses</source>
-        <translation type="unfinished"/>
+        <translation>Oddechy i cezury</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="985"/>
         <source>Arpeggios &amp; glissandi</source>
-        <translation type="unfinished"/>
+        <translation>Arpeggia i glissanda</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1046"/>
@@ -13706,12 +13715,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1079"/>
         <source>Grace notes</source>
-        <translation type="unfinished"/>
+        <translation>Przednutki</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1099"/>
         <source>Bagpipe embellishments</source>
-        <translation type="unfinished"/>
+        <translation>Ozdobniki dudowe</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1118"/>
@@ -13817,13 +13826,13 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1318"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1833"/>
         <source>Let ring</source>
-        <translation type="unfinished"/>
+        <translation>Wybrzmienie</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1338"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1829"/>
         <source>Palm mute</source>
-        <translation type="unfinished"/>
+        <translation>Palm muting</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1346"/>
@@ -13899,60 +13908,60 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1439"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1446"/>
         <source>accel.</source>
-        <translation type="unfinished"/>
+        <translation>accel.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1440"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1447"/>
         <source>allarg.</source>
-        <translation type="unfinished"/>
+        <translation>allarg.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1441"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1452"/>
         <source>rall.</source>
-        <translation type="unfinished"/>
+        <translation>rall.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1442"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1453"/>
         <source>rit.</source>
-        <translation type="unfinished"/>
+        <translation>rit.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1448"/>
         <source>calando</source>
-        <translation type="unfinished"/>
+        <translation>calando</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1449"/>
         <source>lentando</source>
-        <translation type="unfinished"/>
+        <translation>lentando</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1450"/>
         <source>morendo</source>
-        <translation type="unfinished"/>
+        <translation>morendo</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1451"/>
         <source>precipitando</source>
-        <translation type="unfinished"/>
+        <translation>precipitando</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1454"/>
         <source>smorz.</source>
-        <translation type="unfinished"/>
+        <translation>smorz.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1455"/>
         <source>sost.</source>
-        <translation type="unfinished"/>
+        <translation>sost.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1456"/>
         <source>string.</source>
-        <translation type="unfinished"/>
+        <translation>string.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1468"/>
@@ -13997,7 +14006,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1527"/>
         <source>Change instr.</source>
-        <translation type="unfinished"/>
+        <translation>Zmiana instr.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1528"/>
@@ -14012,12 +14021,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1535"/>
         <source>legato</source>
-        <translation type="unfinished"/>
+        <translation>legato</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1537"/>
         <source>Legato</source>
-        <translation type="unfinished"/>
+        <translation>Legato</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1540"/>
@@ -14047,7 +14056,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1553"/>
         <source>Tremolo</source>
-        <translation>Tremolo/tremolando</translation>
+        <translation>Tremolo</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1557"/>
@@ -14077,25 +14086,25 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1570"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1894"/>
         <source>distort</source>
-        <translation type="unfinished"/>
+        <translation>zniekształć</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1572"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1896"/>
         <source>Distortion</source>
-        <translation type="unfinished"/>
+        <translation>Zniekształcony</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1575"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1899"/>
         <source>overdrive</source>
-        <translation>Overdrive</translation>
+        <translation>overdrive</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1577"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1901"/>
         <source>Overdrive</source>
-        <translation type="unfinished"/>
+        <translation>Overdrive</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1580"/>
@@ -14116,53 +14125,53 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1595"/>
         <source>detache</source>
-        <translation type="unfinished"/>
+        <translation>détaché</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1597"/>
         <source>Detache</source>
-        <translation type="unfinished"/>
+        <translation>Détaché</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1600"/>
         <source>martele</source>
-        <translation type="unfinished"/>
+        <translation>martelé</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1602"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1607"/>
         <source>Martele</source>
-        <translation type="unfinished"/>
+        <translation>Martelé</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1605"/>
         <source>col legno</source>
-        <translation type="unfinished"/>
+        <translation>col legno</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1610"/>
         <source>sul pont.</source>
-        <translation type="unfinished"/>
+        <translation>sul pont.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1612"/>
         <source>Sul Ponticello</source>
-        <translation type="unfinished"/>
+        <translation>Sul Ponticello</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1615"/>
         <source>sul tasto</source>
-        <translation type="unfinished"/>
+        <translation>sul tasto</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1617"/>
         <source>Sul Tasto</source>
-        <translation type="unfinished"/>
+        <translation>Sul Tasto</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1620"/>
         <source>vibrato</source>
-        <translation type="unfinished"/>
+        <translation>vibrato</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1622"/>
@@ -14329,7 +14338,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="64"/>
         <source>Single-click to open a Palette</source>
-        <translation type="unfinished"/>
+        <translation>Kliknij, aby otworzyć zakładkę palety</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="96"/>
@@ -14394,7 +14403,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="708"/>
         <source>Write File failed: %1</source>
-        <translation>Zapis pliku zakończony niepowodzeniem: %1.</translation>
+        <translation>Zapisywanie pliku zakończone niepowodzeniem: %1.</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="709"/>
@@ -14410,7 +14419,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/noteGroups.cpp" line="85"/>
         <source>Beam selector</source>
-        <translation type="unfinished"/>
+        <translation>Selektor belki</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1146"/>
@@ -14443,7 +14452,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="83"/>
         <source>Solo</source>
-        <translation>Solowe</translation>
+        <translation>Solo</translation>
     </message>
 </context>
 <context>
@@ -14451,7 +14460,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioResourceControl.qml" line="99"/>
         <source>Bypass</source>
-        <translation type="unfinished"/>
+        <translation>Wyłącz</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioResourceControl.qml" line="262"/>
@@ -14468,12 +14477,12 @@ zakończone niepowodzeniem: %2.</translation>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerFxSection.qml" line="31"/>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="41"/>
         <source>Audio FX</source>
-        <translation type="unfinished"/>
+        <translation>Efekty dźwiękowe</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="59"/>
         <source>Mute</source>
-        <translation>Tłumik</translation>
+        <translation>Wycisz</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerSoundSection.qml" line="31"/>
@@ -14511,27 +14520,27 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="56"/>
         <source>Mixer channel panel</source>
-        <translation type="unfinished"/>
+        <translation>Panel kanałów miksera</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="14"/>
         <source>No effect</source>
-        <translation type="unfinished"/>
+        <translation>Brak efektu</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="39"/>
         <source>Labels</source>
-        <translation type="unfinished"/>
+        <translation>Etykiety</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="44"/>
         <source>Fader</source>
-        <translation type="unfinished"/>
+        <translation>Suwak</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="45"/>
         <source>Mute and solo</source>
-        <translation type="unfinished"/>
+        <translation>Wycisz i solo</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="108"/>
@@ -14541,7 +14550,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/playback/view/mixerpanelmodel.cpp" line="344"/>
         <source>Master</source>
-        <translation type="unfinished"/>
+        <translation>Główny</translation>
     </message>
 </context>
 <context>
@@ -14549,12 +14558,12 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/plugins/internal/pluginsservice.cpp" line="81"/>
         <source>Composing/arranging tools</source>
-        <translation type="unfinished"/>
+        <translation>Narzędzia do komponowania/aranżowania</translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsservice.cpp" line="82"/>
         <source>Colour notes</source>
-        <translation type="unfinished"/>
+        <translation>Kolor nut</translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsservice.cpp" line="83"/>
@@ -14567,22 +14576,22 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="161"/>
         <source>Reload plugins</source>
-        <translation type="unfinished"/>
+        <translation>Przeładuj wtyczki</translation>
     </message>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="49"/>
         <source>Edit shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Edytuj skrót</translation>
     </message>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="140"/>
         <source>Enabled</source>
-        <translation type="unfinished"/>
+        <translation>Włączone</translation>
     </message>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="170"/>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Wyłączone</translation>
     </message>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="210"/>
@@ -14597,22 +14606,22 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/plugins/internal/pluginsactioncontroller.cpp" line="81"/>
         <source>The plugin &quot;%1&quot; is currently disabled. Enable it now?</source>
-        <translation type="unfinished"/>
+        <translation>Wtyczka &quot;%1&quot; jest obecnie wyłączona. Włączyć ją teraz?</translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsactioncontroller.cpp" line="82"/>
         <source>Alternatively, you can enable it at any time from Home &gt; Plugins.</source>
-        <translation type="unfinished"/>
+        <translation>Alternatywnie możesz go włączyć w dowolnym momencie, wybierając Główna &gt; Wtyczki.</translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="54"/>
         <source>Run plugin</source>
-        <translation type="unfinished"/>
+        <translation>Uruchom wtyczkę</translation>
     </message>
     <message>
         <location filename="../../src/plugins/view/pluginsmodel.cpp" line="108"/>
         <source>Not defined</source>
-        <translation type="unfinished"/>
+        <translation>Nie zdefiniowano</translation>
     </message>
 </context>
 <context>
@@ -14625,52 +14634,52 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="171"/>
         <source>Add selected instruments to score</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj wybrane instrumenty do partytury</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="233"/>
         <source>Move selected instruments up</source>
-        <translation type="unfinished"/>
+        <translation>Przesuń wybrane instrumenty w górę</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="248"/>
         <source>Move selected instruments down</source>
-        <translation type="unfinished"/>
+        <translation>Przesuń wybrane instrumenty w dół</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="60"/>
         <source>How would you like to save?</source>
-        <translation type="unfinished"/>
+        <translation>Co chcesz zapisać?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="77"/>
         <source>To the Cloud (free)</source>
-        <translation type="unfinished"/>
+        <translation>W chmurze (darmowe)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
-        <translation type="unfinished"/>
+        <translation>Pliki są zapisywane prywatnie na Twoim osobistym koncie. Możesz dzielić się wersjami roboczymi z innymi i publikować swoje gotowe partytury.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="80"/>
         <source>Save to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>Zapisz w chmurze</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="86"/>
         <source>Save to the cloud (free)</source>
-        <translation type="unfinished"/>
+        <translation>Zapisz w chmurze (darmowe)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
         <source>On your computer</source>
-        <translation type="unfinished"/>
+        <translation>Na swoim komputerze</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="99"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
-        <translation type="unfinished"/>
+        <translation>Jeśli wolisz zapisywać swoje pliki na swoim komputerze, możesz to zrobić tutaj.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="100"/>
@@ -14712,7 +14721,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="124"/>
         <source>Export settings</source>
-        <translation type="unfinished"/>
+        <translation>Ustawienia eksportu</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="164"/>
@@ -14722,7 +14731,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/AdditionalInfoView.qml" line="71"/>
         <source>Score options</source>
-        <translation type="unfinished"/>
+        <translation>Opcje partytury</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/AdditionalInfoView.qml" line="91"/>
@@ -14747,12 +14756,12 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ChooseInstrumentsAndTemplatesPage.qml" line="118"/>
         <source>Choose instruments</source>
-        <translation type="unfinished"/>
+        <translation>Wybierz instrument(y)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ChooseInstrumentsAndTemplatesPage.qml" line="128"/>
         <source>Create from template</source>
-        <translation type="unfinished"/>
+        <translation>Utwórz z szablonu</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/CreateFromTemplatePage.qml" line="67"/>
@@ -14797,7 +14806,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="85"/>
         <source>Each selected part will be exported as a separate audio file.</source>
-        <translation type="unfinished"/>
+        <translation>Każda z wybranych partii zostanie wyeksportowana jako osobny plik dźwiękowy.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="48"/>
@@ -14807,17 +14816,17 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="91"/>
         <source>File type:</source>
-        <translation type="unfinished"/>
+        <translation>Typ pliku:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="175"/>
         <source>Open destination folder on export</source>
-        <translation type="unfinished"/>
+        <translation>Otwórz folder docelowy podczas eksportu</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportScoresListView.qml" line="72"/>
         <source>Main Score</source>
-        <translation type="unfinished"/>
+        <translation>Główna partytura</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml" line="31"/>
@@ -14832,7 +14841,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml" line="59"/>
         <source>Each selected part will be exported as a separate MIDI file.</source>
-        <translation type="unfinished"/>
+        <translation>Każda z wybranych partii zostanie wyeksportowana jako osobny plik MIDI.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="33"/>
@@ -14854,17 +14863,17 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="72"/>
         <source>Each page of the selected parts will be exported as a separate PNG file.</source>
-        <translation type="unfinished"/>
+        <translation>Każda strona wybranych partii zostanie wyeksportowana jako osobny plik PNG.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="29"/>
         <source>Each page of the selected parts will be exported as a separate SVG file.</source>
-        <translation type="unfinished"/>
+        <translation>Każda strona wybranych partii zostanie wyeksportowana jako osobny plik SVG.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/GeneralInfoView.qml" line="48"/>
         <source>Score general info</source>
-        <translation type="unfinished"/>
+        <translation>Ogólne informacje o partyturze</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/GeneralInfoView.qml" line="68"/>
@@ -14909,53 +14918,54 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/KeySignatureSettings.qml" line="100"/>
         <source>Major</source>
-        <translation>durowy</translation>
+        <translation>Durowa</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/MeasuresSettings.qml" line="49"/>
         <source>Pickup: </source>
-        <translation type="unfinished"/>
+        <translation>Przedtakt:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/MeasuresSettings.qml" line="53"/>
         <source>No pickup</source>
-        <translation type="unfinished"/>
+        <translation>Bez przedtaktu</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/MeasuresSettings.qml" line="57"/>
         <source> measures, 
 </source>
-        <translation type="unfinished"/>
+        <translation> taktów, 
+</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/MeasuresSettings.qml" line="100"/>
         <source>Create pickup measure</source>
-        <translation type="unfinished"/>
+        <translation>Utwórz przedtakt</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/MeasuresSettings.qml" line="145"/>
         <source>Initial number of measures</source>
-        <translation type="unfinished"/>
+        <translation>Początkowa liczba taktów</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/MeasuresSettings.qml" line="182"/>
         <source>Hint: You can also add &amp; delete measures after you have created your score</source>
-        <translation type="unfinished"/>
+        <translation>Podpowiedź: Możesz również dodać lub usunąć takty po stworzeniu partytury.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ProjectPropertiesBottomPanel.qml" line="46"/>
         <source>New property</source>
-        <translation type="unfinished"/>
+        <translation>Nowa właściwość</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ProjectPropertiesFileInfoPanel.qml" line="48"/>
         <source>File path:</source>
-        <translation type="unfinished"/>
+        <translation>Ścieżka pliku:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ProjectPropertiesFileInfoPanel.qml" line="83"/>
         <source>MuseScore version:</source>
-        <translation type="unfinished"/>
+        <translation>Wersja MuseScore&apos;a:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ProjectPropertiesFileInfoPanel.qml" line="92"/>
@@ -14970,7 +14980,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/PropertyItem.qml" line="68"/>
         <source>Property</source>
-        <translation type="unfinished"/>
+        <translation>Właściwość</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/PropertyItem.qml" line="88"/>
@@ -14980,12 +14990,12 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/RecentScoresView.qml" line="69"/>
         <source>New &amp; recent</source>
-        <translation type="unfinished"/>
+        <translation>Nowe i ostatnie</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoreInfoPage.qml" line="67"/>
         <source>Additional Score Information</source>
-        <translation type="unfinished"/>
+        <translation>Dodatkowe informacje o partyturze</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/TemplatePreview.qml" line="49"/>
@@ -14995,33 +15005,33 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/TempoSettings.qml" line="95"/>
         <source>Show tempo marking on my score</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż oznaczenie tempa w mojej partytury</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="31"/>
         <source>Style Improvements</source>
-        <translation type="unfinished"/>
+        <translation>Ulepszenia stylu</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="136"/>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="215"/>
         <source>This file was created in MuseScore %1</source>
-        <translation type="unfinished"/>
+        <translation>Ten plik został utworzony w MuseScorze %1</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="150"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
-        <translation type="unfinished"/>
+        <translation>Zwróć uwagę, że wygląd Twojej partytury ulegnie zmianie z powodu ulepszeń, które wprowadziliśmy w domyślnych ustawieniach belkowania, ligatur, łuków, obiektów systemowych i odstępów w poziomie.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="169"/>
         <source>Watch video about changes</source>
-        <translation type="unfinished"/>
+        <translation>Obejrzyj wideo o zmianach</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="227"/>
         <source>Select the engraving improvements you would like to apply to your score</source>
-        <translation type="unfinished"/>
+        <translation>Wybierz ulepszenia układu, które chcesz zastosować w swojej partyturze</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="250"/>
@@ -15031,22 +15041,22 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="259"/>
         <source>Our new text font, Edwin</source>
-        <translation>Nasza nona czcionka tekstowa, Edwin</translation>
+        <translation>Nasza nowa czcionka tekstowa, Edwin</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="268"/>
         <source>Automatic spacing (introduced in MuseScore 3.0)</source>
-        <translation type="unfinished"/>
+        <translation>Autopołożenie (wprowadzone w MuseScorze 3.0)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="288"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore 4</source>
-        <translation type="unfinished"/>
+        <translation>Uwaga: Na układ partytury wpłyną ulepszenia MuseScore&apos;a 4.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="294"/>
         <source>Watch video</source>
-        <translation type="unfinished"/>
+        <translation>Obejrzyj wideo</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="321"/>
@@ -15086,7 +15096,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="84"/>
         <source>Save to cloud</source>
-        <translation>Zapisz do chmury</translation>
+        <translation>Zapisz w chmurze</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="100"/>
@@ -15103,7 +15113,7 @@ zakończone niepowodzeniem: %2.</translation>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="131"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="147"/>
         <source>Visibility</source>
-        <translation>Widoczna</translation>
+        <translation>Widoczność</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="139"/>
@@ -15133,12 +15143,12 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="102"/>
         <source>Recent scores search</source>
-        <translation type="unfinished"/>
+        <translation>Szukaj ostatnich partytur</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="179"/>
         <source>Recent scores bottom</source>
-        <translation type="unfinished"/>
+        <translation>Ostatnie partytury na dole</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="196"/>
@@ -15170,7 +15180,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="229"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
-        <translation type="unfinished"/>
+        <translation>Plik o nazwie %1 już istnieje. Chcesz go zamienić?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="231"/>
@@ -15200,17 +15210,17 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="258"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
-        <translation type="unfinished"/>
+        <translation>Wystąpił błąd podczas zapisywania pliku %1. Chcesz spróbować ponownie?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="333"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
-        <translation type="unfinished"/>
+        <translation>Chcesz zapisać zmiany w partyturze “%1” przed zamknięciem?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="336"/>
         <source>Your changes will be lost if you don’t save them.</source>
-        <translation type="unfinished"/>
+        <translation>Twoje zmiany zostaną utracone, jeśli ich nie zapiszesz.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="528"/>
@@ -15220,7 +15230,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="532"/>
         <source>Cannot open file %1</source>
-        <translation>Nie można otworzyć pliku %1</translation>
+        <translation>Nie można otworzyć pliku %1.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="621"/>
@@ -15257,7 +15267,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/internal/saveprojectscenario.cpp" line="104"/>
         <source>Uncompressed MuseScore folder (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Nieskompresowany folder MuseScore&apos;a (eksperymentalnie)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/saveprojectscenario.cpp" line="219"/>
@@ -15272,7 +15282,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/internal/saveprojectscenario.cpp" line="224"/>
         <source>All saved changes will be publicly visible on MuseScore.com. If you want to make frequent changes, we recommend saving this score privately until you’re ready to share it to the world. </source>
-        <translation type="unfinished"/>
+        <translation>Wszystkie zapisane zmiany będą widoczne na MuseScore.com. Jeśli chcesz dokonywać częstych zmian, zalecamy zapisanie tej partytury na prywatnym urządzeniu, dopóki nie zdecydujesz się udostępnić jej światu.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/templatesrepository.cpp" line="61"/>
@@ -15283,83 +15293,83 @@ zakończone niepowodzeniem: %2.</translation>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="97"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="118"/>
         <source>C major</source>
-        <translation type="unfinished"/>
+        <translation>C-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="97"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="118"/>
         <source>A minor</source>
-        <translation type="unfinished"/>
+        <translation>a-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="119"/>
         <source>G major</source>
-        <translation type="unfinished"/>
+        <translation>G-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="119"/>
         <source>E minor</source>
-        <translation type="unfinished"/>
+        <translation>e-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="120"/>
         <source>D major</source>
-        <translation type="unfinished"/>
+        <translation>D-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="120"/>
         <source>B minor</source>
-        <translation type="unfinished"/>
+        <translation>h-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="121"/>
         <source>A major</source>
-        <translation type="unfinished"/>
+        <translation>A-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="121"/>
         <source>F♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>fis-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="122"/>
         <source>E major</source>
-        <translation type="unfinished"/>
+        <translation>E-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="122"/>
         <source>C♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>cis-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="123"/>
         <source>B major</source>
-        <translation type="unfinished"/>
+        <translation>H-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="123"/>
         <source>G♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>gis-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="124"/>
         <source>F♯ major</source>
-        <translation type="unfinished"/>
+        <translation>Fis-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="124"/>
         <source>D♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>dis-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="125"/>
         <source>C♯ major</source>
-        <translation type="unfinished"/>
+        <translation>Cis-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="125"/>
         <source>A♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>ais-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="126"/>
@@ -15369,72 +15379,72 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
         <source>F major</source>
-        <translation type="unfinished"/>
+        <translation>F-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
         <source>D minor</source>
-        <translation type="unfinished"/>
+        <translation>d-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="129"/>
         <source>B♭ major</source>
-        <translation type="unfinished"/>
+        <translation>B-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="129"/>
         <source>G minor</source>
-        <translation type="unfinished"/>
+        <translation>g-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="130"/>
         <source>E♭ major</source>
-        <translation type="unfinished"/>
+        <translation>Es-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="130"/>
         <source>C minor</source>
-        <translation type="unfinished"/>
+        <translation>c-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="131"/>
         <source>A♭ major</source>
-        <translation type="unfinished"/>
+        <translation>As-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="131"/>
         <source>F minor</source>
-        <translation type="unfinished"/>
+        <translation>f-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
         <source>D♭ major</source>
-        <translation type="unfinished"/>
+        <translation>Des-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
         <source>B♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>b-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="133"/>
         <source>G♭ major</source>
-        <translation type="unfinished"/>
+        <translation>Ges-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="133"/>
         <source>E♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>es-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="134"/>
         <source>C♭ major</source>
-        <translation type="unfinished"/>
+        <translation>Ces-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="134"/>
         <source>A♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>as-moll</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="183"/>
@@ -15444,32 +15454,32 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="316"/>
         <source>Dotted</source>
-        <translation>kropkowana</translation>
+        <translation>Kropkowana</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="321"/>
         <source>semiquaver</source>
-        <translation type="unfinished"/>
+        <translation>szesnastka</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="324"/>
         <source>quaver</source>
-        <translation type="unfinished"/>
+        <translation>ósemka</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="327"/>
         <source>crotchet</source>
-        <translation type="unfinished"/>
+        <translation>ćwierćnuta</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
         <source>minim</source>
-        <translation type="unfinished"/>
+        <translation>półnuta</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="333"/>
         <source>semibreve</source>
-        <translation type="unfinished"/>
+        <translation>cała nuta</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="46"/>
@@ -15675,7 +15685,8 @@ zakończone niepowodzeniem: %2.</translation>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="84"/>
         <source>Press a key or adjust a control on your MIDI device to
 assign it to this function.</source>
-        <translation type="unfinished"/>
+        <translation>Naciśnij klawisz lub ustaw kontrolę na urządzeniu MIDI,
+aby przypisać ją do tej funkcji.</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="93"/>
@@ -15690,7 +15701,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="76"/>
         <source>Define keyboard shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Zdefiniuj skrót klawiaturowy</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="102"/>
@@ -15710,22 +15721,22 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/MidiMappingBottomPanel.qml" line="43"/>
         <source>Midi mapping bottom panel</source>
-        <translation type="unfinished"/>
+        <translation>Dolny panel mapowania MIDI</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/MidiMappingBottomPanel.qml" line="55"/>
         <source>Assign MIDI mapping…</source>
-        <translation type="unfinished"/>
+        <translation>Przypisz mapowanie MIDI…</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/MidiMappingTopPanel.qml" line="39"/>
         <source>Midi mapping top panel</source>
-        <translation type="unfinished"/>
+        <translation>Górny panel mapowania MIDI</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsBottomPanel.qml" line="45"/>
         <source>Shortcuts bottom panel</source>
-        <translation type="unfinished"/>
+        <translation>Dolny panel skrótów</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsBottomPanel.qml" line="57"/>
@@ -15756,12 +15767,12 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsTopPanel.qml" line="45"/>
         <source>Shortcuts top panel</source>
-        <translation type="unfinished"/>
+        <translation>Górny panel skrótów</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsTopPanel.qml" line="63"/>
         <source>Define…</source>
-        <translation>Definiuj…</translation>
+        <translation>Zdefiniuj…</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsTopPanel.qml" line="79"/>
@@ -16249,42 +16260,42 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3400"/>
         <source>1-comma flat</source>
-        <translation type="unfinished"/>
+        <translation>Bemol 1-komatowy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3401"/>
         <source>1-comma sharp</source>
-        <translation type="unfinished"/>
+        <translation>Krzyżyk 1-komatowy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3402"/>
         <source>2-comma flat</source>
-        <translation type="unfinished"/>
+        <translation>Bemol 2-komatowy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3403"/>
         <source>2-comma sharp</source>
-        <translation type="unfinished"/>
+        <translation>Krzyżyk 2-komatowy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3404"/>
         <source>3-comma flat</source>
-        <translation type="unfinished"/>
+        <translation>Bemol 3-komatowy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3405"/>
         <source>3-comma sharp</source>
-        <translation type="unfinished"/>
+        <translation>Krzyżyk 3-komatowy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3406"/>
         <source>4-comma flat</source>
-        <translation type="unfinished"/>
+        <translation>Bemol 4-komatowy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3407"/>
         <source>5-comma sharp</source>
-        <translation type="unfinished"/>
+        <translation>Krzyżyk 5-komatowy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3408"/>
@@ -16369,7 +16380,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3442"/>
         <source>Double flat equal tempered semitone</source>
-        <translation>Podwójny bemol półtonu równomiernie temperowanego </translation>
+        <translation>Podwójny bemol półtonu równomiernie temperowanego</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3443"/>
@@ -16409,7 +16420,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3453"/>
         <source>Double sharp equal tempered semitone</source>
-        <translation>Podwójny krzyżyk półtonu równomiernie temperowanego </translation>
+        <translation>Podwójny krzyżyk półtonu równomiernie temperowanego</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3454"/>
@@ -16459,7 +16470,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3472"/>
         <source>Flat equal tempered semitone</source>
-        <translation>Bemol półtonu równomiernie temperowanego </translation>
+        <translation>Bemol półtonu równomiernie temperowanego</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3474"/>
@@ -16529,7 +16540,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3515"/>
         <source>Natural equal tempered semitone</source>
-        <translation>Kasownik półtonu równomiernie temperowanego </translation>
+        <translation>Kasownik półtonu równomiernie temperowanego</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3516"/>
@@ -16631,7 +16642,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3565"/>
         <source>Sharp equal tempered semitone</source>
-        <translation>Krzyżyk półtonu równomiernie temperowanego </translation>
+        <translation>Krzyżyk półtonu równomiernie temperowanego</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3567"/>
@@ -17294,7 +17305,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4785"/>
         <source>Half note (minim) stem up</source>
-        <translation>Półnuta (minima) z laseczką w górę</translation>
+        <translation>Półnuta z laseczką w górę</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4787"/>
@@ -17304,7 +17315,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4788"/>
         <source>Whole note (semibreve)</source>
-        <translation>Cała nuta (semibreve)</translation>
+        <translation>Cała nuta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5266"/>
@@ -17424,7 +17435,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5648"/>
         <source>Half (minim) rest</source>
-        <translation>Pauza półnutowa (minima)</translation>
+        <translation>Pauza półnutowa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5649"/>
@@ -17449,7 +17460,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5655"/>
         <source>Whole (semibreve) rest</source>
-        <translation>Pauza całonutowa (semibreve)</translation>
+        <translation>Pauza całonutowa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5656"/>
@@ -17680,7 +17691,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="101"/>
         <source>Latin-1 Supplement</source>
-        <translation>Łaciński 1</translation>
+        <translation>Uzupełnienie łacińskiego 1</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="102"/>
@@ -17770,7 +17781,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="119"/>
         <source>Syriac Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Uzupełnienie syryjskiego</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="120"/>
@@ -18045,7 +18056,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="174"/>
         <source>Combining Diacritical Marks for Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Składające znaki diakrytyczne dla symboli</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="175"/>
@@ -18125,7 +18136,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="190"/>
         <source>Braille Patterns</source>
-        <translation>Znaki Braille&apos;a</translation>
+        <translation>Pismo Braille&apos;a</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="191"/>
@@ -18395,7 +18406,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="244"/>
         <source>Cherokee Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Uzupełnienie czirokeskiego</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="245"/>
@@ -18415,17 +18426,17 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="248"/>
         <source>High Surrogates</source>
-        <translation type="unfinished"/>
+        <translation>Starsze surogaty</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="249"/>
         <source>High Private Use Surrogates</source>
-        <translation type="unfinished"/>
+        <translation>Starsze surogaty prywatnego użytku</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="250"/>
         <source>Low Surrogates</source>
-        <translation type="unfinished"/>
+        <translation>Młodsze surogaty</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="251"/>
@@ -18575,7 +18586,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="280"/>
         <source>Osage</source>
-        <translation type="unfinished"/>
+        <translation>Osedżyjski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="281"/>
@@ -18615,7 +18626,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="288"/>
         <source>Hatran</source>
-        <translation type="unfinished"/>
+        <translation>Hatrański</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="289"/>
@@ -18685,12 +18696,12 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="302"/>
         <source>Old Hungarian</source>
-        <translation type="unfinished"/>
+        <translation>Rowasz</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="303"/>
         <source>Hanifi Rohingya</source>
-        <translation type="unfinished"/>
+        <translation>Hanifi Rohingya</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="304"/>
@@ -18700,27 +18711,27 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="305"/>
         <source>Yezidi</source>
-        <translation type="unfinished"/>
+        <translation>Jezydzki</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="306"/>
         <source>Old Sogdian</source>
-        <translation type="unfinished"/>
+        <translation>Starosogdyjski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="307"/>
         <source>Sogdian</source>
-        <translation type="unfinished"/>
+        <translation>Sogdyjski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="308"/>
         <source>Chorasmian</source>
-        <translation type="unfinished"/>
+        <translation>Chorezmijski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="309"/>
         <source>Elymaic</source>
-        <translation type="unfinished"/>
+        <translation>Elamicki</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="310"/>
@@ -18765,7 +18776,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="318"/>
         <source>Multani</source>
-        <translation type="unfinished"/>
+        <translation>Multani</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="319"/>
@@ -18780,7 +18791,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="321"/>
         <source>Newa</source>
-        <translation type="unfinished"/>
+        <translation>Newarski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="322"/>
@@ -18800,7 +18811,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="325"/>
         <source>Mongolian Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Uzupełnienie mongolskiego</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="326"/>
@@ -18810,12 +18821,12 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="327"/>
         <source>Ahom</source>
-        <translation type="unfinished"/>
+        <translation>Ahom</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="328"/>
         <source>Dogra</source>
-        <translation type="unfinished"/>
+        <translation>Dogri</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="329"/>
@@ -18825,22 +18836,22 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="330"/>
         <source>Dives Akuru</source>
-        <translation type="unfinished"/>
+        <translation>Dives akuru</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="331"/>
         <source>Nandinagari</source>
-        <translation type="unfinished"/>
+        <translation>Nandinagari</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="332"/>
         <source>Zanabazer Square</source>
-        <translation type="unfinished"/>
+        <translation>Zanabazar square</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="333"/>
         <source>Soyombo</source>
-        <translation type="unfinished"/>
+        <translation>Sojombo</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="334"/>
@@ -18850,37 +18861,37 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="335"/>
         <source>Bhaiksuki</source>
-        <translation type="unfinished"/>
+        <translation>Bhaiksuki</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="336"/>
         <source>Marchen</source>
-        <translation type="unfinished"/>
+        <translation>Marchen</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="337"/>
         <source>Masaram Gondi</source>
-        <translation type="unfinished"/>
+        <translation>Masaram gondi</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="338"/>
         <source>Gunjala Gondi</source>
-        <translation type="unfinished"/>
+        <translation>Gunjala gondi</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="339"/>
         <source>Makasar</source>
-        <translation type="unfinished"/>
+        <translation>Makasarski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="340"/>
         <source>Lisu Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Uzupełnienie lisu</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="341"/>
         <source>Tamil Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Uzupełnienie tamil</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="342"/>
@@ -18895,7 +18906,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="344"/>
         <source>Early Dynastic Cuneiform</source>
-        <translation type="unfinished"/>
+        <translation>Wczesnodynastyczne klinowe</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="345"/>
@@ -18905,12 +18916,12 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="346"/>
         <source>Egyptian Hieroglyph Format Controls</source>
-        <translation type="unfinished"/>
+        <translation>Egipskie hieroglify kontrolki formatowania</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="347"/>
         <source>Anatolian Hieroglyphs</source>
-        <translation type="unfinished"/>
+        <translation>Hieroglify anatolijskie</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="348"/>
@@ -18935,7 +18946,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="352"/>
         <source>Medefaidrin</source>
-        <translation type="unfinished"/>
+        <translation>Medefaidrin</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="353"/>
@@ -18945,22 +18956,22 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="354"/>
         <source>Ideographic Symbols and Punctuation</source>
-        <translation type="unfinished"/>
+        <translation>Ideograficzne symbole i znaki interpunkcyjne</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="355"/>
         <source>Tangut Components</source>
-        <translation type="unfinished"/>
+        <translation>Komponenty tangut</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="356"/>
         <source>Khitan Small Script</source>
-        <translation type="unfinished"/>
+        <translation>Mały skrypt khitański</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="357"/>
         <source>Tangut Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Uzupełnienie tangut</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="358"/>
@@ -18970,17 +18981,17 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="359"/>
         <source>Kana Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>Kana rozszerzona A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="360"/>
         <source>Small Kana Extension</source>
-        <translation type="unfinished"/>
+        <translation>Małe rozszerzenie Kana</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="361"/>
         <source>Nushu</source>
-        <translation type="unfinished"/>
+        <translation>Nüshu</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="362"/>
@@ -19025,22 +19036,22 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="370"/>
         <source>Sutton SignWriting</source>
-        <translation type="unfinished"/>
+        <translation>SignWriting</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="371"/>
         <source>Glagolitic Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Uzupełnienie głagolicy</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="372"/>
         <source>Nyiakeng Puachue Hmong</source>
-        <translation type="unfinished"/>
+        <translation>Nyiakeng puachue hmong</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="373"/>
         <source>Wancho</source>
-        <translation type="unfinished"/>
+        <translation>Wancho</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="374"/>
@@ -19050,17 +19061,17 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="375"/>
         <source>Adlam</source>
-        <translation type="unfinished"/>
+        <translation>Adlam</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="376"/>
         <source>Indic Siyaq Numbers</source>
-        <translation type="unfinished"/>
+        <translation>Indyjskie liczby Siyaq</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="377"/>
         <source>Ottoman Siyaq Numbers</source>
-        <translation type="unfinished"/>
+        <translation>Osmańskie liczby Siyaq</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="378"/>
@@ -19130,7 +19141,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="391"/>
         <source>Supplemental Symbols and Pictographs</source>
-        <translation type="unfinished"/>
+        <translation>Dodatkowe symbole i piktogramy</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="392"/>
@@ -19140,32 +19151,32 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="393"/>
         <source>Symbols and Pictographs Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>Symbole i piktogramy rozszerzone A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="394"/>
         <source>Symbols for Legacy Computing</source>
-        <translation type="unfinished"/>
+        <translation>Symbole dla starszych komputerów</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="395"/>
         <source>CJK Unified Ideographs Extension B</source>
-        <translation type="unfinished"/>
+        <translation>Rozszerzenie B ujednoliconych ideogramów CJK</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="396"/>
         <source>CJK Unified Ideographs Extension C</source>
-        <translation type="unfinished"/>
+        <translation>Rozszerzenie C ujednoliconych ideogramów CJK</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="397"/>
         <source>CJK Unified Ideographs Extension D</source>
-        <translation type="unfinished"/>
+        <translation>Rozszerzenie D ujednoliconych ideogramów CJK</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="398"/>
         <source>CJK Compatibility Ideographs Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Dodatkowe ideogramy zgodne z CJK</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="399"/>
@@ -19175,17 +19186,17 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="400"/>
         <source>Variation Selectors Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Dodatkowe przełączniki wariantów glifów</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="401"/>
         <source>Supplementary Private Use Area-A</source>
-        <translation type="unfinished"/>
+        <translation>Dodatkowy obszar użytku prywatnego A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="402"/>
         <source>Supplementary Private Use Area-B</source>
-        <translation type="unfinished"/>
+        <translation>Dodatkowy obszar użytku prywatnego B</translation>
     </message>
 </context>
 <context>
@@ -19253,7 +19264,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="94"/>
         <source>Ignore</source>
-        <translation>Ignoruj</translation>
+        <translation>Zignoruj</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="95"/>
@@ -19328,7 +19339,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="131"/>
         <source>direction is both</source>
-        <translation>kierunek to oba</translation>
+        <translation>oba kierunki</translation>
     </message>
 </context>
 <context>
@@ -19396,12 +19407,12 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/ValueListItem.qml" line="244"/>
         <source>checked</source>
-        <translation type="unfinished"/>
+        <translation>zaznaczone</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/ValueListItem.qml" line="244"/>
         <source>unchecked</source>
-        <translation type="unfinished"/>
+        <translation>niezaznaczone</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/MenuButton.qml" line="50"/>
@@ -19416,7 +19427,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/ValueList.qml" line="39"/>
         <source>Key</source>
-        <translation type="unfinished"/>
+        <translation>Klucz</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/ValueList.qml" line="41"/>
@@ -19426,18 +19437,18 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/ValueList.qml" line="122"/>
         <source>Value list header panel</source>
-        <translation type="unfinished"/>
+        <translation>Panel nagłówka listy wartości</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/ValueList.qml" line="190"/>
         <source>Value list panel</source>
-        <translation type="unfinished"/>
+        <translation>Panel listy wartości</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/VisibilityBox.qml" line="65"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NoteInputBarActionDelegate.qml" line="54"/>
         <source>visibility</source>
-        <translation>widoczne</translation>
+        <translation>widoczność</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/VisibilityBox.qml" line="66"/>
@@ -19459,12 +19470,12 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="98"/>
         <source>Up</source>
-        <translation>góra</translation>
+        <translation>Góra</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="115"/>
         <source>Down</source>
-        <translation>dół</translation>
+        <translation>Dół</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/selectmultipledirectoriesmodel.cpp" line="124"/>
@@ -19493,7 +19504,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="111"/>
         <source>Use workspaces to save different arrangements of the MuseScore interface</source>
-        <translation type="unfinished"/>
+        <translation>Użyj obszarów roboczych, aby zapisywać różne układy interfejsu MuseScore&apos;a</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="74"/>
@@ -19503,17 +19514,17 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="112"/>
         <source>Select the options you want remembered in your new workspace</source>
-        <translation type="unfinished"/>
+        <translation>Zaznacz opcje, które chcesz zapamiętać w nowym obszarze roboczym</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="129"/>
         <source>UI preferences (colours, canvas style, etc.)</source>
-        <translation type="unfinished"/>
+        <translation>Preferencje interfejsu (kolory, styl płótna itd.)</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="144"/>
         <source>UI arrangement</source>
-        <translation type="unfinished"/>
+        <translation>Układ interfejsu</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="158"/>
@@ -19523,7 +19534,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="172"/>
         <source>Toolbar customizations</source>
-        <translation type="unfinished"/>
+        <translation>Dostosowania paska narzędziowego</translation>
     </message>
 </context>
 <context>
@@ -19536,12 +19547,12 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/workspace/view/newworkspacemodel.cpp" line="98"/>
         <source>A workspace with the name &apos;%1&apos; already exists. Please choose a different name.</source>
-        <translation type="unfinished"/>
+        <translation>Obszar roboczy o nazwie &apos;%1&apos; już istnieje. Wybierz inną nazwę.</translation>
     </message>
     <message>
         <location filename="../../src/workspace/view/newworkspacemodel.cpp" line="105"/>
         <source>&apos;%1&apos; cannot be used as a workspace name. Please choose a different name.</source>
-        <translation type="unfinished"/>
+        <translation>&apos;%1&apos; nie może być użyty jako nazwa obszaru roboczego. Wybierz inną nazwę.</translation>
     </message>
 </context>
 </TS>
