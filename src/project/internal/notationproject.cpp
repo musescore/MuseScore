@@ -210,9 +210,6 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     // Load style if present
     if (!stylePath.empty()) {
         m_engravingProject->masterScore()->loadStyle(stylePath.toQString());
-        if (!mu::engraving::MScore::lastError.isEmpty()) {
-            LOGE() << mu::engraving::MScore::lastError;
-        }
     }
 
     // Load other stuff from the project file
@@ -258,10 +255,6 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
         return ret;
     }
 
-    if (!mu::engraving::MScore::lastError.isEmpty()) {
-        LOGE() << mu::engraving::MScore::lastError;
-    }
-
     // Setup master score
     engraving::Err err = m_engravingProject->setupMasterScore(forceMode);
     if (err != engraving::Err::NoError) {
@@ -271,9 +264,6 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     // Load style if present
     if (!stylePath.empty()) {
         score->loadStyle(stylePath.toQString());
-        if (!mu::engraving::MScore::lastError.isEmpty()) {
-            LOGE() << mu::engraving::MScore::lastError;
-        }
     }
 
     // Setup other stuff

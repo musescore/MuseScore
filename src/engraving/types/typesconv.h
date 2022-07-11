@@ -131,8 +131,10 @@ public:
     static AsciiStringView toXml(TextPlace v);
     static TextPlace fromXml(const AsciiStringView& str, TextPlace def);
 
+    static String translatedUserName(DirectionV v);
     static AsciiStringView toXml(DirectionV v);
     static DirectionV fromXml(const AsciiStringView& str, DirectionV def);
+    static String translatedUserName(DirectionH v);
     static AsciiStringView toXml(DirectionH v);
     static DirectionH fromXml(const AsciiStringView& str, DirectionH def);
 
@@ -175,7 +177,7 @@ public:
     static AsciiStringView toXml(ChordLineType v);
     static ChordLineType fromXml(const AsciiStringView& tag, ChordLineType def);
 
-    static const char* userName(DrumPitch v);
+    static const char* userName(DrumNum v);
 
     static const char* userName(GlissandoType v);
     static String translatedUserName(GlissandoType v);

@@ -100,7 +100,7 @@ const char* PaletteCell::translationContext() const
     case ElementType::FERMATA:
     case ElementType::SYMBOL:
         // libmscore/sym.cpp, Sym::symUserNames
-        return "symUserNames";
+        return "engraving/sym";
     case ElementType::CLEF:
         // libmscore/clef.cpp, ClefInfo::clefTable[]
         return "clefTable";

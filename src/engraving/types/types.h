@@ -796,7 +796,7 @@ using InstrumentTrackIdSet = std::unordered_set<InstrumentTrackId>;
 
 enum EmbellishmentType {};
 
-enum DrumPitch {};
+enum DrumNum {};
 
 enum class GlissandoType {
     STRAIGHT, WAVY

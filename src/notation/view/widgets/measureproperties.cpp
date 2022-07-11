@@ -24,6 +24,8 @@
 
 #include <QKeyEvent>
 
+#include "translation.h"
+
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/measure.h"
 #include "engraving/libmscore/measurerepeat.h"
@@ -179,7 +181,7 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
     nextButton->setEnabled(m_measure->nextMeasure() != 0);
     previousButton->setEnabled(m_measure->prevMeasure() != 0);
 
-    setWindowTitle(tr("Measure Properties for Measure %1").arg(m_measure->no() + 1));
+    setWindowTitle(qtrc("notation", "Measure Properties for Measure %1").arg(m_measure->no() + 1));
     m_notation->interaction()->clearSelection();
     m_notation->interaction()->select({ m_measure }, mu::engraving::SelectType::ADD, 0);
 
@@ -211,7 +213,7 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
 
     auto itemAccessibleText = [](const QTableWidgetItem* item){
         QString accessibleText = item->data(ITEM_ACCESSIBLE_TITLE_ROLE).toString() + ": "
-                                 + (item->checkState() == Qt::Checked ? tr("checked") : tr("unchecked"));
+                                 + (item->checkState() == Qt::Checked ? qtrc("notation", "checked") : qtrc("notation", "unchecked"));
         return accessibleText;
     };
 

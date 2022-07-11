@@ -182,9 +182,9 @@ QString AdditionalInfoModel::timeSignatureAccessibleName(int timeSignatureType,
     case Fraction:
         return qtrc("project", "%1/%2").arg(QString::number(numerator), QString::number(denominator));
     case Common:
-        return qtrc("symUserNames", "Common time");
+        return qtrc("project", "Common time");
     case Cut:
-        return qtrc("symUserNames", "Cut time");
+        return qtrc("project", "Cut time");
     }
 
     return QString();

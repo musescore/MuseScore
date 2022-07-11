@@ -597,20 +597,20 @@ io::path_t ProjectActionsController::selectScoreOpeningFile()
                      "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
 
     QStringList filter;
-    filter << QObject::tr("All Supported Files") + " (" + allExt + ")"
-           << QObject::tr("MuseScore File") + " (*.mscz)"
-           << QObject::tr("MusicXML Files") + " (*.mxl *.musicxml *.xml)"
-           << QObject::tr("MIDI Files") + " (*.mid *.midi *.kar)"
-           << QObject::tr("MuseData Files") + " (*.md)"
-           << QObject::tr("Capella Files") + " (*.cap *.capx)"
-           << QObject::tr("BB Files (experimental)") + " (*.mgu *.sgu)"
-           << QObject::tr("Overture / Score Writer Files (experimental)") + " (*.ove *.scw)"
-           << QObject::tr("Bagpipe Music Writer Files (experimental)") + " (*.bmw *.bww)"
-           << QObject::tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
-           << QObject::tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
-           << QObject::tr("MuseScore Unpack Files") + " (*.mscx)"
-           << QObject::tr("MuseScore Dev Files") + " (*.mscs)"
-           << QObject::tr("MuseScore Backup Files") + " (*.mscz~)";
+    filter << qtrc("project", "All Supported Files") + " (" + allExt + ")"
+           << qtrc("project", "MuseScore File") + " (*.mscz)"
+           << qtrc("project", "MusicXML Files") + " (*.mxl *.musicxml *.xml)"
+           << qtrc("project", "MIDI Files") + " (*.mid *.midi *.kar)"
+           << qtrc("project", "MuseData Files") + " (*.md)"
+           << qtrc("project", "Capella Files") + " (*.cap *.capx)"
+           << qtrc("project", "BB Files (experimental)") + " (*.mgu *.sgu)"
+           << qtrc("project", "Overture / Score Writer Files (experimental)") + " (*.ove *.scw)"
+           << qtrc("project", "Bagpipe Music Writer Files (experimental)") + " (*.bmw *.bww)"
+           << qtrc("project", "Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
+           << qtrc("project", "Power Tab Editor Files (experimental)") + " (*.ptb)"
+           << qtrc("project", "MuseScore Unpack Files") + " (*.mscx)"
+           << qtrc("project", "MuseScore Dev Files") + " (*.mscs)"
+           << qtrc("project", "MuseScore Backup Files") + " (*.mscz~)";
 
     io::path_t defaultDir = configuration()->lastOpenedProjectsPath();
 

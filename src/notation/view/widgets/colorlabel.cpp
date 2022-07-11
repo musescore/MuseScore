@@ -25,6 +25,8 @@
 #include <QColorDialog>
 #include <QPainter>
 
+#include "translation.h"
+
 namespace Awl {
 //---------------------------------------------------------
 //   ColorLabel
@@ -102,7 +104,7 @@ void ColorLabel::colorButtonClicked(bool)
         return;
     }
     QColor c = QColorDialog::getColor(_color, this,
-                                      tr("Select Color"),
+                                      qtrc("notation", "Select Color"),
                                       QColorDialog::ShowAlphaChannel
                                       );
     if (c.isValid()) {

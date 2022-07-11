@@ -1436,7 +1436,7 @@ void NotationActionController::saveStyle()
     if (!path.empty()) {
         if (!currentNotationStyle()->saveStyle(path)) {
             interactive()->error(trc("notation", "The style file could not be saved."),
-                                 mu::engraving::MScore::lastError.toStdString(), { IInteractive::Button::Ok },
+                                 trc("notation", "There was some error"), { IInteractive::Button::Ok },
                                  IInteractive::Button::Ok, IInteractive::Option::WithIcon);
         }
     }

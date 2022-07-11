@@ -329,11 +329,11 @@ bool Score::loadStyle(const String& fn, bool ign, const bool overlap)
             undo(new ChangeStyle(this, st, overlap));
             return true;
         } else {
-            MScore::lastError = mtrc("engraving", "The style file is not compatible with this version of MuseScore.");
+            LOGE() << "The style file is not compatible with this version of MuseScore.";
             return false;
         }
     }
-    MScore::lastError = String::fromUtf8(strerror(errno));
+
     return false;
 }
 
@@ -351,13 +351,13 @@ bool Score::saveStyle(const String& name)
     }
     File f(info.filePath());
     if (!f.open(IODevice::WriteOnly)) {
-        MScore::lastError = mtrc("engraving", "Failed open style file: %1 ").arg(info.filePath());
+        LOGE() << "Failed open style file: " << info.filePath();
         return false;
     }
 
     bool ok = style().write(&f);
     if (!ok) {
-        MScore::lastError = mtrc("engraving", "Failed write style file: %1").arg(info.filePath());
+        LOGE() << "Failed write style file: " << info.filePath();
         return false;
     }
 

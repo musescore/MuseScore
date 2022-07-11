@@ -78,9 +78,9 @@ Notification PluginsService::pluginsChanged() const
 PluginsService::CategoryInfoMap PluginsService::categories() const
 {
     return {
-        { "composing-arranging-tools", trc("plugin", "Composing/arranging tools") },
-        { "color-notes", trc("plugin", "Colour notes") },
-        { "playback", trc("plugin", "Playback") }
+        { "composing-arranging-tools", trc("plugins", "Composing/arranging tools") },
+        { "color-notes", trc("plugins", "Colour notes") },
+        { "playback", trc("plugins", "Playback") }
     };
 }
 

@@ -22,6 +22,12 @@
 
 #include "editstaff.h"
 
+#include "translation.h"
+#include "global/utils.h"
+
+#include "ui/view/widgetstatestore.h"
+#include "ui/view/widgetutils.h"
+
 #include "editpitch.h"
 #include "editstafftype.h"
 #include "editstringdata.h"
@@ -36,11 +42,6 @@
 #include "libmscore/undo.h"
 #include "libmscore/instrumentname.h"
 #include "libmscore/system.h"
-
-#include "translation.h"
-
-#include "ui/view/widgetstatestore.h"
-#include "ui/view/widgetutils.h"
 
 #include "log.h"
 
@@ -638,24 +639,9 @@ void EditStaff::editStringDataClicked()
     }
 }
 
-static const char* s_es_noteNames[] = {
-    QT_TRANSLATE_NOOP("editstaff", "C"),
-    QT_TRANSLATE_NOOP("editstaff", "C♯"),
-    QT_TRANSLATE_NOOP("editstaff", "D"),
-    QT_TRANSLATE_NOOP("editstaff", "E♭"),
-    QT_TRANSLATE_NOOP("editstaff", "E"),
-    QT_TRANSLATE_NOOP("editstaff", "F"),
-    QT_TRANSLATE_NOOP("editstaff", "F♯"),
-    QT_TRANSLATE_NOOP("editstaff", "G"),
-    QT_TRANSLATE_NOOP("editstaff", "A♭"),
-    QT_TRANSLATE_NOOP("editstaff", "A"),
-    QT_TRANSLATE_NOOP("editstaff", "B♭"),
-    QT_TRANSLATE_NOOP("editstaff", "B")
-};
-
 QString EditStaff::midiCodeToStr(int midiCode)
 {
-    return QString("%1 %2").arg(qtrc("editstaff", s_es_noteNames[midiCode % 12])).arg(midiCode / 12 - 1);
+    return QString("%1 %2").arg(QString::fromStdString(mu::pitchToString(midiCode))).arg(midiCode / 12 - 1);
 }
 
 void EditStaff::showStaffTypeDialog()

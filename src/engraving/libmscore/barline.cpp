@@ -272,7 +272,7 @@ String BarLine::userTypeName(BarLineType t)
 {
     for (const auto& i : barLineTable) {
         if (i.type == t) {
-            return mtrc("symUserNames", i.userName);
+            return mtrc("engraving/sym", i.userName);
         }
     }
     return String();
