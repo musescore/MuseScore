@@ -351,9 +351,9 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
             const char* userName;
         } spans[] = {
             { BARLINE_SPAN_TICK1_FROM,  BARLINE_SPAN_TICK1_TO,  SymNames::userNameForSymId(SymId::barlineDashed) },
-            { BARLINE_SPAN_TICK2_FROM,  BARLINE_SPAN_TICK2_TO,  QT_TRANSLATE_NOOP("symUserNames", "Tick barline 2") },  // Not in SMuFL
+            { BARLINE_SPAN_TICK2_FROM,  BARLINE_SPAN_TICK2_TO,  QT_TRANSLATE_NOOP("engraving/sym", "Tick barline 2") },  // Not in SMuFL
             { BARLINE_SPAN_SHORT1_FROM, BARLINE_SPAN_SHORT1_TO, SymNames::userNameForSymId(SymId::barlineShort) },
-            { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, QT_TRANSLATE_NOOP("symUserNames", "Short barline 2") }, // Not in SMuFL
+            { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, QT_TRANSLATE_NOOP("engraving/sym", "Short barline 2") }, // Not in SMuFL
         };
         for (auto span : spans) {
             auto b = Factory::makeBarLine(gpaletteScore->dummy()->segment());
@@ -394,7 +394,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         auto rm = makeElement<MeasureRepeat>(gpaletteScore);
         rm->setSymId(repeat.id);
         rm->setNumMeasures(repeat.measuresCount);
-        sp->appendElement(rm, mu::qtrc("symUserNames", SymNames::userNameForSymId(repeat.id)));
+        sp->appendElement(rm, mu::qtrc("engraving/sym", SymNames::userNameForSymId(repeat.id)));
     }
 
     const std::vector<MarkerType> defaultMarkers = {
@@ -1020,22 +1020,22 @@ PalettePtr PaletteCreator::newArpeggioPalette()
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::FALL);
     cl->setStraight(true);
-    sp->appendElement(cl, QT_TRANSLATE_NOOP("Ms", "Slide out down"));
+    sp->appendElement(cl, QT_TRANSLATE_NOOP("palette", "Slide out down"));
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::DOIT);
     cl->setStraight(true);
-    sp->appendElement(cl, QT_TRANSLATE_NOOP("Ms", "Slide out up"));
+    sp->appendElement(cl, QT_TRANSLATE_NOOP("palette", "Slide out up"));
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::PLOP);
     cl->setStraight(true);
-    sp->appendElement(cl, QT_TRANSLATE_NOOP("Ms", "Slide in above"));
+    sp->appendElement(cl, QT_TRANSLATE_NOOP("palette", "Slide in above"));
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::SCOOP);
     cl->setStraight(true);
-    sp->appendElement(cl, QT_TRANSLATE_NOOP("Ms", "Slide in below"));
+    sp->appendElement(cl, QT_TRANSLATE_NOOP("palette", "Slide in below"));
 
     return sp;
 }
@@ -1689,8 +1689,8 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
         { 7,  8, TimeSigType::NORMAL, "7/8" },
         { 9,  8, TimeSigType::NORMAL, "9/8" },
         { 12, 8, TimeSigType::NORMAL, "12/8" },
-        { 4,  4, TimeSigType::FOUR_FOUR,  QT_TRANSLATE_NOOP("symUserNames", "Common time") },
-        { 2,  2, TimeSigType::ALLA_BREVE, QT_TRANSLATE_NOOP("symUserNames", "Cut time") },
+        { 4,  4, TimeSigType::FOUR_FOUR,  QT_TRANSLATE_NOOP("engraving/sym", "Common time") },
+        { 2,  2, TimeSigType::ALLA_BREVE, QT_TRANSLATE_NOOP("engraving/sym", "Cut time") },
         { 2,  2, TimeSigType::NORMAL, "2/2" },
         { 3,  2, TimeSigType::NORMAL, "3/2" }
     };
@@ -1708,13 +1708,13 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
         { 7,  8, TimeSigType::NORMAL, "7/8" },
         { 9,  8, TimeSigType::NORMAL, "9/8" },
         { 12, 8, TimeSigType::NORMAL, "12/8" },
-        { 4,  4, TimeSigType::FOUR_FOUR,  QT_TRANSLATE_NOOP("symUserNames", "Common time") },
-        { 2,  2, TimeSigType::ALLA_BREVE, QT_TRANSLATE_NOOP("symUserNames", "Cut time") },
+        { 4,  4, TimeSigType::FOUR_FOUR,  QT_TRANSLATE_NOOP("engraving/sym", "Common time") },
+        { 2,  2, TimeSigType::ALLA_BREVE, QT_TRANSLATE_NOOP("engraving/sym", "Cut time") },
         { 2,  2, TimeSigType::NORMAL, "2/2" },
         { 3,  2, TimeSigType::NORMAL, "3/2" },
         { 4,  2, TimeSigType::NORMAL, "4/2" },
-        { 2,  2, TimeSigType::CUT_BACH, QT_TRANSLATE_NOOP("symUserNames", "Cut time (Bach)") },
-        { 9,  8, TimeSigType::CUT_TRIPLE, QT_TRANSLATE_NOOP("symUserNames", "Cut triple time (9/8)") }
+        { 2,  2, TimeSigType::CUT_BACH, QT_TRANSLATE_NOOP("engraving/sym", "Cut time (Bach)") },
+        { 9,  8, TimeSigType::CUT_TRIPLE, QT_TRANSLATE_NOOP("engraving/sym", "Cut triple time (9/8)") }
     };
 
     for (TS timeSignatureType : defaultPalette ? defaultTimeSignatureList : masterTimeSignatureList) {

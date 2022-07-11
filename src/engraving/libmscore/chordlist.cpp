@@ -1843,8 +1843,7 @@ bool ChordList::read(const String& name)
     }
     File f(path);
     if (!f.open(IODevice::ReadOnly)) {
-        MScore::lastError = mtrc("engraving", "Cannot open chord description:\n%1").arg(f.filePath().toString());
-        LOGD() << "read failed: " << path;
+        LOGE() << "Cannot open chord description: " << f.filePath();
         return false;
     }
 
@@ -1884,7 +1883,7 @@ bool ChordList::write(const String& name) const
     File f(info.filePath());
 
     if (!f.open(IODevice::WriteOnly)) {
-        MScore::lastError = mtrc("engraving", "Failed open chord description: %1").arg(f.filePath().toString());
+        LOGE() << "Failed open chord description: " << f.filePath();
         return false;
     }
 

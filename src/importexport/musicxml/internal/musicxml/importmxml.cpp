@@ -22,6 +22,8 @@
 
 #include <QMessageBox>
 
+#include "translation.h"
+
 #include "importmxml.h"
 #include "importmxmllogger.h"
 #include "importmxmlpass1.h"
@@ -41,7 +43,7 @@ static int musicXMLImportErrorDialog(QString text, QString detailedText)
     QMessageBox errorDialog;
     errorDialog.setIcon(QMessageBox::Question);
     errorDialog.setText(text);
-    errorDialog.setInformativeText(QObject::tr("Do you want to try to load this file anyway?"));
+    errorDialog.setInformativeText(qtrc("musicxml", "Do you want to try to load this file anyway?"));
     errorDialog.setDetailedText(detailedText);
     errorDialog.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     errorDialog.setDefaultButton(QMessageBox::No);
@@ -79,7 +81,7 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
     const auto pass2_errors = pass2.errors();
     if (!(pass1_errors.isEmpty() && pass2_errors.isEmpty())) {
         if (!MScore::noGui) {
-            const QString text { QObject::tr("Error(s) found, import may be incomplete.") };
+            const QString text = qtrc("musicxml", "Error(s) found, import may be incomplete.");
             if (musicXMLImportErrorDialog(text, pass1.errors() + pass2.errors()) != QMessageBox::Yes) {
                 res = Score::FileError::FILE_USER_ABORT;
             }

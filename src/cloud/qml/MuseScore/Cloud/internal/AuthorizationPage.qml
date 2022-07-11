@@ -72,7 +72,7 @@ FocusScope {
         anchors.topMargin: privateProperties.sideMargin
         anchors.leftMargin: privateProperties.sideMargin
 
-        text: qsTrc("scores", "Account")
+        text: qsTrc("cloud", "Account")
 
         font: ui.theme.titleBoldFont
     }

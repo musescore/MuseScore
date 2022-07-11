@@ -59,7 +59,7 @@ public:
             items << makeSeparator();
         }
 
-        MenuItem* closeDockItem = makeMenuItem(SET_DOCK_OPEN_ACTION_CODE, mu::qtrc("dock", "Close"));
+        MenuItem* closeDockItem = makeMenuItem(SET_DOCK_OPEN_ACTION_CODE, mu::qtrc("appshell/dock", "Close"));
         closeDockItem->setArgs(ActionData::make_arg2<QString, bool>(m_panel->objectName(), false));
         items << closeDockItem;
 
@@ -112,7 +112,7 @@ private:
 
     QString toggleFloatingActionTitle() const
     {
-        return m_panel->floating() ? mu::qtrc("dock", "Dock") : mu::qtrc("dock", "Undock");
+        return m_panel->floating() ? mu::qtrc("appshell/dock", "Dock") : mu::qtrc("appshell/dock", "Undock");
     }
 
     void listenFloatingChanged()
