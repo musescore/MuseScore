@@ -29,14 +29,15 @@ jobs:
   
     - name: Setup environment
       run: |
-        sudo bash ./build/ci/lupdate/setup.sh 
+        sudo bash ./build/ci/translation/qt_install.sh 
     - name: Run lupdate
       run: |
-        sudo bash ./build/ci/lupdate/run_lupdate.sh
+        sudo bash ./build/ci/translation/run_lupdate.sh
     - name: Publish to Transifex
       if: env.DO_PUBLISH == 'true'
       run: |
-        sudo bash ./build/ci/lupdate/publish_to_tx.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }}
+        sudo bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
+        sudo bash ./build/ci/translation/tx_push.sh
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:
