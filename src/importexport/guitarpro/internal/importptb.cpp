@@ -445,7 +445,7 @@ void PowerTab::readPosition(int staff, int voice, ptSection& sec)
 
     ptBeat* beat{ nullptr };
     bool add = false;
-    if (voice == 0 || staff >= sec.beats.size() || sec.beats[staff].empty()) {
+    if (voice == 0 || staff >= static_cast<int>(sec.beats.size()) || sec.beats[staff].empty()) {
         beat = new ptBeat(staff, voice);
         beat->position = position;
         add = true;
