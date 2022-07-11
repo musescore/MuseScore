@@ -53,6 +53,7 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/stringdata.h"
+#include "libmscore/stretchedbend.h"
 #include "types/symid.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
