@@ -815,6 +815,8 @@ enum class Sid {
     harpPedalDiagramFrameBgColor,
     harpPedalDiagramOffset,
     harpPedalDiagramPlacement,
+    harpPedalDiagramPosAbove,
+    harpPedalDiagramPosBelow,
     harpPedalDiagramMinDistance,
 
     harpPedalTextDiagramFontFace,
@@ -832,6 +834,8 @@ enum class Sid {
     harpPedalTextDiagramFrameBgColor,
     harpPedalTextDiagramOffset,
     harpPedalTextDiagramPlacement,
+    harpPedalTextDiagramPosAbove,
+    harpPedalTextDiagramPosBelow,
     harpPedalTextDiagramMinDistance,
 
     longInstrumentFontFace,

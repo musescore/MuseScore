@@ -60,6 +60,11 @@ static const ElementStyle harpPedalDiagramStyle {
     { Sid::harpPedalDiagramMinDistance, Pid::MIN_DISTANCE },
 };
 
+static const ElementStyle harpPedalTextDiagramStyle {
+    { Sid::harpPedalTextDiagramPlacement, Pid::PLACEMENT },
+    { Sid::harpPedalTextDiagramMinDistance, Pid::MIN_DISTANCE },
+};
+
 // HarpPedalDiagram
 HarpPedalDiagram::HarpPedalDiagram(Segment* parent)
     : TextBase(ElementType::HARP_DIAGRAM, parent, TextStyleType::HARP_PEDAL_DIAGRAM, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
@@ -80,6 +85,7 @@ HarpPedalDiagram::HarpPedalDiagram(const HarpPedalDiagram& h)
 void HarpPedalDiagram::layout()
 {
     TextBase::layout();
+    autoplaceSegmentElement();
 }
 
 void HarpPedalDiagram::setPedalState(std::vector<PedalPosition> state)
@@ -90,11 +96,15 @@ void HarpPedalDiagram::setPedalState(std::vector<PedalPosition> state)
 void HarpPedalDiagram::setIsDiagram(bool diagram)
 {
     _isDiagram = diagram;
+    const ElementStyle& styleMap = _isDiagram ? harpPedalDiagramStyle : harpPedalTextDiagramStyle;
+
     if (_isDiagram) {
         setTextStyleType(TextStyleType::HARP_PEDAL_DIAGRAM);
     } else {
         setTextStyleType(TextStyleType::HARP_PEDAL_TEXT_DIAGRAM);
     }
+
+    initElementStyle(&styleMap);
 }
 
 void HarpPedalDiagram::setPedal(HarpStringType harpString, PedalPosition pedal)
@@ -166,13 +176,13 @@ void HarpPedalDiagram::updateDiagramText()
                 String strName = harpStringTypeToString(HarpStringType(idx));
                 switch (_pedalState[idx]) {
                 case PedalPosition::FLAT:
-                    strName.append(String("<sym>accidentalFlat</sym> "));
+                    strName.append(String("<sym>csymAccidentalFlat</sym> "));
                     break;
                 case PedalPosition::NATURAL:
-                    strName.append(String("<sym>accidentalNatural</sym> "));
+                    strName.append(String("<sym>csymAccidentalNatural</sym> "));
                     break;
                 case PedalPosition::SHARP:
-                    strName.append(String("<sym>accidentalSharp</sym> "));
+                    strName.append(String("<sym>csymAccidentalSharp</sym> "));
                     break;
                 case PedalPosition::UNSET:
                     break;

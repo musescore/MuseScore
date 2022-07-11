@@ -804,6 +804,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
       PropertyValue::fromValue(draw::Color::transparent) },
     { Sid::harpPedalDiagramOffset,            "harpPedalDiagramOffset",            PointF() },
     { Sid::harpPedalDiagramPlacement,         "harpPedalDiagramPlacement",         PlacementV::ABOVE },
+    { Sid::harpPedalDiagramPosAbove,          "harpPedalDiagramPosAbove",          PointF(.0, -1.0) },
+    { Sid::harpPedalDiagramPosBelow,          "harpPedalDiagramPosBelow",          PointF(.0, 2.5) },
     { Sid::harpPedalDiagramMinDistance,       "harpPedalDiagramMinDistance",       Spatium(.5) },
 
     { Sid::harpPedalTextDiagramFontFace,          "harpPedalTextDiagramFontFace",          "Edwin" },
@@ -812,7 +814,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::harpPedalTextDiagramFontSpatiumDependent, "harpPedalTextDiagramFontSpatiumDependent", true },
     { Sid::harpPedalTextDiagramFontStyle,         "harpPedalTextDiagramFontStyle",         int(FontStyle::Normal) },
     { Sid::harpPedalTextDiagramColor,             "harpPedalTextDiagramColor",             PropertyValue::fromValue(draw::Color::black) },
-    { Sid::harpPedalTextDiagramAlign,             "harpPedalTextDiagramAlign",             Align(AlignH::HCENTER, AlignV::VCENTER) },
+    { Sid::harpPedalTextDiagramAlign,             "harpPedalTextDiagramAlign",             Align(AlignH::LEFT, AlignV::BASELINE) },
     { Sid::harpPedalTextDiagramFrameType,         "harpPedalTextDiagramFrameType",         int(FrameType::NO_FRAME) },
     { Sid::harpPedalTextDiagramFramePadding,      "harpPedalTextDiagramFramePadding",      0.2 },
     { Sid::harpPedalTextDiagramFrameWidth,        "harpPedalTextDiagramFrameWidth",        0.1 },
@@ -822,6 +824,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
       PropertyValue::fromValue(draw::Color::transparent) },
     { Sid::harpPedalTextDiagramOffset,            "harpPedalTextDiagramOffset",            PointF() },
     { Sid::harpPedalTextDiagramPlacement,         "harpPedalTextDiagramPlacement",         PlacementV::BELOW },
+    { Sid::harpPedalTextDiagramPosAbove,          "harpPedalTextDiagramPosAbove",          PointF(.0, -1.5) },
+    { Sid::harpPedalTextDiagramPosBelow,          "harpPedalTextDiagramPosBelow",          PointF(.0, 2.5) },
     { Sid::harpPedalTextDiagramMinDistance,       "harpPedalTextDiagramMinDistance",       Spatium(.5) },
 
     { Sid::longInstrumentFontFace,        "longInstrumentFontFace",       "Edwin" },

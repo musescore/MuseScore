@@ -1209,6 +1209,18 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             }
         }
     }
+
+    //-------------------------------------------------------------
+    // Harp pedal diagrams
+    //-------------------------------------------------------------
+
+    for (const Segment* s : sl) {
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isHarpPedalDiagram()) {
+                e->layout();
+            }
+        }
+    }
 }
 
 void LayoutSystem::doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick)
