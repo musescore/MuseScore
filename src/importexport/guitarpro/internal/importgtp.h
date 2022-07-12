@@ -23,8 +23,6 @@
 #ifndef __IMPORTGTP_H__
 #define __IMPORTGTP_H__
 
-#include <QDomNode>
-
 #include "io/file.h"
 
 #include "gtp/gp67dombuilder.h"
@@ -406,12 +404,12 @@ class GuitarPro6 : public GuitarPro
     const int BITS_IN_BYTE = 8;
     // contains all the information about notes that will go in the parts
     struct GPPartInfo {
-        QDomNode masterBars;
-        QDomNode bars;
-        QDomNode voices;
-        QDomNode beats;
-        QDomNode notes;
-        QDomNode rhythms;
+        XmlDomNode masterBars;
+        XmlDomNode bars;
+        XmlDomNode voices;
+        XmlDomNode beats;
+        XmlDomNode notes;
+        XmlDomNode rhythms;
     };
 
     void parseFile(const char* filename, QByteArray* data);
@@ -423,9 +421,9 @@ class GuitarPro6 : public GuitarPro
     int readBits(QByteArray* buffer, int bitsToRead);
     int readBitsReversed(QByteArray* buffer, int bitsToRead);
     int findNumMeasures(GPPartInfo* partInfo);
-    void readMasterTracks(QDomNode* masterTrack);
+    void readMasterTracks(XmlDomNode* masterTrack);
     void readDrumNote(Note* note, int element, int variation);
-    QDomNode getNode(const QString& id, QDomNode currentDomNode);
+    XmlDomNode getNode(const QString& id, XmlDomNode currentDomNode);
     void unhandledNode(QString nodeName);
     void makeTie(Note* note);
     int readBeatEffects(int /*track*/, Segment*) override { return 0; }
