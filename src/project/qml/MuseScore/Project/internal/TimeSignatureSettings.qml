@@ -65,7 +65,7 @@ FlatButton {
         margins: 36
 
         contentWidth: 200
-        contentHeight: 120
+        contentHeight: radioButtonList.contentHeight
 
         RadioButtonGroup {
             id: radioButtonList
