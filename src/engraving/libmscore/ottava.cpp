@@ -72,6 +72,7 @@ static const ElementStyle ottavaStyle {
 OttavaSegment::OttavaSegment(Ottava* sp, System* parent)
     : TextLineBaseSegment(ElementType::OTTAVA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
+    _text->setTextStyleType(TextStyleType::OTTAVA);
 }
 
 //---------------------------------------------------------
