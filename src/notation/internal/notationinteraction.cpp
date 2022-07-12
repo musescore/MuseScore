@@ -1152,6 +1152,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::FIGURED_BASS:
     case ElementType::LYRICS:
     case ElementType::FRET_DIAGRAM:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STAFFTYPE_CHANGE: {
         EngravingItem* e = dropTarget(m_dropData.ed);
         if (e) {
@@ -1304,6 +1305,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::TREMOLOBAR:
     case ElementType::FIGURED_BASS:
     case ElementType::LYRICS:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STAFFTYPE_CHANGE: {
         EngravingItem* el = dropTarget(m_dropData.ed);
         if (!el) {

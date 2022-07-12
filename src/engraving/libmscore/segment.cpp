@@ -591,6 +591,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::TAB_DURATION_SYMBOL:
     case ElementType::FIGURED_BASS:
     case ElementType::FERMATA:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING:
         _annotations.push_back(el);
         break;
@@ -758,6 +759,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::TEXT:
     case ElementType::TREMOLOBAR:
     case ElementType::FERMATA:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING:
         removeAnnotation(el);
         break;
@@ -1795,6 +1797,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::FIGURED_BASS:
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING: {
         EngravingItem* next = nullptr;
         if (e->explicitParent() == this) {
@@ -1938,6 +1941,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::FIGURED_BASS:
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING: {
         EngravingItem* prev = nullptr;
         if (e->explicitParent() == this) {
@@ -2302,6 +2306,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isArticulation()
                    && !e->isFermata()
                    && !e->isStaffText()
+                   && !e->isHarpPedalDiagram()
                    && !e->isPlayTechAnnotation()) {
             // annotations added here are candidates for collision detection
             // lyrics, ...

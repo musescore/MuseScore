@@ -41,6 +41,7 @@
 #include "glissando.h"
 #include "hairpin.h"
 #include "harmony.h"
+#include "harppedaldiagram.h"
 #include "hook.h"
 #include "image.h"
 #include "instrumentname.h"
@@ -821,6 +822,15 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
 
         textBox = tempoText;
         undoAddElement(textBox);
+        break;
+    }
+    case TextStyleType::HARP_PEDAL_DIAGRAM: {
+        ChordRest* chordRest = getSelectedChordRest();
+        if (!chordRest) {
+            break;
+        }
+        textBox = Factory::createHarpPedalDiagram(this->dummy()->segment());
+        chordRest->undoAddAnnotation(textBox);
         break;
     }
     default:

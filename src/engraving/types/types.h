@@ -497,6 +497,7 @@ enum class TextStyleType {
     LH_GUITAR_FINGERING,
     RH_GUITAR_FINGERING,
     STRING_NUMBER,
+    HARP_PEDAL_DIAGRAM,
 
     // Line-oriented styles
     TEXTLINE,

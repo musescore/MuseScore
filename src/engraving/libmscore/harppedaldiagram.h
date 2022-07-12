@@ -26,39 +26,59 @@
 #include "textbase.h"
 
 namespace mu::engraving {
+enum class PedalPosition {
+    FLAT,
+    NATURAL,
+    SHARP
+};
+
+// Use for indexes of _pedalState
+enum HarpStrings {
+    D, C, B, E, F, G, A
+};
+
 class HarpPedalDiagram final : public TextBase
 {
-    enum HarpString {
-        D, C, B, E, F, G, A
-    };
-
-    enum PedalPosition {
-        FLAT,
-        NATURAL,
-        SHARP
-    };
-
-    std::map<HarpString, PedalPosition> _pedalState;
+    std::vector<PedalPosition> _pedalState;
 
     bool _isDiagram = true;
 
 public:
     // Constructors - too many?
-    HarpPedalDiagram();
-    HarpPedalDiagram(std::map<HarpString, PedalPosition>);
-    HarpPedalDiagram(PedalPosition d, PedalPosition c, PedalPosition b, PedalPosition e, PedalPosition f, PedalPosition g, PedalPosition a);
+    HarpPedalDiagram(Segment* parent);
+    HarpPedalDiagram(const HarpPedalDiagram& h);
+    //HarpPedalDiagram(std::vector<PedalPosition> pedalState);
+    //HarpPedalDiagram(PedalPosition d, PedalPosition c, PedalPosition b, PedalPosition e, PedalPosition f, PedalPosition g, PedalPosition a);
 
-    EngravingItem* clone() const override { return new HarpPedalDiagram(*this); }
+    HarpPedalDiagram* clone() const override { return new HarpPedalDiagram(*this); }
     bool isEditable() const override { return false; }
 
-    void setIsDiagram(bool diagram) { _isDiagram = diagram; }
+    Segment* segment() const { return (Segment*)explicitParent(); }
+    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
+
+    //TODO
+    // xml read/write
+    void read(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
+
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
+    PropertyValue propertyDefault(Pid id) const override;
+
+    //String accessibleInfo() const;
+    //String screenReaderInfo() const;
+
+    void setIsDiagram(bool diagram);
     bool isDiagram() { return _isDiagram; }
 
-    std::map<HarpString, PedalPosition> getPedalState() { return _pedalState; }
-    void setPedal(HarpString string, PedalPosition pedal);//TODO
+    std::vector<PedalPosition> getPedalState() { return _pedalState; }
+    void setPedalState(std::vector<PedalPosition> state);
+    void setPedal(HarpStrings harpString, PedalPosition pedal);
 
 private:
-    friend class Factory;
+    //friend class Factory;
+
+    void updateDiagramText();
 };
 } // namespace mu::engraving
 

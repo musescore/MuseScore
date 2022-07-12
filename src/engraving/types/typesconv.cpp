@@ -731,6 +731,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::LH_GUITAR_FINGERING, "guitar_fingering_lh", QT_TRANSLATE_NOOP("engraving", "LH Guitar Fingering") },
     { TextStyleType::RH_GUITAR_FINGERING, "guitar_fingering_rh", QT_TRANSLATE_NOOP("engraving", "RH Guitar Fingering") },
     { TextStyleType::STRING_NUMBER,     "string_number",        QT_TRANSLATE_NOOP("engraving", "String Number") },
+    { TextStyleType::HARP_PEDAL_DIAGRAM, "harp_pedal_diagram",  QT_TRANSLATE_NOOP("engraving", "Harp Pedal Diagram") },
 
     { TextStyleType::TEXTLINE,          "textline",             QT_TRANSLATE_NOOP("engraving", "Text Line") },
     { TextStyleType::VOLTA,             "volta",                QT_TRANSLATE_NOOP("engraving", "Volta") },

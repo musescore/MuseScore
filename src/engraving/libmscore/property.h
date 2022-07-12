@@ -393,6 +393,8 @@ enum class Pid {
     TEMPO_EASING_METHOD,
     TEMPO_CHANGE_FACTOR,
 
+    HARP_IS_DIAGRAM,
+
     END
 };
 

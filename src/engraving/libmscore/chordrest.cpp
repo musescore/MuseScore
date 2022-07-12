@@ -512,6 +512,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::STICKING:
     case ElementType::STAFF_STATE:
+    case ElementType::HARP_DIAGRAM:
     // fall through
     case ElementType::REHEARSAL_MARK:
     {

@@ -218,6 +218,23 @@ const TextStyle stringNumberTextStyle { {
     { Sid::stringNumberFrameBgColor,           Pid::FRAME_BG_COLOR },
 } };
 
+const TextStyle harpPedalDiagramTextStyle { {
+    { Sid::harpPedalDiagramFontFace,               Pid::FONT_FACE },
+    { Sid::harpPedalDiagramFontSize,               Pid::FONT_SIZE },
+    { Sid::harpPedalDiagramLineSpacing,            Pid::TEXT_LINE_SPACING },
+    { Sid::harpPedalDiagramFontSpatiumDependent,   Pid::SIZE_SPATIUM_DEPENDENT },
+    { Sid::harpPedalDiagramFontStyle,              Pid::FONT_STYLE },
+    { Sid::harpPedalDiagramColor,                  Pid::COLOR },
+    { Sid::harpPedalDiagramAlign,                  Pid::ALIGN },
+    { Sid::harpPedalDiagramOffset,                 Pid::OFFSET },
+    { Sid::harpPedalDiagramFrameType,              Pid::FRAME_TYPE },
+    { Sid::harpPedalDiagramFramePadding,           Pid::FRAME_PADDING },
+    { Sid::harpPedalDiagramFrameWidth,             Pid::FRAME_WIDTH },
+    { Sid::harpPedalDiagramFrameRound,             Pid::FRAME_ROUND },
+    { Sid::harpPedalDiagramFrameFgColor,           Pid::FRAME_FG_COLOR },
+    { Sid::harpPedalDiagramFrameBgColor,           Pid::FRAME_BG_COLOR },
+} };
+
 const TextStyle longInstrumentTextStyle { {
     { Sid::longInstrumentFontFace,             Pid::FONT_FACE },
     { Sid::longInstrumentFontSize,             Pid::FONT_SIZE },
@@ -1044,6 +1061,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::LH_GUITAR_FINGERING: return &lhGuitarFingeringTextStyle;
     case TextStyleType::RH_GUITAR_FINGERING: return &rhGuitarFingeringTextStyle;
     case TextStyleType::STRING_NUMBER: return &stringNumberTextStyle;
+    case TextStyleType::HARP_PEDAL_DIAGRAM: return &harpPedalDiagramTextStyle;
 
     case TextStyleType::TEXTLINE: return &textLineTextStyle;
     case TextStyleType::VOLTA: return &voltaTextStyle;
