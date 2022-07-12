@@ -258,6 +258,8 @@ Column {
             { text: qsTrc("inspector", "Lyrics even lines"), value: TextTypes.TEXT_TYPE_LYRICS_EVEN },
             { text: qsTrc("inspector", "Chord symbol"), value: TextTypes.TEXT_TYPE_HARMONY_A },
             { text: qsTrc("inspector", "Chord symbol (Alternate)"), value: TextTypes.TEXT_TYPE_HARMONY_B },
+            { text: qsTrc("inspector", "Harp pedal diagram"), value: TextTypes.TEXT_TYPE_HARP_PEDAL_DIAGRAM },
+            { text: qsTrc("inspector", "Harp pedal text diagram"), value: TextTypes.TEXT_TYPE_HARP_PEDAL_TEXT_DIAGRAM },
             { text: qsTrc("inspector", "Roman numeral analysis"), value: TextTypes.TEXT_TYPE_HARMONY_ROMAN },
             { text: qsTrc("inspector", "Nashville number"), value: TextTypes.TEXT_TYPE_HARMONY_NASHVILLE },
             { text: qsTrc("inspector", "Sticking"), value: TextTypes.TEXT_TYPE_STICKING }
