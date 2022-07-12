@@ -198,14 +198,14 @@ struct UiAction
     UiAction() = default;
     UiAction(const actions::ActionCode& code, UiContext ctx, Checkable ch = Checkable::No)
         : code(code), context(ctx), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, Checkable ch = Checkable::No)
+    UiAction(const actions::ActionCode& code, UiContext ctx, const QString& title, Checkable ch = Checkable::No)
         : code(code), context(ctx), title(title), description(title), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, const char* desc, Checkable ch = Checkable::No)
+    UiAction(const actions::ActionCode& code, UiContext ctx, const QString& title, const QString& desc, Checkable ch = Checkable::No)
         : code(code), context(ctx), title(title), description(desc), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, const char* desc, IconCode::Code icon,
+    UiAction(const actions::ActionCode& code, UiContext ctx, const QString& title, const QString& desc, IconCode::Code icon,
              Checkable ch = Checkable::No)
         : code(code), context(ctx), title(title), description(desc), iconCode(icon), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, IconCode::Code icon, Checkable ch = Checkable::No)
+    UiAction(const actions::ActionCode& code, UiContext ctx, const QString& title, IconCode::Code icon, Checkable ch = Checkable::No)
         : code(code), context(ctx), title(title), description(title), iconCode(icon), checkable(ch) {}
 
     bool isValid() const

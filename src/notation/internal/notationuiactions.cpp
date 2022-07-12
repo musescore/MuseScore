@@ -39,6 +39,31 @@ static const ActionCode SHOW_IRREGULAR_CODE("show-irregular");
 
 static const ActionCode TOGGLE_CONCERT_PITCH_CODE("concert-pitch");
 
+// avoid translation duplication
+
+// //: This is comment for translator
+
+//: Note
+static const QString noteC(QT_TRANSLATE_NOOP("action", "C"));
+//: Note
+static const QString noteD(QT_TRANSLATE_NOOP("action", "D"));
+//: Note
+static const QString noteE(QT_TRANSLATE_NOOP("action", "E"));
+//: Note
+static const QString noteF(QT_TRANSLATE_NOOP("action", "F"));
+//: Note
+static const QString noteG(QT_TRANSLATE_NOOP("action", "G"));
+//: Note
+static const QString noteA(QT_TRANSLATE_NOOP("action", "A"));
+//: Note
+static const QString noteB(QT_TRANSLATE_NOOP("action", "B"));
+
+static const QString Enter_note_X(QT_TRANSLATE_NOOP("action", "Enter note %1"));
+static const QString Add_X_to_chord(QT_TRANSLATE_NOOP("action", "Add %1 to chord"));
+static const QString Add_note_X_to_chord(QT_TRANSLATE_NOOP("action", "Add note %1 to chord"));
+static const QString Insert_X(QT_TRANSLATE_NOOP("action", "Insert %1"));
+static const QString Insert_note_X(QT_TRANSLATE_NOOP("action", "Insert note %1"));
+
 //! NOTE Each notation actions should has context is UiCtxNotationOpened.
 //! If you want what action to dispatch by shortcut only when notation is focused (ex notation-move-right by press Right key),
 //! then you should set the shortcut context accordingly, not the action context.
@@ -707,108 +732,108 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("note-c",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "C"),
-             QT_TRANSLATE_NOOP("action", "Enter note C")
+             noteC,
+             Enter_note_X.arg(noteC)
              ),
     UiAction("note-d",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "D"),
-             QT_TRANSLATE_NOOP("action", "Enter note D")
+             noteD,
+             Enter_note_X.arg(noteD)
              ),
     UiAction("note-e",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "E"),
-             QT_TRANSLATE_NOOP("action", "Enter note E")
+             noteE,
+             Enter_note_X.arg(noteE)
              ),
     UiAction("note-f",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "F"),
-             QT_TRANSLATE_NOOP("action", "Enter note F")
+             noteF,
+             Enter_note_X.arg(noteF)
              ),
     UiAction("note-g",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "G"),
-             QT_TRANSLATE_NOOP("action", "Enter note G")
+             noteG,
+             Enter_note_X.arg(noteG)
              ),
     UiAction("note-a",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "A"),
-             QT_TRANSLATE_NOOP("action", "Enter note A")
+             noteA,
+             Enter_note_X.arg(noteA)
              ),
     UiAction("note-b",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "B"),
-             QT_TRANSLATE_NOOP("action", "Enter note B")
+             noteB,
+             Enter_note_X.arg(noteB)
              ),
     UiAction("chord-c",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Add C to chord"),
-             QT_TRANSLATE_NOOP("action", "Add note C to chord")
+             Add_X_to_chord.arg(noteC),
+             Add_note_X_to_chord.arg(noteC)
              ),
     UiAction("chord-d",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Add D to chord"),
-             QT_TRANSLATE_NOOP("action", "Add note D to chord")
+             Add_X_to_chord.arg(noteD),
+             Add_note_X_to_chord.arg(noteD)
              ),
     UiAction("chord-e",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Add E to chord"),
-             QT_TRANSLATE_NOOP("action", "Add note E to chord")
+             Add_X_to_chord.arg(noteE),
+             Add_note_X_to_chord.arg(noteE)
              ),
     UiAction("chord-f",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Add F to chord"),
-             QT_TRANSLATE_NOOP("action", "Add note F to chord")
+             Add_X_to_chord.arg(noteF),
+             Add_note_X_to_chord.arg(noteF)
              ),
     UiAction("chord-g",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Add G to chord"),
-             QT_TRANSLATE_NOOP("action", "Add note G to chord")
+             Add_X_to_chord.arg(noteG),
+             Add_note_X_to_chord.arg(noteG)
              ),
     UiAction("chord-a",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Add A to chord"),
-             QT_TRANSLATE_NOOP("action", "Add note A to chord")
+             Add_X_to_chord.arg(noteA),
+             Add_note_X_to_chord.arg(noteA)
              ),
     UiAction("chord-b",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Add B to chord"),
-             QT_TRANSLATE_NOOP("action", "Add note B to chord")
+             Add_X_to_chord.arg(noteB),
+             Add_note_X_to_chord.arg(noteB)
              ),
     UiAction("insert-c",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert C"),
-             QT_TRANSLATE_NOOP("action", "Insert note C")
+             Insert_X.arg(noteC),
+             Insert_note_X.arg(noteC)
              ),
     UiAction("insert-d",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert D"),
-             QT_TRANSLATE_NOOP("action", "Insert note D")
+             Insert_X.arg(noteD),
+             Insert_note_X.arg(noteD)
              ),
     UiAction("insert-e",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert E"),
-             QT_TRANSLATE_NOOP("action", "Insert note E")
+             Insert_X.arg(noteE),
+             Insert_note_X.arg(noteE)
              ),
     UiAction("insert-f",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert F"),
-             QT_TRANSLATE_NOOP("action", "Insert note F")
+             Insert_X.arg(noteF),
+             Insert_note_X.arg(noteF)
              ),
     UiAction("insert-g",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert G"),
-             QT_TRANSLATE_NOOP("action", "Insert note G")
+             Insert_X.arg(noteG),
+             Insert_note_X.arg(noteG)
              ),
     UiAction("insert-a",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert A"),
-             QT_TRANSLATE_NOOP("action", "Insert note A")
+             Insert_X.arg(noteA),
+             Insert_note_X.arg(noteA)
              ),
     UiAction("insert-b",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert B"),
-             QT_TRANSLATE_NOOP("action", "Insert note B")
+             Insert_X.arg(noteB),
+             Insert_note_X.arg(noteB)
              ),
     UiAction("rest",
              mu::context::UiCtxNotationOpened,
