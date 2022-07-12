@@ -1105,6 +1105,7 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
 void Beam::offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, int beamCount, int staffLines,
                                           bool isStartDictator, int stemLengthDictator, int stemLengthPointer) const
 {
+    UNUSED(stemLengthPointer);
     // min stem lengths according to how many beams there are (starting with 1)
     static const int minStemLengths[] = { 11, 13, 15, 18, 21 };
     const int middleLine = getMiddleStaffLine(chordRests.front(), chordRests.back(), staffLines);
@@ -1190,6 +1191,7 @@ int Beam::getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) co
 
 bool Beam::isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, int beamCount) const
 {
+    UNUSED(beamCount);
     // outside the staff
     bool isDictator = isFlat ? false : (isStart ? _up != isAscending : _up == isAscending);
 
