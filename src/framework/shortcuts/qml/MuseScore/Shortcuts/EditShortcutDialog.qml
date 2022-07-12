@@ -30,11 +30,11 @@ import MuseScore.Shortcuts 1.0
 Dialog {
     id: root
 
-    signal applySequenceRequested(var newSequence)
+    signal applySequenceRequested(string newSequence, int conflictShortcutIndex)
 
     function startEdit(shortcut, allShortcuts) {
-        open()
         model.load(shortcut, allShortcuts)
+        open()
         content.forceActiveFocus()
     }
 
@@ -48,9 +48,8 @@ Dialog {
     EditShortcutModel {
         id: model
 
-        onApplyNewSequenceRequested: function(newSequence) {
-            root.applySequenceRequested(newSequence)
-            root.accept()
+        onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
+            root.applySequenceRequested(newSequence, conflictShortcutIndex)
         }
     }
 
@@ -87,7 +86,7 @@ Dialog {
                     width: parent.width
                     horizontalAlignment: Qt.AlignLeft
 
-                    text: model.errorMessage
+                    text: model.conflictWarning
                 }
 
                 RowLayout {
@@ -129,7 +128,7 @@ Dialog {
 
                         hint: qsTrc("shortcuts", "Type to set shortcut")
                         readOnly: true
-                        currentText: model.inputtedSequence
+                        currentText: model.newSequence
 
                         onActiveFocusChanged: {
                             if (activeFocus) {
@@ -161,11 +160,11 @@ Dialog {
                 FlatButton {
                     width: parent.buttonWidth
 
-                    text: qsTrc("global", "Replace")
-                    enabled: model.canApplyInputtedSequence
+                    text: qsTrc("global", "Save")
 
                     onClicked: {
-                        model.applyInputedSequence()
+                        model.applyNewSequence()
+                        root.accept()
                     }
                 }
             }
