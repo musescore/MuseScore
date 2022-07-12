@@ -30,6 +30,8 @@
 #include "iaudiodriver.h"
 #include "internal/audiodeviceslistener.h"
 
+#include "audioclient.h"
+
 namespace mu::audio {
 class CoreAudioDriver : public IAudioDriver, public async::Asyncable
 {
@@ -52,6 +54,18 @@ public:
     AudioDeviceList availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
 
+    unsigned int outputDeviceBufferSize() const override;
+    bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
+    async::Notification outputDeviceBufferSizeChanged() const override;
+
+    std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+
+    unsigned int outputDeviceSampleRate() const override;
+    bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
+    async::Notification outputDeviceSampleRateChanged() const override;
+
+    std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
+
     void resume() override;
     void suspend() override;
 
@@ -59,6 +73,8 @@ private:
     void clean();
 
     std::string defaultDeviceId() const;
+
+    std::vector<unsigned int> resolveBufferSizes(unsigned int minBufferSize);
 
     std::atomic<bool> m_active { false };
     std::thread m_thread;
@@ -68,8 +84,10 @@ private:
     mutable std::mutex m_devicesMutex;
     AudioDevicesListener m_devicesListener;
     async::Notification m_availableOutputDevicesChanged;
-
     std::string m_deviceId;
+    async::Notification m_bufferSizeChanged;
+    async::Notification m_sampleRateChanged;
+    std::vector<unsigned int> m_bufferSizes;
 };
 }
 

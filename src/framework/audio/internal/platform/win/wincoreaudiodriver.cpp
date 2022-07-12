@@ -23,9 +23,9 @@
 
 #include <system_error>
 
-#include "mmdeviceapi.h"
-#include "windows.h"
-#include "audioclient.h"
+#include <mmdeviceapi.h>
+#include <windows.h>
+#include <audioclient.h>
 
 #if defined __MINGW32__ // hack against "undefined reference" when linking in MinGW
 #define INITGUID
@@ -62,11 +62,28 @@ static std::string lpwstrToString(const LPWSTR& lpwstr)
     return QString::fromStdWString(lpwstr).toStdString();
 }
 
+static int refTimeToSamples(const REFERENCE_TIME& t, double sampleRate) noexcept
+{
+    return sampleRate * ((double)t) * 0.0000001;
+}
+
+static REFERENCE_TIME samplesToRefTime(int numSamples, double sampleRate) noexcept
+{
+    return (REFERENCE_TIME)((numSamples * 10000.0 * 1000.0 / sampleRate) + 0.5);
+}
+
+void copyWavFormat(WAVEFORMATEXTENSIBLE& dest, const WAVEFORMATEX* src) noexcept
+{
+    memcpy(&dest, src, src->wFormatTag == WAVE_FORMAT_EXTENSIBLE ? sizeof(WAVEFORMATEXTENSIBLE)
+           : sizeof(WAVEFORMATEX));
+}
+
 static void logError(HRESULT hr);
 
 static WinCoreData* s_data = nullptr;
 static constexpr char DEFAULT_DEVICE_ID[] = "default";
-static IAudioDriver::Spec s_format;
+static IAudioDriver::Spec s_activeSpec;
+static HRESULT s_lastError = S_OK;
 
 const IID MU_IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
 const IID MU_IID_IAudioClient = __uuidof(IAudioClient);
@@ -75,6 +92,7 @@ const IID MU_IID_IAudioRenderClient = __uuidof(IAudioRenderClient);
 CoreAudioDriver::CoreAudioDriver()
 {
     m_deviceId = DEFAULT_DEVICE_ID;
+    CoInitialize(NULL);
 }
 
 CoreAudioDriver::~CoreAudioDriver()
@@ -91,6 +109,8 @@ void CoreAudioDriver::init()
     m_devicesListener.devicesChanged().onNotify(this, [this]() {
         m_availableOutputDevicesChanged.notify();
     });
+
+    CoInitialize(NULL);
 }
 
 std::string CoreAudioDriver::name() const
@@ -135,22 +155,44 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     hr = s_data->audioClient->GetDevicePeriod(&defaultTime, &minimumTime);
     CHECK_HRESULT(hr, false);
 
-    s_data->pFormat = *deviceFormat;
-    s_data->pFormat.wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
-    s_data->pFormat.nChannels = spec.channels;
-    s_data->pFormat.wBitsPerSample = 32;
-    s_data->pFormat.nAvgBytesPerSec = s_data->pFormat.nSamplesPerSec * s_data->pFormat.nChannels * sizeof(float);
-    s_data->pFormat.nBlockAlign = (s_data->pFormat.nChannels * s_data->pFormat.wBitsPerSample) / 8;
-    s_data->pFormat.cbSize = 0;
+    unsigned int minBufferSize = refTimeToSamples(minimumTime, spec.sampleRate);
+    m_bufferSizes = resolveBufferSizes(minBufferSize);
+
+    WAVEFORMATEXTENSIBLE format;
+    memset((void*)&format, 0, sizeof(format));
+    format.Format.wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
+    format.Format.nChannels = spec.channels;
+    format.Format.nSamplesPerSec = (DWORD)spec.sampleRate;
+    format.Format.wBitsPerSample = 32;
+    format.Format.nAvgBytesPerSec = format.Format.nSamplesPerSec * format.Format.nChannels * sizeof(float);
+    format.Format.nBlockAlign = (format.Format.nChannels * format.Format.wBitsPerSample) / 8;
+    format.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
+    format.dwChannelMask = 3;
+
+    WAVEFORMATEX* nearestFormat = nullptr;
+    hr = s_data->audioClient->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, (WAVEFORMATEX*)&format, &nearestFormat);
+    if (hr == S_FALSE) {
+        copyWavFormat(format, nearestFormat);
+
+        format.Format.nSamplesPerSec  = (DWORD)spec.sampleRate;
+        format.Format.nAvgBytesPerSec = (DWORD)(format.Format.nSamplesPerSec * format.Format.nBlockAlign);
+    }
+
+    s_data->pFormat = *((WAVEFORMATEX*)&format);
+
+    LOGI() << s_data->pFormat.nSamplesPerSec;
     s_data->callback = spec.callback;
     if (activeSpec) {
         *activeSpec = spec;
         activeSpec->format = Format::AudioF32;
-        activeSpec->sampleRate = s_data->pFormat.nSamplesPerSec;
-        s_format = *activeSpec;
+        s_activeSpec = *activeSpec;
     }
-    hr = s_data->audioClient->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
-                                         defaultTime, defaultTime, &s_data->pFormat, NULL);
+
+    defaultTime = std::max(minimumTime, samplesToRefTime(spec.samples, s_data->pFormat.nSamplesPerSec));
+
+    hr = s_data->audioClient->Initialize(AUDCLNT_SHAREMODE_SHARED,
+                                         AUDCLNT_STREAMFLAGS_EVENTCALLBACK | AUDCLNT_STREAMFLAGS_NOPERSIST,
+                                         defaultTime, defaultTime, (WAVEFORMATEX*)&format, NULL);
     CHECK_HRESULT(hr, false);
 
     UINT32 bufferFrameCount;
@@ -187,6 +229,7 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
             if (!pData || hr != S_OK) {
                 continue;
             }
+
             s_data->callback(nullptr, reinterpret_cast<uint8_t*>(pData),
                              bufferSize * s_data->pFormat.wBitsPerSample * s_data->pFormat.nChannels / 8);
             hr = s_data->renderClient->ReleaseBuffer(bufferSize, 0);
@@ -203,7 +246,7 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     hr = s_data->audioClient->Start();
     CHECK_HRESULT(hr, false);
 
-    LOGI() << "Core Audio driver started";
+    LOGI() << "Core Audio driver started, id " << outputDeviceId << ", buffer size " << bufferFrameCount;
     return true;
 }
 
@@ -226,21 +269,21 @@ void CoreAudioDriver::close()
 
 bool CoreAudioDriver::isOpened() const
 {
-    return m_active;
+    return m_active || s_lastError != S_OK;
 }
 
 void logError(HRESULT hr)
 {
-    static HRESULT lastError = S_OK;
-
-    if (hr == lastError) {
+    if (hr == s_lastError) {
         return;
     }
 
-    lastError = hr;
+    s_lastError = hr;
 
     switch (hr) {
     case S_OK: return;
+    case S_FALSE: LOGE() << "S_FALSE";
+        break;
     case AUDCLNT_E_NOT_INITIALIZED: LOGE() << "AUDCLNT_E_NOT_INITIALIZED";
         break;
     case AUDCLNT_E_ALREADY_INITIALIZED: LOGE() << "AUDCLNT_E_ALREADY_INITIALIZED";
@@ -309,6 +352,9 @@ void logError(HRESULT hr)
         break;
     case AUDCLNT_S_POSITION_STALLED: LOGE() << "AUDCLNT_S_POSITION_STALLED";
         break;
+    case E_POINTER: LOGE() << "E_POINTER";
+    case E_INVALIDARG: LOGE() << "E_INVALIDARG";
+        break;
     default:
         LOGE() << std::system_category().message(hr);
     }
@@ -322,6 +368,8 @@ void CoreAudioDriver::clean()
     if (s_data->renderClient) {
         s_data->renderClient->Release();
     }
+
+    s_lastError = S_OK;
 
     delete s_data;
     s_data = nullptr;
@@ -352,7 +400,7 @@ bool CoreAudioDriver::selectOutputDevice(const AudioDeviceID& id)
 
     bool ok = true;
     if (reopen) {
-        ok = open(s_format, &s_format);
+        ok = open(s_activeSpec, &s_activeSpec);
     }
 
     if (ok) {
@@ -389,6 +437,21 @@ std::string CoreAudioDriver::defaultDeviceId() const
     return std::string(ws.begin(), ws.end());
 }
 
+std::vector<unsigned int> CoreAudioDriver::resolveBufferSizes(unsigned int minBufferSize)
+{
+    std::vector<unsigned int> result;
+
+    unsigned int n = 2048;
+    while (n >= minBufferSize) {
+        result.push_back(n);
+        n /= 2;
+    }
+
+    std::sort(result.begin(), result.end());
+
+    return result;
+}
+
 mu::async::Notification CoreAudioDriver::outputDeviceChanged() const
 {
     return m_outputDeviceChanged;
@@ -402,6 +465,7 @@ AudioDeviceList CoreAudioDriver::availableOutputDevices() const
     CoInitialize(NULL);
 
     AudioDeviceList result;
+    result.push_back({ DEFAULT_DEVICE_ID, DEFAULT_DEVICE_ID });
 
     HRESULT hr;
     IMMDeviceCollection* devices;
@@ -456,4 +520,86 @@ AudioDeviceList CoreAudioDriver::availableOutputDevices() const
 mu::async::Notification CoreAudioDriver::availableOutputDevicesChanged() const
 {
     return m_availableOutputDevicesChanged;
+}
+
+unsigned int CoreAudioDriver::outputDeviceBufferSize() const
+{
+    if (!s_data) {
+        return 0;
+    }
+
+    return s_activeSpec.samples;
+}
+
+bool CoreAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
+{
+    if (s_activeSpec.samples == bufferSize) {
+        return true;
+    }
+
+    bool reopen = isOpened();
+    close();
+    s_activeSpec.samples = bufferSize;
+
+    bool ok = true;
+    if (reopen) {
+        ok = open(s_activeSpec, &s_activeSpec);
+    }
+
+    if (ok) {
+        m_bufferSizeChanged.notify();
+    }
+
+    return ok;
+}
+
+mu::async::Notification CoreAudioDriver::outputDeviceBufferSizeChanged() const
+{
+    return m_bufferSizeChanged;
+}
+
+std::vector<unsigned int> CoreAudioDriver::availableOutputDeviceBufferSizes() const
+{
+    return m_bufferSizes;
+}
+
+unsigned int CoreAudioDriver::outputDeviceSampleRate() const
+{
+    if (!s_data) {
+        return 0;
+    }
+
+    return s_data->pFormat.nSamplesPerSec;
+}
+
+bool CoreAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
+{
+    if (s_activeSpec.sampleRate == sampleRate) {
+        return true;
+    }
+
+    bool reopen = isOpened();
+    close();
+    s_activeSpec.sampleRate = sampleRate;
+
+    bool ok = true;
+    if (reopen) {
+        ok = open(s_activeSpec, &s_activeSpec);
+    }
+
+    if (ok) {
+        m_sampleRateChanged.notify();
+    }
+
+    return ok;
+}
+
+mu::async::Notification CoreAudioDriver::outputDeviceSampleRateChanged() const
+{
+    return m_sampleRateChanged;
+}
+
+std::vector<unsigned int> CoreAudioDriver::availableOutputDeviceSampleRates() const
+{
+    return { 44100, 48000, 88200, 96000 };
 }
