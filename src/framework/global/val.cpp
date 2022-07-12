@@ -113,6 +113,10 @@ int Val::toInt() const
     case Type::Int: return std::get<int>(m_val);
     case Type::Int64: return static_cast<int>(toInt64());
     case Type::Double: return static_cast<int>(toDouble());
+    case Type::String: {
+        std::string str = std::get<std::string>(m_val);
+        return std::stoi(str);
+    }
     default:
         break;
     }
