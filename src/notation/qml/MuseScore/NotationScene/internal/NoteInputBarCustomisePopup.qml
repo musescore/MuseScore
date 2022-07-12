@@ -57,7 +57,7 @@ StyledPopupView {
             Layout.fillWidth: true
             Layout.topMargin: 8
 
-            text: qsTrc("notation", "Customise toolbar")
+            text: qsTrc("notation", "Customize toolbar")
             horizontalAlignment: Text.AlignLeft
             font: ui.theme.largeBodyBoldFont
         }

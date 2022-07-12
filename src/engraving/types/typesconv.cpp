@@ -242,8 +242,8 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::COMPOUND,             "Compound",             QT_TRANSLATE_NOOP("engraving", "Compound") },
     { ElementType::CHORD,                "Chord",                QT_TRANSLATE_NOOP("engraving", "Chord") },
     { ElementType::SLUR,                 "Slur",                 QT_TRANSLATE_NOOP("engraving", "Slur") },
-    { ElementType::ELEMENT,              "EngravingItem",        QT_TRANSLATE_NOOP("engraving", "EngravingItem") },
-    { ElementType::ELEMENT_LIST,         "ElementList",          QT_TRANSLATE_NOOP("engraving", "EngravingItem list") },
+    { ElementType::ELEMENT,              "EngravingItem",        QT_TRANSLATE_NOOP("engraving", "Element") },
+    { ElementType::ELEMENT_LIST,         "ElementList",          QT_TRANSLATE_NOOP("engraving", "Element list") },
     { ElementType::STAFF_LIST,           "StaffList",            QT_TRANSLATE_NOOP("engraving", "Staff list") },
     { ElementType::MEASURE_LIST,         "MeasureList",          QT_TRANSLATE_NOOP("engraving", "Measure list") },
     { ElementType::HBOX,                 "HBox",                 QT_TRANSLATE_NOOP("engraving", "Horizontal frame") },
@@ -381,7 +381,7 @@ static const std::vector<Item<NoteHeadScheme> > NOTEHEAD_SCHEMES = {
     { NoteHeadScheme::HEAD_AUTO,                "auto",                QT_TRANSLATE_NOOP("engraving", "Auto") },
     { NoteHeadScheme::HEAD_NORMAL,              "normal",              QT_TRANSLATE_NOOP("engraving", "Normal") },
     { NoteHeadScheme::HEAD_PITCHNAME,           "name-pitch",          QT_TRANSLATE_NOOP("engraving", "Pitch names") },
-    { NoteHeadScheme::HEAD_PITCHNAME_GERMAN,    "name-pitch-german",   QT_TRANSLATE_NOOP("engraving", "German Pitch names") },
+    { NoteHeadScheme::HEAD_PITCHNAME_GERMAN,    "name-pitch-german",   QT_TRANSLATE_NOOP("engraving", "German pitch names") },
     { NoteHeadScheme::HEAD_SOLFEGE,             "solfege-movable",     QT_TRANSLATE_NOOP("engraving", "Solf\u00e8ge movable Do") },  // &egrave;
     { NoteHeadScheme::HEAD_SOLFEGE_FIXED,       "solfege-fixed",       QT_TRANSLATE_NOOP("engraving", "Solf\u00e8ge fixed Do") },    // &egrave;
     { NoteHeadScheme::HEAD_SHAPE_NOTE_4,        "shape-4",             QT_TRANSLATE_NOOP("engraving", "4-shape (Walker)") },

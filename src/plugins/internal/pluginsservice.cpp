@@ -79,7 +79,7 @@ PluginsService::CategoryInfoMap PluginsService::categories() const
 {
     return {
         { "composing-arranging-tools", trc("plugins", "Composing/arranging tools") },
-        { "color-notes", trc("plugins", "Colour notes") },
+        { "color-notes", trc("plugins", "Color notes") },
         { "playback", trc("plugins", "Playback") }
     };
 }

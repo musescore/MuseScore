@@ -31,11 +31,11 @@ Item {
     id: root
 
     property PropertyItem leadingSpace: null
-    property PropertyItem barWidth: null
+    property PropertyItem measureWidth: null
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
-    property int navigationRowEnd: barWidth.navigationRowEnd
+    property int navigationRowEnd: measureWidth.navigationRowEnd
 
     function focusOnFirst() {
         leadingValue.focusOnFirst()
@@ -62,17 +62,17 @@ Item {
     }
 
     SpinBoxPropertyView {
-        id: barWidth
+        id: measureWidth
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
 
-        navigationName: "Bar width"
+        navigationName: "Measure width"
         navigationPanel: root.navigationPanel
         navigationRowStart: leadingValue.navigationRowEnd + 1
 
-        titleText: qsTrc("inspector", "Bar width")
-        propertyItem: root.barWidth
+        titleText: qsTrc("inspector", "Measure width")
+        propertyItem: root.measureWidth
 
         icon: IconCode.HORIZONTAL
     }

@@ -387,8 +387,9 @@ void Score::putNote(const Position& p, bool replace)
     staff_idx_t staffIdx = track2staff(_is.track());
     if (m->isMeasureRepeatGroup(staffIdx)) {
         auto b = MessageBox::warning(trc("engraving", "Note input will remove measure repeat"),
-                                     trc("engraving", "There is a measure repeat here.")
-                                     + trc("engraving", "\nContinue with adding note and delete measure repeat?"));
+                                     trc("engraving", "This measure contains a measure repeat."
+                                                      " If you enter notes here, it will be deleted."
+                                                      " Do you want to continue?"));
         if (b == MessageBox::Cancel) {
             return;
         }

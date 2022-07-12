@@ -46,7 +46,7 @@ Column {
     HorizontalSpacingSection {
         id: horizontalSpacingSection
         leadingSpace: model ? model.leadingSpace : null
-        barWidth: model ? model.barWidth : null
+        measureWidth: model ? model.measureWidth : null
 
         navigationPanel: root.navigationPanel
         navigationRowStart: 0
