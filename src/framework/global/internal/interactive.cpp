@@ -123,7 +123,7 @@ IInteractive::Result Interactive::warning(const std::string& title, const Text& 
                                           int defBtn,
                                           const Options& options) const
 {
-    return standardDialogResult(provider()->warning(title, text.text, buttons, defBtn, options));
+    return standardDialogResult(provider()->warning(title, text, buttons, defBtn, options));
 }
 
 IInteractive::Result Interactive::error(const std::string& title, const std::string& text, const Buttons& buttons, const Button& defBtn,
@@ -136,7 +136,7 @@ IInteractive::Result Interactive::error(const std::string& title, const Text& te
                                         int defBtn,
                                         const Options& options) const
 {
-    return standardDialogResult(provider()->error(title, text.text, buttons, defBtn, options));
+    return standardDialogResult(provider()->error(title, text, buttons, defBtn, options));
 }
 
 mu::io::path_t Interactive::selectOpeningFile(const QString& title, const io::path_t& dir, const QString& filter)

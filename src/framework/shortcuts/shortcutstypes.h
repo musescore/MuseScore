@@ -64,6 +64,12 @@ struct Shortcut
         strings::split(str, seqs, ", ");
         return seqs;
     }
+
+    void clear()
+    {
+        sequences.clear();
+        standardKey = QKeySequence::StandardKey::UnknownKey;
+    }
 };
 
 using ShortcutList = std::list<Shortcut>;

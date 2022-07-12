@@ -29,6 +29,7 @@
 #include "log.h"
 
 using namespace mu::shortcuts;
+using namespace mu::framework;
 
 static const QString ANY_CONTEXT("any");
 
@@ -39,13 +40,22 @@ EditShortcutModel::EditShortcutModel(QObject* parent)
 
 void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList& allShortcuts)
 {
-    clear();
+    TRACEFUNC;
+
+    clearNewSequence();
+
+    m_allShortcuts = allShortcuts;
+    m_potentialConflictShortcuts.clear();
 
     QVariantMap originShortcutMap = originShortcut.toMap();
     QString originCtx = originShortcutMap.value("context", ANY_CONTEXT).toString();
     bool isOriginCtxAny = originCtx == ANY_CONTEXT;
 
     for (const QVariant& shortcut : allShortcuts) {
+        if (shortcut == originShortcut) {
+            continue;
+        }
+
         if (isOriginCtxAny) {
             m_potentialConflictShortcuts << shortcut;
             continue;
@@ -65,16 +75,21 @@ void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList&
     }
 
     m_originSequence = originShortcutMap.value("sequence").toString();
+    m_originShortcutTitle = originShortcutMap.value("title").toString();
 
-    emit originSequenceChanged(originSequenceInNativeFormat());
+    emit originSequenceChanged();
 }
 
-void EditShortcutModel::clear()
+void EditShortcutModel::clearNewSequence()
 {
-    m_inputtedSequence = QKeySequence();
-    m_errorMessage.clear();
+    if (m_newSequence.isEmpty() && m_conflictShortcut.isEmpty()) {
+        return;
+    }
 
-    emit inputtedSequenceChanged(QString());
+    m_newSequence = QKeySequence();
+    m_conflictShortcut.clear();
+
+    emit newSequenceChanged();
 }
 
 void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
@@ -94,35 +109,33 @@ void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
         newKey -= Qt::ShiftModifier;
     }
 
-    for (int i = 0; i < m_inputtedSequence.count(); i++) {
-        if (m_inputtedSequence[i] == key) {
+    for (int i = 0; i < m_newSequence.count(); i++) {
+        if (m_newSequence[i] == key) {
             return;
         }
     }
 
     QKeySequence newSequence = QKeySequence(newKey);
-    if (m_inputtedSequence == newSequence) {
+    if (m_newSequence == newSequence) {
         return;
     }
 
-    m_inputtedSequence = newSequence;
-    validateInputtedSequence();
+    m_newSequence = newSequence;
+    checkNewSequenceForConflicts();
 
-    emit inputtedSequenceChanged(inputtedSequenceInNativeFormat());
+    emit newSequenceChanged();
 }
 
-void EditShortcutModel::validateInputtedSequence()
+void EditShortcutModel::checkNewSequenceForConflicts()
 {
-    m_errorMessage.clear();
-
-    QString input = inputtedSequence();
+    m_conflictShortcut.clear();
+    QString input = newSequence();
 
     for (const QVariant& shortcut : m_potentialConflictShortcuts) {
-        QVariantMap sc = shortcut.toMap();
+        QVariantMap map = shortcut.toMap();
 
-        if (sc.value("sequence").toString() == input) {
-            QString title = sc.value("title").toString();
-            m_errorMessage = qtrc("shortcuts", "Shortcut conflicts with %1").arg(title);
+        if (map.value("sequence").toString() == input) {
+            m_conflictShortcut = map;
             return;
         }
     }
@@ -135,28 +148,59 @@ QString EditShortcutModel::originSequenceInNativeFormat() const
     return sequencesToNativeText(sequences);
 }
 
-QString EditShortcutModel::inputtedSequenceInNativeFormat() const
+QString EditShortcutModel::newSequenceInNativeFormat() const
 {
-    return m_inputtedSequence.toString(QKeySequence::NativeText);
+    return m_newSequence.toString(QKeySequence::NativeText);
 }
 
-QString EditShortcutModel::errorMessage() const
+QString EditShortcutModel::conflictWarning() const
 {
-    return m_errorMessage;
+    QString title = m_conflictShortcut["title"].toString();
+    if (title.isEmpty()) {
+        return QString();
+    }
+
+    return qtrc("shortcuts", "This shortcut is already assigned to: <b>%1</b>").arg(title);
 }
 
-bool EditShortcutModel::canApplyInputtedSequence() const
+void EditShortcutModel::applyNewSequence()
 {
-    return m_errorMessage.isEmpty() && !m_inputtedSequence.isEmpty();
+    QString newSequence = this->newSequence();
+
+    if (m_originSequence == newSequence) {
+        return;
+    }
+
+    m_originSequence = newSequence;
+
+    QString conflictWarn = conflictWarning();
+
+    if (conflictWarn.isEmpty()) {
+        emit applyNewSequenceRequested(m_originSequence);
+        return;
+    }
+
+    QString str = conflictWarn + "<br><br>" + mu::qtrc("shortcuts", "Are you sure you want to assign it to <b>%2</b> instead?")
+                  .arg(m_originShortcutTitle);
+
+    IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    okBtn.accent = true;
+
+    IInteractive::Button btn = interactive()->warning(mu::trc("shortcuts", "Reassign shortcut"), text, {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        okBtn,
+    }, (int)IInteractive::Button::Ok, IInteractive::Option::WithIcon).standardButton();
+
+    if (btn != IInteractive::Button::Ok) {
+        return;
+    }
+
+    int conflictShortcutIndex = m_allShortcuts.indexOf(m_conflictShortcut);
+    emit applyNewSequenceRequested(m_originSequence, conflictShortcutIndex);
 }
 
-void EditShortcutModel::applyInputedSequence()
+QString EditShortcutModel::newSequence() const
 {
-    m_originSequence = inputtedSequence();
-    emit applyNewSequenceRequested(m_originSequence);
-}
-
-QString EditShortcutModel::inputtedSequence() const
-{
-    return m_inputtedSequence.toString();
+    return m_newSequence.toString();
 }
