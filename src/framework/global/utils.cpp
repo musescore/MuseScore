@@ -40,14 +40,16 @@ static constexpr const char* noteNames[] = {
     QT_TRANSLATE_NOOP("global", "B")
 };
 
-std::string mu::pitchToString(int pitch)
+std::string mu::pitchToString(int pitch, bool addoctave)
 {
     if (pitch < 0 || pitch > 127) {
         return std::string();
     }
 
-    int octave = (pitch / 12) - 1;
     int i = pitch % 12;
-
-    return trc("global", noteNames[i]) + std::to_string(octave);
+    if (addoctave) {
+        int octave = (pitch / 12) - 1;
+        return trc("global", noteNames[i]) + std::to_string(octave);
+    }
+    return trc("global", noteNames[I]);
 }
