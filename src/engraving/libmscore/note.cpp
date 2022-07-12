@@ -3332,7 +3332,15 @@ String Note::screenReaderInfo() const
         pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
                     .arg(tpcUserName(true), String::number(string() + 1), String::number(fret()));
     } else {
-        pitchName = tpcUserName(true);
+        pitchName = _headGroup == NoteHeadGroup::HEAD_NORMAL
+                    ? tpcUserName(true)
+                    //: head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).
+                    : mtrc("engraving", "%1 head %2").arg(subtypeName()).arg(tpcUserName(true));
+        if (chord()->staffMove() < 0) {
+            duration += u"; " + mtrc("engraving", "Cross-staff above");
+        } else if (chord()->staffMove() > 0) {
+            duration += u"; " + mtrc("engraving", "Cross-staff below");
+        }
     }
     return String(u"%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
 }
