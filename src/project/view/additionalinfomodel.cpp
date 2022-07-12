@@ -310,33 +310,22 @@ QVariantList AdditionalInfoModel::tempoNotes() const
 
 QString AdditionalInfoModel::tempoAccessibleName(int noteIcon, bool withDot) const
 {
-    QString name;
-
-    if (withDot) {
-        name += qtrc("project", "Dotted") + " ";
-    }
-
     switch (static_cast<MusicalSymbolCode>(noteIcon)) {
     case MusicalSymbolCode::SEMIQUAVER:
-        name += qtrc("project", "semiquaver");
-        break;
+        return withDot ? qtrc("project", "Dotted 16th note") : qtrc("project", "16th note");
     case MusicalSymbolCode::QUAVER:
-        name += qtrc("project", "quaver");
-        break;
+        return withDot ? qtrc("project", "Dotted 8th note") : qtrc("project", "8th note");
     case MusicalSymbolCode::CROTCHET:
-        name += qtrc("project", "crotchet");
-        break;
+        return withDot ? qtrc("project", "Dotted quarter note") : qtrc("project", "Quarter note");
     case MusicalSymbolCode::MINIM:
-        name += qtrc("project", "minim");
-        break;
+        return withDot ? qtrc("project", "Dotted half note") : qtrc("project", "Half note");
     case MusicalSymbolCode::SEMIBREVE:
-        name += qtrc("project", "semibreve");
-        break;
+        return withDot ? qtrc("project", "Dotted whole note") : qtrc("project", "Whole note");
     default:
         break;
     }
 
-    return name;
+    return QString();
 }
 
 QVariantMap AdditionalInfoModel::pickupTimeSignature() const

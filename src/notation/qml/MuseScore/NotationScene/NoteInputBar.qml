@@ -223,7 +223,7 @@ Item {
 
         icon: IconCode.SETTINGS_COG
         iconFont: ui.theme.toolbarIconsFont
-        toolTipTitle: qsTrc("notation", "Customise toolbar")
+        toolTipTitle: qsTrc("notation", "Customize toolbar")
         toolTipDescription: qsTrc("notation", "Show/hide toolbar buttons")
         transparent: true
 
@@ -231,7 +231,7 @@ Item {
 
         navigation.panel: keynavSub
         navigation.order: 100
-        navigation.accessible.name: qsTrc("notation", "Customise toolbar")
+        navigation.accessible.name: qsTrc("notation", "Customize toolbar")
 
         onClicked: {
             customizePopup.toggleOpened()
