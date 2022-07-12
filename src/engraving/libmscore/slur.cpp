@@ -1428,8 +1428,10 @@ SpannerSegment* Slur::layoutSystem(System* system)
             Tie* tieBack = c->notes()[0]->tieBack();
             if (tieBack && !tieBack->isInside() && tieBack->up() == _up) {
                 // there is a tie that ends on this chordrest
-                tie = tieBack;
-                endPoint = tie->backSegment()->ups(Grip::START).pos();
+                if (!tieBack->segmentsEmpty()) { //Checks for spanner segment esxists
+                    tie = tieBack;
+                    endPoint = tie->backSegment()->ups(Grip::START).pos();
+                }
             }
             if (tie) {
                 if (_up && tie->up()) {
@@ -1522,8 +1524,10 @@ SpannerSegment* Slur::layoutSystem(System* system)
             Tie* tieFor = c->notes()[0]->tieFor();
             if (tieFor && !tieFor->isInside() && tieFor->up() == up()) {
                 // there is a tie that starts on this chordrest
-                tie = tieFor;
-                endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
+                if (!tieFor->segmentsEmpty()) { //Checks is spanner segment exists
+                    tie = tieFor;
+                    endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
+                }
             }
             if (tie) {
                 if (_up && tie->up()) {
