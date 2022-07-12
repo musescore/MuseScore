@@ -181,7 +181,7 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>24</l1>
+            <l1>30</l1>
             <l2>32</l2>
             </Beam>
           <Chord>
@@ -287,7 +287,7 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>24</l1>
+            <l1>30</l1>
             <l2>32</l2>
             </Beam>
           <Chord>

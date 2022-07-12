@@ -140,7 +140,7 @@
           </LayoutBreak>
         <voice>
           <Beam>
-            <l1>0</l1>
+            <l1>-4</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>

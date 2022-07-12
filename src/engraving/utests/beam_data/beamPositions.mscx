@@ -909,8 +909,8 @@
           </LayoutBreak>
         <voice>
           <Beam>
-            <l1>10</l1>
-            <l2>10</l2>
+            <l1>18</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -930,8 +930,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>10</l1>
-            <l2>10</l2>
+            <l1>18</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -951,8 +951,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>10</l1>
-            <l2>10</l2>
+            <l1>14</l1>
+            <l2>14</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1253,8 +1253,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>22</l1>
-            <l2>22</l2>
+            <l1>18</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1274,8 +1274,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>22</l1>
-            <l2>22</l2>
+            <l1>14</l1>
+            <l2>14</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1295,8 +1295,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>22</l1>
-            <l2>22</l2>
+            <l1>14</l1>
+            <l2>14</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1316,8 +1316,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>22</l1>
-            <l2>22</l2>
+            <l1>14</l1>
+            <l2>14</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1344,33 +1344,33 @@
       <Measure>
         <voice>
           <Beam>
+            <l1>18</l1>
+            <l2>18</l2>
+            </Beam>
+          <Chord>
+            <durationType>64th</durationType>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>64th</durationType>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>32nd</durationType>
+            </Rest>
+          <Beam>
             <l1>6</l1>
             <l2>6</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
             <Note>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>64th</durationType>
-            <Note>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Rest>
-            <durationType>32nd</durationType>
-            </Rest>
-          <Beam>
-            <l1>4</l1>
-            <l2>4</l2>
-            </Beam>
-          <Chord>
-            <durationType>64th</durationType>
-            <Note>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
@@ -1428,8 +1428,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>2</l1>
-            <l2>2</l2>
+            <l1>0</l1>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1470,8 +1470,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>-6</l1>
-            <l2>-6</l2>
+            <l1>-8</l1>
+            <l2>-8</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1512,8 +1512,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>-14</l1>
-            <l2>-14</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1555,8 +1555,8 @@
             </Rest>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>48</l1>
+            <l2>48</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1599,8 +1599,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>38</l1>
-            <l2>38</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1641,8 +1641,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>30</l1>
-            <l2>30</l2>
+            <l1>32</l1>
+            <l2>32</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1708,8 +1708,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>28</l1>
-            <l2>28</l2>
+            <l1>26</l1>
+            <l2>26</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1729,8 +1729,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>26</l1>
-            <l2>26</l2>
+            <l1>14</l1>
+            <l2>14</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>

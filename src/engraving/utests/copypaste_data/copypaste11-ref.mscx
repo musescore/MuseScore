@@ -118,7 +118,7 @@
             </Chord>
           <Beam>
             <l1>-6</l1>
-            <l2>-2</l2>
+            <l2>-4</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -216,7 +216,7 @@
             </Chord>
           <Beam>
             <l1>-6</l1>
-            <l2>-2</l2>
+            <l2>-4</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
