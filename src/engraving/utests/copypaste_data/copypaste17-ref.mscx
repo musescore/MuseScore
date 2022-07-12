@@ -101,7 +101,7 @@
             <durationType>eighth</durationType>
             </Rest>
           <Beam>
-            <l1>-12</l1>
+            <l1>-14</l1>
             <l2>-16</l2>
             </Beam>
           <Chord>
@@ -120,7 +120,7 @@
             </Chord>
           <Beam>
             <l1>-20</l1>
-            <l2>-16</l2>
+            <l2>-18</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
