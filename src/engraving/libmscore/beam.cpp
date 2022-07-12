@@ -1365,8 +1365,6 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
     Chord* endChord = toChord(chordRests.back());
     _startAnchor = chordBeamAnchor(startChord, ChordBeamAnchorType::Start);
     _endAnchor = chordBeamAnchor(endChord, ChordBeamAnchorType::End);
-    Note* startNote = _up ? startChord->downNote() : startChord->upNote();
-    Note* endNote = _up ? endChord->downNote() : endChord->upNote();
     double startLength = startChord->defaultStemLength();
     double endLength = endChord->defaultStemLength();
     double startAnchorBase = _startAnchor.y() + (_up ? startLength : -startLength);
