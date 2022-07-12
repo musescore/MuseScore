@@ -326,6 +326,7 @@ public:
 
     int toInt(bool* ok = nullptr, int base = 10) const;
     unsigned int toUInt(bool* ok = nullptr, int base = 10) const;
+    float toFloat(bool* ok = nullptr) const;
     double toDouble(bool* ok = nullptr) const;
 
     static String number(int n, int base = 10);

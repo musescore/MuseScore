@@ -1021,6 +1021,11 @@ String String::number(double n, int prec)
     return fromAscii(s.c_str(), correctedIdx + 1);
 }
 
+float String::toFloat(bool* ok) const
+{
+    return static_cast<float>(toDouble(ok));
+}
+
 double String::toDouble(bool* ok) const
 {
     ByteArray ba = toUtf8();

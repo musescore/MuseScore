@@ -5,7 +5,7 @@
 #include "global/log.h"
 
 namespace mu::engraving {
-std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(QDomNode* trackNode)
+std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNode* trackNode)
 {
     static const std::set<QString> sUnused = {
         "Color", "SystemsDefautLayout", "SystemsLayout", "AutoBrush",
@@ -15,9 +15,9 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(QDomNode*
         "Automations"
     };
 
-    int trackIdx = trackNode->attributes().namedItem("id").toAttr().value().toInt();
+    int trackIdx = trackNode->attribute("id").toInt();
     auto track = std::make_unique<GPTrack>(trackIdx);
-    QDomNode trackChildNode = trackNode->firstChild();
+    XmlDomNode trackChildNode = trackNode->firstChild();
 
     while (!trackChildNode.isNull()) {
         QString nodeName = trackChildNode.nodeName();
@@ -65,7 +65,7 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(QDomNode*
     return std::make_pair(trackIdx, std::move(track));
 }
 
-int GP7DomBuilder::readMidiChannel(QDomNode* trackChildNode) const
+int GP7DomBuilder::readMidiChannel(XmlDomNode* trackChildNode) const
 {
     int channel
         =trackChildNode->firstChildElement("PrimaryChannel")
@@ -74,7 +74,7 @@ int GP7DomBuilder::readMidiChannel(QDomNode* trackChildNode) const
     return channel;
 }
 
-int GP7DomBuilder::readMidiProgramm(QDomNode* trackChildNode) const
+int GP7DomBuilder::readMidiProgramm(XmlDomNode* trackChildNode) const
 {
     int programm = trackChildNode->firstChild()
                    .firstChildElement("MIDI")
