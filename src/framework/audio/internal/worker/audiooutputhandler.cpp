@@ -188,7 +188,10 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         msecs_t totalDuration = s->player()->duration();
         SoundTrackWriter writer(destination, format, totalDuration, mixer());
 
-        return resolve(writer.write());
+        bool ok = writer.write();
+        s->player()->seek(0);
+
+        return resolve(ok);
 #else
         return reject(static_cast<int>(Err::DisabledAudioExport), "audio export is disabled");
 #endif
