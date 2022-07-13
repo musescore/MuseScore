@@ -28,8 +28,8 @@ import MuseScore.UiComponents 1.0
 import MuseScore.AppShell 1.0
 
 Page {
-    title: qsTrc("appshell", "Video tutorials")
-    explanation: qsTrc("appshell", "Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started\n(Video tutorials require an internet connection)")
+    title: qsTrc("appshell/gettingstarted", "Video tutorials")
+    explanation: qsTrc("appshell/gettingstarted", "Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started\n(Video tutorials require an internet connection)")
 
     titleContentSpacing: 12
 
