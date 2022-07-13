@@ -46,18 +46,21 @@
       <trackName>Bass</trackName>
       <Instrument>
         <longName>Bass</longName>
+        <shortName>el.bs.</shortName>
         <trackName></trackName>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
-          <frets>32</frets>
-          <string>28</string>
-          <string>33</string>
-          <string>38</string>
-          <string>43</string>
+          <frets>24</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
           </StringData>
         <Channel>
           <program value="36"/>
-          <controller ctrl="7" value="103"/>
+          <controller ctrl="7" value="74"/>
           <controller ctrl="10" value="79"/>
           </Channel>
         </Instrument>
@@ -66,8 +69,8 @@
       <Measure>
         <voice>
           <Clef>
-            <concertClefType>F8vb</concertClefType>
-            <transposingClefType>F8vb</transposingClefType>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
             </Clef>
           <KeySig>
             <accidental>0</accidental>
@@ -76,9 +79,17 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Tempo>
+            <tempo>1.783333</tempo>
+            <text><sym>metNoteQuarterUp</sym> = 107</text>
+            </Tempo>
           <Rest>
             <durationType>16th</durationType>
             </Rest>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <Beam>
             <l1>14</l1>
             <l2>16</l2>
@@ -101,6 +112,15 @@
               <string>0</string>
               </Note>
             </Chord>
+          <location>
+            <fractions>-1/32</fractions>
+            </location>
+          <StaffText>
+            <text>P</text>
+            </StaffText>
+          <location>
+            <fractions>1/32</fractions>
+            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -113,6 +133,15 @@
               <string>0</string>
               </Note>
             </Chord>
+          <location>
+            <fractions>-1/32</fractions>
+            </location>
+          <StaffText>
+            <text>P</text>
+            </StaffText>
+          <location>
+            <fractions>1/32</fractions>
+            </location>
           <Chord>
             <durationType>16th</durationType>
             <Spanner type="Slur">
@@ -151,6 +180,15 @@
               <string>1</string>
               </Note>
             </Chord>
+          <location>
+            <fractions>-1/32</fractions>
+            </location>
+          <StaffText>
+            <text>H</text>
+            </StaffText>
+          <location>
+            <fractions>1/32</fractions>
+            </location>
           <Chord>
             <durationType>16th</durationType>
             <Spanner type="Slur">
@@ -170,11 +208,11 @@
               <string>1</string>
               </Note>
             </Chord>
-          <StaffText>
-            <text>S</text>
-            </StaffText>
           <Chord>
             <durationType>16th</durationType>
+            <Articulation>
+              <subtype>Slap</subtype>
+              </Articulation>
             <Note>
               <pitch>38</pitch>
               <tpc>16</tpc>
@@ -183,11 +221,11 @@
               <string>1</string>
               </Note>
             </Chord>
-          <StaffText>
-            <text>P</text>
-            </StaffText>
           <Chord>
             <durationType>16th</durationType>
+            <Articulation>
+              <subtype>Pop</subtype>
+              </Articulation>
             <Note>
               <pitch>52</pitch>
               <tpc>18</tpc>
@@ -208,15 +246,15 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <StaffText>
-            <text>S</text>
-            </StaffText>
           <Beam>
             <l1>52</l1>
             <l2>52</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
+            <Articulation>
+              <subtype>Slap</subtype>
+              </Articulation>
             <Note>
               <pitch>33</pitch>
               <tpc>17</tpc>
@@ -225,11 +263,11 @@
               <string>2</string>
               </Note>
             </Chord>
-          <StaffText>
-            <text>P</text>
-            </StaffText>
           <Chord>
             <durationType>16th</durationType>
+            <Articulation>
+              <subtype>Pop</subtype>
+              </Articulation>
             <Note>
               <pitch>52</pitch>
               <tpc>18</tpc>
@@ -237,11 +275,11 @@
               <string>0</string>
               </Note>
             </Chord>
-          <StaffText>
-            <text>S</text>
-            </StaffText>
           <Chord>
             <durationType>16th</durationType>
+            <Articulation>
+              <subtype>Slap</subtype>
+              </Articulation>
             <Note>
               <pitch>33</pitch>
               <tpc>17</tpc>
@@ -250,18 +288,9 @@
               <string>2</string>
               </Note>
             </Chord>
-          <StaffText>
-            <text>P</text>
-            </StaffText>
-          <Chord>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              <fret>9</fret>
-              <string>0</string>
-              </Note>
-            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

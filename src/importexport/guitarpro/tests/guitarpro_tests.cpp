@@ -63,226 +63,226 @@ void GuitarPro_AllTests::gpReadTest(const char* file, const char* ext)
     delete score;
 }
 
-TEST_F(GuitarPro_AllTests, DISABLED_gpTestIrrTuplet) {
+TEST_F(GuitarPro_AllTests, gpTestIrrTuplet) {
     gpReadTest("testIrrTuplet", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxTestIrrTuplet) {
+TEST_F(GuitarPro_AllTests, gpxTestIrrTuplet) {
     gpReadTest("testIrrTuplet", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4TestIrrTuplet) {
+TEST_F(GuitarPro_AllTests, gp4TestIrrTuplet) {
     gpReadTest("testIrrTuplet", "gp4");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpSforzato) {
+TEST_F(GuitarPro_AllTests, gpSforzato) {
     gpReadTest("sforzato", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxSforzato) {
+TEST_F(GuitarPro_AllTests, gpxSforzato) {
     gpReadTest("sforzato", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4Sforzato) {
+TEST_F(GuitarPro_AllTests, gp4Sforzato) {
     gpReadTest("sforzato", "gp4");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpHeavyAccent) {
+TEST_F(GuitarPro_AllTests, gpHeavyAccent) {
     gpReadTest("heavy-accent", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxHeavyAccent) {
+TEST_F(GuitarPro_AllTests, gpxHeavyAccent) {
     gpReadTest("heavy-accent", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5HeavyAccent) {
+TEST_F(GuitarPro_AllTests, gp5HeavyAccent) {
     gpReadTest("heavy-accent", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpTremolos) {
+TEST_F(GuitarPro_AllTests, gpTremolos) {
     gpReadTest("tremolos", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxTremolos) {
+TEST_F(GuitarPro_AllTests, gpxTremolos) {
     gpReadTest("tremolos", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5Tremolos) {
+TEST_F(GuitarPro_AllTests, gp5Tremolos) {
     gpReadTest("tremolos", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpTrill) {
+TEST_F(GuitarPro_AllTests, gpTrill) {
     gpReadTest("trill", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxTrill) {
+TEST_F(GuitarPro_AllTests, gpxTrill) {
     gpReadTest("trill", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4Trill) {
+TEST_F(GuitarPro_AllTests, gp4Trill) {
     gpReadTest("trill", "gp4");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpDynamic) {
+TEST_F(GuitarPro_AllTests, gpDynamic) {
     gpReadTest("dynamic", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxDynamic) {
+TEST_F(GuitarPro_AllTests, gpxDynamic) {
     gpReadTest("dynamic", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5Dynamic) {
+TEST_F(GuitarPro_AllTests, gp5Dynamic) {
     gpReadTest("dynamic", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpGraceNote) {
+TEST_F(GuitarPro_AllTests, gpGraceNote) {
     gpReadTest("grace", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxGraceNote) {
+TEST_F(GuitarPro_AllTests, gpxGraceNote) {
     gpReadTest("grace", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5GraceNote) {
+TEST_F(GuitarPro_AllTests, gp5GraceNote) {
     gpReadTest("grace", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpVolta) {
+TEST_F(GuitarPro_AllTests, gpVolta) {
     gpReadTest("volta", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxVolta) {
+TEST_F(GuitarPro_AllTests, gpxVolta) {
     gpReadTest("volta", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5Volta) {
+TEST_F(GuitarPro_AllTests, gp5Volta) {
     gpReadTest("volta", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4Volta) {
+TEST_F(GuitarPro_AllTests, gp4Volta) {
     gpReadTest("volta", "gp4");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp3Volta) {
+TEST_F(GuitarPro_AllTests, gp3Volta) {
     gpReadTest("volta", "gp3");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpcopyright) {
+TEST_F(GuitarPro_AllTests, gpcopyright) {
     gpReadTest("copyright", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxcopyright) {
+TEST_F(GuitarPro_AllTests, gpxcopyright) {
     gpReadTest("copyright", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5copyright) {
+TEST_F(GuitarPro_AllTests, gp5copyright) {
     gpReadTest("copyright", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4copyright) {
+TEST_F(GuitarPro_AllTests, gp4copyright) {
     gpReadTest("copyright", "gp4");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp3copyright) {
+TEST_F(GuitarPro_AllTests, gp3copyright) {
     gpReadTest("copyright", "gp3");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpTempo) {
+TEST_F(GuitarPro_AllTests, gpTempo) {
     gpReadTest("tempo", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxTempo) {
+TEST_F(GuitarPro_AllTests, gpxTempo) {
     gpReadTest("tempo", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5Tempo) {
+TEST_F(GuitarPro_AllTests, gp5Tempo) {
     gpReadTest("tempo", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4Tempo) {
+TEST_F(GuitarPro_AllTests, gp4Tempo) {
     gpReadTest("tempo", "gp4");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp3Tempo) {
+TEST_F(GuitarPro_AllTests, gp3Tempo) {
     gpReadTest("tempo", "gp3");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpBasicBend) {
+TEST_F(GuitarPro_AllTests, gpBasicBend) {
     gpReadTest("basic-bend", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxBasicBend) {
+TEST_F(GuitarPro_AllTests, gpxBasicBend) {
     gpReadTest("basic-bend", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5BasicBend) {
+TEST_F(GuitarPro_AllTests, gp5BasicBend) {
     gpReadTest("basic-bend", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpBend) {
+TEST_F(GuitarPro_AllTests, gpBend) {
     gpReadTest("bend", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxBend) {
+TEST_F(GuitarPro_AllTests, gpxBend) {
     gpReadTest("bend", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5Bend) {
+TEST_F(GuitarPro_AllTests, gp5Bend) {
     gpReadTest("bend", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4Bend) {
+TEST_F(GuitarPro_AllTests, gp4Bend) {
     gpReadTest("bend", "gp4");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp3Bend) {
+TEST_F(GuitarPro_AllTests, gp3Bend) {
     gpReadTest("bend", "gp3");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpKeysig) {
+TEST_F(GuitarPro_AllTests, gpKeysig) {
     gpReadTest("keysig", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxKeysig) {
+TEST_F(GuitarPro_AllTests, gpxKeysig) {
     gpReadTest("keysig", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5Keysig) {
+TEST_F(GuitarPro_AllTests, gp5Keysig) {
     gpReadTest("keysig", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4Keysig) {
+TEST_F(GuitarPro_AllTests, gp4Keysig) {
     gpReadTest("keysig", "gp4");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpDottedTuplets) {
+TEST_F(GuitarPro_AllTests, gpDottedTuplets) {
     gpReadTest("dotted-tuplets", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxDottedTuplets) {
+TEST_F(GuitarPro_AllTests, gpxDottedTuplets) {
     gpReadTest("dotted-tuplets", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5DottedTuplets) {
+TEST_F(GuitarPro_AllTests, gp5DottedTuplets) {
     gpReadTest("dotted-tuplets", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpTupletSlur) {
+TEST_F(GuitarPro_AllTests, gpTupletSlur) {
     gpReadTest("tuplet-with-slur", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxTupletSlur) {
+TEST_F(GuitarPro_AllTests, gpxTupletSlur) {
     gpReadTest("tuplet-with-slur", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4TupletSlur) {
+TEST_F(GuitarPro_AllTests, gp4TupletSlur) {
     gpReadTest("tuplet-with-slur", "gp4");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpBeamsStemsLL) {
+TEST_F(GuitarPro_AllTests, gpBeamsStemsLL) {
     gpReadTest("beams-stems-ledger-lines", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxBeamsStemsLL) {
+TEST_F(GuitarPro_AllTests, gpxBeamsStemsLL) {
     gpReadTest("beams-stems-ledger-lines", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5BeamsStemsLL) {
+TEST_F(GuitarPro_AllTests, gp5BeamsStemsLL) {
     gpReadTest("beams-stems-ledger-lines", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpFretDiagram_2Instr) {
+TEST_F(GuitarPro_AllTests, gpFretDiagram_2Instr) {
     gpReadTest("fret-diagram_2instruments", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxFretDiagram_2Instr) {
+TEST_F(GuitarPro_AllTests, gpxFretDiagram_2Instr) {
     gpReadTest("fret-diagram_2instruments", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpFretDiagram) {
+TEST_F(GuitarPro_AllTests, gpFretDiagram) {
     gpReadTest("fret-diagram", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxFretDiagram) {
+TEST_F(GuitarPro_AllTests, gpxFretDiagram) {
     gpReadTest("fret-diagram", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5FretDiagram) {
+TEST_F(GuitarPro_AllTests, gp5FretDiagram) {
     gpReadTest("fret-diagram", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4FretDiagram) {
+TEST_F(GuitarPro_AllTests, gp4FretDiagram) {
     gpReadTest("fret-diagram", "gp4");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpFadeIn) {
+TEST_F(GuitarPro_AllTests, gpFadeIn) {
     gpReadTest("fade-in", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxFadeIn) {
+TEST_F(GuitarPro_AllTests, gpxFadeIn) {
     gpReadTest("fade-in", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5FadeIn) {
+TEST_F(GuitarPro_AllTests, gp5FadeIn) {
     gpReadTest("fade-in", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4FadeIn) {
+TEST_F(GuitarPro_AllTests, gp4FadeIn) {
     gpReadTest("fade-in", "gp4");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpSlurNoteMask) {
+TEST_F(GuitarPro_AllTests, gpSlurNoteMask) {
     gpReadTest("slur-notes-effect-mask", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxSlurNoteMask) {
+TEST_F(GuitarPro_AllTests, gpxSlurNoteMask) {
     gpReadTest("slur-notes-effect-mask", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5SlurNoteMask) {
+TEST_F(GuitarPro_AllTests, gp5SlurNoteMask) {
     gpReadTest("slur-notes-effect-mask", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpCentered) {
+TEST_F(GuitarPro_AllTests, gpCentered) {
     gpReadTest("rest-centered", "gp");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gpxCentered) {
+TEST_F(GuitarPro_AllTests, gpxCentered) {
     gpReadTest("rest-centered", "gpx");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp5Centered) {
+TEST_F(GuitarPro_AllTests, gp5Centered) {
     gpReadTest("rest-centered", "gp5");
 }
-TEST_F(GuitarPro_AllTests, DISABLED_gp4Centered) {
+TEST_F(GuitarPro_AllTests, gp4Centered) {
     gpReadTest("rest-centered", "gp4");
 }
 TEST_F(GuitarPro_AllTests, DISABLED_gpSlideInAbove) {
