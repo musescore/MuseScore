@@ -52,11 +52,7 @@ void UpdatePreferencesModel::setNeedCheckForNewAppVersion(bool value)
     emit needCheckForNewAppVersionChanged(value);
 }
 
-QVariantMap UpdatePreferencesModel::museScorePrivacyPolicyUrl() const
+QString UpdatePreferencesModel::museScorePrivacyPolicyUrl() const
 {
-    QVariantMap urlMap;
-    urlMap["url"] = QString::fromStdString(configuration()->museScorePrivacyPolicyUrl());
-    urlMap["displayName"] = qtrc("appshell", "Privacy Policy");
-
-    return urlMap;
+    return QString::fromStdString(configuration()->museScorePrivacyPolicyUrl());
 }
