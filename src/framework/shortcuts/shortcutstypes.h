@@ -184,6 +184,21 @@ inline QString sequencesToNativeText(const std::vector<std::string>& sequences)
 
     return QKeySequence::listToString(keySequenceList, QKeySequence::NativeText);
 }
+
+inline bool areContextPrioritiesEqual(const std::string& shortcutCtx1, const std::string& shortcutCtx2)
+{
+    static constexpr std::string_view ANY_CTX("any");
+
+    if (shortcutCtx1 == ANY_CTX || shortcutCtx2 == ANY_CTX) {
+        return true;
+    }
+
+    if (shortcutCtx1.empty() || shortcutCtx2.empty()) {
+        return true;
+    }
+
+    return shortcutCtx1 == shortcutCtx2;
+}
 }
 
 #endif // MU_SHORTCUTS_SHORTCUTSTYPES_H
