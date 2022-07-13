@@ -31,7 +31,7 @@ BaseSection {
 
     property bool isAppUpdatable: true
     property alias needCheckForNewAppVersion: needCheckBox.checked
-    property var museScorePrivacyPolicyUrl: null
+    property string museScorePrivacyPolicyUrl
 
     signal needCheckForNewAppVersionChangeRequested(bool check)
 
@@ -54,14 +54,12 @@ BaseSection {
 
     StyledTextLabel {
         width: parent.width
-        text: {
-            var message = qsTrc("appshell", "Update checking requires network access. In order to protect your privacy, MuseScore \
-                          does not store any personal information. See our %1 for more info.")
-            var museScorePrivacyPolicyUrl = root.museScorePrivacyPolicyUrl
-            return message
-            .arg("<a href='" + museScorePrivacyPolicyUrl.url + "'>" + museScorePrivacyPolicyUrl.displayName + "</a>")
-            .replace("\n", "<br>")
-        }
+
+        //: The text between %1 and %2 will be a clickable link
+        text: qsTrc("appshell", "Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our %1privacy policy%2 for more info.")
+              .arg(`<a href="${root.museScorePrivacyPolicyUrl}">`).arg("</a>")
+              .replace("\n", "<br>")
+
         horizontalAlignment: Qt.AlignLeft
         wrapMode: Text.WordWrap
         maximumLineCount: 3
