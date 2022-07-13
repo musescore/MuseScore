@@ -27,7 +27,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Auto save")
+    title: qsTrc("appshell/preferences", "Auto save")
 
     navigation.direction: NavigationPanel.Horizontal
 
@@ -46,7 +46,7 @@ BaseSection {
             width: root.columnWidth
             anchors.verticalCenter: parent.verticalCenter
 
-            text: qsTrc("appshell", "Auto save every:")
+            text: qsTrc("appshell/preferences", "Auto save every:")
 
             navigation.name: "AutoSaveCheckBox"
             navigation.panel: root.navigation

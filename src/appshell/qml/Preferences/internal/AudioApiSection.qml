@@ -26,7 +26,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Audio")
+    title: qsTrc("appshell/preferences", "Audio")
 
     property int currentAudioApiIndex: -1
     property var audioApiList: null
@@ -38,7 +38,7 @@ BaseSection {
     ComboBoxWithTitle {
         id: apiComboBox
 
-        title: qsTrc("appshell", "Audio API:")
+        title: qsTrc("appshell/preferences", "Audio API:")
         columnWidth: root.columnWidth
 
         currentIndex: root.currentAudioApiIndex

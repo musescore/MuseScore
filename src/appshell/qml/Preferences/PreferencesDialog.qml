@@ -31,7 +31,7 @@ import "internal"
 StyledDialogView {
     id: root
 
-    title: qsTrc("appshell", "Preferences")
+    title: qsTrc("appshell/preferences", "Preferences")
 
     contentWidth: 880
     contentHeight: 600

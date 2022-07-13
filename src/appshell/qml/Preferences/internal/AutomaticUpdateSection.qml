@@ -27,7 +27,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Automatic update check")
+    title: qsTrc("appshell/preferences", "Automatic update check")
 
     property bool isAppUpdatable: true
     property alias needCheckForNewAppVersion: needCheckBox.checked
@@ -39,7 +39,7 @@ BaseSection {
         id: needCheckBox
         width: parent.width
 
-        text: qsTrc("appshell", "Check to see if a new version of MuseScore is available")
+        text: qsTrc("appshell/preferences", "Check to see if a new version of MuseScore is available")
 
         visible: root.isAppUpdatable
 
@@ -56,7 +56,7 @@ BaseSection {
         width: parent.width
 
         //: The text between %1 and %2 will be a clickable link
-        text: qsTrc("appshell", "Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our %1privacy policy%2 for more info.")
+        text: qsTrc("appshell/preferences", "Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our %1privacy policy%2 for more info.")
               .arg(`<a href="${root.museScorePrivacyPolicyUrl}">`).arg("</a>")
               .replace("\n", "<br>")
 
