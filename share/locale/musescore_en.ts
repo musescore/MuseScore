@@ -3277,134 +3277,18 @@
 <context>
     <name>appshell</name>
     <message>
-        <location filename="../../src/appshell/qml/AboutDialog.qml" line="32"/>
-        <source>About MuseScore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/AboutDialog.qml" line="70"/>
-        <source>Version: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/AboutDialog.qml" line="80"/>
-        <source>Revision: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/AboutDialog.qml" line="97"/>
-        <source>Visit %1 for new versions and more information.
-Get %2 with the program or %3 to its development.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/AboutDialog.qml" line="114"/>
-        <source>For privacy information, see our %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/AboutDialog.qml" line="127"/>
-        <source>Copyright © 1999-2022 MuseScore BVBA and others.
-Published under the %1GNU General Public License version 3%2.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="32"/>
-        <source>About MusicXML</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="59"/>
-        <source>MusicXML is an open file format for exchanging digital sheet music, supported by many applications.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="71"/>
-        <source>Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published by the W3C Music Notation Community Group under the W3C Community Final Specification Agreement:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
-        <source>A human-readable summary is available:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="32"/>
-        <source>Getting started</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="144"/>
-        <source>Finish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="31"/>
-        <source>Playback</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
-        <source>Enjoy realistic playback for free by downloading our new Muse Sounds library</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
-        <source>Download</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="32"/>
-        <source>Welcome to MuseScore 4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="33"/>
-        <source>Let&apos;s get started by choosing a theme.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="54"/>
-        <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="78"/>
-        <source>Follow system theme</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="115"/>
-        <source>Further high contrast settings are available in Preferences.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="121"/>
-        <source>Enable high contrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="31"/>
-        <source>Video tutorials</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
-        <source>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
-(Video tutorials require an internet connection)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="53"/>
         <source>Home menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="92"/>
-        <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="88"/>
         <source>Scores</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="93"/>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="73"/>
-        <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="100"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3420,14 +3304,13 @@ Published under the %1GNU General Public License version 3%2.</source>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="129"/>
-        <source>Category: </source>
+        <source>Category:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="136"/>
-        <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="165"/>
-        <location filename="../../src/appshell/view/preferences/programmestartpreferencesmodel.cpp" line="110"/>
+        <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="137"/>
         <source>All</source>
+        <extracomment>The title of an option to display the plugins from all categories.</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3454,8 +3337,6 @@ Published under the %1GNU General Public License version 3%2.</source>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="188"/>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="31"/>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="166"/>
         <source>Note input</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3496,7 +3377,7 @@ Published under the %1GNU General Public License version 3%2.</source>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="399"/>
-        <source>Drumset Tools</source>
+        <source>Drumset tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3505,6 +3386,392 @@ Published under the %1GNU General Public License version 3%2.</source>
         <source>MuseScore 4</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="100"/>
+        <source>Undo/redo toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/WindowContent.qml" line="64"/>
+        <source>Main toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/RecentScoresView.qml" line="53"/>
+        <source>Recent scores grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="229"/>
+        <source>Are you sure you want to revert to factory settings?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="230"/>
+        <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
+
+This action will not delete any of your scores.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="237"/>
+        <source>Revert</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="249"/>
+        <source>Would you like to restart MuseScore now?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="250"/>
+        <source>MuseScore needs to be restarted for these changes to take effect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="255"/>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="269"/>
+        <source>No update available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="174"/>
+        <source>The previous session quit unexpectedly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="175"/>
+        <source>Do you want to restore the session?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="135"/>
+        <source>Open &amp;recent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="157"/>
+        <source>&amp;File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="181"/>
+        <source>&amp;Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="201"/>
+        <source>&amp;Toolbars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="202"/>
+        <source>W&amp;orkspaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="204"/>
+        <source>Show</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="209"/>
+        <source>&amp;View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="215"/>
+        <source>N&amp;otes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="216"/>
+        <source>&amp;Intervals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="217"/>
+        <source>T&amp;uplets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="219"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="277"/>
+        <source>&amp;Measures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="220"/>
+        <source>&amp;Frames</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="221"/>
+        <source>&amp;Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="222"/>
+        <source>&amp;Lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="225"/>
+        <source>&amp;Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="241"/>
+        <source>&amp;Stretch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="251"/>
+        <source>F&amp;ormat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="276"/>
+        <source>&amp;Voices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="295"/>
+        <source>&amp;Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="300"/>
+        <source>&amp;Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="342"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="373"/>
+        <source>&amp;System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="374"/>
+        <source>&amp;Accessibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="375"/>
+        <source>&amp;Engraving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="376"/>
+        <source>Auto&amp;bot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="380"/>
+        <source>&amp;Diagnostic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="90"/>
+        <source>Home</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="91"/>
+        <source>Score</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="92"/>
+        <source>Publish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="93"/>
+        <source>DevTools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Main.wasm.qml" line="36"/>
+        <source>MuseScore</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>appshell/about</name>
+    <message>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="32"/>
+        <source>About MuseScore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="70"/>
+        <source>Version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="80"/>
+        <source>Revision:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="100"/>
+        <source>Visit %1 for new versions and more information.</source>
+        <extracomment>%1 will be a link to the MuseScore website</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="104"/>
+        <source>Get %1help%2 with the program or %3contribute%4 to its development.</source>
+        <extracomment>The text between %1 and %2 will be a clickable link (same for %3 and %4)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="118"/>
+        <source>For privacy information, see our %1privacy policy%2.</source>
+        <extracomment>The text between %1 and %2 will be a clickable link</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="129"/>
+        <source>Copyright © 1999-2022 MuseScore BVBA and others.
+Published under the %1GNU General Public License version 3%2.</source>
+        <extracomment>The text between %1 and %2 will be a clickable link</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="32"/>
+        <source>About MusicXML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="59"/>
+        <source>MusicXML is an open file format for exchanging digital sheet music, supported by many applications.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="71"/>
+        <source>Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published by the W3C Music Notation Community Group under the W3C Community Final Specification Agreement:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
+        <source>A human-readable summary is available:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/aboutmodel.cpp" line="43"/>
+        <source>Unstable prerelease for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>appshell/dock</name>
+    <message>
+        <location filename="../../src/appshell/view/dockwindow/dockpanelview.cpp" line="62"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/dockwindow/dockpanelview.cpp" line="115"/>
+        <source>Dock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/dockwindow/dockpanelview.cpp" line="115"/>
+        <source>Undock</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>appshell/gettingstarted</name>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="32"/>
+        <source>Getting started</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="144"/>
+        <source>Finish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="31"/>
+        <source>Playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
+        <source>Enjoy realistic playback for free by downloading our new Muse Sounds library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="32"/>
+        <source>Welcome to MuseScore 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="33"/>
+        <source>Let&apos;s get started by choosing a theme.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="54"/>
+        <source>Follow system theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="115"/>
+        <source>Further high contrast settings are available in Preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="121"/>
+        <source>Enable high contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="31"/>
+        <source>Video tutorials</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
+        <source>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
+(Video tutorials require an internet connection)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
+        <source>Keep going</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="106"/>
+        <source>Are you sure you want to cancel?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="107"/>
+        <source>If you choose to cancel, then make sure to check out our free playback libraries in Home &gt; Audio.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>appshell/preferences</name>
     <message>
         <location filename="../../src/appshell/qml/Preferences/AdvancedPreferencesPage.qml" line="67"/>
         <source>Preference</source>
@@ -3532,7 +3799,7 @@ Published under the %1GNU General Public License version 3%2.</source>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="185"/>
-        <source>Choose Notepaper</source>
+        <source>Choose notepaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3547,8 +3814,9 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="66"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="67"/>
         <source>Search advanced</source>
+        <extracomment>Search advanced preferences</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3577,8 +3845,9 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
-        <source>Update checking requires network access. In order to protect your privacy, MuseScore                           does not store any personal information. See our %1 for more info.</source>
+        <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="59"/>
+        <source>Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our %1privacy policy%2 for more info.</source>
+        <extracomment>The text between %1 and %2 will be a clickable link</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3589,12 +3858,6 @@ Published under the %1GNU General Public License version 3%2.</source>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="49"/>
         <source>Auto save every:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="73"/>
-        <source>min</source>
-        <comment>abbreviation of minutes</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3735,19 +3998,19 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="66"/>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="79"/>
-        <source>ms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="81"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="82"/>
         <source>Play chord when editing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="98"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="99"/>
         <source>Play chord symbol when editing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="31"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="166"/>
+        <source>Note input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3826,6 +4089,11 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="78"/>
+        <source>Follow system theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="93"/>
         <source>Enable high-contrast</source>
         <translation type="unfinished"></translation>
@@ -3852,11 +4120,6 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="63"/>
-        <source>pt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="30"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
@@ -3877,302 +4140,19 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/StubPreferencesPage.qml" line="34"/>
-        <source>Not implemented</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="100"/>
-        <source>Undo/redo toolbar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/WindowContent.qml" line="64"/>
-        <source>Main toolbar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="73"/>
-        <source>checked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="73"/>
-        <source>unchecked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="75"/>
-        <source>selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="75"/>
-        <source>not selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="83"/>
-        <source>menu</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/KeySignatureSettings.qml" line="108"/>
-        <source>Minor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/RecentScoresView.qml" line="53"/>
-        <source>Recent scores grid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="229"/>
-        <source>Are you sure you want to revert to factory settings?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="230"/>
-        <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
-
-This action will not delete any of your scores.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="237"/>
-        <source>Revert</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="249"/>
-        <source>Would you like to restart MuseScore now?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="250"/>
-        <source>MuseScore needs to be restarted for these changes to take effect.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="255"/>
-        <source>Restart</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="269"/>
-        <source>No update available</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="174"/>
-        <source>The previous session quit unexpectedly.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="175"/>
-        <source>Restore session?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/aboutmodel.cpp" line="41"/>
-        <source>Unstable Prerelease for %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/aboutmodel.cpp" line="60"/>
-        <source>help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/aboutmodel.cpp" line="66"/>
-        <source>contribute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/aboutmodel.cpp" line="72"/>
-        <source>privacy policy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="135"/>
-        <source>Open &amp;recent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="157"/>
-        <source>&amp;File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="181"/>
-        <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="201"/>
-        <source>&amp;Toolbars</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="202"/>
-        <source>W&amp;orkspaces</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="204"/>
-        <source>Show</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="209"/>
-        <source>&amp;View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="215"/>
-        <source>N&amp;otes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="216"/>
-        <source>&amp;Intervals</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="217"/>
-        <source>T&amp;uplets</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="219"/>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="277"/>
-        <source>&amp;Measures</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="220"/>
-        <source>&amp;Frames</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="221"/>
-        <source>&amp;Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="222"/>
-        <source>&amp;Lines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="225"/>
-        <source>&amp;Add</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="241"/>
-        <source>&amp;Stretch</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="251"/>
-        <source>F&amp;ormat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="276"/>
-        <source>&amp;Voices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="295"/>
-        <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="300"/>
-        <source>&amp;Plugins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="342"/>
-        <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="373"/>
-        <source>&amp;System</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="374"/>
-        <source>&amp;Accessibility</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="375"/>
-        <source>&amp;Engraving</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="376"/>
-        <source>Auto&amp;bot</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="380"/>
-        <source>&amp;Diagnostic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
-        <source>Keep going</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="106"/>
-        <source>Are you sure you want to cancel?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="107"/>
-        <source>If you choose to cancel, then make sure to check out our free playback libraries in Home &gt; Audio.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="90"/>
-        <source>Home</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="91"/>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="172"/>
-        <source>Score</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="92"/>
-        <source>Publish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="93"/>
-        <source>DevTools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="91"/>
-        <source>Workspace: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="131"/>
-        <source>Continuous view</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="164"/>
         <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="165"/>
+        <location filename="../../src/appshell/view/preferences/programmestartpreferencesmodel.cpp" line="110"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="88"/>
+        <source>Scores</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4186,12 +4166,17 @@ This action will not delete any of your scores.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="100"/>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="104"/>
         <source>SoundFonts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="109"/>
+        <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="110"/>
         <source>VST3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4274,6 +4259,11 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="169"/>
         <source>MIDI device mapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="172"/>
+        <source>Score</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4389,34 +4379,6 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="262"/>
         <source>Choose default style for parts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/preferences/updatepreferencesmodel.cpp" line="59"/>
-        <source>Privacy Policy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Main.wasm.qml" line="36"/>
-        <source>MuseScore</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>appshell/dock</name>
-    <message>
-        <location filename="../../src/appshell/view/dockwindow/dockpanelview.cpp" line="62"/>
-        <source>Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/dockwindow/dockpanelview.cpp" line="115"/>
-        <source>Dock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/view/dockwindow/dockpanelview.cpp" line="115"/>
-        <source>Undock</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4535,7 +4497,7 @@ This action will not delete any of your scores.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/barline.cpp" line="1655"/>
+        <location filename="../../src/engraving/libmscore/barline.cpp" line="1661"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1245"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1256"/>
         <location filename="../../src/engraving/libmscore/note.cpp" line="3359"/>
@@ -4544,7 +4506,7 @@ This action will not delete any of your scores.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/barline.cpp" line="1658"/>
+        <location filename="../../src/engraving/libmscore/barline.cpp" line="1664"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1248"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1258"/>
         <location filename="../../src/engraving/libmscore/note.cpp" line="3363"/>
@@ -9927,7 +9889,7 @@ Continue with adding note and delete measure repeat?</source>
 <context>
     <name>global</name>
     <message>
-        <location filename="../../src/appshell/qml/AboutDialog.qml" line="146"/>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="149"/>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="122"/>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="98"/>
         <location filename="../../src/framework/ui/qml/MuseScore/Ui/internal/StandardDialog.qml" line="41"/>
@@ -10047,12 +10009,12 @@ Continue with adding note and delete measure repeat?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="70"/>
+        <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="71"/>
         <source>Enable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="70"/>
+        <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="71"/>
         <source>Disable</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10063,8 +10025,9 @@ Continue with adding note and delete measure repeat?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/commonaudioapiconfigurationmodel.cpp" line="101"/>
+        <location filename="../../src/appshell/view/preferences/commonaudioapiconfigurationmodel.cpp" line="102"/>
         <source>Hz</source>
+        <extracomment>Abbreviation of Hertz</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10192,6 +10155,25 @@ Continue with adding note and delete measure repeat?</source>
         <source>Show more…</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="73"/>
+        <source>min</source>
+        <comment>abbreviation of minutes</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="67"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="79"/>
+        <source>ms</source>
+        <extracomment>Abbreviation of &quot;milliseconds&quot;</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="65"/>
+        <source>pt</source>
+        <extracomment>Abbreviation of &quot;points&quot;, used to specify a font size</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>iex_capella</name>
@@ -10211,6 +10193,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="412"/>
         <source>Free time</source>
+        <comment>time signature</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10554,28 +10537,28 @@ pickup measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="116"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="114"/>
         <source>Reset &quot;%1&quot; to default value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="119"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="144"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="117"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="142"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="139"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="137"/>
         <source>Menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="147"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="145"/>
         <source>Save as default style for this score</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="149"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="147"/>
         <source>This is set as the default style for this score</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13962,6 +13945,11 @@ Whether you are just getting started with music notation software, or are a powe
         <source>Staff Text Properties</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="131"/>
+        <source>Continuous view</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>notation/editstyle</name>
@@ -14268,12 +14256,12 @@ Whether you are just getting started with music notation software, or are a powe
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2138"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2115"/>
         <source>sp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2138"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2115"/>
         <source>mm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17291,13 +17279,14 @@ failed: %2</source>
 <context>
     <name>plugins</name>
     <message>
-        <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="161"/>
+        <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="162"/>
         <source>Reload plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="49"/>
+        <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="50"/>
         <source>Edit shortcut</source>
+        <extracomment>Edit the keyboard shortcut assigned to a plug-in</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -17316,13 +17305,14 @@ failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="211"/>
+        <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="212"/>
         <source>Shortcut:</source>
+        <extracomment>Keyboard shortcut</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsactioncontroller.cpp" line="81"/>
-        <source>The plugin &quot;%1&quot; is currently disabled. Enable it now?</source>
+        <source>The plugin &quot;%1&quot; is currently disabled. Do you want to enable it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -17331,13 +17321,9 @@ failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="54"/>
-        <source>Run plugin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/view/pluginsmodel.cpp" line="108"/>
+        <location filename="../../src/plugins/view/pluginsmodel.cpp" line="109"/>
         <source>Not defined</source>
+        <extracomment>No keyboard shortcut is assigned to this plugin.</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -17353,6 +17339,11 @@ failed: %2</source>
     <message>
         <location filename="../../src/plugins/internal/pluginsservice.cpp" line="83"/>
         <source>Playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="54"/>
+        <source>Run plugin %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -17431,7 +17422,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="35"/>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="192"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="209"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17650,6 +17641,11 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/KeySignatureSettings.qml" line="100"/>
         <source>Major</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/KeySignatureSettings.qml" line="108"/>
+        <source>Minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -17892,54 +17888,54 @@ failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="175"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="192"/>
         <source>Score_and_Parts</source>
         <comment>Used in export filename suggestion</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="177"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="194"/>
         <source>Parts</source>
         <comment>Used in export filename suggestion</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="228"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="245"/>
         <source>File already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="229"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="246"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="231"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="248"/>
         <source>Replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="232"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="249"/>
         <source>Replace all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="233"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="250"/>
         <source>Skip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="234"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="251"/>
         <source>Skip all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="257"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="274"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="258"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="275"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17954,82 +17950,82 @@ failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="528"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="527"/>
         <source>Open Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="532"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="531"/>
         <source>Cannot open file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="600"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="599"/>
         <source>All Supported Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="601"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="600"/>
         <source>MuseScore File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="602"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="601"/>
         <source>MusicXML Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="604"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="603"/>
         <source>MuseData Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="605"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="604"/>
         <source>Capella Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="606"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="605"/>
         <source>BB Files (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="607"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="606"/>
         <source>Overture / Score Writer Files (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="608"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="607"/>
         <source>Bagpipe Music Writer Files (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="609"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="608"/>
         <source>Guitar Pro Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="610"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="609"/>
         <source>Power Tab Editor Files (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="611"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="610"/>
         <source>MuseScore Unpack Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="612"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="611"/>
         <source>MuseScore Dev Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="613"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="612"/>
         <source>MuseScore Backup Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="621"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="620"/>
         <source>Score</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18381,7 +18377,7 @@ failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="603"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="602"/>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="90"/>
         <source>MIDI Files</source>
         <translation type="unfinished"></translation>
@@ -18469,6 +18465,11 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/recentprojectsmodel.cpp" line="117"/>
         <source>New score</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/ExportProgressDialog.qml" line="61"/>
+        <source>Exporting…</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -18780,6 +18781,40 @@ assign it to this function.</source>
         <source>direction is both</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="75"/>
+        <source>checked</source>
+        <comment>checkstate</comment>
+        <extracomment>Describes the &apos;on&apos; state of a toggle-able ui item.</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="77"/>
+        <source>unchecked</source>
+        <comment>checkstate</comment>
+        <extracomment>Describes the &apos;off&apos; state of a toggle-able ui item.</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="81"/>
+        <source>selected</source>
+        <comment>selectedState</comment>
+        <extracomment>Describes the state of a ui item that is the chosen option in a list of options</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="83"/>
+        <source>not selected</source>
+        <comment>selectedState</comment>
+        <extracomment>Describes the state of a ui item that is not the chosen option in a list of options</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="92"/>
+        <source>menu</source>
+        <extracomment>a type of ui item</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>uicomponents</name>
@@ -18988,6 +19023,11 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/workspace/view/newworkspacemodel.cpp" line="105"/>
         <source>&apos;%1&apos; cannot be used as a workspace name. Please choose a different name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="91"/>
+        <source>Workspace:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
