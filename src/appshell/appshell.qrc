@@ -30,7 +30,6 @@
         <file>qml/Preferences/UpdatePreferencesPage.qml</file>
         <file>qml/Preferences/ProgrammeStartPreferencesPage.qml</file>
         <file>qml/Preferences/NoteInputPreferencesPage.qml</file>
-        <file>qml/Preferences/StubPreferencesPage.qml</file>
         <file>qml/Preferences/AppearancePreferencesPage.qml</file>
         <file>qml/Preferences/FoldersPreferencesPage.qml</file>
         <file>qml/Preferences/AdvancedPreferencesPage.qml</file>
