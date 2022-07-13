@@ -1281,13 +1281,14 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
                 }
                 if (seg2->isSlurSegment()) {
                     SlurSegment* slur2 = toSlurSegment(seg2);
-                    if (slur1->slur()->endChord() == slur2->slur()->startChord()) {
+                    if (slur1->slur()->endChord() == slur2->slur()->startChord()
+                        && compare(slur1->ups(Grip::END).p.y(), slur2->ups(Grip::START).p.y())) {
                         slur1->ups(Grip::END).p.rx() -= slurCollisionHorizOffset;
                         slur2->ups(Grip::START).p.rx() += slurCollisionHorizOffset;
                         slur1->computeBezier();
                         slur2->computeBezier();
+                        continue;
                     }
-                    continue;
                 }
                 SlurTieSegment* slurTie2 = toSlurTieSegment(seg2);
 
