@@ -19,29 +19,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_IUPLOADINGSERVICE_H
-#define MU_CLOUD_IUPLOADINGSERVICE_H
+#ifndef MU_PROJECT_EXPORTPROGRESSMODEL_H
+#define MU_PROJECT_EXPORTPROGRESSMODEL_H
 
-#include "modularity/imoduleexport.h"
-#include "progress.h"
+#include <QObject>
 
-class QByteArray;
-class QUrl;
-class QString;
+#include "async/asyncable.h"
 
-namespace mu::cloud {
-class IUploadingService : MODULE_EXPORT_INTERFACE
+#include "modularity/ioc.h"
+#include "internal/iexportprojectscenario.h"
+
+namespace mu::project {
+class ExportProgressModel : public QObject, public async::Asyncable
 {
-    INTERFACE_ID(IUploadingService)
+    Q_OBJECT
+
+    INJECT(project, IExportProjectScenario, exportScenario)
+
+    Q_PROPERTY(int progress READ progress NOTIFY progressChanged)
 
 public:
-    virtual ~IUploadingService() = default;
+    explicit ExportProgressModel(QObject* parent = nullptr);
 
-    virtual void uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) = 0;
+    int progress() const;
 
-    virtual async::Channel<QUrl> sourceUrlReceived() const = 0;
-    virtual framework::Progress uploadProgress() const = 0;
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void cancel();
+
+signals:
+    void progressChanged();
+    void exportFinished();
+
+private:
+    void setProgress(int progress);
+
+    int m_progress = 0;
 };
 }
 
-#endif // MU_CLOUD_IUPLOADINGSERVICE_H
+#endif // MU_PROJECT_EXPORTPROGRESSMODEL_H

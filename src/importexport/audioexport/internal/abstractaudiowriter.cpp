@@ -28,6 +28,7 @@
 using namespace mu::iex::audioexport;
 using namespace mu::project;
 using namespace mu::notation;
+using namespace mu::framework;
 
 std::vector<INotationWriter::UnitType> AbstractAudioWriter::supportedUnitTypes() const
 {
@@ -75,7 +76,12 @@ void AbstractAudioWriter::abort()
     NOT_IMPLEMENTED;
 }
 
-mu::framework::ProgressChannel AbstractAudioWriter::progress() const
+bool AbstractAudioWriter::supportsProgressNotifications() const
+{
+    return true;
+}
+
+mu::framework::Progress AbstractAudioWriter::progress() const
 {
     return m_progress;
 }
@@ -90,17 +96,22 @@ void AbstractAudioWriter::doWriteAndWait(QIODevice& destinationDevice, const aud
     QFileInfo info(*file);
     QString path = info.absoluteFilePath();
 
+    m_isCompleted = false;
+
     playback()->sequenceIdList()
     .onResolve(this, [this, path, &format](const audio::TrackSequenceIdList& sequenceIdList) {
+        m_progress.started.notify();
+
         for (const audio::TrackSequenceId sequenceId : sequenceIdList) {
             playback()->audioOutput()->saveSoundTrack(sequenceId, io::path_t(path), std::move(format))
             .onResolve(this, [this, path](const bool /*result*/) {
                 LOGD() << "Successfully saved sound track by path: " << path;
                 m_isCompleted = true;
+                m_progress.finished.send(make_ok());
             })
             .onReject(this, [this](int errorCode, const std::string& msg) {
-                LOGE() << "errorCode: " << errorCode << ", " << msg;
-                m_isCompleted = true;
+                m_isCompleted  = true;
+                m_progress.finished.send(make_ret(errorCode, msg));
             });
         }
     })

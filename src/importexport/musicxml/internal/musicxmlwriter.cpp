@@ -60,15 +60,3 @@ mu::Ret MusicXmlWriter::writeList(const notation::INotationPtrList&, QIODevice&,
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
 }
-
-void MusicXmlWriter::abort()
-{
-    NOT_IMPLEMENTED;
-}
-
-mu::framework::ProgressChannel MusicXmlWriter::progress() const
-{
-    NOT_IMPLEMENTED;
-    static framework::ProgressChannel prog;
-    return prog;
-}

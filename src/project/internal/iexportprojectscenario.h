@@ -37,6 +37,10 @@ public:
 
     virtual bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
                               project::INotationWriter::UnitType unitType, bool openDestinationFolderOnExport = false) const = 0;
+
+    virtual framework::Progress progress() const = 0;
+
+    virtual void abort() = 0;
 };
 }
 
