@@ -103,7 +103,7 @@ static MarkerType markerType(const String& typeString)
     return MarkerType::USER;
 }
 
-static QString harmonicText(const GPBeat::HarmonicMarkType& type)
+static mu::String harmonicText(const GPBeat::HarmonicMarkType& type)
 {
     static std::map<GPBeat::HarmonicMarkType, String> names {
         { GPBeat::HarmonicMarkType::Artificial, u"A.H." },
@@ -409,7 +409,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
                 Segment* s = measure->getSegment(SegmentType::TimeSig, measure->tick());
                 StaffText* st = Factory::createStaffText(s);
                 st->setTrack(staffIdx * VOICES);
-                st->setPlainText(mu::qtrc("iex_guitarpro", "Free time"));
+                st->setPlainText(mu::mtrc("iex_guitarpro", "Free time"));
                 s->add(st);
 
                 // if timeSig is different, it was added before, here we handle "freetime"
@@ -633,8 +633,8 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
                 if (capo != 0) {
                     StaffText* st = Factory::createStaffText(s);
                     st->setTrack(curTrack);
-                    QString capoText = QString("Capo fret %1").arg(capo);
-                    st->setPlainText(mu::qtrc("iex_guitarpro", capoText.toStdString().c_str()));
+                    mu::String capoText = mu::String("Capo fret %1").arg(capo);
+                    st->setPlainText(mu::mtrc("iex_guitarpro", capoText.toStdString().c_str()));
                     s->add(st);
                     m_hasCapo[curTrack] = true;
                 }
@@ -702,13 +702,13 @@ void GPConverter::doAddVolta(const GPMasterBar* mB, Measure* measure)
     volta->endings().clear();
     volta->setTick2(measure->tick() + measure->ticks());
 
-    QString str;
+    String str;
     for (const auto& end : mB->alternateEnding()) {
         volta->endings().push_back(end);
         if (str.isEmpty()) {
-            str += QString("%1").arg(end);
+            str += String(u"%1").arg(end);
         } else {
-            str += QString("-%1").arg(end);
+            str += String(u"-%1").arg(end);
         }
     }
     volta->setText(str);
@@ -832,11 +832,11 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 
 void GPConverter::setUpGPScore(const GPScore* gpscore)
 {
-    std::vector<QString> fieldNames = { gpscore->title(), gpscore->subTitle(), gpscore->artist(),
-                                        gpscore->album(), gpscore->composer(), gpscore->poet() };
+    std::vector<mu::String> fieldNames = { gpscore->title(), gpscore->subTitle(), gpscore->artist(),
+                                           gpscore->album(), gpscore->composer(), gpscore->poet() };
 
     bool createTitleField
-        = std::any_of(fieldNames.begin(), fieldNames.end(), [](const QString& fieldName) { return !fieldName.isEmpty(); });
+        = std::any_of(fieldNames.begin(), fieldNames.end(), [](const mu::String& fieldName) { return !fieldName.isEmpty(); });
 
     if (!createTitleField) {
         return;
@@ -864,19 +864,19 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
     }
     if (!gpscore->subTitle().isEmpty() || !gpscore->artist().isEmpty() || !gpscore->album().isEmpty()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::SUBTITLE);
-        QString str;
+        mu::String str;
         if (!gpscore->subTitle().isEmpty()) {
             str.append(gpscore->subTitle());
         }
         if (!gpscore->artist().isEmpty()) {
             if (!str.isEmpty()) {
-                str.append("\n");
+                str.append(u"\n");
             }
             str.append(gpscore->artist());
         }
         if (!gpscore->album().isEmpty()) {
             if (!str.isEmpty()) {
-                str.append("\n");
+                str.append(u"\n");
             }
             str.append(gpscore->album());
         }
@@ -885,12 +885,12 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
     }
     if (!gpscore->composer().isEmpty()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::COMPOSER);
-        s->setPlainText(mu::qtrc("iex_guitarpro", "Music by %1").arg(gpscore->composer()));
+        s->setPlainText(mu::mtrc("iex_guitarpro", "Music by %1").arg(gpscore->composer()));
         m->add(s);
     }
     if (!gpscore->poet().isEmpty()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::POET);
-        s->setPlainText(mu::qtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
+        s->setPlainText(mu::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
         m->add(s);
     }
 }
@@ -1136,7 +1136,7 @@ void GPConverter::addContinuousSlideHammerOn()
                 auto midTick = (startTick + endTick) / 2;
                 Segment* segment = measure->getSegment(SegmentType::ChordRest, midTick);
                 StaffText* staffText = Factory::createStaffText(segment);
-                QString hammerText = (startNote->pitch() > endNote->pitch()) ? "P" : "H";
+                mu::String hammerText = (startNote->pitch() > endNote->pitch()) ? mu::String("P") : mu::String("H");
 
                 staffText->setPlainText(hammerText);
                 staffText->setTrack(track);
@@ -1231,7 +1231,7 @@ void GPConverter::addTempoMap()
             int realTemp = realTempo(tempIt->second);
             TempoText* tt = Factory::createTempoText(segment);
             tt->setTempo((qreal)realTemp / 60);
-            tt->setXmlText(String("<sym>metNoteQuarterUp</sym> = %1").arg(realTemp));
+            tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(realTemp));
             tt->setTrack(0);
             segment->add(tt);
             _score->setTempo(tick, tt->tempo());
@@ -1440,9 +1440,9 @@ void GPConverter::addFingering(const GPNote* gpnote, Note* note)
         return;
     }
 
-    auto scoreFinger = [](const auto& str) {
-        if (str == "Open") {
-            return QString("O");
+    auto scoreFinger = [](const String& str) {
+        if (str == u"Open") {
+            return String(u"O");
         }
         return str;
     };
@@ -1861,7 +1861,7 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
     note->setTpcFromPitch();
 }
 
-int GPConverter::calculateDrumPitch(int element, int variation, const QString& /*instrumentName*/)
+int GPConverter::calculateDrumPitch(int element, int variation, const String& /*instrumentName*/)
 {
     //!@NOTE copied from importgtp-gp6.cpp.
 
@@ -2256,9 +2256,9 @@ void GPConverter::addTimer(const GPBeat* beat, ChordRest* cr)
     int minutes = time / 60;
     int seconds = time % 60;
     Text* st = Factory::createText(cr->segment());
-    st->setPlainText(QString::number(minutes)
-                     + ":"
-                     + (seconds < 10 ? "0" + QString::number(seconds) : QString::number(seconds)));
+    st->setPlainText(mu::String::number(minutes)
+                     + u":"
+                     + (seconds < 10 ? u"0" + mu::String::number(seconds) : mu::String::number(seconds)));
     st->setParent(cr->segment());
     st->setTrack(cr->track());
     cr->segment()->add(st);
@@ -2573,13 +2573,13 @@ void GPConverter::addBarre(const GPBeat* beat, ChordRest* cr)
 
     auto barreType = [](const GPBeat::Barre& barre) {
         if (barre.string == 1) {
-            return QString("1/2B ");
+            return std::string("1/2B ");
         } else {
-            return QString("B ");
+            return std::string("B ");
         }
     };
 
-    QString barreFret;
+    std::string barreFret;
     int fret = beat->barre().fret;
 
     for (int i = 0; i < (fret / 10); i++) {
@@ -2600,7 +2600,7 @@ void GPConverter::addBarre(const GPBeat* beat, ChordRest* cr)
         }
     }
 
-    addTextToNote(barreType(beat->barre()) + barreFret, static_cast<Chord*>(cr)->upNote());
+    addTextToNote(mu::String::fromStdString(barreType(beat->barre()) + barreFret), static_cast<Chord*>(cr)->upNote());
 }
 
 void GPConverter::addLyrics(const GPBeat* beat, ChordRest* cr, const Context& ctx)
@@ -2613,7 +2613,7 @@ void GPConverter::addLyrics(const GPBeat* beat, ChordRest* cr, const Context& ct
     }
 
     Lyrics* lyr = Factory::createLyrics(_score->dummy()->chord());
-    lyr->setPlainText(QString::fromUtf8(lyrStr.c_str()));
+    lyr->setPlainText(mu::String::fromUtf8(lyrStr.c_str()));
     cr->add(lyr);
 }
 
@@ -2655,7 +2655,7 @@ void GPConverter::clearDefectedGraceChord(ChordRestContainer& graceGhords)
     graceGhords.clear();
 }
 
-void GPConverter::addTextToNote(QString string, Note* note)
+void GPConverter::addTextToNote(String string, Note* note)
 {
     Segment* segment = note->chord()->segment();
     StaffText* text = Factory::createStaffText(segment);
@@ -2663,7 +2663,7 @@ void GPConverter::addTextToNote(QString string, Note* note)
     if (!string.isEmpty()) {
         bool useHarmony = string[string.size() - 1] == '\\';
         if (useHarmony) {
-            string.resize(string.size() - 1);
+            string.chop(1);
         }
     }
     text->setPlainText(string);

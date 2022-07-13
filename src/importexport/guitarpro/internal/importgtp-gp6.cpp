@@ -82,7 +82,7 @@ using namespace mu::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-const std::map<QString, QString> GuitarPro6::instrumentMapping = {
+const std::map<std::string, std::string> GuitarPro6::instrumentMapping = {
     { "2Mrcs",           "maracas" },
     { "a-bass4",         "acoustic-bass" },
     { "a-bass5",         "acoustic-bass" },
@@ -342,7 +342,7 @@ QByteArray GuitarPro6::readString(QByteArray* buffer, int offset, int length)
 //   unhandledNode
 //---------------------------------------------------------
 
-void GuitarPro6::unhandledNode(QString nodeName)
+void GuitarPro6::unhandledNode(String nodeName)
 {
     LOGD() << "WARNING: Discovered unhandled node name" << nodeName;
 }
@@ -351,11 +351,11 @@ void GuitarPro6::unhandledNode(QString nodeName)
 //   getNode
 //---------------------------------------------------------
 
-QDomNode GuitarPro6::getNode(const QString& id, QDomNode currentDomNode)
+QDomNode GuitarPro6::getNode(const String& id, QDomNode currentDomNode)
 {
     while (!(currentDomNode).isNull()) {
-        QString currentId = currentDomNode.attributes().namedItem("id").toAttr().value();
-        if (id.compare(currentId) == 0) {
+        String currentId = currentDomNode.attributes().namedItem("id").toAttr().value();
+        if (id == currentId) {
             return currentDomNode;
         }
         currentDomNode = currentDomNode.nextSibling();

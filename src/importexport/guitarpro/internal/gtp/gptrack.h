@@ -23,14 +23,14 @@ public:
         std::vector<int> tunning;
     };
 
-    struct String {
+    struct InstrumentString {
         int num{ 0 };
         int tunning{ 0 };
     };
 
     struct Diagram {
         int id{ 0 };
-        QString name;
+        mu::String name;
         int stringCount{ 0 };
         int fretCount{ 0 };
         int baseFret{ 0 };
@@ -43,14 +43,14 @@ public:
         : _idx(idx) {}
     virtual ~GPTrack() = default;
 
-    void setName(const QString& n) { _name = n; }
-    QString name() const { return _name; }
+    void setName(const mu::String& n) { _name = n; }
+    mu::String name() const { return _name; }
 
-    void setShortName(const QString& s) { _shortName = s; }
-    QString shortName() const { return _shortName; }
+    void setShortName(const mu::String& s) { _shortName = s; }
+    mu::String shortName() const { return _shortName; }
 
-    void setInstrument(const QString& s) { _instrument = s; }
-    QString instrument() const { return _instrument; }
+    void setInstrument(const mu::String& s) { _instrument = s; }
+    mu::String instrument() const { return _instrument; }
 
     void setRSE(const RSE& r) { _rse = r; }
     const RSE& rse() const { return _rse; }
@@ -67,9 +67,9 @@ public:
     void addStaffProperty(const StaffProperty& st) { _staffProperty.push_back(st); }
     const std::vector<StaffProperty>& staffProperty() const { return _staffProperty; }
 
-    std::vector<String> strings() const
+    std::vector<InstrumentString> strings() const
     {
-        std::vector<String> ss;
+        std::vector<InstrumentString> ss;
         if (_staffProperty.empty()) {
             return ss;
         }
@@ -101,9 +101,9 @@ public:
 
 protected:
 
-    QString _name;
-    QString _shortName;
-    QString _instrument;
+    mu::String _name;
+    mu::String _shortName;
+    mu::String _instrument;
     RSE _rse;
     int _programm{ 0 };
     int _midiChannel{ 0 };
