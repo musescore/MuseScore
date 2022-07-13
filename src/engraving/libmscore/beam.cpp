@@ -513,33 +513,56 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
     if (startNote == endNote) {
         return 0;
     }
+    if (isSlopeConstrained(startNote, endNote) == 0) {
+        return 0;
+    }
+
+    // calculate max slope based on distance between first and last chords
+    int maxSlope = getMaxSlope();
+
+    // calculate max slope based on note interval
+    int interval = std::min(std::abs(endNote - startNote), (int)_maxSlopes.size() - 1);
+    return std::min(maxSlope, _maxSlopes[interval]) * (_up ? 1 : -1);
+}
+
+int Beam::isSlopeConstrained(int startNote, int endNote) const
+{
+    // 0 to constrain to flat, 1 to constrain to 0.25, <0 for no constraint
+    if (startNote == endNote) {
+        return 0;
+    }
     // if a note is more extreme than the endpoints, slope is 0
     // p.s. _notes is a sorted vector
     if (_notes.size() > 2) {
         if (_up) {
             int higherEnd = std::min(startNote, endNote);
             if (higherEnd > _notes[0]) {
-                return 0;
+                return 0; // a note is higher in the staff than the highest end
             }
             if (higherEnd == _notes[0] && higherEnd >= _notes[1]) {
                 if (higherEnd > _notes[1]) {
-                    return 0;
+                    return 0; // a note is higher in the staff than the highest end
                 }
                 size_t chordCount = _elements.size();
                 if (chordCount >= 3 && _notes.size() >= 3) {
                     bool middleNoteHigherThanHigherEnd = higherEnd >= _notes[2];
                     if (middleNoteHigherThanHigherEnd) {
-                        return 0;
+                        return 0; // two notes are the same as the highest end (notes [0] [1] and [2] higher than or same as higherEnd)
                     }
                     bool secondNoteSameHeightAsHigherEnd = startNote < endNote && _elements[1]->isChord()
                                                            && toChord(_elements[1])->upLine() == higherEnd;
                     bool secondToLastNoteSameHeightAsHigherEnd = endNote < startNote && _elements[chordCount - 2]->isChord() && toChord(
                         _elements[chordCount - 2])->upLine() == higherEnd;
                     if (!(secondNoteSameHeightAsHigherEnd || secondToLastNoteSameHeightAsHigherEnd)) {
-                        return 0;
+                        return 0; // only one note same as higher end, but it is not a neighbor
+                    } else {
+                        // there is a single note next to the highest one with equivalent height
+                        // and they are neighbors. this is our exception, so
+                        // the slope may be a max of 0.25.
+                        return 1;
                     }
                 } else {
-                    return 0;
+                    return 0; // only two notes in entire beam, in this case startNote == endNote
                 }
             }
         } else {
@@ -563,6 +586,8 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
                         _elements[chordCount - 2])->downLine() == lowerEnd;
                     if (!(secondNoteSameHeightAsLowerEnd || secondToLastNoteSameHeightAsLowerEnd)) {
                         return 0;
+                    } else {
+                        return 1;
                     }
                 } else {
                     return 0;
@@ -570,13 +595,7 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
             }
         }
     }
-
-    // calculate max slope based on distance between first and last chords
-    int maxSlope = getMaxSlope();
-
-    // calculate max slope based on note interval
-    int interval = std::min(std::abs(endNote - startNote), (int)_maxSlopes.size() - 1);
-    return std::min(maxSlope, _maxSlopes[interval]) * (_up ? 1 : -1);
+    return -1;
 }
 
 int Beam::getMaxSlope() const
@@ -1619,6 +1638,9 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
 
         int slant = computeDesiredSlant(startNote, endNote, middleLine, dictator, pointer);
         bool isFlat = slant == 0;
+        int specialSlant = isFlat ? isSlopeConstrained(startNote, endNote) : -1;
+        bool forceFlat = specialSlant == 0;
+        bool smallSlant = specialSlant == 1;
         if (isFlat) {
             dictator = _up ? std::min(pointer, dictator) : std::max(pointer, dictator);
             pointer = dictator;
@@ -1649,7 +1671,9 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
             if (!_isGrace) {
                 setValidBeamPositions(dictator, pointer, beamCount, staffLines, isStartDictator, isFlat, isAscending);
             }
-            addMiddleLineSlant(dictator, pointer, beamCount, middleLine, interval, slant);
+            if (!forceFlat) {
+                addMiddleLineSlant(dictator, pointer, beamCount, middleLine, interval, smallSlant ? 1 : slant);
+            }
         }
 
         _startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer) + pagePos().y());
