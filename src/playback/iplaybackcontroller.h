@@ -25,6 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "async/notification.h"
 #include "async/channel.h"
+#include "global/progress.h"
 
 #include "notation/notationtypes.h"
 #include "audio/audiotypes.h"
@@ -71,6 +72,8 @@ public:
 
     virtual notation::MeasureBeat currentBeat() const = 0;
     virtual audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
+
+    virtual framework::Progress loadingProgress() const = 0;
 };
 }
 

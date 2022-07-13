@@ -14,5 +14,6 @@
         <file>qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml</file>
         <file>qml/MuseScore/Playback/internal/AudioResourceControl.qml</file>
         <file>qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml</file>
+        <file>qml/MuseScore/Playback/PlaybackLoadingInfo.qml</file>
     </qresource>
 </RCC>
