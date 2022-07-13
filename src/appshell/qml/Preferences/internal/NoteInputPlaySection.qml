@@ -63,7 +63,8 @@ BaseSection {
         columnWidth: root.columnWidth
         spacing: root.columnSpacing
 
-        measureUnitsSymbol: qsTrc("appshell", "ms")
+        //: Abbreviation of "milliseconds"
+        measureUnitsSymbol: qsTrc("global", "ms")
 
         navigation.name: "NotePlayDurationControl"
         navigation.panel: root.navigation
