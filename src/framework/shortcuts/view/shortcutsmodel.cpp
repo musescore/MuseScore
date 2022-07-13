@@ -22,7 +22,6 @@
 
 #include "shortcutsmodel.h"
 
-#include "ui/view/iconcodes.h"
 #include "translation.h"
 #include "log.h"
 
@@ -52,7 +51,7 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     case RoleIcon: return static_cast<int>(this->action(shortcut.action).iconCode);
     case RoleSequence: return sequencesToNativeText(shortcut.sequences);
     case RoleSearchKey: {
-        UiAction action = this->action(shortcut.action);
+        const UiAction& action = this->action(shortcut.action);
         return QString::fromStdString(action.code) + action.title + sequencesToNativeText(shortcut.sequences);
     }
     }
@@ -233,15 +232,36 @@ void ShortcutsModel::notifyAboutShortcutChanged(const QModelIndex& index)
 
 void ShortcutsModel::resetToDefaultSelectedShortcuts()
 {
+    auto resolveConflicts = [this](const Shortcut& shortcut) {
+        for (int i = 0; i < m_shortcuts.size(); ++i) {
+            Shortcut& sc = m_shortcuts[i];
+
+            if (shortcut == sc) {
+                continue;
+            }
+
+            if (!areContextPrioritiesEqual(shortcut.context, sc.context)) {
+                continue;
+            }
+
+            if (shortcut.sequences == sc.sequences) {
+                sc.clear();
+                notifyAboutShortcutChanged(index(i));
+            }
+        }
+    };
+
     for (const QModelIndex& index : m_selection.indexes()) {
         Shortcut& shortcut = m_shortcuts[index.row()];
 
-        Shortcut defaultShortcut = shortcutsRegister()->defaultShortcut(shortcut.action);
+        const Shortcut& defaultShortcut = shortcutsRegister()->defaultShortcut(shortcut.action);
         if (defaultShortcut.isValid()) {
             shortcut = defaultShortcut;
         } else {
             shortcut.sequences = {};
         }
+
+        resolveConflicts(shortcut);
 
         notifyAboutShortcutChanged(index);
     }

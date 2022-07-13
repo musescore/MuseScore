@@ -31,8 +31,6 @@
 using namespace mu::shortcuts;
 using namespace mu::framework;
 
-static const QString ANY_CONTEXT("any");
-
 EditShortcutModel::EditShortcutModel(QObject* parent)
     : QObject(parent)
 {
@@ -48,28 +46,17 @@ void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList&
     m_potentialConflictShortcuts.clear();
 
     QVariantMap originShortcutMap = originShortcut.toMap();
-    QString originCtx = originShortcutMap.value("context", ANY_CONTEXT).toString();
-    bool isOriginCtxAny = originCtx == ANY_CONTEXT;
+    std::string originCtx = originShortcutMap.value("context").toString().toStdString();
 
     for (const QVariant& shortcut : allShortcuts) {
         if (shortcut == originShortcut) {
             continue;
         }
 
-        if (isOriginCtxAny) {
-            m_potentialConflictShortcuts << shortcut;
-            continue;
-        }
-
         QVariantMap map = shortcut.toMap();
-        QString ctx = map.value("context", ANY_CONTEXT).toString();
+        std::string ctx = map.value("context").toString().toStdString();
 
-        if (ctx == ANY_CONTEXT) {
-            m_potentialConflictShortcuts << shortcut;
-            continue;
-        }
-
-        if (ctx == originCtx) {
+        if (areContextPrioritiesEqual(originCtx, ctx)) {
             m_potentialConflictShortcuts << shortcut;
         }
     }
