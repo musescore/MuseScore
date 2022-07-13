@@ -98,6 +98,7 @@ QStringList CommonAudioApiConfigurationModel::sampleRateHzList() const
 
     QStringList result;
     for (int sampleRate : sampleRateList) {
+        //: Abbreviation of Hertz
         result << QString::number(sampleRate) + " " + qtrc("global", "Hz");
     }
 

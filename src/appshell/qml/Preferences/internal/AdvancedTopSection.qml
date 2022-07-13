@@ -63,6 +63,7 @@ BaseSection {
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: 160
 
+            //: Search advanced preferences
             hint: qsTrc("appshell", "Search advanced")
 
             navigation.name: "SearchAdvancedField"
