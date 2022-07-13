@@ -27,6 +27,8 @@
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
 
+class QUrl;
+
 namespace mu::appshell {
 class AboutModel : public QObject
 {
@@ -50,7 +52,7 @@ public:
     Q_INVOKABLE void copyRevisionToClipboard() const;
 
 private:
-    QVariantMap makeUrl(const QString& url, const QString& displayName) const;
+    QVariantMap makeUrl(const QUrl& url, bool showPath = true) const;
 };
 }
 
