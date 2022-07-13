@@ -161,8 +161,8 @@ QStringList AppearancePreferencesModel::allFonts() const
 
 QString AppearancePreferencesModel::wallpaperPathFilter() const
 {
-    return qtrc("appshell", "Images") + " (*.jpg *.jpeg *.png);;"
-           + qtrc("appshell", "All") + " (*)";
+    return qtrc("appshell/preferences", "Images") + " (*.jpg *.jpeg *.png);;"
+           + qtrc("appshell/preferences", "All") + " (*)";
 }
 
 QString AppearancePreferencesModel::wallpapersDir() const

@@ -85,28 +85,29 @@ void FoldersPreferencesModel::load()
 
     m_folders = {
         {
-            FolderType::Scores, qtrc("appshell", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
+            FolderType::Scores, qtrc("appshell/preferences", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
             projectConfiguration()->userProjectsPath().toQString()
         },
         {
-            FolderType::Styles, qtrc("appshell", "Styles"), notationConfiguration()->userStylesPath().toQString(),
+            FolderType::Styles, qtrc("appshell/preferences", "Styles"), notationConfiguration()->userStylesPath().toQString(),
             notationConfiguration()->userStylesPath().toQString()
         },
         {
-            FolderType::Templates, qtrc("appshell", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
+            FolderType::Templates, qtrc("appshell/preferences", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
             projectConfiguration()->userTemplatesPath().toQString()
         },
         {
-            FolderType::Plugins, qtrc("appshell", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString(),
+            FolderType::Plugins, qtrc("appshell/preferences", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString(),
             pluginsConfiguration()->userPluginsPath().toQString()
         },
         {
-            FolderType::SoundFonts, qtrc("appshell", "SoundFonts"), pathsToString(audioConfiguration()->userSoundFontDirectories()),
+            FolderType::SoundFonts, qtrc("appshell/preferences", "SoundFonts"), pathsToString(
+                audioConfiguration()->userSoundFontDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         },
 #ifdef BUILD_VST
         {
-            FolderType::VST3, qtrc("appshell", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
+            FolderType::VST3, qtrc("appshell/preferences", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         }
 #endif

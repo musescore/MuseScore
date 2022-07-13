@@ -52,10 +52,10 @@ QVariantList ProgrammeStartPreferencesModel::startupModes() const
 ProgrammeStartPreferencesModel::StartModeList ProgrammeStartPreferencesModel::allStartupModes() const
 {
     static const QMap<StartupModeType, QString> modeTitles {
-        { StartupModeType::StartEmpty,  qtrc("appshell", "Start empty") },
-        { StartupModeType::ContinueLastSession, qtrc("appshell", "Continue last session") },
-        { StartupModeType::StartWithNewScore, qtrc("appshell", "Start with new score") },
-        { StartupModeType::StartWithScore, qtrc("appshell", "Start with score:") }
+        { StartupModeType::StartEmpty,  qtrc("appshell/preferences", "Start empty") },
+        { StartupModeType::ContinueLastSession, qtrc("appshell/preferences", "Continue last session") },
+        { StartupModeType::StartWithNewScore, qtrc("appshell/preferences", "Start with new score") },
+        { StartupModeType::StartWithScore, qtrc("appshell/preferences", "Start with score:") }
     };
 
     StartModeList modes;
@@ -96,9 +96,9 @@ ProgrammeStartPreferencesModel::PanelList ProgrammeStartPreferencesModel::allPan
     PanelList panels {
         /*
          * TODO: https://github.com/musescore/MuseScore/issues/9807
-        Panel { SplashScreen, qtrc("appshell", "Show splash screen"), configuration()->needShowSplashScreen() },
+        Panel { SplashScreen, qtrc("appshell/preferences", "Show splash screen"), configuration()->needShowSplashScreen() },
          */
-        Panel { Navigator, qtrc("appshell", "Show navigator"), configuration()->isNotationNavigatorVisible() },
+        Panel { Navigator, qtrc("appshell/preferences", "Show navigator"), configuration()->isNotationNavigatorVisible() },
     };
 
     return panels;
@@ -106,8 +106,8 @@ ProgrammeStartPreferencesModel::PanelList ProgrammeStartPreferencesModel::allPan
 
 QString ProgrammeStartPreferencesModel::scorePathFilter() const
 {
-    return qtrc("appshell", "MuseScore File") + " (*.mscz);;"
-           + qtrc("appshell", "All") + " (*)";
+    return qtrc("appshell/preferences", "MuseScore File") + " (*.mscz);;"
+           + qtrc("appshell/preferences", "All") + " (*)";
 }
 
 void ProgrammeStartPreferencesModel::setCurrentStartupMode(int modeIndex)

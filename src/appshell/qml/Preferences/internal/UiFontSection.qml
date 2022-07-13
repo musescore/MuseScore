@@ -26,7 +26,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Appearance")
+    title: qsTrc("appshell/preferences", "Appearance")
 
     property alias allFonts: selectFontControl.model
 
@@ -39,7 +39,7 @@ BaseSection {
     ComboBoxWithTitle {
         id: selectFontControl
 
-        title: qsTrc("appshell", "Font face:")
+        title: qsTrc("appshell/preferences", "Font face:")
         columnWidth: root.columnWidth
 
         navigation.name: "FontFaceBox"
@@ -54,7 +54,7 @@ BaseSection {
     IncrementalPropertyControlWithTitle {
         id: bodyTextSizeControl
 
-        title: qsTrc("appshell", "Body text size:")
+        title: qsTrc("appshell/preferences", "Body text size:")
         columnWidth: root.columnWidth
         control.width: 112
 

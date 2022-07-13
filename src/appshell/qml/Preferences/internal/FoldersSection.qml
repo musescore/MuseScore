@@ -28,7 +28,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Folders")
+    title: qsTrc("appshell/preferences", "Folders")
 
     navigation.direction: NavigationPanel.Both
 
@@ -60,7 +60,7 @@ BaseSection {
                 Layout.fillWidth: true
 
                 pickerType: model.isMultiDirectories ? FilePicker.PickerType.MultipleDirectories : FilePicker.PickerType.Directory
-                dialogTitle: qsTrc("appshell", "Choose %1 folder").arg(model.title)
+                dialogTitle: qsTrc("appshell/preferences", "Choose %1 folder").arg(model.title)
                 dir: model.dir
 
                 path: model.path

@@ -26,7 +26,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "MusicXML")
+    title: qsTrc("appshell/preferences", "MusicXML")
 
     property alias importLayout: importLayoutBox.checked
     property alias importBreaks: importBreaksBox.checked
@@ -40,7 +40,7 @@ BaseSection {
         id: importLayoutBox
         width: parent.width
 
-        text: qsTrc("appshell", "Import layout")
+        text: qsTrc("appshell/preferences", "Import layout")
 
         navigation.name: "ImportLayoutBox"
         navigation.panel: root.navigation
@@ -55,7 +55,7 @@ BaseSection {
         id: importBreaksBox
         width: parent.width
 
-        text: qsTrc("appshell", "Import system and page breaks")
+        text: qsTrc("appshell/preferences", "Import system and page breaks")
 
         navigation.name: "ImportBreaksBox"
         navigation.panel: root.navigation
@@ -70,7 +70,7 @@ BaseSection {
         id: needUseDefaultFontBox
         width: parent.width
 
-        text: qsTrc("appshell", "Apply default typeface (Edwin) to imported scores")
+        text: qsTrc("appshell/preferences", "Apply default typeface (Edwin) to imported scores")
 
         navigation.name: "UseDefaultFontBox"
         navigation.panel: root.navigation

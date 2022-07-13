@@ -29,7 +29,7 @@ import "../../shared"
 BaseSection {
     id: root
 
-    title: highContrastEnabled ? qsTrc("appshell", "High Contrast Themes") : qsTrc("appshell", "Themes")
+    title: highContrastEnabled ? qsTrc("appshell/preferences", "High Contrast Themes") : qsTrc("appshell/preferences", "Themes")
     navigation.direction: NavigationPanel.Both
 
     property bool highContrastEnabled: false
@@ -75,7 +75,7 @@ BaseSection {
                 id: followSystemThemeCheckBox
                 width: parent.width
 
-                text: qsTrc("appshell", "Follow system theme")
+                text: qsTrc("appshell/preferences", "Follow system theme")
 
                 navigation.name: "FollowSystemThemeBox"
                 navigation.panel: root.navigation
@@ -90,7 +90,7 @@ BaseSection {
             CheckBox {
                 width: parent.width
 
-                text: qsTrc("appshell", "Enable high-contrast")
+                text: qsTrc("appshell/preferences", "Enable high-contrast")
 
                 checked: root.highContrastEnabled
 

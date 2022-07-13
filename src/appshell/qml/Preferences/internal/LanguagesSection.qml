@@ -28,7 +28,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Languages")
+    title: qsTrc("appshell/preferences", "Languages")
 
     navigation.direction: NavigationPanel.Horizontal
 
@@ -74,7 +74,7 @@ BaseSection {
 
             anchors.verticalCenter: parent.verticalCenter
 
-            text: qsTrc("appshell", "Check for update")
+            text: qsTrc("appshell/preferences", "Check for update")
 
             navigationName: "CheckForUpdate"
             navigationPanel: root.navigation
