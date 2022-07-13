@@ -46,6 +46,7 @@ InfoPanel {
             navigation.panel: root.contentNavigation
             navigation.column: 1
 
+            //: Edit the keyboard shortcut assigned to a plug-in
             text: qsTrc("plugins", "Edit shortcut")
 
             onClicked: {

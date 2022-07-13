@@ -208,6 +208,7 @@ Item {
 
         additionalInfoModel: [
             {"title": qsTrc("plugins", "Version:"), "value": Boolean(selectedPlugin) ? selectedPlugin.version : "" },
+            //: Keyboard shortcut
             {"title": qsTrc("plugins", "Shortcut:"), "value": Boolean(selectedPlugin) ? selectedPlugin.shortcuts : ""}
         ]
 
