@@ -126,13 +126,14 @@ FocusScope {
                 readonly property string allCategoryValue: "ALL_CATEGORY"
                 property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
 
-                displayText: qsTrc("appshell", "Category: ") + categoryDropdown.currentText
+                displayText: qsTrc("appshell", "Category:") + " " + categoryDropdown.currentText
                 currentIndex: indexOfValue(allCategoryValue)
 
                 function initModel() {
                     var categories = pluginsPage.categories()
                     var result = []
 
+                    //: The title of an option to display the plugins from all categories.
                     result.push({ "text": qsTrc("appshell", "All"), "value": allCategoryValue })
 
                     for (var i = 0; i < categories.length; ++i) {
