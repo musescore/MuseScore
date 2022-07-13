@@ -70,9 +70,17 @@ ListItemBlank {
     navigation.accessible.name: {
         var text = itemPrv.title
         if (itemPrv.isCheckable) {
-            text += " " + (itemPrv.isChecked ? qsTrc("appshell", "checked") : qsTrc("appshell", "unchecked"))
+            text += " " + (itemPrv.isChecked
+                           //: Describes the 'on' state of a toggle-able ui item.
+                           ? qsTrc("ui", "checked", "checkstate")
+                           //: Describes the 'off' state of a toggle-able ui item.
+                           : qsTrc("ui", "unchecked", "checkstate"))
         } else if (itemPrv.isSelectable) {
-            text += " " + (itemPrv.isSelected ? qsTrc("appshell", "selected") : qsTrc("appshell", "not selected"))
+            text += " " + (itemPrv.isSelected
+                           //: Describes the state of a ui item that is the chosen option in a list of options
+                           ? qsTrc("ui", "selected", "selectedState")
+                           //: Describes the state of a ui item that is not the chosen option in a list of options
+                           : qsTrc("ui", "not selected", "selectedState"))
         }
 
         if (itemPrv.hasShortcuts) {
@@ -80,7 +88,8 @@ ListItemBlank {
         }
 
         if (root.hasSubMenu) {
-            text += " " + qsTrc("appshell", "menu")
+            //: a type of ui item
+            text += " " + qsTrc("ui", "menu")
         }
 
         return Utils.removeAmpersands(text)
