@@ -66,8 +66,11 @@ StyledDialogView {
         for (var i in pages) {
             var pageInfo = pages[i]
 
-            var pagePath = Boolean(pageInfo.path) ? pageInfo.path : "Preferences/StubPreferencesPage.qml"
-            var pageComponent = Qt.createComponent("../" + pagePath)
+            if (!Boolean(pageInfo.path)) {
+                continue
+            }
+
+            var pageComponent = Qt.createComponent("../" + pageInfo.path)
 
             var properties = {
                 navigationSection: root.navigationSection,
