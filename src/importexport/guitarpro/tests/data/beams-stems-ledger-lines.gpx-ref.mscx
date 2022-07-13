@@ -46,21 +46,23 @@
       <trackName>Acoustic (DADGAD)</trackName>
       <Instrument>
         <longName>Acoustic (DADGAD)</longName>
+        <shortName>S-Gt</shortName>
         <trackName></trackName>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
-          <string>38</string>
-          <string>45</string>
           <string>50</string>
-          <string>55</string>
           <string>57</string>
           <string>62</string>
+          <string>67</string>
+          <string>69</string>
+          <string>74</string>
           </StringData>
         <Channel>
           <program value="25"/>
-          <controller ctrl="7" value="79"/>
-          <controller ctrl="10" value="63"/>
+          <controller ctrl="7" value="88"/>
           </Channel>
         </Instrument>
       </Part>
@@ -68,8 +70,8 @@
       <Measure>
         <voice>
           <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
             </Clef>
           <KeySig>
             <accidental>0</accidental>
@@ -78,16 +80,11 @@
             <sigN>12</sigN>
             <sigD>8</sigD>
             </TimeSig>
-          <RehearsalMark>
-            <text>Verse 1</text>
-            </RehearsalMark>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <FretDiagram>
-            <Harmony>
-              <root>16</root>
-              <name>add11</name>
-              <base>20</base>
-              <align>center,top</align>
-              </Harmony>
             <fretDiagram>
               <string no="0">
                 <dot fret="4">normal</dot>
@@ -127,6 +124,13 @@
               <marker>79</marker>
               </string>
             </FretDiagram>
+          <RehearsalMark>
+            <text>Verse 1</text>
+            </RehearsalMark>
+          <Tempo>
+            <tempo>1.683333</tempo>
+            <text><sym>metNoteQuarterUp</sym> = 101</text>
+            </Tempo>
           <Beam>
             <l1>-16</l1>
             <l2>-16</l2>
@@ -297,6 +301,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <Beam>
             <l1>-16</l1>
             <l2>-16</l2>
@@ -340,6 +348,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -457,13 +469,11 @@
               <string>0</string>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <FretDiagram>
-            <Harmony>
-              <root>15</root>
-              <name>add9</name>
-              <base>18</base>
-              <align>center,top</align>
-              </Harmony>
             <fretDiagram>
               <string no="0">
                 <dot fret="2">normal</dot>
@@ -546,6 +556,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -663,6 +677,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <Beam>
             <l1>-16</l1>
             <l2>-16</l2>
@@ -706,6 +724,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -823,6 +845,9 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>
