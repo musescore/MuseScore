@@ -90,6 +90,8 @@ public:
     notation::MeasureBeat currentBeat() const override;
     audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
 
+    framework::Progress loadingProgress() const override;
+
 private:
     notation::INotationPlaybackPtr notationPlayback() const;
     notation::INotationPartsPtr masterNotationParts() const;
@@ -101,6 +103,8 @@ private:
 
     int currentTick() const;
     bool isPaused() const;
+
+    bool isLoaded() const;
 
     bool isLoopVisible() const;
     bool isPlaybackLooped() const;
@@ -151,7 +155,8 @@ private:
     void updateMuteStates();
 
     void setCurrentTick(const midi::tick_t tick);
-    void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title);
+    void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title,
+                  const std::function<void(const engraving::InstrumentTrackId&)>& callBack);
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
     audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
     engraving::InstrumentTrackIdSet availableInstrumentTracks() const;
@@ -180,6 +185,9 @@ private:
     notation::Tempo m_currentTempo;
 
     std::unordered_map<engraving::InstrumentTrackId, audio::TrackId> m_trackIdMap;
+
+    framework::Progress m_loadingProgress;
+    std::list<engraving::InstrumentTrackId> m_loadingTracks;
 };
 }
 
