@@ -94,15 +94,3 @@ mu::Ret MscNotationWriter::writeList(const INotationPtrList&, QIODevice&, const 
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
 }
-
-void MscNotationWriter::abort()
-{
-    NOT_IMPLEMENTED;
-}
-
-ProgressChannel MscNotationWriter::progress() const
-{
-    NOT_IMPLEMENTED;
-    static ProgressChannel prog;
-    return prog;
-}

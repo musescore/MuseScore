@@ -181,6 +181,7 @@ void PopupView::open()
         }
         qWindow->setTitle(m_title);
         qWindow->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
+        qWindow->setFlag(Qt::FramelessWindowHint, m_frameless);
 #ifdef UI_DISABLE_MODALITY
         qWindow->setModality(Qt::NonModal);
 #endif
@@ -427,6 +428,21 @@ void PopupView::setModal(bool modal)
 
     m_modal = modal;
     emit modalChanged(m_modal);
+}
+
+bool PopupView::frameless() const
+{
+    return m_frameless;
+}
+
+void PopupView::setFrameless(bool frameless)
+{
+    if (m_frameless == frameless) {
+        return;
+    }
+
+    m_frameless = frameless;
+    emit framelessChanged(m_frameless);
 }
 
 void PopupView::setResizable(bool resizable)

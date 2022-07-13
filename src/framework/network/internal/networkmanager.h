@@ -45,12 +45,9 @@ public:
             const RequestHeaders& headers = RequestHeaders()) override;
     Ret del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) override;
 
-    framework::ProgressChannel progressChannel() const override;
+    framework::Progress progress() const override;
 
     void abort() override;
-
-signals:
-    void aborted();
 
 private:
     enum RequestType {
@@ -81,7 +78,7 @@ private:
     QNetworkAccessManager* m_manager = nullptr;
     IncomingDevice* m_incomingData = nullptr;
     QNetworkReply* m_reply = nullptr;
-    framework::ProgressChannel m_progressCh;
+    framework::Progress m_progress;
 
     bool m_isAborted = false;
 };

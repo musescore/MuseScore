@@ -398,9 +398,9 @@ mu::async::Channel<QUrl> CloudService::sourceUrlReceived() const
     return m_sourceUrlReceived;
 }
 
-ProgressChannel CloudService::progressChannel() const
+Progress CloudService::uploadProgress() const
 {
-    return m_networkManager->progressChannel();
+    return m_networkManager->progress();
 }
 
 void CloudService::executeRequest(const RequestCallback& requestCallback)
