@@ -182,7 +182,7 @@ PreferencesPage {
             opacityOverride: paperSettings.enabled ? 1.0 : 0.6
 
             title: qsTrc("appshell", "Paper")
-            wallpaperDialogTitle: qsTrc("appshell", "Choose Notepaper")
+            wallpaperDialogTitle: qsTrc("appshell", "Choose notepaper")
             useColor: appearanceModel.foregroundUseColor
             color: appearanceModel.foregroundColor
             wallpaperPath: appearanceModel.foregroundWallpaperPath
