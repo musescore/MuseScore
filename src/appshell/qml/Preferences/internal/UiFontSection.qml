@@ -60,7 +60,9 @@ BaseSection {
 
         minValue: 10
         maxValue: 18
-        measureUnitsSymbol: qsTrc("appshell", "pt")
+
+        //: Abbreviation of "points", used to specify a font size
+        measureUnitsSymbol: qsTrc("global", "pt")
 
         navigation.name: "BodyTextControl"
         navigation.panel: root.navigation

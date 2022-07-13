@@ -70,7 +70,7 @@ BaseSection {
             step: 1
             decimals: 0
 
-            measureUnitsSymbol: " " + qsTrc("appshell", "min", /*disambiguation*/ "abbreviation of minutes")
+            measureUnitsSymbol: " " + qsTrc("global", "min", /*disambiguation*/ "abbreviation of minutes")
 
             navigation.name: "AutoSavePeriodControl"
             navigation.panel: root.navigation

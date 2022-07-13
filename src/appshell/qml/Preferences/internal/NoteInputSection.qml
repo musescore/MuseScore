@@ -76,7 +76,7 @@ BaseSection {
         columnWidth: root.columnWidth
         spacing: root.columnSpacing
 
-        measureUnitsSymbol: qsTrc("appshell", "ms")
+        measureUnitsSymbol: qsTrc("global", "ms")
 
         navigation.name: "DelayBetweenNotesControl"
         navigation.panel: root.navigation
