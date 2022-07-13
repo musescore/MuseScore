@@ -105,6 +105,7 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
             return shortcuts::sequencesToNativeText(shortcuts::Shortcut::sequencesFromString(plugin.shortcuts));
         }
 
+        //: No keyboard shortcut is assigned to this plugin.
         return qtrc("plugins", "Not defined");
     }
 
