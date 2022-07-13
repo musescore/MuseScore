@@ -697,15 +697,15 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected glissando disclosure
-    int expectedSubNotesCount = pitchStepsCount(std::abs(pitchLevelDiff(PitchClass::F, 4, PitchClass::B, 4)));
+    size_t expectedSubNotesCount = pitchStepsCount(std::abs(pitchLevelDiff(PitchClass::F, 4, PitchClass::B, 4)));
 
     float expectedDuration = static_cast<float>(QUARTER_NOTE_DURATION) / expectedSubNotesCount;
 
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
 
     std::vector<pitch_level_t> expectedPitches;
-    for (int i = 0; i < expectedSubNotesCount; ++i) {
-        expectedPitches.push_back(nominalPitchLevel + i * PITCH_LEVEL_STEP);
+    for (size_t i = 0; i < expectedSubNotesCount; ++i) {
+        expectedPitches.push_back(nominalPitchLevel + static_cast<int>(i) * PITCH_LEVEL_STEP);
     }
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
