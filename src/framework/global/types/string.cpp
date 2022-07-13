@@ -1027,6 +1027,11 @@ double String::toDouble(bool* ok) const
     return toDouble_helper(ba.constChar(), ok);
 }
 
+float String::toFloat(bool *ok) const
+{
+    return static_cast<float>(toDouble(ok));
+}
+
 // ============================
 // StringList
 // ============================
@@ -1166,4 +1171,18 @@ int AsciiStringView::toInt(bool* ok, int base) const
 double AsciiStringView::toDouble(bool* ok) const
 {
     return toDouble_helper(m_data, ok);
+}
+
+StringCodec *StringCodec::codecForName(const String &name)
+{
+    if(name==u"UTF-8")
+    {
+        return new StringCodecUtf8Impl;
+    }
+    return nullptr;
+}
+
+String StringCodecUtf8Impl::toString(const char *chars) const
+{
+    return String::fromUtf8(chars);
 }

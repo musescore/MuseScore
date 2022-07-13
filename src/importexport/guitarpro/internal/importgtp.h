@@ -54,7 +54,7 @@ static constexpr int GP_INVALID_KEYSIG = 127;
 static constexpr int GP_VOLTA_BINARY = 1;
 static constexpr int GP_VOLTA_FLAGS = 2;
 
-Score::FileError importGTP(Score* score, const QString& filename, const char* data, unsigned int data_len);
+Score::FileError importGTP(Score* score, const String& filename, const char* data, unsigned int data_len);
 
 enum class Repeat : char;
 
@@ -82,11 +82,11 @@ struct GPVolta {
 struct GPFermata {
     int index;
     int timeDivision;
-    QString type;
+    String type;
 };
 
 struct GPLyrics {
-    QStringList lyrics;
+    StringList lyrics;
     std::vector<Segment*> segments;
     int fromBeat;
     int beatCounter;
@@ -97,17 +97,17 @@ struct GpBar {
     Fraction timesig;
     bool freeTime;
     int keysig;
-    QString marker;
+    String marker;
     BarLineType barLine;
     Repeat repeatFlags;
     int repeats;
     GPVolta volta;
-    QString direction;
-    QString directionStyle;
+    String direction;
+    String directionStyle;
 
-    QString section[2];
+    String section[2];
 
-    std::vector<QString> directions;
+    std::vector<String> directions;
 
     GpBar();
 };
@@ -218,7 +218,7 @@ protected:
     int previousTempo;
     int previousDynamic;
     std::vector<int> ottavaFound;
-    std::vector<QString> ottavaValue;
+    std::vector<String> ottavaValue;
     std::map<int, std::pair<int, bool> > tempoMap;
     int tempo;
     QMap<int, int> slides;
@@ -226,7 +226,7 @@ protected:
     GPLyrics gpLyrics;
     int slide;
     int voltaSequence;
-    QTextCodec* _codec { 0 };
+    StringCodec* _codec { 0 };
     Slur** slurs       { nullptr };
 
 #ifdef ENGRAVING_USE_STRETCHED_BENDS
@@ -239,11 +239,13 @@ protected:
     void read(void* p, qint64 len);
     int readUChar();
     int readChar();
-    QString readPascalString(int);
-    QString readWordPascalString();
-    QString readBytePascalString();
+//    QString readPascalString(int);
+    String readPascalString(int);
+
+    String readWordPascalString();
+    String readBytePascalString();
     int readInt();
-    QString readDelphiString();
+    String readDelphiString();
     void readVolta(GPVolta*, Measure*);
     virtual void readBend(Note*);
     virtual bool readMixChange(Measure* measure);
@@ -257,13 +259,13 @@ protected:
     void createMeasures();
     void applyBeatEffects(Chord*, int beatEffects);
     void readTremoloBar(int track, Segment*);
-    void readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader);
+    void readChord(Segment* seg, int track, int numStrings, String name, bool gpHeader);
     void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, const Fraction& tick);
     void createSlur(bool hasSlur, staff_idx_t staffIdx, ChordRest* cr);
-    void createOttava(bool hasOttava, int track, ChordRest* cr, QString value);
+    void createOttava(bool hasOttava, int track, ChordRest* cr, String value);
     void createSlide(int slide, ChordRest* cr, int staffIdx, Note* note = nullptr);
     void createCrecDim(int staffIdx, int track, const Fraction& tick, bool crec);
-    void addTextToNote(QString text, Note* note);
+    void addTextToNote(String text, Note* note);
     void addPalmMute(Note*);
     void addLetRing(Note*);
     void addVibrato(Note*, VibratoType type = VibratoType::GUITAR_VIBRATO);
@@ -283,9 +285,9 @@ public:
     static int harmonicOvertone(Note* note, float harmonicValue, int harmonicType);
     void setTempo(int n, Measure* measure);
     void initGuitarProDrumset();
-    QString title, subtitle, artist, album, composer;
-    QString transcriber, instructions;
-    QStringList comments;
+    String title, subtitle, artist, album, composer;
+    String transcriber, instructions;
+    StringList comments;
     GpTrack channelDefaults[GP_MAX_TRACK_NUMBER * 2];
     int staves;
     int measures;
@@ -299,7 +301,7 @@ public:
     GuitarPro(MasterScore*, int v);
     virtual ~GuitarPro();
     virtual bool read(mu::io::IODevice*) = 0;
-    QString error(GuitarProError n) const { return QString(errmsg[int(n)]); }
+    String error(GuitarProError n) const { return String::fromUtf8(errmsg[int(n)]); }
 };
 
 //---------------------------------------------------------
@@ -425,15 +427,15 @@ class GuitarPro6 : public GuitarPro
     int findNumMeasures(GPPartInfo* partInfo);
     void readMasterTracks(QDomNode* masterTrack);
     void readDrumNote(Note* note, int element, int variation);
-    QDomNode getNode(const QString& id, QDomNode currentDomNode);
-    void unhandledNode(QString nodeName);
+    QDomNode getNode(const String& id, QDomNode currentDomNode);
+    void unhandledNode(String nodeName);
     void makeTie(Note* note);
     int readBeatEffects(int /*track*/, Segment*) override { return 0; }
 
     std::map<std::pair<int, int>, Note*> slideMap;
 
 protected:
-    const static std::map<QString, QString> instrumentMapping;
+    const static std::map<std::string, std::string> instrumentMapping;
     void readGpif(QByteArray* data);
 
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;

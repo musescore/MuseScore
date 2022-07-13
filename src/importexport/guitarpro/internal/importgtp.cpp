@@ -126,7 +126,7 @@ GuitarPro::GuitarPro(MasterScore* s, int v)
     score   = s;
     version = v;
     std::string charset = configuration() ? configuration()->importGuitarProCharset() : "UTF-8";
-    _codec = QTextCodec::codecForName(QString::fromStdString(charset).toLatin1());
+    _codec = StringCodec::codecForName(String::fromStdString(charset));//nullptr; //QTextCodec::codecForName(QString::fromStdString(charset).toLatin1()); // NOTE
     voltaSequence = 1;
     tempo = -1;
 }
@@ -211,7 +211,7 @@ int GuitarPro::readUChar()
 //   readPascalString
 //---------------------------------------------------------
 
-QString GuitarPro::readPascalString(int n)
+String GuitarPro::readPascalString(int n)
 {
     uchar l = readUChar();
     std::vector<char> s(l + 1);
@@ -222,9 +222,9 @@ QString GuitarPro::readPascalString(int n)
         skip(n - l);
     }
     if (_codec) {
-        return _codec->toUnicode(&s[0]);
+        return _codec->toString(&s[0]);
     } else {
-        return QString(&s[0]);
+        return String::fromUtf8(&s[0]);
     }
 }
 
@@ -232,7 +232,7 @@ QString GuitarPro::readPascalString(int n)
 //   readWordPascalString
 //---------------------------------------------------------
 
-QString GuitarPro::readWordPascalString()
+String GuitarPro::readWordPascalString()
 {
     int l = readInt();
     std::vector<char> c(l + 1);
@@ -240,9 +240,9 @@ QString GuitarPro::readWordPascalString()
     read(&c[0], l);
     c[l] = 0;
     if (_codec) {
-        return _codec->toUnicode(&c[0]);
+        return _codec->toString(&c[0]);
     } else {
-        return QString::fromLocal8Bit(&c[0]);
+        return String::fromUtf8(&c[0]);
     }
 }
 
@@ -250,7 +250,7 @@ QString GuitarPro::readWordPascalString()
 //   readBytePascalString
 //---------------------------------------------------------
 
-QString GuitarPro::readBytePascalString()
+String GuitarPro::readBytePascalString()
 {
     int l = readUChar();
     std::vector<char> c(l + 1);
@@ -258,9 +258,9 @@ QString GuitarPro::readBytePascalString()
     read(&c[0], l);
     c[l] = 0;
     if (_codec) {
-        return _codec->toUnicode(&c[0]);
+        return _codec->toString(&c[0]);
     } else {
-        return QString::fromLocal8Bit(&c[0]);
+        return String::fromUtf8(&c[0]);
     }
 }
 
@@ -268,12 +268,12 @@ QString GuitarPro::readBytePascalString()
 //   readDelphiString
 //---------------------------------------------------------
 
-QString GuitarPro::readDelphiString()
+String GuitarPro::readDelphiString()
 {
     int maxl = readInt();
     int l    = readUChar();
     if (maxl != l + 1 && maxl > 255) {
-        ASSERT_X(QString::asprintf("readDelphiString: first word doesn't match second byte"));
+        ASSERT_X("readDelphiString: first word doesn't match second byte");
         l = maxl - 1;
     }
     std::vector<char> c(l + 1);
@@ -285,9 +285,9 @@ QString GuitarPro::readDelphiString()
         //?? int k = 1;
     }
     if (_codec) {
-        return _codec->toUnicode(&c[0]);
+        return _codec->toString(&c[0]);
     } else {
-        return QString::fromLatin1(&c[0]);
+        return String::fromAscii(&c[0]);
     }
 }
 
@@ -547,7 +547,7 @@ void GuitarPro::addVibrato(Note* note, VibratoType type)
 
 void GuitarPro::addTap(Note* note)
 {
-    addTextToNote("T", note);
+    addTextToNote(u"T", note);
 }
 
 //---------------------------------------------------------
@@ -556,7 +556,7 @@ void GuitarPro::addTap(Note* note)
 
 void GuitarPro::addSlap(Note* note)
 {
-    addTextToNote("S", note);
+    addTextToNote(u"S", note);
 }
 
 //---------------------------------------------------------
@@ -565,14 +565,14 @@ void GuitarPro::addSlap(Note* note)
 
 void GuitarPro::addPop(Note* note)
 {
-    addTextToNote("P", note);
+    addTextToNote(u"P", note);
 }
 
 //---------------------------------------------------------
 //   addTextToNote
 //---------------------------------------------------------
 
-void GuitarPro::addTextToNote(QString string, Note* note)
+void GuitarPro::addTextToNote(String string, Note* note)
 {
     Segment* segment = note->chord()->segment();
     StaffText* text = Factory::createStaffText(segment);
@@ -580,7 +580,8 @@ void GuitarPro::addTextToNote(QString string, Note* note)
     if (!string.isEmpty()) {
         bool useHarmony = string[string.size() - 1] == '\\';
         if (useHarmony) {
-            string.resize(string.size() - 1);
+//            string.resize(string.size() - 1);
+            string.chop(1); //TODO Check it
         }
     }
     text->setPlainText(string);
@@ -650,7 +651,7 @@ void GuitarPro::setTuplet(Tuplet* tuplet, int tuple)
         tuplet->setRatio(Fraction(13, 8));
         break;
     default:
-        ASSERT_X(QString::asprintf("unsupported tuplet %d\n", tuple));
+        ASSERT_X(String(u"unsupported tuplet %d\n").arg(tuple));
     }
 }
 
@@ -677,7 +678,7 @@ void GuitarPro::addDynamic(Note* note, int d)
     if (!s->findAnnotation(ElementType::DYNAMIC, note->staffIdx() * VOICES, note->staffIdx() * VOICES + VOICES - 1)) {
         Dynamic* dyn = new Dynamic(s);
         // guitar pro only allows their users to go from ppp to fff
-        QString map_dyn[] = { "f", "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff" };
+        const String map_dyn[] = { u"f", u"ppp", u"pp", u"p", u"mp", u"mf", u"f", u"ff", u"fff" };
         dyn->setDynamicType(map_dyn[d]);
         dyn->setTrack(note->track());
         s->add(dyn);
@@ -699,7 +700,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
         // we have volta information - set up a volta
         mu::engraving::Volta* volta = new mu::engraving::Volta(score->dummy());
         volta->endings().clear();
-        QString voltaTextString = "";
+        String voltaTextString = u"";
         // initialise count to 1 as the first bit processed with represent first time volta
         int count = 0;
         int binaryNumber = 0;
@@ -710,10 +711,10 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
             case GP_VOLTA_FLAGS:
                 count++;
                 if (*iter == 1) {                 // we want this number to be displayed in the volta
-                    if (voltaTextString == "") {
-                        voltaTextString += QString::number(count);
+                    if (voltaTextString == u"") {
+                        voltaTextString += String::number(count);
                     } else {
-                        voltaTextString += "," + QString::number(count);
+                        voltaTextString += u"," + String::number(count);
                     }
                     // add the decimal number to the endings field of voltas as well as the text
                     volta->endings().push_back(count);
@@ -729,10 +730,10 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
                 if (iter == gpVolta->voltaInfo.end()) {
                     // display all numbers in the volta from voltaSequence to the decimal
                     while (voltaSequence <= binaryNumber) {
-                        if (voltaTextString == "") {
-                            voltaTextString = QString::number(voltaSequence);
+                        if (voltaTextString == u"") {
+                            voltaTextString = String::number(voltaSequence);
                         } else {
-                            voltaTextString += "," + QString::number(voltaSequence);
+                            voltaTextString += u"," + String::number(voltaSequence);
                         }
                         volta->endings().push_back(voltaSequence);
                         voltaSequence++;
@@ -794,11 +795,10 @@ void GuitarPro::readLyrics()
     gpLyrics.fromBeat = readInt();
     gpLyrics.beatCounter = 0;
 
-    QString lyrics = readWordPascalString();
-    lyrics.replace(QRegularExpression("\n"), " ");
-    lyrics.replace(QRegularExpression("\r"), " ");
-    auto sl = lyrics.split(" ", Qt::KeepEmptyParts);
-    //gpLyrics.lyrics = lyrics.split(" ", Qt::KeepEmptyParts);
+    String lyrics = readWordPascalString();
+    lyrics.replace(u"\n", u" ");
+    lyrics.replace(u"\r", u" ");
+    auto sl = lyrics.split(u" ", KeepEmptyParts);
     for (auto& str : sl) {
         /*while (str[0] == '-')
     {
@@ -1254,7 +1254,7 @@ bool GuitarPro1::read(IODevice* io)
                 if (beatBits & BEAT_CHORD) {
                     int numStrings = static_cast<int>(score->staff(staffIdx)->part()->instrument()->stringData()->strings());
                     int header = readUChar();
-                    QString name;
+                    mu::String name;
                     if ((header & 1) == 0) {
                         name = readDelphiString();
                         readChord(segment, track, numStrings, name, false);
@@ -1407,7 +1407,7 @@ void GuitarPro::setTempo(int temp, Measure* measure)
 
         TempoText* tt = new TempoText(segment);
         tt->setTempo(double(temp) / 60.0);
-        tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(temp));
+        tt->setXmlText(String("<sym>metNoteQuarterUp</sym> = %1").arg(temp));
         tt->setTrack(0);
 
         segment->add(tt);
@@ -1420,7 +1420,7 @@ void GuitarPro::setTempo(int temp, Measure* measure)
 //   readChord
 //---------------------------------------------------------
 
-void GuitarPro::readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader)
+void GuitarPro::readChord(Segment* seg, int track, int numStrings, String name, bool gpHeader)
 {
     int firstFret = readInt();
     if (firstFret || gpHeader) {
@@ -1509,18 +1509,18 @@ void GuitarPro::createSlur(bool hasSlur, staff_idx_t staffIdx, ChordRest* cr)
 //   createOttava
 //---------------------------------------------------------
 
-void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString value)
+void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, String value)
 {
     if (hasOttava && (ottava.at(track) == 0)) {
         Ottava* newOttava = new Ottava(score->dummy());
         newOttava->setTrack(track);
-        if (!value.compare("8va")) {
+        if (value == u"8va") {
             newOttava->setOttavaType(OttavaType::OTTAVA_8VA);
-        } else if (!value.compare("8vb")) {
+        } else if (value == u"8vb") {
             newOttava->setOttavaType(OttavaType::OTTAVA_8VB);
-        } else if (!value.compare("15ma")) {
+        } else if (value == u"15ma") {
             newOttava->setOttavaType(OttavaType::OTTAVA_15MA);
-        } else if (!value.compare("15mb")) {
+        } else if (value == u"15mb") {
             newOttava->setOttavaType(OttavaType::OTTAVA_15MB);
         }
         newOttava->setTick(cr->tick());
@@ -1552,7 +1552,7 @@ bool GuitarPro2::read(IODevice* io)
     artist       = readDelphiString();
     album        = readDelphiString();
     composer     = readDelphiString();
-    QString copyright = readDelphiString();
+    mu::String copyright = readDelphiString();
     if (!copyright.isEmpty()) {
         score->setMetaTag(u"copyright", copyright);
     }
@@ -1670,7 +1670,7 @@ bool GuitarPro2::read(IODevice* io)
         }
         if (c & 0x4) {                    // banjo track
         }
-        QString name = readPascalString(40);
+        String name = readPascalString(40);
         int strings  = readInt();
         if (strings <= 0 || strings > GP_MAX_STRING_NUMBER) {
             return false;
@@ -1727,7 +1727,7 @@ bool GuitarPro2::read(IODevice* io)
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
             //                  st->setTextStyleType(TextStyleType::STAFF);
-            st->setPlainText(QString("Capo. fret ") + QString::number(capo));
+            st->setPlainText(String(u"Capo. fret ") + String::number(capo));
             st->setTrack(i * VOICES);
             s->add(st);
         }
@@ -1789,7 +1789,7 @@ bool GuitarPro2::read(IODevice* io)
                 if (beatBits & BEAT_CHORD) {
                     int numStrings = static_cast<int>(score->staff(staffIdx)->part()->instrument()->stringData()->strings());
                     int header = readUChar();
-                    QString name;
+                    String name;
                     if ((header & 1) == 0) {
                         name = readDelphiString();
                         readChord(segment, track, numStrings, name, false);
@@ -1802,7 +1802,7 @@ bool GuitarPro2::read(IODevice* io)
                 }
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
-                    QString txt = readDelphiString();
+                    String txt = readDelphiString();
                     lyrics = Factory::createLyrics(score->dummy()->chord());
                     lyrics->setPlainText(txt);
                 }
@@ -2227,7 +2227,7 @@ bool GuitarPro3::read(IODevice* io)
     artist       = readDelphiString();
     album        = readDelphiString();
     composer     = readDelphiString();
-    QString copyright = readDelphiString();
+    String copyright = readDelphiString();
     if (!copyright.isEmpty()) {
         score->setMetaTag(u"copyright", copyright);
     }
@@ -2387,7 +2387,7 @@ bool GuitarPro3::read(IODevice* io)
         }
         if (c & 0x4) {                    // banjo track
         }
-        QString name = readPascalString(40);
+        String name = readPascalString(40);
         int strings  = readInt();
         if (strings <= 0 || strings > GP_MAX_STRING_NUMBER) {
             return false;
@@ -2443,7 +2443,7 @@ bool GuitarPro3::read(IODevice* io)
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
             //                  st->setTextStyleType(TextStyleType::STAFF);
-            st->setPlainText(QString("Capo. fret ") + QString::number(capo));
+            st->setPlainText(String(u"Capo. fret ") + String::number(capo));
             st->setTrack(i * VOICES);
             s->add(st);
         }
@@ -2515,7 +2515,7 @@ bool GuitarPro3::read(IODevice* io)
                 if (beatBits & BEAT_CHORD) {
                     int numStrings = static_cast<int>(score->staff(staffIdx)->part()->instrument()->stringData()->strings());
                     int header = readUChar();
-                    QString name;
+                    String name;
                     if ((header & 1) == 0) {
                         name = readDelphiString();
                         readChord(segment, track, numStrings, name, false);
@@ -2528,7 +2528,7 @@ bool GuitarPro3::read(IODevice* io)
                 }
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
-                    QString txt = readDelphiString();
+                    String txt = readDelphiString();
                     Lyrics* lyrics = Factory::createLyrics(score->dummy()->chord());
                     lyrics->setPlainText(txt);
                 }
@@ -2858,11 +2858,11 @@ void GuitarPro::createCrecDim(int staffIdx, int track, const Fraction& tick, boo
 
 static void addMetaInfo(MasterScore* score, GuitarPro* gp)
 {
-    std::vector<QString> fieldNames = { gp->title, gp->subtitle, gp->artist,
-                                        gp->album, gp->composer };
+    std::vector<mu::String> fieldNames = { gp->title, gp->subtitle, gp->artist,
+                                           gp->album, gp->composer };
 
     bool createTitleField
-        = std::any_of(fieldNames.begin(), fieldNames.end(), [](const QString& fieldName) { return !fieldName.isEmpty(); });
+        = std::any_of(fieldNames.begin(), fieldNames.end(), [](const mu::String& fieldName) { return !fieldName.isEmpty(); });
 
     if (createTitleField) {
         MeasureBase* m;
@@ -2886,19 +2886,19 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp)
         }
         if (!gp->subtitle.isEmpty() || !gp->artist.isEmpty() || !gp->album.isEmpty()) {
             Text* s = Factory::createText(m, TextStyleType::SUBTITLE);
-            QString str;
+            String str;
             if (!gp->subtitle.isEmpty()) {
                 str.append(gp->subtitle);
             }
             if (!gp->artist.isEmpty()) {
                 if (!str.isEmpty()) {
-                    str.append("\n");
+                    str.append(u"\n");
                 }
                 str.append(gp->artist);
             }
             if (!gp->album.isEmpty()) {
                 if (!str.isEmpty()) {
-                    str.append("\n");
+                    str.append(u"\n");
                 }
                 str.append(gp->album);
             }
@@ -3013,10 +3013,10 @@ static Score::FileError importScore(MasterScore* score, mu::io::IODevice* io)
         char ss[30];
         io->read((uint8_t*)(ss), 30);
         ss[l] = 0;
-        QString s(ss);
-        if (s.startsWith("FICHIER GUITAR PRO ")) {
+        String s(ss);
+        if (s.startsWith(u"FICHIER GUITAR PRO ")) {
             s = s.mid(20);
-        } else if (s.startsWith("FICHIER GUITARE PRO ")) {
+        } else if (s.startsWith(u"FICHIER GUITARE PRO ")) {
             s = s.mid(21);
         } else {
             LOGD("unknown gtp format <%s>", ss);

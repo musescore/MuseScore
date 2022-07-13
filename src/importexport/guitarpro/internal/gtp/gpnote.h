@@ -5,6 +5,8 @@
 #include <memory>
 #include <bitset>
 
+#include <global/types/string.h>
+
 #include "inoteproperty.h"
 
 namespace mu::engraving {
@@ -109,11 +111,11 @@ public:
     void setSlides(const std::bitset<6>& s) { _slides = s; }
     const std::bitset<6>& slides() const { return _slides; }
 
-    void setLeftFingering(const QString& ch) { _leftFingering = ch; }
-    const QString& leftFingering() const { return _leftFingering; }
+    void setLeftFingering(const mu::String& ch) { _leftFingering = ch; }
+    const mu::String& leftFingering() const { return _leftFingering; }
 
-    void setRightFingering(const QString& ch) { _rightFingering = ch; }
-    const QString& rightFingering() const { return _rightFingering; }
+    void setRightFingering(const mu::String& ch) { _rightFingering = ch; }
+    const mu::String& rightFingering() const { return _rightFingering; }
 
     void setVibratoType(VibratoType v) { _vibrato = v; }
     VibratoType vibratoType() const { return _vibrato; }
@@ -152,8 +154,8 @@ private:
     std::bitset<4> _accent{ 0 };
     //[0] shifSlide, [1] - legatoSlide, [2] - slideDownWard, [3] - slidewUpWard, [4] - slideInFormBelow, [5] - slideInFormAbove
     std::bitset<6> _slides{ 0 };
-    QString _leftFingering;
-    QString _rightFingering;
+    mu::String _leftFingering;
+    mu::String _rightFingering;
     VibratoType _vibrato{ VibratoType::None };
     Trill _trill;
     Ornament _ornament{ Ornament::None };
