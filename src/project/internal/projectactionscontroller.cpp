@@ -524,7 +524,8 @@ bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::pat
         engraving::Err::FileOld300Format
     };
 
-    std::string title = trc("project", "Open Error");
+    //: an error that occurred while opening a file
+    std::string title = trc("project", "Open error");
     std::string body = ret.text();
 
     if (body.empty()) {
@@ -596,20 +597,20 @@ io::path_t ProjectActionsController::selectScoreOpeningFile()
                      "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
 
     QStringList filter;
-    filter << qtrc("project", "All Supported Files") + " (" + allExt + ")"
-           << qtrc("project", "MuseScore File") + " (*.mscz)"
-           << qtrc("project", "MusicXML Files") + " (*.mxl *.musicxml *.xml)"
-           << qtrc("project", "MIDI Files") + " (*.mid *.midi *.kar)"
-           << qtrc("project", "MuseData Files") + " (*.md)"
-           << qtrc("project", "Capella Files") + " (*.cap *.capx)"
-           << qtrc("project", "BB Files (experimental)") + " (*.mgu *.sgu)"
-           << qtrc("project", "Overture / Score Writer Files (experimental)") + " (*.ove *.scw)"
-           << qtrc("project", "Bagpipe Music Writer Files (experimental)") + " (*.bmw *.bww)"
-           << qtrc("project", "Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
-           << qtrc("project", "Power Tab Editor Files (experimental)") + " (*.ptb)"
-           << qtrc("project", "MuseScore Unpack Files") + " (*.mscx)"
-           << qtrc("project", "MuseScore Dev Files") + " (*.mscs)"
-           << qtrc("project", "MuseScore Backup Files") + " (*.mscz~)";
+    filter << qtrc("project", "All supported files") + " (" + allExt + ")"
+           << qtrc("project", "MuseScore files") + " (*.mscz)"
+           << qtrc("project", "MusicXML files") + " (*.mxl *.musicxml *.xml)"
+           << qtrc("project", "MIDI files") + " (*.mid *.midi *.kar)"
+           << qtrc("project", "MuseData files") + " (*.md)"
+           << qtrc("project", "Capella files") + " (*.cap *.capx)"
+           << qtrc("project", "BB files (experimental)") + " (*.mgu *.sgu)"
+           << qtrc("project", "Overture / Score Writer files (experimental)") + " (*.ove *.scw)"
+           << qtrc("project", "Bagpipe Music Writer files (experimental)") + " (*.bmw *.bww)"
+           << qtrc("project", "Guitar Pro files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
+           << qtrc("project", "Power Tab Editor files (experimental)") + " (*.ptb)"
+           << qtrc("project", "Uncompressed MuseScore folders (experimental)") + " (*.mscx)"
+           << qtrc("project", "MuseScore developer files") + " (*.mscs)"
+           << qtrc("project", "MuseScore backup files") + " (*.mscz~)";
 
     io::path_t defaultDir = configuration()->lastOpenedProjectsPath();
 
@@ -617,7 +618,7 @@ io::path_t ProjectActionsController::selectScoreOpeningFile()
         defaultDir = configuration()->defaultProjectsPath();
     }
 
-    io::path_t filePath = interactive()->selectOpeningFile(qtrc("project", "Score"), defaultDir, filter.join(";;"));
+    io::path_t filePath = interactive()->selectOpeningFile(qtrc("project", "Open"), defaultDir, filter.join(";;"));
 
     if (!filePath.empty()) {
         configuration()->setLastOpenedProjectsPath(io::dirpath(filePath));

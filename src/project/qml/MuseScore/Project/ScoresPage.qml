@@ -99,7 +99,7 @@ FocusScope {
             navigation.name: "Scores Search"
             navigation.panel: navSearchPanel
             navigation.order: 1
-            accessible.name: qsTrc("project", "Recent scores search")
+            accessible.name: qsTrc("project", "Search recent scores")
         }
     }
 
@@ -176,7 +176,9 @@ FocusScope {
             section: navSec
             direction: NavigationPanel.Horizontal
             order: 3
-            accessible.name: qsTrc("project", "Recent scores bottom")
+
+            //: accessibility name for the panel at the bottom of the "Scores" page
+            accessible.name: qsTrc("project", "Scores actions")
         }
 
         Row {

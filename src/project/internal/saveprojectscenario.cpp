@@ -101,8 +101,8 @@ RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project
     io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition);
 
     QStringList filter {
-        qtrc("project/save", "MuseScore file") + " (*.mscz)",
-        qtrc("project/save", "Uncompressed MuseScore folder (experimental)")
+        qtrc("project", "MuseScore file") + " (*.mscz)",
+        qtrc("project", "Uncompressed MuseScore folder (experimental)")
 #ifdef Q_OS_MAC
         + " (*)"
 #else

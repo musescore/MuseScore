@@ -67,7 +67,7 @@ Column {
 
             title: qsTrc("project", "Title")
 
-            info: qsTrc("project", "Untitled Score")
+            info: qsTrc("project", "Untitled score")
 
             navigation.panel: root.navigationPanel
             navigation.column: 0
