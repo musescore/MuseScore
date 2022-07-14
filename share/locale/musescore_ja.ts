@@ -610,7 +610,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="95"/>
         <source>Print…</source>
-        <translation>印刷…(&amp;P)</translation>
+        <translation>印刷…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="101"/>
