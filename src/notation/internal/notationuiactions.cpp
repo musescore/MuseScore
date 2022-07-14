@@ -176,10 +176,6 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Previous system")
              ),
-    UiAction("show-irregular",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Mark irregular measures")
-             ),
     UiAction("toggle-insert-mode",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Toggle 'insert mode'")
@@ -1245,12 +1241,6 @@ const UiActionList NotationUiActions::m_actions = {
              IconCode::Code::TUNING_FORK,
              Checkable::Yes
              ),
-    UiAction("print",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Print"),
-             QT_TRANSLATE_NOOP("action", "Print score/part"),
-             IconCode::Code::PRINT
-             ),
     UiAction("next-text-element",
              mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Next text element"),
@@ -1441,14 +1431,6 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("pitch-down-diatonic-alterations",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Diatonic pitch down (keep degree alterations)")
-             ),
-    UiAction("transpose-down",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Transpose down")
-             ),
-    UiAction("transpose-up",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Transpose up")
              ),
     UiAction("full-measure-rest",
              mu::context::UiCtxNotationOpened,
