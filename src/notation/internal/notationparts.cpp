@@ -166,6 +166,10 @@ std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
 {
     std::vector<Staff*> staves;
 
+    if (stavesIds.empty()) {
+        return staves;
+    }
+
     for (Staff* staff : score()->staves()) {
         if (std::find(stavesIds.cbegin(), stavesIds.cend(), staff->id()) != stavesIds.cend()) {
             staves.push_back(staff);
@@ -315,34 +319,6 @@ void NotationParts::doSetScoreOrder(const ScoreOrder& order)
     score()->undo(new mu::engraving::ChangeScoreOrder(score(), order));
 
     m_scoreOrderChanged.notify();
-}
-
-void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, staff_idx_t destinationStaffIndex, Part* destinationPart)
-{
-    TRACEFUNC;
-
-    for (Staff* staff: staves) {
-        Staff* movedStaff = staff->clone();
-
-        if (destinationPart) {
-            movedStaff->setPart(destinationPart);
-        }
-
-        bool needUnlink = !staff->isLinked();
-
-        insertStaff(movedStaff, destinationStaffIndex);
-        mu::engraving::Excerpt::cloneStaff(staff, movedStaff);
-
-        if (needUnlink) {
-            movedStaff->undoUnlink();
-        }
-
-        ++destinationStaffIndex;
-    }
-
-    for (Staff* staff: staves) {
-        score()->undoRemoveStaff(staff);
-    }
 }
 
 void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const QString& name)
@@ -895,10 +871,6 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
 {
     TRACEFUNC;
 
-    if (sourceStavesIds.empty()) {
-        return;
-    }
-
     Staff* destinationStaff = staffModifiable(destinationStaffId);
     if (!destinationStaff) {
         return;
@@ -909,15 +881,31 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
         return;
     }
 
-    Part* destinationPart = destinationStaff->part();
-    staff_idx_t destinationStaffIndex = (mode == InsertMode::Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
-    destinationStaffIndex -= score()->staffIdx(destinationPart); // NOTE: convert to local part's staff index
-
     endInteractionWithScore();
     startEdit();
 
-    doMoveStaves(staves, destinationStaffIndex, destinationPart);
+    std::vector<Staff*> allStaves = score()->staves();
 
+    mu::remove_if(allStaves, [&staves](const Staff* staff) {
+        return std::find(staves.cbegin(), staves.cend(), staff) != staves.cend();
+    });
+
+    size_t dstIndex = mu::indexOf(allStaves, destinationStaff);
+    if (mode == InsertMode::After) {
+        dstIndex++;
+    }
+
+    for (staff_idx_t i = 0; i < staves.size(); ++i, ++dstIndex) {
+        allStaves.insert(allStaves.begin() + dstIndex, staves[i]);
+    }
+
+    std::vector<staff_idx_t> sortedIndexes;
+
+    for (const Staff* staff : allStaves) {
+        sortedIndexes.push_back(staff->idx());
+    }
+
+    score()->undo(new mu::engraving::SortStaves(score(), sortedIndexes));
     setBracketsAndBarlines();
 
     apply();
