@@ -52,13 +52,15 @@ add_definitions(
     #-DHAW_LOGGER_QT_SUPPORT
 )
 
+set(GLOBAL_NO_INTERNAL ON)
+add_subdirectory(${MU_ROOT}/src/framework/global global)
+
 set(NO_QT_SUPPORT ON)
 set(ENGRAVING_NO_INTERNAL ON)
 set(ENGRAVING_NO_ACCESSIBILITY ON)
 add_subdirectory(${MU_ROOT}/src/engraving engraving)
 
-set(GLOBAL_NO_INTERNAL ON)
-add_subdirectory(${MU_ROOT}/src/framework/global global)
+#add_subdirectory(${MU_ROOT}/src/importexport/guitarpro guitarpro)
 
 
 add_executable(engraving_app
@@ -82,4 +84,5 @@ target_link_libraries(engraving_app
     ${QT_LIBRARIES}
     global
     engraving
+#    guitarpro
 )

@@ -39,6 +39,8 @@
 #include "segment.h"
 #include "stem.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -312,7 +314,7 @@ void Tremolo::layoutOneNoteTremolo(double x, double y, double h, double spatium)
 
 void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium)
 {
-    Q_UNUSED(h);
+    UNUSED(h);
     const bool defaultStyle = (!customStyleApplicable()) || (_style == TremoloStyle::DEFAULT);
     const bool isTraditionalAlternate = (_style == TremoloStyle::TRADITIONAL_ALTERNATE);
 

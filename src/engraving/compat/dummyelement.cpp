@@ -123,5 +123,7 @@ AccessibleItemPtr DummyElement::createAccessible()
 {
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     return std::make_shared<AccessibleItem>(this, accessibility::IAccessible::Panel);
+#else
+    return nullptr;
 #endif
 }
