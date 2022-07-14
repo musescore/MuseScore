@@ -370,11 +370,11 @@ XmlDomNode GuitarPro6::getNode(const QString& id, XmlDomNode currentDomNode)
 //   readGpif
 //---------------------------------------------------------
 
-void GuitarPro6::readGpif(QByteArray* data)
+void GuitarPro6::readGpif(ByteArray* data)
 {
     XmlDomDocument domDoc;
     domDoc.setContent(*data);
-    XmlDomElement domElem = domDoc.documentElement();
+    XmlDomElement domElem = domDoc.rootElement();
 
     auto builder = createGPDomBuilder();
     builder->buildGPDomModel(&domElem);
@@ -387,7 +387,7 @@ void GuitarPro6::readGpif(QByteArray* data)
 //   parseFile
 //---------------------------------------------------------
 
-void GuitarPro6::parseFile(const char* filename, QByteArray* data)
+void GuitarPro6::parseFile(const char* filename, ByteArray* data)
 {
     // test to check if we are dealing with the score
     if (!strcmp(filename, "score.gpif")) {
@@ -459,7 +459,8 @@ void GuitarPro6::readGPX(QByteArray* buffer)
                     QByteArray filenameBytes = readString(buffer, indexFileName, 127);
                     char* filename           = filenameBytes.data();
                     QByteArray data          = getBytes(fileBytes, 0, fileSize);
-                    parseFile(filename, &data);
+                    ByteArray d = ByteArray::fromQByteArrayNoCopy(data);
+                    parseFile(filename, &d);
                 }
                 delete fileBytes;
             }
