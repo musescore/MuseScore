@@ -41,7 +41,7 @@ BaseSection {
         id: playNotesBox
         width: parent.width
 
-        text: qsTrc("appshell", "Play notes when editing")
+        text: qsTrc("appshell/preferences", "Play notes when editing")
         font: ui.theme.bodyBoldFont
 
         navigation.name: "PlayNotesBox"
@@ -56,14 +56,15 @@ BaseSection {
     IncrementalPropertyControlWithTitle {
         id: notePlayDurationControl
 
-        title: qsTrc("appshell", "Default duration:")
+        title: qsTrc("appshell/preferences", "Default duration:")
 
         enabled: root.playNotesWhenEditing
 
         columnWidth: root.columnWidth
         spacing: root.columnSpacing
 
-        measureUnitsSymbol: qsTrc("appshell", "ms")
+        //: Abbreviation of "milliseconds"
+        measureUnitsSymbol: qsTrc("global", "ms")
 
         navigation.name: "NotePlayDurationControl"
         navigation.panel: root.navigation
@@ -78,7 +79,7 @@ BaseSection {
         id: playChordBox
         width: parent.width
 
-        text: qsTrc("appshell", "Play chord when editing")
+        text: qsTrc("appshell/preferences", "Play chord when editing")
 
         enabled: root.playNotesWhenEditing
 
@@ -95,7 +96,7 @@ BaseSection {
         id: playChordSymbolBox
         width: parent.width
 
-        text: qsTrc("appshell", "Play chord symbol when editing")
+        text: qsTrc("appshell/preferences", "Play chord symbol when editing")
 
         enabled: root.playNotesWhenEditing
 

@@ -27,7 +27,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Auto save")
+    title: qsTrc("appshell/preferences", "Auto save")
 
     navigation.direction: NavigationPanel.Horizontal
 
@@ -46,7 +46,7 @@ BaseSection {
             width: root.columnWidth
             anchors.verticalCenter: parent.verticalCenter
 
-            text: qsTrc("appshell", "Auto save every:")
+            text: qsTrc("appshell/preferences", "Auto save every:")
 
             navigation.name: "AutoSaveCheckBox"
             navigation.panel: root.navigation
@@ -70,7 +70,7 @@ BaseSection {
             step: 1
             decimals: 0
 
-            measureUnitsSymbol: " " + qsTrc("appshell", "min", /*disambiguation*/ "abbreviation of minutes")
+            measureUnitsSymbol: " " + qsTrc("global", "min", /*disambiguation*/ "abbreviation of minutes")
 
             navigation.name: "AutoSavePeriodControl"
             navigation.panel: root.navigation

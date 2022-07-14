@@ -27,7 +27,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Miscellaneous")
+    title: qsTrc("appshell/preferences", "Miscellaneous")
 
     property alias selectionProximity: selectionProximityControl.currentValue
 
@@ -36,7 +36,7 @@ BaseSection {
     IncrementalPropertyControlWithTitle {
         id: selectionProximityControl
 
-        title: qsTrc("appshell", "Proximity for selecting elements:")
+        title: qsTrc("appshell/preferences", "Proximity for selecting elements:")
 
         columnWidth: root.columnWidth
         spacing: root.columnSpacing

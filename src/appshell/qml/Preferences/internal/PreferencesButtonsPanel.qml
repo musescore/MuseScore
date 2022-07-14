@@ -62,7 +62,7 @@ Rectangle {
             navigation.panel: root.navigation
             navigation.order: 2
 
-            text: qsTrc("appshell", "Reset preferences")
+            text: qsTrc("appshell/preferences", "Reset preferences")
 
             onClicked: {
                 root.revertFactorySettingsRequested()

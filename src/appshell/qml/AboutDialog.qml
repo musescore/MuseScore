@@ -29,7 +29,7 @@ import MuseScore.AppShell 1.0
 StyledDialogView {
     id: root
 
-    title: qsTrc("appshell", "About MuseScore")
+    title: qsTrc("appshell/about", "About MuseScore")
 
     contentHeight: 424
     contentWidth: 480
@@ -67,7 +67,7 @@ StyledDialogView {
 
                 StyledTextLabel {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: qsTrc("appshell", "Version: ") + aboutModel.museScoreVersion()
+                    text: qsTrc("appshell/about", "Version:") + " " + aboutModel.museScoreVersion()
                     font: ui.theme.bodyBoldFont
                 }
 
@@ -77,7 +77,7 @@ StyledDialogView {
 
                     StyledTextLabel {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: qsTrc("appshell", "Revision: ") + aboutModel.museScoreRevision()
+                        text: qsTrc("appshell/about", "Revision:") + " " + aboutModel.museScoreRevision()
                     }
 
                     FlatButton {
@@ -94,15 +94,18 @@ StyledDialogView {
             StyledTextLabel {
                 Layout.fillWidth: true
                 text: {
-                    var message = qsTrc("appshell", "Visit %1 for new versions and more information.\nGet %2 with the program or %3 to its development.")
-                    var museScoreUrl = aboutModel.museScoreUrl()
-                    var museScoreForumUrl = aboutModel.museScoreForumUrl()
-                    var museScoreContributionUrl = aboutModel.museScoreContributionUrl()
-                    return message
-                    .arg("<a href='" + museScoreUrl.url + "'>" + museScoreUrl.displayName + "</a>")
-                    .arg("<a href='" + museScoreForumUrl.url + "'>" + museScoreForumUrl.displayName + "</a>")
-                    .arg("<a href='" + museScoreContributionUrl.url + "'>" + museScoreContributionUrl.displayName + "</a>")
-                    .replace("\n", "<br>")
+                    let museScoreUrl = aboutModel.museScoreUrl()
+
+                    //: %1 will be a link to the MuseScore website
+                    let line1 = qsTrc("appshell/about", "Visit %1 for new versions and more information.")
+                                .arg(`<a href="${museScoreUrl.url}">${museScoreUrl.displayName}</a>`)
+
+                    //: The text between %1 and %2 will be a clickable link (same for %3 and %4)
+                    let line2 = qsTrc("appshell/about", "Get %1help%2 with the program or %3contribute%4 to its development.")
+                                .arg(`<a href="${aboutModel.museScoreForumUrl().url}">`).arg("</a>")
+                                .arg(`<a href="${aboutModel.museScoreContributionUrl().url}">`).arg("</a>")
+
+                    return line1 + "<br>" + line2
                 }
                 wrapMode: Text.WordWrap
                 maximumLineCount: 3
@@ -110,13 +113,11 @@ StyledDialogView {
 
             StyledTextLabel {
                 Layout.fillWidth: true
-                text: {
-                    var message = qsTrc("appshell", "For privacy information, see our %1")
-                    var museScorePrivacyPolicyUrl = aboutModel.museScorePrivacyPolicyUrl()
-                    return message
-                    .arg("<a href='" + museScorePrivacyPolicyUrl.url + "'>" + museScorePrivacyPolicyUrl.displayName + "</a>")
-                    .replace("\n", "<br>")
-                }
+
+                //: The text between %1 and %2 will be a clickable link
+                text: qsTrc("appshell/about", "For privacy information, see our %1privacy policy%2.")
+                      .arg(`<a href="${aboutModel.museScorePrivacyPolicyUrl().url}">`).arg("</a>")
+
                 wrapMode: Text.WordWrap
                 maximumLineCount: 3
             }
@@ -124,12 +125,14 @@ StyledDialogView {
             StyledTextLabel {
                 Layout.fillWidth: true
                 text: {
-                    var message = qsTrc("appshell", "Copyright © 1999-2022 MuseScore BVBA and others.\nPublished under the %1GNU General Public License version 3%2.")
+                    //: The text between %1 and %2 will be a clickable link
+                    var message = qsTrc("appshell/about", "Copyright © 1999-2022 MuseScore BVBA and others.\nPublished under the %1GNU General Public License version 3%2.")
                     return message
                     .arg("<a href='https://www.gnu.org/licenses/gpl-3.0.html'>")
                     .arg("</a>")
                     .replace("\n", "<br>")
                 }
+
                 wrapMode: Text.WordWrap
                 maximumLineCount: 3
             }

@@ -29,7 +29,7 @@ import MuseScore.AppShell 1.0
 StyledDialogView {
     id: root
 
-    title: qsTrc("appshell", "Getting started")
+    title: qsTrc("appshell/gettingstarted", "Getting started")
 
     contentWidth: 576
     contentHeight: 384
@@ -141,7 +141,7 @@ StyledDialogView {
             FlatButton {
                 Layout.alignment: Qt.AlignRight
 
-                text: model.canFinish ? qsTrc("appshell", "Finish")
+                text: model.canFinish ? qsTrc("appshell/gettingstarted", "Finish")
                                       : qsTrc("global", "Next")
                 accentButton: !extraButton.visible
 

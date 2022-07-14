@@ -28,12 +28,12 @@ import MuseScore.UiComponents 1.0
 import MuseScore.AppShell 1.0
 
 Page {
-    title: qsTrc("appshell", "Playback")
-    explanation: qsTrc("appshell", "Enjoy realistic playback for free by downloading our new Muse Sounds library")
+    title: qsTrc("appshell/gettingstarted", "Playback")
+    explanation: qsTrc("appshell/gettingstarted", "Enjoy realistic playback for free by downloading our new Muse Sounds library")
 
     titleContentSpacing: 12
 
-    extraButtonTitle: qsTrc("appshell", "Download")
+    extraButtonTitle: qsTrc("appshell/gettingstarted", "Download")
 
     onExtraButtonClicked: {
         console.log("NOT_IMPLEMENTED!")

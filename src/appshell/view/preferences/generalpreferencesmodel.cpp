@@ -55,7 +55,7 @@ void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
     Language language = languagesService()->currentLanguage().val;
 
     if (language.status != LanguageStatus::Status::NeedUpdate) {
-        QString msg = mu::qtrc("appshell", "Your version of %1 is up to date").arg(language.name);
+        QString msg = mu::qtrc("appshell/preferences", "Your version of %1 is up to date").arg(language.name);
         interactive()->info(msg.toStdString(), "");
         return;
     }
