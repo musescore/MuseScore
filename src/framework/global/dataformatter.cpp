@@ -35,38 +35,46 @@ String DataFormatter::formatReal(double val, int prec)
     return String::number(val, prec);
 }
 
-String DataFormatter::formatTimeSince(const Date& dateTime)
+String DataFormatter::formatTimeSince(const Date& date)
 {
-    DateTime currentDateTime = DateTime::currentDateTime();
-    int days = dateTime.daysTo(currentDateTime.date());
+    Date currentDate = DateTime::currentDateTime().date();
+    int days = date.daysTo(currentDate);
 
     if (days == 0) {
         return mtrc("global", "Today");
     }
 
-    if (days >= 1 && days < 7) {
-        //: Omit the "%n" for the singular translation and translate to (the equivalent of) "Yesterday"
+    if (days == 1) {
+        return mtrc("global", "Yesterday");
+    }
+
+    if (days < 7) {
         return mtrc("global", "%n day(s) ago", nullptr, days);
     }
 
     int weeks = days / 7;
 
-    if (weeks >= 1 && weeks <= 4) {
-        //: Omit the "%n" for the singular translation and translate to (the equivalent of) "Last week"
+    if (weeks == 1) {
+        return mtrc("global", "Last week");
+    }
+
+    if (weeks <= 4) {
         return mtrc("global", "%n week(s) ago", nullptr, weeks);
     }
 
-    Date currentDate = currentDateTime.date();
-    constexpr int monthInYear = 12;
-    int months = (currentDate.year() - dateTime.year()) * monthInYear + (currentDate.month() - dateTime.month());
+    constexpr int monthsInYear = 12;
 
-    if (months >= 1 && months < monthInYear) {
-        //: Omit the "%n" for the singular translation and translate (the equivalent of) to "Last month"
+    int months = (currentDate.year() - date.year()) * monthsInYear + (currentDate.month() - date.month());
+
+    if (months == 1) {
+        return mtrc("global", "Last month");
+    }
+
+    if (months < monthsInYear) {
         return mtrc("global", "%n month(s) ago", nullptr, months);
     }
 
-    int years = currentDate.year() - dateTime.year();
+    int years = currentDate.year() - date.year();
 
-    //: Omit the "%n" for the singular translation and translate to (the equivalent of) "Last year"
     return mtrc("global", "%n year(s) ago", nullptr, years);
 }
