@@ -31,7 +31,7 @@ namespace mu::framework {
 struct Progress
 {
     async::Notification started;
-    async::Channel<int64_t /*current*/, int64_t /*total*/> progressChanged;
+    async::Channel<int64_t /*current*/, int64_t /*total*/, std::string /*title*/> progressChanged;
     async::Channel<Ret> finished;
 };
 }

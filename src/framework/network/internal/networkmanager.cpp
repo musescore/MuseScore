@@ -200,7 +200,7 @@ void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* i
 {
     if (incomingData) {
         connect(reply, &QNetworkReply::downloadProgress, this, [this](const qint64 curr, const qint64 total) {
-            m_progress.progressChanged.send(curr, total);
+            m_progress.progressChanged.send(curr, total, "");
         });
 
         connect(reply, &QNetworkReply::readyRead, this, [this]() {
@@ -221,7 +221,7 @@ void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* i
 void NetworkManager::prepareReplyTransmit(QNetworkReply* reply)
 {
     connect(reply, &QNetworkReply::uploadProgress, [this](const qint64 curr, const qint64 total) {
-        m_progress.progressChanged.send(curr, total);
+        m_progress.progressChanged.send(curr, total, "");
     });
 }
 

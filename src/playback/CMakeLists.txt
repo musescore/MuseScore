@@ -57,6 +57,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelcontextmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbacktoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/playbacktoolbarmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/playbackloadingmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/playbackloadingmodel.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
