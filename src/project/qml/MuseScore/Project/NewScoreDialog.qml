@@ -161,7 +161,7 @@ StyledDialogView {
 
             visible: pagesStack.currentIndex > 0
 
-            text: qsTrc("project/newscore", "Back")
+            text: qsTrc("global", "Back")
 
             onClicked: {
                 pagesStack.currentIndex--
@@ -176,7 +176,7 @@ StyledDialogView {
             visible: pagesStack.currentIndex < pagesStack.count - 1
             enabled: chooseInstrumentsAndTemplatePage.hasSelection
 
-            text: qsTrc("project/newscore", "Next")
+            text: qsTrc("global", "Next")
 
             onClicked: {
                 pagesStack.currentIndex++
@@ -192,7 +192,7 @@ StyledDialogView {
 
             enabled: chooseInstrumentsAndTemplatePage.hasSelection
 
-            text: qsTrc("project/newscore", "Done")
+            text: qsTrc("global", "Done")
 
             onClicked: {
                 root.onDone()
