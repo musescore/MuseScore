@@ -31,7 +31,7 @@ import "internal/NewScore"
 StyledDialogView {
     id: root
 
-    title: qsTrc("project/newscore", "New Score")
+    title: qsTrc("project", "New score")
 
     contentHeight: 600
     contentWidth: 1024

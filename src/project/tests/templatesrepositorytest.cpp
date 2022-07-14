@@ -171,7 +171,7 @@ TEST_F(TemplatesRepositoryTest, Templates)
     };
 
     for (const io::path_t& otherTemplatePath : otherUserTemplates) {
-        expectedTemplates << buildTemplate("My Templates", otherTemplatePath);
+        expectedTemplates << buildTemplate("My templates", otherTemplatePath);
     }
 
     for (const Template& templ : expectedTemplates) {

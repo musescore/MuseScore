@@ -58,7 +58,7 @@ Templates TemplatesRepository::readTemplates(const io::path_t& dirPath) const
             return Templates();
         }
 
-        return readTemplates(files.val, qtrc("project", "My Templates"));
+        return readTemplates(files.val, qtrc("project", "My templates"));
     }
 
     RetVal<ByteArray> categoriesJson = fileSystem()->readFile(categoriesJsonPath);
