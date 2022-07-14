@@ -30,7 +30,6 @@
 
 namespace mu {
 struct XmlDomData;
-struct XmlNodeData;
 
 class XmlDomElement;
 class XmlDomNode
@@ -56,10 +55,10 @@ protected:
     friend class XmlDomDocument;
     friend class XmlDomElement;
 
-    XmlDomNode(const std::shared_ptr<XmlDomData>& data, const std::shared_ptr<XmlNodeData>& node);
+    XmlDomNode(const std::shared_ptr<XmlDomData>& xml, uintptr_t node);
 
-    std::shared_ptr<XmlDomData> m_data = nullptr;
-    std::shared_ptr<XmlNodeData> m_node = nullptr;
+    std::shared_ptr<XmlDomData> m_xml = nullptr;
+    uintptr_t m_node = 0;
 };
 
 class XmlDomElement : public XmlDomNode
@@ -73,7 +72,7 @@ private:
     friend class XmlDomDocument;
     friend class XmlDomNode;
 
-    XmlDomElement(const std::shared_ptr<XmlDomData>& data, const std::shared_ptr<XmlNodeData>& node);
+    XmlDomElement(const std::shared_ptr<XmlDomData>& data, uintptr_t node);
 };
 
 class XmlDomDocument
@@ -81,12 +80,15 @@ class XmlDomDocument
 public:
     XmlDomDocument();
 
-    void setContent(const QByteArray& data);
+    void setContent(const ByteArray& data);
 
-    XmlDomElement documentElement() const;
+    XmlDomElement rootElement() const;
+
+    bool hasError() const;
+    String errorString() const;
 
 private:
-    std::shared_ptr<XmlDomData> m_data = nullptr;
+    std::shared_ptr<XmlDomData> m_xml = nullptr;
 };
 }
 
