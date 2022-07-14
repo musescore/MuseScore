@@ -30,6 +30,7 @@ StyledListView {
     id: root
 
     spacing: 0
+    scrollBarPolicy: ScrollBar.AlwaysOn
 
     signal selectRowRequested(int index)
     signal clearSelectionRequested()
