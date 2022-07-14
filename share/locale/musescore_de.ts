@@ -512,7 +512,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="47"/>
         <source>Save</source>
-        <translation>&amp;Speichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="48"/>
@@ -537,7 +537,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="78"/>
         <source>Export…</source>
-        <translation>&amp;Export…</translation>
+        <translation>Export…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="79"/>
@@ -612,7 +612,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="95"/>
         <source>Print…</source>
-        <translation>&amp;Drucken…</translation>
+        <translation>Drucken…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="101"/>
@@ -15118,7 +15118,7 @@ fehlgeschlagen: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="195"/>
         <source>Save</source>
-        <translation>&amp;Speichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="82"/>
@@ -19203,7 +19203,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="84"/>
         <source>Save</source>
-        <translation>&amp;Speichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="85"/>
