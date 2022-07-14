@@ -155,8 +155,8 @@ public:
         Start, End, Middle
     };
 
-    qreal chordBeamAnchorX(const Chord* chord, ChordBeamAnchorType anchorType) const;
-    qreal chordBeamAnchorY(const Chord* chord) const;
+    double chordBeamAnchorX(const Chord* chord, ChordBeamAnchorType anchorType) const;
+    double chordBeamAnchorY(const Chord* chord) const;
     PointF chordBeamAnchor(const Chord* chord, ChordBeamAnchorType anchorType) const;
 
     const std::vector<ChordRest*>& elements() const { return _elements; }

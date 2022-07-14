@@ -48,7 +48,7 @@ static const char* label[] = {
 //   textFlags
 //---------------------------------------------------------
 
-static int textFlags = Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip;
+static int textFlags = draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip;
 
 //---------------------------------------------------------
 //   forward declarations of static functions
@@ -234,7 +234,7 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
     for (const BendSegment& bendSegment : m_bendSegments) {
         const PointF& src = bendSegment.src;
         const PointF& dest = bendSegment.dest;
-        const String& text = String(label[bendSegment.tone]);
+        const String& text = String::fromUtf8(label[bendSegment.tone]);
 
         switch (bendSegment.type) {
         case BendSegmentType::LINE_UP:
