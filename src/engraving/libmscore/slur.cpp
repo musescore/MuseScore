@@ -1382,9 +1382,11 @@ SpannerSegment* Slur::layoutSystem(System* system)
             if (!adjustedVertically && sc->notes()[0]->tieBack() && !sc->notes()[0]->tieBack()->isInside()
                 && sc->notes()[0]->tieBack()->up() == up()) {
                 // there is a tie that ends on this chordrest
-                //tie = sc->notes()[0]->tieBack();
-                //endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
-                p1.rx() += horizontalTieClearance;
+                tie = sc->notes()[0]->tieBack();
+                endPoint = tie->segmentAt(tie->nsegments() - 1)->ups(Grip::END).pos();
+                if (abs(endPoint.y() - p1.y()) < tieClearance) {
+                    p1.rx() += horizontalTieClearance;
+                }
             }
         }
     } else if (sst == SpannerSegmentType::END || sst == SpannerSegmentType::MIDDLE) {
