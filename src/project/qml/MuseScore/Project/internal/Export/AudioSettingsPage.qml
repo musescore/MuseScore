@@ -33,7 +33,7 @@ ExportSettingsPage {
 
     ExportOptionItem {
         id: sampleRateLabel
-        text: qsTrc("project", "Sample rate:")
+        text: qsTrc("project/export", "Sample rate:")
 
         StyledDropdown {
             Layout.preferredWidth: 126
@@ -44,7 +44,7 @@ ExportSettingsPage {
             navigation.accessible.name: sampleRateLabel.text + " " + currentText
 
             model: root.model.availableSampleRates().map(function(sampleRate) {
-                return { text: qsTrc("project", "%1 Hz").arg(sampleRate), value: sampleRate }
+                return { text: qsTrc("project/export", "%1 Hz").arg(sampleRate), value: sampleRate }
             })
 
             currentIndex: indexOfValue(root.model.sampleRate)
@@ -58,7 +58,7 @@ ExportSettingsPage {
     ExportOptionItem {
         id: bitrateLabel
         visible: root.showBitRateControl
-        text: qsTrc("project", "Bitrate:")
+        text: qsTrc("project/export", "Bitrate:")
 
         StyledDropdown {
             Layout.preferredWidth: 126
@@ -69,7 +69,7 @@ ExportSettingsPage {
             navigation.accessible.name: bitrateLabel.text + " " + currentText
 
             model: root.model.availableBitRates().map(function(bitRate) {
-                return { text: qsTrc("project", "%1 kBit/s").arg(bitRate), value: bitRate }
+                return { text: qsTrc("project/export", "%1 kBit/s").arg(bitRate), value: bitRate }
             })
 
             currentIndex: indexOfValue(root.model.bitRate)
@@ -82,7 +82,7 @@ ExportSettingsPage {
 
     StyledTextLabel {
         width: parent.width
-        text: qsTrc("project", "Each selected part will be exported as a separate audio file.")
+        text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.WordWrap
     }
