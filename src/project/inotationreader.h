@@ -23,8 +23,10 @@
 #define MU_PROJECT_INOTATIONREADER_H
 
 #include <memory>
+#include <map>
 
 #include "ret.h"
+#include "val.h"
 #include "io/path.h"
 
 namespace mu::engraving {
@@ -39,7 +41,7 @@ public:
         ForceMode // Ignore lower priority errors (like version errors)
     };
 
-    using Options = QMap<OptionKey, QVariant>;
+    using Options = std::map<OptionKey, Val>;
 
     virtual ~INotationReader() = default;
 

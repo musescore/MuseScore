@@ -47,7 +47,7 @@ class PowerTab
     MasterScore* score = nullptr;
 
     bool              readBoolean();
-    unsigned char     readUChar();
+    unsigned char     readUInt8();
     char              readChar();
     unsigned short    readShort();
     int               readInt();

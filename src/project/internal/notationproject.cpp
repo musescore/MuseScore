@@ -243,7 +243,7 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     // Setup import reader
     INotationReader::Options options;
     if (forceMode) {
-        options[INotationReader::OptionKey::ForceMode] = forceMode;
+        options[INotationReader::OptionKey::ForceMode] = Val(forceMode);
     }
 
     // Read(import) master score

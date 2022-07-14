@@ -32,7 +32,9 @@
 using namespace mu::iex::guitarpro;
 using namespace mu::project;
 
+#ifndef IEX_GUITARPRO_NO_INTERNAL
 static std::shared_ptr<GuitarProConfiguration> s_configuration = std::make_shared<GuitarProConfiguration>();
+#endif
 
 std::string GuitarProModule::moduleName() const
 {
@@ -41,7 +43,9 @@ std::string GuitarProModule::moduleName() const
 
 void GuitarProModule::registerExports()
 {
+#ifndef IEX_GUITARPRO_NO_INTERNAL
     modularity::ioc()->registerExport<IGuitarProConfiguration>(moduleName(), s_configuration);
+#endif
 }
 
 void GuitarProModule::resolveImports()
@@ -54,5 +58,7 @@ void GuitarProModule::resolveImports()
 
 void GuitarProModule::onInit(const framework::IApplication::RunMode&)
 {
+#ifndef IEX_GUITARPRO_NO_INTERNAL
     s_configuration->init();
+#endif
 }
