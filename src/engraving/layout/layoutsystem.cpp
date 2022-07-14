@@ -46,6 +46,7 @@
 #include "layoutlyrics.h"
 #include "layoutmeasure.h"
 #include "layouttuplets.h"
+#include "layoutchords.h"
 
 #include "log.h"
 
@@ -344,6 +345,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     }
                     m = m->nextMeasure();
                 }
+                // Restore the original state of ties and glissandos
+                LayoutChords::updateLineAttachPoints(m);
             }
             ctx.rangeDone = true;
         }
@@ -456,11 +459,6 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     system->setWidth(pos.x());
 
     layoutSystemElements(options, ctx, score, system);
-    if (oldSystem) {
-        // We may have previously processed some elements of the first measure of next system.
-        // This restores the correct state.
-        layoutSystemElements(options, ctx, score, oldSystem);
-    }
     system->layout2(ctx);     // compute staff distances
     for (MeasureBase* mb : system->measures()) {
         mb->layoutCrossStaff();
