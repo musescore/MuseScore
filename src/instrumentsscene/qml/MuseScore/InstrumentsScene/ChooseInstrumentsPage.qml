@@ -168,7 +168,7 @@ Rectangle {
             navigation.panel: navSelectPanel
             navigation.order: 1
 
-            toolTipTitle: qsTrc("project", "Add selected instruments to score")
+            toolTipTitle: qsTrc("instruments", "Add selected instruments to score")
 
             visible: root.canSelectMultipleInstruments
 
@@ -230,7 +230,7 @@ Rectangle {
                 navigation.panel: navUpDownPanel
                 navigation.row: 1
 
-                toolTipTitle: qsTrc("project", "Move selected instruments up")
+                toolTipTitle: qsTrc("instruments", "Move selected instruments up")
 
                 onClicked: {
                     instrumentsOnScoreView.moveSelectedInstrumentsUp()
@@ -245,7 +245,7 @@ Rectangle {
                 navigation.panel: navUpDownPanel
                 navigation.row: 2
 
-                toolTipTitle: qsTrc("project", "Move selected instruments down")
+                toolTipTitle: qsTrc("instruments", "Move selected instruments down")
 
                 onClicked: {
                     instrumentsOnScoreView.moveSelectedInstrumentsDown()
