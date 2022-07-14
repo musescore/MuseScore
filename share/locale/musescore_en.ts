@@ -4020,7 +4020,7 @@ Published under the %1GNU General Public License version 3%2.</source>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="60"/>
-        <source>Colour notes outside of usable pitch range</source>
+        <source>Color notes outside of usable pitch range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4031,11 +4031,6 @@ Published under the %1GNU General Public License version 3%2.</source>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="65"/>
         <source>Reset preferences</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/ProgrammeStartSection.qml" line="30"/>
-        <source>Programme start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4242,6 +4237,7 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/ProgrammeStartSection.qml" line="30"/>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="149"/>
         <source>Program start</source>
         <translation type="unfinished"></translation>
@@ -4429,7 +4425,7 @@ Published under the %1GNU General Public License version 3%2.</source>
     </message>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/AccountBenefitsDescription.qml" line="88"/>
-        <source>Get social by following other creators, and liking and commenting on your favourite works</source>
+        <source>Get social by following other creators, and liking and commenting on your favorite works</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4737,11 +4733,6 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/measurerepeat.cpp" line="300"/>
-        <source>%1; Duration: %2 measure(s)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/engraving/libmscore/note.cpp" line="837"/>
         <source>%1 (sounding as %2%3)</source>
         <translation type="unfinished"></translation>
@@ -4823,13 +4814,7 @@ Published under the %1GNU General Public License version 3%2.</source>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/noteentry.cpp" line="390"/>
-        <source>There is a measure repeat here.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/libmscore/noteentry.cpp" line="391"/>
-        <source>
-Continue with adding note and delete measure repeat?</source>
+        <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5567,16 +5552,6 @@ Continue with adding note and delete measure repeat?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="245"/>
-        <source>EngravingItem</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
-        <source>EngravingItem list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="247"/>
         <source>Staff list</source>
         <translation type="unfinished"></translation>
@@ -5696,8 +5671,18 @@ Continue with adding note and delete measure repeat?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="245"/>
+        <source>Element</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
+        <source>Element list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="384"/>
-        <source>German Pitch names</source>
+        <source>German pitch names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8061,6 +8046,14 @@ Continue with adding note and delete measure repeat?</source>
         <source>Open/Atonal</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <location filename="../../src/engraving/libmscore/measurerepeat.cpp" line="300"/>
+        <source>%1; Duration: %n measure(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>engraving/sym</name>
@@ -9918,7 +9911,7 @@ Continue with adding note and delete measure repeat?</source>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="80"/>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="128"/>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="186"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="153"/>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/DirectoriesBottomPanel.qml" line="47"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml" line="101"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditGridSizeDialog.qml" line="148"/>
@@ -9944,20 +9937,13 @@ Continue with adding note and delete measure repeat?</source>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="116"/>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="164"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="152"/>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/TextInputField.qml" line="225"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="175"/>
-        <source>Replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10040,50 +10026,47 @@ Continue with adding note and delete measure repeat?</source>
         <source>Yesterday</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="52"/>
-        <source>%1 days ago</source>
-        <translation type="unfinished"></translation>
+        <source>%n day(s) ago</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="58"/>
         <source>Last week</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="62"/>
-        <source>Two weeks ago</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/global/dataformatter.cpp" line="66"/>
-        <source>Three weeks ago</source>
-        <translation type="unfinished"></translation>
+        <source>%n week(s) ago</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="70"/>
-        <source>Four weeks ago</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/global/dataformatter.cpp" line="78"/>
         <source>Last month</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../../src/framework/global/dataformatter.cpp" line="82"/>
-        <source>%1 months ago</source>
-        <translation type="unfinished"></translation>
+    <message numerus="yes">
+        <location filename="../../src/framework/global/dataformatter.cpp" line="74"/>
+        <source>%n month(s) ago</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <location filename="../../src/framework/global/dataformatter.cpp" line="87"/>
-        <source>1 year ago</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/global/dataformatter.cpp" line="90"/>
-        <source>%1 years ago</source>
-        <translation type="unfinished"></translation>
+    <message numerus="yes">
+        <location filename="../../src/framework/global/dataformatter.cpp" line="79"/>
+        <source>%n year(s) ago</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="29"/>
@@ -10174,6 +10157,11 @@ Continue with adding note and delete measure repeat?</source>
         <extracomment>Abbreviation of &quot;points&quot;, used to specify a font size</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="163"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>iex_capella</name>
@@ -10191,18 +10179,18 @@ Continue with adding note and delete measure repeat?</source>
 <context>
     <name>iex_guitarpro</name>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="412"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="413"/>
         <source>Free time</source>
         <comment>time signature</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="888"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="889"/>
         <source>Music by %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="893"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="894"/>
         <source>Words by %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10482,6 +10470,63 @@ pickup measure</source>
     </message>
 </context>
 <context>
+    <name>iex_musicxml</name>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="46"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/importxml.cpp" line="121"/>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="84"/>
+        <source>%n error(s) found, import may be incomplete.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/importxml.cpp" line="210"/>
+        <source>File &apos;%1&apos; is not a valid MusicXML file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="192"/>
+        <source>Debug message:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="194"/>
+        <source>Warning:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="196"/>
+        <source>Critical error:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="198"/>
+        <source>Fatal error:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="200"/>
+        <source>Unknown error:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="283"/>
+        <source>line %1, column %2:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="296"/>
+        <source>expected token type and name &apos;EndElement %1&apos;, actual &apos;%2 %3&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>inspector</name>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/ColorSection.qml" line="34"/>
@@ -10640,7 +10685,7 @@ pickup measure</source>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml" line="74"/>
-        <source>Bar width</source>
+        <source>Measure width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -13186,65 +13231,6 @@ Whether you are just getting started with music notation software, or are a powe
     </message>
 </context>
 <context>
-    <name>musicxml</name>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/importxml.cpp" line="210"/>
-        <source>File &apos;%1&apos; is not a valid MusicXML file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="46"/>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/importxml.cpp" line="121"/>
-        <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="84"/>
-        <source>Error(s) found, import may be incomplete.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="192"/>
-        <source>Debug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="194"/>
-        <source>Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="196"/>
-        <source>Critical</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="198"/>
-        <source>Fatal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="200"/>
-        <source>Unknown</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="204"/>
-        <source>%1 error: line %2 column %3 %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="287"/>
-        <source>line %1 column %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="300"/>
-        <source>expected token type and name &apos;EndElement %1&apos;, actual &apos;%2 %3&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>notation</name>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="83"/>
@@ -13291,7 +13277,7 @@ Whether you are just getting started with music notation software, or are a powe
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="47"/>
-        <source>Customise control</source>
+        <source>Customize control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -13352,13 +13338,6 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="163"/>
         <source>Scroll right</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml" line="60"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="226"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="234"/>
-        <source>Customise toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -13948,6 +13927,13 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="131"/>
         <source>Continuous view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml" line="60"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="226"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="234"/>
+        <source>Customize toolbar</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -17231,8 +17217,13 @@ failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="845"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="862"/>
         <source>Metronome</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="864"/>
+        <source>Loading audio samples</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -17333,7 +17324,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsservice.cpp" line="82"/>
-        <source>Colour notes</source>
+        <source>Color notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -17650,19 +17641,21 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/MeasuresSettings.qml" line="49"/>
-        <source>Pickup: </source>
+        <source>pickup:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/MeasuresSettings.qml" line="53"/>
-        <source>No pickup</source>
+        <source>no pickup</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/MeasuresSettings.qml" line="57"/>
-        <source> measures, 
-</source>
-        <translation type="unfinished"></translation>
+        <source>%n measure(s),</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/MeasuresSettings.qml" line="100"/>
@@ -17742,7 +17735,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="136"/>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="215"/>
-        <source>This file was created in MuseScore %1</source>
+        <source>This file was last saved in MuseScore %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -18254,33 +18247,53 @@ failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="316"/>
-        <source>Dotted</source>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="315"/>
+        <source>Dotted 16th note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="315"/>
+        <source>16th note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="317"/>
+        <source>Dotted 8th note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="317"/>
+        <source>8th note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="319"/>
+        <source>Dotted quarter note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="319"/>
+        <source>Quarter note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="321"/>
-        <source>semiquaver</source>
+        <source>Dotted half note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="324"/>
-        <source>quaver</source>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="321"/>
+        <source>Half note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="327"/>
-        <source>crotchet</source>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="323"/>
+        <source>Dotted whole note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
-        <source>minim</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="333"/>
-        <source>semibreve</source>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="323"/>
+        <source>Whole note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -18498,22 +18511,22 @@ assign it to this function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="76"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="75"/>
         <source>Define keyboard shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="102"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="101"/>
         <source>Old shortcuts:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="122"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="121"/>
         <source>New shortcut:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="130"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="129"/>
         <source>Type to set shortcut</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18609,11 +18622,6 @@ assign it to this function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="129"/>
-        <source>Shortcut conflicts with %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/framework/shortcuts/view/mididevicemappingmodel.cpp" line="100"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
@@ -18624,18 +18632,33 @@ assign it to this function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="34"/>
+        <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="33"/>
         <source>MuseScore Shortcuts File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="180"/>
+        <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="174"/>
         <source>Import shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="192"/>
+        <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="186"/>
         <source>Export shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="150"/>
+        <source>This shortcut is already assigned to: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="170"/>
+        <source>Are you sure you want to assign it to &lt;b&gt;%2&lt;/b&gt; instead?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="177"/>
+        <source>Reassign shortcut</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -18992,7 +19015,7 @@ assign it to this function.</source>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="129"/>
-        <source>UI preferences (colours, canvas style, etc.)</source>
+        <source>UI preferences (colors, canvas style, etc.)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
