@@ -1250,12 +1250,24 @@ void Spanner::setTicks(const Fraction& f)
 
 int Spanner::startUniqueTicks() const
 {
-    return _startUniqueTicks;
+    Score* score = this->score();
+
+    if (!score) {
+        return 0;
+    }
+
+    return score->repeatList().tick2utick(tick().ticks());
 }
 
 int Spanner::endUniqueTicks() const
 {
-    return _endUniqueTicks;
+    Score* score = this->score();
+
+    if (!score) {
+        return 0;
+    }
+
+    return score->repeatList().tick2utick(tick2().ticks());
 }
 
 //---------------------------------------------------------
