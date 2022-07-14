@@ -189,15 +189,15 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
 
     QString typeStr;
     switch (type) {
-    case 0:  typeStr = qtrc("musicxml", "Debug message:");
+    case 0:  typeStr = qtrc("iex_musicxml", "Debug message:");
         break;
-    case 1:  typeStr = qtrc("musicxml", "Warning:");
+    case 1:  typeStr = qtrc("iex_musicxml", "Warning:");
         break;
-    case 2:  typeStr = qtrc("musicxml", "Critical error:");
+    case 2:  typeStr = qtrc("iex_musicxml", "Critical error:");
         break;
-    case 3:  typeStr = qtrc("musicxml", "Fatal error:");
+    case 3:  typeStr = qtrc("iex_musicxml", "Fatal error:");
         break;
-    default: typeStr = qtrc("musicxml", "Unknown error:");
+    default: typeStr = qtrc("iex_musicxml", "Unknown error:");
         break;
     }
 
@@ -280,7 +280,7 @@ void domNotImplemented(const QDomElement& e)
 
 QString errorStringWithLocation(int line, int col, const QString& error)
 {
-    return qtrc("musicxml", "line %1, column %2:").arg(line).arg(col) + " " + error;
+    return qtrc("iex_musicxml", "line %1, column %2:").arg(line).arg(col) + " " + error;
 }
 
 //---------------------------------------------------------
@@ -293,7 +293,7 @@ QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName)
         return "";
     }
 
-    QString res = qtrc("musicxml", "expected token type and name 'EndElement %1', actual '%2 %3'")
+    QString res = qtrc("iex_musicxml", "expected token type and name 'EndElement %1', actual '%2 %3'")
                   .arg(expName)
                   .arg(e.tokenString())
                   .arg(e.name().toString());
