@@ -88,10 +88,13 @@ QString EditMidiMappingModel::eventName(const RemoteEvent& event) const
     QString title;
 
     if (event.type == RemoteEventType::Note) {
-        return qtrc("shortcuts", "Note ") + QString::fromStdString(pitchToString(event.value));
+        //: A MIDI remote event, namely a note event
+        return qtrc("shortcuts", "Note %1").arg(QString::fromStdString(pitchToString(event.value)));
     } else if (event.type == RemoteEventType::Controller) {
-        return qtrc("shortcuts", "Controller ") + QString::number(event.value);
+        //: A MIDI remote event, namely a MIDI controller event
+        return qtrc("shortcuts", "Controller %1").arg(QString::number(event.value));
     }
 
+    //: No MIDI remote event
     return qtrc("shortcuts", "None");
 }
