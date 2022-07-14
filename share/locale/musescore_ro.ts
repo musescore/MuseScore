@@ -511,7 +511,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="47"/>
         <source>Save</source>
-        <translation>&amp;Salvează</translation>
+        <translation>Salvează</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="48"/>
@@ -611,7 +611,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="95"/>
         <source>Print…</source>
-        <translation>Ti&amp;părește…</translation>
+        <translation>Tipărește…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="101"/>
@@ -15114,7 +15114,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="195"/>
         <source>Save</source>
-        <translation>&amp;Salvează</translation>
+        <translation>Salvează</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="82"/>
@@ -19199,7 +19199,7 @@ assign it to this function.</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="84"/>
         <source>Save</source>
-        <translation>&amp;Salvează</translation>
+        <translation>Salvează</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="85"/>

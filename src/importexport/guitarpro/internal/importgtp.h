@@ -412,7 +412,7 @@ class GuitarPro6 : public GuitarPro
         XmlDomNode rhythms;
     };
 
-    void parseFile(const char* filename, QByteArray* data);
+    void parseFile(const char* filename, ByteArray* data);
     int readBit(QByteArray* buffer);
     QByteArray getBytes(QByteArray* buffer, int offset, int length);
     void readGPX(QByteArray* buffer);
@@ -432,7 +432,7 @@ class GuitarPro6 : public GuitarPro
 
 protected:
     const static std::map<std::string, std::string> instrumentMapping;
-    void readGpif(QByteArray* data);
+    void readGpif(ByteArray* data);
 
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;
 

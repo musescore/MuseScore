@@ -66,8 +66,8 @@ Item {
     EditShortcutDialog {
         id: editShortcutDialog
 
-        onApplySequenceRequested: function(newSequence) {
-            shortcutsModel.applySequenceToCurrentShortcut(newSequence)
+        onApplySequenceRequested: function(newSequence, conflictShortcutIndex) {
+            shortcutsModel.applySequenceToCurrentShortcut(newSequence, conflictShortcutIndex)
         }
 
         property bool canEditCurrentShortcut: Boolean(shortcutsModel.currentShortcut)
