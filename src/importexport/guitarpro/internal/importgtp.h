@@ -413,13 +413,14 @@ class GuitarPro6 : public GuitarPro
     };
 
     void parseFile(const char* filename, ByteArray* data);
-    int readBit(QByteArray* buffer);
-    QByteArray getBytes(QByteArray* buffer, int offset, int length);
-    void readGPX(QByteArray* buffer);
-    int readInteger(QByteArray* buffer, int offset);
-    QByteArray readString(QByteArray* buffer, int offset, int length);
-    int readBits(QByteArray* buffer, int bitsToRead);
-    int readBitsReversed(QByteArray* buffer, int bitsToRead);
+
+    int readBit(ByteArray* buffer);
+    ByteArray getBytes(ByteArray* buffer, int offset, int length);
+    void readGPX(ByteArray* buffer);
+    int readInteger(ByteArray* buffer, int offset);
+    ByteArray readString(ByteArray* buffer, int offset, int length);
+    int readBits(ByteArray* buffer, int bitsToRead);
+    int readBitsReversed(ByteArray* buffer, int bitsToRead);
     int findNumMeasures(GPPartInfo* partInfo);
     void readMasterTracks(XmlDomNode* masterTrack);
     void readDrumNote(Note* note, int element, int variation);
@@ -452,7 +453,7 @@ public:
     GuitarPro7(MasterScore* s)
         : GuitarPro6(s, 7) {}
     bool read(mu::io::IODevice*) override;
-    GPProperties readProperties(QByteArray* data);
+    GPProperties readProperties(ByteArray* data);
 };
 } // namespace Ms
 #endif

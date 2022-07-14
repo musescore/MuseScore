@@ -58,9 +58,12 @@ public:
     void push_back(uint8_t b);
     void push_back(const uint8_t* b, size_t len);
     void push_back(const ByteArray& ba);
+
+    uint8_t at(size_t pos) const;
     uint8_t operator[](size_t pos) const;
     uint8_t& operator[](size_t pos);
 
+    void reserve(size_t nsize);
     void resize(size_t nsize);
     void truncate(size_t pos);
     void clear();

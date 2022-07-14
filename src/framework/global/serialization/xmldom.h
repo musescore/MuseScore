@@ -24,8 +24,7 @@
 
 #include <memory>
 
-#include <QByteArray>
-
+#include "types/bytearray.h"
 #include "types/string.h"
 
 namespace mu {
