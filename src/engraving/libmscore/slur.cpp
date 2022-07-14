@@ -1321,15 +1321,21 @@ SpannerSegment* Slur::layoutSystem(System* system)
 
             _up = !(startCR()->up());
 
-            Measure* m1 = startCR()->measure();
-
+            Measure* m = startCR()->measure();
             if (c1 && c2 && !c1->isGrace() && isDirectionMixture(c1, c2)) {
                 // slurs go above if there are mixed direction stems between c1 and c2
                 // but grace notes are exceptions
                 _up = true;
-            } else if (m1->hasVoices(startCR()->staffIdx(), tick(), ticks()) && c1 && !c1->isGrace()) {
-                // in polyphonic passage, slurs go on the stem side
-                _up = startCR()->up();
+            } else {
+                ChordRest* cr2 = endCR() ? endCR() : startCR();
+                while (m && m->tick() < cr2->tick()) {
+                    if (m->hasVoices(startCR()->staffIdx(), tick(),
+                                     ticks() + (cr2 ? cr2->ticks() : startCR()->ticks())) && c1 && !c1->isGrace()) {
+                        // in polyphonic passage, slurs go on the stem side
+                        _up = startCR()->up();
+                    }
+                    m = m->nextMeasure();
+                }
             }
         }
         break;
