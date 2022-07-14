@@ -59,7 +59,7 @@ protected:
     void readLyrics(const XmlDomNode& items, GPTrack* track) const;
     std::vector<GPMasterBar::Fermata> readFermatas(XmlDomNode* fermatasNode) const;
     std::vector<GPMasterBar::Direction> readRepeatsJumps(XmlDomNode* repeatsJumpsNode) const;
-    std::pair<QString, QString> readMasterBarSection(const XmlDomNode& sectionNode) const;
+    std::pair<String, String> readMasterBarSection(const XmlDomNode& sectionNode) const;
     GPMasterBar::Repeat readRepeat(XmlDomNode* repeatNode) const;
     std::vector<int> readEnding(XmlDomNode* endNode) const;
 

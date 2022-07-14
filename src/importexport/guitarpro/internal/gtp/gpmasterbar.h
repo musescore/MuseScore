@@ -55,7 +55,7 @@ public:
         };
 
         Type type = Type::Repeat;
-        QString name;
+        String name;
     };
 
     ~GPMasterBar() = default;
@@ -85,8 +85,8 @@ public:
     void setAlternativeEnding(std::vector<int>&& r) { _alternateEndings.swap(r); }
     const std::vector<int>& alternateEnding() const { return _alternateEndings; }
 
-    void setSection(std::pair<QString, QString>&& s) { _section.swap(s); }
-    const std::pair<QString, QString>& section() const { return _section; }
+    void setSection(std::pair<String, String>&& s) { _section.swap(s); }
+    const std::pair<String, String>& section() const { return _section; }
 
     void setDirections(std::vector<Direction>&& d) { _directions.swap(d); }
     const std::vector<Direction>& directions() const { return _directions; }
@@ -109,7 +109,7 @@ private:
     TripletFeelType _tripletFeel = TripletFeelType::None;
     BarlineType _barlineType = BarlineType::NORMAL;
     bool _freeTime = false;
-    std::pair<QString, QString> _section;
+    std::pair<String, String> _section;
     Direction _direction;
 };
 }

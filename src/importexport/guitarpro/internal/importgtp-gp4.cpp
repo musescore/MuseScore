@@ -256,31 +256,31 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         int leftFinger  = readUChar();
         int rightFinger = readUChar();
         Fingering* fi   = Factory::createFingering(note);
-        QString finger;
+        String finger;
         // if there is a valid left hand fingering
         if (leftFinger < 5) {
             if (leftFinger == 0) {
-                finger = "T";
+                finger = u"T";
             } else if (leftFinger == 1) {
-                finger = "1";
+                finger = u"1";
             } else if (leftFinger == 2) {
-                finger = "2";
+                finger = u"2";
             } else if (leftFinger == 3) {
-                finger = "3";
+                finger = u"3";
             } else if (leftFinger == 4) {
-                finger = "4";
+                finger = u"4";
             }
         } else {
             if (rightFinger == 0) {
-                finger = "T";
+                finger = u"T";
             } else if (rightFinger == 1) {
-                finger = "I";
+                finger = u"I";
             } else if (rightFinger == 2) {
-                finger = "M";
+                finger = u"M";
             } else if (rightFinger == 3) {
-                finger = "A";
+                finger = u"A";
             } else if (rightFinger == 4) {
-                finger = "O";
+                finger = u"O";
             }
         }
         fi->setPlainText(finger);
@@ -456,13 +456,13 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         if (type == 1) {   //Natural
             note->setHarmonic(false);
         } else if (type == 3) { // Tapped
-            addTextToNote("T.H.", note);
+            addTextToNote(u"T.H.", note);
         } else if (type == 4) { //Pinch
-            addTextToNote("P.H.", note);
+            addTextToNote(u"P.H.", note);
         } else if (type == 5) { //semi
-            addTextToNote("S.H.", note);
+            addTextToNote(u"S.H.", note);
         } else {   //Artificial
-            addTextToNote("A.H.", note);
+            addTextToNote(u"A.H.", note);
             int harmonicFret = note->fret();
             harmonicFret += type - 10;
             Note* harmonicNote = Factory::createNote(note->chord());
@@ -582,7 +582,7 @@ void GuitarPro4::readInfo()
     artist       = readDelphiString();
     album        = readDelphiString();
     composer     = readDelphiString();
-    QString copyright = readDelphiString();
+    String copyright = readDelphiString();
     if (!copyright.isEmpty()) {
         score->setMetaTag(u"copyright", copyright);
     }
@@ -720,7 +720,7 @@ bool GuitarPro4::read(IODevice* io)
         }
         if (c & 0x4) {                    // banjo track
         }
-        QString name = readPascalString(40);
+        String name = readPascalString(40);
         int strings  = readInt();
         if (strings <= 0 || strings > GP_MAX_STRING_NUMBER) {
             return false;
@@ -777,7 +777,7 @@ bool GuitarPro4::read(IODevice* io)
         if (capo > 0) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
-            st->setPlainText(QString("Capo. fret ") + QString::number(capo));
+            st->setPlainText(String(u"Capo. fret ") + String::number(capo));
             st->setTrack(i * VOICES);
             s->add(st);
         }
@@ -858,7 +858,7 @@ bool GuitarPro4::read(IODevice* io)
                 if (beatBits & BEAT_CHORD) {
                     size_t numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
                     int header = readUChar();
-                    QString name;
+                    String name;
                     if ((header & 1) == 0) {
                         name = readDelphiString();
                         readChord(segment, staffIdx * VOICES, static_cast<int>(numStrings), name, false);
