@@ -3053,6 +3053,8 @@ AccessibleItemPtr TextBase::createAccessible()
 {
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     return std::make_shared<AccessibleItem>(this, AccessibleItem::EditableText);
+#else
+    return nullptr;
 #endif
 }
 
@@ -3072,6 +3074,10 @@ void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const
         auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
         accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextInsert, Val::fromQVariant(range.toMap()));
     }
+#else
+    UNUSED(startPosition);
+    UNUSED(endPosition);
+    UNUSED(text);
 #endif
 }
 
@@ -3082,6 +3088,10 @@ void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const 
         auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
         accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextRemove, Val::fromQVariant(range.toMap()));
     }
+#else
+    UNUSED(startPosition);
+    UNUSED(endPosition);
+    UNUSED(text);
 #endif
 }
 

@@ -774,7 +774,7 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
         const int extraBeamAdjust = overallUp ? beamsAbove : beamsBelow;
         const double verticalOffset = _beamDist * (level - extraBeamAdjust) * upValue;
 
-        if (qFuzzyCompare(_grow1, _grow2)) {
+        if (RealIsEqual(_grow1, _grow2)) {
             startY -= verticalOffset * _grow1;
             endY -= verticalOffset * _grow1;
         } else {
@@ -814,7 +814,7 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
 
         if (level > 0) {
             double grow = _grow1;
-            if (!qFuzzyCompare(_grow1, _grow2)) {
+            if (!RealIsEqual(_grow1, _grow2)) {
                 double anchorX = chordBeamAnchorX(chord, ChordBeamAnchorType::Middle);
                 double proportionAlongX = (anchorX - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
                 grow = proportionAlongX * (_grow2 - _grow1) + _grow1;
@@ -945,7 +945,7 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
     const int upValue = chord->up() ? -1 : 1;
     const double verticalOffset = _beamDist * (level - extraBeamAdjust) * upValue;
 
-    if (qFuzzyCompare(_grow1, _grow2)) {
+    if (RealIsEqual(_grow1, _grow2)) {
         startY -= verticalOffset * _grow1;
         endY -= verticalOffset * _grow1;
     } else {

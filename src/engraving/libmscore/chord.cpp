@@ -3764,8 +3764,8 @@ void Chord::layoutArticulations()
         a->layout();                 // must be done after assigning direction, or else symId is not reliable
 
         bool headSide = bottom == up();
-        qreal x = centerX();
-        qreal y = 0.0;
+        double x = centerX();
+        double y = 0.0;
         if (bottom) {
             if (!headSide && stem()) {
                 auto userLen = stem()->userLength();
@@ -3862,23 +3862,23 @@ void Chord::layoutArticulations2()
     if (_articulations.empty()) {
         return;
     }
-    qreal x         = centerX();
-    qreal minDist = score()->styleMM(Sid::articulationMinDistance);
-    qreal staffDist = score()->styleMM(Sid::propertyDistance);
-    qreal stemDist = score()->styleMM(Sid::propertyDistanceStem);
-    qreal noteDist = score()->styleMM(Sid::propertyDistanceHead);
+    double x         = centerX();
+    double minDist = score()->styleMM(Sid::articulationMinDistance);
+    double staffDist = score()->styleMM(Sid::propertyDistance);
+    double stemDist = score()->styleMM(Sid::propertyDistanceStem);
+    double noteDist = score()->styleMM(Sid::propertyDistanceHead);
 
-    qreal chordTopY = upPos() - 0.5 * upNote()->headHeight();      // note position of highest note
-    qreal chordBotY = downPos() + 0.5 * upNote()->headHeight();    // note position of lowest note
+    double chordTopY = upPos() - 0.5 * upNote()->headHeight();      // note position of highest note
+    double chordBotY = downPos() + 0.5 * upNote()->headHeight();    // note position of lowest note
 
-    qreal staffTopY = -staffDist;
-    qreal staffBotY = staff()->height() + staffDist;
+    double staffTopY = -staffDist;
+    double staffBotY = staff()->height() + staffDist;
 
     // avoid collisions of staff articulations with chord notes:
     // gap between note and staff articulation is distance0 + 0.5 spatium
 
     if (stem()) {
-        qreal y = stem()->pos().y() + pos().y();
+        double y = stem()->pos().y() + pos().y();
         y += up() ? -stem()->length() : stem()->length();
         if (up()) {
             chordTopY = y;
@@ -3902,7 +3902,7 @@ void Chord::layoutArticulations2()
             }
         }
     }
-    for (Articulation* a : qAsConst(_articulations)) {
+    for (Articulation* a : _articulations) {
         ArticulationAnchor aa = a->anchor();
         if (aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD) {
             continue;
@@ -3932,9 +3932,9 @@ void Chord::layoutArticulations2()
     //
     //    now place all articulations with staff top or bottom anchor
     //
-    staffTopY = qMin(staffTopY, chordTopY);
-    staffBotY = qMax(staffBotY, chordBotY);
-    for (Articulation* a : qAsConst(_articulations)) {
+    staffTopY = std::min(staffTopY, chordTopY);
+    staffBotY = std::max(staffBotY, chordBotY);
+    for (Articulation* a : _articulations) {
         ArticulationAnchor aa = a->anchor();
         if (aa == ArticulationAnchor::TOP_STAFF
             || aa == ArticulationAnchor::BOTTOM_STAFF
