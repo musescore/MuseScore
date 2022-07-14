@@ -21,11 +21,13 @@
  */
 import QtQuick 2.15
 import QtQuick.Window 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.AppShell 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
+import MuseScore.Playback 1.0
 
 Item {
     id: root
@@ -54,21 +56,7 @@ Item {
         model.load()
     }
 
-    StyledTextLabel {
-        anchors.left: parent.left
-        anchors.leftMargin: 12
-        anchors.right: statusBarRow.left
-        anchors.rightMargin: 12
-        anchors.verticalCenter: parent.verticalCenter
-
-        horizontalAlignment: Text.AlignLeft
-
-        text: model.accessibilityInfo
-
-        visible: !hiddenControlsMenuButton.visible
-    }
-
-    Row {
+    RowLayout {
         id: statusBarRow
 
         //! TODO: hiding of controls is disabled because there is a bug
@@ -77,6 +65,8 @@ Item {
         //property int remainingSpace: Window.window ? Window.window.width - (viewModeControl.width + zoomControl.width + eps) : 0
         property int remainingSpace: 999999
 
+        anchors.left: parent.left
+        anchors.leftMargin: 12
         anchors.right: parent.right
         anchors.rightMargin: 4
 
@@ -84,12 +74,40 @@ Item {
 
         spacing: 4
 
+        PlaybackLoadingInfo {
+            id: playbackLoadingInfo
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredHeight: 28
+            Layout.preferredWidth: 312
+
+            onStarted: {
+                visible = true
+            }
+
+            onFinished: {
+                visible = false
+            }
+        }
+
+        SeparatorLine { orientation: Qt.Vertical; visible: playbackLoadingInfo.visible }
+
+        StyledTextLabel {
+            id: accessibiityInfo
+            Layout.alignment: Qt.AlignVCenter
+            Layout.fillWidth: true
+
+            text: model.accessibilityInfo
+            horizontalAlignment: Text.AlignLeft
+
+            visible: !hiddenControlsMenuButton.visible
+        }
+
         SeparatorLine { orientation: Qt.Vertical; visible: workspaceControl.visible }
 
         FlatButton {
             id: workspaceControl
-            anchors.verticalCenter: parent.verticalCenter
-            height: 28
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredHeight: 28
 
             text: model.currentWorkspaceItem.title
             transparent: true
@@ -107,8 +125,8 @@ Item {
 
         ConcertPitchControl {
             id: concertPitchControl
-            anchors.verticalCenter: parent.verticalCenter
-            height: 28
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredHeight: 28
 
             text: model.concertPitchItem.title
             icon: model.concertPitchItem.icon
@@ -128,8 +146,8 @@ Item {
 
         ViewModeControl {
             id: viewModeControl
-            anchors.verticalCenter: parent.verticalCenter
-            height: 28
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredHeight: 28
 
             currentViewMode: model.currentViewMode
             availableViewModeList: model.availableViewModeList
@@ -144,8 +162,8 @@ Item {
 
         ZoomControl {
             id: zoomControl
-            anchors.verticalCenter: parent.verticalCenter
-            height: 28
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredHeight: 28
 
             enabled: model.zoomEnabled
             currentZoomPercentage: model.currentZoomPercentage
@@ -178,7 +196,7 @@ Item {
         MenuButton {
             id: hiddenControlsMenuButton
 
-            anchors.verticalCenter: parent.verticalCenter
+            Layout.alignment: Qt.AlignVCenter
 
             visible: !concertPitchControl.visible ||
                      !workspaceControl.visible

@@ -71,6 +71,8 @@ void PlaybackController::init()
             return;
         }
 
+        m_loadingProgress.started.notify();
+
         playback()->addSequence().onResolve(this, [this](const TrackSequenceId& sequenceId) {
             setupNewCurrentSequence(sequenceId);
         });
@@ -110,7 +112,7 @@ int PlaybackController::currentTick() const
 
 bool PlaybackController::isPlayAllowed() const
 {
-    return m_notation != nullptr;
+    return m_notation != nullptr && isLoaded();
 }
 
 Notification PlaybackController::isPlayAllowedChanged() const
@@ -126,6 +128,11 @@ bool PlaybackController::isPlaying() const
 bool PlaybackController::isPaused() const
 {
     return m_currentPlaybackStatus == PlaybackStatus::Paused;
+}
+
+bool PlaybackController::isLoaded() const
+{
+    return m_loadingTracks.empty();
 }
 
 bool PlaybackController::isLoopVisible() const
@@ -644,7 +651,8 @@ void PlaybackController::setCurrentTick(const tick_t tick)
     m_playbackPositionChanged.notify();
 }
 
-void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const std::string& title)
+void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const std::string& title,
+                                  const std::function<void(const engraving::InstrumentTrackId&)>& callBack)
 {
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
         return;
@@ -665,7 +673,7 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
     uint64_t notationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
 
     playback()->tracks()->addTrack(m_currentSequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
-    .onResolve(this, [this, instrumentTrackId, notationPlaybackKey](const TrackId trackId, const AudioParams& appliedParams) {
+    .onResolve(this, [this, instrumentTrackId, notationPlaybackKey, callBack](const TrackId trackId, const AudioParams& appliedParams) {
         //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
         //! This situation can be if the notation was opened and immediately closed.
         quint64 currentNotationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
@@ -679,10 +687,16 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
         audioSettings()->setTrackOutputParams(instrumentTrackId, appliedParams.out);
 
         updateMuteStates();
+
+        callBack(instrumentTrackId);
     })
-    .onReject(this, [](int code, const std::string& msg) {
+    .onReject(this, [instrumentTrackId, callBack](int code, const std::string& msg) {
         LOGE() << "can't add a new track, code: [" << code << "] " << msg;
+
+        callBack(instrumentTrackId);
     });
+
+    m_loadingTracks.push_back(instrumentTrackId);
 }
 
 void PlaybackController::setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive)
@@ -834,36 +848,59 @@ void PlaybackController::setupSequenceTracks()
         return;
     }
 
+    std::map<InstrumentTrackId, std::string> tracks;
+    m_loadingTracks.clear();
+
     NotifyList<const Part*> partList = masterNotationParts()->partList();
 
     for (const Part* part : partList) {
         for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
-            addTrack(trackId, part->partName().toStdString());
+            tracks.insert({ trackId, part->partName().toStdString() });
         }
     }
 
-    addTrack(notationPlayback()->metronomeTrackId(), qtrc("playback", "Metronome").toStdString());
+    tracks.insert({ notationPlayback()->metronomeTrackId(), qtrc("playback", "Metronome").toStdString() });
 
-    notationPlayback()->trackAdded().onReceive(this, [this](const InstrumentTrackId& instrumentTrackId) {
+    std::string title = trc("playback", "Loading audio samples");
+    m_loadingProgress.progressChanged.send(0, tracks.size(), title);
+
+    auto doTrackAddFinished = [this, tracks, title](const engraving::InstrumentTrackId& instrumentTrackId) {
+        m_loadingTracks.remove(instrumentTrackId);
+
+        size_t current = tracks.size() - m_loadingTracks.size();
+        size_t total = tracks.size();
+        m_loadingProgress.progressChanged.send(current, total, title);
+
+        if (m_loadingTracks.empty()) {
+            m_loadingProgress.finished.send(make_ok());
+            m_isPlayAllowedChanged.notify();
+        }
+    };
+
+    for (const auto& track : tracks) {
+        addTrack(track.first, track.second, doTrackAddFinished);
+    }
+
+    notationPlayback()->trackAdded().onReceive(this, [this, doTrackAddFinished](const InstrumentTrackId& instrumentTrackId) {
         const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
 
         if (!part) {
             return;
         }
 
-        addTrack(instrumentTrackId, part->partName().toStdString());
+        addTrack(instrumentTrackId, part->partName().toStdString(), doTrackAddFinished);
     });
 
     notationPlayback()->trackRemoved().onReceive(this, [this](const InstrumentTrackId& instrumentTrackId) {
         removeTrack(instrumentTrackId);
     });
 
-    partList.onItemChanged(this, [this](const Part* part) {
+    partList.onItemChanged(this, [this, doTrackAddFinished](const Part* part) {
         for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
             auto search = m_trackIdMap.find(trackId);
             if (search == m_trackIdMap.cend()) {
                 removeNonExistingTracks();
-                addTrack(trackId, part->partName().toStdString());
+                addTrack(trackId, part->partName().toStdString(), doTrackAddFinished);
             }
         }
 
@@ -874,6 +911,8 @@ void PlaybackController::setupSequenceTracks()
                                                       [this](const InstrumentTrackId&, const project::IProjectAudioSettings::SoloMuteState&) {
         updateMuteStates();
     });
+
+    m_isPlayAllowedChanged.notify();
 }
 
 void PlaybackController::setupSequencePlayer()
@@ -1015,6 +1054,11 @@ msecs_t PlaybackController::beatToMilliseconds(int measureIndex, int beatIndex) 
 
     int tick = notationPlayback()->beatToTick(measureIndex, beatIndex);
     return tickToMsecs(tick);
+}
+
+mu::framework::Progress PlaybackController::loadingProgress() const
+{
+    return m_loadingProgress;
 }
 
 msecs_t PlaybackController::tickToMsecs(int tick) const

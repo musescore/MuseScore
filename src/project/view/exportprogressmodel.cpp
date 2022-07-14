@@ -55,7 +55,7 @@ void ExportProgressModel::load()
         setProgress(0);
     });
 
-    progress.progressChanged.onReceive(this, [this](int64_t current, int64_t) {
+    progress.progressChanged.onReceive(this, [this](int64_t current, int64_t, const std::string&) {
         setProgress(current);
     });
 

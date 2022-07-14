@@ -386,7 +386,8 @@ RetVal<QString> LanguagesService::downloadLanguage(const QString& languageCode, 
     QBuffer buff;
     INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
 
-    networkManagerPtr->progress().progressChanged.onReceive(new async::Asyncable(), [&progressChannel](int64_t current, int64_t total) {
+    networkManagerPtr->progress().progressChanged.onReceive(new async::Asyncable(),
+                                                            [&progressChannel](int64_t current, int64_t total, const std::string&) {
         progressChannel->send(LanguageProgress(downloadingStatusTitle(), current, total));
     });
 
