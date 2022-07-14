@@ -9913,7 +9913,7 @@ Published under the %1GNU General Public License version 3%2.</source>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="80"/>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="128"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="130"/>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="153"/>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/DirectoriesBottomPanel.qml" line="47"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml" line="101"/>
@@ -9934,12 +9934,7 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="104"/>
-        <source>Waiting…</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="116"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="118"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18497,8 +18492,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="84"/>
-        <source>Press a key or adjust a control on your MIDI device to
-assign it to this function.</source>
+        <source>Press a key or adjust a control on your MIDI device to assign it to this action.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -18518,7 +18512,7 @@ assign it to this function.</source>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="101"/>
-        <source>Old shortcuts:</source>
+        <source>Old shortcut:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -18603,23 +18597,28 @@ assign it to this function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="106"/>
         <location filename="../../src/framework/shortcuts/view/editmidimappingmodel.cpp" line="61"/>
         <source>Waiting…</source>
+        <extracomment>The app is waiting for the user to trigger a valid MIDI remote event</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/view/editmidimappingmodel.cpp" line="91"/>
-        <source>Note </source>
+        <location filename="../../src/framework/shortcuts/view/editmidimappingmodel.cpp" line="92"/>
+        <source>Note %1</source>
+        <extracomment>A MIDI remote event, namely a note event</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/view/editmidimappingmodel.cpp" line="93"/>
-        <source>Controller </source>
+        <location filename="../../src/framework/shortcuts/view/editmidimappingmodel.cpp" line="95"/>
+        <source>Controller %1</source>
+        <extracomment>A MIDI remote event, namely a MIDI controller event</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/view/editmidimappingmodel.cpp" line="96"/>
+        <location filename="../../src/framework/shortcuts/view/editmidimappingmodel.cpp" line="99"/>
         <source>None</source>
+        <extracomment>No MIDI remote event</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -18634,7 +18633,7 @@ assign it to this function.</source>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="33"/>
-        <source>MuseScore Shortcuts File</source>
+        <source>MuseScore shortcuts file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
