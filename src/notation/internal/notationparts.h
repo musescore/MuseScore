@@ -88,7 +88,6 @@ private:
     void updatePartTitles();
 
     void doSetScoreOrder(const ScoreOrder& order);
-    void doMoveStaves(const std::vector<Staff*>& staves, engraving::staff_idx_t destinationStaffIndex, Part* destinationPart = nullptr);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);
