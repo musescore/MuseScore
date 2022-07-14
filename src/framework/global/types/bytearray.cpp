@@ -133,6 +133,17 @@ bool ByteArray::empty() const
     return size() == 0;
 }
 
+void ByteArray::reserve(size_t nsize)
+{
+    if (nsize <= size()) {
+        return;
+    }
+
+    detach();
+    m_data->reserve(nsize + 1);
+    m_data->operator [](nsize) = 0;
+}
+
 void ByteArray::resize(size_t nsize)
 {
     if (nsize == size()) {
@@ -191,13 +202,18 @@ void ByteArray::push_back(const ByteArray& ba)
     push_back(ba.constData(), ba.size());
 }
 
-uint8_t ByteArray::operator[](size_t pos) const
+uint8_t ByteArray::at(size_t pos) const
 {
     assert(pos < size());
     if (pos < size()) {
         return constData()[pos];
     }
     return 0;
+}
+
+uint8_t ByteArray::operator[](size_t pos) const
+{
+    return at(pos);
 }
 
 uint8_t& ByteArray::operator[](size_t pos)
