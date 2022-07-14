@@ -46,15 +46,15 @@ FlatButton {
 
         property string pickupMessage: {
             if (withPickupMeasure.checked) {
-                return qsTrc("project", "Pickup: ") +
+                return qsTrc("project", "pickup:") + " " +
                         model.pickupTimeSignature.numerator + "/" + model.pickupTimeSignature.denominator
             }
 
-            return qsTrc("project", "No pickup")
+            return qsTrc("project", "no pickup")
         }
 
         font: ui.theme.largeBodyFont
-        text: model.measureCount + qsTrc("project", " measures, \n") + pickupMessage
+        text:  qsTrc("project", "%n measure(s),", "", model.measureCount) + "\n" + pickupMessage
     }
 
     onClicked: {

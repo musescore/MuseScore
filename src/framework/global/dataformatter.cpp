@@ -44,48 +44,29 @@ String DataFormatter::formatTimeSince(const Date& dateTime)
         return mtrc("global", "Today");
     }
 
-    if (days == 1) {
-        return mtrc("global", "Yesterday");
-    }
-
-    if (days < 7) {
-        return mtrc("global", "%1 days ago").arg(days);
+    if (days >= 1 && days < 7) {
+        //: Omit the "%n" for the singular translation and translate to (the equivalent of) "Yesterday"
+        return mtrc("global", "%n day(s) ago", nullptr, days);
     }
 
     int weeks = days / 7;
 
-    if (weeks == 1) {
-        return mtrc("global", "Last week");
-    }
-
-    if (weeks == 2) {
-        return mtrc("global", "Two weeks ago");
-    }
-
-    if (weeks == 3) {
-        return mtrc("global", "Three weeks ago");
-    }
-
-    if (weeks == 4) {
-        return mtrc("global", "Four weeks ago");
+    if (weeks >= 1 && weeks <= 4) {
+        //: Omit the "%n" for the singular translation and translate to (the equivalent of) "Last week"
+        return mtrc("global", "%n week(s) ago", nullptr, weeks);
     }
 
     Date currentDate = currentDateTime.date();
     constexpr int monthInYear = 12;
     int months = (currentDate.year() - dateTime.year()) * monthInYear + (currentDate.month() - dateTime.month());
 
-    if (months == 1) {
-        return mtrc("global", "Last month");
-    }
-
-    if (months < monthInYear) {
-        return mtrc("global", "%1 months ago").arg(months);
+    if (months >= 1 && months < monthInYear) {
+        //: Omit the "%n" for the singular translation and translate (the equivalent of) to "Last month"
+        return mtrc("global", "%n month(s) ago", nullptr, months);
     }
 
     int years = currentDate.year() - dateTime.year();
-    if (years == 1) {
-        return mtrc("global", "1 year ago");
-    }
 
-    return mtrc("global", "%1 years ago").arg(years);
+    //: Omit the "%n" for the singular translation and translate to (the equivalent of) "Last year"
+    return mtrc("global", "%n year(s) ago", nullptr, years);
 }

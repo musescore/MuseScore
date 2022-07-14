@@ -126,7 +126,7 @@ StyledDialogView {
             CheckBox {
                 checked: workspaceModel.useUiPreferences
 
-                text: qsTrc("workspace", "UI preferences (colours, canvas style, etc.)")
+                text: qsTrc("workspace", "UI preferences (colors, canvas style, etc.)")
 
                 navigation.name: "UIPreferencesCheckBox"
                 navigation.panel: content.navigationPanel
