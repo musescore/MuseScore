@@ -28,7 +28,7 @@ import MuseScore.Project 1.0
 StyledDialogView {
     id: dialog
 
-    title: qsTrc("project", "Style Improvements")
+    title: qsTrc("project/migration", "Style Improvements")
 
     property string appVersion: ""
     property int migrationType: MigrationType.Unknown
@@ -133,7 +133,7 @@ StyledDialogView {
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
 
-                    text: qsTrc("project", "This file was last saved in MuseScore %1").arg(dialog.appVersion)
+                    text: qsTrc("project/migration", "This file was last saved in MuseScore %1").arg(dialog.appVersion)
                 }
 
                 StyledTextLabel {
@@ -147,7 +147,7 @@ StyledDialogView {
                     wrapMode: Text.WordWrap
                     elide: Text.ElideNone
 
-                    text: qsTrc("project", "Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.")
+                    text: qsTrc("project/migration", "Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.")
                 }
             }
 
@@ -166,7 +166,7 @@ StyledDialogView {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
 
-                    text: qsTrc("project", "Watch video about changes")
+                    text: qsTrc("project/migration", "Watch video about changes")
                     onClicked: dialog.watchVideo()
                 }
 
@@ -212,7 +212,7 @@ StyledDialogView {
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
 
-                    text: qsTrc("project", "This file was last saved in MuseScore %1").arg(dialog.appVersion)
+                    text: qsTrc("project/migration", "This file was last saved in MuseScore %1").arg(dialog.appVersion)
                 }
 
                 StyledTextLabel {
@@ -224,7 +224,7 @@ StyledDialogView {
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
 
-                    text: qsTrc("project", "Select the engraving improvements you would like to apply to your score")
+                    text: qsTrc("project/migration", "Select the engraving improvements you would like to apply to your score")
                 }
 
                 Item {
@@ -247,7 +247,7 @@ StyledDialogView {
                     id: lelandOption
                     anchors.left: parent.left
                     height: 32
-                    text: qsTrc("project", "Our new notation font, Leland")
+                    text: qsTrc("project/migration", "Our new notation font, Leland")
                     checked: dialog.isApplyLeland
                     onClicked: dialog.isApplyLeland = !dialog.isApplyLeland
                 }
@@ -256,7 +256,7 @@ StyledDialogView {
                     id: edwinOption
                     anchors.left: parent.left
                     height: 32
-                    text: qsTrc("project", "Our new text font, Edwin")
+                    text: qsTrc("project/migration", "Our new text font, Edwin")
                     checked: dialog.isApplyEdwin
                     onClicked: dialog.isApplyEdwin = !dialog.isApplyEdwin
                 }
@@ -265,7 +265,7 @@ StyledDialogView {
                     id: spacingOption
                     anchors.left: parent.left
                     height: 32
-                    text: qsTrc("project", "Automatic spacing (introduced in MuseScore 3.0)")
+                    text: qsTrc("project/migration", "Automatic spacing (introduced in MuseScore 3.0)")
                     visible: dialog.migrationType === MigrationType.Pre300
                     checked: dialog.isApplyAutoSpacing
                     onClicked: dialog.isApplyAutoSpacing = !dialog.isApplyAutoSpacing
@@ -285,13 +285,13 @@ StyledDialogView {
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
 
-                    text: qsTrc("project", "Please note: score layouts will be affected by improvements to MuseScore 4")
+                    text: qsTrc("project/migration", "Please note: score layouts will be affected by improvements to MuseScore 4")
                 }
 
                 FlatButton {
                     id: watchVideo
 
-                    text: qsTrc("project", "Watch video")
+                    text: qsTrc("project/migration", "Watch video")
                     onClicked: dialog.watchVideo()
                 }
             }
@@ -318,7 +318,7 @@ StyledDialogView {
                     id: askAgain
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTrc("project", "Don't ask again")
+                    text: qsTrc("global", "Don't ask again")
                     checked: !dialog.isAskAgain
                     onClicked: dialog.isAskAgain = !dialog.isAskAgain
                 }
