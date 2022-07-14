@@ -112,14 +112,15 @@ RetVal<Val> InteractiveProvider::info(const std::string& title, const std::strin
     return openStandardDialog("INFO", QString::fromStdString(title), text, buttons, defBtn, options);
 }
 
-RetVal<Val> InteractiveProvider::warning(const std::string& title, const std::string& text, const IInteractive::ButtonDatas& buttons,
+RetVal<Val> InteractiveProvider::warning(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
                                          int defBtn,
                                          const IInteractive::Options& options)
 {
     return openStandardDialog("WARNING", QString::fromStdString(title), text, buttons, defBtn, options);
 }
 
-RetVal<Val> InteractiveProvider::error(const std::string& title, const std::string& text, const IInteractive::ButtonDatas& buttons,
+RetVal<Val> InteractiveProvider::error(const std::string& title, const framework::IInteractive::Text& text,
+                                       const IInteractive::ButtonDatas& buttons,
                                        int defBtn,
                                        const IInteractive::Options& options)
 {
