@@ -60,7 +60,7 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         if (startItem->isChordRest() && endItem->isChordRest()) {
             ChordRest* startChord = toChordRest(startItem);
             ChordRest* endChord = toChordRest(endItem);
-            overallDurationTicks = startChord->ticks().ticks() + endChord->ticks().ticks();
+            overallDurationTicks = endChord->tick().ticks() + endChord->ticks().ticks() - startChord->tick().ticks();
         }
 
         break;
