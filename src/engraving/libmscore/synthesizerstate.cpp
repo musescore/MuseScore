@@ -107,7 +107,7 @@ bool SynthesizerState::isDefaultSynthSoundfont()
 {
     SynthesizerGroup fluid = group(u"Fluid");
     if (fluid.size() == 1) {
-        if (fluid.front().data == u"MuseScore_General.sf3") {
+        if (fluid.front().data == u"MS Basic.sf3") {
             return true;
         }
     }

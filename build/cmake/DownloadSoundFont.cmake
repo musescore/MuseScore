@@ -2,7 +2,7 @@
 
 set (SF_VERSION_REMOTE_FILE ${PROJECT_BINARY_DIR}/SF_VERSION)
 set (SF_VERSION_LOCAL_FILE ${PROJECT_SOURCE_DIR}/share/sound/SF_VERSION)
-set (DOWNLOAD_URL_ROOT "https://ftp.osuosl.org/pub/musescore/soundfont/MuseScore_General")
+set (DOWNLOAD_URL_ROOT "https://s3.amazonaws.com/extensions.musescore.org/4.0/soundfonts/MS_Basic")
 set (SOUND_DIRECTORY ${PROJECT_SOURCE_DIR}/share/sound)
 
 file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/VERSION ${SF_VERSION_REMOTE_FILE} STATUS SF_VERSION_DL_STATUS_LIST)
@@ -21,19 +21,19 @@ if(EXISTS ${SF_VERSION_REMOTE_FILE} AND SF_VERSION_DL_STATUS EQUAL 0)
     message("Version ${SF_VERSION_LOCAL} of the MuseScore SoundFont is outdated, downloading version ${SF_VERSION_REMOTE}.")
     # delete soundfont and download new version
     ## TODO check STATUS of downloads
-    file (REMOVE ${SOUND_DIRECTORY}/MuseScore_General.sf3
-                 ${SOUND_DIRECTORY}/MuseScore_General_License.md
-                 ${SOUND_DIRECTORY}/MuseScore_General_Changelog.md
-                 ${SOUND_DIRECTORY}/MuseScore_General_Readme.md)
-    file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General.sf3 ${SOUND_DIRECTORY}/MuseScore_General.sf3 SHOW_PROGRESS STATUS SF_DL_STATUS)
+    file (REMOVE "${SOUND_DIRECTORY}/MS Basic.sf3"
+                 "${SOUND_DIRECTORY}/MS Basic_License.md"
+                 "${SOUND_DIRECTORY}/MS Basic_Changelog.md"
+                 "${SOUND_DIRECTORY}/MS Basic_Readme.md")
+    file(DOWNLOAD "${DOWNLOAD_URL_ROOT}/MS_Basic.sf3" "${SOUND_DIRECTORY}/MS Basic.sf3" SHOW_PROGRESS STATUS SF_DL_STATUS)
     list(GET SF_DL_STATUS 0 HTTP_STATUS)
     if (NOT HTTP_STATUS EQUAL 0)
       list(GET SF_DL_STATUS 1 HTTP_STATUS_TEXT)
       message(FATAL_ERROR "Cannot download new soundfont. Error: ${HTTP_STATUS_TEXT}")
     endif()
-    file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General_License.md ${SOUND_DIRECTORY}/MuseScore_General_License.md)
-    file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General_Changelog.md ${SOUND_DIRECTORY}/MuseScore_General_Changelog.txt)
-    file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General_Readme.md ${SOUND_DIRECTORY}/MuseScore_General_Readme.md)
+    file(DOWNLOAD "${DOWNLOAD_URL_ROOT}/MS_Basic_License.md" "${SOUND_DIRECTORY}/MS Basic_License.md")
+    file(DOWNLOAD "${DOWNLOAD_URL_ROOT}/MS_Basic_Changelog.md" "${SOUND_DIRECTORY}/MS Basic_Changelog.md")
+    file(DOWNLOAD "${DOWNLOAD_URL_ROOT}/MS_Basic_Readme.md" "${SOUND_DIRECTORY}/MS Basic_Readme.md")
     # replace VERSION file (in any case, delete VERSION file)
     file (COPY ${SF_VERSION_REMOTE_FILE} DESTINATION ${SOUND_DIRECTORY})
     file (REMOVE ${SF_VERSION_REMOTE_FILE})
