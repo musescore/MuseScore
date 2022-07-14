@@ -298,26 +298,25 @@ void Dynamic::layout()
             if (e->isChord() && (align() == AlignH::HCENTER)) {
                 SymId symId = TConv::symId(dynamicType());
 
-                // this value is different than chord()->mag() or mag()
-                // as it reflects the actual scaling of the text
-                // using chord()->mag(), mag() or fontSize will yield
-                // undesirable results with small staves or cue notes
-                double dynamicMag = spatium() / SPATIUM20;
-
-                double noteHeadWidth = score()->noteHeadWidth() * dynamicMag;
+                // FIRST: move it at the center of the notehead width
+                // Note: the simplest way to get the correct notehead width (accounting for all
+                // the various spatium changes, staff scaling, note scaling...) is to just look
+                // at the first note of the chord and get it from there.
+                Note* note = toChord(e)->notes().at(0);
+                double noteHeadWidth = note->headWidth();// * dynamicMag;
                 movePosX(noteHeadWidth * .5);
-
-                double opticalCenter = symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x() * dynamicMag;
+                // SECOND: center around the SMUFL optical center, rather than using the geometrical
+                // center of the bounding box
+                double opticalCenter = symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x();
                 if (symId != SymId::noSym && opticalCenter) {
+                    double symWidth = symBbox(symId).width();
+                    double offset = symWidth / 2 - opticalCenter + symBbox(symId).left();
+                    // Account for scaling factors
+                    double spatiumScaling = spatium() / score()->spatium();
                     static const double DEFAULT_DYNAMIC_FONT_SIZE = 10.0;
                     double fontScaling = size() / DEFAULT_DYNAMIC_FONT_SIZE;
-                    double left = symBbox(symId).bottomLeft().x() * dynamicMag; // this is negative per SMuFL spec
-
-                    opticalCenter *= fontScaling;
-                    left *= fontScaling;
-
-                    double offset = opticalCenter - left - bbox().width() * 0.5;
-                    movePosX(-offset);
+                    offset *= spatiumScaling * fontScaling;
+                    movePosX(offset);
                 }
             } else {
                 movePosX(e->width() * .5);

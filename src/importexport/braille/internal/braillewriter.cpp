@@ -62,15 +62,3 @@ mu::Ret BrailleWriter::writeList(const notation::INotationPtrList&, QIODevice&, 
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
 }
-
-void BrailleWriter::abort()
-{
-    NOT_IMPLEMENTED;
-}
-
-mu::framework::ProgressChannel BrailleWriter::progress() const
-{
-    NOT_IMPLEMENTED;
-    static framework::ProgressChannel prog;
-    return prog;
-}

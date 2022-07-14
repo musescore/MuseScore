@@ -105,6 +105,8 @@ private:
 
     void dispatch(const actions::ActionCode& code, const actions::ActionData& args = actions::ActionData());
 
+    void onCurrentNotationChanged();
+
     void listenChangesInAccessibility();
 
     QList<int> possibleZoomPercentageList() const;

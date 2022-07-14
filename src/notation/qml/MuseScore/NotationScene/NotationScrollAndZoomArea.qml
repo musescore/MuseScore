@@ -26,7 +26,7 @@ import MuseScore.NotationScene 1.0
 import "internal"
 
 PinchArea {
-    required default property NotationPaintView notationView
+    required default property AbstractNotationPaintView notationView
 
     onPinchUpdated: function(pinch) {
         notationView.pinchToZoom(pinch.scale / pinch.previousScale, pinch.center)

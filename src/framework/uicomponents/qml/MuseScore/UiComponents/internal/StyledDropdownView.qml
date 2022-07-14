@@ -42,7 +42,7 @@ DropdownView {
 
     property alias animationEnabled: content.animationEnabled
 
-    property alias isCloseByEscape: content.isCloseByEscape
+    property alias closeOnEscape: content.closeOnEscape
     property alias navigationSection: content.navigationSection
 
     required property int currentIndex

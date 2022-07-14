@@ -30,7 +30,7 @@ public:
 
     struct Diagram {
         int id{ 0 };
-        mu::String name;
+        String name;
         int stringCount{ 0 };
         int fretCount{ 0 };
         int baseFret{ 0 };
@@ -43,14 +43,14 @@ public:
         : _idx(idx) {}
     virtual ~GPTrack() = default;
 
-    void setName(const mu::String& n) { _name = n; }
-    mu::String name() const { return _name; }
+    void setName(const String& n) { _name = n; }
+    String name() const { return _name; }
 
-    void setShortName(const mu::String& s) { _shortName = s; }
-    mu::String shortName() const { return _shortName; }
+    void setShortName(const String& s) { _shortName = s; }
+    String shortName() const { return _shortName; }
 
-    void setInstrument(const mu::String& s) { _instrument = s; }
-    mu::String instrument() const { return _instrument; }
+    void setInstrument(const String& s) { _instrument = s; }
+    String instrument() const { return _instrument; }
 
     void setRSE(const RSE& r) { _rse = r; }
     const RSE& rse() const { return _rse; }
@@ -101,9 +101,9 @@ public:
 
 protected:
 
-    mu::String _name;
-    mu::String _shortName;
-    mu::String _instrument;
+    String _name;
+    String _shortName;
+    String _instrument;
     RSE _rse;
     int _programm{ 0 };
     int _midiChannel{ 0 };

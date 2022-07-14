@@ -1021,15 +1021,15 @@ String String::number(double n, int prec)
     return fromAscii(s.c_str(), correctedIdx + 1);
 }
 
+float String::toFloat(bool* ok) const
+{
+    return static_cast<float>(toDouble(ok));
+}
+
 double String::toDouble(bool* ok) const
 {
     ByteArray ba = toUtf8();
     return toDouble_helper(ba.constChar(), ok);
-}
-
-float String::toFloat(bool *ok) const
-{
-    return static_cast<float>(toDouble(ok));
 }
 
 // ============================
@@ -1171,18 +1171,4 @@ int AsciiStringView::toInt(bool* ok, int base) const
 double AsciiStringView::toDouble(bool* ok) const
 {
     return toDouble_helper(m_data, ok);
-}
-
-StringCodec *StringCodec::codecForName(const String &name)
-{
-    if(name==u"UTF-8")
-    {
-        return new StringCodecUtf8Impl;
-    }
-    return nullptr;
-}
-
-String StringCodecUtf8Impl::toString(const char *chars) const
-{
-    return String::fromUtf8(chars);
 }

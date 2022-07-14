@@ -68,6 +68,16 @@ public:
     double dx() const { return m_dx; }
     double dy() const { return m_dy; }
 
+    bool operator ==(const Matrix& other) const
+    {
+        return m_11 == other.m_11
+               && m_12 == other.m_12
+               && m_21 == other.m_21
+               && m_22 == other.m_22
+               && m_dx == other.m_dx
+               && m_dy == other.m_dy;
+    }
+
 private:
     friend class Transform;
 

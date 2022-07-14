@@ -57,8 +57,11 @@ public:
 
     virtual Ret write(notation::INotationPtr notation, QIODevice& device, const Options& options = Options()) = 0;
     virtual Ret writeList(const notation::INotationPtrList& notations, QIODevice& device, const Options& options = Options()) = 0;
-    virtual void abort() = 0;
-    virtual framework::ProgressChannel progress() const = 0;
+
+    virtual bool supportsProgressNotifications() const { return false; }
+    virtual framework::Progress progress() const { return framework::Progress(); }
+
+    virtual void abort() {}
 };
 
 using INotationWriterPtr = std::shared_ptr<INotationWriter>;

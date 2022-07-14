@@ -12,8 +12,8 @@ public:
     GP6DomBuilder() = default;
 
 private:
-    virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(QDomNode* trackNode);
-    void setUpInstrument(QDomNode* trackChildNode, GPTrack* track);
+    virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(XmlDomNode* trackNode);
+    void setUpInstrument(XmlDomNode* trackChildNode, GPTrack* track);
 };
 } //end Ms namespace
 #endif // GP6DOMBUILDER_H

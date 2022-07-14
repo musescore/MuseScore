@@ -123,18 +123,6 @@ mu::Ret PositionsWriter::writeList(const INotationPtrList&, QIODevice&, const Op
     return Ret(Ret::Code::NotSupported);
 }
 
-void PositionsWriter::abort()
-{
-    NOT_IMPLEMENTED;
-}
-
-ProgressChannel PositionsWriter::progress() const
-{
-    NOT_IMPLEMENTED;
-    static ProgressChannel prog;
-    return prog;
-}
-
 qreal PositionsWriter::pngDpiResolution() const
 {
     return (imagesExportConfiguration()->exportPngDpiResolution() / mu::engraving::DPI) * 12.0;

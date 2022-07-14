@@ -46,7 +46,7 @@ FocusScope {
 
     property bool animationEnabled: false
 
-    property bool isCloseByEscape: true
+    property bool closeOnEscape: true
     property alias navigationSection: navSec
 
     width: contentContainer.width + padding * 2
@@ -74,7 +74,7 @@ FocusScope {
         }
 
         onNavigationEvent: function(event) {
-            if (event.type === NavigationEvent.Escape && root.isCloseByEscape) {
+            if (event.type === NavigationEvent.Escape && root.closeOnEscape) {
                 root.closeRequested()
             }
         }

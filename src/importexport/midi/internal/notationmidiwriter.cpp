@@ -70,15 +70,3 @@ mu::Ret NotationMidiWriter::writeList(const notation::INotationPtrList&, QIODevi
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
 }
-
-void NotationMidiWriter::abort()
-{
-    NOT_IMPLEMENTED;
-}
-
-mu::framework::ProgressChannel NotationMidiWriter::progress() const
-{
-    NOT_IMPLEMENTED;
-    static framework::ProgressChannel prog;
-    return prog;
-}

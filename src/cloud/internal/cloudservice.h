@@ -64,7 +64,7 @@ public:
     void uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) override;
 
     async::Channel<QUrl> sourceUrlReceived() const override;
-    framework::ProgressChannel progressChannel() const override;
+    framework::Progress uploadProgress() const override;
 
 private slots:
     void onUserAuthorized();
