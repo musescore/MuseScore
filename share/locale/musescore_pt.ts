@@ -14703,7 +14703,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="164"/>
         <source>Export…</source>
-        <translation>&amp;Exportar…</translation>
+        <translation>Exportar…</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/AdditionalInfoView.qml" line="71"/>
