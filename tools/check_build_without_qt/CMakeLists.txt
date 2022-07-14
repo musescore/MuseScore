@@ -60,7 +60,8 @@ set(ENGRAVING_NO_INTERNAL ON)
 set(ENGRAVING_NO_ACCESSIBILITY ON)
 add_subdirectory(${MU_ROOT}/src/engraving engraving)
 
-#add_subdirectory(${MU_ROOT}/src/importexport/guitarpro guitarpro)
+set(IEX_GUITARPRO_NO_INTERNAL ON)
+add_subdirectory(${MU_ROOT}/src/importexport/guitarpro guitarpro)
 
 
 add_executable(engraving_app
@@ -84,5 +85,5 @@ target_link_libraries(engraving_app
     ${QT_LIBRARIES}
     global
     engraving
-#    guitarpro
+    iex_guitarpro
 )

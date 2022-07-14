@@ -23,6 +23,9 @@
 #ifndef __IMPORTGTP_H__
 #define __IMPORTGTP_H__
 
+#include <vector>
+#include <map>
+
 #include "io/file.h"
 
 #include "gtp/gp67dombuilder.h"
@@ -58,12 +61,12 @@ enum class Repeat : char;
 
 struct GpTrack {
     int patch;
-    uchar volume, pan, chorus, reverb, phase, tremolo;
+    uint8_t volume, pan, chorus, reverb, phase, tremolo;
 };
 
 struct GPVolta {
     int voltaType;
-    QList<int> voltaInfo;
+    std::vector<int> voltaInfo;
 };
 
 /* How the fermatas are represented in Guitar Pro is two integers, the
@@ -137,58 +140,58 @@ protected:
     std::list<Note*> slideList;   //list of start slide notes
 
     // note effect bit masks
-    static const uchar EFFECT_BEND = 0x1;
-    static const uchar EFFECT_STACCATO = 0x1;
-    static const uchar EFFECT_HAMMER = 0x2;
-    static const uchar EFFECT_PALM_MUTE = 0x2;
-    static const uchar EFFECT_TREMOLO = 0x4;
-    static const uchar EFFECT_LET_RING = 0x8;
-    static const uchar EFFECT_SLIDE_OLD = 0x4;
-    static const uchar EFFECT_SLIDE = 0x8;
-    static const uchar EFFECT_GRACE = 0x10;
-    static const uchar EFFECT_ARTIFICIAL_HARMONIC = 0x10;
-    static const uchar EFFECT_TRILL = 0x20;
-    static const uchar EFFECT_GHOST = 0x01;
+    static const uint8_t EFFECT_BEND = 0x1;
+    static const uint8_t EFFECT_STACCATO = 0x1;
+    static const uint8_t EFFECT_HAMMER = 0x2;
+    static const uint8_t EFFECT_PALM_MUTE = 0x2;
+    static const uint8_t EFFECT_TREMOLO = 0x4;
+    static const uint8_t EFFECT_LET_RING = 0x8;
+    static const uint8_t EFFECT_SLIDE_OLD = 0x4;
+    static const uint8_t EFFECT_SLIDE = 0x8;
+    static const uint8_t EFFECT_GRACE = 0x10;
+    static const uint8_t EFFECT_ARTIFICIAL_HARMONIC = 0x10;
+    static const uint8_t EFFECT_TRILL = 0x20;
+    static const uint8_t EFFECT_GHOST = 0x01;
 
     // arpeggio direction masks
-    static const uchar ARPEGGIO_UP = 0xa;
-    static const uchar ARPEGGIO_DOWN = 0x2;
+    static const uint8_t ARPEGGIO_UP = 0xa;
+    static const uint8_t ARPEGGIO_DOWN = 0x2;
 
     // note bit masks
-    static const uchar NOTE_GHOST = 0x04;   // 2
-    static const uchar NOTE_DEAD = 0x20;   //5
-    static const uchar NOTE_DYNAMIC = 0x10;   // 4
-    static const uchar NOTE_FRET = 0x20;   //5
-    static const uchar NOTE_FINGERING = 0x80;   //7
-    static const uchar NOTE_MARCATO = 0x02;   //1
-    static const uchar NOTE_SFORZATO = 0x40;   //6
-    static const uchar NOTE_SLUR = 0x8;  //3
-    static const uchar NOTE_APPOGIATURA = 0x02;  //1
+    static const uint8_t NOTE_GHOST = 0x04;   // 2
+    static const uint8_t NOTE_DEAD = 0x20;   //5
+    static const uint8_t NOTE_DYNAMIC = 0x10;   // 4
+    static const uint8_t NOTE_FRET = 0x20;   //5
+    static const uint8_t NOTE_FINGERING = 0x80;   //7
+    static const uint8_t NOTE_MARCATO = 0x02;   //1
+    static const uint8_t NOTE_SFORZATO = 0x40;   //6
+    static const uint8_t NOTE_SLUR = 0x8;  //3
+    static const uint8_t NOTE_APPOGIATURA = 0x02;  //1
 
     // beat bit masks
-    static const uchar BEAT_VIBRATO_TREMOLO = 0x02;
-    static const uchar BEAT_FADE = 0x10;
-    static const uchar BEAT_EFFECT = 0x20;
-    static const uchar BEAT_TREMOLO = 0x04;
-    static const uchar BEAT_ARPEGGIO = 0x40;
-    static const uchar BEAT_STROKE_DIR = 0x02;
-    static const uchar BEAT_DOTTED = 0x01;
-    static const uchar BEAT_PAUSE = 0x40;
-    static const uchar BEAT_TUPLET = 0x20;
-    static const uchar BEAT_LYRICS = 0x4;
-    static const uchar BEAT_EFFECTS = 0x8;
-    static const uchar BEAT_MIX_CHANGE = 0x10;
-    static const uchar BEAT_CHORD = 0x2;
+    static const uint8_t BEAT_VIBRATO_TREMOLO = 0x02;
+    static const uint8_t BEAT_FADE = 0x10;
+    static const uint8_t BEAT_EFFECT = 0x20;
+    static const uint8_t BEAT_TREMOLO = 0x04;
+    static const uint8_t BEAT_ARPEGGIO = 0x40;
+    static const uint8_t BEAT_STROKE_DIR = 0x02;
+    static const uint8_t BEAT_DOTTED = 0x01;
+    static const uint8_t BEAT_PAUSE = 0x40;
+    static const uint8_t BEAT_TUPLET = 0x20;
+    static const uint8_t BEAT_LYRICS = 0x4;
+    static const uint8_t BEAT_EFFECTS = 0x8;
+    static const uint8_t BEAT_MIX_CHANGE = 0x10;
+    static const uint8_t BEAT_CHORD = 0x2;
 
     // score bit masks
-    static const uchar SCORE_TIMESIG_NUMERATOR = 0x1;
-    static const uchar SCORE_TIMESIG_DENOMINATOR = 0x2;
-    static const uchar SCORE_REPEAT_START = 0x4;
-    static const uchar SCORE_REPEAT_END = 0x8;
-    static const uchar SCORE_MARKER = 0x20;
-    static const uchar SCORE_VOLTA = 0x10;
-    static const uchar SCORE_KEYSIG = 0x40;
-    static const uchar SCORE_DOUBLE_BAR = 0x80;
+    static const uint8_t SCORE_TIMESIG_NUMERATOR = 0x1;
+    static const uint8_t SCORE_TIMESIG_DENOMINATOR = 0x2;
+    static const uint8_t SCORE_REPEAT_START = 0x4;
+    static const uint8_t SCORE_REPEAT_END = 0x8;
+    static const uint8_t SCORE_MARKER = 0x20;
+    static const uint8_t SCORE_VOLTA = 0x10;
+    static const uint8_t SCORE_KEYSIG = 0x40;
+    static const uint8_t SCORE_DOUBLE_BAR = 0x80;
 
     // slide kinds
     static const int SHIFT_SLIDE = 1;
@@ -207,7 +210,7 @@ protected:
     Measure* last_measure   { nullptr };
     int last_tempo          { -1 };
 
-    QMap<int, QList<GPFermata>*> fermatas;
+    std::map<int, std::vector<GPFermata>*> fermatas;
     std::vector<Ottava*> ottava;
     Hairpin** hairpins = nullptr;
     MasterScore* score = nullptr;
@@ -219,7 +222,7 @@ protected:
     std::vector<String> ottavaValue;
     std::map<int, std::pair<int, bool> > tempoMap;
     int tempo;
-    QMap<int, int> slides;
+    std::map<int, int> slides;
 
     GPLyrics gpLyrics;
     int slide;
@@ -232,9 +235,9 @@ protected:
     std::vector<Bend*> m_bends;
 #endif
 
-    void skip(qint64 len);
-    void read(void* p, qint64 len);
-    int readUChar();
+    void skip(int64_t len);
+    void read(void* p, int64_t len);
+    uint8_t readUInt8();
     int readChar();
     String readPascalString(int);
 
@@ -285,9 +288,9 @@ public:
     String transcriber, instructions;
     StringList comments;
     GpTrack channelDefaults[GP_MAX_TRACK_NUMBER * 2];
-    int staves;
-    int measures;
-    QList<GpBar> bars;
+    size_t staves = 0;
+    size_t measures = 0;
+    std::vector<GpBar> bars;
 
     enum class GuitarProError : char {
         GP_NO_ERROR, GP_UNKNOWN_FORMAT,

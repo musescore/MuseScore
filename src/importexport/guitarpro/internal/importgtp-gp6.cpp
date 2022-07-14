@@ -248,7 +248,7 @@ std::unique_ptr<IGPDomBuilder> GuitarPro6::createGPDomBuilder() const
 int GuitarPro6::readBit(ByteArray* buffer)
 {
     // calculate the byte index by dividing the position in bits by the bits per byte
-    int byteIndex = position / BITS_IN_BYTE;
+    size_t byteIndex = position / BITS_IN_BYTE;
 
     // calculate our offset so we know how much to bit shift
     int byteOffset = ((BITS_IN_BYTE - 1) - (position % BITS_IN_BYTE));
@@ -297,7 +297,7 @@ ByteArray GuitarPro6::getBytes(ByteArray* buffer, int offset, int length)
     ByteArray newBytes;
     // compute new bytes from our buffer and return byte array
     for (int i = 0; i < length; i++) {
-        if (buffer->size() > offset + i) {
+        if (static_cast<int>(buffer->size()) > offset + i) {
             newBytes.insert(i, ((*buffer)[offset + i]));
         }
     }

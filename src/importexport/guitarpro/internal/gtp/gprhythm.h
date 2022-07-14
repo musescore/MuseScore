@@ -1,6 +1,8 @@
 #ifndef GPRHYTHM_H
 #define GPRHYTHM_H
 
+#include <utility>
+
 namespace mu::engraving {
 class GPRhythm
 {

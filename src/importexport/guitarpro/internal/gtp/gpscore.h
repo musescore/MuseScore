@@ -1,6 +1,8 @@
 #ifndef GPSCORE_H
 #define GPSCORE_H
 
+#include "types/string.h"
+
 namespace mu::engraving {
 class GPScore
 {
