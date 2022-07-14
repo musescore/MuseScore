@@ -1519,7 +1519,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
         // there is an exception for grace-sized stems with hooks.
         // reducing by the full amount puts the hooks too low. Limit reduction to 0.5sp
         if (_hook) {
-            reduction = std::min(reduction, 2);
+            reduction = std::min(reduction, 1);
         }
     } else {
         // there are a few exceptions for normal-sized (non-grace) beams
@@ -1533,7 +1533,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
             reduction = 0;
         }
         if (_hook) {
-            reduction = std::min(reduction, 2);
+            reduction = std::min(reduction, 1);
         }
     }
     return reduction;
@@ -1628,9 +1628,6 @@ double Chord::calcDefaultStemLength()
             if (tab) {
                 reduction *= 2;
             }
-            if (_hook && _relativeMag == 1) {
-                reduction = floor(reduction / 2.0) * 2; // transforms to only half steps positions
-            }
             idealStemLength = std::max(idealStemLength - reduction, shortestStem);
         } else if (stemEndPosition > middleLine) {
             // this case will be taken care of below; even if we were to adjust here we'd have
@@ -1662,7 +1659,7 @@ double Chord::calcDefaultStemLength()
 
         stemLength = std::max(idealStemLength, minStemLengthQuarterSpaces);
     }
-    if (beams() == 4) {
+    if (beams() == 4 && _beam) {
         stemLength = calc4BeamsException(stemLength);
     }
 

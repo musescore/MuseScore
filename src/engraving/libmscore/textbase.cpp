@@ -791,7 +791,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 
     String family;
     if (format.fontFamily() == "ScoreText") {
-        if (t->isDynamic()) {
+        if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA) {
             family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
             // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
             m *= 2;

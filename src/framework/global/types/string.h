@@ -326,8 +326,8 @@ public:
 
     int toInt(bool* ok = nullptr, int base = 10) const;
     unsigned int toUInt(bool* ok = nullptr, int base = 10) const;
-    double toDouble(bool* ok = nullptr) const;
     float toFloat(bool* ok = nullptr) const;
+    double toDouble(bool* ok = nullptr) const;
 
     static String number(int n, int base = 10);
     static String number(int64_t n);
@@ -429,22 +429,6 @@ private:
 
 inline String operator+(char16_t s1, const String& s2) { String t(s1); t += s2; return t; }
 inline String operator+(const char16_t* s1, const String& s2) { String t(s1); t += s2; return t; }
-
-// ============================
-// StringCodec
-// ============================
-
-class StringCodec
-{
-public:
-    static StringCodec* codecForName(const String& name);
-    virtual String toString(const char* chars) const = 0;
-};
-
-class StringCodecUtf8Impl :public StringCodec
-{
-    String toString(const char* chars) const override;
-};
 }
 
 // ============================
@@ -482,7 +466,6 @@ inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::AsciiStri
     s << str.ascii();
     return s;
 }
-
 
 #ifndef muPrintable
 #  define muPrintable(string) string.toUtf8().constChar()

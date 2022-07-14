@@ -557,28 +557,70 @@ void ScoreFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternatesOb
 
 void ScoreFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject)
 {
-    static const std::unordered_map<std::string, Sid> engravingDefaultsMapping = {
-        { "staffLineThickness",            Sid::staffLineWidth },
-        { "stemThickness",                 Sid::stemWidth },
-        { "beamThickness",                 Sid::beamWidth },
-        { "legerLineThickness",            Sid::ledgerLineWidth },
-        { "legerLineExtension",            Sid::ledgerLineLength },
-        { "slurEndpointThickness",         Sid::SlurEndWidth },
-        { "slurMidpointThickness",         Sid::SlurMidWidth },
-        { "thinBarlineThickness",          Sid::barWidth },
-        { "thinBarlineThickness",          Sid::doubleBarWidth },
-        { "thickBarlineThickness",         Sid::endBarWidth },
-        { "dashedBarlineThickness",        Sid::barWidth },
-        { "barlineSeparation",             Sid::doubleBarDistance },
-        { "barlineSeparation",             Sid::endBarDistance },
-        { "repeatBarlineDotSeparation",    Sid::repeatBarlineDotSeparation },
-        { "bracketThickness",              Sid::bracketWidth },
-        { "hairpinThickness",              Sid::hairpinLineWidth },
-        { "octaveLineThickness",           Sid::ottavaLineWidth },
-        { "pedalLineThickness",            Sid::pedalLineWidth },
-        { "repeatEndingLineThickness",     Sid::voltaLineWidth },
-        { "lyricLineThickness",            Sid::lyricsLineThickness },
-        { "tupletBracketThickness",        Sid::tupletBracketWidth }
+    struct EngravingDefault {
+        std::vector<Sid> sids;
+
+        // If a childKey is not specified in `engravingDefaultsObject`,
+        // it will receive the value for the key of `this` EngravingDefault.
+        // This is done for compatibility with fonts made for older SMuFL versions:
+        // in newer versions, some settings have been split into two.
+        std::vector<std::string> childKeys = {};
+
+        EngravingDefault(const std::vector<Sid>& sids)
+            : sids(sids), childKeys() {}
+        EngravingDefault(const std::vector<Sid>& sids, const std::vector<std::string>& childKeys)
+            : sids(sids), childKeys(childKeys) {}
+    };
+
+    // https://w3c.github.io/smufl/latest/specification/engravingdefaults.html
+    static const std::unordered_map<std::string, EngravingDefault> engravingDefaultsMapping = {
+        // "textFontFamily" not supported
+        { "staffLineThickness",         { { Sid::staffLineWidth } } },
+        { "stemThickness",              { { Sid::stemWidth } } },
+        { "beamThickness",              { { Sid::beamWidth } } },
+        // "beamSpacing" handled separately
+        { "legerLineThickness",         { { Sid::ledgerLineWidth } } },
+        { "legerLineExtension",         { { Sid::ledgerLineLength } } },
+        { "slurEndpointThickness",      { { Sid::SlurEndWidth } } },
+        { "slurMidpointThickness",      { { Sid::SlurMidWidth } } },
+        // "tieEndpointThickness" not supported
+        // "tieMidpointThickness" not supported
+        { "thinBarlineThickness",       { { Sid::barWidth, Sid::doubleBarWidth } } },
+        { "thickBarlineThickness",      { { Sid::endBarWidth } } },
+        // "dashedBarlineThickness" not supported
+        // "dashedBarlineDashLength" not supported
+        // "dashedBarlineGapLength" not supported
+        { "barlineSeparation",          { { Sid::doubleBarDistance }, { "thinThickBarlineSeparation" } } },
+        { "thinThickBarlineSeparation", { { Sid::endBarDistance } } },
+        { "repeatBarlineDotSeparation", { { Sid::repeatBarlineDotSeparation } } },
+        { "bracketThickness",           { { Sid::bracketWidth } } },
+        // "subBracketThickness" not supported
+        { "hairpinThickness",           { { Sid::hairpinLineWidth } } },
+        { "octaveLineThickness",        { { Sid::ottavaLineWidth } } },
+        { "pedalLineThickness",         { { Sid::pedalLineWidth } } },
+        { "repeatEndingLineThickness",  { { Sid::voltaLineWidth } } },
+        // "arrowShaftThickness" not supported
+        { "lyricLineThickness",         { { Sid::lyricsLineThickness } } },
+        // "textEnclosureThickness" handled separately
+        { "tupletBracketThickness",     { { Sid::tupletBracketWidth } } },
+        { "hBarThickness",              { { Sid::mmRestHBarThickness } } }
+    };
+
+    std::function<void(const std::string& key, const PropertyValue& value)> applyEngravingDefault;
+
+    applyEngravingDefault = [&](const std::string& key, const PropertyValue& value) {
+        auto search = engravingDefaultsMapping.find(key);
+        if (search != engravingDefaultsMapping.cend()) {
+            for (Sid sid : search->second.sids) {
+                m_engravingDefaults.insert({ sid, value });
+            }
+
+            for (const std::string& childKey : search->second.childKeys) {
+                if (!engravingDefaultsObject.contains(childKey)) {
+                    applyEngravingDefault(childKey, value);
+                }
+            }
+        }
     };
 
     for (const std::string& key : engravingDefaultsObject.keys()) {
@@ -593,11 +635,7 @@ void ScoreFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject)
             continue;
         }
 
-        auto search = engravingDefaultsMapping.find(key);
-        if (search != engravingDefaultsMapping.cend()) {
-            double value = engravingDefaultsObject.value(key).toDouble();
-            m_engravingDefaults.insert({ search->second, value });
-        }
+        applyEngravingDefault(key, engravingDefaultsObject.value(key).toDouble());
     }
 
     m_engravingDefaults.insert({ Sid::MusicalTextFont, String(u"%1 Text").arg(m_family) });

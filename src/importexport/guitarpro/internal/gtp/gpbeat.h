@@ -110,8 +110,8 @@ public:
     void setGraceNotes(GraceNotes gn) { _graceNotes = gn; }
     GraceNotes graceNotes() const { return _graceNotes; }
 
-    void setFreeText(const mu::String& s) { _freeText = s; }
-    const mu::String& freeText() const { return _freeText; }
+    void setFreeText(const String& s) { _freeText = s; }
+    const String& freeText() const { return _freeText; }
 
     void setTime(int t) { _time = t; }
     int time() const { return _time; }
@@ -227,7 +227,7 @@ private:
     Brush _brush = Brush::None;
     GraceNotes _graceNotes = GraceNotes::None;
     int _time = -1;
-    mu::String _freeText;
+    String _freeText;
     VibratoWTremBar _vibrato{ VibratoWTremBar::None };
     Fadding _fadding = Fadding::None;
     Hairpin _hairpin = Hairpin::None;

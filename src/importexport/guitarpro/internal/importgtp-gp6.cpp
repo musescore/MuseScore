@@ -24,6 +24,8 @@
 
 #include <cmath>
 
+#include "serialization/xmldom.h"
+
 #include "gtp/gp6dombuilder.h"
 #include "gtp/gp7dombuilder.h"
 #include "gtp/gpconverter.h"
@@ -351,11 +353,11 @@ void GuitarPro6::unhandledNode(String nodeName)
 //   getNode
 //---------------------------------------------------------
 
-QDomNode GuitarPro6::getNode(const String& id, QDomNode currentDomNode)
+XmlDomNode GuitarPro6::getNode(const String& id, XmlDomNode currentDomNode)
 {
     while (!(currentDomNode).isNull()) {
-        String currentId = currentDomNode.attributes().namedItem("id").toAttr().value();
-        if (id == currentId) {
+        String currentId = currentDomNode.attribute("id");
+        if (currentId == id) {
             return currentDomNode;
         }
         currentDomNode = currentDomNode.nextSibling();
@@ -370,12 +372,12 @@ QDomNode GuitarPro6::getNode(const String& id, QDomNode currentDomNode)
 
 void GuitarPro6::readGpif(QByteArray* data)
 {
-    QDomDocument qdomDoc;
-    qdomDoc.setContent(*data);
-    QDomElement qdomElem = qdomDoc.documentElement();
+    XmlDomDocument domDoc;
+    domDoc.setContent(*data);
+    XmlDomElement domElem = domDoc.documentElement();
 
     auto builder = createGPDomBuilder();
-    builder->buildGPDomModel(&qdomElem);
+    builder->buildGPDomModel(&domElem);
 
     GPConverter scoreBuilder(score, builder->getGPDomModel());
     scoreBuilder.convertGP();

@@ -23,6 +23,8 @@
 #ifndef MU_ENGRAVING_SCORERW_H
 #define MU_ENGRAVING_SCORERW_H
 
+#include <functional>
+
 #include "types/string.h"
 
 #include "engraving/libmscore/masterscore.h"
@@ -33,12 +35,18 @@ class ScoreRW
 public:
     ScoreRW() = default;
 
+    static void setRootPath(const String& path);
     static String rootPath();
 
-    static MasterScore* readScore(const String& path, bool isAbsolutePath = false);
+    using ImportFunc = std::function<Score::FileError(MasterScore* score, const io::path_t& path)>;
+
+    static MasterScore* readScore(const String& path, bool isAbsolutePath = false, ImportFunc importFunc = nullptr);
     static bool saveScore(Score* score, const String& name);
     static EngravingItem* writeReadElement(EngravingItem* element);
     static bool saveMimeData(ByteArray mimeData, const String& saveName);
+
+private:
+    static String m_rootPath;
 };
 }
 

@@ -68,16 +68,6 @@ mu::Ret AbstractImageWriter::writeList(const INotationPtrList&, QIODevice&, cons
     return Ret(Ret::Code::NotSupported);
 }
 
-void AbstractImageWriter::abort()
-{
-    NOT_IMPLEMENTED;
-}
-
-mu::framework::ProgressChannel AbstractImageWriter::progress() const
-{
-    return m_progress;
-}
-
 INotationWriter::UnitType AbstractImageWriter::unitTypeFromOptions(const Options& options) const
 {
     std::vector<UnitType> supported = supportedUnitTypes();

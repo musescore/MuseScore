@@ -484,9 +484,8 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
 
     projectData->open(QIODevice::ReadOnly);
 
-    ProgressChannel progressCh = uploadingService()->progressChannel();
-    progressCh.onReceive(this, [](const Progress& progress) {
-        LOGD() << "Uploading progress: " << progress.current << "/" << progress.total;
+    uploadingService()->uploadProgress().progressChanged.onReceive(this, [](int64_t current, int64_t total) {
+        LOGD() << "Uploading progress: " << current << "/" << total;
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
     async::Channel<QUrl> sourceUrlCh = uploadingService()->sourceUrlReceived();

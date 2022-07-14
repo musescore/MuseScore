@@ -24,7 +24,6 @@
 
 #include "modularity/imoduleexport.h"
 #include "progress.h"
-#include "progress.h"
 
 class QByteArray;
 class QUrl;
@@ -41,7 +40,7 @@ public:
     virtual void uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) = 0;
 
     virtual async::Channel<QUrl> sourceUrlReceived() const = 0;
-    virtual framework::ProgressChannel progressChannel() const = 0;
+    virtual framework::Progress uploadProgress() const = 0;
 };
 }
 

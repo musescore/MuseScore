@@ -31,6 +31,8 @@
 
 #include "mocks/engravingconfigurationmock.h"
 
+#include "utils/scorerw.h"
+
 #include "log.h"
 
 static mu::testing::SuiteEnvironment engraving_se(
@@ -40,6 +42,9 @@ static mu::testing::SuiteEnvironment engraving_se(
 },
     []() {
     LOGI() << "engraving tests suite post init";
+
+    mu::engraving::ScoreRW::setRootPath(mu::String::fromUtf8(engraving_utests_DATA_ROOT));
+
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::noGui = true;
 

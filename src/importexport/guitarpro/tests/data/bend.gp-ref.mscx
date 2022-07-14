@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.00">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
+      <slurShowTabSimple>0</slurShowTabSimple>
+      <fermataShowTabSimple>0</fermataShowTabSimple>
+      <dynamicsShowTabSimple>0</dynamicsShowTabSimple>
+      <hairpinShowTabSimple>0</hairpinShowTabSimple>
+      <accentShowTabSimple>0</accentShowTabSimple>
+      <staccatoShowTabSimple>0</staccatoShowTabSimple>
+      <harmonicMarkShowTabSimple>0</harmonicMarkShowTabSimple>
+      <rasgueadoShowTabSimple>0</rasgueadoShowTabSimple>
+      <mordentShowTabSimple>0</mordentShowTabSimple>
+      <mordentShowTabCommon>0</mordentShowTabCommon>
+      <turnShowTabSimple>0</turnShowTabSimple>
+      <turnShowTabCommon>0</turnShowTabCommon>
+      <wahShowTabSimple>0</wahShowTabSimple>
+      <golpeShowTabSimple>0</golpeShowTabSimple>
+      <Spatium>1.74978</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Guitar I</trackName>
+      <Instrument>
+        <longName>Guitar I</longName>
+        <shortName>od.guit.</shortName>
+        <trackName></trackName>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <StringData>
+          <frets>24</frets>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
+          </StringData>
+        <Channel>
+          <program value="29"/>
+          <controller ctrl="7" value="74"/>
+          <controller ctrl="10" value="32"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <KeySig>
+            <accidental>0</accidental>
+            </KeySig>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
+          <Tempo>
+            <tempo>2</tempo>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>5</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          <Beam>
+            <l1>24</l1>
+            <l2>24</l2>
+            </Beam>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <Bend>
+                <point time="0" pitch="0" vibrato="0"/>
+                <point time="50" pitch="50" vibrato="0"/>
+                <point time="100" pitch="100" vibrato="0"/>
+                </Bend>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/8</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <fret>6</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <Bend>
+                <point time="0" pitch="100" vibrato="0"/>
+                <point time="50" pitch="50" vibrato="0"/>
+                <point time="100" pitch="0" vibrato="0"/>
+                </Bend>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/8</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/8</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <fret>6</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <Bend>
+                <point time="0" pitch="0" vibrato="0"/>
+                <point time="50" pitch="50" vibrato="0"/>
+                <point time="100" pitch="100" vibrato="0"/>
+                </Bend>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/8</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <fret>6</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <Bend>
+                <point time="0" pitch="0" vibrato="0"/>
+                <point time="25" pitch="100" vibrato="0"/>
+                <point time="50" pitch="100" vibrato="0"/>
+                <point time="75" pitch="0" vibrato="0"/>
+                </Bend>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <Bend>
+                <point time="0" pitch="0" vibrato="0"/>
+                <point time="50" pitch="100" vibrato="0"/>
+                </Bend>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <Bend>
+                <point time="0" pitch="100" vibrato="0"/>
+                <point time="50" pitch="100" vibrato="0"/>
+                <point time="100" pitch="100" vibrato="0"/>
+                </Bend>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <Bend>
+                <point time="0" pitch="100" vibrato="0"/>
+                <point time="50" pitch="50" vibrato="0"/>
+                <point time="66" pitch="0" vibrato="0"/>
+                </Bend>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              <fret>3</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

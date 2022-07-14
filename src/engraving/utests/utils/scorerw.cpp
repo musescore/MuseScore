@@ -38,12 +38,19 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-String ScoreRW::rootPath()
+String ScoreRW::m_rootPath;
+
+void ScoreRW::setRootPath(const String& path)
 {
-    return String(engraving_utests_DATA_ROOT);
+    m_rootPath = path;
 }
 
-MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath)
+String ScoreRW::rootPath()
+{
+    return m_rootPath;
+}
+
+MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath, ImportFunc importFunc)
 {
     io::path_t path = isAbsolutePath ? name : (rootPath() + u"/" + name);
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
@@ -54,6 +61,8 @@ MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath)
     Score::FileError rv;
     if (suffix == "mscz" || suffix == "mscx") {
         rv = compat::loadMsczOrMscx(score, path.toString(), false);
+    } else if (importFunc) {
+        rv = importFunc(score, path);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }

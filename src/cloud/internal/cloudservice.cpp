@@ -39,7 +39,7 @@ using namespace mu::cloud;
 using namespace mu::network;
 using namespace mu::framework;
 
-static const QString ACCESS_TOKEN_KEY("token");
+static const QString ACCESS_TOKEN_KEY("access_token");
 static const QString REFRESH_TOKEN_KEY("refresh_token");
 static const QString DEVICE_ID_KEY("device_id");
 
@@ -246,7 +246,7 @@ CloudService::RequestStatus CloudService::downloadUserInfo()
     AccountInfo info;
     info.id = user.value("id").toString().toInt();
     info.userName = user.value("name").toString();
-    QString profileUrl = user.value("permalink").toString();
+    QString profileUrl = user.value("profile_url").toString();
     info.profileUrl = QUrl(profileUrl);
     info.avatarUrl = QUrl(user.value("avatar_url").toString());
     info.sheetmusicUrl = QUrl(profileUrl + "/sheetmusic");
@@ -272,7 +272,7 @@ void CloudService::signOut()
     QUrl signOutUrl = prepareUrlForRequest(configuration()->loginApiUrl());
     if (!signOutUrl.isEmpty()) {
         QBuffer receivedData;
-        Ret ret = m_networkManager->del(signOutUrl, &receivedData, headers());
+        Ret ret = m_networkManager->get(signOutUrl, &receivedData, headers());
 
         if (!ret) {
             LOGE() << ret.toString();
@@ -398,9 +398,9 @@ mu::async::Channel<QUrl> CloudService::sourceUrlReceived() const
     return m_sourceUrlReceived;
 }
 
-ProgressChannel CloudService::progressChannel() const
+Progress CloudService::uploadProgress() const
 {
-    return m_networkManager->progressChannel();
+    return m_networkManager->progress();
 }
 
 void CloudService::executeRequest(const RequestCallback& requestCallback)

@@ -137,6 +137,11 @@ inline mu::Ret make_ret(Ret::Code e, const std::string& text)
     return Ret(static_cast<int>(e), text);
 }
 
+inline mu::Ret make_ret(int e, const std::string& text)
+{
+    return Ret(e, text);
+}
+
 #ifndef NO_QT_SUPPORT
 inline mu::Ret make_ret(Ret::Code e, const QString& text)
 {

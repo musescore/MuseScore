@@ -499,18 +499,24 @@ void BarLine::drawDots(Painter* painter, double x) const
     } else {
         const StaffType* st = staffType();
 
-        //workaround to make new Bravura, Petaluma and Leland font work correctly with repeatDots
-        double offset
-            = (score()->scoreFont()->name() == "Leland" || score()->scoreFont()->name() == "Bravura"
-               || score()->scoreFont()->name() == "Petaluma") ? 0 : 0.5 * score()->spatium() * mag();
-        y1l          = st->doty1() * _spatium + offset;
-        y2l          = st->doty2() * _spatium + offset;
+        y1l = st->doty1() * _spatium;
+        y2l = st->doty2() * _spatium;
+
+        //workaround to make Bravura, Petaluma and Leland font work correctly with repeatDots
+        if (!(score()->scoreFont()->name() == "Leland"
+              || score()->scoreFont()->name() == "Bravura"
+              || score()->scoreFont()->name() == "Petaluma")) {
+            double offset = 0.5 * score()->spatium() * mag();
+            y1l += offset;
+            y2l += offset;
+        }
 
         //adjust for staffType offset
         double stYOffset = st->yoffset().val() * _spatium;
-        y1l             += stYOffset;
-        y2l             += stYOffset;
+        y1l += stYOffset;
+        y2l += stYOffset;
     }
+
     drawSymbol(SymId::repeatDot, painter, PointF(x, y1l));
     drawSymbol(SymId::repeatDot, painter, PointF(x, y2l));
 }

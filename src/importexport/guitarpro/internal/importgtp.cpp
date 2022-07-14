@@ -125,8 +125,6 @@ GuitarPro::GuitarPro(MasterScore* s, int v)
 {
     score   = s;
     version = v;
-    std::string charset = configuration() ? configuration()->importGuitarProCharset() : "UTF-8";
-    _codec = StringCodec::codecForName(String::fromStdString(charset));//nullptr; //QTextCodec::codecForName(QString::fromStdString(charset).toLatin1()); // NOTE
     voltaSequence = 1;
     tempo = -1;
 }
@@ -221,11 +219,7 @@ String GuitarPro::readPascalString(int n)
     if (n - l > 0) {
         skip(n - l);
     }
-    if (_codec) {
-        return _codec->toString(&s[0]);
-    } else {
-        return String::fromUtf8(&s[0]);
-    }
+    return String::fromUtf8(&s[0]);
 }
 
 //---------------------------------------------------------
@@ -239,11 +233,7 @@ String GuitarPro::readWordPascalString()
     //char c[l+1];
     read(&c[0], l);
     c[l] = 0;
-    if (_codec) {
-        return _codec->toString(&c[0]);
-    } else {
-        return String::fromUtf8(&c[0]);
-    }
+    return String::fromUtf8(&c[0]);
 }
 
 //---------------------------------------------------------
@@ -257,11 +247,7 @@ String GuitarPro::readBytePascalString()
     //char c[l+1];
     read(&c[0], l);
     c[l] = 0;
-    if (_codec) {
-        return _codec->toString(&c[0]);
-    } else {
-        return String::fromUtf8(&c[0]);
-    }
+    return String::fromUtf8(&c[0]);
 }
 
 //---------------------------------------------------------
@@ -284,11 +270,8 @@ String GuitarPro::readDelphiString()
     if (g.find("2nd ") == 0) {
         //?? int k = 1;
     }
-    if (_codec) {
-        return _codec->toString(&c[0]);
-    } else {
-        return String::fromAscii(&c[0]);
-    }
+
+    return String::fromAscii(&c[0]);
 }
 
 //---------------------------------------------------------
@@ -580,8 +563,7 @@ void GuitarPro::addTextToNote(String string, Note* note)
     if (!string.isEmpty()) {
         bool useHarmony = string[string.size() - 1] == '\\';
         if (useHarmony) {
-//            string.resize(string.size() - 1);
-            string.chop(1); //TODO Check it
+            string.chop(1);
         }
     }
     text->setPlainText(string);
@@ -714,7 +696,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
                     if (voltaTextString == u"") {
                         voltaTextString += String::number(count);
                     } else {
-                        voltaTextString += u"," + String::number(count);
+                        voltaTextString += u',' + String::number(count);
                     }
                     // add the decimal number to the endings field of voltas as well as the text
                     volta->endings().push_back(count);
@@ -733,7 +715,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
                         if (voltaTextString == u"") {
                             voltaTextString = String::number(voltaSequence);
                         } else {
-                            voltaTextString += u"," + String::number(voltaSequence);
+                            voltaTextString += u',' + String::number(voltaSequence);
                         }
                         volta->endings().push_back(voltaSequence);
                         voltaSequence++;
@@ -796,9 +778,9 @@ void GuitarPro::readLyrics()
     gpLyrics.beatCounter = 0;
 
     String lyrics = readWordPascalString();
-    lyrics.replace(u"\n", u" ");
-    lyrics.replace(u"\r", u" ");
-    auto sl = lyrics.split(u" ", KeepEmptyParts);
+    lyrics.replace(u'\n', u' ');
+    lyrics.replace(u'\r', u' ');
+    auto sl = lyrics.split(u' ', KeepEmptyParts);
     for (auto& str : sl) {
         /*while (str[0] == '-')
     {
@@ -1254,7 +1236,7 @@ bool GuitarPro1::read(IODevice* io)
                 if (beatBits & BEAT_CHORD) {
                     int numStrings = static_cast<int>(score->staff(staffIdx)->part()->instrument()->stringData()->strings());
                     int header = readUChar();
-                    mu::String name;
+                    String name;
                     if ((header & 1) == 0) {
                         name = readDelphiString();
                         readChord(segment, track, numStrings, name, false);
@@ -1407,7 +1389,7 @@ void GuitarPro::setTempo(int temp, Measure* measure)
 
         TempoText* tt = new TempoText(segment);
         tt->setTempo(double(temp) / 60.0);
-        tt->setXmlText(String("<sym>metNoteQuarterUp</sym> = %1").arg(temp));
+        tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(temp));
         tt->setTrack(0);
 
         segment->add(tt);
@@ -1552,7 +1534,7 @@ bool GuitarPro2::read(IODevice* io)
     artist       = readDelphiString();
     album        = readDelphiString();
     composer     = readDelphiString();
-    mu::String copyright = readDelphiString();
+    String copyright = readDelphiString();
     if (!copyright.isEmpty()) {
         score->setMetaTag(u"copyright", copyright);
     }
@@ -2858,11 +2840,11 @@ void GuitarPro::createCrecDim(int staffIdx, int track, const Fraction& tick, boo
 
 static void addMetaInfo(MasterScore* score, GuitarPro* gp)
 {
-    std::vector<mu::String> fieldNames = { gp->title, gp->subtitle, gp->artist,
-                                           gp->album, gp->composer };
+    std::vector<String> fieldNames = { gp->title, gp->subtitle, gp->artist,
+                                       gp->album, gp->composer };
 
     bool createTitleField
-        = std::any_of(fieldNames.begin(), fieldNames.end(), [](const mu::String& fieldName) { return !fieldName.isEmpty(); });
+        = std::any_of(fieldNames.begin(), fieldNames.end(), [](const String& fieldName) { return !fieldName.isEmpty(); });
 
     if (createTitleField) {
         MeasureBase* m;
@@ -2892,13 +2874,13 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp)
             }
             if (!gp->artist.isEmpty()) {
                 if (!str.isEmpty()) {
-                    str.append(u"\n");
+                    str.append(u'\n');
                 }
                 str.append(gp->artist);
             }
             if (!gp->album.isEmpty()) {
                 if (!str.isEmpty()) {
-                    str.append(u"\n");
+                    str.append(u'\n');
                 }
                 str.append(gp->album);
             }
