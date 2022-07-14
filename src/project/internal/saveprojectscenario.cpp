@@ -87,21 +87,22 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
 
 RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
 {
-    QString dialogTitle = qtrc("project", "Save score");
+    QString dialogTitle = qtrc("project/save", "Save score");
     QString filenameAddition;
 
     if (saveMode == SaveMode::SaveCopy) {
         //: used to form a filename suggestion, like "originalFile - copy"
-        filenameAddition = " - " + qtrc("project", "copy", "a copy of a file");
+        filenameAddition = " - " + qtrc("project/save", "copy", "a copy of a file");
     } else if (saveMode == SaveMode::SaveSelection) {
-        filenameAddition = " - " + qtrc("project", "selection");
+        //: used to form a filename suggestion, like "originalFile - selection"
+        filenameAddition = " - " + qtrc("project/save", "selection");
     }
 
     io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition);
 
     QStringList filter {
-        qtrc("project", "MuseScore file") + " (*.mscz)",
-        qtrc("project", "Uncompressed MuseScore folder (experimental)")
+        qtrc("project/save", "MuseScore file") + " (*.mscz)",
+        qtrc("project/save", "Uncompressed MuseScore folder (experimental)")
 #ifdef Q_OS_MAC
         + " (*)"
 #else
@@ -216,14 +217,14 @@ bool SaveProjectScenario::warnBeforePublishing() const
 
     IInteractive::ButtonDatas buttons = {
         IInteractive::ButtonData(IInteractive::Button::Cancel, trc("global", "Cancel")),
-        IInteractive::ButtonData(IInteractive::Button::Ok, trc("project", "Publish online"), true)
+        IInteractive::ButtonData(IInteractive::Button::Ok, trc("project/save", "Publish online"), true)
     };
 
     IInteractive::Result result = interactive()->warning(
-        trc("project", "Publish this score online?"),
-        trc("project", "All saved changes will be publicly visible on MuseScore.com. "
-                       "If you want to make frequent changes, we recommend saving this "
-                       "score privately until you’re ready to share it to the world. "),
+        trc("project/save", "Publish this score online?"),
+        trc("project/save", "All saved changes will be publicly visible on MuseScore.com. "
+                            "If you want to make frequent changes, we recommend saving this "
+                            "score privately until you’re ready to share it to the world. "),
         buttons,
         int(IInteractive::Button::Ok),
         IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain);
