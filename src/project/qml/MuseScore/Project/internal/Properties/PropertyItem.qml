@@ -65,7 +65,7 @@ RowLayout {
 
         currentText: root.propertyName ? root.propertyName : ""
         visible: !root.isStandardProperty
-        hint: qsTrc("project", "Property")
+        hint: qsTrc("project/properties", "Property")
 
         navigation.name: root.propertyName + "PropertyName"
         navigation.panel: root.navigationPanel
@@ -85,7 +85,7 @@ RowLayout {
         Layout.fillWidth: true
 
         currentText: root.propertyValue ? root.propertyValue : ""
-        hint: root.isStandardProperty ? "" : qsTrc("project", "Value")
+        hint: root.isStandardProperty ? "" : qsTrc("project/properties", "Value")
         visible: !root.isFileInfoPanelProperty
 
         navigation.name: root.propertyName + "PropertyValue"

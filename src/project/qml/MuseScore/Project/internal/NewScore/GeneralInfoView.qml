@@ -65,9 +65,9 @@ Column {
             anchors.bottom: parent.bottom
             width: parent.childWidth
 
-            title: qsTrc("project/newscore", "Title")
+            title: qsTrc("project", "Title")
 
-            info: qsTrc("project/newscore", "Untitled Score")
+            info: qsTrc("project", "Untitled Score")
 
             navigation.panel: root.navigationPanel
             navigation.column: 0
@@ -79,9 +79,9 @@ Column {
             anchors.bottom: parent.bottom
             width: parent.childWidth
 
-            title: qsTrc("project/newscore", "Composer")
+            title: qsTrc("project", "Composer")
 
-            info: qsTrc("project/newscore", "Composer / arranger")
+            info: qsTrc("project", "Composer / arranger")
 
             navigation.panel: root.navigationPanel
             navigation.column: 1
@@ -105,9 +105,9 @@ Column {
             anchors.bottom: parent.bottom
             width: parent.childWidth
 
-            title: qsTrc("project/newscore", "Subtitle")
+            title: qsTrc("project", "Subtitle")
 
-            info: qsTrc("project/newscore", "Subtitle")
+            info: qsTrc("project", "Subtitle")
 
             navigation.panel: root.navigationPanel
             navigation.column: 2
@@ -120,7 +120,7 @@ Column {
             anchors.bottom: parent.bottom
             width: parent.childWidth
 
-            title: qsTrc("project/newscore", "Lyricist")
+            title: qsTrc("project", "Lyricist")
 
             navigation.panel: root.navigationPanel
             navigation.column: 3
@@ -133,7 +133,8 @@ Column {
             anchors.bottom: parent.bottom
             width: parent.childWidth
 
-            title: qsTrc("project/newscore", "Copyright")
+            //: The caption of a field to specify copyright information
+            title: qsTrc("project", "Copyright")
 
             navigation.panel: root.navigationPanel
             navigation.column: 4
