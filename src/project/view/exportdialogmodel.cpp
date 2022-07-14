@@ -455,9 +455,13 @@ void ExportDialogModel::setMidiExportRpns(bool exportRpns)
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const
 {
     QMap<MusicXmlLayoutType, QString> musicXmlLayoutTypeNames {
+        //: Specifies to which extent layout customizations should be exported to MusicXML.
         { MusicXmlLayoutType::AllLayout, qtrc("project/export", "All layout") },
+        //: Specifies to which extent layout customizations should be exported to MusicXML.
         { MusicXmlLayoutType::AllBreaks, qtrc("project/export", "System and page breaks") },
+        //: Specifies to which extent layout customizations should be exported to MusicXML.
         { MusicXmlLayoutType::ManualBreaks, qtrc("project/export", "Manually added system and page breaks only") },
+        //: Specifies to which extent layout customizations should be exported to MusicXML.
         { MusicXmlLayoutType::None, qtrc("project/export", "No system or page breaks") },
     };
 
