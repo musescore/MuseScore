@@ -297,7 +297,7 @@ Fraction MeasureRepeat::ticks() const
 
 String MeasureRepeat::accessibleInfo() const
 {
-    return mtrc("engraving", "%1; Duration: %2 measure(s)").arg(EngravingItem::accessibleInfo()).arg(numMeasures());
+    return mtrc("engraving", "%1; Duration: %n measure(s)", nullptr, numMeasures()).arg(EngravingItem::accessibleInfo());
 }
 
 //---------------------------------------------------------

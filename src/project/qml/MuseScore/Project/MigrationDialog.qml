@@ -133,7 +133,7 @@ StyledDialogView {
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
 
-                    text: qsTrc("project", "This file was created in MuseScore %1").arg(dialog.appVersion)
+                    text: qsTrc("project", "This file was last saved in MuseScore %1").arg(dialog.appVersion)
                 }
 
                 StyledTextLabel {
@@ -212,7 +212,7 @@ StyledDialogView {
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
 
-                    text: qsTrc("project", "This file was created in MuseScore %1").arg(dialog.appVersion)
+                    text: qsTrc("project", "This file was last saved in MuseScore %1").arg(dialog.appVersion)
                 }
 
                 StyledTextLabel {

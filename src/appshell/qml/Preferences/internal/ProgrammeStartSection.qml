@@ -27,7 +27,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Programme start")
+    title: qsTrc("appshell", "Program start")
 
     navigation.direction: NavigationPanel.Both
 

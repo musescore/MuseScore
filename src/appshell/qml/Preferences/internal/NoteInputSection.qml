@@ -57,7 +57,7 @@ BaseSection {
         id: colorNotesBox
         width: parent.width
 
-        text: qsTrc("appshell", "Colour notes outside of usable pitch range")
+        text: qsTrc("appshell", "Color notes outside of usable pitch range")
 
         navigation.name: "ColorNotesBox"
         navigation.panel: root.navigation
