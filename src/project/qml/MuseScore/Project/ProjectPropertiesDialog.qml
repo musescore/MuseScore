@@ -26,12 +26,12 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
 
-import "internal"
+import "internal/Properties"
 
 StyledDialogView {
     id: root
 
-    title: qsTrc("project", "Project properties")
+    title: qsTrc("project/properties", "Project properties")
 
     contentWidth: 680
     contentHeight: 460
