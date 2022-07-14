@@ -45,7 +45,7 @@ Column {
         name: "NavPanel"
         direction: NavigationPanel.Horizontal
         enabled: root.visible
-        accessible.name: qsTrc("project", "Score general info")
+        accessible.name: qsTrc("project/newscore", "General score info")
     }
 
     Row {
@@ -65,9 +65,9 @@ Column {
             anchors.bottom: parent.bottom
             width: parent.childWidth
 
-            title: qsTrc("project", "Title")
+            title: qsTrc("project/newscore", "Title")
 
-            info: qsTrc("project", "Untitled Score")
+            info: qsTrc("project/newscore", "Untitled Score")
 
             navigation.panel: root.navigationPanel
             navigation.column: 0
@@ -79,9 +79,9 @@ Column {
             anchors.bottom: parent.bottom
             width: parent.childWidth
 
-            title: qsTrc("project", "Composer")
+            title: qsTrc("project/newscore", "Composer")
 
-            info: qsTrc("project", "Composer / arranger")
+            info: qsTrc("project/newscore", "Composer / arranger")
 
             navigation.panel: root.navigationPanel
             navigation.column: 1
@@ -105,9 +105,9 @@ Column {
             anchors.bottom: parent.bottom
             width: parent.childWidth
 
-            title: qsTrc("project", "Subtitle")
+            title: qsTrc("project/newscore", "Subtitle")
 
-            info: qsTrc("project", "Subtitle")
+            info: qsTrc("project/newscore", "Subtitle")
 
             navigation.panel: root.navigationPanel
             navigation.column: 2
@@ -120,7 +120,7 @@ Column {
             anchors.bottom: parent.bottom
             width: parent.childWidth
 
-            title: qsTrc("project", "Lyricist")
+            title: qsTrc("project/newscore", "Lyricist")
 
             navigation.panel: root.navigationPanel
             navigation.column: 3
@@ -133,7 +133,7 @@ Column {
             anchors.bottom: parent.bottom
             width: parent.childWidth
 
-            title: qsTrc("project", "Copyright")
+            title: qsTrc("project/newscore", "Copyright")
 
             navigation.panel: root.navigationPanel
             navigation.column: 4

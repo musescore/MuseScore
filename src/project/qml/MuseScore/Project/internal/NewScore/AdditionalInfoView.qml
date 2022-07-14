@@ -68,7 +68,7 @@ Row {
         name: "NavPanel"
         direction: NavigationPanel.Horizontal
         enabled: root.enabled && root.visible
-        accessible.name: qsTrc("project", "Score options")
+        accessible.name: qsTrc("project/newscore", "Score options")
     }
 
     Column {
@@ -88,7 +88,7 @@ Row {
 
             font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
-            text: qsTrc("project", "Key signature")
+            text: qsTrc("project/newscore", "Key signature")
         }
 
         KeySignatureSettings {
@@ -126,7 +126,7 @@ Row {
 
             font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
-            text: qsTrc("project", "Time signature")
+            text: qsTrc("project/newscore", "Time signature")
         }
 
         TimeSignatureSettings {
@@ -161,7 +161,7 @@ Row {
 
             font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
-            text: qsTrc("project", "Tempo")
+            text: qsTrc("project/newscore", "Tempo")
         }
 
         TempoSettings {
@@ -196,7 +196,7 @@ Row {
 
             font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
-            text: qsTrc("project", "Measures")
+            text: qsTrc("project/newscore", "Measures")
         }
 
         MeasuresSettings {

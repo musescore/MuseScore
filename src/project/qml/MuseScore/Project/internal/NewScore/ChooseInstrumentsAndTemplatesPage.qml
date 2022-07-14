@@ -115,7 +115,7 @@ Item {
         StyledTabButton {
             id: chooseInstrumentsBtn
 
-            text: qsTrc("project", "Choose instruments")
+            text: qsTrc("project/newscore", "Choose instruments")
 
             navigation.name: "Choose instruments"
             navigation.panel: topNavPanel
@@ -125,7 +125,7 @@ Item {
         StyledTabButton {
             id: createFromTemplateBtn
 
-            text: qsTrc("project", "Create from template")
+            text: qsTrc("project/newscore", "Create from template")
 
             navigation.name: "Create from template"
             navigation.panel: topNavPanel

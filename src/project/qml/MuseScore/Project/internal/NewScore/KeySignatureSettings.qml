@@ -97,7 +97,7 @@ FlatButton {
 
                 StyledTabButton {
                     id: majorTab
-                    text: qsTrc("project", "Major")
+                    text: qsTrc("project/newscore", "Major")
 
                     navigation.name: "MajorTab"
                     navigation.panel: bar.navigationPanel
@@ -105,7 +105,7 @@ FlatButton {
                 }
 
                 StyledTabButton {
-                    text: qsTrc("project", "Minor")
+                    text: qsTrc("project/newscore", "Minor")
 
                     navigation.name: "MinorTab"
                     navigation.panel: bar.navigationPanel
