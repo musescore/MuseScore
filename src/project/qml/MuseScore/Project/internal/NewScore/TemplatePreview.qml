@@ -46,7 +46,7 @@ Item {
 
         anchors.top: parent.top
 
-        text: qsTrc("project", "Preview")
+        text: qsTrc("project/newscore", "Preview")
         font: ui.theme.bodyBoldFont
     }
 

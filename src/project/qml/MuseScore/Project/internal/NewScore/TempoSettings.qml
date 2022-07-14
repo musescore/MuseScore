@@ -92,7 +92,7 @@ FlatButton {
 
                 checked: root.model.withTempo
 
-                text: qsTrc("project", "Show tempo marking on my score")
+                text: qsTrc("project/newscore", "Show tempo marking on my score")
 
                 navigation.name: "WithTempoBox"
                 navigation.panel: content.navigationPanel

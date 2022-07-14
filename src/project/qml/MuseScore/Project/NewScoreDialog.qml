@@ -26,12 +26,12 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
 
-import "internal"
+import "internal/NewScore"
 
 StyledDialogView {
     id: root
 
-    title: qsTrc("project", "New Score")
+    title: qsTrc("project/newscore", "New Score")
 
     contentHeight: 600
     contentWidth: 1024
@@ -161,7 +161,7 @@ StyledDialogView {
 
             visible: pagesStack.currentIndex > 0
 
-            text: qsTrc("project", "Back")
+            text: qsTrc("project/newscore", "Back")
 
             onClicked: {
                 pagesStack.currentIndex--
@@ -176,7 +176,7 @@ StyledDialogView {
             visible: pagesStack.currentIndex < pagesStack.count - 1
             enabled: chooseInstrumentsAndTemplatePage.hasSelection
 
-            text: qsTrc("project", "Next")
+            text: qsTrc("project/newscore", "Next")
 
             onClicked: {
                 pagesStack.currentIndex++
@@ -192,7 +192,7 @@ StyledDialogView {
 
             enabled: chooseInstrumentsAndTemplatePage.hasSelection
 
-            text: qsTrc("project", "Done")
+            text: qsTrc("project/newscore", "Done")
 
             onClicked: {
                 root.onDone()

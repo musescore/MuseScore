@@ -94,8 +94,8 @@ AdditionalInfoModel::AdditionalInfoModel(QObject* parent)
 
 void AdditionalInfoModel::init()
 {
-    setKeySignature(KeySignature(qtrc("project", "C major"), qtrc("project", "A minor"), IconCode::Code::KEY_SIGNATURE_NONE,
-                                 Key::C).toMap());
+    setKeySignature(KeySignature(qtrc("project/newscore", "C major"), qtrc("project/newscore", "A minor"),
+                                 IconCode::Code::KEY_SIGNATURE_NONE, Key::C).toMap());
 
     setTimeSignatureType(static_cast<int>(TimeSignatureType::Fraction));
     setTimeSignature(FOUR_FOUR_TIME_SIGNATURE);
@@ -115,23 +115,38 @@ void AdditionalInfoModel::init()
 QVariantList AdditionalInfoModel::keySignatureList() const
 {
     QVariantList list = {
-        KeySignature(qtrc("project", "C major"), qtrc("project", "A minor"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C).toMap(),
-        KeySignature(qtrc("project", "G major"), qtrc("project", "E minor"), IconCode::Code::KEY_SIGNATURE_1_SHARP, Key::G).toMap(),
-        KeySignature(qtrc("project", "D major"), qtrc("project", "B minor"), IconCode::Code::KEY_SIGNATURE_2_SHARPS, Key::D).toMap(),
-        KeySignature(qtrc("project", "A major"), qtrc("project", "F♯ minor"), IconCode::Code::KEY_SIGNATURE_3_SHARPS, Key::A).toMap(),
-        KeySignature(qtrc("project", "E major"), qtrc("project", "C♯ minor"), IconCode::Code::KEY_SIGNATURE_4_SHARPS, Key::E).toMap(),
-        KeySignature(qtrc("project", "B major"), qtrc("project", "G♯ minor"), IconCode::Code::KEY_SIGNATURE_5_SHARPS, Key::B).toMap(),
-        KeySignature(qtrc("project", "F♯ major"), qtrc("project", "D♯ minor"), IconCode::Code::KEY_SIGNATURE_6_SHARPS, Key::F_S).toMap(),
-        KeySignature(qtrc("project", "C♯ major"), qtrc("project", "A♯ minor"), IconCode::Code::KEY_SIGNATURE_7_SHARPS, Key::C_S).toMap(),
-        KeySignature(qtrc("project", "Open/Atonal"), qtrc("project", "Open/Atonal"), IconCode::Code::KEY_SIGNATURE_NONE,
-                     Key::INVALID).toMap(),
-        KeySignature(qtrc("project", "F major"), qtrc("project", "D minor"), IconCode::Code::KEY_SIGNATURE_1_FLAT, Key::F).toMap(),
-        KeySignature(qtrc("project", "B♭ major"), qtrc("project", "G minor"), IconCode::Code::KEY_SIGNATURE_2_FLAT, Key::B_B).toMap(),
-        KeySignature(qtrc("project", "E♭ major"), qtrc("project", "C minor"), IconCode::Code::KEY_SIGNATURE_3_FLAT, Key::E_B).toMap(),
-        KeySignature(qtrc("project", "A♭ major"), qtrc("project", "F minor"), IconCode::Code::KEY_SIGNATURE_4_FLAT, Key::A_B).toMap(),
-        KeySignature(qtrc("project", "D♭ major"), qtrc("project", "B♭ minor"), IconCode::Code::KEY_SIGNATURE_5_FLAT, Key::D_B).toMap(),
-        KeySignature(qtrc("project", "G♭ major"), qtrc("project", "E♭ minor"), IconCode::Code::KEY_SIGNATURE_6_FLAT, Key::G_B).toMap(),
-        KeySignature(qtrc("project", "C♭ major"), qtrc("project", "A♭ minor"), IconCode::Code::KEY_SIGNATURE_7_FLAT, Key::C_B).toMap()
+        KeySignature(qtrc("project/newscore", "C major"), qtrc("project/newscore", "A minor"),
+                     IconCode::Code::KEY_SIGNATURE_NONE, Key::C).toMap(),
+        KeySignature(qtrc("project/newscore", "G major"), qtrc("project/newscore", "E minor"),
+                     IconCode::Code::KEY_SIGNATURE_1_SHARP, Key::G).toMap(),
+        KeySignature(qtrc("project/newscore", "D major"), qtrc("project/newscore", "B minor"),
+                     IconCode::Code::KEY_SIGNATURE_2_SHARPS, Key::D).toMap(),
+        KeySignature(qtrc("project/newscore", "A major"), qtrc("project/newscore", "F♯ minor"),
+                     IconCode::Code::KEY_SIGNATURE_3_SHARPS, Key::A).toMap(),
+        KeySignature(qtrc("project/newscore", "E major"), qtrc("project/newscore", "C♯ minor"),
+                     IconCode::Code::KEY_SIGNATURE_4_SHARPS, Key::E).toMap(),
+        KeySignature(qtrc("project/newscore", "B major"), qtrc("project/newscore", "G♯ minor"),
+                     IconCode::Code::KEY_SIGNATURE_5_SHARPS, Key::B).toMap(),
+        KeySignature(qtrc("project/newscore", "F♯ major"), qtrc("project/newscore", "D♯ minor"),
+                     IconCode::Code::KEY_SIGNATURE_6_SHARPS, Key::F_S).toMap(),
+        KeySignature(qtrc("project/newscore", "C♯ major"), qtrc("project/newscore", "A♯ minor"),
+                     IconCode::Code::KEY_SIGNATURE_7_SHARPS, Key::C_S).toMap(),
+        KeySignature(qtrc("project/newscore", "Open/Atonal"), qtrc("project/newscore", "Open/Atonal"),
+                     IconCode::Code::KEY_SIGNATURE_NONE, Key::INVALID).toMap(),
+        KeySignature(qtrc("project/newscore", "F major"), qtrc("project/newscore", "D minor"),
+                     IconCode::Code::KEY_SIGNATURE_1_FLAT, Key::F).toMap(),
+        KeySignature(qtrc("project/newscore", "B♭ major"), qtrc("project/newscore", "G minor"),
+                     IconCode::Code::KEY_SIGNATURE_2_FLAT, Key::B_B).toMap(),
+        KeySignature(qtrc("project/newscore", "E♭ major"), qtrc("project/newscore", "C minor"),
+                     IconCode::Code::KEY_SIGNATURE_3_FLAT, Key::E_B).toMap(),
+        KeySignature(qtrc("project/newscore", "A♭ major"), qtrc("project/newscore", "F minor"),
+                     IconCode::Code::KEY_SIGNATURE_4_FLAT, Key::A_B).toMap(),
+        KeySignature(qtrc("project/newscore", "D♭ major"), qtrc("project/newscore", "B♭ minor"),
+                     IconCode::Code::KEY_SIGNATURE_5_FLAT, Key::D_B).toMap(),
+        KeySignature(qtrc("project/newscore", "G♭ major"), qtrc("project/newscore", "E♭ minor"),
+                     IconCode::Code::KEY_SIGNATURE_6_FLAT, Key::G_B).toMap(),
+        KeySignature(qtrc("project/newscore", "C♭ major"), qtrc("project/newscore", "A♭ minor"),
+                     IconCode::Code::KEY_SIGNATURE_7_FLAT, Key::C_B).toMap()
     };
 
     return list;
@@ -180,11 +195,11 @@ QString AdditionalInfoModel::timeSignatureAccessibleName(int timeSignatureType,
 {
     switch (timeSignatureType) {
     case Fraction:
-        return qtrc("project", "%1/%2").arg(QString::number(numerator), QString::number(denominator));
+        return qtrc("project/newscore", "%1/%2").arg(QString::number(numerator), QString::number(denominator));
     case Common:
-        return qtrc("project", "Common time");
+        return qtrc("project/newscore", "Common time");
     case Cut:
-        return qtrc("project", "Cut time");
+        return qtrc("project/newscore", "Cut time");
     }
 
     return QString();
@@ -312,15 +327,15 @@ QString AdditionalInfoModel::tempoAccessibleName(int noteIcon, bool withDot) con
 {
     switch (static_cast<MusicalSymbolCode>(noteIcon)) {
     case MusicalSymbolCode::SEMIQUAVER:
-        return withDot ? qtrc("project", "Dotted 16th note") : qtrc("project", "16th note");
+        return withDot ? qtrc("project/newscore", "Dotted 16th note") : qtrc("project/newscore", "16th note");
     case MusicalSymbolCode::QUAVER:
-        return withDot ? qtrc("project", "Dotted 8th note") : qtrc("project", "8th note");
+        return withDot ? qtrc("project/newscore", "Dotted eight note") : qtrc("project/newscore", "Eight note");
     case MusicalSymbolCode::CROTCHET:
-        return withDot ? qtrc("project", "Dotted quarter note") : qtrc("project", "Quarter note");
+        return withDot ? qtrc("project/newscore", "Dotted quarter note") : qtrc("project/newscore", "Quarter note");
     case MusicalSymbolCode::MINIM:
-        return withDot ? qtrc("project", "Dotted half note") : qtrc("project", "Half note");
+        return withDot ? qtrc("project/newscore", "Dotted half note") : qtrc("project/newscore", "Half note");
     case MusicalSymbolCode::SEMIBREVE:
-        return withDot ? qtrc("project", "Dotted whole note") : qtrc("project", "Whole note");
+        return withDot ? qtrc("project/newscore", "Dotted whole note") : qtrc("project/newscore", "Whole note");
     default:
         break;
     }
