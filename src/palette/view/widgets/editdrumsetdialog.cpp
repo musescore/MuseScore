@@ -636,9 +636,9 @@ void EditDrumsetDialog::updateExample()
 
 void EditDrumsetDialog::load()
 {
-    QString filter = mu::qtrc("palette", "MuseScore Drumset File") + " (*.drm)";
+    QString filter = mu::qtrc("palette", "MuseScore drumset file") + " (*.drm)";
     mu::io::path_t dir = notationConfiguration()->userStylesPath();
-    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Load Drumset"), dir, filter);
+    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Load drumset"), dir, filter);
 
     if (fname.empty()) {
         return;
@@ -684,9 +684,9 @@ void EditDrumsetDialog::load()
 
 void EditDrumsetDialog::save()
 {
-    QString filter = mu::qtrc("palette", "MuseScore Drumset File") + " (*.drm)";
+    QString filter = mu::qtrc("palette", "MuseScore drumset file") + " (*.drm)";
     mu::io::path_t dir = notationConfiguration()->userStylesPath();
-    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Save Drumset"), dir, filter);
+    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Save drumset"), dir, filter);
 
     if (fname.empty()) {
         return;
@@ -694,8 +694,8 @@ void EditDrumsetDialog::save()
 
     File f(fname);
     if (!f.open(IODevice::WriteOnly)) {
-        QString s = mu::qtrc("palette", "Open File\n%1\nfailed: %2").arg(f.filePath().toQString()).arg(strerror(errno));
-        interactive()->error(mu::trc("palette", "Open File"), s.toStdString());
+        QString s = mu::qtrc("palette", "Opening file\n%1\nfailed: %2").arg(f.filePath().toQString()).arg(strerror(errno));
+        interactive()->error(mu::trc("palette", "Open file"), s.toStdString());
         return;
     }
     valueChanged();    //save last changes in name
@@ -705,8 +705,8 @@ void EditDrumsetDialog::save()
     m_editedDrumset.save(xml);
     xml.endElement();
     if (f.error() != File::NoError) {
-        QString s = mu::qtrc("palette", "Write File failed: %1").arg(QString::fromStdString(f.errorString()));
-        interactive()->error(mu::trc("palette", "Write Drumset"), s.toStdString());
+        QString s = mu::qtrc("palette", "Writing file failed: %1").arg(QString::fromStdString(f.errorString()));
+        interactive()->error(mu::trc("palette", "Write drumset"), s.toStdString());
     }
 }
 

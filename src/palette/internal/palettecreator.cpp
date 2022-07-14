@@ -510,6 +510,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 PalettePtr PaletteCreator::newLayoutPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Layout);
+    //: The name of a palette
     sp->setName(QT_TRANSLATE_NOOP("palette", "Layout"));
     sp->setGridSize(42, 36);
     sp->setDrawGrid(true);
@@ -824,6 +825,7 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
 PalettePtr PaletteCreator::newAccordionPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Accordion);
+    //: The name of a palette
     sp->setName(QT_TRANSLATE_NOOP("palette", "Accordion"));
     sp->setGridSize(42, 25);
     sp->setDrawGrid(true);
@@ -1397,25 +1399,25 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
         TempoPattern("Prestissimo",      "Prestissimo",      200.0 / 60.0, false, true, false, false, true),
 
         TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Quarter note = dotted quarter note metric modulation"),
+                     QT_TRANSLATE_NOOP("palette", "Metric modulation: quarter note = dotted quarter note"),
                      3.0 / 2.0, true, false, true, false, false),
         TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Dotted quarter note = quarter note metric modulation"),
+                     QT_TRANSLATE_NOOP("palette", "Metric modulation: dotted quarter note = quarter note"),
                      2.0 / 3.0, true, false, true, false, false),
         TempoPattern("<sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Half note = quarter note metric modulation"),
+                     QT_TRANSLATE_NOOP("palette", "Metric modulation: half note = quarter note"),
                      1.0 / 2.0, true, false, true, false, false),
         TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteHalfUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Quarter note = half note metric modulation"),
+                     QT_TRANSLATE_NOOP("palette", "Metric modulation: quarter note = half note"),
                      2.0 / 1.0, true, false, true, false, false),
         TempoPattern("<sym>metNote8thUp</sym> = <sym>metNote8thUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Eighth note = eighth note metric modulation"),
+                     QT_TRANSLATE_NOOP("palette", "Metric modulation: eighth note = eighth note"),
                      1.0 / 1.0, true, false, true, false, false),
         TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Quarter note = quarter note metric modulation"),
+                     QT_TRANSLATE_NOOP("palette", "Metric modulation: quarter note = quarter note"),
                      1.0 / 1.0, true, false, true, false, false),
         TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Dotted eighth note = quarter note metric modulation"),
+                     QT_TRANSLATE_NOOP("palette", "Metric modulation: dotted eighth note = quarter note"),
                      4.0 / 3.0, true, false, true, false, false),
     };
 
@@ -1957,6 +1959,7 @@ PalettePtr PaletteCreator::newKeyboardPalette()
 PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Pitch);
+    //: The name of a palette
     sp->setName(QT_TRANSLATE_NOOP("palette", "Pitch"));
     sp->setGridSize(100, 30);
     sp->setDrawGrid(true);

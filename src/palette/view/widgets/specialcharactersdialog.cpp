@@ -435,7 +435,7 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     psa->setRestrictHeight(false);
 
     tabWidget->clear();
-    tabWidget->addTab(psa, mu::qtrc("palette", "Common Symbols"));
+    tabWidget->addTab(psa, mu::qtrc("palette", "Common symbols"));
 
     psa = new PaletteScrollArea(m_pSmufl);
     psa->setRestrictHeight(false);
@@ -455,7 +455,7 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     ws->addWidget(m_lws);
     ws->addWidget(psa);
 
-    tabWidget->addTab(ws, mu::qtrc("palette", "Musical Symbols"));
+    tabWidget->addTab(ws, mu::qtrc("palette", "Musical symbols"));
 
     psa = new PaletteScrollArea(m_pUnicode);
     psa->setRestrictHeight(false);
@@ -478,7 +478,7 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     wu->addWidget(m_lwu);
     wu->addWidget(psa);
 
-    tabWidget->addTab(wu, mu::qtrc("palette", "Unicode Symbols"));
+    tabWidget->addTab(wu, mu::qtrc("palette", "Unicode symbols"));
 
     connect(m_lws, &QListWidget::currentRowChanged, this, &SpecialCharactersDialog::populateSmufl);
     connect(m_lwu, &QListWidget::currentRowChanged, this, &SpecialCharactersDialog::populateUnicode);
