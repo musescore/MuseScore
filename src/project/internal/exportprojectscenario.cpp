@@ -189,9 +189,11 @@ mu::io::path_t ExportProjectScenario::askExportPath(const INotationPtrList& nota
         }) != notations.cend();
 
         if (containsMaster) {
-            filenameAddition = "-" + qtrc("project", "Score_and_Parts", "Used in export filename suggestion");
+            //: Used in export filename suggestion. Please use only characters that are valid for filenames.
+            filenameAddition = "-" + qtrc("project/export", "Score_and_Parts");
         } else {
-            filenameAddition = "-" + qtrc("project", "Parts", "Used in export filename suggestion");
+            //: Used in export filename suggestion. Please use only characters that are valid for filenames.
+            filenameAddition = "-" + qtrc("project/export", "Parts");
         }
     } else if (isExportingOnlyOneScore) {
         if (!isMainNotation(notations.front())) {
@@ -206,7 +208,7 @@ mu::io::path_t ExportProjectScenario::askExportPath(const INotationPtrList& nota
 
     io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front());
 
-    return interactive()->selectSavingFile(qtrc("project", "Export"), defaultPath,
+    return interactive()->selectSavingFile(qtrc("project/export", "Export"), defaultPath,
                                            exportType.filter(), isCreatingOnlyOneFile);
 }
 
@@ -236,19 +238,19 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
     case FileConflictPolicy::SkipAll:
         return false;
     case FileConflictPolicy::Undefined: {
-        static const int Replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
-        static const int ReplaceAll = static_cast<int>(IInteractive::Button::CustomButton) + 2;
-        static const int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
-        static const int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
+        constexpr int Replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
+        constexpr int ReplaceAll = static_cast<int>(IInteractive::Button::CustomButton) + 2;
+        constexpr int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
+        constexpr int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
 
         IInteractive::Result result = interactive()->question(
-            trc("project", "File already exists"),
-            qtrc("project", "A file already exists with the filename %1. Do you want to replace it?")
+            trc("project/export", "File already exists"),
+            qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
             .arg(filename).toStdString(), {
-                IInteractive::ButtonData(Replace, trc("project", "Replace")),
-                IInteractive::ButtonData(ReplaceAll, trc("project", "Replace all")),
-                IInteractive::ButtonData(Skip, trc("project", "Skip")),
-                IInteractive::ButtonData(SkipAll, trc("project", "Skip all"))
+                IInteractive::ButtonData(Replace, trc("project/export", "Replace")),
+                IInteractive::ButtonData(ReplaceAll, trc("project/export", "Replace all")),
+                IInteractive::ButtonData(Skip, trc("project/export", "Skip")),
+                IInteractive::ButtonData(SkipAll, trc("project/export", "Skip all"))
             });
 
         switch (result.button()) {
@@ -271,8 +273,8 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
 bool ExportProjectScenario::askForRetry(const QString& filename) const
 {
     IInteractive::Result result = interactive()->question(
-        trc("project", "Error"),
-        qtrc("project", "An error occurred while writing the file %1. Do you want to retry?")
+        trc("project/export", "Error"),
+        qtrc("project/export", "An error occurred while writing the file %1. Do you want to retry?")
         .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });
 
     return result.standardButton() == IInteractive::Button::Retry;
