@@ -21,96 +21,135 @@
  */
 #include "xmldom.h"
 
-#include <QDomDocument>
+#include "thirdparty/tinyxml/tinyxml2.h"
+
+#include "log.h"
 
 using namespace mu;
 
 struct mu::XmlDomData
 {
-    QDomDocument doc;
-};
-
-struct mu::XmlNodeData
-{
-    QDomNode node;
-    XmlNodeData(const QDomNode& n)
-        : node(n) {}
+    tinyxml2::XMLDocument doc;
+    tinyxml2::XMLError err;
 };
 
 // ================================================
 // XmlDomNode
 // ================================================
+static inline const tinyxml2::XMLNode* node_const(uintptr_t p)
+{
+    return reinterpret_cast<const tinyxml2::XMLNode*>(p);
+}
 
-XmlDomNode::XmlDomNode(const std::shared_ptr<XmlDomData>& data, const std::shared_ptr<XmlNodeData>& node)
-    : m_data(data), m_node(node)
+XmlDomNode::XmlDomNode(const std::shared_ptr<XmlDomData>& xml, uintptr_t node)
+    : m_xml(xml), m_node(node)
 {
 }
 
 bool XmlDomNode::isNull() const
 {
-    return m_node ? m_node->node.isNull() : true;
+    return m_node ? false : true;
 }
 
 String XmlDomNode::nodeName() const
 {
-    return m_node->node.nodeName();
+    return m_node ? String::fromUtf8(node_const(m_node)->Value()) : String();
 }
 
 bool XmlDomNode::hasChildNodes() const
 {
-    return m_node->node.hasChildNodes();
+    return m_node ? !node_const(m_node)->NoChildren() : false;
 }
 
 XmlDomNode XmlDomNode::firstChild() const
 {
-    QDomNode n = m_node->node.firstChild();
-    return XmlDomNode(m_data, std::make_shared<XmlNodeData>(n));
+    if (!m_node) {
+        return XmlDomNode(m_xml, 0);
+    }
+    const tinyxml2::XMLNode* n = node_const(m_node)->FirstChild();
+    return XmlDomNode(m_xml, reinterpret_cast<uintptr_t>(n));
 }
 
 XmlDomElement XmlDomNode::firstChildElement(const char* name) const
 {
-    QDomNode n = m_node->node.firstChildElement(name);
-    return XmlDomElement(m_data, std::make_shared<XmlNodeData>(n));
+    if (!m_node) {
+        return XmlDomElement(m_xml, 0);
+    }
+
+    const tinyxml2::XMLElement* n = node_const(m_node)->FirstChildElement(name);
+    return XmlDomElement(m_xml, reinterpret_cast<uintptr_t>(n));
 }
 
 XmlDomNode XmlDomNode::nextSibling() const
 {
-    QDomNode n = m_node->node.nextSibling();
-    return XmlDomNode(m_data, std::make_shared<XmlNodeData>(n));
+    if (!m_node) {
+        return XmlDomNode(m_xml, 0);
+    }
+    const tinyxml2::XMLNode* n = node_const(m_node)->NextSibling();
+    return XmlDomNode(m_xml, reinterpret_cast<uintptr_t>(n));
 }
 
 bool XmlDomNode::hasAttribute(const char* name) const
 {
-    return !m_node->node.attributes().namedItem(name).isNull();
+    if (!m_node) {
+        return false;
+    }
+
+    const tinyxml2::XMLElement* e = node_const(m_node)->ToElement();
+    if (!e) {
+        return false;
+    }
+    return e->FindAttribute(name) != nullptr;
 }
 
 String XmlDomNode::attribute(const char* name) const
 {
-    return m_node->node.attributes().namedItem(name).toAttr().value();
+    if (!m_node) {
+        return String();
+    }
+
+    const tinyxml2::XMLElement* e = node_const(m_node)->ToElement();
+    if (!e) {
+        return String();
+    }
+    return String::fromUtf8(e->Attribute(name));
 }
 
 XmlDomElement XmlDomNode::toElement() const
 {
-    return XmlDomElement(m_data, m_node);
+    const tinyxml2::XMLElement* e = node_const(m_node)->ToElement();
+    return XmlDomElement(m_xml, reinterpret_cast<uintptr_t>(e));
 }
 
 // ================================================
 // XmlDomElement
 // ================================================
-
-static QDomElement to_el(const std::shared_ptr<XmlNodeData>& node)
+static inline const tinyxml2::XMLElement* el_const(uintptr_t p)
 {
-    return node->node.toElement();
+    return reinterpret_cast<const tinyxml2::XMLNode*>(p)->ToElement();
 }
 
-XmlDomElement::XmlDomElement(const std::shared_ptr<XmlDomData>& data, const std::shared_ptr<XmlNodeData>& node)
+XmlDomElement::XmlDomElement(const std::shared_ptr<XmlDomData>& data, uintptr_t node)
     : XmlDomNode(data, node)
 {
 }
 
 String XmlDomElement::text() const
 {
-    return to_el(m_node).text();
+    const tinyxml2::XMLElement* e = el_const(m_node);
+    if (!e) {
+        return String();
+    }
+
+    String result;
+    for (const tinyxml2::XMLNode* n = e->FirstChild(); n != nullptr; n = n->NextSibling()) {
+        const tinyxml2::XMLText* t = n->ToText();
+        if (t) {
+            result += String::fromUtf8(t->Value());
+        }
+    }
+
+    return result;
 }
 
 // ================================================
@@ -119,16 +158,31 @@ String XmlDomElement::text() const
 
 XmlDomDocument::XmlDomDocument()
 {
-    m_data = std::make_shared<XmlDomData>();
+    m_xml = std::make_shared<XmlDomData>();
 }
 
-void XmlDomDocument::setContent(const QByteArray& data)
+void XmlDomDocument::setContent(const ByteArray& data)
 {
-    m_data->doc.setContent(data);
+    m_xml->doc.Clear();
+    m_xml->err = m_xml->doc.Parse(reinterpret_cast<const char*>(data.constData()), data.size());
+
+    if (m_xml->err != tinyxml2::XML_SUCCESS) {
+        LOGE() << errorString();
+    }
 }
 
-XmlDomElement XmlDomDocument::documentElement() const
+XmlDomElement XmlDomDocument::rootElement() const
 {
-    QDomElement el = m_data->doc.documentElement();
-    return XmlDomElement(m_data, std::make_shared<XmlNodeData>(el));
+    const tinyxml2::XMLElement* e = m_xml->doc.FirstChildElement();
+    return XmlDomElement(m_xml, reinterpret_cast<uintptr_t>(e));
+}
+
+bool XmlDomDocument::hasError() const
+{
+    return m_xml->err == tinyxml2::XML_SUCCESS;
+}
+
+String XmlDomDocument::errorString() const
+{
+    return String::fromUtf8(m_xml->doc.ErrorStr());
 }

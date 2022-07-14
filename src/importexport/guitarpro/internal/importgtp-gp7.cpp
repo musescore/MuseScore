@@ -47,15 +47,14 @@ bool GuitarPro7::read(IODevice* io)
     previousTempo = -1;
 
     mu::ZipReader zip(io);
-    mu::ByteArray fileData = zip.fileData("Content/score.gpif");
-    mu::ByteArray partsData = zip.fileData("Content/PartConfiguration");
+    ByteArray fileData = zip.fileData("Content/score.gpif");
+    ByteArray partsData = zip.fileData("Content/PartConfiguration");
     zip.close();
 
     QByteArray partsArray = partsData.toQByteArrayNoCopy();
     m_properties = readProperties(&partsArray);
 
-    QByteArray ba = fileData.toQByteArrayNoCopy();
-    readGpif(&ba);
+    readGpif(&fileData);
     return true;
 }
 

@@ -22,7 +22,6 @@
 
 #include "shortcutsmodel.h"
 
-#include "ui/view/iconcodes.h"
 #include "translation.h"
 #include "log.h"
 
@@ -52,7 +51,7 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     case RoleIcon: return static_cast<int>(this->action(shortcut.action).iconCode);
     case RoleSequence: return sequencesToNativeText(shortcut.sequences);
     case RoleSearchKey: {
-        UiAction action = this->action(shortcut.action);
+        const UiAction& action = this->action(shortcut.action);
         return QString::fromStdString(action.code) + action.title + sequencesToNativeText(shortcut.sequences);
     }
     }
@@ -147,12 +146,7 @@ QVariant ShortcutsModel::currentShortcut() const
     }
 
     const Shortcut& sc = m_shortcuts.at(index.row());
-
-    QVariantMap obj;
-    obj["title"] = actionTitle(sc.action);
-    obj["sequence"] = QString::fromStdString(sc.sequencesAsString());
-    obj["context"] = QString::fromStdString(sc.context);
-    return obj;
+    return shortcutToObject(sc);
 }
 
 QModelIndex ShortcutsModel::currentShortcutIndex() const
@@ -203,25 +197,29 @@ void ShortcutsModel::exportShortcutsToFile()
     }
 }
 
-void ShortcutsModel::applySequenceToCurrentShortcut(const QString& newSequence)
+void ShortcutsModel::applySequenceToCurrentShortcut(const QString& newSequence, int conflictShortcutIndex)
 {
-    QModelIndex index = currentShortcutIndex();
-    if (!index.isValid()) {
+    QModelIndex currIndex = currentShortcutIndex();
+    if (!currIndex.isValid()) {
         return;
     }
 
-    int row = index.row();
+    int row = currIndex.row();
     m_shortcuts[row].sequences = Shortcut::sequencesFromString(newSequence.toStdString());
 
-    notifyAboutShortcutChanged(index);
+    if (conflictShortcutIndex >= 0 && conflictShortcutIndex < m_shortcuts.size()) {
+        m_shortcuts[conflictShortcutIndex].clear();
+        notifyAboutShortcutChanged(index(conflictShortcutIndex));
+    }
+
+    notifyAboutShortcutChanged(currIndex);
 }
 
 void ShortcutsModel::clearSelectedShortcuts()
 {
     for (const QModelIndex& index : m_selection.indexes()) {
         Shortcut& shortcut = m_shortcuts[index.row()];
-        shortcut.sequences.clear();
-        shortcut.standardKey = QKeySequence::StandardKey::UnknownKey;
+        shortcut.clear();
 
         notifyAboutShortcutChanged(index);
     }
@@ -234,15 +232,36 @@ void ShortcutsModel::notifyAboutShortcutChanged(const QModelIndex& index)
 
 void ShortcutsModel::resetToDefaultSelectedShortcuts()
 {
+    auto resolveConflicts = [this](const Shortcut& shortcut) {
+        for (int i = 0; i < m_shortcuts.size(); ++i) {
+            Shortcut& sc = m_shortcuts[i];
+
+            if (shortcut == sc) {
+                continue;
+            }
+
+            if (!areContextPrioritiesEqual(shortcut.context, sc.context)) {
+                continue;
+            }
+
+            if (shortcut.sequences == sc.sequences) {
+                sc.clear();
+                notifyAboutShortcutChanged(index(i));
+            }
+        }
+    };
+
     for (const QModelIndex& index : m_selection.indexes()) {
         Shortcut& shortcut = m_shortcuts[index.row()];
 
-        Shortcut defaultShortcut = shortcutsRegister()->defaultShortcut(shortcut.action);
+        const Shortcut& defaultShortcut = shortcutsRegister()->defaultShortcut(shortcut.action);
         if (defaultShortcut.isValid()) {
             shortcut = defaultShortcut;
         } else {
             shortcut.sequences = {};
         }
+
+        resolveConflicts(shortcut);
 
         notifyAboutShortcutChanged(index);
     }
@@ -253,13 +272,18 @@ QVariantList ShortcutsModel::shortcuts() const
     QVariantList result;
 
     for (const Shortcut& shortcut : qAsConst(m_shortcuts)) {
-        QVariantMap obj;
-        obj["title"] = actionTitle(shortcut.action);
-        obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
-        obj["context"] = QString::fromStdString(shortcut.context);
-
-        result << obj;
+        result << shortcutToObject(shortcut);
     }
 
     return result;
+}
+
+QVariant ShortcutsModel::shortcutToObject(const Shortcut& shortcut) const
+{
+    QVariantMap obj;
+    obj["title"] = actionTitle(shortcut.action);
+    obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
+    obj["context"] = QString::fromStdString(shortcut.context);
+
+    return obj;
 }

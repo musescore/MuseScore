@@ -102,6 +102,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/iappmenumodelhook.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/maintoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/maintoolbarmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen.h
     ${DOCKWINDOW_SRC}
     )
 
