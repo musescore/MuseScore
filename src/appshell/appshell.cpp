@@ -30,6 +30,9 @@
 #ifndef Q_OS_WASM
 #include <QThreadPool>
 #endif
+
+#include "view/internal/splashscreen.h"
+
 #include "view/dockwindow/docksetup.h"
 
 #include "modularity/ioc.h"
@@ -126,6 +129,11 @@ int AppShell::run(int argc, char** argv)
     commandLine.parse(QCoreApplication::arguments());
     commandLine.apply();
     framework::IApplication::RunMode runMode = muapplication()->runMode();
+
+    SplashScreen splashScreen;
+    if (runMode == framework::IApplication::RunMode::Editor) {
+        splashScreen.show();
+    }
 
     // ====================================================
     // Setup modules: onInit
@@ -228,6 +236,8 @@ int AppShell::run(int argc, char** argv)
         QQuickWindow::setDefaultAlphaBuffer(true);
 
         engine->load(url);
+
+        splashScreen.close();
     }
     }
 

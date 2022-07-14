@@ -104,5 +104,6 @@
         <file>qml/platform/win/AppSystemButtons.qml</file>
         <file>qml/platform/AppMenuBar.qml</file>
         <file>qml/platform/AppButtonBackground.qml</file>
+        <file>resources/LoadingScreen.svg</file>
     </qresource>
 </RCC>
