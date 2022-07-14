@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <string>
 
+#include "types/string.h"
+
 namespace mu::engraving {
 class GPTrack
 {
