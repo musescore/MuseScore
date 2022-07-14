@@ -50,7 +50,7 @@ const SpannerMap::SpannerRange& SpannerMap::range(int tickFrom, int tickTo) cons
 
     auto firstNotLess = std::lower_bound(cbegin(), cend(), tickFrom, [](const auto& pair, int tick) {
         int spannerFrom = pair.second->tick().ticks();
-        int spannerTo = pair.second->tick().ticks() + pair.second->ticks().ticks();
+        int spannerTo = spannerFrom + pair.second->ticks().ticks();
         return spannerFrom < tick && spannerTo < tick;
     });
 
