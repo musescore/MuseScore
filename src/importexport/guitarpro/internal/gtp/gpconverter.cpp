@@ -2,6 +2,8 @@
 
 #include <chrono>
 
+#include "translation.h"
+
 #include "gpdommodel.h"
 
 #include "libmscore/factory.h"
@@ -53,7 +55,6 @@
 #include "../importgtp.h"
 
 #include "log.h"
-#include "translation.h"
 
 using namespace mu::engraving;
 
@@ -1230,7 +1231,7 @@ void GPConverter::addTempoMap()
 
             int realTemp = realTempo(tempIt->second);
             TempoText* tt = Factory::createTempoText(segment);
-            tt->setTempo((qreal)realTemp / 60);
+            tt->setTempo((double)realTemp / 60);
             tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(realTemp));
             tt->setTrack(0);
             segment->add(tt);
@@ -1801,8 +1802,8 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elem
         EngravingItem* engItem = Factory::createItem(muType, _score->dummy());
 
         TextLineBase* newElem = dynamic_cast<TextLineBase*>(engItem);
-        if (!newElem) {
-            qFatal("wrong type of imported element");
+        IF_ASSERT_FAILED(newElem) {
+            return;
         }
 
         elem = newElem;
