@@ -196,13 +196,13 @@ private:
     bool isStandardStaff() const;
     bool isTablatureStaff() const;
     void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(const actions::ActionData& data),
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(),
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const mu::actions::ActionCode&, std::function<void()>,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const mu::actions::ActionCode&, std::function<void(const actions::ActionData& data)>,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(MoveDirection, bool), MoveDirection, bool,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
 
@@ -221,15 +221,15 @@ private:
 
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(), bool (NotationActionController::*)() const);
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     template<typename P1>
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(P1), P1, PlayMode = PlayMode::NoPlay,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     template<typename P1>
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(P1), P1, bool (NotationActionController::*)() const);
     template<typename P1, typename P2>
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(P1, P2), P1, P2, PlayMode = PlayMode::NoPlay,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
 
     async::Notification m_currentNotationNoteInputChanged;
 
