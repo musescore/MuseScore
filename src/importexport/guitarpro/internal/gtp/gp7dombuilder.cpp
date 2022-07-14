@@ -7,12 +7,12 @@
 namespace mu::engraving {
 std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNode* trackNode)
 {
-    static const std::set<QString> sUnused = {
-        "Color", "SystemsDefautLayout", "SystemsLayout", "AutoBrush",
-        "PalmMute", "AutoAccentuation", "PlayingStyle",
-        "UseOneChannelPerString", "IconId", "InstrumentSet",
-        "ForcedSound", "PlaybackState", "AudioEngineState",
-        "Automations"
+    static const std::set<String> sUnused = {
+        u"Color", u"SystemsDefautLayout", u"SystemsLayout", u"AutoBrush",
+        u"PalmMute", u"AutoAccentuation", u"PlayingStyle",
+        u"UseOneChannelPerString", u"IconId", u"InstrumentSet",
+        u"ForcedSound", u"PlaybackState", u"AudioEngineState",
+        u"Automations"
     };
 
     int trackIdx = trackNode->attribute("id").toInt();
@@ -20,21 +20,21 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
     XmlDomNode trackChildNode = trackNode->firstChild();
 
     while (!trackChildNode.isNull()) {
-        QString nodeName = trackChildNode.nodeName();
-        if (nodeName == "Name") {
+        String nodeName = trackChildNode.nodeName();
+        if (nodeName == u"Name") {
             track->setName(trackChildNode.toElement().text());
-        } else if (nodeName == "RSE") {
+        } else if (nodeName == u"RSE") {
             GPTrack::RSE rse = readTrackRSE(&trackChildNode);
             track->setRSE(rse);
-        } else if (nodeName == "MidiConnection") {
+        } else if (nodeName == u"MidiConnection") {
             int midiChannel = readMidiChannel(&trackChildNode);
             track->setMidiChannel(midiChannel);
-        } else if (nodeName == "ShortName") {
+        } else if (nodeName == u"ShortName") {
             track->setShortName(trackChildNode.toElement().text());
-        } else if (nodeName == "Sounds") {
+        } else if (nodeName == u"Sounds") {
             int programm = readMidiProgramm(&trackChildNode);
             track->setProgramm(programm);
-        } else if (nodeName == "Staves") {
+        } else if (nodeName == u"Staves") {
             auto staffNode = trackChildNode.firstChild();
             int staffCount = 0;
             while (!staffNode.isNull()) {
@@ -44,14 +44,14 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
                 staffCount++;
             }
             track->setStaffCount(staffCount);
-        } else if (nodeName == "Transpose") {
+        } else if (nodeName == u"Transpose") {
             auto octaveNode = trackChildNode.firstChildElement("Octave");
             int octave = octaveNode.toElement().text().toInt();
             auto chromaticNode = trackChildNode.firstChildElement("Chromatic");
             int chromatic = chromaticNode.toElement().text().toInt();
             int transpose = 12 * octave + chromatic;
             track->setTranspose(transpose);
-        } else if ("Lyrics" == nodeName) {
+        } else if (nodeName == u"Lyrics") {
             readLyrics(trackChildNode, track.get());
         } else if (sUnused.find(nodeName) != sUnused.end()) {
             // Ignored nodes
