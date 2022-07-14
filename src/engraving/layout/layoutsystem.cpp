@@ -673,6 +673,8 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                 b->layout();
             }
         }
+        // Must recreate the shapes because stem lengths may have been changed!
+        s->createShapes();
     }
 
     //-------------------------------------------------------------
