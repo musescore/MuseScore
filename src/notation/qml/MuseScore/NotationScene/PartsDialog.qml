@@ -37,6 +37,7 @@ StyledDialogView {
     contentHeight: 558
 
     modal: true
+    resizable: true
 
     PartListModel {
         id: partsModel
