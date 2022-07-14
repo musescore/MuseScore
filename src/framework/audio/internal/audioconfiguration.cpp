@@ -45,7 +45,7 @@ static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
-static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MuseScore_General";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
+static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MS Basic";     // "GeneralUser GS v1.471.sf2"; // "MS Basic.sf3";
 static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
     = { DEFAULT_SOUND_FONT_NAME, AudioResourceType::FluidSoundfont, "Fluid", false /*hasNativeEditor*/ };
 
