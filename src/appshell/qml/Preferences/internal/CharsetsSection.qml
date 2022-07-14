@@ -26,7 +26,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Character set used when importing binary files")
+    title: qsTrc("appshell/preferences", "Character set used when importing binary files")
 
     property var charsets: null
     property string currentGuitarProCharset: ""
@@ -36,7 +36,7 @@ BaseSection {
     signal overtureCharsetChangeRequested(string charset)
 
     ComboBoxWithTitle {
-        title: qsTrc("appshell", "Guitar Pro import character set:")
+        title: qsTrc("appshell/preferences", "Guitar Pro import character set:")
         columnWidth: root.columnWidth
 
         currentIndex: control.indexOfValue(root.currentGuitarProCharset)
@@ -52,7 +52,7 @@ BaseSection {
     }
 
     ComboBoxWithTitle {
-        title: qsTrc("appshell", "Overture import character set:")
+        title: qsTrc("appshell/preferences", "Overture import character set:")
         columnWidth: root.columnWidth
 
         currentIndex: control.indexOfValue(root.currentOvertureCharset)

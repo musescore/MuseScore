@@ -50,7 +50,7 @@ Item {
         spacing: 12
 
         ComboBoxWithTitle {
-            title: qsTrc("appshell", "Audio device:")
+            title: qsTrc("appshell/preferences", "Audio device:")
             columnWidth: root.columnWidth
 
             currentIndex: indexOfValue(apiModel.currentDeviceId)
@@ -70,7 +70,7 @@ Item {
         ComboBoxWithTitle {
             id: sampleRate
 
-            title: qsTrc("appshell", "Sample rate:")
+            title: qsTrc("appshell/preferences", "Sample rate:")
             columnWidth: root.columnWidth
 
             currentIndex: apiModel.currentSampleRateIndex

@@ -88,17 +88,17 @@ void ScorePreferencesModel::load()
     beginResetModel();
 
     m_defaultFiles = {
-        { DefaultFileType::FirstInstrumentList, qtrc("appshell", "Instrument list 1"), firstInstrumentListPath(),
+        { DefaultFileType::FirstInstrumentList, qtrc("appshell/preferences", "Instrument list 1"), firstInstrumentListPath(),
           instrumentPathFilter(), instrumentChooseTitle() },
-        { DefaultFileType::SecondInstrumentList, qtrc("appshell", "Instrument list 2"), secondInstrumentListPath(),
+        { DefaultFileType::SecondInstrumentList, qtrc("appshell/preferences", "Instrument list 2"), secondInstrumentListPath(),
           instrumentPathFilter(), instrumentChooseTitle() },
-        { DefaultFileType::FirstScoreOrderList, qtrc("appshell", "Score order list 1"), firstScoreOrderListPath(),
+        { DefaultFileType::FirstScoreOrderList, qtrc("appshell/preferences", "Score order list 1"), firstScoreOrderListPath(),
           scoreOrderPathFilter(), scoreOrderChooseTitle() },
-        { DefaultFileType::SecondScoreOrderList, qtrc("appshell", "Score order list 2"), secondScoreOrderListPath(),
+        { DefaultFileType::SecondScoreOrderList, qtrc("appshell/preferences", "Score order list 2"), secondScoreOrderListPath(),
           scoreOrderPathFilter(), scoreOrderChooseTitle() },
-        { DefaultFileType::Style, qtrc("appshell", "Style"), stylePath(),
+        { DefaultFileType::Style, qtrc("appshell/preferences", "Style"), stylePath(),
           stylePathFilter(), styleChooseTitle() },
-        { DefaultFileType::PartStyle, qtrc("appshell", "Style for part"), partStylePath(),
+        { DefaultFileType::PartStyle, qtrc("appshell/preferences", "Style for part"), partStylePath(),
           stylePathFilter(), partStyleChooseTitle() },
     };
 
@@ -229,37 +229,37 @@ QString ScorePreferencesModel::partStylePath() const
 
 QString ScorePreferencesModel::instrumentPathFilter() const
 {
-    return qtrc("appshell", "Instrument List") + " (*.xml)";
+    return qtrc("appshell/preferences", "Instrument List") + " (*.xml)";
 }
 
 QString ScorePreferencesModel::scoreOrderPathFilter() const
 {
-    return qtrc("appshell", "Score Order List") + " (*.xml)";
+    return qtrc("appshell/preferences", "Score Order List") + " (*.xml)";
 }
 
 QString ScorePreferencesModel::stylePathFilter() const
 {
-    return qtrc("appshell", "MuseScore Style File") + " (*.mss)";
+    return qtrc("appshell/preferences", "MuseScore Style File") + " (*.mss)";
 }
 
 QString ScorePreferencesModel::instrumentChooseTitle() const
 {
-    return qtrc("appshell", "Choose instrument list");
+    return qtrc("appshell/preferences", "Choose instrument list");
 }
 
 QString ScorePreferencesModel::scoreOrderChooseTitle() const
 {
-    return qtrc("appshell", "Choose score order list");
+    return qtrc("appshell/preferences", "Choose score order list");
 }
 
 QString ScorePreferencesModel::styleChooseTitle() const
 {
-    return qtrc("appshell", "Choose default style");
+    return qtrc("appshell/preferences", "Choose default style");
 }
 
 QString ScorePreferencesModel::partStyleChooseTitle() const
 {
-    return qtrc("appshell", "Choose default style for parts");
+    return qtrc("appshell/preferences", "Choose default style for parts");
 }
 
 void ScorePreferencesModel::setPath(ScorePreferencesModel::DefaultFileType fileType, const QString& path)

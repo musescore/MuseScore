@@ -396,7 +396,7 @@ DockPage {
             id: drumsetPanel
 
             objectName: pageModel.drumsetPanelName()
-            title: qsTrc("appshell", "Drumset Tools")
+            title: qsTrc("appshell", "Drumset tools")
 
             height: 64
             minimumHeight: 64

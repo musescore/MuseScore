@@ -410,7 +410,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
                 Segment* s = measure->getSegment(SegmentType::TimeSig, measure->tick());
                 StaffText* st = Factory::createStaffText(s);
                 st->setTrack(staffIdx * VOICES);
-                st->setPlainText(mu::mtrc("iex_guitarpro", "Free time"));
+                st->setPlainText(mu::mtrc("iex_guitarpro", "Free time", "time signature"));
                 s->add(st);
 
                 // if timeSig is different, it was added before, here we handle "freetime"

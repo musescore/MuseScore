@@ -35,12 +35,12 @@ BaseSection {
     signal currentInputDeviceIndexChangeRequested(int newIndex)
     signal currentOutputDeviceIndexChangeRequested(int newIndex)
 
-    title: qsTrc("appshell", "MIDI")
+    title: qsTrc("appshell/preferences", "MIDI")
 
     ComboBoxWithTitle {
         id: inputDevicesBox
 
-        title: qsTrc("appshell", "MIDI input:")
+        title: qsTrc("appshell/preferences", "MIDI input:")
         columnWidth: root.columnWidth
 
         navigation.name: "MidiInputBox"
@@ -55,7 +55,7 @@ BaseSection {
     ComboBoxWithTitle {
         id: outputDevicesBox
 
-        title: qsTrc("appshell", "MIDI output:")
+        title: qsTrc("appshell/preferences", "MIDI output:")
         columnWidth: root.columnWidth
 
         navigation.name: "MidiOutputBox"

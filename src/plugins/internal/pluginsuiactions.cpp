@@ -51,7 +51,7 @@ const mu::ui::UiActionList& PluginsUiActions::actionsList() const
         UiAction action;
         action.code = codeFromQString(plugin.codeKey);
         action.context = mu::context::UiCtxNotationOpened;
-        action.title = qtrc("plugins", "Run plugin") + " " + plugin.codeKey;
+        action.title = qtrc("plugins", "Run plugin %1").arg(plugin.codeKey);
 
         result.push_back(action);
     }

@@ -105,7 +105,7 @@ FlatButton {
                 }
 
                 StyledTabButton {
-                    text: qsTrc("appshell", "Minor")
+                    text: qsTrc("project", "Minor")
 
                     navigation.name: "MinorTab"
                     navigation.panel: bar.navigationPanel

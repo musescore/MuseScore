@@ -172,7 +172,7 @@ void StartupScenario::restoreLastSession()
     }
 
     IInteractive::Result result = interactive()->question(trc("appshell", "The previous session quit unexpectedly."),
-                                                          trc("appshell", "Restore session?"),
+                                                          trc("appshell", "Do you want to restore the session?"),
                                                           { IInteractive::Button::No, IInteractive::Button::Yes });
 
     if (result.button() == static_cast<int>(IInteractive::Button::Yes)) {

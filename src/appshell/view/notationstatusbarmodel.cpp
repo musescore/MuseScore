@@ -88,7 +88,7 @@ QVariant NotationStatusBarModel::currentWorkspaceItem()
     item->setId(QString::fromStdString(item->action().code));
 
     UiAction action;
-    action.title = qtrc("appshell", "Workspace: ") + QString::fromStdString(workspaceConfiguration()->currentWorkspaceName());
+    action.title = qtrc("workspace", "Workspace:") + " " + QString::fromStdString(workspaceConfiguration()->currentWorkspaceName());
     item->setAction(action);
 
     return QVariant::fromValue(item);
@@ -128,7 +128,7 @@ MenuItemList NotationStatusBarModel::makeAvailableViewModeList()
             return title;
         case ViewMode::LINE:
         case ViewMode::SYSTEM:
-            return qtrc("appshell", "Continuous view");
+            return qtrc("notation", "Continuous view");
         default:
             return title;
         }

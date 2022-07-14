@@ -141,8 +141,8 @@ PreferencesPage {
 
             width: parent.width
 
-            title: qsTrc("appshell", "Background")
-            wallpaperDialogTitle: qsTrc("appshell", "Choose background wallpaper")
+            title: qsTrc("appshell/preferences", "Background")
+            wallpaperDialogTitle: qsTrc("appshell/preferences", "Choose background wallpaper")
             useColor: appearanceModel.backgroundUseColor
             color: appearanceModel.backgroundColor
             wallpaperPath: appearanceModel.backgroundWallpaperPath
@@ -181,8 +181,8 @@ PreferencesPage {
             enabled: !appearanceModel.scoreInversionEnabled
             opacityOverride: paperSettings.enabled ? 1.0 : 0.6
 
-            title: qsTrc("appshell", "Paper")
-            wallpaperDialogTitle: qsTrc("appshell", "Choose Notepaper")
+            title: qsTrc("appshell/preferences", "Paper")
+            wallpaperDialogTitle: qsTrc("appshell/preferences", "Choose notepaper")
             useColor: appearanceModel.foregroundUseColor
             color: appearanceModel.foregroundColor
             wallpaperPath: appearanceModel.foregroundWallpaperPath
