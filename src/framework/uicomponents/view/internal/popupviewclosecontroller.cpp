@@ -53,6 +53,22 @@ void PopupViewCloseController::setActive(bool active)
     doUpdateEventFiletrs();
 }
 
+bool PopupViewCloseController::isDialog() const
+{
+    return m_isDialog;
+}
+
+void PopupViewCloseController::setIsDialog(bool isDialog)
+{
+    if (m_isDialog == isDialog) {
+        return;
+    }
+
+    m_isDialog = isDialog;
+
+    doUpdateEventFiletrs();
+}
+
 QQuickItem* PopupViewCloseController::parentItem() const
 {
     return m_parentItem;
@@ -112,6 +128,12 @@ bool PopupViewCloseController::eventFilter(QObject* watched, QEvent* event)
     } else {
         if (QEvent::FocusOut == event->type() && watched == popupWindow()) {
             doFocusOut();
+        }
+    }
+
+    if (QEvent::ApplicationStateChange == event->type() && !m_isDialog) {
+        if (qApp->applicationState() != Qt::ApplicationActive) {
+            notifyAboutClose();
         }
     }
 

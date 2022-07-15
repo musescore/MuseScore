@@ -199,6 +199,7 @@ void PopupView::open()
     m_closeController->setWindow(window());
     m_closeController->setIsCloseOnPressOutsideParent(m_closePolicy == CloseOnPressOutsideParent);
     m_closeController->setActive(true);
+    m_closeController->setIsDialog(isDialog());
 
     qApp->installEventFilter(this);
 

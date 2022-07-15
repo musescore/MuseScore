@@ -47,6 +47,9 @@ public:
     bool active() const;
     void setActive(bool active);
 
+    bool isDialog() const;
+    void setIsDialog(bool isDialog);
+
     QQuickItem* parentItem() const;
     void setParentItem(QQuickItem* parentItem);
 
@@ -75,6 +78,7 @@ private:
     void notifyAboutClose();
 
     bool m_active = false;
+    bool m_isDialog = false;
 
     QQuickItem* m_parentItem = nullptr;
     QWindow* m_popupWindow = nullptr;
