@@ -201,7 +201,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenu(qtrc("appshell", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
         makeMenu(qtrc("appshell", "W&orkspaces"), makeWorkspacesItems(), "menu-workspaces"),
         makeSeparator(),
-        makeMenu(qtrc("appshell", "Show"), makeShowItems(), "menu-show"),
+        makeMenu(qtrc("appshell", "&Show"), makeShowItems(), "menu-show"),
         makeSeparator(),
         makeMenuItem("dock-restore-default-layout")
     };
@@ -212,7 +212,7 @@ MenuItem* AppMenuModel::makeViewMenu()
 MenuItem* AppMenuModel::makeAddMenu()
 {
     MenuItemList addItems {
-        makeMenu(qtrc("appshell", "N&otes"), makeNotesItems(), "menu-notes"),
+        makeMenu(qtrc("appshell", "&Notes"), makeNotesItems(), "menu-notes"),
         makeMenu(qtrc("appshell", "&Intervals"), makeIntervalsItems(), "menu-intervals"),
         makeMenu(qtrc("appshell", "T&uplets"), makeTupletsItems(), "menu-tuplets"),
         makeSeparator(),
@@ -238,7 +238,7 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeMenuItem("page-settings"),
         makeSeparator(),
         makeMenuItem("add-remove-breaks"),
-        makeMenu(qtrc("appshell", "&Stretch"), stretchItems, "menu-stretch"),
+        makeMenu(qtrc("appshell", "Str&etch"), stretchItems, "menu-stretch"),
         makeSeparator(),
         makeMenuItem("reset-text-style-overrides"),
         makeMenuItem("reset-beammode"),
@@ -489,11 +489,11 @@ MenuItemList AppMenuModel::makeTupletsItems()
 MenuItemList AppMenuModel::makeMeasuresItems()
 {
     MenuItemList items {
-        makeMenuItem("insert-measures-after-selection", qtrc("notation", "Insert after selection…")),
-        makeMenuItem("insert-measures", qtrc("notation", "Insert before selection…")),
+        makeMenuItem("insert-measures-after-selection", qtrc("notation", "Insert &after selection…")),
+        makeMenuItem("insert-measures", qtrc("notation", "Insert &before selection…")),
         makeSeparator(),
-        makeMenuItem("insert-measures-at-start-of-score", qtrc("notation", "Insert at start of score…")),
-        makeMenuItem("append-measures", qtrc("notation", "Insert at end of score…"))
+        makeMenuItem("insert-measures-at-start-of-score", qtrc("notation", "Insert at &start of score…")),
+        makeMenuItem("append-measures", qtrc("notation", "Insert at &end of score…"))
     };
 
     return items;
