@@ -46,7 +46,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("fullscreen",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Enter full screen"),
+             QT_TRANSLATE_NOOP("action", "&Full screen"),
              QT_TRANSLATE_NOOP("action", "Enter full screen"),
              Checkable::Yes
              ),
@@ -64,45 +64,45 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("online-handbook",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "&Online handbook")
+             QT_TRANSLATE_NOOP("action", "Online &handbook")
              ),
     UiAction("ask-help",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Ask for help")
+             QT_TRANSLATE_NOOP("action", "As&k for help")
              ),
     UiAction("report-bug",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Report a bug"),
+             QT_TRANSLATE_NOOP("action", "&Report a bug"),
              QT_TRANSLATE_NOOP("action", "Report a bug")
              ),
     UiAction("leave-feedback",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Feedback"),
+             QT_TRANSLATE_NOOP("action", "F&eedback"),
              QT_TRANSLATE_NOOP("action", "Leave feedback")
              ),
     UiAction("revert-factory",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Revert to factory settings"),
+             QT_TRANSLATE_NOOP("action", "Revert to &factory settings"),
              QT_TRANSLATE_NOOP("action", "Revert to factory settings")
              ),
 
     // Docking
     UiAction("dock-restore-default-layout",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Restore the default layout"),
+             QT_TRANSLATE_NOOP("action", "Restore the &default layout"),
              QT_TRANSLATE_NOOP("action", "Restore the default layout")
              ),
 
     // Toolbars
     UiAction("toggle-transport",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Playback controls"),
+             QT_TRANSLATE_NOOP("action", "&Playback controls"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Playback controls' toolbar"),
              Checkable::Yes
              ),
     UiAction("toggle-noteinput",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Note input"),
+             QT_TRANSLATE_NOOP("action", "&Note input"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Note input' toolbar"),
              Checkable::Yes
              ),
@@ -110,25 +110,25 @@ const UiActionList ApplicationUiActions::m_actions = {
     // Vertical panels
     UiAction("toggle-palettes",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Palettes"),
+             QT_TRANSLATE_NOOP("action", "&Palettes"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Palettes'"),
              Checkable::Yes
              ),
     UiAction("toggle-instruments",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Instruments"),
+             QT_TRANSLATE_NOOP("action", "Instr&uments"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Instruments'"),
              Checkable::Yes
              ),
     UiAction("inspector",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Properties"),
+             QT_TRANSLATE_NOOP("action", "Propert&ies"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Properties'"),
              Checkable::Yes
              ),
     UiAction("toggle-selection-filter",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Selection filter"),
+             QT_TRANSLATE_NOOP("action", "Se&lection filter"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Selection filter'"),
              Checkable::Yes
              ),
@@ -136,7 +136,7 @@ const UiActionList ApplicationUiActions::m_actions = {
     // Navigator
     UiAction("toggle-navigator",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Navigator"),
+             QT_TRANSLATE_NOOP("action", "&Navigator"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'"),
              Checkable::Yes
              ),
@@ -144,7 +144,7 @@ const UiActionList ApplicationUiActions::m_actions = {
     // Horizontal panels
     UiAction("toggle-timeline",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Timeline"),
+             QT_TRANSLATE_NOOP("action", "Tim&eline"),
              QT_TRANSLATE_NOOP("action", "Toggle timeline"),
              Checkable::Yes
              ),
@@ -157,7 +157,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("toggle-piano-keyboard",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Piano keyboard"),
+             QT_TRANSLATE_NOOP("action", "Piano &keyboard"),
              QT_TRANSLATE_NOOP("action", "Toggle piano keyboard"),
              Checkable::Yes
              ),
@@ -171,7 +171,7 @@ const UiActionList ApplicationUiActions::m_actions = {
     // Status bar
     UiAction("toggle-statusbar",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Status bar"),
+             QT_TRANSLATE_NOOP("action", "&Status bar"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Status bar'"),
              Checkable::Yes
              ),
@@ -183,7 +183,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("check-update",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Check for update"),
+             QT_TRANSLATE_NOOP("action", "Check for &update"),
              QT_TRANSLATE_NOOP("action", "Check for update")
              )
 };

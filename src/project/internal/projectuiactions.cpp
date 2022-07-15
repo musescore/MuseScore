@@ -27,50 +27,50 @@ using namespace mu::ui;
 const UiActionList ProjectUiActions::m_actions = {
     UiAction("file-open",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Open…"),
+             QT_TRANSLATE_NOOP("action", "&Open…"),
              QT_TRANSLATE_NOOP("action", "Load score from file"),
              IconCode::Code::OPEN_FILE
              ),
     UiAction("file-new",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "New…"),
+             QT_TRANSLATE_NOOP("action", "&New…"),
              QT_TRANSLATE_NOOP("action", "Create new score"),
              IconCode::Code::NEW_FILE
              ),
     UiAction("file-close",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Close"),
+             QT_TRANSLATE_NOOP("action", "&Close"),
              QT_TRANSLATE_NOOP("action", "Close current score")
              ),
     UiAction("file-save",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Save"),
+             QT_TRANSLATE_NOOP("action", "&Save"),
              QT_TRANSLATE_NOOP("action", "Save score to file"),
              IconCode::Code::SAVE
              ),
     UiAction("file-save-as",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Save as…"),
+             QT_TRANSLATE_NOOP("action", "Save &as…"),
              QT_TRANSLATE_NOOP("action", "Save score under a new file name")
              ),
     UiAction("file-save-a-copy",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Save a copy…"),
+             QT_TRANSLATE_NOOP("action", "Save a cop&y…"),
              QT_TRANSLATE_NOOP("action", "Save a copy of the score in addition to the current file")
              ),
     UiAction("file-save-selection",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Save selection…"),
+             QT_TRANSLATE_NOOP("action", "Save se&lection…"),
              QT_TRANSLATE_NOOP("action", "Save current selection as new score")
              ),
     UiAction("file-save-to-cloud",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Save to cloud…"),
+             QT_TRANSLATE_NOOP("action", "Save to clo&ud…"),
              IconCode::Code::CLOUD_FILE
              ),
     UiAction("file-publish",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Publish to MuseScore.com…"),
+             QT_TRANSLATE_NOOP("action", "Pu&blish to MuseScore.com…"),
              IconCode::Code::CLOUD_FILE
              ),
     UiAction("file-export",
@@ -81,13 +81,13 @@ const UiActionList ProjectUiActions::m_actions = {
              ),
     UiAction("file-import-pdf",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Import PDF…"),
+             QT_TRANSLATE_NOOP("action", "Import P&DF…"),
              QT_TRANSLATE_NOOP("action", "Import a PDF file with an experimental service on musescore.com"),
              IconCode::Code::IMPORT
              ),
     UiAction("project-properties",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Project properties…"),
+             QT_TRANSLATE_NOOP("action", "Project propert&ies…"),
              QT_TRANSLATE_NOOP("action", "Edit project properties")
              ),
     UiAction("print",
@@ -98,7 +98,7 @@ const UiActionList ProjectUiActions::m_actions = {
              ),
     UiAction("clear-recent",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Clear recent files")
+             QT_TRANSLATE_NOOP("action", "&Clear recent files")
              )
 };
 
