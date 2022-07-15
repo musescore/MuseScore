@@ -31,7 +31,7 @@ MacOSPopupViewCloseController::MacOSPopupViewCloseController(QObject* parent)
 {
 }
 
-void MacOSPopupViewCloseController::doUpdateEventFiletrs()
+void MacOSPopupViewCloseController::doUpdateEventFilters()
 {
     if (active()) {
         qApp->installNativeEventFilter(this);
@@ -39,7 +39,7 @@ void MacOSPopupViewCloseController::doUpdateEventFiletrs()
         qApp->removeNativeEventFilter(this);
     }
 
-    PopupViewCloseController::doUpdateEventFiletrs();
+    PopupViewCloseController::doUpdateEventFilters();
 }
 
 bool MacOSPopupViewCloseController::nativeEventFilter(const QByteArray& eventType, void* message, long*)
