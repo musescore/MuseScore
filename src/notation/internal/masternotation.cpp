@@ -138,7 +138,6 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
         ks.setMode(KeyMode::NONE);
     } else {
         ks.setKey(scoreOptions.key);
-        ks.setMode(scoreOptions.keyMode);
     }
 
     for (int i = 0; i < measures; ++i) {
