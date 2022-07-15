@@ -871,7 +871,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
 {
     TRACEFUNC;
 
-    Staff* destinationStaff = staffModifiable(destinationStaffId);
+    const Staff* destinationStaff = staffModifiable(destinationStaffId);
     if (!destinationStaff) {
         return;
     }
@@ -879,6 +879,12 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     std::vector<Staff*> staves = this->staves(sourceStavesIds);
     if (staves.empty()) {
         return;
+    }
+
+    for (const Staff* staff : staves) {
+        IF_ASSERT_FAILED_X(staff->part() == destinationStaff->part(), "All staves must have the same part!") {
+            return;
+        }
     }
 
     endInteractionWithScore();

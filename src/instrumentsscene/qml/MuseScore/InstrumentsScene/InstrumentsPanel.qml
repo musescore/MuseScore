@@ -203,10 +203,8 @@ Item {
                     Loader {
                         id: treeItemDelegateLoader
 
-                        property var delegateType: model ? model.itemRole.type : InstrumentsTreeItemType.UNDEFINED
-                        property bool isExpandable: model ? model.itemRole.isExpandable : false
-                        property bool isEditable: model ? model.itemRole.isEditable : false
-                        property bool isSelectable: model ? model.itemRole.isSelectable : false
+                        property var item: model ? model.itemRole : null
+                        property int delegateType: model ? model.itemRole.type : InstrumentsTreeItemType.UNDEFINED
                         property bool isSelected: model ? model.itemRole.isSelected : false
 
                         height: parent.height
@@ -221,11 +219,7 @@ Item {
                             InstrumentsTreeItemDelegate {
                                 treeView: instrumentsTreeView
 
-                                type: treeItemDelegateLoader.delegateType
-                                isDragAvailable: treeItemDelegateLoader.isSelectable
-                                isSelected: treeItemDelegateLoader.isSelected
-                                isExpandable: treeItemDelegateLoader.isExpandable
-                                isEditable: treeItemDelegateLoader.isEditable
+                                item: treeItemDelegateLoader.item
 
                                 sideMargin: contentColumn.sideMargin
                                 popupAnchorItem: root
@@ -302,7 +296,7 @@ Item {
                     }
 
                     onEntered: function(drag) {
-                        if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.type)) {
+                        if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.item)) {
                             return
                         }
 
