@@ -56,7 +56,20 @@ public:
     async::Channel<AudioInputParams> inputParamsChanged() const override;
 
 private:
+    struct SynthCtx
+    {
+        bool isActive = false;
+        msecs_t playbackPosition = -1;
+
+        bool isValid() const
+        {
+            return playbackPosition >= 0;
+        }
+    };
+
     void setupSource();
+    SynthCtx currentSynthCtx() const;
+    void restoreSynthCtx(SynthCtx&& ctx);
 
     TrackId m_trackId = -1;
     mpe::PlaybackData m_playbackData;

@@ -138,6 +138,8 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
         return;
     }
 
+    SynthCtx ctx = currentSynthCtx();
+
     m_synth = synthResolver()->resolveSynth(m_trackId, requiredParams, m_playbackData.setupData);
 
     if (!m_synth) {
@@ -150,6 +152,10 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
 
     setupSource();
 
+    if (ctx.isValid()) {
+        restoreSynthCtx(std::move(ctx));
+    }
+
     m_params = m_synth->params();
     m_paramsChanges.send(m_params);
 }
@@ -157,6 +163,21 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
 async::Channel<AudioInputParams> EventAudioSource::inputParamsChanged() const
 {
     return m_paramsChanges;
+}
+
+EventAudioSource::SynthCtx EventAudioSource::currentSynthCtx() const
+{
+    if (!m_synth) {
+        return SynthCtx();
+    }
+
+    return { m_synth->isActive(), m_synth->playbackPosition() };
+}
+
+void EventAudioSource::restoreSynthCtx(SynthCtx &&ctx)
+{
+    m_synth->setPlaybackPosition(ctx.playbackPosition);
+    m_synth->setIsActive(ctx.isActive);
 }
 
 void EventAudioSource::setupSource()
