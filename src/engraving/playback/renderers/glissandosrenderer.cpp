@@ -54,18 +54,23 @@ void GlissandosRenderer::doRender(const EngravingItem* item, const mpe::Articula
 void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result)
 {
     const mpe::ArticulationAppliedData& articulationData = context.commonArticulations.at(ArticulationType::DiscreteGlissando);
-    int stepsCount = pitchStepsCount(articulationData.meta.overallPitchChangesRange);
-    float durationStep = context.nominalDuration / static_cast<float>(stepsCount);
+    size_t stepsCount = pitchStepsCount(articulationData.meta.overallPitchChangesRange);
 
-    for (int i = 0; i < stepsCount; ++i) {
+    bool downwards = articulationData.meta.overallPitchChangesRange < 0;
+    int factor = downwards ? -1 : 1;
+    float durationStep = context.nominalDuration / static_cast<float>(stepsCount) * factor;
+
+    for (size_t i = 0; i < stepsCount; ++i) {
         if (!isNotePlayable(note)) {
             continue;
         }
 
+        int step = static_cast<int>(i) * factor;
+
         NominalNoteCtx noteCtx(note, context);
         noteCtx.duration = durationStep;
-        noteCtx.timestamp += i * durationStep;
-        noteCtx.pitchLevel += i * mpe::PITCH_LEVEL_STEP;
+        noteCtx.timestamp += step * durationStep;
+        noteCtx.pitchLevel += step * mpe::PITCH_LEVEL_STEP;
 
         updateArticulationBoundaries(ArticulationType::DiscreteGlissando,
                                      noteCtx.timestamp,
