@@ -34,6 +34,21 @@
 using namespace mu::vst;
 using namespace Steinberg;
 
+::Steinberg::uint32 PLUGIN_API AbstractVstEditorView::addRef ()
+{
+    return ::Steinberg::FUnknownPrivate::atomicAdd (__funknownRefCount, 1);
+}
+::Steinberg::uint32 PLUGIN_API AbstractVstEditorView::release ()
+{
+    if (::Steinberg::FUnknownPrivate::atomicAdd (__funknownRefCount, -1) == 0)
+    {
+        return 0;
+    }
+    return __funknownRefCount;
+}
+
+IMPLEMENT_QUERYINTERFACE (AbstractVstEditorView, IPlugFrame, IPlugFrame::iid)
+
 AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
     : TopLevelDialog(parent)
 {
@@ -44,6 +59,7 @@ AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
 AbstractVstEditorView::~AbstractVstEditorView()
 {
     if (m_view) {
+        m_view->setFrame(nullptr);
         m_view->removed();
     }
 

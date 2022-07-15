@@ -37,6 +37,8 @@ class AbstractVstEditorView : public uicomponents::TopLevelDialog, public Steinb
 {
     Q_OBJECT
 
+    DECLARE_FUNKNOWN_METHODS
+
     Q_PROPERTY(int trackId READ trackId WRITE setTrackId NOTIFY trackIdChanged)
     Q_PROPERTY(QString resourceId READ resourceId WRITE setResourceId NOTIFY resourceIdChanged)
 
