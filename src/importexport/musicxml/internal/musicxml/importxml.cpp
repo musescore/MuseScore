@@ -118,7 +118,7 @@ static int musicXMLValidationErrorDialog(QString text, QString detailedText)
     QMessageBox errorDialog;
     errorDialog.setIcon(QMessageBox::Question);
     errorDialog.setText(text);
-    errorDialog.setInformativeText(qtrc("musicxml", "Do you want to try to load this file anyway?"));
+    errorDialog.setInformativeText(qtrc("iex_musicxml", "Do you want to try to load this file anyway?"));
     errorDialog.setDetailedText(detailedText);
     errorDialog.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     errorDialog.setDefaultButton(QMessageBox::No);
@@ -207,7 +207,7 @@ static Score::FileError doValidate(const QString& name, QIODevice* dev)
 
     if (!valid) {
         LOGD("importMusicXml() file '%s' is not a valid MusicXML file", qPrintable(name));
-        QString strErr = qtrc("musicxml", "File '%1' is not a valid MusicXML file").arg(name);
+        QString strErr = qtrc("iex_musicxml", "File '%1' is not a valid MusicXML file.").arg(name);
         if (MScore::noGui) {
             return Score::FileError::FILE_NO_ERROR;         // might as well try anyhow in converter mode
         }
