@@ -45,7 +45,7 @@ ColumnLayout {
 
             propertyNameWidth: root.propertyNameWidth
             index: 0
-            propertyName: qsTrc("project", "File path:")
+            propertyName: qsTrc("project/properties", "File path:")
             propertyValue: projectPropertiesModel.filePath
             isFileInfoPanelProperty: true
             valueFillWidth: true
@@ -80,7 +80,7 @@ ColumnLayout {
         PropertyItem {
             propertyNameWidth: root.propertyNameWidth
             index: 2
-            propertyName: qsTrc("project", "MuseScore version:")
+            propertyName: qsTrc("project/properties", "MuseScore version:")
             propertyValue: projectPropertiesModel.version
             isFileInfoPanelProperty: true
 
@@ -89,7 +89,7 @@ ColumnLayout {
 
         PropertyItem {
             index: 3
-            propertyName: qsTrc("project", "Revision:")
+            propertyName: qsTrc("project/properties", "Revision:")
             propertyValue: projectPropertiesModel.revision
             isFileInfoPanelProperty: true
 
@@ -103,7 +103,7 @@ ColumnLayout {
             id: apiLevelProperty
 
             index: 4
-            propertyName: qsTrc("project", "API-Level:")
+            propertyName: qsTrc("project/properties", "API-Level:")
             propertyValue: projectPropertiesModel.apiLevel
             isFileInfoPanelProperty: true
 

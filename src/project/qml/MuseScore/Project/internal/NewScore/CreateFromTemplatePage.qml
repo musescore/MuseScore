@@ -64,7 +64,7 @@ Item {
             navigationPanel.name: "Category"
             navigationPanel.order: 2
 
-            listTitle: qsTrc("project", "Category")
+            listTitle: qsTrc("project/newscore", "Category")
             model: model.categoriesTitles
             currentIndex: model.currentCategoryIndex
             searchEnabled: false
@@ -91,7 +91,7 @@ Item {
             navigationPanel.name: "Template"
             navigationPanel.order: 3
 
-            listTitle: qsTrc("project", "Template")
+            listTitle: qsTrc("project/newscore", "Template")
             model: model.templatesTitles
             currentIndex: model.currentTemplateIndex
 
@@ -143,7 +143,7 @@ Item {
                 navigation.name: "ZOOM_IN"
                 navigation.panel: navZoomPanel
                 navigation.row: 1
-                navigation.accessible.name: qsTrc("project", "Zoom in")
+                navigation.accessible.name: qsTrc("project/newscore", "Zoom in")
 
                 onClicked: {
                     templatePreview.zoomIn()
@@ -156,7 +156,7 @@ Item {
                 navigation.name: "ZOOM_OUT"
                 navigation.panel: navZoomPanel
                 navigation.row: 2
-                navigation.accessible.name: qsTrc("project", "Zoom out")
+                navigation.accessible.name: qsTrc("project/newscore", "Zoom out")
 
                 onClicked: {
                     templatePreview.zoomOut()

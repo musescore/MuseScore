@@ -43,57 +43,57 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
 
     ExportTypeList musicXmlTypes {
         ExportType::makeWithSuffixes({ "mxl" },
-                                     qtrc("project", "Compressed") + " (*.mxl)",
-                                     qtrc("project", "Compressed MusicXML Files"),
+                                     qtrc("project/export", "Compressed") + " (*.mxl)",
+                                     qtrc("project/export", "Compressed MusicXML files"),
                                      "MusicXmlSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "musicxml" },
-                                     qtrc("project", "Uncompressed") + " (*.musicxml)",
-                                     qtrc("project", "Uncompressed MusicXML Files"),
+                                     qtrc("project/export", "Uncompressed") + " (*.musicxml)",
+                                     qtrc("project/export", "Uncompressed MusicXML files"),
                                      "MusicXmlSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "xml" },
-                                     qtrc("project", "Uncompressed (outdated)") + " (*.xml)",
-                                     qtrc("project", "Uncompressed MusicXML Files"),
+                                     qtrc("project/export", "Uncompressed (outdated)") + " (*.xml)",
+                                     qtrc("project/export", "Uncompressed MusicXML files"),
                                      "MusicXmlSettingsPage.qml"),
     };
 
     m_exportTypeList = {
         ExportType::makeWithSuffixes({ "pdf" },
-                                     qtrc("project", "PDF File"),
-                                     qtrc("project", "PDF Files"),
+                                     qtrc("project/export", "PDF file"),
+                                     qtrc("project/export", "PDF files"),
                                      "PdfSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "png" },
-                                     qtrc("project", "PNG Images"),
-                                     qtrc("project", "PNG Images"),
+                                     qtrc("project/export", "PNG images"),
+                                     qtrc("project/export", "PNG images"),
                                      "PngSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "svg" },
-                                     qtrc("project", "SVG Images"),
-                                     qtrc("project", "SVG Images"),
+                                     qtrc("project/export", "SVG images"),
+                                     qtrc("project/export", "SVG images"),
                                      "SvgSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "mp3" },
-                                     qtrc("project", "MP3 Audio"),
-                                     qtrc("project", "MP3 Audio Files"),
+                                     qtrc("project/export", "MP3 audio"),
+                                     qtrc("project/export", "MP3 audio files"),
                                      "Mp3SettingsPage.qml"),
         ExportType::makeWithSuffixes({ "wav" },
-                                     qtrc("project", "WAV Audio"),
-                                     qtrc("project", "WAV Audio Files"),
+                                     qtrc("project/export", "WAV audio"),
+                                     qtrc("project/export", "WAV audio files"),
                                      "AudioSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "ogg" },
-                                     qtrc("project", "OGG Audio"),
-                                     qtrc("project", "OGG Audio Files"),
+                                     qtrc("project/export", "OGG audio"),
+                                     qtrc("project/export", "OGG audio files"),
                                      "AudioSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "flac" },
-                                     qtrc("project", "FLAC Audio"),
-                                     qtrc("project", "FLAC Audio Files"),
+                                     qtrc("project/export", "FLAC audio"),
+                                     qtrc("project/export", "FLAC audio files"),
                                      "AudioSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "mid", "midi", "kar" },
-                                     qtrc("project", "MIDI File"),
-                                     qtrc("project", "MIDI Files"),
+                                     qtrc("project/export", "MIDI file"),
+                                     qtrc("project/export", "MIDI files"),
                                      "MidiSettingsPage.qml"),
         ExportType::makeWithSubtypes(musicXmlTypes,
-                                     qtrc("project", "MusicXML")),
+                                     qtrc("project/export", "MusicXML")),
         ExportType::makeWithSuffixes({ "brf" },
-                                     qtrc("project", "Braille"),
-                                     qtrc("project", "Braille files"))
+                                     qtrc("project/export", "Braille"),
+                                     qtrc("project/export", "Braille files"))
     };
 
     m_selectedExportType = m_exportTypeList.front();
@@ -266,9 +266,9 @@ void ExportDialogModel::selectExportTypeById(const QString& id)
 QVariantList ExportDialogModel::availableUnitTypes() const
 {
     QMap<UnitType, QString> unitTypeNames {
-        { UnitType::PER_PAGE, qtrc("project", "Each page to a separate file") },
-        { UnitType::PER_PART, qtrc("project", "Each part to a separate file") },
-        { UnitType::MULTI_PART, qtrc("project", "All parts combined in one file") },
+        { UnitType::PER_PAGE, qtrc("project/export", "Each page to a separate file") },
+        { UnitType::PER_PART, qtrc("project/export", "Each part to a separate file") },
+        { UnitType::MULTI_PART, qtrc("project/export", "All parts combined in one file") },
     };
 
     QVariantList result;
@@ -455,10 +455,14 @@ void ExportDialogModel::setMidiExportRpns(bool exportRpns)
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const
 {
     QMap<MusicXmlLayoutType, QString> musicXmlLayoutTypeNames {
-        { MusicXmlLayoutType::AllLayout, qtrc("project", "All layout") },
-        { MusicXmlLayoutType::AllBreaks, qtrc("project", "System and page breaks") },
-        { MusicXmlLayoutType::ManualBreaks, qtrc("project", "Manually added system and page breaks only") },
-        { MusicXmlLayoutType::None, qtrc("project", "No system or page breaks") },
+        //: Specifies to which extent layout customizations should be exported to MusicXML.
+        { MusicXmlLayoutType::AllLayout, qtrc("project/export", "All layout") },
+        //: Specifies to which extent layout customizations should be exported to MusicXML.
+        { MusicXmlLayoutType::AllBreaks, qtrc("project/export", "System and page breaks") },
+        //: Specifies to which extent layout customizations should be exported to MusicXML.
+        { MusicXmlLayoutType::ManualBreaks, qtrc("project/export", "Manually added system and page breaks only") },
+        //: Specifies to which extent layout customizations should be exported to MusicXML.
+        { MusicXmlLayoutType::None, qtrc("project/export", "No system or page breaks") },
     };
 
     QVariantList result;

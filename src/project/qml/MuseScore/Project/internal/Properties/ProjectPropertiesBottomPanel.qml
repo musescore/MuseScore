@@ -43,7 +43,7 @@ RowLayout {
     signal hide()
 
     FlatButton {
-        text: qsTrc("project", "New property")
+        text: qsTrc("project/properties", "New property")
 
         navigation.name: "NewProperty"
         navigation.panel: root.navigationPanel

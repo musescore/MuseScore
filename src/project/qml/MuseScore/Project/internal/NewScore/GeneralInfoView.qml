@@ -45,7 +45,7 @@ Column {
         name: "NavPanel"
         direction: NavigationPanel.Horizontal
         enabled: root.visible
-        accessible.name: qsTrc("project", "Score general info")
+        accessible.name: qsTrc("project/newscore", "General score info")
     }
 
     Row {
@@ -67,7 +67,7 @@ Column {
 
             title: qsTrc("project", "Title")
 
-            info: qsTrc("project", "Untitled Score")
+            info: qsTrc("project", "Untitled score")
 
             navigation.panel: root.navigationPanel
             navigation.column: 0
@@ -133,6 +133,7 @@ Column {
             anchors.bottom: parent.bottom
             width: parent.childWidth
 
+            //: The caption of a field to specify copyright information
             title: qsTrc("project", "Copyright")
 
             navigation.panel: root.navigationPanel

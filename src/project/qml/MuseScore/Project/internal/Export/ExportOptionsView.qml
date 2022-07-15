@@ -45,7 +45,7 @@ Column {
     ExportOptionItem {
         id: typeLabel
         width: parent.width
-        text: qsTrc("project", "Format:")
+        text: qsTrc("project/export", "Format:")
 
         StyledDropdown {
             id: typeDropdown
@@ -88,7 +88,7 @@ Column {
         id: subtypeLabel
         width: parent.width
         visible: subtypeComboBox.count > 0
-        text: qsTrc("project", "File type:")
+        text: qsTrc("project/export", "File type:")
 
         StyledDropdown {
             id: subtypeComboBox
@@ -172,7 +172,7 @@ Column {
 
     CheckBox {
         width: parent.width
-        text: qsTrc("project", "Open destination folder on export")
+        text: qsTrc("project/export", "Open destination folder on export")
 
         navigation.name: "OpenDestinationFolderOnExportCheckbox"
         navigation.panel: navPanel

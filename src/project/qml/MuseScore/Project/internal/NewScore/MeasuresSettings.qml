@@ -46,15 +46,15 @@ FlatButton {
 
         property string pickupMessage: {
             if (withPickupMeasure.checked) {
-                return qsTrc("project", "pickup:") + " " +
+                return qsTrc("project/newscore", "pickup:") + " " +
                         model.pickupTimeSignature.numerator + "/" + model.pickupTimeSignature.denominator
             }
 
-            return qsTrc("project", "no pickup")
+            return qsTrc("project/newscore", "no pickup")
         }
 
         font: ui.theme.largeBodyFont
-        text:  qsTrc("project", "%n measure(s),", "", model.measureCount) + "\n" + pickupMessage
+        text: qsTrc("project/newscore", "%n measure(s),", "", model.measureCount) + "\n" + pickupMessage
     }
 
     onClicked: {
@@ -97,7 +97,7 @@ FlatButton {
 
                 checked: root.model.withPickupMeasure
 
-                text: qsTrc("project", "Create pickup measure")
+                text: qsTrc("project/newscore", "Create pickup measure")
 
                 navigation.name: "WithPickupMeasure"
                 navigation.panel: content.navigationPanel
@@ -142,7 +142,7 @@ FlatButton {
                 Layout.rightMargin: 32
 
                 horizontalAlignment: Text.AlignLeft
-                text: qsTrc("project", "Initial number of measures")
+                text: qsTrc("project/newscore", "Initial number of measures")
             }
 
             IncrementalPropertyControl {
@@ -179,7 +179,7 @@ FlatButton {
                 Layout.preferredWidth: 246
 
                 horizontalAlignment: Text.AlignLeft
-                text: qsTrc("project", "Hint: You can also add & delete measures after you have created your score")
+                text: qsTrc("project/newscore", "Hint: You can also add & delete measures after you have created your score")
                 wrapMode: Text.WordWrap
                 maximumLineCount: 2
             }
