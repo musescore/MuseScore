@@ -25,7 +25,7 @@
 
 #include <list>
 #include "types/string.h"
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
 class BspTreeVisitor;

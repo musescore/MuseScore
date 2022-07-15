@@ -126,6 +126,7 @@ endif (USE_SYSTEM_FREETYPE)
 set(LINK_LIB
     ${QT_LIBRARIES}
     global
+    draw
     ui
     uicomponents
     fonts

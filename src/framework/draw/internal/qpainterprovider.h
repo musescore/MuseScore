@@ -19,29 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_BUFFEREDPAINTPROVIDER_H
-#define MU_DRAW_BUFFEREDPAINTPROVIDER_H
-
-#include <vector>
-#include <stack>
+#ifndef MU_DRAW_QPAINTERPROVIDER_H
+#define MU_DRAW_QPAINTERPROVIDER_H
 
 #include "ipaintprovider.h"
-#include "buffereddrawtypes.h"
-#include "pen.h"
-#include "brush.h"
+
+class QPainter;
+class QImage;
 
 namespace mu::draw {
 class DrawObjectsLogger;
-class BufferedPaintProvider : public IPaintProvider
+class QPainterProvider : public IPaintProvider
 {
 public:
-    BufferedPaintProvider();
-    ~BufferedPaintProvider();
+    QPainterProvider(QPainter* painter, bool ownsPainter = false);
+    ~QPainterProvider();
 
-    bool isActive() const override;
+    static IPaintProviderPtr make(QPaintDevice* dp);
+    static IPaintProviderPtr make(QPainter* qp, bool ownsPainter = false);
+
+    QPainter* qpainter() const;
+
     void beginTarget(const std::string& name) override;
     void beforeEndTargetHook(Painter* painter) override;
     bool endTarget(bool endDraw = false) override;
+    bool isActive() const override;
 
     void beginObject(const std::string& name, const PointF& pagePos) override;
     void endObject() override;
@@ -75,35 +77,27 @@ public:
 
     void drawSymbol(const PointF& point, char32_t ucs4Code) override;
 
-    void drawPixmap(const PointF& p, const Pixmap& pm) override;
+    void drawPixmap(const PointF& point, const Pixmap& pm) override;
     void drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset = PointF()) override;
 
-#ifndef NO_QT_SUPPORT
     void drawPixmap(const PointF& point, const QPixmap& pm) override;
     void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF()) override;
-#endif
 
     void setClipRect(const RectF& rect) override;
     void setClipping(bool enable) override;
 
-    // ---
-
-    const DrawData& drawData() const;
-    void clear();
+protected:
+    QPainter* m_painter = nullptr;
 
 private:
-
-    const DrawData::Data& currentData() const;
-    DrawData::Data& editableData();
-
-    const DrawData::State& currentState() const;
-    DrawData::State& editableState();
-
-    DrawData m_buf;
-    std::stack<DrawData::Object> m_currentObjects;
-    bool m_isActive = false;
+    bool m_ownsPainter = false;
     DrawObjectsLogger* m_drawObjectsLogger = nullptr;
+    Font m_font;
+    Pen m_pen;
+    Brush m_brush;
+
+    Transform m_transform;
 };
 }
 
-#endif // MU_DRAW_BUFFEREDPAINTPROVIDER_H
+#endif // MU_DRAW_QPAINTERPROVIDER_H

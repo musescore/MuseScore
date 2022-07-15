@@ -22,7 +22,7 @@
 
 #include "lasso.h"
 #include "score.h"
-#include "draw/brush.h"
+#include "draw/types/brush.h"
 
 using namespace mu;
 using namespace mu::engraving;

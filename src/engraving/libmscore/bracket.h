@@ -25,7 +25,7 @@
 
 #include "engravingitem.h"
 #include "bracketItem.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 class Factory;
@@ -45,7 +45,7 @@ class Bracket final : public EngravingItem
     size_t _firstStaff = 0;
     size_t _lastStaff = 0;
 
-    mu::PainterPath path;
+    mu::draw::PainterPath path;
     SymId _braceSymbol;
     Shape _shape;
 

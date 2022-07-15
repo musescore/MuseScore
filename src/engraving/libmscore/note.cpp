@@ -30,7 +30,7 @@
 #include <assert.h>
 
 #include "translation.h"
-#include "draw/brush.h"
+#include "draw/types/brush.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 

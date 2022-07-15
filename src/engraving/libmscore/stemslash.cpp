@@ -23,7 +23,7 @@
 #include "stemslash.h"
 #include "score.h"
 #include "chord.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 
 using namespace mu;
 

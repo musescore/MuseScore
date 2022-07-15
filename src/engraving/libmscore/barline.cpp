@@ -23,7 +23,7 @@
 #include "barline.h"
 
 #include "translation.h"
-#include "draw/font.h"
+#include "draw/types/font.h"
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
 #include "types/symnames.h"

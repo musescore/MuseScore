@@ -32,7 +32,7 @@
 #include "types/dimension.h"
 
 #include "property/propertyvalue.h"
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 #include "styledef.h"
 

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GEOMETRY_H
-#define MU_GEOMETRY_H
+#ifndef MU_DRAW_GEOMETRY_H
+#define MU_DRAW_GEOMETRY_H
 
 #include <vector>
 #include <cmath>
@@ -705,4 +705,4 @@ RectX<T> RectX<T>::normalized() const
 }
 }
 
-#endif // MU_GEOMETRY_H
+#endif // MU_DRAW_GEOMETRY_H

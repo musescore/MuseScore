@@ -33,7 +33,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
-#include "engraving/infrastructure/draw/transform.h"
+#include "draw/types/transform.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -78,7 +78,7 @@ private:
     void constraintCanvas(int* dxx);
     QSize sizeHint() const override;
 
-    mu::Transform m_matrix;
+    mu::draw::Transform m_matrix;
     QColor m_backgroundColor;
     QPixmap* m_backgroundPixmap;
 

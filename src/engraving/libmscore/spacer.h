@@ -24,7 +24,7 @@
 #define __SPACER_H__
 
 #include "engravingitem.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 class Factory;
@@ -47,7 +47,7 @@ class Spacer final : public EngravingItem
     SpacerType _spacerType;
     Millimetre _gap;
 
-    mu::PainterPath path;
+    mu::draw::PainterPath path;
 
     friend class Factory;
     Spacer(Measure* parent);

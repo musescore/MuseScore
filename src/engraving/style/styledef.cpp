@@ -22,7 +22,7 @@
 
 #include "styledef.h"
 
-#include "draw/geometry.h"
+#include "draw/types/geometry.h"
 #include "rw/xml.h"
 
 #include "libmscore/articulation.h"

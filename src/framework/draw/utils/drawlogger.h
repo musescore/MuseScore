@@ -19,27 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_QIMAGEPAINTERPROVIDER_H
-#define MU_DRAW_QIMAGEPAINTERPROVIDER_H
+#ifndef MU_DRAW_DRAWLOGGER_H
+#define MU_DRAW_DRAWLOGGER_H
 
-#include "qpainterprovider.h"
-#include <QImage>
-#include "infrastructure/draw/pixmap.h"
+#include <stack>
+#include <string>
+
+#include "types/geometry.h"
 
 namespace mu::draw {
-class QImagePainterProvider : public QPainterProvider
+class DrawObjectsLogger
 {
 public:
-    QImagePainterProvider(std::shared_ptr<Pixmap> px);
-    ~QImagePainterProvider();
-    bool endTarget(bool endDraw) override;
+    DrawObjectsLogger() = default;
 
-    static IPaintProviderPtr make(std::shared_ptr<Pixmap> px);
+    void beginObject(const std::string& name, const PointF& pagePos);
+    void endObject();
 
 private:
-    std::shared_ptr<Pixmap> m_px;
-    QImage m_image;
+
+    std::stack<std::string> m_objects;
 };
 }
 
-#endif // MU_DRAW_QIMAGEPAINTERPROVIDER_H
+#endif // MU_DRAW_DRAWLOGGER_H

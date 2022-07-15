@@ -151,7 +151,7 @@ protected:
     INotationPtr notation() const;
     void setNotation(INotationPtr notation);
     void setReadonly(bool readonly);
-    void setMatrix(const Transform& matrix);
+    void setMatrix(const draw::Transform& matrix);
 
     void moveCanvasToCenter();
     bool moveCanvasToPosition(const PointF& logicPos);
@@ -166,7 +166,7 @@ protected:
     virtual void onLoadNotation(INotationPtr notation);
     virtual void onUnloadNotation(INotationPtr notation);
 
-    virtual void onMatrixChanged(const Transform& matrix);
+    virtual void onMatrixChanged(const draw::Transform& matrix);
 
 protected slots:
     virtual void onViewSizeChanged();
@@ -232,7 +232,7 @@ private:
     std::pair<qreal, qreal> constraintCanvas(qreal dx, qreal dy) const;
 
     INotationPtr m_notation;
-    Transform m_matrix;
+    draw::Transform m_matrix;
 
     std::unique_ptr<NotationViewInputController> m_inputController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;

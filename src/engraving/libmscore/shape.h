@@ -23,7 +23,7 @@
 #ifndef __SHAPE_H__
 #define __SHAPE_H__
 
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::draw {
 class Painter;

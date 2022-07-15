@@ -26,8 +26,8 @@
 #include "containers.h"
 #include "serialization/xmlstreamreader.h"
 
-#include "infrastructure/draw/color.h"
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/color.h"
+#include "draw/types/geometry.h"
 
 #include "types/fraction.h"
 

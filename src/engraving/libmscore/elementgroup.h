@@ -23,7 +23,7 @@
 #ifndef __ELEMENTGROUP_H__
 #define __ELEMENTGROUP_H__
 
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
 class EngravingItem;

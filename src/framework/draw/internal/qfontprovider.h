@@ -23,7 +23,7 @@
 #define MU_DRAW_QFONTPROVIDER_H
 
 #include <QHash>
-#include "infrastructure/draw/ifontprovider.h"
+#include "ifontprovider.h"
 
 namespace mu::draw {
 class FontEngineFT;

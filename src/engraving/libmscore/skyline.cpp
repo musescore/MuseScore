@@ -23,7 +23,7 @@
 #include "skyline.h"
 #include "segment.h"
 
-#include "infrastructure/draw/painter.h"
+#include "draw/painter.h"
 
 #include "realfn.h"
 

@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_PAINT_H
 
 #include <vector>
-#include "infrastructure/draw/painter.h"
+#include "draw/painter.h"
 
 namespace mu::engraving {
 class EngravingItem;

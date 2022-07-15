@@ -25,7 +25,7 @@
 
 #include <vector>
 
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::draw {
 class Painter;

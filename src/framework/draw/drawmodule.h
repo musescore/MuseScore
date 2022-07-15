@@ -19,41 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_PAGEDPAINTDEVICE_H
-#define MU_DRAW_PAGEDPAINTDEVICE_H
+#ifndef MU_DRAW_DRAWMODULE_H
+#define MU_DRAW_DRAWMODULE_H
 
-class QPaintDevice;
-class QPagedPaintDevice;
+#include "modularity/imodulesetup.h"
+
 namespace mu::draw {
-class PaintDevice
+class DrawModule : public modularity::IModuleSetup
 {
 public:
-    PaintDevice() = default;
-
-#ifndef NO_QT_SUPPORT
-    PaintDevice(QPaintDevice* d);
-#endif
-
-    int dpi() const;
-
-private:
-    QPaintDevice* m_d = nullptr;
-};
-
-class PagedPaintDevice : public PaintDevice
-{
-public:
-    PagedPaintDevice() = default;
-
-#ifndef NO_QT_SUPPORT
-    PagedPaintDevice(QPagedPaintDevice* d);
-#endif
-
-    void newPage();
-
-private:
-    QPagedPaintDevice* m_d = nullptr;
+    std::string moduleName() const override;
+    void registerExports() override;
 };
 }
 
-#endif // MU_DRAW_PAGEDPAINTDEVICE_H
+#endif // MU_DRAW_DRAWMODULE_H

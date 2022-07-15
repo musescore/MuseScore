@@ -27,7 +27,7 @@
 #include "geometry.h"
 #include "realfn.h"
 
-namespace mu {
+namespace mu::draw {
 class PainterPath;
 
 class Transform

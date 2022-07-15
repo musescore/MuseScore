@@ -25,8 +25,8 @@
 #include <cmath>
 
 #include "translation.h"
-#include "draw/transform.h"
-#include "draw/pen.h"
+#include "draw/types/transform.h"
+#include "draw/types/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
@@ -45,6 +45,7 @@
 #include "types/typesconv.h"
 
 using namespace mu;
+using namespace mu::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {

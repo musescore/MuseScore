@@ -173,6 +173,7 @@ endif (USE_SYSTEM_FREETYPE)
 set(MODULE_LINK
     Qt5::Svg
     ${FREETYPE_LIB}
+    draw
     engraving
     commonscene
     uicomponents

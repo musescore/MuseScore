@@ -25,7 +25,7 @@
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 
 #include "staff.h"
 #include "clef.h"

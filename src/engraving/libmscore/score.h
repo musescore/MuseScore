@@ -46,7 +46,7 @@
 
 #include "infrastructure/io/mscwriter.h"
 #include "infrastructure/io/mscreader.h"
-#include "infrastructure/draw/iimageprovider.h"
+#include "draw/iimageprovider.h"
 #include "infrastructure/interactive/imimedata.h"
 
 #include "rw/readcontext.h"
@@ -57,7 +57,6 @@
 #include "style/style.h"
 
 #include "modularity/ioc.h"
-#include "infrastructure/draw/iimageprovider.h"
 
 class QMimeData;
 

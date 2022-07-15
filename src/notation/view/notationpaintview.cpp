@@ -22,6 +22,7 @@
 #include "notationpaintview.h"
 
 using namespace mu;
+using namespace mu::draw;
 using namespace mu::notation;
 
 NotationPaintView::NotationPaintView(QQuickItem* parent)

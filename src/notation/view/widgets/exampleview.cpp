@@ -40,6 +40,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::draw;
 using namespace mu::notation;
 using namespace mu::engraving;
 
@@ -99,7 +100,7 @@ void ExampleView::resetMatrix()
 {
     qreal _spatium = SPATIUM20 * m_defaultScaling;
     // example would normally be 10sp from top of page; this leaves 3sp margin above
-    m_matrix = mu::Transform(m_defaultScaling, 0.0, 0.0, m_defaultScaling, _spatium, -_spatium * 7.0);
+    m_matrix = Transform(m_defaultScaling, 0.0, 0.0, m_defaultScaling, _spatium, -_spatium * 7.0);
 }
 
 void ExampleView::layoutChanged()

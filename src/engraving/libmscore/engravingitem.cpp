@@ -32,7 +32,7 @@
 #include "containers.h"
 #include "io/buffer.h"
 
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"

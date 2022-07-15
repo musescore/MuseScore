@@ -25,7 +25,7 @@
 
 #include "spanner.h"
 #include "mscore.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -93,8 +93,8 @@ class SlurTieSegment : public SpannerSegment
 protected:
     struct UP _ups[int(Grip::GRIPS)];
 
-    mu::PainterPath path;
-    mu::PainterPath shapePath;
+    mu::draw::PainterPath path;
+    mu::draw::PainterPath shapePath;
     Shape _shape;
 
     SlurTieSegment(const ElementType& type, System*);

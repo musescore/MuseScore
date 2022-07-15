@@ -30,7 +30,7 @@
 #include "inotationinteraction.h"
 #include "inotationundostack.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
 class Score;

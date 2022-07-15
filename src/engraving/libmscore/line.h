@@ -23,7 +23,7 @@
 #ifndef __LINE_H__
 #define __LINE_H__
 
-#include "infrastructure/draw/color.h"
+#include "draw/types/color.h"
 #include "spanner.h"
 
 namespace mu::engraving {

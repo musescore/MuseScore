@@ -26,7 +26,7 @@
 #include <vector>
 
 #include "types/types.h"
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
 class XmlWriter;

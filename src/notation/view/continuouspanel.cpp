@@ -38,7 +38,7 @@
 #include "libmscore/stafflines.h"
 #include "libmscore/factory.h"
 
-#include "engraving/infrastructure/draw/painter.h"
+#include "draw/painter.h"
 
 using namespace mu::notation;
 

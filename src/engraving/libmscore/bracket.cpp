@@ -22,7 +22,7 @@
 
 #include "bracket.h"
 
-#include "draw/brush.h"
+#include "draw/types/brush.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
