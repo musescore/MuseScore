@@ -1071,7 +1071,8 @@ static EngravingItem* prepareTarget(EngravingItem* target, Note* with, const Fra
     if (target->isNote() && toNote(target)->chord()->ticks() != duration) {
         return prepareTarget(toNote(target)->chord(), with, duration);
     }
-    if (target->isChordRest() && toChordRest(target)->ticks() != duration) {
+    if (target->isChordRest()
+        && (toChordRest(target)->ticks() != duration || toChordRest(target)->durationType().type() == DurationType::V_MEASURE)) {
         return prepareTarget(toChordRest(target), with, duration);
     }
     return target;
