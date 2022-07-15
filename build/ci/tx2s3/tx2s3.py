@@ -58,11 +58,6 @@ def processTsFile(prefix, langCode, data):
         return False
 
 
-#pull ts files from transifex, use .tx/config
-pull = subprocess.Popen(['tx', '-q', 'pull', '-a', '-s'])
-pull.communicate()
-
-
 newDetailsFile = False
 translationChanged = False
 
