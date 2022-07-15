@@ -39,7 +39,7 @@ public:
 private:
     bool nativeEventFilter(const QByteArray& eventType, void* message, long* result) override;
 
-    void doUpdateEventFiletrs() override;
+    void doUpdateEventFilters() override;
 };
 }
 
