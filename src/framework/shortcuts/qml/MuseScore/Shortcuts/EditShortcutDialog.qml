@@ -98,7 +98,7 @@ Dialog {
                     StyledTextLabel {
                         Layout.alignment: Qt.AlignVCenter
 
-                        text: qsTrc("shortcuts", "Old shortcuts:")
+                        text: qsTrc("shortcuts", "Old shortcut:")
                     }
 
                     TextInputField {

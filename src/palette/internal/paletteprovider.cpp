@@ -893,11 +893,11 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
                  .arg(QCoreApplication::applicationName());
 #endif
     if (open) {
-        title  = mu::qtrc("palette", "Load palette");
+        title  = mu::qtrc("palette", "Load Palette");
         filter = mu::qtrc("palette", "MuseScore Palette") + " (*.mpal)";
     } else {
         title  = mu::qtrc("palette", "Save Palette");
-        filter = mu::qtrc("palette", "MuseScore palette") + " (*.mpal)";
+        filter = mu::qtrc("palette", "MuseScore Palette") + " (*.mpal)";
     }
 
     QFileInfo myPalettes(wd);
