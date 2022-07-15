@@ -53,7 +53,7 @@ MixerChannelItem::MixerChannelItem(QObject* parent, const audio::TrackId id, con
     m_panel = new ui::NavigationPanel(this);
     m_panel->setDirection(ui::NavigationPanel::Vertical);
     m_panel->setName("MixerChannelPanel " + QString::number(m_id));
-    m_panel->accessible()->setName(qtrc("playback", "Mixer channel panel") + " " + QString::number(m_id));
+    m_panel->accessible()->setName(qtrc("playback", "Mixer channel panel %1").arg(m_id));
     m_panel->componentComplete();
 
     connect(this, &MixerChannelItem::mutedChanged, this, [this]() {

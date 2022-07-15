@@ -63,7 +63,7 @@ Dialog {
             spacing: 24
 
             Row {
-                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width
 
                 spacing: 8
 
@@ -79,9 +79,9 @@ Dialog {
             }
 
             StyledTextLabel {
-                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width
 
-                text: qsTrc("shortcuts", "Press a key or adjust a control on your MIDI device to\nassign it to this function.")
+                text: qsTrc("shortcuts", "Press a key or adjust a control on your MIDI device to assign it to this action.")
             }
 
             RowLayout {
@@ -101,7 +101,9 @@ Dialog {
                     readOnly: true
 
                     currentText: model.mappingTitle
-                    hint: qsTrc("global", "Waiting…")
+
+                    //: The app is waiting for the user to trigger a valid MIDI remote event
+                    hint: qsTrc("shortcuts", "Waiting…")
                 }
             }
 

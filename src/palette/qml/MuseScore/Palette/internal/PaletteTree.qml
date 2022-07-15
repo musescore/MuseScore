@@ -405,7 +405,7 @@ StyledListView {
                 paletteTree.paletteController.remove(modelIndex);
             }
 
-            text: filter.length ? qsTrc("palette", "%1, contains %n matching element(s)", "palette", mainPalette.count).arg(model.accessibleText)
+            text: filter.length ? qsTrc("palette", "%1, contains %n matching element(s)", "", mainPalette.count).arg(model.accessibleText)
                                 : model.expanded ? qsTrc("palette", "%1 expanded", "tree item not collapsed").arg(model.accessibleText)
                                                  : model.accessibleText
 

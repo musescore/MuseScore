@@ -190,6 +190,7 @@ StyledGridView {
                 }
             }
 
+            //: Caption of a button to reveal more elements
             text: qsTrc("palette", "More")
 
             transparent: true

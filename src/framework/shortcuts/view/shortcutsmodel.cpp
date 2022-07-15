@@ -30,7 +30,7 @@ using namespace mu::ui;
 
 static QString shortcutsFileFilter()
 {
-    return mu::qtrc("shortcuts", "MuseScore Shortcuts File") + " (*.xml)";
+    return mu::qtrc("shortcuts", "MuseScore shortcuts file") + " (*.xml)";
 }
 
 ShortcutsModel::ShortcutsModel(QObject* parent)

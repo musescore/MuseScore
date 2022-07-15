@@ -223,7 +223,11 @@ FocusableControl {
                 navigation.panel: root.navigation.panel
                 navigation.row: root.navigation.row
                 navigation.column: 2
-                navigation.accessible.name: qsTrc("instruments", "Expand")
+                navigation.accessible.name: styleData.isExpanded
+                                            //: Collapse a tree item
+                                            ? qsTrc("global", "Collapse")
+                                            //: Expand a tree item
+                                            : qsTrc("global", "Expand")
 
                 transparent: true
                 icon: styleData.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
