@@ -57,7 +57,7 @@ StyledDialogView {
 
         StyledTextLabel {
             Layout.fillWidth: true
-            text: qsTrc("project", "How would you like to save?")
+            text: qsTrc("project/save", "How would you like to save?")
             font: ui.theme.headerBoldFont
         }
 
@@ -74,16 +74,16 @@ StyledDialogView {
             }
 
             SaveLocationOption {
-                title: qsTrc("project", "To the Cloud (free)")
-                description: qsTrc("project", "Files are saved privately on your own personal account. \
+                title: qsTrc("project/save", "To the Cloud (free)")
+                description: qsTrc("project/save", "Files are saved privately on your own personal account. \
 You can share drafts with others and publish your finished scores publicly too.")
-                buttonText: qsTrc("project", "Save to the cloud")
+                buttonText: qsTrc("project/save", "Save to the cloud")
 
                 imageSource: "internal/SaveToCloud/images/Cloud.png"
 
                 navigation.panel: optionsNavPanel
                 navigation.column: 1
-                navigation.accessible.name: qsTrc("project", "Save to the cloud (free)")
+                navigation.accessible.name: qsTrc("project/save", "Save to the cloud (free)")
                 navigation.accessible.description: description
 
                 // Todo(save-to-cloud): disabled until fully implemented
@@ -95,15 +95,15 @@ You can share drafts with others and publish your finished scores publicly too."
             }
 
             SaveLocationOption {
-                title: qsTrc("project", "On your computer")
-                description: qsTrc("project", "If you prefer to save your files on your computer, you can do that here.")
-                buttonText: qsTrc("project", "Save to computer")
+                title: qsTrc("project/save", "On your computer")
+                description: qsTrc("project/save", "If you prefer to save your files on your computer, you can do that here.")
+                buttonText: qsTrc("project/save", "Save to computer")
 
                 imageSource: "internal/SaveToCloud/images/Laptop.png"
 
                 navigation.panel: optionsNavPanel
                 navigation.column: 2
-                navigation.accessible.name: qsTrc("project", "Save on your computer")
+                navigation.accessible.name: qsTrc("project/save", "Save on your computer")
                 navigation.accessible.description: description
 
                 onButtonClicked: {
@@ -127,7 +127,7 @@ You can share drafts with others and publish your finished scores publicly too."
             id: dontAskAgainCheckbox
 
             width: parent.width
-            text: qsTrc("project", "Don’t show again")
+            text: qsTrc("global", "Don’t show again")
             checked: !root.askAgain
 
             navigation.panel: dontAskAgainPanel

@@ -32,7 +32,7 @@ import "internal/Export"
 StyledDialogView {
     id: root
 
-    title: qsTrc("project", "Export")
+    title: qsTrc("project/export", "Export")
 
     contentWidth: 756
     contentHeight: 336
@@ -60,7 +60,7 @@ StyledDialogView {
             spacing: 18
 
             StyledTextLabel {
-                text: qsTrc("project", "Select parts to export")
+                text: qsTrc("project/export", "Select parts to export")
                 font: ui.theme.bodyBoldFont
             }
 
@@ -88,7 +88,7 @@ StyledDialogView {
                 FlatButton {
                     Layout.fillWidth: true
 
-                    text: qsTrc("project", "Select all")
+                    text: qsTrc("project/export", "Select all")
 
                     navigation.name: "Select all"
                     navigation.panel: leftButtonsNavPanel
@@ -102,7 +102,7 @@ StyledDialogView {
                 FlatButton {
                     Layout.fillWidth: true
 
-                    text: qsTrc("project", "Clear selection")
+                    text: qsTrc("project/export", "Clear selection")
 
                     navigation.name: "Clear selection"
                     navigation.panel: leftButtonsNavPanel
@@ -121,7 +121,7 @@ StyledDialogView {
             spacing: 18
 
             StyledTextLabel {
-                text: qsTrc("project", "Export settings")
+                text: qsTrc("project/export", "Export settings")
                 font: ui.theme.bodyBoldFont
             }
 
@@ -161,7 +161,7 @@ StyledDialogView {
                 FlatButton {
                     id: exportButton
 
-                    text: qsTrc("project", "Export…")
+                    text: qsTrc("project/export", "Export…")
                     enabled: exportModel.selectionLength > 0;
                     accentButton: enabled
 

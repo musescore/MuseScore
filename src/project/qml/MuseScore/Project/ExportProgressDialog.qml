@@ -58,7 +58,7 @@ StyledDialogView {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
 
-            text: qsTrc("project", "Exporting…")
+            text: qsTrc("project/export", "Exporting…")
         }
 
         Controls.ProgressBar {

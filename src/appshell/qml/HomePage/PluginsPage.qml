@@ -94,7 +94,7 @@ FocusScope {
                 id: pageTitle
                 Layout.fillWidth: true
 
-                text: qsTrc("project", "Plugins")
+                text: qsTrc("appshell", "Plugins")
                 font: ui.theme.titleBoldFont
                 horizontalAlignment: Text.AlignLeft
             }

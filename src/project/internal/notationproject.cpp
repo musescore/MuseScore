@@ -107,7 +107,7 @@ static void setupScoreMetaTags(mu::engraving::MasterScore* masterScore, const Pr
 
 static QString scoreDefaultTitle()
 {
-    return qtrc("project", "Untitled Score");
+    return qtrc("project", "Untitled score");
 }
 
 NotationProject::~NotationProject()
