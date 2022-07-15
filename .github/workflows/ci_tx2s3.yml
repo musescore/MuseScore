@@ -32,6 +32,11 @@ jobs:
       run: |
         sudo bash ./build/ci/tx2s3/setup.sh --tx_token ${{ secrets.TRANSIFEX_API_TOKEN }} --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
     
+    - name: Update .ts files (tx pull)
+      if: env.DO_RUN == 'true'
+      run: |
+        sudo bash ./build/ci/translation/tx_pull.sh
+
     - name: Run tx2s3
       if: env.DO_RUN == 'true'
       run: |

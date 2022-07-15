@@ -62,21 +62,7 @@ echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
 lrelease -version
 
 echo "Install transifex-client" 
-CUR_DIR=$(pwd)
-mkdir -p $BUILD_TOOLS/tx
-cd $BUILD_TOOLS/tx
-curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
-cd $CUR_DIR
-ls $BUILD_TOOLS/tx/
-export PATH=$BUILD_TOOLS/tx:$PATH
-echo export PATH="$BUILD_TOOLS/tx:\${PATH}" >> ${ENV_FILE}
-
-cat >~/.transifexrc <<EOL
-[https://www.transifex.com]
-token = $TRANSIFEX_API_TOKEN
-EOL
-
-echo "tx version: $(tx --version)"
+bash ./build/ci/translation/tx_install.sh -s linux -t $TRANSIFEX_API_TOKEN
 
 echo "Install s3cmd"
 pip3 install s3cmd
