@@ -32,7 +32,7 @@ static const mu::actions::ActionCode MASTERPALETTE_CODE("masterpalette");
 const UiActionList PaletteUiActions::m_actions = {
     UiAction(MASTERPALETTE_CODE,
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Master palette"),
+             QT_TRANSLATE_NOOP("action", "&Master palette"),
              Checkable::Yes
              ),
     UiAction("palette-search",
