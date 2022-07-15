@@ -885,7 +885,12 @@ Chord* Spanner::startChord()
     if (!_startElement) {
         _startElement = findStartChord();
     }
-    return toChord(_startElement);
+
+    if (_startElement && _startElement->isChord()) {
+        return toChord(_startElement);
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -898,7 +903,12 @@ Chord* Spanner::endChord()
     if (!_endElement && type() == ElementType::SLUR) {
         _endElement = findEndChord();
     }
-    return toChord(_endElement);
+
+    if (_endElement && _endElement->isChord()) {
+        return toChord(_endElement);
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
