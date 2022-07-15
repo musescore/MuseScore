@@ -146,9 +146,10 @@ constexpr inline pitch_level_t pitchLevelDiff(const PitchClass fClass, const oct
     return pitchLevel(fClass, fOctave) - pitchLevel(sClass, sOctave);
 }
 
-constexpr inline int pitchStepsCount(const pitch_level_t pitchRange)
+constexpr inline size_t pitchStepsCount(const pitch_level_t pitchRange)
 {
-    return static_cast<int>(pitchRange / PITCH_LEVEL_STEP) + 1;
+    size_t range = pitchRange > 0 ? pitchRange : -pitchRange;
+    return range / PITCH_LEVEL_STEP + 1;
 }
 
 // Expression
