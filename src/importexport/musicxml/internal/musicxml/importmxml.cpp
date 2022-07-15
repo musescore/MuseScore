@@ -43,7 +43,7 @@ static int musicXMLImportErrorDialog(QString text, QString detailedText)
     QMessageBox errorDialog;
     errorDialog.setIcon(QMessageBox::Question);
     errorDialog.setText(text);
-    errorDialog.setInformativeText(qtrc("musicxml", "Do you want to try to load this file anyway?"));
+    errorDialog.setInformativeText(qtrc("iex_musicxml", "Do you want to try to load this file anyway?"));
     errorDialog.setDetailedText(detailedText);
     errorDialog.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     errorDialog.setDefaultButton(QMessageBox::No);
@@ -81,7 +81,7 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
     const auto pass2_errors = pass2.errors();
     if (!(pass1_errors.isEmpty() && pass2_errors.isEmpty())) {
         if (!MScore::noGui) {
-            const QString text = qtrc("musicxml", "%n error(s) found, import may be incomplete.",
+            const QString text = qtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
                                       nullptr, pass1_errors.count() + pass2_errors.count());
             if (musicXMLImportErrorDialog(text, pass1.errors() + pass2.errors()) != QMessageBox::Yes) {
                 res = Score::FileError::FILE_USER_ABORT;

@@ -180,38 +180,34 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
              contentLine, contentColumn, qPrintable(contentError));
         return;
     }
+
     QDomElement e = desc.documentElement();
     if (e.tagName() != "html") {
         LOGD("ValidatorMessageHandler: description is not html");
         return;
     }
-    QString descText = e.text();
 
-    QString strType;
+    QString typeStr;
     switch (type) {
-    case 0:  strType = qtrc("musicxml", "Debug");
+    case 0:  typeStr = qtrc("iex_musicxml", "Debug message:");
         break;
-    case 1:  strType = qtrc("musicxml", "Warning");
+    case 1:  typeStr = qtrc("iex_musicxml", "Warning:");
         break;
-    case 2:  strType = qtrc("musicxml", "Critical");
+    case 2:  typeStr = qtrc("iex_musicxml", "Critical error:");
         break;
-    case 3:  strType = qtrc("musicxml", "Fatal");
+    case 3:  typeStr = qtrc("iex_musicxml", "Fatal error:");
         break;
-    default: strType = qtrc("musicxml", "Unknown");
+    default: typeStr = qtrc("iex_musicxml", "Unknown error:");
         break;
     }
 
-    QString errorStr = qtrc("musicxml", "%1 error: line %2 column %3 %4")
-                       .arg(strType)
-                       .arg(sourceLocation.line())
-                       .arg(sourceLocation.column())
-                       .arg(descText);
+    QString errorStr = typeStr + " " + errorStringWithLocation(sourceLocation.line(), sourceLocation.column(), e.text());
 
     // append error, separated by newline if necessary
-    if (errors != "") {
-        errors += "\n";
+    if (!m_errors.isEmpty()) {
+        m_errors += "\n";
     }
-    errors += errorStr;
+    m_errors += errorStr;
 }
 
 //---------------------------------------------------------
@@ -279,12 +275,12 @@ void domNotImplemented(const QDomElement& e)
 }
 
 //---------------------------------------------------------
-//   xmlReaderLocation
+//   errorStringWithLocation
 //---------------------------------------------------------
 
-QString xmlReaderLocation(const QXmlStreamReader& e)
+QString errorStringWithLocation(int line, int col, const QString& error)
 {
-    return qtrc("musicxml", "line %1 column %2").arg(e.lineNumber()).arg(e.columnNumber());
+    return qtrc("iex_musicxml", "line %1, column %2:").arg(line).arg(col) + " " + error;
 }
 
 //---------------------------------------------------------
@@ -297,7 +293,7 @@ QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName)
         return "";
     }
 
-    QString res = qtrc("musicxml", "expected token type and name 'EndElement %1', actual '%2 %3'")
+    QString res = qtrc("iex_musicxml", "expected token type and name 'EndElement %1', actual '%2 %3'")
                   .arg(expName)
                   .arg(e.tokenString())
                   .arg(e.name().toString());
