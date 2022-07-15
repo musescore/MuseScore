@@ -30,8 +30,6 @@ class VstiEditorView : public AbstractVstEditorView
 {
     Q_OBJECT
 
-    DECLARE_FUNKNOWN_METHODS
-
 public:
     explicit VstiEditorView(QWidget* parent = nullptr);
 
