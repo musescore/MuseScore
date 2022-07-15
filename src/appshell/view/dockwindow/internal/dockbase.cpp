@@ -349,6 +349,8 @@ void DockBase::init()
 
     setVisible(m_dockWidget->isOpen());
     setInited(true);
+
+    applySizeConstraints();
 }
 
 void DockBase::deinit()
@@ -636,7 +638,6 @@ void DockBase::updateFloatingStatus()
     bool floating = m_dockWidget && m_dockWidget->floatingWindow();
 
     doSetFloating(floating);
-    applySizeConstraints();
 }
 
 void DockBase::doSetFloating(bool floating)
