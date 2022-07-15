@@ -91,10 +91,10 @@ FocusScope {
     Rectangle {
         anchors.bottom: parent.bottom
 
-        height: 114
+        height: 100
         width: parent.width
 
-        color: ui.theme.popupBackgroundColor
+        color: ui.theme.backgroundSecondaryColor
 
         RowLayout {
             anchors.verticalCenter: parent.verticalCenter
