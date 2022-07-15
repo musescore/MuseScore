@@ -212,12 +212,16 @@ void VstPlugin::updatePluginConfig(const audio::AudioUnitConfig& config)
         return;
     }
 
-    stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
-    component->setState(&m_componentStateBuffer);
-    controller->setComponentState(&m_componentStateBuffer);
+    if (component->getState(&m_componentStateBuffer) == Steinberg::kResultTrue) {
+        stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
+        component->setState(&m_componentStateBuffer);
+    }
 
-    stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(controllerState->second.data()), controllerState->second.size());
-    controller->setState(&m_controllerStateBuffer);
+    if (controller->getState(&m_controllerStateBuffer) == Steinberg::kResultTrue) {
+        stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(controllerState->second.data()), controllerState->second.size());
+        controller->setState(&m_controllerStateBuffer);
+        controller->setComponentState(&m_componentStateBuffer);
+    }
 }
 
 void VstPlugin::refreshConfig()
