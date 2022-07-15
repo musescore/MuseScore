@@ -10196,6 +10196,14 @@ Published under the %1GNU General Public License version 3%2.</source>
         <extracomment>Expand a tree item</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="85"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="86"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="85"/>
+        <source>sp</source>
+        <extracomment>Abbreviation of &quot;spatium&quot;</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>iex_capella</name>
@@ -14489,7 +14497,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/Palette.qml" line="194"/>
         <source>More</source>
-        <extracomment>Caption of a buttton to reveal more elements</extracomment>
+        <extracomment>Caption of a button to reveal more elements</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -14594,14 +14602,6 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="83"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="85"/>
-        <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="86"/>
-        <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="85"/>
-        <source>sp</source>
-        <extracomment>Abbreviation of &quot;spatium&quot;</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -18099,223 +18099,223 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="97"/>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="119"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="118"/>
         <source>C major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="97"/>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="119"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="118"/>
         <source>A minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="121"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="120"/>
         <source>G major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="121"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="120"/>
         <source>E minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="123"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="122"/>
         <source>D major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="123"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="122"/>
         <source>B minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="125"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="124"/>
         <source>A major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="125"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="124"/>
         <source>F♯ minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="127"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="126"/>
         <source>E major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="127"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="126"/>
         <source>C♯ minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="129"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
         <source>B major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="129"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
         <source>G♯ minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="131"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="130"/>
         <source>F♯ major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="131"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="130"/>
         <source>D♯ minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="133"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
         <source>C♯ major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="133"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
         <source>A♯ minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="135"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="134"/>
         <source>Open/Atonal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="137"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="136"/>
         <source>F major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="137"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="136"/>
         <source>D minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="139"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="138"/>
         <source>B♭ major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="139"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="138"/>
         <source>G minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="141"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="140"/>
         <source>E♭ major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="141"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="140"/>
         <source>C minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="143"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="142"/>
         <source>A♭ major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="143"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="142"/>
         <source>F minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="145"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="144"/>
         <source>D♭ major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="145"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="144"/>
         <source>B♭ minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="147"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="146"/>
         <source>G♭ major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="147"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="146"/>
         <source>E♭ minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="149"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="148"/>
         <source>C♭ major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="149"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="148"/>
         <source>A♭ minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="199"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="198"/>
         <source>%1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="201"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="200"/>
         <source>Common time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="203"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="202"/>
         <source>Cut time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="331"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
         <source>Dotted 16th note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="331"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
         <source>16th note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="333"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
         <source>Dotted eight note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="333"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
         <source>Eight note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="335"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="334"/>
         <source>Dotted quarter note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="335"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="334"/>
         <source>Quarter note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="337"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="336"/>
         <source>Dotted half note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="337"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="336"/>
         <source>Half note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="339"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="338"/>
         <source>Dotted whole note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/additionalinfomodel.cpp" line="339"/>
+        <location filename="../../src/project/view/additionalinfomodel.cpp" line="338"/>
         <source>Whole note</source>
         <translation type="unfinished"></translation>
     </message>
