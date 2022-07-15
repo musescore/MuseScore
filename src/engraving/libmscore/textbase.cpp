@@ -24,8 +24,8 @@
 #include <stack>
 
 #include "draw/fontmetrics.h"
-#include "draw/pen.h"
-#include "draw/brush.h"
+#include "draw/types/pen.h"
+#include "draw/types/brush.h"
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
 #include "types/symnames.h"

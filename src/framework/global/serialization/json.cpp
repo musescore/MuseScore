@@ -524,6 +524,27 @@ JsonArray& JsonArray::append(const char* str)
     return *this;
 }
 
+JsonArray& JsonArray::append(const JsonValue& v)
+{
+    detach();
+    array_mut(m_data).push_back(val_const(v.m_data));
+    return *this;
+}
+
+JsonArray& JsonArray::append(const JsonArray& v)
+{
+    detach();
+    array_mut(m_data).push_back(val_const(v.m_data));
+    return *this;
+}
+
+JsonArray& JsonArray::append(const JsonObject& v)
+{
+    detach();
+    array_mut(m_data).push_back(val_const(v.m_data));
+    return *this;
+}
+
 JsonValue JsonArray::operator [](size_t i) const
 {
     return at(i);

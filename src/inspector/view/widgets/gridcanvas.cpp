@@ -26,7 +26,7 @@
 #include <QPalette>
 #include <cmath>
 
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 
 #include "log.h"
 

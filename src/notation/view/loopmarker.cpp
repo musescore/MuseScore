@@ -21,7 +21,7 @@
  */
 
 #include "loopmarker.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "libmscore/scorefont.h"
 
 using namespace mu::notation;

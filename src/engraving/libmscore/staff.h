@@ -27,7 +27,7 @@
 #include <vector>
 
 #include "engravingitem.h"
-#include "infrastructure/draw/color.h"
+#include "draw/types/color.h"
 #include "changeMap.h"
 #include "pitch.h"
 #include "cleflist.h"

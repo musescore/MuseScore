@@ -25,7 +25,7 @@
 
 #include <list>
 
-#include "infrastructure/draw/painter.h"
+#include "draw/painter.h"
 
 namespace mu::engraving {
 class EngravingItem;

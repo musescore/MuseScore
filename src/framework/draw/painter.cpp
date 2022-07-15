@@ -20,8 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "painter.h"
-#include "brush.h"
-#include "painterpath.h"
+
+#include "types/brush.h"
+#include "types/painterpath.h"
 
 #ifndef NO_QT_SUPPORT
 #include "internal/qpainterprovider.h"

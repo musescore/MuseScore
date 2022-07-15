@@ -31,7 +31,7 @@
 #include "translation.h"
 #include "mimedatautils.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 #include "engraving/rw/xml.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/articulation.h"

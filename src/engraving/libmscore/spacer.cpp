@@ -21,7 +21,7 @@
  */
 
 #include "spacer.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "score.h"
 #include "staff.h"

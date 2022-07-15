@@ -24,7 +24,7 @@
 #define __CHORDLINE_H__
 
 #include "engravingitem.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 #include "types/types.h"
 
@@ -45,7 +45,7 @@ protected:
 
     ChordLineType _chordLineType;
     bool _straight;
-    mu::PainterPath path;
+    mu::draw::PainterPath path;
     bool modified;
     double _lengthX;
     double _lengthY;

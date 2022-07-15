@@ -26,9 +26,9 @@
 #include "engravingobject.h"
 #include "elementgroup.h"
 
-#include "infrastructure/draw/color.h"
-#include "infrastructure/draw/geometry.h"
-#include "infrastructure/draw/painter.h"
+#include "draw/types/color.h"
+#include "draw/types/geometry.h"
+#include "draw/painter.h"
 
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"

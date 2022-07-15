@@ -23,7 +23,7 @@
 #include "measurerepeat.h"
 
 #include "translation.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "barline.h"
 #include "measure.h"

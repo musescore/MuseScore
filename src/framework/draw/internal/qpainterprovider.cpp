@@ -31,8 +31,8 @@
 #include <QPainterPath>
 
 #include "draw/utils/drawlogger.h"
-#include "draw/transform.h"
-#include "draw/painterpath.h"
+#include "types/transform.h"
+#include "types/painterpath.h"
 
 #include "log.h"
 
@@ -181,7 +181,7 @@ void QPainterProvider::setTransform(const Transform& transform)
     m_painter->setTransform(Transform::toQTransform(m_transform));
 }
 
-const mu::Transform& QPainterProvider::transform() const
+const Transform& QPainterProvider::transform() const
 {
     return m_transform;
 }

@@ -23,7 +23,7 @@
 #include "ambitus.h"
 
 #include "translation.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "rw/compat/read206.h"
 #include "rw/xml.h"
 

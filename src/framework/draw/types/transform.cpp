@@ -25,6 +25,8 @@
 #include "painterpath.h"
 
 using namespace mu;
+using namespace mu::draw;
+
 static constexpr double NEAR_CLIP = 0.000001;
 
 Transform::Transform(double h11, double h12, double h21, double h22, double dx, double dy)

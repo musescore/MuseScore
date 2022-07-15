@@ -27,7 +27,7 @@
 #include "async/channel.h"
 #include "retval.h"
 
-#include "engraving/infrastructure/draw/transform.h"
+#include "draw/types/transform.h"
 
 namespace mu::notation {
 class NotationPaintView;
@@ -39,9 +39,9 @@ public:
     virtual bool isMatrixInited() const = 0;
     virtual void setMatrixInited(bool inited) = 0;
 
-    virtual Transform matrix() const = 0;
-    virtual async::Channel<Transform /*newMatrix*/, NotationPaintView* /*sender*/> matrixChanged() const = 0;
-    virtual void setMatrix(const Transform& matrix, NotationPaintView* sender) = 0;
+    virtual draw::Transform matrix() const = 0;
+    virtual async::Channel<draw::Transform /*newMatrix*/, NotationPaintView* /*sender*/> matrixChanged() const = 0;
+    virtual void setMatrix(const draw::Transform& matrix, NotationPaintView* sender) = 0;
 
     virtual ValCh<int> zoomPercentage() const = 0;
 };

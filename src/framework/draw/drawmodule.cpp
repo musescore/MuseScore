@@ -19,54 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "paintdevice.h"
+#include "drawmodule.h"
 
-#ifndef NO_QT_SUPPORT
-#include <QPaintDevice>
-#include <QPagedPaintDevice>
+#include "modularity/ioc.h"
+
+#ifndef DRAW_NO_INTERNAL
+#include "internal/qfontprovider.h"
+#include "internal/qimageprovider.h"
 #endif
-
-#include "log.h"
 
 using namespace mu::draw;
-#ifndef NO_QT_SUPPORT
 
-PaintDevice::PaintDevice(QPaintDevice* d)
-    : m_d(d)
+std::string DrawModule::moduleName() const
 {
+    return "draw";
 }
 
-#endif
-
-int PaintDevice::dpi() const
+void DrawModule::registerExports()
 {
-#ifndef NO_QT_SUPPORT
-    if (m_d) {
-        return m_d->logicalDpiX();
-    }
+#ifndef DRAW_NO_INTERNAL
+    mu::modularity::ioc()->registerExport<draw::IFontProvider>(moduleName(), new QFontProvider());
+    mu::modularity::ioc()->registerExport<draw::IImageProvider>(moduleName(), new QImageProvider());
 #endif
-    NOT_IMPLEMENTED;
-    return -1;
-}
-
-// =====================================================
-// PagedPaintDevice
-// =====================================================
-
-#ifndef NO_QT_SUPPORT
-PagedPaintDevice::PagedPaintDevice(QPagedPaintDevice* d)
-    : PaintDevice(d), m_d(d)
-{
-}
-
-#endif
-void PagedPaintDevice::newPage()
-{
-#ifndef NO_QT_SUPPORT
-    if (m_d) {
-        m_d->newPage();
-        return;
-    }
-#endif
-    NOT_IMPLEMENTED;
 }

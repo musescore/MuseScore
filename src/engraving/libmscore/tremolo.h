@@ -25,7 +25,7 @@
 
 #include "durationtype.h"
 #include "symbol.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 #include "types/types.h"
 
 namespace mu::engraving {
@@ -48,7 +48,7 @@ class Tremolo final : public EngravingItem
     TDuration _durationType;
     bool _up{ true };
     DirectionV _direction;
-    mu::PainterPath path;
+    mu::draw::PainterPath path;
 
     int _lines;         // derived from _subtype
     TremoloStyle _style { TremoloStyle::DEFAULT };
@@ -57,7 +57,7 @@ class Tremolo final : public EngravingItem
     Tremolo(Chord* parent);
     Tremolo(const Tremolo&);
 
-    mu::PainterPath basePath(double stretch = 0) const;
+    mu::draw::PainterPath basePath(double stretch = 0) const;
     void computeShape();
     void layoutOneNoteTremolo(double x, double y, double h, double spatium);
     void layoutTwoNotesTremolo(double x, double y, double h, double spatium);

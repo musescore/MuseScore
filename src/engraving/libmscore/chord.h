@@ -32,7 +32,7 @@
 #include <functional>
 #include <vector>
 
-#include "infrastructure/draw/color.h"
+#include "draw/types/color.h"
 #include "chordrest.h"
 #include "articulation.h"
 

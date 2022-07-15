@@ -3,7 +3,8 @@
 #include <QBuffer>
 
 #include "qimagepainterprovider.h"
-#include "draw/pixmap.h"
+#include "types/pixmap.h"
+
 #include "log.h"
 
 using namespace mu::draw;

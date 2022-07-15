@@ -40,16 +40,16 @@ public:
     bool isMatrixInited() const override;
     void setMatrixInited(bool inited) override;
 
-    Transform matrix() const override;
-    async::Channel<Transform, NotationPaintView*> matrixChanged() const override;
-    void setMatrix(const Transform& matrix, NotationPaintView* sender) override;
+    draw::Transform matrix() const override;
+    async::Channel<draw::Transform, NotationPaintView*> matrixChanged() const override;
+    void setMatrix(const draw::Transform& matrix, NotationPaintView* sender) override;
 
     ValCh<int> zoomPercentage() const override;
 
 private:
     bool m_isMatrixInited = false;
-    Transform m_matrix;
-    async::Channel<Transform, NotationPaintView*> m_matrixChanged;
+    draw::Transform m_matrix;
+    async::Channel<draw::Transform, NotationPaintView*> m_matrixChanged;
     ValCh<int> m_zoomPercentage;
 };
 }

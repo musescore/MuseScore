@@ -25,8 +25,6 @@
 
 #ifndef ENGRAVING_NO_INTERNAL
 #include "engraving/infrastructure/internal/engravingconfiguration.h"
-#include "engraving/infrastructure/internal/qfontprovider.h"
-#include "engraving/infrastructure/internal/qimageprovider.h"
 #endif
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -63,8 +61,6 @@ std::string EngravingModule::moduleName() const
 void EngravingModule::registerExports()
 {
 #ifndef ENGRAVING_NO_INTERNAL
-    ioc()->registerExport<draw::IFontProvider>(moduleName(), new draw::QFontProvider());
-    ioc()->registerExport<draw::IImageProvider>(moduleName(), new draw::QImageProvider());
     ioc()->registerExport<IEngravingConfiguration>(moduleName(), s_configuration);
 #endif
 }

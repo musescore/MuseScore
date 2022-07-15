@@ -29,7 +29,7 @@
 #include "rest.h"
 #include "score.h"
 
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 
 using namespace mu;
 

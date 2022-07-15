@@ -19,6 +19,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #add_subdirectory(global)
+add_subdirectory(draw)
 add_subdirectory(ui)
 add_subdirectory(uicomponents)
 add_subdirectory(fonts)

@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_PAINTDEBUGGER_H
 #define MU_ENGRAVING_PAINTDEBUGGER_H
 
-#include "infrastructure/draw/ipaintprovider.h"
+#include "draw/ipaintprovider.h"
 
 namespace mu::engraving {
 class PaintDebugger : public draw::IPaintProvider
@@ -58,10 +58,10 @@ public:
     void save() override;
     void restore() override;
 
-    void setTransform(const Transform& transform) override;
-    const Transform& transform() const override;
+    void setTransform(const draw::Transform& transform) override;
+    const draw::Transform& transform() const override;
 
-    void drawPath(const PainterPath& path) override;
+    void drawPath(const draw::PainterPath& path) override;
     void drawPolygon(const PointF* points, size_t pointCount, draw::PolygonMode mode) override;
 
     void drawText(const PointF& point, const String& text) override;

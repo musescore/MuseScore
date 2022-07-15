@@ -21,7 +21,7 @@
  */
 #include "paint.h"
 
-#include "infrastructure/draw/painter.h"
+#include "draw/painter.h"
 #include "libmscore/engravingitem.h"
 #include "libmscore/page.h"
 #include "libmscore/score.h"

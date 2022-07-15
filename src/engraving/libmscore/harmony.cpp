@@ -25,8 +25,8 @@
 #include "containers.h"
 #include "translation.h"
 #include "draw/fontmetrics.h"
-#include "draw/brush.h"
-#include "draw/pen.h"
+#include "draw/types/brush.h"
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
 

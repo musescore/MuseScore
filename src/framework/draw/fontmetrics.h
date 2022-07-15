@@ -22,12 +22,12 @@
 #ifndef MU_DRAW_FONTMETRICS_H
 #define MU_DRAW_FONTMETRICS_H
 
-#include "font.h"
+#include "types/font.h"
+#include "types/geometry.h"
 
 #include "types/string.h"
 #include "modularity/ioc.h"
 #include "ifontprovider.h"
-#include "geometry.h"
 
 namespace mu::draw {
 class FontMetrics

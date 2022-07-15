@@ -32,7 +32,7 @@
 #include "view/autobotscriptsmodel.h"
 #include "view/testcaserunmodel.h"
 
-#include "engraving/infrastructure/draw/painter.h"
+#include "draw/painter.h"
 #include "internal/draw/abpaintprovider.h"
 #include "internal/autobotactionscontroller.h"
 #include "internal/autobotactions.h"

@@ -36,8 +36,8 @@
 #include "containers.h"
 
 #include "engraving/rw/xml.h"
-#include "engraving/infrastructure/draw/pen.h"
-#include "engraving/infrastructure/draw/painterpath.h"
+#include "draw/types/pen.h"
+#include "draw/types/painterpath.h"
 #include "engraving/infrastructure/internal/qmimedataadapter.h"
 
 #include "libmscore/masterscore.h"
@@ -2128,7 +2128,7 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
 
     std::vector<RectF> rangeArea = m_selection->range()->boundingArea();
     for (const RectF& rect: rangeArea) {
-        mu::PainterPath path;
+        PainterPath path;
         path.addRoundedRect(rect, 6, 6);
 
         QColor fillColor = selectionColor;
