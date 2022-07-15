@@ -40,7 +40,7 @@ PluginsUiActions::PluginsUiActions(std::shared_ptr<PluginsService> service)
 static UiAction MANAGE_ACTION = UiAction(
     "manage-plugins",
     mu::context::UiCtxAny,
-    QT_TRANSLATE_NOOP("action", "Manage plugins…")
+    QT_TRANSLATE_NOOP("action", "&Manage plugins…")
     );
 
 const mu::ui::UiActionList& PluginsUiActions::actionsList() const

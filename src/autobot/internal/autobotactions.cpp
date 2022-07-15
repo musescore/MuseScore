@@ -34,7 +34,7 @@ const UiActionList AutobotActions::m_actions = {
              ),
     UiAction("autobot-show-scripts",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Show scripts…")
+             QT_TRANSLATE_NOOP("action", "Show &scripts…")
              ),
 };
 
