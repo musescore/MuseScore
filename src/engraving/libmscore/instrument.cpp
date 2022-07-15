@@ -993,7 +993,7 @@ void InstrChannel::switchExpressive(Synthesizer* synth, bool expressive, bool fo
 //        return;
 //    }
 //    const auto& info = fontsInfo.front();
-//    if (!info.fontName.contains("MuseScore_General", Qt::CaseInsensitive)) {
+//    if (!info.fontName.contains("MS Basic", Qt::CaseInsensitive)) {
 //        LOGD().nospace() << "Soundfont '" << info.fontName << "' is not MuseScore General, cannot update expressive";
 //        return;
 //    }

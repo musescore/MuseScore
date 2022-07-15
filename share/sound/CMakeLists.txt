@@ -18,25 +18,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/MuseScore_General.sf3)
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/MS Basic.sf3")
   install (FILES FluidR3Mono_GM.sf3
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
-      RENAME MuseScore_General.sf3
+      RENAME "MS Basic.sf3"
       )
 else ()
   install(FILES
-      MuseScore_General.sf3
+      "MS Basic.sf3"
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
       )
 endif ()
 
-if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/MuseScore_General_License.md)
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/MS Basic_License.md")
   install (FILES FluidR3Mono_License.md
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
-      RENAME MuseScore_General_License.md)
+      RENAME "MS Basic_License.md")
 else ()
   install(FILES
-      MuseScore_General_License.md
+      "MS Basic_License.md"
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
       )
 endif ()
