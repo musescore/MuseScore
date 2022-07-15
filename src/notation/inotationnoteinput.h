@@ -43,9 +43,7 @@ public:
     virtual void padNote(const Pad& pad)  = 0;
     virtual void putNote(const PointF& pos, bool replace, bool insert) = 0;
     virtual void removeNote(const PointF& pos) = 0;
-    virtual void setAccidental(AccidentalType accidentalType) = 0;
-    virtual void setArticulation(SymbolId articulationSymbolId) = 0;
-    virtual void setDrumNote(int note) = 0;
+
     virtual void addTuplet(const TupletOptions& options) = 0;
 
     virtual void doubleNoteInputDuration() = 0;
@@ -56,7 +54,11 @@ public:
 
     virtual void addTie() = 0;
 
-    virtual void setCurrentVoiceIndex(int voiceIndex) = 0;
+    virtual void setAccidental(AccidentalType accidentalType) = 0;
+    virtual void setArticulation(SymbolId articulationSymbolId) = 0;
+    virtual void setDrumNote(int note) = 0;
+    virtual void setCurrentVoice(voice_idx_t voiceIndex) = 0;
+    virtual void setCurrentTrack(track_idx_t trackIndex) = 0;
 
     virtual void resetInputPosition() = 0;
 
