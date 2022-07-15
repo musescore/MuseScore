@@ -26,11 +26,11 @@
 
 #include "modularity/ioc.h"
 
-#include "geometry.h"
-#include "pixmap.h"
-#include "color.h"
+#include "types/geometry.h"
+#include "types/pixmap.h"
+#include "types/color.h"
 #include "painter.h"
-#include "infrastructure/draw/ipaintprovider.h"
+#include "ipaintprovider.h"
 
 namespace mu::draw {
 class IImageProvider : MODULE_EXPORT_INTERFACE

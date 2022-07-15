@@ -24,7 +24,7 @@
 #include <cmath>
 
 #include "rw/xml.h"
-#include "draw/brush.h"
+#include "draw/types/brush.h"
 
 #include "staff.h"
 #include "chord.h"

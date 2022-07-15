@@ -21,7 +21,7 @@
  */
 
 #include "tremolobar.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 

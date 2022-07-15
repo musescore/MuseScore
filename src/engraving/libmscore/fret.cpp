@@ -24,7 +24,7 @@
 
 #include "translation.h"
 #include "draw/fontmetrics.h"
-#include "draw/brush.h"
+#include "draw/types/brush.h"
 #include "rw/xml.h"
 
 #include "factory.h"
@@ -38,7 +38,7 @@
 #include "mscore.h"
 #include "harmony.h"
 #include "staff.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "undo.h"
 
 #include "log.h"

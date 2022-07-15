@@ -28,7 +28,7 @@
 #include "mscore.h"
 #include "interval.h"
 
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
 enum class Key;

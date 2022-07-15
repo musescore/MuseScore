@@ -50,6 +50,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::palette;
 
@@ -122,7 +123,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     qreal x = 3;
     qreal w = ww - 6;
 
-    painter.setWorldTransform(mu::Transform::fromQTransform(_matrix));
+    painter.setWorldTransform(Transform::fromQTransform(_matrix));
 
     QRectF r = imatrix.mapRect(QRectF(x, y, w, wh));
 

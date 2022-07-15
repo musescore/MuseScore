@@ -26,7 +26,7 @@
 #include <vector>
 #include <memory>
 #include "types/bytearray.h"
-#include "infrastructure/draw/pixmap.h"
+#include "draw/types/pixmap.h"
 
 namespace mu::engraving {
 class IMimeData

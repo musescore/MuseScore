@@ -23,12 +23,13 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
-#include "types/string.h"
-#include "config.h"
+#include "global/types/string.h"
+#include "global/containers.h"
+#include "draw/types/color.h"
 
-#include "infrastructure/draw/color.h"
-#include "containers.h"
-#include "types/types.h"
+#include "engraving/types/types.h"
+
+#include "config.h"
 
 namespace mu::engraving {
 #define MSC_VERSION     "4.00"

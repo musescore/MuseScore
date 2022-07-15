@@ -25,7 +25,7 @@
 
 #include "engravingitem.h"
 #include "instrument.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 enum class StaffStateType : char {
@@ -43,7 +43,7 @@ class StaffState final : public EngravingItem
 {
     StaffStateType _staffStateType { StaffStateType::INVISIBLE };
     double lw { 0.0 };
-    mu::PainterPath path;
+    mu::draw::PainterPath path;
 
     Instrument* _instrument { nullptr };
 

@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_DEBUGPAINT_H
 #define MU_ENGRAVING_DEBUGPAINT_H
 
-#include "infrastructure/draw/painter.h"
+#include "draw/painter.h"
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"

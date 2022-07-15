@@ -26,7 +26,7 @@
 #include "types/string.h"
 
 #include "types.h"
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 #include "style/styledef.h"
 #include "style/textstyle.h"
 #include "style/style.h"

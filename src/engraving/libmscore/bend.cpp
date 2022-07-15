@@ -22,8 +22,8 @@
 
 #include "bend.h"
 
-#include "draw/pen.h"
-#include "draw/brush.h"
+#include "draw/types/pen.h"
+#include "draw/types/brush.h"
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"

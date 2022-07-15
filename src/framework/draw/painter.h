@@ -29,12 +29,13 @@
 #include "ipaintprovider.h"
 
 #include "types/string.h"
-#include "color.h"
-#include "geometry.h"
-#include "drawtypes.h"
-#include "font.h"
-#include "pen.h"
-#include "pixmap.h"
+
+#include "types/color.h"
+#include "types/geometry.h"
+#include "types/drawtypes.h"
+#include "types/font.h"
+#include "types/pen.h"
+#include "types/pixmap.h"
 
 class QPaintDevice;
 

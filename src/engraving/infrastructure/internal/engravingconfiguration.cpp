@@ -22,7 +22,7 @@
 #include "engravingconfiguration.h"
 
 #include "global/settings.h"
-#include "draw/color.h"
+#include "draw/types/color.h"
 #include "libmscore/mscore.h"
 
 #include "log.h"

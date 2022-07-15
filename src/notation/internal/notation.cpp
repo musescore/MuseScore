@@ -43,7 +43,7 @@
 #include "notationmidiinput.h"
 #include "notationparts.h"
 #include "notationtypes.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 
 using namespace mu::notation;
 

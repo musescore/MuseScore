@@ -28,9 +28,10 @@
 #include "types/string.h"
 #include "id.h"
 
-#include "infrastructure/draw/color.h"
-#include "infrastructure/draw/geometry.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/color.h"
+#include "draw/types/geometry.h"
+#include "draw/types/painterpath.h"
+
 #include "dimension.h"
 #include "fraction.h"
 #include "symid.h"
@@ -197,7 +198,7 @@ using ElementTypeSet = std::unordered_set<ElementType>;
 // --- Geometry ---
 using PointF = mu::PointF;              // P_TYPE::POINT
 using SizeF = mu::SizeF;                // P_TYPE::SIZE
-using PainterPath = mu::PainterPath;    // P_TYPE::PATH
+using PainterPath = mu::draw::PainterPath; // P_TYPE::PATH
 using ScaleF = mu::ScaleF;              // P_TYPE::SCALE
 using PairF = mu::PairF;                // P_TYPE::PAIR_REAL
 

@@ -23,7 +23,7 @@
 #ifndef MU_DRAW_MATRIX_H
 #define MU_DRAW_MATRIX_H
 
-namespace mu {
+namespace mu::draw {
 class Matrix
 {
 public:

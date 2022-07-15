@@ -25,7 +25,7 @@
 
 #include "geometry.h"
 
-namespace mu {
+namespace mu::draw {
 class Bezier
 {
 public:
@@ -52,4 +52,4 @@ private:
 };
 }
 
-#endif // MU_BEZIER_H
+#endif // MU_DRAW_BEZIER_H

@@ -25,7 +25,7 @@
 
 #include <vector>
 
-#include "infrastructure/draw/font.h"
+#include "draw/types/font.h"
 
 #include "text.h"
 #include "pitchspelling.h"

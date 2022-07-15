@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_READPAGEFORMAT_H
 #define MU_ENGRAVING_READPAGEFORMAT_H
 
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
 class MStyle;

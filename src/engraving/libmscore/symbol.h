@@ -25,7 +25,7 @@
 
 #include "bsymbol.h"
 
-#include "infrastructure/draw/font.h"
+#include "draw/types/font.h"
 
 namespace mu::engraving {
 class Segment;

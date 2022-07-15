@@ -24,7 +24,7 @@
 #define __LAYOUTBREAK_H__
 
 #include "engravingitem.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 class Factory;
@@ -85,7 +85,7 @@ private:
 
     double lw;
     mu::RectF m_iconBorderRect;
-    mu::PainterPath m_iconPath;
+    mu::draw::PainterPath m_iconPath;
     double _pause;
     bool _startWithLongNames;
     bool _startWithMeasureOne;

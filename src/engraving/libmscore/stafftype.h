@@ -23,7 +23,7 @@
 #ifndef __STAFFTYPE_H__
 #define __STAFFTYPE_H__
 
-#include "infrastructure/draw/color.h"
+#include "draw/types/color.h"
 #include "engravingitem.h"
 #include "mscore.h"
 #include "durationtype.h"

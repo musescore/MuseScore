@@ -30,7 +30,7 @@
 #include "score.h"
 #include "note.h"
 #include "measure.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "system.h"
 #include "segment.h"
 #include "chord.h"

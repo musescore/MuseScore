@@ -26,7 +26,7 @@
 #include "engravingitem.h"
 #include "harmony.h"
 
-#include "infrastructure/draw/font.h"
+#include "draw/types/font.h"
 
 namespace mu::engraving {
 class Factory;

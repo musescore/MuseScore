@@ -26,8 +26,8 @@
 #include "modularity/imoduleexport.h"
 
 #include "types/string.h"
-#include "font.h"
-#include "geometry.h"
+#include "types/font.h"
+#include "types/geometry.h"
 
 namespace mu::draw {
 class IFontProvider : MODULE_EXPORT_INTERFACE

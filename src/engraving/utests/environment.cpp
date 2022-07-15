@@ -24,7 +24,8 @@
 
 #include "engraving/engravingmodule.h"
 #include "engraving/libmscore/engravingitem.h"
-#include "framework/fonts/fontsmodule.h"
+#include "fonts/fontsmodule.h"
+#include "draw/drawmodule.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
@@ -37,6 +38,7 @@
 
 static mu::testing::SuiteEnvironment engraving_se(
 {
+    new mu::draw::DrawModule(),
     new mu::fonts::FontsModule(),
     new mu::engraving::EngravingModule()
 },

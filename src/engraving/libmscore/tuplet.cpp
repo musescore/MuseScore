@@ -22,7 +22,7 @@
 
 #include "tuplet.h"
 
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"

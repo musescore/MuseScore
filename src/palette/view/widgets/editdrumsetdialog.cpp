@@ -36,7 +36,7 @@
 #include "libmscore/stem.h"
 #include "libmscore/scorefont.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 #include "framework/global/smuflranges.h"
 

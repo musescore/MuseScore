@@ -26,10 +26,10 @@
 
 #include "style/style.h"
 
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 #include "modularity/ioc.h"
-#include "infrastructure/draw/ifontprovider.h"
+#include "draw/ifontprovider.h"
 
 namespace mu {
 class JsonObject;

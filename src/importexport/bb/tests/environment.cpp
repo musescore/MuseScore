@@ -22,12 +22,15 @@
 
 #include "testing/environment.h"
 
-#include "log.h"
-#include "framework/fonts/fontsmodule.h"
+#include "fonts/fontsmodule.h"
+#include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
+
+#include "log.h"
 
 static mu::testing::SuiteEnvironment importexport_se(
 {
+    new mu::draw::DrawModule(),
     new mu::fonts::FontsModule(), // needs for libmscore
     new mu::engraving::EngravingModule()
 },

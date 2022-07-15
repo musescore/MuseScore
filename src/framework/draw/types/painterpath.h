@@ -34,7 +34,7 @@
 #include <QPainterPath>
 #endif
 
-namespace mu {
+namespace mu::draw {
 class PainterPath
 {
 public:
@@ -182,7 +182,7 @@ private:
 };
 }
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::PainterPath)
+Q_DECLARE_METATYPE(mu::draw::PainterPath)
 #endif
 
 #endif // MU_DRAW_PAINTERPATH_H

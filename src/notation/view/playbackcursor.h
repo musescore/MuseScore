@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 #include "notation/inotation.h"
 

@@ -19,29 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_SVGRENDERER_H
-#define MU_DRAW_SVGRENDERER_H
+#ifndef MU_DRAW_QIMAGEPROVIDER_H
+#define MU_DRAW_QIMAGEPROVIDER_H
 
-#include "types/bytearray.h"
-#include "geometry.h"
-#include "painter.h"
-
-class QSvgRenderer;
+#include "iimageprovider.h"
 
 namespace mu::draw {
-class SvgRenderer
+class QImageProvider : public IImageProvider
 {
 public:
-    SvgRenderer(const ByteArray& data);
-    ~SvgRenderer();
+    std::shared_ptr<Pixmap> createPixmap(const ByteArray& data) const override;
+    std::shared_ptr<Pixmap> createPixmap(int w, int h, int dpm, const Color& color) const override;
 
-    SizeF defaultSize() const;
+    Pixmap scaled(const Pixmap& origin, const Size& s) const override;
 
-    void render(Painter* painter, const RectF& rect);
-
-private:
-    QSvgRenderer* m_qSvgRenderer = nullptr;
+    IPaintProviderPtr painterForImage(std::shared_ptr<Pixmap> pixmap) override;
+    void saveAsPng(std::shared_ptr<Pixmap> px, io::IODevice* device) override;
 };
 }
 
-#endif // MU_DRAW_SVGRENDERER_H
+#endif // MU_DRAW_QIMAGEPROVIDER_H

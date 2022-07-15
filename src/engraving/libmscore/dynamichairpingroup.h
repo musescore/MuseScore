@@ -27,7 +27,7 @@
 #include <functional>
 
 #include "elementgroup.h"
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
 class Dynamic;

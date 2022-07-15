@@ -23,9 +23,9 @@
 
 #include <cmath>
 
-#include "draw/transform.h"
-#include "draw/pen.h"
-#include "draw/brush.h"
+#include "draw/types/transform.h"
+#include "draw/types/pen.h"
+#include "draw/types/brush.h"
 #include "rw/xml.h"
 
 #include "articulation.h"
