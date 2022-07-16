@@ -163,6 +163,22 @@ QVariant ShortcutsModel::currentShortcut() const
     return shortcutToObject(sc);
 }
 
+QVariant ShortcutsModel::getShortcut(QString action) const
+{
+    for (const Shortcut& shortcut : m_shortcuts) {
+        if (action == QString::fromStdString(shortcut.action)) {
+            QVariantMap obj;
+            obj["title"] = actionTitle(shortcut.action);
+            obj["action"] = QString::fromStdString(shortcut.action);
+            obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
+            obj["context"] = QString::fromStdString(shortcut.context);
+            return obj;
+        }
+    }
+    LOGE() << "No action found in getShortcut in shortcutsmodel.cpp";
+    return QVariant();
+}
+
 QModelIndex ShortcutsModel::currentShortcutIndex() const
 {
     if (m_selection.size() == 1) {
@@ -227,6 +243,33 @@ void ShortcutsModel::applySequenceToCurrentShortcut(const QString& newSequence, 
     }
 
     notifyAboutShortcutChanged(currIndex);
+}
+
+void ShortcutsModel::applySequenceToShortcut(QString action, const QString& newSequence)
+{
+    int i = 0;
+    for (Shortcut& shortcut : m_shortcuts) {
+        if (action == QString::fromStdString(shortcut.action)) {
+            shortcut.sequences = Shortcut::sequencesFromString(newSequence.toStdString());
+            notifyAboutShortcutChanged(index(i));
+            return;
+        }
+        i += 1;
+    }
+}
+
+void ShortcutsModel::clearSequenceOfShortcut(QString action)
+{
+    int i = 0;
+    for (Shortcut& shortcut : m_shortcuts) {
+        if (action == QString::fromStdString(shortcut.action)) {
+            shortcut.sequences.clear();
+            shortcut.standardKey = QKeySequence::StandardKey::UnknownKey;
+            notifyAboutShortcutChanged(index(i));
+            return; // TODO: New addition
+        }
+        i += 1;
+    }
 }
 
 void ShortcutsModel::clearSelectedShortcuts()

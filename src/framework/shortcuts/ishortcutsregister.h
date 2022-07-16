@@ -38,7 +38,9 @@ public:
     virtual ~IShortcutsRegister() = default;
 
     virtual const ShortcutList& shortcuts() const = 0;
+    virtual Ret setShortcut(const Shortcut& shortcut) = 0;
     virtual Ret setShortcuts(const ShortcutList& shortcuts) = 0;
+    virtual Ret removeShortcutForAction(const QString& action) = 0;
     virtual void resetShortcuts() = 0;
     virtual async::Notification shortcutsChanged() const = 0;
 

@@ -39,9 +39,11 @@
 #include "internal/shortcutsconfiguration.h"
 #include "view/shortcutsmodel.h"
 #include "view/editshortcutmodel.h"
+#include "view/toolbarshortcutscontextmodel.h"
 #include "view/mididevicemappingmodel.h"
 #include "view/editmidimappingmodel.h"
 
+#include "ui/iinteractiveuriregister.h"
 #include "ui/iuiengine.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
@@ -89,6 +91,7 @@ void ShortcutsModule::registerUiTypes()
 
     qmlRegisterType<ShortcutsModel>("MuseScore.Shortcuts", 1, 0, "ShortcutsModel");
     qmlRegisterType<EditShortcutModel>("MuseScore.Shortcuts", 1, 0, "EditShortcutModel");
+    qmlRegisterType<ToolbarShortcutsContextModel>("MuseScore.Shortcuts", 1, 0, "ToolbarShortcutsContextModel");
     qmlRegisterType<MidiDeviceMappingModel>("MuseScore.Shortcuts", 1, 0, "MidiDeviceMappingModel");
     qmlRegisterType<EditMidiMappingModel>("MuseScore.Shortcuts", 1, 0, "EditMidiMappingModel");
 
@@ -111,5 +114,11 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
         pr->reg("shortcutsUserAppDataPath", s_configuration->shortcutsUserAppDataPath());
         pr->reg("shortcutsAppDataPath", s_configuration->shortcutsAppDataPath());
         pr->reg("midiMappingUserAppDataPath", s_configuration->midiMappingUserAppDataPath());
+    }
+
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://shortcuts/editshortcut"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Shortcuts/EditShortcutDialogDirect.qml"));
     }
 }

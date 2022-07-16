@@ -14,5 +14,7 @@
         <file>qml/MuseScore/Shortcuts/internal/ShortcutsBottomPanel.qml</file>
         <file>qml/MuseScore/Shortcuts/internal/MidiMappingTopPanel.qml</file>
         <file>qml/MuseScore/Shortcuts/internal/MidiMappingBottomPanel.qml</file>
+        <file>qml/MuseScore/Shortcuts/EditShortcutView.qml</file>
+        <file>qml/MuseScore/Shortcuts/EditShortcutDialogDirect.qml</file>
     </qresource>
 </RCC>

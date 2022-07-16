@@ -291,6 +291,36 @@ const ShortcutList& ShortcutsRegister::shortcuts() const
     return m_shortcuts;
 }
 
+mu::Ret ShortcutsRegister::setShortcut(const Shortcut& shortcut)
+{
+    bool found = false;
+
+    for (Shortcut& sc : m_shortcuts) {
+        if (sc.action == shortcut.action) {
+            sc.sequences = shortcut.sequences;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        m_shortcuts.push_back(shortcut);
+    }
+
+    ShortcutList needToWrite = filterAndUpdateAdditionalShortcuts(m_shortcuts);
+
+    bool ok = writeToFile(needToWrite, configuration()->shortcutsUserAppDataPath());
+
+    if (ok) {
+        m_shortcuts = needToWrite;
+        mergeShortcuts(m_shortcuts, m_defaultShortcuts);
+        mergeAdditionalShortcuts(m_shortcuts);
+        m_shortcutsChanged.notify();
+    }
+
+    return ok;
+}
+
 mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
 {
     TRACEFUNC;
@@ -311,6 +341,20 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
     }
 
     return ok;
+}
+
+mu::Ret ShortcutsRegister::removeShortcutForAction(const QString& action)
+{
+    ShortcutList filtered = m_shortcuts;
+
+    for (Shortcut& sc : filtered) {
+        if (QString::fromStdString(sc.action) == action) {
+            sc.sequences.clear();
+            return setShortcuts(filtered);
+        }
+    }
+
+    return false;
 }
 
 void ShortcutsRegister::resetShortcuts()
@@ -353,6 +397,10 @@ void ShortcutsRegister::writeShortcut(framework::XmlWriter& writer, const Shortc
 
     for (const std::string& seq : shortcut.sequences) {
         writer.writeTextElement(SEQUENCE_TAG, seq);
+    }
+
+    if (!shortcut.sequences.size()) {
+        writer.writeTextElement(SEQUENCE_TAG, "");
     }
 
     writer.writeEndElement();

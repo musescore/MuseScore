@@ -1,6 +1,7 @@
 module MuseScore.Shortcuts
 ShortcutsPage 1.0 ShortcutsPage.qml
 EditShortcutDialog 1.0 EditShortcutDialog.qml
+EditShortcutView 1.0 EditShortcutView.qml
 Shortcuts 1.0 Shortcuts.qml
 MidiDeviceMappingPage 1.0 MidiDeviceMappingPage.qml
 EditMidiMappingDialog 1.0 EditMidiMappingDialog.qml

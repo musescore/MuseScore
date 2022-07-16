@@ -24,6 +24,7 @@ import QtQuick 2.15
 import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.Shortcuts 1.0
 
 import "internal"
 
@@ -142,9 +143,8 @@ Item {
                 }
             }
 
-            mouseArea.acceptedButtons: hasMenu && itemModel.isMenuSecondary
-                                       ? Qt.LeftButton | Qt.RightButton
-                                       : Qt.LeftButton
+
+            mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
 
             function toggleMenuOpened() {
                 menuLoader.toggleOpened(item.subitems)
@@ -165,6 +165,10 @@ Item {
 
                 if (mouse.button === Qt.LeftButton) {
                     handleMenuItem()
+                }
+
+                else if (mouse.button === Qt.RightButton) {
+                    contextMenu.show(Qt.point(mouseArea.mouseX, mouseArea.mouseY))
                 }
             }
 
@@ -207,6 +211,16 @@ Item {
 
                 onHandleMenuItem: function(itemId) {
                     noteInputModel.handleMenuItem(itemId)
+                }
+            }
+
+            ToolbarShortcutsContextMenu {
+                id: contextMenu
+                actionCode: btn.item ? btn.item.action : ""
+
+                onItemHandled: {
+                    console.log(btn.item.action + " handled!")
+                    noteInputModel.load()
                 }
             }
         }

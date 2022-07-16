@@ -624,6 +624,36 @@
     <seq>.</seq>
     </SC>
   <SC>
+    <key>pad-rest</key>
+    <seq></seq>
+    <ctx>any</ctx>
+    </SC>
+  <SC>
+    <key>flat</key>
+    <seq></seq>
+    <ctx>any</ctx>
+    </SC>
+  <SC>
+    <key>flat2</key>
+    <seq></seq>
+    <ctx>any</ctx>
+    </SC>
+  <SC>
+     <key>nat</key>
+     <seq></seq>
+     <ctx>notation-staff-not-tab</ctx>
+     </SC>
+  <SC>
+     <key>sharp</key>
+     <seq></seq>
+     <ctx>any</ctx>
+     </SC>
+  <SC>
+     <key>sharp2</key>
+     <seq></seq>
+     <ctx>any</ctx>
+     </SC>
+  <SC>
     <key>tie</key>
     <seq>+</seq>
     </SC>
@@ -702,6 +732,21 @@
   <SC>
     <key>play</key>
     <seq>Space</seq>
+    </SC>
+  <SC>
+    <key>rewind</key>
+    <seq></seq>
+    <ctx>notation-focused</ctx>
+    </SC>
+  <SC>
+    <key>loop</key>
+    <seq></seq>
+    <ctx>notation-focused</ctx>
+    </SC>
+  <SC>
+    <key>metronome</key>
+    <seq></seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>play-prev-chord</key>

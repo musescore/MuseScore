@@ -91,6 +91,11 @@ UiAction MenuItem::action() const
     return m_action;
 }
 
+QString mu::uicomponents::MenuItem::actionCode() const
+{
+    return QString::fromStdString(m_action.code);
+}
+
 mu::actions::ActionData MenuItem::args() const
 {
     return m_args;
