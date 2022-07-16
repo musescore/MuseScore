@@ -347,6 +347,8 @@ mu::Ret ShortcutsRegister::removeShortcutForAction(const QString& action)
 {
     ShortcutList filtered = m_shortcuts;
 
+    LOGD() << "Clearing shortcut for: " << action;
+
     for (Shortcut& sc : filtered) {
         if (QString::fromStdString(sc.action) == action) {
             sc.sequences.clear();

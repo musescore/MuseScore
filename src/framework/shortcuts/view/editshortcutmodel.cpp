@@ -45,10 +45,31 @@ void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList&
     m_allShortcuts = allShortcuts;
     m_potentialConflictShortcuts.clear();
 
-    QVariantMap originShortcutMap = originShortcut.toMap();
-    std::string originCtx = originShortcutMap.value("context").toString().toStdString();
+    QVariantList shortcuts;
+    if (allShortcuts.isEmpty()) {
+        for (const Shortcut& shortcut : shortcutsRegister()->shortcuts()) {
+            QVariantMap obj;
 
-    for (const QVariant& shortcut : allShortcuts) {
+            obj["title"] = uiactionsRegister()->action(shortcut.action).title;
+            obj["action"] = QString::fromStdString(shortcut.action);
+            obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
+            obj["context"] = QString::fromStdString(shortcut.context);
+
+            shortcuts << obj;
+        }
+        LOGD() << "Empty shortcuts";
+    }
+    else {
+        shortcuts = allShortcuts;
+        LOGD() << "Non-empty shortcuts";
+    }
+
+    QVariantMap originShortcutMap = originShortcut.toMap();
+    m_originContext = originShortcutMap.value("context").toString();
+    m_originAction = originShortcutMap.value("action").toString();
+    LOGD() << "Action in editshortcutmodel load?: " << m_originAction;
+
+    for (const QVariant& shortcut : shortcuts) {
         if (shortcut == originShortcut) {
             continue;
         }
@@ -56,7 +77,7 @@ void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList&
         QVariantMap map = shortcut.toMap();
         std::string ctx = map.value("context").toString().toStdString();
 
-        if (areContextPrioritiesEqual(originCtx, ctx)) {
+        if (areContextPrioritiesEqual(m_originContext.toStdString(), ctx)) {
             m_potentialConflictShortcuts << shortcut;
         }
     }
@@ -65,6 +86,23 @@ void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList&
     m_originShortcutTitle = originShortcutMap.value("title").toString();
 
     emit originSequenceChanged();
+}
+
+void EditShortcutModel::loadByAction(const QString& actionCode)
+{
+    Shortcut shortcut = shortcutsRegister()->shortcut(actionCode.toStdString());
+
+    if (shortcut.action.empty()) {
+        return;
+    }
+
+    QVariantMap obj;
+    obj["title"] = uiactionsRegister()->action(shortcut.action).title;
+    obj["action"] = QString::fromStdString(shortcut.action);
+    obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
+    obj["context"] = QString::fromStdString(shortcut.context);
+
+    load(obj);
 }
 
 void EditShortcutModel::clearNewSequence()
@@ -132,6 +170,16 @@ void EditShortcutModel::checkNewSequenceForConflicts()
     }
 }
 
+void EditShortcutModel::clearConflicts()
+{
+    m_potentialConflictShortcuts.clear();
+}
+
+void EditShortcutModel::setDirectReplace(bool val)
+{
+    directReplace = val;
+}
+
 QString EditShortcutModel::originSequenceInNativeFormat() const
 {
     std::vector<std::string> sequences = Shortcut::sequencesFromString(m_originSequence.toStdString());
@@ -188,10 +236,27 @@ void EditShortcutModel::applyNewSequence()
     }
 
     int conflictShortcutIndex = m_allShortcuts.indexOf(m_conflictShortcut);
+
+    if (directReplace) {
+        Shortcut sc;
+
+        sc.action = originAction().toStdString();
+        sc.context = m_originContext.toStdString();
+        sc.sequences = Shortcut::sequencesFromString(m_originSequence.toStdString());
+        shortcutsRegister()->removeShortcutForAction(m_conflictShortcut["action"].toString());
+        shortcutsRegister()->setShortcut(sc);
+    }
+
     emit applyNewSequenceRequested(m_originSequence, conflictShortcutIndex);
 }
 
 QString EditShortcutModel::newSequence() const
 {
     return m_newSequence.toString();
+}
+
+QString EditShortcutModel::originAction() const
+{
+    LOGE() << "Action in cpp: " << m_originAction;
+    return m_originAction;
 }
