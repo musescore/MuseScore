@@ -58,8 +58,7 @@ void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList&
             shortcuts << obj;
         }
         LOGD() << "Empty shortcuts";
-    }
-    else {
+    } else {
         shortcuts = allShortcuts;
         LOGD() << "Non-empty shortcuts";
     }
