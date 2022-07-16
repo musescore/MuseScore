@@ -88,7 +88,6 @@ private:
     void updatePartTitles();
 
     void doSetScoreOrder(const ScoreOrder& order);
-    void doMoveStaves(const std::vector<Staff*>& staves, engraving::staff_idx_t destinationStaffIndex, Part* destinationPart = nullptr);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);
@@ -110,8 +109,6 @@ private:
     void appendNewParts(const PartInstrumentList& parts);
     void updateSoloist(const PartInstrumentList& parts);
     void sortParts(const PartInstrumentList& parts, const std::vector<mu::engraving::Staff*>& originalStaves);
-
-    void updateTracks();
 
     int resolveNewInstrumentNumber(const InstrumentTemplate& instrument, const PartInstrumentList& allNewInstruments) const;
 

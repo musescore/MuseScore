@@ -2964,7 +2964,7 @@ void Score::sortStaves(std::vector<staff_idx_t>& dst)
 void Score::mapExcerptTracks(const std::vector<staff_idx_t>& dst)
 {
     for (Excerpt* e : masterScore()->excerpts()) {
-        TracksMap tr = e->tracksMapping();
+        const TracksMap& tr = e->tracksMapping();
         TracksMap tracks;
         for (auto it = tr.begin(); it != tr.end(); ++it) {
             staff_idx_t prvStaffIdx = it->first / VOICES;
@@ -2972,7 +2972,7 @@ void Score::mapExcerptTracks(const std::vector<staff_idx_t>& dst)
             int offset = static_cast<int>((curStaffIdx - prvStaffIdx) * VOICES);
             tracks.insert({ it->first + offset, it->second });
         }
-        e->tracksMapping() = tracks;
+        e->setTracksMapping(tracks);
     }
 }
 

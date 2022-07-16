@@ -69,17 +69,12 @@ public:
     size_t nstaves() const;
     bool isEmpty() const;
 
-    TracksMap& tracksMapping() { return m_tracksMapping; }
+    TracksMap& tracksMapping();
     void setTracksMapping(const TracksMap& tracksMapping);
-
-    void updateTracksMapping();
 
     void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
 
     void read(XmlReader&);
-
-    bool operator==(const Excerpt& other) const;
-    bool operator!=(const Excerpt& other) const;
 
     static std::vector<Excerpt*> createExcerptsFromParts(const std::vector<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);
@@ -97,6 +92,8 @@ private:
     static String formatName(const String& partName, const std::vector<Excerpt*>&);
 
     void setInited(bool inited);
+
+    void updateTracksMapping(bool voicesVisibilityChanged = false);
 
     MasterScore* m_masterScore = nullptr;
     Score* m_excerptScore = nullptr;

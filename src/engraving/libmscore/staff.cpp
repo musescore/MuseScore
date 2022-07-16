@@ -331,13 +331,8 @@ bool Staff::canDisableVoice() const
     return countOfVisibleVoices > 1;
 }
 
-void Staff::updateVisibilityVoices(Staff* masterStaff)
+void Staff::updateVisibilityVoices(Staff* masterStaff, const TracksMap& tracks)
 {
-    if (!score()->excerpt()) {
-        return;
-    }
-
-    auto tracks = score()->excerpt()->tracksMapping();
     if (tracks.empty()) {
         _visibilityVoices = { true, true, true, true };
         return;
