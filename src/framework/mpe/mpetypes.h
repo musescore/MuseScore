@@ -103,6 +103,21 @@ struct ValuesCurve : public SharedMap<duration_percentage_t, T>
     {
         return this->empty() ? 0 : this->rbegin()->first - amplitudeValuePoint().first;
     }
+
+    float velocityFraction() const
+    {
+        auto amplitudePoint = amplitudeValuePoint();
+        duration_percentage_t duration = amplitudePoint.first;
+        T amplitude = amplitudePoint.second;
+
+        if (duration == 0) {
+            return 1.f;
+        }
+
+        float factor = log10f(amplitude / static_cast<float>(duration));
+
+        return (factor + 1.f) / 2.f;
+    }
 };
 
 // Pitch
@@ -357,7 +372,7 @@ struct ArrangementPattern
     bool operator==(const ArrangementPattern& other) const
     {
         return durationFactor == other.durationFactor
-               && timestampOffset == other.timestampOffset;
+                && timestampOffset == other.timestampOffset;
     }
 };
 
@@ -436,8 +451,8 @@ struct ArticulationPatternSegment
     bool operator==(const ArticulationPatternSegment& other) const
     {
         return arrangementPattern == other.arrangementPattern
-               && pitchPattern == other.pitchPattern
-               && expressionPattern == other.expressionPattern;
+                && pitchPattern == other.pitchPattern
+                && expressionPattern == other.expressionPattern;
     }
 };
 
@@ -510,11 +525,11 @@ struct ArticulationMeta
                      const pitch_level_t overallPitchRange = 0,
                      const dynamic_level_t overallDynamicRange = 0)
         : type(_type),
-        pattern(_pattern),
-        timestamp(_timestamp),
-        overallDuration(_duration),
-        overallPitchChangesRange(overallPitchRange),
-        overallDynamicChangesRange(overallDynamicRange)
+          pattern(_pattern),
+          timestamp(_timestamp),
+          overallDuration(_duration),
+          overallPitchChangesRange(overallPitchRange),
+          overallDynamicChangesRange(overallDynamicRange)
     {}
 
     ArticulationType type = ArticulationType::Undefined;
@@ -528,11 +543,11 @@ struct ArticulationMeta
     bool operator==(const ArticulationMeta& other) const
     {
         return type == other.type
-               && pattern == other.pattern
-               && timestamp == other.timestamp
-               && overallDuration == other.overallDuration
-               && overallPitchChangesRange == other.overallPitchChangesRange
-               && overallDynamicChangesRange == other.overallDynamicChangesRange;
+                && pattern == other.pattern
+                && timestamp == other.timestamp
+                && overallDuration == other.overallDuration
+                && overallPitchChangesRange == other.overallPitchChangesRange
+                && overallDynamicChangesRange == other.overallDynamicChangesRange;
     }
 };
 
@@ -599,11 +614,11 @@ struct ArticulationAppliedData {
     bool operator==(const ArticulationAppliedData& other) const
     {
         return meta == other.meta
-               && appliedPatternSegment == other.appliedPatternSegment
-               && occupiedFrom == other.occupiedFrom
-               && occupiedTo == other.occupiedTo
-               && occupiedPitchChangesRange == other.occupiedPitchChangesRange
-               && occupiedDynamicChangesRange == other.occupiedDynamicChangesRange;
+                && appliedPatternSegment == other.appliedPatternSegment
+                && occupiedFrom == other.occupiedFrom
+                && occupiedTo == other.occupiedTo
+                && occupiedPitchChangesRange == other.occupiedPitchChangesRange
+                && occupiedDynamicChangesRange == other.occupiedDynamicChangesRange;
     }
 };
 
@@ -666,6 +681,19 @@ struct ArticulationMap : public SharedHashMap<ArticulationType, ArticulationAppl
             return;
         }
 
+        if (size() == 1) {
+            const ArticulationPatternSegment& segment = cbegin()->second.appliedPatternSegment;
+
+            m_averageDurationFactor = segment.arrangementPattern.durationFactor;
+            m_averageTimestampOffset = segment.arrangementPattern.timestampOffset;
+            m_averageMaxAmplitudeLevel = segment.expressionPattern.maxAmplitudeLevel();
+            m_averagePitchRange = cbegin()->second.occupiedPitchChangesRange;
+            m_averageDynamicRange = cbegin()->second.occupiedDynamicChangesRange;
+            m_averageDynamicOffsetMap = segment.expressionPattern.dynamicOffsetMap;
+            m_averagePitchOffsetMap = segment.pitchPattern.pitchOffsetMap;
+            return;
+        }
+
         resetData();
 
         for (auto it = cbegin(); it != cend(); ++it) {
@@ -683,10 +711,23 @@ private:
         auto segmentDynamicOffsetIt = segment.expressionPattern.dynamicOffsetMap.cbegin();
         auto segmentPitchOffsetIt = segment.pitchPattern.pitchOffsetMap.cbegin();
 
+        bool hasMeaningDynamicOffset = segment.expressionPattern.maxAmplitudeLevel() != dynamicLevelFromType(DynamicType::Natural);
+        bool hasMeaningPitchOffset = segment.pitchPattern.maxAmplitudeLevel() != 0;
+
+        if (!hasMeaningDynamicOffset && !hasMeaningPitchOffset) {
+            return;
+        }
+
         while (segmentDynamicOffsetIt != segment.expressionPattern.dynamicOffsetMap.cend()
                && segmentPitchOffsetIt != segment.pitchPattern.pitchOffsetMap.cend()) {
-            averageDynamicOffsetIt->second += segmentDynamicOffsetIt->second;
-            averagePitchOffsetIt->second += segmentPitchOffsetIt->second;
+
+            if (hasMeaningDynamicOffset) {
+                averageDynamicOffsetIt->second += segmentDynamicOffsetIt->second;
+            }
+
+            if (hasMeaningPitchOffset) {
+                averagePitchOffsetIt->second += segmentPitchOffsetIt->second;
+            }
 
             ++averageDynamicOffsetIt;
             ++averagePitchOffsetIt;
