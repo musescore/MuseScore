@@ -31,7 +31,7 @@ StyledDialogView {
     id: root
 
     title: qsTrc("shortcuts", "Enter shortcut sequence")
-    contentHeight: 240
+    contentHeight: 228
     contentWidth: 538
     margins: 12
 
@@ -57,7 +57,6 @@ StyledDialogView {
 
     EditShortcutView {
         id: view
-        fromUI: true
         height: parent.height
         width: parent.width
 

@@ -30,18 +30,11 @@ import MuseScore.Shortcuts 1.0
 Dialog {
     id: root
 
-    signal applySequenceRequested(string newSequence, int conflictShortcutIndex)
-
-    function startEdit(shortcut, allShortcuts) {
-        model.load(shortcut, allShortcuts)
-        open()
-        content.forceActiveFocus()
-    }
-
-    height: 240
-    width: 538
+    signal applySequenceRequested(var newSequence, var toChangeShortcut)
 
     title: qsTrc("shortcuts", "Enter shortcut sequence")
+    height: 240
+    width: 600
 
     standardButtons: Dialog.NoButton
 
@@ -50,133 +43,26 @@ Dialog {
 
         onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
             root.applySequenceRequested(newSequence, conflictShortcutIndex)
+            root.accept()
         }
     }
 
-    Rectangle {
-        id: content
+    function startEdit(shortcut, allShortcuts) {
+        open()
+        model.load(shortcut, allShortcuts)
+        view.forceFocus()
+    }
 
-        anchors.fill: parent
+    EditShortcutView {
+        id: view
+        height: parent.height
+        width: parent.width
 
-        color: ui.theme.backgroundPrimaryColor
+        model: model
 
-        focus: true
-
-        Column {
-            anchors.fill: parent
-            anchors.margins: 8
-
-            spacing: 20
-
-            StyledTextLabel {
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                width: parent.width
-                text: qsTrc("shortcuts", "Define keyboard shortcut")
-                horizontalAlignment: Text.AlignLeft
-                font:ui.theme.headerBoldFont
-            }
-
-            Column {
-                width: parent.width
-
-                spacing: 12
-
-                StyledTextLabel {
-                    width: parent.width
-                    horizontalAlignment: Qt.AlignLeft
-
-                    text: model.conflictWarning
-                }
-
-                RowLayout {
-                    width: parent.width
-                    height: childrenRect.height
-
-                    spacing: 12
-
-                    StyledTextLabel {
-                        Layout.alignment: Qt.AlignVCenter
-
-                        text: qsTrc("shortcuts", "Old shortcut:")
-                    }
-
-                    TextInputField {
-                        Layout.fillWidth: true
-
-                        enabled: false
-                        currentText: model.originSequence
-                    }
-                }
-
-                RowLayout {
-                    width: parent.width
-                    height: childrenRect.height
-
-                    spacing: 12
-
-                    StyledTextLabel {
-                        Layout.alignment: Qt.AlignVCenter
-
-                        text: qsTrc("shortcuts", "New shortcut:")
-                    }
-
-                    TextInputField {
-                        id: newSequenceField
-
-                        Layout.fillWidth: true
-
-                        hint: qsTrc("shortcuts", "Type to set shortcut")
-                        readOnly: true
-                        currentText: model.newSequence
-
-                        onActiveFocusChanged: {
-                            if (activeFocus) {
-                                content.forceActiveFocus()
-                            }
-                        }
-                    }
-                }
-            }
-
-            RowLayout {
-                width: parent.width
-                height: childrenRect.height
-
-                readonly property int buttonWidth: 100
-
-                Item { Layout.fillWidth: true }
-
-                FlatButton {
-                    width: parent.buttonWidth
-
-                    text: qsTrc("global", "Cancel")
-
-                    onClicked: {
-                        root.reject()
-                    }
-                }
-
-                FlatButton {
-                    width: parent.buttonWidth
-
-                    text: qsTrc("global", "Save")
-
-                    onClicked: {
-                        model.applyNewSequence()
-                        root.accept()
-                    }
-                }
-            }
+        onReject: {
+            root.reject()
         }
 
-        Keys.onShortcutOverride: function(event) {
-            event.accepted = true
-        }
-
-        Keys.onPressed: function(event) {
-            model.inputKey(event.key, event.modifiers)
-        }
     }
 }
-
