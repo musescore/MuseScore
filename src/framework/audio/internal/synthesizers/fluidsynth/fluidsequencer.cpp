@@ -225,35 +225,11 @@ note_idx_t FluidSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
 
 velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
 {
-    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(DynamicType::ppp);
-    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(DynamicType::fff);
-    static constexpr midi::velocity_t NORMAL_SUPPORTED_VELOCITY = 63;
     static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = 127;
-    static constexpr midi::velocity_t VELOCITY_STEP = 16;
 
-    static constexpr float MAX_VELOCITY_FACTOR = (MAX_SUPPORTED_LEVEL - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::TEN_PERCENT);
-    static constexpr float MIN_VELOCITY_FACTOR = 0.f;
+    velocity_t result = RealRound(noteEvent.expressionCtx().expressionCurve.velocityFraction() * MAX_SUPPORTED_VELOCITY, 0);
 
-    mpe::duration_percentage_t attackDuration = noteEvent.expressionCtx().expressionCurve.attackPhaseDuration();
-    mpe::dynamic_level_t amplitude = noteEvent.expressionCtx().expressionCurve.maxAmplitudeLevel();
-
-    if (attackDuration == 0) {
-        return MAX_SUPPORTED_VELOCITY;
-    }
-
-    float velocityFactor = amplitude / static_cast<float>(attackDuration);
-
-    if (RealIsEqualOrMore(velocityFactor, MAX_VELOCITY_FACTOR)) {
-        return MAX_SUPPORTED_VELOCITY;
-    }
-
-    if (RealIsEqualOrLess(velocityFactor, MIN_VELOCITY_FACTOR)) {
-        return NORMAL_SUPPORTED_VELOCITY;
-    }
-
-    velocity_t result = NORMAL_SUPPORTED_VELOCITY + (velocityFactor * VELOCITY_STEP);
-
-    return std::clamp(result, NORMAL_SUPPORTED_VELOCITY, MAX_SUPPORTED_VELOCITY);
+    return std::clamp<velocity_t>(result, 0, MAX_SUPPORTED_VELOCITY);
 }
 
 int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const

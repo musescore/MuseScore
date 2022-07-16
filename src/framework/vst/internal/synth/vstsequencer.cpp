@@ -129,7 +129,7 @@ int32_t VstSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
 
 float VstSequencer::noteVelocityFraction(const mpe::NoteEvent& noteEvent) const
 {
-    return RealRound(noteEvent.expressionCtx().expressionCurve.maxAmplitudeLevel() / static_cast<float>(mpe::MAX_PITCH_LEVEL), 2);
+    return std::clamp(noteEvent.expressionCtx().expressionCurve.velocityFraction(), 0.f, 1.f);
 }
 
 float VstSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const
