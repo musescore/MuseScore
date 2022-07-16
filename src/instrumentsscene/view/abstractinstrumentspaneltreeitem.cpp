@@ -92,9 +92,14 @@ bool AbstractInstrumentsPanelTreeItem::isRemovable() const
     return m_isRemovable;
 }
 
-bool AbstractInstrumentsPanelTreeItem::canAcceptDrop(int type) const
+bool AbstractInstrumentsPanelTreeItem::canAcceptDrop(const QVariant& obj) const
 {
-    return static_cast<InstrumentsTreeItemType::ItemType>(type) == m_type;
+    auto item = dynamic_cast<const AbstractInstrumentsPanelTreeItem*>(obj.value<QObject*>());
+    if (!item) {
+        return false;
+    }
+
+    return item->m_parent == m_parent && item->m_type == m_type;
 }
 
 void AbstractInstrumentsPanelTreeItem::appendNewItem()

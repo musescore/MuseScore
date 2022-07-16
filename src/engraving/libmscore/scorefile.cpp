@@ -108,9 +108,9 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     if (excerpt()) {
         Excerpt* e = excerpt();
-        const TracksMap& trackList = e->tracksMapping();
-        if (!(trackList.size() == e->nstaves() * VOICES) && !trackList.empty()) {
-            for (auto it = trackList.begin(); it != trackList.end(); ++it) {
+        const TracksMap& tracks = e->tracksMapping();
+        if (!(tracks.size() == e->nstaves() * VOICES) && !tracks.empty()) {
+            for (auto it = tracks.begin(); it != tracks.end(); ++it) {
                 xml.tag("Tracklist", { { "sTrack", it->first }, { "dstTrack", it->second } });
             }
         }

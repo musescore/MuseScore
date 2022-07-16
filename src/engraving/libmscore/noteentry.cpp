@@ -370,9 +370,12 @@ void Score::putNote(const Position& p, bool replace)
     _is.setTrack(p.staffIdx * VOICES + _is.voice());
     _is.setSegment(s);
 
-    if (score()->excerpt() && !score()->excerpt()->tracksMapping().empty()
-        && mu::key(score()->excerpt()->tracksMapping(), _is.track(), mu::nidx) == mu::nidx) {
-        return;
+    if (mu::engraving::Excerpt* excerpt = score()->excerpt()) {
+        const TracksMap& tracks = excerpt->tracksMapping();
+
+        if (!tracks.empty() && mu::key(tracks, _is.track(), mu::nidx) == mu::nidx) {
+            return;
+        }
     }
 
     DirectionV stemDirection = DirectionV::AUTO;
