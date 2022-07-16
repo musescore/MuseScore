@@ -23,7 +23,9 @@
 #include "bezier.h"
 #include "realfn.h"
 
-namespace mu {
+using namespace mu;
+using namespace mu::draw;
+
 Bezier::Bezier(double x1, double y1,
                double x2, double y2,
                double x3, double y3,
@@ -103,5 +105,4 @@ PointF Bezier::pointAt(double t) const
         y = a * t1 + b * t;
     }
     return PointF(x, y);
-}
 }

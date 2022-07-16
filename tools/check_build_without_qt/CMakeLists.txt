@@ -55,6 +55,9 @@ add_definitions(
 set(GLOBAL_NO_INTERNAL ON)
 add_subdirectory(${MU_ROOT}/src/framework/global global)
 
+set(DRAW_NO_INTERNAL ON)
+add_subdirectory(${MU_ROOT}/src/framework/draw draw)
+
 set(NO_QT_SUPPORT ON)
 set(ENGRAVING_NO_INTERNAL ON)
 set(ENGRAVING_NO_ACCESSIBILITY ON)
@@ -84,6 +87,7 @@ target_include_directories(engraving_app PUBLIC
 target_link_libraries(engraving_app
     ${QT_LIBRARIES}
     global
+    draw
     engraving
     iex_guitarpro
 )
