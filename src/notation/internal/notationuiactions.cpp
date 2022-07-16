@@ -130,7 +130,7 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("bottom-chord",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Bottom note in chord"),
-             QT_TRANSLATE_NOOP("action", "Go bottom note in chord")
+             QT_TRANSLATE_NOOP("action", "Go to bottom note in chord")
              ),
     UiAction("first-element",
              mu::context::UiCtxNotationOpened,
