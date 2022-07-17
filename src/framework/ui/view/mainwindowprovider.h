@@ -57,6 +57,8 @@ public:
     void toggleFullScreen() override;
     QScreen* screen() const override;
 
+    Q_INVOKABLE void showMinimizedWithSavePreviousState();
+
 signals:
     void windowChanged();
     void filePathChanged();
