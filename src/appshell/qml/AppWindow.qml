@@ -55,6 +55,8 @@ ApplicationWindow {
     }
 
     MainWindowProvider {
+        id: windowProvider
+
         window: root
 
         //! NOTE These properties of QWindow (of which ApplicationWindow is derived)
@@ -75,5 +77,9 @@ ApplicationWindow {
 
     WindowDropArea {
         anchors.fill: parent
+    }
+
+    function showMinimizedWithSavePreviousState() {
+        windowProvider.showMinimizedWithSavePreviousState()
     }
 }
