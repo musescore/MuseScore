@@ -68,6 +68,7 @@ signals:
 
 private:
     void clearNewSequence();
+    void replaceShortcutDirectly();
 
     QString newSequence() const;
     void checkNewSequenceForConflicts();

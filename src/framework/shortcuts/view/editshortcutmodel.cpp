@@ -214,6 +214,10 @@ void EditShortcutModel::applyNewSequence()
     QString conflictWarn = conflictWarning();
 
     if (conflictWarn.isEmpty()) {
+        if (directReplace) {
+            replaceShortcutDirectly();
+        }
+
         emit applyNewSequenceRequested(m_originSequence);
         return;
     }
@@ -237,16 +241,24 @@ void EditShortcutModel::applyNewSequence()
     int conflictShortcutIndex = m_allShortcuts.indexOf(m_conflictShortcut);
 
     if (directReplace) {
-        Shortcut sc;
-
-        sc.action = originAction().toStdString();
-        sc.context = m_originContext.toStdString();
-        sc.sequences = Shortcut::sequencesFromString(m_originSequence.toStdString());
-        shortcutsRegister()->removeShortcutForAction(m_conflictShortcut["action"].toString());
-        shortcutsRegister()->setShortcut(sc);
+        replaceShortcutDirectly();
     }
 
     emit applyNewSequenceRequested(m_originSequence, conflictShortcutIndex);
+}
+
+void EditShortcutModel::replaceShortcutDirectly()
+{
+    Shortcut sc;
+    sc.action = originAction().toStdString();
+    sc.context = m_originContext.toStdString();
+    sc.sequences = Shortcut::sequencesFromString(m_originSequence.toStdString());
+
+    if (!conflictWarning().isEmpty()) {
+        shortcutsRegister()->removeShortcutForAction(m_conflictShortcut["action"].toString());
+    }
+
+    shortcutsRegister()->setShortcut(sc);
 }
 
 QString EditShortcutModel::newSequence() const
