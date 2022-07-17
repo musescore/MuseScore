@@ -626,22 +626,22 @@
   <SC>
     <key>pad-rest</key>
     <seq></seq>
-    <ctx>any</ctx>
+    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>flat</key>
     <seq></seq>
-    <ctx>any</ctx>
+    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>flat2</key>
     <seq></seq>
-    <ctx>any</ctx>
+    <ctx>notation-opened</ctx>
     </SC>
   <SC>
      <key>nat</key>
      <seq></seq>
-     <ctx>notation-staff-not-tab</ctx>
+     <ctx>notation-opened</ctx>
      </SC>
   <SC>
      <key>sharp</key>
@@ -651,7 +651,7 @@
   <SC>
      <key>sharp2</key>
      <seq></seq>
-     <ctx>any</ctx>
+     <ctx>notation-opened</ctx>
      </SC>
   <SC>
     <key>tie</key>
