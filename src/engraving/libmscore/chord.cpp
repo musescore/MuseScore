@@ -1500,6 +1500,9 @@ int Chord::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook,
 // all values are in quarter spaces
 int Chord::maxReduction(int extensionOutsideStaff) const
 {
+    if (!score()->styleB(Sid::shortenStem)) {
+        return 0;
+    }
     // [extensionOutsideStaff][beamCount]
     static const int maxReductions[4][5] = {
         //1sp 1.5sp 2sp 2.5sp >=3sp -- extensionOutsideStaff
