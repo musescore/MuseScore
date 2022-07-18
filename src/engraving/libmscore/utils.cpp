@@ -455,10 +455,10 @@ int line2pitch(int line, ClefType clef, Key key)
 {
     int l      = ClefInfo::pitchOffset(clef) - line;
     int octave = 0;
-    while (l < 0) {
-        l += 7;
-        octave++;
+    if (l < 0) {
+        l = 0;
     }
+
     octave += l / 7;
     l       = l % 7;
 
