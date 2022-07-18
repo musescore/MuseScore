@@ -572,7 +572,6 @@ struct ScoreCreateOptions
     TimeSigType timesigType = TimeSigType::NORMAL;
 
     Key key = Key::C;
-    KeyMode keyMode = KeyMode::UNKNOWN;
 
     bool withPickupMeasure = false;
     int measures = 0;
