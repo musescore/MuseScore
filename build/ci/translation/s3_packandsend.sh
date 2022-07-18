@@ -19,14 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-BUILD_TOOLS=$HOME/build_tools
-ENV_FILE=$BUILD_TOOLS/tx2s3_environment.sh
-source $ENV_FILE
-
-command -v lrelease >/dev/null 2>&1 || { echo "error: not found 'lrelease'" >&2; exit 1; }
 command -v s3cmd >/dev/null 2>&1 || { echo "error: not found 's3cmd'" >&2; exit 1; }
 
-echo "lrelease: $(lrelease -version)"
 echo "s3cmd: $(s3cmd --version)"
 
 echo "Updating translation on s3..."

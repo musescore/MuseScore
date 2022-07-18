@@ -30,17 +30,20 @@ jobs:
     - name: Setup environment
       if: env.DO_RUN == 'true'
       run: |
-        sudo bash ./build/ci/tx2s3/setup.sh --tx_token ${{ secrets.TRANSIFEX_API_TOKEN }} --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
+        # lrelease
+        sudo bash ./build/ci/translation/qt_install.sh 
+        sudo bash ./build/ci/translation/tx_install.sh -s linux -t ${{ secrets.TRANSIFEX_API_TOKEN }}
+        sudo bash ./build/ci/translation/s3_install.sh --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
     
     - name: Update .ts files (tx pull)
       if: env.DO_RUN == 'true'
       run: |
         sudo bash ./build/ci/translation/tx_pull.sh
 
-    - name: Run tx2s3
+    - name: Pack and send to s3
       if: env.DO_RUN == 'true'
       run: |
-        sudo bash ./build/ci/tx2s3/tx2s3.sh
+        sudo bash ./build/ci/translation/s3_packandsend.sh
         
     - name: Upload artifacts on GitHub
       if: env.DO_RUN == 'true'
