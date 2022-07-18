@@ -86,16 +86,6 @@ void EditPitch::setup()
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    auto clefTrebleItem = tableWidget->item(5, 7);
-    if (clefTrebleItem) {
-        clefTrebleItem->setText(iconCodeToChar(IconCode::Code::CLEF_TREBLE) + QString(" ") + qtrc("notation", "G 4"));
-    }
-
-    auto clefBassItem = tableWidget->item(6, 5);
-    if (clefBassItem) {
-        clefBassItem->setText(iconCodeToChar(IconCode::Code::CLEF_BASS) + QString(" ") + qtrc("notation", "F 3"));
-    }
-
     WidgetStateStore::restoreGeometry(this);
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
