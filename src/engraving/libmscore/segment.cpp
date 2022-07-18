@@ -2629,6 +2629,28 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
         }
     }
 
+    // Allocate space to ensure minimum length of "dangling" ties at start of system
+    if (systemHeaderGap && ns && ns->isChordRestType()) {
+        for (EngravingItem* e : ns->elist()) {
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            double headerTieMargin = score()->styleMM(Sid::HeaderToLineStartDistance);
+            for (Note* note : toChord(e)->notes()) {
+                if (!note->tieBack() || note->lineAttachPoints().empty()) {
+                    continue;
+                }
+                double tieStartPointX = minRight() + headerTieMargin;
+                double notePosX = w + note->pos().x() + toChord(e)->pos().x() + note->headWidth() / 2;
+                double tieEndPointX = notePosX + note->lineAttachPoints().at(0).pos().x();
+                double tieLength = tieEndPointX - tieStartPointX;
+                if (tieLength < score()->styleMM(Sid::MinTieLength)) {
+                    w += score()->styleMM(Sid::MinTieLength) - tieLength;
+                }
+            }
+        }
+    }
+
     if (ns) {
         w += ns->extraLeadingSpace().val() * spatium();
     }

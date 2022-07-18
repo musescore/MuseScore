@@ -469,6 +469,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::SlurDottedWidth,         "slurDottedWidth",         Spatium(.10) },
     { Sid::MinTieLength,            "minTieLength",            Spatium(1.0) },
     { Sid::SlurMinDistance,         "slurMinDistance",         Spatium(0.5) },
+    { Sid::HeaderToLineStartDistance,   "headerSlurTieDistance",   Spatium(1.0) },
+
     { Sid::SectionPause,            "sectionPause",            PropertyValue(double(3.0)) },
     { Sid::MusicalSymbolFont,       "musicalSymbolFont",       PropertyValue(String(u"Leland")) },
     { Sid::MusicalTextFont,         "musicalTextFont",         PropertyValue(String(u"Leland Text")) },
