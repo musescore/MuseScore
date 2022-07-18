@@ -78,7 +78,7 @@ QVariantList GeneralPreferencesModel::languages() const
 
     QVariantList result;
 
-    for (const Language& language: languageList) {
+    for (const Language& language : languageList) {
         if (language.status == LanguageStatus::Status::NoInstalled
             || language.status == LanguageStatus::Status::Undefined) {
             continue;

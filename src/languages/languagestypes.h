@@ -92,7 +92,7 @@ struct Language
     {
         QJsonObject obj = { { "name", name },
             { "fileName", archiveFileName },
-            { "status", QString::number(static_cast<int>(status)) } };
+            { "status", static_cast<int>(status) } };
         QJsonArray filesArray;
         for (const LanguageFile& file: files) {
             filesArray << file.toJson();
