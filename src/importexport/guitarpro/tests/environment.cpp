@@ -28,7 +28,6 @@
 #include "engraving/utests/utils/scorerw.h"
 
 #include "importexport/guitarpro/guitarpromodule.h"
-#include "importexport/guitarpro/iguitarproconfiguration.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
@@ -54,8 +53,5 @@ static mu::testing::SuiteEnvironment importexport_se(
 
     new mu::engraving::MuseScoreCore();
     mu::engraving::MScore::init(); // initialize libmscore
-
-    std::shared_ptr<IGuitarProConfiguration> conf = mu::modularity::ioc()->resolve<IGuitarProConfiguration>("");
-    conf->setImportGuitarProCharset("");
 }
     );

@@ -29,27 +29,9 @@ BaseSection {
     title: qsTrc("appshell/preferences", "Character set used when importing binary files")
 
     property var charsets: null
-    property string currentGuitarProCharset: ""
     property string currentOvertureCharset: ""
 
-    signal guitarProCharsetChangeRequested(string charset)
     signal overtureCharsetChangeRequested(string charset)
-
-    ComboBoxWithTitle {
-        title: qsTrc("appshell/preferences", "Guitar Pro import character set:")
-        columnWidth: root.columnWidth
-
-        currentIndex: control.indexOfValue(root.currentGuitarProCharset)
-        model: root.charsets
-
-        navigation.name: "GuitarProBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
-
-        onValueEdited: function(newIndex, newValue) {
-            root.guitarProCharsetChangeRequested(newValue)
-        }
-    }
 
     ComboBoxWithTitle {
         title: qsTrc("appshell/preferences", "Overture import character set:")
