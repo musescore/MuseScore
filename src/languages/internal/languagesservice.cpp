@@ -366,6 +366,7 @@ RetVal<LanguagesHash> LanguagesService::correctLanguagesStates(LanguagesHash& la
 
 LanguageStatus::Status LanguagesService::languageStatus(const Language& language) const
 {
+    TRACEFUNC;
     if (!isLanguageExists(language.code)) {
         return LanguageStatus::Status::NoInstalled;
     }
