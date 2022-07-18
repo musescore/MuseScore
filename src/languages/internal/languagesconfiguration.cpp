@@ -46,6 +46,9 @@ static const io::path_t LANGUAGES_STATE_FILE("/languages.json");
 
 static const std::string LANGUAGES_RESOURCE_NAME("LANGUAGES");
 
+static const QString DEF_MUSESCORE_QM("musescore_%1.qm");
+static const QString DEF_INSTRUMENTS_QM("instruments_%1.qm");
+
 static QString correctLanguageCode(const QString& languageCode)
 {
     QString result = languageCode;
@@ -92,6 +95,11 @@ QUrl LanguagesConfiguration::languageFileServerUrl(const QString& languageCode) 
     return QUrl(LANGUAGES_SERVER_URL + fileName.toQString());
 }
 
+RetVal<ByteArray> LanguagesConfiguration::readDefaultLanguages() const
+{
+    return fileSystem()->readFile(globalConfiguration()->appDataPath() + "/locale/languages.json");
+}
+
 RetVal<ByteArray> LanguagesConfiguration::readLanguagesState() const
 {
     mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), LANGUAGES_RESOURCE_NAME);
@@ -104,17 +112,59 @@ Ret LanguagesConfiguration::writeLanguagesState(const QByteArray& data)
     return fileSystem()->writeFile(languagesUserAppDataPath() + LANGUAGES_STATE_FILE, ByteArray::fromQByteArrayNoCopy(data));
 }
 
+LanguagesHash LanguagesConfiguration::parseDefaultLanguages(const ByteArray& json) const
+{
+    TRACEFUNC;
+    LanguagesHash result;
+
+    QJsonParseError err;
+    QJsonDocument jsodDoc = QJsonDocument::fromJson(json.toQByteArrayNoCopy(), &err);
+    if (err.error != QJsonParseError::NoError) {
+        LOGE() << "failed parse, err: " << err.errorString();
+        return LanguagesHash();
+    }
+
+    const QJsonObject languages = jsodDoc.object();
+    for (auto it = languages.begin(); it != languages.end(); ++it) {
+        Language lang;
+        lang.code = it.key();
+        lang.name = it.value().toString();
+
+        lang.files << LanguageFile(DEF_MUSESCORE_QM.arg(lang.code), QString());
+        lang.files << LanguageFile(DEF_INSTRUMENTS_QM.arg(lang.code), QString());
+
+        result.insert(lang.code, lang);
+    }
+
+    return result;
+}
+
 ValCh<LanguagesHash> LanguagesConfiguration::languages() const
 {
     TRACEFUNC;
-    RetVal<ByteArray> rv = readLanguagesState();
-    if (!rv.ret) {
-        LOGE() << rv.ret.toString();
-        return ValCh<LanguagesHash>();
+
+    LanguagesHash langs;
+    {
+        RetVal<ByteArray> rv = readLanguagesState();
+        if (rv.ret) {
+            langs = parseLanguagesState(rv.val);
+        } else {
+            LOGW() << "failed read server languages, err: " << rv.ret.toString();
+        }
+    }
+
+    //! NOTE If there is a downloaded a list of languages from the server, then we use it, if not, then we use the default
+    if (langs.empty()) {
+        RetVal<ByteArray> rv = readDefaultLanguages();
+        if (rv.ret) {
+            langs = parseDefaultLanguages(rv.val);
+        } else {
+            LOGE() << "failed read default languages, err: " << rv.ret.toString();
+        }
     }
 
     ValCh<LanguagesHash> result;
-    result.val = parseLanguagesConfig(rv.val.toQByteArrayNoCopy());
+    result.val = langs;
     result.ch = m_languagesHashChanged;
 
     return result;
@@ -123,15 +173,12 @@ ValCh<LanguagesHash> LanguagesConfiguration::languages() const
 Ret LanguagesConfiguration::setLanguages(const LanguagesHash& languages)
 {
     TRACEFUNC;
-    QJsonArray jsonArray;
+    QJsonObject obj;
     for (const Language& language : languages) {
-        QJsonObject obj;
         obj[language.code] = language.toJson();
-
-        jsonArray << obj;
     }
 
-    QByteArray data = QJsonDocument(jsonArray).toJson();
+    QByteArray data = QJsonDocument(obj).toJson();
 
     Ret ret = writeLanguagesState(data);
     if (ret) {
@@ -141,32 +188,32 @@ Ret LanguagesConfiguration::setLanguages(const LanguagesHash& languages)
     return ret;
 }
 
-LanguagesHash LanguagesConfiguration::parseLanguagesConfig(const QByteArray& json) const
+LanguagesHash LanguagesConfiguration::parseLanguagesState(const ByteArray& json) const
 {
     TRACEFUNC;
     LanguagesHash result;
 
     QJsonParseError err;
-    QJsonDocument jsodDoc = QJsonDocument::fromJson(json, &err);
-    if (err.error != QJsonParseError::NoError || !jsodDoc.isArray()) {
+    QJsonDocument jsodDoc = QJsonDocument::fromJson(json.toQByteArrayNoCopy(), &err);
+    if (err.error != QJsonParseError::NoError) {
         LOGE() << "failed parse, err: " << err.errorString();
         return LanguagesHash();
     }
 
-    const QVariantList languages = jsodDoc.array().toVariantList();
-    for (const QVariant& languagesObj : languages) {
-        QMap<QString, QVariant> value = languagesObj.toMap();
-        QVariantMap lngMap = value.first().toMap();
-
+    const QJsonObject obj = jsodDoc.object();
+    for (auto it = obj.begin(); it != obj.end(); ++it) {
         Language language;
-        language.code = value.keys().first();
-        language.name = lngMap.value("name").toString();
-        language.archiveFileName = lngMap.value("fileName").toString();
-        language.status = static_cast<LanguageStatus::Status>(lngMap.value("status").toInt());
+        language.code = it.key();
 
-        const QVariantList files = lngMap.value("files").toList();
-        for (const QVariant& fileVar : files) {
-            QVariantMap fileObj = fileVar.toMap();
+        QJsonObject langObj = it.value().toObject();
+
+        language.name = langObj.value("name").toString();
+        language.archiveFileName = langObj.value("fileName").toString();
+        language.status = static_cast<LanguageStatus::Status>(langObj.value("status").toInt());
+
+        const QJsonArray files = langObj.value("files").toArray();
+        for (const QJsonValue& fileVal : files) {
+            QJsonObject fileObj = fileVal.toObject();
             LanguageFile file;
             file.name = fileObj["name"].toString();
             file.hash = fileObj["hash"].toString();
