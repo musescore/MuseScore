@@ -32,8 +32,8 @@ TestCaseRunModel::TestCaseRunModel(QObject* parent)
         emit statusChanged();
     });
 
-    autobot()->stepStatusChanged().onReceive(this, [this](const QString& name, const StepStatus& stepStatus, const Ret& ret) {
-        updateStep(name, stepStatus, ret);
+    autobot()->stepStatusChanged().onReceive(this, [this](const StepInfo& stepInfo, const Ret& ret) {
+        updateStep(stepInfo, ret);
     });
 }
 
@@ -121,7 +121,7 @@ int TestCaseRunModel::stepIndexOf(const QString& name) const
     return -1;
 }
 
-void TestCaseRunModel::updateStep(const QString& name, const StepStatus& stepStatus, const Ret& ret)
+void TestCaseRunModel::updateStep(const StepInfo& stepInfo, const Ret& ret)
 {
     auto stepStatusToString = [](const StepStatus& stepStatus) {
         switch (stepStatus) {
@@ -136,16 +136,20 @@ void TestCaseRunModel::updateStep(const QString& name, const StepStatus& stepSta
         return "";
     };
 
-    int idx = stepIndexOf(name);
+    int idx = stepIndexOf(stepInfo.name);
     if (idx == -1) {
-        LOGE() << "not found step: " << name;
+        LOGE() << "not found step: " << stepInfo.name;
         return;
     }
 
     StepItem& s = m_steps[idx];
-    s.status = stepStatusToString(stepStatus);
-    if (stepStatus == StepStatus::Error) {
+    s.status = stepStatusToString(stepInfo.status);
+    if (stepInfo.status == StepStatus::Error) {
         s.status = std::any_cast<QString>(ret.data("err"));
+    }
+
+    if (stepInfo.durationMsec) {
+        s.duration = QString("%1 msec").arg(stepInfo.durationMsec);
     }
 
     emit stepsChanged();
@@ -165,6 +169,7 @@ QVariantList TestCaseRunModel::steps() const
         QVariantMap obj;
         obj["name"] = s.name;
         obj["status"] = s.status;
+        obj["duration"] = s.duration;
         list.append(obj);
     }
     return list;

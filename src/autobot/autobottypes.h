@@ -125,6 +125,19 @@ enum class StepStatus {
     Error
 };
 
+struct StepInfo
+{
+    QString name;
+    StepStatus status;
+    int durationMsec = 0;
+
+    StepInfo() = default;
+    StepInfo(const QString& n, StepStatus s)
+        : name(n), status(s) {}
+    StepInfo(const QString& n, StepStatus s, int dur)
+        : name(n), status(s), durationMsec(dur) {}
+};
+
 enum class SpeedMode {
     Undefined = 0,
     Default,

@@ -109,6 +109,7 @@ void AutobotApi::fatal(const QString& msg)
 
 bool AutobotApi::openProject(const QString& name)
 {
+    TRACEFUNC;
     io::path_t dir = autobotConfiguration()->testingFilesDirPath();
     io::path_t filePath = dir + "/" + name;
     Ret ret = projectFilesController()->openProject(filePath);
@@ -117,6 +118,7 @@ bool AutobotApi::openProject(const QString& name)
 
 void AutobotApi::saveProject(const QString& name)
 {
+    TRACEFUNC;
     io::path_t dir = autobotConfiguration()->savingFilesPath();
     if (!QFileInfo::exists(dir.toQString())) {
         QDir().mkpath(dir.toQString());

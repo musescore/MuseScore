@@ -26,6 +26,7 @@
 #include <memory>
 #include <QJSValue>
 #include <QEventLoop>
+#include <QElapsedTimer>
 
 #include "async/channel.h"
 #include "async/asyncable.h"
@@ -53,7 +54,7 @@ public:
     void unpause(bool isNextStep);
     void abort();
 
-    async::Channel<QString /*name*/, StepStatus, Ret> stepStatusChanged() const;
+    async::Channel<StepInfo, Ret> stepStatusChanged() const;
 
     async::Channel<bool /*aborted*/> allFinished() const;
 
@@ -91,7 +92,9 @@ private:
     bool m_abort = false;
     bool m_paused = false;
 
-    async::Channel<QString /*name*/, StepStatus, Ret> m_stepStatusChanged;
+    QElapsedTimer m_elapsed;
+
+    async::Channel<StepInfo, Ret> m_stepStatusChanged;
     async::Channel<bool /*aborted*/> m_allFinished;
 
     SpeedMode m_speedMode = SpeedMode::Undefined;

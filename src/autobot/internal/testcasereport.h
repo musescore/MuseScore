@@ -44,7 +44,7 @@ public:
     Ret beginReport(const TestCase& testCase);
     void endReport(bool aborted);
 
-    void onStepStatusChanged(const QString& name, StepStatus status, const ITestCaseContextPtr& ctx);
+    void onStepStatusChanged(const StepInfo& stepInfo, const ITestCaseContextPtr& ctx);
 
 private:
 
