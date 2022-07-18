@@ -22,6 +22,8 @@
 
 #include "vstplugin.h"
 
+#include <exception>
+
 #include "log.h"
 #include "async/async.h"
 
@@ -221,12 +223,20 @@ void VstPlugin::updatePluginConfig(const audio::AudioUnitConfig& config)
         return;
     }
 
-    stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
-    component->setState(&m_componentStateBuffer);
-    controller->setComponentState(&m_componentStateBuffer);
+    try {
+        stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
+        component->setState(&m_componentStateBuffer);
+        controller->setComponentState(&m_componentStateBuffer);
+    } catch (...) {
+        LOGW() << "Unexpected VST plugin exception";
+    }
 
-    stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(controllerState->second.data()), controllerState->second.size());
-    controller->setState(&m_controllerStateBuffer);
+    try {
+        stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(controllerState->second.data()), controllerState->second.size());
+        controller->setState(&m_controllerStateBuffer);
+    } catch (...) {
+        LOGW() << "Unexpected VST plugin exception";
+    }
 }
 
 void VstPlugin::refreshConfig()
