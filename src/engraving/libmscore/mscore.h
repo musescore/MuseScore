@@ -280,6 +280,7 @@ public:
 // #endif
     static bool debugMode;
     static bool testMode;
+    static bool testWriteStyleToScore;
 
     static int sampleRate;
     static int mtcType;

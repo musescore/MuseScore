@@ -29,6 +29,7 @@
       <trackName>Percussions</trackName>
       <Instrument>
         <longName>Percussions</longName>
+        <shortName>drm.</shortName>
         <trackName></trackName>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
@@ -497,10 +498,8 @@
           <string>0</string>
           </StringData>
         <Channel>
-          <controller ctrl="0" value="1"/>
           <program value="0"/>
-          <controller ctrl="7" value="71"/>
-          <controller ctrl="10" value="63"/>
+          <controller ctrl="7" value="61"/>
           </Channel>
         </Instrument>
       </Part>
@@ -518,6 +517,10 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <RehearsalMark>
             <text>tempo 144</text>
             </RehearsalMark>
@@ -526,24 +529,24 @@
             <text><sym>metNoteQuarterUp</sym> = 144</text>
             </Tempo>
           <Beam>
-            <l1>34</l1>
-            <l2>34</l2>
+            <l1>24</l1>
+            <l2>24</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
-              <pitch>27</pitch>
-              <tpc>11</tpc>
-              <fret>27</fret>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <fret>0</fret>
               <string>0</string>
               </Note>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
-              <pitch>28</pitch>
-              <tpc>18</tpc>
-              <fret>28</fret>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <fret>0</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -582,9 +585,9 @@
           <Chord>
             <durationType>half</durationType>
             <Note>
-              <pitch>32</pitch>
-              <tpc>22</tpc>
-              <fret>32</fret>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <fret>0</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -672,9 +675,9 @@
           <Chord>
             <durationType>half</durationType>
             <Note>
-              <pitch>40</pitch>
-              <tpc>18</tpc>
-              <fret>40</fret>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              <fret>38</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -1216,6 +1219,9 @@
           <Rest>
             <durationType>half</durationType>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>
