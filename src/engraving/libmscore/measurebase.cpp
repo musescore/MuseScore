@@ -348,6 +348,11 @@ Fraction MeasureBase::tick() const
     return mb ? mb->_tick : Fraction(-1, 1);
 }
 
+void MeasureBase::setTick(const Fraction& f)
+{
+    _tick = f;
+}
+
 //---------------------------------------------------------
 //   triggerLayout
 //---------------------------------------------------------

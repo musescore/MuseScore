@@ -31,6 +31,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/chord.h"
 #include "libmscore/instrument.h"
+#include "libmscore/fret.h"
 
 #include "utils/pitchutils.h"
 
@@ -46,6 +47,17 @@ static const std::string CHORD_SYMBOLS_INSTRUMENT_ID("chord_symbols");
 
 const InstrumentTrackId PlaybackModel::METRONOME_TRACK_ID = { 999, METRONOME_INSTRUMENT_ID };
 const InstrumentTrackId PlaybackModel::CHORD_SYMBOLS_TRACK_ID = { 1000, CHORD_SYMBOLS_INSTRUMENT_ID };
+
+static const Harmony* findChordSymbols(const EngravingItem* item)
+{
+    if (item->isHarmony()) {
+        return toHarmony(item);
+    } else if (item->isFretDiagram()) {
+        return toFretDiagram(item)->harmony();
+    }
+
+    return nullptr;
+}
 
 void PlaybackModel::load(Score* score)
 {
@@ -172,6 +184,18 @@ void PlaybackModel::triggerEventsForItem(const EngravingItem* item)
         return;
     }
 
+    if (item->isHarmony()) {
+        const Harmony* chordSymbol = toHarmony(item);
+
+        if (chordSymbol->isRealizable()) {
+            PlaybackEventsMap result;
+            m_renderer.renderChordSymbols(chordSymbol, 0 /*ticksPositionOffset*/, result);
+            trackPlaybackData->second.offStream.send(std::move(result));
+        }
+
+        return;
+    }
+
     int utick = repeatList().tick2utick(item->tick().ticks());
     timestamp_t actualTimestamp = timestampFromTicks(item->score(), utick);
     duration_t actualDuration = MScore::defaultPlayDuration;
@@ -276,6 +300,25 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
 
                 if (segmentStartTick > tickTo || segmentEndTick <= tickFrom) {
                     continue;
+                }
+
+                for (const EngravingItem* item : segment->annotations()) {
+                    if (!item || !item->part()) {
+                        continue;
+                    }
+
+                    const Harmony* chordSymbol = findChordSymbols(item);
+                    if (!chordSymbol || !chordSymbol->isRealizable()) {
+                        continue;
+                    }
+
+                    ID partId = item->part()->id();
+                    if (changedPartIdSet.find(partId) == changedPartIdSet.cend()) {
+                        return;
+                    }
+
+                    m_renderer.renderChordSymbols(chordSymbol, tickPositionOffset, m_playbackDataMap[CHORD_SYMBOLS_TRACK_ID].originEvents);
+                    collectChangesTracks(CHORD_SYMBOLS_TRACK_ID, trackChanges);
                 }
 
                 for (const EngravingItem* item : segment->elist()) {
@@ -516,6 +559,10 @@ const RepeatList& PlaybackModel::repeatList() const
 
 InstrumentTrackId PlaybackModel::idKey(const EngravingItem* item) const
 {
+    if (item->isHarmony()) {
+        return CHORD_SYMBOLS_TRACK_ID;
+    }
+
     return { item->part()->id(),
              item->part()->instrumentId(item->tick()).toStdString() };
 }
