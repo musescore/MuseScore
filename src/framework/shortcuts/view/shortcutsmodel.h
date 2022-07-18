@@ -83,6 +83,8 @@ signals:
 private:
     const ui::UiAction& action(const std::string& actionCode) const;
     const QString& actionTitle(const std::string& actionCode) const;
+    const QString& actionDescription(const std::string& actionCode) const;
+    const QString& actionText(const std::string& actionCode) const;
 
     QModelIndex currentShortcutIndex() const;
     void notifyAboutShortcutChanged(const QModelIndex& index);
