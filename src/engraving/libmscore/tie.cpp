@@ -452,8 +452,13 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
         }
         return false;
     };
+    Chord* ec = t->endNote() ? t->endNote()->chord() : 0;
+    double staffDistance = 0.;
+    if (sc && sc->staffMove() != 0 && ec && ec->staffMove() == sc->staffMove()) {
+        staffDistance = system()->staff(sc->vStaffIdx())->y() - system()->staff(staffIdx())->y();
+    }
 
-    double endpointYsp = (bbox.y() + (isUp ? bbox.height() : 0)) / ld;
+    double endpointYsp = (bbox.y() + (isUp ? bbox.height() : 0) - staffDistance) / ld;
     double tieHeightSp = bbox.height() / ld;
     double tieThicknessSp = (styleP(Sid::SlurMidWidth) + ((styleP(Sid::SlurMidWidth) - styleP(Sid::SlurEndWidth)) / 2)) / ld;
     double tieMidOutsideSp = endpointYsp + (isUp ? -tieHeightSp : tieHeightSp);
@@ -534,7 +539,7 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
                 }
             }
         }
-        setAutoAdjust(PointF(0, (tieAdjustSp * ld) - (p1.y() - (endpointYsp * ld))));
+        setAutoAdjust(PointF(0, (tieAdjustSp * ld) - (p1.y() - (endpointYsp * ld + staffDistance))));
     } else {
         // INSIDE TIES (non-tab)
         bool collideAbove = false;
@@ -956,14 +961,13 @@ void Tie::slurPos(SlurPos* sp)
         }
     }
     sp->p2 += PointF(x2, y2);
-
     // adjust for cross-staff
-    if (sc->vStaffIdx() != vStaffIdx() && sp->system1) {
-        double diff = sp->system1->staff(sc->vStaffIdx())->y() - sp->system1->staff(vStaffIdx())->y();
+    if (sc->vStaffIdx() != staffIdx() && sp->system1) {
+        double diff = sp->system1->staff(sc->vStaffIdx())->y() - sp->system1->staff(staffIdx())->y();
         sp->p1.ry() += diff;
     }
-    if (ec->vStaffIdx() != vStaffIdx() && sp->system2) {
-        double diff = sp->system2->staff(ec->vStaffIdx())->y() - sp->system2->staff(vStaffIdx())->y();
+    if (ec->vStaffIdx() != staffIdx() && sp->system2) {
+        double diff = sp->system2->staff(ec->vStaffIdx())->y() - sp->system2->staff(staffIdx())->y();
         sp->p2.ry() += diff;
     }
 }
