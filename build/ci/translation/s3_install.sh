@@ -18,13 +18,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-TRANSIFEX_API_TOKEN=""
+
 S3_KEY=""
 S3_SECRET=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --tx_token) TRANSIFEX_API_TOKEN="$2"; shift ;;
         --s3_key) S3_KEY="$2"; shift ;;
         --s3_secret) S3_SECRET="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
@@ -32,37 +31,9 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-if [ -z "$TRANSIFEX_API_TOKEN" ]; then echo "error: not set TRANSIFEX_API_TOKEN"; exit 1; fi
 if [ -z "$S3_KEY" ]; then echo "error: not set S3_KEY"; exit 1; fi
 if [ -z "$S3_SECRET" ]; then echo "error: not set S3_SECRET"; exit 1; fi
 
-BUILD_TOOLS=$HOME/build_tools
-mkdir -p $BUILD_TOOLS
-
-ENV_FILE=$BUILD_TOOLS/tx2s3_environment.sh
-rm -f $ENV_FILE
-
-echo "echo 'Setup environment for run lupdate'" >> ${ENV_FILE}
-
-##########################################################################
-# GET QT
-##########################################################################
-qt_version="5152"
-qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
-if [[ ! -d "${qt_dir}" ]]; then
-  mkdir -p "${qt_dir}"
-  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
-  wget -q --show-progress -O qt5.7z "${qt_url}"
-  7z x -y qt5.7z -o"${qt_dir}"
-fi
-
-export PATH=${qt_dir}/bin:$PATH
-echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
-
-lrelease -version
-
-echo "Install transifex-client" 
-bash ./build/ci/translation/tx_install.sh -s linux -t $TRANSIFEX_API_TOKEN
 
 echo "Install s3cmd"
 pip3 install s3cmd
@@ -108,7 +79,4 @@ use_https = False
 verbosity = WARNING
 EOL
 
-
 echo "s3cmd version: $(s3cmd --version)"
-
-echo "Setup done"

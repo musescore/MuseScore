@@ -15,8 +15,6 @@ period = 300
 outputDir = "share/locale/"
 s3Urls = ["s3://extensions.musescore.org/4.0/languages/"]
 
-print("Last changes: 07 Feb 2020")
-
 def processTsFile(prefix, langCode, data):
     print("Processing " + langCode)
     filename = prefix + '_' + lang_code
