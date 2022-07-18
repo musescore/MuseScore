@@ -3356,11 +3356,11 @@ String Note::accessibleExtraInfo() const
         }
     }
     if (tieFor()) {
-        rez = mtrc("engraving", "%1 Start of %2").arg(rez, tieFor()->screenReaderInfo());
+        rez += u" " + mtrc("engraving", "Start of %1").arg(tieFor()->screenReaderInfo());
     }
 
     if (tieBack()) {
-        rez = mtrc("engraving", "%1 End of %2").arg(rez, tieBack()->screenReaderInfo());
+        rez += u" " + mtrc("engraving", "End of %1").arg(tieBack()->screenReaderInfo());
     }
 
     if (!spannerFor().empty()) {
@@ -3368,7 +3368,7 @@ String Note::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(s)) {
                 continue;
             }
-            rez = mtrc("engraving", "%1 Start of %2").arg(rez, s->screenReaderInfo());
+            rez += u" " + mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
         }
     }
     if (!spannerBack().empty()) {
@@ -3376,7 +3376,7 @@ String Note::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(s)) {
                 continue;
             }
-            rez = mtrc("engraving", "%1 End of %2").arg(rez, s->screenReaderInfo());
+            rez += u" " + mtrc("engraving", "End of %1").arg(s->screenReaderInfo());
         }
     }
 

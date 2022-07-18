@@ -1658,10 +1658,10 @@ String BarLine::accessibleExtraInfo() const
         }
         if (s->type() == ElementType::VOLTA) {
             if (s->tick() == tick) {
-                rez = mtrc("engraving", "%1 Start of %2").arg(rez, s->screenReaderInfo());
+                rez += u"; " + mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
             }
             if (s->tick2() == tick) {
-                rez = mtrc("engraving", "%1 End of %2").arg(rez, s->screenReaderInfo());
+                rez += u"; " + mtrc("engraving", "End of %1").arg(s->screenReaderInfo());
             }
         }
     }
