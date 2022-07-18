@@ -1709,17 +1709,18 @@ void NotationActionController::toggleConcertPitch()
 void NotationActionController::playSelectedElement(bool playChord)
 {
     TRACEFUNC;
+
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
     EngravingItem* element = interaction->selection()->element();
-    if (!element || !element->isNote()) {
+    if (!element) {
         return;
     }
 
-    if (playChord && playbackConfiguration()->playChordWhenEditing()) {
+    if (playChord) {
         element = element->elementBase();
     }
 

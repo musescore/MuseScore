@@ -2718,7 +2718,7 @@ int Note::octave() const
 
 int Note::playingOctave() const
 {
-    return ((ppitch() - static_cast<int>(tpc2alter(tpc1()))) / PITCH_DELTA_OCTAVE) - 1;
+    return mu::engraving::playingOctave(ppitch(), tpc1());
 }
 
 //---------------------------------------------------------

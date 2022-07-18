@@ -223,6 +223,14 @@ void PlaybackController::playElement(const notation::EngravingItem* element)
         return;
     }
 
+    if (element->isChord() && !configuration()->playChordWhenEditing()) {
+        return;
+    }
+
+    if (element->isHarmony() && !configuration()->playHarmonyWhenEditing()) {
+        return;
+    }
+
     notationPlayback()->triggerEventsForItem(element);
 }
 
