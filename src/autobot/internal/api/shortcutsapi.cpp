@@ -21,6 +21,8 @@
  */
 #include "shortcutsapi.h"
 
+#include "log.h"
+
 using namespace mu::api;
 
 ShortcutsApi::ShortcutsApi(IApiEngine* e)
@@ -30,5 +32,6 @@ ShortcutsApi::ShortcutsApi(IApiEngine* e)
 
 void ShortcutsApi::activate(const QString& sequence)
 {
+    TRACEFUNC;
     shortcutsController()->activate(sequence.toStdString());
 }

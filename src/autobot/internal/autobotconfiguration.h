@@ -36,7 +36,7 @@ public:
     AutobotConfiguration() = default;
 
     io::paths_t scriptsDirPaths() const override;
-    io::path_t testingFilesDirPath() const override;
+    io::paths_t testingFilesDirPaths() const override;
 
     io::path_t dataPath() const override;
     io::path_t savingFilesPath() const override;
