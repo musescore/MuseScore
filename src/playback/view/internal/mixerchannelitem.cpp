@@ -162,6 +162,8 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
 
     if (m_outputResourceItemList.empty()) {
         loadOutputResourceItemList(newParams.fxChain);
+    } else {
+        updateOutputResourceItemList(newParams.fxChain);
     }
 
     ensureBlankOutputResourceSlot();
@@ -177,6 +179,18 @@ void MixerChannelItem::loadOutputResourceItemList(const AudioFxChain& fxChain)
     }
 
     emit outputResourceItemListChanged(m_outputResourceItemList);
+}
+
+void MixerChannelItem::updateOutputResourceItemList(const audio::AudioFxChain& fxChain)
+{
+    for (auto it = fxChain.cbegin(); it != fxChain.cend(); ++it) {
+        if (m_outputResourceItemList.size() < it->first) {
+            LOGW() << "Can't find item " << it->first;
+            continue;
+        }
+
+        m_outputResourceItemList[it->first]->setParams(it->second);
+    }
 }
 
 void MixerChannelItem::loadSoloMuteState(project::IProjectAudioSettings::SoloMuteState&& newState)

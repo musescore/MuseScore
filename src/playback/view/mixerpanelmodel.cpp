@@ -352,6 +352,11 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
                << ", " << text;
     });
 
+    playback()->audioOutput()->masterOutputParamsChanged().onReceive(this,
+                                                                     [item](AudioOutputParams params) {
+        item->loadOutputParams(std::move(params));
+    }, AsyncMode::AsyncSetRepeat);
+
     playback()->audioOutput()->masterSignalChanges()
     .onResolve(this, [item](AudioSignalChanges signalChanges) {
         item->subscribeOnAudioSignalChanges(std::move(signalChanges));
