@@ -33,7 +33,7 @@ public:
     virtual ~IAutobotConfiguration() = default;
 
     virtual io::paths_t scriptsDirPaths() const = 0;
-    virtual io::path_t testingFilesDirPath() const = 0;
+    virtual io::paths_t testingFilesDirPaths() const = 0;
 
     virtual io::path_t dataPath() const = 0;
     virtual io::path_t savingFilesPath() const = 0;
