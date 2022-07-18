@@ -844,10 +844,8 @@ void TieSegment::addLineAttachPoints()
     // Add tie attach point to start and end note
     Note* startNote = tie()->startNote();
     Note* endNote = tie()->endNote();
-    if (endNote && endNote->findMeasure() == startNote->findMeasure()) {
-        startNote->addLineAttachPoint(ups(Grip::START).pos(), tie());
-        endNote->addLineAttachPoint(ups(Grip::END).pos(), tie());
-    }
+    startNote->addLineAttachPoint(ups(Grip::START).pos(), tie());
+    endNote->addLineAttachPoint(ups(Grip::END).pos(), tie());
 }
 
 //---------------------------------------------------------
@@ -1215,12 +1213,13 @@ TieSegment* Tie::layoutBack(System* system)
     TieSegment* segment = segmentAt(1);
     segment->setSystem(system);
 
-    double x = system->firstNoteRestSegmentX(true);
+    double x = system ? system->firstNoteRestSegmentX(true) : 0;
 
     segment->adjustY(PointF(x, sPos.p2.y()), sPos.p2);
     segment->setSpannerSegmentType(SpannerSegmentType::END);
     segment->adjustX();
     segment->finalizeSegment();
+    segment->addLineAttachPoints();
     return segment;
 }
 

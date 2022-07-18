@@ -478,6 +478,7 @@ enum class Sid {
     SlurDottedWidth,
     MinTieLength,
     SlurMinDistance,
+    HeaderToLineStartDistance, // determines start point of "dangling" lines (ties, gliss, lyrics...) at start of system
 
     SectionPause,
     MusicalSymbolFont,
