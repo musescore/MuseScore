@@ -50,6 +50,7 @@ static mu::testing::SuiteEnvironment importexport_se(
     mu::engraving::ScoreRW::setRootPath(mu::String::fromUtf8(iex_guitarpro_tests_DATA_ROOT));
 
     mu::engraving::MScore::testMode = true;
+    mu::engraving::MScore::testWriteStyleToScore = false;
     mu::engraving::MScore::noGui = true;
 
     new mu::engraving::MuseScoreCore();

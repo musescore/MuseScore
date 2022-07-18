@@ -4,10 +4,6 @@
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
-    <Style>
-      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-      <Spatium>1.74978</Spatium>
-      </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
@@ -23,26 +19,19 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Steel Guitar</trackName>
-      <Instrument id="guitar-steel-treble-clef">
-        <longName>Guitar</longName>
-        <shortName>Guit.</shortName>
-        <trackName>Acoustic Guitar (Treble Clef)</trackName>
-        <minPitchP>40</minPitchP>
-        <maxPitchP>84</maxPitchP>
-        <minPitchA>40</minPitchA>
-        <maxPitchA>83</maxPitchA>
+      <Instrument>
+        <longName>Steel Guitar</longName>
+        <shortName>s.guit.</shortName>
+        <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
-        <instrumentId>pluck.guitar.acoustic</instrumentId>
-        <concertClef>G8vb</concertClef>
-        <transposingClef>G</transposingClef>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
@@ -53,84 +42,35 @@
           <string>71</string>
           <string>76</string>
           </StringData>
-        <Articulation>
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="staccatissimo">
-          <velocity>100</velocity>
-          <gateTime>33</gateTime>
-          </Articulation>
-        <Articulation name="staccato">
-          <velocity>100</velocity>
-          <gateTime>50</gateTime>
-          </Articulation>
-        <Articulation name="portato">
-          <velocity>100</velocity>
-          <gateTime>67</gateTime>
-          </Articulation>
-        <Articulation name="tenuto">
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="marcato">
-          <velocity>120</velocity>
-          <gateTime>67</gateTime>
-          </Articulation>
-        <Articulation name="sforzato">
-          <velocity>150</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="sforzatoStaccato">
-          <velocity>150</velocity>
-          <gateTime>50</gateTime>
-          </Articulation>
-        <Articulation name="marcatoStaccato">
-          <velocity>120</velocity>
-          <gateTime>50</gateTime>
-          </Articulation>
-        <Articulation name="marcatoTenuto">
-          <velocity>120</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
         <Channel>
           <program value="25"/>
+          <controller ctrl="7" value="101"/>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
-      <VBox>
-        <height>10</height>
-        <linkedMain/>
-        </VBox>
       <Measure>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
-            <linkedMain/>
             </Clef>
           <KeySig>
-            <linkedMain/>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <linkedMain/>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -140,14 +80,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>17</l1>
-            <l2>17</l2>
+            <l1>34</l1>
+            <l2>34</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -155,10 +93,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -166,10 +102,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -178,7 +112,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>4</normalNotes>
             <actualNotes>5</actualNotes>
             <baseNote>eighth</baseNote>
@@ -188,14 +121,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>17</l1>
-            <l2>17</l2>
+            <l1>34</l1>
+            <l2>34</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -203,10 +134,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -214,10 +143,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -225,10 +152,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -236,10 +161,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -248,14 +171,12 @@
             </Chord>
           <endTuplet/>
           <Beam>
-            <l1>17</l1>
-            <l2>17</l2>
+            <l1>34</l1>
+            <l2>34</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -263,10 +184,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -278,7 +197,6 @@
       <Measure>
         <voice>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>8</normalNotes>
             <actualNotes>15</actualNotes>
             <baseNote>16th</baseNote>
@@ -289,14 +207,12 @@
             <numberType>1</numberType>
             </Tuplet>
           <Beam>
-            <l1>19</l1>
-            <l2>19</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -304,10 +220,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -315,10 +229,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -326,10 +238,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -337,10 +247,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -348,10 +256,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -359,10 +265,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -370,10 +274,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -381,10 +283,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -392,10 +292,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -403,10 +301,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -414,10 +310,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -425,10 +319,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -436,10 +328,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -447,10 +337,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>16th</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -459,10 +347,8 @@
             </Chord>
           <endTuplet/>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -470,10 +356,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -485,10 +369,8 @@
       <Measure>
         <voice>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -496,10 +378,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -507,10 +387,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -518,1120 +396,19 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>
-    <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
-      <Division>480</Division>
-      <Style>
-        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-        <Spatium>1.74978</Spatium>
-        </Style>
-      <showInvisible>1</showInvisible>
-      <showUnprintable>1</showUnprintable>
-      <showFrames>1</showFrames>
-      <showMargins>0</showMargins>
-      <Part>
-        <Staff id="1">
-          <linkedTo>1</linkedTo>
-          <StaffType group="pitched">
-            <name>stdNormal</name>
-            </StaffType>
-          <bracket type="0" span="2" col="0"/>
-          </Staff>
-        <Staff id="2">
-          <linkedTo>1</linkedTo>
-          <StaffType group="tablature">
-            <name>tab6StrCommon</name>
-            <lines>6</lines>
-            <lineDistance>1.5</lineDistance>
-            <timesig>0</timesig>
-            <durations>0</durations>
-            <durationFontName>MuseScore Tab Modern</durationFontName>
-            <durationFontSize>15</durationFontSize>
-            <durationFontY>0</durationFontY>
-            <fretFontName>MuseScore Tab Serif</fretFontName>
-            <fretFontSize>9</fretFontSize>
-            <fretFontY>0</fretFontY>
-            <linesThrough>0</linesThrough>
-            <minimStyle>1</minimStyle>
-            <onLines>1</onLines>
-            <showRests>0</showRests>
-            <stemsDown>1</stemsDown>
-            <stemsThrough>0</stemsThrough>
-            <upsideDown>0</upsideDown>
-            <useNumbers>1</useNumbers>
-            </StaffType>
-          </Staff>
-        <trackName></trackName>
-        <Instrument id="guitar-steel-treble-clef">
-          <longName>Guitar</longName>
-          <shortName>Guit.</shortName>
-          <trackName>Acoustic Guitar (Treble Clef)</trackName>
-          <minPitchP>40</minPitchP>
-          <maxPitchP>84</maxPitchP>
-          <minPitchA>40</minPitchA>
-          <maxPitchA>83</maxPitchA>
-          <transposeDiatonic>-7</transposeDiatonic>
-          <transposeChromatic>-12</transposeChromatic>
-          <instrumentId>pluck.guitar.acoustic</instrumentId>
-          <concertClef>G8vb</concertClef>
-          <transposingClef>G</transposingClef>
-          <singleNoteDynamics>0</singleNoteDynamics>
-          <StringData>
-            <frets>24</frets>
-            <string>52</string>
-            <string>57</string>
-            <string>62</string>
-            <string>67</string>
-            <string>71</string>
-            <string>76</string>
-            </StringData>
-          <Articulation>
-            <velocity>100</velocity>
-            <gateTime>100</gateTime>
-            </Articulation>
-          <Articulation name="staccatissimo">
-            <velocity>100</velocity>
-            <gateTime>33</gateTime>
-            </Articulation>
-          <Articulation name="staccato">
-            <velocity>100</velocity>
-            <gateTime>50</gateTime>
-            </Articulation>
-          <Articulation name="portato">
-            <velocity>100</velocity>
-            <gateTime>67</gateTime>
-            </Articulation>
-          <Articulation name="tenuto">
-            <velocity>100</velocity>
-            <gateTime>100</gateTime>
-            </Articulation>
-          <Articulation name="marcato">
-            <velocity>120</velocity>
-            <gateTime>67</gateTime>
-            </Articulation>
-          <Articulation name="sforzato">
-            <velocity>150</velocity>
-            <gateTime>100</gateTime>
-            </Articulation>
-          <Articulation name="sforzatoStaccato">
-            <velocity>150</velocity>
-            <gateTime>50</gateTime>
-            </Articulation>
-          <Articulation name="marcatoStaccato">
-            <velocity>120</velocity>
-            <gateTime>50</gateTime>
-            </Articulation>
-          <Articulation name="marcatoTenuto">
-            <velocity>120</velocity>
-            <gateTime>100</gateTime>
-            </Articulation>
-          <Channel>
-            <program value="25"/>
-            </Channel>
-          </Instrument>
-        </Part>
-      <Staff id="1">
-        <VBox>
-          <height>10</height>
-          <linked>
-            </linked>
-          <Text>
-            <style>instrument_excerpt</style>
-            <text>Guitar</text>
-            </Text>
-          </VBox>
-        <Measure>
-          <voice>
-            <Clef>
-              <concertClefType>G</concertClefType>
-              <transposingClefType>G</transposingClefType>
-              <linked>
-                </linked>
-              </Clef>
-            <KeySig>
-              <linked>
-                </linked>
-              <accidental>0</accidental>
-              </KeySig>
-            <TimeSig>
-              <linked>
-                </linked>
-              <sigN>4</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
-            <Dynamic>
-              <subtype>mf</subtype>
-              <velocity>80</velocity>
-              <linked>
-                </linked>
-              </Dynamic>
-            <Tempo>
-              <tempo>2</tempo>
-              <linked>
-                </linked>
-              <text><sym>metNoteQuarterUp</sym> = 120</text>
-              </Tempo>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>17</l1>
-              <l2>17</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>4</normalNotes>
-              <actualNotes>5</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>5</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>17</l1>
-              <l2>17</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Beam>
-              <l1>17</l1>
-              <l2>17</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>8</normalNotes>
-              <actualNotes>15</actualNotes>
-              <baseNote>16th</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>15:8</text>
-                </Number>
-              <numberType>1</numberType>
-              </Tuplet>
-            <Beam>
-              <l1>19</l1>
-              <l2>19</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        </Staff>
-      <Staff id="2">
-        <Measure>
-          <voice>
-            <KeySig>
-              <linked>
-                <indexDiff>2</indexDiff>
-                </linked>
-              <accidental>0</accidental>
-              </KeySig>
-            <Tuplet>
-              <linked>
-                <indexDiff>5</indexDiff>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>46</l1>
-              <l2>46</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                <indexDiff>5</indexDiff>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  <indexDiff>5</indexDiff>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>4</normalNotes>
-              <actualNotes>5</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>5</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>46</l1>
-              <l2>46</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Beam>
-              <l1>46</l1>
-              <l2>46</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>8</normalNotes>
-              <actualNotes>15</actualNotes>
-              <baseNote>16th</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>15:8</text>
-                </Number>
-              <numberType>1</numberType>
-              </Tuplet>
-            <Beam>
-              <l1>46</l1>
-              <l2>46</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>16th</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>5</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        </Staff>
-      <name>Steel Guitar</name>
-      </Score>
     </Score>
   </museScore>

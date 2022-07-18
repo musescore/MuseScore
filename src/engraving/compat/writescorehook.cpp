@@ -44,7 +44,7 @@ void WriteScoreHook::onWriteStyle302(Score* score, XmlWriter& xml)
     }
 
     //! NOTE If the test mode, because the tests have not yet been adapted to the new format
-    if (MScore::testMode) {
+    if (MScore::testMode && MScore::testWriteStyleToScore) {
         isWriteStyle = true;
     }
 

@@ -25,10 +25,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Track 1</trackName>
+      <trackName>Electric Guitar</trackName>
       <Instrument>
-        <longName>Track 1</longName>
-        <shortName>S-Gt</shortName>
+        <longName>Electric Guitar</longName>
+        <shortName>E-Gt</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
@@ -43,8 +43,8 @@
           <string>76</string>
           </StringData>
         <Channel>
-          <program value="25"/>
-          <controller ctrl="7" value="102"/>
+          <program value="27"/>
+          <controller ctrl="7" value="101"/>
           </Channel>
         </Instrument>
       </Part>
@@ -63,71 +63,70 @@
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/2</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <StaffText>
-            <text>P</text>
-            </StaffText>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
+          <Spanner type="WhammyBar">
+            <WhammyBar>
+              <beginTextOffset x="0" y="0"/>
+              </WhammyBar>
+            <next>
+              <location>
+                <measures>3</measures>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <fret>0</fret>
-              <string>1</string>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>5</fret>
+              <string>2</string>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <StaffText>
-            <text>H</text>
-            </StaffText>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
-          <Dynamic>
-            <subtype>mf</subtype>
-            <velocity>80</velocity>
-            </Dynamic>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
           <Chord>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/2</fractions>
-                  </location>
-                </prev>
-              </Spanner>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>15</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
             <Note>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -138,12 +137,54 @@
           <Chord>
             <durationType>quarter</durationType>
             <Note>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>0</fret>
-              <string>2</string>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>15</fret>
+              <string>4</string>
               </Note>
             </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Spanner type="WhammyBar">
+            <prev>
+              <location>
+                <measures>-3</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>

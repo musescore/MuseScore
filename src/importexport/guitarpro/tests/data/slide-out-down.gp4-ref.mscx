@@ -4,24 +4,6 @@
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
-    <Style>
-      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-      <slurShowTabSimple>0</slurShowTabSimple>
-      <fermataShowTabSimple>0</fermataShowTabSimple>
-      <dynamicsShowTabSimple>0</dynamicsShowTabSimple>
-      <hairpinShowTabSimple>0</hairpinShowTabSimple>
-      <accentShowTabSimple>0</accentShowTabSimple>
-      <staccatoShowTabSimple>0</staccatoShowTabSimple>
-      <harmonicMarkShowTabSimple>0</harmonicMarkShowTabSimple>
-      <rasgueadoShowTabSimple>0</rasgueadoShowTabSimple>
-      <mordentShowTabSimple>0</mordentShowTabSimple>
-      <mordentShowTabCommon>0</mordentShowTabCommon>
-      <turnShowTabSimple>0</turnShowTabSimple>
-      <turnShowTabCommon>0</turnShowTabCommon>
-      <wahShowTabSimple>0</wahShowTabSimple>
-      <golpeShowTabSimple>0</golpeShowTabSimple>
-      <Spatium>1.74978</Spatium>
-      </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
