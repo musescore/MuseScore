@@ -54,14 +54,6 @@ bool VstAudioClient::handleEvent(const VstEvent& event)
 {
     ensureActivity();
 
-    if (event.type == VstEvent::kNoteOnEvent) {
-        LOGD() << "SUKAAAAA NOTE ON";
-    }
-
-    if (event.type == VstEvent::kNoteOffEvent) {
-        LOGD() << "SUKAAAAA NOTE OFF";
-    }
-
     if (m_eventList.addEvent(const_cast<VstEvent&>(event)) == Steinberg::kResultTrue) {
         return true;
     }
@@ -89,8 +81,6 @@ bool VstAudioClient::handleParamChange(const PluginParamInfo& param)
 
 void VstAudioClient::setVolumeGain(const audio::gain_t newVolumeGain)
 {
-    LOGD() << "SUKAAAAA VOLUME: " << newVolumeGain;
-
     m_volumeGain = newVolumeGain;
 }
 
@@ -222,8 +212,6 @@ PluginComponentPtr VstAudioClient::pluginComponent() const
 
 void VstAudioClient::setUpProcessData()
 {
-    LOGD() << "SUKAAAAA -----";
-
     m_processContext.sampleRate = m_samplesInfo.sampleRate;
 
     m_processData.inputEvents = &m_eventList;
