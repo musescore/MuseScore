@@ -277,16 +277,12 @@ Shortcut ShortcutsRegister::readShortcut(framework::XmlReader& reader) const
             shortcut.standardKey = QKeySequence::StandardKey(reader.readInt());
         } else if (tag == SEQUENCE_TAG) {
             shortcut.sequences.push_back(reader.readString());
-        } else if (tag == CONTEXT_TAG) {
-            shortcut.context = reader.readString();
         } else {
             reader.skipCurrentElement();
         }
     }
 
-    if (shortcut.context.empty()) {
-        shortcut.context = "any";
-    }
+    shortcut.context = uiactionsRegister()->action(shortcut.action).scCtx;
 
     return shortcut;
 }
