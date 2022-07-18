@@ -107,7 +107,7 @@ Item {
 
             currentIndex: instrumentsOnScoreModel.currentOrderIndex
 
-            displayText: qsTrc("instruments", "Order: ") + currentText
+            displayText: qsTrc("instruments", "Order:") + " " + currentText
 
             onActivated: function(index, value) {
                 instrumentsOnScoreModel.currentOrderIndex = index
@@ -168,7 +168,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 horizontalAlignment: Text.AlignLeft
-                text:  model.isSoloist ? qsTrc("instruments", "Soloist: ") + model.name : model.name
+                text:  model.isSoloist ? qsTrc("instruments", "Soloist:") + " " + model.name : model.name
                 font: ui.theme.bodyBoldFont
             }
 

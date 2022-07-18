@@ -116,7 +116,9 @@ Item {
             Layout.leftMargin: 20
             Layout.rightMargin: 20
 
-            text: qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the shortcut <b>‘i’</b>")
+            //: Text between %1 and %2 will be printed in a bold font.
+            text: qsTrc("instruments", "There are no instruments in your score. To choose some, press %1Add%2, or use the shortcut %1‘i’%2")
+                  .arg("<b>").arg("</b>")
             visible: instrumentsTreeModel.isEmpty && instrumentsTreeModel.isAddingAvailable
 
             verticalAlignment: Qt.AlignTop
