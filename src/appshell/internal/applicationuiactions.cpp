@@ -38,50 +38,61 @@ const ActionCode TOGGLE_NAVIGATOR_ACTION_CODE("toggle-navigator");
 const UiActionList ApplicationUiActions::m_actions = {
     UiAction("quit",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             QT_TRANSLATE_NOOP("action", "Quit"),
              QT_TRANSLATE_NOOP("action", "Quit")
              ),
     UiAction("restart",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Restart")
              ),
     UiAction("fullscreen",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "&Full screen"),
-             QT_TRANSLATE_NOOP("action", "Enter full screen"),
+             QT_TRANSLATE_NOOP("action", "Full screen"),
              Checkable::Yes
              ),
     UiAction("about",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "&About…")
              ),
     UiAction("about-qt",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "About &Qt…")
              ),
     UiAction("about-musicxml",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "About &MusicXML…")
              ),
     UiAction("online-handbook",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Online &handbook")
+             mu::context::CTX_ANY,
+             QT_TRANSLATE_NOOP("action", "Online &handbook"),
+             QT_TRANSLATE_NOOP("action", "Go to online handbook")
              ),
     UiAction("ask-help",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "As&k for help")
              ),
     UiAction("report-bug",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "&Report a bug"),
-             QT_TRANSLATE_NOOP("action", "Report a bug")
+             mu::context::CTX_ANY,
+             QT_TRANSLATE_NOOP("action", "&Report a bug")
              ),
     UiAction("leave-feedback",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "F&eedback"),
-             QT_TRANSLATE_NOOP("action", "Leave feedback")
+             mu::context::CTX_ANY,
+             QT_TRANSLATE_NOOP("action", "F&eedback")
              ),
     UiAction("revert-factory",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Revert to &factory settings"),
              QT_TRANSLATE_NOOP("action", "Revert to factory settings")
              ),
@@ -89,6 +100,7 @@ const UiActionList ApplicationUiActions::m_actions = {
     // Docking
     UiAction("dock-restore-default-layout",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Restore the &default layout"),
              QT_TRANSLATE_NOOP("action", "Restore the default layout")
              ),
@@ -96,95 +108,107 @@ const UiActionList ApplicationUiActions::m_actions = {
     // Toolbars
     UiAction("toggle-transport",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
              QT_TRANSLATE_NOOP("action", "&Playback controls"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Playback controls' toolbar"),
+             QT_TRANSLATE_NOOP("action", "Show/hide playback controls"),
              Checkable::Yes
              ),
     UiAction("toggle-noteinput",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "&Note input"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Note input' toolbar"),
+             QT_TRANSLATE_NOOP("action", "Show/hide note input toolbar"),
              Checkable::Yes
              ),
 
     // Vertical panels
     UiAction("toggle-palettes",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "&Palettes"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Palettes'"),
+             QT_TRANSLATE_NOOP("action", "Show/hide palettes"),
              Checkable::Yes
              ),
     UiAction("toggle-instruments",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Instr&uments"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Instruments'"),
+             QT_TRANSLATE_NOOP("action", "Open instruments dialog…"),
              Checkable::Yes
              ),
     UiAction("inspector",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Propert&ies"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Properties'"),
+             QT_TRANSLATE_NOOP("action", "Show/hide properties"),
              Checkable::Yes
              ),
     UiAction("toggle-selection-filter",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
              QT_TRANSLATE_NOOP("action", "Se&lection filter"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Selection filter'"),
+             QT_TRANSLATE_NOOP("action", "Show/hide selection filter"),
              Checkable::Yes
              ),
 
     // Navigator
     UiAction("toggle-navigator",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "&Navigator"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'"),
+             QT_TRANSLATE_NOOP("action", "Show/hide navigator"),
              Checkable::Yes
              ),
 
     // Horizontal panels
     UiAction("toggle-timeline",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Tim&eline"),
-             QT_TRANSLATE_NOOP("action", "Toggle timeline"),
+             QT_TRANSLATE_NOOP("action", "Show/hide timeline"),
              Checkable::Yes
              ),
     UiAction("toggle-mixer",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Mixer"),
-             QT_TRANSLATE_NOOP("action", "Toggle mixer"),
+             QT_TRANSLATE_NOOP("action", "Show/hide mixer"),
              IconCode::Code::MIXER,
              Checkable::Yes
              ),
     UiAction("toggle-piano-keyboard",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Piano &keyboard"),
-             QT_TRANSLATE_NOOP("action", "Toggle piano keyboard"),
+             QT_TRANSLATE_NOOP("action", "Show/hide piano keyboard"),
              Checkable::Yes
              ),
     UiAction("toggle-scorecmp-tool",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
              QT_TRANSLATE_NOOP("action", "Score comparison tool"),
-             QT_TRANSLATE_NOOP("action", "Toggle score comparison tool"),
              Checkable::Yes
              ),
 
     // Status bar
     UiAction("toggle-statusbar",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
              QT_TRANSLATE_NOOP("action", "&Status bar"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Status bar'"),
+             QT_TRANSLATE_NOOP("action", "Show/hide status bar"),
              Checkable::Yes
              ),
 
     UiAction("preference-dialog",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "&Preferences"),
-             QT_TRANSLATE_NOOP("action", "Open preferences dialog")
+             QT_TRANSLATE_NOOP("action", "Preferences…")
              ),
     UiAction("check-update",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Check for &update"),
-             QT_TRANSLATE_NOOP("action", "Check for update")
+             mu::context::CTX_ANY,
+             QT_TRANSLATE_NOOP("action", "Check for &update")
              )
 };
 

@@ -30,26 +30,32 @@ using namespace mu::diagnostics;
 const UiActionList DiagnosticsActions::m_actions = {
     UiAction("diagnostic-show-paths",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Show p&aths…")
              ),
     UiAction("diagnostic-show-profiler",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Show pr&ofiler…")
              ),
     UiAction("diagnostic-show-navigation-tree",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Show &navigation tree…")
              ),
     UiAction("diagnostic-show-accessible-tree",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Show &accessible tree…")
              ),
     UiAction("diagnostic-accessible-tree-dump",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Accessible &dump")
              ),
     UiAction("diagnostic-show-engraving-elements",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Engraving &elements")
              )
 };

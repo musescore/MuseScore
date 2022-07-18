@@ -30,6 +30,7 @@ using namespace mu::mi;
 const UiActionList MultiInstancesUiActions::m_actions = {
     UiAction("multiinstances-dev-show-info",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "&Multiinstances")
              )
 };
