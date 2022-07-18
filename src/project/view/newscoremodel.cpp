@@ -92,7 +92,6 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
 
     QVariantMap keySignature = info["keySignature"].toMap();
     scoreOptions.key = static_cast<Key>(keySignature["key"].toInt());
-    scoreOptions.keyMode = static_cast<KeyMode>(keySignature["mode"].toInt());
 
     QVariantMap measuresPickup = info["pickupTimeSignature"].toMap();
     scoreOptions.withPickupMeasure = info["withPickupMeasure"].toBool();
