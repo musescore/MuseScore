@@ -58,7 +58,7 @@ public:
 
     Status status() const override;
     async::Channel<io::path_t, Status> statusChanged() const override;
-    async::Channel<QString, StepStatus, Ret> stepStatusChanged() const override;
+    async::Channel<StepInfo, Ret> stepStatusChanged() const override;
 
     SpeedMode speedMode() const override;
     void setSpeedMode(SpeedMode mode) override;
@@ -87,7 +87,7 @@ private:
 
     Status m_status = Status::Undefined;
     async::Channel<io::path_t, Status> m_statusChanged;
-    async::Channel<QString, StepStatus, Ret> m_stepStatusChanged;
+    async::Channel<StepInfo, Ret> m_stepStatusChanged;
     ScriptEngine* m_engine = nullptr;
     ITestCaseContextPtr m_context = nullptr;
     TestCaseRunner m_runner;
