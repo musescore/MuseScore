@@ -532,23 +532,23 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
             TimeSig(MidiOperations::Opers& opers)
                 : Column(opers)
             {
-                _values.push_back(qtrc("iex_midi", "2"));
-                _values.push_back(qtrc("iex_midi", "3"));
-                _values.push_back(qtrc("iex_midi", "4"));
-                _values.push_back(qtrc("iex_midi", "5"));
-                _values.push_back(qtrc("iex_midi", "6"));
-                _values.push_back(qtrc("iex_midi", "7"));
-                _values.push_back(qtrc("iex_midi", "9"));
-                _values.push_back(qtrc("iex_midi", "12"));
-                _values.push_back(qtrc("iex_midi", "15"));
-                _values.push_back(qtrc("iex_midi", "21"));
+                _values.push_back("2");
+                _values.push_back("3");
+                _values.push_back("4");
+                _values.push_back("5");
+                _values.push_back("6");
+                _values.push_back("7");
+                _values.push_back("9");
+                _values.push_back("12");
+                _values.push_back("15");
+                _values.push_back("21");
                 _numeratorCount = _values.size();
 
-                _values.push_back(qtrc("iex_midi", "2"));
-                _values.push_back(qtrc("iex_midi", "4"));
-                _values.push_back(qtrc("iex_midi", "8"));
-                _values.push_back(qtrc("iex_midi", "16"));
-                _values.push_back(qtrc("iex_midi", "32"));
+                _values.push_back("2");
+                _values.push_back("4");
+                _values.push_back("8");
+                _values.push_back("16");
+                _values.push_back("32");
             }
 
             QString headerName() const override
