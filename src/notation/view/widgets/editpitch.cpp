@@ -72,7 +72,7 @@ bool EditPitch::eventFilter(QObject* obj, QEvent* event)
         QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
         if (keyEvent
             && WidgetNavigationFix::fixNavigationForTableWidget(
-                new WidgetNavigationFix::NavigationChain { tableWidget, buttonBox, buttonBox },
+                WidgetNavigationFix::NavigationChain { tableWidget, buttonBox, buttonBox },
                 keyEvent->key())) {
             return true;
         }
