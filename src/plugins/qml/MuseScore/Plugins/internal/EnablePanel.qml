@@ -68,7 +68,7 @@ InfoPanel {
                 }
             }
 
-            text: !root.isEnabled ? qsTrc("global", "Enable") : qsTrc("global", "Disable")
+            text: !root.isEnabled ? qsTrc("plugins", "Enable") : qsTrc("plugins", "Disable")
 
             Component.onCompleted: {
                 root.mainButton = mainButton
