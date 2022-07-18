@@ -42,7 +42,7 @@ using namespace mu::network;
 static const QString DEFAULT_LANGUAGE("system");
 
 static const QStringList languageFileTypes = {
-    "mscore",
+    "musescore",
     "instruments"
 };
 
@@ -58,9 +58,7 @@ void LanguagesService::init()
     ValCh<QString> languageCode = configuration()->currentLanguageCode();
     loadLanguage(languageCode.val);
 
-    languageCode.ch.onReceive(this, [this](const QString& languageCode) {
-        setCurrentLanguage(languageCode);
-    });
+    //! NOTE To change the language at the moment, a restart is required
 
     m_inited = true;
 }

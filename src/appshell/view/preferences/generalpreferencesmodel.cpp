@@ -35,10 +35,12 @@ void GeneralPreferencesModel::load()
 {
     languagesConfiguration()->currentLanguageCode().ch.onReceive(this, [this](const QString& languageCode) {
         emit currentLanguageCodeChanged(languageCode);
+        setIsNeedRestart(true);
     });
 
     languagesService()->languages().ch.onReceive(this, [this](const LanguagesHash&) {
         emit languagesChanged(languages());
+        setIsNeedRestart(true);
     });
 
     projectConfiguration()->autoSaveEnabledChanged().onReceive(this, [this](bool enabled) {
@@ -183,4 +185,18 @@ void GeneralPreferencesModel::setOscPort(int oscPort)
 {
     NOT_IMPLEMENTED;
     emit oscPortChanged(oscPort);
+}
+
+bool GeneralPreferencesModel::isNeedRestart() const
+{
+    return m_isNeedRestart;
+}
+
+void GeneralPreferencesModel::setIsNeedRestart(bool newIsNeedRestart)
+{
+    if (m_isNeedRestart == newIsNeedRestart) {
+        return;
+    }
+    m_isNeedRestart = newIsNeedRestart;
+    emit isNeedRestartChanged();
 }
