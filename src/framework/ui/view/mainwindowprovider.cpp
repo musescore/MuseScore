@@ -134,3 +134,13 @@ QScreen* MainWindowProvider::screen() const
 {
     return m_window ? m_window->screen() : nullptr;
 }
+
+void MainWindowProvider::showMinimizedWithSavePreviousState()
+{
+    // On Windows, QWindow::showMinimized() doesn't store the previous state of the window.
+    // Thus, it will always be restored to a windowed state once clicked on from the task bar, even
+    // if it was maximized before.
+    // Using setWindowStates, we can remember the previous state and restore it correctly
+    // when the window is shown again.
+    m_window->setWindowStates(Qt::WindowMinimized | m_window->windowStates());
+}
