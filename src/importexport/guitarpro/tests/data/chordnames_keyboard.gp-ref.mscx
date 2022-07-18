@@ -63,6 +63,46 @@
             <subtype>mf</subtype>
             <velocity>80</velocity>
             </Dynamic>
+          <FretDiagram>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <marker>cross</marker>
+                </string>
+              <string no="2">
+                <marker>cross</marker>
+                </string>
+              <string no="3">
+                <marker>cross</marker>
+                </string>
+              <string no="4">
+                <marker>cross</marker>
+                </string>
+              <string no="5">
+                <marker>cross</marker>
+                </string>
+              </fretDiagram>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <marker>88</marker>
+              </string>
+            <string no="2">
+              <marker>88</marker>
+              </string>
+            <string no="3">
+              <marker>88</marker>
+              </string>
+            <string no="4">
+              <marker>88</marker>
+              </string>
+            <string no="5">
+              <marker>88</marker>
+              </string>
+            </FretDiagram>
           <Tempo>
             <tempo>2</tempo>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
@@ -72,6 +112,8 @@
             <Note>
               <pitch>67</pitch>
               <tpc>15</tpc>
+              <fret>3</fret>
+              <string>-6</string>
               </Note>
             </Chord>
           </voice>
@@ -83,6 +125,8 @@
             <Note>
               <pitch>69</pitch>
               <tpc>17</tpc>
+              <fret>5</fret>
+              <string>-6</string>
               </Note>
             </Chord>
           </voice>
@@ -94,6 +138,8 @@
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
+              <fret>7</fret>
+              <string>-6</string>
               </Note>
             </Chord>
           </voice>
@@ -105,6 +151,8 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <fret>8</fret>
+              <string>-6</string>
               </Note>
             </Chord>
           <BarLine>
