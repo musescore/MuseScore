@@ -30,33 +30,38 @@ using namespace mu::actions;
 const UiActionList PlaybackUiActions::m_mainActions = {
     UiAction("play",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
              QT_TRANSLATE_NOOP("action", "Play"),
-             QT_TRANSLATE_NOOP("action", "Start or stop playback"),
+             QT_TRANSLATE_NOOP("action", "Play"),
              IconCode::Code::PLAY
              ),
     UiAction("stop",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
              QT_TRANSLATE_NOOP("action", "Stop"),
              QT_TRANSLATE_NOOP("action", "Stop playback"),
              IconCode::Code::STOP
              ),
     UiAction("rewind",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
              QT_TRANSLATE_NOOP("action", "Rewind"),
-             QT_TRANSLATE_NOOP("action", "Rewind to start position"),
+             QT_TRANSLATE_NOOP("action", "Rewind"),
              IconCode::Code::REWIND
              ),
     UiAction("loop",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
              QT_TRANSLATE_NOOP("action", "Loop playback"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Loop playback'"),
+             QT_TRANSLATE_NOOP("action", "Toggle ‘Loop playback’"),
              IconCode::Code::LOOP,
              Checkable::Yes
              ),
     UiAction("metronome",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
              QT_TRANSLATE_NOOP("action", "Metronome"),
-             QT_TRANSLATE_NOOP("action", "Play metronome during playback"),
+             QT_TRANSLATE_NOOP("action", "Toggle metronome playback"),
              IconCode::Code::METRONOME,
              Checkable::Yes
              )
@@ -65,13 +70,15 @@ const UiActionList PlaybackUiActions::m_mainActions = {
 const UiActionList PlaybackUiActions::m_settingsActions = {
     UiAction("midi-on",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "MIDI input"),
-             QT_TRANSLATE_NOOP("action", "Enable 'MIDI input'"),
+             QT_TRANSLATE_NOOP("action", "Toggle ‘Enable MIDI input’"),
              IconCode::Code::MIDI_INPUT,
              Checkable::Yes
              ),
     UiAction("repeat",
              mu::context::UiCtxAny,
+             mu::context::CTX_NOTATION_FOCUSED,
              QT_TRANSLATE_NOOP("action", "Play repeats"),
              QT_TRANSLATE_NOOP("action", "Play repeats"),
              IconCode::Code::PLAY_REPEATS,
@@ -79,6 +86,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              ),
     UiAction("pan",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Pan score"),
              QT_TRANSLATE_NOOP("action", "Pan score automatically"),
              IconCode::Code::PAN_SCORE,
@@ -86,8 +94,9 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              ),
     UiAction("countin",
              mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "Count-in"),
-             QT_TRANSLATE_NOOP("action", "Enable count-in when playing"),
+             QT_TRANSLATE_NOOP("action", "Enable count-in"),
              IconCode::Code::COUNT_IN,
              Checkable::Yes
              ),
@@ -96,12 +105,14 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
 const UiActionList PlaybackUiActions::m_loopBoundaryActions = {
     UiAction("loop-in",
              mu::context::UiCtxAny,
+             mu::context::CTX_NOTATION_FOCUSED,
              QT_TRANSLATE_NOOP("action", "Loop in"),
              QT_TRANSLATE_NOOP("action", "Set loop marker left"),
              IconCode::Code::LOOP_IN
              ),
     UiAction("loop-out",
              mu::context::UiCtxAny,
+             mu::context::CTX_NOTATION_FOCUSED,
              QT_TRANSLATE_NOOP("action", "Loop out"),
              QT_TRANSLATE_NOOP("action", "Set loop marker right"),
              IconCode::Code::LOOP_OUT
