@@ -184,7 +184,14 @@ Rectangle {
                 anchors.leftMargin: 8
                 anchors.rightMargin: 8
                 horizontalAlignment: Text.AlignLeft
-                text: modelData.status
+                text: {
+                    var duration = modelData.duration
+                    if (duration !== "") {
+                        return modelData.status + " [" + duration + "]"
+                    }
+
+                    modelData.status
+                }
             }
         }
     }
