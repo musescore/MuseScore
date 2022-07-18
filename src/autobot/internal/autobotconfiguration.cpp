@@ -40,15 +40,18 @@ mu::io::paths_t AutobotConfiguration::scriptsDirPaths() const
     return paths;
 }
 
-mu::io::path_t AutobotConfiguration::testingFilesDirPath() const
+mu::io::paths_t AutobotConfiguration::testingFilesDirPaths() const
 {
     io::path_t p = io::path_t(std::getenv("MU_AUTOBOT_FILES_PATH"));
     if (!p.empty()) {
-        return p;
+        return { p };
     }
 
-    p = globalConfiguration()->userDataPath() + "/AutobotTestingFiles";
-    return p;
+    io::paths_t paths;
+    paths.push_back(globalConfiguration()->appDataPath() + "/autobotscripts/data");
+    paths.push_back(globalConfiguration()->userDataPath() + "/AutobotTestingFiles");
+
+    return paths;
 }
 
 mu::io::path_t AutobotConfiguration::dataPath() const
