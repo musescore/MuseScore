@@ -65,15 +65,10 @@ PreferencesPage {
 
         CharsetsSection {
             charsets: importPreferencesModel.charsets()
-            currentGuitarProCharset: importPreferencesModel.currentGuitarProCharset
             currentOvertureCharset: importPreferencesModel.currentOvertureCharset
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
-
-            onGuitarProCharsetChangeRequested: function(charset) {
-                importPreferencesModel.currentGuitarProCharset = charset
-            }
 
             onOvertureCharsetChangeRequested: function(charset) {
                 importPreferencesModel.currentOvertureCharset = charset

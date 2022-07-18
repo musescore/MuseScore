@@ -47,8 +47,6 @@ class ImportPreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(QString styleFileImportPath READ styleFileImportPath WRITE setStyleFileImportPath NOTIFY styleFileImportPathChanged)
 
     Q_PROPERTY(
-        QString currentGuitarProCharset READ currentGuitarProCharset WRITE setCurrentGuitarProCharset NOTIFY currentGuitarProCharsetChanged)
-    Q_PROPERTY(
         QString currentOvertureCharset READ currentOvertureCharset WRITE setCurrentOvertureCharset NOTIFY currentOvertureCharsetChanged)
 
     Q_PROPERTY(bool importLayout READ importLayout WRITE setImportLayout NOTIFY importLayoutChanged)
@@ -72,7 +70,6 @@ public:
     Q_INVOKABLE QString fileDirectory(const QString& filePath) const;
 
     QString styleFileImportPath() const;
-    QString currentGuitarProCharset() const;
     QString currentOvertureCharset() const;
 
     bool importLayout() const;
@@ -85,7 +82,6 @@ public:
 
 public slots:
     void setStyleFileImportPath(QString path);
-    void setCurrentGuitarProCharset(QString charset);
     void setCurrentOvertureCharset(QString charset);
 
     void setImportLayout(bool import);
@@ -98,7 +94,6 @@ public slots:
 
 signals:
     void styleFileImportPathChanged(QString styleFileImportPath);
-    void currentGuitarProCharsetChanged(QString currentGuitarProCharset);
     void currentOvertureCharsetChanged(QString currentOvertureCharset);
     void importLayoutChanged(bool importLayout);
     void importBreaksChanged(bool importBreaks);

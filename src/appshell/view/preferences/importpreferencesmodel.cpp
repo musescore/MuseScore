@@ -90,11 +90,6 @@ QString ImportPreferencesModel::styleFileImportPath() const
     return musicXmlConfiguration()->styleFileImportPath().toQString();
 }
 
-QString ImportPreferencesModel::currentGuitarProCharset() const
-{
-    return QString::fromStdString(guitarProConfiguration()->importGuitarProCharset());
-}
-
 QString ImportPreferencesModel::currentOvertureCharset() const
 {
     return QString::fromStdString(oveConfiguration()->importOvertureCharset());
@@ -133,16 +128,6 @@ void ImportPreferencesModel::setStyleFileImportPath(QString path)
 
     musicXmlConfiguration()->setStyleFileImportPath(path.toStdString());
     emit styleFileImportPathChanged(path);
-}
-
-void ImportPreferencesModel::setCurrentGuitarProCharset(QString charset)
-{
-    if (charset == currentGuitarProCharset()) {
-        return;
-    }
-
-    guitarProConfiguration()->setImportGuitarProCharset(charset.toStdString());
-    emit currentGuitarProCharsetChanged(charset);
 }
 
 void ImportPreferencesModel::setCurrentOvertureCharset(QString charset)
