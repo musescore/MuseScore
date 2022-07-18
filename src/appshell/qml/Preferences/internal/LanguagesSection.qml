@@ -34,6 +34,7 @@ BaseSection {
 
     property alias languages: dropdown.model
     property string currentLanguageCode: ""
+    property bool isNeedRestart: false
 
     signal languageSelected(string languageCode)
     signal checkForUpdateRequested()
@@ -74,7 +75,7 @@ BaseSection {
 
             anchors.verticalCenter: parent.verticalCenter
 
-            text: qsTrc("appshell/preferences", "Check for update")
+            text: qsTrc("appshell/preferences", "Check for language updates")
 
             navigationName: "CheckForUpdate"
             navigationPanel: root.navigation
@@ -84,5 +85,10 @@ BaseSection {
                 root.checkForUpdateRequested()
             }
         }
+    }
+
+    StyledTextLabel {
+        text: qsTrc("appshell/preferences", "Restart required")
+        visible: root.isNeedRestart
     }
 }
