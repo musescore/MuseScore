@@ -64,8 +64,8 @@ public:
     void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) override;
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
-    void appendStaff(Staff* staff, const ID& destinationPartId) override;
-    void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
+    bool appendStaff(Staff* staff, const ID& destinationPartId) override;
+    bool appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
 
     void insertPart(Part* part, size_t index) override;
 

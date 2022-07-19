@@ -475,13 +475,17 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     notifyAboutStaffChanged(staff);
 }
 
-void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
+bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     TRACEFUNC;
 
+    IF_ASSERT_FAILED(staff) {
+        return false;
+    }
+
     Part* destinationPart = partModifiable(destinationPartId);
-    if (!staff || !destinationPart) {
-        return;
+    if (!destinationPart) {
+        return false;
     }
 
     startEdit();
@@ -489,16 +493,22 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     apply();
 
     notifyAboutStaffAdded(staff, destinationPartId);
+
+    return true;
 }
 
-void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const mu::ID& destinationPartId)
+bool NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const mu::ID& destinationPartId)
 {
     TRACEFUNC;
 
+    IF_ASSERT_FAILED(staff) {
+        return false;
+    }
+
     Staff* sourceStaff = staffModifiable(sourceStaffId);
     Part* destinationPart = partModifiable(destinationPartId);
-    if (!staff || !sourceStaff || !destinationPart) {
-        return;
+    if (!sourceStaff || !destinationPart) {
+        return false;
     }
 
     startEdit();
@@ -512,6 +522,8 @@ void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, con
     apply();
 
     notifyAboutStaffAdded(staff, destinationPartId);
+
+    return true;
 }
 
 void NotationParts::insertPart(Part* part, size_t index)
