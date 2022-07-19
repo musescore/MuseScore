@@ -2191,7 +2191,7 @@ String Segment::accessibleExtraInfo() const
         }
 
         if (s->tick() == tick()) {
-            startSpanners += mtrc("engraving", "Start of %1").arg(s->accessibleInfo());
+            startSpanners += u" " + mtrc("engraving", "Start of %1").arg(s->accessibleInfo());
         }
 
         const Segment* seg = 0;
@@ -2206,10 +2206,11 @@ String Segment::accessibleExtraInfo() const
         }
 
         if (seg && s->tick2() == seg->tick()) {
-            endSpanners += mtrc("engraving", "End of %1").arg(s->accessibleInfo());
+            endSpanners += u" " + mtrc("engraving", "End of %1").arg(s->accessibleInfo());
         }
     }
-    return rez + u' ' + startSpanners + u' ' + endSpanners;
+
+    return rez + startSpanners + endSpanners;
 }
 
 //---------------------------------------------------------

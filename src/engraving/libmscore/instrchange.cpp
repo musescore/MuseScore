@@ -139,6 +139,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             score()->transpositionChanged(part, oldV, tickStart, tickEnd);
         }
 
+        //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.
         const String newInstrChangeText = mtrc("engraving", "To %1").arg(instrument->trackName());
         undoChangeProperty(Pid::TEXT, TextBase::plainToXmlText(newInstrChangeText));
     }
