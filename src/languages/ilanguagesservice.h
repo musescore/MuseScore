@@ -38,6 +38,8 @@ public:
     virtual ValCh<LanguagesHash> languages() const = 0;
     virtual ValCh<Language> currentLanguage() const = 0;
 
+    virtual LanguageStatus::Status languageStatus(const QString& languageCode) const = 0;
+
     virtual RetCh<LanguageProgress> install(const QString& languageCode) = 0;
     virtual RetCh<LanguageProgress> update(const QString& languageCode) = 0;
     virtual Ret uninstall(const QString& languageCode) = 0;

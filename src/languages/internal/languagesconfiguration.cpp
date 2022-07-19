@@ -199,7 +199,6 @@ LanguagesHash LanguagesConfiguration::parseLanguagesState(const ByteArray& json)
 
         language.name = langObj.value("name").toString();
         language.archiveFileName = langObj.value("fileName").toString();
-        language.status = static_cast<LanguageStatus::Status>(langObj.value("status").toInt());
 
         const QJsonArray files = langObj.value("files").toArray();
         for (const QJsonValue& fileVal : files) {
