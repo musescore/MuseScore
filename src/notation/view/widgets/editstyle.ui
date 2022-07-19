@@ -3846,7 +3846,7 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
+                <width>369</width>
                 <height>882</height>
                </rect>
               </property>
@@ -5207,7 +5207,17 @@ By default, they will be placed such as that their right end are at the same lev
               <bool>true</bool>
              </property>
              <layout class="QGridLayout" name="gridLayout_37">
-              <item row="2" column="1">
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_47">
+                <property name="text">
+                 <string>Shortest stem:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>shortestStem</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="shortestStem">
                 <property name="suffix">
                  <string extracomment="space unit">sp</string>
@@ -5217,36 +5227,6 @@ By default, they will be placed such as that their right end are at the same lev
                 </property>
                 <property name="singleStep">
                  <double>0.250000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_46">
-                <property name="text">
-                 <string>Progression:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>shortStemProgression</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QDoubleSpinBox" name="shortStemProgression">
-                <property name="suffix">
-                 <string extracomment="space unit">sp</string>
-                </property>
-                <property name="singleStep">
-                 <double>0.050000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="label_47">
-                <property name="text">
-                 <string>Shortest stem:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>shortestStem</cstring>
                 </property>
                </widget>
               </item>
@@ -5874,8 +5854,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>638</height>
+                <width>579</width>
+                <height>527</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -9632,8 +9612,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>703</width>
-             <height>674</height>
+             <width>585</width>
+             <height>465</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -10928,8 +10908,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>638</height>
+                <width>568</width>
+                <height>551</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -11849,8 +11829,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>671</width>
-                <height>636</height>
+                <width>531</width>
+                <height>481</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -13087,7 +13067,6 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>repeatBarlineDotSeparation</tabstop>
   <tabstop>resetRepeatBarlineDotSeparation</tabstop>
   <tabstop>shortenStem</tabstop>
-  <tabstop>shortStemProgression</tabstop>
   <tabstop>shortestStem</tabstop>
   <tabstop>accidentalNoteDistance</tabstop>
   <tabstop>accidentalDistance</tabstop>

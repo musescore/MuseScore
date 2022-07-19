@@ -181,7 +181,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::shortenStem,             "shortenStem",             true },
     { Sid::stemLength,              "stemLength",              PropertyValue(3.5) },
     { Sid::stemLengthSmall,         "stemLengthSmall",         PropertyValue(2.25) },
-    { Sid::shortStemProgression,    "shortStemProgression",    Spatium(0.25) },
     { Sid::shortStemStartLocation,  "shortStemStartLocation",  1 },
     { Sid::shortestStem,            "shortestStem",            PropertyValue(2.5) },
     { Sid::minStaffSizeForAutoStems, "minStaffSizeForAutoStems", 4 },

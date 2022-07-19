@@ -195,7 +195,6 @@ enum class Sid {
     shortenStem,
     stemLength,
     stemLengthSmall,
-    shortStemProgression,
     shortStemStartLocation,
     shortestStem,
     minStaffSizeForAutoStems,
