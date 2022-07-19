@@ -113,11 +113,22 @@ void ChordLine::layout()
             note = chord()->upNote();
         }
 
-        double x = note->pos().x();
+        double x = 0.0;
         double y = note->pos().y();
         double horOffset = 0.33 * spatium(); // one third of a space away from the note
         double vertOffset = 0.25 * spatium(); // one quarter of a space from the center line
-        x += isToTheLeft() ? -note->shape().left() - horOffset : note->shape().right() + horOffset;
+        // Get chord shape
+        Shape chordShape = chord()->shape();
+        // ...but remove chordLines, otherwise we are spacing chordLines against themselves
+        auto iter = chordShape.begin();
+        while (iter != chordShape.end()) {
+            if (iter->toItem && iter->toItem->isChordLine()) {
+                iter = chordShape.erase(iter);
+            } else {
+                ++iter;
+            }
+        }
+        x += isToTheLeft() ? -chordShape.left() - horOffset : chordShape.right() + horOffset;
         y += isBelow() ? vertOffset : -vertOffset;
         setPos(x, y);
     } else {
