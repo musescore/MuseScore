@@ -102,8 +102,7 @@ inline bool isNotePlayable(const Note* note)
         const Chord* firstChord = tie->startNote()->chord();
         const Chord* lastChord = tie->endNote()->chord();
 
-        return !firstChord->containsEqualArticulations(lastChord)
-               || !firstChord->containsEqualTremolo(lastChord);
+        return !firstChord->containsEqualTremolo(lastChord);
     }
 
     return true;
