@@ -72,7 +72,7 @@ bool EditPitch::eventFilter(QObject* obj, QEvent* event)
         QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
         if (keyEvent
             && WidgetNavigationFix::fixNavigationForTableWidget(
-                new WidgetNavigationFix::NavigationChain { tableWidget, buttonBox, buttonBox },
+                WidgetNavigationFix::NavigationChain { tableWidget, buttonBox, buttonBox },
                 keyEvent->key())) {
             return true;
         }
@@ -85,16 +85,6 @@ void EditPitch::setup()
 {
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-    auto clefTrebleItem = tableWidget->item(5, 7);
-    if (clefTrebleItem) {
-        clefTrebleItem->setText(iconCodeToChar(IconCode::Code::CLEF_TREBLE) + QString(" ") + qtrc("notation", "G 4"));
-    }
-
-    auto clefBassItem = tableWidget->item(6, 5);
-    if (clefBassItem) {
-        clefBassItem->setText(iconCodeToChar(IconCode::Code::CLEF_BASS) + QString(" ") + qtrc("notation", "F 3"));
-    }
 
     WidgetStateStore::restoreGeometry(this);
 

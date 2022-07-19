@@ -127,7 +127,7 @@ bool EditStringData::eventFilter(QObject* obj, QEvent* event)
         QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
         if (keyEvent
             && WidgetNavigationFix::fixNavigationForTableWidget(
-                new WidgetNavigationFix::NavigationChain { stringList, newString, buttonBox },
+                WidgetNavigationFix::NavigationChain { stringList, newString, buttonBox },
                 keyEvent->key())) {
             return true;
         }

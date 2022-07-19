@@ -162,7 +162,7 @@ bool MeasurePropertiesDialog::eventFilter(QObject* obj, QEvent* event)
         QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
         if (keyEvent
             && WidgetNavigationFix::fixNavigationForTableWidget(
-                new WidgetNavigationFix::NavigationChain { staves, actualZ, buttonBox },
+                WidgetNavigationFix::NavigationChain { staves, actualZ, buttonBox },
                 keyEvent->key())) {
             return true;
         }
