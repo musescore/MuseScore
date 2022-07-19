@@ -85,16 +85,15 @@ struct Language
 
     LanguageFiles files;
 
-    bool isCurrent = false;
-    LanguageStatus::Status status = LanguageStatus::Status::Undefined;
-
     Language() = default;
 
     QJsonObject toJson() const
     {
-        QJsonObject obj = { { "name", name },
-            { "fileName", archiveFileName },
-            { "status", static_cast<int>(status) } };
+        QJsonObject obj = {
+            { "name", name },
+            { "fileName", archiveFileName }
+        };
+
         QJsonArray filesArray;
         for (const LanguageFile& file: files) {
             filesArray << file.toJson();

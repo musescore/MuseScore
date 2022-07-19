@@ -52,6 +52,8 @@ public:
     ValCh<LanguagesHash> languages() const override;
     ValCh<Language> currentLanguage() const override;
 
+    LanguageStatus::Status languageStatus(const QString& languageCode) const override;
+
     RetCh<LanguageProgress> install(const QString& languageCode) override;
     RetCh<LanguageProgress> update(const QString& languageCode) override;
     Ret uninstall(const QString& languageCode) override;
@@ -66,9 +68,6 @@ private:
     bool checkLanguageFilesHash(const QString& languageCode, const LanguageFiles& languageFiles) const;
 
     Language language(const QString& languageCode) const;
-
-    RetVal<LanguagesHash> correctLanguagesStates(LanguagesHash& languages) const;
-    LanguageStatus::Status languageStatus(const Language& language) const;
 
     RetVal<QString> downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel) const;
     Ret removeLanguage(const QString& languageCode) const;
