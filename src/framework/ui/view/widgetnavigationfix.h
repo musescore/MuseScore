@@ -35,7 +35,7 @@ public:
         QWidget* prevWidget = nullptr;
     };
 
-    static bool fixNavigationForTableWidget(const NavigationChain* chain, int key);
+    static bool fixNavigationForTableWidget(const NavigationChain& chain, int key);
 };
 }
 

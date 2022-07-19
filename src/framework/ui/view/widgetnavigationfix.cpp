@@ -27,9 +27,9 @@
 
 using namespace mu::ui;
 
-bool WidgetNavigationFix::fixNavigationForTableWidget(const WidgetNavigationFix::NavigationChain* chain, int key)
+bool WidgetNavigationFix::fixNavigationForTableWidget(const WidgetNavigationFix::NavigationChain& chain, int key)
 {
-    QTableWidget* tableWidget = qobject_cast<QTableWidget*>(chain->widget);
+    QTableWidget* tableWidget = qobject_cast<QTableWidget*>(chain.widget);
 
     if (!tableWidget || !tableWidget->hasFocus()) {
         return false;
@@ -37,19 +37,19 @@ bool WidgetNavigationFix::fixNavigationForTableWidget(const WidgetNavigationFix:
 
     switch (key) {
     case Qt::Key_Tab: {
-        if (!chain->nextWidget) {
+        if (!chain.nextWidget) {
             return false;
         }
 
-        chain->nextWidget->setFocus();
+        chain.nextWidget->setFocus();
         return true;
     }
     case Qt::Key_Backtab: {
-        if (!chain->prevWidget) {
+        if (!chain.prevWidget) {
             return false;
         }
 
-        chain->prevWidget->setFocus();
+        chain.prevWidget->setFocus();
         return true;
     }
     default:
