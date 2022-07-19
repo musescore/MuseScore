@@ -124,7 +124,6 @@
     <shortenStem>1</shortenStem>
     <stemLength>3.5</stemLength>
     <stemLengthSmall>2.25</stemLengthSmall>
-    <shortStemProgression>0.25</shortStemProgression>
     <shortStemStartLocation>1</shortStemStartLocation>
     <shortestStem>2.25</shortestStem>
     <minStaffSizeForAutoStems>4</minStaffSizeForAutoStems>
