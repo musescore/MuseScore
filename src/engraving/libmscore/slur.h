@@ -39,6 +39,8 @@ class SlurSegment final : public SlurTieSegment
 protected:
     double _extraHeight = 0.0;
     void changeAnchor(EditData&, EngravingItem*) override;
+    PointF _endPointOff1 = PointF(0.0, 0.0);
+    PointF _endPointOff2 = PointF(0.0, 0.0);
 
 public:
     SlurSegment(System* parent);
@@ -51,8 +53,11 @@ public:
     void layoutSegment(const mu::PointF& p1, const mu::PointF& p2);
 
     bool isEdited() const;
+    bool isEndPointsEdited() const;
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
+
+    void editDrag(EditData& ed) override;
 
     Slur* slur() const { return toSlur(spanner()); }
     void adjustEndpoints();

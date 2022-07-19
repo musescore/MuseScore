@@ -325,6 +325,8 @@ public:
     Shape shape() const override;
     void undoChangeProperty(Pid id, const PropertyValue& newValue);
     void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
+
+    bool isSlurStartEnd() const;
 };
 } // namespace mu::engraving
 #endif

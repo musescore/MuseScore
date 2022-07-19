@@ -3973,28 +3973,54 @@ void Chord::layoutArticulations2()
             a->doAutoplace();
         }
     }
-    for (Articulation* a : _articulations) {
-        if (a->addToSkyline()) {
-            // the segment shape has already been calculated
-            // so measure width and spacing is already determined
-            // in line mode, we cannot add to segment shape without throwing this off
-            // but adding to skyline is always good
-            Segment* s = segment();
-            Measure* m = s->measure();
-            RectF r = a->bbox().translated(a->pos() + pos());
-            // TODO: limit to width of chord
-            // this avoids "staircase" effect due to space not having been allocated already
-            // ANOTHER alternative is to allocate the space in layoutPitched() / layoutTablature()
-            //double w = std::min(r.width(), width());
-            //r.translate((r.width() - w) * 0.5, 0.0);
-            //r.setWidth(w);
-            if (!score()->lineMode()) {
-                s->staffShape(staffIdx()).add(r);
+
+    if (!isSlurStartEnd()) {
+        // If this chord is the start or end of a slur, we add the accent
+        // shape later, after the slur layout
+        for (Articulation* a : _articulations) {
+            if (a->addToSkyline()) {
+                // the segment shape has already been calculated
+                // so measure width and spacing is already determined
+                // in line mode, we cannot add to segment shape without throwing this off
+                // but adding to skyline is always good
+                Segment* s = segment();
+                Measure* m = s->measure();
+                RectF r = a->bbox().translated(a->pos() + pos());
+                // TODO: limit to width of chord
+                // this avoids "staircase" effect due to space not having been allocated already
+                // ANOTHER alternative is to allocate the space in layoutPitched() / layoutTablature()
+                //double w = std::min(r.width(), width());
+                //r.translate((r.width() - w) * 0.5, 0.0);
+                //r.setWidth(w);
+                if (!score()->lineMode()) {
+                    s->staffShape(staffIdx()).add(r);
+                }
+                r.translate(s->pos() + m->pos());
+                m->system()->staff(vStaffIdx())->skyline().add(r);
             }
-            r.translate(s->pos() + m->pos());
-            m->system()->staff(vStaffIdx())->skyline().add(r);
         }
     }
+}
+
+bool Chord::isSlurStartEnd() const
+{
+    auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), tick().ticks());
+    if (spanners.empty()) {
+        return false;
+    }
+    for (auto sp : spanners) {
+        Spanner* spanner = sp.value;
+        if (spanner->isSlur()) {
+            Slur* slur = toSlur(spanner);
+            if (slur->startElement() && slur->startElement()->isChord() && toChord(slur->startElement()) == this) {
+                return true;
+            }
+            if (slur->endElement() && slur->endElement()->isChord() && toChord(slur->endElement()) == this) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 //---------------------------------------------------------
@@ -4035,6 +4061,7 @@ void Chord::layoutArticulations3(Slur* slur)
             }
             if (sstaff && a->addToSkyline()) {
                 sstaff->skyline().add(aShape);
+                s->staffShape(staffIdx()).add(aShape);
             }
         }
     }
