@@ -858,10 +858,9 @@ EngravingItem* Ambitus::prevSegmentElement()
 
 String Ambitus::accessibleInfo() const
 {
-    return mtrc("engraving", "%1; Top pitch: %2%3; Bottom pitch: %4%5")
-           .arg(EngravingItem::accessibleInfo(), tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false),
-                String::number(topOctave()), tpc2name(bottomTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false),
-                String::number(bottomOctave())
-                );
+    return EngravingItem::accessibleInfo() + u"; "
+           + mtrc("engraving", "Top pitch: %1; Bottom pitch: %2")
+           .arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false) + String::number(topOctave()),
+                tpc2name(bottomTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false) + String::number(bottomOctave()));
 }
 }

@@ -71,22 +71,24 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
         text = mtrc("engraving", "Unknown filetype");
         break;
     case Err::FileTooOld:
-        text = mtrc("engraving", "It was last saved with a version older than 2.0.0.\n"
-                                 "You can convert this score by opening and then\n"
-                                 "saving with MuseScore version 2.x.\n"
+        //: The text between %1 and %2 will be a clickable link.
+        text = mtrc("engraving", "It was last saved with a version older than 2.0.0. "
+                                 "You can convert this score by opening and then "
+                                 "saving with MuseScore version 2.x. "
                                  "Visit the %1MuseScore download page%2 to obtain such a 2.x version.")
                .arg(u"<a href=\"https://musescore.org/download#older-versions\">", u"</a>");
         break;
     case Err::FileTooNew:
-        text = mtrc("engraving", "This score was saved using a newer version of MuseScore.\n "
+        //: The text between %1 and %2 will be a clickable link.
+        text = mtrc("engraving", "This score was saved using a newer version of MuseScore. "
                                  "Visit the %1MuseScore website%2 to obtain the latest version.")
                .arg(u"<a href=\"https://musescore.org\">", u"</a>");
         break;
     case Err::FileOld300Format:
-        text = mtrc("engraving", "It was last saved with a developer version of 3.0.");
+        text = mtrc("engraving", "It was last saved with a development version of 3.0.");
         break;
     case Err::FileCorrupted:
-        text = mtrc("engraving", "File \"%1\" corrupted.").arg(filePath.toString());
+        text = mtrc("engraving", "File \"%1\" is corrupted.").arg(filePath.toString());
         break;
     case Err::FileCriticalCorrupted:
         text = mtrc("engraving", "File \"%1\" is critically corrupted and cannot be processed.").arg(filePath.toString());
