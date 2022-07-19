@@ -4087,7 +4087,7 @@ void GraceNotesGroup::layout()
         double offset;
         offset = -std::max(chordShape.minHorizontalDistance(_shape, score()), 0.0);
         _shape.add(chordShape.translated(mu::PointF(offset, 0.0)));
-        double xpos = offset - parent()->rxoffset() - parent()->xpos();
+        double xpos = offset - parent()->rxoffset() - parent()->xpos() - chord->rxoffset();
         chord->setPos(xpos, 0.0);
     }
 }
@@ -4096,7 +4096,7 @@ void GraceNotesGroup::setPos(double x, double y)
 {
     for (unsigned i = 0; i < this->size(); ++i) {
         Chord* chord = this->at(i);
-        chord->setPos(chord->pos().x() + x, chord->pos().y() + y);
+        chord->movePos(PointF(x, y));
     }
 }
 }
