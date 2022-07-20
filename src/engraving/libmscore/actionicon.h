@@ -61,7 +61,7 @@ enum class ActionIconType {
 //! Dummy element, used for drag&drop
 class ActionIcon final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, ActionIcon)
+    OBJECT_ALLOCATOR(engraving, ActionIcon)
 public:
     ActionIcon(EngravingItem* score);
     ~ActionIcon() override = default;

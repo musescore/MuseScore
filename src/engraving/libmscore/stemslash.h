@@ -34,7 +34,7 @@ namespace mu::engraving {
 
 class StemSlash final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, StemSlash)
+    OBJECT_ALLOCATOR(engraving, StemSlash)
 
     mu::LineF line;
 

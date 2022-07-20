@@ -28,7 +28,7 @@
 #include <string>
 
 namespace mu {
-#define OBJECT_ALLOC(Module, ClassName) \
+#define OBJECT_ALLOCATOR(Module, ClassName) \
 public: \
     static ObjectAllocator& allocator() { \
         static ObjectAllocator a(#Module, #ClassName, ObjectAllocator::destroyer<ClassName>); \
@@ -95,14 +95,16 @@ public:
         size_t totalChunks = 0;
         size_t freeChunks = 0;
 
+        uint64_t totalAllocatedCount = 0;
+        uint64_t totalFreeCount = 0;
+
+        uint64_t usedChunks() const { return totalChunks - freeChunks; }
         uint64_t allocatedBytes() const { return totalChunks * chunkSize; }
     };
 
-    Info dumpInfo() const;
-    static void dump(const Info& info);
-    void dump() const;
+    Info stateInfo() const;
 
-    static bool enabled;
+    static int enabled;
 
 private:
     struct Chunk {
@@ -130,6 +132,14 @@ private:
     destroyer_t m_dtor = nullptr;
     Chunk* m_free = nullptr;
     std::vector<Block> m_blocks;
+
+    struct Statistic
+    {
+        uint64_t totalAllocatedCount = 0;
+        uint64_t totalFreeCount = 0;
+    };
+
+    Statistic m_statistic;
 };
 
 class AllocatorsRegister
@@ -147,7 +157,8 @@ public:
 
     void cleanupAll(const std::string& module);
 
-    void dump(const std::string& info);
+    void printStatistic(const std::string& title);
+    void printState(const std::string& title);
 
 private:
     std::list<ObjectAllocator*> m_allocators;

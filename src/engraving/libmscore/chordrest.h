@@ -57,7 +57,7 @@ enum class SegmentType;
 
 class ChordRest : public DurationElement
 {
-    OBJECT_ALLOC(engraving, ChordRest)
+    OBJECT_ALLOCATOR(engraving, ChordRest)
 
     ElementList _el;
     TDuration _durationType;

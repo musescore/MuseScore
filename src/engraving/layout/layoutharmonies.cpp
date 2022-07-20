@@ -60,7 +60,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
     // Contains harmonies/fretboard per segment.
     class HarmonyList : public std::vector<EngravingItem*>
     {
-        OBJECT_ALLOC(engraving, HarmonyList)
+        OBJECT_ALLOCATOR(engraving, HarmonyList)
 
         std::map<const Segment*, std::vector<EngravingItem*> > elements;
         std::vector<EngravingItem*> modified;

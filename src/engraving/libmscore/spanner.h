@@ -46,7 +46,7 @@ enum class SpannerSegmentType {
 
 class SpannerSegment : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, SpannerSegment)
+    OBJECT_ALLOCATOR(engraving, SpannerSegment)
 
     Spanner* _spanner;
     SpannerSegmentType _spannerSegmentType;
@@ -147,7 +147,7 @@ private:
 
 class Spanner : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Spanner)
+    OBJECT_ALLOCATOR(engraving, Spanner)
 public:
     enum class Anchor {
         SEGMENT, MEASURE, CHORD, NOTE

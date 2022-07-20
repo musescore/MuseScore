@@ -41,7 +41,7 @@ namespace mu::engraving {
 
 class ShadowNote final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, ShadowNote)
+    OBJECT_ALLOCATOR(engraving, ShadowNote)
 
     INJECT(notation, IEngravingConfiguration, engravingConfiguration)
 

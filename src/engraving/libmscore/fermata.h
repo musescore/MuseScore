@@ -42,7 +42,7 @@ class System;
 
 class Fermata final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Fermata)
+    OBJECT_ALLOCATOR(engraving, Fermata)
 
     SymId _symId;
     double _timeStretch;

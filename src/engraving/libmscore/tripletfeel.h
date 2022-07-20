@@ -32,7 +32,7 @@ namespace mu::engraving {
 
 class TripletFeel final : public SystemText
 {
-    OBJECT_ALLOC(engraving, TripletFeel)
+    OBJECT_ALLOCATOR(engraving, TripletFeel)
 
     constexpr static int eightDivision = 2;
     constexpr static int sixteenthDivision = 4;

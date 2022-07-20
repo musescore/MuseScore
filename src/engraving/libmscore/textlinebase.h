@@ -40,7 +40,7 @@ class Text;
 
 class TextLineBaseSegment : public LineSegment
 {
-    OBJECT_ALLOC(engraving, TextLineBaseSegment)
+    OBJECT_ALLOCATOR(engraving, TextLineBaseSegment)
 protected:
     Text* _text;
     Text* _endText;
@@ -75,7 +75,7 @@ public:
 
 class TextLineBase : public SLine
 {
-    OBJECT_ALLOC(engraving, TextLineBase)
+    OBJECT_ALLOCATOR(engraving, TextLineBase)
 
     M_PROPERTY(bool,       lineVisible,           setLineVisible)
     M_PROPERTY2(HookType,  beginHookType,         setBeginHookType,     HookType::NONE)

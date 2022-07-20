@@ -69,7 +69,7 @@ public:
 
 class NoteEventList : public std::vector<NoteEvent>
 {
-    OBJECT_ALLOC(engraving, NoteEventList)
+    OBJECT_ALLOCATOR(engraving, NoteEventList)
 public:
     NoteEventList();
 

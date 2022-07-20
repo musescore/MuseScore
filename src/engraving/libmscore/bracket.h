@@ -38,7 +38,7 @@ enum class BracketType : signed char;
 
 class Bracket final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Bracket)
+    OBJECT_ALLOCATOR(engraving, Bracket)
 
     BracketItem* _bi;
     double ay1;

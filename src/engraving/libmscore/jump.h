@@ -40,7 +40,7 @@ namespace mu::engraving {
 
 class Jump final : public TextBase
 {
-    OBJECT_ALLOC(engraving, Jump)
+    OBJECT_ALLOCATOR(engraving, Jump)
 
     String _jumpTo;
     String _playUntil;

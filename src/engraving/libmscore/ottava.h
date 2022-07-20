@@ -78,7 +78,7 @@ class Ottava;
 
 class OttavaSegment final : public TextLineBaseSegment
 {
-    OBJECT_ALLOC(engraving, OttavaSegment)
+    OBJECT_ALLOCATOR(engraving, OttavaSegment)
 
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     Sid getPropertyStyle(Pid) const override;
@@ -99,7 +99,7 @@ public:
 
 class Ottava final : public TextLineBase
 {
-    OBJECT_ALLOC(engraving, Ottava)
+    OBJECT_ALLOCATOR(engraving, Ottava)
 
     OttavaType _ottavaType;
     bool _numbersOnly;

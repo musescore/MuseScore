@@ -35,7 +35,7 @@ namespace mu::engraving {
 
 class Lasso : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Lasso)
+    OBJECT_ALLOCATOR(engraving, Lasso)
 
     INJECT(engraving, IEngravingConfiguration, engravingConfiguration)
 

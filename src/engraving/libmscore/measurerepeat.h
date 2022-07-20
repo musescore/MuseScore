@@ -32,7 +32,7 @@ class Segment;
 
 class MeasureRepeat final : public Rest
 {
-    OBJECT_ALLOC(engraving, MeasureRepeat)
+    OBJECT_ALLOCATOR(engraving, MeasureRepeat)
 public:
     MeasureRepeat(Segment* parent);
     MeasureRepeat(const MeasureRepeat&) = default;

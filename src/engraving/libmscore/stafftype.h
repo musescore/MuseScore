@@ -441,7 +441,7 @@ enum class TabBeamGrid : char {
 
 class TabDurationSymbol final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, TabDurationSymbol)
+    OBJECT_ALLOCATOR(engraving, TabDurationSymbol)
 
     double _beamLength { 0.0 };              // if _grid==MEDIALFINAL, length of the beam toward previous grid element
     int _beamLevel  { 0 };                 // if _grid==MEDIALFINAL, the number of beams

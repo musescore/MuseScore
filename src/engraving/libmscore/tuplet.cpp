@@ -780,7 +780,7 @@ void Tuplet::draw(mu::draw::Painter* painter) const
 
 class TupletRect : public RectF
 {
-    OBJECT_ALLOC(engraving, TupletRect)
+    OBJECT_ALLOCATOR(engraving, TupletRect)
 public:
     TupletRect(const PointF& p1, const PointF& p2, double w)
     {

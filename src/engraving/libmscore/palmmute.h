@@ -34,7 +34,7 @@ class PalmMute;
 
 class PalmMuteSegment final : public TextLineBaseSegment
 {
-    OBJECT_ALLOC(engraving, PalmMuteSegment)
+    OBJECT_ALLOCATOR(engraving, PalmMuteSegment)
 
     Sid getPropertyStyle(Pid) const override;
 
@@ -56,7 +56,7 @@ public:
 
 class PalmMute final : public ChordTextLineBase
 {
-    OBJECT_ALLOC(engraving, PalmMute)
+    OBJECT_ALLOCATOR(engraving, PalmMute)
 
     Sid getPropertyStyle(Pid) const override;
 

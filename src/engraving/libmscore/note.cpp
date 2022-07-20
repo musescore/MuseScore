@@ -565,7 +565,11 @@ Note::~Note()
 {
     delete _accidental;
     DeleteAll(_el);
-    delete _tieFor;
+
+    if (_tieFor && _tieFor->parent() == this) {
+        delete _tieFor;
+    }
+
     DeleteAll(_dots);
     _leftParenthesis = nullptr;
     _rightParenthesis = nullptr;
@@ -1744,7 +1748,7 @@ int Note::transposition() const
 
 class NoteEditData : public ElementEditData
 {
-    OBJECT_ALLOC(engraving, NoteEditData)
+    OBJECT_ALLOCATOR(engraving, NoteEditData)
 public:
     enum EditMode {
         EditMode_ChangePitch = 0,

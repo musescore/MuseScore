@@ -37,7 +37,7 @@ namespace mu::engraving {
 
 class TempoText final : public TextBase
 {
-    OBJECT_ALLOC(engraving, TempoText)
+    OBJECT_ALLOCATOR(engraving, TempoText)
 public:
     TempoText(Segment* parent);
 

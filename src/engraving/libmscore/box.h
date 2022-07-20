@@ -39,7 +39,7 @@ namespace mu::engraving {
 
 class Box : public MeasureBase
 {
-    OBJECT_ALLOC(engraving, Box)
+    OBJECT_ALLOCATOR(engraving, Box)
 
     Spatium _boxWidth             { Spatium(0) };      // only valid for HBox
     Spatium _boxHeight            { Spatium(0) };      // only valid for VBox
@@ -117,7 +117,7 @@ public:
 
 class HBox final : public Box
 {
-    OBJECT_ALLOC(engraving, HBox)
+    OBJECT_ALLOCATOR(engraving, HBox)
 
     bool _createSystemHeader { true };
 
@@ -154,7 +154,7 @@ public:
 
 class VBox : public Box
 {
-    OBJECT_ALLOC(engraving, VBox)
+    OBJECT_ALLOCATOR(engraving, VBox)
 public:
     VBox(const ElementType& type, System* parent);
     VBox(System* parent);
@@ -183,7 +183,7 @@ private:
 
 class FBox : public VBox
 {
-    OBJECT_ALLOC(engraving, FBox)
+    OBJECT_ALLOCATOR(engraving, FBox)
 public:
     FBox(System* parent)
         : VBox(ElementType::FBOX, parent) {}

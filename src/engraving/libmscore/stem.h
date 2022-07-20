@@ -30,7 +30,7 @@ class Chord;
 
 class Stem final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Stem)
+    OBJECT_ALLOCATOR(engraving, Stem)
 public:
 
     Stem(const Stem&) = default;
