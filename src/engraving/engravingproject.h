@@ -73,7 +73,7 @@ public:
 private:
     friend class MasterScore;
 
-    EngravingProject() = default;
+    EngravingProject();
 
     void init(const MStyle& style);
 

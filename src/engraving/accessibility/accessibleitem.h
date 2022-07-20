@@ -37,7 +37,7 @@ namespace mu::engraving {
 class AccessibleRoot;
 class AccessibleItem : public accessibility::IAccessible
 {
-    OBJECT_ALLOC(engraving, AccessibleItem)
+    OBJECT_ALLOCATOR(engraving, AccessibleItem)
 
     INJECT_STATIC(engraving, accessibility::IAccessibilityController, accessibilityController)
 

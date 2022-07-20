@@ -43,6 +43,7 @@ using RepeatListElementList = std::vector<RepeatListElement*>;
 
 class RepeatSegment
 {
+    OBJECT_ALLOCATOR(engraving, RepeatSegment)
 public:
     int tick;           // start tick
     int utick;
@@ -76,7 +77,7 @@ private:
 
 class RepeatList : public std::vector<RepeatSegment*>
 {
-    OBJECT_ALLOC(engraving, RepeatList)
+    OBJECT_ALLOCATOR(engraving, RepeatList)
 
     Score* _score = nullptr;
     mutable unsigned idx1, idx2;     // cached values

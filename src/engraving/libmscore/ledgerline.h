@@ -39,7 +39,7 @@ class Chord;
 
 class LedgerLine final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, LedgerLine)
+    OBJECT_ALLOCATOR(engraving, LedgerLine)
 
     double _width;
     double _len;

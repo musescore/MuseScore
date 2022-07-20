@@ -25,7 +25,7 @@ template<typename Data> class Notifier;
 template<typename Data>
 class Listener
 {
-    OBJECT_ALLOC(engraving, Listener)
+    OBJECT_ALLOCATOR(engraving, Listener)
 
     Notifier<Data>* _notifier = nullptr;
 

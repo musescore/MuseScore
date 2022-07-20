@@ -277,7 +277,7 @@ public:
 
 class TextBase : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, TextBase)
+    OBJECT_ALLOCATOR(engraving, TextBase)
 
     // sorted by size to allow for most compact memory layout
     M_PROPERTY(FrameType,  frameType,              setFrameType)

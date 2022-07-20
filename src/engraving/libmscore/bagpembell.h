@@ -60,7 +60,7 @@ struct BEDrawingDataY;
 
 class BagpipeEmbellishment final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, BagpipeEmbellishment)
+    OBJECT_ALLOCATOR(engraving, BagpipeEmbellishment)
 
     EmbellishmentType _embelType;
     void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&, SymId, const double x, const bool drawFlag) const;

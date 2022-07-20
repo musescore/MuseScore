@@ -267,7 +267,7 @@ struct ChordFont {
 
 class ChordList : public std::map<int, ChordDescription>
 {
-    OBJECT_ALLOC(engraving, ChordList)
+    OBJECT_ALLOCATOR(engraving, ChordList)
 
     INJECT(engraving, IEngravingConfiguration, configuration)
 

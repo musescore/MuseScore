@@ -32,7 +32,7 @@ namespace mu::engraving {
 class GradualTempoChangeSegment;
 class GradualTempoChange : public TextLineBase
 {
-    OBJECT_ALLOC(engraving, GradualTempoChange)
+    OBJECT_ALLOCATOR(engraving, GradualTempoChange)
 public:
     GradualTempoChange(EngravingItem* parent);
 
@@ -71,7 +71,7 @@ private:
 
 class GradualTempoChangeSegment : public TextLineBaseSegment
 {
-    OBJECT_ALLOC(engraving, GradualTempoChangeSegment)
+    OBJECT_ALLOCATOR(engraving, GradualTempoChangeSegment)
 public:
     GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent);
 

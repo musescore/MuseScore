@@ -36,7 +36,7 @@ class Rest;
 
 class NoteDot final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, NoteDot)
+    OBJECT_ALLOCATOR(engraving, NoteDot)
 public:
 
     NoteDot* clone() const override { return new NoteDot(*this); }

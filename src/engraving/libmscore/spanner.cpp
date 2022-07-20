@@ -50,7 +50,7 @@ namespace mu::engraving {
 
 class SpannerWriter : public ConnectorInfoWriter
 {
-    OBJECT_ALLOC(engraving, SpannerWriter)
+    OBJECT_ALLOCATOR(engraving, SpannerWriter)
 protected:
     const char* tagName() const override { return "Spanner"; }
 public:
@@ -402,8 +402,17 @@ Spanner::Spanner(const Spanner& s)
 
 Spanner::~Spanner()
 {
-    DeleteAll(segments);
-    DeleteAll(unusedSegments);
+    for (SpannerSegment* s : segments) {
+        if (s->parent() == this) {
+            delete s;
+        }
+    }
+
+    for (SpannerSegment* s : unusedSegments) {
+        if (s->parent() == this) {
+            delete s;
+        }
+    }
 }
 
 //---------------------------------------------------------

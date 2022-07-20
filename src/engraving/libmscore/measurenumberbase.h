@@ -34,7 +34,7 @@ namespace mu::engraving {
 
 class MeasureNumberBase : public TextBase
 {
-    OBJECT_ALLOC(engraving, MeasureNumberBase)
+    OBJECT_ALLOCATOR(engraving, MeasureNumberBase)
 public:
     MeasureNumberBase(const ElementType& type, Measure* parent = nullptr, TextStyleType = TextStyleType::DEFAULT);
     MeasureNumberBase(const MeasureNumberBase& other);

@@ -69,7 +69,7 @@ struct SymElement {
 
 class Accidental final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Accidental)
+    OBJECT_ALLOCATOR(engraving, Accidental)
 
     std::vector<SymElement> el;
     AccidentalType _accidentalType { AccidentalType::NONE };

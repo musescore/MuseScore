@@ -118,7 +118,7 @@ public:
 
 class PosLen : public Pos
 {
-    OBJECT_ALLOC(engraving, PosLen)
+    OBJECT_ALLOCATOR(engraving, PosLen)
 
     mutable unsigned _lenTick;
     mutable unsigned _lenFrame;

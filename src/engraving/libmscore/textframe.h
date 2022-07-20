@@ -35,7 +35,7 @@ class Text;
 
 class TBox : public VBox
 {
-    OBJECT_ALLOC(engraving, TBox)
+    OBJECT_ALLOCATOR(engraving, TBox)
 public:
     TBox(System* parent);
     TBox(const TBox&);

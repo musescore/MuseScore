@@ -40,7 +40,7 @@ class ScoreFont;
 
 class Symbol : public BSymbol
 {
-    OBJECT_ALLOC(engraving, Symbol)
+    OBJECT_ALLOCATOR(engraving, Symbol)
 protected:
     SymId _sym;
     const ScoreFont* _scoreFont = nullptr;
@@ -79,7 +79,7 @@ public:
 
 class FSymbol final : public BSymbol
 {
-    OBJECT_ALLOC(engraving, FSymbol)
+    OBJECT_ALLOCATOR(engraving, FSymbol)
 
     mu::draw::Font _font;
     int _code; // character code point (Unicode)

@@ -45,7 +45,7 @@ class XmlWriter;
 
 class ConnectorInfo
 {
-    OBJECT_ALLOC(engraving, ConnectorInfo)
+    OBJECT_ALLOCATOR(engraving, ConnectorInfo)
 
     const EngravingItem* _current    { 0 };
     bool _currentUpdated       { false };
@@ -108,7 +108,7 @@ public:
 
 class ConnectorInfoReader final : public ConnectorInfo
 {
-    OBJECT_ALLOC(engraving, ConnectorInfoReader)
+    OBJECT_ALLOCATOR(engraving, ConnectorInfoReader)
 
     XmlReader* _reader;
     EngravingItem* _connector;
@@ -144,7 +144,7 @@ public:
 
 class ConnectorInfoWriter : public ConnectorInfo
 {
-    OBJECT_ALLOC(engraving, ConnectorInfoWriter)
+    OBJECT_ALLOCATOR(engraving, ConnectorInfoWriter)
 
     XmlWriter* _xml;
 

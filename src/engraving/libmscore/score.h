@@ -368,7 +368,7 @@ public:
 typedef std::map<ElementType, std::map<ElementType, double> > PaddingTable;
 class Score : public EngravingObject
 {
-    OBJECT_ALLOC(engraving, Score)
+    OBJECT_ALLOCATOR(engraving, Score)
 
     INJECT(engraving, mu::draw::IImageProvider, imageProvider)
 public:

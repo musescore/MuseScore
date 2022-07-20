@@ -34,7 +34,7 @@ class StaffType;
 
 class StaffTypeChange final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, StaffTypeChange)
+    OBJECT_ALLOCATOR(engraving, StaffTypeChange)
 
     StaffType* m_staffType { nullptr };
     bool m_ownsStaffType = false;

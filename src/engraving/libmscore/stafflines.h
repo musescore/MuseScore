@@ -36,7 +36,7 @@ namespace mu::engraving {
 
 class StaffLines final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, StaffLines)
+    OBJECT_ALLOCATOR(engraving, StaffLines)
 
     double lw { 0.0 };
     std::vector<mu::LineF> lines;

@@ -46,7 +46,7 @@ class MeasureBase;
 
 class Page final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Page)
+    OBJECT_ALLOCATOR(engraving, Page)
 
     std::vector<System*> _systems;
     page_idx_t _no;                        // page number

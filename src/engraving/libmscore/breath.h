@@ -45,7 +45,7 @@ struct BreathType {
 
 class Breath final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Breath)
+    OBJECT_ALLOCATOR(engraving, Breath)
 
     double _pause;
     SymId _symId;

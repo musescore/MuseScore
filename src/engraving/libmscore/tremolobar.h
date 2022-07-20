@@ -46,7 +46,7 @@ enum class TremoloBarType {
 
 class TremoloBar final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, TremoloBar)
+    OBJECT_ALLOCATOR(engraving, TremoloBar)
 public:
 
     TremoloBar* clone() const override { return new TremoloBar(*this); }

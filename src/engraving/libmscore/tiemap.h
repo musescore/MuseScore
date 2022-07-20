@@ -34,7 +34,7 @@ class Tie;
 
 class TieMap : public ElementMap
 {
-    OBJECT_ALLOC(engraving, TieMap)
+    OBJECT_ALLOCATOR(engraving, TieMap)
 public:
     TieMap() {}
     Tie* findNew(Tie* o) const { return (Tie*)(ElementMap::findNew((EngravingItem*)o)); }

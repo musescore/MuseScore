@@ -34,7 +34,7 @@ class RootItem;
 namespace mu::engraving::compat {
 class DummyElement : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, DummyElement)
+    OBJECT_ALLOCATOR(engraving, DummyElement)
 public:
     DummyElement(EngravingObject* parent);
     ~DummyElement();

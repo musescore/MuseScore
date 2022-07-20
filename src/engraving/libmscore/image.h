@@ -46,7 +46,7 @@ enum class ImageType : char {
 
 class Image final : public BSymbol
 {
-    OBJECT_ALLOC(engraving, Image)
+    OBJECT_ALLOCATOR(engraving, Image)
 
     INJECT(engraving, mu::draw::IImageProvider, imageProvider)
 

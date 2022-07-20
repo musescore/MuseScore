@@ -31,7 +31,7 @@ using namespace mu;
 namespace mu {
 class ItemBase
 {
-    OBJECT_ALLOC(test, ItemBase)
+    OBJECT_ALLOCATOR(test, ItemBase)
 
 public:
     ItemBase(uint8_t n)
@@ -57,7 +57,7 @@ public:
 
 #define DECLARE_ITEM(size) \
     class Item##size : public ItemBase { \
-        OBJECT_ALLOC(test, Item##size) \
+        OBJECT_ALLOCATOR(test, Item##size) \
     public: \
         Item##size(uint8_t n) \
             : ItemBase(n) \
@@ -80,6 +80,11 @@ DECLARE_ITEM(131)
 class Global_AllocatorTests : public ::testing::Test
 {
 public:
+
+    void SetUp() override
+    {
+        ObjectAllocator::enabled++;
+    }
 };
 
 TEST_F(Global_AllocatorTests, Single_NewDelete)
@@ -93,9 +98,8 @@ TEST_F(Global_AllocatorTests, Single_NewDelete)
     EXPECT_EQ(item->wasDestroyed, 0);
 
     //! CHECK Allocator state
-    ObjectAllocator::Info info = Item3::allocator().dumpInfo();
+    ObjectAllocator::Info info = Item3::allocator().stateInfo();
     EXPECT_EQ(info.totalChunks - info.freeChunks, 1); // used 1 chunk
-    Item3::allocator().dump(); // just print
 
     //! DO Destroy Item
     delete item;
@@ -104,9 +108,8 @@ TEST_F(Global_AllocatorTests, Single_NewDelete)
     EXPECT_EQ(item->wasDestroyed, 1);
 
     //! CHECK Allocator state
-    info = Item3::allocator().dumpInfo();
+    info = Item3::allocator().stateInfo();
     EXPECT_EQ(info.totalChunks - info.freeChunks, 0); // used 0 chunk
-    Item3::allocator().dump(); // just print
 }
 
 TEST_F(Global_AllocatorTests, Single_NewCleanup)
@@ -141,10 +144,9 @@ TEST_F(Global_AllocatorTests, Single_BigNewDelete)
     EXPECT_EQ(item->wasDestroyed, 0);
 
     //! CHECK Allocator state
-    ObjectAllocator::Info info = Item131::allocator().dumpInfo();
+    ObjectAllocator::Info info = Item131::allocator().stateInfo();
     EXPECT_EQ(info.totalChunks, 1);
     EXPECT_EQ(info.freeChunks, 0);
-    Item131::allocator().dump(); // just print
 
     //! DO Destroy Item
     delete item;
@@ -153,10 +155,9 @@ TEST_F(Global_AllocatorTests, Single_BigNewDelete)
     EXPECT_EQ(item->wasDestroyed, 1);
 
     //! CHECK Allocator state
-    info = Item131::allocator().dumpInfo();
+    info = Item131::allocator().stateInfo();
     EXPECT_EQ(info.totalChunks, 1);
     EXPECT_EQ(info.freeChunks, 1);
-    Item131::allocator().dump(); // just print
 }
 
 TEST_F(Global_AllocatorTests, Many_NewCleanup)
@@ -179,10 +180,9 @@ TEST_F(Global_AllocatorTests, Many_NewCleanup)
     }
 
     //! CHECK Allocator state
-    ObjectAllocator::Info info = Item8::allocator().dumpInfo();
+    ObjectAllocator::Info info = Item8::allocator().stateInfo();
     EXPECT_EQ(info.totalChunks, 12); // DEFAULT_BLOCK_SIZE * 3
     EXPECT_EQ(info.freeChunks, 2);
-    Item8::allocator().dump(); // just print
 
     //! DO Allocator cleanup
     Item8::allocator().cleanup();
@@ -193,8 +193,7 @@ TEST_F(Global_AllocatorTests, Many_NewCleanup)
     }
 
     //! CHECK Allocator state
-    info = Item8::allocator().dumpInfo();
+    info = Item8::allocator().stateInfo();
     EXPECT_EQ(info.totalChunks, 12); // DEFAULT_BLOCK_SIZE * 3
     EXPECT_EQ(info.freeChunks, 12);
-    Item8::allocator().dump(); // just print
 }

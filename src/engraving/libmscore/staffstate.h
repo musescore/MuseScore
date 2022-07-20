@@ -41,7 +41,7 @@ enum class StaffStateType : char {
 
 class StaffState final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, StaffState)
+    OBJECT_ALLOCATOR(engraving, StaffState)
 
     StaffStateType _staffStateType { StaffStateType::INVISIBLE };
     double lw { 0.0 };

@@ -41,7 +41,7 @@ class Measure;
 //---------------------------------------------------------
 
 struct ShapeElement : public mu::RectF {
-    OBJECT_ALLOC(engraving, ShapeElement)
+    OBJECT_ALLOCATOR(engraving, ShapeElement)
 public:
     const EngravingItem* toItem = nullptr;
     ShapeElement(const mu::RectF& f, const EngravingItem* p)
@@ -59,7 +59,7 @@ public:
 
 class Shape : public std::vector<ShapeElement>
 {
-    OBJECT_ALLOC(engraving, Shape)
+    OBJECT_ALLOCATOR(engraving, Shape)
 public:
     enum HorizontalSpacingType {
         SPACING_GENERAL = 0,

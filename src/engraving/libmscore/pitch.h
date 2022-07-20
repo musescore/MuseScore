@@ -34,7 +34,7 @@ namespace mu::engraving {
 
 class PitchList : public std::map<int, int>
 {
-    OBJECT_ALLOC(engraving, PitchList)
+    OBJECT_ALLOCATOR(engraving, PitchList)
 public:
     PitchList() {}
     int pitchOffset(int tick) const;

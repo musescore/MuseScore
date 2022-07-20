@@ -52,7 +52,7 @@ struct BeamSegment {
 
 class Beam final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Beam)
+    OBJECT_ALLOCATOR(engraving, Beam)
 
     std::vector<ChordRest*> _elements;          // must be sorted by tick
     std::vector<BeamSegment*> _beamSegments;

@@ -32,7 +32,7 @@ class Chord;
 
 class Hook final : public Symbol
 {
-    OBJECT_ALLOC(engraving, Hook)
+    OBJECT_ALLOCATOR(engraving, Hook)
 public:
     Hook(Chord* parent = 0);
 

@@ -117,7 +117,7 @@ enum class KerningType
 
 class EngravingItemList : public std::list<EngravingItem*>
 {
-    OBJECT_ALLOC(engraving, EngravingItemList)
+    OBJECT_ALLOCATOR(engraving, EngravingItemList)
 public:
 
     EngravingItem* at(size_t i) const;
@@ -579,7 +579,7 @@ struct PropertyData {
 
 class ElementEditData
 {
-    OBJECT_ALLOC(engraving, ElementEditData)
+    OBJECT_ALLOCATOR(engraving, ElementEditData)
 public:
     EngravingItem* e = nullptr;
     std::list<PropertyData> propertyData;
@@ -600,7 +600,7 @@ public:
 
 class ElementList : public std::vector<EngravingItem*>
 {
-    OBJECT_ALLOC(engraving, ElementList)
+    OBJECT_ALLOCATOR(engraving, ElementList)
 public:
     ElementList() {}
     bool remove(EngravingItem*);
@@ -615,7 +615,7 @@ public:
 
 class Compound : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Compound)
+    OBJECT_ALLOCATOR(engraving, Compound)
 
     std::list<EngravingItem*> elements;
 

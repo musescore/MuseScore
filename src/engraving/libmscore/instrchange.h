@@ -34,7 +34,7 @@ namespace mu::engraving {
 
 class InstrumentChange final : public TextBase
 {
-    OBJECT_ALLOC(engraving, InstrumentChange)
+    OBJECT_ALLOCATOR(engraving, InstrumentChange)
 
     Instrument* _instrument;    // Staff holds ownership if part of score
     bool _init = false;   // Set if the instrument has been set by the user, as there is no other way to tell.

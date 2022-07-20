@@ -101,7 +101,7 @@ public:
 
 class BspTreeVisitor
 {
-    OBJECT_ALLOC(engraving, BspTreeVisitor)
+    OBJECT_ALLOCATOR(engraving, BspTreeVisitor)
 public:
     virtual ~BspTreeVisitor() {}
     virtual void visit(std::list<EngravingItem*>* items) = 0;

@@ -180,7 +180,7 @@ class EngravingObject;
 
 class EngravingObjectList : public std::list<EngravingObject*>
 {
-    OBJECT_ALLOC(engraving, EngravingObjectList)
+    OBJECT_ALLOCATOR(engraving, EngravingObjectList)
 public:
 
     EngravingObject* at(size_t i) const;

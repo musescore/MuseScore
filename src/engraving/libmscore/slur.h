@@ -35,7 +35,7 @@ namespace mu::engraving {
 
 class SlurSegment final : public SlurTieSegment
 {
-    OBJECT_ALLOC(engraving, SlurSegment)
+    OBJECT_ALLOCATOR(engraving, SlurSegment)
 protected:
     double _extraHeight = 0.0;
     void changeAnchor(EditData&, EngravingItem*) override;
@@ -65,7 +65,7 @@ public:
 
 class Slur final : public SlurTie
 {
-    OBJECT_ALLOC(engraving, Slur)
+    OBJECT_ALLOCATOR(engraving, Slur)
 
     void slurPosChord(SlurPos*);
     int _sourceStemArrangement = -1;

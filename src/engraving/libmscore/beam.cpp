@@ -1828,7 +1828,7 @@ void Beam::read(XmlReader& e)
 
 class BeamEditData : public ElementEditData
 {
-    OBJECT_ALLOC(engraving, BeamEditData)
+    OBJECT_ALLOCATOR(engraving, BeamEditData)
 public:
     int editFragment;
     virtual EditDataType type() override { return EditDataType::BeamEditData; }

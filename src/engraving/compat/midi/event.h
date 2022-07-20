@@ -41,7 +41,7 @@ enum class BeatType : char;
 
 class PlayEvent : public MidiCoreEvent
 {
-    OBJECT_ALLOC(engraving, PlayEvent)
+    OBJECT_ALLOCATOR(engraving, PlayEvent)
 protected:
     float _tuning = .0f;
 
@@ -63,7 +63,7 @@ public:
 
 class NPlayEvent : public PlayEvent
 {
-    OBJECT_ALLOC(engraving, NPlayEvent)
+    OBJECT_ALLOCATOR(engraving, NPlayEvent)
 
     const Note* _note{ nullptr };
     const Harmony* _harmony{ nullptr };
@@ -106,7 +106,7 @@ public:
 
 class Event : public PlayEvent
 {
-    OBJECT_ALLOC(engraving, Event)
+    OBJECT_ALLOCATOR(engraving, Event)
 
     int _ontime;
     int _noquantOntime;
@@ -162,7 +162,7 @@ public:
 
 class EventList : public std::vector<Event>
 {
-    OBJECT_ALLOC(engraving, EventList)
+    OBJECT_ALLOCATOR(engraving, EventList)
 public:
     void insert(const Event&);
     void insertNote(int channel, Note*);
@@ -170,7 +170,7 @@ public:
 
 class EventMap : public std::multimap<int, NPlayEvent>
 {
-    OBJECT_ALLOC(engraving, EventMap)
+    OBJECT_ALLOCATOR(engraving, EventMap)
 
     int _highestChannel = 15;
 public:

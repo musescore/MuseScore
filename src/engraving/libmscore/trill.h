@@ -35,7 +35,7 @@ class Accidental;
 
 class TrillSegment final : public LineSegment
 {
-    OBJECT_ALLOC(engraving, TrillSegment)
+    OBJECT_ALLOCATOR(engraving, TrillSegment)
 
     SymIdList _symbols;
 
@@ -72,7 +72,7 @@ public:
 
 class Trill final : public SLine
 {
-    OBJECT_ALLOC(engraving, Trill)
+    OBJECT_ALLOCATOR(engraving, Trill)
 
     Sid getPropertyStyle(Pid) const override;
 

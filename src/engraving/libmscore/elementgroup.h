@@ -38,7 +38,7 @@ class EditData;
 
 class ElementGroup
 {
-    OBJECT_ALLOC(engraving, ElementGroup)
+    OBJECT_ALLOCATOR(engraving, ElementGroup)
 public:
     virtual ~ElementGroup() {}
 
@@ -55,7 +55,7 @@ public:
 
 class DisabledElementGroup final : public ElementGroup
 {
-    OBJECT_ALLOC(engraving, DisabledElementGroup)
+    OBJECT_ALLOCATOR(engraving, DisabledElementGroup)
 public:
     bool enabled() const override { return false; }
 
@@ -71,7 +71,7 @@ public:
 
 class SingleElementGroup final : public ElementGroup
 {
-    OBJECT_ALLOC(engraving, SingleElementGroup)
+    OBJECT_ALLOCATOR(engraving, SingleElementGroup)
 
     EngravingItem* e;
 public:
