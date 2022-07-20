@@ -23,6 +23,7 @@
 #ifndef MU_ENGRAVING_OBJECT_H
 #define MU_ENGRAVING_OBJECT_H
 
+#include "global/allocator.h"
 #include "types/string.h"
 
 #include "types.h"
@@ -179,6 +180,7 @@ class EngravingObject;
 
 class EngravingObjectList : public std::list<EngravingObject*>
 {
+    OBJECT_ALLOC(engraving, EngravingObjectList)
 public:
 
     EngravingObject* at(size_t i) const;

@@ -36,6 +36,8 @@ class Factory;
 
 class Ambitus final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, Ambitus)
+
     NoteHeadGroup _noteHeadGroup;
     NoteHeadType _noteHeadType;
     DirectionH _dir;

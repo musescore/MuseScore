@@ -72,6 +72,8 @@ constexpr bool operator&(Repeat t1, Repeat t2)
 
 class MeasureBase : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, MeasureBase)
+
     MeasureBase* _next    { 0 };
     MeasureBase* _prev    { 0 };
 

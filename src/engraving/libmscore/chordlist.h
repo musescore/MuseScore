@@ -24,6 +24,8 @@
 #define __CHORDLIST_H__
 
 #include <map>
+
+#include "global/allocator.h"
 #include "types/string.h"
 #include "containers.h"
 #include "io/iodevice.h"
@@ -265,6 +267,8 @@ struct ChordFont {
 
 class ChordList : public std::map<int, ChordDescription>
 {
+    OBJECT_ALLOC(engraving, ChordList)
+
     INJECT(engraving, IEngravingConfiguration, configuration)
 
     std::map<String, ChordSymbol> symbols;

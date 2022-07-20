@@ -42,6 +42,7 @@ class Spanner;
 
 class DurationElement : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, DurationElement)
 public:
     ~DurationElement();
 

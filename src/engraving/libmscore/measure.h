@@ -137,6 +137,7 @@ private:
 
 class Measure final : public MeasureBase
 {
+    OBJECT_ALLOC(engraving, Measure)
 public:
 
     ~Measure();

@@ -64,6 +64,8 @@ struct BarLineTableItem {
 
 class BarLine final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, BarLine)
+
     int _spanStaff          { 0 };         // span barline to next staff if true, values > 1 are used for importing from 2.x
     int _spanFrom           { 0 };         // line number on start and end staves
     int _spanTo             { 0 };

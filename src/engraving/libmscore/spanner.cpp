@@ -50,6 +50,7 @@ namespace mu::engraving {
 
 class SpannerWriter : public ConnectorInfoWriter
 {
+    OBJECT_ALLOC(engraving, SpannerWriter)
 protected:
     const char* tagName() const override { return "Spanner"; }
 public:

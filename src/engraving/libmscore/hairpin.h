@@ -47,6 +47,8 @@ enum class HairpinType : signed char {
 
 class HairpinSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOC(engraving, HairpinSegment)
+
     bool drawCircledTip;
     mu::PointF circledTip;
     double circledTipRadius;
@@ -89,6 +91,8 @@ public:
 
 class Hairpin final : public TextLineBase
 {
+    OBJECT_ALLOC(engraving, Hairpin)
+
     HairpinType _hairpinType { HairpinType::INVALID };
     int _veloChange;
     bool _hairpinCircledTip;

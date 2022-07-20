@@ -34,6 +34,7 @@ class HarmonicMark;
 
 class HarmonicMarkSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOC(engraving, HarmonicMarkSegment)
 public:
     HarmonicMarkSegment(HarmonicMark* sp, System* parent);
 
@@ -52,6 +53,7 @@ public:
 
 class HarmonicMark final : public ChordTextLineBase
 {
+    OBJECT_ALLOC(engraving, HarmonicMark)
 public:
     HarmonicMark(EngravingItem* parent);
 

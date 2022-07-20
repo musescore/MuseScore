@@ -42,6 +42,8 @@ enum class TremoloStyle : signed char {
 
 class Tremolo final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, Tremolo)
+
     TremoloType _tremoloType { TremoloType::R8 };
     Chord* _chord1 { nullptr };
     Chord* _chord2 { nullptr };

@@ -34,6 +34,7 @@ class Factory;
 
 class StretchedBend final : public Bend
 {
+    OBJECT_ALLOC(engraving, StretchedBend)
 public:
     StretchedBend* clone() const override { return new StretchedBend(*this); }
 

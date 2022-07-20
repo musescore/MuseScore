@@ -39,6 +39,8 @@ class Segment;
 
 class KeySig final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, KeySig)
+
     bool _showCourtesy;
     bool _hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
     KeySigEvent _sig;

@@ -33,6 +33,8 @@ namespace mu::engraving {
 
 class Sticking final : public TextBase
 {
+    OBJECT_ALLOC(engraving, Sticking)
+
     PropertyValue propertyDefault(Pid id) const override;
 
 public:

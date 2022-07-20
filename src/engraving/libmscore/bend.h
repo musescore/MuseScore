@@ -47,6 +47,8 @@ enum class BendType {
 
 class Bend : public EngravingItem // TODO: bring back "final" keyword
 {
+    OBJECT_ALLOC(engraving, Bend)
+
     M_PROPERTY(String,     fontFace,  setFontFace)
     M_PROPERTY(double,      fontSize,  setFontSize)
     M_PROPERTY(FontStyle,  fontStyle, setFontStyle)

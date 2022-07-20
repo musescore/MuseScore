@@ -34,6 +34,8 @@ class Pedal;
 
 class PedalSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOC(engraving, PedalSegment)
+
     Sid getPropertyStyle(Pid) const override;
 
 public:
@@ -52,6 +54,8 @@ public:
 
 class Pedal final : public TextLineBase
 {
+    OBJECT_ALLOC(engraving, Pedal)
+
     Sid getPropertyStyle(Pid) const override;
 
 protected:

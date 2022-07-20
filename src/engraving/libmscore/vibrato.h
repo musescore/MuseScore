@@ -35,6 +35,8 @@ class Accidental;
 
 class VibratoSegment final : public LineSegment
 {
+    OBJECT_ALLOC(engraving, VibratoSegment)
+
     SymIdList _symbols;
 
     void symbolLine(SymId start, SymId fill);
@@ -64,6 +66,8 @@ public:
 
 class Vibrato final : public SLine
 {
+    OBJECT_ALLOC(engraving, Vibrato)
+
     Sid getPropertyStyle(Pid) const override;
 
 private:

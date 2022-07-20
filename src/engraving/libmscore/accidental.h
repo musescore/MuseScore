@@ -30,8 +30,8 @@
 
 #include <vector>
 
-#include "config.h"
 #include "engravingitem.h"
+#include "config.h"
 
 namespace mu::engraving {
 class Factory;
@@ -69,6 +69,8 @@ struct SymElement {
 
 class Accidental final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, Accidental)
+
     std::vector<SymElement> el;
     AccidentalType _accidentalType { AccidentalType::NONE };
     bool m_isSmall                    { false };

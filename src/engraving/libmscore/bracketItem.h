@@ -35,6 +35,8 @@ class Factory;
 
 class BracketItem final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, BracketItem)
+
     BracketType _bracketType { BracketType::NO_BRACKET };
     size_t _column = 0;
     size_t _bracketSpan = 0;

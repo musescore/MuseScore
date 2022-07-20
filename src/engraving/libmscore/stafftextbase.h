@@ -43,6 +43,8 @@ struct ChannelActions {
 
 class StaffTextBase : public TextBase
 {
+    OBJECT_ALLOC(engraving, StaffTextBase)
+
     String _channelNames[4];
     std::vector<ChannelActions> _channelActions;
     SwingParameters _swingParameters;

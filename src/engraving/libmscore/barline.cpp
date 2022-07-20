@@ -240,6 +240,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
 
 class BarLineEditData : public ElementEditData
 {
+    OBJECT_ALLOC(engraving, BarLineEditData)
 public:
     double yoff1;
     double yoff2;

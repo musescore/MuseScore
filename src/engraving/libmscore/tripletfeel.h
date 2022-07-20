@@ -32,6 +32,8 @@ namespace mu::engraving {
 
 class TripletFeel final : public SystemText
 {
+    OBJECT_ALLOC(engraving, TripletFeel)
+
     constexpr static int eightDivision = 2;
     constexpr static int sixteenthDivision = 4;
     constexpr static int tripletRatio = 66;

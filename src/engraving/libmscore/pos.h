@@ -23,6 +23,7 @@
 #ifndef __POS_H__
 #define __POS_H__
 
+#include "global/allocator.h"
 #include "types/string.h"
 #include "sig.h"
 
@@ -117,6 +118,8 @@ public:
 
 class PosLen : public Pos
 {
+    OBJECT_ALLOC(engraving, PosLen)
+
     mutable unsigned _lenTick;
     mutable unsigned _lenFrame;
     mutable int sn;
