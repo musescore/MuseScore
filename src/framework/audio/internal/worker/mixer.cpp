@@ -198,11 +198,16 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
 
     m_masterFxProcessors.clear();
     m_masterFxProcessors = fxResolver()->resolveMasterFxList(params.fxChain);
-    m_masterOutputParamsChanged.send(params);
 
     for (IFxProcessorPtr& fx : m_masterFxProcessors) {
         fx->setSampleRate(m_sampleRate);
+        fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
+            m_masterParams.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);
+            m_masterOutputParamsChanged.send(m_masterParams);
+        });
     }
+
+    m_masterOutputParamsChanged.send(params);
 }
 
 Channel<AudioOutputParams> Mixer::masterOutputParamsChanged() const

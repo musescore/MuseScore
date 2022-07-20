@@ -100,6 +100,16 @@ const AudioFxParams& OutputResourceItem::params() const
     return m_currentFxParams;
 }
 
+void OutputResourceItem::setParams(const audio::AudioFxParams& params)
+{
+    if (m_currentFxParams == params) {
+        return;
+    }
+
+    m_currentFxParams = params;
+    emit fxParamsChanged();
+}
+
 QString OutputResourceItem::title() const
 {
     return QString::fromStdString(m_currentFxParams.resourceMeta.id);

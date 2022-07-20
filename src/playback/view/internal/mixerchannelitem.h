@@ -145,6 +145,7 @@ private:
     void removeRedundantEmptySlots();
 
     void loadOutputResourceItemList(const audio::AudioFxChain& fxChain);
+    void updateOutputResourceItemList(const audio::AudioFxChain& fxChain);
 
     void openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri);
     void closeEditor(AbstractAudioResourceItem* item);
