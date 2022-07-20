@@ -116,14 +116,18 @@ void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
 void EditShortcutModel::checkNewSequenceForConflicts()
 {
     m_conflictShortcut.clear();
-    QString input = newSequence();
+    const std::string input = newSequence().toStdString();
 
     for (const QVariant& shortcut : m_potentialConflictShortcuts) {
         QVariantMap map = shortcut.toMap();
 
-        if (map.value("sequence").toString() == input) {
-            m_conflictShortcut = map;
-            return;
+        std::vector<std::string> toCheckSequences = Shortcut::sequencesFromString(map.value("sequence").toString().toStdString());
+
+        for (const std::string& toCheckSequence : toCheckSequences) {
+            if (input == toCheckSequence) {
+                m_conflictShortcut = map;
+                return;
+            }
         }
     }
 }
