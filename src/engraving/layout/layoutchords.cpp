@@ -1271,6 +1271,7 @@ void LayoutChords::updateLineAttachPoints(Measure* measure)
             }
         }
     }
+    bool isFirstChordRestInMeasure = true;
     for (Segment& s : measure->segments()) {
         if (!s.isChordRestType()) {
             continue;
@@ -1280,11 +1281,12 @@ void LayoutChords::updateLineAttachPoints(Measure* measure)
                 continue;
             }
             Chord* c = toChord(e);
-            doUpdateLineAttachPoints(c);
+            doUpdateLineAttachPoints(c, isFirstChordRestInMeasure);
             for (Chord* gn : c->graceNotes()) {
-                doUpdateLineAttachPoints(gn);
+                doUpdateLineAttachPoints(gn, false);
             }
         }
+        isFirstChordRestInMeasure = false;
     }
     for (Segment& s : measure->segments()) {
         s.createShapes();
@@ -1294,7 +1296,7 @@ void LayoutChords::updateLineAttachPoints(Measure* measure)
 /* We perform a pre-layout of ties and glissandi to obtain the attach points and attach them to
  * the notes of the chord. Will be needed for spacing calculation, particularly to
  * enforce minTieLength. The true layout of ties and glissandi is done much later. */
-void LayoutChords::doUpdateLineAttachPoints(Chord* chord)
+void LayoutChords::doUpdateLineAttachPoints(Chord* chord, bool isFirstInMeasure)
 {
     if (chord->endsGlissando()) {
         for (Note* note : chord->notes()) {
@@ -1308,6 +1310,14 @@ void LayoutChords::doUpdateLineAttachPoints(Chord* chord)
                         }
                     }
                 }
+            }
+        }
+    }
+    if (isFirstInMeasure) {
+        for (Note* note : chord->notes()) {
+            Tie* tieBack = note->tieBack();
+            if (tieBack && tieBack->startNote()->findMeasure() != note->findMeasure()) {
+                tieBack->layoutBack(note->findMeasure()->system());
             }
         }
     }

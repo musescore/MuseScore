@@ -1746,7 +1746,7 @@ Spacer* System::downSpacer(staff_idx_t staffIdx) const
 
 double System::firstNoteRestSegmentX(bool leading)
 {
-    double margin = score()->spatium();
+    double margin = score()->styleMM(Sid::HeaderToLineStartDistance);
     for (const MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             const Measure* measure = static_cast<const Measure*>(mb);
