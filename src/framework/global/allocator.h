@@ -28,17 +28,35 @@
 #include <string>
 
 namespace mu {
-#define OBJECT_ALLOC(ClassName) \
+#define OBJECT_ALLOC(Module, ClassName) \
 public: \
     static ObjectAllocator& allocator() { \
-        static ObjectAllocator a(#ClassName, ObjectAllocator::destroyer<ClassName>); \
+        static ObjectAllocator a(#Module, #ClassName, ObjectAllocator::destroyer<ClassName>); \
         return a; \
     } \
-    static void* operator new(size_t sz) { return allocator().alloc(sz); } \
-    static void operator delete(void* ptr, size_t sz) { allocator().free(ptr, sz); } \
-    static void* operator new[](size_t) { return allocator().not_supported("new[]"); } \
-    static void* operator new(size_t, void*) { return allocator().not_supported("new(size_t, void*)"); } \
-    static void operator delete[](void*, size_t) { allocator().not_supported("delete[]"); } \
+    static void* operator new(size_t sz) { \
+        return ObjectAllocator::enabled ? allocator().alloc(sz) : ::operator new(sz); \
+    } \
+    static void operator delete(void* ptr, size_t sz) { \
+        if (ObjectAllocator::enabled) { \
+            allocator().free(ptr, sz); \
+        } else { \
+            ::operator delete(ptr, sz); \
+        } \
+    } \
+    static void* operator new[](size_t sz) { \
+        return ObjectAllocator::enabled ? allocator().not_supported("new[]") : ::operator new[](sz); \
+    } \
+    static void* operator new(size_t sz, void* ptr) { \
+        return ObjectAllocator::enabled ? allocator().not_supported("new(size_t, void*)") : ::operator new(sz, ptr); \
+    } \
+    static void operator delete[](void* ptr, size_t sz) { \
+        if (ObjectAllocator::enabled) { \
+            allocator().not_supported("delete[]"); \
+        } else { \
+            ::operator delete[](ptr, sz); \
+        } \
+    } \
 private:
 
 class ObjectAllocator
@@ -47,11 +65,12 @@ public:
 
     using destroyer_t = void (*)(void*);
 
-    ObjectAllocator(const char* name, destroyer_t dtor);
+    ObjectAllocator(const char* module, const char* name, destroyer_t dtor);
     ~ObjectAllocator();
 
     static size_t DEFAULT_BLOCK_SIZE;
 
+    const char* module() const;
     const char* name() const;
 
     void* alloc(size_t size);
@@ -69,16 +88,21 @@ public:
 
     struct Info
     {
+        std::string module;
         std::string name;
         size_t chunkSize = 0;
         size_t blockCount = 0;
         size_t totalChunks = 0;
         size_t freeChunks = 0;
-        uint64_t allocatedBytes = 0;
+
+        uint64_t allocatedBytes() const { return totalChunks * chunkSize; }
     };
 
     Info dumpInfo() const;
+    static void dump(const Info& info);
     void dump() const;
+
+    static bool enabled;
 
 private:
     struct Chunk {
@@ -100,6 +124,7 @@ private:
 
     Block allocateBlock(size_t chunkSize) const;
 
+    const char* m_module = nullptr;
     const char* m_name = nullptr;
     size_t m_chunkSize = 0;
     destroyer_t m_dtor = nullptr;
@@ -120,9 +145,9 @@ public:
     void reg(ObjectAllocator* a);
     void unreg(ObjectAllocator* a);
 
-    void cleanupAll();
+    void cleanupAll(const std::string& module);
 
-    void dump();
+    void dump(const std::string& info);
 
 private:
     std::list<ObjectAllocator*> m_allocators;

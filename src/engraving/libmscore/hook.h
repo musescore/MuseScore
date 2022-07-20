@@ -25,13 +25,14 @@
 
 #include "symbol.h"
 
+#include "global/allocator.h"
+
 namespace mu::engraving {
 class Chord;
 
 class Hook final : public Symbol
 {
-    int _hookType { 0 };
-
+    OBJECT_ALLOC(engraving, Hook)
 public:
     Hook(Chord* parent = 0);
 
@@ -49,6 +50,9 @@ public:
     //! @p index: the number of flags (positive: upwards, negative: downwards)
     //! @p straight: whether to use straight flags
     static SymId symIdForHookIndex(int index, bool straight);
+
+private:
+    int _hookType { 0 };
 };
 } // namespace mu::engraving
 #endif

@@ -48,7 +48,7 @@ class MStyle;
 
 class EngravingProject : public std::enable_shared_from_this<EngravingProject>
 {
-    INJECT(engraving, diagnostics::IEngravingElementsProvider, engravingElementsProvider)
+    INJECT_STATIC(engraving, diagnostics::IEngravingElementsProvider, engravingElementsProvider)
 
 public:
     ~EngravingProject();

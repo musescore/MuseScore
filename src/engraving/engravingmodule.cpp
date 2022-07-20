@@ -22,6 +22,7 @@
 #include "engravingmodule.h"
 
 #include "modularity/ioc.h"
+#include "global/allocator.h"
 
 #ifndef ENGRAVING_NO_INTERNAL
 #include "engraving/infrastructure/internal/engravingconfiguration.h"
@@ -87,6 +88,8 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
     DefaultStyle::instance()->init(s_configuration->defaultStyleFilePath(),
                                    s_configuration->partStyleFilePath());
 #endif
+
+    ObjectAllocator::enabled = false;
 
     MScore::init();     // initialize libmscore
 
