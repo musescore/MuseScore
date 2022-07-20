@@ -42,8 +42,10 @@ using namespace mu::mpe;
 using namespace mu::async;
 
 static const std::string METRONOME_INSTRUMENT_ID("metronome");
+static const std::string CHORD_SYMBOLS_INSTRUMENT_ID("chord_symbols");
 
 const InstrumentTrackId PlaybackModel::METRONOME_TRACK_ID = { 999, METRONOME_INSTRUMENT_ID };
+const InstrumentTrackId PlaybackModel::CHORD_SYMBOLS_TRACK_ID = { 1000, CHORD_SYMBOLS_INSTRUMENT_ID };
 
 void PlaybackModel::load(Score* score)
 {
@@ -121,6 +123,11 @@ void PlaybackModel::setPlayRepeats(const bool isEnabled)
 const InstrumentTrackId& PlaybackModel::metronomeTrackId() const
 {
     return METRONOME_TRACK_ID;
+}
+
+const InstrumentTrackId& PlaybackModel::chordSymbolsTrackId() const
+{
+    return CHORD_SYMBOLS_TRACK_ID;
 }
 
 const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& trackId)
@@ -217,6 +224,7 @@ void PlaybackModel::updateSetupData()
     }
 
     m_setupResolver.resolveMetronomeSetupData(m_playbackDataMap[METRONOME_TRACK_ID].setupData);
+    m_setupResolver.resolveChordSymbolsSetupData(m_playbackDataMap[CHORD_SYMBOLS_TRACK_ID].setupData);
 }
 
 void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t trackTo)
@@ -360,7 +368,7 @@ void PlaybackModel::clearExpiredTracks()
     auto it = m_playbackDataMap.cbegin();
 
     while (it != m_playbackDataMap.cend()) {
-        if (it->first == METRONOME_TRACK_ID) {
+        if (it->first == METRONOME_TRACK_ID || it->first == CHORD_SYMBOLS_TRACK_ID) {
             ++it;
             continue;
         }
@@ -407,6 +415,7 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
     }
 
     removeEvents(METRONOME_TRACK_ID, timestampFrom, timestampTo);
+    removeEvents(CHORD_SYMBOLS_TRACK_ID, timestampFrom, timestampTo);
 }
 
 void PlaybackModel::collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result)

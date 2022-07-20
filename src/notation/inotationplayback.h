@@ -41,6 +41,8 @@ public:
     virtual void init(INotationUndoStackPtr undoStack) = 0;
 
     virtual const engraving::InstrumentTrackId& metronomeTrackId() const = 0;
+    virtual const engraving::InstrumentTrackId& chordSymbolsTrackId() const = 0;
+
     virtual const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void triggerEventsForItem(const EngravingItem* item) = 0;
 

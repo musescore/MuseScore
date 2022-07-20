@@ -33,6 +33,7 @@ class PlaybackSetupDataResolver
 public:
     void resolveSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const;
     void resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const;
+    void resolveChordSymbolsSetupData(mpe::PlaybackSetupData& result) const;
 };
 }
 
