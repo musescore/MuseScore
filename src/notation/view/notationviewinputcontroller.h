@@ -71,6 +71,10 @@ public:
     virtual void showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus = false) = 0;
     virtual void hideContextMenu() = 0;
 
+    virtual void showElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size, bool activateFocus) = 0;
+    virtual void hideElementPopup() = 0;
+    virtual void toggleElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size, bool activateFocus = false) = 0;
+
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;
 

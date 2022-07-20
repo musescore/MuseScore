@@ -139,6 +139,14 @@ FocusScope {
                         contextMenuLoader.close()
                     }
 
+                    onShowElementPopupRequested: function (popupType, viewPos, elemSize) {
+                        popUpLoader.show(popupType, viewPos, elemSize)
+                    }
+
+                    onHideElementPopupRequested: {
+                        popUpLoader.close()
+                    }
+
                     onViewportChanged: {
                         notationNavigator.setCursorRect(viewport)
                     }
@@ -149,6 +157,12 @@ FocusScope {
                         onHandleMenuItem: function(itemId) {
                             contextMenuModel.handleMenuItem(itemId)
                         }
+                    }
+
+                    ElementPopupLoader {
+                        id: popUpLoader
+                        onOpened: paintView.setIsPopupOpen(true)
+                        onClosed: paintView.setIsPopupOpen(false)
                     }
                 }
             }

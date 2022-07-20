@@ -36,5 +36,7 @@
         <file>qml/MuseScore/NotationScene/internal/NotationScrollBar.qml</file>
         <file>qml/MuseScore/NotationScene/PianoKeyboardPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/ElementPopupLoader.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml</file>
     </qresource>
 </RCC>

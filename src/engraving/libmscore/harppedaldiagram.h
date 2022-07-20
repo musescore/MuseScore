@@ -77,8 +77,8 @@ public:
     bool isDiagram() { return _isDiagram; }
 
     std::array<PedalPosition, 7> getPedalState() { return _pedalState; }
-
     void setPedalState(std::array<PedalPosition, 7> state);
+
     void setPedal(HarpStringType harpString, PedalPosition pedal);
 
     String createDiagramText();
