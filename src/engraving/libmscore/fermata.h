@@ -42,6 +42,8 @@ class System;
 
 class Fermata final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, Fermata)
+
     SymId _symId;
     double _timeStretch;
     bool _play;

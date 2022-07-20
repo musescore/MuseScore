@@ -25,6 +25,8 @@
 
 #include <cstdint>
 
+#include "global/allocator.h"
+
 namespace mu::engraving {
 //---------------------------------------------------------
 //   Event types
@@ -145,6 +147,7 @@ enum CntrType {
 
 class MidiCoreEvent
 {
+    OBJECT_ALLOC(engraving, MidiCoreEvent)
 protected:
     uint8_t _type    = 0;
     uint8_t _channel = 0;

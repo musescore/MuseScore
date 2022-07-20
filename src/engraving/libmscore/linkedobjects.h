@@ -29,6 +29,8 @@
 namespace mu::engraving {
 class LinkedObjects : public std::list<EngravingObject*>
 {
+    OBJECT_ALLOC(engraving, LinkedObjects)
+
     int _lid;           // unique id for every linked list
 
 public:

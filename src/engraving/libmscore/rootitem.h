@@ -31,6 +31,7 @@ class Score;
 
 class RootItem : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, RootItem)
 public:
     RootItem(Score* score);
     ~RootItem() override;

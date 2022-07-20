@@ -82,6 +82,8 @@ class HDegree;
 
 class Harmony final : public TextBase
 {
+    OBJECT_ALLOC(engraving, Harmony)
+
     int _rootTpc;               // root note for chord
     int _baseTpc;               // bass note or chord base; used for "slash" chords
                                 // or notation of base note in chord

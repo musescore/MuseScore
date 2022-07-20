@@ -70,6 +70,7 @@ struct SwingParameters {
 
 class Staff final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, Staff)
 public:
     enum class HideMode {
         AUTO, ALWAYS, NEVER, INSTRUMENT

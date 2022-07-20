@@ -13,6 +13,8 @@
 #ifndef __NOTIFIER_H__
 #define __NOTIFIER_H__
 
+#include "global/allocator.h"
+
 namespace mu::engraving {
 template<typename Data> class Notifier;
 
@@ -23,6 +25,8 @@ template<typename Data> class Notifier;
 template<typename Data>
 class Listener
 {
+    OBJECT_ALLOC(engraving, Listener)
+
     Notifier<Data>* _notifier = nullptr;
 
 public:

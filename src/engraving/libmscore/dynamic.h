@@ -39,6 +39,7 @@ class Segment;
 
 class Dynamic final : public TextBase
 {
+    OBJECT_ALLOC(engraving, Dynamic)
 public:
 
     struct ChangeSpeedItem {

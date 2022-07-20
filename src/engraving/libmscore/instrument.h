@@ -73,6 +73,7 @@ public:
 
 class StaffNameList : public std::list<StaffName>
 {
+    OBJECT_ALLOC(engraving, StaffNameList)
 public:
     void write(XmlWriter& xml, const char* name) const;
     std::list<String> toStringList() const;
@@ -230,6 +231,7 @@ public:
 
 class ChannelListener : public Listener<InstrChannel::Prop>
 {
+    OBJECT_ALLOC(engraving, ChannelListener)
 public:
     virtual void propertyChanged(InstrChannel::Prop property) = 0;
     void setNotifier(InstrChannel* ch)
@@ -439,6 +441,8 @@ public:
 
 class InstrumentList : public std::map<const int, Instrument*>
 {
+    OBJECT_ALLOC(engraving, InstrumentList)
+
     static Instrument defaultInstrument;
 
 public:

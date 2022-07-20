@@ -23,6 +23,7 @@
 #ifndef __SHAPE_H__
 #define __SHAPE_H__
 
+#include "global/allocator.h"
 #include "draw/types/geometry.h"
 
 namespace mu::draw {
@@ -40,6 +41,8 @@ class Measure;
 //---------------------------------------------------------
 
 struct ShapeElement : public mu::RectF {
+    OBJECT_ALLOC(engraving, ShapeElement)
+public:
     const EngravingItem* toItem = nullptr;
     ShapeElement(const mu::RectF& f, const EngravingItem* p)
         : mu::RectF(f), toItem(p) {}
@@ -56,7 +59,7 @@ struct ShapeElement : public mu::RectF {
 
 class Shape : public std::vector<ShapeElement>
 {
-// class Shape : std::vector<ShapeElement> {
+    OBJECT_ALLOC(engraving, Shape)
 public:
     enum HorizontalSpacingType {
         SPACING_GENERAL = 0,

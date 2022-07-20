@@ -42,6 +42,7 @@ class System;
 
 class LineSegment : public SpannerSegment
 {
+    OBJECT_ALLOC(engraving, LineSegment)
 protected:
     virtual void editDrag(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;
@@ -93,6 +94,8 @@ private:
 
 class SLine : public Spanner
 {
+    OBJECT_ALLOC(engraving, SLine)
+
     Millimetre _lineWidth;
     mu::draw::Color _lineColor { engravingConfiguration()->defaultColor() };
     LineType _lineStyle { LineType::SOLID };

@@ -90,6 +90,7 @@ class SlurTie;
 
 class SlurTieSegment : public SpannerSegment
 {
+    OBJECT_ALLOC(engraving, SlurTieSegment)
 protected:
     struct UP _ups[int(Grip::GRIPS)];
 
@@ -145,6 +146,8 @@ public:
 
 class SlurTie : public Spanner
 {
+    OBJECT_ALLOC(engraving, SlurTie)
+
     SlurStyleType _styleType = SlurStyleType::Undefined;
 
 protected:

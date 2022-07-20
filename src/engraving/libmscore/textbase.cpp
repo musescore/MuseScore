@@ -2041,6 +2041,8 @@ void TextBase::setSize(const double& val)
 
 class XmlNesting : public std::stack<String>
 {
+    OBJECT_ALLOC(engraving, XmlNesting)
+
     String* _s;
 
 public:

@@ -34,6 +34,7 @@ class Rasgueado;
 
 class RasgueadoSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOC(engraving, RasgueadoSegment)
 public:
     RasgueadoSegment(Rasgueado* sp, System* parent);
 
@@ -52,6 +53,7 @@ public:
 
 class Rasgueado final : public ChordTextLineBase
 {
+    OBJECT_ALLOC(engraving, Rasgueado)
 public:
     Rasgueado(EngravingItem* parent);
 

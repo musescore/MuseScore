@@ -134,6 +134,8 @@ public:
 
 class FretDiagram final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, FretDiagram)
+
     int _strings       { 6 };
     int _frets         { 4 };
     int _fretOffset    { 0 };

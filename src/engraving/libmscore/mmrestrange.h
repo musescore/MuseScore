@@ -33,6 +33,8 @@ namespace mu::engraving {
 
 class MMRestRange : public MeasureNumberBase
 {
+    OBJECT_ALLOC(engraving, MMRestRange)
+
     /// Bracketing: [18-24], (18-24) or 18-24
     M_PROPERTY(MMRestRangeBracketType, bracketType, setBracketType)
 

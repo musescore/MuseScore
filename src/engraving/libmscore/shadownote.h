@@ -41,6 +41,8 @@ namespace mu::engraving {
 
 class ShadowNote final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, ShadowNote)
+
     INJECT(notation, IEngravingConfiguration, engravingConfiguration)
 
     Fraction m_tick;

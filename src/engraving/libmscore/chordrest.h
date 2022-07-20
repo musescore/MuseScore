@@ -57,6 +57,8 @@ enum class SegmentType;
 
 class ChordRest : public DurationElement
 {
+    OBJECT_ALLOC(engraving, ChordRest)
+
     ElementList _el;
     TDuration _durationType;
     int _staffMove;           // -1, 0, +1, used for crossbeaming

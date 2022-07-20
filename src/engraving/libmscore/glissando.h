@@ -41,6 +41,7 @@ enum class GlissandoType;
 
 class GlissandoSegment final : public LineSegment
 {
+    OBJECT_ALLOC(engraving, GlissandoSegment)
 public:
     GlissandoSegment(Glissando* sp, System* parent);
 
@@ -59,6 +60,8 @@ public:
 
 class Glissando final : public SLine
 {
+    OBJECT_ALLOC(engraving, Glissando)
+
     M_PROPERTY(String, text, setText)
     M_PROPERTY(GlissandoType, glissandoType, setGlissandoType)
     M_PROPERTY(GlissandoStyle, glissandoStyle, setGlissandoStyle)

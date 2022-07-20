@@ -70,6 +70,8 @@ enum class PreferSharpFlat : char {
 
 class Part final : public EngravingObject
 {
+    OBJECT_ALLOC(engraving, Part)
+
     String _partName;              ///< used in tracklist (mixer)
     InstrumentList _instruments;
     std::vector<Staff*> _staves;

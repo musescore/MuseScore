@@ -23,6 +23,7 @@
 #ifndef __ELEMENTGROUP_H__
 #define __ELEMENTGROUP_H__
 
+#include "global/allocator.h"
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {
@@ -37,6 +38,7 @@ class EditData;
 
 class ElementGroup
 {
+    OBJECT_ALLOC(engraving, ElementGroup)
 public:
     virtual ~ElementGroup() {}
 
@@ -53,6 +55,7 @@ public:
 
 class DisabledElementGroup final : public ElementGroup
 {
+    OBJECT_ALLOC(engraving, DisabledElementGroup)
 public:
     bool enabled() const override { return false; }
 
@@ -68,6 +71,8 @@ public:
 
 class SingleElementGroup final : public ElementGroup
 {
+    OBJECT_ALLOC(engraving, SingleElementGroup)
+
     EngravingItem* e;
 public:
     SingleElementGroup(EngravingItem* el)

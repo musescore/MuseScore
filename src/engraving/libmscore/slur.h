@@ -65,6 +65,8 @@ public:
 
 class Slur final : public SlurTie
 {
+    OBJECT_ALLOC(engraving, Slur)
+
     void slurPosChord(SlurPos*);
     int _sourceStemArrangement = -1;
 

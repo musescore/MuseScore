@@ -1744,6 +1744,7 @@ int Note::transposition() const
 
 class NoteEditData : public ElementEditData
 {
+    OBJECT_ALLOC(engraving, NoteEditData)
 public:
     enum EditMode {
         EditMode_ChangePitch = 0,

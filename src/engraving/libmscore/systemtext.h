@@ -32,6 +32,8 @@ namespace mu::engraving {
 
 class SystemText : public StaffTextBase
 {
+    OBJECT_ALLOC(engraving, SystemText)
+
     void layout() override;
 
 protected:

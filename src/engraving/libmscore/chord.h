@@ -55,6 +55,7 @@ enum class TremoloChordType : char {
 
 class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
 {
+    OBJECT_ALLOC(engraving, GraceNotesGroup)
 public:
     GraceNotesGroup* clone() const override { return new GraceNotesGroup(*this); }
     GraceNotesGroup(Chord* c);
@@ -86,6 +87,8 @@ private:
 
 class Chord final : public ChordRest
 {
+    OBJECT_ALLOC(engraving, Chord)
+
     std::vector<Note*> _notes;           // sorted to decreasing line step
     LedgerLine* _ledgerLines = nullptr;  // single linked list
 

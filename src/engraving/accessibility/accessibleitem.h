@@ -22,6 +22,8 @@
 #ifndef MU_ENGRAVING_ACCESSIBLEITEM_H
 #define MU_ENGRAVING_ACCESSIBLEITEM_H
 
+#include "global/allocator.h"
+
 #include "accessibility/iaccessible.h"
 #include "modularity/ioc.h"
 #include "accessibility/iaccessibilitycontroller.h"
@@ -35,6 +37,8 @@ namespace mu::engraving {
 class AccessibleRoot;
 class AccessibleItem : public accessibility::IAccessible
 {
+    OBJECT_ALLOC(engraving, AccessibleItem)
+
     INJECT_STATIC(engraving, accessibility::IAccessibilityController, accessibilityController)
 
 public:
