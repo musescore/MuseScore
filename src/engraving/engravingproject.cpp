@@ -41,8 +41,6 @@ std::shared_ptr<EngravingProject> EngravingProject::create()
         engravingElementsProvider()->clearStatistic();
     }
 
-    ObjectAllocator::enabled = true;
-
     std::shared_ptr<EngravingProject> p = std::shared_ptr<EngravingProject>(new EngravingProject());
     p->init(DefaultStyle::defaultStyle());
     return p;
@@ -54,33 +52,27 @@ std::shared_ptr<EngravingProject> EngravingProject::create(const MStyle& style)
         engravingElementsProvider()->clearStatistic();
     }
 
-    ObjectAllocator::enabled = true;
-
     std::shared_ptr<EngravingProject> p = std::shared_ptr<EngravingProject>(new EngravingProject());
     p->init(style);
     return p;
+}
+
+EngravingProject::EngravingProject()
+{
+    ObjectAllocator::enabled++;
 }
 
 EngravingProject::~EngravingProject()
 {
     delete m_masterScore;
 
-    ObjectAllocator::enabled = false;
+    ObjectAllocator::enabled--;
 
-    AllocatorsRegister::instance()->dump("=== Destroy engraving project ===");
+    AllocatorsRegister::instance()->printStatistic("=== Destroy engraving project ===");
 
     async::Async::call(nullptr, []() {
         AllocatorsRegister::instance()->cleanupAll("engraving");
-        AllocatorsRegister::instance()->dump("=== After cleanup ===");
-
-        if (engravingElementsProvider()) {
-            engravingElementsProvider()->printStatistic("=== Destroy engraving project ===");
-        }
     });
-
-    if (engravingElementsProvider()) {
-        engravingElementsProvider()->printStatistic("=== Destroy engraving project ===");
-    }
 }
 
 void EngravingProject::init(const MStyle& style)
@@ -116,9 +108,7 @@ bool EngravingProject::readOnly() const
 Err EngravingProject::setupMasterScore(bool forceMode)
 {
     TRACEFUNC;
-
     Err err = doSetupMasterScore(m_masterScore, forceMode);
-    engravingElementsProvider()->printStatistic("=== Update and Layout ===");
     return err;
 }
 
@@ -165,8 +155,6 @@ Err EngravingProject::loadMscz(const MscReader& msc, bool ignoreVersionError)
     MScore::setError(MsError::MS_NO_ERROR);
     ScoreReader scoreReader;
     Err err = scoreReader.loadMscz(m_masterScore, msc, ignoreVersionError);
-    engravingElementsProvider()->printStatistic("=== Load ===");
-    AllocatorsRegister::instance()->dump("=== Load ===");
     return err;
 }
 

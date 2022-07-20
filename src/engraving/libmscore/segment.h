@@ -65,7 +65,7 @@ struct CrossStaffContent
 
 class Segment final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Segment)
+    OBJECT_ALLOCATOR(engraving, Segment)
 
     SegmentType _segmentType { SegmentType::Invalid };
     Fraction _tick;    // { Fraction(0, 1) };

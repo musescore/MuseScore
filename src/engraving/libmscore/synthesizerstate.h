@@ -52,7 +52,7 @@ struct IdValue {
 
 class SynthesizerGroup : public std::list<IdValue>
 {
-    OBJECT_ALLOC(engraving, SynthesizerGroup)
+    OBJECT_ALLOCATOR(engraving, SynthesizerGroup)
 
     String _name;
 
@@ -72,7 +72,7 @@ public:
 
 class SynthesizerState : public std::list<SynthesizerGroup>
 {
-    OBJECT_ALLOC(engraving, SynthesizerState)
+    OBJECT_ALLOCATOR(engraving, SynthesizerState)
 
     bool _isDefault        { true };
 

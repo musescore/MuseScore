@@ -89,8 +89,6 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
                                    s_configuration->partStyleFilePath());
 #endif
 
-    ObjectAllocator::enabled = false;
-
     MScore::init();     // initialize libmscore
 
     MScore::setNudgeStep(0.1); // cursor key (default 0.1)

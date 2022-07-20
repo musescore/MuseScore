@@ -90,7 +90,7 @@ class FiguredBass;
 
 class FiguredBassItem final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, FiguredBassItem)
+    OBJECT_ALLOCATOR(engraving, FiguredBassItem)
 
 public:
     enum class Modifier : char {
@@ -247,7 +247,7 @@ struct FiguredBassFont {
 
 class FiguredBass final : public TextBase
 {
-    OBJECT_ALLOC(engraving, FiguredBass)
+    OBJECT_ALLOCATOR(engraving, FiguredBass)
 
     std::vector<FiguredBassItem*> items;        // the individual lines of the F.B.
     std::vector<double> _lineLengths;                // lengths of duration indicator lines (in raster units)

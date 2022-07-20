@@ -34,7 +34,7 @@ class Note;
 
 class TextLineSegment final : public TextLineBaseSegment
 {
-    OBJECT_ALLOC(engraving, TextLineSegment)
+    OBJECT_ALLOCATOR(engraving, TextLineSegment)
 
     Sid getTextLinePos(bool above) const;
     Sid getPropertyStyle(Pid) const override;
@@ -56,7 +56,7 @@ public:
 
 class TextLine final : public TextLineBase
 {
-    OBJECT_ALLOC(engraving, TextLine)
+    OBJECT_ALLOCATOR(engraving, TextLine)
 
     Sid getTextLinePos(bool above) const;
     Sid getPropertyStyle(Pid) const override;

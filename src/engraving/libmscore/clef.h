@@ -90,7 +90,7 @@ public:
 
 class Clef final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, Clef)
+    OBJECT_ALLOCATOR(engraving, Clef)
 
     SymId symId;
     bool _showCourtesy = true;

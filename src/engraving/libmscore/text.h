@@ -32,7 +32,7 @@ namespace mu::engraving {
 
 class Text final : public TextBase
 {
-    OBJECT_ALLOC(engraving, Text)
+    OBJECT_ALLOCATOR(engraving, Text)
 public:
 
     Text* clone() const override { return new Text(*this); }

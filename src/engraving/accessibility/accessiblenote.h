@@ -29,7 +29,7 @@
 namespace mu::engraving {
 class AccessibleNote : public AccessibleItem
 {
-    OBJECT_ALLOC(engraving, AccessibleNote)
+    OBJECT_ALLOCATOR(engraving, AccessibleNote)
 public:
     AccessibleNote(EngravingItem* n = nullptr);
     ~AccessibleNote();

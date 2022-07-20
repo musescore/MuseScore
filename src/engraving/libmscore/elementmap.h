@@ -36,7 +36,7 @@ class EngravingItem;
 
 class ElementMap : public std::unordered_map<EngravingItem*, EngravingItem*>
 {
-    OBJECT_ALLOC(engraving, ElementMap)
+    OBJECT_ALLOCATOR(engraving, ElementMap)
 public:
     ElementMap() {}
     EngravingItem* findNew(EngravingItem* o) const;

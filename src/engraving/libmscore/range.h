@@ -47,7 +47,7 @@ class Score;
 
 class TrackList : public std::vector<EngravingItem*>
 {
-    OBJECT_ALLOC(engraving, TrackList)
+    OBJECT_ALLOCATOR(engraving, TrackList)
 
     Fraction _duration;
     ScoreRange* _range = nullptr;

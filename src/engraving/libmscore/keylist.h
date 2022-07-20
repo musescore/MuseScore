@@ -40,7 +40,7 @@ class XmlReader;
 
 class KeyList : public std::map<const int, KeySigEvent>
 {
-    OBJECT_ALLOC(engraving, KeyList)
+    OBJECT_ALLOCATOR(engraving, KeyList)
 public:
     KeyList() {}
     KeySigEvent key(int tick) const;

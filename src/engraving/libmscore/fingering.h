@@ -32,7 +32,7 @@ namespace mu::engraving {
 
 class Fingering final : public TextBase
 {
-    OBJECT_ALLOC(engraving, Fingering)
+    OBJECT_ALLOCATOR(engraving, Fingering)
 public:
     Fingering(Note* parent, TextStyleType tid, ElementFlags ef = ElementFlag::HAS_TAG);
     Fingering(Note* parent, ElementFlags ef = ElementFlag::HAS_TAG);

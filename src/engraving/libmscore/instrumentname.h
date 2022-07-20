@@ -39,7 +39,7 @@ class SysStaff;
 
 class InstrumentName final : public TextBase
 {
-    OBJECT_ALLOC(engraving, InstrumentName)
+    OBJECT_ALLOCATOR(engraving, InstrumentName)
 
     InstrumentNameType _instrumentNameType;
     int _layoutPos { 0 };

@@ -56,7 +56,7 @@ enum class BeatType : char {
 
 class TimeSigFrac : public Fraction
 {
-    OBJECT_ALLOC(engraving, TimeSigFrac)
+    OBJECT_ALLOCATOR(engraving, TimeSigFrac)
 public:
     using Fraction::Fraction;
     constexpr TimeSigFrac(int n = 0, int d = 1)
@@ -143,7 +143,7 @@ public:
 
 class TimeSigMap : public std::map<int, SigEvent >
 {
-    OBJECT_ALLOC(engraving, TimeSigMap)
+    OBJECT_ALLOCATOR(engraving, TimeSigMap)
 
     void normalize();
 

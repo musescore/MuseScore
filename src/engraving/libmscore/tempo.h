@@ -69,7 +69,7 @@ struct TEvent {
 
 class TempoMap : public std::map<int, TEvent>
 {
-    OBJECT_ALLOC(engraving, TempoMap)
+    OBJECT_ALLOCATOR(engraving, TempoMap)
 
     int _tempoSN;             // serial no to track tempo changes
     BeatsPerSecond _tempo;    // tempo if not using tempo list (beats per second)

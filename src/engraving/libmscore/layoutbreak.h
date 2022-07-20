@@ -35,7 +35,7 @@ class Factory;
 //---------------------------------------------------------
 class LayoutBreak final : public EngravingItem
 {
-    OBJECT_ALLOC(engraving, LayoutBreak)
+    OBJECT_ALLOCATOR(engraving, LayoutBreak)
 public:
 
     void setParent(MeasureBase* parent);

@@ -147,7 +147,7 @@ enum CntrType {
 
 class MidiCoreEvent
 {
-    OBJECT_ALLOC(engraving, MidiCoreEvent)
+    OBJECT_ALLOCATOR(engraving, MidiCoreEvent)
 protected:
     uint8_t _type    = 0;
     uint8_t _channel = 0;

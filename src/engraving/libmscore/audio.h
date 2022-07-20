@@ -37,7 +37,7 @@ class XmlReader;
 
 class Audio
 {
-    OBJECT_ALLOC(engraving, Audio)
+    OBJECT_ALLOCATOR(engraving, Audio)
 
     String _path;
     ByteArray _data;

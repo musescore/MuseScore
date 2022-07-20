@@ -41,7 +41,7 @@ class HairpinSegment;
 
 class HairpinWithDynamicsDragGroup : public ElementGroup
 {
-    OBJECT_ALLOC(engraving, HairpinWithDynamicsDragGroup)
+    OBJECT_ALLOCATOR(engraving, HairpinWithDynamicsDragGroup)
 
     Dynamic* startDynamic;
     HairpinSegment* hairpinSegment;
@@ -65,7 +65,7 @@ public:
 
 class DynamicNearHairpinsDragGroup : public ElementGroup
 {
-    OBJECT_ALLOC(engraving, DynamicNearHairpinsDragGroup)
+    OBJECT_ALLOCATOR(engraving, DynamicNearHairpinsDragGroup)
 
     Hairpin* leftHairpin;
     Dynamic* dynamic;

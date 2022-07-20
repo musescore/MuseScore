@@ -76,7 +76,7 @@ public:
 
 class MasterScore : public Score
 {
-    OBJECT_ALLOC(engraving, MasterScore)
+    OBJECT_ALLOCATOR(engraving, MasterScore)
 
     UndoStack* _undoStack = nullptr;
     TimeSigMap* _sigmap;

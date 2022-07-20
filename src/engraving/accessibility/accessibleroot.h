@@ -30,7 +30,7 @@ using AccessibleMapToScreenFunc = std::function<RectF(const RectF&)>;
 
 class AccessibleRoot : public AccessibleItem
 {
-    OBJECT_ALLOC(engraving, AccessibleRoot)
+    OBJECT_ALLOCATOR(engraving, AccessibleRoot)
 public:
     AccessibleRoot(RootItem* e);
     ~AccessibleRoot() override;

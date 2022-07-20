@@ -35,7 +35,7 @@ namespace mu::engraving {
 
 class Marker final : public TextBase
 {
-    OBJECT_ALLOC(engraving, Marker)
+    OBJECT_ALLOCATOR(engraving, Marker)
 private:
     MarkerType _markerType;
     String _label;                 ///< referenced from Jump() element
