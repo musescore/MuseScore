@@ -378,7 +378,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::stemWidth,               false, stemWidth,               0 },
         { StyleId::ledgerLineWidth,         false, ledgerLineWidth,         0 },
         { StyleId::ledgerLineLength,        false, ledgerLineLength,        0 },
-        { StyleId::shortStemProgression,    false, shortStemProgression,    0 },
         { StyleId::shortestStem,            false, shortestStem,            0 },
         { StyleId::ArpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
         { StyleId::ArpeggioLineWidth,       false, arpeggioLineWidth,       0 },
