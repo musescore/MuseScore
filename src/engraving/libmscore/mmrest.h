@@ -29,6 +29,7 @@ namespace mu::engraving {
 /// This class implements a multimeasure rest.
 class MMRest final : public Rest
 {
+    OBJECT_ALLOC(engraving, MMRest)
 public:
     MMRest(Segment* s = 0);
     MMRest(const MMRest&, bool link = false);

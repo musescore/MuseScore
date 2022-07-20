@@ -25,6 +25,7 @@
 
 #include <map>
 
+#include "global/allocator.h"
 #include "types/types.h"
 
 /**
@@ -74,6 +75,8 @@ typedef std::vector<std::pair<Fraction, Fraction> > EndPointsVector;
 
 class ChangeMap : public std::multimap<Fraction, ChangeEvent>
 {
+    OBJECT_ALLOC(engraving, ChangeMap)
+
     bool cleanedUp    { false };
     static const int DEFAULT_VALUE  { 80 };
 

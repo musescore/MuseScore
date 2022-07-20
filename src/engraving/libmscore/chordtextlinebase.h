@@ -32,6 +32,7 @@ namespace mu::engraving {
 
 class ChordTextLineBase : public TextLineBase
 {
+    OBJECT_ALLOC(engraving, ChordTextLineBase)
 protected:
     friend class TextLineBaseSegment;
 

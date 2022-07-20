@@ -34,6 +34,7 @@ class WhammyBar;
 
 class WhammyBarSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOC(engraving, WhammyBarSegment)
 public:
     WhammyBarSegment(WhammyBar* sp, System* parent);
 
@@ -52,6 +53,7 @@ public:
 
 class WhammyBar final : public ChordTextLineBase
 {
+    OBJECT_ALLOC(engraving, WhammyBar)
 public:
     WhammyBar(EngravingItem* parent);
 

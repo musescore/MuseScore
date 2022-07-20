@@ -35,6 +35,8 @@ class Chord;
 
 class Arpeggio final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, Arpeggio)
+
     ArpeggioType _arpeggioType;
     double _userLen1;
     double _userLen2;

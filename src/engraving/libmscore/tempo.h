@@ -25,6 +25,7 @@
 
 #include <map>
 
+#include "global/allocator.h"
 #include "types/flags.h"
 #include "types/types.h"
 
@@ -68,6 +69,8 @@ struct TEvent {
 
 class TempoMap : public std::map<int, TEvent>
 {
+    OBJECT_ALLOC(engraving, TempoMap)
+
     int _tempoSN;             // serial no to track tempo changes
     BeatsPerSecond _tempo;    // tempo if not using tempo list (beats per second)
     BeatsPerSecond _relTempo;          // rel. tempo

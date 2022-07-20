@@ -41,6 +41,7 @@ class Chord;
 
 class ChordLine final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, ChordLine)
 protected:
 
     ChordLineType _chordLineType;

@@ -90,6 +90,8 @@ class FiguredBass;
 
 class FiguredBassItem final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, FiguredBassItem)
+
 public:
     enum class Modifier : char {
         NONE = 0,
@@ -245,6 +247,8 @@ struct FiguredBassFont {
 
 class FiguredBass final : public TextBase
 {
+    OBJECT_ALLOC(engraving, FiguredBass)
+
     std::vector<FiguredBassItem*> items;        // the individual lines of the F.B.
     std::vector<double> _lineLengths;                // lengths of duration indicator lines (in raster units)
     bool _onNote;                               // true if this element is on a staff note | false if it is between notes

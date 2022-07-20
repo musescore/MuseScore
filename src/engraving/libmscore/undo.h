@@ -112,6 +112,8 @@ class EditData;
 
 class UndoCommand
 {
+    OBJECT_ALLOC(engraving, UndoCommand)
+
     std::list<UndoCommand*> childList;
 
 protected:
@@ -157,6 +159,7 @@ public:
 
 class UndoMacro : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, UndoMacro)
 public:
     struct SelectionInfo {
         std::vector<EngravingItem*> elements;
@@ -247,6 +250,8 @@ public:
 
 class InsertPart : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, InsertPart)
+
     Part* part;
     int idx;
 
@@ -265,6 +270,8 @@ public:
 
 class RemovePart : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, RemovePart)
+
     Part* part;
     staff_idx_t idx;
 
@@ -282,6 +289,8 @@ public:
 
 class SetSoloist : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, SetSoloist)
+
     Part* part = nullptr;
     bool soloist = false;
 
@@ -299,6 +308,8 @@ public:
 
 class InsertStaff : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, InsertStaff)
+
     Staff* staff;
     staff_idx_t ridx;
 
@@ -316,6 +327,8 @@ public:
 
 class RemoveStaff : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, RemoveStaff)
+
     Staff* staff = nullptr;
     staff_idx_t ridx = mu::nidx;
 
@@ -333,6 +346,8 @@ public:
 
 class InsertMStaff : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, InsertMStaff)
+
     Measure* measure;
     MStaff* mstaff;
     staff_idx_t idx;
@@ -351,6 +366,8 @@ public:
 
 class RemoveMStaff : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, RemoveMStaff)
+
     Measure* measure;
     MStaff* mstaff;
     int idx;
@@ -369,6 +386,8 @@ public:
 
 class InsertStaves : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, InsertStaves)
+
     Measure* measure;
     staff_idx_t a;
     staff_idx_t b;
@@ -387,6 +406,8 @@ public:
 
 class RemoveStaves : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, RemoveStaves)
+
     Measure* measure;
     staff_idx_t a;
     staff_idx_t b;
@@ -405,6 +426,8 @@ public:
 
 class SortStaves : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, SortStaves)
+
     Score* score = nullptr;
     std::vector<staff_idx_t> list;
     std::vector<staff_idx_t> rlist;
@@ -423,6 +446,8 @@ public:
 
 class MapExcerptTracks : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, MapExcerptTracks)
+
     Score* score = nullptr;
     std::vector<staff_idx_t> list;
     std::vector<staff_idx_t> rlist;
@@ -441,6 +466,8 @@ public:
 
 class ChangePitch : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangePitch)
+
     Note* note;
     int pitch;
     int tpc1;
@@ -459,6 +486,8 @@ public:
 
 class ChangeFretting : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeFretting)
+
     Note* note;
     int pitch;
     int string;
@@ -479,6 +508,8 @@ public:
 
 class ChangeKeySig : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeKeySig)
+
     KeySig* keysig;
     KeySigEvent ks;
     bool showCourtesy;
@@ -498,6 +529,8 @@ public:
 
 class ChangeMeasureLen : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeMeasureLen)
+
     Measure* measure;
     Fraction len;
     void flip(EditData*) override;
@@ -514,6 +547,8 @@ public:
 
 class ChangeElement : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeElement)
+
     EngravingItem* oldElement;
     EngravingItem* newElement;
     void flip(EditData*) override;
@@ -530,6 +565,8 @@ public:
 
 class TransposeHarmony : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, TransposeHarmony)
+
     Harmony* harmony;
     int rootTpc, baseTpc;
     void flip(EditData*) override;
@@ -546,6 +583,8 @@ public:
 
 class ExchangeVoice : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ExchangeVoice)
+
     Measure* measure;
     track_idx_t val1, val2;
     staff_idx_t staff;
@@ -564,6 +603,8 @@ public:
 
 class CloneVoice : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, CloneVoice)
+
     Segment* sf;
     Fraction lTick;
     Segment* d;               //Destination
@@ -587,6 +628,8 @@ public:
 
 class ChangeInstrumentShort : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeInstrumentShort)
+
     Part* part;
     Fraction tick;
     std::list<StaffName> text;
@@ -604,6 +647,8 @@ public:
 
 class ChangeInstrumentLong : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeInstrumentLong)
+
     Part* part = nullptr;
     Fraction tick;
     std::list<StaffName> text;
@@ -621,6 +666,8 @@ public:
 
 class ChangeBracketType : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeBracketType)
+
     Bracket* bracket;
     BracketType type;
     void flip(EditData*) override;
@@ -637,6 +684,8 @@ public:
 
 class AddElement : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, AddElement)
+
     EngravingItem* element;
 
     void endUndoRedo(bool) const;
@@ -660,6 +709,8 @@ public:
 
 class RemoveElement : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, RemoveElement)
+
     EngravingItem* element;
 
 public:
@@ -680,6 +731,8 @@ public:
 
 class EditText : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, EditText)
+
     Text* text;
     String oldText;
     //int undoLevel;
@@ -701,6 +754,8 @@ public:
 
 class ChangePatch : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangePatch)
+
     Score* score;
     InstrChannel* channel;
     MidiPatch patch;
@@ -720,6 +775,8 @@ public:
 
 class SetUserBankController : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, SetUserBankController)
+
     InstrChannel* channel;
     bool val;
 
@@ -737,6 +794,8 @@ public:
 
 class ChangeStaff : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeStaff)
+
     Staff* staff = nullptr;
 
     bool visible = false;
@@ -765,6 +824,8 @@ public:
 
 class ChangeStaffType : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeStaffType)
+
     Staff* staff;
     StaffType staffType;
 
@@ -783,6 +844,8 @@ public:
 
 class ChangePart : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangePart)
+
     Part* part;
     Instrument* instrument;
     String partName;
@@ -801,6 +864,8 @@ public:
 
 class ChangeStyle : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeStyle)
+
     Score* score;
     MStyle style;
     bool overlap = false;
@@ -819,6 +884,8 @@ public:
 
 class ChangeStyleVal : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeStyleVal)
+
     Score* score;
     Sid idx;
     PropertyValue value;
@@ -838,6 +905,8 @@ public:
 
 class ChangePageNumberOffset : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangePageNumberOffset)
+
     Score* score;
     int pageOffset;
 
@@ -856,6 +925,8 @@ public:
 
 class ChangeChordStaffMove : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeChordStaffMove)
+
     ChordRest* chordRest;
     int staffMove;
     void flip(EditData*) override;
@@ -872,6 +943,8 @@ public:
 
 class ChangeVelocity : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeVelocity)
+
     Note* note;
     VeloType veloType;
     int veloOffset;
@@ -889,6 +962,8 @@ public:
 
 class ChangeMStaffProperties : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeMStaffProperties)
+
     Measure* measure;
     int staffIdx;
     bool visible;
@@ -907,6 +982,8 @@ public:
 
 class InsertRemoveMeasures : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, InsertRemoveMeasures)
+
     MeasureBase* fm;
     MeasureBase* lm;
 
@@ -930,6 +1007,7 @@ public:
 
 class RemoveMeasures : public InsertRemoveMeasures
 {
+    OBJECT_ALLOC(engraving, RemoveMeasures)
 public:
     RemoveMeasures(MeasureBase* m1, MeasureBase* m2)
         : InsertRemoveMeasures(m1, m2) {}
@@ -944,6 +1022,7 @@ public:
 
 class InsertMeasures : public InsertRemoveMeasures
 {
+    OBJECT_ALLOC(engraving, InsertMeasures)
 public:
     InsertMeasures(MeasureBase* m1, MeasureBase* m2)
         : InsertRemoveMeasures(m1, m2) {}
@@ -958,6 +1037,8 @@ public:
 
 class AddExcerpt : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, AddExcerpt)
+
     Excerpt* excerpt = nullptr;
     bool deleteExcerpt = false;
 
@@ -976,6 +1057,8 @@ public:
 
 class RemoveExcerpt : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, RemoveExcerpt)
+
     Excerpt* excerpt = nullptr;
     size_t index = mu::nidx;
     bool deleteExcerpt = false;
@@ -995,6 +1078,8 @@ public:
 
 class SwapExcerpt : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, SwapExcerpt)
+
     MasterScore* score;
     int pos1;
     int pos2;
@@ -1014,6 +1099,8 @@ public:
 
 class ChangeExcerptTitle : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeExcerptTitle)
+
     Excerpt* excerpt;
     String title;
 
@@ -1031,6 +1118,8 @@ public:
 
 class ChangeBend : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeBend)
+
     Bend* bend;
     PitchValues points;
 
@@ -1049,6 +1138,8 @@ public:
 
 class ChangeTremoloBar : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeTremoloBar)
+
     TremoloBar* bend;
     PitchValues points;
 
@@ -1067,6 +1158,8 @@ public:
 
 class ChangeNoteEvents : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeNoteEvents)
+
     Chord* chord = nullptr;
     std::list<NoteEvent*> events;
 
@@ -1085,6 +1178,8 @@ public:
 
 class ChangeNoteEventList : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeNoteEventList)
+
     Note* note;
     NoteEventList newEvents;
     PlayEventType newPetype;
@@ -1104,6 +1199,8 @@ public:
 
 class ChangeChordPlayEventType : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeChordPlayEventType)
+
     Chord* chord;
     PlayEventType petype;
     std::vector<NoteEventList> events;
@@ -1128,6 +1225,8 @@ public:
 
 class ChangeInstrument : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeInstrument)
+
     InstrumentChange* is;
     Instrument* instrument;
 
@@ -1148,6 +1247,8 @@ extern void updateNoteLines(Segment*, track_idx_t track);
 
 class SwapCR : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, SwapCR)
+
     ChordRest* cr1;
     ChordRest* cr2;
 
@@ -1166,6 +1267,8 @@ public:
 
 class ChangeClefType : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeClefType)
+
     Clef* clef;
     ClefType concertClef;
     ClefType transposingClef;
@@ -1183,6 +1286,7 @@ public:
 
 class ChangeProperty : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeProperty)
 protected:
     EngravingObject* element;
     Pid id;
@@ -1212,6 +1316,8 @@ public:
 
 class ChangeBracketProperty : public ChangeProperty
 {
+    OBJECT_ALLOC(engraving, ChangeBracketProperty)
+
     Staff* staff = nullptr;
     size_t level = 0;
 
@@ -1230,6 +1336,8 @@ public:
 
 class ChangeTextLineProperty : public ChangeProperty
 {
+    OBJECT_ALLOC(engraving, ChangeTextLineProperty)
+
     void flip(EditData*) override;
 
 public:
@@ -1244,6 +1352,8 @@ public:
 
 class ChangeMetaText : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeMetaText)
+
     Score* score;
     String id;
     String text;
@@ -1263,6 +1373,8 @@ public:
 
 class ChangeSynthesizerState : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeSynthesizerState)
+
     Score* score;
     SynthesizerState state;
 
@@ -1281,6 +1393,8 @@ public:
 
 class RemoveBracket : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, RemoveBracket)
+
     Staff* staff;
     size_t level;
     BracketType type;
@@ -1302,6 +1416,8 @@ public:
 
 class AddBracket : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, AddBracket)
+
     Staff* staff;
     int level;
     BracketType type;
@@ -1323,6 +1439,8 @@ public:
 
 class ChangeSpannerElements : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeSpannerElements)
+
     Spanner* spanner;
     EngravingItem* startElement;
     EngravingItem* endElement;
@@ -1342,6 +1460,8 @@ public:
 
 class ChangeParent : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeParent)
+
     EngravingItem* element;
     EngravingItem* parent;
     staff_idx_t staffIdx;
@@ -1361,6 +1481,8 @@ public:
 
 class ChangeMMRest : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeMMRest)
+
     Measure* m;
     Measure* mmrest;
 
@@ -1379,6 +1501,8 @@ public:
 
 class ChangeMeasureRepeatCount : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeMeasureRepeatCount)
+
     Measure* m;
     int count;
     staff_idx_t staffIdx;
@@ -1398,6 +1522,8 @@ public:
 
 class InsertTime : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, InsertTime)
+
     Score* score;
     Fraction tick;
     Fraction len;
@@ -1418,6 +1544,8 @@ public:
 
 class InsertTimeUnmanagedSpanner : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, InsertTimeUnmanagedSpanner)
+
     Score* score;
     Fraction tick;
     Fraction len;
@@ -1437,6 +1565,8 @@ public:
 
 class ChangeNoteEvent : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeNoteEvent)
+
     Note* note;
     NoteEvent* oldEvent;
     NoteEvent newEvent;
@@ -1457,6 +1587,8 @@ public:
 
 class LinkUnlink : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, LinkUnlink)
+
     bool mustDelete  { false };
 
 protected:
@@ -1477,6 +1609,7 @@ public:
 
 class Unlink : public LinkUnlink
 {
+    OBJECT_ALLOC(engraving, Unlink)
 public:
     Unlink(EngravingObject*);
     virtual void undo(EditData*) override { link(); }
@@ -1490,6 +1623,7 @@ public:
 
 class Link : public LinkUnlink
 {
+    OBJECT_ALLOC(engraving, Link)
 public:
     Link(EngravingObject*, EngravingObject*);
     virtual void undo(EditData*) override { unlink(); }
@@ -1505,6 +1639,8 @@ public:
 
 class ChangeStartEndSpanner : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeStartEndSpanner)
+
     Spanner* spanner;
     EngravingItem* start;
     EngravingItem* end;
@@ -1524,6 +1660,8 @@ public:
 
 class ChangeMetaTags : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeMetaTags)
+
     Score* score;
     std::map<String, String> metaTags;
 
@@ -1542,6 +1680,8 @@ public:
 
 class ChangeDrumset : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeDrumset)
+
     Instrument* instrument;
     Drumset drumset;
 
@@ -1559,6 +1699,8 @@ public:
 
 class FretDot : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, FretDot)
+
     FretDiagram* diagram;
     int string;
     int fret;
@@ -1582,6 +1724,8 @@ public:
 
 class FretMarker : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, FretMarker)
+
     FretDiagram* diagram;
     int string;
     FretMarkerType mtype;
@@ -1603,6 +1747,8 @@ public:
 
 class FretBarre : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, FretBarre)
+
     FretDiagram* diagram;
     int string;
     int fret;
@@ -1625,6 +1771,8 @@ public:
 
 class FretClear : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, FretClear)
+
     FretDiagram* diagram;
     FretUndoData undoData;
 
@@ -1644,6 +1792,8 @@ public:
 
 class MoveTremolo : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, MoveTremolo)
+
     Score* score { nullptr };
     Fraction chord1Tick;
     Fraction chord2Tick;
@@ -1669,6 +1819,8 @@ public:
 
 class ChangeScoreOrder : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeScoreOrder)
+
     Score* score;
     ScoreOrder order;
     void flip(EditData*) override;

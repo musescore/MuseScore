@@ -84,6 +84,7 @@ public:
 
 class NoteHead final : public Symbol
 {
+    OBJECT_ALLOC(engraving, NoteHead)
 public:
 
     NoteHead(Note* parent = 0);
@@ -152,6 +153,7 @@ static const int INVALID_LINE = -10000;
 
 class Note final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, Note)
 public:
     enum class SlideType {
         Undefined = 0,

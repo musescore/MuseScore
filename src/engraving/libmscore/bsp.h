@@ -24,6 +24,8 @@
 #define __BSP_H__
 
 #include <list>
+
+#include "global/allocator.h"
 #include "types/string.h"
 #include "draw/types/geometry.h"
 
@@ -99,6 +101,7 @@ public:
 
 class BspTreeVisitor
 {
+    OBJECT_ALLOC(engraving, BspTreeVisitor)
 public:
     virtual ~BspTreeVisitor() {}
     virtual void visit(std::list<EngravingItem*>* items) = 0;

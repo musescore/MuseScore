@@ -24,6 +24,8 @@
 #define __SYNTHESIZERSTATE_H__
 
 #include <list>
+
+#include "global/allocator.h"
 #include "types/string.h"
 
 namespace mu::engraving {
@@ -50,6 +52,8 @@ struct IdValue {
 
 class SynthesizerGroup : public std::list<IdValue>
 {
+    OBJECT_ALLOC(engraving, SynthesizerGroup)
+
     String _name;
 
 public:
@@ -68,6 +72,8 @@ public:
 
 class SynthesizerState : public std::list<SynthesizerGroup>
 {
+    OBJECT_ALLOC(engraving, SynthesizerState)
+
     bool _isDefault        { true };
 
 public:

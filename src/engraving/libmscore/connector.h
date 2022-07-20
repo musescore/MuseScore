@@ -23,6 +23,7 @@
 #ifndef __CONNECTOR_H__
 #define __CONNECTOR_H__
 
+#include "global/allocator.h"
 #include "location.h"
 #include "types.h"
 
@@ -44,6 +45,8 @@ class XmlWriter;
 
 class ConnectorInfo
 {
+    OBJECT_ALLOC(engraving, ConnectorInfo)
+
     const EngravingItem* _current    { 0 };
     bool _currentUpdated       { false };
     const Score* _score;
@@ -105,6 +108,8 @@ public:
 
 class ConnectorInfoReader final : public ConnectorInfo
 {
+    OBJECT_ALLOC(engraving, ConnectorInfoReader)
+
     XmlReader* _reader;
     EngravingItem* _connector;
     EngravingObject* _connectorReceiver;
@@ -139,6 +144,8 @@ public:
 
 class ConnectorInfoWriter : public ConnectorInfo
 {
+    OBJECT_ALLOC(engraving, ConnectorInfoWriter)
+
     XmlWriter* _xml;
 
 protected:

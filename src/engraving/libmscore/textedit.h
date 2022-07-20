@@ -33,6 +33,9 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 struct TextEditData : public ElementEditData {
+    OBJECT_ALLOC(engraving, TextEditData)
+public:
+
     String oldXmlText;
     size_t startUndoIdx { 0 };
 
@@ -59,6 +62,7 @@ struct TextEditData : public ElementEditData {
 
 class TextEditUndoCommand : public UndoCommand
 {
+    OBJECT_ALLOC(engraving, TextEditUndoCommand)
 protected:
     TextCursor _cursor;
 public:
@@ -78,6 +82,8 @@ public:
 
 class ChangeTextProperties : public TextEditUndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeTextProperties)
+
     String xmlText;
     Pid propertyId;
     PropertyValue propertyVal;
@@ -98,6 +104,8 @@ public:
 
 class ChangeText : public TextEditUndoCommand
 {
+    OBJECT_ALLOC(engraving, ChangeText)
+
     String s;
 
 protected:
@@ -118,6 +126,7 @@ public:
 
 class InsertText : public ChangeText
 {
+    OBJECT_ALLOC(engraving, InsertText)
 public:
     InsertText(const TextCursor* tc, const String& t)
         : ChangeText(tc, t) {}
@@ -132,6 +141,7 @@ public:
 
 class RemoveText : public ChangeText
 {
+    OBJECT_ALLOC(engraving, RemoveText)
 public:
     RemoveText(const TextCursor* tc, const String& t)
         : ChangeText(tc, t) {}
@@ -146,6 +156,7 @@ public:
 
 class SplitJoinText : public TextEditUndoCommand
 {
+    OBJECT_ALLOC(engraving, SplitJoinText)
 protected:
     virtual void split(EditData*);
     virtual void join(EditData*);
@@ -161,6 +172,8 @@ public:
 
 class SplitText : public SplitJoinText
 {
+    OBJECT_ALLOC(engraving, SplitText)
+
     virtual void undo(EditData* data) override { join(data); }
     virtual void redo(EditData* data) override { split(data); }
 
@@ -176,6 +189,8 @@ public:
 
 class JoinText : public SplitJoinText
 {
+    OBJECT_ALLOC(engraving, JoinText)
+
     virtual void undo(EditData* data) override { split(data); }
     virtual void redo(EditData* data) override { join(data); }
 

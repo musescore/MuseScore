@@ -26,6 +26,7 @@
 #include <map>
 #include <cassert>
 
+#include "global/allocator.h"
 #include "types/string.h"
 #include "types/fraction.h"
 
@@ -55,6 +56,7 @@ enum class BeatType : char {
 
 class TimeSigFrac : public Fraction
 {
+    OBJECT_ALLOC(engraving, TimeSigFrac)
 public:
     using Fraction::Fraction;
     constexpr TimeSigFrac(int n = 0, int d = 1)
@@ -141,6 +143,8 @@ public:
 
 class TimeSigMap : public std::map<int, SigEvent >
 {
+    OBJECT_ALLOC(engraving, TimeSigMap)
+
     void normalize();
 
 public:

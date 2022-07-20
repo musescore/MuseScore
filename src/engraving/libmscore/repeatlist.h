@@ -26,6 +26,7 @@
 #include <set>
 #include <vector>
 
+#include "global/allocator.h"
 #include "types/string.h"
 
 namespace mu::engraving {
@@ -75,6 +76,8 @@ private:
 
 class RepeatList : public std::vector<RepeatSegment*>
 {
+    OBJECT_ALLOC(engraving, RepeatList)
+
     Score* _score = nullptr;
     mutable unsigned idx1, idx2;     // cached values
 

@@ -23,6 +23,7 @@
 #ifndef MU_ENGRAVING_AUDIO_H
 #define MU_ENGRAVING_AUDIO_H
 
+#include "global/allocator.h"
 #include "types/bytearray.h"
 #include "types/string.h"
 
@@ -36,6 +37,8 @@ class XmlReader;
 
 class Audio
 {
+    OBJECT_ALLOC(engraving, Audio)
+
     String _path;
     ByteArray _data;
 

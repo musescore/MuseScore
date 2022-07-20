@@ -33,6 +33,8 @@ namespace mu::engraving {
 
 class TieSegment final : public SlurTieSegment
 {
+    OBJECT_ALLOC(engraving, TieSegment)
+
     mu::PointF autoAdjustOffset;
     double shoulderHeightMin = 0.4;
     double shoulderHeightMax = 1.3;
@@ -75,6 +77,8 @@ public:
 
 class Tie final : public SlurTie
 {
+    OBJECT_ALLOC(engraving, Tie)
+
     static Note* editStartNote;
     static Note* editEndNote;
 

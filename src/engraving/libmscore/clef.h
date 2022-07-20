@@ -90,6 +90,8 @@ public:
 
 class Clef final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, Clef)
+
     SymId symId;
     bool _showCourtesy = true;
     bool m_isSmall = false;

@@ -52,6 +52,8 @@ struct BeamSegment {
 
 class Beam final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, Beam)
+
     std::vector<ChordRest*> _elements;          // must be sorted by tick
     std::vector<BeamSegment*> _beamSegments;
     DirectionV _direction    { DirectionV::AUTO };

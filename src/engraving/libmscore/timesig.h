@@ -51,6 +51,8 @@ enum class TimeSigType : char {
 
 class TimeSig final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, TimeSig)
+
     String _numeratorString;       // calculated from actualSig() if !customText
     String _denominatorString;
 

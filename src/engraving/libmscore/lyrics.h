@@ -35,6 +35,7 @@ class LyricsLine;
 
 class Lyrics final : public TextBase
 {
+    OBJECT_ALLOC(engraving, Lyrics)
 public:
     enum class Syllabic : char {
         ///.\{
@@ -124,6 +125,7 @@ public:
 
 class LyricsLine final : public SLine
 {
+    OBJECT_ALLOC(engraving, LyricsLine)
 protected:
     Lyrics* _nextLyrics;
 
@@ -152,6 +154,7 @@ public:
 
 class LyricsLineSegment final : public LineSegment
 {
+    OBJECT_ALLOC(engraving, LyricsLineSegment)
 protected:
     int _numOfDashes = 0;
     double _dashLength = 0;

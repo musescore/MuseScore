@@ -40,6 +40,7 @@ extern LineSegment* voltaDebug;
 
 class VoltaSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOC(engraving, VoltaSegment)
 public:
     VoltaSegment(Volta*, System* parent);
 
@@ -58,6 +59,8 @@ public:
 
 class Volta final : public TextLineBase
 {
+    OBJECT_ALLOC(engraving, Volta)
+
     std::vector<int> _endings;
     static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
 

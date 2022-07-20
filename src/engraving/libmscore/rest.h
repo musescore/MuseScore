@@ -38,6 +38,7 @@ class TDuration;
 
 class Rest : public ChordRest
 {
+    OBJECT_ALLOC(engraving, Rest)
 public:
 
     ~Rest() { DeleteAll(m_dots); }

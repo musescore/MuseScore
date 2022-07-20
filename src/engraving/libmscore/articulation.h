@@ -83,6 +83,7 @@ std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, 
 
 class Articulation final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, Articulation)
 public:
 
     enum TextType {

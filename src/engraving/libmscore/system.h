@@ -99,6 +99,8 @@ public:
 
 class System final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, System)
+
     SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
     SystemDivider* _systemDividerRight   { nullptr };
 

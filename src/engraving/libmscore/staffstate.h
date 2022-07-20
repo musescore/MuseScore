@@ -41,6 +41,8 @@ enum class StaffStateType : char {
 
 class StaffState final : public EngravingItem
 {
+    OBJECT_ALLOC(engraving, StaffState)
+
     StaffStateType _staffStateType { StaffStateType::INVISIBLE };
     double lw { 0.0 };
     mu::draw::PainterPath path;
