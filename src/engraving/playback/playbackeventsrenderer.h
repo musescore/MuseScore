@@ -49,7 +49,7 @@ public:
                 const mpe::dynamic_level_t actualDynamicLevel, const mpe::ArticulationType persistentArticulationApplied,
                 const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const;
 
-    void renderMetronome(const Score* score, const int positionTick, const int durationTicks, const int ticksPositionOffset,
+    void renderMetronome(const Score* score, const int measureStartTick, const int measureEndTick, const int ticksPositionOffset,
                          mpe::PlaybackEventsMap& result) const;
 
 private:
