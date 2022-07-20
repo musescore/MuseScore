@@ -96,7 +96,6 @@
     <timesigBarlineDistance>0.5</timesigBarlineDistance>
     <stemWidth>0.2</stemWidth>
     <shortenStem>1</shortenStem>
-    <shortStemProgression>0.25</shortStemProgression>
     <shortestStem>2.25</shortestStem>
     <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
     <minNoteDistance>0.25</minNoteDistance>
