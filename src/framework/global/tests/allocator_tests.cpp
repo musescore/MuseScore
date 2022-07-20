@@ -31,20 +31,20 @@ using namespace mu;
 namespace mu {
 class ItemBase
 {
-    OBJECT_ALLOC(ItemBase)
+    OBJECT_ALLOC(test, ItemBase)
 
 public:
     ItemBase(uint8_t n)
-        : wasDestroyed(false), num(n)
+        : wasDestroyed(0), num(n)
     {
     }
 
     virtual ~ItemBase()
     {
-        wasDestroyed = true;
+        wasDestroyed++;
     }
 
-    bool wasDestroyed = false;
+    int wasDestroyed = 0;
     uint8_t num = 0;
     std::string str;
 
@@ -57,7 +57,7 @@ public:
 
 #define DECLARE_ITEM(size) \
     class Item##size : public ItemBase { \
-        OBJECT_ALLOC(Item##size) \
+        OBJECT_ALLOC(test, Item##size) \
     public: \
         Item##size(uint8_t n) \
             : ItemBase(n) \
@@ -90,7 +90,7 @@ TEST_F(Global_AllocatorTests, Single_NewDelete)
     //! CHECK
     EXPECT_TRUE(item);
     EXPECT_TRUE(item->alive());
-    EXPECT_FALSE(item->wasDestroyed);
+    EXPECT_EQ(item->wasDestroyed, 0);
 
     //! CHECK Allocator state
     ObjectAllocator::Info info = Item3::allocator().dumpInfo();
@@ -101,7 +101,7 @@ TEST_F(Global_AllocatorTests, Single_NewDelete)
     delete item;
 
     //! CHECK
-    EXPECT_TRUE(item->wasDestroyed);
+    EXPECT_EQ(item->wasDestroyed, 1);
 
     //! CHECK Allocator state
     info = Item3::allocator().dumpInfo();
@@ -138,7 +138,7 @@ TEST_F(Global_AllocatorTests, Single_BigNewDelete)
     //! CHECK
     EXPECT_TRUE(item);
     EXPECT_TRUE(item->alive());
-    EXPECT_FALSE(item->wasDestroyed);
+    EXPECT_EQ(item->wasDestroyed, 0);
 
     //! CHECK Allocator state
     ObjectAllocator::Info info = Item131::allocator().dumpInfo();
@@ -150,7 +150,7 @@ TEST_F(Global_AllocatorTests, Single_BigNewDelete)
     delete item;
 
     //! CHECK
-    EXPECT_TRUE(item->wasDestroyed);
+    EXPECT_EQ(item->wasDestroyed, 1);
 
     //! CHECK Allocator state
     info = Item131::allocator().dumpInfo();
@@ -175,7 +175,7 @@ TEST_F(Global_AllocatorTests, Many_NewCleanup)
     for (ItemBase* item : items) {
         EXPECT_TRUE(item);
         EXPECT_TRUE(item->alive());
-        EXPECT_FALSE(item->wasDestroyed);
+        EXPECT_EQ(item->wasDestroyed, 0);
     }
 
     //! CHECK Allocator state
@@ -189,7 +189,7 @@ TEST_F(Global_AllocatorTests, Many_NewCleanup)
 
     //! CHECK
     for (const ItemBase* item : items) {
-        EXPECT_TRUE(item->wasDestroyed);
+        EXPECT_EQ(item->wasDestroyed, 1);
     }
 
     //! CHECK Allocator state

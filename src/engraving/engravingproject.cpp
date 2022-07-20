@@ -21,6 +21,9 @@
  */
 #include "engravingproject.h"
 
+#include "global/allocator.h"
+#include "async/async.h"
+
 #include "style/defaultstyle.h"
 #include "rw/scorereader.h"
 #include "libmscore/masterscore.h"
@@ -34,6 +37,12 @@ using namespace mu::engraving;
 
 std::shared_ptr<EngravingProject> EngravingProject::create()
 {
+    if (engravingElementsProvider()) {
+        engravingElementsProvider()->clearStatistic();
+    }
+
+    ObjectAllocator::enabled = true;
+
     std::shared_ptr<EngravingProject> p = std::shared_ptr<EngravingProject>(new EngravingProject());
     p->init(DefaultStyle::defaultStyle());
     return p;
@@ -41,6 +50,12 @@ std::shared_ptr<EngravingProject> EngravingProject::create()
 
 std::shared_ptr<EngravingProject> EngravingProject::create(const MStyle& style)
 {
+    if (engravingElementsProvider()) {
+        engravingElementsProvider()->clearStatistic();
+    }
+
+    ObjectAllocator::enabled = true;
+
     std::shared_ptr<EngravingProject> p = std::shared_ptr<EngravingProject>(new EngravingProject());
     p->init(style);
     return p;
@@ -49,6 +64,23 @@ std::shared_ptr<EngravingProject> EngravingProject::create(const MStyle& style)
 EngravingProject::~EngravingProject()
 {
     delete m_masterScore;
+
+    ObjectAllocator::enabled = false;
+
+    AllocatorsRegister::instance()->dump("=== Destroy engraving project ===");
+
+    async::Async::call(nullptr, []() {
+        AllocatorsRegister::instance()->cleanupAll("engraving");
+        AllocatorsRegister::instance()->dump("=== After cleanup ===");
+
+        if (engravingElementsProvider()) {
+            engravingElementsProvider()->printStatistic("=== Destroy engraving project ===");
+        }
+    });
+
+    if (engravingElementsProvider()) {
+        engravingElementsProvider()->printStatistic("=== Destroy engraving project ===");
+    }
 }
 
 void EngravingProject::init(const MStyle& style)
@@ -85,7 +117,6 @@ Err EngravingProject::setupMasterScore(bool forceMode)
 {
     TRACEFUNC;
 
-    engravingElementsProvider()->clearStatistic();
     Err err = doSetupMasterScore(m_masterScore, forceMode);
     engravingElementsProvider()->printStatistic("=== Update and Layout ===");
     return err;
@@ -131,12 +162,11 @@ MasterScore* EngravingProject::masterScore() const
 Err EngravingProject::loadMscz(const MscReader& msc, bool ignoreVersionError)
 {
     TRACEFUNC;
-
-    engravingElementsProvider()->clearStatistic();
     MScore::setError(MsError::MS_NO_ERROR);
     ScoreReader scoreReader;
     Err err = scoreReader.loadMscz(m_masterScore, msc, ignoreVersionError);
     engravingElementsProvider()->printStatistic("=== Load ===");
+    AllocatorsRegister::instance()->dump("=== Load ===");
     return err;
 }
 

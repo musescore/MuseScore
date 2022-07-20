@@ -94,6 +94,10 @@ EngravingObject::EngravingObject(const EngravingObject& se)
         }
     }
     _links = 0;
+
+    if (elementsProvider()) {
+        elementsProvider()->reg(this);
+    }
 }
 
 //---------------------------------------------------------
@@ -109,10 +113,17 @@ EngravingObject::~EngravingObject()
     if (!this->isType(ElementType::ROOT_ITEM)
         && !this->isType(ElementType::DUMMY)
         && !this->isType(ElementType::SCORE)) {
-        for (EngravingObject* c : m_children) {
+        EngravingObjectList children = m_children;
+        for (EngravingObject* c : children) {
             c->m_parent = nullptr;
             c->moveToDummy();
         }
+    } else {
+        for (EngravingObject* c : m_children) {
+            c->m_parent = nullptr;
+            delete c;
+        }
+        m_children.clear();
     }
 
     if (elementsProvider()) {
