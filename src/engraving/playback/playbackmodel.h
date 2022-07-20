@@ -62,6 +62,7 @@ public:
     void setPlayRepeats(const bool isEnabled);
 
     const InstrumentTrackId& metronomeTrackId() const;
+    const InstrumentTrackId& chordSymbolsTrackId() const;
 
     const mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
     const mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId);
@@ -72,6 +73,7 @@ public:
 
 private:
     static const InstrumentTrackId METRONOME_TRACK_ID;
+    static const InstrumentTrackId CHORD_SYMBOLS_TRACK_ID;
 
     using ChangedTrackIdSet = InstrumentTrackIdSet;
 

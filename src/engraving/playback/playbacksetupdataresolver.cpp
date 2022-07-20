@@ -72,3 +72,12 @@ void PlaybackSetupDataResolver::resolveMetronomeSetupData(mpe::PlaybackSetupData
 
     result = METRONOME_SETUP_DATA;
 }
+
+void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(mpe::PlaybackSetupData& result) const
+{
+    static const mpe::PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
+        SoundId::Piano, SoundCategory::Keyboards, {}, {}
+    };
+
+    result = CHORD_SYMBOLS_SETUP_DATA;
+}

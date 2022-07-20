@@ -742,7 +742,8 @@ InstrumentTrackIdSet PlaybackController::availableInstrumentTracks() const
 void PlaybackController::removeNonExistingTracks()
 {
     for (const InstrumentTrackId& instrumentTrackId : availableInstrumentTracks()) {
-        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
+        if (instrumentTrackId == notationPlayback()->metronomeTrackId() ||
+            instrumentTrackId == notationPlayback()->chordSymbolsTrackId()) {
             continue;
         }
 
@@ -860,6 +861,7 @@ void PlaybackController::setupSequenceTracks()
     }
 
     tracks.insert({ notationPlayback()->metronomeTrackId(), qtrc("playback", "Metronome").toStdString() });
+    tracks.insert({ notationPlayback()->chordSymbolsTrackId(), qtrc("playback", "Chord symbols").toStdString() });
 
     std::string title = trc("playback", "Loading audio samples");
     m_loadingProgress.progressChanged.send(0, tracks.size(), title);
