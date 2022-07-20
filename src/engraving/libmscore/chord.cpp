@@ -1219,6 +1219,10 @@ void Chord::read(XmlReader& e)
             e.unknown();
         }
     }
+    // Reset horizontal offset of grace notes when migrating from before 4.0
+    if (isGrace() && score()->mscVersion() < 400) {
+        rxoffset() = 0;
+    }
 }
 
 //---------------------------------------------------------
