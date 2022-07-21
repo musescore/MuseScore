@@ -45,23 +45,6 @@ public:
 
     SpannerMap();
 
-    struct SpannerRange {
-        const_it first;
-        const_it last;
-
-        const_it begin() const
-        {
-            return first;
-        }
-
-        const_it end() const
-        {
-            return last;
-        }
-    };
-
-    const SpannerRange& range(int tickFrom, int tickTo) const;
-
     const std::vector<interval_tree::Interval<Spanner*> >& findContained(int start, int stop) const;
     const std::vector<interval_tree::Interval<Spanner*> >& findOverlapping(int start, int stop) const;
     const std::multimap<int, Spanner*>& map() const { return *this; }
