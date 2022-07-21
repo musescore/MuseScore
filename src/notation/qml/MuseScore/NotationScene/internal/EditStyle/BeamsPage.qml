@@ -87,7 +87,7 @@ StyleDialogPage {
             maxValue: 99
             step: 0.01
             decimals: 2
-            measureUnitsSymbol: qsTrc("notation", "sp")
+            measureUnitsSymbol: qsTrc("global", "sp")
 
             onValueEdited: function(newValue) {
                 beamsPageModel.beamWidth.value = newValue
@@ -107,7 +107,7 @@ StyleDialogPage {
             maxValue: 99
             step: 0.05
             decimals: 2
-            measureUnitsSymbol: qsTrc("notation", "sp")
+            measureUnitsSymbol: qsTrc("global", "sp")
 
             onValueEdited: function(newValue) {
                 beamsPageModel.beamMinLen.value = newValue

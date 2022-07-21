@@ -64,7 +64,7 @@ Column {
         maxValue: 99.0
         step: 0.5
         decimals: 2
-        measureUnitsSymbol: qsTrc("inspector", "sp")
+        measureUnitsSymbol: qsTrc("global", "sp")
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 2
