@@ -21,6 +21,7 @@
  */
 
 #include "dynamichairpingroup.h"
+
 #include "dynamic.h"
 #include "hairpin.h"
 #include "score.h"

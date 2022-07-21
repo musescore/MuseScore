@@ -23,14 +23,12 @@
 #ifndef __DURATION_H__
 #define __DURATION_H__
 
-#include "config.h"
 #include "engravingitem.h"
 #include "durationtype.h"
 
 namespace mu::engraving {
-class Tuplet;
 class Beam;
-class Spanner;
+class Tuplet;
 
 //---------------------------------------------------------
 //   @@ DurationElement
@@ -55,11 +53,11 @@ public:
     void setTuplet(Tuplet* t) { _tuplet = t; }
     Tuplet* tuplet() const { return _tuplet; }
     Tuplet* topTuplet() const;
-    virtual Beam* beam() const { return 0; }
+    virtual Beam* beam() const { return nullptr; }
 
     Fraction actualTicks() const;
 
-    //Length expressed as a fraction of a whole note
+    // Length expressed as a fraction of a whole note
     virtual Fraction ticks() const { return _duration; }
     Fraction globalTicks() const;
     void setTicks(const Fraction& f) { _duration = f; }
@@ -68,7 +66,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
 
 protected:
-    DurationElement(const ElementType& type, EngravingItem* parent = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
+    DurationElement(const ElementType& type, EngravingItem* parent = nullptr, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
     DurationElement(const DurationElement& e);
 
 private:
@@ -76,4 +74,5 @@ private:
     Tuplet* _tuplet;
 };
 } // namespace mu::engraving
+
 #endif

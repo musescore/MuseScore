@@ -22,14 +22,14 @@
 
 #include "connector.h"
 
-#include "rw/xml.h"
 #include "rw/writecontext.h"
+#include "rw/xml.h"
 #include "types/typesconv.h"
 
 #include "engravingitem.h"
-#include "score.h"
 #include "engravingobject.h"
 #include "factory.h"
+#include "score.h"
 
 #include "log.h"
 

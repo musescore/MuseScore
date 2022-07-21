@@ -24,11 +24,9 @@
 #define __CHORDREST_H__
 
 #include <functional>
-#include "symbol.h"
+
 #include "duration.h"
-#include "beam.h"
-#include "shape.h"
-#include "measure.h"
+#include "types/types.h"
 
 namespace mu::engraving {
 enum class CrossMeasure : signed char {
@@ -38,21 +36,18 @@ enum class CrossMeasure : signed char {
     SECOND
 };
 
-class Score;
-class Measure;
-class Tuplet;
-class Segment;
-class Slur;
 class Articulation;
 class Lyrics;
+class Measure;
+class Score;
+class Segment;
+class Slur;
 class TabDurationSymbol;
-class Spanner;
 enum class SegmentType;
 
 //-------------------------------------------------------------------
 //   ChordRest
 //    Virtual base class. Chords and rests can be part of a beam
-//
 //-------------------------------------------------------------------
 
 class ChordRest : public DurationElement
@@ -105,7 +100,7 @@ public:
     BeamMode beamMode() const { return _beamMode; }
 
     void setBeam(Beam* b);
-    virtual Beam* beam() const final { return !(measure() && measure()->stemless(staffIdx())) ? _beam : nullptr; }
+    virtual Beam* beam() const final;
     int beams() const { return _durationType.hooks(); }
     virtual double upPos()   const = 0;
     virtual double downPos() const = 0;

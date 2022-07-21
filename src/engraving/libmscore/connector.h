@@ -24,13 +24,14 @@
 #define __CONNECTOR_H__
 
 #include "global/allocator.h"
+
 #include "location.h"
-#include "types.h"
+#include "types/types.h"
 
 namespace mu::engraving {
 class EngravingItem;
-class Score;
 class EngravingObject;
+class Score;
 class XmlReader;
 class XmlWriter;
 

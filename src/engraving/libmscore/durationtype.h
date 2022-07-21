@@ -23,9 +23,10 @@
 #ifndef __DURATIONTYPE_H__
 #define __DURATIONTYPE_H__
 
-#include "note.h"
+#include "types/types.h"
 
 namespace mu::engraving {
+class Measure;
 class TimeSigFrac;
 enum class BeatType : char;
 
