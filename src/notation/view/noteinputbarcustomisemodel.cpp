@@ -232,7 +232,7 @@ NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeItem(const UiAction& 
 NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeSeparatorItem()
 {
     NoteInputBarCustomiseItem* item = new NoteInputBarCustomiseItem(NoteInputBarCustomiseItem::ItemType::SEPARATOR, this);
-    item->setTitle(qtrc("notation", "-------  Separator line  -------"));
+    item->setTitle(QString("-------  %1  -------").arg(qtrc("notation", "Separator line")));
     item->setChecked(true); //! NOTE Can't be unchecked
     return item;
 }

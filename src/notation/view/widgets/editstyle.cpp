@@ -173,9 +173,12 @@ public:
 };
 
 static constexpr const char* lineStyles[] = {
-    QT_TRANSLATE_NOOP("notation", "Continuous"),
-    QT_TRANSLATE_NOOP("notation", "Dashed"),
-    QT_TRANSLATE_NOOP("notation", "Dotted"),
+    //: line style
+    QT_TRANSLATE_NOOP("notation/editstyle", "Continuous"),
+    //: line style
+    QT_TRANSLATE_NOOP("notation/editstyle", "Dashed"),
+    //: line style
+    QT_TRANSLATE_NOOP("notation/editstyle", "Dotted"),
 };
 
 static void fillDirectionComboBox(QComboBox* comboBox)
@@ -756,19 +759,19 @@ EditStyle::EditStyle(QWidget* parent)
 
     voicingSelectWidget->voicingBox->clear();
     voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Automatic"), int(mu::engraving::Voicing::AUTO));
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Root Only"), int(mu::engraving::Voicing::ROOT_ONLY));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Root only"), int(mu::engraving::Voicing::ROOT_ONLY));
     voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Close"), int(mu::engraving::Voicing::CLOSE));
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Drop Two"), int(mu::engraving::Voicing::DROP_2));
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Six Note"), int(mu::engraving::Voicing::SIX_NOTE));
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Four Note"), int(mu::engraving::Voicing::FOUR_NOTE));
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Three Note"), int(mu::engraving::Voicing::THREE_NOTE));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Drop two"), int(mu::engraving::Voicing::DROP_2));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Six note"), int(mu::engraving::Voicing::SIX_NOTE));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Four note"), int(mu::engraving::Voicing::FOUR_NOTE));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Three note"), int(mu::engraving::Voicing::THREE_NOTE));
 
     voicingSelectWidget->durationBox->clear();
-    voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Until Next Chord Symbol"),
+    voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Until next chord symbol"),
                                               int(mu::engraving::HDuration::UNTIL_NEXT_CHORD_SYMBOL));
-    voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Until End of Measure"),
+    voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Until end of measure"),
                                               int(mu::engraving::HDuration::STOP_AT_MEASURE_END));
-    voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Chord/Rest Duration"),
+    voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Chord/rest duration"),
                                               int(mu::engraving::HDuration::SEGMENT_DURATION));
 
     // ====================================================
@@ -1100,16 +1103,16 @@ void EditStyle::retranslate()
     voicingSelectWidget->interpretBox->setItemText(1, qtrc("notation/editstyle", "Literal"));
 
     voicingSelectWidget->voicingBox->setItemText(0, qtrc("notation/editstyle", "Automatic"));
-    voicingSelectWidget->voicingBox->setItemText(1, qtrc("notation/editstyle", "Root Only"));
+    voicingSelectWidget->voicingBox->setItemText(1, qtrc("notation/editstyle", "Root only"));
     voicingSelectWidget->voicingBox->setItemText(2, qtrc("notation/editstyle", "Close"));
-    voicingSelectWidget->voicingBox->setItemText(3, qtrc("notation/editstyle", "Drop Two"));
-    voicingSelectWidget->voicingBox->setItemText(4, qtrc("notation/editstyle", "Six Note"));
-    voicingSelectWidget->voicingBox->setItemText(5, qtrc("notation/editstyle", "Four Note"));
-    voicingSelectWidget->voicingBox->setItemText(6, qtrc("notation/editstyle", "Three Note"));
+    voicingSelectWidget->voicingBox->setItemText(3, qtrc("notation/editstyle", "Drop two"));
+    voicingSelectWidget->voicingBox->setItemText(4, qtrc("notation/editstyle", "Six note"));
+    voicingSelectWidget->voicingBox->setItemText(5, qtrc("notation/editstyle", "Four note"));
+    voicingSelectWidget->voicingBox->setItemText(6, qtrc("notation/editstyle", "Three note"));
 
-    voicingSelectWidget->durationBox->setItemText(0, qtrc("notation/editstyle", "Until Next Chord Symbol"));
-    voicingSelectWidget->durationBox->setItemText(1, qtrc("notation/editstyle", "Until End of Measure"));
-    voicingSelectWidget->durationBox->setItemText(2, qtrc("notation/editstyle", "Chord/Rest Duration"));
+    voicingSelectWidget->durationBox->setItemText(0, qtrc("notation/editstyle", "Until next chord symbol"));
+    voicingSelectWidget->durationBox->setItemText(1, qtrc("notation/editstyle", "Until end of measure"));
+    voicingSelectWidget->durationBox->setItemText(2, qtrc("notation/editstyle", "Chord/rest duration"));
 
     setHeaderFooterToolTip();
 
@@ -1777,9 +1780,9 @@ void EditStyle::setValues()
 void EditStyle::selectChordDescriptionFile()
 {
     io::path_t dir = configuration()->userStylesPath();
-    QString filter = qtrc("notation", "MuseScore Styles") + " (*.mss)";
+    QString filter = qtrc("notation", "MuseScore style files") + " (*.mss)";
 
-    mu::io::path_t path = interactive()->selectOpeningFile(qtrc("notation", "Load Style"), dir, filter);
+    mu::io::path_t path = interactive()->selectOpeningFile(qtrc("notation", "Load style"), dir, filter);
     if (path.empty()) {
         return;
     }
