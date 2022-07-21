@@ -83,7 +83,7 @@ public:
 
     void SetUp() override
     {
-        ObjectAllocator::enabled++;
+        ObjectAllocator::used++;
     }
 };
 

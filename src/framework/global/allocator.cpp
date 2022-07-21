@@ -30,7 +30,7 @@
 
 using namespace mu;
 
-int ObjectAllocator::enabled = 0;
+int ObjectAllocator::used = 0;
 size_t ObjectAllocator::DEFAULT_BLOCK_SIZE(1024 * 256); // 256 kB
 
 static inline size_t align(size_t n)
@@ -203,6 +203,15 @@ ObjectAllocator::Info ObjectAllocator::stateInfo() const
     }
 
     return info;
+}
+
+bool ObjectAllocator::enabled()
+{
+#ifdef CUSTOM_ALLOCATOR_DISABLED
+    return false;
+#else
+    return used;
+#endif
 }
 
 // ============================================

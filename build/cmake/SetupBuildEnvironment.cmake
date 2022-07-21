@@ -14,7 +14,11 @@ else()
     add_definitions(-DNO_QT_SUPPORT)
 endif()
 
-    add_definitions(-DHAW_PROFILER_ENABLED)
+add_definitions(-DHAW_PROFILER_ENABLED)
+
+if (NOT BUILD_ALLOCATOR)
+    add_definitions(-DCUSTOM_ALLOCATOR_DISABLED)
+endif()
 
 if (CC_IS_GCC)
     message(STATUS "Using Compiler GCC ${CMAKE_CXX_COMPILER_VERSION}")

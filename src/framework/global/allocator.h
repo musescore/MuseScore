@@ -35,23 +35,23 @@ public: \
         return a; \
     } \
     static void* operator new(size_t sz) { \
-        return ObjectAllocator::enabled ? allocator().alloc(sz) : ::operator new(sz); \
+        return ObjectAllocator::enabled() ? allocator().alloc(sz) : ::operator new(sz); \
     } \
     static void operator delete(void* ptr, size_t sz) { \
-        if (ObjectAllocator::enabled) { \
+        if (ObjectAllocator::enabled()) { \
             allocator().free(ptr, sz); \
         } else { \
             ::operator delete(ptr, sz); \
         } \
     } \
     static void* operator new[](size_t sz) { \
-        return ObjectAllocator::enabled ? allocator().not_supported("new[]") : ::operator new[](sz); \
+        return ObjectAllocator::enabled() ? allocator().not_supported("new[]") : ::operator new[](sz); \
     } \
     static void* operator new(size_t sz, void* ptr) { \
-        return ObjectAllocator::enabled ? allocator().not_supported("new(size_t, void*)") : ::operator new(sz, ptr); \
+        return ObjectAllocator::enabled() ? allocator().not_supported("new(size_t, void*)") : ::operator new(sz, ptr); \
     } \
     static void operator delete[](void* ptr, size_t sz) { \
-        if (ObjectAllocator::enabled) { \
+        if (ObjectAllocator::enabled()) { \
             allocator().not_supported("delete[]"); \
         } else { \
             ::operator delete[](ptr, sz); \
@@ -104,7 +104,8 @@ public:
 
     Info stateInfo() const;
 
-    static int enabled;
+    static bool enabled();
+    static int used;
 
 private:
     struct Chunk {
