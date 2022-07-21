@@ -26,8 +26,6 @@
 #include "types/typesconv.h"
 
 #include "chord.h"
-#include "measure.h"
-#include "system.h"
 #include "note.h"
 
 using namespace mu;

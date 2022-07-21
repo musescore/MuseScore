@@ -20,21 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "dynamic.h"
-#include "style/style.h"
+
 #include "rw/xml.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
-#include "dynamichairpingroup.h"
-#include "score.h"
-#include "measure.h"
-#include "system.h"
-#include "segment.h"
-#include "utils.h"
-#include "mscore.h"
 #include "chord.h"
+#include "dynamichairpingroup.h"
+#include "measure.h"
+#include "mscore.h"
+#include "score.h"
+#include "segment.h"
+#include "system.h"
+#include "tempo.h"
 #include "undo.h"
-#include "musescoreCore.h"
 
 #include "log.h"
 

@@ -28,19 +28,18 @@
 #include "clef.h"
 
 #include "translation.h"
+
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
+#include "ambitus.h"
 #include "factory.h"
 #include "measure.h"
-#include "ambitus.h"
-#include "symbol.h"
-#include "system.h"
-#include "score.h"
-#include "staff.h"
-#include "segment.h"
-#include "stafftype.h"
 #include "part.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "stafftype.h"
 
 #include "log.h"
 
