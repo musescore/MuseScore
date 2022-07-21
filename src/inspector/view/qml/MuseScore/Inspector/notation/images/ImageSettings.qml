@@ -58,7 +58,7 @@ Column {
             propertyItem: root.model ? root.model.height : null
 
             icon: IconCode.VERTICAL
-            measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
+            measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("global", "sp") : qsTrc("global", "mm")
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1
@@ -97,7 +97,7 @@ Column {
 
             icon: IconCode.HORIZONTAL
             iconMode: IncrementalPropertyControl.Right
-            measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
+            measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("global", "sp") : qsTrc("global", "mm")
 
             navigationPanel: root.navigationPanel
             navigationRowStart: lockButton.navigation.row + 1

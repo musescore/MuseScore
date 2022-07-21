@@ -69,7 +69,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
 
-                text: model.isMain ? qsTrc("project/export", "Main Score") : model.title
+                text: model.isMain ? qsTrc("project/export", "Main score") : model.title
                 font: model.isMain ? ui.theme.bodyBoldFont : ui.theme.bodyFont
 
                 navigation.name: "ExportScoreCheckBox " + text

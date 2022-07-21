@@ -37,7 +37,10 @@ Item {
         name: "PartsControlPanel"
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
+
+        //: Accessibility description of the button group at the top of the "Parts" dialog
         accessible.name: qsTrc("notation", "Parts control")
+
         onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()

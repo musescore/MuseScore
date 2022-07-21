@@ -51,7 +51,9 @@ Column {
         maxValue: 999
         minValue: 0
         step: 0.5
-        measureUnitsSymbol: qsTrc("inspector", "s")
+
+        //: Abbreviation of "seconds"
+        measureUnitsSymbol: qsTrc("global", "s")
 
         navigationName: "PauseBeforeStarts"
         navigationPanel: root.navigationPanel

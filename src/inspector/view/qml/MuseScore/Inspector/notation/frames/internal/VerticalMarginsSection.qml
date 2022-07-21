@@ -50,7 +50,7 @@ Item {
         propertyItem: root.frameTopMargin
 
         icon: IconCode.TOP_MARGIN
-        measureUnitsSymbol: qsTrc("inspector", "mm")
+        measureUnitsSymbol: qsTrc("global", "mm")
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
@@ -66,7 +66,7 @@ Item {
         propertyItem: root.frameBottomMargin
 
         icon: IconCode.BOTTOM_MARGIN
-        measureUnitsSymbol: qsTrc("inspector", "mm")
+        measureUnitsSymbol: qsTrc("global", "mm")
 
         navigationPanel: root.navigationPanel
         navigationRowStart: topMarginsSection.navigationRowEnd + 1

@@ -28,7 +28,7 @@ import MuseScore.Project 1.0
 StyledDialogView {
     id: dialog
 
-    title: qsTrc("project/migration", "Style Improvements")
+    title: qsTrc("project/migration", "Style improvements")
 
     property string appVersion: ""
     property int migrationType: MigrationType.Unknown

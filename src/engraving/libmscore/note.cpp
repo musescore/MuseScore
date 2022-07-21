@@ -3330,7 +3330,7 @@ String Note::screenReaderInfo() const
     String pitchName;
     const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
-        pitchName = chord()->noStem() ? mtrc("engraving", "Beat Slash") : mtrc("engraving", "Rhythm Slash");
+        pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
         pitchName = mtrc("engraving", drumset->name(pitch()));
     } else if (staff()->isTabStaff(tick())) {

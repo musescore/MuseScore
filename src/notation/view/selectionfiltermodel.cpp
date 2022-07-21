@@ -160,13 +160,13 @@ QString SelectionFilterModel::titleForType(SelectionFilterType type) const
     case SelectionFilterType::ALL:
         return qtrc("notation", "All");
     case SelectionFilterType::FIRST_VOICE:
-        return qtrc("notation", "Voice 1");
+        return qtrc("notation", "Voice %1").arg(1);
     case SelectionFilterType::SECOND_VOICE:
-        return qtrc("notation", "Voice 2");
+        return qtrc("notation", "Voice %1").arg(2);
     case SelectionFilterType::THIRD_VOICE:
-        return qtrc("notation", "Voice 3");
+        return qtrc("notation", "Voice %1").arg(3);
     case SelectionFilterType::FOURTH_VOICE:
-        return qtrc("notation", "Voice 4");
+        return qtrc("notation", "Voice %1").arg(4);
     case SelectionFilterType::DYNAMIC:
         return qtrc("notation", "Dynamics");
     case SelectionFilterType::HAIRPIN:
@@ -176,9 +176,9 @@ QString SelectionFilterModel::titleForType(SelectionFilterType type) const
     case SelectionFilterType::LYRICS:
         return qtrc("notation", "Lyrics");
     case SelectionFilterType::CHORD_SYMBOL:
-        return qtrc("notation", "Chord Symbols");
+        return qtrc("notation", "Chord symbols");
     case SelectionFilterType::OTHER_TEXT:
-        return qtrc("notation", "Other Text");
+        return qtrc("notation", "Other text");
     case SelectionFilterType::ARTICULATION:
         return qtrc("notation", "Articulations");
     case SelectionFilterType::ORNAMENT:
@@ -186,25 +186,25 @@ QString SelectionFilterModel::titleForType(SelectionFilterType type) const
     case SelectionFilterType::SLUR:
         return qtrc("notation", "Slurs");
     case SelectionFilterType::FIGURED_BASS:
-        return qtrc("notation", "Figured Bass");
+        return qtrc("notation", "Figured bass");
     case SelectionFilterType::OTTAVA:
         return qtrc("notation", "Ottavas");
     case SelectionFilterType::PEDAL_LINE:
-        return qtrc("notation", "Pedal Lines");
+        return qtrc("notation", "Pedal lines");
     case SelectionFilterType::OTHER_LINE:
-        return qtrc("notation", "Other Lines");
+        return qtrc("notation", "Other lines");
     case SelectionFilterType::ARPEGGIO:
         return qtrc("notation", "Arpeggios");
     case SelectionFilterType::GLISSANDO:
         return qtrc("notation", "Glissandi");
     case SelectionFilterType::FRET_DIAGRAM:
-        return qtrc("notation", "Fretboard Diagrams");
+        return qtrc("notation", "Fretboard diagrams");
     case SelectionFilterType::BREATH:
-        return qtrc("notation", "Breath Marks");
+        return qtrc("notation", "Breath marks");
     case SelectionFilterType::TREMOLO:
         return qtrc("notation", "Tremolos");
     case SelectionFilterType::GRACE_NOTE:
-        return qtrc("notation", "Grace Notes");
+        return qtrc("notation", "Grace notes");
     case SelectionFilterType::NONE:
         break;
     }

@@ -211,7 +211,7 @@ void PartListModel::copyPart(int partIndex)
 
     IExcerptNotationPtr copy = m_excerpts[partIndex]->clone();
     QString title = copy->name();
-    title += qtrc("notation", " (copy)");
+    title += " " + qtrc("notation", "(copy)");
 
     copy->setName(title);
 

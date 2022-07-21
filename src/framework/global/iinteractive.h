@@ -58,7 +58,6 @@ public:
         Help,
         Apply,
         Reset,
-        RestoreDefaults,
         Continue,
 
         CustomButton

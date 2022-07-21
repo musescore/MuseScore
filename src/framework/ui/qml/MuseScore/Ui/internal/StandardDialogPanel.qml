@@ -172,7 +172,7 @@ RowLayout {
                 width: parent.width
                 visible: Boolean(root.withShowAgain)
 
-                text: qsTrc("ui", "Show this message again")
+                text: qsTrc("global", "Show this message again")
                 checked: true
 
                 navigation.panel: navPanel
