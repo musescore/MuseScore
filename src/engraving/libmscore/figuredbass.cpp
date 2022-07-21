@@ -22,21 +22,21 @@
 
 #include "figuredbass.h"
 
-#include "translation.h"
 #include "io/file.h"
 
 #include "draw/fontmetrics.h"
-#include "rw/xml.h"
-#include "score.h"
-#include "note.h"
-#include "measure.h"
 #include "draw/types/pen.h"
-#include "system.h"
-#include "segment.h"
+#include "rw/xml.h"
+#include "style/textstyle.h"
+
 #include "chord.h"
+#include "factory.h"
+#include "measure.h"
+#include "note.h"
 #include "rest.h"
 #include "score.h"
-#include "factory.h"
+#include "segment.h"
+#include "system.h"
 
 #include "log.h"
 
@@ -1527,7 +1527,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t trac
         fb->setParent(seg);
 
         // locate next SegChordRest in the same staff to estimate presumed duration of element
-        endTick = Fraction(INT_MAX, 1);
+        endTick = Fraction::max();
         Segment* nextSegm;
         for (voice_idx_t iVoice = 0; iVoice < VOICES; iVoice++) {
             nextSegm = seg->nextCR(track + iVoice);
@@ -1535,7 +1535,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t trac
                 endTick = nextSegm->tick();
             }
         }
-        if (endTick == Fraction(INT_MAX, 1)) {               // no next segment: set up to score end
+        if (endTick == Fraction::max()) {               // no next segment: set up to score end
             Measure* meas = seg->score()->lastMeasure();
             endTick = meas->tick() + meas->ticks();
         }
