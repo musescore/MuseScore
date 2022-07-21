@@ -29,7 +29,7 @@ import "../../shared"
 BaseSection {
     id: root
 
-    title: highContrastEnabled ? qsTrc("appshell/preferences", "High Contrast Themes") : qsTrc("appshell/preferences", "Themes")
+    title: highContrastEnabled ? qsTrc("appshell/preferences", "High contrast themes") : qsTrc("appshell/preferences", "Themes")
     navigation.direction: NavigationPanel.Both
 
     property bool highContrastEnabled: false

@@ -106,7 +106,7 @@ ProgrammeStartPreferencesModel::PanelList ProgrammeStartPreferencesModel::allPan
 
 QString ProgrammeStartPreferencesModel::scorePathFilter() const
 {
-    return qtrc("appshell/preferences", "MuseScore File") + " (*.mscz);;"
+    return qtrc("appshell/preferences", "MuseScore file") + " (*.mscz);;"
            + qtrc("appshell/preferences", "All") + " (*)";
 }
 

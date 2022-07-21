@@ -119,7 +119,7 @@ Rectangle {
 
                     horizontalAlignment: Qt.AlignLeft
                     font: ui.theme.largeBodyBoldFont
-                    text: qsTrc("mpe", "Articulation Pattern List")
+                    text: qsTrc("mpe", "Articulation pattern list")
                 }
 
                 ArticulationPatternsTab {
@@ -168,7 +168,7 @@ Rectangle {
 
                     horizontalAlignment: Qt.AlignLeft
                     font: ui.theme.largeBodyBoldFont
-                    text: qsTrc("mpe", "Pattern Segments:")
+                    text: qsTrc("mpe", "Pattern segments:")
                 }
 
                 ArticulationPatternSegmentsList {
@@ -271,7 +271,7 @@ Rectangle {
 
                     horizontalAlignment: Qt.AlignLeft
                     font: ui.theme.largeBodyBoldFont
-                    text: qsTrc("mpe", "Pattern Segment Positioning")
+                    text: qsTrc("mpe", "Pattern segment positioning")
                 }
 
                 Column {
@@ -374,7 +374,7 @@ Rectangle {
 
                     horizontalAlignment: Qt.AlignLeft
                     font: ui.theme.largeBodyBoldFont
-                    text: qsTrc("mpe", "Pattern Parameters")
+                    text: qsTrc("mpe", "Pattern parameters")
                 }
 
                 ArticulationPatternControlsTab {

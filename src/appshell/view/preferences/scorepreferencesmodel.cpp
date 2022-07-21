@@ -229,17 +229,17 @@ QString ScorePreferencesModel::partStylePath() const
 
 QString ScorePreferencesModel::instrumentPathFilter() const
 {
-    return qtrc("appshell/preferences", "Instrument List") + " (*.xml)";
+    return qtrc("appshell/preferences", "Instrument list") + " (*.xml)";
 }
 
 QString ScorePreferencesModel::scoreOrderPathFilter() const
 {
-    return qtrc("appshell/preferences", "Score Order List") + " (*.xml)";
+    return qtrc("appshell/preferences", "Score order list") + " (*.xml)";
 }
 
 QString ScorePreferencesModel::stylePathFilter() const
 {
-    return qtrc("appshell/preferences", "MuseScore Style File") + " (*.mss)";
+    return qtrc("appshell/preferences", "MuseScore style file") + " (*.mss)";
 }
 
 QString ScorePreferencesModel::instrumentChooseTitle() const
