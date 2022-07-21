@@ -25,6 +25,8 @@
 
 #include "project/inotationwriter.h"
 
+#include "engraving/infrastructure/mscio.h"
+
 namespace mu::notation {
 class MscNotationWriter : public project::INotationWriter
 {
