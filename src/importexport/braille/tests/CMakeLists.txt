@@ -21,10 +21,13 @@
 set(MODULE_TEST iex_braille_tests)
 
 set(MODULE_TEST_SRC
+    ${PROJECT_SOURCE_DIR}/src/engraving/utests/utils/scorerw.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/utests/utils/scorerw.h
+    ${PROJECT_SOURCE_DIR}/src/engraving/utests/utils/scorecomp.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/utests/utils/scorecomp.h
+
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/testbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/tst_braille_io.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/braille_tests.cpp
 )
 
 set(MODULE_TEST_LINK
@@ -36,4 +39,4 @@ set(MODULE_TEST_LINK
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/qtest.cmake)
+include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
