@@ -25,13 +25,26 @@
 #include "../libmscore/score.h"
 #include "../libmscore/measure.h"
 
+#include "translation.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 using namespace mu::accessibility;
 using namespace mu::engraving;
 
 bool AccessibleItem::enabled = true;
+
+static QString readable(QString s)
+{
+    // Remove undesired pauses in screen reader speech output
+    s.remove(u':');
+
+    // Handle desired pauses
+    s.replace(u';', u','); // NVDA doesn't pause for semicolon
+
+    return s;
+}
 
 AccessibleItem::AccessibleItem(EngravingItem* e, Role role)
     : m_element(e), m_role(role)
@@ -169,9 +182,15 @@ QString AccessibleItem::accessibleName() const
     QString staffInfo = root ? root->staffInfo() : "";
     QString barsAndBeats = m_element->formatBarsAndBeats();
 
-    return QString("%1%2%3").arg(!staffInfo.isEmpty() ? (staffInfo + "; ") : "")
-           .arg(m_element->accessibleInfo().toQString())
-           .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "");
+    barsAndBeats.remove(u';'); // Too many pauses in speech
+
+    QString name = QString("%1%2%3%4")
+                   .arg(!staffInfo.isEmpty() ? (staffInfo + "; ") : "")
+                   .arg(m_element->screenReaderInfo().toQString())
+                   .arg(m_element->visible() ? "" : " " + qtrc("engraving", "invisible"))
+                   .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "");
+
+    return readable(name);
 }
 
 QString AccessibleItem::accessibleDescription() const
@@ -185,7 +204,7 @@ QString AccessibleItem::accessibleDescription() const
     result = accessibleName() + " ";
 #endif
 
-    result += m_element->accessibleExtraInfo();
+    result += readable(m_element->accessibleExtraInfo());
     return result;
 }
 
