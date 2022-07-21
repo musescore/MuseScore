@@ -416,7 +416,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     // Set up coordinate transforms
     // CAUTION: transform operations are applies in reverse order to how
     // they are added to the transformation.
-    qreal slurAngle = atan((pp2.y() - pp1.y()) / (pp2.x() - pp1.x()));
+    double slurAngle = atan((pp2.y() - pp1.y()) / (pp2.x() - pp1.x()));
     Transform rotate;
     rotate.rotateRadians(-slurAngle);
     Transform toSlurCoordinates;
@@ -433,9 +433,9 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
      * ***********************************************/
 
     // Compute default shoulder height and width
-    qreal _spatium  = spatium();
-    qreal shoulderW; // expressed as fraction of slur-length
-    qreal shoulderH;
+    double _spatium  = spatium();
+    double shoulderW; // expressed as fraction of slur-length
+    double shoulderH;
     double d = p2.x() / _spatium;
 
     if (d < 2) {
@@ -454,9 +454,9 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
         shoulderH = -shoulderH;
     }
 
-    qreal c    = p2.x();
-    qreal c1   = (c - c * shoulderW) * .5 + p6offset.x();
-    qreal c2   = c1 + c * shoulderW + p6offset.x();
+    double c    = p2.x();
+    double c1   = (c - c * shoulderW) * .5 + p6offset.x();
+    double c2   = c1 + c * shoulderW + p6offset.x();
 
     PointF p3(c1, -shoulderH);
     PointF p4(c2, -shoulderH);
@@ -700,7 +700,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     ups(Grip::SHOULDER).p = toSystemCoordinates.map(p6);
 
     // Set slur thickness
-    qreal w = score()->styleMM(Sid::SlurMidWidth) - score()->styleMM(Sid::SlurEndWidth);
+    double w = score()->styleMM(Sid::SlurMidWidth) - score()->styleMM(Sid::SlurEndWidth);
     if (staff()) {
         w *= staff()->staffMag(slur()->tick());
     }
@@ -729,7 +729,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     _shape.clear();
     PointF start = pp1;
     int nbShapes  = 32;
-    qreal minH    = qAbs(3 * w);
+    double minH    = abs(3 * w);
     const CubicBezier b(ups(Grip::START).pos(), ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {
         const PointF point = b.pointAtPercent(i / float(nbShapes));
