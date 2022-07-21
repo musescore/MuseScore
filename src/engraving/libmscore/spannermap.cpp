@@ -38,36 +38,6 @@ SpannerMap::SpannerMap()
     dirty = true;
 }
 
-const SpannerMap::SpannerRange& SpannerMap::range(int tickFrom, int tickTo) const
-{
-    static SpannerRange result;
-
-    if (empty()) {
-        result.first = cend();
-        result.last = cend();
-        return result;
-    }
-
-    auto firstNotLess = std::lower_bound(cbegin(), cend(), tickFrom, [](const auto& pair, int tick) {
-        int spannerFrom = pair.second->tick().ticks();
-        int spannerTo = spannerFrom + pair.second->ticks().ticks();
-        return spannerFrom < tick && spannerTo < tick;
-    });
-
-    auto firstGreater = upper_bound(tickTo);
-
-    if (firstNotLess == firstGreater
-        || firstNotLess->first >= tickTo) {
-        result.first = cend();
-        result.last = cend();
-        return result;
-    }
-
-    result.first = firstNotLess;
-    result.last = firstGreater;
-    return result;
-}
-
 //---------------------------------------------------------
 //   update
 //   updates the internal lookup tree, not the map itself
