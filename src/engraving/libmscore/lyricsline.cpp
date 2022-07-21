@@ -25,14 +25,12 @@
 #include "draw/types/pen.h"
 #include "rw/xml.h"
 
-#include "chord.h"
-#include "score.h"
-#include "system.h"
-#include "staff.h"
-#include "segment.h"
-#include "undo.h"
-#include "textedit.h"
+#include "chordrest.h"
 #include "measure.h"
+#include "score.h"
+#include "segment.h"
+#include "stafftype.h"
+#include "system.h"
 
 using namespace mu;
 

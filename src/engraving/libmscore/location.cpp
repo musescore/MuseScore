@@ -21,11 +21,14 @@
  */
 
 #include "location.h"
+
 #include "rw/xml.h"
+
 #include "chord.h"
 #include "engravingitem.h"
 #include "measure.h"
 #include "mscore.h"
+#include "note.h"
 
 #include "log.h"
 

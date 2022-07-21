@@ -25,8 +25,8 @@
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
-#include "score.h"
 #include "measure.h"
+#include "score.h"
 
 using namespace mu;
 using namespace mu::engraving;
