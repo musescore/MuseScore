@@ -26,6 +26,7 @@
 #include "engravingitem.h"
 #include "line.h"
 #include "property.h"
+#include "types.h"
 
 namespace mu::engraving {
 // the amount of white space to leave before a system-initial chord with glissando

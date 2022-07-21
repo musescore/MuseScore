@@ -40,13 +40,9 @@ NICE-TO-HAVE TODO:
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
-#include "accidental.h"
-#include "arpeggio.h"
 #include "chord.h"
-#include "ledgerline.h"
 #include "measure.h"
 #include "note.h"
-#include "notedot.h"
 #include "score.h"
 #include "symbolfont.h"
 #include "segment.h"

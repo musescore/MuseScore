@@ -21,8 +21,8 @@
  */
 
 #include "hook.h"
+
 #include "chord.h"
-#include "stem.h"
 #include "score.h"
 
 #include "log.h"

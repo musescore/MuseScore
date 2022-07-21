@@ -28,23 +28,23 @@
 #include "containers.h"
 #include "types/string.h"
 
-#include "stringdata.h"
-#include "mscore.h"
-#include "notifier.hpp"
-#include "interval.h"
 #include "clef.h"
+#include "interval.h"
+#include "notifier.hpp"
+#include "stringdata.h"
 
 #include "compat/midi/midicoreevent.h"
 
 namespace mu::engraving {
+class ChannelListener;
+class Drumset;
 class InstrumentTemplate;
 class MasterScore;
-class XmlWriter;
-class XmlReader;
-class Drumset;
+class Part;
 class StringData;
-class ChannelListener;
 class Synthesizer;
+class XmlReader;
+class XmlWriter;
 
 //---------------------------------------------------------
 //   StaffName
