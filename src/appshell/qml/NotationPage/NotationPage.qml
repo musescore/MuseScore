@@ -286,7 +286,7 @@ DockPage {
             id: selectionFilterPanel
 
             objectName: pageModel.selectionFiltersPanelName()
-            title: qsTrc("appshell", "Selection Filter")
+            title: qsTrc("appshell", "Selection filter")
 
             navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
 

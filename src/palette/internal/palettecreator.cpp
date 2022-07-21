@@ -1290,14 +1290,14 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     staffTextLine->setLen(w);
     staffTextLine->setBeginText(u"Staff");
     staffTextLine->setEndHookType(HookType::HOOK_90);
-    sp->appendElement(staffTextLine, QT_TRANSLATE_NOOP("palette", "Staff Text line"));
+    sp->appendElement(staffTextLine, QT_TRANSLATE_NOOP("palette", "Staff text line"));
 
     auto systemTextLine = makeElement<TextLine>(gpaletteScore);
     systemTextLine->setSystemFlag(true);
     systemTextLine->setLen(w * 1.5);
     systemTextLine->setBeginText(u"System");
     systemTextLine->setEndHookType(HookType::HOOK_90);
-    sp->appendElement(systemTextLine, QT_TRANSLATE_NOOP("palette", "System Text line"));
+    sp->appendElement(systemTextLine, QT_TRANSLATE_NOOP("palette", "System text line"));
 
     if (!defaultPalette) {
         auto textLine = makeElement<TextLine>(gpaletteScore);

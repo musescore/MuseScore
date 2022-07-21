@@ -201,7 +201,7 @@ EditStyle::EditStyle(QWidget* parent)
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     setModal(true);
 
-    buttonApplyToAllParts = buttonBox->addButton(qtrc("notation/editstyle", "Apply to all Parts"), QDialogButtonBox::ApplyRole);
+    buttonApplyToAllParts = buttonBox->addButton(qtrc("notation/editstyle", "Apply to all parts"), QDialogButtonBox::ApplyRole);
     WidgetUtils::setWidgetIcon(buttonTogglePagelist, IconCode::Code::ARROW_RIGHT);
 
     // ====================================================
@@ -1062,7 +1062,7 @@ void EditStyle::retranslate()
 {
     retranslateUi(this);
 
-    buttonApplyToAllParts->setText(qtrc("notation/editstyle", "Apply to all Parts"));
+    buttonApplyToAllParts->setText(qtrc("notation/editstyle", "Apply to all parts"));
 
     for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
         int idx = 0;
@@ -1179,7 +1179,7 @@ void EditStyle::setHeaderFooterToolTip()
           + QString("</i></td></tr></table><p>")
           + qtrc("notation/editstyle", "Available metadata tags and their current values")
           + QString("<br />")
-          + qtrc("notation/editstyle", "(in File > Score Properties…):")
+          + qtrc("notation/editstyle", "(in File > Score properties…):")
           + QString("</p><table>");
 
     // show all tags for current score/part, see also Score::init()

@@ -82,13 +82,13 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
     case IInteractive::Button::NoButton:    return ButtonData(int(b), "");
     case IInteractive::Button::Ok:          return ButtonData(int(b), trc("global", "OK"));
     case IInteractive::Button::Save:        return ButtonData(int(b), trc("global", "Save"), accent);
-    case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("global", "Save All"));
+    case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("global", "Save all"));
     case IInteractive::Button::DontSave:    return ButtonData(int(b), trc("global", "Don't save"));
     case IInteractive::Button::Open:        return ButtonData(int(b), trc("global", "Open"));
     case IInteractive::Button::Yes:         return ButtonData(int(b), trc("global", "Yes"), accent);
-    case IInteractive::Button::YesToAll:    return ButtonData(int(b), trc("global", "Yes to All"), accent);
+    case IInteractive::Button::YesToAll:    return ButtonData(int(b), trc("global", "Yes to all"), accent);
     case IInteractive::Button::No:          return ButtonData(int(b), trc("global", "No"));
-    case IInteractive::Button::NoToAll:     return ButtonData(int(b), trc("global", "No to All"));
+    case IInteractive::Button::NoToAll:     return ButtonData(int(b), trc("global", "No to all"));
     case IInteractive::Button::Abort:       return ButtonData(int(b), trc("global", "Abort"));
     case IInteractive::Button::Retry:       return ButtonData(int(b), trc("global", "Retry"));
     case IInteractive::Button::Ignore:      return ButtonData(int(b), trc("global", "Ignore"));
