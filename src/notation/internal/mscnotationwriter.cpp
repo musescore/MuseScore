@@ -24,13 +24,14 @@
 
 #include "io/buffer.h"
 #include "io/file.h"
+
 #include "engraving/engravingproject.h"
+#include "engraving/libmscore/masterscore.h"
 
 #include "log.h"
 
 using namespace mu::io;
 using namespace mu::engraving;
-using namespace mu::framework;
 using namespace mu::notation;
 using namespace mu::project;
 

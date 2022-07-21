@@ -22,7 +22,11 @@
 #include "notationactioncontroller.h"
 
 #include "io/file.h"
+
 #include "notationtypes.h"
+
+#include "libmscore/note.h"
+#include "libmscore/text.h"
 
 #include "log.h"
 
