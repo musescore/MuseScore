@@ -170,8 +170,8 @@
     <hairpinPlacement>1</hairpinPlacement>
     <hairpinPosAbove x="0" y="-2"/>
     <hairpinPosBelow x="0" y="2"/>
-    <hairpinLinePosAbove x="0" y="-3"/>
-    <hairpinLinePosBelow x="0" y="4"/>
+    <hairpinLinePosAbove x="0" y="-1.5"/>
+    <hairpinLinePosBelow x="0" y="2.5"/>
     <hairpinHeight>1.15</hairpinHeight>
     <hairpinContHeight>0.5</hairpinContHeight>
     <hairpinWidth>0.12</hairpinWidth>
