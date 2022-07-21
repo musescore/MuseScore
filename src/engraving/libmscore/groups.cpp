@@ -21,9 +21,11 @@
  */
 
 #include "groups.h"
+
 #include "rw/xml.h"
-#include "durationtype.h"
+
 #include "chordrest.h"
+#include "durationtype.h"
 #include "staff.h"
 #include "tuplet.h"
 
@@ -32,6 +34,15 @@
 using namespace mu;
 
 namespace mu::engraving {
+//---------------------------------------------------------
+//   NoteGroup
+//---------------------------------------------------------
+
+struct NoteGroup {
+    Fraction timeSig;
+    Groups endings;
+};
+
 //---------------------------------------------------------
 //   noteGroups
 //---------------------------------------------------------

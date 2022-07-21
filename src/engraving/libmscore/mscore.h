@@ -129,10 +129,6 @@ static constexpr char mimeStaffListFormat[]  = "application/musescore/stafflist"
 static constexpr int INVALID_STRING_INDEX = -1; // no ordinal for a physical string (0 = topmost in instrument)
 static constexpr int INVALID_FRET_INDEX   = -1; // no ordinal for a fret
 
-// no ordinal for the visual repres. of string
-// (topmost in TAB varies according to visual order and presence of bass strings)
-static constexpr int VISUAL_INVALID_STRING_INDEX = -100;
-
 static constexpr ID INVALID_ID = 0;
 
 //---------------------------------------------------------
