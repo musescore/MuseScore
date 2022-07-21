@@ -127,7 +127,7 @@ InspectorSectionView {
                 navigationRowStart: styleSection.navigationRowEnd + 1
 
                 titleText: qsTrc("inspector", "Size")
-                measureUnitsSymbol: qsTrc("inspector", "pt")
+                measureUnitsSymbol: qsTrc("global", "pt")
                 propertyItem: root.model ? root.model.fontSize : null
 
                 decimals: 1
