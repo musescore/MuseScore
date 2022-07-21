@@ -2417,6 +2417,9 @@ bool Measure::hasVoice(track_idx_t track) const
 
 bool Measure::isEmpty(staff_idx_t staffIdx) const
 {
+    if (isMMRest()) {
+        return true;
+    }
     track_idx_t strack = 0;
     track_idx_t etrack = 0;
     if (staffIdx == mu::nidx) {
