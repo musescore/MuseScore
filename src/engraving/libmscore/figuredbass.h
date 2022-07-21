@@ -23,7 +23,7 @@
 #ifndef __FIGUREDBASS_H__
 #define __FIGUREDBASS_H__
 
-#include "text.h"
+#include "textbase.h"
 
 namespace mu::engraving {
 class Factory;
@@ -67,7 +67,7 @@ FiguredBass might require formatting (discouraged, but might be necessary for ve
 and it is edited (via the normalized text); so it is derived from Text.
 ---------------------------------------------------------*/
 
-#define FBIDigitNone    -1
+constexpr int FBIDigitNone = -1;
 
 //---------------------------------------------------------
 //   @@ FiguredBassItem
