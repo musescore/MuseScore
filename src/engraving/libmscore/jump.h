@@ -23,7 +23,8 @@
 #ifndef __JUMP_H__
 #define __JUMP_H__
 
-#include "text.h"
+#include "textbase.h"
+
 #include "types/types.h"
 
 namespace mu::engraving {
