@@ -59,14 +59,14 @@ std::shared_ptr<EngravingProject> EngravingProject::create(const MStyle& style)
 
 EngravingProject::EngravingProject()
 {
-    ObjectAllocator::enabled++;
+    ObjectAllocator::used++;
 }
 
 EngravingProject::~EngravingProject()
 {
     delete m_masterScore;
 
-    ObjectAllocator::enabled--;
+    ObjectAllocator::used--;
 
     AllocatorsRegister::instance()->printStatistic("=== Destroy engraving project ===");
 
