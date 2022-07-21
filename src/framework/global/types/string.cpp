@@ -116,7 +116,7 @@ char Char::toAscii(char16_t c, bool* ok)
 bool Char::isLetter(char16_t c)
 {
     //! TODO
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     return QChar::isLetter(c);
 #else
     return std::isalpha(static_cast<unsigned char>(c));
@@ -126,7 +126,7 @@ bool Char::isLetter(char16_t c)
 bool Char::isSpace(char16_t c)
 {
     //! TODO
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     return QChar::isSpace(c);
 #else
     return std::isspace(static_cast<unsigned char>(c));
@@ -148,7 +148,7 @@ int Char::digitValue() const
 
 bool Char::isPunct(char16_t ch)
 {
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     return QChar::isPunct(ch);
 #else
     return std::ispunct(static_cast<unsigned char>(ch));
@@ -158,7 +158,7 @@ bool Char::isPunct(char16_t ch)
 char16_t Char::toLower(char16_t ch)
 {
     //! TODO
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     return QChar::toLower(ch);
 #else
     return std::tolower(static_cast<unsigned char>(ch));
@@ -168,7 +168,7 @@ char16_t Char::toLower(char16_t ch)
 char16_t Char::toUpper(char16_t ch)
 {
     //! TODO
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     return QChar::toUpper(ch);
 #else
     return std::toupper(static_cast<unsigned char>(ch));
@@ -439,7 +439,7 @@ std::u32string String::toStdU32String() const
     return s32;
 }
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
 String String::fromQString(const QString& str)
 {
     const QChar* qu = str.unicode();
@@ -891,7 +891,7 @@ String String::trimmed() const
 String String::simplified() const
 {
     //! TODO
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     return String::fromQString(toQString().simplified());
 #else
     return *this;
@@ -937,7 +937,7 @@ String String::toXmlEscaped() const
 String String::toLower() const
 {
     //! TODO
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     QString qs = toQString();
     return String::fromQString(qs.toLower());
 #else
@@ -951,7 +951,7 @@ String String::toLower() const
 String String::toUpper() const
 {
     //! TODO
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     QString qs = toQString();
     return String::fromQString(qs.toUpper());
 #else
@@ -1088,7 +1088,7 @@ void StringList::removeAt(size_t i)
     erase(begin() + i);
 }
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
 StringList::StringList(const QStringList& l)
 {
     reserve(l.size());

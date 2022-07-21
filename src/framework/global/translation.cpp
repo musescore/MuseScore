@@ -21,7 +21,7 @@
  */
 #include "translation.h"
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
 #include <QCoreApplication>
 #endif
 
@@ -31,7 +31,7 @@ using namespace mu;
 
 static String translate(const char* context, const char* key, const char* disambiguation, int n)
 {
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     return String::fromQString(QCoreApplication::translate(context, key, disambiguation, n));
 #else
     UNUSED(context);
@@ -46,7 +46,7 @@ std::string mu::trc(const char* context, const char* key, const char* disambigua
     return translate(context, key, disambiguation, n).toStdString();
 }
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
 QString mu::qtrc(const char* context, const char* key, const char* disambiguation, int n)
 {
     return QCoreApplication::translate(context, key, disambiguation, n);

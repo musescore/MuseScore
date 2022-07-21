@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_QMIMEDATAADAPTER_H
 #define MU_ENGRAVING_QMIMEDATAADAPTER_H
 
-#include "infrastructure/interactive/imimedata.h"
+#include "interactive/imimedata.h"
 
 class QMimeData;
 

@@ -25,9 +25,9 @@
 #include <memory>
 
 #include "engravingerrors.h"
-#include "infrastructure/io/mscreader.h"
-#include "infrastructure/io/mscwriter.h"
-#include "infrastructure/io/ifileinfoprovider.h"
+#include "io/mscreader.h"
+#include "io/mscwriter.h"
+#include "io/ifileinfoprovider.h"
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"

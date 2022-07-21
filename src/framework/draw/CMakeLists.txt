@@ -64,7 +64,7 @@ set(MODULE_SRC
     )
 
 if (DRAW_NO_INTERNAL)
-    set(MODULE_DEF -DDRAW_NO_INTERNAL)
+    set(MODULE_DEF -DDRAW_NO_INTERNAL -DDRAW_NO_QSVGRENDER)
 else()
     set(MODULE_SRC ${MODULE_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/qpainterprovider.cpp

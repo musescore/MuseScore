@@ -26,7 +26,7 @@
 #include <memory>
 #include <vector>
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
 #include <QByteArray>
 #endif
 
@@ -71,7 +71,7 @@ public:
     ByteArray left(size_t len) const;
     ByteArray right(size_t len) const;
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     static ByteArray fromQByteArray(const QByteArray& ba)
     {
         return ByteArray(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());

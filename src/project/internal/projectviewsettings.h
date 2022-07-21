@@ -26,8 +26,8 @@
 #include "../iprojectviewsettings.h"
 
 #include "ret.h"
-#include "engraving/infrastructure/io/mscreader.h"
-#include "engraving/infrastructure/io/mscwriter.h"
+#include "engraving/io/mscreader.h"
+#include "engraving/io/mscwriter.h"
 
 namespace mu::project {
 class ProjectViewSettings : public IProjectViewSettings

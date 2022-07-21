@@ -135,7 +135,6 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     s_data->pFormat = *deviceFormat;
     s_data->pFormat.wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
     s_data->pFormat.nChannels = spec.channels;
-    LOGI() << s_data->pFormat.nSamplesPerSec;
     s_data->pFormat.wBitsPerSample = 32;
     s_data->pFormat.nAvgBytesPerSec = s_data->pFormat.nSamplesPerSec * s_data->pFormat.nChannels * sizeof(float);
     s_data->pFormat.nBlockAlign = (s_data->pFormat.nChannels * s_data->pFormat.wBitsPerSample) / 8;
@@ -192,7 +191,7 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
 
             DWORD waitResult = WaitForSingleObject(s_data->hEvent, INFINITE);
             if (waitResult != WAIT_OBJECT_0) {
-                LOGE() << "audio driver wait for signal failed: " << waitResult;
+                LOGE() << "audio driver wait for signal failed: " << int32_t(waitResult);
                 break;
             }
         } while (m_active);

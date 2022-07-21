@@ -104,11 +104,11 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
 
     auto readPackage = [socket, &stream, onPackageRead]() {
         QByteArray data;
-        quint32 remaining;
+        uint32_t remaining;
         stream >> remaining;
         data.resize(remaining);
 
-        qint64 available = socket->bytesAvailable();
+        int64_t available = socket->bytesAvailable();
         if (available < remaining) {
             if (!socket->waitForReadyRead(ipc::TIMEOUT_MSEC)) {
                 LOGE() << "failed read, remaining: " << remaining << ", available: " << available << ", err: " << socket->errorString();
