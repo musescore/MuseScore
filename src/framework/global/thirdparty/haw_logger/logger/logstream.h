@@ -24,6 +24,8 @@ public:
     inline Stream& operator<<(unsigned int t) { m_ss << t; return *this; }
     inline Stream& operator<<(signed long t) { m_ss << t; return *this; }
     inline Stream& operator<<(unsigned long t) { m_ss << t; return *this; }
+    inline Stream& operator<<(signed long long t) { m_ss << t; return *this; }
+    inline Stream& operator<<(unsigned long long t) { m_ss << t; return *this; }
     inline Stream& operator<<(float t) { m_ss << t; return *this; }
     inline Stream& operator<<(double t) { m_ss << t; return *this; }
     inline Stream& operator<<(const void* t) { m_ss << t; return *this; }
@@ -47,8 +49,6 @@ public:
     }
 
 #ifdef HAW_LOGGER_QT_SUPPORT
-    inline Stream& operator<<(qint64 t) { qt_to_ss(t); return *this; }
-    inline Stream& operator<<(quint64 t) { qt_to_ss(t); return *this; }
     inline Stream& operator<<(QChar t) { qt_to_ss(t); return *this; }
     inline Stream& operator<<(const QString& t) { qt_to_ss(t); return *this; }
     inline Stream& operator<<(const QStringRef& t) { qt_to_ss(t); return *this; }

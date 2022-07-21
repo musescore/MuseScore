@@ -41,6 +41,9 @@
 
 using namespace mu::io;
 
+typedef unsigned long int ulong;
+typedef unsigned short int ushort;
+
 namespace mu {
 static inline uint readUInt(const uint8_t* data)
 {

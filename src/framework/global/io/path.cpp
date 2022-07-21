@@ -91,7 +91,7 @@ const char* path_t::c_str() const
     return m_path.c_str();
 }
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
 path_t::path_t(const QString& s)
     : m_path(s.toStdString())
 {

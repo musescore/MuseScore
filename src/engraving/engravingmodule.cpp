@@ -25,7 +25,7 @@
 #include "global/allocator.h"
 
 #ifndef ENGRAVING_NO_INTERNAL
-#include "engraving/infrastructure/internal/engravingconfiguration.h"
+#include "internal/engravingconfiguration.h"
 #endif
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY

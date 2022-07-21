@@ -1,7 +1,7 @@
 #ifndef FONTPROVIDERSTUB_H
 #define FONTPROVIDERSTUB_H
 
-#include "engraving/infrastructure/draw/ifontprovider.h"
+#include "engraving/draw/ifontprovider.h"
 
 namespace mu::draw {
 class FontProviderStub : public IFontProvider

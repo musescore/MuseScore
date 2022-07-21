@@ -25,7 +25,10 @@
 
 #include "project/inotationreadersregister.h"
 #include "internal/guitarproreader.h"
+
+#ifndef IEX_GUITARPRO_NO_INTERNAL
 #include "internal/guitarproconfiguration.h"
+#endif
 
 #include "log.h"
 

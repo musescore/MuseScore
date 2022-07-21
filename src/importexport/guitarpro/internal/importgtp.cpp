@@ -28,7 +28,6 @@
 
 #include "realfn.h"
 #include "translation.h"
-#include "interactive/messagebox.h"
 
 #include "rw/xml.h"
 #include "types/typesconv.h"
@@ -3027,13 +3026,6 @@ static Score::FileError importScore(MasterScore* score, mu::io::IODevice* io)
         return Score::FileError::FILE_BAD_FORMAT;
     }
     if (readResult == false) {
-        /*
-        if (!MScore::noGui) {
-            MessageBox::warning(mu::trc("iex_guitarpro", "Import Guitar Pro"),
-                                mu::qtrc("iex_guitarpro", "Import failed: %1").arg(gp->error(errNo)).toStdString(),
-                                { MessageBox::Ok });
-        }
-        */
         LOGD("guitar pro import error====");
         // avoid another error message box
         return Score::FileError::FILE_NO_ERROR;

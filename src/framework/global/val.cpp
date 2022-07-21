@@ -235,14 +235,14 @@ bool Val::operator <(const Val& v) const
     case Type::String: return toString() < v.toString();
     case Type::List: return toList() < v.toList();
     case Type::Map: return toMap() < v.toMap();
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     case Type::Color: return toString() < v.toString();
 #endif
     }
     return false;
 }
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
 Val::Val(const QString& str)
     : m_val(str.toStdString()), m_type(Type::String) {}
 

@@ -318,7 +318,7 @@ void XmlWriter::tagFraction(const AsciiStringView& name, const Fraction& v, cons
 void XmlWriter::writeXml(const String& name, String s)
 {
     for (size_t i = 0; i < s.size(); ++i) {
-        ushort c = s.at(i).unicode();
+        char16_t c = s.at(i).unicode();
         if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) {
             s[i] = u'?';
         }
