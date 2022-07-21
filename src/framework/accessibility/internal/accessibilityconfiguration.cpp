@@ -30,6 +30,11 @@ using namespace mu::accessibility;
 class AccessibilityActivationObserver : public QAccessible::ActivationObserver
 {
 public:
+    AccessibilityActivationObserver()
+    {
+        m_isAccessibilityActive = QAccessible::isActive();
+    }
+
     bool isAccessibilityActive() const
     {
         return m_isAccessibilityActive;
