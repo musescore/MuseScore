@@ -863,8 +863,14 @@ String Rest::screenReaderInfo() const
 {
     Measure* m = measure();
     bool voices = m ? m->hasVoices(staffIdx()) : false;
-    String voice = voices ? mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1) : u"";
-    return String(u"%1 %2 %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
+    String voice = voices ? (u"; " + mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1)) : u"";
+    String crossStaff;
+    if (staffMove() < 0) {
+        crossStaff = u"; " + mtrc("engraving", "Cross-staff above");
+    } else if (staffMove() > 0) {
+        crossStaff = u"; " + mtrc("engraving", "Cross-staff below");
+    }
+    return String(u"%1 %2%3%4").arg(EngravingItem::accessibleInfo(), durationUserName(), crossStaff, voice);
 }
 
 //---------------------------------------------------------

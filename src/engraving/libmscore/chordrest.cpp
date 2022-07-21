@@ -683,7 +683,8 @@ String ChordRest::durationUserName() const
             tupletType = mtrc("engraving", "Nonuplet");
             break;
         default:
-            tupletType = mtrc("engraving", "Custom tuplet");
+            //: %1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)
+            tupletType = mtrc("engraving", "%1 note tuplet").arg(tuplet()->ratio().numerator());
         }
     }
     String dotString;
