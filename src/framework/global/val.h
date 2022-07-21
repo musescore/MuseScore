@@ -30,7 +30,7 @@
 
 #include "io/path.h"
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
 #include <QString>
 #include <QColor>
 #include <QVariant>
@@ -52,7 +52,7 @@ public:
         String,
         List,
         Map,
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
         Color
 #endif
     };
@@ -97,7 +97,7 @@ public:
     bool operator ==(const Val& v) const;
     bool operator <(const Val& v) const;
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     explicit Val(const QString& str);
     explicit Val(const QColor& color);
 

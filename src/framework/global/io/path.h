@@ -27,7 +27,7 @@
 #include "types/string.h"
 #include "framework/global/logstream.h"
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
 #include <QString>
 #endif
 
@@ -69,7 +69,7 @@ struct path_t {
     std::string toStdString() const;
     const char* c_str() const;
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     path_t(const QString& s);
     inline path_t& operator=(const QString& other) { m_path = other.toStdString(); return *this; }
     inline path_t operator+(const QString& other) const { path_t p = *this; p += String::fromQString(other); return p; }
@@ -85,7 +85,7 @@ private:
 inline path_t operator+(const String& one, const path_t& other) { return path_t(one) + other; }
 inline path_t operator+(const char* one, const path_t& other) { return path_t(one) + other; }
 
-#ifndef GLOBAL_NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
 inline path_t operator+(const QString& one, const path_t& other) { return path_t(one) + other; }
 #endif
 

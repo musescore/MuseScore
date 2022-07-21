@@ -21,7 +21,6 @@
 set(MODULE engraving)
 set(MODULE_QRC engraving.qrc)
 
-include(${CMAKE_CURRENT_LIST_DIR}/infrastructure/engraving_infrastructure.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/libmscore/libmscore.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
 
@@ -34,7 +33,21 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/engravingproject.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingconfiguration.h
 
-    ${ENGRAVING_INFRASTRUCTURE_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.h
+    ${CMAKE_CURRENT_LIST_DIR}/interactive/imimedata.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/io/mscio.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/mscreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/mscreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/mscwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/mscwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/htmlparser.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/htmlparser.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/ifileinfoprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/localfileinfoprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/localfileinfoprovider.h
+
     ${LIBMSCORE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/xml.h
@@ -200,15 +213,28 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/arrangementutils.h
     )
 
-if (NOT ENGRAVING_NO_ACCESSIBILITY)
-set(MODULE_SRC ${MODULE_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.h
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleroot.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleroot.h
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.h
-)
+if (ENGRAVING_NO_ACCESSIBILITY)
+    set(MODULE_DEF ${MODULE_DEF} -DENGRAVING_NO_ACCESSIBILITY)
+else()
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.h
+        ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleroot.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleroot.h
+        ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.h
+    )
+endif()
+
+if (ENGRAVING_NO_INTERNAL)
+    set(MODULE_DEF ${MODULE_DEF} -DENGRAVING_NO_INTERNAL -DENGRAVING_NO_QTEXTDOCUMENT -DENGRAVING_NO_INTERACTIVE)
+else()
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qmimedataadapter.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qmimedataadapter.h
+        )
 endif()
 
 set_source_files_properties( # For these files, Unity Build does not work
@@ -224,7 +250,7 @@ set(MODULE_INCLUDE
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure
     )
 
-set(MODULE_DEF ${ENGRAVING_INFRASTRUCTURE_DEF})
+set(MODULE_DEF ${MODULE_DEF} ${ENGRAVING_INFRASTRUCTURE_DEF})
 set(MODULE_LINK
     ${ENGRAVING_INFRASTRUCTURE_LINK}
     draw

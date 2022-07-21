@@ -26,7 +26,7 @@
 #include <QClipboard>
 #include <QMimeData>
 
-#include "infrastructure/internal/qmimedataadapter.h"
+#include "internal/qmimedataadapter.h"
 
 #include "engraving/rw/xml.h"
 #include "libmscore/masterscore.h"

@@ -118,7 +118,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.h
 )
 
-if (NOT GLOBAL_NO_INTERNAL)
+if (GLOBAL_NO_INTERNAL)
+    set(MODULE_DEF ${MODULE_DEF} -DGLOBAL_NO_INTERNAL)
+else()
     set(MODULE_SRC ${MODULE_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/globalmodule.cpp
         ${CMAKE_CURRENT_LIST_DIR}/globalmodule.h

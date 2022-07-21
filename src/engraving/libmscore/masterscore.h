@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_MASTERSCORE_H
 #define MU_ENGRAVING_MASTERSCORE_H
 
-#include "infrastructure/io/ifileinfoprovider.h"
+#include "io/ifileinfoprovider.h"
 
 #include "score.h"
 #include "instrument.h"

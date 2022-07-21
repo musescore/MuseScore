@@ -38,7 +38,7 @@
 #include "engraving/rw/xml.h"
 #include "draw/types/pen.h"
 #include "draw/types/painterpath.h"
-#include "engraving/infrastructure/internal/qmimedataadapter.h"
+#include "engraving/internal/qmimedataadapter.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/page.h"

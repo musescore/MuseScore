@@ -26,7 +26,7 @@
 #include "dataformatter.h"
 #include "io/fileinfo.h"
 
-#include "engraving/infrastructure/io/mscio.h"
+#include "engraving/io/mscio.h"
 
 #include "log.h"
 
