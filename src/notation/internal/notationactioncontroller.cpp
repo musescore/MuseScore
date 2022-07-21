@@ -1401,10 +1401,13 @@ void NotationActionController::openPartsDialog()
 mu::io::path_t NotationActionController::selectStyleFile(bool forLoad)
 {
     mu::io::path_t dir = configuration()->userStylesPath();
-    QString filter = qtrc("notation", "MuseScore Styles") + " (*.mss)";
+    QString filterName = forLoad
+                         ? qtrc("notation", "MuseScore style files")
+                         : qtrc("notation", "MuseScore style file");
+    QString filter = filterName + " (*.mss)";
     return forLoad
-           ? interactive()->selectOpeningFile(qtrc("notation", "Load Style"), dir, filter)
-           : interactive()->selectSavingFile(qtrc("notation", "Save Style"), dir, filter);
+           ? interactive()->selectOpeningFile(qtrc("notation", "Load style"), dir, filter)
+           : interactive()->selectSavingFile(qtrc("notation", "Save style"), dir, filter);
 }
 
 void NotationActionController::loadStyle()
@@ -1437,7 +1440,7 @@ void NotationActionController::saveStyle()
     if (!path.empty()) {
         if (!currentNotationStyle()->saveStyle(path)) {
             interactive()->error(trc("notation", "The style file could not be saved."),
-                                 trc("notation", "There was some error"), { IInteractive::Button::Ok },
+                                 trc("notation", "An error occurred."), { IInteractive::Button::Ok },
                                  IInteractive::Button::Ok, IInteractive::Option::WithIcon);
         }
     }

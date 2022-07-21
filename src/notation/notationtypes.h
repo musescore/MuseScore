@@ -346,13 +346,13 @@ inline QString formatInstrumentTitle(const QString& instrumentName, const Instru
 
     switch (trait.type) {
     case TraitType::Tuning:
-        result = mu::qtrc("notation", "%1 %2").arg(trait.name).arg(instrumentName);
+        result = mu::qtrc("notation", "%1 %2", "formatInstrumentTitle").arg(trait.name).arg(instrumentName);
         break;
     case TraitType::Course:
-        result = mu::qtrc("notation", "%1 (%2)").arg(instrumentName).arg(trait.name);
+        result = mu::qtrc("notation", "%1 (%2)", "formatInstrumentTitle").arg(instrumentName).arg(trait.name);
         break;
     case TraitType::Transposition:
-        result = mu::qtrc("notation", "%1 in %2").arg(instrumentName).arg(trait.name);
+        result = mu::qtrc("notation", "%1 in %2", "formatInstrumentTitle").arg(instrumentName).arg(trait.name);
         break;
     case TraitType::Unknown:
         break;

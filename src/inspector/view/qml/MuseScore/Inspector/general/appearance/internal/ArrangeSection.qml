@@ -104,7 +104,7 @@ Column {
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 1
 
-                text: qsTrc("inspector", "To Back")
+                text: qsTrc("inspector", "To back")
 
                 onClicked: {
                     root.pushToBackRequested()
@@ -121,7 +121,7 @@ Column {
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 2
 
-                text: qsTrc("inspector", "To Front")
+                text: qsTrc("inspector", "To front")
 
                 onClicked: {
                     root.pushToFrontRequested()

@@ -52,7 +52,7 @@ StyledPopupView {
 
             delegate: CheckBox {
                 checked: modelData
-                text: qsTrc("notation", "Voice ") + (model.index + 1)
+                text: qsTrc("notation", "Voice %1").arg(model.index + 1)
 
                 onClicked: {
                     checked = !checked

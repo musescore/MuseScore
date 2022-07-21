@@ -148,15 +148,15 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
 
     std::pair<int, float> startBarbeat = selection()->startSegment()->barbeat();
     QString start =  qtrc("notation", "Start measure: %1; Start beat: %2")
-                    .arg(QString::number(startBarbeat.first))
-                    .arg(QString::number(startBarbeat.second));
+                    .arg(startBarbeat.first)
+                    .arg(startBarbeat.second);
 
     std::pair<int, float> endBarbeat = endSegment->barbeat();
-    QString end =  qtrc("notation", "Start measure: %1; Start beat: %2")
-                  .arg(QString::number(endBarbeat.first))
-                  .arg(QString::number(endBarbeat.second));
+    QString end =  qtrc("notation", "End measure: %1; End beat: %2")
+                  .arg(endBarbeat.first)
+                  .arg(endBarbeat.second);
 
-    return qtrc("notation", "Range selection %1 %2")
+    return qtrc("notation", "Range selection; %1; %2")
            .arg(start)
            .arg(end);
 }

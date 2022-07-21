@@ -41,7 +41,7 @@ Item {
         id: navPanel
         name: "UndoRedoToolBar"
         enabled: root.enabled && root.visible
-        accessible.name: qsTrc("notation", "Undo Redo toolbar")
+        accessible.name: qsTrc("notation", "Undo redo toolbar")
     }
 
     UndoRedoModel {

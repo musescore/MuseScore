@@ -52,7 +52,7 @@ Item {
         StyledTextLabel {
             width: parent.width
 
-            text: qsTrc("notation", "NAME")
+            text: qsTrc("notation", "Name")
 
             horizontalAlignment: Qt.AlignLeft
             font.capitalization: Font.AllUppercase

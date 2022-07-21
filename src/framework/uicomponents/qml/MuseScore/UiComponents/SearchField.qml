@@ -38,5 +38,7 @@ TextInputField {
     hint: qsTrc("uicomponents", "Search")
     hintIcon: IconCode.SEARCH
 
+    accessible.name: hint
+
     clearTextButtonVisible: Boolean(searchText) ?? false
 }

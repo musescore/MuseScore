@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Strings Tuning:</string>
+        <string>Strings tuning:</string>
        </property>
       </widget>
      </item>
@@ -63,21 +63,21 @@
          <item>
           <widget class="QPushButton" name="newString">
            <property name="text">
-            <string>New String…</string>
+            <string>New string…</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="editString">
            <property name="text">
-            <string>Edit String…</string>
+            <string>Edit string…</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="deleteString">
            <property name="text">
-            <string>Delete String</string>
+            <string>Delete string</string>
            </property>
           </widget>
          </item>

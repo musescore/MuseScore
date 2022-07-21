@@ -47,26 +47,24 @@ EditStringData::EditStringData(QWidget* parent, std::vector<mu::engraving::instr
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     _strings = strings;
-    QStringList hdrLabels;
+    stringList->setHorizontalHeaderLabels({ qtrc("notation/editstringdata", "Open"),
+                                            qtrc("notation/editstringdata", "Pitch") });
     int numOfStrings = static_cast<int>(_strings->size());
-    hdrLabels << qtrc("notation", "Open", "string data") << qtrc("notation", "Pitch", "string data");
-    stringList->setHorizontalHeaderLabels(hdrLabels);
     stringList->setRowCount(numOfStrings);
     // if any string, insert into string list control and select the first one
 
     if (numOfStrings > 0) {
-        int i;
         mu::engraving::instrString strg;
         // insert into local working copy and into string list dlg control
         // IN REVERSED ORDER
-        for (i=0; i < numOfStrings; i++) {
+        for (int i = 0; i < numOfStrings; i++) {
             strg = (*_strings)[numOfStrings - i - 1];
             _stringsLoc.push_back(strg);
             QTableWidgetItem* newCheck = new QTableWidgetItem();
             newCheck->setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
             newCheck->setCheckState(strg.open ? Qt::Checked : Qt::Unchecked);
 
-            newCheck->setData(OPEN_ACCESSIBLE_TITLE_ROLE, qtrc("notation", "Open"));
+            newCheck->setData(OPEN_ACCESSIBLE_TITLE_ROLE, qtrc("notation/editstringdata", "Open"));
             newCheck->setData(Qt::AccessibleTextRole, openColumnAccessibleText(newCheck));
 
             stringList->setItem(i, 0, newCheck);
@@ -138,11 +136,8 @@ bool EditStringData::eventFilter(QObject* obj, QEvent* event)
 
 QString EditStringData::openColumnAccessibleText(const QTableWidgetItem* item) const
 {
-    QString accessibleText = item->data(OPEN_ACCESSIBLE_TITLE_ROLE).toString() + ": "
-                             + (item->checkState() == Qt::Checked
-                                ? qtrc("notation", "checked")
-                                : qtrc("notation", "unchecked"));
-    return accessibleText;
+    return item->data(OPEN_ACCESSIBLE_TITLE_ROLE).toString() + ": "
+           + (item->checkState() == Qt::Checked ? qtrc("ui", "checked", "checkstate") : qtrc("ui", "unchecked", "checkstate"));
 }
 
 //---------------------------------------------------------
@@ -268,5 +263,5 @@ void EditStringData::accept()
 
 QString EditStringData::midiCodeToStr(int midiCode)
 {
-    return QString("%1 %2").arg(QString::fromStdString(mu::pitchToString(midiCode))).arg(midiCode / 12 - 1);
+    return QString::fromStdString(mu::pitchToString(midiCode));
 }

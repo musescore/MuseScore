@@ -37,16 +37,16 @@ const UiActionList PaletteUiActions::m_actions = {
              ),
     UiAction("palette-search",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Palette Search")
+             QT_TRANSLATE_NOOP("action", "Palette search")
              ),
     UiAction("time-signature-properties",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Time Signature Properties…"),
+             QT_TRANSLATE_NOOP("action", "Time signature properties…"),
              QT_TRANSLATE_NOOP("action", "Time signature properties")
              ),
     UiAction("edit-drumset",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Edit Drumset…"),
+             QT_TRANSLATE_NOOP("action", "Edit drumset…"),
              QT_TRANSLATE_NOOP("action", "Edit drumset")
              ),
     UiAction("show-keys",
