@@ -45,7 +45,7 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
         return instrumentName + numberPart;
     }
 
-    return mu::qtrc("notation", "%1 in %2%3").arg(instrumentName).arg(trait.name).arg(numberPart);
+    return mu::qtrc("notation", "%1 in %2%3", "formatInstrumentTitleOnScore").arg(instrumentName).arg(trait.name).arg(numberPart);
 }
 
 static QString formatPartTitle(const Part* part)

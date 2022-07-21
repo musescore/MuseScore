@@ -512,8 +512,8 @@ void EditStaff::applyPartProperties()
     String _sn = shortName->toPlainText();
     String _ln = longName->toPlainText();
     if (!mu::engraving::Text::validateText(_sn) || !mu::engraving::Text::validateText(_ln)) {
-        interactive()->warning(trc("notation", "Invalid instrument name"),
-                               trc("notation", "The instrument name is invalid."));
+        interactive()->warning(trc("notation/staffpartproperties", "Invalid instrument name"),
+                               trc("notation/staffpartproperties", "The instrument name is invalid."));
         return;
     }
     QString sn = _sn;
@@ -641,7 +641,7 @@ void EditStaff::editStringDataClicked()
 
 QString EditStaff::midiCodeToStr(int midiCode)
 {
-    return QString("%1 %2").arg(QString::fromStdString(mu::pitchToString(midiCode))).arg(midiCode / 12 - 1);
+    return QString::fromStdString(mu::pitchToString(midiCode));
 }
 
 void EditStaff::showStaffTypeDialog()
