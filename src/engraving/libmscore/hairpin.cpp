@@ -310,7 +310,10 @@ void HairpinSegment::layout()
         double ddiff = hairpin()->isLineType() ? 0.0 : _spatium * 0.5;
 
         double sp = spatium();
-        double md = minDistance().val() * sp;
+
+        // TODO: in the future, there should be a minDistance style setting for hairpinLines as well as hairpins.
+        double minDist = twoLines ? minDistance().val() : score()->styleS(Sid::dynamicsMinDistance).val();
+        double md = minDist * sp;
 
         bool above = spanner()->placeAbove();
         SkylineLine sl(!above);
