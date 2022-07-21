@@ -1964,8 +1964,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             Dynamic* dyn = Factory::createDynamic(segment);
             dyn->setTrack(ctx.track());
             dyn->read(e);
-            dyn->setDynamicType(dyn->xmlText());
-            segment->add(dyn);
+            if (dyn->dynamicType() == DynamicType::OTHER && dyn->xmlText().isEmpty()) {
+                // if we add this dynamic, it will be an unselectable invisible object that
+                // messes with collision detection.
+                delete dyn;
+            } else {
+                dyn->setDynamicType(dyn->xmlText());
+                segment->add(dyn);
+            }
         } else if (tag == "Tempo") {
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             TempoText* t = Factory::createTempoText(segment);
