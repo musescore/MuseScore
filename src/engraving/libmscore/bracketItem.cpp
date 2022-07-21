@@ -20,9 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "bracketItem.h"
+
 #include "property.h"
+#include "score.h"
 #include "staff.h"
 
 using namespace mu;

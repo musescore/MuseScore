@@ -24,13 +24,14 @@
 
 #include "rw/xml.h"
 #include "types/symnames.h"
-#include "log.h"
 
-#include "system.h"
-#include "segment.h"
 #include "measure.h"
 #include "score.h"
+#include "segment.h"
 #include "staff.h"
+#include "system.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;

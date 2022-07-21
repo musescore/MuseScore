@@ -20,19 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "bsymbol.h"
+
 #include <cmath>
 
 #include "containers.h"
 #include "rw/xml.h"
 
-#include "score.h"
-#include "image.h"
-#include "staff.h"
-#include "segment.h"
-#include "page.h"
-#include "system.h"
-#include "measure.h"
 #include "factory.h"
+#include "measure.h"
+#include "page.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "system.h"
 
 #include "log.h"
 

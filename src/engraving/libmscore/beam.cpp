@@ -27,34 +27,28 @@
 #include <algorithm>
 
 #include "containers.h"
-
-#include "draw/types/brush.h"
-#include "style/style.h"
-#include "rw/xml.h"
 #include "realfn.h"
 
-#include "segment.h"
-#include "score.h"
+#include "draw/types/brush.h"
+#include "rw/xml.h"
+
+#include "actionicon.h"
 #include "chord.h"
-#include "sig.h"
-#include "note.h"
-#include "tuplet.h"
-#include "system.h"
-#include "tremolo.h"
+#include "groups.h"
 #include "measure.h"
-#include "undo.h"
+#include "mscore.h"
+#include "note.h"
+#include "score.h"
+#include "segment.h"
+#include "spanner.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "stem.h"
-#include "hook.h"
-#include "mscore.h"
-#include "actionicon.h"
-#include "stemslash.h"
-#include "groups.h"
-#include "spanner.h"
+#include "system.h"
+#include "tremolo.h"
+#include "tuplet.h"
 
 #include "layout/layoutbeams.h"
-#include "layout/layoutchords.h"
 
 #include "log.h"
 

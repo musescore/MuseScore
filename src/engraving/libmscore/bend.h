@@ -24,10 +24,9 @@
 #define __BEND_H__
 
 #include "draw/types/font.h"
-#include "style/style.h"
 
 #include "engravingitem.h"
-#include "property.h"
+#include "types.h"
 
 namespace mu::engraving {
 class Factory;
