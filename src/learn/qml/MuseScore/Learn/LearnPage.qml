@@ -113,7 +113,6 @@ FocusScope {
             navigation.name: "LearnSearch"
             navigation.panel: navSearchPanel
             navigation.order: 1
-            accessible.name: qsTrc("learn", "Learn search")
 
             onSearchTextChanged: {
                 pageModel.setSearchText(searchText)
@@ -151,7 +150,7 @@ FocusScope {
             section: navSec
             direction: NavigationPanel.Horizontal
             order: 2
-            accessible.name: qsTrc("learn", "Learn tabs")
+            accessible.name: qsTrc("learn", "Learn tab bar")
             enabled: tabBar.enabled && tabBar.visible
 
             onNavigationEvent: function(event) {
