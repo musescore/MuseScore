@@ -25,11 +25,10 @@
 #include "layoutoptions.h"
 
 namespace mu::engraving {
-class Score;
 class Measure;
 class MeasureBase;
+class Score;
 
-class LayoutContext;
 class LayoutContext;
 class LayoutMeasure
 {
