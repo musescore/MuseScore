@@ -24,16 +24,19 @@
 #include "containers.h"
 
 #include "libmscore/accidental.h"
+#include "libmscore/beam.h"
 #include "libmscore/chord.h"
+#include "libmscore/glissando.h"
 #include "libmscore/hook.h"
+#include "libmscore/measure.h"
 #include "libmscore/note.h"
+#include "libmscore/part.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/staff.h"
+#include "libmscore/stem.h"
 #include "libmscore/stemslash.h"
 #include "libmscore/tie.h"
-#include "libmscore/glissando.h"
-#include "libmscore/part.h"
 
 using namespace mu::engraving;
 

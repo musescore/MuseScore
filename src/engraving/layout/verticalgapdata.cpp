@@ -21,12 +21,13 @@
  */
 #include "verticalgapdata.h"
 
-#include "libmscore/system.h"
-#include "libmscore/staff.h"
-#include "libmscore/spacer.h"
-#include "libmscore/score.h"
-
 #include "realfn.h"
+
+#include "libmscore/spacer.h"
+#include "libmscore/staff.h"
+#include "libmscore/system.h"
+
+#include "style/style.h"
 
 using namespace mu::engraving;
 

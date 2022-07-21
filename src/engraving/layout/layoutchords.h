@@ -27,13 +27,13 @@
 #include "layoutcontext.h"
 
 namespace mu::engraving {
-class Score;
-class Segment;
-class Note;
-class Staff;
+class Chord;
 class MStyle;
 class Measure;
-class Chord;
+class Note;
+class Score;
+class Segment;
+class Staff;
 
 class LayoutChords
 {

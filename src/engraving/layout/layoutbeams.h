@@ -25,10 +25,10 @@
 #include <vector>
 
 namespace mu::engraving {
-class Score;
-class Measure;
 class Chord;
 class ChordRest;
+class Measure;
+class Score;
 
 class LayoutContext;
 class LayoutBeams
