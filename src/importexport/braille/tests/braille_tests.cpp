@@ -112,7 +112,7 @@ TEST_F(Braille_Tests, notes) {
 }
 TEST_F(Braille_Tests, octavesNoChords) {
     brailleSaveTest("testOctavesNoChords_Example_3.2.2.1_MBC2015");
-}                                                                                                                               // TODO a,b,c section names not exported
+}                                                   // TODO a,b,c section names not exported
 TEST_F(Braille_Tests, clefs) {
     brailleSaveTest("testClefs_Example_4.2_MBC2015");
 }
@@ -127,7 +127,7 @@ TEST_F(Braille_Tests, quarterAccidentals) {
 }
 TEST_F(Braille_Tests, keySigs) {
     brailleSaveTest("testKeySig_Example_6.5_MBC2015");
-}                                                                                                                              // a bit changed. the second key sig does not have naturals
+}                                                   // a bit changed. the second key sig does not have naturals
 TEST_F(Braille_Tests, timeSignature) {
     brailleSaveTest("testTimeSig_Example_7.1_MBC2015");
 }
@@ -136,7 +136,7 @@ TEST_F(Braille_Tests, chords1) {
 }
 TEST_F(Braille_Tests, chords2) {
     brailleSaveTest("testChords_Example_9.1.1_MBC2015");
-}                                                                                                                              // TODO 9.1.1.d octave mark in unison intervals
+}                                                    // TODO 9.1.1.d octave mark in unison intervals
 TEST_F(Braille_Tests, chords3) {
     brailleSaveTest("testChords_Example_9.2.1_MBC2015");
 }
