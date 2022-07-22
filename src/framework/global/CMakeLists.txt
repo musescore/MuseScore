@@ -40,10 +40,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/logremover.h
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
-    ${CMAKE_CURRENT_LIST_DIR}/id.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/id.h
-    ${CMAKE_CURRENT_LIST_DIR}/val.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/val.h
     ${CMAKE_CURRENT_LIST_DIR}/version.cpp
     ${CMAKE_CURRENT_LIST_DIR}/version.h
     ${CMAKE_CURRENT_LIST_DIR}/stringutils.cpp
@@ -55,19 +51,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/translation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/translation.h
     ${CMAKE_CURRENT_LIST_DIR}/timer.h
-    ${CMAKE_CURRENT_LIST_DIR}/ret.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/ret.h
-    ${CMAKE_CURRENT_LIST_DIR}/retval.h
-    ${CMAKE_CURRENT_LIST_DIR}/uri.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/uri.h
     ${CMAKE_CURRENT_LIST_DIR}/progress.h
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.cpp
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.h
     ${CMAKE_CURRENT_LIST_DIR}/utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils.h
     ${CMAKE_CURRENT_LIST_DIR}/defer.h
-    ${CMAKE_CURRENT_LIST_DIR}/sharedhashmap.h
-    ${CMAKE_CURRENT_LIST_DIR}/sharedmap.h
     ${CMAKE_CURRENT_LIST_DIR}/containers.h
     ${CMAKE_CURRENT_LIST_DIR}/icryptographichash.h
     ${CMAKE_CURRENT_LIST_DIR}/allocator.cpp
@@ -80,6 +69,17 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/datetime.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/datetime.h
     ${CMAKE_CURRENT_LIST_DIR}/types/flags.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/id.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/id.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/val.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/val.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/ret.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/ret.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/retval.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/uri.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/uri.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/sharedhashmap.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/sharedmap.h
 
     ${CMAKE_CURRENT_LIST_DIR}/io/ioenums.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp

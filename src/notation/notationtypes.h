@@ -28,7 +28,7 @@
 
 #include "io/path.h"
 #include "translation.h"
-#include "id.h"
+#include "types/id.h"
 #include "midi/midievent.h"
 
 #include "libmscore/engravingitem.h"

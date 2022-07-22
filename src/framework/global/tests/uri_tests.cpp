@@ -21,7 +21,7 @@
  */
 #include <gtest/gtest.h>
 
-#include "uri.h"
+#include "types/uri.h"
 
 using namespace mu;
 

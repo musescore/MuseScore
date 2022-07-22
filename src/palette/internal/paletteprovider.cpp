@@ -40,7 +40,7 @@
 #include "commonscene/commonscenetypes.h"
 
 #include "translation.h"
-#include "uri.h"
+#include "types/uri.h"
 
 using namespace mu::palette;
 using namespace mu::framework;

@@ -28,6 +28,8 @@
 #include "mapping/percussionssetupdataresolver.h"
 #include "mapping/voicessetupdataresolver.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 using namespace mu::mpe;
 

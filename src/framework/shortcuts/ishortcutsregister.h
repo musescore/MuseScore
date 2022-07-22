@@ -27,7 +27,7 @@
 #include "modularity/imoduleexport.h"
 #include "shortcutstypes.h"
 #include "async/notification.h"
-#include "ret.h"
+#include "types/ret.h"
 #include "io/path.h"
 
 namespace mu::shortcuts {

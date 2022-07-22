@@ -21,7 +21,7 @@
  */
 #include "workspaceactioncontroller.h"
 
-#include "val.h"
+#include "types/val.h"
 
 using namespace mu::workspace;
 using namespace mu::actions;

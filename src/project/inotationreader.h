@@ -25,8 +25,8 @@
 #include <memory>
 #include <map>
 
-#include "ret.h"
-#include "val.h"
+#include "types/ret.h"
+#include "types/val.h"
 #include "io/path.h"
 
 namespace mu::engraving {

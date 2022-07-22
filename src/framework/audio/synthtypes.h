@@ -26,7 +26,7 @@
 #include <map>
 
 #include "io/path.h"
-#include "uri.h"
+#include "types/uri.h"
 #include "midi/miditypes.h"
 
 namespace mu::audio::synth {

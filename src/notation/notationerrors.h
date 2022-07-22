@@ -22,7 +22,7 @@
 #ifndef MU_NOTATION_NOTATIONERRORS_H
 #define MU_NOTATION_NOTATIONERRORS_H
 
-#include "ret.h"
+#include "types/ret.h"
 #include "translation.h"
 
 namespace mu::notation {

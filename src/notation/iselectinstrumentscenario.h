@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "notation/notationtypes.h"
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::notation {
 class ISelectInstrumentsScenario : MODULE_EXPORT_INTERFACE

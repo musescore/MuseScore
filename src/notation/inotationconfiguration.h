@@ -26,7 +26,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
-#include "retval.h"
+#include "types/retval.h"
 #include "io/path.h"
 #include "notationtypes.h"
 #include "global/globaltypes.h"

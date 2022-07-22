@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "midi/miditypes.h"
-#include "ret.h"
+#include "types/ret.h"
 #include "shortcutstypes.h"
 
 namespace mu::shortcuts {

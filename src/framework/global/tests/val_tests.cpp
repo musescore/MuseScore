@@ -21,7 +21,7 @@
  */
 #include <gtest/gtest.h>
 
-#include "val.h"
+#include "types/val.h"
 
 using namespace mu;
 

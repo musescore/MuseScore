@@ -34,6 +34,8 @@
 
 #include "utils/pitchutils.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::mpe;
