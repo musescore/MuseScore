@@ -119,9 +119,12 @@ EngravingObject::~EngravingObject()
             c->moveToDummy();
         }
     } else {
+        bool isPaletteScore = score()->isPaletteScore();
         for (EngravingObject* c : m_children) {
             c->m_parent = nullptr;
-            delete c;
+            if (!isPaletteScore) {
+                delete c;
+            }
         }
         m_children.clear();
     }

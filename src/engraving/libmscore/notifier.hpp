@@ -38,7 +38,7 @@ public:
     Listener(Listener<Data>&&);
     Listener& operator=(const Listener<Data>&) { return *this; }
     Listener& operator=(Listener&&);
-    ~Listener();
+    virtual ~Listener();
 
     void setNotifier(Notifier<Data>* n);
 
