@@ -76,9 +76,9 @@ extern int pitch2tpc(int pitch, Key, Prefer prefer);
 
 extern int computeWindow(const std::vector<Note*>& notes, int start, int end);
 extern int tpc(int idx, int pitch, int opt);
-extern String tpc2name(int tpc, NoteSpellingType spelling, NoteCaseType noteCase, bool explicitAccidental = false);
+extern String tpc2name(int tpc, NoteSpellingType spelling, NoteCaseType noteCase, bool explicitAccidental = false, bool full = false);
 extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, String& acc,
-                     bool explicitAccidental = false);
+                     bool explicitAccidental = false, bool full = false);
 extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, AccidentalVal& acc);
 extern int step2tpc(const String& stepName, AccidentalVal alter);
 extern int step2tpc(int step);
