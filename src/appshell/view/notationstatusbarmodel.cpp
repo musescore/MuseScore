@@ -219,6 +219,7 @@ void NotationStatusBarModel::onCurrentNotationChanged()
 {
     emit currentViewModeChanged();
     emit availableViewModeListChanged();
+    emit availableZoomListChanged();
     emit zoomEnabledChanged();
 
     if (!notation()) {
