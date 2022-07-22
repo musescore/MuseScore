@@ -69,10 +69,8 @@ EngravingProject::~EngravingProject()
     ObjectAllocator::used--;
 
     AllocatorsRegister::instance()->printStatistic("=== Destroy engraving project ===");
-
-    async::Async::call(nullptr, []() {
-        AllocatorsRegister::instance()->cleanupAll("engraving");
-    });
+    //! NOTE At the moment, the allocator is working as leak detector. No need to do cleanup, at the moment it can lead to crashes
+    // AllocatorsRegister::instance()->cleanupAll("engraving");
 }
 
 void EngravingProject::init(const MStyle& style)
