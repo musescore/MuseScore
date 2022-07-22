@@ -24,7 +24,7 @@
 #define MU_PLUGINS_IPLUGINSSERVICE_H
 
 #include "pluginstypes.h"
-#include "retval.h"
+#include "types/retval.h"
 #include "global/progress.h"
 
 #include "modularity/imoduleexport.h"

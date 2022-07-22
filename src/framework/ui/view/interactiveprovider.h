@@ -31,7 +31,7 @@
 #include "../iinteractiveprovider.h"
 #include "../iinteractiveuriregister.h"
 #include "../imainwindow.h"
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::ui {
 class QmlLaunchData : public QObject

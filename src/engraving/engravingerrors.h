@@ -25,7 +25,7 @@
 
 #include "libmscore/masterscore.h"
 
-#include "ret.h"
+#include "types/ret.h"
 #include "translation.h"
 
 namespace mu::engraving {

@@ -23,7 +23,7 @@
 #define MU_UI_IINTERACTIVEURIREGISTER_H
 
 #include "modularity/imoduleexport.h"
-#include "global/uri.h"
+#include "types/uri.h"
 #include "uitypes.h"
 
 namespace mu::ui {

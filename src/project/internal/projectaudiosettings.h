@@ -27,7 +27,7 @@
 
 #include "../iprojectaudiosettings.h"
 
-#include "ret.h"
+#include "types/ret.h"
 #include "engraving/io/mscreader.h"
 #include "engraving/io/mscwriter.h"
 

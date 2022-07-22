@@ -23,7 +23,7 @@
 #ifndef MU_NOTATION_INOTATIONACCESSIBILITY_H
 #define MU_NOTATION_INOTATIONACCESSIBILITY_H
 
-#include "retval.h"
+#include "types/retval.h"
 #include "notationtypes.h"
 
 #include "engraving/accessibility/accessibleroot.h"

@@ -23,7 +23,7 @@
 #define MU_PROJECT_IPROJECTMIGRATOR_H
 
 #include "modularity/imoduleexport.h"
-#include "ret.h"
+#include "types/ret.h"
 #include "engraving/engravingproject.h"
 
 namespace mu::project {

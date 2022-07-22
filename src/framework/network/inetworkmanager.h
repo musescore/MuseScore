@@ -22,7 +22,7 @@
 #ifndef MU_NETWORK_INETWORKMANAGER_H
 #define MU_NETWORK_INETWORKMANAGER_H
 
-#include "ret.h"
+#include "types/ret.h"
 #include "async/channel.h"
 #include "global/progress.h"
 #include "networktypes.h"

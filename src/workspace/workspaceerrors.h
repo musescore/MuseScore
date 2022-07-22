@@ -22,7 +22,7 @@
 #ifndef MU_WORKSPACE_WORKSPACEERRORS_H
 #define MU_WORKSPACE_WORKSPACEERRORS_H
 
-#include "ret.h"
+#include "types/ret.h"
 
 namespace mu::workspace {
 enum class Err {

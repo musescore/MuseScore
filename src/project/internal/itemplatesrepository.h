@@ -26,7 +26,7 @@
 #include "modularity/imoduleexport.h"
 #include "project/projecttypes.h"
 
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::project {
 class ITemplatesRepository : MODULE_EXPORT_INTERFACE

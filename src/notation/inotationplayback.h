@@ -22,7 +22,7 @@
 #ifndef MU_NOTATION_INOTATIONPLAYBACK_H
 #define MU_NOTATION_INOTATIONPLAYBACK_H
 
-#include "retval.h"
+#include "types/retval.h"
 #include "midi/miditypes.h"
 #include "audio/audiotypes.h"
 #include "async/channel.h"
