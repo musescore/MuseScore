@@ -1779,28 +1779,11 @@ void Beam::read(XmlReader& e)
             setGrowLeft(e.readDouble());
         } else if (tag == "growRight") {
             setGrowRight(e.readDouble());
-        } else if (tag == "y1") {
-            if (fragments.empty()) {
-                fragments.push_back(new BeamFragment);
-            }
-            BeamFragment* f = fragments.back();
-            int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-            _userModified[idx] = true;
-            f->py1[idx] = e.readDouble() * _spatium;
-        } else if (tag == "y2") {
-            if (fragments.empty()) {
-                fragments.push_back(new BeamFragment);
-            }
-            BeamFragment* f = fragments.back();
-            int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-            _userModified[idx] = true;
-            f->py2[idx] = e.readDouble() * _spatium;
         } else if (tag == "Fragment") {
             BeamFragment* f = new BeamFragment;
             int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
             _userModified[idx] = true;
             double _spatium1 = spatium();
-
             while (e.readNextStartElement()) {
                 const AsciiStringView tag1(e.name());
                 if (tag1 == "y1") {
@@ -1815,6 +1798,8 @@ void Beam::read(XmlReader& e)
         } else if (tag == "l1" || tag == "l2") {      // ignore
             e.skipCurrentElement();
         } else if (tag == "subtype") {          // obsolete
+            e.skipCurrentElement();
+        } else if (tag == "y1" || tag == "y2") { // obsolete
             e.skipCurrentElement();
         } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
