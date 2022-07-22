@@ -41,12 +41,12 @@ ColumnLayout {
 
         StyledTabButton {
             fillWidth: true
-            text: qsTrc("mpe", "Single note")
+            text: /*qsTrc*/ "Single note"
         }
 
         StyledTabButton {
             fillWidth: true
-            text: qsTrc("mpe", "Multi note")
+            text: /*qsTrc*/ "Multi note"
         }
     }
 

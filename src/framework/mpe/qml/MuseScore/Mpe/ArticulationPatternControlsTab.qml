@@ -41,17 +41,17 @@ Column {
 
         StyledTabButton {
             fillWidth: true
-            text: qsTrc("mpe", "Arrangement")
+            text: /*qsTrc*/ "Arrangement"
         }
 
         StyledTabButton {
             fillWidth: true
-            text: qsTrc("mpe", "Pitch")
+            text: /*qsTrc*/ "Pitch"
         }
 
         StyledTabButton {
             fillWidth: true
-            text: qsTrc("mpe", "Expression")
+            text: /*qsTrc*/ "Expression"
         }
     }
 

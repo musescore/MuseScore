@@ -22,8 +22,6 @@
 
 #include "articulationsprofileeditormodel.h"
 
-#include "global/translation.h"
-
 using namespace mu;
 using namespace mu::mpe;
 
@@ -39,8 +37,10 @@ ArticulationsProfileEditorModel::ArticulationsProfileEditorModel(QObject* parent
 
 void ArticulationsProfileEditorModel::requestToOpenProfile()
 {
-    QString filter = qtrc("mpe", "MPE articulations profile") + " " + PROFILE_EXTENSION;
-    io::path_t path = interactive()->selectOpeningFile(qtrc("mpe", "Open MPE articulations profile"), "", filter);
+    //! Make these strings translatable when we expose this tool to users
+    QString filter = /*qtrc*/ QString("MPE articulations profile") + " " + PROFILE_EXTENSION;
+    io::path_t path = interactive()->selectOpeningFile(/*qtrc*/ QString("Open MPE articulations profile"), "", filter);
+
     setCurrentPath(path.toQString());
 
     setProfile(profilesRepository()->loadProfile(m_profilePath));
@@ -48,15 +48,14 @@ void ArticulationsProfileEditorModel::requestToOpenProfile()
 
 void ArticulationsProfileEditorModel::requestToCreateProfile()
 {
-    QString filter = qtrc("mpe", "MPE articulations profile") + " " + PROFILE_EXTENSION;
-    io::path_t path = interactive()->selectSavingFile(qtrc("mpe", "Open MPE articulations profile"), "", filter);
+    QString filter = /*qtrc*/ QString("MPE articulations profile") + " " + PROFILE_EXTENSION;
+    io::path_t path = interactive()->selectSavingFile(/*qtrc*/ QString("Save MPE articulations profile"), "", filter);
+
     setCurrentPath(path.toQString());
 }
 
 void ArticulationsProfileEditorModel::requestToSaveProfile()
 {
-    QString filter = qtrc("mpe", "MPE articulations profile") + " " + PROFILE_EXTENSION;
-
     if (m_profilePath.empty()) {
         requestToCreateProfile();
     }
