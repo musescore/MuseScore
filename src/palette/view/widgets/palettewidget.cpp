@@ -36,8 +36,8 @@
 
 #include "translation.h"
 #include "types/bytearray.h"
-#include "serialization/internal/qzipreader_p.h"
-#include "serialization/internal/qzipwriter_p.h"
+#include "global/deprecated/qzipreader_p.h"
+#include "global/deprecated/qzipwriter_p.h"
 
 #include "actions/actiontypes.h"
 #include "commonscene/commonscenetypes.h"
