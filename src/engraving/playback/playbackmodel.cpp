@@ -48,7 +48,7 @@ static const std::string CHORD_SYMBOLS_INSTRUMENT_ID("chord_symbols");
 const InstrumentTrackId PlaybackModel::METRONOME_TRACK_ID = { 999, METRONOME_INSTRUMENT_ID };
 const InstrumentTrackId PlaybackModel::CHORD_SYMBOLS_TRACK_ID = { 1000, CHORD_SYMBOLS_INSTRUMENT_ID };
 
-static const Harmony* findChordSymbols(const EngravingItem* item)
+static const Harmony* findChordSymbol(const EngravingItem* item)
 {
     if (item->isHarmony()) {
         return toHarmony(item);
@@ -78,10 +78,12 @@ void PlaybackModel::load(Score* score)
         clearExpiredContexts(trackRange.trackFrom, trackRange.trackTo);
         clearExpiredEvents(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo);
 
-        InstrumentTrackIdSet existingTracks = existingTrackIdSet();
+        InstrumentTrackIdSet oldTracks = existingTrackIdSet();
+
         ChangedTrackIdSet trackChanges;
         update(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo, &trackChanges);
-        notifyAboutChanges(std::move(trackChanges), std::move(existingTracks));
+
+        notifyAboutChanges(oldTracks, trackChanges);
     });
 
     update(0, m_score->lastMeasure()->endTick().ticks(), 0, m_score->ntracks());
@@ -189,7 +191,7 @@ void PlaybackModel::triggerEventsForItem(const EngravingItem* item)
 
         if (chordSymbol->isRealizable()) {
             PlaybackEventsMap result;
-            m_renderer.renderChordSymbols(chordSymbol, 0 /*ticksPositionOffset*/, result);
+            m_renderer.renderChordSymbol(chordSymbol, 0 /*ticksPositionOffset*/, result);
             trackPlaybackData->second.offStream.send(std::move(result));
         }
 
@@ -215,6 +217,17 @@ void PlaybackModel::triggerEventsForItem(const EngravingItem* item)
     trackPlaybackData->second.offStream.send(std::move(result));
 }
 
+InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const
+{
+    InstrumentTrackIdSet result;
+
+    for (const auto& pair : m_playbackDataMap) {
+        result.insert(pair.first);
+    }
+
+    return result;
+}
+
 async::Channel<InstrumentTrackId> PlaybackModel::trackAdded() const
 {
     return m_trackAdded;
@@ -235,6 +248,8 @@ void PlaybackModel::update(const int tickFrom, const int tickTo, const track_idx
 
 void PlaybackModel::updateSetupData()
 {
+    bool hasChordSymbols = false;
+
     for (const Part* part : m_score->parts()) {
         for (const auto& pair : part->instruments()) {
             InstrumentTrackId trackId = idKey(part->id(), pair.second->id().toStdString());
@@ -245,10 +260,17 @@ void PlaybackModel::updateSetupData()
 
             m_setupResolver.resolveSetupData(pair.second, m_playbackDataMap[trackId].setupData);
         }
+
+        if (!hasChordSymbols && part->hasChordSymbol()) {
+            hasChordSymbols = true;
+        }
     }
 
     m_setupResolver.resolveMetronomeSetupData(m_playbackDataMap[METRONOME_TRACK_ID].setupData);
-    m_setupResolver.resolveChordSymbolsSetupData(m_playbackDataMap[CHORD_SYMBOLS_TRACK_ID].setupData);
+
+    if (hasChordSymbols) {
+        m_setupResolver.resolveChordSymbolsSetupData(m_playbackDataMap[CHORD_SYMBOLS_TRACK_ID].setupData);
+    }
 }
 
 void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t trackTo)
@@ -307,7 +329,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                         continue;
                     }
 
-                    const Harmony* chordSymbol = findChordSymbols(item);
+                    const Harmony* chordSymbol = findChordSymbol(item);
                     if (!chordSymbol || !chordSymbol->isRealizable()) {
                         continue;
                     }
@@ -317,7 +339,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                         return;
                     }
 
-                    m_renderer.renderChordSymbols(chordSymbol, tickPositionOffset, m_playbackDataMap[CHORD_SYMBOLS_TRACK_ID].originEvents);
+                    m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset, m_playbackDataMap[CHORD_SYMBOLS_TRACK_ID].originEvents);
                     collectChangesTracks(CHORD_SYMBOLS_TRACK_ID, trackChanges);
                 }
 
@@ -409,6 +431,7 @@ bool PlaybackModel::containsTrack(const InstrumentTrackId& trackId) const
 void PlaybackModel::clearExpiredTracks()
 {
     auto it = m_playbackDataMap.cbegin();
+    bool hasChordSymbols = false;
 
     while (it != m_playbackDataMap.cend()) {
         if (it->first == METRONOME_TRACK_ID || it->first == CHORD_SYMBOLS_TRACK_ID) {
@@ -424,7 +447,20 @@ void PlaybackModel::clearExpiredTracks()
             continue;
         }
 
+        if (!hasChordSymbols && part->hasChordSymbol()) {
+            hasChordSymbols = true;
+        }
+
         ++it;
+    }
+
+    if (!hasChordSymbols) {
+        it = m_playbackDataMap.find(CHORD_SYMBOLS_TRACK_ID);
+
+        if (it != m_playbackDataMap.cend()) {
+            m_trackRemoved.send(CHORD_SYMBOLS_TRACK_ID);
+            m_playbackDataMap.erase(it);
+        }
     }
 }
 
@@ -470,9 +506,9 @@ void PlaybackModel::collectChangesTracks(const InstrumentTrackId& trackId, Chang
     result->insert(trackId);
 }
 
-void PlaybackModel::notifyAboutChanges(ChangedTrackIdSet&& trackChanges, InstrumentTrackIdSet&& existingTracks)
+void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, const InstrumentTrackIdSet& changedTracks)
 {
-    for (const InstrumentTrackId& trackId : trackChanges) {
+    for (const InstrumentTrackId& trackId : changedTracks) {
         auto search = m_playbackDataMap.find(trackId);
 
         if (search == m_playbackDataMap.cend()) {
@@ -481,13 +517,15 @@ void PlaybackModel::notifyAboutChanges(ChangedTrackIdSet&& trackChanges, Instrum
 
         search->second.mainStream.send(search->second.originEvents);
         search->second.dynamicLevelChanges.send(search->second.dynamicLevelMap);
+    }
 
-        if (existingTracks.find(trackId) == existingTracks.cend()) {
-            m_trackAdded.send(trackId);
+    for (auto it = m_playbackDataMap.cbegin(); it != m_playbackDataMap.cend(); ++it) {
+        if (!mu::contains(oldTracks, it->first)) {
+            m_trackAdded.send(it->first);
         }
     }
 
-    if (!trackChanges.empty()) {
+    if (!changedTracks.empty()) {
         m_dataChanged.notify();
     }
 }
@@ -570,15 +608,4 @@ InstrumentTrackId PlaybackModel::idKey(const EngravingItem* item) const
 InstrumentTrackId PlaybackModel::idKey(const ID& partId, const std::string& instrumentId) const
 {
     return { partId, instrumentId };
-}
-
-InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const
-{
-    InstrumentTrackIdSet result;
-
-    for (const auto& pair : m_playbackDataMap) {
-        result.insert(pair.first);
-    }
-
-    return result;
 }

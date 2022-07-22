@@ -155,8 +155,12 @@ private:
     void updateMuteStates();
 
     void setCurrentTick(const midi::tick_t tick);
-    void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title,
-                  const std::function<void(const engraving::InstrumentTrackId&)>& callBack);
+
+    using TrackAddFinished = std::function<void (const engraving::InstrumentTrackId&)>;
+
+    void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished);
+    void doAddTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title, const TrackAddFinished& onFinished);
+
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
     audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
     engraving::InstrumentTrackIdSet availableInstrumentTracks() const;

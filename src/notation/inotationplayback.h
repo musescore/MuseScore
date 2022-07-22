@@ -46,6 +46,7 @@ public:
     virtual const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void triggerEventsForItem(const EngravingItem* item) = 0;
 
+    virtual engraving::InstrumentTrackIdSet existingTrackIdSet() const = 0;
     virtual async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
     virtual async::Channel<engraving::InstrumentTrackId> trackRemoved() const = 0;
 

@@ -115,6 +115,11 @@ void NotationPlayback::triggerEventsForItem(const EngravingItem* item)
     m_playbackModel.triggerEventsForItem(item);
 }
 
+InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const
+{
+    return m_playbackModel.existingTrackIdSet();
+}
+
 async::Channel<InstrumentTrackId> NotationPlayback::trackAdded() const
 {
     return m_playbackModel.trackAdded();

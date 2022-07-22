@@ -96,15 +96,15 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timest
     }
 }
 
-void PlaybackEventsRenderer::renderChordSymbols(const Harmony* chordSymbols,
-                                                const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const
+void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
+                                               const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const
 {
-    const Score* score = chordSymbols->score();
+    const Score* score = chordSymbol->score();
 
-    int positionTick = chordSymbols->tick().ticks() + ticksPositionOffset;
+    int positionTick = chordSymbol->tick().ticks() + ticksPositionOffset;
     BeatsPerSecond bps = score->tempomap()->tempo(positionTick);
 
-    const RealizedHarmony& realized = chordSymbols->getRealizedHarmony();
+    const RealizedHarmony& realized = chordSymbol->getRealizedHarmony();
     const RealizedHarmony::PitchMap& notes = realized.notes();
 
     static ArticulationMap emptyArticulations;
@@ -114,7 +114,7 @@ void PlaybackEventsRenderer::renderChordSymbols(const Harmony* chordSymbols,
 
     int durationTicks = realized.getActualDuration(positionTick).ticks();
     duration_t duration = durationFromTicks(bps.val, durationTicks);
-    voice_layer_idx_t voiceIdx = chordSymbols->voice();
+    voice_layer_idx_t voiceIdx = chordSymbol->voice();
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int octave = playingOctave(it->first, it->second);

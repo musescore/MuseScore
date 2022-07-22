@@ -793,6 +793,11 @@ const InstrChannel* Part::harmonyChannel() const
     return chan;
 }
 
+bool Part::hasChordSymbol() const
+{
+    return harmonyChannel() != nullptr;
+}
+
 //---------------------------------------------------------
 //   hasPitchedStaff
 //---------------------------------------------------------
