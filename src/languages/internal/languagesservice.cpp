@@ -39,8 +39,6 @@ using namespace mu::languages;
 using namespace mu::framework;
 using namespace mu::network;
 
-static const QString DEFAULT_LANGUAGE("system");
-
 static const QStringList languageFileTypes = {
     "musescore",
     "instruments"
@@ -56,7 +54,7 @@ static QString downloadingStatusTitle()
 void LanguagesService::init()
 {
     ValCh<QString> languageCode = configuration()->currentLanguageCode();
-    loadLanguage(languageCode.val);
+    setCurrentLanguage(languageCode.val);
 
     //! NOTE To change the language at the moment, a restart is required
 
@@ -364,7 +362,12 @@ Ret LanguagesService::removeLanguage(const QString& languageCode) const
 
 Ret LanguagesService::loadLanguage(const QString& languageCode)
 {
-    const io::paths_t files = configuration()->languageFilePaths(languageCode);
+    io::paths_t files = configuration()->languageFilePaths(languageCode);
+    if (files.empty()) {
+        QString shortLanguageCode = languageCode.left(languageCode.lastIndexOf("_"));
+        files = configuration()->languageFilePaths(shortLanguageCode);
+    }
+
     if (files.empty()) {
         return make_ret(Err::UnknownError);
     }
