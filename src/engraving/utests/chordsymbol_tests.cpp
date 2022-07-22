@@ -41,7 +41,7 @@ using namespace mu::engraving;
 
 static const String CHORDSYMBOL_DATA_DIR("chordsymbol_data/");
 
-class ChordSymbolTests : public ::testing::Test
+class Engraving_ChordSymbolTests : public ::testing::Test
 {
 public:
     MasterScore* test_pre(const char16_t* p);
@@ -51,7 +51,7 @@ public:
     void realizeSelectionVoiced(MasterScore* score, Voicing voicing);
 };
 
-MasterScore* ChordSymbolTests::test_pre(const char16_t* p)
+MasterScore* Engraving_ChordSymbolTests::test_pre(const char16_t* p)
 {
     String p1 = CHORDSYMBOL_DATA_DIR + p + ".mscx";
     MasterScore* score = ScoreRW::readScore(p1);
@@ -60,7 +60,7 @@ MasterScore* ChordSymbolTests::test_pre(const char16_t* p)
     return score;
 }
 
-void ChordSymbolTests::test_post(MasterScore* score, const char16_t* p)
+void Engraving_ChordSymbolTests::test_post(MasterScore* score, const char16_t* p)
 {
     String p1 = p;
     p1 += u"-test.mscx";
@@ -72,7 +72,7 @@ void ChordSymbolTests::test_post(MasterScore* score, const char16_t* p)
 //---------------------------------------------------------
 //   select all chord symbols within the specified score
 //---------------------------------------------------------
-void ChordSymbolTests::selectAllChordSymbols(MasterScore* score)
+void Engraving_ChordSymbolTests::selectAllChordSymbols(MasterScore* score)
 {
     //find a chord symbol
     Segment* seg = score->firstSegment(SegmentType::ChordRest);
@@ -92,7 +92,7 @@ void ChordSymbolTests::selectAllChordSymbols(MasterScore* score)
 //   realize the current selection of the score using
 //   the specified voicing
 //---------------------------------------------------------
-void ChordSymbolTests::realizeSelectionVoiced(MasterScore* score, Voicing voicing)
+void Engraving_ChordSymbolTests::realizeSelectionVoiced(MasterScore* score, Voicing voicing)
 {
     for (EngravingItem* e : score->selection().elements()) {
         if (e->isHarmony()) {
@@ -104,7 +104,7 @@ void ChordSymbolTests::realizeSelectionVoiced(MasterScore* score, Voicing voicin
     score->endCmd();
 }
 
-TEST_F(ChordSymbolTests, testExtend)
+TEST_F(Engraving_ChordSymbolTests, testExtend)
 {
     MasterScore* score = test_pre(u"extend");
     Measure* m = score->firstMeasure();
@@ -115,7 +115,7 @@ TEST_F(ChordSymbolTests, testExtend)
     test_post(score, u"extend");
 }
 
-TEST_F(ChordSymbolTests, testClear)
+TEST_F(Engraving_ChordSymbolTests, testClear)
 {
     MasterScore* score = test_pre(u"clear");
     Measure* m = score->firstMeasure();
@@ -125,7 +125,7 @@ TEST_F(ChordSymbolTests, testClear)
     test_post(score, u"clear");
 }
 
-TEST_F(ChordSymbolTests, testAddLink)
+TEST_F(Engraving_ChordSymbolTests, testAddLink)
 {
     MasterScore* score = test_pre(u"add-link");
     Segment* seg = score->firstSegment(SegmentType::ChordRest);
@@ -139,7 +139,7 @@ TEST_F(ChordSymbolTests, testAddLink)
     test_post(score, u"add-link");
 }
 
-TEST_F(ChordSymbolTests, testAddPart)
+TEST_F(Engraving_ChordSymbolTests, testAddPart)
 {
     MasterScore* score = test_pre(u"add-part");
     Segment* seg = score->firstSegment(SegmentType::ChordRest);
@@ -153,7 +153,7 @@ TEST_F(ChordSymbolTests, testAddPart)
     test_post(score, u"add-part");
 }
 
-TEST_F(ChordSymbolTests, testNoSystem)
+TEST_F(Engraving_ChordSymbolTests, testNoSystem)
 {
     MasterScore* score = test_pre(u"no-system");
 
@@ -198,7 +198,7 @@ TEST_F(ChordSymbolTests, testNoSystem)
     test_post(score, u"no-system");
 }
 
-TEST_F(ChordSymbolTests, testTranspose)
+TEST_F(Engraving_ChordSymbolTests, testTranspose)
 {
     MasterScore* score = test_pre(u"transpose");
     score->startCmd();
@@ -208,7 +208,7 @@ TEST_F(ChordSymbolTests, testTranspose)
     test_post(score, u"transpose");
 }
 
-TEST_F(ChordSymbolTests, testTransposePart)
+TEST_F(Engraving_ChordSymbolTests, testTransposePart)
 {
     MasterScore* score = test_pre(u"transpose-part");
     score->startCmd();
@@ -221,7 +221,7 @@ TEST_F(ChordSymbolTests, testTransposePart)
 //---------------------------------------------------------
 //   check close voicing algorithm
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeClose)
+TEST_F(Engraving_ChordSymbolTests, testRealizeClose)
 {
     MasterScore* score = test_pre(u"realize");
     selectAllChordSymbols(score);
@@ -232,7 +232,7 @@ TEST_F(ChordSymbolTests, testRealizeClose)
 //---------------------------------------------------------
 //   check Drop 2 voicing algorithm
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeDrop2)
+TEST_F(Engraving_ChordSymbolTests, testRealizeDrop2)
 {
     MasterScore* score = test_pre(u"realize");
     selectAllChordSymbols(score);
@@ -243,7 +243,7 @@ TEST_F(ChordSymbolTests, testRealizeDrop2)
 //---------------------------------------------------------
 //   check 3 note voicing algorithm
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealize3Note)
+TEST_F(Engraving_ChordSymbolTests, testRealize3Note)
 {
     MasterScore* score = test_pre(u"realize");
     selectAllChordSymbols(score);
@@ -254,7 +254,7 @@ TEST_F(ChordSymbolTests, testRealize3Note)
 //---------------------------------------------------------
 //   check 4 note voicing algorithm
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealize4Note)
+TEST_F(Engraving_ChordSymbolTests, testRealize4Note)
 {
     MasterScore* score = test_pre(u"realize");
     selectAllChordSymbols(score);
@@ -265,7 +265,7 @@ TEST_F(ChordSymbolTests, testRealize4Note)
 //---------------------------------------------------------
 //   check 6 note voicing algorithm
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealize6Note)
+TEST_F(Engraving_ChordSymbolTests, testRealize6Note)
 {
     MasterScore* score = test_pre(u"realize");
     selectAllChordSymbols(score);
@@ -277,7 +277,7 @@ TEST_F(ChordSymbolTests, testRealize6Note)
 //   Check if the note pitches and tpcs are correct after realizing
 //   chord symbols on transposed instruments.
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeConcertPitch)
+TEST_F(Engraving_ChordSymbolTests, testRealizeConcertPitch)
 {
     MasterScore* score = test_pre(u"realize-concert-pitch");
     //concert pitch off
@@ -297,7 +297,7 @@ TEST_F(ChordSymbolTests, testRealizeConcertPitch)
 //   Check if the note pitches and tpcs are correct after
 //   transposing the score
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeTransposed)
+TEST_F(Engraving_ChordSymbolTests, testRealizeTransposed)
 {
     MasterScore* score = test_pre(u"transpose");
     //transpose
@@ -316,7 +316,7 @@ TEST_F(ChordSymbolTests, testRealizeTransposed)
 //   Check for correctness when using the override
 //   feature for realizing chord symbols
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeOverrides)
+TEST_F(Engraving_ChordSymbolTests, testRealizeOverrides)
 {
     MasterScore* score = test_pre(u"realize-override");
     //realize all chord symbols
@@ -330,7 +330,7 @@ TEST_F(ChordSymbolTests, testRealizeOverrides)
 //---------------------------------------------------------
 //   Check for correctness when realizing chord symbols on triplets
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeTriplet)
+TEST_F(Engraving_ChordSymbolTests, testRealizeTriplet)
 {
     MasterScore* score = test_pre(u"realize-triplet");
     //realize all chord symbols
@@ -345,7 +345,7 @@ TEST_F(ChordSymbolTests, testRealizeTriplet)
 //   Check for correctness when realizing chord symbols
 //   with different durations
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeDuration)
+TEST_F(Engraving_ChordSymbolTests, testRealizeDuration)
 {
     MasterScore* score = test_pre(u"realize-duration");
     //realize all chord symbols
@@ -360,7 +360,7 @@ TEST_F(ChordSymbolTests, testRealizeDuration)
 //   Check for correctness when realizing chord symbols
 //   with jazz mode
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeJazz)
+TEST_F(Engraving_ChordSymbolTests, testRealizeJazz)
 {
     MasterScore* score = test_pre(u"realize-jazz");
     //realize all chord symbols

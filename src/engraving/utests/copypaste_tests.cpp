@@ -44,7 +44,7 @@ using namespace mu::engraving;
 
 static const String COPYPASTE_DATA_DIR(u"copypaste_data/");
 
-class CopyPasteTests : public ::testing::Test
+class Engraving_CopyPasteTests : public ::testing::Test
 {
 public:
     void copypaste(const char*);
@@ -58,7 +58,7 @@ public:
 //    copy measure 2, paste into measure 4
 //---------------------------------------------------------
 
-void CopyPasteTests::copypaste(const char* idx)
+void Engraving_CopyPasteTests::copypaste(const char* idx)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)));
     EXPECT_TRUE(score);
@@ -97,92 +97,92 @@ void CopyPasteTests::copypaste(const char* idx)
     delete score;
 }
 
-TEST_F(CopyPasteTests, copypaste01)
+TEST_F(Engraving_CopyPasteTests, copypaste01)
 {
     copypaste("01");    // start slur
 }
 
-TEST_F(CopyPasteTests, copypaste02)
+TEST_F(Engraving_CopyPasteTests, copypaste02)
 {
     copypaste("02");    // end slur
 }
 
-TEST_F(CopyPasteTests, copypaste03)
+TEST_F(Engraving_CopyPasteTests, copypaste03)
 {
     copypaste("03");    // slur
 }
 
-TEST_F(CopyPasteTests, copypaste04)
+TEST_F(Engraving_CopyPasteTests, copypaste04)
 {
     copypaste("04");    // start tie
 }
 
-TEST_F(CopyPasteTests, copypaste05)
+TEST_F(Engraving_CopyPasteTests, copypaste05)
 {
     copypaste("05");    // end tie
 }
 
-TEST_F(CopyPasteTests, copypaste06)
+TEST_F(Engraving_CopyPasteTests, copypaste06)
 {
     copypaste("06");    // tie
 }
 
-TEST_F(CopyPasteTests, DISABLED_copypaste07)
+TEST_F(Engraving_CopyPasteTests, DISABLED_copypaste07)
 {
     copypaste("07");    // start ottava
 }
 
-TEST_F(CopyPasteTests, copypaste08)
+TEST_F(Engraving_CopyPasteTests, copypaste08)
 {
     copypaste("08");    // end ottava
 }
 
-TEST_F(CopyPasteTests, copypaste09)
+TEST_F(Engraving_CopyPasteTests, copypaste09)
 {
     copypaste("09");    // ottava
 }
 
-TEST_F(CopyPasteTests, copypaste10)
+TEST_F(Engraving_CopyPasteTests, copypaste10)
 {
     copypaste("10");    // two slurs
 }
 
-TEST_F(CopyPasteTests, copypaste11)
+TEST_F(Engraving_CopyPasteTests, copypaste11)
 {
     copypaste("11");    // grace notes
 }
 
-TEST_F(CopyPasteTests, copypaste12)
+TEST_F(Engraving_CopyPasteTests, copypaste12)
 {
     copypaste("12");    // voices
 }
 
-TEST_F(CopyPasteTests, copypaste19)
+TEST_F(Engraving_CopyPasteTests, copypaste19)
 {
     copypaste("19");    // chord symbols
 }
 
-TEST_F(CopyPasteTests, copypaste22)
+TEST_F(Engraving_CopyPasteTests, copypaste22)
 {
     copypaste("22");    // cross-staff slur
 }
 
-TEST_F(CopyPasteTests, copypaste23)
+TEST_F(Engraving_CopyPasteTests, copypaste23)
 {
     copypaste("23");    // full measure tuplet 10/8
 }
 
-TEST_F(CopyPasteTests, copypaste24)
+TEST_F(Engraving_CopyPasteTests, copypaste24)
 {
     copypaste("24");    // more complex non reduced tuplet
 }
 
-TEST_F(CopyPasteTests, copypaste25)
+TEST_F(Engraving_CopyPasteTests, copypaste25)
 {
     copypaste("25");    // copy full measure rest
 }
 
-TEST_F(CopyPasteTests, copypaste26)
+TEST_F(Engraving_CopyPasteTests, copypaste26)
 {
     copypaste("26");    // Copy chords (#298541)
 }
@@ -191,7 +191,7 @@ TEST_F(CopyPasteTests, copypaste26)
 //    copy measure 2 from first staff, paste into staff 2
 //---------------------------------------------------------
 
-void CopyPasteTests::copypastevoice(const char* idx, int voice)
+void Engraving_CopyPasteTests::copypastevoice(const char* idx, int voice)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)));
     EXPECT_TRUE(score);
@@ -229,7 +229,7 @@ void CopyPasteTests::copypastevoice(const char* idx, int voice)
     delete score;
 }
 
-TEST_F(CopyPasteTests, copypaste2Voice)
+TEST_F(Engraving_CopyPasteTests, copypaste2Voice)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste13.mscx"));
     EXPECT_TRUE(score);
@@ -267,7 +267,7 @@ TEST_F(CopyPasteTests, copypaste2Voice)
     delete score;
 }
 
-TEST_F(CopyPasteTests, copypaste2Voice5)
+TEST_F(Engraving_CopyPasteTests, copypaste2Voice5)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste17.mscx"));
     EXPECT_TRUE(score);
@@ -308,7 +308,7 @@ TEST_F(CopyPasteTests, copypaste2Voice5)
     delete score;
 }
 
-TEST_F(CopyPasteTests, copypaste2Voice6)
+TEST_F(Engraving_CopyPasteTests, copypaste2Voice6)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste20.mscx"));
     EXPECT_TRUE(score);
@@ -348,7 +348,7 @@ TEST_F(CopyPasteTests, copypaste2Voice6)
     delete score;
 }
 
-TEST_F(CopyPasteTests, copypasteOnlySecondVoice)
+TEST_F(Engraving_CopyPasteTests, copypasteOnlySecondVoice)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste18.mscx"));
     EXPECT_TRUE(score);
@@ -389,7 +389,7 @@ TEST_F(CopyPasteTests, copypasteOnlySecondVoice)
 //    copy measure 2 from first staff, paste into staff 2
 //---------------------------------------------------------
 
-void CopyPasteTests::copypastestaff(const char* idx)
+void Engraving_CopyPasteTests::copypastestaff(const char* idx)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste%1.mscx").arg(String::fromUtf8(idx)));
     EXPECT_TRUE(score);
@@ -422,12 +422,12 @@ void CopyPasteTests::copypastestaff(const char* idx)
     delete score;
 }
 
-TEST_F(CopyPasteTests, copypastestaff50)
+TEST_F(Engraving_CopyPasteTests, copypastestaff50)
 {
     copypastestaff("50");    // staff & slurs
 }
 
-TEST_F(CopyPasteTests, copypastePartial)
+TEST_F(Engraving_CopyPasteTests, copypastePartial)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_partial_01.mscx"));
     EXPECT_TRUE(score);
@@ -460,7 +460,7 @@ TEST_F(CopyPasteTests, copypastePartial)
     delete score;
 }
 
-void CopyPasteTests::copypastetuplet(const char* idx)
+void Engraving_CopyPasteTests::copypastetuplet(const char* idx)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_tuplet_%1.mscx").arg(String::fromUtf8(idx)));
     EXPECT_TRUE(score);
@@ -495,17 +495,17 @@ void CopyPasteTests::copypastetuplet(const char* idx)
     delete score;
 }
 
-TEST_F(CopyPasteTests, copypasteTuplet01)
+TEST_F(Engraving_CopyPasteTests, copypasteTuplet01)
 {
     copypastetuplet("01");
 }
 
-TEST_F(CopyPasteTests, copypasteTuplet02)
+TEST_F(Engraving_CopyPasteTests, copypasteTuplet02)
 {
     copypastetuplet("02");
 }
 
-void CopyPasteTests::copypastenote(const String& idx, Fraction scale)
+void Engraving_CopyPasteTests::copypastenote(const String& idx, Fraction scale)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + "copypasteNote" + idx + ".mscx");
     EXPECT_TRUE(score);
@@ -530,57 +530,57 @@ void CopyPasteTests::copypastenote(const String& idx, Fraction scale)
                                             COPYPASTE_DATA_DIR + "copypasteNote" + idx + "-ref.mscx"));
 }
 
-TEST_F(CopyPasteTests, copypasteQtrNoteOntoWholeRest)
+TEST_F(Engraving_CopyPasteTests, copypasteQtrNoteOntoWholeRest)
 {
     copypastenote(u"01");
 }
 
-TEST_F(CopyPasteTests, copypasteQtrNoteOntoWholeNote)
+TEST_F(Engraving_CopyPasteTests, copypasteQtrNoteOntoWholeNote)
 {
     copypastenote(u"02");
 }
 
-TEST_F(CopyPasteTests, copypasteQtrNoteOntoQtrRest)
+TEST_F(Engraving_CopyPasteTests, copypasteQtrNoteOntoQtrRest)
 {
     copypastenote(u"03");
 }
 
-TEST_F(CopyPasteTests, copypasteQtrNoteOntoQtrNote)
+TEST_F(Engraving_CopyPasteTests, copypasteQtrNoteOntoQtrNote)
 {
     copypastenote(u"04");
 }
 
-TEST_F(CopyPasteTests, copypasteWholeNoteOntoQtrNote)
+TEST_F(Engraving_CopyPasteTests, copypasteWholeNoteOntoQtrNote)
 {
     copypastenote(u"05");
 }
 
-TEST_F(CopyPasteTests, copypasteWholeNoteOntoQtrRest)
+TEST_F(Engraving_CopyPasteTests, copypasteWholeNoteOntoQtrRest)
 {
     copypastenote(u"06");
 }
 
-TEST_F(CopyPasteTests, copypasteQtrNoteOntoTriplet)
+TEST_F(Engraving_CopyPasteTests, copypasteQtrNoteOntoTriplet)
 {
     copypastenote(u"07");
 }
 
-TEST_F(CopyPasteTests, copypasteWholeNoteOntoTriplet)
+TEST_F(Engraving_CopyPasteTests, copypasteWholeNoteOntoTriplet)
 {
     copypastenote(u"08");
 }
 
-TEST_F(CopyPasteTests, copypasteQtrNoteIntoChord)
+TEST_F(Engraving_CopyPasteTests, copypasteQtrNoteIntoChord)
 {
     copypastenote(u"09");
 }
 
-TEST_F(CopyPasteTests, copypasteQtrNoteOntoMMRest)
+TEST_F(Engraving_CopyPasteTests, copypasteQtrNoteOntoMMRest)
 {
     copypastenote(u"10");
 }
 
-TEST_F(CopyPasteTests, copypasteQtrNoteDoubleDuration)
+TEST_F(Engraving_CopyPasteTests, copypasteQtrNoteDoubleDuration)
 {
     copypastenote(u"11", Fraction(2, 1));
 }
@@ -589,7 +589,7 @@ TEST_F(CopyPasteTests, copypasteQtrNoteDoubleDuration)
 //   copy-paste of tremolo between two notes
 //---------------------------------------------------------
 
-TEST_F(CopyPasteTests, DISABLED_copypastetremolo)
+TEST_F(Engraving_CopyPasteTests, DISABLED_copypastetremolo)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_tremolo.mscx"));
     EXPECT_TRUE(score);

@@ -33,11 +33,11 @@ using namespace mu::engraving;
 
 static const String TRANSPOSE_DATA_DIR("transpose_data/");
 
-class TransposeTests : public ::testing::Test
+class Engraving_TransposeTests : public ::testing::Test
 {
 };
 
-TEST_F(TransposeTests, undoTranspose)
+TEST_F(Engraving_TransposeTests, undoTranspose)
 {
     String readFile(TRANSPOSE_DATA_DIR + "undoTranspose.mscx");
     String writeFile1("undoTranspose01-test.mscx");
@@ -65,7 +65,7 @@ TEST_F(TransposeTests, undoTranspose)
     delete score;
 }
 
-TEST_F(TransposeTests, undoDiatonicTranspose)
+TEST_F(Engraving_TransposeTests, undoDiatonicTranspose)
 {
     String readFile(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose.mscx");
     String writeFile1("undoDiatonicTranspose01-test.mscx");

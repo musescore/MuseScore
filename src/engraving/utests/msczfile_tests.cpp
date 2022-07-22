@@ -31,12 +31,12 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-class MsczFileTests : public ::testing::Test
+class Engraving_MsczFileTests : public ::testing::Test
 {
 public:
 };
 
-TEST_F(MsczFileTests, MsczFile_WriteRead)
+TEST_F(Engraving_MsczFileTests, MsczFile_WriteRead)
 {
     //! CASE Writing and reading multiple datas
 

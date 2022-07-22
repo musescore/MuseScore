@@ -45,7 +45,7 @@ using namespace mu::engraving;
 
 static const String CPSYMBOLLIST_DATA_DIR(u"copypastesymbollist_data/");
 
-class CopyPasteSymbolListTests : public ::testing::Test
+class Engraving_CopyPasteSymbolListTests : public ::testing::Test
 {
 public:
     void copypastecommon(MasterScore*, const char16_t*);
@@ -57,7 +57,7 @@ public:
 //---------------------------------------------------------
 //   copy and paste to first chord in measure 4
 //---------------------------------------------------------
-void CopyPasteSymbolListTests::copypastecommon(MasterScore* score, const char16_t* name)
+void Engraving_CopyPasteSymbolListTests::copypastecommon(MasterScore* score, const char16_t* name)
 {
     // copy selection to clipboard
     EXPECT_TRUE(score->selection().canCopy());
@@ -94,7 +94,7 @@ void CopyPasteSymbolListTests::copypastecommon(MasterScore* score, const char16_
 //---------------------------------------------------------
 //    select all elements of type and copy paste
 //---------------------------------------------------------
-void CopyPasteSymbolListTests::copypaste(const char16_t* name, ElementType type)
+void Engraving_CopyPasteSymbolListTests::copypaste(const char16_t* name, ElementType type)
 {
     MasterScore* score = ScoreRW::readScore(CPSYMBOLLIST_DATA_DIR + String("copypastesymbollist-%1.mscx").arg(name));
     EXPECT_TRUE(score);
@@ -106,47 +106,47 @@ void CopyPasteSymbolListTests::copypaste(const char16_t* name, ElementType type)
     copypastecommon(score, name);
 }
 
-TEST_F(CopyPasteSymbolListTests, copypasteArticulation)
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteArticulation)
 {
     copypaste(u"articulation", ElementType::ARTICULATION);
 }
 
-TEST_F(CopyPasteSymbolListTests, copypasteChordNames)
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteChordNames)
 {
     copypaste(u"chordnames", ElementType::HARMONY);
 }
 
-TEST_F(CopyPasteSymbolListTests, copypasteChordNames1)
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteChordNames1)
 {
     copypaste(u"chordnames-01", ElementType::HARMONY);
 }
 
-TEST_F(CopyPasteSymbolListTests, DISABLED_copypasteFiguredBass)
+TEST_F(Engraving_CopyPasteSymbolListTests, DISABLED_copypasteFiguredBass)
 {
     copypaste(u"figuredbass", ElementType::FIGURED_BASS);
 }
 
-TEST_F(CopyPasteSymbolListTests, copypasteLyrics)
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteLyrics)
 {
     copypaste(u"lyrics", ElementType::LYRICS);
 }
 
-TEST_F(CopyPasteSymbolListTests, copypasteStaffText)
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteStaffText)
 {
     copypaste(u"stafftext", ElementType::STAFF_TEXT);
 }
 
-TEST_F(CopyPasteSymbolListTests, copypasteSticking)
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteSticking)
 {
     copypaste(u"sticking", ElementType::STICKING);
 }
 
-TEST_F(CopyPasteSymbolListTests, copypasteArticulationRest)
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteArticulationRest)
 {
     copypaste(u"articulation-rest", ElementType::ARTICULATION);
 }
 
-TEST_F(CopyPasteSymbolListTests, DISABLED_copypasteFermataRest)
+TEST_F(Engraving_CopyPasteSymbolListTests, DISABLED_copypasteFermataRest)
 {
     copypaste(u"fermata-rest", ElementType::ARTICULATION);
 }
@@ -155,7 +155,7 @@ TEST_F(CopyPasteSymbolListTests, DISABLED_copypasteFermataRest)
 //    select all elements of type in 2 first measures
 //    in the first staff and copy paste
 //---------------------------------------------------------
-void CopyPasteSymbolListTests::copypastepart(const char16_t* name, ElementType type)
+void Engraving_CopyPasteSymbolListTests::copypastepart(const char16_t* name, ElementType type)
 {
     MasterScore* score = ScoreRW::readScore(CPSYMBOLLIST_DATA_DIR + String("copypastesymbollist-%1.mscx").arg(name));
     EXPECT_TRUE(score);
@@ -172,7 +172,7 @@ void CopyPasteSymbolListTests::copypastepart(const char16_t* name, ElementType t
     copypastecommon(score, name);
 }
 
-TEST_F(CopyPasteSymbolListTests, copypasteRange)
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteRange)
 {
     copypastepart(u"range", ElementType::ARTICULATION);
 }
@@ -181,7 +181,7 @@ TEST_F(CopyPasteSymbolListTests, copypasteRange)
 //    select all elements of type in 2 first measures
 //    in both staves and copy paste
 //---------------------------------------------------------
-void CopyPasteSymbolListTests::copypastedifferentvoice(const char16_t* name, ElementType type)
+void Engraving_CopyPasteSymbolListTests::copypastedifferentvoice(const char16_t* name, ElementType type)
 {
     MasterScore* score = ScoreRW::readScore(CPSYMBOLLIST_DATA_DIR + String(u"copypastesymbollist-%1.mscx").arg(name));
     EXPECT_TRUE(score);
@@ -198,7 +198,7 @@ void CopyPasteSymbolListTests::copypastedifferentvoice(const char16_t* name, Ele
     copypastecommon(score, name);
 }
 
-TEST_F(CopyPasteSymbolListTests, copypasteRange1)
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteRange1)
 {
     copypastedifferentvoice(u"range-01", ElementType::ARTICULATION);
 }

@@ -37,14 +37,14 @@ using namespace mu::engraving;
 
 static const String EARLYMUSIC_DATA_DIR("earlymusic_data/");
 
-class EarlymusicTests : public ::testing::Test
+class Engraving_EarlymusicTests : public ::testing::Test
 {
 };
 
 //---------------------------------------------------------
 //   Setting cross-measure value flag and undoing.
 //---------------------------------------------------------
-TEST_F(EarlymusicTests, earlymusic01)
+TEST_F(Engraving_EarlymusicTests, earlymusic01)
 {
     MasterScore* score = ScoreRW::readScore(EARLYMUSIC_DATA_DIR + u"mensurstrich01.mscx");
     EXPECT_TRUE(score);

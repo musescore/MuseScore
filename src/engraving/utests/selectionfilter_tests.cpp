@@ -33,14 +33,14 @@ using namespace mu::engraving;
 
 static const String SELECTIONFILTER_DATA_DIR("selectionfilter_data/");
 
-class SelectionFilterTests : public ::testing::Test
+class Engraving_SelectionFilterTests : public ::testing::Test
 {
 public:
     void testFilter(int idx, SelectionFilterType filter);
     void testFilterSpanner(int idx, SelectionFilterType filter);
 };
 
-void SelectionFilterTests::testFilter(int idx, SelectionFilterType filter)
+void Engraving_SelectionFilterTests::testFilter(int idx, SelectionFilterType filter)
 {
     Score* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String(u"selectionfilter%1.mscx").arg(idx));
     EXPECT_TRUE(score);
@@ -68,7 +68,7 @@ void SelectionFilterTests::testFilter(int idx, SelectionFilterType filter)
     delete score;
 }
 
-void SelectionFilterTests::testFilterSpanner(int idx, SelectionFilterType filter)
+void Engraving_SelectionFilterTests::testFilterSpanner(int idx, SelectionFilterType filter)
 {
     Score* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String("selectionfilter%1.mscx").arg(idx));
     EXPECT_TRUE(score);
@@ -100,112 +100,112 @@ void SelectionFilterTests::testFilterSpanner(int idx, SelectionFilterType filter
     delete score;
 }
 
-TEST_F(SelectionFilterTests, filterDynamic)
+TEST_F(Engraving_SelectionFilterTests, filterDynamic)
 {
     testFilter(1, SelectionFilterType::DYNAMIC);
 }
 
-TEST_F(SelectionFilterTests, filterArticulation)
+TEST_F(Engraving_SelectionFilterTests, filterArticulation)
 {
     testFilter(2, SelectionFilterType::ARTICULATION);
 }
 
-TEST_F(SelectionFilterTests, filterLyrics)
+TEST_F(Engraving_SelectionFilterTests, filterLyrics)
 {
     testFilter(3, SelectionFilterType::LYRICS);
 }
 
-TEST_F(SelectionFilterTests, filterFingering)
+TEST_F(Engraving_SelectionFilterTests, filterFingering)
 {
     testFilter(4, SelectionFilterType::FINGERING);
 }
 
-TEST_F(SelectionFilterTests, filterChordSymbol)
+TEST_F(Engraving_SelectionFilterTests, filterChordSymbol)
 {
     testFilter(5, SelectionFilterType::CHORD_SYMBOL);
 }
 
-TEST_F(SelectionFilterTests, filterSlur)
+TEST_F(Engraving_SelectionFilterTests, filterSlur)
 {
     testFilter(6, SelectionFilterType::SLUR);
 }
 
-TEST_F(SelectionFilterTests, filterFiguredBass)
+TEST_F(Engraving_SelectionFilterTests, filterFiguredBass)
 {
     testFilter(7, SelectionFilterType::FIGURED_BASS);
 }
 
-TEST_F(SelectionFilterTests, filterOttava)
+TEST_F(Engraving_SelectionFilterTests, filterOttava)
 {
     testFilter(8, SelectionFilterType::OTTAVA);
 }
 
-TEST_F(SelectionFilterTests, filterPedalLine)
+TEST_F(Engraving_SelectionFilterTests, filterPedalLine)
 {
     testFilter(9, SelectionFilterType::PEDAL_LINE);
 }
 
-TEST_F(SelectionFilterTests, filterArpeggio)
+TEST_F(Engraving_SelectionFilterTests, filterArpeggio)
 {
     testFilter(10, SelectionFilterType::ARPEGGIO);
 }
 
-TEST_F(SelectionFilterTests, filterFretDiagram)
+TEST_F(Engraving_SelectionFilterTests, filterFretDiagram)
 {
     testFilter(11, SelectionFilterType::FRET_DIAGRAM);
 }
 
-TEST_F(SelectionFilterTests, filterGlissando)
+TEST_F(Engraving_SelectionFilterTests, filterGlissando)
 {
     testFilter(12, SelectionFilterType::GLISSANDO);
 }
 
-TEST_F(SelectionFilterTests, filterBreath)
+TEST_F(Engraving_SelectionFilterTests, filterBreath)
 {
     testFilter(13, SelectionFilterType::BREATH);
 }
 
-TEST_F(SelectionFilterTests, filterOtherText)
+TEST_F(Engraving_SelectionFilterTests, filterOtherText)
 {
     testFilter(14, SelectionFilterType::OTHER_TEXT);
 }
 
-TEST_F(SelectionFilterTests, filterOtherLine)
+TEST_F(Engraving_SelectionFilterTests, filterOtherLine)
 {
     testFilterSpanner(15, SelectionFilterType::OTHER_LINE);
 }
 
-TEST_F(SelectionFilterTests, filterTremolo)
+TEST_F(Engraving_SelectionFilterTests, filterTremolo)
 {
     testFilter(16, SelectionFilterType::TREMOLO);
 }
 
-TEST_F(SelectionFilterTests, filterVoice1)
+TEST_F(Engraving_SelectionFilterTests, filterVoice1)
 {
     testFilter(17, SelectionFilterType::FIRST_VOICE);
 }
 
-TEST_F(SelectionFilterTests, filterVoice2)
+TEST_F(Engraving_SelectionFilterTests, filterVoice2)
 {
     testFilter(18, SelectionFilterType::SECOND_VOICE);
 }
 
-TEST_F(SelectionFilterTests, filterVoice3)
+TEST_F(Engraving_SelectionFilterTests, filterVoice3)
 {
     testFilter(19, SelectionFilterType::THIRD_VOICE);
 }
 
-TEST_F(SelectionFilterTests, filterVoice4)
+TEST_F(Engraving_SelectionFilterTests, filterVoice4)
 {
     testFilter(20, SelectionFilterType::FOURTH_VOICE);
 }
 
-TEST_F(SelectionFilterTests, filterHairpin)
+TEST_F(Engraving_SelectionFilterTests, filterHairpin)
 {
     testFilter(22, SelectionFilterType::HAIRPIN);
 }
 
-TEST_F(SelectionFilterTests, filterOrnament)
+TEST_F(Engraving_SelectionFilterTests, filterOrnament)
 {
     testFilter(23, SelectionFilterType::ORNAMENT);
 }

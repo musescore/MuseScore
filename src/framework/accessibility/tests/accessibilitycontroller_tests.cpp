@@ -38,7 +38,7 @@ using ::testing::DoAll;
 using namespace mu;
 using namespace mu::accessibility;
 
-class AccessibilityControllerTests : public ::testing::Test
+class Accessibility_ControllerTests : public ::testing::Test
 {
 public:
 
@@ -148,7 +148,7 @@ public:
     std::shared_ptr<framework::ApplicationMock> m_application;
 };
 
-TEST_F(AccessibilityControllerTests, SendEventOnFocusChanged)
+TEST_F(Accessibility_ControllerTests, SendEventOnFocusChanged)
 {
     //! [GIVEN] Accessibility is enabled
     ON_CALL(*m_configuration, enabled()).WillByDefault(Return(true));
@@ -185,7 +185,7 @@ TEST_F(AccessibilityControllerTests, SendEventOnFocusChanged)
     testing::Mock::AllowLeak(m_configuration.get());
 }
 
-TEST_F(AccessibilityControllerTests, NotSendEventOnFocusChangedIfAccessibilityIsNotActive)
+TEST_F(Accessibility_ControllerTests, NotSendEventOnFocusChangedIfAccessibilityIsNotActive)
 {
     //! [GIVEN] Accessibility is enabled
     ON_CALL(*m_configuration, enabled()).WillByDefault(Return(true));
