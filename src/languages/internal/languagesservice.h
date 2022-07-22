@@ -75,7 +75,7 @@ private:
 
     Ret loadLanguage(const QString& languageCode);
 
-    void resetLanguageToDefault();
+    void resetLanguageToSystemLanguage();
 
     void th_refreshLanguages();
     void th_install(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel, async::Channel<Ret>* finishChannel);
