@@ -30,7 +30,7 @@
 #include <QMap>
 
 #include "async/channel.h"
-#include "val.h"
+#include "types/val.h"
 
 class QWindow;
 

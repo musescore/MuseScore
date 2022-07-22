@@ -24,7 +24,7 @@
 
 #include "async/notification.h"
 #include "notationtypes.h"
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::notation {
 class INotationNoteInput

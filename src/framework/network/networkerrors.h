@@ -22,7 +22,7 @@
 #ifndef MU_NETWORK_NETWORKERRORS_H
 #define MU_NETWORK_NETWORKERRORS_H
 
-#include "ret.h"
+#include "types/ret.h"
 #include "translation.h"
 
 namespace mu::network {

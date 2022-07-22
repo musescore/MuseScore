@@ -30,7 +30,7 @@
 #include <QBuffer>
 
 #include "translation.h"
-#include "serialization/internal/qzipreader_p.h"
+#include "global/deprecated/qzipreader_p.h"
 #include "importmxml.h"
 
 #include "log.h"

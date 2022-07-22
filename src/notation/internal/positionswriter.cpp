@@ -29,7 +29,7 @@
 #include "engraving/types/types.h"
 
 #include "log.h"
-#include "global/xmlwriter.h"
+#include "global/deprecated/xmlwriter.h"
 
 using namespace mu::project;
 using namespace mu::notation;

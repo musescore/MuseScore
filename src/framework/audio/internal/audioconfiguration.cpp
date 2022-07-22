@@ -23,8 +23,8 @@
 #include "settings.h"
 #include "stringutils.h"
 
-#include "global/xmlreader.h"
-#include "global/xmlwriter.h"
+#include "global/deprecated/xmlreader.h"
+#include "global/deprecated/xmlwriter.h"
 
 #include "log.h"
 

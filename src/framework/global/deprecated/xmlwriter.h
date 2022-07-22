@@ -24,8 +24,11 @@
 #define MU_FRAMEWORK_XMLWRITER_H
 
 #include <memory>
+#include <QIODevice>
 
 #include "io/path.h"
+
+//! NOTE This is class is deprecated, please use serialization/xmlstreamwriter.h or serialization/xmldom.h
 
 class QXmlStreamWriter;
 

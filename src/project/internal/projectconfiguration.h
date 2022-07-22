@@ -22,7 +22,7 @@
 #ifndef MU_PROJECT_PROJECTCONFIGURATION_H
 #define MU_PROJECT_PROJECTCONFIGURATION_H
 
-#include "global/val.h"
+#include "types/val.h"
 
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"

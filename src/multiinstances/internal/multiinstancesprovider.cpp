@@ -26,7 +26,7 @@
 #include <QTimer>
 #include <QEventLoop>
 
-#include "uri.h"
+#include "types/uri.h"
 #include "settings.h"
 #include "log.h"
 

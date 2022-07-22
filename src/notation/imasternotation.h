@@ -23,7 +23,7 @@
 #define MU_NOTATION_IMASTERNOTATION_H
 
 #include "modularity/imoduleexport.h"
-#include "retval.h"
+#include "types/retval.h"
 #include "io/path.h"
 
 #include "inotation.h"

@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "io/path.h"
-#include "uri.h"
+#include "types/uri.h"
 
 namespace mu::appshell {
 class IStartupScenario : MODULE_EXPORT_INTERFACE

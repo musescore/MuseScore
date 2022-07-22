@@ -24,9 +24,9 @@
 
 #include "modularity/imoduleexport.h"
 #include "io/path.h"
-#include "val.h"
-#include "retval.h"
-#include "uri.h"
+#include "types/val.h"
+#include "types/retval.h"
+#include "types/uri.h"
 #include "types/flags.h"
 
 namespace mu::framework {

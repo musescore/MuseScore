@@ -23,7 +23,7 @@
 #define MU_APPSHELL_IAPPSHELLCONFIGURATION_H
 
 #include "modularity/imoduleexport.h"
-#include "retval.h"
+#include "types/retval.h"
 
 #include "io/path.h"
 #include "appshelltypes.h"

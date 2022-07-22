@@ -26,7 +26,7 @@
 #include "modularity/imoduleexport.h"
 #include "inotationproject.h"
 
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::project {
 class ISaveProjectScenario : MODULE_EXPORT_INTERFACE
