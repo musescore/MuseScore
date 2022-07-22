@@ -46,11 +46,11 @@ using namespace mu::engraving;
 
 static const String MEASURE_DATA_DIR("measure_data/");
 
-class MeasureTests : public ::testing::Test
+class Engraving_MeasureTests : public ::testing::Test
 {
 };
 
-TEST_F(MeasureTests, DISABLED_insertMeasureMiddle) //TODO: verify program change, 72 is wrong surely?
+TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureMiddle) //TODO: verify program change, 72 is wrong surely?
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-1.mscx");
     EXPECT_TRUE(score);
@@ -64,7 +64,7 @@ TEST_F(MeasureTests, DISABLED_insertMeasureMiddle) //TODO: verify program change
     delete score;
 }
 
-TEST_F(MeasureTests, DISABLED_insertMeasureBegin) // TODO: verify program change, 72 is wrong surely?
+TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureBegin) // TODO: verify program change, 72 is wrong surely?
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-1.mscx");
     EXPECT_TRUE(score);
@@ -78,7 +78,7 @@ TEST_F(MeasureTests, DISABLED_insertMeasureBegin) // TODO: verify program change
     delete score;
 }
 
-TEST_F(MeasureTests, DISABLED_insertMeasureEnd) // TODO: verify program change, 72 is wrong surely?
+TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureEnd) // TODO: verify program change, 72 is wrong surely?
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-1.mscx");
     EXPECT_TRUE(score);
@@ -91,7 +91,7 @@ TEST_F(MeasureTests, DISABLED_insertMeasureEnd) // TODO: verify program change, 
     delete score;
 }
 
-TEST_F(MeasureTests, insertBfClefChange)
+TEST_F(Engraving_MeasureTests, insertBfClefChange)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx");
     EXPECT_TRUE(score);
@@ -123,7 +123,7 @@ TEST_F(MeasureTests, insertBfClefChange)
     delete score;
 }
 
-TEST_F(MeasureTests, insertBfKeyChange)
+TEST_F(Engraving_MeasureTests, insertBfKeyChange)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_bf_key.mscx");
     EXPECT_TRUE(score);
@@ -166,7 +166,7 @@ TEST_F(MeasureTests, insertBfKeyChange)
 //
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, spanner_a)
+TEST_F(Engraving_MeasureTests, spanner_a)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-3.mscx");
     EXPECT_TRUE(score);
@@ -188,7 +188,7 @@ TEST_F(MeasureTests, spanner_a)
 //
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, spanner_b)
+TEST_F(Engraving_MeasureTests, spanner_b)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-4.mscx");
     EXPECT_TRUE(score);
@@ -209,7 +209,7 @@ TEST_F(MeasureTests, spanner_b)
 //
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, spanner_A)
+TEST_F(Engraving_MeasureTests, spanner_A)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-6.mscx");
     EXPECT_TRUE(score);
@@ -232,7 +232,7 @@ TEST_F(MeasureTests, spanner_A)
 //
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, spanner_B)
+TEST_F(Engraving_MeasureTests, spanner_B)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-7.mscx");
     EXPECT_TRUE(score);
@@ -255,7 +255,7 @@ TEST_F(MeasureTests, spanner_B)
 //
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, spanner_C)
+TEST_F(Engraving_MeasureTests, spanner_C)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-8.mscx");
     EXPECT_TRUE(score);
@@ -278,7 +278,7 @@ TEST_F(MeasureTests, spanner_C)
 //
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, spanner_D)
+TEST_F(Engraving_MeasureTests, spanner_D)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-9.mscx");
     EXPECT_TRUE(score);
@@ -297,7 +297,7 @@ TEST_F(MeasureTests, spanner_D)
 //    deleteLast
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, deleteLast)
+TEST_F(Engraving_MeasureTests, deleteLast)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-10.mscx");
     EXPECT_TRUE(score);
@@ -316,7 +316,7 @@ TEST_F(MeasureTests, deleteLast)
 //    delete rests and check reorganization of lengths
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, gap)
+TEST_F(Engraving_MeasureTests, gap)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"gaps.mscx");
     EXPECT_TRUE(score);
@@ -381,7 +381,7 @@ TEST_F(MeasureTests, gap)
 //
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, checkMeasure)
+TEST_F(Engraving_MeasureTests, checkMeasure)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"checkMeasure.mscx");
     EXPECT_TRUE(score);
@@ -435,7 +435,7 @@ TEST_F(MeasureTests, checkMeasure)
 ///    4. Undo to restore initial VBox results in assert failure crash
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, undoDelInitialVBox_269919)
+TEST_F(Engraving_MeasureTests, undoDelInitialVBox_269919)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"undoDelInitialVBox_269919.mscx");
     EXPECT_TRUE(score);
@@ -471,7 +471,7 @@ TEST_F(MeasureTests, undoDelInitialVBox_269919)
 ///    mmrest creation
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, mmrest)
+TEST_F(Engraving_MeasureTests, mmrest)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrest.mscx");
     EXPECT_TRUE(score);
@@ -490,7 +490,7 @@ TEST_F(MeasureTests, mmrest)
 ///    test measure numbers properties
 //---------------------------------------------------------
 
-TEST_F(MeasureTests, measureNumbers)
+TEST_F(Engraving_MeasureTests, measureNumbers)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measurenumber.mscx");
     EXPECT_TRUE(score);

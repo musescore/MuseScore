@@ -32,7 +32,7 @@ using namespace mu::engraving;
 
 static const String UNROLLREPEATS_DATA_DIR(u"unrollrepeats_data/");
 
-class UnrollRepeatsTests : public ::testing::Test
+class Engraving_UnrollRepeatsTests : public ::testing::Test
 {
 };
 
@@ -42,7 +42,7 @@ class UnrollRepeatsTests : public ::testing::Test
 ///   clef, key, time signature changes.
 //---------------------------------------------------------
 
-TEST_F(UnrollRepeatsTests, clefKeyTs)
+TEST_F(Engraving_UnrollRepeatsTests, clefKeyTs)
 {
     MasterScore* score = ScoreRW::readScore(UNROLLREPEATS_DATA_DIR + u"clef-key-ts-test.mscx");
 
@@ -57,7 +57,7 @@ TEST_F(UnrollRepeatsTests, clefKeyTs)
 ///   pickup measure should get merged to a full bar on repeat
 //---------------------------------------------------------
 
-TEST_F(UnrollRepeatsTests, pickupMeasure)
+TEST_F(Engraving_UnrollRepeatsTests, pickupMeasure)
 {
     MasterScore* score = ScoreRW::readScore(UNROLLREPEATS_DATA_DIR + u"pickup-measure-test.mscx");
 

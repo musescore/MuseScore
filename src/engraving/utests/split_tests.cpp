@@ -35,13 +35,13 @@ using namespace mu::engraving;
 
 static const String SPLIT_DATA_DIR("split_data/");
 
-class SplitTests : public ::testing::Test
+class Engraving_SplitTests : public ::testing::Test
 {
 public:
     void split(const char* file, const char* reference, int index = 2);
 };
 
-void SplitTests::split(const char* f1, const char* ref, int index)
+void Engraving_SplitTests::split(const char* f1, const char* ref, int index)
 {
     MasterScore* score = ScoreRW::readScore(SPLIT_DATA_DIR + String::fromUtf8(f1));
     EXPECT_TRUE(score);
@@ -58,47 +58,47 @@ void SplitTests::split(const char* f1, const char* ref, int index)
     delete score;
 }
 
-TEST_F(SplitTests, split01)
+TEST_F(Engraving_SplitTests, split01)
 {
     split("split01.mscx", "split01-ref.mscx");
 }
 
-TEST_F(SplitTests, split02)
+TEST_F(Engraving_SplitTests, split02)
 {
     split("split02.mscx", "split02-ref.mscx");
 }
 
-TEST_F(SplitTests, split03)
+TEST_F(Engraving_SplitTests, split03)
 {
     split("split03.mscx", "split03-ref.mscx");
 }
 
-TEST_F(SplitTests, split04)
+TEST_F(Engraving_SplitTests, split04)
 {
     split("split04.mscx", "split04-ref.mscx");
 }
 
-TEST_F(SplitTests, split05)
+TEST_F(Engraving_SplitTests, split05)
 {
     split("split05.mscx", "split05-ref.mscx");
 }
 
-TEST_F(SplitTests, split06)
+TEST_F(Engraving_SplitTests, split06)
 {
     split("split06.mscx", "split06-ref.mscx", 6);
 }
 
-TEST_F(SplitTests, split07)
+TEST_F(Engraving_SplitTests, split07)
 {
     split("split07.mscx", "split07-ref.mscx");
 }
 
-TEST_F(SplitTests, split08)
+TEST_F(Engraving_SplitTests, split08)
 {
     split("split08.mscx", "split08-ref.mscx");
 }
 
-TEST_F(SplitTests, DISABLED_split183846) //  determine why pageWidth/pageHeight are missing!
+TEST_F(Engraving_SplitTests, DISABLED_split183846) //  determine why pageWidth/pageHeight are missing!
 {
     split("split183846-irregular-qn-qn-wn.mscx",          "split183846-irregular-qn-qn-wn-ref.mscx", 1);
     split("split183846-irregular-wn-wn.mscx",             "split183846-irregular-wn-wn-ref.mscx", 1);
@@ -108,7 +108,7 @@ TEST_F(SplitTests, DISABLED_split183846) //  determine why pageWidth/pageHeight 
     split("split183846-irregular-verylong.mscx",          "split183846-irregular-verylong-ref.mscx", 7);
 }
 
-TEST_F(SplitTests, split184061)
+TEST_F(Engraving_SplitTests, split184061)
 {
     split("split184061-no-tie.mscx", "split184061-no-tie-ref.mscx", 3);       // splitting on 11/16th the way though measure, but voice 2 has whole note which can't be divided into two durations
     split("split184061-keep-tie.mscx", "split184061-keep-tie-ref.mscx", 3);     // same, but this split-up whole note has a tie to the next measure...
@@ -117,7 +117,7 @@ TEST_F(SplitTests, split184061)
     split("split184061-other-inst-only-one-tie.mscx", "split184061-other-inst-only-one-tie-ref.mscx", 2);     // only the one tied note of the chord in the flute should still be tied over
 }
 
-TEST_F(SplitTests, split295207)
+TEST_F(Engraving_SplitTests, split295207)
 {
     split("split295207.mscx", "split295207-ref.mscx", 5);
 }

@@ -35,11 +35,11 @@ using namespace mu::engraving;
 
 static const String EXCHVOICES_DATA_DIR("exchangevoices_data/");
 
-class ExchangevoicesTests : public ::testing::Test
+class Engraving_ExchangevoicesTests : public ::testing::Test
 {
 };
 
-TEST_F(ExchangevoicesTests, slurs)
+TEST_F(Engraving_ExchangevoicesTests, slurs)
 {
     Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + "exchangevoices-slurs.mscx");
     EXPECT_TRUE(score);
@@ -59,7 +59,7 @@ TEST_F(ExchangevoicesTests, slurs)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-slurs.mscx", EXCHVOICES_DATA_DIR + u"exchangevoices-slurs-ref.mscx"));
 }
 
-TEST_F(ExchangevoicesTests, glissandi)
+TEST_F(Engraving_ExchangevoicesTests, glissandi)
 {
     Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + u"exchangevoices-gliss.mscx");
     EXPECT_TRUE(score);
@@ -79,7 +79,7 @@ TEST_F(ExchangevoicesTests, glissandi)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-gliss.mscx", EXCHVOICES_DATA_DIR + u"exchangevoices-gliss-ref.mscx"));
 }
 
-TEST_F(ExchangevoicesTests, undoChangeVoice)
+TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)
 {
     String readFile(EXCHVOICES_DATA_DIR + u"undoChangeVoice.mscx");
     String writeFile1(u"undoChangeVoice01-test.mscx");

@@ -31,11 +31,11 @@
 
 using namespace mu::engraving;
 
-class ElementTests : public ::testing::Test
+class Engraving_ElementTests : public ::testing::Test
 {
 };
 
-TEST_F(ElementTests, DISABLED_testIds)
+TEST_F(Engraving_ElementTests, DISABLED_testIds)
 {
     ElementType ids[] = {
         ElementType::VOLTA,

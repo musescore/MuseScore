@@ -42,7 +42,7 @@ static const String BARLINE_DATA_DIR(u"barline_data/");
 //   BarlineTests
 //---------------------------------------------------------
 
-class BarlineTests : public ::testing::Test
+class Engraving_BarlineTests : public ::testing::Test
 {
 public:
 };
@@ -68,7 +68,7 @@ static const double BRACKET0_HEIGHT_MAX     = 30;
 static const double BRACKET_HEIGHT_MIN      = 17;
 static const double BRACKET_HEIGHT_MAX      = 20;
 
-TEST_F(BarlineTests, barline01)
+TEST_F(Engraving_BarlineTests, barline01)
 {
     Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline01.mscx");
     EXPECT_TRUE(score);
@@ -112,7 +112,7 @@ TEST_F(BarlineTests, barline01)
 //
 //    NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-TEST_F(BarlineTests, barline02)
+TEST_F(Engraving_BarlineTests, barline02)
 {
     Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline02.mscx");
     EXPECT_TRUE(score);
@@ -149,7 +149,7 @@ TEST_F(BarlineTests, barline02)
 //
 //   NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-TEST_F(BarlineTests, barline03)
+TEST_F(Engraving_BarlineTests, barline03)
 {
     Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline03.mscx");
     EXPECT_TRUE(score);
@@ -182,7 +182,7 @@ TEST_F(BarlineTests, barline03)
 //
 //   NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-TEST_F(BarlineTests, barline04)
+TEST_F(Engraving_BarlineTests, barline04)
 {
     Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline04.mscx");
     EXPECT_TRUE(score);
@@ -224,7 +224,7 @@ TEST_F(BarlineTests, barline04)
 //
 //   NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-TEST_F(BarlineTests, barline05)
+TEST_F(Engraving_BarlineTests, barline05)
 {
     Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline05.mscx");
     EXPECT_TRUE(score);
@@ -275,7 +275,7 @@ TEST_F(BarlineTests, barline05)
 //
 //   NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-TEST_F(BarlineTests, barline06)
+TEST_F(Engraving_BarlineTests, barline06)
 {
     Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline06.mscx");
     EXPECT_TRUE(score);
@@ -335,7 +335,7 @@ void dropNormalBarline(EngravingItem* e)
 //
 //    NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-TEST_F(BarlineTests, barline179726)
+TEST_F(Engraving_BarlineTests, barline179726)
 {
     Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline179726.mscx");
     EXPECT_TRUE(score);
@@ -413,7 +413,7 @@ TEST_F(BarlineTests, barline179726)
 //---------------------------------------------------------
 //   deleteSkipBarlines
 //---------------------------------------------------------
-TEST_F(BarlineTests, deleteSkipBarlines)
+TEST_F(Engraving_BarlineTests, deleteSkipBarlines)
 {
     MasterScore* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barlinedelete.mscx");
     EXPECT_TRUE(score);

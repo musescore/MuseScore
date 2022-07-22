@@ -32,11 +32,11 @@ using namespace mu::engraving;
 
 static const String RWUNDORESET_DATA_DIR("readwriteundoreset_data/");
 
-class ReadWriteUndoResetTests : public ::testing::Test
+class Engraving_ReadWriteUndoResetTests : public ::testing::Test
 {
 };
 
-TEST_F(ReadWriteUndoResetTests, testReadWriteResetPositions)
+TEST_F(Engraving_ReadWriteUndoResetTests, testReadWriteResetPositions)
 {
     std::vector<const char16_t*> files = {
         u"barlines",
@@ -69,7 +69,7 @@ TEST_F(ReadWriteUndoResetTests, testReadWriteResetPositions)
 ///   See issue #296426
 //---------------------------------------------------------
 
-TEST_F(ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
+TEST_F(Engraving_ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
 {
     const String file("mmrestBarlineTextLinks");
 

@@ -36,11 +36,11 @@ using namespace mu::engraving;
 
 static const String KEYSIG_DATA_DIR("keysig_data/");
 
-class KeySigTests : public ::testing::Test
+class Engraving_KeySigTests : public ::testing::Test
 {
 };
 
-TEST_F(KeySigTests, keysig)
+TEST_F(Engraving_KeySigTests, keysig)
 {
     String writeFile1("keysig01-test.mscx");
     String reference1(KEYSIG_DATA_DIR + "keysig01-ref.mscx");     // with D maj
@@ -109,7 +109,7 @@ TEST_F(KeySigTests, keysig)
 //    input score has section breaks on non-measure MeasureBase objects.
 //    should not display courtesy keysig at the end of final measure of each section (meas 1, 2, & 3), even if section break occurs on subsequent non-measure frame.
 //---------------------------------------------------------
-TEST_F(KeySigTests, keysig_78216)
+TEST_F(Engraving_KeySigTests, keysig_78216)
 {
     MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "keysig_78216.mscx");
     EXPECT_TRUE(score);
@@ -129,7 +129,7 @@ TEST_F(KeySigTests, keysig_78216)
     delete score;
 }
 
-TEST_F(KeySigTests, concertPitch)
+TEST_F(Engraving_KeySigTests, concertPitch)
 {
     MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "concert-pitch.mscx");
     EXPECT_TRUE(score);
@@ -142,7 +142,7 @@ TEST_F(KeySigTests, concertPitch)
     delete score;
 }
 
-TEST_F(KeySigTests, preferSharpFlat)
+TEST_F(Engraving_KeySigTests, preferSharpFlat)
 {
     MasterScore* score1 = ScoreRW::readScore(KEYSIG_DATA_DIR + u"preferSharpFlat-1.mscx");
     EXPECT_TRUE(score1);
@@ -166,7 +166,7 @@ TEST_F(KeySigTests, preferSharpFlat)
     delete score2;
 }
 
-TEST_F(KeySigTests, keysigMode)
+TEST_F(Engraving_KeySigTests, keysigMode)
 {
     MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + u"keysigMode.mscx");
     EXPECT_TRUE(score);

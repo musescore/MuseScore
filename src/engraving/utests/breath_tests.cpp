@@ -36,11 +36,11 @@ using namespace mu::engraving;
 
 static const String BREATH_DATA_DIR("breath_data/");
 
-class BreathTests : public ::testing::Test
+class Engraving_BreathTests : public ::testing::Test
 {
 };
 
-TEST_F(BreathTests, breath)
+TEST_F(Engraving_BreathTests, breath)
 {
     String readFile(BREATH_DATA_DIR + u"breath.mscx");
     String writeFile1(u"breath01-test.mscx");

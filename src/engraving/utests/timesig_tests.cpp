@@ -36,7 +36,7 @@ using namespace mu::engraving;
 
 static const String TIMESIG_DATA_DIR(u"timesig_data/");
 
-class TimesigTests : public ::testing::Test
+class Engraving_TimesigTests : public ::testing::Test
 {
 };
 
@@ -45,7 +45,7 @@ class TimesigTests : public ::testing::Test
 ///   add a 3/4 time signature in the second measure
 //---------------------------------------------------------
 
-TEST_F(TimesigTests, timesig01)
+TEST_F(Engraving_TimesigTests, timesig01)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig01.mscx");
     EXPECT_TRUE(score);
@@ -69,7 +69,7 @@ TEST_F(TimesigTests, timesig01)
 ///   The attempt should fail, the score left unchanged
 //---------------------------------------------------------
 
-TEST_F(TimesigTests, timesig02)
+TEST_F(Engraving_TimesigTests, timesig02)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-02.mscx");
     EXPECT_TRUE(score);
@@ -95,7 +95,7 @@ TEST_F(TimesigTests, timesig02)
 ///   also measure repeats and non-default barlines
 //---------------------------------------------------------
 
-TEST_F(TimesigTests, timesig03)
+TEST_F(Engraving_TimesigTests, timesig03)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-03.mscx");
     EXPECT_TRUE(score);
@@ -116,7 +116,7 @@ TEST_F(TimesigTests, timesig03)
 ///   which already contains a quarter note
 //---------------------------------------------------------
 
-TEST_F(TimesigTests, timesig04)
+TEST_F(Engraving_TimesigTests, timesig04)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-04.mscx");
     EXPECT_TRUE(score);
@@ -140,7 +140,7 @@ TEST_F(TimesigTests, timesig04)
 ///   caused crashes.
 //---------------------------------------------------------
 
-TEST_F(TimesigTests, timesig05)
+TEST_F(Engraving_TimesigTests, timesig05)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-05.mscx");
     EXPECT_TRUE(score);
@@ -160,7 +160,7 @@ TEST_F(TimesigTests, timesig05)
 //    Change timesig with a tremolo that doesn't end up across a barline
 //---------------------------------------------------------
 
-TEST_F(TimesigTests, timesig06)
+TEST_F(Engraving_TimesigTests, timesig06)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-06.mscx");
     EXPECT_TRUE(score);
@@ -186,7 +186,7 @@ TEST_F(TimesigTests, timesig06)
 //    The tremolo should end up removed.
 //---------------------------------------------------------
 
-TEST_F(TimesigTests, timesig07)
+TEST_F(Engraving_TimesigTests, timesig07)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-07.mscx");
     EXPECT_TRUE(score);
@@ -213,7 +213,7 @@ TEST_F(TimesigTests, timesig07)
 //    (in this particular case, stave no.2)
 //---------------------------------------------------------
 
-TEST_F(TimesigTests, timesig08)
+TEST_F(Engraving_TimesigTests, timesig08)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-08.mscx");
     score->doLayout();
@@ -231,7 +231,7 @@ TEST_F(TimesigTests, timesig08)
 //    Change timesig with tremolos on notes that end up across barlines
 //---------------------------------------------------------
 
-TEST_F(TimesigTests, timesig09)
+TEST_F(Engraving_TimesigTests, timesig09)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-09.mscx");
     EXPECT_TRUE(score);
@@ -258,7 +258,7 @@ TEST_F(TimesigTests, timesig09)
 //    Same for 2/2 to common time
 //---------------------------------------------------------
 
-TEST_F(TimesigTests, timesig10)
+TEST_F(Engraving_TimesigTests, timesig10)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-10.mscx");
 
@@ -291,7 +291,7 @@ TEST_F(TimesigTests, timesig10)
 //    should not display courtesy timesig at the end of final measure of each section (meas 1, 2, & 3), even if section break occurs on subsequent non-measure frame.
 //---------------------------------------------------------
 
-TEST_F(TimesigTests, timesig_78216)
+TEST_F(Engraving_TimesigTests, timesig_78216)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig_78216.mscx");
     score->doLayout();

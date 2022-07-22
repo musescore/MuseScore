@@ -41,7 +41,7 @@ static const String ALL_ELEMENTS_DATA_DIR("all_elements_data/");
 ///   it appears in.
 //---------------------------------------------------------
 
-class ScanTreeTests : public ::testing::Test
+class Engraving_ScanTreeTests : public ::testing::Test
 {
 public:
     void tstTree(String file);
@@ -59,7 +59,7 @@ static String elementToText(EngravingObject* element)
     return element->typeUserName();
 }
 
-void ScanTreeTests::tstTree(String file)
+void Engraving_ScanTreeTests::tstTree(String file)
 {
     MasterScore* score = ScoreRW::readScore(ALL_ELEMENTS_DATA_DIR + file);
     traverseTree(score);
@@ -70,7 +70,7 @@ void ScanTreeTests::tstTree(String file)
 //   correct, then recursively checks all children.
 //---------------------------------------------------------
 
-void ScanTreeTests::traverseTree(EngravingObject* element)
+void Engraving_ScanTreeTests::traverseTree(EngravingObject* element)
 {
     EngravingObjectList children = element->scanChildren();
     for (EngravingObject* child : children) {
@@ -99,22 +99,22 @@ void ScanTreeTests::traverseTree(EngravingObject* element)
     }
 }
 
-TEST_F(ScanTreeTests, tstTreeElements)
+TEST_F(Engraving_ScanTreeTests, tstTreeElements)
 {
     tstTree(u"layout_elements.mscx");
 }
 
-TEST_F(ScanTreeTests, tstTreeTablature)
+TEST_F(Engraving_ScanTreeTests, tstTreeTablature)
 {
     tstTree(u"layout_elements_tab.mscx");
 }
 
-TEST_F(ScanTreeTests, tstTreeMoonlight)
+TEST_F(Engraving_ScanTreeTests, tstTreeMoonlight)
 {
     tstTree(u"moonlight.mscx");
 }
 
-TEST_F(ScanTreeTests, DISABLED_tstTreeGoldberg) // too long
+TEST_F(Engraving_ScanTreeTests, DISABLED_tstTreeGoldberg) // too long
 {
     tstTree(u"goldberg.mscx");
 }
