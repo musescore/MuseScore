@@ -505,18 +505,25 @@ String TempoText::accessibleInfo() const
     }
 
     if (x1 != -1) {
-        String dots1;
-        String dots2;
-        dots1 = duration2userName(t1);
+        String info;
+        String dots1 = duration2userName(t1);
         if (x2 != -1) {
-            dots2 = duration2userName(t2);
-            return String(u"%1: %2 %3 = %4 %5").arg(EngravingItem::accessibleInfo(),
-                                                    dots1, mtrc("engraving", "note"),
-                                                    dots2, mtrc("engraving", "note"));
+            String dots2 = duration2userName(t2);
+            //: %1 and %2 are note durations. If your language does not have different terms
+            //: for "quarter note" and "quarter" (for example), or if the translations for
+            //: the durations as separate strings are not suitable to be used as adjectives
+            //: here, //: translate "%1 note" with "%1" and "%2 note" with "%2", so that
+            //: just the duration will be shown.
+            info = mtrc("engraving", "%1 note = %2 note").arg(dots1, dots2);
         } else {
-            return String(u"%1: %2 %3 = %4").arg(EngravingItem::accessibleInfo(),
-                                                 dots1, mtrc("engraving", "note"), secondPart);
+            //: %1 is a note duration. If your language does not have different terms for
+            //: "quarter note" and "quarter" (for example), or if the translations for the
+            //: durations as separate strings are not suitable to be used as adjectives here,
+            //: translate "%1 note" with "%1", so that just the duration will be shown.
+            info = mtrc("engraving", "%1 note = %2").arg(dots1, secondPart);
         }
+
+        return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), info);
     } else {
         return TextBase::accessibleInfo();
     }
