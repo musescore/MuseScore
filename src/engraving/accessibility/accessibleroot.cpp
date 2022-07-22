@@ -65,6 +65,12 @@ AccessibleItemWeakPtr AccessibleRoot::focusedElement() const
     return m_focusedElement;
 }
 
+void AccessibleRoot::notifyAboutFocuedElemntNameChanged()
+{
+    m_staffInfo = "";
+    m_focusedElement.lock()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::Name, Val());
+}
+
 mu::RectF AccessibleRoot::toScreenRect(const RectF& rect, bool* ok) const
 {
     RectF result;
