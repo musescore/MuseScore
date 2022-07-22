@@ -51,8 +51,7 @@ Item {
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRow
             navigation.column: 1
-            navigation.accessible.name: titleLabel.text + " " + qsTrc("uicomponents", "visibility") + " "
-                                        + (visibilityButton.isVisible ? qsTrc("uicomponents", "on") : qsTrc("uicomponents", "off"))
+            accessibleText: titleLabel.text
 
             isVisible: root.item.checked
 

@@ -69,7 +69,7 @@ RadioButtonGroup {
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRow
         navigation.column: root.navigationColumnStart + model.index
-        navigation.accessible.name: Utils.colorToString(accentColor)
+        navigation.accessible.name: Utils.accessibleColorDescription(accentColor)
 
         onToggled: {
             root.accentColorChangeRequested(model.index)

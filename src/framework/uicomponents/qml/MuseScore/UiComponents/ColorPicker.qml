@@ -53,7 +53,7 @@ Rectangle {
         name: root.objectName != "" ? root.objectName : "ColorPicker"
         enabled: root.enabled && root.visible
         accessible.role: MUAccessible.Button
-        accessible.name: Utils.colorToString(root.color)
+        accessible.name: Utils.accessibleColorDescription(root.color)
 
         onTriggered: colorDialog.open()
     }

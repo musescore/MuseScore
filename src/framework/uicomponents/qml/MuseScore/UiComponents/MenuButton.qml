@@ -47,7 +47,7 @@ FlatButton {
     transparent: !isMenuOpened
     accentButton: isMenuOpened
 
-    navigation.accessible.name: qsTrc("uicomponents", "Menu")
+    navigation.accessible.name: qsTrc("ui", "Menu")
 
     StyledMenuLoader {
         id: menuLoader
