@@ -805,11 +805,16 @@ int Note::tpc() const
 //   tpcUserName
 //---------------------------------------------------------
 
-String Note::tpcUserName(const int tpc, const int pitch, const bool explicitAccidental)
+String Note::tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full)
 {
-    const String pitchStr = mtrc("engraving",
-                                 tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental)
-                                 .replace(u"b", u"♭").replace(u"#", u"♯").toUtf8().constChar());
+    String pitchStr = tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental, full);
+    if (!explicitAccidental) {
+        pitchStr.replace(u"b", u"♭");
+        pitchStr.replace(u"#", u"♯");
+    }
+
+    pitchStr = mtrc("engraving", pitchStr);
+
     const String octaveStr = String::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
 
     return pitchStr + (explicitAccidental ? u" " : u"") + octaveStr;
@@ -819,9 +824,9 @@ String Note::tpcUserName(const int tpc, const int pitch, const bool explicitAcci
 //   tpcUserName
 //---------------------------------------------------------
 
-String Note::tpcUserName(const bool explicitAccidental) const
+String Note::tpcUserName(const bool explicitAccidental, bool full) const
 {
-    String pitchName = tpcUserName(tpc(), epitch() + ottaveCapoFret(), explicitAccidental);
+    String pitchName = tpcUserName(tpc(), epitch() + ottaveCapoFret(), explicitAccidental, full);
 
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         // see Note::accessibleInfo(), but we return what we have
@@ -3342,10 +3347,10 @@ String Note::screenReaderInfo() const
         pitchName = mtrc("engraving", drumset->name(pitch()));
     } else if (staff()->isTabStaff(tick())) {
         pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
-                    .arg(tpcUserName(true), String::number(string() + 1), String::number(fret()));
+                    .arg(tpcUserName(true, true), String::number(string() + 1), String::number(fret()));
     } else {
         pitchName = _headGroup == NoteHeadGroup::HEAD_NORMAL
-                    ? tpcUserName(true)
+                    ? tpcUserName(true, true)
                     //: head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).
                     : mtrc("engraving", "%1 head %2").arg(subtypeName()).arg(tpcUserName(true));
         if (chord()->staffMove() < 0) {

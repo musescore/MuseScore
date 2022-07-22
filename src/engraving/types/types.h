@@ -734,6 +734,18 @@ enum class AccidentalRole : char {
     USER                  // user created accidental
 };
 
+enum class AccidentalVal : signed char {
+    SHARP3  = 3,
+    SHARP2  = 2,
+    SHARP   = 1,
+    NATURAL = 0,
+    FLAT    = -1,
+    FLAT2   = -2,
+    FLAT3   = -3,
+    MIN     = FLAT3,
+    MAX     = SHARP3
+};
+
 enum class FermataType {
     Undefined = -1,
     VeryShort,
