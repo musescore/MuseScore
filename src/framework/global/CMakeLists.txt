@@ -126,10 +126,7 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/globalmodule.h
         ${CMAKE_CURRENT_LIST_DIR}/settings.cpp
         ${CMAKE_CURRENT_LIST_DIR}/settings.h
-        ${CMAKE_CURRENT_LIST_DIR}/xmlreader.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/xmlreader.h
-        ${CMAKE_CURRENT_LIST_DIR}/xmlwriter.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/xmlwriter.h
+
         ${CMAKE_CURRENT_LIST_DIR}/internal/application.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/application.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.cpp
@@ -144,9 +141,13 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.cpp
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h
 
-        ${CMAKE_CURRENT_LIST_DIR}/serialization/internal/qzip.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/serialization/internal/qzipreader_p.h
-        ${CMAKE_CURRENT_LIST_DIR}/serialization/internal/qzipwriter_p.h
+        ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlreader.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlreader.h
+        ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlwriter.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlwriter.h
+        ${CMAKE_CURRENT_LIST_DIR}/deprecated/qzip.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/deprecated/qzipreader_p.h
+        ${CMAKE_CURRENT_LIST_DIR}/deprecated/qzipwriter_p.h
         )
 endif()
 

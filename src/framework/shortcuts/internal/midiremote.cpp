@@ -21,8 +21,8 @@
  */
 #include "midiremote.h"
 
-#include "global/xmlreader.h"
-#include "global/xmlwriter.h"
+#include "global/deprecated/xmlreader.h"
+#include "global/deprecated/xmlwriter.h"
 
 #include "multiinstances/resourcelockguard.h"
 

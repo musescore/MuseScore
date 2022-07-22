@@ -24,8 +24,11 @@
 #define MU_FRAMEWORK_XMLREADER_H
 
 #include <memory>
+#include <QIODevice>
 
 #include "io/path.h"
+
+//! NOTE This is class is deprecated, please use serialization/xmlstreamreader.h or serialization/xmldom.h
 
 class QXmlStreamReader;
 class QByteArray;

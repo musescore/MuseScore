@@ -23,8 +23,8 @@
 
 #include <QKeySequence>
 
-#include "global/xmlreader.h"
-#include "global/xmlwriter.h"
+#include "global/deprecated/xmlreader.h"
+#include "global/deprecated/xmlwriter.h"
 #include "multiinstances/resourcelockguard.h"
 
 #include "log.h"
