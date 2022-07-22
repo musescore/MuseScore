@@ -211,8 +211,8 @@ Ret LanguagesService::uninstall(const QString& languageCode)
 
 void LanguagesService::setCurrentLanguage(const QString& languageCode)
 {
-    if (languageCode == DEFAULT_LANGUAGE) {
-        resetLanguageToDefault();
+    if (languageCode == SYSTEM_LANGUAGE_CODE) {
+        resetLanguageToSystemLanguage();
         return;
     }
 
@@ -460,15 +460,13 @@ Ret LanguagesService::loadLanguage(const QString& languageCode)
     return make_ret(Err::NoError);
 }
 
-void LanguagesService::resetLanguageToDefault()
+void LanguagesService::resetLanguageToSystemLanguage()
 {
-    Ret load = loadLanguage(DEFAULT_LANGUAGE);
+    Ret load = loadLanguage(QLocale::system().name());
     if (!load) {
         LOGE() << load.toString();
         return;
     }
-
-    configuration()->setCurrentLanguageCode(DEFAULT_LANGUAGE);
 }
 
 void LanguagesService::th_refreshLanguages()

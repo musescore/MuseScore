@@ -30,6 +30,8 @@
 #include <QJsonArray>
 
 namespace mu::languages {
+const QString SYSTEM_LANGUAGE_CODE = "system";
+
 class LanguageStatus
 {
     Q_GADGET

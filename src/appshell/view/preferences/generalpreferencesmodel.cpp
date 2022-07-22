@@ -96,6 +96,11 @@ QVariantList GeneralPreferencesModel::languages() const
         return l.toMap().value("code").toString() < r.toMap().value("code").toString();
     });
 
+    QVariantMap systemLanguageObj;
+    systemLanguageObj["code"] = SYSTEM_LANGUAGE_CODE;
+    systemLanguageObj["name"] = mu::qtrc("appshell/preferences", "System default");
+    result.prepend(systemLanguageObj);
+
     return result;
 }
 
