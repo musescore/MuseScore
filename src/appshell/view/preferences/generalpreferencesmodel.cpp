@@ -54,15 +54,16 @@ void GeneralPreferencesModel::load()
 
 void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 {
-    Language language = languagesService()->currentLanguage().val;
-
-    if (language.status != LanguageStatus::Status::NeedUpdate) {
-        QString msg = mu::qtrc("appshell/preferences", "Your version of %1 is up to date").arg(language.name);
+    QString currentLanguageCode = this->currentLanguageCode();
+    LanguageStatus::Status languageStatus = languagesService()->languageStatus(currentLanguageCode);
+    if (languageStatus != LanguageStatus::Status::NeedUpdate) {
+        Language currentLanguage = languagesService()->languages().val.value(currentLanguageCode);
+        QString msg = mu::qtrc("appshell/preferences", "Your version of %1 is up to date").arg(currentLanguage.name);
         interactive()->info(msg.toStdString(), "");
         return;
     }
 
-    RetCh<LanguageProgress> progress = languagesService()->update(language.code);
+    RetCh<LanguageProgress> progress = languagesService()->update(currentLanguageCode);
     if (!progress.ret) {
         LOGE() << progress.ret.toString();
         return;
@@ -81,11 +82,6 @@ QVariantList GeneralPreferencesModel::languages() const
     QVariantList result;
 
     for (const Language& language : languageList) {
-        if (language.status == LanguageStatus::Status::NoInstalled
-            || language.status == LanguageStatus::Status::Undefined) {
-            continue;
-        }
-
         QVariantMap languageObj;
         languageObj["code"] = language.code;
         languageObj["name"] = language.name;
@@ -95,6 +91,11 @@ QVariantList GeneralPreferencesModel::languages() const
     std::sort(result.begin(), result.end(), [](const QVariant& l, const QVariant& r) {
         return l.toMap().value("code").toString() < r.toMap().value("code").toString();
     });
+
+    QVariantMap systemLanguageObj;
+    systemLanguageObj["code"] = SYSTEM_LANGUAGE_CODE;
+    systemLanguageObj["name"] = mu::qtrc("appshell/preferences", "System default");
+    result.prepend(systemLanguageObj);
 
     return result;
 }
