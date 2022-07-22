@@ -134,8 +134,6 @@ class System final : public EngravingItem
 public:
     ~System();
 
-    AccessibleItemPtr createAccessible() override;
-
     void moveToPage(Page* parent);
 
     // Score Tree functions
@@ -241,6 +239,10 @@ public:
     Fraction maxSysTicks() const;
 
     double squeezableSpace() const;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 };
 
 typedef std::vector<System*>::iterator iSystem;

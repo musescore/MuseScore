@@ -186,7 +186,7 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
         m_needToVoicePanelInfo = false;
         etype = QAccessible::NameChanged;
         break;
-#elif
+#else
         triggerRevoicingOfChangedName(item);
         return;
 #endif

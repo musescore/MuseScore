@@ -28,7 +28,7 @@
 namespace mu::engraving {
 using AccessibleMapToScreenFunc = std::function<RectF(const RectF&)>;
 
-class AccessibleRoot : public QObject, public AccessibleItem
+class AccessibleRoot : public AccessibleItem
 {
     OBJECT_ALLOCATOR(engraving, AccessibleRoot)
 public:

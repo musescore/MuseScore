@@ -76,8 +76,10 @@
 #include "utils.h"
 #include "hook.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #include "accessibility/accessibleroot.h"
+#endif
 
 #include "config.h"
 #include "log.h"
@@ -679,9 +681,11 @@ void Note::setPitch(int val)
         _pitch = val;
         score()->setPlaylistDirty();
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
         if (m_accessible) {
             m_accessible->accessibleRoot()->notifyAboutFocuedElemntNameChanged();
         }
+#endif
     }
 }
 

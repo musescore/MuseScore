@@ -185,13 +185,13 @@ EngravingItem::~EngravingItem()
     Score::onElementDestruction(this);
 }
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 void EngravingItem::setupAccessible()
 {
     if (m_accessible) {
         return;
     }
 
-#ifndef ENGRAVING_NO_ACCESSIBILITY
     static std::list<ElementType> accessibleDisabled = {
         ElementType::LEDGER_LINE
     };
@@ -202,8 +202,9 @@ void EngravingItem::setupAccessible()
             m_accessible->setup();
         }
     }
-#endif
 }
+
+#endif
 
 bool EngravingItem::accessibleEnabled() const
 {
@@ -236,14 +237,13 @@ EngravingItemList EngravingItem::childrenItems() const
     return list;
 }
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 AccessibleItemPtr EngravingItem::createAccessible()
 {
-#ifndef ENGRAVING_NO_ACCESSIBILITY
     return std::make_shared<AccessibleItem>(this);
-#else
-    return nullptr;
-#endif
 }
+
+#endif
 
 //---------------------------------------------------------
 //   spatiumChanged
@@ -1992,10 +1992,13 @@ EngravingItem* EngravingItem::prevSegmentElement()
     return score()->firstElement();
 }
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 AccessibleItemPtr EngravingItem::accessible() const
 {
     return m_accessible;
 }
+
+#endif
 
 String EngravingItem::accessibleInfo() const
 {

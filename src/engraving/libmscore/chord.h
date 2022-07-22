@@ -155,8 +155,6 @@ public:
     ~Chord();
     Chord& operator=(const Chord&) = delete;
 
-    AccessibleItemPtr createAccessible() override;
-
     bool containsEqualArticulations(const Chord* other) const;
     bool containsEqualArpeggio(const Chord* other) const;
     bool containsEqualTremolo(const Chord* other) const;
@@ -317,7 +315,12 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* lastElementBeforeSegment();
     EngravingItem* prevSegmentElement() override;
+
     String accessibleExtraInfo() const override;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 
     Shape shape() const override;
     void undoChangeProperty(Pid id, const PropertyValue& newValue);

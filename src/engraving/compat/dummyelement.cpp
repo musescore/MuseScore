@@ -55,10 +55,16 @@ DummyElement::~DummyElement()
 
 void DummyElement::init()
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     setupAccessible();
+#endif
+
     m_root = new RootItem(score());
     m_root->setParent(explicitParent());
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     m_root->setupAccessible();
+#endif
 
     m_page = Factory::createPage(m_root);
     m_page->setParent(explicitParent());
@@ -119,11 +125,10 @@ EngravingItem* DummyElement::clone() const
     return nullptr;
 }
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 AccessibleItemPtr DummyElement::createAccessible()
 {
-#ifndef ENGRAVING_NO_ACCESSIBILITY
     return std::make_shared<AccessibleItem>(this, accessibility::IAccessible::Panel);
-#else
-    return nullptr;
-#endif
 }
+
+#endif
