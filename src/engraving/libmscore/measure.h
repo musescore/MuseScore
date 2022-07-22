@@ -142,6 +142,8 @@ public:
 
     ~Measure();
 
+    AccessibleItemPtr createAccessible() override;
+
     void setParent(System* s);
 
     Measure* clone() const override { return new Measure(*this); }

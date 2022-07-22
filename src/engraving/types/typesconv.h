@@ -104,7 +104,7 @@ public:
 
     static String toXml(const PitchValue& v);
 
-    static String userName(AccidentalVal accidental, bool full);
+    static const char* userName(AccidentalVal accidental, bool full);
     static String toXml(AccidentalRole v);
     static AccidentalRole fromXml(const AsciiStringView& tag, AccidentalRole def);
 

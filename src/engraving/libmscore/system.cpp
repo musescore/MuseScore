@@ -59,6 +59,8 @@
 #include "stafflines.h"
 #include "bracketItem.h"
 
+#include "accessibility/accessibleitem.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -132,6 +134,11 @@ System::~System()
     DeleteAll(_brackets);
     delete _systemDividerLeft;
     delete _systemDividerRight;
+}
+
+AccessibleItemPtr System::createAccessible()
+{
+    return std::make_shared<AccessibleItem>(this, AccessibleItem::Group);
 }
 
 void System::moveToPage(Page* parent)

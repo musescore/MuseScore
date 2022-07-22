@@ -35,7 +35,7 @@
 
 namespace mu::engraving {
 class AccessibleRoot;
-class AccessibleItem : public accessibility::IAccessible
+class AccessibleItem : public accessibility::IAccessible, public std::enable_shared_from_this<AccessibleItem>
 {
     OBJECT_ALLOCATOR(engraving, AccessibleItem)
 
@@ -84,6 +84,8 @@ public:
 
     async::Channel<Property, Val> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;
+
+    void setState(State state, bool arg) override;
     // ---
 
     static bool enabled;

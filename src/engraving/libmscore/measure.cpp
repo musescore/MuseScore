@@ -104,6 +104,8 @@
 #include "utils.h"
 #include "volta.h"
 
+#include "accessibility/accessibleitem.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -374,6 +376,11 @@ Measure::~Measure()
         s = ns;
     }
     DeleteAll(m_mstaves);
+}
+
+AccessibleItemPtr Measure::createAccessible()
+{
+    return std::make_shared<AccessibleItem>(this, AccessibleItem::Group);
 }
 
 void Measure::setParent(System* s)

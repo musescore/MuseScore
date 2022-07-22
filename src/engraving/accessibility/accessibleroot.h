@@ -28,14 +28,14 @@
 namespace mu::engraving {
 using AccessibleMapToScreenFunc = std::function<RectF(const RectF&)>;
 
-class AccessibleRoot : public AccessibleItem
+class AccessibleRoot : public QObject, public AccessibleItem
 {
     OBJECT_ALLOCATOR(engraving, AccessibleRoot)
 public:
-    AccessibleRoot(RootItem* e);
+    AccessibleRoot(RootItem* e, Role role);
     ~AccessibleRoot() override;
 
-    void setFocusedElement(AccessibleItemPtr e);
+    void setFocusedElement(AccessibleItemPtr e, bool voiceStaffInfoChange = true);
     AccessibleItemWeakPtr focusedElement() const;
 
     void notifyAboutFocuedElemntNameChanged();
@@ -53,7 +53,8 @@ public:
     QString staffInfo() const;
 
 private:
-    void updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem);
+    void updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem,
+                         bool voiceStaffInfoChange = true);
 
     bool m_enabled = false;
 

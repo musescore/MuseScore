@@ -155,6 +155,8 @@ public:
     ~Chord();
     Chord& operator=(const Chord&) = delete;
 
+    AccessibleItemPtr createAccessible() override;
+
     bool containsEqualArticulations(const Chord* other) const;
     bool containsEqualArpeggio(const Chord* other) const;
     bool containsEqualTremolo(const Chord* other) const;

@@ -187,6 +187,10 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
+    case IAccessible::Role::Group: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
     default: {
         LOGW() << "not handled role: " << static_cast<int>(r);
     } break;
@@ -212,13 +216,8 @@ QAccessible::Role AccessibleItemInterface::role() const
     case IAccessible::Role::ListItem: return QAccessible::ListItem;
     case IAccessible::Role::MenuItem: return QAccessible::MenuItem;
     case IAccessible::Role::Range: return QAccessible::Slider;
-    case IAccessible::Role::Information: {
-#ifdef Q_OS_WIN
-        return QAccessible::StaticText;
-#else
-        return QAccessible::UserRole;
-#endif
-    }
+    case IAccessible::Role::Group:
+    case IAccessible::Role::Information:
     case IAccessible::Role::ElementOnScore: {
 #ifdef Q_OS_WIN
         return QAccessible::StaticText;
