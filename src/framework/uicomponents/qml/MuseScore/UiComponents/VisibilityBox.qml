@@ -29,6 +29,7 @@ FocusScope {
     id: root
 
     property alias text: label.text
+    property string accessibleText: text
     property bool isVisible: true
 
     property alias navigation: eyeButton.navigation
@@ -62,8 +63,8 @@ FocusScope {
             icon: root.isVisible ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
             transparent: true
 
-            navigation.accessible.name: label.text + " " + qsTrc("uicomponents", "visibility") + " "
-                                        + (root.isVisible ? qsTrc("uicomponents", "on") : qsTrc("uicomponents", "off"))
+            accessible.name: (root.accessibleText ? root.accessibleText + ", " : "")
+                             + (root.isVisible ? qsTrc("ui", "Visible") : qsTrc("ui", "Hidden"))
 
             onClicked: {
                 root.visibleToggled()

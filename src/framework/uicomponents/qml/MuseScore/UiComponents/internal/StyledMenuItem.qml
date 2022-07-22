@@ -89,7 +89,7 @@ ListItemBlank {
 
         if (root.hasSubMenu) {
             //: a type of ui item
-            text += " " + qsTrc("ui", "menu")
+            text += " " + qsTrc("ui", "Menu")
         }
 
         return Utils.removeAmpersands(text)

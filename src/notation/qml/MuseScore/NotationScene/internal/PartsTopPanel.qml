@@ -39,7 +39,7 @@ Item {
         direction: NavigationPanel.Horizontal
 
         //: Accessibility description of the button group at the top of the "Parts" dialog
-        accessible.name: qsTrc("notation", "Parts control")
+        accessible.name: qsTrc("notation", "Parts actions")
 
         onActiveChanged: function(active) {
             if (active) {
