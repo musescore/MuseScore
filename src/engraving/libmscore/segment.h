@@ -100,6 +100,8 @@ public:
 
     ~Segment();
 
+    AccessibleItemPtr createAccessible() override;
+
     void setParent(Measure* parent);
 
     // Score Tree functions

@@ -44,6 +44,8 @@
 #include "segment.h"
 #include "masterscore.h"
 
+#include "accessibility/accessibleitem.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -214,6 +216,11 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
     text->setXmlText(s);
     text->layout();
     return text;
+}
+
+AccessibleItemPtr Page::createAccessible()
+{
+    return std::make_shared<AccessibleItem>(this, AccessibleItem::Group);
 }
 
 //---------------------------------------------------------

@@ -104,7 +104,7 @@ public:
     QQuickItem* visualItem() const;
 
     const IAccessible* accessibleRoot() const;
-    void setState(State st, bool arg);
+    void setState(State st, bool arg) override;
 
     AccessibleItem* accessibleParent_property() const;
     void setAccessibleParent(AccessibleItem* p);

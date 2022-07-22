@@ -132,8 +132,9 @@ class System final : public EngravingItem
     double totalBracketOffset(const LayoutContext& ctx);
 
 public:
-
     ~System();
+
+    AccessibleItemPtr createAccessible() override;
 
     void moveToPage(Page* parent);
 

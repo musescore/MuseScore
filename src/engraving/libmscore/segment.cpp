@@ -55,6 +55,8 @@
 #include "factory.h"
 #include "masterscore.h"
 
+#include "accessibility/accessibleitem.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -227,6 +229,11 @@ Segment::~Segment()
     }
 
     DeleteAll(_annotations);
+}
+
+AccessibleItemPtr Segment::createAccessible()
+{
+    return std::make_shared<AccessibleItem>(this, AccessibleItem::Group);
 }
 
 //---------------------------------------------------------

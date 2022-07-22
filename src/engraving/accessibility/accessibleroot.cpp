@@ -30,8 +30,8 @@
 using namespace mu::engraving;
 using namespace mu::accessibility;
 
-AccessibleRoot::AccessibleRoot(RootItem* e)
-    : AccessibleItem(e)
+AccessibleRoot::AccessibleRoot(RootItem* e, Role role)
+    : AccessibleItem(e, role)
 {
 }
 
@@ -45,10 +45,10 @@ AccessibleRoot::~AccessibleRoot()
     m_element = nullptr;
 }
 
-void AccessibleRoot::setFocusedElement(AccessibleItemPtr e)
+void AccessibleRoot::setFocusedElement(AccessibleItemPtr e, bool voiceStaffInfoChange)
 {
     AccessibleItemWeakPtr old = m_focusedElement;
-    updateStaffInfo(e, old);
+    updateStaffInfo(e, old, voiceStaffInfoChange);
 
     if (auto oldItem = old.lock()) {
         oldItem->notifyAboutFocus(false);
@@ -115,9 +115,14 @@ QString AccessibleRoot::staffInfo() const
     return m_staffInfo;
 }
 
-void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem)
+void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem,
+                                     bool voiceStaffInfoChange)
 {
     m_staffInfo = "";
+
+    if (!voiceStaffInfoChange) {
+        return;
+    }
 
     AccessibleItemPtr newItem = newAccessibleItem.lock();
     AccessibleItemPtr oldItem = oldAccessibleItem.lock();
@@ -138,7 +143,7 @@ void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleIt
             if (staffName.isEmpty()) {
                 m_staffInfo = staff;
             } else {
-                m_staffInfo = QString("%2 (%3)").arg(staff).arg(staffName);
+                m_staffInfo = QString("%2 (%3)").arg(staff, staffName);
             }
         }
     }

@@ -61,7 +61,7 @@ EngravingObject* RootItem::scanParent() const
 AccessibleItemPtr RootItem::createAccessible()
 {
 #ifndef ENGRAVING_NO_ACCESSIBILITY
-    return std::make_shared<AccessibleRoot>(this);
+    return std::make_shared<AccessibleRoot>(this, AccessibleItem::Group);
 #else
     return nullptr;
 #endif

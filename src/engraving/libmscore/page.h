@@ -64,6 +64,7 @@ class Page final : public EngravingItem
     Text* layoutHeaderFooter(int area, const String& ss) const;
 
 public:
+    AccessibleItemPtr createAccessible() override;
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
