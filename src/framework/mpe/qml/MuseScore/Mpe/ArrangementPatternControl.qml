@@ -44,7 +44,7 @@ Column {
 
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
-            text: qsTrc("mpe", "Timestamp offset")
+            text: /*qsTrc*/ "Timestamp offset"
         }
 
         StyledSlider {
@@ -104,7 +104,7 @@ Column {
 
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
-            text: qsTrc("mpe", "Duration factor")
+            text: /*qsTrc*/ "Duration factor"
         }
 
         StyledSlider {
