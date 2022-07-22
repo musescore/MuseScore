@@ -25,6 +25,10 @@
 #include "fonts/fontsmodule.h"
 #include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
+#include "engraving/utests/utils/scorerw.h"
+
+#include "libmscore/masterscore.h"
+#include "libmscore/musescoreCore.h"
 
 #include "log.h"
 
@@ -35,6 +39,14 @@ static mu::testing::SuiteEnvironment importexport_se(
     new mu::engraving::EngravingModule()
 },
     []() {
-    LOGI() << "braille tests suite post init";
+    LOGI() << "capella tests suite post init";
+
+    mu::engraving::ScoreRW::setRootPath(mu::String::fromUtf8(iex_capella_tests_DATA_ROOT));
+
+    mu::engraving::MScore::testMode = true;
+    mu::engraving::MScore::noGui = true;
+
+    new mu::engraving::MuseScoreCore();
+    mu::engraving::MScore::init(); // initialize libmscore
 }
     );
