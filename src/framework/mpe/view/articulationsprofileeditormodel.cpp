@@ -41,23 +41,34 @@ void ArticulationsProfileEditorModel::requestToOpenProfile()
     QString filter = /*qtrc*/ QString("MPE articulations profile") + " " + PROFILE_EXTENSION;
     io::path_t path = interactive()->selectOpeningFile(/*qtrc*/ QString("Open MPE articulations profile"), "", filter);
 
+    if (path.empty()) {
+        return;
+    }
+
     setCurrentPath(path.toQString());
 
     setProfile(profilesRepository()->loadProfile(m_profilePath));
 }
 
-void ArticulationsProfileEditorModel::requestToCreateProfile()
+bool ArticulationsProfileEditorModel::requestToCreateProfile()
 {
     QString filter = /*qtrc*/ QString("MPE articulations profile") + " " + PROFILE_EXTENSION;
     io::path_t path = interactive()->selectSavingFile(/*qtrc*/ QString("Save MPE articulations profile"), "", filter);
 
+    if (path.empty()) {
+        return false;
+    }
+
     setCurrentPath(path.toQString());
+    return true;
 }
 
 void ArticulationsProfileEditorModel::requestToSaveProfile()
 {
     if (m_profilePath.empty()) {
-        requestToCreateProfile();
+        if (!requestToCreateProfile()) {
+            return;
+        }
     }
 
     for (const auto& item : m_singleNoteItems) {
