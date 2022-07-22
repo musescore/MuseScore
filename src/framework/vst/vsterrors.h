@@ -23,7 +23,7 @@
 #ifndef MU_VST_VSTERRORS_H
 #define MU_VST_VSTERRORS_H
 
-#include "ret.h"
+#include "types/ret.h"
 #include "translation.h"
 
 namespace mu::vst {

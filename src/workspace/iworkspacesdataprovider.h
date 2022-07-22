@@ -26,7 +26,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "workspacetypes.h"
-#include "retval.h"
+#include "types/retval.h"
 #include "async/notification.h"
 
 namespace mu::workspace {

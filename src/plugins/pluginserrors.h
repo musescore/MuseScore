@@ -22,7 +22,7 @@
 #ifndef MU_PLUGINS_PLUGINSERRORS_H
 #define MU_PLUGINS_PLUGINSERRORS_H
 
-#include "ret.h"
+#include "types/ret.h"
 #include "translation.h"
 
 namespace mu::plugins {

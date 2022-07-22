@@ -26,7 +26,7 @@
 #include <map>
 
 #include "types/string.h"
-#include "id.h"
+#include "types/id.h"
 
 #include "draw/types/color.h"
 #include "draw/types/geometry.h"

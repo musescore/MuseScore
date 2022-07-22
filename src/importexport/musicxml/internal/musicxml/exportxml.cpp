@@ -48,7 +48,7 @@
 #include "io/iodevice.h"
 #include "io/buffer.h"
 #include "io/fileinfo.h"
-#include "serialization/internal/qzipwriter_p.h"
+#include "global/deprecated/qzipwriter_p.h"
 
 #include "engraving/style/style.h"
 #include "engraving/rw/xml.h"

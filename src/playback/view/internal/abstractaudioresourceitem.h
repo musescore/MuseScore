@@ -27,7 +27,7 @@
 
 #include "audio/audiotypes.h"
 
-#include "uri.h"
+#include "types/uri.h"
 
 namespace mu::playback {
 class AbstractAudioResourceItem : public QObject

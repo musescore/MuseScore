@@ -25,7 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "types/bytearray.h"
 #include "types/datetime.h"
-#include "retval.h"
+#include "types/retval.h"
 #include "path.h"
 #include "ioenums.h"
 

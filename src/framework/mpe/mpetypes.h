@@ -32,9 +32,8 @@
 #include <set>
 #include <vector>
 
-#include "log.h"
-#include "sharedhashmap.h"
-#include "sharedmap.h"
+#include "types/sharedhashmap.h"
+#include "types/sharedmap.h"
 
 #include "soundid.h"
 

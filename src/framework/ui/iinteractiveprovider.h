@@ -23,8 +23,8 @@
 #define MU_UI_IINTERACTIVEPROVIDER_H
 
 #include "modularity/imoduleexport.h"
-#include "uri.h"
-#include "retval.h"
+#include "types/uri.h"
+#include "types/retval.h"
 
 #include "iinteractive.h"
 

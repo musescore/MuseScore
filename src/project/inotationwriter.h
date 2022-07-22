@@ -23,8 +23,8 @@
 #ifndef MU_PROJECT_INOTATIONWRITER_H
 #define MU_PROJECT_INOTATIONWRITER_H
 
-#include "ret.h"
-#include "val.h"
+#include "types/ret.h"
+#include "types/val.h"
 
 #include "async/channel.h"
 #include "global/progress.h"

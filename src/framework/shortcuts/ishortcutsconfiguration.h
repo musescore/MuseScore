@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "io/path.h"
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::shortcuts {
 class IShortcutsConfiguration : MODULE_EXPORT_INTERFACE

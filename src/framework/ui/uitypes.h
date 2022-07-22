@@ -28,8 +28,8 @@
 #include <QString>
 #include <QMetaType>
 
-#include "ret.h"
-#include "val.h"
+#include "types/ret.h"
+#include "types/val.h"
 #include "actions/actiontypes.h"
 #include "view/iconcodes.h"
 #include "shortcuts/shortcutstypes.h"

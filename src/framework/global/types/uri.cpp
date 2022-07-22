@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "uri.h"
+#include "types/uri.h"
 
 #include "log.h"
 #include "stringutils.h"

@@ -25,11 +25,11 @@
 
 #include "stringutils.h"
 
-#include "serialization/internal/qzipreader_p.h"
-#include "serialization/internal/qzipwriter_p.h"
+#include "global/deprecated/qzipreader_p.h"
+#include "global/deprecated/qzipwriter_p.h"
 
-#include "global/xmlreader.h"
-#include "global/xmlwriter.h"
+#include "global/deprecated/xmlreader.h"
+#include "global/deprecated/xmlwriter.h"
 
 #include "workspaceerrors.h"
 

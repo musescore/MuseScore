@@ -23,6 +23,8 @@
 #ifndef MU_ENGRAVING_SETUPRESOLVERBASE_H
 #define MU_ENGRAVING_SETUPRESOLVERBASE_H
 
+#include <cassert>
+
 #include "mpe/events.h"
 
 #include "libmscore/instrument.h"
@@ -34,7 +36,8 @@ class SetupDataResolverBase
 public:
     static bool isAbleToResolve(const Instrument* instrument)
     {
-        IF_ASSERT_FAILED(instrument) {
+        assert(instrument);
+        if (!instrument) {
             return false;
         }
 
@@ -43,7 +46,8 @@ public:
 
     static void resolve(const Instrument* instrument, mpe::PlaybackSetupData& result)
     {
-        IF_ASSERT_FAILED(instrument) {
+        assert(instrument);
+        if (!instrument) {
             return;
         }
 

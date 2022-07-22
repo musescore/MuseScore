@@ -39,44 +39,73 @@
 **
 ****************************************************************************/
 
-#ifndef __ZIPWRITER_H__
-#define __ZIPWRITER_H__
+#ifndef __ZIPREADER_H__
+#define __ZIPREADER_H__
+
 #ifndef QT_NO_TEXTODFWRITER
+
+//! NOTE This is class is deprecated, please use serialization/zipreader.h
 
 //
 //  W A R N I N G
 //  -------------
 //
 // This file is not part of the Qt API.  It exists for the convenience
-// of the QZipWriter class.  This header file may change from
+// of the QZipReader class.  This header file may change from
 // version to version without notice, or even be removed.
 //
 // We mean it.
 //
 
-#include <QtCore/qstring.h>
+#include <QtCore/qdatetime.h>
 #include <QtCore/qfile.h>
+#include <QtCore/qstring.h>
 
 QT_BEGIN_NAMESPACE
 
-class MQZipWriterPrivate;
+class MQZipReaderPrivate;
 
-class MQZipWriter
+class MQZipReader
 {
 public:
-    MQZipWriter(const QString& fileName, QIODevice::OpenMode mode = (QIODevice::WriteOnly | QIODevice::Truncate));
+    MQZipReader(const QString& fileName, QIODevice::OpenMode mode = QIODevice::ReadOnly);
 
-    explicit MQZipWriter(QIODevice* device);
-    ~MQZipWriter();
+    explicit MQZipReader(QIODevice* device);
+    ~MQZipReader();
 
     QIODevice* device() const;
 
-    bool isWritable() const;
+    bool isReadable() const;
     bool exists() const;
+
+    struct FileInfo
+    {
+        FileInfo() Q_DECL_NOTHROW
+            : isDir(false), isFile(false), isSymLink(false), crc(0), size(0)
+        {}
+
+        bool isValid() const Q_DECL_NOTHROW { return isDir || isFile || isSymLink; }
+
+        QString filePath;
+        uint isDir : 1;
+        uint isFile : 1;
+        uint isSymLink : 1;
+        QFile::Permissions permissions;
+        uint crc;
+        qint64 size;
+        QDateTime lastModified;
+    };
+
+    QVector<FileInfo> fileInfoList() const;
+    int count() const;
+
+    FileInfo entryInfoAt(int index) const;
+    QByteArray fileData(const QString& fileName) const;
+    bool extractAll(const QString& destinationDir) const;
 
     enum Status {
         NoError,
-        FileWriteError,
+        FileReadError,
         FileOpenError,
         FilePermissionsError,
         FileError
@@ -84,33 +113,14 @@ public:
 
     Status status() const;
 
-    enum CompressionPolicy {
-        AlwaysCompress,
-        NeverCompress,
-        AutoCompress
-    };
-
-    void setCompressionPolicy(CompressionPolicy policy);
-    CompressionPolicy compressionPolicy() const;
-
-    void setCreationPermissions(QFile::Permissions permissions);
-    QFile::Permissions creationPermissions() const;
-
-    void addFile(const QString& fileName, const QByteArray& data);
-
-    void addFile(const QString& fileName, QIODevice* device);
-
-    void addDirectory(const QString& dirName);
-
-    void addSymLink(const QString& fileName, const QString& destination);
-
     void close();
+
 private:
-    MQZipWriterPrivate* d;
-    Q_DISABLE_COPY(MQZipWriter)
+    MQZipReaderPrivate* d;
+    Q_DISABLE_COPY(MQZipReader)
 };
 
 QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTODFWRITER
-#endif // QZIPWRITER_H
+#endif // QZIPREADER_H
