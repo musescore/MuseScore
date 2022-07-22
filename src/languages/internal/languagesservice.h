@@ -52,6 +52,8 @@ public:
     ValCh<LanguagesHash> languages() const override;
     ValCh<Language> currentLanguage() const override;
 
+    LanguageStatus::Status languageStatus(const QString& languageCode) const override;
+
     RetCh<LanguageProgress> install(const QString& languageCode) override;
     RetCh<LanguageProgress> update(const QString& languageCode) override;
     Ret uninstall(const QString& languageCode) override;
@@ -67,15 +69,12 @@ private:
 
     Language language(const QString& languageCode) const;
 
-    RetVal<LanguagesHash> correctLanguagesStates(LanguagesHash& languages) const;
-    LanguageStatus::Status languageStatus(const Language& language) const;
-
     RetVal<QString> downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel) const;
     Ret removeLanguage(const QString& languageCode) const;
 
     Ret loadLanguage(const QString& languageCode);
 
-    void resetLanguageToDefault();
+    void resetLanguageToSystemLanguage();
 
     void th_refreshLanguages();
     void th_install(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel, async::Channel<Ret>* finishChannel);

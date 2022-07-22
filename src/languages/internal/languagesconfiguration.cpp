@@ -38,7 +38,6 @@ using namespace mu;
 using namespace mu::framework;
 using namespace mu::languages;
 
-static const QString SYSTEM_LANGUAGE_CODE("system");
 static const Settings::Key LANGUAGE_KEY("languages", "language");
 
 static const QString LANGUAGES_SERVER_URL("http://extensions.musescore.org/4.0/languages/");
@@ -49,20 +48,11 @@ static const std::string LANGUAGES_RESOURCE_NAME("LANGUAGES");
 static const QString DEF_MUSESCORE_QM("musescore_%1.qm");
 static const QString DEF_INSTRUMENTS_QM("instruments_%1.qm");
 
-static QString correctLanguageCode(const QString& languageCode)
-{
-    QString result = languageCode;
-    if (result == SYSTEM_LANGUAGE_CODE) {
-        result = QLocale::system().name();
-    }
-    return result;
-}
-
 void LanguagesConfiguration::init()
 {
     settings()->setDefaultValue(LANGUAGE_KEY, Val(SYSTEM_LANGUAGE_CODE.toStdString()));
     settings()->valueChanged(LANGUAGE_KEY).onReceive(nullptr, [this](const Val& val) {
-        m_currentLanguageCodeChanged.send(correctLanguageCode(val.toQString()));
+        m_currentLanguageCodeChanged.send(val.toQString());
     });
 
     fileSystem()->makePath(languagesUserAppDataPath());
@@ -72,7 +62,7 @@ ValCh<QString> LanguagesConfiguration::currentLanguageCode() const
 {
     ValCh<QString> result;
     result.ch = m_currentLanguageCodeChanged;
-    result.val = correctLanguageCode(settings()->value(LANGUAGE_KEY).toQString());
+    result.val = settings()->value(LANGUAGE_KEY).toQString();
 
     return result;
 }
@@ -209,7 +199,6 @@ LanguagesHash LanguagesConfiguration::parseLanguagesState(const ByteArray& json)
 
         language.name = langObj.value("name").toString();
         language.archiveFileName = langObj.value("fileName").toString();
-        language.status = static_cast<LanguageStatus::Status>(langObj.value("status").toInt());
 
         const QJsonArray files = langObj.value("files").toArray();
         for (const QJsonValue& fileVal : files) {
