@@ -38,6 +38,8 @@ public:
     void setFocusedElement(AccessibleItemPtr e);
     AccessibleItemWeakPtr focusedElement() const;
 
+    void notifyAboutFocuedElemntNameChanged();
+
     void setMapToScreenFunc(const AccessibleMapToScreenFunc& func);
     RectF toScreenRect(const RectF& rect, bool* ok = nullptr) const;
 
