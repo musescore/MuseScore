@@ -899,13 +899,6 @@ bool Harmony::edit(EditData& ed)
 
 void Harmony::endEdit(EditData& ed)
 {
-    // complete editing: generate xml text, set Pid::TEXT, perform initial layout
-    // if text has changed, this also triggers setHarmony() which renders chord symbol
-    // but any rendering or layout performed here is tentative,
-    // we may still need to substitute special characters,
-    // and that cannot be until after editing is completed
-    TextBase::endEdit(ed);
-
     // get plain text
     String s = plainText();
 
@@ -936,13 +929,7 @@ void Harmony::endEdit(EditData& ed)
     score()->setPlayChord(true);
     _realizedHarmony.setDirty(true);
 
-    // render and layout chord symbol
-    // (needs to be done here if text hasn't changed, or redone if replacements were performed above)
-    score()->startCmd();
     setHarmony(s);
-    layout1();
-    triggerLayout();
-    score()->endCmd();
 
     // disable spell check
     _isMisspelled = false;
@@ -978,6 +965,8 @@ void Harmony::endEdit(EditData& ed)
             }
         }
     }
+
+    TextBase::endEdit(ed);
 }
 
 //---------------------------------------------------------
