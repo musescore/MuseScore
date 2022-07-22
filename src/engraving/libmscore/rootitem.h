@@ -47,7 +47,9 @@ public:
 
 private:
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
+#endif
 
     Score* m_score = nullptr;
     compat::DummyElement* m_dummy = nullptr;

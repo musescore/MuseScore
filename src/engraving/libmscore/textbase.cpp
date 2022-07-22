@@ -3051,14 +3051,13 @@ String TextBase::getHtmlEndTag(FontStyle style, VerticalAlignment vAlign)
     return s;
 }
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 AccessibleItemPtr TextBase::createAccessible()
 {
-#ifndef ENGRAVING_NO_ACCESSIBILITY
     return std::make_shared<AccessibleItem>(this, AccessibleItem::EditableText);
-#else
-    return nullptr;
-#endif
 }
+
+#endif
 
 void TextBase::notifyAboutTextCursorChanged()
 {

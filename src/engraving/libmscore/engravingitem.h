@@ -44,8 +44,11 @@
 
 namespace mu::engraving {
 class Factory;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 class AccessibleItem;
 typedef std::shared_ptr<AccessibleItem> AccessibleItemPtr;
+#endif
 
 enum class Pid;
 class StaffType;
@@ -147,7 +150,10 @@ class EngravingItem : public EngravingObject
     ///< valid after call to layout()
     uint _tag;                    ///< tag bitmask
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr m_accessible;
+#endif
+
     bool m_accessibleEnabled = false;
 
     bool m_colorsInversionEnabled = true;
@@ -165,7 +171,11 @@ protected:
     friend class Factory;
     EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
     EngravingItem(const EngravingItem&);
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     virtual AccessibleItemPtr createAccessible();
+#endif
+
     virtual KerningType doComputeKerningType(const EngravingItem*) const { return KerningType::KERNING; }
 
 public:
@@ -175,7 +185,9 @@ public:
     KerningType computeKerningType(const EngravingItem* nextItem) const;
     virtual double computePadding(const EngravingItem* nextItem) const;
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     virtual void setupAccessible();
+#endif
     bool accessibleEnabled() const;
     void setAccessibleEnabled(bool enabled);
 
@@ -521,7 +533,9 @@ public:
     virtual EngravingItem* nextSegmentElement();    //< Used for navigation
     virtual EngravingItem* prevSegmentElement();    //< next-element and prev-element command
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr accessible() const;
+#endif
     virtual String accessibleInfo() const;
     virtual String screenReaderInfo() const { return accessibleInfo(); }
     //  if the screen-reader needs a special string (see note for example)

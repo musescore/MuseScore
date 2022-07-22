@@ -68,7 +68,9 @@
 #include "fingering.h"
 #include "layout/layoutchords.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
+#endif
 
 #include "log.h"
 
@@ -425,10 +427,13 @@ Chord::~Chord()
     DeleteAll(_notes);
 }
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 AccessibleItemPtr Chord::createAccessible()
 {
     return std::make_shared<AccessibleItem>(this, AccessibleItem::Group);
 }
+
+#endif
 
 bool Chord::containsEqualArticulations(const Chord* other) const
 {
