@@ -27,7 +27,7 @@
 #include "textbase.h"
 
 using namespace mu;
-using namespace mu::engraving;
+//using namespace mu::engraving;
 
 namespace mu::engraving {
 enum class PedalPosition : char {
@@ -87,4 +87,5 @@ public:
     bool isPitchPlayable(int pitch);
 };
 } // namespace mu::engraving
+
 #endif // __HARPPEDALDIAGRAM_H__

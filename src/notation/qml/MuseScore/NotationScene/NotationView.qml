@@ -42,6 +42,8 @@ FocusScope {
 
     property alias defaultNavigationControl: fakeNavCtrl
 
+    property var windowContent: null
+
     NavigationSection {
         id: navSec
         name: "NotationView"
@@ -90,6 +92,8 @@ FocusScope {
                 NotationPaintView {
                     id: notationView
                     anchors.fill: parent
+
+                    property var windowContent: root.windowContent
 
                     NavigationPanel {
                         id: navPanel

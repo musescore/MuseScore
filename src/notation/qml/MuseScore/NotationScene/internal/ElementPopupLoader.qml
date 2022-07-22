@@ -34,7 +34,6 @@ Item {
     height: 0
 
     anchors.fill: parent
-
     property var openedPopup: null
     property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
 
@@ -91,11 +90,11 @@ Item {
     Loader {
         id: loader
 
-        function createPopup(comp, pos) {
+        function createPopup(comp, pos, size) {
             loader.sourceComponent = comp
             loader.item.parent = container
-            loader.item.x = pos.x - loader.item.width / 2
-            loader.item.y = pos.y + 10
+            loader.item.updatePosition(pos, size)
+
             return loader.item
         }
     }

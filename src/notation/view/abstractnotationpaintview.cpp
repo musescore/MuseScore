@@ -505,6 +505,7 @@ void AbstractNotationPaintView::showElementPopup(const ElementType& elementType,
 
     RectF elemRect = fromLogical(size);
     QPointF elemSize = QPointF(elemRect.width(), elemRect.height());
+
     PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
 
     emit showElementPopupRequested(modelType, pos, elemSize);

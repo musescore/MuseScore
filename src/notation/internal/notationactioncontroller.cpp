@@ -1356,6 +1356,11 @@ void NotationActionController::startEditSelectedElement(const ActionData& args)
         return;
     }
 
+    if (element->isHarpPedalDiagram()) {
+        dispatcher()->dispatch("notation-popup-menu");
+        return;
+    }
+
     if (element->isText()) {
         TextStyleType styleType = mu::engraving::toText(element)->textStyleType();
 

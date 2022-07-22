@@ -208,9 +208,7 @@ String HarpPedalDiagram::createDiagramText()
         }
     }
 
-    setXmlText(diagram);
-
-    layout();
+    return diagram;
 }
 
 void HarpPedalDiagram::updateDiagramText()
@@ -308,7 +306,7 @@ PropertyValue HarpPedalDiagram::propertyDefault(Pid id) const
 
 String HarpPedalDiagram::accessibleInfo() const
 {
-    String rez = score() ? score()->getTextStyleUserName(textStyleType()) : TConv::toUserName(textStyleType());
+    String rez = score() ? score()->getTextStyleUserName(textStyleType()).translated() : TConv::translatedUserName(textStyleType());
     String s;
 
     for (int idx = 0; idx < _pedalState.size(); idx++) {

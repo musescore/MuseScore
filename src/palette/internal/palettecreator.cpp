@@ -2033,6 +2033,7 @@ PalettePtr PaletteCreator::newHarpPalette()
 
     auto pedalTextDiagram = Factory::makeHarpPedalDiagram(gpaletteScore->dummy()->segment());
     pedalTextDiagram->setIsDiagram(false);
+
     sp->appendElement(pedalTextDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal text diagram"));
 
     return sp;

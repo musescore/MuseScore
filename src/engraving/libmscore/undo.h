@@ -72,6 +72,7 @@ class EditData;
 class EngravingItem;
 class Excerpt;
 class Harmony;
+class HarpPedalDiagram;
 class InstrChannel;
 class Instrument;
 class InstrumentChange;

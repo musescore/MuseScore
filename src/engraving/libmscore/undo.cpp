@@ -2924,7 +2924,6 @@ void ChangeHarpPedalState::flip(EditData*)
 
     diagram->triggerLayout();
 }
-}
 
 void ChangeSingleHarpPedal::flip(EditData*)
 {
@@ -2938,4 +2937,5 @@ void ChangeSingleHarpPedal::flip(EditData*)
     type = f_type;
     pos = f_pos;
     diagram->triggerLayout();
+}
 }

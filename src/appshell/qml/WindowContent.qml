@@ -97,6 +97,7 @@ DockWindow {
 
         NotationPage {
             topToolKeyNavSec: root.topToolKeyNavSec
+            windowContent: root
         },
 
         PublishPage {

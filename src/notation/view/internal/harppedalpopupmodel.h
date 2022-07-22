@@ -19,11 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #ifndef MU_NOTATION_HARPPEDALPOPUPMODEL_H
 #define MU_NOTATION_HARPPEDALPOPUPMODEL_H
 
 #include "abstractelementpopupmodel.h"
-
+#include "context/iglobalcontext.h"
+#include "engraving/libmscore/harppedaldiagram.h"
+#include "engraving/libmscore/undo.h"
 #include <QObject>
 
 namespace mu::notation {
@@ -31,9 +34,69 @@ class HarpPedalPopupModel : public AbstractElementPopupModel
 {
     Q_OBJECT
 
+    INJECT(notation, context::IGlobalContext, globalContext)
+
+    Q_PROPERTY(bool isDiagram READ isDiagram WRITE setIsDiagram NOTIFY isDiagramChanged)
+    Q_PROPERTY(
+        QVector<mu::notation::HarpPedalPopupModel::Position> pedalState READ pedalState WRITE setDiagramPedalState NOTIFY pedalStateChanged)
+    Q_PROPERTY(QPointF pos READ pos CONSTANT)
+    Q_PROPERTY(QPointF size READ size CONSTANT)
+    Q_PROPERTY(QPointF staffPos READ staffPos CONSTANT)
+    Q_PROPERTY(double staffHeight READ staffHeight CONSTANT)
+    Q_PROPERTY(bool belowStave READ belowStave CONSTANT)
+
 public:
+    enum class Position {
+        FLAT,
+        NATURAL,
+        SHARP,
+
+        UNSET
+    };
+    Q_ENUM(Position)
+
     explicit HarpPedalPopupModel(QObject* parent = nullptr);
+
+    bool isDiagram() const;
+
+    QPointF pos() const;
+
+    QPointF size() const;
+
+    QPointF staffPos() const;
+
+    double staffHeight() const;
+
+    bool belowStave() const;
+
+    QVector<Position> pedalState() const;
+
+public slots:
+    void setIsDiagram(bool isDiagram);
+    void setDiagramPedalState(QVector<mu::notation::HarpPedalPopupModel::Position> pedalState);
+
+signals:
+    void isDiagramChanged(bool isDiagram);
+    void pedalStateChanged(QVector<mu::notation::HarpPedalPopupModel::Position> pedalState);
+
+private:
+    // Convert between mu::engraving::PedalPosition and internal qml safe Position enums
+    void setPopupPedalState(std::array<mu::engraving::PedalPosition, 7> pos);
+
+    void setPopupPedalState(std::array<HarpPedalPopupModel::Position, 7> pos);
+
+    std::array<mu::engraving::PedalPosition, 7> getPopupPedalState();
+
+    mu::engraving::HarpPedalDiagram* m_diagram = nullptr;
+
+    bool m_isDiagram = false;
+
+    std::array<Position, 7> m_pedalState;
 };
 } //namespace mu::notation
 
 #endif // MU_NOTATION_HARPPEDALPOPUPMODEL_H
+
+#ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::notation::HarpPedalPopupModel::Position)
+#endif
