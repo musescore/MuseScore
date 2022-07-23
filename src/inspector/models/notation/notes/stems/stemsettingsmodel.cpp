@@ -62,6 +62,10 @@ void StemSettingsModel::createProperties()
     context()->currentNotation()->style()->styleChanged().onNotify(this, [this]() {
         emit useStraightNoteFlagsChanged();
     });
+
+    context()->currentNotation()->undoStack()->stackChanged().onNotify(this, [this]() {
+        emit useStraightNoteFlagsChanged();
+    });
 }
 
 void StemSettingsModel::requestElements()
