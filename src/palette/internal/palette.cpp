@@ -120,6 +120,12 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QStr
     return cell;
 }
 
+PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const TranslatableString& name, qreal mag,
+                                      const QPointF& offset, const QString& tag)
+{
+    return insertElement(idx, element, name.str, mag, offset, tag);
+}
+
 PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF& offset, const QString& tag)
 {
     if (element) {
@@ -138,7 +144,13 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, q
     return cell;
 }
 
-PaletteCellPtr Palette::appendActionIcon(mu::engraving::ActionIconType type, actions::ActionCode code)
+PaletteCellPtr Palette::appendElement(ElementPtr element, const TranslatableString& name, qreal mag, const QPointF& offset,
+                                      const QString& tag)
+{
+    return appendElement(element, name.str, mag, offset, tag);
+}
+
+PaletteCellPtr Palette::appendActionIcon(ActionIconType type, actions::ActionCode code)
 {
     const ui::UiAction& action = actionsRegister()->action(code);
     auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
