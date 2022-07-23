@@ -35,13 +35,13 @@ using namespace mu::engraving;
 
 static const String SPLITSTAFF_DATA_DIR(u"splitstaff_data/");
 
-class SplitStaffTests : public ::testing::Test
+class Engraving_SplitStaffTests : public ::testing::Test
 {
 public:
     void splitstaff(int, int);
 };
 
-void SplitStaffTests::splitstaff(int idx, int staffIdx)
+void Engraving_SplitStaffTests::splitstaff(int idx, int staffIdx)
 {
     MasterScore* score = ScoreRW::readScore(SPLITSTAFF_DATA_DIR + String(u"splitstaff0%1.mscx").arg(idx));
     EXPECT_TRUE(score);
@@ -55,32 +55,32 @@ void SplitStaffTests::splitstaff(int idx, int staffIdx)
     delete score;
 }
 
-TEST_F(SplitStaffTests, splitstaff01)
+TEST_F(Engraving_SplitStaffTests, splitstaff01)
 {
     splitstaff(1, 0); //single notes
 }
 
-TEST_F(SplitStaffTests, splitstaff02)
+TEST_F(Engraving_SplitStaffTests, splitstaff02)
 {
     splitstaff(2, 0); //chord
 }
 
-TEST_F(SplitStaffTests, splitstaff03)
+TEST_F(Engraving_SplitStaffTests, splitstaff03)
 {
     splitstaff(3, 1); //non-top staff
 }
 
-TEST_F(SplitStaffTests, splitstaff04)
+TEST_F(Engraving_SplitStaffTests, splitstaff04)
 {
     splitstaff(4, 0); //slur up
 }
 
-TEST_F(SplitStaffTests, splitstaff05)
+TEST_F(Engraving_SplitStaffTests, splitstaff05)
 {
     splitstaff(5, 0); //slur down
 }
 
-TEST_F(SplitStaffTests, splitstaff06)
+TEST_F(Engraving_SplitStaffTests, splitstaff06)
 {
     splitstaff(6, 0); //tuplet
 }

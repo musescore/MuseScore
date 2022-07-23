@@ -44,7 +44,7 @@ using namespace mu::engraving;
 
 static const String SPANNERS_DATA_DIR("spanners_data/");
 
-class SpannersTests : public ::testing::Test
+class Engraving_SpannersTests : public ::testing::Test
 {
 };
 
@@ -52,7 +52,7 @@ class SpannersTests : public ::testing::Test
 //   Adds glissandi in several contexts.
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners01)
+TEST_F(Engraving_SpannersTests, spanners01)
 {
     EditData dropData(0);
     Glissando* gliss;
@@ -156,7 +156,7 @@ TEST_F(SpannersTests, spanners01)
 //          glissando from a bass staff note to a treble staff note
 //    is loaded and laid out and saved: should be round-trip safe.
 //---------------------------------------------------------
-TEST_F(SpannersTests, spanners02)
+TEST_F(Engraving_SpannersTests, spanners02)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando-crossstaff01.mscx");
     EXPECT_TRUE(score);
@@ -168,7 +168,7 @@ TEST_F(SpannersTests, spanners02)
 //---------------------------------------------------------
 //   Loads a score with before- and after-grace notes and adds several glissandi from/to them.
 //---------------------------------------------------------
-TEST_F(SpannersTests, spanners03)
+TEST_F(Engraving_SpannersTests, spanners03)
 {
     EditData dropData(0);
     Glissando* gliss;
@@ -243,7 +243,7 @@ TEST_F(SpannersTests, spanners03)
 //   Linking a staff to an existing staff containing a glissando
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners04)
+TEST_F(Engraving_SpannersTests, spanners04)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando-cloning01.mscx");
     EXPECT_TRUE(score);
@@ -272,7 +272,7 @@ TEST_F(SpannersTests, spanners04)
 ///   Creating part from an existing staff containing a glissando
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, DISABLED_spanners05)
+TEST_F(Engraving_SpannersTests, DISABLED_spanners05)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando-cloning02.mscx");
     EXPECT_TRUE(score);
@@ -300,7 +300,7 @@ TEST_F(SpannersTests, DISABLED_spanners05)
 ///   Drop a glissando on a staff with a linked staff
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners06)
+TEST_F(Engraving_SpannersTests, spanners06)
 {
     EditData dropData(0);
     Glissando* gliss;
@@ -332,7 +332,7 @@ TEST_F(SpannersTests, spanners06)
 ///   Drop a glissando on a staff with an excerpt
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners07)
+TEST_F(Engraving_SpannersTests, spanners07)
 {
     EditData dropData(0);
     Glissando* gliss;
@@ -368,7 +368,7 @@ TEST_F(SpannersTests, spanners07)
 //
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners09)
+TEST_F(Engraving_SpannersTests, spanners09)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline02.mscx");
     EXPECT_TRUE(score);
@@ -401,7 +401,7 @@ TEST_F(SpannersTests, spanners09)
 //
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners10)
+TEST_F(Engraving_SpannersTests, spanners10)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline03.mscx");
     EXPECT_TRUE(score);
@@ -434,7 +434,7 @@ TEST_F(SpannersTests, spanners10)
 //
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners11)
+TEST_F(Engraving_SpannersTests, spanners11)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline04.mscx");
     EXPECT_TRUE(score);
@@ -467,7 +467,7 @@ TEST_F(SpannersTests, spanners11)
 //
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners12)
+TEST_F(Engraving_SpannersTests, spanners12)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline05.mscx");
     EXPECT_TRUE(score);
@@ -497,7 +497,7 @@ TEST_F(SpannersTests, spanners12)
 //
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, DISABLED_spanners13)
+TEST_F(Engraving_SpannersTests, DISABLED_spanners13)
 {
     EditData dropData(0);
     LayoutBreak* brk;
@@ -534,7 +534,7 @@ TEST_F(SpannersTests, DISABLED_spanners13)
 ///   creating part from an existing grand staff containing a cross staff glissando
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, DISABLED_spanners14)
+TEST_F(Engraving_SpannersTests, DISABLED_spanners14)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando-cloning05.mscx");
     EXPECT_TRUE(score);
@@ -562,7 +562,7 @@ TEST_F(SpannersTests, DISABLED_spanners14)
 ///   set the color of a spanner and save
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners15)
+TEST_F(Engraving_SpannersTests, spanners15)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"linecolor01.mscx");
     EXPECT_TRUE(score);
@@ -586,7 +586,7 @@ TEST_F(SpannersTests, spanners15)
 ///   read manually adjusted lines on a small staff and save
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners16)
+TEST_F(Engraving_SpannersTests, spanners16)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"smallstaff01.mscx");
     EXPECT_TRUE(score);

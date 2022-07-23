@@ -35,11 +35,11 @@ using namespace mu::engraving;
 
 static const String IMPLODEEXP_DATA_DIR("implode_explode_data/");
 
-class ImplodeExplodeTests : public ::testing::Test
+class Engraving_ImplodeExplodeTests : public ::testing::Test
 {
 };
 
-TEST_F(ImplodeExplodeTests, undoExplode)
+TEST_F(Engraving_ImplodeExplodeTests, undoExplode)
 {
     String readFile(IMPLODEEXP_DATA_DIR + "undoExplode.mscx");
     String writeFile1("undoExplode01-test.mscx");
@@ -70,7 +70,7 @@ TEST_F(ImplodeExplodeTests, undoExplode)
     delete score;
 }
 
-TEST_F(ImplodeExplodeTests, undoImplode)
+TEST_F(Engraving_ImplodeExplodeTests, undoImplode)
 {
     String readFile(IMPLODEEXP_DATA_DIR + "undoImplode.mscx");
     String writeFile1("undoImplode01-test.mscx");
@@ -101,7 +101,7 @@ TEST_F(ImplodeExplodeTests, undoImplode)
     delete score;
 }
 
-TEST_F(ImplodeExplodeTests, undoImplodeVoice)
+TEST_F(Engraving_ImplodeExplodeTests, undoImplodeVoice)
 {
     String readFile(IMPLODEEXP_DATA_DIR + "undoImplodeVoice.mscx");
     String writeFile1("undoImplodeVoice01-test.mscx");
@@ -132,7 +132,7 @@ TEST_F(ImplodeExplodeTests, undoImplodeVoice)
     delete score;
 }
 
-TEST_F(ImplodeExplodeTests, implode1)
+TEST_F(Engraving_ImplodeExplodeTests, implode1)
 {
     String readFile(IMPLODEEXP_DATA_DIR + "implode1.mscx");
     String writeFile1("implode1-test1.mscx");

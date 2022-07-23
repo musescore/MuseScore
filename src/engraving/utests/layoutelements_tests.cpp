@@ -40,7 +40,7 @@ using namespace mu::engraving;
 
 static const String ALL_ELEMENTS_DATA_DIR("all_elements_data/");
 
-class LayoutElementsTests : public ::testing::Test
+class Engraving_LayoutElementsTests : public ::testing::Test
 {
 public:
     void tstLayoutAll(String file);
@@ -96,7 +96,7 @@ static void isLayoutDone(void* data, EngravingItem* e)
 //    Test that all elements in the score are laid out
 //---------------------------------------------------------
 
-void LayoutElementsTests::tstLayoutAll(String file)
+void Engraving_LayoutElementsTests::tstLayoutAll(String file)
 {
     MasterScore* score = ScoreRW::readScore(ALL_ELEMENTS_DATA_DIR + file);
     // readScore should also do layout of the score
@@ -111,24 +111,24 @@ void LayoutElementsTests::tstLayoutAll(String file)
     }
 }
 
-TEST_F(LayoutElementsTests, tstLayoutElements)
+TEST_F(Engraving_LayoutElementsTests, tstLayoutElements)
 {
     tstLayoutAll(u"layout_elements.mscx");
 }
 
-TEST_F(LayoutElementsTests, tstLayoutTablature)
+TEST_F(Engraving_LayoutElementsTests, tstLayoutTablature)
 {
     tstLayoutAll(u"layout_elements_tab.mscx");
 }
 
-TEST_F(LayoutElementsTests, tstLayoutMoonlight)
+TEST_F(Engraving_LayoutElementsTests, tstLayoutMoonlight)
 {
     tstLayoutAll(u"moonlight.mscx");
 }
 
 // FIXME goldberg.mscx does not pass the test because of some
 // TimeSig and Clef elements. Need to check it later!
-TEST_F(LayoutElementsTests, DISABLED_tstLayoutGoldberg)
+TEST_F(Engraving_LayoutElementsTests, DISABLED_tstLayoutGoldberg)
 {
     tstLayoutAll(u"goldberg.mscx");
 }

@@ -35,14 +35,14 @@ using namespace mu::engraving;
 
 static const String CLEF_DATA_DIR(u"clef_data/");
 
-class ClefTests : public ::testing::Test
+class Engraving_ClefTests : public ::testing::Test
 {
 };
 
 //---------------------------------------------------------
 //    two clefs at tick position zero
 //---------------------------------------------------------
-TEST_F(ClefTests, clef1)
+TEST_F(Engraving_ClefTests, clef1)
 {
     MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + u"clef-1.mscx");
     EXPECT_TRUE(score);
@@ -54,7 +54,7 @@ TEST_F(ClefTests, clef1)
 //---------------------------------------------------------
 //    change timesig -> rewrite measures ->insertTime
 //---------------------------------------------------------
-TEST_F(ClefTests, clef2)
+TEST_F(Engraving_ClefTests, clef2)
 {
     MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + u"clef-2.mscx");
     EXPECT_TRUE(score);
@@ -74,7 +74,7 @@ TEST_F(ClefTests, clef2)
 //---------------------------------------------------------
 //    change the first clef of a score by changing the first measure's clef
 //---------------------------------------------------------
-TEST_F(ClefTests, clef3)
+TEST_F(Engraving_ClefTests, clef3)
 {
     MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + u"clef-3.mscx");
     EXPECT_TRUE(score);

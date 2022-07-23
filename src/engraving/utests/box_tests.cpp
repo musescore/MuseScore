@@ -35,7 +35,7 @@ using namespace mu::engraving;
 
 static const String BOX_DATA_DIR(u"box_data/");
 
-class BoxTests : public ::testing::Test
+class Engraving_BoxTests : public ::testing::Test
 {
 };
 
@@ -43,7 +43,7 @@ class BoxTests : public ::testing::Test
 //   undoRemoveVBox
 ///   read a file with a vbox. Delete it, and undo. Check that the VBox still exists.
 //---------------------------------------------------------
-TEST_F(BoxTests, undoRemoveVBox)
+TEST_F(Engraving_BoxTests, undoRemoveVBox)
 {
     String readFile(BOX_DATA_DIR + u"undoRemoveVBox.mscx");
     String writeFile1(u"undoRemoveVBox1-test.mscx");

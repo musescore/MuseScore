@@ -36,7 +36,7 @@ using namespace mu::engraving;
 
 static const String REMOVE_DATA_DIR("remove_data/");
 
-class RemoveTests : public ::testing::Test
+class Engraving_RemoveTests : public ::testing::Test
 {
 };
 
@@ -89,7 +89,7 @@ static bool staffHasElements(Score* score, staff_idx_t staffIdx)
 //    belonging to it are not removed in excerpts.
 //---------------------------------------------------------
 
-TEST_F(RemoveTests, removeStaff)
+TEST_F(Engraving_RemoveTests, removeStaff)
 {
     MasterScore* score = ScoreRW::readScore(REMOVE_DATA_DIR + u"remove_staff.mscx");
     EXPECT_TRUE(score);
