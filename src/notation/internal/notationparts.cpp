@@ -37,15 +37,39 @@ using namespace mu::engraving;
 
 static const mu::engraving::Fraction DEFAULT_TICK = mu::engraving::Fraction(0, 1);
 
-static QString formatInstrumentTitleOnScore(const QString& instrumentName, const Trait& trait, int instrumentNumber)
+static QString formatInstrumentTitleOnScore(const QString& instrumentName, const Trait& trait)
 {
-    QString numberPart = instrumentNumber > 0 ? " " + QString::number(instrumentNumber) : QString();
+    // Comments for translators start with //:
 
-    if (trait.type != TraitType::Transposition || trait.isHiddenOnScore) {
-        return instrumentName + numberPart;
+    if (trait.type == TraitType::Transposition && !trait.isHiddenOnScore) {
+        //: %1=name ("Horn"), %2=transposition ("C alto"). Example: "Horn in C alto"
+        return mu::qtrc("notation", "%1 in %2", "Transposing instrument displayed in the score")
+               .arg(instrumentName, trait.name);
     }
 
-    return mu::qtrc("notation", "%1 in %2%3", "formatInstrumentTitleOnScore").arg(instrumentName).arg(trait.name).arg(numberPart);
+    return instrumentName; // Example: "Flute"
+}
+
+static QString formatInstrumentTitleOnScore(const QString& instrumentName, const Trait& trait, int instrumentNumber)
+{
+    if (instrumentNumber == 0) {
+        // Only one instance of this instrument in the score
+        return formatInstrumentTitleOnScore(instrumentName, trait);
+    }
+
+    QString number = QString::number(instrumentNumber);
+
+    // Comments for translators start with //:
+
+    if (trait.type == TraitType::Transposition && !trait.isHiddenOnScore) {
+        //: %1=name ("Horn"), %2=transposition ("C alto"), %3=number ("2"). Example: "Horn in C alto 2"
+        return mu::qtrc("notation", "%1 in %2 %3", "One of several transposing instruments displayed in the score")
+               .arg(instrumentName, trait.name, number);
+    }
+
+    //: %1=name ("Flute"), %2=number ("2"). Example: "Flute 2"
+    return mu::qtrc("notation", "%1 %2", "One of several instruments displayed in the score")
+           .arg(instrumentName, number);
 }
 
 static QString formatPartTitle(const Part* part)
