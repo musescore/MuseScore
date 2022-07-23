@@ -78,6 +78,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/uri.h
     ${CMAKE_CURRENT_LIST_DIR}/types/sharedhashmap.h
     ${CMAKE_CURRENT_LIST_DIR}/types/sharedmap.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/translatablestring.h
 
     ${CMAKE_CURRENT_LIST_DIR}/io/ioenums.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
