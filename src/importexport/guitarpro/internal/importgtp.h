@@ -311,7 +311,7 @@ class GuitarPro1 : public GuitarPro
 {
 protected:
     bool readNote(int string, Note* note);
-    virtual int readBeatEffects(int track, Segment*);
+    int readBeatEffects(int track, Segment*) override;
 
 public:
     GuitarPro1(MasterScore* s, int v)
@@ -337,7 +337,7 @@ public:
 
 class GuitarPro3 : public GuitarPro1
 {
-    virtual int readBeatEffects(int track, Segment* segment);
+    int readBeatEffects(int track, Segment* segment) override;
 
 public:
     GuitarPro3(MasterScore* s, int v)
@@ -355,8 +355,8 @@ class GuitarPro4 : public GuitarPro
     std::vector<int> tupleKind;
     void readInfo();
     bool readNote(int string, int staffIdx, Note* note);
-    virtual int readBeatEffects(int track, Segment* segment);
-    virtual bool readMixChange(Measure* measure);
+    int readBeatEffects(int track, Segment* segment) override;
+    bool readMixChange(Measure* measure) override;
     int convertGP4SlideNum(int slide);
 
 public:
@@ -375,9 +375,9 @@ class GuitarPro5 : public GuitarPro
     int _beat_counter{ 0 };
     void readInfo();
     void readPageSetup();
-    virtual int readBeatEffects(int track, Segment* segment);
+    int readBeatEffects(int track, Segment* segment) override;
     bool readNote(int string, Note* note);
-    virtual bool readMixChange(Measure* measure);
+    bool readMixChange(Measure* measure) override;
     void readMeasure(Measure* measure, int staffIdx, Tuplet*[], bool mixChange);
     int readArtificialHarmonic();
     bool readTracks();

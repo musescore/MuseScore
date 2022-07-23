@@ -78,6 +78,7 @@ protected:
 public:
     ConnectorInfo(const EngravingItem* current, int track = -1, Fraction = { -1, 1 });
     ConnectorInfo(const Score* score, const Location& currentLocation);
+    virtual ~ConnectorInfo() = default;
 
     ConnectorInfo* prev() const { return _prev; }
     ConnectorInfo* next() const { return _next; }
