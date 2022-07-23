@@ -166,7 +166,7 @@ public:
     static AsciiStringView toXml(ArpeggioType v);
     static ArpeggioType fromXml(const AsciiStringView& tag, ArpeggioType def);
 
-    static const char* userName(EmbellishmentType v);
+    static const TranslatableString& userName(EmbellishmentType v);
     static String translatedUserName(EmbellishmentType v);
     static String toXml(EmbellishmentType v);
     static EmbellishmentType fromXml(const AsciiStringView& tag, EmbellishmentType def);

@@ -1108,7 +1108,8 @@ PalettePtr PaletteCreator::newBagpipeEmbellishmentPalette()
     for (size_t i = 0; i < TConv::embellishmentsCount(); ++i) {
         auto b = makeElement<BagpipeEmbellishment>(gpaletteScore);
         b->setEmbelType(EmbellishmentType(i));
-        sp->appendElement(b, TConv::userName(static_cast<EmbellishmentType>(i)));
+        // TODO: pass TranslatableString
+        sp->appendElement(b, TConv::userName(static_cast<EmbellishmentType>(i)).str);
     }
 
     return sp;

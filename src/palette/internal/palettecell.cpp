@@ -117,7 +117,7 @@ const char* PaletteCell::translationContext() const
         // libmscore/tremolo.cpp, tremoloName[]
         return "Tremolo";
     case ElementType::BAGPIPE_EMBELLISHMENT:
-    // libmscore/bagpembell.cpp, BagpipeEmbellishment::BagpipeEmbellishmentList[]
+        return "engraving/bagpipeembellishment";
     case ElementType::TRILL:
         // libmscore/trill.cpp, trillTable[]
         return "trillType";
