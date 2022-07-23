@@ -29,6 +29,8 @@
 #include "async/asyncable.h"
 #include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
+#include "ui/iuiactionsregister.h"
+#include "palette/ipaletteconfiguration.h"
 
 namespace mu::framework {
 class XmlReader;
@@ -38,6 +40,7 @@ class XmlWriter;
 namespace mu::shortcuts {
 class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
 {
+    INJECT(shortcuts, mu::palette::IPaletteConfiguration, paletteConfiguration)
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
     INJECT(shortcuts, io::IFileSystem, fileSystem)
     INJECT(shortcuts, mi::IMultiInstancesProvider, multiInstancesProvider)
@@ -51,7 +54,8 @@ public:
     void reload(bool onlyDef = false) override;
 
     const ShortcutList& shortcuts() const override;
-    Ret setShortcuts(const ShortcutList& shortcuts) override;
+    Ret setShortcuts(const ShortcutList& shortcuts, QModelIndex cellIdx = QModelIndex()) override;
+    Ret setShortcut(const Shortcut toAddShortcut);
     void resetShortcuts() override;
     async::Notification shortcutsChanged() const override;
 
@@ -69,16 +73,17 @@ public:
     bool active() override;
     void setActive(bool active) override;
     async::Notification activeChanged() const override;
+    void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const override;
 
 private:
 
+    const std::string palettePrefix = "palette-item-";
     bool readFromFile(ShortcutList& shortcuts, const io::path_t& path) const;
     Shortcut readShortcut(framework::XmlReader& reader) const;
 
     bool writeToFile(const ShortcutList& shortcuts, const io::path_t& path) const;
     void writeShortcut(framework::XmlWriter& writer, const Shortcut& shortcut) const;
 
-    void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;
     void mergeAdditionalShortcuts(ShortcutList& shortcuts);
 
     void makeUnique(ShortcutList& shortcuts);

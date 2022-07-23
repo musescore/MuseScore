@@ -525,6 +525,13 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
     interactive()->open(uri.toStdString());
 }
 
+void UserPaletteController::applyPaletteCellProperties(const QModelIndex& index)
+{
+    auto srcindex = convertProxyIndex(index, _userPalette);
+    _userPalette->itemDataChanged(srcindex);
+    _userPalette->itemDataChanged(srcindex.parent());
+}
+
 void UserPaletteController::editCellProperties(const QModelIndex& index)
 {
     if (!canEdit(index)) {
@@ -545,7 +552,15 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
         cell->drawStaff = config.drawStaff;
         cell->xoffset = config.xOffset;
         cell->yoffset = config.yOffset;
+
+        LOGE() << "VALID SHORTCUT?";
+        if (config.shortcut.isValid()) {
+            LOGE() << "VALID SHORTCUT";
+            cell->shortcut = config.shortcut;
+        }
+
         _userPalette->itemDataChanged(srcIndex);
+        _userPalette->itemDataChanged(srcIndex.parent());
     });
 
     QVariantMap properties;
@@ -644,10 +659,35 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
 {
     if (m_isSearching) {
         m_mainPalette = m_searchFilterModel;
-    } else {
+    }
+    else {
         m_mainPalette = m_visibilityFilterModel;
     }
 
+    LOGE() << "BEGIN ROW COUNT";
+    umap.clear();
+
+    int ctr = 0;
+    for (int i = 0; i < m_mainPalette->rowCount(); i++) {
+        for (int j = 0; j < m_mainPalette->rowCount(m_mainPalette->index(i, 0)); j++) {
+            auto it = m_mainPalette->index(j, 0, m_mainPalette->index(i, 0));
+            const PaletteCell* cell = m_mainPalette->data(it, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
+            if (!cell || !cell->element) {
+                continue;
+            }
+            auto el = cell->element.get();
+            auto ac_name = cell->action;
+            ctr++;
+            umap[ac_name] = cell->element.get();
+            dispatcher()->reg(this, ac_name.toStdString(), [this, ac_name]() {
+                LOGE() << "You are trying to call: " << ac_name;
+                globalContext()->currentNotation()->interaction()->applyPaletteElement(umap[ac_name]);
+                });
+        }
+    }
+
+    LOGE() << ctr;
+    LOGE() << "END ROW COUNT";
     return m_mainPalette;
 }
 
@@ -967,6 +1007,18 @@ void PaletteProvider::setUserPaletteTree(PaletteTreePtr tree)
         m_userPaletteModel = new PaletteTreeModel(tree, /* parent */ this);
         connect(m_userPaletteModel, &PaletteTreeModel::treeChanged, this, &PaletteProvider::notifyAboutUserPaletteChanged);
     }
+
+    mu::shortcuts::ShortcutList toBeAdded;
+    shortcutsRegister()->mergeShortcuts(toBeAdded, shortcutsRegister()->shortcuts());
+    for (auto x : PaletteCell::allActions) {
+        if (x.isValid()) {
+            toBeAdded.push_back(x);
+        }
+    }
+
+    shortcutsRegister()->setShortcuts(toBeAdded);
+    LOGE() << "In the end total palette cells: " << PaletteCell::allActions.size() << " and with valid shortcuts: " << toBeAdded.size();
+
 }
 
 void PaletteProvider::setDefaultPaletteTree(PaletteTreePtr tree)

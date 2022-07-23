@@ -83,6 +83,7 @@ void PaletteModule::resolveImports()
 {
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
+        LOGE() << "Registering palette ui actions";
         ar->reg(s_paletteUiActions);
     }
 
@@ -165,10 +166,26 @@ void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
     if (framework::IApplication::RunMode::Editor != mode) {
         return;
     }
-
+   
     //! NOTE We need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onAllInited
     s_paletteWorkspaceSetup->setup();
+    LOGE() << "Actions in cell prepped here" << PaletteCell::allActions.size();
+    int i = 0;
+    for (auto action : PaletteCell::allActions) {
+        auto a = UiAction(action.action,
+            mu::context::UiCtxNotationOpened,
+            QT_TRANSLATE_NOOP("action", ("Test Action " + std::to_string(i) + ": " + action.action).c_str()),
+            QT_TRANSLATE_NOOP("action", ("Test Action " + std::to_string(i++)).c_str())
+        );
+
+        s_paletteUiActions->addAction(a);
+    }
+
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(s_paletteUiActions, true);
+    }
 }
 
 void PaletteModule::onDeinit()

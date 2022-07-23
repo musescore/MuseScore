@@ -22,7 +22,7 @@
 #include "notationmodule.h"
 
 #include <QQmlEngine>
-
+#include "log.h"
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 #include "ui/iuiactionsregister.h"
@@ -107,7 +107,9 @@ void NotationModule::registerExports()
 void NotationModule::resolveImports()
 {
     auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
+    LOGE() << "Notation module imports";
     if (ar) {
+        LOGE() << "Registering notation ui actions";
         ar->reg(s_notationUiActions);
     }
 

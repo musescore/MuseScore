@@ -41,7 +41,7 @@ public:
 
     void init();
 
-    void reg(const IUiActionsModulePtr& actions) override;
+    void reg(const IUiActionsModulePtr& actions, bool reload = false) override;
     const UiAction& action(const actions::ActionCode& code) const override;
     const std::vector<UiAction> getActions() const override;
     UiActionState actionState(const actions::ActionCode& code) const override;

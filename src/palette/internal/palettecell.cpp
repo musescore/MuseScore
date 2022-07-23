@@ -64,6 +64,7 @@ PaletteCell::PaletteCell(QObject* parent)
     : QObject(parent)
 {
     id = makeId();
+    cells.insert(this);
 }
 
 PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, const QPointF& _offset, const QString& _tag, QObject* parent)
@@ -173,6 +174,7 @@ bool PaletteCell::read(XmlReader& e)
     // pre-3.3 version compatibility
     custom = e.hasAttribute("custom") ? e.intAttribute("custom") : false; // TODO: actually check master palette?
     visible = e.hasAttribute("visible") ? e.intAttribute("visible") : true;
+    shortcut.sequences.clear();
 
     const bool translateElement = e.hasAttribute("trElement") ? e.intAttribute("trElement") : false;
 
@@ -189,6 +191,13 @@ bool PaletteCell::read(XmlReader& e)
         } else if (s == "tag") {
             tag = e.readText();
         }
+        else if (s == "sctx") {
+            shortcut.context = e.readText().toStdString();
+        }
+        else if (s == "sseq") {
+            shortcut.sequences.push_back(e.readText().toStdString());
+        }
+
         // added on palettes rework
         // TODO: remove or leave to switch from using attributes later?
         else if (s == "custom") {
@@ -216,7 +225,26 @@ bool PaletteCell::read(XmlReader& e)
         }
     }
 
+    if (shortcut.context == "")
+    {
+        shortcut.context = "notation-focused";
+    }
+
     setElementTranslated(translateElement);
+
+    std::stringstream pointerAddr;
+    pointerAddr << element.get();
+    shortcut.action = "palette-item-" + id.toStdString() + "_" + pointerAddr.str();
+
+    if (shortcut.isValid()) {
+        LOGE() << "Valid";
+    }
+
+    action = QString::fromStdString(shortcut.action);
+    PaletteCell::allActions.push_back(shortcut);
+    //shortcutsRegister()->setShortcut(shortcut);  // Makes the application extremely slow, need to run this when cells are done being set up
+
+    //LOGE() << PaletteCell::allActions.size() << " is the size and the addr is " << pointerAddr.str();
 
     return add && element;
 }
@@ -261,6 +289,14 @@ void PaletteCell::write(XmlWriter& xml) const
     }
     if (mag != 1.0) {
         xml.tag("mag", mag);
+    }
+
+    if (shortcut.isValid()) {
+        for (std::string seq : shortcut.sequences) {
+            xml.tag("sseq", QString::fromStdString(seq));
+        }
+
+        xml.tag("sctx", QString::fromStdString(shortcut.context));
     }
 
     if (untranslatedElement) {

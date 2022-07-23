@@ -21,7 +21,7 @@
  */
 
 #include "paletteuiactions.h"
-
+#include "palettecell.h"
 #include "context/uicontext.h"
 #include "types/translatablestring.h"
 
@@ -30,7 +30,7 @@ using namespace mu::ui;
 
 static const mu::actions::ActionCode MASTERPALETTE_CODE("masterpalette");
 
-const UiActionList PaletteUiActions::m_actions = {
+UiActionList PaletteUiActions::m_actions = {
     UiAction(MASTERPALETTE_CODE,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
@@ -74,10 +74,13 @@ void PaletteUiActions::init()
     m_controller->isMasterPaletteOpened().ch.onReceive(this, [this](bool) {
         m_actionCheckedChanged.send({ MASTERPALETTE_CODE });
     });
+
+    LOGE() << "Cells in init: " << PaletteCell::cells.size();
 }
 
 const UiActionList& PaletteUiActions::actionsList() const
 {
+    LOGE() << "Cells in list: " << PaletteCell::cells.size();
     return m_actions;
 }
 
@@ -107,4 +110,9 @@ mu::async::Channel<mu::actions::ActionCodeList> PaletteUiActions::actionEnabledC
 mu::async::Channel<mu::actions::ActionCodeList> PaletteUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
+}
+
+void PaletteUiActions::addAction(const ui::UiAction& action)
+{
+    m_actions.push_back(action);
 }

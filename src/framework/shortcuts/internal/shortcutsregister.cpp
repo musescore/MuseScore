@@ -26,7 +26,8 @@
 #include "global/deprecated/xmlreader.h"
 #include "global/deprecated/xmlwriter.h"
 #include "multiinstances/resourcelockguard.h"
-
+#include "palette/internal/palettecell.h"
+#include "palette/ipaletteconfiguration.h"
 #include "log.h"
 
 using namespace mu::shortcuts;
@@ -72,6 +73,7 @@ void ShortcutsRegister::reload(bool onlyDef)
     m_shortcuts.clear();
     m_defaultShortcuts.clear();
 
+
     io::path_t defPath = configuration()->shortcutsAppDataPath();
     io::path_t userPath = configuration()->shortcutsUserAppDataPath();
 
@@ -94,12 +96,13 @@ void ShortcutsRegister::reload(bool onlyDef)
             mergeShortcuts(m_shortcuts, m_defaultShortcuts);
             mergeAdditionalShortcuts(m_shortcuts);
         }
-
+        
         ok = true;
     }
 
     if (ok) {
         expandStandardKeys(m_shortcuts);
+        mergeShortcuts(m_shortcuts, mu::palette::PaletteCell::allActions);
         makeUnique(m_shortcuts);
         m_shortcutsChanged.notify();
     }
@@ -202,7 +205,7 @@ void ShortcutsRegister::expandStandardKeys(ShortcutList& shortcuts) const
     }
 
     if (!notbonded.empty()) {
-        LOGD() << "removed " << notbonded.size() << " shortcut, because they are not bound to standard key";
+        LOGW() << "removed " << notbonded.size() << " shortcut, because they are not bound to standard key";
         for (const Shortcut& sc : notbonded) {
             shortcuts.remove(sc);
         }
@@ -292,7 +295,7 @@ const ShortcutList& ShortcutsRegister::shortcuts() const
     return m_shortcuts;
 }
 
-mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
+mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts, QModelIndex cellIdx)
 {
     TRACEFUNC;
 
@@ -300,18 +303,80 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
         return true;
     }
 
-    ShortcutList needToWrite = filterAndUpdateAdditionalShortcuts(shortcuts);
+
+    ShortcutList filtered = filterAndUpdateAdditionalShortcuts(shortcuts);
+    ShortcutList needToWrite;
+    ShortcutList PaletteShortcuts;
+
+    for (auto shortcut : filtered) {
+        bool isPaletteCellShortcut = palettePrefix.size() <= shortcut.action.size() && std::mismatch(
+            palettePrefix.begin(), palettePrefix.end(), shortcut.action.begin(), shortcut.action.end()).first == palettePrefix.end();
+        if (isPaletteCellShortcut) {
+            LOGE() << "We think this is a palette shortcut: " << shortcut.action;
+            PaletteShortcuts.push_back(shortcut);
+        }
+        else {
+            needToWrite.push_back(shortcut);
+        }
+    }
+
 
     bool ok = writeToFile(needToWrite, configuration()->shortcutsUserAppDataPath());
 
+    for (auto cell : mu::palette::PaletteCell::cells) {
+        //LOGE() << "Name of Palette cell: " << cell->name << " whose action is: " << cell->action;
+
+        mu::palette::IPaletteConfiguration::PaletteCellConfig config;
+        config.name = cell->name;
+        config.drawStaff = cell->drawStaff;
+        config.xOffset = cell->xoffset;
+        config.yOffset = cell->yoffset;
+        config.scale = cell->mag;
+        config.idx = cellIdx;
+
+        for (auto shrtct : PaletteShortcuts) {
+            if (!shrtct.isValid()) {
+                continue;
+            }
+
+            std::string cellId = "";
+
+            for (int i = palettePrefix.length(); i < shrtct.action.length(); i++) {
+                if (shrtct.action[i] == '_') {
+                    break;
+                }
+                cellId += shrtct.action[i];
+            }
+            if (cell->id.toStdString() != cellId) {
+                continue;
+            }
+
+            LOGE() << "ID of cell being modified: " << cellId << " with shortcut: ";
+            for (auto seq : shrtct.sequences) {
+                LOGE() << seq;
+            }
+
+            config.shortcut = shrtct;
+            cell->shortcut = config.shortcut;
+            paletteConfiguration()->setPaletteCellConfig(cell->id, config);
+        }
+    }
+
     if (ok) {
-        m_shortcuts = needToWrite;
+        m_shortcuts = filtered;
         mergeShortcuts(m_shortcuts, m_defaultShortcuts);
         mergeAdditionalShortcuts(m_shortcuts);
         m_shortcutsChanged.notify();
     }
 
     return ok;
+}
+
+mu::Ret ShortcutsRegister::setShortcut(const Shortcut toAddShortcut)
+{
+    ShortcutList SingletonList;
+    SingletonList.push_back(toAddShortcut);
+    return setShortcuts(SingletonList);
 }
 
 void ShortcutsRegister::resetShortcuts()

@@ -28,6 +28,9 @@
 
 #include "ipaletteprovider.h"
 #include "async/asyncable.h"
+#include "shortcuts/ishortcutsregister.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
@@ -185,6 +188,7 @@ public:
     void removeSelection(const QModelIndexList&, const QModelIndex& parent = QModelIndex()) override;
 
     void editPaletteProperties(const QModelIndex& index) override;
+    Q_INVOKABLE void applyPaletteCellProperties(const QModelIndex& index);
     void editCellProperties(const QModelIndex& index) override;
 
     bool userEditable() const { return _userEditable; }
@@ -199,13 +203,16 @@ public:
 //   PaletteProvider
 // ========================================================
 
-class PaletteProvider : public QObject, public IPaletteProvider, public async::Asyncable
+class PaletteProvider : public QObject, public IPaletteProvider, public async::Asyncable, public mu::actions::Actionable
 {
     Q_OBJECT
 
+    INJECT(palette, mu::shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(palette, IPaletteConfiguration, configuration)
     INJECT(palette, framework::IInteractive, interactive)
-
+    INJECT(palette, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, context::IGlobalContext, globalContext)
+ 
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
     Q_PROPERTY(mu::palette::AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
 
@@ -309,6 +316,8 @@ private:
     UserPaletteController* m_customElementsPaletteController = nullptr;
 
     async::Channel<engraving::ElementPtr> m_addCustomItemRequested;
+
+    std::unordered_map<QString, mu::engraving::EngravingItem*> umap;
 };
 }
 

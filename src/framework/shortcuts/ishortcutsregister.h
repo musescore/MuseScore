@@ -23,6 +23,7 @@
 #define MU_SHORTCUTS_ISHORTCUTSREGISTER_H
 
 #include <list>
+#include <QAbstractListModel>
 
 #include "modularity/imoduleexport.h"
 #include "shortcutstypes.h"
@@ -38,7 +39,8 @@ public:
     virtual ~IShortcutsRegister() = default;
 
     virtual const ShortcutList& shortcuts() const = 0;
-    virtual Ret setShortcuts(const ShortcutList& shortcuts) = 0;
+    virtual Ret setShortcuts(const ShortcutList& shortcuts, QModelIndex cellIdx = QModelIndex()) = 0;
+    virtual Ret setShortcut(const Shortcut toAddShortcut) = 0;
     virtual void resetShortcuts() = 0;
     virtual async::Notification shortcutsChanged() const = 0;
 
@@ -56,6 +58,7 @@ public:
     virtual bool active() = 0;
     virtual void setActive(bool active) = 0;
     virtual async::Notification activeChanged() const = 0;
+    virtual void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const = 0;
 
     // for autobot tests
     virtual void reload(bool onlyDef = false) = 0;
