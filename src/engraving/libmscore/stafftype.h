@@ -291,8 +291,7 @@ public:
     const String& xmlName() const { return _xmlName; }
     void setName(const String& val) { _name = val; }
     void setXmlName(const String& val) { _xmlName = val; }
-    const char* groupName() const;
-    static const char* groupName(StaffGroup);
+    String translatedGroupName() const;
 
     void setLines(int val) { _lines = val; }
     int lines() const { return _lines; }

@@ -2113,7 +2113,6 @@ static const std::array<Item<GlissandoType>, 2> GLISSANDO_TYPES = { {
     { GlissandoType::WAVY,      "1",     TranslatableString("engraving", "Wavy glissando") }
 } };
 
-//! TODO Return TranslatableString
 const TranslatableString& TConv::userName(GlissandoType v)
 {
     return findUserNameByType<GlissandoType>(GLISSANDO_TYPES, v);
@@ -2154,10 +2153,9 @@ static const std::vector<Item<JumpType> > JUMP_TYPES = {
     { JumpType::USER,           "", TranslatableString("engraving", "Custom") }
 };
 
-//! TODO Return TranslatableString
-const char* TConv::userName(JumpType v)
+const TranslatableString& TConv::userName(JumpType v)
 {
-    return findUserNameByType<JumpType>(JUMP_TYPES, v).str;
+    return findUserNameByType<JumpType>(JUMP_TYPES, v);
 }
 
 String TConv::translatedUserName(JumpType v)
@@ -2177,10 +2175,9 @@ static const std::array<Item<MarkerType>, 9> MARKER_TYPES = { {
     { MarkerType::USER,         "",         TranslatableString("engraving", "Custom") }
 } };
 
-//! TODO Return TranslatableString
-const char* TConv::userName(MarkerType v)
+const TranslatableString& TConv::userName(MarkerType v)
 {
-    return findUserNameByType<MarkerType>(MARKER_TYPES, v).str;
+    return findUserNameByType<MarkerType>(MARKER_TYPES, v);
 }
 
 String TConv::translatedUserName(MarkerType v)
@@ -2204,12 +2201,6 @@ static const std::array<Item<StaffGroup>, 3> STAFFGROUP_TYPES = { {
     { StaffGroup::TAB,          "tablature",  TranslatableString("engraving/staffgroup", "Tablature") },
 } };
 
-//! TODO Return TranslatableString
-const char* TConv::userName(StaffGroup v)
-{
-    return findUserNameByType<StaffGroup>(STAFFGROUP_TYPES, v).str;
-}
-
 String TConv::translatedUserName(StaffGroup v)
 {
     return findUserNameByType<StaffGroup>(STAFFGROUP_TYPES, v).translated();
@@ -2232,10 +2223,9 @@ const std::array<Item<TrillType>, 4> TRILL_TYPES = { {
     { TrillType::PRALLPRALL_LINE, "prallprall", TranslatableString("engraving", "Prallprall line") }
 } };
 
-//! TODO Return TranslatableString
-const char* TConv::userName(TrillType v)
+const TranslatableString& TConv::userName(TrillType v)
 {
-    return findUserNameByType<TrillType>(TRILL_TYPES, v).str;
+    return findUserNameByType<TrillType>(TRILL_TYPES, v);
 }
 
 String TConv::translatedUserName(TrillType v)
@@ -2276,10 +2266,9 @@ const std::array<Item<VibratoType>, 4> VIBRATO_TYPES = { {
     { VibratoType::VIBRATO_SAWTOOTH_WIDE, "vibratoSawtoothWide", TranslatableString("engraving", "Tremolo sawtooth wide") }
 } };
 
-//! TODO Return TranslatableString
-const char* TConv::userName(VibratoType v)
+const TranslatableString& TConv::userName(VibratoType v)
 {
-    return findUserNameByType<VibratoType>(VIBRATO_TYPES, v).str;
+    return findUserNameByType<VibratoType>(VIBRATO_TYPES, v);
 }
 
 String TConv::translatedUserName(VibratoType v)
@@ -2317,7 +2306,6 @@ const std::array<const char*, 17> KEY_NAMES = { {
     QT_TRANSLATE_NOOP("engraving", "Custom")
 } };
 
-//! TODO Return TranslatableString
 const char* TConv::userName(Key v, bool isAtonal, bool isCustom)
 {
     if (isAtonal) {

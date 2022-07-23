@@ -185,25 +185,24 @@ public:
     static AsciiStringView toXml(GlissandoType v);
     static GlissandoType fromXml(const AsciiStringView& tag, GlissandoType def);
 
-    static const char* userName(JumpType v);
+    static const TranslatableString& userName(JumpType v);
     static String translatedUserName(JumpType v);
 
-    static const char* userName(MarkerType v);
+    static const TranslatableString& userName(MarkerType v);
     static String translatedUserName(MarkerType v);
     static AsciiStringView toXml(MarkerType v);
     static MarkerType fromXml(const AsciiStringView& tag, MarkerType def);
 
-    static const char* userName(StaffGroup v);
     static String translatedUserName(StaffGroup v);
     static AsciiStringView toXml(StaffGroup v);
     static StaffGroup fromXml(const AsciiStringView& tag, StaffGroup def);
 
-    static const char* userName(TrillType v);
+    static const TranslatableString& userName(TrillType v);
     static String translatedUserName(TrillType v);
     static AsciiStringView toXml(TrillType v);
     static TrillType fromXml(const AsciiStringView& tag, TrillType def);
 
-    static const char* userName(VibratoType v);
+    static const TranslatableString& userName(VibratoType v);
     static String translatedUserName(VibratoType v);
     static AsciiStringView toXml(VibratoType v);
     static VibratoType fromXml(const AsciiStringView& tag, VibratoType def);

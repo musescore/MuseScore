@@ -129,17 +129,12 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
 }
 
 //---------------------------------------------------------
-//   groupName
+//   translatedGroupName
 //---------------------------------------------------------
 
-const char* StaffType::groupName() const
+String StaffType::translatedGroupName() const
 {
-    return groupName(_group);
-}
-
-const char* StaffType::groupName(StaffGroup r)
-{
-    return TConv::userName(r);
+    return TConv::translatedUserName(_group);
 }
 
 int StaffType::middleLine() const

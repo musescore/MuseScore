@@ -202,7 +202,7 @@ void EditStaff::updateStaffType(const mu::engraving::StaffType& staffType)
     showBarlines->setChecked(staffType.showBarlines());
     invisible->setChecked(staffType.invisible());
     isSmallCheckbox->setChecked(staffType.isSmall());
-    staffGroupName->setText(qtrc("Staff type group name", staffType.groupName()));
+    staffGroupName->setText(staffType.translatedGroupName());
 }
 
 void EditStaff::updateInstrument()
