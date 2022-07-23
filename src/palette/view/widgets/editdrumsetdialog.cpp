@@ -313,7 +313,7 @@ void EditDrumsetDialog::updatePitchesList()
             QString s(QChar(m_editedDrumset.shortcut(i)));
             item->setText(Column::SHORTCUT, s);
         }
-        item->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(i)));
+        item->setText(Column::NAME, m_editedDrumset.translatedName(i));
         item->setData(Column::PITCH, Qt::UserRole, i);
     }
     pitchList->sortItems(3, Qt::SortOrder::DescendingOrder);
@@ -333,7 +333,7 @@ void EditDrumsetDialog::refreshPitchesList()
             QString s(QChar(m_editedDrumset.shortcut(pitch)));
             item->setText(Column::SHORTCUT, s);
         }
-        item->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(pitch)));
+        item->setText(Column::NAME,  m_editedDrumset.translatedName(i));
         item->setData(0, Qt::UserRole, pitch);
     }
 }
@@ -507,7 +507,7 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
             m_editedDrumset.drum(pitch).shortcut = "ABCDEFG"[shortcut->currentIndex()];
         }
         m_editedDrumset.drum(pitch).stemDirection = DirectionV(stemDirection->currentIndex());
-        previous->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(pitch)));
+        previous->setText(Column::NAME, m_editedDrumset.translatedName(pitch));
     }
     if (current == 0) {
         return;
@@ -519,7 +519,7 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
     noteHead->blockSignals(true);
 
     int pitch = current->data(0, Qt::UserRole).toInt();
-    name->setText(mu::qtrc("drumset", m_editedDrumset.name(pitch)));
+    name->setText(m_editedDrumset.translatedName(pitch));
     staffLine->setValue(m_editedDrumset.line(pitch));
     voice->setCurrentIndex(m_editedDrumset.voice(pitch));
     stemDirection->setCurrentIndex(int(m_editedDrumset.stemDirection(pitch)));
@@ -626,7 +626,7 @@ void EditDrumsetDialog::updateExample()
     Stem* stem = Factory::createStem(chord.get());
     stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * gpaletteScore->spatium()));
     chord->add(stem);
-    drumNote->appendElement(chord, mu::qtrc("drumset", m_editedDrumset.name(pitch)));
+    drumNote->appendElement(chord, m_editedDrumset.translatedName(pitch));
 }
 
 //---------------------------------------------------------

@@ -23,6 +23,7 @@
 #include "drumset.h"
 
 #include "rw/xml.h"
+#include "translation.h"
 #include "types/typesconv.h"
 #include "types/symnames.h"
 
@@ -36,6 +37,11 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 Drumset* smDrumset = nullptr;           // standard midi drumset
+
+String Drumset::translatedName(int pitch) const
+{
+    return mtrc("engraving/drumset", name(pitch));
+}
 
 //---------------------------------------------------------
 //   save
