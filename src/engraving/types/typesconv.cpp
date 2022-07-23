@@ -2012,88 +2012,88 @@ ChordLineType TConv::fromXml(const AsciiStringView& tag, ChordLineType def)
 
 struct DrumPitchItem {
     DrumNum num = DrumNum(0);
-    TranslatableString userName;
+    const char* userName;
 };
 
+// TODO: Can't use TranslatableString, because Drumset uses these strings and doesn't support TranslatableString
 static const std::vector<DrumPitchItem> DRUMPITCHS = {
-    { DrumNum(27),       TranslatableString("engraving/generalmididrumset", "High Q") },
-    { DrumNum(28),       TranslatableString("engraving/generalmididrumset", "Slap") },
-    { DrumNum(29),       TranslatableString("engraving/generalmididrumset", "Scratch Push") },
+    { DrumNum(27),       QT_TRANSLATE_NOOP("engraving/drumset", "High Q") },
+    { DrumNum(28),       QT_TRANSLATE_NOOP("engraving/drumset", "Slap") },
+    { DrumNum(29),       QT_TRANSLATE_NOOP("engraving/drumset", "Scratch Push") },
 
-    { DrumNum(30),       TranslatableString("engraving/generalmididrumset", "Scratch Pull") },
-    { DrumNum(31),       TranslatableString("engraving/generalmididrumset", "Sticks") },
-    { DrumNum(32),       TranslatableString("engraving/generalmididrumset", "Square Click") },
-    { DrumNum(33),       TranslatableString("engraving/generalmididrumset", "Metronome Click") },
-    { DrumNum(34),       TranslatableString("engraving/generalmididrumset", "Metronome Bell") },
-    { DrumNum(35),       TranslatableString("engraving/generalmididrumset", "Acoustic Bass Drum") },
-    { DrumNum(36),       TranslatableString("engraving/generalmididrumset", "Bass Drum 1") },
-    { DrumNum(37),       TranslatableString("engraving/generalmididrumset", "Side Stick") },
-    { DrumNum(38),       TranslatableString("engraving/generalmididrumset", "Acoustic Snare") },
-    { DrumNum(39),       TranslatableString("engraving/generalmididrumset", "Hand Clap") },
+    { DrumNum(30),       QT_TRANSLATE_NOOP("engraving/drumset", "Scratch Pull") },
+    { DrumNum(31),       QT_TRANSLATE_NOOP("engraving/drumset", "Sticks") },
+    { DrumNum(32),       QT_TRANSLATE_NOOP("engraving/drumset", "Square Click") },
+    { DrumNum(33),       QT_TRANSLATE_NOOP("engraving/drumset", "Metronome Click") },
+    { DrumNum(34),       QT_TRANSLATE_NOOP("engraving/drumset", "Metronome Bell") },
+    { DrumNum(35),       QT_TRANSLATE_NOOP("engraving/drumset", "Acoustic Bass Drum") },
+    { DrumNum(36),       QT_TRANSLATE_NOOP("engraving/drumset", "Bass Drum 1") },
+    { DrumNum(37),       QT_TRANSLATE_NOOP("engraving/drumset", "Side Stick") },
+    { DrumNum(38),       QT_TRANSLATE_NOOP("engraving/drumset", "Acoustic Snare") },
+    { DrumNum(39),       QT_TRANSLATE_NOOP("engraving/drumset", "Hand Clap") },
 
-    { DrumNum(40),       TranslatableString("engraving/generalmididrumset", "Electric Snare") },
-    { DrumNum(41),       TranslatableString("engraving/generalmididrumset", "Low Floor Tom") },
-    { DrumNum(42),       TranslatableString("engraving/generalmididrumset", "Closed Hi-Hat") },
-    { DrumNum(43),       TranslatableString("engraving/generalmididrumset", "High Floor Tom") },
-    { DrumNum(44),       TranslatableString("engraving/generalmididrumset", "Pedal Hi-Hat") },
-    { DrumNum(45),       TranslatableString("engraving/generalmididrumset", "Low Tom") },
-    { DrumNum(46),       TranslatableString("engraving/generalmididrumset", "Open Hi-Hat") },
-    { DrumNum(47),       TranslatableString("engraving/generalmididrumset", "Low-Mid Tom") },
-    { DrumNum(48),       TranslatableString("engraving/generalmididrumset", "Hi-Mid Tom") },
-    { DrumNum(49),       TranslatableString("engraving/generalmididrumset", "Crash Cymbal 1") },
+    { DrumNum(40),       QT_TRANSLATE_NOOP("engraving/drumset", "Electric Snare") },
+    { DrumNum(41),       QT_TRANSLATE_NOOP("engraving/drumset", "Low Floor Tom") },
+    { DrumNum(42),       QT_TRANSLATE_NOOP("engraving/drumset", "Closed Hi-Hat") },
+    { DrumNum(43),       QT_TRANSLATE_NOOP("engraving/drumset", "High Floor Tom") },
+    { DrumNum(44),       QT_TRANSLATE_NOOP("engraving/drumset", "Pedal Hi-Hat") },
+    { DrumNum(45),       QT_TRANSLATE_NOOP("engraving/drumset", "Low Tom") },
+    { DrumNum(46),       QT_TRANSLATE_NOOP("engraving/drumset", "Open Hi-Hat") },
+    { DrumNum(47),       QT_TRANSLATE_NOOP("engraving/drumset", "Low-Mid Tom") },
+    { DrumNum(48),       QT_TRANSLATE_NOOP("engraving/drumset", "Hi-Mid Tom") },
+    { DrumNum(49),       QT_TRANSLATE_NOOP("engraving/drumset", "Crash Cymbal 1") },
 
-    { DrumNum(50),       TranslatableString("engraving/generalmididrumset", "High Tom") },
-    { DrumNum(51),       TranslatableString("engraving/generalmididrumset", "Ride Cymbal 1") },
-    { DrumNum(52),       TranslatableString("engraving/generalmididrumset", "Chinese Cymbal") },
-    { DrumNum(53),       TranslatableString("engraving/generalmididrumset", "Ride Bell") },
-    { DrumNum(54),       TranslatableString("engraving/generalmididrumset", "Tambourine") },
-    { DrumNum(55),       TranslatableString("engraving/generalmididrumset", "Splash Cymbal") },
-    { DrumNum(56),       TranslatableString("engraving/generalmididrumset", "Cowbell") },
-    { DrumNum(57),       TranslatableString("engraving/generalmididrumset", "Crash Cymbal 2") },
-    { DrumNum(58),       TranslatableString("engraving/generalmididrumset", "Vibraslap") },
-    { DrumNum(59),       TranslatableString("engraving/generalmididrumset", "Ride Cymbal 2") },
+    { DrumNum(50),       QT_TRANSLATE_NOOP("engraving/drumset", "High Tom") },
+    { DrumNum(51),       QT_TRANSLATE_NOOP("engraving/drumset", "Ride Cymbal 1") },
+    { DrumNum(52),       QT_TRANSLATE_NOOP("engraving/drumset", "Chinese Cymbal") },
+    { DrumNum(53),       QT_TRANSLATE_NOOP("engraving/drumset", "Ride Bell") },
+    { DrumNum(54),       QT_TRANSLATE_NOOP("engraving/drumset", "Tambourine") },
+    { DrumNum(55),       QT_TRANSLATE_NOOP("engraving/drumset", "Splash Cymbal") },
+    { DrumNum(56),       QT_TRANSLATE_NOOP("engraving/drumset", "Cowbell") },
+    { DrumNum(57),       QT_TRANSLATE_NOOP("engraving/drumset", "Crash Cymbal 2") },
+    { DrumNum(58),       QT_TRANSLATE_NOOP("engraving/drumset", "Vibraslap") },
+    { DrumNum(59),       QT_TRANSLATE_NOOP("engraving/drumset", "Ride Cymbal 2") },
 
-    { DrumNum(60),       TranslatableString("engraving/generalmididrumset", "Hi Bongo") },
-    { DrumNum(61),       TranslatableString("engraving/generalmididrumset", "Low Bongo") },
-    { DrumNum(62),       TranslatableString("engraving/generalmididrumset", "Mute Hi Conga") },
-    { DrumNum(63),       TranslatableString("engraving/generalmididrumset", "Open Hi Conga") },
-    { DrumNum(64),       TranslatableString("engraving/generalmididrumset", "Low Conga") },
-    { DrumNum(65),       TranslatableString("engraving/generalmididrumset", "High Timbale") },
-    { DrumNum(66),       TranslatableString("engraving/generalmididrumset", "Low Timbale") },
-    { DrumNum(67),       TranslatableString("engraving/generalmididrumset", "High Agogo") },
-    { DrumNum(68),       TranslatableString("engraving/generalmididrumset", "Low Agogo") },
-    { DrumNum(69),       TranslatableString("engraving/generalmididrumset", "Cabasa") },
+    { DrumNum(60),       QT_TRANSLATE_NOOP("engraving/drumset", "Hi Bongo") },
+    { DrumNum(61),       QT_TRANSLATE_NOOP("engraving/drumset", "Low Bongo") },
+    { DrumNum(62),       QT_TRANSLATE_NOOP("engraving/drumset", "Mute Hi Conga") },
+    { DrumNum(63),       QT_TRANSLATE_NOOP("engraving/drumset", "Open Hi Conga") },
+    { DrumNum(64),       QT_TRANSLATE_NOOP("engraving/drumset", "Low Conga") },
+    { DrumNum(65),       QT_TRANSLATE_NOOP("engraving/drumset", "High Timbale") },
+    { DrumNum(66),       QT_TRANSLATE_NOOP("engraving/drumset", "Low Timbale") },
+    { DrumNum(67),       QT_TRANSLATE_NOOP("engraving/drumset", "High Agogo") },
+    { DrumNum(68),       QT_TRANSLATE_NOOP("engraving/drumset", "Low Agogo") },
+    { DrumNum(69),       QT_TRANSLATE_NOOP("engraving/drumset", "Cabasa") },
 
-    { DrumNum(70),       TranslatableString("engraving/generalmididrumset", "Maracas") },
-    { DrumNum(71),       TranslatableString("engraving/generalmididrumset", "Short Whistle") },
-    { DrumNum(72),       TranslatableString("engraving/generalmididrumset", "Long Whistle") },
-    { DrumNum(73),       TranslatableString("engraving/generalmididrumset", "Short Güiro") },
-    { DrumNum(74),       TranslatableString("engraving/generalmididrumset", "Long Güiro") },
-    { DrumNum(75),       TranslatableString("engraving/generalmididrumset", "Claves") },
-    { DrumNum(76),       TranslatableString("engraving/generalmididrumset", "Hi Wood Block") },
-    { DrumNum(77),       TranslatableString("engraving/generalmididrumset", "Low Wood Block") },
-    { DrumNum(78),       TranslatableString("engraving/generalmididrumset", "Mute Cuica") },
-    { DrumNum(79),       TranslatableString("engraving/generalmididrumset", "Open Cuica") },
+    { DrumNum(70),       QT_TRANSLATE_NOOP("engraving/drumset", "Maracas") },
+    { DrumNum(71),       QT_TRANSLATE_NOOP("engraving/drumset", "Short Whistle") },
+    { DrumNum(72),       QT_TRANSLATE_NOOP("engraving/drumset", "Long Whistle") },
+    { DrumNum(73),       QT_TRANSLATE_NOOP("engraving/drumset", "Short Güiro") },
+    { DrumNum(74),       QT_TRANSLATE_NOOP("engraving/drumset", "Long Güiro") },
+    { DrumNum(75),       QT_TRANSLATE_NOOP("engraving/drumset", "Claves") },
+    { DrumNum(76),       QT_TRANSLATE_NOOP("engraving/drumset", "Hi Wood Block") },
+    { DrumNum(77),       QT_TRANSLATE_NOOP("engraving/drumset", "Low Wood Block") },
+    { DrumNum(78),       QT_TRANSLATE_NOOP("engraving/drumset", "Mute Cuica") },
+    { DrumNum(79),       QT_TRANSLATE_NOOP("engraving/drumset", "Open Cuica") },
 
-    { DrumNum(80),       TranslatableString("engraving/generalmididrumset", "Mute Triangle") },
-    { DrumNum(81),       TranslatableString("engraving/generalmididrumset", "Open Triangle") },
-    { DrumNum(82),       TranslatableString("engraving/generalmididrumset", "Shaker") },
-    { DrumNum(83),       TranslatableString("engraving/generalmididrumset", "Sleigh Bell") },
-    { DrumNum(84),       TranslatableString("engraving/generalmididrumset", "Mark Tree") },
-    { DrumNum(85),       TranslatableString("engraving/generalmididrumset", "Castanets") },
-    { DrumNum(86),       TranslatableString("engraving/generalmididrumset", "Mute Surdo") },
-    { DrumNum(87),       TranslatableString("engraving/generalmididrumset", "Open Surdo") },
+    { DrumNum(80),       QT_TRANSLATE_NOOP("engraving/drumset", "Mute Triangle") },
+    { DrumNum(81),       QT_TRANSLATE_NOOP("engraving/drumset", "Open Triangle") },
+    { DrumNum(82),       QT_TRANSLATE_NOOP("engraving/drumset", "Shaker") },
+    { DrumNum(83),       QT_TRANSLATE_NOOP("engraving/drumset", "Sleigh Bell") },
+    { DrumNum(84),       QT_TRANSLATE_NOOP("engraving/drumset", "Mark Tree") },
+    { DrumNum(85),       QT_TRANSLATE_NOOP("engraving/drumset", "Castanets") },
+    { DrumNum(86),       QT_TRANSLATE_NOOP("engraving/drumset", "Mute Surdo") },
+    { DrumNum(87),       QT_TRANSLATE_NOOP("engraving/drumset", "Open Surdo") },
 
-    { DrumNum(91),       TranslatableString("engraving/generalmididrumset", "Snare (Rim shot)") },
+    { DrumNum(91),       QT_TRANSLATE_NOOP("engraving/drumset", "Snare (Rim shot)") },
 
-    { DrumNum(93),       TranslatableString("engraving/generalmididrumset", "Ride (Edge)") },
+    { DrumNum(93),       QT_TRANSLATE_NOOP("engraving/drumset", "Ride (Edge)") },
 
-    { DrumNum(99),       TranslatableString("engraving/generalmididrumset", "Cowbell Low") },
+    { DrumNum(99),       QT_TRANSLATE_NOOP("engraving/drumset", "Cowbell Low") },
 
-    { DrumNum(102),      TranslatableString("engraving/generalmididrumset", "Cowbell High") },
+    { DrumNum(102),      QT_TRANSLATE_NOOP("engraving/drumset", "Cowbell High") },
 };
 
-//! TODO Return TranslatableString
 const char* TConv::userName(DrumNum v)
 {
     auto it = std::find_if(DRUMPITCHS.cbegin(), DRUMPITCHS.cend(), [v](const DrumPitchItem& i) {
@@ -2104,7 +2104,7 @@ const char* TConv::userName(DrumNum v)
         static const char* dummy = "";
         return dummy;
     }
-    return it->userName.str;
+    return it->userName;
 }
 
 //! TODO Add xml names
@@ -2114,9 +2114,9 @@ static const std::array<Item<GlissandoType>, 2> GLISSANDO_TYPES = { {
 } };
 
 //! TODO Return TranslatableString
-const char* TConv::userName(GlissandoType v)
+const TranslatableString& TConv::userName(GlissandoType v)
 {
-    return findUserNameByType<GlissandoType>(GLISSANDO_TYPES, v).str;
+    return findUserNameByType<GlissandoType>(GLISSANDO_TYPES, v);
 }
 
 String TConv::translatedUserName(GlissandoType v)

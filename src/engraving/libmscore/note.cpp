@@ -3351,7 +3351,7 @@ String Note::accessibleInfo() const
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = mtrc("engraving", drumset->name(pitch()));
+        pitchName = drumset->translatedName(pitch());
     } else if (staff()->isTabStaff(tick())) {
         pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
                     .arg(tpcUserName(false), String::number(string() + 1), String::number(fret()));
@@ -3378,7 +3378,7 @@ String Note::screenReaderInfo() const
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = mtrc("engraving", drumset->name(pitch()));
+        pitchName = drumset->translatedName(pitch());
     } else if (staff()->isTabStaff(tick())) {
         pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
                     .arg(tpcUserName(true, true), String::number(string() + 1), String::number(fret()));

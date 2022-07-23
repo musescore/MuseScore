@@ -82,6 +82,7 @@ public:
     int voice(int pitch) const { return _drum[pitch].voice; }
     DirectionV stemDirection(int pitch) const { return _drum[pitch].stemDirection; }
     const String& name(int pitch) const { return _drum[pitch].name; }
+    String translatedName(int pitch) const;
     int shortcut(int pitch) const { return _drum[pitch].shortcut; }
     std::list<DrumInstrumentVariant> variants(int pitch) const { return _drum[pitch].variants; }
 

@@ -180,7 +180,7 @@ public:
 
     static const char* userName(DrumNum v);
 
-    static const char* userName(GlissandoType v);
+    static const TranslatableString& userName(GlissandoType v);
     static String translatedUserName(GlissandoType v);
     static AsciiStringView toXml(GlissandoType v);
     static GlissandoType fromXml(const AsciiStringView& tag, GlissandoType def);
