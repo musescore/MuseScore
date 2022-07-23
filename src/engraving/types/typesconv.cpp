@@ -1663,6 +1663,7 @@ struct EmbelItem
     AsciiStringView notes;
 };
 
+// TODO: Can't use .arg, because Palettes use these strings and doesn't support TranslatableString
 static const std::vector<EmbelItem> EMBELLISHMENT_TYPES = {
     // Single Grace notes
     { TranslatableString("engraving/bagpipeembellishment", "Single grace low G"), "LG" },
@@ -1945,10 +1946,9 @@ static const std::vector<EmbelItem> EMBELLISHMENT_TYPES = {
     { TranslatableString("engraving/bagpipeembellishment", "Thumb triple strike on high G"), "HA HG F HG F HG F" },
 };
 
-//! TODO Return TranslatableString
-const char* TConv::userName(EmbellishmentType v)
+const TranslatableString& TConv::userName(EmbellishmentType v)
 {
-    return EMBELLISHMENT_TYPES.at(static_cast<size_t>(v)).name.str;
+    return EMBELLISHMENT_TYPES.at(static_cast<size_t>(v)).name;
 }
 
 String TConv::translatedUserName(EmbellishmentType v)
