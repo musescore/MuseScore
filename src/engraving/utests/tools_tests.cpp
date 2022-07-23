@@ -35,13 +35,13 @@ using namespace mu::engraving;
 
 static const String TOOLS_DATA_DIR("tools_data/");
 
-class ToolsTests : public ::testing::Test
+class Engraving_ToolsTests : public ::testing::Test
 {
 public:
     void changeEnharmonic(bool);
 };
 
-TEST_F(ToolsTests, undoAddLineBreaks)
+TEST_F(Engraving_ToolsTests, undoAddLineBreaks)
 {
     String readFile(TOOLS_DATA_DIR + "undoAddLineBreaks.mscx");
     String writeFile1("undoAddLineBreaks01-test.mscx");
@@ -71,7 +71,7 @@ TEST_F(ToolsTests, undoAddLineBreaks)
     delete score;
 }
 
-TEST_F(ToolsTests, undoSlashFill)
+TEST_F(Engraving_ToolsTests, undoSlashFill)
 {
     String readFile(TOOLS_DATA_DIR + "undoSlashFill.mscx");
     String writeFile1("undoSlashFill01-test.mscx");
@@ -99,7 +99,7 @@ TEST_F(ToolsTests, undoSlashFill)
     delete score;
 }
 
-TEST_F(ToolsTests, undoSlashRhythm)
+TEST_F(Engraving_ToolsTests, undoSlashRhythm)
 {
     String readFile(TOOLS_DATA_DIR + "undoSlashRhythm.mscx");
     String writeFile1("undoSlashRhythm01-test.mscx");
@@ -129,7 +129,7 @@ TEST_F(ToolsTests, undoSlashRhythm)
     delete score;
 }
 
-TEST_F(ToolsTests, undoResequenceAlpha)
+TEST_F(Engraving_ToolsTests, undoResequenceAlpha)
 {
     String readFile(TOOLS_DATA_DIR + "undoResequenceAlpha.mscx");
     String writeFile1("undoResequenceAlpha01-test.mscx");
@@ -154,7 +154,7 @@ TEST_F(ToolsTests, undoResequenceAlpha)
     delete score;
 }
 
-TEST_F(ToolsTests, undoResequenceNumeric)
+TEST_F(Engraving_ToolsTests, undoResequenceNumeric)
 {
     String readFile(TOOLS_DATA_DIR + "undoResequenceNumeric.mscx");
     String writeFile1("undoResequenceNumeric01-test.mscx");
@@ -179,7 +179,7 @@ TEST_F(ToolsTests, undoResequenceNumeric)
     delete score;
 }
 
-TEST_F(ToolsTests, undoResequenceMeasure)
+TEST_F(Engraving_ToolsTests, undoResequenceMeasure)
 {
     String readFile(TOOLS_DATA_DIR + "undoResequenceMeasure.mscx");
     String writeFile1("undoResequenceMeasure01-test.mscx");
@@ -204,7 +204,7 @@ TEST_F(ToolsTests, undoResequenceMeasure)
     delete score;
 }
 
-TEST_F(ToolsTests, undoResequencePart)
+TEST_F(Engraving_ToolsTests, undoResequencePart)
 {
     String readFile(TOOLS_DATA_DIR + "undoResequencePart.mscx");
     String writeFile1("undoResequencePart01-test.mscx");
@@ -229,7 +229,7 @@ TEST_F(ToolsTests, undoResequencePart)
     delete score;
 }
 
-void ToolsTests::changeEnharmonic(bool both)
+void Engraving_ToolsTests::changeEnharmonic(bool both)
 {
     String readFile(TOOLS_DATA_DIR + u"change-enharmonic.mscx");
     MasterScore* score = ScoreRW::readScore(readFile);
@@ -245,12 +245,12 @@ void ToolsTests::changeEnharmonic(bool both)
     }
 }
 
-TEST_F(ToolsTests, changeEnharmonicBoth)
+TEST_F(Engraving_ToolsTests, changeEnharmonicBoth)
 {
     changeEnharmonic(true);
 }
 
-TEST_F(ToolsTests, changeEnharmonicCurrent)
+TEST_F(Engraving_ToolsTests, changeEnharmonicCurrent)
 {
     changeEnharmonic(false);
 }

@@ -40,7 +40,7 @@ static constexpr duration_t QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 2; //
 static constexpr duration_t SEMI_QUAVER_NOTE_DURATION = QUAVER_NOTE_DURATION / 2; // duration in msecs for 4/4 120BPM
 static constexpr duration_t DEMI_SEMI_QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 8; // duration in msecs for 4/4 120BPM
 
-class PlaybackEventsRendererTests : public ::testing::Test
+class Engraving_PlaybackEventsRendererTests : public ::testing::Test
 {
 protected:
     void SetUp() override
@@ -67,7 +67,7 @@ protected:
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note marked by TENUTO-ACCENT articulation.
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_TenutoAccent)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_TenutoAccent)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tenuto_accent/tenuto_accent.mscx");
@@ -114,7 +114,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_TenutoAccent)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note without any articulations applied
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_NoArticulations)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_NoArticulations)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_no_articulations/no_articulations.mscx");
@@ -159,7 +159,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_NoArticulations)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which consists a rest only
  */
-TEST_F(PlaybackEventsRendererTests, Rest)
+TEST_F(Engraving_PlaybackEventsRendererTests, Rest)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "whole_measure_rest/whole_measure_rest.mscx");
@@ -193,7 +193,7 @@ TEST_F(PlaybackEventsRendererTests, Rest)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note marked by Trill articulation.
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Modern)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -251,7 +251,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 32-nd note marked by Trill articulation.
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_Unexpandable_Trill)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Unexpandable_Trill)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -287,7 +287,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Unexpandable_Trill)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note marked by Trill(Baroque) articulation.
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -354,7 +354,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note marked by Turn articulation.
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Regular)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -414,7 +414,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note marked by Inverted Turn articulation.
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -475,7 +475,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
  *          which starts with the F4 quarter note marked by "Turn with slash" articulation,
  *          which is just a variation of Inverted Turn articulation
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -535,7 +535,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note marked by "Upper Mordent" articulation
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -608,7 +608,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note marked by "Lower Mordent" articulation
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -681,7 +681,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with F4 and B4 quarter notes connected by Discrete Glissando articulation.
  */
-TEST_F(PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
+TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -742,7 +742,7 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with F4 and B4 quarter notes connected by ContinuousGlissando articulation.
  */
-TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
+TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score
@@ -804,7 +804,7 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
  *          which starts with F4 and B4 quarter notes connected by ContinuousGlissando articulation.
  *          However, the glissando has been marked as "no play", so we'll render the Standard articulation instead
  */
-TEST_F(PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
+TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -865,7 +865,7 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note prepended with G4 8-th acciaccatura note
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Acciaccatura)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -932,7 +932,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note prepended with A4+G4 8-th acciaccatura notes
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -1002,7 +1002,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note prepended with G4 8-th appoggiatura note
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score
@@ -1069,7 +1069,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note prepended with G4 16-th and A4 32-nd appoggiatura notes
  */
-TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
+TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -1139,7 +1139,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4+A4+C4 quarter chord marked by the Arpeggio articulation
  */
-TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio)
+TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio/chord_arpeggio.mscx");
@@ -1201,7 +1201,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4+A4+C4 quarter chord marked by the Arpeggio Up articulation
  */
-TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Up)
+TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_up/chord_arpeggio_up.mscx");
@@ -1263,7 +1263,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Up)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4+A4+C4 quarter chord marked by the Arpeggio Down articulation
  */
-TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Down)
+TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Down)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_down/chord_arpeggio_down.mscx");
@@ -1325,7 +1325,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Down)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4+A4+C4 quarter chord marked by the Arpeggio Straight Down articulation
  */
-TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
+TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -1388,7 +1388,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4+A4+C4 quarter chord marked by the Arpeggio Straight Up articulation
  */
-TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
+TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -1452,7 +1452,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
  *          which starts with the F4+A4+C4 quarter chord marked by the Arpeggio Bracket, which means that chord should be played
  *          like it has not arpeggio
  */
-TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
+TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_bracket/chord_arpeggio_bracket.mscx");
@@ -1514,7 +1514,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 half note marked by the 8-th Tremolo articulation
  */
-TEST_F(PlaybackEventsRendererTests, Single_Note_Tremolo)
+TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tremolo/single_note_tremolo.mscx");
@@ -1578,7 +1578,7 @@ TEST_F(PlaybackEventsRendererTests, Single_Note_Tremolo)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4+A4+C5 quarter notes chord marked by the 16-th Tremolo articulation
  */
-TEST_F(PlaybackEventsRendererTests, Single_Chord_Tremolo)
+TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_chord_tremolo/single_chord_tremolo.mscx");
@@ -1644,7 +1644,7 @@ TEST_F(PlaybackEventsRendererTests, Single_Chord_Tremolo)
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4+A4+C5 chord and ends with C5+E5+G5 chord connected by the 16-th Tremolo articulation
  */
-TEST_F(PlaybackEventsRendererTests, Two_Chords_Tremolo)
+TEST_F(Engraving_PlaybackEventsRendererTests, Two_Chords_Tremolo)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_chords_tremolo/two_chords_tremolo.mscx");

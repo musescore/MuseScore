@@ -41,14 +41,14 @@ using namespace mu::engraving;
 
 static const String INSTRUMENTCHANGE_DATA_DIR("instrumentchange_data/");
 
-class InstrumentChangeTests : public ::testing::Test
+class Engraving_InstrumentChangeTests : public ::testing::Test
 {
 public:
     MasterScore* test_pre(const char16_t* p);
     void test_post(MasterScore* score, const char16_t* p);
 };
 
-MasterScore* InstrumentChangeTests::test_pre(const char16_t* p)
+MasterScore* Engraving_InstrumentChangeTests::test_pre(const char16_t* p)
 {
     String p1 = INSTRUMENTCHANGE_DATA_DIR + p + u".mscx";
     MasterScore* score = ScoreRW::readScore(p1);
@@ -56,7 +56,7 @@ MasterScore* InstrumentChangeTests::test_pre(const char16_t* p)
     return score;
 }
 
-void InstrumentChangeTests::test_post(MasterScore* score, const char16_t* p)
+void Engraving_InstrumentChangeTests::test_post(MasterScore* score, const char16_t* p)
 {
     String p1 = p;
     p1 += u"-test.mscx";
@@ -65,7 +65,7 @@ void InstrumentChangeTests::test_post(MasterScore* score, const char16_t* p)
     delete score;
 }
 
-TEST_F(InstrumentChangeTests, testAdd)
+TEST_F(Engraving_InstrumentChangeTests, testAdd)
 {
     MasterScore* score = test_pre(u"add");
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -80,7 +80,7 @@ TEST_F(InstrumentChangeTests, testAdd)
     test_post(score, u"add");
 }
 
-TEST_F(InstrumentChangeTests, testDelete)
+TEST_F(Engraving_InstrumentChangeTests, testDelete)
 {
     MasterScore* score = test_pre(u"delete");
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -91,7 +91,7 @@ TEST_F(InstrumentChangeTests, testDelete)
     test_post(score, u"delete");
 }
 
-TEST_F(InstrumentChangeTests, testChange)
+TEST_F(Engraving_InstrumentChangeTests, testChange)
 {
     MasterScore* score   = test_pre(u"change");
     Measure* m           = score->firstMeasure()->nextMeasure();
@@ -107,7 +107,7 @@ TEST_F(InstrumentChangeTests, testChange)
     test_post(score, u"change");
 }
 
-TEST_F(InstrumentChangeTests, testMixer)
+TEST_F(Engraving_InstrumentChangeTests, testMixer)
 {
     MasterScore* score = test_pre(u"mixer");
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -129,7 +129,7 @@ TEST_F(InstrumentChangeTests, testMixer)
     test_post(score, u"mixer");
 }
 
-TEST_F(InstrumentChangeTests, testCopy)
+TEST_F(Engraving_InstrumentChangeTests, testCopy)
 {
     MasterScore* score = test_pre(u"copy");
     Measure* m = score->firstMeasure()->nextMeasure();

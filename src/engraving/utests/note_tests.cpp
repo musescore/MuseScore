@@ -46,7 +46,7 @@ using namespace mu::engraving;
 
 static const String NOTE_DATA_DIR("note_data/");
 
-class NoteTests : public ::testing::Test
+class Engraving_NoteTests : public ::testing::Test
 {
 };
 
@@ -55,7 +55,7 @@ class NoteTests : public ::testing::Test
 ///   read/write test of note
 //---------------------------------------------------------
 
-TEST_F(NoteTests, note)
+TEST_F(Engraving_NoteTests, note)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScore();
     Chord* chord = Factory::createChord(score->dummy()->segment());
@@ -312,7 +312,7 @@ TEST_F(NoteTests, note)
 ///   read/write test of grace notes
 //---------------------------------------------------------
 
-TEST_F(NoteTests, grace)
+TEST_F(Engraving_NoteTests, grace)
 {
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"grace.mscx");
     score->doLayout();
@@ -366,7 +366,7 @@ TEST_F(NoteTests, grace)
 ///   test of note tpc values
 //---------------------------------------------------------
 
-TEST_F(NoteTests, tpc)
+TEST_F(Engraving_NoteTests, tpc)
 {
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"tpc.mscx");
 
@@ -394,7 +394,7 @@ TEST_F(NoteTests, tpc)
 ///   test of note tpc values & transposition
 //---------------------------------------------------------
 
-TEST_F(NoteTests, tpcTranspose)
+TEST_F(Engraving_NoteTests, tpcTranspose)
 {
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"tpc-transpose.mscx");
 
@@ -422,7 +422,7 @@ TEST_F(NoteTests, tpcTranspose)
 ///   more tests of note tpc values & transposition
 //---------------------------------------------------------
 
-TEST_F(NoteTests, tpcTranspose2)
+TEST_F(Engraving_NoteTests, tpcTranspose2)
 {
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"tpc-transpose2.mscx");
 
@@ -446,7 +446,7 @@ TEST_F(NoteTests, tpcTranspose2)
 ///   noteLimits
 //---------------------------------------------------------
 
-TEST_F(NoteTests, noteLimits)
+TEST_F(Engraving_NoteTests, noteLimits)
 {
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"empty.mscx");
 
@@ -486,7 +486,7 @@ TEST_F(NoteTests, noteLimits)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"notelimits-test.mscx", NOTE_DATA_DIR + u"notelimits-ref.mscx"));
 }
 
-TEST_F(NoteTests, tpcDegrees)
+TEST_F(Engraving_NoteTests, tpcDegrees)
 {
     EXPECT_EQ(tpc2degree(Tpc::TPC_C,   Key::C),   0);
     //QCOMPARE(tpc2degree(Tpc::TPC_E_S, Key::C),   3);
@@ -497,7 +497,7 @@ TEST_F(NoteTests, tpcDegrees)
     //QCOMPARE(tpc2degree(Tpc::TPC_B_S, Key::C_S), 7);
 }
 
-TEST_F(NoteTests, alteredUnison)
+TEST_F(Engraving_NoteTests, alteredUnison)
 {
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"altered-unison.mscx");
     Measure* m = score->firstMeasure();
@@ -518,7 +518,7 @@ TEST_F(NoteTests, alteredUnison)
 ///    regardless of how the breve was divided up.
 //---------------------------------------------------------
 
-TEST_F(NoteTests, LongNoteAfterShort_183746)
+TEST_F(Engraving_NoteTests, LongNoteAfterShort_183746)
 {
     Score* score = ScoreRW::readScore(NOTE_DATA_DIR + "empty.mscx");
     score->doLayout();

@@ -41,14 +41,14 @@ using namespace mu::engraving;
 
 static const String TEXTBASE_DATA_DIR("textbase_data/");
 
-class TextBaseTests : public ::testing::Test
+class Engraving_TextBaseTests : public ::testing::Test
 {
 public:
     Dynamic* addDynamic(MasterScore* score);
     StaffText* addStaffText(MasterScore* score);
 };
 
-Dynamic* TextBaseTests::addDynamic(MasterScore* score)
+Dynamic* Engraving_TextBaseTests::addDynamic(MasterScore* score)
 {
     Dynamic* dynamic = new Dynamic(score->dummy()->segment());
     dynamic->setXmlText("<sym>dynamicForte</sym>");
@@ -59,14 +59,14 @@ Dynamic* TextBaseTests::addDynamic(MasterScore* score)
     return dynamic;
 }
 
-TEST_F(TextBaseTests, createDynamic)
+TEST_F(Engraving_TextBaseTests, createDynamic)
 {
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     addDynamic(score);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"createDynamic.mscx", TEXTBASE_DATA_DIR + u"createDynamic-ref.mscx"));
 }
 
-TEST_F(TextBaseTests, dynamicAddTextBefore)
+TEST_F(Engraving_TextBaseTests, dynamicAddTextBefore)
 {
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     Dynamic* dynamic = addDynamic(score);
@@ -77,7 +77,7 @@ TEST_F(TextBaseTests, dynamicAddTextBefore)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextBefore.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextBefore-ref.mscx"));
 }
 
-TEST_F(TextBaseTests, dynamicAddTextAfter)
+TEST_F(Engraving_TextBaseTests, dynamicAddTextAfter)
 {
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     Dynamic* dynamic = addDynamic(score);
@@ -89,7 +89,7 @@ TEST_F(TextBaseTests, dynamicAddTextAfter)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextAfter.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextAfter-ref.mscx"));
 }
 
-TEST_F(TextBaseTests, dynamicAddTextNoItalic)
+TEST_F(Engraving_TextBaseTests, dynamicAddTextNoItalic)
 {
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     Dynamic* dynamic = addDynamic(score);
@@ -101,7 +101,7 @@ TEST_F(TextBaseTests, dynamicAddTextNoItalic)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextNoItalic.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextNoItalic-ref.mscx"));
 }
 
-StaffText* TextBaseTests::addStaffText(MasterScore* score)
+StaffText* Engraving_TextBaseTests::addStaffText(MasterScore* score)
 {
     StaffText* staffText = new StaffText(score->dummy()->segment());
     ChordRest* chordRest = score->firstSegment(SegmentType::ChordRest)->nextChordRest(0);
@@ -111,7 +111,7 @@ StaffText* TextBaseTests::addStaffText(MasterScore* score)
     return staffText;
 }
 
-TEST_F(TextBaseTests, getFontStyleProperty)
+TEST_F(Engraving_TextBaseTests, getFontStyleProperty)
 {
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     StaffText* staffText = addStaffText(score);
@@ -134,7 +134,7 @@ TEST_F(TextBaseTests, getFontStyleProperty)
     EXPECT_EQ(staffText->getProperty(Pid::FONT_STYLE), PropertyValue::fromValue(0));
 }
 
-TEST_F(TextBaseTests, undoChangeFontStyleProperty)
+TEST_F(Engraving_TextBaseTests, undoChangeFontStyleProperty)
 {
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     StaffText* staffText = addStaffText(score);
@@ -172,7 +172,7 @@ TEST_F(TextBaseTests, undoChangeFontStyleProperty)
     EXPECT_EQ(staffText->xmlText(), u"normal bold underline italic");
 }
 
-TEST_F(TextBaseTests, musicalSymbolsNotBold)
+TEST_F(Engraving_TextBaseTests, musicalSymbolsNotBold)
 {
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     StaffText* staffText = addStaffText(score);
@@ -183,7 +183,7 @@ TEST_F(TextBaseTests, musicalSymbolsNotBold)
     EXPECT_TRUE(!std::next(fragmentList.begin())->font(staffText).bold());
 }
 
-TEST_F(TextBaseTests, musicalSymbolsNotItalic)
+TEST_F(Engraving_TextBaseTests, musicalSymbolsNotItalic)
 {
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     Dynamic* dynamic = addDynamic(score);

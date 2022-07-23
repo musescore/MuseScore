@@ -36,7 +36,7 @@ using namespace mu::engraving;
 
 static const String CLEFCOURTESY_DATA_DIR("clef_courtesy_data/");
 
-class ClefCourtesyTests : public ::testing::Test
+class Engraving_ClefCourtesyTests : public ::testing::Test
 {
 };
 
@@ -69,7 +69,7 @@ static void dropClef(EngravingItem* m, ClefType t)
 //    add two clefs mid-score at the beginning of systems and look for courtesy clefs
 //    the first should be there, the second should not, as it is after a section break
 //---------------------------------------------------------
-TEST_F(ClefCourtesyTests, clef_courtesy01)
+TEST_F(Engraving_ClefCourtesyTests, clef_courtesy01)
 {
     MasterScore* score = ScoreRW::readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy01.mscx");
     EXPECT_TRUE(score);
@@ -137,7 +137,7 @@ TEST_F(ClefCourtesyTests, clef_courtesy01)
 //    add two clefs mid-score at the beginning of systems and look for courtesy clefs
 //    neither should be there, as courtesy clefs are turned off
 //---------------------------------------------------------
-TEST_F(ClefCourtesyTests, clef_courtesy02)
+TEST_F(Engraving_ClefCourtesyTests, clef_courtesy02)
 {
     MasterScore* score = ScoreRW::readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy02.mscx");
     EXPECT_TRUE(score);
@@ -196,7 +196,7 @@ TEST_F(ClefCourtesyTests, clef_courtesy02)
 //    adds a clef on meas 2, which occurs after a single-measure section
 //    the added clef should not be visible, since it is after a section break
 //---------------------------------------------------------
-TEST_F(ClefCourtesyTests, clef_courtesy03)
+TEST_F(Engraving_ClefCourtesyTests, clef_courtesy03)
 {
     MasterScore* score = ScoreRW::readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy03.mscx");
     EXPECT_TRUE(score);
@@ -230,7 +230,7 @@ TEST_F(ClefCourtesyTests, clef_courtesy03)
 //    input score has section breaks on non-measure MeasureBase objects.
 //    should not display courtesy clefs at the end of final measure of each section (meas 2, 4, & 6), even if section break occurs on subsequent non-measure frame.
 //---------------------------------------------------------
-TEST_F(ClefCourtesyTests, clef_courtesy_78196)
+TEST_F(Engraving_ClefCourtesyTests, clef_courtesy_78196)
 {
     MasterScore* score = ScoreRW::readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy_78196.mscx");
     EXPECT_TRUE(score);
@@ -277,7 +277,7 @@ TEST_F(ClefCourtesyTests, clef_courtesy_78196)
 //    staves and look for courtesy clefs in different "show courtesy" configurations
 //    also check the behavior after a horizontal frame
 //---------------------------------------------------------
-TEST_F(ClefCourtesyTests, clef_courtesy04)
+TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
 {
     MasterScore* score = ScoreRW::readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy04.mscx");
     EXPECT_TRUE(score);

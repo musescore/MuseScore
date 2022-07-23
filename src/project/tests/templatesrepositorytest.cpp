@@ -39,7 +39,7 @@ using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::io;
 
-class TemplatesRepositoryTest : public ::testing::Test
+class Project_TemplatesRepositoryTest : public ::testing::Test
 {
 protected:
     void SetUp() override
@@ -101,7 +101,7 @@ inline bool operator==(const Template& templ1, const Template& templ2)
 }
 }
 
-TEST_F(TemplatesRepositoryTest, Templates)
+TEST_F(Project_TemplatesRepositoryTest, Templates)
 {
     // [GIVEN] All template dirs
     io::paths_t templateDirs {

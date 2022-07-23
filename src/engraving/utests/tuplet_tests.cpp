@@ -38,7 +38,7 @@ using namespace mu::engraving;
 
 static const String TUPLET_DATA_DIR(u"tuplet_data/");
 
-class TupletTests : public ::testing::Test
+class Engraving_TupletTests : public ::testing::Test
 {
 public:
     bool createTuplet(int n, ChordRest* cr);
@@ -46,7 +46,7 @@ public:
     void split(const char16_t* p1, const char16_t* p2);
 };
 
-bool TupletTests::createTuplet(int n, ChordRest* cr)
+bool Engraving_TupletTests::createTuplet(int n, ChordRest* cr)
 {
     if (cr->durationType() < TDuration(DurationType::V_128TH)) {
         return false;
@@ -94,7 +94,7 @@ bool TupletTests::createTuplet(int n, ChordRest* cr)
     return true;
 }
 
-void TupletTests::tuplet(const char16_t* p1, const char16_t* p2)
+void Engraving_TupletTests::tuplet(const char16_t* p1, const char16_t* p2)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + p1);
     Measure* m1 = score->firstMeasure();
@@ -115,12 +115,12 @@ void TupletTests::tuplet(const char16_t* p1, const char16_t* p2)
     delete score;
 }
 
-TEST_F(TupletTests, join1)
+TEST_F(Engraving_TupletTests, join1)
 {
     tuplet(u"tuplet1.mscx", u"tuplet1-ref.mscx");
 }
 
-void TupletTests::split(const char16_t* p1, const char16_t* p2)
+void Engraving_TupletTests::split(const char16_t* p1, const char16_t* p2)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + p1);
     Measure* m         = score->firstMeasure();
@@ -140,22 +140,22 @@ void TupletTests::split(const char16_t* p1, const char16_t* p2)
     delete score;
 }
 
-TEST_F(TupletTests, split1)
+TEST_F(Engraving_TupletTests, split1)
 {
     split(u"split1.mscx",   u"split1-ref.mscx");
 }
 
-TEST_F(TupletTests, split2)
+TEST_F(Engraving_TupletTests, split2)
 {
     split(u"split2.mscx",   u"split2-ref.mscx");
 }
 
-TEST_F(TupletTests, split3)
+TEST_F(Engraving_TupletTests, split3)
 {
     split(u"split3.mscx",   u"split3-ref.mscx");
 }
 
-TEST_F(TupletTests, split4)
+TEST_F(Engraving_TupletTests, split4)
 {
     split(u"split4.mscx",   u"split4-ref.mscx");
 }
@@ -166,7 +166,7 @@ TEST_F(TupletTests, split4)
 //    score is equal to the reference score
 //---------------------------------------------------------
 
-TEST_F(TupletTests, addStaff)
+TEST_F(Engraving_TupletTests, addStaff)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + "nestedTuplets_addStaff.mscx");
     EXPECT_TRUE(score);
@@ -190,7 +190,7 @@ TEST_F(TupletTests, addStaff)
 //    saveLoad
 //     checks that properties persist after loading and saving
 //-----------------------------------------
-TEST_F(TupletTests, saveLoad)
+TEST_F(Engraving_TupletTests, saveLoad)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + "save-load.mscx");
     EXPECT_TRUE(score);

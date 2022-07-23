@@ -34,7 +34,7 @@ using namespace mu::engraving;
 
 static const String SELRANGEDELETE_DATA_DIR("selectionrangedelete_data/");
 
-class SelectionRangeDeleteTests : public ::testing::Test
+class Engraving_SelectionRangeDeleteTests : public ::testing::Test
 {
 public:
     void verifyDelete(MasterScore* score, size_t spanners);
@@ -42,7 +42,7 @@ public:
     void deleteVoice(int voice, String idx);
 };
 
-void SelectionRangeDeleteTests::verifyDelete(MasterScore* score, size_t spanners)
+void Engraving_SelectionRangeDeleteTests::verifyDelete(MasterScore* score, size_t spanners)
 {
     score->startCmd();
     score->cmdDeleteSelection();
@@ -53,7 +53,7 @@ void SelectionRangeDeleteTests::verifyDelete(MasterScore* score, size_t spanners
     EXPECT_EQ(score->spanner().size(), spanners);
 }
 
-void SelectionRangeDeleteTests::verifyNoDelete(MasterScore* score, size_t spanners)
+void Engraving_SelectionRangeDeleteTests::verifyNoDelete(MasterScore* score, size_t spanners)
 {
     score->startCmd();
     score->cmdDeleteSelection();
@@ -71,7 +71,7 @@ static EngravingItem* chordRestAtBeat(Score* score, int beat, int half = 0)
     return score->tick2segment(Fraction::fromTicks(tick), false, SegmentType::ChordRest, false)->element(0);
 }
 
-TEST_F(SelectionRangeDeleteTests, deleteSegmentWithSlur)
+TEST_F(Engraving_SelectionRangeDeleteTests, deleteSegmentWithSlur)
 {
     /*
      *  Score looks like this:
@@ -109,7 +109,7 @@ TEST_F(SelectionRangeDeleteTests, deleteSegmentWithSlur)
     delete score;
 }
 
-TEST_F(SelectionRangeDeleteTests, deleteSegmentWithSpanner)
+TEST_F(Engraving_SelectionRangeDeleteTests, deleteSegmentWithSpanner)
 {
     /*
      *  Score looks like this:
@@ -146,7 +146,7 @@ TEST_F(SelectionRangeDeleteTests, deleteSegmentWithSpanner)
     delete score;
 }
 
-void SelectionRangeDeleteTests::deleteVoice(int voice, String idx)
+void Engraving_SelectionRangeDeleteTests::deleteVoice(int voice, String idx)
 {
     MasterScore* score = ScoreRW::readScore(SELRANGEDELETE_DATA_DIR + String("selectionrangedelete%1.mscx").arg(idx));
     EXPECT_TRUE(score);
@@ -169,17 +169,17 @@ void SelectionRangeDeleteTests::deleteVoice(int voice, String idx)
     delete score;
 }
 
-TEST_F(SelectionRangeDeleteTests, deleteVoice1)
+TEST_F(Engraving_SelectionRangeDeleteTests, deleteVoice1)
 {
     deleteVoice(0, u"03");
 }
 
-TEST_F(SelectionRangeDeleteTests, deleteVoice2)
+TEST_F(Engraving_SelectionRangeDeleteTests, deleteVoice2)
 {
     deleteVoice(1, u"04");
 }
 
-TEST_F(SelectionRangeDeleteTests, deleteSkipAnnotations)
+TEST_F(Engraving_SelectionRangeDeleteTests, deleteSkipAnnotations)
 {
     MasterScore* score = ScoreRW::readScore(SELRANGEDELETE_DATA_DIR + String(u"selectionrangedelete05.mscx"));
     EXPECT_TRUE(score);

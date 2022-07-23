@@ -30,7 +30,7 @@ using namespace mu;
 using namespace mu::mpe;
 using namespace mu::mpe::tests;
 
-class MultiNoteArticulationsTest : public ::testing::Test
+class Engraving_MultiNoteArticulationsTest : public ::testing::Test
 {
 protected:
     void SetUp() override
@@ -94,7 +94,7 @@ protected:
  *          So the actual PitchCurve of every note would be equal to the data from the "StandardPattern" in Articulation Profile.
  *          However, the actual ExpressionCurve would be adapted by the current dynamic value ("forte")
  */
-TEST_F(MultiNoteArticulationsTest, StandardPattern)
+TEST_F(Engraving_MultiNoteArticulationsTest, StandardPattern)
 {
     // [GIVEN] No articulations applied on the top of the note
     ArticulationPattern pattern;
@@ -150,7 +150,7 @@ TEST_F(MultiNoteArticulationsTest, StandardPattern)
  * @details In this case we're gonna build a very simple note sequence with glissando articulation applied on the top of the first two notes
  *          So the actual PitchCurve of the first two notes would be equal to the data from the "GlissandoPattern" in Articulation Profile
  */
-TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
+TEST_F(Engraving_MultiNoteArticulationsTest, GlissandoPattern)
 {
     std::map<size_t, ArticulationMap> appliedArticulations;
 
@@ -248,7 +248,7 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
  *          the top of these notes (from forte to fortissimo). So the actual ExpressionCurve of the notes would be equal
  *          to the data from the "CrescendoPattern" in Articulation Profile
  */
-TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
+TEST_F(Engraving_MultiNoteArticulationsTest, CrescendoPattern)
 {
     std::map<size_t, ArticulationMap> appliedArticulations;
 

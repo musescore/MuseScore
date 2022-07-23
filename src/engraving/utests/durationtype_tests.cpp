@@ -42,7 +42,7 @@ using namespace mu::engraving;
 
 static const String DURATIONTYPE_DATA_DIR("durationtype_data/");
 
-class DurationTypeTests : public ::testing::Test
+class Engraving_DurationTypeTests : public ::testing::Test
 {
 private slots:
 
@@ -56,7 +56,7 @@ private slots:
 //    Simple tests for command "half-duration" (default shortcut "Q").
 //    starts with Whole note and repeatedly applies cmdHalfDuration()
 //---------------------------------------------------------
-TEST_F(DurationTypeTests, halfDuration)
+TEST_F(Engraving_DurationTypeTests, halfDuration)
 {
     MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
     EXPECT_TRUE(score);
@@ -87,7 +87,7 @@ TEST_F(DurationTypeTests, halfDuration)
 //    Simple tests for command "double-duration" (default shortcut "W").
 //    Starts with 128th note and repeatedly applies cmdDoubleDuration() up to Whole note.
 //---------------------------------------------------------
-TEST_F(DurationTypeTests, doubleDuration)
+TEST_F(Engraving_DurationTypeTests, doubleDuration)
 {
     MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
     EXPECT_TRUE(score);
@@ -115,7 +115,7 @@ TEST_F(DurationTypeTests, doubleDuration)
 //    Simple tests for command "dec-duration-dotted" (default shortcut "Shift+Q").
 //    Starts with Whole note and repeatedly applies cmdDecDurationDotted() down to 128th note.
 //---------------------------------------------------------
-TEST_F(DurationTypeTests, decDurationDotted)
+TEST_F(Engraving_DurationTypeTests, decDurationDotted)
 {
     MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
     EXPECT_TRUE(score);
@@ -148,7 +148,7 @@ TEST_F(DurationTypeTests, decDurationDotted)
 //    Simple tests for command "inc-duration-dotted" (default shortcut "Shift+W").
 //    Starts with 128th note and repeatedly applies cmdIncDurationDotted() up to Whole note.
 //---------------------------------------------------------
-TEST_F(DurationTypeTests, incDurationDotted)
+TEST_F(Engraving_DurationTypeTests, incDurationDotted)
 {
     MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
     EXPECT_TRUE(score);
