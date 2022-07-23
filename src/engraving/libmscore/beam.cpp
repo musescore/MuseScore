@@ -1764,10 +1764,10 @@ void Beam::write(XmlWriter& xml) const
 
 void Beam::read(XmlReader& e)
 {
-    double _spatium = spatium();
     if (score()->mscVersion() < 301) {
         _id = e.intAttribute("id");
     }
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "StemDirection") {
@@ -1783,13 +1783,13 @@ void Beam::read(XmlReader& e)
             BeamFragment* f = new BeamFragment;
             int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
             _userModified[idx] = true;
-            double _spatium1 = spatium();
+            double _spatium = spatium();
             while (e.readNextStartElement()) {
                 const AsciiStringView tag1(e.name());
                 if (tag1 == "y1") {
-                    f->py1[idx] = e.readDouble() * _spatium1;
+                    f->py1[idx] = e.readDouble() * _spatium;
                 } else if (tag1 == "y2") {
-                    f->py2[idx] = e.readDouble() * _spatium1;
+                    f->py2[idx] = e.readDouble() * _spatium;
                 } else {
                     e.unknown();
                 }
