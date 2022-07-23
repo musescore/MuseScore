@@ -24,6 +24,7 @@
 #define MU_ENGRAVING_TYPESCONV_H
 
 #include "types/string.h"
+#include "types/translatablestring.h"
 #include "types.h"
 
 namespace mu::engraving {
@@ -153,7 +154,7 @@ public:
     static AsciiStringView toXml(BarLineType v);
     static BarLineType fromXml(const AsciiStringView& str, BarLineType def);
 
-    static const char* userName(TremoloType v);
+    static const TranslatableString& userName(TremoloType v);
     static String translatedUserName(TremoloType v);
     static AsciiStringView toXml(TremoloType v);
     static TremoloType fromXml(const AsciiStringView& str, TremoloType def);

@@ -1581,10 +1581,9 @@ static const std::array<Item<TremoloType>, 10> TREMOLO_TYPES = { {
     { TremoloType::C64,             "c64",      TranslatableString("engraving", "64th between notes") }
 } };
 
-//! TODO Return TranslatableString
-const char* TConv::userName(TremoloType v)
+const TranslatableString& TConv::userName(TremoloType v)
 {
-    return findUserNameByType<TremoloType>(TREMOLO_TYPES, v).str;
+    return findUserNameByType<TremoloType>(TREMOLO_TYPES, v);
 }
 
 String TConv::translatedUserName(TremoloType v)
