@@ -99,8 +99,9 @@ const char* PaletteCell::translationContext() const
     case ElementType::BREATH:
     case ElementType::FERMATA:
     case ElementType::SYMBOL:
-        // libmscore/sym.cpp, Sym::symUserNames
         return "engraving/sym";
+    case ElementType::CHORDLINE:
+        return "engraving";
     case ElementType::CLEF:
         // libmscore/clef.cpp, ClefInfo::clefTable[]
         return "clefTable";
@@ -124,9 +125,6 @@ const char* PaletteCell::translationContext() const
     case ElementType::VIBRATO:
         // libmscore/vibrato.cpp, vibratoTable[]
         return "vibratoType";
-    case ElementType::CHORDLINE:
-        // libmscore/chordline.cpp, scorelineNames[]
-        return "Ms";
     case ElementType::NOTEHEAD:
         // libmscore/note.cpp, noteHeadGroupNames[]
         return "noteheadnames";

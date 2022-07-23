@@ -1990,15 +1990,14 @@ static const std::array<Item<ChordLineType>, 6> CHORDLINE_TYPES = { {
     { ChordLineType::SCOOP,     "4",     TranslatableString("engraving", "Scoop") }
 } };
 
-//! TODO Return TranslatableString
-const char* TConv::userName(ChordLineType v)
+const TranslatableString& TConv::userName(ChordLineType v)
 {
-    return findUserNameByType<ChordLineType>(CHORDLINE_TYPES, v).str;
+    return findUserNameByType<ChordLineType>(CHORDLINE_TYPES, v);
 }
 
 String TConv::translatedUserName(ChordLineType v)
 {
-    return findUserNameByType<ChordLineType>(CHORDLINE_TYPES, v).translated();
+    return userName(v).translated();
 }
 
 AsciiStringView TConv::toXml(ChordLineType v)
