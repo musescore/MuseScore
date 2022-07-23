@@ -278,11 +278,12 @@ void AbstractInspectorModel::onPropertyValueChanged(const mu::engraving::Pid pid
 
         mu::engraving::PropertyFlags ps = element->propertyFlags(pid);
 
-        if (ps == mu::engraving::PropertyFlags::STYLED) {
-            ps = mu::engraving::PropertyFlags::UNSTYLED;
+        PropertyValue propValue = valueToElementUnits(pid, newValue, element);
+        if (ps != mu::engraving::PropertyFlags::NOSTYLE) {
+            ps = (propValue == element->propertyDefault(pid)) ? mu::engraving::PropertyFlags::STYLED
+                 : mu::engraving::PropertyFlags::UNSTYLED;
         }
 
-        PropertyValue propValue = valueToElementUnits(pid, newValue, element);
         element->undoChangeProperty(pid, propValue, ps);
     }
 
