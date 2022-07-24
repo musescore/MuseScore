@@ -555,8 +555,8 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
 
         LOGE() << "VALID SHORTCUT?";
         if (config.shortcut.isValid()) {
-            LOGE() << "VALID SHORTCUT";
             cell->shortcut = config.shortcut;
+            LOGE() << "VALID SHORTCUT: " + cell->shortcut.sequencesAsString();
         }
 
         _userPalette->itemDataChanged(srcIndex);
@@ -659,8 +659,7 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
 {
     if (m_isSearching) {
         m_mainPalette = m_searchFilterModel;
-    }
-    else {
+    } else {
         m_mainPalette = m_visibilityFilterModel;
     }
 
@@ -682,7 +681,7 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
             dispatcher()->reg(this, ac_name.toStdString(), [this, ac_name]() {
                 LOGE() << "You are trying to call: " << ac_name;
                 globalContext()->currentNotation()->interaction()->applyPaletteElement(umap[ac_name]);
-                });
+            });
         }
     }
 
@@ -1018,7 +1017,6 @@ void PaletteProvider::setUserPaletteTree(PaletteTreePtr tree)
 
     shortcutsRegister()->setShortcuts(toBeAdded);
     LOGE() << "In the end total palette cells: " << PaletteCell::allActions.size() << " and with valid shortcuts: " << toBeAdded.size();
-
 }
 
 void PaletteProvider::setDefaultPaletteTree(PaletteTreePtr tree)

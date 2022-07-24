@@ -51,6 +51,7 @@ StyledGridView {
     property bool enableAnimations: true
 
     property bool isInVisibleArea: true
+    property var currentCellIdx
 
     property NavigationPanel navigationPanel: null
     property int navigationRow: 0
@@ -223,16 +224,17 @@ StyledGridView {
     EditShortcutDialog {
         id: editShortcutDialog
 
-        onApplySequenceRequested: function(newSequence, shortcutAction) {
-            shortcutsModel.applySequenceToPalette(shortcutAction, newSequence, paletteView.currentCellIdx)
-
+        onApplySequenceRequested: function(newSequence, shortcutAction, conflictShortcutIndex) {
+            console.log("Applying to " + shortcutAction + " with " + newSequence)
+            shortcutsModel.applySequenceToPalette(shortcutAction, newSequence, paletteView.currentCellIdx, conflictShortcutIndex)
             paletteController.applyPaletteCellProperties(paletteView.currentCellIdx)
         }
 
         property bool canEditCurrentShortcut: Boolean(shortcutsModel.currentShortcut)
 
         function startEditShortcut(shortcut2change) {
-            editShortcutDialog.startEdit(shortcut2change, shortcutsModel.shortcuts(), true)
+            editShortcutDialog.clearConflicts()
+            editShortcutDialog.startEdit(shortcut2change, shortcutsModel.shortcuts())
         }
     }
 
@@ -655,8 +657,10 @@ StyledGridView {
                 onHandleMenuItem: {
                     switch(itemId) {
                     case "assign":
+                        console.log("RESPOND2")
                         paletteView.currentCellIdx = contextMenu.modelIndex
-                        console.log("Adding shortcut for: " + model.cellAction + " with ID:" << model.cellID)
+                        console.log("RESPOND2")
+                        console.log("Adding shortcut for: " + model.cellAction + " with ID:" + model.cellID)
                         editShortcutDialog.startEditShortcut(shortcutsModel.getShortcut(model.cellAction))
                         break
                     case "delshortcut":

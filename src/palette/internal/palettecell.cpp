@@ -190,14 +190,12 @@ bool PaletteCell::read(XmlReader& e)
             mag = e.readDouble();
         } else if (s == "tag") {
             tag = e.readText();
-        }
-        else if (s == "sctx") {
+        } else if (s == "sctx") {
             shortcut.context = e.readText().toStdString();
-        }
-        else if (s == "sseq") {
+        } else if (s == "sseq") {
             shortcut.sequences.push_back(e.readText().toStdString());
+            LOGE() << "Sequence found for: " << name << " as:" << shortcut.sequencesAsString();
         }
-
         // added on palettes rework
         // TODO: remove or leave to switch from using attributes later?
         else if (s == "custom") {
@@ -225,8 +223,7 @@ bool PaletteCell::read(XmlReader& e)
         }
     }
 
-    if (shortcut.context == "")
-    {
+    if (shortcut.context == "") {
         shortcut.context = "notation-focused";
     }
 

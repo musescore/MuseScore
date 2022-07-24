@@ -312,7 +312,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts, QModelInd
         bool isPaletteCellShortcut = palettePrefix.size() <= shortcut.action.size() && std::mismatch(
             palettePrefix.begin(), palettePrefix.end(), shortcut.action.begin(), shortcut.action.end()).first == palettePrefix.end();
         if (isPaletteCellShortcut) {
-            LOGE() << "We think this is a palette shortcut: " << shortcut.action;
+            //LOGE() << "We think this is a palette shortcut: " << shortcut.action;
             PaletteShortcuts.push_back(shortcut);
         }
         else {

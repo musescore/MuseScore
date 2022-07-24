@@ -30,10 +30,15 @@ import MuseScore.Shortcuts 1.0
 Dialog {
     id: root
 
-    signal applySequenceRequested(string newSequence, int conflictShortcutIndex)
+    signal applySequenceRequested(string newSequence, var shortcut2change, int conflictShortcutIndex)
+
+    function clearConflicts() {
+        model.clearConflicts()
+    }
 
     function startEdit(shortcut, allShortcuts) {
         model.load(shortcut, allShortcuts)
+        console.log(model.originAction + " is the action in editshortdialog.qml")
         open()
         content.forceActiveFocus()
     }
@@ -49,7 +54,7 @@ Dialog {
         id: model
 
         onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
-            root.applySequenceRequested(newSequence, conflictShortcutIndex)
+            root.applySequenceRequested(newSequence, model.originAction, conflictShortcutIndex)
         }
     }
 
