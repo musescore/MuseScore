@@ -2209,9 +2209,8 @@ void Note::setHeadHasParentheses(bool hasParentheses)
 
 void Note::setDotY(DirectionV pos)
 {
-    bool onLine = false;
     double y = 0;
-
+    bool onLine = !(line() & 1);
     if (staff()->isTabStaff(chord()->tick())) {
         // with TAB's, dotPosX is not set:
         // get dot X from width of fret text and use TAB default spacing
@@ -2219,38 +2218,129 @@ void Note::setDotY(DirectionV pos)
         const StaffType* tab = st->staffTypeForElement(this);
         if (tab->stemThrough()) {
             // if fret mark on lines, use standard processing
-            if (tab->onLines()) {
-                onLine = true;
-            } else {
+            if (!tab->onLines()) {
                 // if fret marks above lines, raise the dots by half line distance
                 y = -0.5;
+            }
+            if (pos == DirectionV::AUTO) {
+                bool oddVoice = voice() & 1;
+                y = oddVoice ? 0.5 : -0.5;
+            } else if (pos == DirectionV::UP) {
+                y = -0.5;
+            } else {
+                y = 0.5;
             }
         }
         // if stems beside staff, do nothing
         else {
             return;
         }
+    } else if (onLine) {
+        // NON-TAB
+        bool oddVoice = voice() & 1;
+        Chord* c = chord();
+        bool hasVoices = c->measure()->hasVoices(c->staffIdx(), c->tick(), c->ticks());
+        std::vector<Note*> topDownNotes;
+        std::vector<Note*> bottomUpNotes;
+        std::vector<size_t> anchoredDots;
+        // construct combined chords using the notes from overlapping chords
+        if (!hasVoices) {
+            // only this voice, so topDownNotes is just the notes in the chord
+            for (Note* note : c->notes()) {
+                if (note->line() & 1) {
+                    int newOffset = 0;
+                    bool adjustDown = (c->voice() & 1) && !c->up();
+                    if (!anchoredDots.empty() && anchoredDots.back() == note->line()) {
+                        if (anchoredDots.size() >= 1 && anchoredDots[anchoredDots.size() - 2] == note->line() + adjustDown ? 2 : -2) {
+                            newOffset = adjustDown ? -2 : 2;
+                        } else {
+                            newOffset = adjustDown ? 2 : -2;
+                        }
+                    }
+                    anchoredDots.push_back(note->line() + newOffset);
+                } else {
+                    topDownNotes.push_back(note);
+                }
+            }
+        } else {
+            // Get a list of notes in this staff that adjust dots from top down,
+            // bottom up, and also start our locked-in dot list by adding all lines where dots are
+            // guaranteed
+            Measure* m = c->measure();
+            size_t firstVoice = c->track() - c->voice();
+            for (size_t i = firstVoice; i < firstVoice + VOICES; ++i) {
+                if (Chord* voiceChord = m->findChord(c->tick(), i)) {
+                    /*if (voiceChord->dots() == 0) {
+                        continue;
+                    }*/
+                    bool startFromTop = !((voiceChord->voice() & 1) && !voiceChord->up());
+                    if (startFromTop) {
+                        for (Note* note : voiceChord->notes()) {
+                            if (note->line() & 1) {
+                                anchoredDots.push_back(note->line());
+                            } else {
+                                topDownNotes.push_back(note);
+                            }
+                        }
+                    } else {
+                        for (Note* note : voiceChord->notes()) {
+                            if (note->line() & 1) {
+                                anchoredDots.push_back(note->line());
+                            } else {
+                                bottomUpNotes.push_back(note);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // our two lists now contain only notes that are on lines
+        std::sort(topDownNotes.begin(), topDownNotes.end(),
+                  [](Note* n1, Note* n2) { return n1->line() < n2->line(); });
+        std::sort(bottomUpNotes.begin(), bottomUpNotes.end(),
+                  [](Note* n1, Note* n2) { return n1->line() > n2->line(); });
+
+        bool finished = false;
+        for (Note* note : topDownNotes) {
+            int dotMove = -1;
+            if (std::find(anchoredDots.begin(), anchoredDots.end(), note->line() + dotMove) != anchoredDots.end()) {
+                dotMove = 1; // if the desired space is taken, adjust downwards
+            }
+            if (note == this) {
+                y = dotMove / 2.0;
+                finished = true;
+                break;
+            }
+            anchoredDots.push_back(note->line() + dotMove);
+        }
+        if (!finished) {
+            for (Note* note : bottomUpNotes) {
+                int dotMove = 1;
+                if (std::find(anchoredDots.begin(), anchoredDots.end(), note->line() + dotMove) != anchoredDots.end()) {
+                    dotMove = -1; // if the desired space is taken, adjust upwards
+                }
+                if (note == this) {
+                    y = dotMove / 2.0;
+                    finished = true;
+                    break;
+                }
+                anchoredDots.push_back(note->line() + dotMove);
+            }
+        }
     } else {
-        onLine = !(line() & 1);
+        // on a space; usually this means the dot is on this same line, but there is an exception
+        // for a unison within the same chord.
+        for (Note* note : chord()->notes()) {
+            if (note == this) {
+                break;
+            }
+            if (note->line() == _line) {
+                bool adjustDown = (chord()->voice() & 1) && !chord()->up();
+                y = adjustDown ? 1.0 : -1.0;
+            }
+        }
     }
 
-    bool oddVoice = voice() & 1;
-    if (onLine) {
-        // displace dots by half spatium up or down according to voice
-        if (pos == DirectionV::AUTO) {
-            y = oddVoice ? 0.5 : -0.5;
-        } else if (pos == DirectionV::UP) {
-            y = -0.5;
-        } else {
-            y = 0.5;
-        }
-    } else {
-        if (pos == DirectionV::UP && !oddVoice) {
-            y -= 1.0;
-        } else if (pos == DirectionV::DOWN && oddVoice) {
-            y += 1.0;
-        }
-    }
     y *= spatium() * staff()->lineDistance(tick());
 
     // apply to dots
