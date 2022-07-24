@@ -26,26 +26,40 @@
 
 #include "types/string.h"
 
-#ifndef NO_QT_SUPPORT
-#include <QString>
-#endif
-
 namespace mu {
 //! Note: in order to make the string visible for `lupdate`,
 //! you must write TranslatableString(...) explicitly.
-struct TranslatableString {
+class TranslatableString
+{
+public:
     const char* context = nullptr;
-    const char* str = nullptr;
+    String str;
     const char* disambiguation = nullptr;
 
     TranslatableString() = default;
     TranslatableString(const char* context, const char* str, const char* disambiguation = nullptr)
+        : context(context), str(String::fromUtf8(str)), disambiguation(disambiguation) {}
+    TranslatableString(const char* context, const String& str, const char* disambiguation = nullptr)
         : context(context), str(str), disambiguation(disambiguation) {}
+
+    static TranslatableString untranslatable(const char* str)
+    {
+        return TranslatableString(nullptr, str, nullptr);
+    }
+
+    static TranslatableString untranslatable(const String& str)
+    {
+        return TranslatableString(nullptr, str, nullptr);
+    }
 
     inline bool isValid() const
     {
-        // Not null or empty
-        return context && context[0] && str && str[0];
+        return !str.empty();
+    }
+
+    inline bool isTranslatable() const
+    {
+        return context && context[0];
     }
 
     inline String translated(int n = -1) const
@@ -54,7 +68,7 @@ struct TranslatableString {
             return {};
         }
 
-        String res = mtrc(context, str, disambiguation, n);
+        String res = isTranslatable() ? mtrc(context, str, disambiguation, n) : str;
 
         for (auto arg : args) {
             arg->apply(res);
@@ -78,9 +92,6 @@ private:
     template<typename ... Args>
     struct Arg;
 
-    template<typename ... Args>
-    Arg(const Args&...)->Arg<std::enable_if_t<std::is_constructible_v<String, Args...>, String> >;
-
     std::vector<std::shared_ptr<const IArg> > args;
 };
 
@@ -97,7 +108,17 @@ struct TranslatableString::Arg : public TranslatableString::IArg
 
     void apply(String& res) const override
     {
-        res = std::apply([&](const Args&... args) { return res.arg(args ...); }, args);
+        res = std::apply([&](const Args&... args) { return res.arg(makeArg(args)...); }, args);
+    }
+
+    template<typename T>
+    static auto makeArg(T&& t)
+    {
+        if constexpr (std::is_same_v<T, TranslatableString>) {
+            return t.translated();
+        } else {
+            return std::forward<T>(t);
+        }
     }
 };
 
@@ -155,8 +176,7 @@ template<typename ... Args>
 TranslatableString TranslatableString::arg(const Args& ... args)
 {
     TranslatableString res = *this;
-    auto* a = new Arg(args ...);
-    res.args.push_back(std::shared_ptr<std::decay_t<decltype(*a)> >(a));
+    res.args.push_back(std::shared_ptr<IArg>(new Arg(args ...)));
     return res;
 }
 
@@ -164,8 +184,7 @@ template<typename ... Args>
 TranslatableString TranslatableString::arg(Args&& ... args)
 {
     TranslatableString res = *this;
-    auto* a = new Arg(std::forward<Args>(args) ...);
-    res.args.push_back(std::shared_ptr<std::decay_t<decltype(*a)> >(a));
+    res.args.push_back(std::shared_ptr<IArg>(new Arg(std::forward<Args>(args) ...)));
     return res;
 }
 }

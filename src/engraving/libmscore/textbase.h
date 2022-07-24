@@ -432,7 +432,7 @@ public:
     String screenReaderInfo() const override;
 
     int subtype() const override;
-    String subtypeName() const override;
+    TranslatableString subtypeUserName() const override;
 
     std::list<TextFragment> fragmentList() const;   // for MusicXML formatted export
 

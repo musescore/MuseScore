@@ -24,6 +24,7 @@
 
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "infrastructure/symbolfont.h"
 
@@ -296,9 +297,9 @@ void Accidental::write(XmlWriter& xml) const
 //   subTypeUserName
 //---------------------------------------------------------
 
-String Accidental::subtypeUserName() const
+TranslatableString Accidental::subtypeUserName() const
 {
-    return SymNames::translatedUserNameForSymId(symbol());
+    return TranslatableString("engraving/sym", SymNames::userNameForSymId(symbol()));
 }
 
 //---------------------------------------------------------
@@ -654,6 +655,6 @@ bool Accidental::setProperty(Pid propertyId, const PropertyValue& v)
 
 String Accidental::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), Accidental::subtypeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }
 }

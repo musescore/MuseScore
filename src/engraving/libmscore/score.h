@@ -915,7 +915,7 @@ public:
     int styleI(Sid idx) const { return style().styleI(idx); }
 
     void setStyleValue(Sid sid, const PropertyValue& value) { style().set(sid, value); }
-    String getTextStyleUserName(TextStyleType tid);
+    TranslatableString getTextStyleUserName(TextStyleType tid);
     double spatium() const { return styleD(Sid::spatium); }
     void setSpatium(double v) { setStyleValue(Sid::spatium, v); }
 

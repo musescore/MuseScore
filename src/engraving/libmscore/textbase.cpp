@@ -29,6 +29,7 @@
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "infrastructure/symbolfonts.h"
 
@@ -2602,7 +2603,7 @@ String TextBase::accessibleInfo() const
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:
-        rez = score() ? score()->getTextStyleUserName(textStyleType()) : TConv::translatedUserName(textStyleType());
+        rez = translatedSubtypeUserName();
         break;
     default:
         rez = EngravingItem::accessibleInfo();
@@ -2632,7 +2633,7 @@ String TextBase::screenReaderInfo() const
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:
-        rez = score() ? score()->getTextStyleUserName(textStyleType()) : TConv::translatedUserName(textStyleType());
+        rez = translatedSubtypeUserName();
         break;
     default:
         rez = EngravingItem::accessibleInfo();
@@ -2652,12 +2653,12 @@ int TextBase::subtype() const
 }
 
 //---------------------------------------------------------
-//   subtypeName
+//   subtypeUserName
 //---------------------------------------------------------
 
-String TextBase::subtypeName() const
+TranslatableString TextBase::subtypeUserName() const
 {
-    return score() ? score()->getTextStyleUserName(textStyleType()) : TConv::translatedUserName(textStyleType());
+    return score() ? score()->getTextStyleUserName(textStyleType()) : TConv::userName(textStyleType());
 }
 
 //---------------------------------------------------------

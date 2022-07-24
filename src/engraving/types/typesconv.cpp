@@ -250,9 +250,9 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::DUMMY,                "Dummy",                TranslatableString("engraving", "Dummy") },
 };
 
-String TConv::translatedUserName(ElementType v)
+const TranslatableString& TConv::userName(ElementType v)
 {
-    return findUserNameByType<ElementType>(ELEMENT_TYPES, v).translated();
+    return findUserNameByType<ElementType>(ELEMENT_TYPES, v);
 }
 
 AsciiStringView TConv::toXml(ElementType v)
@@ -483,6 +483,11 @@ static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
     { NoteHeadGroup::HEAD_CUSTOM,       "custom",       TranslatableString("engraving",  "Custom") }
 };
 
+const TranslatableString& TConv::userName(NoteHeadGroup v)
+{
+    return findUserNameByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v);
+}
+
 String TConv::translatedUserName(NoteHeadGroup v)
 {
     return findUserNameByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v).translated();
@@ -537,6 +542,11 @@ static const std::vector<Item<ClefType> > CLEF_TYPES = {
     { ClefType::TAB_SERIF,  "TAB2",     TranslatableString("engraving/cleftype", "Tablature Serif") },
     { ClefType::TAB4_SERIF, "TAB4_SERIF", TranslatableString("engraving/cleftype", "Tablature Serif 4 lines") },
 };
+
+const TranslatableString& TConv::userName(ClefType v)
+{
+    return findUserNameByType<ClefType>(CLEF_TYPES, v);
+}
 
 String TConv::translatedUserName(ClefType v)
 {
@@ -948,6 +958,11 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::USER11,            "user_11",              TranslatableString("engraving", "User-11") },
     { TextStyleType::USER12,            "user_12",              TranslatableString("engraving", "User-12") },
 };
+
+const TranslatableString& TConv::userName(TextStyleType v)
+{
+    return findUserNameByType<TextStyleType>(TEXTSTYLE_TYPES, v);
+}
 
 String TConv::translatedUserName(TextStyleType v)
 {
@@ -1570,25 +1585,20 @@ BarLineType TConv::fromXml(const AsciiStringView& tag, BarLineType def)
 
 static const std::array<Item<TremoloType>, 10> TREMOLO_TYPES = { {
     { TremoloType::INVALID_TREMOLO, "" },
-    { TremoloType::R8,              "r8",       TranslatableString("engraving", "Eighth through stem") },
-    { TremoloType::R16,             "r16",      TranslatableString("engraving", "16th through stem") },
-    { TremoloType::R32,             "r32",      TranslatableString("engraving", "32nd through stem") },
-    { TremoloType::R64,             "r64",      TranslatableString("engraving", "64th through stem") },
-    { TremoloType::BUZZ_ROLL,       "buzzroll", TranslatableString("engraving", "Buzz roll") },
-    { TremoloType::C8,              "c8",       TranslatableString("engraving", "Eighth between notes") },
-    { TremoloType::C16,             "c16",      TranslatableString("engraving", "16th between notes") },
-    { TremoloType::C32,             "c32",      TranslatableString("engraving", "32nd between notes") },
-    { TremoloType::C64,             "c64",      TranslatableString("engraving", "64th between notes") }
+    { TremoloType::R8,              "r8",       TranslatableString("engraving/tremolotype", "Eighth through stem") },
+    { TremoloType::R16,             "r16",      TranslatableString("engraving/tremolotype", "16th through stem") },
+    { TremoloType::R32,             "r32",      TranslatableString("engraving/tremolotype", "32nd through stem") },
+    { TremoloType::R64,             "r64",      TranslatableString("engraving/tremolotype", "64th through stem") },
+    { TremoloType::BUZZ_ROLL,       "buzzroll", TranslatableString("engraving/tremolotype", "Buzz roll") },
+    { TremoloType::C8,              "c8",       TranslatableString("engraving/tremolotype", "Eighth between notes") },
+    { TremoloType::C16,             "c16",      TranslatableString("engraving/tremolotype", "16th between notes") },
+    { TremoloType::C32,             "c32",      TranslatableString("engraving/tremolotype", "32nd between notes") },
+    { TremoloType::C64,             "c64",      TranslatableString("engraving/tremolotype", "64th between notes") }
 } };
 
 const TranslatableString& TConv::userName(TremoloType v)
 {
     return findUserNameByType<TremoloType>(TREMOLO_TYPES, v);
-}
-
-String TConv::translatedUserName(TremoloType v)
-{
-    return findUserNameByType<TremoloType>(TREMOLO_TYPES, v).translated();
 }
 
 AsciiStringView TConv::toXml(TremoloType v)
@@ -1642,9 +1652,9 @@ static const std::array<Item<ArpeggioType>, 6> ARPEGGIO_TYPES = { {
     { ArpeggioType::DOWN_STRAIGHT,  "5",     TranslatableString("engraving", "Down arpeggio straight") }
 } };
 
-String TConv::translatedUserName(ArpeggioType v)
+const TranslatableString& TConv::userName(ArpeggioType v)
 {
-    return findUserNameByType<ArpeggioType>(ARPEGGIO_TYPES, v).translated();
+    return findUserNameByType<ArpeggioType>(ARPEGGIO_TYPES, v);
 }
 
 AsciiStringView TConv::toXml(ArpeggioType v)
@@ -2118,11 +2128,6 @@ const TranslatableString& TConv::userName(GlissandoType v)
     return findUserNameByType<GlissandoType>(GLISSANDO_TYPES, v);
 }
 
-String TConv::translatedUserName(GlissandoType v)
-{
-    return findUserNameByType<GlissandoType>(GLISSANDO_TYPES, v).translated();
-}
-
 AsciiStringView TConv::toXml(GlissandoType v)
 {
     return findXmlTagByType<GlissandoType>(GLISSANDO_TYPES, v);
@@ -2217,10 +2222,10 @@ StaffGroup TConv::fromXml(const AsciiStringView& tag, StaffGroup def)
 }
 
 const std::array<Item<TrillType>, 4> TRILL_TYPES = { {
-    { TrillType::TRILL_LINE,      "trill",      TranslatableString("engraving", "Trill line") },
-    { TrillType::UPPRALL_LINE,    "upprall",    TranslatableString("engraving", "Upprall line") },
-    { TrillType::DOWNPRALL_LINE,  "downprall",  TranslatableString("engraving", "Downprall line") },
-    { TrillType::PRALLPRALL_LINE, "prallprall", TranslatableString("engraving", "Prallprall line") }
+    { TrillType::TRILL_LINE,      "trill",      TranslatableString("engraving/trilltype", "Trill line") },
+    { TrillType::UPPRALL_LINE,    "upprall",    TranslatableString("engraving/trilltype", "Upprall line") },
+    { TrillType::DOWNPRALL_LINE,  "downprall",  TranslatableString("engraving/trilltype", "Downprall line") },
+    { TrillType::PRALLPRALL_LINE, "prallprall", TranslatableString("engraving/trilltype", "Prallprall line") }
 } };
 
 const TranslatableString& TConv::userName(TrillType v)
@@ -2260,10 +2265,10 @@ TrillType TConv::fromXml(const AsciiStringView& tag, TrillType def)
 }
 
 const std::array<Item<VibratoType>, 4> VIBRATO_TYPES = { {
-    { VibratoType::GUITAR_VIBRATO,        "guitarVibrato",       TranslatableString("engraving", "Guitar vibrato") },
-    { VibratoType::GUITAR_VIBRATO_WIDE,   "guitarVibratoWide",   TranslatableString("engraving", "Guitar vibrato wide") },
-    { VibratoType::VIBRATO_SAWTOOTH,      "vibratoSawtooth",     TranslatableString("engraving", "Vibrato sawtooth") },
-    { VibratoType::VIBRATO_SAWTOOTH_WIDE, "vibratoSawtoothWide", TranslatableString("engraving", "Tremolo sawtooth wide") }
+    { VibratoType::GUITAR_VIBRATO,        "guitarVibrato",       TranslatableString("engraving/vibratotype", "Guitar vibrato") },
+    { VibratoType::GUITAR_VIBRATO_WIDE,   "guitarVibratoWide",   TranslatableString("engraving/vibratotype", "Guitar vibrato wide") },
+    { VibratoType::VIBRATO_SAWTOOTH,      "vibratoSawtooth",     TranslatableString("engraving/vibratotype", "Vibrato sawtooth") },
+    { VibratoType::VIBRATO_SAWTOOTH_WIDE, "vibratoSawtoothWide", TranslatableString("engraving/vibratotype", "Tremolo sawtooth wide") }
 } };
 
 const TranslatableString& TConv::userName(VibratoType v)

@@ -27,6 +27,7 @@
 
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "score.h"
@@ -783,9 +784,14 @@ const char* EngravingObject::typeName() const
     return TConv::toXml(type()).ascii();
 }
 
-String EngravingObject::typeUserName() const
+TranslatableString EngravingObject::typeUserName() const
 {
-    return TConv::translatedUserName(type());
+    return TConv::userName(type());
+}
+
+String EngravingObject::translatedTypeUserName() const
+{
+    return typeUserName().translated();
 }
 
 //---------------------------------------------------------

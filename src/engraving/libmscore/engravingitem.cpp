@@ -36,6 +36,7 @@
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -312,9 +313,14 @@ double EngravingItem::magS() const
 //   name
 //---------------------------------------------------------
 
-String EngravingItem::subtypeName() const
+TranslatableString EngravingItem::subtypeUserName() const
 {
-    return String();
+    return {};
+}
+
+String EngravingItem::translatedSubtypeUserName() const
+{
+    return subtypeUserName().translated();
 }
 
 //---------------------------------------------------------
@@ -2003,7 +2009,7 @@ AccessibleItemPtr EngravingItem::accessible() const
 
 String EngravingItem::accessibleInfo() const
 {
-    return EngravingItem::typeUserName();
+    return EngravingItem::translatedTypeUserName();
 }
 
 //---------------------------------------------------------
