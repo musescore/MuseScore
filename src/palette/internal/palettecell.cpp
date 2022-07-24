@@ -290,6 +290,7 @@ void PaletteCell::write(XmlWriter& xml) const
 
     if (shortcut.isValid()) {
         for (std::string seq : shortcut.sequences) {
+            LOGE() << "Sequence written for: " << name << " as:" << shortcut.sequencesAsString();
             xml.tag("sseq", QString::fromStdString(seq));
         }
 

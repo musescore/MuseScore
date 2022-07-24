@@ -532,6 +532,25 @@ void UserPaletteController::applyPaletteCellProperties(const QModelIndex& index)
     _userPalette->itemDataChanged(srcindex.parent());
 }
 
+bool UserPaletteController::connectOnPaletteCellConfigChange(const QModelIndex& index)
+{
+    QModelIndex srcIndex = convertProxyIndex(index, _userPalette);
+    PaletteCellPtr cell = _userPalette->findCell(srcIndex);
+    if (!cell) {
+        return false;
+    }
+
+    configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
+        [this, srcIndex, cell](
+            const IPaletteConfiguration::PaletteCellConfig& config) {
+                modifyCellfromConfig(cell, config);
+
+                _userPalette->itemDataChanged(srcIndex);
+                _userPalette->itemDataChanged(srcIndex.parent());
+        });
+    return true;
+}
+
 void UserPaletteController::editCellProperties(const QModelIndex& index)
 {
     if (!canEdit(index)) {
@@ -547,17 +566,7 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
     configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
                                                               [this, srcIndex, cell](
                                                                   const IPaletteConfiguration::PaletteCellConfig& config) {
-        cell->name = config.name;
-        cell->mag = config.scale;
-        cell->drawStaff = config.drawStaff;
-        cell->xoffset = config.xOffset;
-        cell->yoffset = config.yOffset;
-
-        LOGE() << "VALID SHORTCUT?";
-        if (config.shortcut.isValid()) {
-            cell->shortcut = config.shortcut;
-            LOGE() << "VALID SHORTCUT: " + cell->shortcut.sequencesAsString();
-        }
+        modifyCellfromConfig(cell, config);
 
         _userPalette->itemDataChanged(srcIndex);
         _userPalette->itemDataChanged(srcIndex.parent());
@@ -576,6 +585,22 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
                   .arg(QString(document.toJson()));
 
     interactive()->open(uri.toStdString());
+}
+
+void UserPaletteController::modifyCellfromConfig(const mu::palette::PaletteCellPtr& cell,
+                                                 const mu::palette::IPaletteConfiguration::PaletteCellConfig& config)
+{
+    cell->name = config.name;
+    cell->mag = config.scale;
+    cell->drawStaff = config.drawStaff;
+    cell->xoffset = config.xOffset;
+    cell->yoffset = config.yOffset;
+
+    LOGE() << "Checking validity of shortcut";
+    if (config.shortcut.isValid()) {
+        cell->shortcut = config.shortcut;
+        LOGE() << "Valid Shortcut: " + cell->shortcut.sequencesAsString();
+    }
 }
 
 bool UserPaletteController::canEdit(const QModelIndex& index) const
