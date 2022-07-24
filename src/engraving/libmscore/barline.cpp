@@ -266,10 +266,10 @@ const std::vector<BarLineTableItem> BarLine::barLineTable {
 };
 
 //---------------------------------------------------------
-//   userTypeName
+//   translatedUserTypeName
 //---------------------------------------------------------
 
-String BarLine::userTypeName(BarLineType t)
+String BarLine::translatedUserTypeName(BarLineType t)
 {
     for (const auto& i : barLineTable) {
         if (i.type == t) {
@@ -1587,7 +1587,7 @@ EngravingItem* BarLine::prevSegmentElement()
 
 String BarLine::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), BarLine::userTypeName(barLineType()));
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), BarLine::translatedUserTypeName(barLineType()));
 }
 
 //---------------------------------------------------------

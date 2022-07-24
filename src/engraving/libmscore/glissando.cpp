@@ -218,9 +218,9 @@ Glissando::Glissando(const Glissando& g)
     _fontStyle      = g._fontStyle;
 }
 
-String Glissando::glissandoTypeName() const
+const TranslatableString& Glissando::glissandoTypeName() const
 {
-    return TConv::translatedUserName(glissandoType());
+    return TConv::userName(glissandoType());
 }
 
 //---------------------------------------------------------

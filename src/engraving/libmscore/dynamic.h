@@ -71,7 +71,8 @@ public:
 
     DynamicType dynamicType() const { return _dynamicType; }
     int subtype() const override { return static_cast<int>(_dynamicType); }
-    String subtypeName() const override;
+    TranslatableString subtypeUserName() const override;
+    String translatedSubtypeUserName() const override;
 
     void layout() override;
     void write(XmlWriter& xml) const override;

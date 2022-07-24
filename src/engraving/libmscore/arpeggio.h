@@ -72,7 +72,7 @@ public:
 
     ArpeggioType arpeggioType() const { return _arpeggioType; }
     void setArpeggioType(ArpeggioType v) { _arpeggioType = v; }
-    String arpeggioTypeName() const;
+    const TranslatableString& arpeggioTypeName() const;
 
     Chord* chord() const { return (Chord*)explicitParent(); }
 

@@ -223,7 +223,7 @@ public:
     mu::PointF calculateBoundingRect();
     double xShapeOffset() const;
 
-    String typeUserName() const override;
+    TranslatableString typeUserName() const override;
     String accessibleInfo() const override;
     String generateScreenReaderInfo() const;
     String screenReaderInfo() const override;

@@ -80,7 +80,7 @@ public:
     static Note* guessInitialNote(Chord* chord);
     static Note* guessFinalNote(Chord* chord, Note* startNote);
 
-    String glissandoTypeName() const;
+    const TranslatableString& glissandoTypeName() const;
 
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }

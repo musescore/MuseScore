@@ -1392,7 +1392,7 @@ void Timeline::barlineMeta(Segment* seg, int* stagger, int pos)
         case BarLineType::REVERSE_END:
         case BarLineType::HEAVY:
         case BarLineType::DOUBLE_HEAVY:
-            repeatText = BarLine::userTypeName(barline->barLineType());
+            repeatText = BarLine::translatedUserTypeName(barline->barLineType());
             break;
         case BarLineType::END_START_REPEAT:
         // actually an end repeat followed by a start repeat, so nothing needs to be done here
@@ -1593,13 +1593,13 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
     QGraphicsPixmapItem* graphicsPixmapItem = nullptr;
 
     std::map<QString, BarLineType> barLineTypes = {
-        { BarLine::userTypeName(BarLineType::START_REPEAT), BarLineType::START_REPEAT },
-        { BarLine::userTypeName(BarLineType::END_REPEAT), BarLineType::END_REPEAT },
-        { BarLine::userTypeName(BarLineType::END), BarLineType::END },
-        { BarLine::userTypeName(BarLineType::DOUBLE), BarLineType::DOUBLE },
-        { BarLine::userTypeName(BarLineType::REVERSE_END), BarLineType::REVERSE_END },
-        { BarLine::userTypeName(BarLineType::HEAVY), BarLineType::HEAVY },
-        { BarLine::userTypeName(BarLineType::DOUBLE_HEAVY), BarLineType::DOUBLE_HEAVY },
+        { BarLine::translatedUserTypeName(BarLineType::START_REPEAT), BarLineType::START_REPEAT },
+        { BarLine::translatedUserTypeName(BarLineType::END_REPEAT), BarLineType::END_REPEAT },
+        { BarLine::translatedUserTypeName(BarLineType::END), BarLineType::END },
+        { BarLine::translatedUserTypeName(BarLineType::DOUBLE), BarLineType::DOUBLE },
+        { BarLine::translatedUserTypeName(BarLineType::REVERSE_END), BarLineType::REVERSE_END },
+        { BarLine::translatedUserTypeName(BarLineType::HEAVY), BarLineType::HEAVY },
+        { BarLine::translatedUserTypeName(BarLineType::DOUBLE_HEAVY), BarLineType::DOUBLE_HEAVY },
     };
 
     BarLineType barLineType = barLineTypes[metaText];

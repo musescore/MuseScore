@@ -24,8 +24,11 @@
 #define MU_ENGRAVING_TYPESCONV_H
 
 #include "types/string.h"
-#include "types/translatablestring.h"
 #include "types.h"
+
+namespace mu {
+class TranslatableString;
+}
 
 namespace mu::engraving {
 class TConv
@@ -36,7 +39,7 @@ public:
     static String toXml(const std::vector<int>& v);
     static std::vector<int> fromXml(const String& tag, const std::vector<int>& def);
 
-    static String translatedUserName(ElementType v);
+    static const TranslatableString& userName(ElementType v);
     static AsciiStringView toXml(ElementType v);
     static ElementType fromXml(const AsciiStringView& tag, ElementType def, bool silent = false);
 
@@ -59,10 +62,12 @@ public:
     static String translatedUserName(NoteHeadScheme v);
     static AsciiStringView toXml(NoteHeadScheme v);
     static NoteHeadScheme fromXml(const AsciiStringView& tag, NoteHeadScheme def);
+    static const TranslatableString& userName(NoteHeadGroup v);
     static String translatedUserName(NoteHeadGroup v);
     static AsciiStringView toXml(NoteHeadGroup v);
     static NoteHeadGroup fromXml(const AsciiStringView& tag, NoteHeadGroup def);
 
+    static const TranslatableString& userName(ClefType v);
     static String translatedUserName(ClefType v);
     static AsciiStringView toXml(ClefType v);
     static ClefType fromXml(const AsciiStringView& tag, ClefType def);
@@ -91,6 +96,7 @@ public:
     static AsciiStringView toXml(KeyMode v);
     static KeyMode fromXml(const AsciiStringView& tag, KeyMode def);
 
+    static const TranslatableString& userName(TextStyleType v);
     static String translatedUserName(TextStyleType v);
     static AsciiStringView toXml(TextStyleType v);
     static TextStyleType fromXml(const AsciiStringView& tag, TextStyleType def);
@@ -155,14 +161,13 @@ public:
     static BarLineType fromXml(const AsciiStringView& str, BarLineType def);
 
     static const TranslatableString& userName(TremoloType v);
-    static String translatedUserName(TremoloType v);
     static AsciiStringView toXml(TremoloType v);
     static TremoloType fromXml(const AsciiStringView& str, TremoloType def);
 
     static AsciiStringView toXml(BracketType v);
     static BracketType fromXml(const AsciiStringView& str, BracketType def);
 
-    static String translatedUserName(ArpeggioType v);
+    static const TranslatableString& userName(ArpeggioType v);
     static AsciiStringView toXml(ArpeggioType v);
     static ArpeggioType fromXml(const AsciiStringView& tag, ArpeggioType def);
 
@@ -181,7 +186,6 @@ public:
     static const char* userName(DrumNum v);
 
     static const TranslatableString& userName(GlissandoType v);
-    static String translatedUserName(GlissandoType v);
     static AsciiStringView toXml(GlissandoType v);
     static GlissandoType fromXml(const AsciiStringView& tag, GlissandoType def);
 

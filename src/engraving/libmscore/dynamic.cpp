@@ -22,6 +22,7 @@
 #include "dynamic.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "dynamichairpingroup.h"
@@ -388,7 +389,12 @@ String Dynamic::dynamicText(DynamicType t)
     return String::fromUtf8(dynList[int(t)].text);
 }
 
-String Dynamic::subtypeName() const
+TranslatableString Dynamic::subtypeUserName() const
+{
+    return TranslatableString::untranslatable(TConv::toXml(dynamicType()).ascii());
+}
+
+String Dynamic::translatedSubtypeUserName() const
 {
     return String::fromAscii(TConv::toXml(dynamicType()).ascii());
 }

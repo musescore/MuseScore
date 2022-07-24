@@ -91,46 +91,41 @@ QString PaletteCell::makeId()
 
 const char* PaletteCell::translationContext() const
 {
+    // Keep in sync with PaletteCreator and all element types
     const ElementType type = element ? element->type() : ElementType::INVALID;
     switch (type) {
+    case ElementType::ACTION_ICON:
+        return "action";
+    case ElementType::CHORDLINE:
+    case ElementType::HARMONY:
+    case ElementType::JUMP:
+    case ElementType::KEYSIG:
+    case ElementType::MARKER:
+        return "engraving";
+    case ElementType::BAGPIPE_EMBELLISHMENT:
+        return "engraving/bagpipeembellishment";
+    case ElementType::CLEF:
+        return "engraving/cleftype";
+    case ElementType::NOTEHEAD:
+        return "engraving/noteheadgroup";
     case ElementType::ACCIDENTAL:
     case ElementType::ARTICULATION:
     case ElementType::BAR_LINE:
     case ElementType::BREATH:
     case ElementType::FERMATA:
+    case ElementType::MEASURE_REPEAT:
     case ElementType::SYMBOL:
         return "engraving/sym";
-    case ElementType::CHORDLINE:
-        return "engraving";
-    case ElementType::CLEF:
-        // libmscore/clef.cpp, ClefInfo::clefTable[]
-        return "clefTable";
-    case ElementType::KEYSIG:
-        // libmscore/keysig.cpp, keyNames[]
-        return "MuseScore";
-    case ElementType::MARKER:
-        // libmscore/marker.cpp, markerTypeTable[]
-        return "markerType";
-    case ElementType::JUMP:
-        // libmscore/jump.cpp, jumpTypeTable[]
-        return "jumpType";
+    case ElementType::TIMESIG:
+        return "engraving/timesig";
     case ElementType::TREMOLO:
-        // libmscore/tremolo.cpp, tremoloName[]
-        return "Tremolo";
-    case ElementType::BAGPIPE_EMBELLISHMENT:
-        return "engraving/bagpipeembellishment";
+        return "engraving/tremolotype";
     case ElementType::TRILL:
-        // libmscore/trill.cpp, trillTable[]
-        return "trillType";
+        return "engraving/trilltype";
+    case ElementType::TRIPLET_FEEL:
+        return "engraving/tripletfeel";
     case ElementType::VIBRATO:
-        // libmscore/vibrato.cpp, vibratoTable[]
-        return "vibratoType";
-    case ElementType::NOTEHEAD:
-        // libmscore/note.cpp, noteHeadGroupNames[]
-        return "noteheadnames";
-    case ElementType::ACTION_ICON:
-        // mscore/shortcut.cpp, Shortcut::_sc[]
-        return "action";
+        return "engraving/vibratotype";
     default:
         break;
     }
@@ -303,7 +298,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
         }
     }
 
-    const String name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyText() : element->typeUserName();
+    const String name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyText() : element->translatedTypeUserName();
 
     return std::make_shared<PaletteCell>(element, name);
 }

@@ -51,7 +51,7 @@ public:
     TripletFeelType getTripletFeelType() const { return m_tripletFeelType; }
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid id) const override;
-    String typeUserName() const override;
+    TranslatableString subtypeUserName() const override;
     String accessibleInfo() const override;
 };
 }     // namespace mu::engraving

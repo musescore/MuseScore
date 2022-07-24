@@ -331,7 +331,7 @@ public:
     void setHeadType(NoteHeadType t);
 
     int subtype() const override { return int(_headGroup); }
-    String subtypeName() const override;
+    TranslatableString subtypeUserName() const override;
 
     void setPitch(int val);
     void setPitch(int pitch, int tpc1, int tpc2);
