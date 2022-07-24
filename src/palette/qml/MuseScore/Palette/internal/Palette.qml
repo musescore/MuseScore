@@ -666,10 +666,20 @@ StyledGridView {
                         break
                     case "assign":
                         paletteView.currentCellIdx = contextMenu.modelIndex
+                        if(!paletteView.paletteController.connectOnPaletteCellConfigChange(contextMenu.modelIndex)) {
+                            console.log("Prepare failed")
+                            break
+                        }
+
                         console.log("Adding shortcut for: " + model.cellAction + " with ID:" + model.cellID)
                         editShortcutDialog.startEditShortcut(shortcutsModel.getShortcut(model.cellAction))
                         break
                     case "delshortcut":
+                        if(!paletteView.paletteController.connectOnPaletteCellConfigChange(contextMenu.modelIndex)) {
+                            console.log("Prepare failed")
+                            break
+                        }
+
                         shortcutsModel.clearSequenceOfShortcut(model.cellAction)
                         shortcutsModel.apply()
                         break

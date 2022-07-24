@@ -335,10 +335,6 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts, QModelInd
         config.idx = cellIdx;
 
         for (auto shrtct : PaletteShortcuts) {
-            if (!shrtct.isValid()) {
-                continue;
-            }
-
             std::string cellId = "";
 
             for (int i = palettePrefix.length(); i < shrtct.action.length(); i++) {
@@ -351,13 +347,12 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts, QModelInd
                 continue;
             }
 
-            LOGE() << "ID of cell being modified: " << cellId << " with shortcut: ";
+            LOGE() << "Cell being modified: " << cell->name << " with shortcut: ";
             for (auto seq : shrtct.sequences) {
                 LOGE() << seq;
             }
 
             config.shortcut = shrtct;
-            cell->shortcut = config.shortcut;
             paletteConfiguration()->setPaletteCellConfig(cell->id, config);
         }
     }

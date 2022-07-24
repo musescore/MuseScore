@@ -288,10 +288,15 @@ void PaletteCell::write(XmlWriter& xml) const
         xml.tag("mag", mag);
     }
 
-    if (shortcut.isValid()) {
+    if (!shortcut.action.empty()) {
+
+        LOGE() << "Sequence written for: " << name << " as:" << shortcut.sequencesAsString();
         for (std::string seq : shortcut.sequences) {
-            LOGE() << "Sequence written for: " << name << " as:" << shortcut.sequencesAsString();
             xml.tag("sseq", QString::fromStdString(seq));
+        }
+
+        if (shortcut.sequences.empty()) {
+            xml.tag("sseq", "");
         }
 
         xml.tag("sctx", QString::fromStdString(shortcut.context));

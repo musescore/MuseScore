@@ -595,12 +595,7 @@ void UserPaletteController::modifyCellfromConfig(const mu::palette::PaletteCellP
     cell->drawStaff = config.drawStaff;
     cell->xoffset = config.xOffset;
     cell->yoffset = config.yOffset;
-
-    LOGE() << "Checking validity of shortcut";
-    if (config.shortcut.isValid()) {
-        cell->shortcut = config.shortcut;
-        LOGE() << "Valid Shortcut: " + cell->shortcut.sequencesAsString();
-    }
+    cell->shortcut = config.shortcut;
 }
 
 bool UserPaletteController::canEdit(const QModelIndex& index) const
