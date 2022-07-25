@@ -22,6 +22,7 @@
 
 #include "shortcutsmodel.h"
 
+#include "ui/view/iconcodes.h"
 #include "translation.h"
 #include "log.h"
 
@@ -47,12 +48,12 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     const Shortcut& shortcut = m_shortcuts.at(index.row());
 
     switch (role) {
-    case RoleTitle: return this->action(shortcut.action).title;
+    case RoleTitle: return actionText(shortcut.action);
     case RoleIcon: return static_cast<int>(this->action(shortcut.action).iconCode);
     case RoleSequence: return sequencesToNativeText(shortcut.sequences);
     case RoleSearchKey: {
         const UiAction& action = this->action(shortcut.action);
-        return QString::fromStdString(action.code) + action.title + sequencesToNativeText(shortcut.sequences);
+        return QString::fromStdString(action.code) + action.title + action.description + sequencesToNativeText(shortcut.sequences);
     }
     }
 
@@ -68,6 +69,17 @@ const QString& ShortcutsModel::actionTitle(const std::string& actionCode) const
 {
     const UiAction& action = this->action(actionCode);
     return action.title;
+}
+
+const QString& ShortcutsModel::actionDescription(const std::string& actionCode) const
+{
+    const UiAction& action = this->action(actionCode);
+    return action.description;
+}
+
+const QString& ShortcutsModel::actionText(const std::string& actionCode) const
+{
+    return actionDescription(actionCode) == "" ? actionTitle(actionCode) : actionDescription(actionCode);
 }
 
 int ShortcutsModel::rowCount(const QModelIndex&) const
@@ -92,9 +104,15 @@ void ShortcutsModel::load()
     beginResetModel();
     m_shortcuts.clear();
 
-    for (const Shortcut& shortcut : shortcutsRegister()->shortcuts()) {
-        if (actionTitle(shortcut.action).isEmpty()) {
+    for (const UiAction& action : uiactionsRegister()->getActions()) {
+        if (action.title.isEmpty() || action.description.isEmpty()) {
             continue;
+        }
+
+        Shortcut shortcut = shortcutsRegister()->shortcut(action.code);
+        if (shortcut.action != action.code) {
+            shortcut.action = action.code;
+            shortcut.context = action.scCtx;
         }
 
         m_shortcuts << shortcut;
@@ -105,7 +123,7 @@ void ShortcutsModel::load()
     });
 
     std::sort(m_shortcuts.begin(), m_shortcuts.end(), [this](const Shortcut& s1, const Shortcut& s2) {
-        return actionTitle(s1.action) < actionTitle(s2.action);
+        return actionText(s1.action) < actionText(s2.action);
     });
 
     endResetModel();
@@ -116,7 +134,9 @@ bool ShortcutsModel::apply()
     ShortcutList shortcuts;
 
     for (const Shortcut& shortcut : qAsConst(m_shortcuts)) {
-        shortcuts.push_back(shortcut);
+        if (!shortcut.sequences.empty()) {
+            shortcuts.push_back(shortcut);
+        }
     }
 
     Ret ret = shortcutsRegister()->setShortcuts(shortcuts);

@@ -33,6 +33,7 @@
 #include "actions/actiontypes.h"
 #include "view/iconcodes.h"
 #include "shortcuts/shortcutstypes.h"
+#include "context/shortcutcontext.h"
 
 namespace mu::ui {
 using ThemeCode = std::string;
@@ -188,7 +189,8 @@ enum class Checkable {
 struct UiAction
 {
     actions::ActionCode code;
-    UiContext context = UiCtxAny;
+    UiContext uiCtx = UiCtxAny;
+    std::string scCtx = "NULL";
     QString title;
     QString description;
     IconCode::Code iconCode = IconCode::Code::NONE;
@@ -196,17 +198,24 @@ struct UiAction
     std::vector<std::string> shortcuts;
 
     UiAction() = default;
-    UiAction(const actions::ActionCode& code, UiContext ctx, Checkable ch = Checkable::No)
-        : code(code), context(ctx), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const QString& title, Checkable ch = Checkable::No)
-        : code(code), context(ctx), title(title), description(title), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const QString& title, const QString& desc, Checkable ch = Checkable::No)
-        : code(code), context(ctx), title(title), description(desc), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const QString& title, const QString& desc, IconCode::Code icon,
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
+        : code(code), uiCtx(ctx), scCtx(scCtx), checkable(ch) {}
+
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const QString& title,  Checkable ch = Checkable::No)
+        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), checkable(ch) {}
+
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const QString& title, const QString& desc,
              Checkable ch = Checkable::No)
-        : code(code), context(ctx), title(title), description(desc), iconCode(icon), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const QString& title, IconCode::Code icon, Checkable ch = Checkable::No)
-        : code(code), context(ctx), title(title), description(title), iconCode(icon), checkable(ch) {}
+        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc),  checkable(ch) {}
+
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const QString& title, const QString& desc,
+             IconCode::Code icon,
+             Checkable ch = Checkable::No)
+        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), checkable(ch) {}
+
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const QString& title, IconCode::Code icon,
+             Checkable ch = Checkable::No)
+        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), iconCode(icon), checkable(ch) {}
 
     bool isValid() const
     {
@@ -233,7 +242,8 @@ struct UiAction
     bool operator==(const UiAction& other) const
     {
         return code == other.code
-               && context == other.context
+               && uiCtx == other.uiCtx
+               && scCtx == other.scCtx
                && title == other.title
                && description == other.description
                && iconCode == other.iconCode

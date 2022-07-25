@@ -32,26 +32,34 @@ static const mu::actions::ActionCode MASTERPALETTE_CODE("masterpalette");
 const UiActionList PaletteUiActions::m_actions = {
     UiAction(MASTERPALETTE_CODE,
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
              QT_TRANSLATE_NOOP("action", "&Master palette"),
+             QT_TRANSLATE_NOOP("action", "Open master palette…"),
              Checkable::Yes
              ),
     UiAction("palette-search",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Palette search")
+             mu::context::CTX_ANY,
+             QT_TRANSLATE_NOOP("action", "Palette search"),
+             QT_TRANSLATE_NOOP("action", "Search palettes")
              ),
     UiAction("time-signature-properties",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
              QT_TRANSLATE_NOOP("action", "Time signature properties…"),
-             QT_TRANSLATE_NOOP("action", "Time signature properties")
+             QT_TRANSLATE_NOOP("action", "Time signature properties…")
              ),
     UiAction("edit-drumset",
              mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
              QT_TRANSLATE_NOOP("action", "Edit drumset…"),
-             QT_TRANSLATE_NOOP("action", "Edit drumset")
+             QT_TRANSLATE_NOOP("action", "Edit drumset…")
              ),
     UiAction("show-keys",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert special characters")
+             mu::context::CTX_NOTATION_TEXT_EDITING,
+             QT_TRANSLATE_NOOP("action", "Insert special characters"),
+             QT_TRANSLATE_NOOP("action", "Insert special characters…")
              )
 };
 
