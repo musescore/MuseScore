@@ -22,7 +22,6 @@
 #include "playbackcursor.h"
 
 #include "engraving/libmscore/system.h"
-#include "engraving/libmscore/scorefont.h"
 
 using namespace mu::notation;
 

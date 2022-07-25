@@ -25,11 +25,11 @@
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
+#include "infrastructure/symbolfont.h"
 
 #include "note.h"
 #include "symbol.h"
 #include "score.h"
-#include "scorefont.h"
 #include "actionicon.h"
 #include "staff.h"
 #include "undo.h"
@@ -429,7 +429,7 @@ void Accidental::layoutSingleGlyphAccidental()
         default:
             break;
         }
-        if (!score()->scoreFont()->isValid(s)) {
+        if (!score()->symbolFont()->isValid(s)) {
             layoutMultiGlyphAccidental();
             return;
         }
@@ -532,7 +532,7 @@ void Accidental::draw(mu::draw::Painter* painter) const
 
     painter->setPen(curColor());
     for (const SymElement& e : el) {
-        score()->scoreFont()->draw(e.sym, painter, magS(), PointF(e.x, e.y));
+        score()->symbolFont()->draw(e.sym, painter, magS(), PointF(e.x, e.y));
     }
 }
 

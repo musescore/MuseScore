@@ -22,7 +22,7 @@
 
 #include "loopmarker.h"
 #include "draw/types/pen.h"
-#include "libmscore/scorefont.h"
+#include "infrastructure/symbolfont.h"
 
 using namespace mu::notation;
 using namespace mu;
@@ -112,7 +112,7 @@ RectF LoopMarker::resolveMarkerRectByTick(midi::tick_t _tick) const
     double _spatium = score->spatium();
 
     qreal mag = _spatium / mu::engraving::SPATIUM20;
-    double width = (_spatium * 2.0 + score->scoreFont()->width(mu::engraving::SymId::noteheadBlack, mag)) / 3;
+    double width = (_spatium * 2.0 + score->symbolFont()->width(mu::engraving::SymId::noteheadBlack, mag)) / 3;
     double height = 6 * _spatium;
 
     // set cursor height for whole system

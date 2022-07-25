@@ -19,15 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FONTS_FONTSSETUP_H
-#define MU_FONTS_FONTSSETUP_H
 
-namespace mu::fonts {
-class FontsSetup
+#ifndef MU_ENGRAVING_SYMBOLFONTS_H
+#define MU_ENGRAVING_SYMBOLFONTS_H
+
+#include <vector>
+
+#include "types/string.h"
+
+#include "symbolfont.h"
+
+namespace mu::engraving {
+class SymbolFonts
 {
 public:
-    void setup();
+
+    static void addFont(const String& name, const String& family, const io::path_t& filePath);
+    static const std::vector<SymbolFont>& scoreFonts();
+    static SymbolFont* fontByName(const String& name);
+
+    static void setFallbackFont(const String& name);
+    static SymbolFont* fallbackFont();
+    static const char* fallbackTextFont();
+
+private:
+
+    struct Fallback {
+        String name;
+        size_t index = 0;
+    };
+
+    static Fallback s_fallback;
+    static std::vector<SymbolFont> s_symbolFonts;
 };
 }
 
-#endif // MU_FONTS_FONTSSETUP_H
+#endif // MU_ENGRAVING_SYMBOLFONTS_H

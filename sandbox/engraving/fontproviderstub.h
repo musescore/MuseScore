@@ -8,7 +8,8 @@ class FontProviderStub : public IFontProvider
 {
 public:
 
-    int addApplicationFont(const QString& family, const QString& path) override;
+    int addSymbolFont(const QString& family, const io::path_t& path) override;
+    int addTextFont(const io::path_t& path) override;
     void insertSubstitution(const QString& familyName, const QString& substituteName) override;
 
     qreal lineSpacing(const Font& f) const override;

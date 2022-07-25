@@ -30,6 +30,7 @@
 #include "rw/xml.h"
 #include "types/typesconv.h"
 #include "types/symnames.h"
+#include "infrastructure/symbolfonts.h"
 
 #include "compat/pageformat.h"
 
@@ -37,7 +38,6 @@
 #include "libmscore/staff.h"
 #include "libmscore/part.h"
 #include "libmscore/page.h"
-#include "libmscore/scorefont.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/audio.h"
 #include "libmscore/sig.h"
@@ -3241,7 +3241,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 // float mode
                 score->style().set(Sid::spatium, sp);
             }
-            score->setScoreFont(ScoreFont::fontByName(score->style().styleSt(Sid::MusicalSymbolFont)));
+            score->setSymbolFont(SymbolFonts::fontByName(score->style().styleSt(Sid::MusicalSymbolFont)));
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(score->dummy(), TextStyleType::DEFAULT, false);
             readText206(e, ctx, text, text);

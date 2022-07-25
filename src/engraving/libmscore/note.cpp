@@ -59,7 +59,7 @@
 #include "part.h"
 #include "pitchspelling.h"
 #include "score.h"
-#include "scorefont.h"
+#include "symbolfont.h"
 #include "segment.h"
 #include "slur.h"
 #include "spanner.h"
@@ -942,7 +942,7 @@ SymId Note::noteHead() const
 //---------------------------------------------------------
 double Note::bboxRightPos() const
 {
-    const auto& bbox = score()->scoreFont()->bbox(noteHead(), magS());
+    const auto& bbox = score()->symbolFont()->bbox(noteHead(), magS());
     return bbox.right();
 }
 
@@ -1058,7 +1058,7 @@ double Note::headWidth() const
 //---------------------------------------------------------
 double Note::bboxXShift() const
 {
-    const auto& bbox = score()->scoreFont()->bbox(noteHead(), magS());
+    const auto& bbox = score()->symbolFont()->bbox(noteHead(), magS());
     return bbox.bottomLeft().x();
 }
 
@@ -1069,7 +1069,7 @@ double Note::bboxXShift() const
 //---------------------------------------------------------
 double Note::noteheadCenterX() const
 {
-    return score()->scoreFont()->width(noteHead(), magS()) / 2 + bboxXShift();
+    return score()->symbolFont()->width(noteHead(), magS()) / 2 + bboxXShift();
 }
 
 //---------------------------------------------------------

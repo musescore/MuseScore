@@ -34,7 +34,6 @@
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
 #include "libmscore/system.h"
-#include "libmscore/scorefont.h"
 #include "libmscore/page.h"
 #include "libmscore/staff.h"
 #include "libmscore/chordrest.h"

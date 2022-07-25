@@ -22,6 +22,8 @@
 
 #include "masterpalette.h"
 
+#include "translation.h"
+
 #include "palettewidget.h"
 #include "keyedit.h"
 #include "timedialog.h"
@@ -29,10 +31,9 @@
 
 #include "internal/palettecreator.h"
 
-#include "smuflranges.h"
+#include "engraving/infrastructure/smufl.h"
 #include "ui/view/widgetstatestore.h"
 
-#include "translation.h"
 #include "log.h"
 
 using namespace mu::palette;
@@ -144,17 +145,17 @@ MasterPalette::MasterPalette(QWidget* parent)
     m_symbolItem->setData(0, Qt::UserRole, m_idxAllSymbols);
     m_symbolItem->setText(0, QT_TRANSLATE_NOOP("palette", "Symbols"));
     treeWidget->addTopLevelItem(m_symbolItem);
-    stack->addWidget(new SymbolDialog(mu::SMUFL_ALL_SYMBOLS));
+    stack->addWidget(new SymbolDialog(Smufl::SMUFL_ALL_SYMBOLS));
 
     // Add "All symbols" entry to be first in the list of categories
-    QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(mu::SMUFL_ALL_SYMBOLS));
+    QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(Smufl::SMUFL_ALL_SYMBOLS));
     child->setData(0, Qt::UserRole, m_idxAllSymbols);
     m_symbolItem->addChild(child);
 
-    std::vector<String> symbols = mu::keys(mu::smuflRanges());
+    std::vector<String> symbols = mu::keys(Smufl::smuflRanges());
     for (size_t i = 0; i < symbols.size(); i++) {
         QString symbol = symbols[i].toQString();
-        if (symbol == mu::SMUFL_ALL_SYMBOLS) {
+        if (symbol == Smufl::SMUFL_ALL_SYMBOLS) {
             continue;
         }
 
@@ -200,7 +201,7 @@ void MasterPalette::currentChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
 
     if (idx > m_idxAllSymbols) {
         if (!m_symbolWidgets.contains(idx)) {
-            std::vector<String> symbols = mu::keys(mu::smuflRanges());
+            std::vector<String> symbols = mu::keys(Smufl::smuflRanges());
             SymbolDialog* dialog = new SymbolDialog(symbols[idx - m_idxAllSymbols - 1].toQString());
             m_symbolWidgets[idx] = dialog;
             stack->addWidget(dialog);

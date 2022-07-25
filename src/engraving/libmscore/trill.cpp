@@ -33,7 +33,7 @@
 #include "measure.h"
 #include "utils.h"
 #include "score.h"
-#include "scorefont.h"
+#include "symbolfont.h"
 #include "accidental.h"
 #include "segment.h"
 #include "staff.h"
@@ -111,7 +111,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill)
     double x2 = pos2().x();
     double w   = x2 - x1;
     double mag = magS();
-    ScoreFont* f = score()->scoreFont();
+    SymbolFont* f = score()->symbolFont();
 
     _symbols.clear();
     _symbols.push_back(start);
@@ -131,7 +131,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
     double x2 = pos2().x();
     double w   = x2 - x1;
     double mag = magS();
-    ScoreFont* f = score()->scoreFont();
+    SymbolFont* f = score()->symbolFont();
 
     _symbols.clear();
     _symbols.push_back(start);

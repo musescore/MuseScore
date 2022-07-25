@@ -25,6 +25,7 @@
 
 #include "modularity/imoduleexport.h"
 
+#include "io/path.h"
 #include "types/string.h"
 #include "types/font.h"
 #include "types/geometry.h"
@@ -37,7 +38,8 @@ class IFontProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IFontProvider() = default;
 
-    virtual int addApplicationFont(const String& family, const String& path) = 0;
+    virtual int addSymbolFont(const String& family, const io::path_t& path) = 0;
+    virtual int addTextFont(const io::path_t& path) = 0;
     virtual void insertSubstitution(const String& familyName, const String& substituteName) = 0;
 
     virtual double lineSpacing(const Font& f) const = 0;

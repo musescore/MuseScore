@@ -31,7 +31,7 @@
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/measure.h"
 #include "engraving/libmscore/part.h"
-#include "engraving/libmscore/scorefont.h"
+#include "engraving/infrastructure/symbolfont.h"
 
 #include "ui/view/musicalsymbolcodes.h"
 #include "ui/view/widgetstatestore.h"
@@ -125,15 +125,15 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
         SymId::mensuralProlation11, // tempus inperf., prol. perfecta, reversed
     };
 
-    ScoreFont* scoreFont = gpaletteScore->scoreFont();
+    SymbolFont* symbolFont = gpaletteScore->symbolFont();
 
     otherCombo->clear();
     otherCombo->setStyleSheet(QString("QComboBox { font-family: \"%1 Text\"; font-size: %2px; max-height: 30px } ")
-                              .arg(scoreFont->family()).arg(musicalFontSize));
+                              .arg(symbolFont->family()).arg(musicalFontSize));
 
     int idx = 0;
     for (SymId prolatio : prolatioList) {
-        const QString& str = scoreFont->toString(prolatio);
+        const QString& str = symbolFont->toString(prolatio);
         if (str.size() > 0) {
             otherCombo->addItem(str, int(prolatio));
 
@@ -212,10 +212,10 @@ void TimeSignaturePropertiesDialog::accept()
     }
 
     if (otherButton->isChecked()) {
-        ScoreFont* scoreFont = m_editedTimeSig->score()->scoreFont();
+        SymbolFont* symbolFont = m_editedTimeSig->score()->symbolFont();
         SymId symId = (SymId)(otherCombo->itemData(otherCombo->currentIndex()).toInt());
         // ...and set numerator to font string for symbol and denominator to empty string
-        m_editedTimeSig->setNumeratorString(scoreFont->toString(symId));
+        m_editedTimeSig->setNumeratorString(symbolFont->toString(symId));
         m_editedTimeSig->setDenominatorString(QString());
     }
 

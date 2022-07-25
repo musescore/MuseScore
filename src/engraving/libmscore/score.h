@@ -103,7 +103,7 @@ class RepeatList;
 class Rest;
 class Score;
 class ScoreElement;
-class ScoreFont;
+class SymbolFont;
 class Segment;
 class Slur;
 class Spanner;
@@ -412,7 +412,7 @@ private:
     std::vector<Layer> _layer;
     int _currentLayer { 0 };
 
-    ScoreFont* _scoreFont;
+    SymbolFont* m_symbolFont = nullptr;
     int _pageNumberOffset { 0 };          ///< Offset for page numbers.
 
     UpdateState _updateState;
@@ -1178,8 +1178,8 @@ public:
     ChordRest* findCRinStaff(const Fraction& tick, staff_idx_t staffIdx) const;
     void insertTime(const Fraction& tickPos, const Fraction& tickLen);
 
-    ScoreFont* scoreFont() const { return _scoreFont; }
-    void setScoreFont(ScoreFont* f) { _scoreFont = f; }
+    SymbolFont* symbolFont() const { return m_symbolFont; }
+    void setSymbolFont(SymbolFont* f) { m_symbolFont = f; }
 
     double noteHeadWidth() const { return _noteHeadWidth; }
     void setNoteHeadWidth(double n) { _noteHeadWidth = n; }

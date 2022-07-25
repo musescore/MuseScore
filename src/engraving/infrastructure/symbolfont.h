@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MS_SCOREFONT_H
-#define MS_SCOREFONT_H
+#ifndef MU_ENGRAVING_SYMBOLFONT_H
+#define MU_ENGRAVING_SYMBOLFONT_H
 
 #include <unordered_map>
 
@@ -30,6 +30,9 @@
 
 #include "modularity/ioc.h"
 #include "draw/ifontprovider.h"
+#include "io/path.h"
+
+#include "smufl.h"
 
 namespace mu {
 class JsonObject;
@@ -40,26 +43,20 @@ class Painter;
 }
 
 namespace mu::engraving {
-class ScoreFont
+class SymbolFont
 {
     INJECT_STATIC(score, mu::draw::IFontProvider, fontProvider)
 
 public:
-    ScoreFont(const char* name, const char* family, const char* path, const char* filename);
-    ScoreFont(const ScoreFont& other);
+    SymbolFont(const String& name, const String& family, const io::path_t& filePath);
+    SymbolFont(const SymbolFont& other);
 
     const String& name() const;
     const String& family() const;
-    const String& fontPath() const;
+    const io::path_t& fontPath() const;
 
     std::unordered_map<Sid, PropertyValue> engravingDefaults();
     double textEnclosureThickness();
-
-    static void initScoreFonts();
-    static const std::vector<ScoreFont>& scoreFonts();
-    static ScoreFont* fontByName(const String& name);
-    static ScoreFont* fallbackFont();
-    static const char* fallbackTextFont();
 
     uint symCode(SymId id) const;
     SymId fromCode(uint code) const;
@@ -88,13 +85,10 @@ public:
 
 private:
 
-    struct Code {
-        uint smuflCode = 0;
-        uint musicSymBlockCode = 0;
-    };
+    friend class SymbolFonts;
 
     struct Sym {
-        uint code;
+        char32_t code;
         mu::RectF bbox;
         double advance = 0.0;
 
@@ -112,33 +106,27 @@ private:
         }
     };
 
-    static bool initGlyphNamesJson();
-
     void load();
     void loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors);
     void loadComposedGlyphs();
     void loadStylisticAlternates(const JsonObject& glyphsWithAlternatesObject);
     void loadEngravingDefaults(const JsonObject& engravingDefaultsObject);
-    void computeMetrics(Sym& sym, const Code& code);
+    void computeMetrics(Sym& sym, const Smufl::Code& code);
 
     Sym& sym(SymId id);
     const Sym& sym(SymId id) const;
 
     bool m_loaded = false;
     std::vector<Sym> m_symbols;
-    mutable mu::draw::Font m_font;
+    mutable draw::Font m_font;
 
     String m_name;
     String m_family;
-    String m_fontPath;
-    String m_filename;
+    io::path_t m_fontPath;
 
     std::unordered_map<Sid, PropertyValue> m_engravingDefaults;
     double m_textEnclosureThickness = 0;
-
-    static std::vector<ScoreFont> s_scoreFonts;
-    static std::array<Code, size_t(SymId::lastSym) + 1> s_symIdCodes;
 };
 }
 
-#endif // MS_SCOREFONT_H
+#endif // MU_ENGRAVING_SYMBOLFONT_H

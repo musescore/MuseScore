@@ -19,14 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "scorefont.h"
+#include "symbolfont.h"
 
 #include "serialization/json.h"
 #include "io/file.h"
+#include "io/fileinfo.h"
 #include "draw/painter.h"
 #include "types/symnames.h"
 
-#include "mscore.h"
+#include "libmscore/mscore.h"
+
+#include "symbolfonts.h"
+#include "smufl.h"
 
 #include "log.h"
 
@@ -35,211 +39,64 @@ using namespace mu::io;
 using namespace mu::draw;
 using namespace mu::engraving;
 
-static constexpr int FALLBACK_FONT_INDEX = 1; // Bravura
-
-std::vector<ScoreFont> ScoreFont::s_scoreFonts {
-    ScoreFont("Leland",     "Leland",      ":/fonts/leland/",    "Leland.otf"),
-    ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",   "Bravura.otf"),
-    ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",    "mscore.ttf"),
-    ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf"),
-    ScoreFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/",  "MuseJazz.otf"),
-    ScoreFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/",  "Petaluma.otf"),
-    ScoreFont("Finale Maestro", "Finale Maestro", ":/fonts/finalemaestro/", "FinaleMaestro.otf"),
-    ScoreFont("Finale Broadway", "Finale Broadway", ":/fonts/finalebroadway/", "FinaleBroadway.otf"),
-};
-
-std::array<ScoreFont::Code, size_t(SymId::lastSym) + 1> ScoreFont::s_symIdCodes { {  } };
-
 // =============================================
 // ScoreFont
 // =============================================
 
-ScoreFont::ScoreFont(const char* name, const char* family, const char* path, const char* filename)
+SymbolFont::SymbolFont(const String& name, const String& family, const path_t& filePath)
     : m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
-    m_name(String::fromUtf8(name)),
-    m_family(String::fromUtf8(family)),
-    m_fontPath(String::fromUtf8(path)),
-    m_filename(String::fromUtf8(filename))
+    m_name(name),
+    m_family(family),
+    m_fontPath(filePath)
 {
 }
 
-ScoreFont::ScoreFont(const ScoreFont& other)
+SymbolFont::SymbolFont(const SymbolFont& other)
 {
     m_loaded = false;
     m_symbols  = other.m_symbols;
     m_name     = other.m_name;
     m_family   = other.m_family;
     m_fontPath = other.m_fontPath;
-    m_filename = other.m_filename;
 }
 
 // =============================================
 // Properties
 // =============================================
 
-const String& ScoreFont::name() const
+const String& SymbolFont::name() const
 {
     return m_name;
 }
 
-const String& ScoreFont::family() const
+const String& SymbolFont::family() const
 {
     return m_family;
 }
 
-const String& ScoreFont::fontPath() const
+const path_t& SymbolFont::fontPath() const
 {
     return m_fontPath;
 }
 
-std::unordered_map<Sid, PropertyValue> ScoreFont::engravingDefaults()
+std::unordered_map<Sid, PropertyValue> SymbolFont::engravingDefaults()
 {
     return m_engravingDefaults;
 }
 
-double ScoreFont::textEnclosureThickness()
+double SymbolFont::textEnclosureThickness()
 {
     return m_textEnclosureThickness;
-}
-
-// =============================================
-// Init ScoreFonts
-// =============================================
-
-void ScoreFont::initScoreFonts()
-{
-    initGlyphNamesJson();
-
-    fontProvider()->insertSubstitution(u"Leland Text",    u"Bravura Text");
-    fontProvider()->insertSubstitution(u"Bravura Text",   u"Leland Text");
-    fontProvider()->insertSubstitution(u"MScore Text",    u"Leland Text");
-    fontProvider()->insertSubstitution(u"Gootville Text", u"Leland Text");
-    fontProvider()->insertSubstitution(u"MuseJazz Text",  u"Leland Text");
-    fontProvider()->insertSubstitution(u"Petaluma Text",  u"MuseJazz Text");
-    fontProvider()->insertSubstitution(u"Finale Maestro Text", u"Leland Text");
-    fontProvider()->insertSubstitution(u"Finale Broadway Text", u"MuseJazz Text");
-    fontProvider()->insertSubstitution(u"ScoreFont",      u"Leland Text"); // alias for current Musical Text Font
-
-    fallbackFont(); // load fallback font
-}
-
-bool ScoreFont::initGlyphNamesJson()
-{
-    File file(":fonts/smufl/glyphnames.json");
-    if (!file.open(IODevice::ReadOnly)) {
-        LOGE() << "could not open glyph names JSON file.";
-        return false;
-    }
-
-    std::string error;
-    JsonObject glyphNamesJson = JsonDocument::fromJson(file.readAll(), &error).rootObject();
-    file.close();
-
-    if (!error.empty()) {
-        LOGE() << "JSON parse error in glyph names file: " << error;
-        return false;
-    }
-
-    IF_ASSERT_FAILED(!glyphNamesJson.empty()) {
-        LOGE() << "Could not read glyph names JSON";
-        return false;
-    }
-
-    for (size_t i = 0; i < s_symIdCodes.size(); ++i) {
-        SymId sym = static_cast<SymId>(i);
-        if (sym == SymId::noSym || sym == SymId::lastSym) {
-            continue;
-        }
-
-        std::string name(SymNames::nameForSymId(sym).ascii());
-        JsonObject symObj = glyphNamesJson.value(name).toObject();
-        if (!symObj.isValid()) {
-            continue;
-        }
-
-        bool ok;
-        uint code = symObj.value("codepoint").toString().mid(2).toUInt(&ok, 16);
-        if (ok) {
-            s_symIdCodes[i].smuflCode = code;
-        } else if (MScore::debugMode) {
-            LOGD() << "could not read codepoint for glyph " << name;
-        }
-
-        uint alernativeCode = symObj.value("alternateCodepoint").toString().mid(2).toUInt(&ok, 16);
-        if (ok) {
-            s_symIdCodes[i].musicSymBlockCode = alernativeCode;
-        } else if (MScore::debugMode) {
-            LOGD() << "could not read alternate codepoint for glyph " << name;
-        }
-    }
-    return true;
-}
-
-// =============================================
-// Available ScoreFonts
-// =============================================
-
-const std::vector<ScoreFont>& ScoreFont::scoreFonts()
-{
-    return s_scoreFonts;
-}
-
-ScoreFont* ScoreFont::fontByName(const String& name)
-{
-    ScoreFont* font = nullptr;
-    for (ScoreFont& f : s_scoreFonts) {
-        if (f.name().toLower() == name.toLower()) { // case insensitive
-            font = &f;
-            break;
-        }
-    }
-
-    if (!font) {
-        LOGE() << "ScoreFont not found in list: " << name;
-        LOGE() << "ScoreFonts in list:";
-
-        for (const ScoreFont& f : s_scoreFonts) {
-            LOGE() << "    " << f.name();
-        }
-
-        font = fallbackFont();
-
-        LOGE() << "Using fallback font " << font->name() << " instead.";
-        return font;
-    }
-
-    if (!font->m_loaded) {
-        font->load();
-    }
-
-    return font;
-}
-
-ScoreFont* ScoreFont::fallbackFont()
-{
-    ScoreFont* font = &s_scoreFonts[FALLBACK_FONT_INDEX];
-
-    if (!font->m_loaded) {
-        font->load();
-    }
-
-    return font;
-}
-
-const char* ScoreFont::fallbackTextFont()
-{
-    return "Bravura Text";
 }
 
 // =============================================
 // Load
 // =============================================
 
-void ScoreFont::load()
+void SymbolFont::load()
 {
-    String facePath = m_fontPath + m_filename;
-    if (-1 == fontProvider()->addApplicationFont(m_family, facePath)) {
-        LOGE() << "fatal error: cannot load internal font: " << facePath;
+    if (-1 == fontProvider()->addSymbolFont(m_family, m_fontPath)) {
+        LOGE() << "fatal error: cannot load internal font: " << m_fontPath;
         return;
     }
 
@@ -249,16 +106,16 @@ void ScoreFont::load()
     m_font.setNoFontMerging(true);
     m_font.setHinting(mu::draw::Font::Hinting::PreferVerticalHinting);
 
-    for (size_t id = 0; id < s_symIdCodes.size(); ++id) {
-        Code code = s_symIdCodes[id];
-        if (code.smuflCode == 0 && code.musicSymBlockCode == 0) {
+    for (size_t id = 0; id < m_symbols.size(); ++id) {
+        Smufl::Code code = Smufl::code(static_cast<SymId>(id));
+        if (!code.isValid()) {
             continue;
         }
         Sym& sym = m_symbols[id];
         computeMetrics(sym, code);
     }
 
-    File metadataFile(m_fontPath + u"metadata.json");
+    File metadataFile(io::FileInfo(m_fontPath).path() + u"/metadata.json");
     if (!metadataFile.open(IODevice::ReadOnly)) {
         LOGE() << "Failed to open glyph metadata file: " << metadataFile.filePath();
         return;
@@ -279,7 +136,7 @@ void ScoreFont::load()
     m_loaded = true;
 }
 
-void ScoreFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
+void SymbolFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
 {
     for (const std::string& symName : glyphsWithAnchors.keys()) {
         SymId symId = SymNames::symIdByName(symName);
@@ -320,7 +177,7 @@ void ScoreFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
     }
 }
 
-void ScoreFont::loadComposedGlyphs()
+void SymbolFont::loadComposedGlyphs()
 {
     static const struct ComposedGlyph {
         const SymId id;
@@ -381,7 +238,7 @@ void ScoreFont::loadComposedGlyphs()
     }
 }
 
-void ScoreFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternatesObject)
+void SymbolFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternatesObject)
 {
     if (!glyphsWithAlternatesObject.isValid()) {
         return;
@@ -536,13 +393,13 @@ void ScoreFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternatesOb
                 JsonObject symObj = val.toObject();
                 Sym& sym = this->sym(glyph.alternateSymId);
 
-                Code code;
-                uint smuflCode = symObj.value("codepoint").toString().mid(2).toUInt(&ok, 16);
+                Smufl::Code code;
+                char32_t smuflCode = symObj.value("codepoint").toString().mid(2).toUInt(&ok, 16);
                 if (ok) {
                     code.smuflCode = smuflCode;
                 }
 
-                uint musicSymBlockCode = symObj.value("alternateCodepoint").toString().mid(2).toUInt(&ok, 16);
+                char32_t musicSymBlockCode = symObj.value("alternateCodepoint").toString().mid(2).toUInt(&ok, 16);
                 if (ok) {
                     code.musicSymBlockCode = musicSymBlockCode;
                 }
@@ -555,7 +412,7 @@ void ScoreFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternatesOb
     }
 }
 
-void ScoreFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject)
+void SymbolFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject)
 {
     struct EngravingDefault {
         std::vector<Sid> sids;
@@ -641,7 +498,7 @@ void ScoreFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject)
     m_engravingDefaults.insert({ Sid::MusicalTextFont, String(u"%1 Text").arg(m_family) });
 }
 
-void ScoreFont::computeMetrics(ScoreFont::Sym& sym, const Code& code)
+void SymbolFont::computeMetrics(SymbolFont::Sym& sym, const Smufl::Code& code)
 {
     if (fontProvider()->inFontUcs4(m_font, code.smuflCode)) {
         sym.code = code.smuflCode;
@@ -659,17 +516,17 @@ void ScoreFont::computeMetrics(ScoreFont::Sym& sym, const Code& code)
 // Symbol properties
 // =============================================
 
-ScoreFont::Sym& ScoreFont::sym(SymId id)
+SymbolFont::Sym& SymbolFont::sym(SymId id)
 {
     return m_symbols[static_cast<size_t>(id)];
 }
 
-const ScoreFont::Sym& ScoreFont::sym(SymId id) const
+const SymbolFont::Sym& SymbolFont::sym(SymId id) const
 {
     return m_symbols.at(static_cast<size_t>(id));
 }
 
-uint ScoreFont::symCode(SymId id) const
+uint SymbolFont::symCode(SymId id) const
 {
     const Sym& s = sym(id);
     if (s.isValid()) {
@@ -677,10 +534,10 @@ uint ScoreFont::symCode(SymId id) const
     }
 
     // fallback: search in the common SMuFL table
-    return s_symIdCodes.at(static_cast<size_t>(id)).smuflCode;
+    return Smufl::smuflCode(id);
 }
 
-SymId ScoreFont::fromCode(uint code) const
+SymId SymbolFont::fromCode(uint code) const
 {
     auto it = std::find_if(m_symbols.begin(), m_symbols.end(), [code](const Sym& s) { return s.code == code; });
     return static_cast<SymId>(it == m_symbols.end() ? 0 : it - m_symbols.begin());
@@ -691,34 +548,34 @@ static String codeToString(char32_t code)
     return String::fromUcs4(&code, 1);
 }
 
-String ScoreFont::toString(SymId id) const
+String SymbolFont::toString(SymId id) const
 {
     return codeToString(symCode(id));
 }
 
-bool ScoreFont::isValid(SymId id) const
+bool SymbolFont::isValid(SymId id) const
 {
     return sym(id).isValid();
 }
 
-bool ScoreFont::useFallbackFont(SymId id) const
+bool SymbolFont::useFallbackFont(SymId id) const
 {
-    return MScore::useFallbackFont && !sym(id).isValid() && this != ScoreFont::fallbackFont();
+    return MScore::useFallbackFont && !sym(id).isValid() && this != SymbolFonts::fallbackFont();
 }
 
 // =============================================
 // Symbol bounding box
 // =============================================
 
-const RectF ScoreFont::bbox(SymId id, double mag) const
+const RectF SymbolFont::bbox(SymId id, double mag) const
 {
     return bbox(id, SizeF(mag, mag));
 }
 
-const RectF ScoreFont::bbox(SymId id, const SizeF& mag) const
+const RectF SymbolFont::bbox(SymId id, const SizeF& mag) const
 {
     if (useFallbackFont(id)) {
-        return fallbackFont()->bbox(id, mag);
+        return SymbolFonts::fallbackFont()->bbox(id, mag);
     }
 
     RectF r = sym(id).bbox;
@@ -726,12 +583,12 @@ const RectF ScoreFont::bbox(SymId id, const SizeF& mag) const
                  r.width() * mag.width(), r.height() * mag.height());
 }
 
-const RectF ScoreFont::bbox(const SymIdList& s, double mag) const
+const RectF SymbolFont::bbox(const SymIdList& s, double mag) const
 {
     return bbox(s, SizeF(mag, mag));
 }
 
-const RectF ScoreFont::bbox(const SymIdList& s, const SizeF& mag) const
+const RectF SymbolFont::bbox(const SymIdList& s, const SizeF& mag) const
 {
     RectF r;
     PointF pos;
@@ -746,34 +603,34 @@ const RectF ScoreFont::bbox(const SymIdList& s, const SizeF& mag) const
 // Symbol metrics
 // =============================================
 
-double ScoreFont::width(SymId id, double mag) const
+double SymbolFont::width(SymId id, double mag) const
 {
     return bbox(id, mag).width();
 }
 
-double ScoreFont::height(SymId id, double mag) const
+double SymbolFont::height(SymId id, double mag) const
 {
     return bbox(id, mag).height();
 }
 
-double ScoreFont::advance(SymId id, double mag) const
+double SymbolFont::advance(SymId id, double mag) const
 {
     if (useFallbackFont(id)) {
-        return fallbackFont()->advance(id, mag);
+        return SymbolFonts::fallbackFont()->advance(id, mag);
     }
 
     return sym(id).advance * mag;
 }
 
-double ScoreFont::width(const SymIdList& s, double mag) const
+double SymbolFont::width(const SymIdList& s, double mag) const
 {
     return bbox(s, mag).width();
 }
 
-PointF ScoreFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const
+PointF SymbolFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const
 {
     if (useFallbackFont(symId)) {
-        return fallbackFont()->smuflAnchor(symId, anchorId, mag);
+        return SymbolFonts::fallbackFont()->smuflAnchor(symId, anchorId, mag);
     }
 
     return const_cast<Sym&>(sym(symId)).smuflAnchors[anchorId] * mag;
@@ -783,7 +640,7 @@ PointF ScoreFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) c
 // Draw
 // =============================================
 
-void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos) const
+void SymbolFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos) const
 {
     const Sym& sym = this->sym(id);
     if (sym.isCompound()) { // is this a compound symbol?
@@ -792,8 +649,8 @@ void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF&
     }
 
     if (!sym.isValid()) {
-        if (MScore::useFallbackFont && this != ScoreFont::fallbackFont()) {
-            fallbackFont()->draw(id, painter, mag, pos);
+        if (MScore::useFallbackFont && this != SymbolFonts::fallbackFont()) {
+            SymbolFonts::fallbackFont()->draw(id, painter, mag, pos);
         } else {
             LOGE() << "invalid sym: " << static_cast<size_t>(id);
         }
@@ -810,18 +667,18 @@ void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF&
     painter->restore();
 }
 
-void ScoreFont::draw(SymId id, Painter* painter, double mag, const PointF& pos) const
+void SymbolFont::draw(SymId id, Painter* painter, double mag, const PointF& pos) const
 {
     draw(id, painter, SizeF(mag, mag), pos);
 }
 
-void ScoreFont::draw(SymId id, mu::draw::Painter* painter, double mag, const PointF& pos, int n) const
+void SymbolFont::draw(SymId id, mu::draw::Painter* painter, double mag, const PointF& pos, int n) const
 {
     SymIdList list(n, id);
     draw(list, painter, mag, pos);
 }
 
-void ScoreFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos) const
+void SymbolFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {
@@ -830,7 +687,7 @@ void ScoreFont::draw(const SymIdList& ids, Painter* painter, double mag, const P
     }
 }
 
-void ScoreFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos) const
+void SymbolFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {

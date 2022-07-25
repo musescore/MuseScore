@@ -30,6 +30,7 @@
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
+#include "infrastructure/symbolfonts.h"
 
 #include "text.h"
 #include "textedit.h"
@@ -42,7 +43,6 @@
 #include "box.h"
 #include "page.h"
 #include "textframe.h"
-#include "scorefont.h"
 #include "undo.h"
 #include "mscore.h"
 
@@ -792,7 +792,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     String family;
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA) {
-            family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
+            family = SymbolFonts::fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
             // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
             m *= 2;
         } else if (t->isTempoText()) {
@@ -828,7 +828,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
             }
         }
         if (fail) {
-            family = String::fromUtf8(ScoreFont::fallbackTextFont());
+            family = String::fromUtf8(SymbolFonts::fallbackTextFont());
         }
     } else {
         family = format.fontFamily();
@@ -1479,7 +1479,7 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
 
 static String toSymbolXml(Char c)
 {
-    SymId symId = ScoreFont::fallbackFont()->fromCode(c.unicode());
+    SymId symId = SymbolFonts::fallbackFont()->fromCode(c.unicode());
     return u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";
 }
 
@@ -1741,7 +1741,7 @@ void TextBase::createLayout()
                         CharFormat fmt = *cursor.format(); // save format
 
                         //uint code = score()->scoreFont()->symCode(id);
-                        uint code = id == SymId::space ? static_cast<uint>(' ') : ScoreFont::fallbackFont()->symCode(id);
+                        uint code = id == SymId::space ? static_cast<uint>(' ') : SymbolFonts::fallbackFont()->symCode(id);
                         cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code);
                         cursor.setFormat(fmt); // restore format

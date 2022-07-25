@@ -25,12 +25,12 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
+#include "infrastructure/symbolfonts.h"
 
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
 #include "libmscore/part.h"
 #include "libmscore/page.h"
-#include "libmscore/scorefont.h"
 #include "libmscore/audio.h"
 #include "libmscore/sig.h"
 #include "libmscore/barline.h"
@@ -123,7 +123,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
                 // float mode
                 score->style().set(Sid::spatium, sp);
             }
-            score->_scoreFont = ScoreFont::fontByName(score->style().styleSt(Sid::MusicalSymbolFont));
+            score->m_symbolFont = SymbolFonts::fontByName(score->style().styleSt(Sid::MusicalSymbolFont));
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag(u"copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {

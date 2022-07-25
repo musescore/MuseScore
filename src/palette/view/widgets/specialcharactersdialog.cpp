@@ -27,7 +27,6 @@
 #include "palettewidget.h"
 
 #include "translation.h"
-#include "smuflranges.h"
 
 #include "engraving/libmscore/text.h"
 #include "engraving/libmscore/symbol.h"
@@ -35,6 +34,7 @@
 #include "engraving/libmscore/score.h"
 #include "engraving/style/style.h"
 #include "engraving/types/symnames.h"
+#include "engraving/infrastructure/smufl.h"
 
 #include "ui/view/widgetstatestore.h"
 
@@ -444,7 +444,7 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     m_lws = new QListWidget;
 
     QStringList keys;
-    std::vector<String> symbols = mu::keys(mu::smuflRanges());
+    std::vector<String> symbols = mu::keys(Smufl::smuflRanges());
     for (const String& s : symbols) {
         keys << s.toQString();
     }
@@ -679,7 +679,7 @@ void SpecialCharactersDialog::populateCommon()
 
     for (auto id : commonScoreSymbols) {
         std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gpaletteScore->dummy());
-        s->setSym(id, gpaletteScore->scoreFont());
+        s->setSym(id, gpaletteScore->symbolFont());
         m_pCommon->appendElement(s, SymNames::translatedUserNameForSymId(id));
     }
 
@@ -699,14 +699,14 @@ void SpecialCharactersDialog::populateSmufl()
 {
     int row = m_lws->currentRow();
 
-    QString key = mu::keys(mu::smuflRanges()).at(row).toQString();
-    QStringList smuflNames = mu::smuflRanges().at(key).toQStringList();
+    QString key = mu::keys(Smufl::smuflRanges()).at(row).toQString();
+    QStringList smuflNames = Smufl::smuflRanges().at(key).toQStringList();
 
     m_pSmufl->clear();
     for (const QString& name : smuflNames) {
         auto symId = SymNames::symIdByName(name);
         std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gpaletteScore->dummy());
-        s->setSym(symId, gpaletteScore->scoreFont());
+        s->setSym(symId, gpaletteScore->symbolFont());
         m_pSmufl->appendElement(s, SymNames::translatedUserNameForSymId(symId));
     }
 }
