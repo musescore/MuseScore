@@ -88,7 +88,9 @@ QVariant NotationStatusBarModel::currentWorkspaceItem()
     item->setId(QString::fromStdString(item->action().code));
 
     UiAction action;
-    action.title = qtrc("workspace", "Workspace:") + " " + QString::fromStdString(workspaceConfiguration()->currentWorkspaceName());
+    action.title
+        = TranslatableString::untranslatable("%1 %2").arg(TranslatableString("workspace", "Workspace:"),
+                                                          String::fromStdString(workspaceConfiguration()->currentWorkspaceName()));
     item->setAction(action);
 
     return QVariant::fromValue(item);
@@ -122,18 +124,6 @@ MenuItemList NotationStatusBarModel::makeAvailableViewModeList()
         return {};
     }
 
-    auto correctedTitle = [](ViewMode viewMode, const QString& title) {
-        switch (viewMode) {
-        case ViewMode::PAGE:
-            return title;
-        case ViewMode::LINE:
-        case ViewMode::SYSTEM:
-            return qtrc("notation", "Continuous view");
-        default:
-            return title;
-        }
-    };
-
     MenuItemList result;
 
     ViewMode currentViewMode = notation()->viewMode();
@@ -142,9 +132,7 @@ MenuItemList NotationStatusBarModel::makeAvailableViewModeList()
         ActionCode code = ALL_MODE_MAP[viewMode];
         UiAction action = actionsRegister()->action(code);
 
-        MenuItem* viewModeItem = new MenuItem(this);
-        action.title = correctedTitle(viewMode, action.title);
-        viewModeItem->setAction(action);
+        MenuItem* viewModeItem = new MenuItem(action, this);
 
         UiActionState state;
         state.enabled = true;
@@ -280,10 +268,10 @@ MenuItemList NotationStatusBarModel::makeAvailableZoomList()
     int currZoomPercentage = currentZoomPercentage();
 
     auto zoomPercentageTitle = [](int percentage) {
-        return QString::number(percentage) + "%";
+        return TranslatableString::untranslatable("%1%").arg(percentage);
     };
 
-    auto buildZoomItem = [=](ZoomType type, const QString& title = QString(), int value = 0) {
+    auto buildZoomItem = [=](ZoomType type, const TranslatableString& title = {}, int value = 0) {
         MenuItem* menuItem = new MenuItem(this);
         menuItem->setId(QString::number(static_cast<int>(type)) + QString::number(value));
 

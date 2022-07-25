@@ -22,6 +22,7 @@
 #include "playbackuiactions.h"
 
 #include "ui/view/iconcodes.h"
+#include "types/translatablestring.h"
 
 using namespace mu::playback;
 using namespace mu::ui;
@@ -31,37 +32,37 @@ const UiActionList PlaybackUiActions::m_mainActions = {
     UiAction("play",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_FOCUSED,
-             QT_TRANSLATE_NOOP("action", "Play"),
-             QT_TRANSLATE_NOOP("action", "Play"),
+             TranslatableString("action", "Play"),
+             TranslatableString("action", "Play"),
              IconCode::Code::PLAY
              ),
     UiAction("stop",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             QT_TRANSLATE_NOOP("action", "Stop"),
-             QT_TRANSLATE_NOOP("action", "Stop playback"),
+             TranslatableString("action", "Stop"),
+             TranslatableString("action", "Stop playback"),
              IconCode::Code::STOP
              ),
     UiAction("rewind",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_FOCUSED,
-             QT_TRANSLATE_NOOP("action", "Rewind"),
-             QT_TRANSLATE_NOOP("action", "Rewind"),
+             TranslatableString("action", "Rewind"),
+             TranslatableString("action", "Rewind"),
              IconCode::Code::REWIND
              ),
     UiAction("loop",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_FOCUSED,
-             QT_TRANSLATE_NOOP("action", "Loop playback"),
-             QT_TRANSLATE_NOOP("action", "Toggle ‘Loop playback’"),
+             TranslatableString("action", "Loop playback"),
+             TranslatableString("action", "Toggle ‘Loop playback’"),
              IconCode::Code::LOOP,
              Checkable::Yes
              ),
     UiAction("metronome",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_FOCUSED,
-             QT_TRANSLATE_NOOP("action", "Metronome"),
-             QT_TRANSLATE_NOOP("action", "Toggle metronome playback"),
+             TranslatableString("action", "Metronome"),
+             TranslatableString("action", "Toggle metronome playback"),
              IconCode::Code::METRONOME,
              Checkable::Yes
              )
@@ -71,32 +72,32 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
     UiAction("midi-on",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "MIDI input"),
-             QT_TRANSLATE_NOOP("action", "Toggle ‘Enable MIDI input’"),
+             TranslatableString("action", "MIDI input"),
+             TranslatableString("action", "Toggle ‘Enable MIDI input’"),
              IconCode::Code::MIDI_INPUT,
              Checkable::Yes
              ),
     UiAction("repeat",
              mu::context::UiCtxAny,
              mu::context::CTX_NOTATION_FOCUSED,
-             QT_TRANSLATE_NOOP("action", "Play repeats"),
-             QT_TRANSLATE_NOOP("action", "Play repeats"),
+             TranslatableString("action", "Play repeats"),
+             TranslatableString("action", "Play repeats"),
              IconCode::Code::PLAY_REPEATS,
              Checkable::Yes
              ),
     UiAction("pan",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "Pan score"),
-             QT_TRANSLATE_NOOP("action", "Pan score automatically"),
+             TranslatableString("action", "Pan score"),
+             TranslatableString("action", "Pan score automatically"),
              IconCode::Code::PAN_SCORE,
              Checkable::Yes
              ),
     UiAction("countin",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "Count-in"),
-             QT_TRANSLATE_NOOP("action", "Enable count-in"),
+             TranslatableString("action", "Count-in"),
+             TranslatableString("action", "Enable count-in"),
              IconCode::Code::COUNT_IN,
              Checkable::Yes
              ),
@@ -106,15 +107,15 @@ const UiActionList PlaybackUiActions::m_loopBoundaryActions = {
     UiAction("loop-in",
              mu::context::UiCtxAny,
              mu::context::CTX_NOTATION_FOCUSED,
-             QT_TRANSLATE_NOOP("action", "Loop in"),
-             QT_TRANSLATE_NOOP("action", "Set loop marker left"),
+             TranslatableString("action", "Loop in"),
+             TranslatableString("action", "Set loop marker left"),
              IconCode::Code::LOOP_IN
              ),
     UiAction("loop-out",
              mu::context::UiCtxAny,
              mu::context::CTX_NOTATION_FOCUSED,
-             QT_TRANSLATE_NOOP("action", "Loop out"),
-             QT_TRANSLATE_NOOP("action", "Set loop marker right"),
+             TranslatableString("action", "Loop out"),
+             TranslatableString("action", "Set loop marker right"),
              IconCode::Code::LOOP_OUT
              ),
 };

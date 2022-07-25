@@ -24,7 +24,8 @@
 
 #include <map>
 
-#include "libmscore/mscore.h"
+#include "types/translatablestring.h"
+
 #include "instrtemplate.h"
 
 namespace mu::engraving {
@@ -62,7 +63,7 @@ struct InstrumentOverwrite
 struct ScoreOrder
 {
     String id;
-    String name;
+    TranslatableString name;
     std::map<String, InstrumentOverwrite> instrumentMap;
     std::vector<ScoreGroup> groups;
     bool customized = false;
@@ -81,7 +82,7 @@ struct ScoreOrder
 
     bool isValid() const;
     bool isCustom() const;
-    String getName() const;
+    TranslatableString getName() const;
     String getFamilyName(const InstrumentTemplate* instrTemplate, bool soloist) const;
     ScoreGroup newUnsortedGroup(const String group, const String section) const;
     ScoreGroup getGroup(const String family, const String instrumentGroup) const;

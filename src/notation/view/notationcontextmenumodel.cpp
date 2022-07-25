@@ -21,7 +21,7 @@
  */
 #include "notationcontextmenumodel.h"
 
-#include "translation.h"
+#include "types/translatablestring.h"
 
 #include "ui/view/iconcodes.h"
 
@@ -97,9 +97,9 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
     items << makeSeparator();
 
     MenuItem* clearItem = makeMenuItem("notation-delete");
-    clearItem->setTitle(qtrc("notation", "Clear measures"));
+    clearItem->setTitle(TranslatableString("notation", "Clear measures"));
     MenuItem* deleteItem = makeMenuItem("time-delete");
-    deleteItem->setTitle(qtrc("notation", "Delete measures"));
+    deleteItem->setTitle(TranslatableString("notation", "Delete measures"));
     items << clearItem;
     items << deleteItem;
 
@@ -111,7 +111,7 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
 
     items << makeMenuItem("staff-properties");
     items << makeSeparator();
-    items << makeMenu(qtrc("notation", "Insert measures"), makeInsertMeasuresItems());
+    items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
     items << makeMenuItem("measure-properties");
 
     return items;
@@ -181,7 +181,7 @@ MenuItemList NotationContextMenuModel::makeElementItems()
     MenuItemList selectItems = makeSelectItems();
 
     if (!selectItems.isEmpty()) {
-        items << makeMenu(qtrc("notation", "Select"), selectItems);
+        items << makeMenu(TranslatableString("notation", "Select"), selectItems);
     }
 
     const EngravingItem* hitElement = hitElementContext().element;
@@ -197,11 +197,11 @@ MenuItemList NotationContextMenuModel::makeElementItems()
 MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
 {
     MenuItemList items {
-        makeMenuItem("insert-measures-after-selection", qtrc("notation", "After selection…")),
-        makeMenuItem("insert-measures", qtrc("notation", "Before selection…")),
+        makeMenuItem("insert-measures-after-selection", TranslatableString("notation", "After selection…")),
+        makeMenuItem("insert-measures", TranslatableString("notation", "Before selection…")),
         makeSeparator(),
-        makeMenuItem("insert-measures-at-start-of-score", qtrc("notation", "At start of score…")),
-        makeMenuItem("append-measures", qtrc("notation", "At end of score…"))
+        makeMenuItem("insert-measures-at-start-of-score", TranslatableString("notation", "At start of score…")),
+        makeMenuItem("append-measures", TranslatableString("notation", "At end of score…"))
     };
 
     return items;

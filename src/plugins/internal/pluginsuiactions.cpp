@@ -25,9 +25,10 @@
 #include "context/uicontext.h"
 
 #include "containers.h"
-#include "translation.h"
+#include "types/translatablestring.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::plugins;
 using namespace mu::ui;
 using namespace mu::actions;
@@ -41,8 +42,8 @@ static UiAction MANAGE_ACTION = UiAction(
     "manage-plugins",
     mu::context::UiCtxAny,
     mu::context::CTX_ANY,
-    QT_TRANSLATE_NOOP("action", "&Manage plugins…"),
-    QT_TRANSLATE_NOOP("action", "Manage plugins…")
+    TranslatableString("action", "&Manage plugins…"),
+    TranslatableString("action", "Manage plugins…")
     );
 
 const mu::ui::UiActionList& PluginsUiActions::actionsList() const
@@ -54,7 +55,7 @@ const mu::ui::UiActionList& PluginsUiActions::actionsList() const
         action.code = codeFromQString(plugin.codeKey);
         action.uiCtx = mu::context::UiCtxNotationOpened;
         action.scCtx = mu::context::CTX_NOTATION_OPENED;
-        action.title = qtrc("plugins", "Run plugin %1").arg(plugin.codeKey);
+        action.title = TranslatableString("plugins", "Run plugin %1").arg(plugin.codeKey);
 
         result.push_back(action);
     }

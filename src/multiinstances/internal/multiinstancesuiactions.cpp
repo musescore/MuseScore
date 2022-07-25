@@ -22,6 +22,7 @@
 #include "multiinstancesuiactions.h"
 
 #include "context/uicontext.h"
+#include "types/translatablestring.h"
 
 using namespace mu::ui;
 using namespace mu::actions;
@@ -31,7 +32,7 @@ const UiActionList MultiInstancesUiActions::m_actions = {
     UiAction("multiinstances-dev-show-info",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "&Multiinstances")
+             TranslatableString("action", "&Multiinstances")
              )
 };
 

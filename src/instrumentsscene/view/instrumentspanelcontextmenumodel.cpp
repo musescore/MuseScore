@@ -22,10 +22,10 @@
 
 #include "instrumentspanelcontextmenumodel.h"
 
-#include "log.h"
-#include "translation.h"
-
 #include "actions/actiontypes.h"
+#include "types/translatablestring.h"
+
+#include "log.h"
 
 using namespace mu::context;
 using namespace mu::instrumentsscene;
@@ -122,7 +122,7 @@ void InstrumentsPanelContextMenuModel::buildMenu()
     }
 
     MenuItemList items {
-        makeMenu(qtrc("instruments", "Instrument ordering"), orderItems, ORDERING_MENU_ID)
+        makeMenu(TranslatableString("instruments", "Instrument ordering"), orderItems, ORDERING_MENU_ID)
     };
 
     setItems(items);
