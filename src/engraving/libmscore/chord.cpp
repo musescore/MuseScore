@@ -1012,13 +1012,13 @@ void Chord::computeUp()
                     // we have to determine the first and last chord direction for the beam
                     // so that we can calculate the beam anchor points
                     if (move > 0) {
-                        _up = staffMove() != 0;
-                        firstCr->setUp(firstCr->staffMove() != 0);
-                        lastCr->setUp(lastCr->staffMove() != 0);
+                        _up = staffMove() > 0;
+                        firstCr->setUp(firstCr->staffMove() > 0);
+                        lastCr->setUp(lastCr->staffMove() > 0);
                     } else {
-                        _up = staffMove() == 0;
-                        firstCr->setUp(firstCr->staffMove() == 0);
-                        lastCr->setUp(lastCr->staffMove() == 0);
+                        _up = staffMove() >= 0;
+                        firstCr->setUp(firstCr->staffMove() >= 0);
+                        lastCr->setUp(lastCr->staffMove() >= 0);
                     }
                 }
                 break;
