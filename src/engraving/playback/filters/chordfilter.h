@@ -28,6 +28,9 @@
 namespace mu::engraving {
 class ChordFilter : public FilterBase<ChordFilter>
 {
+public:
+    static void validateArticulations(const EngravingItem* item, mpe::ArticulationMap& result);
+
 protected:
     friend class FilterBase<ChordFilter>;
     static bool isPlayable(const EngravingItem* item, const RenderingContext& ctx);

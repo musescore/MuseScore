@@ -255,6 +255,13 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const R
 
         NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
 
+        if (note->tieFor()) {
+            const Note* lastTiedNote = note->lastTiedNote();
+            noteCtx.duration += lastTiedNoteDurationOffset(lastTiedNote, ctx);
+            result.emplace_back(buildNoteEvent(std::move(noteCtx)));
+            return;
+        }
+
         if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::DiscreteGlissando)) {
             GlissandosRenderer::render(note, ArticulationType::DiscreteGlissando, noteCtx.chordCtx, result);
             continue;
@@ -267,4 +274,16 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const R
 
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     }
+}
+
+duration_t PlaybackEventsRenderer::lastTiedNoteDurationOffset(const Note* lastTiedNote, const RenderingContext& ctx) const
+{
+    NominalNoteCtx lastTiedNoteCtx(lastTiedNote, ctx);
+    lastTiedNoteCtx.duration = durationFromTicks(ctx.beatsPerSecond.val, lastTiedNote->chord()->ticks().ticks());
+
+    ChordArticulationsParser::buildChordArticulationMap(lastTiedNote->chord(), ctx, lastTiedNoteCtx.chordCtx.commonArticulations);
+
+    mpe::NoteEvent lastTiedNoteEvent = buildNoteEvent(std::move(lastTiedNoteCtx));
+
+    return lastTiedNoteEvent.arrangementCtx().actualDuration - lastTiedNoteEvent.arrangementCtx().nominalDuration;
 }

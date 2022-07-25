@@ -3387,6 +3387,28 @@ Chord* Chord::nextTiedChord(bool backwards, bool sameSize)
     return next;   // all notes in this chord are tied to notes in next chord
 }
 
+bool Chord::containsTieEnd() const
+{
+    for (const Note* note : _notes) {
+        if (note->tieBack() && !note->tieFor()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Chord::containsTieStart() const
+{
+    for (const Note* note : _notes) {
+        if (!note->tieBack() && note->tieFor()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 //---------------------------------------------------------
 //   toGraceAfter
 //---------------------------------------------------------
