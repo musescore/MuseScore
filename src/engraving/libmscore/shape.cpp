@@ -175,12 +175,8 @@ double Shape::minVerticalDistance(const Shape& a) const
 bool Shape::clearsVertically(const Shape& a) const
 {
     for (const RectF r1 : a) {
-        double left1 = r1.left();
-        double right1 = r1.right();
         for (const RectF r2 : *this) {
-            double left2 = r2.left();
-            double right2 = r2.right();
-            if (mu::engraving::intersects(left1, right1, left2, right2, 0.0)) {
+            if (mu::engraving::intersects(r1.left(), r1.right(), r2.left(), r2.right(), 0.0)) {
                 if (std::min(r1.top(), r1.bottom()) <= std::max(r2.top(), r2.bottom())) {
                     return false;
                 }
