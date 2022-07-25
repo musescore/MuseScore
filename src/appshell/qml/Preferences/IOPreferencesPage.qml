@@ -61,6 +61,9 @@ PreferencesPage {
             inputDevices: ioModel.midiInputDevices
             outputDevices: ioModel.midiOutputDevices
 
+            isMIDI20OutputSupported: ioModel.isMIDI20OutputSupported
+            useMIDI20Output: ioModel.useMIDI20Output
+
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
@@ -70,6 +73,10 @@ PreferencesPage {
 
             onCurrentOutputDeviceIndexChangeRequested: function(newIndex) {
                 ioModel.currentMidiOutputDeviceIndex = newIndex
+            }
+
+            onUseMIDI20OutputChangeRequested: function(use) {
+                ioModel.useMIDI20Output = use
             }
         }
 

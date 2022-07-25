@@ -44,6 +44,10 @@ public:
     virtual bool isConnected() const = 0;
     virtual MidiDeviceID deviceID() const = 0;
 
+    // Whether the output port supports it, rather than whether the receiver supports it
+    // (If the receiver does not support MIDI 2.0, then it's the output port's resposibility to convert to MIDI 1.0)
+    virtual bool supportsMIDI20Output() const = 0;
+
     virtual Ret sendEvent(const Event& e) = 0;
 };
 }
