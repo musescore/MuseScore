@@ -471,7 +471,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Didgeridoo,  { mpe::SoundSubCategory::Australian } }, { midi::Program(0, 57) } },
         { { mpe::SoundId::Shofar,  {} }, { midi::Program(0, 60) } },
         { { mpe::SoundId::Vuvuzela,  {} }, { midi::Program(0, 56) } },
-        { { mpe::SoundId::KlaxonHorns,  {} }, { midi::Program(17, 84) } },
+        { { mpe::SoundId::KlaxonHorns,  {} }, { midi::Program(0, 84) } },
         { { mpe::SoundId::Kazoo,  {} }, { midi::Program(0, 85) } }
     };
 
@@ -617,7 +617,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Guiro,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(128, 0) } },
 
         { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Wooden,
-                                    mpe::SoundSubCategory::Temple } }, { midi::Program(0, 115) } },
+                                    mpe::SoundSubCategory::Temple } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(0, 115) } },
         { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Sandpaper } }, { midi::Program(128, 0) } },
 
