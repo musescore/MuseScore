@@ -44,6 +44,10 @@
 #include "segment.h"
 #include "masterscore.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+#include "accessibility/accessibleitem.h"
+#endif
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -215,6 +219,14 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
     text->layout();
     return text;
 }
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+AccessibleItemPtr Page::createAccessible()
+{
+    return std::make_shared<AccessibleItem>(this, AccessibleItem::Group);
+}
+
+#endif
 
 //---------------------------------------------------------
 //   headerExtension

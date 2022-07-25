@@ -1144,6 +1144,35 @@ String TConv::toXml(const PitchValue& v)
     return String(u"point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"").arg(v.time).arg(v.pitch).arg(v.vibrato);
 }
 
+struct AccidentalUnicodeItem {
+    AccidentalVal accidental;
+    const char* name = nullptr;
+    const char* fullName = nullptr;
+};
+
+static const std::vector<AccidentalUnicodeItem> ACCIDENTALS_NAMES = {
+    { AccidentalVal::SHARP3, QT_TRANSLATE_NOOP("engraving", "triple ♯"), QT_TRANSLATE_NOOP("engraving", "triple sharp") },
+    { AccidentalVal::SHARP2, QT_TRANSLATE_NOOP("engraving", "double ♯"), QT_TRANSLATE_NOOP("engraving", "double sharp") },
+    { AccidentalVal::SHARP, QT_TRANSLATE_NOOP("engraving", "♯"), QT_TRANSLATE_NOOP("engraving", "sharp") },
+    { AccidentalVal::NATURAL, QT_TRANSLATE_NOOP("engraving", "natural") },
+    { AccidentalVal::FLAT, QT_TRANSLATE_NOOP("engraving", "♭"), QT_TRANSLATE_NOOP("engraving", "flat") },
+    { AccidentalVal::FLAT2, QT_TRANSLATE_NOOP("engraving", "double ♭"), QT_TRANSLATE_NOOP("engraving", "double flat") },
+    { AccidentalVal::FLAT3, QT_TRANSLATE_NOOP("engraving", "triple ♭"), QT_TRANSLATE_NOOP("engraving", "triple flat") }
+};
+
+const char* TConv::userName(AccidentalVal accidental, bool full)
+{
+    auto it = std::find_if(ACCIDENTALS_NAMES.cbegin(), ACCIDENTALS_NAMES.cend(), [accidental](const AccidentalUnicodeItem& i) {
+        return i.accidental == accidental;
+    });
+
+    if (it != ACCIDENTALS_NAMES.cend()) {
+        return full ? it->fullName : it->name;
+    }
+
+    return "";
+}
+
 String TConv::toXml(AccidentalRole v)
 {
     return String::number(static_cast<int>(v));

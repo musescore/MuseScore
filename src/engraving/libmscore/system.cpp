@@ -59,6 +59,10 @@
 #include "stafflines.h"
 #include "bracketItem.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+#include "accessibility/accessibleitem.h"
+#endif
+
 #include "log.h"
 
 using namespace mu;
@@ -133,6 +137,14 @@ System::~System()
     delete _systemDividerLeft;
     delete _systemDividerRight;
 }
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+AccessibleItemPtr System::createAccessible()
+{
+    return std::make_shared<AccessibleItem>(this, AccessibleItem::Group);
+}
+
+#endif
 
 void System::moveToPage(Page* parent)
 {

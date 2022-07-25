@@ -132,7 +132,6 @@ class System final : public EngravingItem
     double totalBracketOffset(const LayoutContext& ctx);
 
 public:
-
     ~System();
 
     void moveToPage(Page* parent);
@@ -240,6 +239,10 @@ public:
     Fraction maxSysTicks() const;
 
     double squeezableSpace() const;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 };
 
 typedef std::vector<System*>::iterator iSystem;

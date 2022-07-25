@@ -32,11 +32,13 @@ class AccessibleRoot : public AccessibleItem
 {
     OBJECT_ALLOCATOR(engraving, AccessibleRoot)
 public:
-    AccessibleRoot(RootItem* e);
+    AccessibleRoot(RootItem* e, Role role);
     ~AccessibleRoot() override;
 
-    void setFocusedElement(AccessibleItemPtr e);
+    void setFocusedElement(AccessibleItemPtr e, bool voiceStaffInfoChange = true);
     AccessibleItemWeakPtr focusedElement() const;
+
+    void notifyAboutFocuedElemntNameChanged();
 
     void setMapToScreenFunc(const AccessibleMapToScreenFunc& func);
     RectF toScreenRect(const RectF& rect, bool* ok = nullptr) const;
@@ -51,7 +53,8 @@ public:
     QString staffInfo() const;
 
 private:
-    void updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem);
+    void updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem,
+                         bool voiceStaffInfoChange = true);
 
     bool m_enabled = false;
 

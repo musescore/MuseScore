@@ -95,6 +95,8 @@ public:
             return m_stateChanged;
         }
 
+        void setState(State, bool) override {}
+
         async::Channel<IAccessible::Property, Val> m_propertyChanged;
         async::Channel<IAccessible::State, bool> m_stateChanged;
 

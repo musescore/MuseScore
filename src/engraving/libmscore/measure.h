@@ -328,7 +328,12 @@ public:
 
     EngravingItem* nextElementStaff(staff_idx_t staff);
     EngravingItem* prevElementStaff(staff_idx_t staff);
+
     String accessibleInfo() const override;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 
     void addSystemHeader(bool firstSystem);
     void addSystemTrailer(Measure* nm);

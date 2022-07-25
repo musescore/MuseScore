@@ -410,6 +410,18 @@ mu::async::Channel<IAccessible::State, bool> AccessibleItem::accessibleStateChan
     return m_accessibleStateChanged;
 }
 
+void AccessibleItem::setState(State state, bool arg)
+{
+    if (state != State::Focused) {
+        return;
+    }
+
+    AccessibleRoot* root = accessibleRoot();
+    if (arg) {
+        root->setFocusedElement(shared_from_this(), false /*voiceStaffInfoChange*/);
+    }
+}
+
 TextCursor* AccessibleItem::textCursor() const
 {
     if (!m_element || !m_element->isTextBase()) {
