@@ -50,6 +50,13 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::draw;
 
+struct SlurCollision
+{
+    bool left = false;
+    bool mid = false;
+    bool right = false;
+};
+
 namespace mu::engraving {
 SlurSegment::SlurSegment(System* parent)
     : SlurTieSegment(ElementType::SLUR_SEGMENT, parent)
@@ -498,15 +505,15 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
         const unsigned npoints = 20;
         std::vector<RectF> slurRects;
         slurRects.reserve(2 * npoints);
-        // Detect separate collision areas (left, mid, right section of the slur)
-        std::vector<bool> collision(3);
+        // Define separate collision areas (left-mid-center)
+        SlurCollision collision;
 
         /*************************************************
          * STAGE 2.1: Check for collisions
          * **********************************************/
         unsigned iter = 0;
         do {
-            collision = { false, false, false };
+            collision.left = collision.mid = collision.right = false;
             // Update tranform because pp1 may change
             toSystemCoordinates.reset();
             toSystemCoordinates.translate(pp1.x(), pp1.y());
@@ -546,25 +553,25 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
                     segShape.add(secondStaffShape);
                 }
                 for (unsigned i=0; i < slurRects.size(); i++) {
-                    bool firstSection = i < slurRects.size() / 3;
-                    bool secondSection = i >= slurRects.size() / 3 && i < 2 * slurRects.size() / 3;
-                    bool thirdSection = i >= 2 * slurRects.size() / 3;
-                    if ((firstSection && collision[0])
-                        || (secondSection && collision[1])
-                        || (thirdSection && collision[2])) { // If a collision is already found in this section, no need to check again
+                    bool leftSection = i < slurRects.size() / 3;
+                    bool midSection = i >= slurRects.size() / 3 && i < 2 * slurRects.size() / 3;
+                    bool rightSection = i >= 2 * slurRects.size() / 3;
+                    if ((leftSection && collision.left)
+                        || (midSection && collision.mid)
+                        || (rightSection && collision.right)) { // If a collision is already found in this section, no need to check again
                         continue;
                     }
                     bool intersection = slur()->up() ? !Shape(slurRects[i]).clearsVertically(segShape)
                                         : !segShape.clearsVertically(slurRects[i]);
                     if (intersection) {
-                        if (firstSection) {
-                            collision[0] = true; // collision in first section
+                        if (leftSection) {
+                            collision.left = true; // collision in first section
                         }
-                        if (secondSection) {
-                            collision[1] = true; // collision in second section
+                        if (midSection) {
+                            collision.mid = true; // collision in second section
                         }
-                        if (thirdSection) {
-                            collision[2] = true; // collision in third section
+                        if (rightSection) {
+                            collision.right = true; // collision in third section
                         }
                     }
                 }
@@ -579,19 +586,19 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
             if (iter % 2 == 0) {
                 double shapeStep = (1 - balance) * step;
                 // Collision in left section
-                if (collision[0]) {
+                if (collision.left) {
                     // Move left Bezier point up(/down) and outwards
                     p3 += PointF(-abs(shapeStep), shapeStep);
                     // and a bit also the right point to compensate asymmetry
                     p4 += PointF(abs(shapeStep), shapeStep) / 2.0;
                 }
                 // Collision in middle section
-                if (collision[1]) { // Move both Bezier points up(/down)
+                if (collision.mid) { // Move both Bezier points up(/down)
                     p3 += PointF(0.0, shapeStep);
                     p4 += PointF(0.0, shapeStep);
                 }
                 // Collision in right section
-                if (collision[2]) {
+                if (collision.right) {
                     // Move right Bezier point up(/down) and outwards
                     p4 += PointF(abs(shapeStep), shapeStep);
                     // and a bit also the left point to compensate asymmetry
@@ -606,7 +613,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
                 double steepLimit = M_PI / 4;
                 double endPointStep = balance * step;
                 // Collision in left section
-                if (collision[0] || slurAngle < -steepLimit) {
+                if (collision.left || slurAngle < -steepLimit) {
                     // Lift the left end point, i.e. tilt the slur around p2
                     double stepX = sin(slurAngle) * endPointStep;
                     double stepY = cos(slurAngle) * endPointStep;
@@ -621,12 +628,12 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
                     p4 -= pp1delta;
                 }
                 // Collision in middle section
-                if (collision[1] && !(abs(slurAngle) > steepLimit)) {
+                if (collision.mid && !(abs(slurAngle) > steepLimit)) {
                     // Lift the whole slur
                     pp1 += PointF(0.0, endPointStep);
                 }
                 // Collision in right section
-                if (collision[2] || slurAngle > steepLimit) {
+                if (collision.right || slurAngle > steepLimit) {
                     // Lift the right end point, i.e. tilt the slur around p1
                     double stepX = sin(slurAngle) * endPointStep;
                     double stepY = cos(slurAngle) * endPointStep;
@@ -656,7 +663,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
             p4 = toSystemCoordinates.inverted().map(p4SysCoord);
 
             ++iter;
-        } while ((collision[0] || collision[1] || collision[2]) && iter < maxIter);
+        } while ((collision.left || collision.mid || collision.right) && iter < maxIter);
     }
 
     /*********************************************************************
