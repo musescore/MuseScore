@@ -23,12 +23,7 @@
 
 #include <QtGlobal>
 
-#include "modularity/ioc.h"
-#include "internal/fontssetup.h"
-
 using namespace mu::fonts;
-
-static std::shared_ptr<FontsSetup> s_fontsSetup = std::make_shared<FontsSetup>();
 
 static void init_fonts_qrc()
 {
@@ -57,9 +52,4 @@ std::string FontsModule::moduleName() const
 void FontsModule::registerResources()
 {
     init_fonts_qrc();
-}
-
-void FontsModule::onInit(const mu::framework::IApplication::RunMode&)
-{
-    s_fontsSetup->setup();
 }

@@ -34,6 +34,8 @@
 
 #include "undo.h"
 
+#include "infrastructure/symbolfonts.h"
+
 #include "engravingitem.h"
 #include "note.h"
 #include "score.h"
@@ -81,7 +83,6 @@
 #include "stafftext.h"
 #include "chordline.h"
 #include "tremolo.h"
-#include "scorefont.h"
 #include "utils.h"
 #include "glissando.h"
 #include "stafflines.h"
@@ -1829,7 +1830,7 @@ void ChangeStyle::flip(EditData*)
         score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool());
     }
     if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
-        score->setScoreFont(ScoreFont::fontByName(style.styleSt(Sid::MusicalSymbolFont)));
+        score->setSymbolFont(SymbolFonts::fontByName(style.styleSt(Sid::MusicalSymbolFont)));
     }
 
     score->setStyle(style, overlap);

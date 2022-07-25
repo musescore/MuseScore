@@ -22,6 +22,7 @@
 #include "uimodule.h"
 
 #include <QtQml>
+#include <QFontDatabase>
 
 #include "modularity/ioc.h"
 
@@ -148,6 +149,8 @@ void UiModule::registerUiTypes()
 
 void UiModule::onInit(const framework::IApplication::RunMode&)
 {
+    QFontDatabase::addApplicationFont(":/fonts/mscore/MusescoreIcon.ttf"); // icons
+
     s_configuration->init();
     s_keyNavigationController->init();
 }

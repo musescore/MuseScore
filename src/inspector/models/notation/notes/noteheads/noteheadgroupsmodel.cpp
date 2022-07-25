@@ -22,7 +22,7 @@
 #include "noteheadgroupsmodel.h"
 
 #include "engraving/libmscore/note.h"
-#include "engraving/libmscore/scorefont.h"
+#include "engraving/infrastructure/symbolfonts.h"
 #include "engraving/types/typesconv.h"
 
 using namespace mu::inspector;
@@ -63,7 +63,7 @@ QVariant NoteheadGroupsModel::data(const QModelIndex& index, int role) const
         return TConv::translatedUserName(group).toQString();
     case IconCodeRole: {
         auto type = (group == NoteHeadGroup::HEAD_BREVIS_ALT) ? NoteHeadType::HEAD_BREVIS : NoteHeadType::HEAD_QUARTER;
-        return ScoreFont::fallbackFont()->symCode(Note::noteHead(0, group, type));
+        return SymbolFonts::fallbackFont()->symCode(Note::noteHead(0, group, type));
     }
     default: break;
     }

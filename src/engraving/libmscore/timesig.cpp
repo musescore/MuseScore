@@ -28,7 +28,7 @@
 #include "log.h"
 
 #include "score.h"
-#include "scorefont.h"
+#include "symbolfont.h"
 #include "symbol.h"
 #include "staff.h"
 #include "stafftype.h"
@@ -332,7 +332,7 @@ void TimeSig::layout()
             ds = timeSigSymIdsFromString(_denominatorString);
         }
 
-        ScoreFont* font = score()->scoreFont();
+        SymbolFont* font = score()->symbolFont();
         SizeF mag(magS() * _scale);
 
         RectF numRect = font->bbox(ns, mag);

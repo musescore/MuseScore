@@ -28,7 +28,7 @@
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
-#include "scorefont.h"
+#include "symbolfont.h"
 #include "accidental.h"
 #include "chord.h"
 #include "note.h"
@@ -136,7 +136,7 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
     double bottom = calcBottom();
     double w   = bottom - top;
     double mag = magS();
-    ScoreFont* f = score()->scoreFont();
+    SymbolFont* f = score()->symbolFont();
 
     symbols.clear();
     double w1 = f->advance(end, mag);
@@ -310,7 +310,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     {
         RectF r(symBbox(symbols));
         painter->rotate(-90.0);
-        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.right() - y1, -r.bottom() + r.height()));
+        score()->symbolFont()->draw(symbols, painter, magS(), PointF(-r.right() - y1, -r.bottom() + r.height()));
     }
     break;
 
@@ -318,7 +318,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     {
         RectF r(symBbox(symbols));
         painter->rotate(90.0);
-        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.left() + y1, -r.top() - r.height()));
+        score()->symbolFont()->draw(symbols, painter, magS(), PointF(-r.left() + y1, -r.top() - r.height()));
     }
     break;
 

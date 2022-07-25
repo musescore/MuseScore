@@ -3,7 +3,12 @@
 using namespace mu;
 using namespace mu::draw;
 
-int FontProviderStub::addApplicationFont(const String&, const String&)
+int FontProviderStub::addSymbolFont(const String&, const io::path_t&)
+{
+    return -1;
+}
+
+int FontProviderStub::addTextFont(const io::path_t&)
 {
     return -1;
 }

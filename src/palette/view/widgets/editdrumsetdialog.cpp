@@ -27,6 +27,8 @@
 #include "engraving/rw/xml.h"
 #include "engraving/types/typesconv.h"
 #include "engraving/types/symnames.h"
+#include "engraving/infrastructure/smufl.h"
+#include "engraving/infrastructure/symbolfont.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/utils.h"
@@ -34,11 +36,8 @@
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/stem.h"
-#include "libmscore/scorefont.h"
 
 #include "draw/types/geometry.h"
-
-#include "framework/global/smuflranges.h"
 
 #include <QMessageBox>
 
@@ -118,13 +117,13 @@ struct SymbolIcon {
         QPixmap image(w, h);
         image.fill(Qt::transparent);
         mu::draw::Painter painter(&image, "generateicon");
-        const mu::RectF& bbox = ScoreFont::fallbackFont()->bbox(id, 1);
+        const mu::RectF& bbox = SymbolFonts::fallbackFont()->bbox(id, 1);
         const qreal actualSymbolScale = std::min(w / bbox.width(), h / bbox.height());
         qreal mag = std::min(defaultScale, actualSymbolScale);
         const qreal& xStShift = (w - mag * bbox.width()) / 2 - mag * bbox.left();
         const qreal& yStShift = (h - mag * bbox.height()) / 2 - mag * bbox.top();
         const mu::PointF& stPtPos = mu::PointF(xStShift, yStShift);
-        ScoreFont::fallbackFont()->draw(id, &painter, mag, stPtPos);
+        SymbolFonts::fallbackFont()->draw(id, &painter, mag, stPtPos);
         icon.addPixmap(image);
         return SymbolIcon(id, icon);
     }
@@ -236,7 +235,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     }
 
     for (QString range : validNoteheadRanges) {
-        for (auto symName : mu::smuflRanges().at(range)) {
+        for (auto symName : Smufl::smuflRanges().at(range)) {
             SymId id = SymNames::symIdByName(symName);
             if (!excludeSym.contains(symName) && !primaryNoteheads.contains(symName)) {
                 resNoteheads.append(SymbolIcon::generateIcon(id, w, h, defaultScale));

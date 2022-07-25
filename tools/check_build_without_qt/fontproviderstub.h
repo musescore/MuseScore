@@ -8,7 +8,8 @@ class FontProviderStub : public IFontProvider
 {
 public:
 
-    int addApplicationFont(const String& family, const String& path) override;
+    int addSymbolFont(const String& family, const io::path_t& path) override;
+    int addTextFont(const io::path_t& path) override;
     void insertSubstitution(const String& familyName, const String& substituteName) override;
 
     double lineSpacing(const Font& f) const override;

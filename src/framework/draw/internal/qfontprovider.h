@@ -32,7 +32,8 @@ class QFontProvider : public IFontProvider
 public:
     QFontProvider() = default;
 
-    int addApplicationFont(const String& family, const String& path) override;
+    int addSymbolFont(const String& family, const io::path_t& path) override;
+    int addTextFont(const io::path_t& path) override;
     void insertSubstitution(const String& familyName, const String& substituteName) override;
 
     double lineSpacing(const Font& f) const override;
@@ -61,7 +62,7 @@ private:
 
     FontEngineFT* symEngine(const Font& f) const;
 
-    QHash<QString /*family*/, QString /*path*/> m_paths;
+    QHash<QString /*family*/, io::path_t> m_symbolsFonts;
     mutable QHash<QString /*path*/, FontEngineFT*> m_symEngines;
 };
 }

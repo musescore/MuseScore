@@ -52,10 +52,15 @@ protected:
 
 static FontPaintDevice device;
 
-int QFontProvider::addApplicationFont(const String& family, const String& path)
+int QFontProvider::addSymbolFont(const String& family, const io::path_t& path)
 {
-    m_paths[family] = path;
-    return QFontDatabase::addApplicationFont(path);
+    m_symbolsFonts[family] = path;
+    return QFontDatabase::addApplicationFont(path.toQString());
+}
+
+int QFontProvider::addTextFont(const io::path_t& path)
+{
+    return QFontDatabase::addApplicationFont(path.toQString());
 }
 
 void QFontProvider::insertSubstitution(const String& familyName, const String& substituteName)
@@ -192,7 +197,7 @@ double QFontProvider::symAdvance(const Font& f, uint ucs4, double dpi_f) const
 
 FontEngineFT* QFontProvider::symEngine(const Font& f) const
 {
-    QString path = m_paths.value(f.family());
+    QString path = m_symbolsFonts.value(f.family()).toQString();
     if (path.isEmpty()) {
         return nullptr;
     }

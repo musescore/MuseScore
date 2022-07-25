@@ -37,7 +37,7 @@
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
 #include "engraving/libmscore/figuredbass.h"
-#include "engraving/libmscore/scorefont.h"
+#include "engraving/infrastructure/symbolfonts.h"
 #include "engraving/libmscore/realizedharmony.h"
 
 #include "ui/view/widgetstatestore.h"
@@ -696,7 +696,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     musicalSymbolFont->clear();
     int idx = 0;
-    for (auto i : mu::engraving::ScoreFont::scoreFonts()) {
+    for (auto i : mu::engraving::SymbolFonts::scoreFonts()) {
         musicalSymbolFont->addItem(i.name().toQString(), i.name().toQString());
         ++idx;
     }
@@ -1740,7 +1740,7 @@ void EditStyle::setValues()
 
     QString mfont(styleValue(StyleId::MusicalSymbolFont).value<String>());
     int idx = 0;
-    for (const auto& i : mu::engraving::ScoreFont::scoreFonts()) {
+    for (const auto& i : mu::engraving::SymbolFonts::scoreFonts()) {
         if (i.name().toLower() == mfont.toLower()) {
             musicalSymbolFont->setCurrentIndex(idx);
             break;
@@ -2035,7 +2035,7 @@ void EditStyle::valueChanged(int i)
     PropertyValue val  = getValue(idx);
     bool setValue = false;
     if (idx == StyleId::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
-        mu::engraving::ScoreFont* scoreFont = mu::engraving::ScoreFont::fontByName(val.value<String>());
+        mu::engraving::SymbolFont* scoreFont = mu::engraving::SymbolFonts::fontByName(val.value<String>());
         if (scoreFont) {
             for (auto j : scoreFont->engravingDefaults()) {
                 setStyleValue(j.first, j.second);
