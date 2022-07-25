@@ -139,6 +139,7 @@ ListItemBlank {
 
     Component {
         id: textComp
+
         TextInputField {
             id: textControl
 
@@ -161,6 +162,7 @@ ListItemBlank {
 
     Component {
         id: colorComp
+
         ColorPicker {
             id: colorControl
 
@@ -183,6 +185,7 @@ ListItemBlank {
 
     Component {
         id: intComp
+
         IncrementalPropertyControl {
             id: intControl
 
@@ -208,6 +211,7 @@ ListItemBlank {
 
     Component {
         id: doubleComp
+
         IncrementalPropertyControl {
             id: doubleControl
 
@@ -231,17 +235,18 @@ ListItemBlank {
 
     Component {
         id: boolComp
+
         CheckBox {
             id: boolControl
 
             property bool val
             signal changed(bool newVal)
 
+            property string accessibleName: checked ? qsTrc("ui", "checked", "checkstate") : qsTrc("ui", "unchecked", "checkstate")
+
             navigation.panel: root.navigation.panel
             navigation.row: root.navigation.row
             navigation.column: 1
-
-            property string accessibleName: checked ? qsTrc("uicomponents", "checked") : qsTrc("uicomponents", "unchecked")
 
             checked: val ? true : false
             onClicked: {

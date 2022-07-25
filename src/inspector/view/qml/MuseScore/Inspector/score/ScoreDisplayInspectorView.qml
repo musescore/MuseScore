@@ -49,7 +49,9 @@ InspectorSectionView {
             navigation.name: "Invisible"
             navigation.row: root.navigationRow(2)
 
+            //: Invisible elements
             text: qsTrc("inspector", "Invisible")
+            accessibleText: qsTrc("inspector", "Invisible elements")
             isVisible: model ? model.shouldShowInvisible : false
             onVisibleToggled: { model.shouldShowInvisible = !model.shouldShowInvisible }
         }

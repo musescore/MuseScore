@@ -45,7 +45,7 @@ Column {
 
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
-            text: qsTrc("mpe", "Point index")
+            text: /*qsTrc*/ "Point index"
         }
 
         StyledSlider {
@@ -80,7 +80,7 @@ Column {
 
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
-            text: qsTrc("mpe", "Pitch offset")
+            text: /*qsTrc*/ "Pitch offset"
         }
 
         StyledSlider {

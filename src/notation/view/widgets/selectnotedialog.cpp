@@ -32,13 +32,15 @@
 #include "engraving/types/typesconv.h"
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/engravingitem.h"
-#include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/note.h"
+#include "engraving/libmscore/score.h"
 #include "engraving/libmscore/segment.h"
 #include "engraving/libmscore/select.h"
 #include "engraving/libmscore/system.h"
 
 #include "ui/view/widgetstatestore.h"
+
+#include "log.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -57,6 +59,10 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
 
     m_note = dynamic_cast<mu::engraving::Note*>(contextItem(globalContext()->currentNotation()->interaction()));
 
+    IF_ASSERT_FAILED(m_note) {
+        return;
+    }
+
     notehead->setText(TConv::translatedUserName(m_note->headGroup()));
     sameNotehead->setAccessibleName(sameNotehead->text() + notehead->text());
 
@@ -69,7 +75,11 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     type->setText(m_note->noteTypeUserName());
     sameType->setAccessibleName(sameType->text() + type->text());
 
-    durationType->setText(qtrc("notation", "%1 Note").arg(TConv::translatedUserName(m_note->chord()->durationType().type())));
+    //: %1 is a note duration. If your language does not have different terms for
+    //: "quarter note" and "quarter" (for example), or if the translations for the
+    //: durations as separate strings are not suitable to be used as adjectives here,
+    //: translate this string with "%1", so that just the duration will be shown.
+    durationType->setText(qtrc("notation", "%1 note").arg(TConv::translatedUserName(m_note->chord()->durationType().type())));
     sameDurationType->setAccessibleName(sameDurationType->text() + durationType->text());
 
     durationTicks->setText(m_note->chord()->durationUserName());
