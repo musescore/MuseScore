@@ -31,6 +31,7 @@ namespace mu::engraving {
 class Chord;
 class Rest;
 class Score;
+class Note;
 
 class PlaybackEventsRenderer
 {
@@ -66,6 +67,7 @@ private:
     void renderArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
     bool renderChordArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
     void renderNoteArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
+    mpe::duration_t lastTiedNoteDurationOffset(const Note* lastTiedNote, const RenderingContext& ctx) const;
 };
 }
 
