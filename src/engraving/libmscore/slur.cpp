@@ -366,126 +366,8 @@ void SlurSegment::adjustEndpoints()
     }
 }
 
-//---------------------------------------------------------
-//   computeBezier
-//    compute the shape of the slur segment, optimize it
-//    for avoiding collisions, and set grip points
-//---------------------------------------------------------
-
-void SlurSegment::computeBezier(mu::PointF p6offset)
+void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p4, Transform& toSystemCoordinates, double& slurAngle)
 {
-    /* ************************************************
-     * STAGE 0: Initial setup and calculations
-     *
-     * CAUTION: points can be expressed either in system
-     * coordinates or in slur coordinates (i.e. translated
-     * by pp1 and rotated by the slur angle). Many operations
-     * require coordinate changes.
-     *
-     * REMEMBER!: ups().pos() = ups().p + ups().off
-     *
-     * LEGEND: pp1 = start point
-     *         pp2 = end point
-     *         p2 = end point (in slur coordinates)
-     *         p3 = first bezier point (in slur coord.)
-     *         p4 = second bezier point (in slur coord.)
-     *         p5 = whole slur drag point (in slur coord.)
-     *         p6 = shoulder drag point (in slur coord.)
-     * ***********************************************/
-    // Avoid bad staff line intersections
-    if (autoplace()) {
-        adjustEndpoints();
-    }
-
-    // If end point adjustment is locked, restore the endpoints to
-    // where they were before
-    if (isEndPointsEdited()) {
-        ups(Grip::START).off += _endPointOff1;
-        ups(Grip::END).off += _endPointOff2;
-    }
-    // Get start and end points (have been calculated before)
-    PointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
-    PointF pp2 = ups(Grip::END).p + ups(Grip::END).off;
-    // Keep track of the original value before it gets changed
-    PointF oldp1 = pp1;
-    PointF oldp2 = pp2;
-
-    // Check slur integrity
-    if (pp2 == pp1) {
-        Measure* m1 = slur()->startCR()->segment()->measure();
-        Measure* m2 = slur()->endCR()->segment()->measure();
-        LOGD("zero slur at tick %d(%d) track %zu in measure %d-%d  tick %d ticks %d",
-             m1->tick().ticks(), tick().ticks(), track(), m1->no(), m2->no(), slur()->tick().ticks(), slur()->ticks().ticks());
-        slur()->setBroken(true);
-        return;
-    }
-
-    // Set up coordinate transforms
-    // CAUTION: transform operations are applies in reverse order to how
-    // they are added to the transformation.
-    double slurAngle = atan((pp2.y() - pp1.y()) / (pp2.x() - pp1.x()));
-    Transform rotate;
-    rotate.rotateRadians(-slurAngle);
-    Transform toSlurCoordinates;
-    toSlurCoordinates.rotateRadians(-slurAngle);
-    toSlurCoordinates.translate(-pp1.x(), -pp1.y());
-    Transform toSystemCoordinates = toSlurCoordinates.inverted();
-
-    PointF p2 = toSlurCoordinates.map(pp2);
-    p6offset = rotate.map(p6offset);
-
-    /**************************************************
-     * STAGE 1: create the default shape. This will be
-     * also the final shape if there are no collisions.
-     * ***********************************************/
-
-    // Compute default shoulder height and width
-    double _spatium  = spatium();
-    double shoulderW; // expressed as fraction of slur-length
-    double shoulderH;
-    double d = p2.x() / _spatium;
-
-    if (d < 2) {
-        shoulderW = 0.60;
-    } else if (d < 10) {
-        shoulderW = 0.5;
-    } else if (d < 18) {
-        shoulderW = 0.6;
-    } else {
-        shoulderW = 0.7;
-    }
-    shoulderH = sqrt(d / 4) * _spatium;
-
-    shoulderH -= p6offset.y();
-    if (!slur()->up()) {
-        shoulderH = -shoulderH;
-    }
-
-    double c    = p2.x();
-    double c1   = (c - c * shoulderW) * .5 + p6offset.x();
-    double c2   = c1 + c * shoulderW + p6offset.x();
-
-    PointF p3(c1, -shoulderH);
-    PointF p4(c2, -shoulderH);
-
-    // Set Bezier points default position
-    ups(Grip::BEZIER1).p  = toSystemCoordinates.map(p3);
-    ups(Grip::BEZIER2).p  = toSystemCoordinates.map(p4);
-
-    // Add offsets
-    p3 += p6offset + rotate.map(ups(Grip::BEZIER1).off);
-    p4 += p6offset + rotate.map(ups(Grip::BEZIER2).off);
-    ups(Grip::BEZIER1).off += rotate.inverted().map(p6offset);
-    ups(Grip::BEZIER2).off += rotate.inverted().map(p6offset);
-
-    /*********************************************************************
-     * STAGE 2: adjust the slur shape and end points to avoid collisions
-     *
-     * CAUTION: p2, p3, etc. are expressed in slur coordinates,
-     * i.e. normalized to the start point pp1 and rotated by
-     * the angle of the slur.
-     * ******************************************************************/
-
     ChordRest* startCR = slur()->startCR();
     ChordRest* endCR = slur()->endCR();
     Segment* startSeg = startCR ? startCR->segment() : nullptr;
@@ -497,6 +379,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     // balance: determines how much endpoint adjustment VS shape adjustment
     // we will do (0 = only shape, 1 = only end point)
     double balance = 0.4; // TODO: style (maybe?)
+
     if (startSeg && endSeg && startSeg != endSeg && autoplace()) {
         static constexpr unsigned maxIter = 30; // Max iterations allowed
         const double vertClearance = slur()->up() ? clearance : -clearance;
@@ -508,9 +391,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
         // Define separate collision areas (left-mid-center)
         SlurCollision collision;
 
-        /*************************************************
-         * STAGE 2.1: Check for collisions
-         * **********************************************/
+        // CHECK FOR COLLISIONS
         unsigned iter = 0;
         do {
             collision.left = collision.mid = collision.right = false;
@@ -565,13 +446,13 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
                                         : !segShape.clearsVertically(slurRects[i]);
                     if (intersection) {
                         if (leftSection) {
-                            collision.left = true; // collision in first section
+                            collision.left = true;
                         }
                         if (midSection) {
-                            collision.mid = true; // collision in second section
+                            collision.mid = true;
                         }
                         if (rightSection) {
-                            collision.right = true; // collision in third section
+                            collision.right = true;
                         }
                     }
                 }
@@ -579,25 +460,19 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
                     break;
                 }
             }
-            /**********************************************************
-             * STAGE 2.2: In the even iterations, adjust the shape
-             * of the slur.
-             * *******************************************************/
+            // In the even iterations, adjust the shape
             if (iter % 2 == 0) {
                 double shapeStep = (1 - balance) * step;
-                // Collision in left section
                 if (collision.left) {
                     // Move left Bezier point up(/down) and outwards
                     p3 += PointF(-abs(shapeStep), shapeStep);
                     // and a bit also the right point to compensate asymmetry
                     p4 += PointF(abs(shapeStep), shapeStep) / 2.0;
                 }
-                // Collision in middle section
                 if (collision.mid) { // Move both Bezier points up(/down)
                     p3 += PointF(0.0, shapeStep);
                     p4 += PointF(0.0, shapeStep);
                 }
-                // Collision in right section
                 if (collision.right) {
                     // Move right Bezier point up(/down) and outwards
                     p4 += PointF(abs(shapeStep), shapeStep);
@@ -605,14 +480,10 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
                     p3 += PointF(-abs(shapeStep), shapeStep) / 2.0;
                 }
             } else if (!isEndPointsEdited()) {
-                /*********************************************************
-                * STAGE 2.3: In the odd iterations, adjust the end points
-                * of the slur.
-                * ******************************************************/
+                // In the odd iterations, adjust the end points
                 // Slurs steeper than 45° are gently compensated
                 double steepLimit = M_PI / 4;
                 double endPointStep = balance * step;
-                // Collision in left section
                 if (collision.left || slurAngle < -steepLimit) {
                     // Lift the left end point, i.e. tilt the slur around p2
                     double stepX = sin(slurAngle) * endPointStep;
@@ -627,12 +498,10 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
                     p3 -= pp1delta;
                     p4 -= pp1delta;
                 }
-                // Collision in middle section
                 if (collision.mid && !(abs(slurAngle) > steepLimit)) {
                     // Lift the whole slur
                     pp1 += PointF(0.0, endPointStep);
                 }
-                // Collision in right section
                 if (collision.right || slurAngle > steepLimit) {
                     // Lift the right end point, i.e. tilt the slur around p1
                     double stepX = sin(slurAngle) * endPointStep;
@@ -643,15 +512,12 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
                     p4 += p2delta * p4.x() / p2.x();
                 }
             }
-            /*************************************************
-            * STAGE 2.4: Enforce non-ugliness rules (i.e.
-            * avoid weird/extreme shapes)
-            *************************************************/
+            // Enforce non-ugliness rules
             // 1) Slur cannot be taller than it is wide
             const double maxRelativeHeight = abs(p2.x());
             p3 = slur()->up() ? PointF(p3.x(), std::max(p3.y(), -maxRelativeHeight)) : PointF(p3.x(), std::min(p3.y(), maxRelativeHeight));
             p4 = slur()->up() ? PointF(p4.x(), std::max(p4.y(), -maxRelativeHeight)) : PointF(p4.x(), std::min(p4.y(), maxRelativeHeight));
-            // 2) Tangent rule: p3 and p4 cannot be more than one space left of p1 or right of p2
+            // 2) Tangent rule: p3 and p4 cannot be further left than p1 nor further right than p2
             PointF p3SysCoord = toSystemCoordinates.map(p3);
             PointF p4SysCoord = toSystemCoordinates.map(p4);
             PointF p2SysCoord = toSystemCoordinates.map(p2);
@@ -665,16 +531,103 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
             ++iter;
         } while ((collision.left || collision.mid || collision.right) && iter < maxIter);
     }
+}
 
-    /*********************************************************************
-     * STAGE 3:
-     * - Check endpoints again for bad staff line intersections
-     * - Calculate p5 and p6
-     * - Update slur points after collision avoidance.
-     * - Set slur thickness
-     * - Define path
-     * - Create shape
-     * ******************************************************************/
+//---------------------------------------------------------
+//   computeBezier
+//    compute the shape of the slur segment, optimize it
+//    for avoiding collisions, and set grip points
+//---------------------------------------------------------
+
+void SlurSegment::computeBezier(mu::PointF p6offset)
+{
+    /* ************************************************
+     * LEGEND: pp1 = start point
+     *         pp2 = end point
+     *         p2 = end point (in slur coordinates)
+     *         p3 = first bezier point (in slur coord.)
+     *         p4 = second bezier point (in slur coord.)
+     *         p5 = whole slur drag point (in slur coord.)
+     *         p6 = shoulder drag point (in slur coord.)
+     * REMEMBER! ups().pos() = ups().p + ups().off
+     * ***********************************************/
+    // Avoid bad staff line intersections
+    if (autoplace()) {
+        adjustEndpoints();
+    }
+    // If end point adjustment is locked, restore the endpoints to
+    // where they were before
+    if (isEndPointsEdited()) {
+        ups(Grip::START).off += _endPointOff1;
+        ups(Grip::END).off += _endPointOff2;
+    }
+    // Get start and end points (have been calculated before)
+    PointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
+    PointF pp2 = ups(Grip::END).p + ups(Grip::END).off;
+    // Keep track of the original value before it gets changed
+    PointF oldp1 = pp1;
+    PointF oldp2 = pp2;
+    // Check slur integrity
+    if (pp2 == pp1) {
+        Measure* m1 = slur()->startCR()->segment()->measure();
+        Measure* m2 = slur()->endCR()->segment()->measure();
+        LOGD("zero slur at tick %d(%d) track %zu in measure %d-%d  tick %d ticks %d",
+             m1->tick().ticks(), tick().ticks(), track(), m1->no(), m2->no(), slur()->tick().ticks(), slur()->ticks().ticks());
+        slur()->setBroken(true);
+        return;
+    }
+    // Set up coordinate transforms
+    // CAUTION: transform operations are applies in reverse order to how
+    // they are added to the transformation.
+    double slurAngle = atan((pp2.y() - pp1.y()) / (pp2.x() - pp1.x()));
+    Transform rotate;
+    rotate.rotateRadians(-slurAngle);
+    Transform toSlurCoordinates;
+    toSlurCoordinates.rotateRadians(-slurAngle);
+    toSlurCoordinates.translate(-pp1.x(), -pp1.y());
+    Transform toSystemCoordinates = toSlurCoordinates.inverted();
+    // Transform p2 and shoulder offset
+    PointF p2 = toSlurCoordinates.map(pp2);
+    p6offset = rotate.map(p6offset);
+
+    // COMPUTE DEFAULT SLUR SHAPE
+    // Compute default shoulder height and width
+    double _spatium  = spatium();
+    double shoulderW; // expressed as fraction of slur-length
+    double shoulderH;
+    double d = p2.x() / _spatium;
+    if (d < 2) {
+        shoulderW = 0.60;
+    } else if (d < 10) {
+        shoulderW = 0.5;
+    } else if (d < 18) {
+        shoulderW = 0.6;
+    } else {
+        shoulderW = 0.7;
+    }
+    shoulderH = sqrt(d / 4) * _spatium;
+    shoulderH -= p6offset.y();
+    if (!slur()->up()) {
+        shoulderH = -shoulderH;
+    }
+    double c    = p2.x();
+    double c1   = (c - c * shoulderW) * .5 + p6offset.x();
+    double c2   = c1 + c * shoulderW + p6offset.x();
+    PointF p3(c1, -shoulderH);
+    PointF p4(c2, -shoulderH);
+    // Set Bezier points default position
+    ups(Grip::BEZIER1).p  = toSystemCoordinates.map(p3);
+    ups(Grip::BEZIER2).p  = toSystemCoordinates.map(p4);
+    // Add offsets
+    p3 += p6offset + rotate.map(ups(Grip::BEZIER1).off);
+    p4 += p6offset + rotate.map(ups(Grip::BEZIER2).off);
+    ups(Grip::BEZIER1).off += rotate.inverted().map(p6offset);
+    ups(Grip::BEZIER2).off += rotate.inverted().map(p6offset);
+
+    // ADAPT SLUR SHAPE AND ENDPOINT POSITION
+    // to clear collisions with underlying items
+    avoidCollisions(pp1, p2, p3, p4, toSystemCoordinates, slurAngle);
+
     // Re-check end points for bad staff line collisions
     ups(Grip::START).p = pp1 - ups(Grip::START).off;
     ups(Grip::END).p = toSystemCoordinates.map(p2) - ups(Grip::END).off;
