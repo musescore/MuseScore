@@ -133,10 +133,10 @@ Ret FluidSynth::init()
     fluid_settings_setnum(m_fluid->settings, "synth.chorus.speed", 1);
 
     fluid_settings_setint(m_fluid->settings, "synth.reverb.active", 1);
-    fluid_settings_setnum(m_fluid->settings, "synth.reverb.room-size", 1.0);
-    fluid_settings_setnum(m_fluid->settings, "synth.reverb.damp", 1.0);
-    fluid_settings_setnum(m_fluid->settings, "synth.reverb.width", 1.5);
-    fluid_settings_setnum(m_fluid->settings, "synth.reverb.level", 0.8);
+    fluid_settings_setnum(m_fluid->settings, "synth.reverb.room-size", 0.6);
+    fluid_settings_setnum(m_fluid->settings, "synth.reverb.damp", 0.8);
+    fluid_settings_setnum(m_fluid->settings, "synth.reverb.width", 10.0);
+    fluid_settings_setnum(m_fluid->settings, "synth.reverb.level", 0.5);
 
     fluid_settings_setstr(m_fluid->settings, "audio.sample-format", "float");
 
