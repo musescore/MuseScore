@@ -108,15 +108,15 @@ Item {
             var result = []
 
             if (root.showArrangement) {
-                result.push({ title : qsTrc("mpe", "Time line"), color: root.arrangementLineColor})
+                result.push({ title : /*qsTrc*/ "Time line", color: root.arrangementLineColor})
             }
 
             if (root.showPitch) {
-                result.push({ title : qsTrc("mpe", "Pitch curve"), color: root.pitchLineColor})
+                result.push({ title : /*qsTrc*/ "Pitch curve", color: root.pitchLineColor})
             }
 
             if (root.showExpression) {
-                result.push({ title : qsTrc("mpe", "Expression curve"), color: root.expressionLineColor})
+                result.push({ title : /*qsTrc*/ "Expression curve", color: root.expressionLineColor})
             }
 
             return result

@@ -33,7 +33,7 @@ ListView {
     property QtObject editorModel: null
 
     property var contextMenuModel: [
-        {id: "copy", title: qsTrc("mpe", "Copy pattern data")}
+        { id: "copy", title: /*qsTrc*/ "Copy pattern data" }
     ]
 
     implicitWidth: 180

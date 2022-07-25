@@ -59,7 +59,7 @@ public:
     explicit ArticulationsProfileEditorModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void requestToOpenProfile();
-    Q_INVOKABLE void requestToCreateProfile();
+    Q_INVOKABLE bool requestToCreateProfile();
     Q_INVOKABLE void requestToSaveProfile();
 
     Q_INVOKABLE void copyPatternDataFromItem(ArticulationPatternItem* item);

@@ -74,7 +74,7 @@ Item {
         StyledTextLabel {
             width: parent.width
 
-            text: qsTrc("uicomponents", "Path")
+            text: qsTrc("ui", "Path")
 
             horizontalAlignment: Qt.AlignLeft
             font.capitalization: Font.AllUppercase
@@ -100,7 +100,7 @@ Item {
             name: "DirectoriesView"
             enabled: root.enabled && root.visible
             direction: NavigationPanel.Both
-            accessible.name: qsTrc("uicomponents", "Directories view")
+            accessible.name: qsTrc("ui", "Directories list")
             onActiveChanged: function(active) {
                 if (active) {
                     root.forceActiveFocus()

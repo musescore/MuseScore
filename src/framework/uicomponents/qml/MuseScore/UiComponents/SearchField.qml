@@ -35,7 +35,7 @@ TextInputField {
     width: 220
     opacity: 0.8
 
-    hint: qsTrc("uicomponents", "Search")
+    hint: qsTrc("ui", "Search")
     hintIcon: IconCode.SEARCH
 
     accessible.name: hint
