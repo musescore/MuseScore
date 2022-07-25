@@ -387,7 +387,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
         // Divide slur in several rectangles to localize collisions
         const unsigned npoints = 20;
         std::vector<RectF> slurRects;
-        slurRects.reserve(2 * npoints);
+        slurRects.reserve(npoints);
         // Define separate collision areas (left-mid-center)
         SlurCollision collision;
 
@@ -401,17 +401,13 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
             toSystemCoordinates.rotateRadians(slurAngle);
             // Create rectangles
             slurRects.clear();
-            CubicBezier bezier(PointF(0, 0), p3, p4, p2);
             CubicBezier clearanceBezier(PointF(0, 0), p3 + PointF(0.0, vertClearance), p4 + PointF(0.0, vertClearance), p2);
             for (unsigned i = 0; i < npoints - 1; i++) {
-                PointF slurPoint1 = bezier.pointAtPercent(double(i) / double(npoints));
-                PointF slurPoint2 = bezier.pointAtPercent(double(i + 1) / double(npoints));
-                PointF clearancePoint = clearanceBezier.pointAtPercent(double(i) / double(npoints));
-                slurPoint1 = toSystemCoordinates.map(slurPoint1);
-                slurPoint2 = toSystemCoordinates.map(slurPoint2);
-                clearancePoint = toSystemCoordinates.map(clearancePoint);
-                slurRects.push_back(RectF(clearancePoint, slurPoint1));
-                slurRects.push_back(RectF(clearancePoint, slurPoint2));
+                PointF clearancePoint1 = clearanceBezier.pointAtPercent(double(i) / double(npoints));
+                PointF clearancePoint2 = clearanceBezier.pointAtPercent(double(i + 1) / double(npoints));
+                clearancePoint1 = toSystemCoordinates.map(clearancePoint1);
+                clearancePoint2 = toSystemCoordinates.map(clearancePoint2);
+                slurRects.push_back(RectF(clearancePoint1, clearancePoint2));
             }
             // Check collisions
             for (Segment* seg = startSeg;;) {
