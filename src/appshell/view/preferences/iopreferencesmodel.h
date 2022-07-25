@@ -51,6 +51,9 @@ class IOPreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(
         int currentMidiOutputDeviceIndex READ currentMidiOutputDeviceIndex WRITE setCurrentMidiOutputDeviceIndex NOTIFY currentMidiOutputDeviceIndexChanged)
 
+    Q_PROPERTY(bool isMIDI20OutputSupported READ isMIDI20OutputSupported CONSTANT)
+    Q_PROPERTY(bool useMIDI20Output READ useMIDI20Output WRITE setUseMIDI20Output NOTIFY useMIDI20OutputChanged)
+
 public:
     explicit IOPreferencesModel(QObject* parent = nullptr);
 
@@ -67,10 +70,15 @@ public:
     QStringList midiInputDevices() const;
     QStringList midiOutputDevices() const;
 
+    bool isMIDI20OutputSupported() const;
+    bool useMIDI20Output() const;
+
 public slots:
     void setCurrentAudioApiIndex(int index);
     void setCurrentMidiInputDeviceIndex(int index);
     void setCurrentMidiOutputDeviceIndex(int index);
+
+    void setUseMIDI20Output(bool use);
 
 signals:
     void currentAudioApiIndexChanged(int index);
@@ -79,6 +87,8 @@ signals:
 
     void midiInputDevicesChanged();
     void midiOutputDevicesChanged();
+
+    void useMIDI20OutputChanged();
 
 private:
     midi::MidiDeviceID midiInputDeviceId(int index) const;

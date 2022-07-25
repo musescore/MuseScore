@@ -32,8 +32,12 @@ BaseSection {
     property alias inputDevices: inputDevicesBox.model
     property alias outputDevices: outputDevicesBox.model
 
+    property alias isMIDI20OutputSupported: useMIDI20OutputCheckbox.visible
+    property alias useMIDI20Output: useMIDI20OutputCheckbox.checked
+
     signal currentInputDeviceIndexChangeRequested(int newIndex)
     signal currentOutputDeviceIndexChangeRequested(int newIndex)
+    signal useMIDI20OutputChangeRequested(bool use)
 
     title: qsTrc("appshell/preferences", "MIDI")
 
@@ -64,6 +68,20 @@ BaseSection {
 
         onValueEdited: function(newIndex, newValue) {
             root.currentOutputDeviceIndexChangeRequested(newIndex)
+        }
+    }
+
+    CheckBox {
+        id: useMIDI20OutputCheckbox
+
+        text: qsTrc("appshell", "Produce MIDI 2.0 output if supported by the receiver")
+
+        navigation.name: "MidiUse20Output"
+        navigation.panel: root.navigation
+        navigation.row: 3
+
+        onClicked: {
+            root.useMIDI20OutputChangeRequested(!checked)
         }
     }
 }

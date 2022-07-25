@@ -68,8 +68,8 @@ MidiDeviceList CoreMidiInPort::devices() const
     MidiDeviceList ret;
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
-    int sources = MIDIGetNumberOfSources();
-    for (int sourceIndex = 0; sourceIndex <= sources; sourceIndex++) {
+    ItemCount sources = MIDIGetNumberOfSources();
+    for (ItemCount sourceIndex = 0; sourceIndex <= sources; sourceIndex++) {
         MIDIEndpointRef sourceRef = MIDIGetSource(sourceIndex);
         if (sourceRef != 0) {
             CFStringRef stringRef = 0;
@@ -110,33 +110,51 @@ void CoreMidiInPort::initCore()
 
         switch (notification->messageID) {
         case kMIDIMsgObjectAdded:
-        case kMIDIMsgObjectRemoved:
-            if (notification->messageSize == sizeof(MIDIObjectAddRemoveNotification)) {
-                auto addRemoveNotification = (const MIDIObjectAddRemoveNotification*)notification;
-                MIDIObjectType objectType = addRemoveNotification->childType;
-
-                if (objectType == kMIDIObjectType_Source) {
-                    if (notification->messageID == kMIDIMsgObjectRemoved) {
-                        MIDIObjectRef removedObject = addRemoveNotification->child;
-
-                        if (self->isConnected() && removedObject == self->m_core->sourceId) {
-                            self->disconnect();
-                        }
-                    }
-
-                    self->devicesChanged().notify();
-                }
-            } else {
+        case kMIDIMsgObjectRemoved: {
+            if (notification->messageSize != sizeof(MIDIObjectAddRemoveNotification)) {
                 LOGW() << "Received corrupted MIDIObjectAddRemoveNotification";
+                break;
             }
-            break;
+
+            auto addRemoveNotification = (const MIDIObjectAddRemoveNotification*)notification;
+
+            if (addRemoveNotification->childType != kMIDIObjectType_Source) {
+                break;
+            }
+
+            if (notification->messageID == kMIDIMsgObjectRemoved) {
+                MIDIObjectRef removedObject = addRemoveNotification->child;
+
+                if (self->isConnected() && removedObject == self->m_core->sourceId) {
+                    self->disconnect();
+                }
+            }
+
+            self->devicesChanged().notify();
+        } break;
+
+        case kMIDIMsgPropertyChanged: {
+            if (notification->messageSize != sizeof(MIDIObjectPropertyChangeNotification)) {
+                LOGW() << "Received corrupted MIDIObjectPropertyChangeNotification";
+                break;
+            }
+
+            auto propertyChangeNotification = (const MIDIObjectPropertyChangeNotification*)notification;
+
+            if (propertyChangeNotification->objectType != kMIDIObjectType_Device
+                && propertyChangeNotification->objectType != kMIDIObjectType_Source) {
+                break;
+            }
+
+            if (CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyDisplayName, 0) == kCFCompareEqualTo
+                || CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyName, 0) == kCFCompareEqualTo) {
+                self->devicesChanged().notify();
+            }
+        } break;
 
         // General message that should be ignored because we handle specific ones
         case kMIDIMsgSetupChanged:
 
-        // Questionable whether we should send a notification for this ones
-        // Possibly we should send a notification when the changed property is the device name
-        case kMIDIMsgPropertyChanged:
         case kMIDIMsgThruConnectionsChanged:
         case kMIDIMsgSerialPortOwnerChanged:
 
@@ -161,7 +179,7 @@ void CoreMidiInPort::initCore()
                 if (packet->wordCount != 0 && packet->wordCount <= 4) {
                     Event e = Event::fromRawData(packet->words, packet->wordCount);
                     if (e) {
-                        m_eventReceived.send(packet->timeStamp, e);
+                        m_eventReceived.send((tick_t)packet->timeStamp, e);
                     }
                 } else if (packet->wordCount > 4) {
                     LOGW() << "unsupported midi message size " << packet->wordCount << " bytes";
@@ -184,7 +202,7 @@ void CoreMidiInPort::initCore()
 
                     auto e = Event::fromMIDI10Package(message).toMIDI20();
                     if (e) {
-                        m_eventReceived.send(packet->timeStamp, e);
+                        m_eventReceived.send((tick_t)packet->timeStamp, e);
                     }
                 } else if (packet->length > 4) {
                     LOGW() << "unsupported midi message size " << packet->length << " bytes";
