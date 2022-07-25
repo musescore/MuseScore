@@ -48,7 +48,7 @@ NICE-TO-HAVE TODO:
 #include "note.h"
 #include "notedot.h"
 #include "score.h"
-#include "scorefont.h"
+#include "symbolfont.h"
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
@@ -128,7 +128,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
             ids.push_back(SymId::wiggleTrill);
         }
 
-        score()->scoreFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)));
+        score()->symbolFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)));
     }
 
     if (glissando()->showText()) {

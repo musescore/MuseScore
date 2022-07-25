@@ -27,7 +27,6 @@
 #include "libmscore/score.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
-#include "libmscore/scorefont.h"
 #include "libmscore/bracket.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/box.h"

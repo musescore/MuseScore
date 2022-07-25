@@ -19,16 +19,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef SMUFLRANGES_H
-#define SMUFLRANGES_H
+#ifndef MU_ENGRAVING_SMUFL_H
+#define MU_ENGRAVING_SMUFL_H
 
+#include <array>
 #include <map>
-#include "types/string.h"
 
-//! NOTE temporary place for this method
-namespace mu {
-const std::map<String, StringList>& smuflRanges();
-constexpr const char* SMUFL_ALL_SYMBOLS = "All symbols";
+#include "types/string.h"
+#include "types/symid.h"
+
+namespace mu::engraving {
+class Smufl
+{
+public:
+
+    static bool init();
+
+    struct Code {
+        char32_t smuflCode = 0;
+        char32_t musicSymBlockCode = 0;
+
+        bool isValid() const { return smuflCode != 0 || musicSymBlockCode != 0; }
+    };
+
+    static const Code code(SymId id);
+    static char32_t smuflCode(SymId id);
+
+    static const std::map<String, StringList>& smuflRanges();
+    static constexpr const char* SMUFL_ALL_SYMBOLS = "All symbols";
+
+private:
+
+    static bool initGlyphNamesJson();
+
+    static std::array<Code, size_t(SymId::lastSym) + 1> s_symIdCodes;
+};
 }
 
-#endif // SMUFLRANGES_H
+#endif // MU_ENGRAVING_SMUFL_H

@@ -42,7 +42,7 @@
 #include "hook.h"
 
 // included for gonville/musejazz hook hack in SlurPos
-#include "scorefont.h"
+#include "symbolfont.h"
 
 #include "log.h"
 
@@ -784,7 +784,7 @@ void Slur::slurPos(SlurPos* sp)
     // Gonville and MuseJazz have really weirdly-shaped hooks compared to Leland and Bravura and Emmentaler,
     // so we need to adjust the slope of our hook-avoidance line. this will be unnecessary when hooks have
     // SMuFL anchors
-    bool bulkyHook = score()->scoreFont()->family() == "Gonville" || score()->scoreFont()->family() == "MuseJazz";
+    bool bulkyHook = score()->symbolFont()->family() == "Gonville" || score()->symbolFont()->family() == "MuseJazz";
     const double fakeCutoutSlope = bulkyHook ? 1.5 : 1.0;
 
     if (endCR() == 0) {

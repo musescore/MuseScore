@@ -52,6 +52,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/debugpaint.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paintdebugger.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paintdebugger.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/symbolfonts.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/symbolfonts.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/symbolfont.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/symbolfont.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.h
 
     ${LIBMSCORE_SRC}
 

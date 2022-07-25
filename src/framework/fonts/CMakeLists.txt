@@ -43,8 +43,6 @@ set(MODULE_BIG_QRC
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/fontsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fontsmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fontssetup.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fontssetup.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

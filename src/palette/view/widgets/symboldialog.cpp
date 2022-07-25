@@ -24,15 +24,14 @@
 
 #include "engraving/style/style.h"
 #include "engraving/types/symnames.h"
+#include "engraving/infrastructure/smufl.h"
 
 #include "libmscore/masterscore.h"
-#include "libmscore/scorefont.h"
+#include "infrastructure/symbolfonts.h"
 #include "libmscore/engravingitem.h"
 #include "libmscore/symbol.h"
 
 #include "palettewidget.h"
-
-#include "smuflranges.h"
 
 using namespace mu::engraving;
 using namespace mu::palette;
@@ -58,11 +57,11 @@ void SymbolDialog::createSymbolPalette()
 void SymbolDialog::createSymbols()
 {
     int currentIndex = fontList->currentIndex();
-    const ScoreFont* f = &ScoreFont::scoreFonts()[currentIndex];
+    const SymbolFont* f = &SymbolFonts::scoreFonts()[currentIndex];
     // init the font if not done yet
-    ScoreFont::fontByName(f->name());
+    SymbolFonts::fontByName(f->name());
     m_symbolsWidget->clear();
-    for (auto name : mu::smuflRanges().at(range)) {
+    for (auto name : Smufl::smuflRanges().at(range)) {
         SymId id = SymNames::symIdByName(name);
         if (search->text().isEmpty()
             || SymNames::translatedUserNameForSymId(id).toQString().contains(search->text(), Qt::CaseInsensitive)) {
@@ -84,7 +83,7 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
     range = s;          // smufl symbol range
     int idx = 0;
     int currentIndex = 0;
-    for (const ScoreFont& f : ScoreFont::scoreFonts()) {
+    for (const SymbolFont& f : SymbolFonts::scoreFonts()) {
         fontList->addItem(f.name());
         if (f.name() == "Leland" || f.name() == "Bravura") {
             currentIndex = idx;

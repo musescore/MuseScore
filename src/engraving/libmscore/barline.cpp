@@ -31,7 +31,7 @@
 
 #include "factory.h"
 #include "score.h"
-#include "scorefont.h"
+#include "symbolfont.h"
 #include "staff.h"
 #include "part.h"
 #include "system.h"
@@ -504,9 +504,9 @@ void BarLine::drawDots(Painter* painter, double x) const
         y2l = st->doty2() * _spatium;
 
         //workaround to make Bravura, Petaluma and Leland font work correctly with repeatDots
-        if (!(score()->scoreFont()->name() == "Leland"
-              || score()->scoreFont()->name() == "Bravura"
-              || score()->scoreFont()->name() == "Petaluma")) {
+        if (!(score()->symbolFont()->name() == "Leland"
+              || score()->symbolFont()->name() == "Bravura"
+              || score()->symbolFont()->name() == "Petaluma")) {
             double offset = 0.5 * score()->spatium() * mag();
             y1l += offset;
             y2l += offset;
@@ -1163,7 +1163,7 @@ void BarLine::endEditDrag(EditData& ed)
 
 double BarLine::layoutWidth(Score* score, BarLineType type)
 {
-    double dotwidth = score->scoreFont()->width(SymId::repeatDot, 1.0);
+    double dotwidth = score->symbolFont()->width(SymId::repeatDot, 1.0);
 
     double w { 0.0 };
     switch (type) {

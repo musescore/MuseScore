@@ -64,7 +64,7 @@
 #include "excerpt.h"
 #include "barline.h"
 #include "skyline.h"
-#include "scorefont.h"
+#include "symbolfont.h"
 
 #include "config.h"
 
@@ -137,8 +137,6 @@ void MScore::init()
     //
     //  initialize styles
     //
-
-    ScoreFont::initScoreFonts();
     StaffType::initStaffTypes();
     initDrumset();
     FiguredBass::readConfigFile(String());

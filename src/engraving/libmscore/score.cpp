@@ -38,6 +38,7 @@
 #include "compat/dummyelement.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
+#include "infrastructure/symbolfonts.h"
 
 #include "articulation.h"
 #include "audio.h"
@@ -75,7 +76,6 @@
 #include "rehearsalmark.h"
 #include "repeatlist.h"
 #include "rest.h"
-#include "scorefont.h"
 #include "scoreorder.h"
 #include "segment.h"
 #include "select.h"
@@ -325,7 +325,7 @@ Score::Score()
     _layer.push_back(l);
     _layerTags[0]   = u"default";
 
-    _scoreFont = ScoreFont::fontByName(u"Leland");
+    m_symbolFont = SymbolFonts::fontByName(u"Leland");
 
     _fileDivision           = Constants::division;
     _style  = DefaultStyle::defaultStyle();
@@ -1446,7 +1446,7 @@ void Score::spatiumChanged(double oldValue, double newValue)
     for (Staff* staff : _staves) {
         staff->spatiumChanged(oldValue, newValue);
     }
-    _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
+    _noteHeadWidth = m_symbolFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
     createPaddingTable();
 }
 
@@ -5481,8 +5481,8 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 {
     TRACEFUNC;
 
-    _scoreFont = ScoreFont::fontByName(style().value(Sid::MusicalSymbolFont).value<String>());
-    _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
+    m_symbolFont = SymbolFonts::fontByName(style().value(Sid::MusicalSymbolFont).value<String>());
+    _noteHeadWidth = m_symbolFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
     m_layoutOptions.updateFromStyle(style());
     m_layout.doLayoutRange(m_layoutOptions, st, et);

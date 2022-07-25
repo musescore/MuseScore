@@ -22,6 +22,8 @@
 
 #include <QRegularExpression>
 
+#include "engraving/infrastructure/symbolfonts.h"
+
 #include "engraving/libmscore/factory.h"
 #include "engraving/libmscore/box.h"
 #include "engraving/libmscore/chordrest.h"
@@ -29,7 +31,6 @@
 #include "engraving/libmscore/measure.h"
 #include "engraving/libmscore/page.h"
 #include "engraving/libmscore/part.h"
-#include "engraving/libmscore/scorefont.h"
 #include "engraving/libmscore/staff.h"
 #include "engraving/libmscore/stringdata.h"
 #include "engraving/libmscore/symbol.h"
@@ -1178,7 +1179,7 @@ static QString text2syms(const QString& t)
     // note that this takes about 1 msec on a Core i5,
     // caching does not gain much
 
-    ScoreFont* sf = ScoreFont::fallbackFont();
+    SymbolFont* sf = SymbolFonts::fallbackFont();
     QMap<QString, SymId> map;
     int maxStringSize = 0;          // maximum string size found
 
