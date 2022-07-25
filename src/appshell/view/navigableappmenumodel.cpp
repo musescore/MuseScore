@@ -303,7 +303,8 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
             }
         }
 
-        break;
+        event->accept();
+        return true;
     }
     case QEvent::MouseButtonPress: {
         resetNavigation();
