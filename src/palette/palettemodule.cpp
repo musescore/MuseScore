@@ -175,8 +175,9 @@ void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
     for (auto action : PaletteCell::allActions) {
         auto a = UiAction(action.action,
             mu::context::UiCtxNotationOpened,
+            mu::context::CTX_NOTATION_FOCUSED,
             QT_TRANSLATE_NOOP("action", ("Test Action " + std::to_string(i) + ": " + action.action).c_str()),
-            QT_TRANSLATE_NOOP("action", ("Test Action " + std::to_string(i++)).c_str())
+            QT_TRANSLATE_NOOP("action", ("Test Action " + std::to_string(i++) + ": " + action.action).c_str())
         );
 
         s_paletteUiActions->addAction(a);
