@@ -28,7 +28,7 @@
 #include <assert.h>
 
 #include "translation.h"
-#include "interactive/messagebox.h"
+#include "infrastructure/messagebox.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/symnames.h"

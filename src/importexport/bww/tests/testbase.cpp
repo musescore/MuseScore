@@ -31,7 +31,7 @@
 #include "config.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
-#include "engraving/io/localfileinfoprovider.h"
+#include "engraving/infrastructure/localfileinfoprovider.h"
 
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"

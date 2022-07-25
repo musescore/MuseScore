@@ -24,8 +24,8 @@
 #include <QScreen>
 
 #include "engraving/libmscore/score.h"
-#include "engraving/paint/paint.h"
-#include "engraving/paint/debugpaint.h"
+#include "engraving/infrastructure/paint.h"
+#include "engraving/infrastructure/debugpaint.h"
 
 #include "notation.h"
 #include "notationinteraction.h"

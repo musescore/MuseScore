@@ -26,7 +26,7 @@
 
 #include "../rw/scorereader.h"
 
-#include "io/localfileinfoprovider.h"
+#include "infrastructure/localfileinfoprovider.h"
 
 #include "log.h"
 

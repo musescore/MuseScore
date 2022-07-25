@@ -30,7 +30,7 @@
 #include "libmscore/scorefont.h"
 #include "libmscore/page.h"
 #include "libmscore/rendermidi.h"
-#include "engraving/paint/paint.h"
+#include "engraving/infrastructure/paint.h"
 
 #include "notationpainting.h"
 #include "notationviewstate.h"

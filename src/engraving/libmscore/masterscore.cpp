@@ -23,8 +23,8 @@
 
 #include "types/datetime.h"
 #include "io/buffer.h"
-#include "io/mscreader.h"
-#include "io/mscwriter.h"
+#include "infrastructure/mscreader.h"
+#include "infrastructure/mscwriter.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
 #include "style/defaultstyle.h"

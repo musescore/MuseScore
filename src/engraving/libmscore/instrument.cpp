@@ -24,7 +24,7 @@
 
 #include "translation.h"
 #include "rw/xml.h"
-#include "io/htmlparser.h"
+#include "infrastructure/htmlparser.h"
 #include "types/typesconv.h"
 
 #include "compat/midi/event.h"
