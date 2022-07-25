@@ -4004,20 +4004,22 @@ void Chord::layoutArticulations2()
 
 bool Chord::isSlurStartEnd() const
 {
-    auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), tick().ticks());
+    int ticks = tick().ticks();
+    auto spanners = score()->spannerMap().findOverlapping(ticks, ticks);
     if (spanners.empty()) {
         return false;
     }
     for (auto sp : spanners) {
         Spanner* spanner = sp.value;
-        if (spanner->isSlur()) {
-            Slur* slur = toSlur(spanner);
-            if (slur->startElement() && slur->startElement()->isChord() && toChord(slur->startElement()) == this) {
-                return true;
-            }
-            if (slur->endElement() && slur->endElement()->isChord() && toChord(slur->endElement()) == this) {
-                return true;
-            }
+        if (!spanner->isSlur() || spanner->staffIdx() != staffIdx()) {
+            continue;
+        }
+        Slur* slur = toSlur(spanner);
+        if (slur->startElement() && slur->startElement()->isChord() && toChord(slur->startElement()) == this) {
+            return true;
+        }
+        if (slur->endElement() && slur->endElement()->isChord() && toChord(slur->endElement()) == this) {
+            return true;
         }
     }
     return false;
