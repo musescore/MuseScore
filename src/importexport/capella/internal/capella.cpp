@@ -25,14 +25,13 @@
 //
 #include <assert.h>
 #include <cmath>
-#include <QMessageBox>
 #include <QtMath>
 
 #include "libmscore/mscore.h"
 #include "capella.h"
 
 #include "translation.h"
-#include "interactive/messagebox.h"
+#include "infrastructure/messagebox.h"
 #include "types/typesconv.h"
 
 #include "libmscore/factory.h"

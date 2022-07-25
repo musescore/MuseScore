@@ -34,7 +34,7 @@
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"
-#include "engraving/io/localfileinfoprovider.h"
+#include "engraving/infrastructure/localfileinfoprovider.h"
 
 #include "log.h"
 

@@ -27,7 +27,7 @@
 #include <vector>
 
 #include "types/string.h"
-#include "property/propertyvalue.h"
+#include "types/propertyvalue.h"
 #include "libmscore/property.h"
 #include "config.h"
 

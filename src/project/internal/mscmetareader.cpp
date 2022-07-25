@@ -27,7 +27,7 @@
 
 #include "stringutils.h"
 #include "global/deprecated/xmlreader.h"
-#include "engraving/io/mscreader.h"
+#include "engraving/infrastructure/mscreader.h"
 
 #include "log.h"
 

@@ -33,7 +33,7 @@
 #include "io/buffer.h"
 
 #include "engraving/compat/scoreaccess.h"
-#include "engraving/io/mscwriter.h"
+#include "engraving/infrastructure/mscwriter.h"
 #include "engraving/libmscore/excerpt.h"
 
 #include "backendjsonwriter.h"

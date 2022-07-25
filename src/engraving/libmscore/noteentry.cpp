@@ -21,7 +21,7 @@
  */
 
 #include "translation.h"
-#include "interactive/messagebox.h"
+#include "infrastructure/messagebox.h"
 
 #include "factory.h"
 #include "utils.h"
