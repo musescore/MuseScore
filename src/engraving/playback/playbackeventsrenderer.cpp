@@ -95,33 +95,29 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timest
     }
 }
 
-void PlaybackEventsRenderer::renderMetronome(const Score* score, const int positionTick, const int durationTicks,
+void PlaybackEventsRenderer::renderMetronome(const Score* score, const int measureStartTick, const int measureEndTick,
                                              const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(score) {
         return;
     }
 
-    BeatType beatType = score->tick2beatType(Fraction::fromTicks(positionTick));
-
-    if (beatType == BeatType::SUBBEAT) {
-        return;
-    }
-
-    TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(positionTick).timesig();
+    TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(measureStartTick).timesig();
     int ticksPerBeat = timeSignatureFraction.ticks() / timeSignatureFraction.numerator();
 
-    BeatsPerSecond bps = score->tempomap()->tempo(positionTick);
+    BeatsPerSecond bps = score->tempomap()->tempo(measureStartTick);
 
-    int eventsCount = std::max(1, durationTicks / ticksPerBeat);
+    int step = timeSignatureFraction.isBeatedCompound(bps.val)
+               ? timeSignatureFraction.beatTicks() : timeSignatureFraction.dUnitTicks();
 
-    for (int i = 0; i < eventsCount; ++i) {
+    for (int tick = measureStartTick; tick < measureEndTick; tick += step) {
         static ArticulationMap emptyArticulations;
 
-        timestamp_t eventTimestamp = timestampFromTicks(score, positionTick + ticksPositionOffset + i * ticksPerBeat);
+        timestamp_t eventTimestamp = timestampFromTicks(score, tick + ticksPositionOffset);
 
+        BeatType beatType = score->tick2beatType(Fraction::fromTicks(tick));
         pitch_level_t eventPitchLevel = pitchLevel(PitchClass::A, 4);
-        if (beatType == BeatType::DOWNBEAT && i == 0) {
+        if (beatType == BeatType::DOWNBEAT && tick == 0) {
             eventPitchLevel = pitchLevel(PitchClass::B, 4);
         }
 
