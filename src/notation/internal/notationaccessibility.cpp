@@ -71,12 +71,17 @@ mu::ValCh<std::string> NotationAccessibility::accessibilityInfo() const
 
 void NotationAccessibility::setMapToScreenFunc(const AccessibleMapToScreenFunc& func)
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     score()->rootItem()->accessible()->accessibleRoot()->setMapToScreenFunc(func);
     score()->dummy()->rootItem()->accessible()->accessibleRoot()->setMapToScreenFunc(func);
+#else
+    UNUSED(func)
+#endif
 }
 
 void NotationAccessibility::setEnabled(bool enabled)
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     std::vector<AccessibleRoot*> roots {
         score()->rootItem()->accessible()->accessibleRoot(),
         score()->dummy()->rootItem()->accessible()->accessibleRoot()
@@ -101,6 +106,9 @@ void NotationAccessibility::setEnabled(bool enabled)
             root->setFocusedElement(selectedElementAccItem);
         }
     }
+#else
+    UNUSED(enabled)
+#endif
 }
 
 void NotationAccessibility::updateAccessibilityInfo()

@@ -317,7 +317,9 @@ class TextBase : public EngravingItem
     static String getHtmlStartTag(double, double&, const String&, String&, FontStyle, VerticalAlignment);
     static String getHtmlEndTag(FontStyle, VerticalAlignment);
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
+#endif
 
     void notifyAboutTextCursorChanged();
     void notifyAboutTextInserted(int startPosition, int endPosition, const String& text);

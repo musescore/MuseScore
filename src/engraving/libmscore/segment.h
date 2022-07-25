@@ -226,6 +226,10 @@ public:
 
     String accessibleExtraInfo() const override;
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
+
     EngravingItem* firstInNextSegments(staff_idx_t activeStaff);   //<
     EngravingItem* lastInPrevSegments(staff_idx_t activeStaff);     //<
     EngravingItem* firstElement(staff_idx_t staff);                //<  These methods are used for navigation

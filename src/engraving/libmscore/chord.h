@@ -315,7 +315,12 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* lastElementBeforeSegment();
     EngravingItem* prevSegmentElement() override;
+
     String accessibleExtraInfo() const override;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 
     Shape shape() const override;
     void undoChangeProperty(Pid id, const PropertyValue& newValue);

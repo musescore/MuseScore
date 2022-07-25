@@ -156,6 +156,7 @@ protected:
 
 public:
     ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* current, const EngravingItem* connector, int track = -1, Fraction = { -1, 1 });
+    virtual ~ConnectorInfoWriter() = default;
 
     ConnectorInfoWriter* prev() const { return static_cast<ConnectorInfoWriter*>(_prev); }
     ConnectorInfoWriter* next() const { return static_cast<ConnectorInfoWriter*>(_next); }

@@ -104,6 +104,10 @@
 #include "utils.h"
 #include "volta.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+#include "accessibility/accessibleitem.h"
+#endif
+
 #include "log.h"
 
 using namespace mu;
@@ -375,6 +379,14 @@ Measure::~Measure()
     }
     DeleteAll(m_mstaves);
 }
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+AccessibleItemPtr Measure::createAccessible()
+{
+    return std::make_shared<AccessibleItem>(this, AccessibleItem::Group);
+}
+
+#endif
 
 void Measure::setParent(System* s)
 {

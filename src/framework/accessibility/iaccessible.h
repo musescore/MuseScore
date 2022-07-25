@@ -56,6 +56,7 @@ public:
         ListItem,
         MenuItem,
         Range,
+        Group,
 
         // Custom roles
         Information, // just text
@@ -145,6 +146,8 @@ public:
     virtual int accessibleCharacterCount() const = 0;
 
     virtual async::Channel<IAccessible::Property, Val> accessiblePropertyChanged() const = 0;
+
+    virtual void setState(State state, bool arg) = 0;
     virtual async::Channel<IAccessible::State, bool> accessibleStateChanged() const = 0;
 };
 }

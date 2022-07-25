@@ -64,7 +64,6 @@ class Page final : public EngravingItem
     Text* layoutHeaderFooter(int area, const String& ss) const;
 
 public:
-
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
@@ -99,6 +98,10 @@ public:
     std::vector<EngravingItem*> elements() const;              ///< list of visible elements
     mu::RectF tbbox();                             // tight bounding box, excluding white space
     Fraction endTick() const;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 };
 } // namespace mu::engraving
 #endif
