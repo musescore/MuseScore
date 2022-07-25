@@ -309,6 +309,8 @@ public:
     void sortNotes();
 
     Chord* nextTiedChord(bool backwards = false, bool sameSize = true);
+    bool containsTieEnd() const;
+    bool containsTieStart() const;
 
     EngravingItem* nextElement() override;
     EngravingItem* prevElement() override;

@@ -30,6 +30,7 @@
 #include "libmscore/chordline.h"
 
 #include "playback/utils/arrangementutils.h"
+#include "playback/filters/chordfilter.h"
 #include "internal/spannersmetaparser.h"
 #include "internal/symbolsmetaparser.h"
 #include "internal/annotationsmetaparser.h"
@@ -75,12 +76,13 @@ void ChordArticulationsParser::doParse(const EngravingItem* item, const Renderin
     const Chord* chord = toChord(item);
 
     parseSpanners(chord, ctx, result);
-    parseArticulationSymbols(chord, ctx, result);
     parseAnnotations(chord, ctx, result);
     parseTremolo(chord, ctx, result);
     parseArpeggio(chord, ctx, result);
     parseGraceNotes(chord, ctx, result);
     parseChordLine(chord, ctx, result);
+
+    parseArticulationSymbols(chord, ctx, result);
 }
 
 void ChordArticulationsParser::parseSpanners(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
@@ -125,6 +127,8 @@ void ChordArticulationsParser::parseArticulationSymbols(const Chord* chord, cons
     for (const Articulation* articulation : chord->articulations()) {
         SymbolsMetaParser::parse(articulation, ctx, result);
     }
+
+    ChordFilter::validateArticulations(chord, result);
 }
 
 void ChordArticulationsParser::parseAnnotations(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
