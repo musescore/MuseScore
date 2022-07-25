@@ -43,6 +43,7 @@ public:
 
     void reg(const IUiActionsModulePtr& actions) override;
     const UiAction& action(const actions::ActionCode& code) const override;
+    const std::vector<UiAction> getActions() const override;
     UiActionState actionState(const actions::ActionCode& code) const override;
     async::Channel<actions::ActionCodeList> actionStateChanged() const override;
 

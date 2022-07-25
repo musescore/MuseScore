@@ -23,84 +23,68 @@
         <key>nav-next-section</key>
         <seq>F6</seq>
         <seq>`</seq>
-        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-prev-section</key>
         <seq>Shift+F6</seq>
         <seq>Shift+`</seq>
-        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-next-panel</key>
         <seq>Tab</seq>
-        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-prev-panel</key>
         <seq>Shift+Tab</seq>
-        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-next-tab</key>
         <seq>Ctrl+Tab</seq>
-        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-prev-tab</key>
         <seq>Ctrl+Shift+Tab</seq>
-        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-right</key>
         <seq>Right</seq>
-        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-left</key>
         <seq>Left</seq>
-        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-up</key>
         <seq>Up</seq>
-        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-down</key>
         <seq>Down</seq>
-        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-first-control</key>
       <seq>Home</seq>
-      <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-last-control</key>
       <seq>End</seq>
-      <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-nextrow-control</key>
       <seq>PgDown</seq>
-      <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-prevrow-control</key>
       <seq>PgUp</seq>
-      <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-trigger-control</key>
       <seq>Return</seq>
       <seq>Space</seq>
-      <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-escape</key>
       <seq>Esc</seq>
-      <ctx>not-notation-focused</ctx>
     </SC>
 <!-- end Keyboard navigation -->
 
@@ -147,32 +131,26 @@
   <SC>
     <key>notation-cut</key>
     <seq>Ctrl+X</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>notation-copy</key>
     <seq>Ctrl+C</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>notation-paste</key>
     <seq>Ctrl+V</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>notation-paste-half</key>
     <seq>Ctrl+Shift+Q</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>notation-paste-double</key>
     <seq>Ctrl+Shift+W</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>notation-swap</key>
     <seq>Ctrl+Shift+X</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>instruments</key>
@@ -313,7 +291,6 @@
   <SC>
     <key>rest</key>
     <seq>0</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>realtime-advance</key>
@@ -350,7 +327,6 @@
   <SC>
     <key>pitch-up</key>
     <seq>Up</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pitch-up-diatonic</key>
@@ -359,32 +335,26 @@
   <SC>
     <key>pitch-up-octave</key>
     <seq>Ctrl+Up</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>up-chord</key>
     <seq>Alt+Up</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>top-chord</key>
     <seq>Ctrl+Alt+Up</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>top-staff</key>
     <seq></seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>first-element</key>
     <seq>Ctrl+Home</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>last-element</key>
     <seq>Ctrl+End</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>next-segment-element</key>
@@ -397,12 +367,10 @@
   <SC>
     <key>next-element</key>
     <seq>Alt+Right</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>prev-element</key>
     <seq>Alt+Left</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>palette-search</key>
@@ -415,12 +383,10 @@
   <SC>
     <key>move-up</key>
     <seq>Ctrl+Shift+Up</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>pitch-down</key>
     <seq>Down</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pitch-down-diatonic</key>
@@ -429,42 +395,34 @@
   <SC>
     <key>pitch-down-octave</key>
     <seq>Ctrl+Down</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>down-chord</key>
     <seq>Alt+Down</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>bottom-chord</key>
     <seq>Ctrl+Alt+Down</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>move-down</key>
     <seq>Ctrl+Shift+Down</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>notation-move-left</key>
     <seq>Left</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>notation-move-left-quickly</key>
     <seq>Ctrl+Left</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>notation-move-right</key>
     <seq>Right</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>notation-move-right-quickly</key>
     <seq>Ctrl+Right</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>select-prev-chord</key>
@@ -561,13 +519,11 @@
   <SC>
     <key>notation-escape</key>
     <seq>Esc</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>notation-delete</key>
     <seq>Del</seq>
     <seq>Backspace</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>time-delete</key>
@@ -630,52 +586,42 @@
   <SC>
     <key>note-longa</key>
     <seq>9</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>note-breve</key>
     <seq>8</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-1</key>
     <seq>7</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-2</key>
     <seq>6</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-4</key>
     <seq>5</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-8</key>
     <seq>4</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-16</key>
     <seq>3</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-32</key>
     <seq>2</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-64</key>
     <seq>1</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-dot</key>
     <seq>.</seq>
-    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>tie</key>
@@ -756,7 +702,6 @@
   <SC>
     <key>play</key>
     <seq>Space</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>play-prev-chord</key>
@@ -785,7 +730,6 @@
   <SC>
     <key>notation-select-all</key>
     <seq>Ctrl+A</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>clef-violin</key>
@@ -798,7 +742,6 @@
   <SC>
     <key>system-break</key>
     <seq>Return</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>page-break</key>
@@ -939,12 +882,10 @@
   <SC>
     <key>next-text-element</key>
     <seq>Space</seq>
-    <ctx>notation-text-editing</ctx>
     </SC>
   <SC>
     <key>prev-text-element</key>
     <seq>Shift+Space</seq>
-    <ctx>notation-text-editing</ctx>
     </SC>
   <SC>
     <key>toggle-visible</key>
@@ -1012,92 +953,75 @@
   <SC>
     <key>string-above</key>
     <seq>Up</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>string-below</key>
     <seq>Down</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-0</key>
     <seq>0</seq>
     <seq>A</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-1</key>
     <seq>1</seq>
     <seq>B</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-2</key>
     <seq>2</seq>
     <seq>C</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-3</key>
     <seq>3</seq>
     <seq>D</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-4</key>
     <seq>4</seq>
     <seq>E</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-5</key>
     <seq>5</seq>
     <seq>F</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-6</key>
     <seq>6</seq>
     <seq>G</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-7</key>
     <seq>7</seq>
     <seq>H</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-8</key>
     <seq>8</seq>
     <seq>J</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-9</key>
     <seq>9</seq>
     <seq>K</seq>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-10</key>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-11</key>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-12</key>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-13</key>
-    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-14</key>
-    <ctx>notation-staff-tab</ctx>
     </SC>
 <!-- HARMONY / FIGURED BASS specific shortcuts -->
   <SC>
@@ -1208,6 +1132,5 @@
     <key>notation-context-menu</key>
     <seq>Shift+F10</seq>
     <seq>Ctrl+Shift+F10</seq>
-    <ctx>notation-focused</ctx>
     </SC>
   </Shortcuts>
