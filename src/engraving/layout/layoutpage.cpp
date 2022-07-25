@@ -336,17 +336,15 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
             continue;
         }
         auto spanners = ctx.score()->spannerMap().findOverlapping(stick, etick);
-        std::vector<Spanner*> spanner;
         for (auto interval : spanners) {
             Spanner* sp = interval.value;
-            if (sp->tick().ticks() < etick && sp->tick2().ticks() >= stick) {
-                if (sp->isSlur()) {
-                    ChordRest* scr = sp->startCR();
-                    ChordRest* ecr = sp->endCR();
-                    if (scr && ecr && scr->vStaffIdx() != ecr->vStaffIdx()) {
-                        toSlur(sp)->layout();
-                    }
-                }
+            if (!sp->isSlur()) {
+                continue;
+            }
+            ChordRest* scr = sp->startCR();
+            ChordRest* ecr = sp->endCR();
+            if (scr && ecr && scr->vStaffIdx() != ecr->vStaffIdx()) {
+                toSlur(sp)->layout();
             }
         }
     }

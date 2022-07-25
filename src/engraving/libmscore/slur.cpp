@@ -55,6 +55,13 @@ struct SlurCollision
     bool left = false;
     bool mid = false;
     bool right = false;
+
+    void reset()
+    {
+        left = false;
+        mid = false;
+        right = false;
+    }
 };
 
 namespace mu::engraving {
@@ -394,7 +401,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
         // CHECK FOR COLLISIONS
         unsigned iter = 0;
         do {
-            collision.left = collision.mid = collision.right = false;
+            collision.reset();
             // Update tranform because pp1 may change
             toSystemCoordinates.reset();
             toSystemCoordinates.translate(pp1.x(), pp1.y());
