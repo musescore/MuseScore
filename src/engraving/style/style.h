@@ -31,7 +31,7 @@
 #include "libmscore/types.h"
 #include "types/dimension.h"
 
-#include "property/propertyvalue.h"
+#include "types/propertyvalue.h"
 #include "draw/types/geometry.h"
 
 #include "styledef.h"

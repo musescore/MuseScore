@@ -24,8 +24,8 @@
 #include <QByteArray>
 
 #include "io/buffer.h"
-#include "io/mscwriter.h"
-#include "io/mscreader.h"
+#include "infrastructure/mscwriter.h"
+#include "infrastructure/mscreader.h"
 
 using namespace mu;
 using namespace mu::io;

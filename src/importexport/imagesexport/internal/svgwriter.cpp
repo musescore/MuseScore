@@ -31,7 +31,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/stafflines.h"
 #include "libmscore/repeatlist.h"
-#include "engraving/paint/paint.h"
+#include "engraving/infrastructure/paint.h"
 
 #include "log.h"
 

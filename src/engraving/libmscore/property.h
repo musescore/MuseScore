@@ -25,7 +25,7 @@
 
 #include "types/string.h"
 
-#include "property/propertyvalue.h"
+#include "types/propertyvalue.h"
 
 namespace mu::engraving {
 class XmlReader;

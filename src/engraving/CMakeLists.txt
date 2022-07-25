@@ -33,20 +33,25 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/engravingproject.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingconfiguration.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.h
-    ${CMAKE_CURRENT_LIST_DIR}/interactive/imimedata.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/io/mscio.h
-    ${CMAKE_CURRENT_LIST_DIR}/io/mscreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/io/mscreader.h
-    ${CMAKE_CURRENT_LIST_DIR}/io/mscwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/io/mscwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/io/htmlparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/io/htmlparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/io/ifileinfoprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/io/localfileinfoprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/io/localfileinfoprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/messagebox.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/messagebox.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/imimedata.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/mscio.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/mscreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/mscreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/mscwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/mscwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/htmlparser.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/htmlparser.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/ifileinfoprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/localfileinfoprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/localfileinfoprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paint.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paint.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/debugpaint.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/debugpaint.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paintdebugger.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paintdebugger.h
 
     ${LIBMSCORE_SRC}
 
@@ -79,13 +84,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/paint/paint.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/paint/paint.h
-    ${CMAKE_CURRENT_LIST_DIR}/paint/debugpaint.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/paint/debugpaint.h
-    ${CMAKE_CURRENT_LIST_DIR}/paint/paintdebugger.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/paint/paintdebugger.h
-
     ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/mscxcompat.cpp
@@ -112,9 +110,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/pitchvalue.h
     ${CMAKE_CURRENT_LIST_DIR}/types/bps.h
     ${CMAKE_CURRENT_LIST_DIR}/types/groupnode.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/propertyvalue.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/propertyvalue.h
 
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.h

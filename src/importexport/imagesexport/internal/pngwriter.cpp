@@ -27,7 +27,7 @@
 
 #include "libmscore/masterscore.h"
 #include "libmscore/page.h"
-#include "engraving/paint/paint.h"
+#include "engraving/infrastructure/paint.h"
 
 #include "log.h"
 

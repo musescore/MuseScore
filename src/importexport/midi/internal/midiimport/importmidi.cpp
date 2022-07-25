@@ -22,13 +22,11 @@
 
 #include <set>
 
-#include <QMessageBox>
-
 #include "engraving/style/style.h"
 #include "engraving/rw/xml.h"
 
 #include "translation.h"
-#include "interactive/messagebox.h"
+#include "infrastructure/messagebox.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"

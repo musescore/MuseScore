@@ -44,10 +44,10 @@
 #include "synthesizerstate.h"
 #include "rootitem.h"
 
-#include "io/mscwriter.h"
-#include "io/mscreader.h"
+#include "infrastructure/mscwriter.h"
+#include "infrastructure/mscreader.h"
+#include "infrastructure/imimedata.h"
 #include "draw/iimageprovider.h"
-#include "interactive/imimedata.h"
 
 #include "rw/readcontext.h"
 

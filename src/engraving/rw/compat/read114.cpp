@@ -27,7 +27,7 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "compat/pageformat.h"
-#include "io/htmlparser.h"
+#include "infrastructure/htmlparser.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 

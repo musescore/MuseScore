@@ -33,7 +33,7 @@
 #include "inotationwritersregister.h"
 
 #include "engraving/engravingproject.h"
-#include "engraving/io/ifileinfoprovider.h"
+#include "engraving/infrastructure/ifileinfoprovider.h"
 
 #include "notation/internal/masternotation.h"
 #include "projectaudiosettings.h"

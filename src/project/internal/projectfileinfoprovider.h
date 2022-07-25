@@ -22,7 +22,7 @@
 #ifndef MU_PROJECT_PROJECTFILEINFOPROVIDER_H
 #define MU_PROJECT_PROJECTFILEINFOPROVIDER_H
 
-#include "engraving/io/ifileinfoprovider.h"
+#include "engraving/infrastructure/ifileinfoprovider.h"
 
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
