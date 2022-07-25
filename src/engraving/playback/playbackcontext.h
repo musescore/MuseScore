@@ -54,7 +54,8 @@ private:
     void updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick);
     void applyDynamicToNextSegment(const Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel);
 
-    void handleSpanners(const ID partId, const Score* score);
+    void handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
+                        const int tickPositionOffset);
     void handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick);
 
     void removeDynamicData(const int from, const int to);
