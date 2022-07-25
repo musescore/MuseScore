@@ -24,6 +24,7 @@
 
 #include "ui/view/iconcodes.h"
 #include "translation.h"
+#include "types/translatablestring.h"
 #include "log.h"
 
 using namespace mu::shortcuts;
@@ -53,7 +54,8 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     case RoleSequence: return sequencesToNativeText(shortcut.sequences);
     case RoleSearchKey: {
         const UiAction& action = this->action(shortcut.action);
-        return QString::fromStdString(action.code) + action.title + action.description + sequencesToNativeText(shortcut.sequences);
+        return QString::fromStdString(action.code) + action.title.qTranslated() + action.description.qTranslated()
+               + sequencesToNativeText(shortcut.sequences);
     }
     }
 
@@ -65,22 +67,15 @@ const UiAction& ShortcutsModel::action(const std::string& actionCode) const
     return uiactionsRegister()->action(actionCode);
 }
 
-const QString& ShortcutsModel::actionTitle(const std::string& actionCode) const
+QString ShortcutsModel::actionText(const std::string& actionCode) const
 {
     const UiAction& action = this->action(actionCode);
-    return action.title;
-}
 
-const QString& ShortcutsModel::actionDescription(const std::string& actionCode) const
-{
-    const UiAction& action = this->action(actionCode);
-    return action.description;
-}
+    if (action.description.isEmpty()) {
+        return action.title.qTranslated();
+    }
 
-const QString& ShortcutsModel::actionText(const std::string& actionCode) const
-{
-    const QString& description = actionDescription(actionCode);
-    return description.isEmpty() ? actionTitle(actionCode) : description;
+    return action.description.qTranslated();
 }
 
 int ShortcutsModel::rowCount(const QModelIndex&) const
@@ -302,7 +297,7 @@ QVariantList ShortcutsModel::shortcuts() const
 QVariant ShortcutsModel::shortcutToObject(const Shortcut& shortcut) const
 {
     QVariantMap obj;
-    obj["title"] = actionTitle(shortcut.action);
+    obj["title"] = actionText(shortcut.action);
     obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
     obj["context"] = QString::fromStdString(shortcut.context);
 

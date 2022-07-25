@@ -22,10 +22,11 @@
 #include "noteinputbarmodel.h"
 
 #include "log.h"
-#include "translation.h"
+#include "types/translatablestring.h"
 
 #include "internal/notationuiactions.h"
 
+using namespace mu;
 using namespace mu::notation;
 using namespace mu::actions;
 using namespace mu::ui;
@@ -34,7 +35,7 @@ using namespace mu::uicomponents;
 static const QString TOOLBAR_NAME("noteInput");
 
 static const std::string ADD_ACTION_CODE("add");
-static const char* ADD_ACTION_TITLE("Add");
+static const TranslatableString ADD_ACTION_TITLE = TranslatableString("notation", "Add");
 static const IconCode::Code ADD_ACTION_ICON_CODE = IconCode::Code::PLUS;
 
 static const ActionCode CROSS_STAFF_BEAMING_CODE("cross-staff-beaming");
@@ -618,12 +619,12 @@ MenuItemList NoteInputBarModel::makeTupletItems()
 MenuItemList NoteInputBarModel::makeAddItems()
 {
     MenuItemList items = {
-        makeMenu(qtrc("notation", "Notes"), makeNotesItems()),
-        makeMenu(qtrc("notation", "Intervals"), makeIntervalsItems()),
-        makeMenu(qtrc("notation", "Measures"), makeMeasuresItems()),
-        makeMenu(qtrc("notation", "Frames"), makeFramesItems()),
-        makeMenu(qtrc("notation", "Text"), makeTextItems()),
-        makeMenu(qtrc("notation", "Lines"), makeLinesItems())
+        makeMenu(TranslatableString("notation", "Notes"), makeNotesItems()),
+        makeMenu(TranslatableString("notation", "Intervals"), makeIntervalsItems()),
+        makeMenu(TranslatableString("notation", "Measures"), makeMeasuresItems()),
+        makeMenu(TranslatableString("notation", "Frames"), makeFramesItems()),
+        makeMenu(TranslatableString("notation", "Text"), makeTextItems()),
+        makeMenu(TranslatableString("notation", "Lines"), makeLinesItems())
     };
 
     return items;

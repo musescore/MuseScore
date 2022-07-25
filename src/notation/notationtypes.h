@@ -29,6 +29,7 @@
 #include "io/path.h"
 #include "translation.h"
 #include "types/id.h"
+#include "types/translatablestring.h"
 #include "midi/midievent.h"
 
 #include "libmscore/engravingitem.h"
@@ -281,16 +282,16 @@ enum class ZoomType {
     TwoPages
 };
 
-inline QString zoomTypeTitle(ZoomType type)
+inline TranslatableString zoomTypeTitle(ZoomType type)
 {
     switch (type) {
-    case ZoomType::Percentage: return qtrc("notation", "Percentage");
-    case ZoomType::PageWidth: return qtrc("notation", "Page width");
-    case ZoomType::WholePage: return qtrc("notation", "Whole page");
-    case ZoomType::TwoPages: return qtrc("notation", "Two pages");
+    case ZoomType::Percentage: return TranslatableString("notation", "Percentage");
+    case ZoomType::PageWidth: return TranslatableString("notation", "Page width");
+    case ZoomType::WholePage: return TranslatableString("notation", "Whole page");
+    case ZoomType::TwoPages: return TranslatableString("notation", "Two pages");
     }
 
-    return QString();
+    return {};
 }
 
 struct Tempo
@@ -614,7 +615,7 @@ inline const ScoreOrder& customOrder()
 {
     static ScoreOrder order;
     order.id = "custom";
-    order.name = mtrc("OrderXML", "Custom");
+    order.name = TranslatableString("engraving/scoreorder", "Custom");
 
     return order;
 }

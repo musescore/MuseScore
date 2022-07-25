@@ -25,8 +25,9 @@
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 #include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 
+#include "types/translatablestring.h"
+
 #include "log.h"
-#include "translation.h"
 
 #include "ui/uitypes.h"
 #include "uicomponents/view/abstractmenumodel.h"
@@ -59,7 +60,7 @@ public:
             items << makeSeparator();
         }
 
-        MenuItem* closeDockItem = makeMenuItem(SET_DOCK_OPEN_ACTION_CODE, mu::qtrc("appshell/dock", "Close"));
+        MenuItem* closeDockItem = makeMenuItem(SET_DOCK_OPEN_ACTION_CODE, TranslatableString("appshell/dock", "Close"));
         closeDockItem->setArgs(ActionData::make_arg2<QString, bool>(m_panel->objectName(), false));
         items << closeDockItem;
 
@@ -93,7 +94,7 @@ public:
     }
 
 private:
-    MenuItem* makeMenuItem(const QString& actionCode, const QString& title)
+    MenuItem* makeMenuItem(const QString& actionCode, const TranslatableString& title)
     {
         MenuItem* item = new MenuItem(this);
         item->setId(actionCode);
@@ -110,9 +111,9 @@ private:
         return item;
     }
 
-    QString toggleFloatingActionTitle() const
+    TranslatableString toggleFloatingActionTitle() const
     {
-        return m_panel->floating() ? mu::qtrc("appshell/dock", "Dock") : mu::qtrc("appshell/dock", "Undock");
+        return m_panel->floating() ? TranslatableString("appshell/dock", "Dock") : TranslatableString("appshell/dock", "Undock");
     }
 
     void listenFloatingChanged()

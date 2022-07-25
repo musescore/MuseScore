@@ -26,6 +26,10 @@
 
 #include "types/string.h"
 
+#ifndef NO_QT_SUPPORT
+#include <QString>
+#endif
+
 namespace mu {
 //! Note: in order to make the string visible for `lupdate`,
 //! you must write TranslatableString(...) explicitly.
@@ -52,9 +56,9 @@ public:
         return TranslatableString(nullptr, str, nullptr);
     }
 
-    inline bool isValid() const
+    inline bool isEmpty() const
     {
-        return !str.empty();
+        return str.empty();
     }
 
     inline bool isTranslatable() const
@@ -64,7 +68,7 @@ public:
 
     inline String translated(int n = -1) const
     {
-        if (!isValid()) {
+        if (isEmpty()) {
             return {};
         }
 
@@ -77,16 +81,52 @@ public:
         return res;
     }
 
-    template<typename ... Args>
-    inline TranslatableString arg(const Args& ...);
+#ifndef NO_QT_SUPPORT
+    inline QString qTranslated(int n = -1) const
+    {
+        if (isEmpty()) {
+            return {};
+        }
+
+        QString res = isTranslatable() ? qtrc(context, str, disambiguation, n) : str.toQString();
+
+        for (auto arg : args) {
+            arg->apply(res);
+        }
+
+        return res;
+    }
+
+#endif
 
     template<typename ... Args>
-    inline TranslatableString arg(Args&& ...);
+    inline TranslatableString arg(const Args& ...) const;
+
+    template<typename ... Args>
+    inline TranslatableString arg(Args&& ...) const;
+
+    bool operator ==(const TranslatableString& other) const
+    {
+        return (context == other.context || (context && other.context && strcmp(context, other.context) == 0))
+               && str == other.str
+               && (disambiguation == other.disambiguation
+                   || (disambiguation && other.disambiguation && strcmp(disambiguation, other.disambiguation) == 0))
+               && args == other.args;
+    }
+
+    bool operator !=(const TranslatableString& other) const
+    {
+        return !operator==(other);
+    }
 
 private:
     struct IArg {
         virtual ~IArg() = default;
+
         virtual void apply(String& res) const = 0;
+#ifndef NO_QT_SUPPORT
+        virtual void apply(QString& res) const = 0;
+#endif
     };
 
     template<typename ... Args>
@@ -112,14 +152,36 @@ struct TranslatableString::Arg : public TranslatableString::IArg
     }
 
     template<typename T>
-    static auto makeArg(T&& t)
+    static inline auto makeArg(const T& t)
     {
         if constexpr (std::is_same_v<T, TranslatableString>) {
             return t.translated();
         } else {
-            return std::forward<T>(t);
+            return t;
         }
     }
+
+#ifndef NO_QT_SUPPORT
+    void apply(QString& res) const override
+    {
+        res = std::apply([&](const Args&... args) { return res.arg(makeQArg(args)...); }, args);
+    }
+
+    template<typename T>
+    static inline auto makeQArg(const T& t)
+    {
+        if constexpr (std::is_same_v<T, TranslatableString>) {
+            return t.qTranslated();
+// *INDENT-OFF* // Uncrustify doesn't understand `else if constexpr`
+        } else if constexpr (std::is_same_v<T, String>) {
+// *INDENT-ON*
+            return t.toQString();
+        } else {
+            return t;
+        }
+    }
+
+#endif
 };
 
 template<typename Int>
@@ -134,6 +196,14 @@ struct TranslatableString::Arg<Int> : public TranslatableString::IArg
     {
         res = res.arg(arg);
     }
+
+#ifndef NO_QT_SUPPORT
+    void apply(QString& res) const override
+    {
+        res = res.arg(arg);
+    }
+
+#endif
 };
 
 template<>
@@ -153,6 +223,14 @@ struct TranslatableString::Arg<String> : public TranslatableString::IArg
     {
         res = res.arg(arg);
     }
+
+#ifndef NO_QT_SUPPORT
+    void apply(QString& res) const override
+    {
+        res = res.arg(arg.toQString());
+    }
+
+#endif
 };
 
 template<>
@@ -170,10 +248,18 @@ struct TranslatableString::Arg<TranslatableString> : public TranslatableString::
     {
         res = res.arg(arg.translated());
     }
+
+#ifndef NO_QT_SUPPORT
+    void apply(QString& res) const override
+    {
+        res = res.arg(arg.qTranslated());
+    }
+
+#endif
 };
 
 template<typename ... Args>
-TranslatableString TranslatableString::arg(const Args& ... args)
+TranslatableString TranslatableString::arg(const Args& ... args) const
 {
     TranslatableString res = *this;
     res.args.push_back(std::shared_ptr<IArg>(new Arg(args ...)));
@@ -181,7 +267,7 @@ TranslatableString TranslatableString::arg(const Args& ... args)
 }
 
 template<typename ... Args>
-TranslatableString TranslatableString::arg(Args&& ... args)
+TranslatableString TranslatableString::arg(Args&& ... args) const
 {
     TranslatableString res = *this;
     res.args.push_back(std::shared_ptr<IArg>(new Arg(std::forward<Args>(args) ...)));

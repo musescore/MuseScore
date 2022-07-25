@@ -29,6 +29,10 @@
 
 #include "ui/uitypes.h"
 
+namespace mu {
+class TranslatableString;
+}
+
 namespace mu::uicomponents {
 // This must be in sync with QAction::MenuRole
 enum class MenuItemRole {
@@ -51,7 +55,7 @@ class MenuItem : public QObject, public async::Asyncable
     Q_PROPERTY(QString shortcuts READ shortcutsTitle NOTIFY actionChanged)
     Q_PROPERTY(QString portableShortcuts READ portableShortcuts NOTIFY actionChanged)
 
-    Q_PROPERTY(QString title READ title NOTIFY actionChanged)
+    Q_PROPERTY(QString title READ translatedTitle NOTIFY actionChanged)
     Q_PROPERTY(QString description READ description_property NOTIFY actionChanged)
     Q_PROPERTY(QString section READ section NOTIFY sectionChanged)
 
@@ -74,7 +78,8 @@ public:
     MenuItem(const ui::UiAction& action, QObject* parent = nullptr);
 
     QString id() const;
-    QString title() const;
+    TranslatableString title() const;
+    QString translatedTitle() const;
     QString section() const;
 
     bool selectable() const;
@@ -95,7 +100,7 @@ public:
 
 public slots:
     void setId(const QString& id);
-    void setTitle(const QString& title);
+    void setTitle(const TranslatableString& title);
     void setSection(const QString& section);
     void setState(const mu::ui::UiActionState& state);
     void setSelectable(bool selectable);
