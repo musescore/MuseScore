@@ -212,15 +212,6 @@ StyledGridView {
         interval: 400
     }
 
-    Component.onCompleted: {
-        shortcutsModel.load()
-    }
-
-    ShortcutsModel {
-        id: shortcutsModel
-    }
-
-
     EditShortcutDialog {
         id: editShortcutDialog
 
