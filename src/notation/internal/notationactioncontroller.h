@@ -188,6 +188,8 @@ private:
     mu::engraving::EngravingItem* selectedElement() const;
     bool noteOrRestSelected() const;
 
+    const mu::engraving::Harmony* editedChordSymbol() const;
+
     bool canUndo() const;
     bool canRedo() const;
     bool isNotationPage() const;
