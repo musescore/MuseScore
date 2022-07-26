@@ -87,7 +87,7 @@ GradualTempoChange::GradualTempoChange(EngravingItem* parent)
     : TextLineBase(ElementType::GRADUAL_TEMPO_CHANGE, parent, ElementFlag::SYSTEM)
 {
     initElementStyle(&tempoStyle);
-    setAnchor(Anchor::MEASURE);
+    setAnchor(Anchor::SEGMENT);
 
     resetProperty(Pid::LINE_VISIBLE);
     resetProperty(Pid::BEGIN_TEXT_PLACE);
