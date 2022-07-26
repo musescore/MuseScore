@@ -2767,17 +2767,26 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
             }
             sts = m->findSegment(SegmentType::KeySig, m->tick());
             if (sts && !lastDeletedKeySig) {
-                lastDeletedKeySig = toKeySig(sts->element(0));
-                if (lastDeletedKeySig) {
-                    lastDeletedKeySigEvent = lastDeletedKeySig->keySigEvent();
-                    if (!styleB(Sid::concertPitch) && !lastDeletedKeySigEvent.isAtonal()) {
-                        // convert to concert pitch
-                        transposeKeySigEvent = true;
-                        Interval v = staff(0)->part()->instrument(m->tick())->transpose();
-                        if (!v.isZero()) {
-                            lastDeletedKeySigEvent.setKey(transposeKey(lastDeletedKeySigEvent.key(), v,
-                                                                       lastDeletedKeySig->part()->preferSharpFlat()));
+                // Search all staves for a key sig until one is found
+                // Sometimes, there is no key sig in a staff, but there is a transposing instrument
+                // that has one in another one
+                for (size_t staffIdx = 0; staffIdx < nstaves(); staffIdx++) {
+                    lastDeletedKeySig = toKeySig(sts->element(staffIdx * VOICES));
+
+                    if (lastDeletedKeySig) {
+                        lastDeletedKeySigEvent = lastDeletedKeySig->keySigEvent();
+                        if (!styleB(Sid::concertPitch) && !lastDeletedKeySigEvent.isAtonal()) {
+                            // Convert to concert pitch
+                            transposeKeySigEvent = true;
+                            Interval v
+                                = staff(staffIdx)->part()->instrument(m->tick())->transpose();
+                            if (!v.isZero()) {
+                                lastDeletedKeySigEvent.setKey(
+                                    transposeKey(lastDeletedKeySigEvent.key(), v,
+                                                 lastDeletedKeySig->part()->preferSharpFlat()));
+                            }
                         }
+                        break;
                     }
                 }
             }
