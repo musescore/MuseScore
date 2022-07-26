@@ -104,7 +104,15 @@ public:
 
     Info stateInfo() const;
 
-    static bool enabled();
+    static bool enabled()
+    {
+    #ifdef CUSTOM_ALLOCATOR_DISABLED
+        return false;
+    #else
+        return used;
+    #endif
+    }
+
     static int used;
 
 private:

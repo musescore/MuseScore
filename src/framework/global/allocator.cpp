@@ -205,15 +205,6 @@ ObjectAllocator::Info ObjectAllocator::stateInfo() const
     return info;
 }
 
-bool ObjectAllocator::enabled()
-{
-#ifdef CUSTOM_ALLOCATOR_DISABLED
-    return false;
-#else
-    return used;
-#endif
-}
-
 // ============================================
 // AllocatorsRegister
 // ============================================
