@@ -71,6 +71,7 @@ public:
 
 private:
     Ret init();
+    void createFluidInstance();
 
     bool handleEvent(const midi::Event& event);
 
@@ -87,6 +88,7 @@ private:
     int m_currentExpressionLevel = 0;
 
     FluidSequencer m_sequencer;
+    std::set<io::path_t> m_sfontPaths;
 };
 
 using FluidSynthPtr = std::shared_ptr<FluidSynth>;

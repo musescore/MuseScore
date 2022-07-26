@@ -140,17 +140,22 @@ Ret FluidSynth::init()
 
     fluid_settings_setstr(m_fluid->settings, "audio.sample-format", "float");
 
+    createFluidInstance();
+
+    m_currentExpressionLevel = DEFAULT_MIDI_VOLUME;
+
+    LOGD() << "synth inited\n";
+    return true;
+}
+
+void FluidSynth::createFluidInstance()
+{
     m_fluid->synth = new_fluid_synth(m_fluid->settings);
 
     fluid_sfloader_t* sfloader = new_fluid_sfloader(loadSoundFont, delete_fluid_sfloader);
 
     fluid_sfloader_set_data(sfloader, m_fluid->settings);
     fluid_synth_add_sfloader(m_fluid->synth, sfloader);
-
-    m_currentExpressionLevel = DEFAULT_MIDI_VOLUME;
-
-    LOGD() << "synth inited\n";
-    return true;
 }
 
 bool FluidSynth::handleEvent(const midi::Event& event)
@@ -200,10 +205,22 @@ void FluidSynth::updateCurrentExpressionLevel(const midi::Event& event)
 
 void FluidSynth::setSampleRate(unsigned int sampleRate)
 {
+    if (m_sampleRate == sampleRate) {
+        return;
+    }
+
     m_sampleRate = sampleRate;
     if (m_fluid->settings) {
         fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
     }
+
+    if (m_fluid->synth) {
+        delete_fluid_synth(m_fluid->synth);
+    }
+
+    createFluidInstance();
+    addSoundFonts(std::vector<io::path_t>(m_sfontPaths.cbegin(), m_sfontPaths.cend()));
+    setupSound(m_setupData);
 }
 
 Ret FluidSynth::addSoundFonts(const std::vector<io::path_t>& sfonts)
@@ -221,6 +238,7 @@ Ret FluidSynth::addSoundFonts(const std::vector<io::path_t>& sfonts)
         }
 
         LOGI() << "success load soundfont: " << sfont;
+        m_sfontPaths.insert(sfont);
     }
 
     return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedLoad);
