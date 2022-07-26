@@ -540,6 +540,9 @@ TEST_F(Musicxml_Tests, grace1) {
 TEST_F(Musicxml_Tests, grace2) {
     mxmlIoTest("testGrace2");
 }
+TEST_F(Musicxml_Tests, grace3) {
+    mxmlIoTest("testGrace3");
+}
 TEST_F(Musicxml_Tests, graceAfter1) {
     mxmlIoTest("testGraceAfter1");
 }
