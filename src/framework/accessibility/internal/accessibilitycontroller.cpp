@@ -323,6 +323,10 @@ void AccessibilityController::savePanelAccessibleName(const IAccessible* oldItem
 #ifndef Q_OS_MAC
 void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
 {
+    if (!configuration()->active()) {
+        return;
+    }
+
     if (m_lastFocused != item) {
         return;
     }
