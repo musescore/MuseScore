@@ -271,6 +271,10 @@ void CloudService::signOut()
 
     QUrl signOutUrl = prepareUrlForRequest(configuration()->loginApiUrl());
     if (!signOutUrl.isEmpty()) {
+        QUrlQuery query(signOutUrl.query());
+        query.addQueryItem(REFRESH_TOKEN_KEY, m_refreshToken);
+        signOutUrl.setQuery(query);
+
         QBuffer receivedData;
         Ret ret = m_networkManager->get(signOutUrl, &receivedData, headers());
 
