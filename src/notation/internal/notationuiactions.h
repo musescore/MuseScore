@@ -51,8 +51,6 @@ public:
     bool actionChecked(const ui::UiAction& act) const override;
     async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
 
-    static ui::UiActionList defaultNoteInputActions();
-
     static DurationType actionDurationType(const actions::ActionCode& actionCode);
     static AccidentalType actionAccidentalType(const actions::ActionCode& actionCode);
     static int actionDotCount(const actions::ActionCode& actionCode);
