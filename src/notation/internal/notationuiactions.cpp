@@ -2396,7 +2396,6 @@ const UiActionList& NotationUiActions::actionsList() const
     static UiActionList alist;
     if (alist.empty()) {
         alist.insert(alist.end(), m_actions.begin(), m_actions.end());
-        alist.insert(alist.end(), m_noteInputActions.begin(), m_noteInputActions.end());
         alist.insert(alist.end(), m_scoreConfigActions.begin(), m_scoreConfigActions.end());
         alist.insert(alist.end(), m_engravingDebuggingActions.begin(), m_engravingDebuggingActions.end());
     }

@@ -61,7 +61,6 @@ public:
 
 private:
     static const ui::UiActionList m_actions;
-    static const ui::UiActionList m_noteInputActions;
     static const ui::UiActionList m_scoreConfigActions;
     static const ui::UiActionList m_engravingDebuggingActions;
 
