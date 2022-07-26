@@ -27,7 +27,7 @@ namespace mu::engraving {
 class ChordRest;
 
 extern int pitch2y(int pitch, int enh, int clefOffset, int key, int& prefix, const char* tversatz);
-extern ChordRest* nextChordRest(ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
-extern ChordRest* prevChordRest(ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
+extern ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
+extern ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
 } // namespace mu::engraving
 #endif

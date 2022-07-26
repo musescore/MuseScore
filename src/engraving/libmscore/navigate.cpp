@@ -119,38 +119,38 @@ static std::set<ElementPair, decltype(& isChild1beforeChild2)> toChildPairsSet(c
 //    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests)
+ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests)
 {
     if (!cr) {
-        return 0;
+        return nullptr;
     }
 
     if (cr->isGrace()) {
-        Chord* c  = toChord(cr);
+        const Chord* c  = toChord(cr);
         Chord* pc = toChord(cr->explicitParent());
 
         if (skipGrace) {
             cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
-            std::vector<Chord*> cl = pc->graceNotesBefore();
-            auto i = std::find(cl.begin(), cl.end(), c);
-            if (i == cl.end()) {
-                return 0;           // unable to find self?
+            const GraceNotesGroup& group = pc->graceNotesBefore();
+            auto i = std::find(group.begin(), group.end(), c);
+            if (i == group.end()) {
+                return nullptr;           // unable to find self?
             }
             ++i;
-            if (i != cl.end()) {
+            if (i != group.end()) {
                 return *i;
             }
             // if this was last grace note before, return parent
             return pc;
         } else {
-            std::vector<Chord*> cl = pc->graceNotesAfter();
-            auto i = std::find(cl.begin(), cl.end(), c);
-            if (i == cl.end()) {
-                return 0;           // unable to find self?
+            const GraceNotesGroup& group = pc->graceNotesAfter();
+            auto i = std::find(group.begin(), group.end(), c);
+            if (i == group.end()) {
+                return nullptr;           // unable to find self?
             }
             ++i;
-            if (i != cl.end()) {
+            if (i != group.end()) {
                 return *i;
             }
             // if this was last grace note after, fall through to find next main note
@@ -158,11 +158,11 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
         }
     } else { // cr is not a grace note
         if (cr->isChord() && !skipGrace) {
-            Chord* c = toChord(cr);
+            const Chord* c = toChord(cr);
             if (!c->graceNotes().empty()) {
-                std::vector<Chord*> cl = c->graceNotesAfter();
-                if (!cl.empty()) {
-                    return cl.front();
+                const GraceNotesGroup& group = c->graceNotesAfter();
+                if (!group.empty()) {
+                    return group.front();
                 }
             }
         }
@@ -180,9 +180,9 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
             if (e->isChord() && !skipGrace) {
                 Chord* c = toChord(e);
                 if (!c->graceNotes().empty()) {
-                    std::vector<Chord*> cl = c->graceNotesBefore();
-                    if (!cl.empty()) {
-                        return cl.front();
+                    const GraceNotesGroup& group = c->graceNotesBefore();
+                    if (!group.empty()) {
+                        return group.front();
                     }
                 }
             }
@@ -190,7 +190,7 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -199,36 +199,36 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
 //    if grace is true, include grace notes
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests)
+ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests)
 {
     if (!cr) {
-        return 0;
+        return nullptr;
     }
 
     if (cr->isGrace()) {
-        Chord* c  = toChord(cr);
+        const Chord* c  = toChord(cr);
         Chord* pc = toChord(cr->explicitParent());
 
         if (skipGrace) {
             cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
-            std::vector<Chord*> cl = pc->graceNotesBefore();
-            auto i = std::find(cl.begin(), cl.end(), c);
-            if (i == cl.end()) {
-                return 0;           // unable to find self?
+            const GraceNotesGroup& group = pc->graceNotesBefore();
+            auto i = std::find(group.begin(), group.end(), c);
+            if (i == group.end()) {
+                return nullptr;           // unable to find self?
             }
-            if (i != cl.begin()) {
+            if (i != group.begin()) {
                 return *--i;
             }
             // if this was first grace note before, fall through to find previous main note
             cr = pc;
         } else {
-            std::vector<Chord*> cl = pc->graceNotesAfter();
-            auto i = std::find(cl.begin(), cl.end(), c);
-            if (i == cl.end()) {
-                return 0;           // unable to find self?
+            const GraceNotesGroup& group = pc->graceNotesAfter();
+            auto i = std::find(group.begin(), group.end(), c);
+            if (i == group.end()) {
+                return nullptr;           // unable to find self?
             }
-            if (i != cl.begin()) {
+            if (i != group.begin()) {
                 return *--i;
             }
             // if this was first grace note after, return parent
@@ -238,10 +238,10 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
         //
         // cr is not a grace note
         if (cr->isChord() && !skipGrace) {
-            Chord* c = toChord(cr);
-            std::vector<Chord*> cl = c->graceNotesBefore();
-            if (!cl.empty()) {
-                return cl.back();
+            const Chord* c = toChord(cr);
+            const GraceNotesGroup& group = c->graceNotesBefore();
+            if (!group.empty()) {
+                return group.back();
             }
         }
     }
@@ -255,16 +255,16 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
                 continue; // these rests are not shown, skip them
             }
             if (e->isChord() && !skipGrace) {
-                std::vector<Chord*> cl = toChord(e)->graceNotesAfter();
-                if (!cl.empty()) {
-                    return cl.back();
+                const GraceNotesGroup& group = toChord(e)->graceNotesAfter();
+                if (!group.empty()) {
+                    return group.back();
                 }
             }
             return e;
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------

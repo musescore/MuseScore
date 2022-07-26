@@ -1272,11 +1272,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
     }
 }
 
-//--------------------------------------------------------
-//   swingAdjustParams
-//--------------------------------------------------------
-
-void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swingUnit, int swingRatio)
+void Score::swingAdjustParams(const Chord* chord, int& gateTime, int& ontime, int swingUnit, int swingRatio)
 {
     Fraction tick = chord->rtick();
     // adjust for anacrusis
@@ -1315,7 +1311,7 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
 //   Check for subdivided beat
 //---------------------------------------------------------
 
-bool Score::isSubdivided(ChordRest* chord, int swingUnit)
+bool Score::isSubdivided(const ChordRest* chord, int swingUnit)
 {
     if (!chord) {
         return false;
