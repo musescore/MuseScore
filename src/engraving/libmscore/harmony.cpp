@@ -930,6 +930,7 @@ void Harmony::endEdit(EditData& ed)
     _realizedHarmony.setDirty(true);
 
     setHarmony(s);
+    setPlainText(harmonyName());
 
     // disable spell check
     _isMisspelled = false;
