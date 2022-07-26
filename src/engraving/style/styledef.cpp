@@ -891,9 +891,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::tempoFrameFgColor,             "tempoFrameFgColor",            PropertyValue::fromValue(draw::Color::black) },
     { Sid::tempoFrameBgColor,             "tempoFrameBgColor",            PropertyValue::fromValue(draw::Color::transparent) },
     { Sid::tempoChangeLineWidth,          "tempoChangeLineWidth",         Spatium(0.15) },
-    { Sid::tempoChangeLineStyle,          "tempoChangeLineStyle",         PropertyValue(LineType::DOTTED) },
+    { Sid::tempoChangeLineStyle,          "tempoChangeLineStyle",         PropertyValue(LineType::DASHED) },
     { Sid::tempoChangeDashLineLen,        "tempoChangeDashLineLen",       6.0 },
-    { Sid::tempoChangeDashGapLen,         "tempoChangeDashGapLen",        8.0 },
+    { Sid::tempoChangeDashGapLen,         "tempoChangeDashGapLen",        9.0 },
 
     { Sid::metronomeFontFace,             "metronomeFontFace",            "Edwin" },
     { Sid::metronomeFontSize,             "metronomeFontSize",            12.0 },
