@@ -214,7 +214,10 @@ void StaffSettingsModel::createLinkedStaff()
     }
 
     Staff* linkedStaff = sourceStaff->clone();
-    masterNotationParts()->appendLinkedStaff(linkedStaff, sourceStaff->id(), sourceStaff->part()->id());
+    if (!masterNotationParts()->appendLinkedStaff(linkedStaff, sourceStaff->id(), sourceStaff->part()->id())) {
+        linkedStaff->unlink();
+        delete linkedStaff;
+    }
 }
 
 INotationPartsPtr StaffSettingsModel::notationParts() const
