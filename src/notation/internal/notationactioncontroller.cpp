@@ -874,7 +874,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     case MoveDirection::Left:
         if (interaction->isTextEditingStarted() && textNavigationAvailable()) {
             navigateToTextElementInNearMeasure(direction);
-            break;
+            return;
         }
 
         if (selectedElement && selectedElement->isTextBase()) {
@@ -1558,7 +1558,9 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
     if (element->isLyrics()) {
         currentNotationInteraction()->navigateToLyrics(direction);
     } else if (element->isHarmony()) {
+        const Harmony* chordSymbol = editedChordSymbol();
         currentNotationInteraction()->navigateToNearHarmony(direction, nearNoteOrRest);
+        playbackController()->playElement(chordSymbol);
     } else if (element->isFiguredBass()) {
         currentNotationInteraction()->navigateToNearFiguredBass(direction);
     } else {
@@ -1574,7 +1576,9 @@ void NotationActionController::navigateToTextElementByFraction(const Fraction& f
     }
 
     if (element->isHarmony()) {
+        const Harmony* chordSymbol = editedChordSymbol();
         currentNotationInteraction()->navigateToHarmony(fraction);
+        playbackController()->playElement(chordSymbol);
     } else if (element->isFiguredBass()) {
         currentNotationInteraction()->navigateToFiguredBass(fraction);
     }
@@ -1588,7 +1592,9 @@ void NotationActionController::navigateToTextElementInNearMeasure(MoveDirection 
     }
 
     if (element->isHarmony()) {
+        const Harmony* chordSymbol = editedChordSymbol();
         currentNotationInteraction()->navigateToHarmonyInNearMeasure(direction);
+        playbackController()->playElement(chordSymbol);
     } else if (element->isFiguredBass()) {
         currentNotationInteraction()->navigateToFiguredBassInNearMeasure(direction);
     }
@@ -1775,6 +1781,21 @@ bool NotationActionController::noteOrRestSelected() const
     }
 
     return false;
+}
+
+const mu::engraving::Harmony* NotationActionController::editedChordSymbol() const
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return nullptr;
+    }
+
+    const TextBase* text = interaction->editedText();
+    if (!text || !text->isHarmony()) {
+        return nullptr;
+    }
+
+    return toHarmony(text);
 }
 
 bool NotationActionController::canUndo() const
