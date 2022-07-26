@@ -79,7 +79,8 @@ const QString& ShortcutsModel::actionDescription(const std::string& actionCode) 
 
 const QString& ShortcutsModel::actionText(const std::string& actionCode) const
 {
-    return actionDescription(actionCode) == "" ? actionTitle(actionCode) : actionDescription(actionCode);
+    const QString description = actionDescription(actionCode);
+    return description.isEmpty() ? actionTitle(actionCode) : description;
 }
 
 int ShortcutsModel::rowCount(const QModelIndex&) const

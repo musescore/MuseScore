@@ -190,7 +190,7 @@ struct UiAction
 {
     actions::ActionCode code;
     UiContext uiCtx = UiCtxAny;
-    std::string scCtx = "NULL";
+    std::string scCtx = "any";
     QString title;
     QString description;
     IconCode::Code iconCode = IconCode::Code::NONE;
