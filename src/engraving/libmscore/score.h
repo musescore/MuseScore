@@ -472,8 +472,7 @@ private:
 
     bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, staff_idx_t staffIdx);
     bool rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffIdx);
-    void swingAdjustParams(Chord*, int&, int&, int, int);
-    bool isSubdivided(ChordRest*, int);
+    bool isSubdivided(const ChordRest *, int);
     std::list<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
     void pasteChordRest(ChordRest* cr, const Fraction& tick, const Interval&);
 
@@ -952,6 +951,8 @@ public:
     void updateCapo();
     void updateVelo();
     void updateChannel();
+
+    void swingAdjustParams(const Chord*, int&, int&, int, int);
 
     void cmdConcertPitchChanged(bool);
 
