@@ -387,7 +387,7 @@ bool PlaybackModel::hasToReloadTracks(const std::unordered_set<ElementType>& cha
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
         ElementType::PLAYTECH_ANNOTATION, ElementType::DYNAMIC, ElementType::HAIRPIN,
-        ElementType::HAIRPIN_SEGMENT
+        ElementType::HAIRPIN_SEGMENT, ElementType::HARMONY
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
