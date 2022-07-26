@@ -1888,90 +1888,6 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "String below (TAB)"),
              TranslatableString("action", "Go to string below (TAB)")
              ),
-    UiAction("pad-note-1-TAB",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "Whole note")),
-             X_TAB.arg(TranslatableString("action", "Set duration: whole note")),
-             IconCode::Code::NOTE_WHOLE
-             ),
-    UiAction("pad-note-2-TAB",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "Half note")),
-             X_TAB.arg(TranslatableString("action", "Set duration: half note")),
-             IconCode::Code::NOTE_HALF
-             ),
-    UiAction("pad-note-4-TAB",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "Quarter note")),
-             X_TAB.arg(TranslatableString("action", "Set duration: quarter note")),
-             IconCode::Code::NOTE_QUARTER
-             ),
-    UiAction("pad-note-8-TAB",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "8th note")),
-             X_TAB.arg(TranslatableString("action", "Set duration: eighth note")),
-             IconCode::Code::NOTE_8TH
-             ),
-    UiAction("pad-note-16-TAB",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "16th note")),
-             X_TAB.arg(TranslatableString("action", "Set duration: 16th note")),
-             IconCode::Code::NOTE_16TH
-             ),
-    UiAction("pad-note-32-TAB",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "32nd note")),
-             X_TAB.arg(TranslatableString("action", "Set duration: 32nd note")),
-             IconCode::Code::NOTE_32ND
-             ),
-    UiAction("pad-note-64-TAB",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "64th note")),
-             X_TAB.arg(TranslatableString("action", "Set duration: 64th note")),
-             IconCode::Code::NOTE_64TH
-             ),
-    UiAction("pad-note-128-TAB",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "128th note")),
-             X_TAB.arg(TranslatableString("action", "Set duration: 128th note")),
-             IconCode::Code::NOTE_128TH
-             ),
-    UiAction("pad-note-256-TAB",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "256th note")),
-             X_TAB.arg(TranslatableString("action", "Set duration: 256th note")),
-             IconCode::Code::NOTE_256TH
-             ),
-    UiAction("pad-note-512-TAB",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "512th note")),
-             X_TAB.arg(TranslatableString("action", "Set duration: 512th note")),
-             IconCode::Code::NOTE_512TH
-             ),
-    UiAction("pad-note-1024-TAB",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "1024th note")),
-             X_TAB.arg(TranslatableString("action", "Set duration: 1024th note")),
-             IconCode::Code::NOTE_1024TH
-             ),
-    UiAction("notation-context-menu",
-             mu::context::UiCtxNotationFocused,
-             mu::context::CTX_NOTATION_FOCUSED
-             )
-};
-
-const UiActionList NotationUiActions::m_noteInputActions = {
     UiAction(NOTE_INPUT_ACTION_CODE,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
@@ -2111,6 +2027,83 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              mu::context::CTX_NOTATION_STAFF_NOT_TAB,
              TranslatableString("action", "1024th note"),
              TranslatableString("action", "Set duration: 1024th note"),
+             IconCode::Code::NOTE_1024TH
+             ),
+    UiAction("pad-note-1-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             X_TAB.arg(TranslatableString("action", "Whole note")),
+             X_TAB.arg(TranslatableString("action", "Set duration: whole note")),
+             IconCode::Code::NOTE_WHOLE
+             ),
+    UiAction("pad-note-2-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             X_TAB.arg(TranslatableString("action", "Half note")),
+             X_TAB.arg(TranslatableString("action", "Set duration: half note")),
+             IconCode::Code::NOTE_HALF
+             ),
+    UiAction("pad-note-4-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             X_TAB.arg(TranslatableString("action", "Quarter note")),
+             X_TAB.arg(TranslatableString("action", "Set duration: quarter note")),
+             IconCode::Code::NOTE_QUARTER
+             ),
+    UiAction("pad-note-8-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             X_TAB.arg(TranslatableString("action", "8th note")),
+             X_TAB.arg(TranslatableString("action", "Set duration: eighth note")),
+             IconCode::Code::NOTE_8TH
+             ),
+    UiAction("pad-note-16-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             X_TAB.arg(TranslatableString("action", "16th note")),
+             X_TAB.arg(TranslatableString("action", "Set duration: 16th note")),
+             IconCode::Code::NOTE_16TH
+             ),
+    UiAction("pad-note-32-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             X_TAB.arg(TranslatableString("action", "32nd note")),
+             X_TAB.arg(TranslatableString("action", "Set duration: 32nd note")),
+             IconCode::Code::NOTE_32ND
+             ),
+    UiAction("pad-note-64-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             X_TAB.arg(TranslatableString("action", "64th note")),
+             X_TAB.arg(TranslatableString("action", "Set duration: 64th note")),
+             IconCode::Code::NOTE_64TH
+             ),
+    UiAction("pad-note-128-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             X_TAB.arg(TranslatableString("action", "128th note")),
+             X_TAB.arg(TranslatableString("action", "Set duration: 128th note")),
+             IconCode::Code::NOTE_128TH
+             ),
+    UiAction("pad-note-256-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             X_TAB.arg(TranslatableString("action", "256th note")),
+             X_TAB.arg(TranslatableString("action", "Set duration: 256th note")),
+             IconCode::Code::NOTE_256TH
+             ),
+    UiAction("pad-note-512-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             X_TAB.arg(TranslatableString("action", "512th note")),
+             X_TAB.arg(TranslatableString("action", "Set duration: 512th note")),
+             IconCode::Code::NOTE_512TH
+             ),
+    UiAction("pad-note-1024-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             X_TAB.arg(TranslatableString("action", "1024th note")),
+             X_TAB.arg(TranslatableString("action", "Set duration: 1024th note")),
              IconCode::Code::NOTE_1024TH
              ),
     UiAction("pad-dot",
@@ -2275,6 +2268,10 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              TranslatableString("action", "Voice 4"),
              TranslatableString("action", "Use voice 4"),
              IconCode::Code::VOICE_4
+             ),
+    UiAction("notation-context-menu",
+             mu::context::UiCtxNotationFocused,
+             mu::context::CTX_NOTATION_FOCUSED
              )
 };
 
@@ -2485,11 +2482,6 @@ mu::async::Channel<mu::actions::ActionCodeList> NotationUiActions::actionEnabled
 mu::async::Channel<mu::actions::ActionCodeList> NotationUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
-}
-
-UiActionList NotationUiActions::defaultNoteInputActions()
-{
-    return m_noteInputActions;
 }
 
 DurationType NotationUiActions::actionDurationType(const ActionCode& actionCode)

@@ -34,7 +34,7 @@ using namespace mu::uicomponents;
 
 static const QString TOOLBAR_NAME("noteInput");
 
-static const std::string ADD_ACTION_CODE("add");
+static const ActionCode ADD_ACTION_CODE("add");
 static const TranslatableString ADD_ACTION_TITLE = TranslatableString("notation", "Add");
 static const IconCode::Code ADD_ACTION_ICON_CODE = IconCode::Code::PLUS;
 
@@ -378,7 +378,7 @@ void NoteInputBarModel::updateRestState()
 
 void NoteInputBarModel::updateAddState()
 {
-    findItem(ActionCode(ADD_ACTION_CODE)).setSubitems(makeAddItems());
+    findItem(ADD_ACTION_CODE).setSubitems(makeAddItems());
 }
 
 int NoteInputBarModel::resolveCurrentVoiceIndex() const
@@ -549,7 +549,7 @@ MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QStrin
 
 MenuItem* NoteInputBarModel::makeAddItem(const QString& section)
 {
-    UiAction addAction(ADD_ACTION_CODE, UiCtxAny, mu::context::CTX_ANY, ADD_ACTION_TITLE, ADD_ACTION_ICON_CODE);
+    static const UiAction addAction(ADD_ACTION_CODE, UiCtxAny, mu::context::CTX_ANY, ADD_ACTION_TITLE, ADD_ACTION_ICON_CODE);
     return makeActionItem(addAction, section, makeAddItems());
 }
 
