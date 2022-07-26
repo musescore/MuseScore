@@ -102,9 +102,6 @@ public:
     template<typename ... Args>
     inline TranslatableString arg(const Args& ...) const;
 
-    template<typename ... Args>
-    inline TranslatableString arg(Args&& ...) const;
-
     bool operator ==(const TranslatableString& other) const
     {
         return (context == other.context || (context && other.context && strcmp(context, other.context) == 0))
@@ -142,9 +139,6 @@ struct TranslatableString::Arg : public TranslatableString::IArg
 
     Arg(const Args&... args)
         : args(args ...) {}
-
-    Arg(Args&&... args)
-        : args(std::forward<Args>(args)...) {}
 
     void apply(String& res) const override
     {
@@ -215,10 +209,6 @@ struct TranslatableString::Arg<String> : public TranslatableString::IArg
     Arg(const T& ... arg) : arg(arg ...) {
     }
 
-    template<typename ... T>
-    Arg(T && ... arg) : arg(std::forward<T>(arg)...) {
-    }
-
     void apply(String& res) const override
     {
         res = res.arg(arg);
@@ -241,9 +231,6 @@ struct TranslatableString::Arg<TranslatableString> : public TranslatableString::
     Arg(const TranslatableString& arg) : arg(arg) {
     }
 
-    Arg(TranslatableString && arg) : arg(std::forward<TranslatableString>(arg)) {
-    }
-
     void apply(String& res) const override
     {
         res = res.arg(arg.translated());
@@ -263,14 +250,6 @@ TranslatableString TranslatableString::arg(const Args& ... args) const
 {
     TranslatableString res = *this;
     res.args.push_back(std::shared_ptr<IArg>(new Arg(args ...)));
-    return res;
-}
-
-template<typename ... Args>
-TranslatableString TranslatableString::arg(Args&& ... args) const
-{
-    TranslatableString res = *this;
-    res.args.push_back(std::shared_ptr<IArg>(new Arg(std::forward<Args>(args) ...)));
     return res;
 }
 }
