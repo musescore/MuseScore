@@ -94,7 +94,7 @@ option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_UNITY "Build using unity build." ON)
 option(TRY_BUILD_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
 option(BUILD_ASAN "Enable Address Sanitizer" OFF) # if ON, then disabled custom allocator
-option(BUILD_ALLOCATOR "Enable Custom allocator (used for engraving)" ON)
+option(BUILD_ALLOCATOR "Enable Custom allocator (used for engraving)" OFF)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(TRACE_DRAW_OBJ_ENABLED "Trace draw objects" OFF)
 
