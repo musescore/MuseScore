@@ -69,7 +69,7 @@ void AudioConfiguration::init()
         m_audioOutputDeviceIdChanged.notify();
     });
 
-    settings()->setDefaultValue(AUDIO_SAMPLE_RATE_KEY, Val(48000));
+    settings()->setDefaultValue(AUDIO_SAMPLE_RATE_KEY, Val(44100));
     settings()->valueChanged(AUDIO_SAMPLE_RATE_KEY).onReceive(nullptr, [this](const Val&) {
         m_driverSampleRateChanged.notify();
     });

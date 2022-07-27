@@ -28,6 +28,7 @@
 
 #include <QTimer>
 
+#include "translation.h"
 #include "log.h"
 
 typedef AudioDeviceID OSXAudioDeviceID;
@@ -186,7 +187,7 @@ bool OSXAudioDriver::isOpened() const
 AudioDeviceList OSXAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList deviceList;
-    deviceList.push_back({ DEFAULT_DEVICE_ID, DEFAULT_DEVICE_ID });
+    deviceList.push_back({ DEFAULT_DEVICE_ID, trc("audio", "System default") });
 
     for (auto& device : m_outputDevices) {
         AudioDevice deviceInfo;
@@ -344,8 +345,10 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
         return {};
     }
 
+    unsigned int minimum = std::max(static_cast<int>(range.mMinimum), 32);
+
     std::vector<unsigned int> result;
-    for (unsigned int bufferSize = range.mMaximum; bufferSize >= range.mMinimum;) {
+    for (unsigned int bufferSize = range.mMaximum; bufferSize >= minimum;) {
         result.push_back(bufferSize);
         bufferSize /= 2;
     }
