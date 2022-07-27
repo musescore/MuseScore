@@ -4684,21 +4684,6 @@ By default, they will be placed such as that their right end are at the same lev
     </message>
 </context>
 <context>
-    <name>InstrumentsXML</name>
-    <message>
-        <location filename="../../src/engraving/libmscore/instrument.cpp" line="50"/>
-        <source>normal</source>
-        <extracomment>Channel name for otherwise unnamed channels</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/libmscore/instrument.cpp" line="52"/>
-        <source>harmony</source>
-        <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>KeyEdit</name>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="38"/>
@@ -14016,6 +14001,21 @@ Published under the %1GNU General Public License version 3%2.</source>
     </message>
 </context>
 <context>
+    <name>engraving/instruments</name>
+    <message>
+        <location filename="../../src/engraving/libmscore/instrument.cpp" line="50"/>
+        <source>normal</source>
+        <extracomment>Channel name for otherwise unnamed channels</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/libmscore/instrument.cpp" line="52"/>
+        <source>harmony</source>
+        <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>engraving/noteheadgroup</name>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="402"/>
@@ -14452,7 +14452,7 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="618"/>
+        <location filename="../../src/notation/notationtypes.h" line="619"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20067,59 +20067,59 @@ Whether you are just getting started with music notation software, or are a powe
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="773"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="774"/>
         <source>Cannot create tuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="773"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="774"/>
         <source>Note value is too short</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1405"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1406"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1783"/>
         <source>MuseScore style files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1406"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1407"/>
         <source>MuseScore style file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1409"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1410"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1785"/>
         <source>Load style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1410"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1411"/>
         <source>Save style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1420"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1421"/>
         <source>The style file could not be loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1426"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1427"/>
         <source>Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1428"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1429"/>
         <source>Click OK to load anyway.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1442"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1443"/>
         <source>The style file could not be saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1443"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1444"/>
         <source>An error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20436,69 +20436,69 @@ Whether you are just getting started with music notation software, or are a powe
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="288"/>
+        <location filename="../../src/notation/notationtypes.h" line="289"/>
         <source>Percentage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="289"/>
+        <location filename="../../src/notation/notationtypes.h" line="290"/>
         <source>Page width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="290"/>
+        <location filename="../../src/notation/notationtypes.h" line="291"/>
         <source>Whole page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="291"/>
+        <location filename="../../src/notation/notationtypes.h" line="292"/>
         <source>Two pages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="350"/>
+        <location filename="../../src/notation/notationtypes.h" line="351"/>
         <source>%1 %2</source>
         <comment>Tuned instrument displayed in the UI</comment>
         <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;). Example: &quot;D Tin Whistle&quot;</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="354"/>
+        <location filename="../../src/notation/notationtypes.h" line="355"/>
         <source>%1 in %2</source>
         <comment>Transposing instrument displayed in the UI</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;). Example: &quot;Horn in C alto&quot;</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="358"/>
+        <location filename="../../src/notation/notationtypes.h" line="359"/>
         <source>%1 (%2)</source>
         <comment>String instrument displayed in the UI</comment>
         <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;). Example: &quot;Tenor Lute (7-course)&quot;</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="379"/>
+        <location filename="../../src/notation/notationtypes.h" line="380"/>
         <source>%1 %2 %3</source>
         <comment>One of several tuned instruments displayed in the UI</comment>
         <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;), %3=number (&quot;2&quot;). Example: &quot;D Tin Whistle 2&quot;</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="383"/>
+        <location filename="../../src/notation/notationtypes.h" line="384"/>
         <source>%1 in %2 %3</source>
         <comment>One of several transposing instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;), %3=number (&quot;2&quot;). Example: &quot;Horn in C alto 2&quot;</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="387"/>
+        <location filename="../../src/notation/notationtypes.h" line="388"/>
         <source>%1 (%2) %3</source>
         <comment>One of several string instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;), %3=number (&quot;2&quot;). Example: &quot;Tenor Lute (7-course) 2&quot;</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/notationtypes.h" line="391"/>
+        <location filename="../../src/notation/notationtypes.h" line="392"/>
         <source>%1 %2</source>
         <comment>One of several instruments displayed in the UI</comment>
         <extracomment>%1=name (&quot;Flute&quot;), %2=number (&quot;2&quot;). Example: &quot;Flute 2&quot;</extracomment>
@@ -20918,12 +20918,12 @@ Whether you are just getting started with music notation software, or are a powe
 <context>
     <name>notation/stafftextproperties</name>
     <message>
-        <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="81"/>
+        <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="95"/>
         <source>System text properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="87"/>
+        <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="101"/>
         <source>Staff text properties</source>
         <translation type="unfinished"></translation>
     </message>
