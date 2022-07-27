@@ -27,10 +27,11 @@
           </StaffType>
         </Staff>
       <trackName>Percussions</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Percussions</longName>
         <shortName>drm.</shortName>
         <trackName></trackName>
+        <instrumentId>keyboard.piano</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
