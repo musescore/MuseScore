@@ -79,7 +79,7 @@ const QString& ShortcutsModel::actionDescription(const std::string& actionCode) 
 
 const QString& ShortcutsModel::actionText(const std::string& actionCode) const
 {
-    const QString description = actionDescription(actionCode);
+    const QString& description = actionDescription(actionCode);
     return description.isEmpty() ? actionTitle(actionCode) : description;
 }
 
