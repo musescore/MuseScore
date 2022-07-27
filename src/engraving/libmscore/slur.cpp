@@ -856,10 +856,12 @@ void Slur::slurPos(SlurPos* sp)
 {
     double _spatium = spatium();
     const double stemSideInset = 0.5;
-    const double beamClearance = 0.5;
+    const double stemOffsetX = 0.35;
+    const double beamClearance = 0.35;
     const double hookClearanceX = 0.3;
     const double beamAnchorInset = 0.15;
     const double straightStemXOffset = 0.5; // how far down a straight stem a slur attaches (percent)
+    const double minOffset = 0.2;
     // hack alert!! -- fakeCutout
     // The fakeCutout const describes the slope of a line from the top of the stem to the full width of the hook.
     // this is necessary because hooks don't have SMuFL cutouts
@@ -950,11 +952,19 @@ void Slur::slurPos(SlurPos* sp)
         if (stem2 && (!ecr->beam() || ecr->beam()->elements().front() == ecr)) {
             sa2 = SlurAnchor::STEM;
         }
+    } else if (ecr->segment()->system() != scr->segment()->system()) {
+        // in the case of continued slurs, we anchor to stem when necessary
+        if (scr->up() == _up) {
+            sa1 = SlurAnchor::STEM;
+        }
+        if (ecr->up() == _up) {
+            sa2 = SlurAnchor::STEM;
+        }
     }
 
     double __up = _up ? -1.0 : 1.0;
-    double hw1 = note1 ? note1->tabHeadWidth(stt) : scr->width();        // if stt == 0, tabHeadWidth()
-    double hw2 = note2 ? note2->tabHeadWidth(stt) : ecr->width();        // defaults to headWidth()
+    double hw1 = note1 ? note1->tabHeadWidth(stt) : scr->width() * scr->mag();        // if stt == 0, tabHeadWidth()
+    double hw2 = note2 ? note2->tabHeadWidth(stt) : ecr->width() * scr->mag();        // defaults to headWidth()
     PointF pt;
     switch (sa1) {
     case SlurAnchor::STEM:                //sc can't be null
@@ -967,26 +977,31 @@ void Slur::slurPos(SlurPos* sp)
         // clear the stem (x)
         // allow slight overlap (y)
         // don't allow overlap with hook if not disabling the autoplace checks against start/end segments in SlurSegment::layoutSegment()
-        double yadj = -stemSideInset;
+        double yadj = -stemSideInset* sc->mag();
         yadj *= _spatium * __up;
-        pt += PointF(0.35 * _spatium, yadj);
+        double offset = std::max(stemOffsetX * sc->mag(), minOffset);
+        pt += PointF(offset * _spatium, yadj);
         // account for articulations
         fixArticulations(pt, sc, __up, true);
         // adjust for hook
         double fakeCutout = 0.0;
         if (!score()->styleB(Sid::useStraightNoteFlags)) {
+            Hook* hook = sc->hook();
             // regular flags
-            if (sc->hook() && sc->hook()->bbox().translated(sc->hook()->pos()).contains(pt)) {
+
+            if (hook && hook->bbox().translated(hook->pos()).contains(pt)) {
                 // TODO: in the utopian far future where all hooks have SMuFL cutouts, this fakeCutout business will no
                 // longer be used. for the time being fakeCutout describes a point on the line y=mx+b, out from the top of the stem
                 // where y = yadj, m = fakeCutoutSlope, and x = y/m + fakeCutout
-                fakeCutout = std::min(0.0, std::abs(yadj) - (sc->hook()->width() / fakeCutoutSlope));
-                pt.rx() = (sc->hook()->width() + sc->hook()->pos().x() - sc->x() + fakeCutout + (hookClearanceX * _spatium)) * sc->mag();
+                fakeCutout = std::min(0.0, std::abs(yadj) - (hook->width() / fakeCutoutSlope));
+                pt.rx() = sc->stemPosX() / sc->magS() - fakeCutout;
             }
         } else {
+            Hook* hook = sc->hook();
             // straight flags
-            if (sc->hook() && sc->hook()->bbox().translated(sc->hook()->pos()).contains(pt)) {
-                pt.rx() = (sc->hook()->width() * straightStemXOffset) + sc->hook()->pos().x() - sc->x();
+            if (hook && hook->bbox().translated(hook->pos()).contains(pt)) {
+                double hookWidth = hook->width() * hook->mag();
+                pt.rx() = (hookWidth * straightStemXOffset) + (hook->pos().x() + sc->x());
                 if (_up) {
                     pt.ry() = sc->downNote()->pos().y() - stem1->height() - (beamClearance * _spatium * .7);
                 } else {
@@ -1015,7 +1030,8 @@ void Slur::slurPos(SlurPos* sp)
             yadj = -stemSideInset;
         }
         yadj *= _spatium * __up;
-        pt += PointF(-0.35 * _spatium, yadj);
+        double offset = std::max(stemOffsetX * ec->mag(), minOffset);
+        pt += PointF(-offset * _spatium, yadj);
         // account for articulations
         fixArticulations(pt, ec, __up, true);
         sp->p2 += pt;
@@ -1054,18 +1070,20 @@ void Slur::slurPos(SlurPos* sp)
                 // TODO: stem direction is not finalized, so we cannot use it here
                 fixArticulations(po, sc, __up, false);
             } else if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
+                beam1->layout();
                 // start chord is beamed but not the last chord of beam group
                 // and slur direction is same as start chord (stem side)
 
                 // in these cases, layout start of slur to stem
-                double beamWidthSp = score()->styleS(Sid::beamWidth).val() * beam1->mag();
-                double sh = stem1->height() + ((beamWidthSp / 2 + beamClearance) * _spatium);
+                double beamWidthSp = score()->styleS(Sid::beamWidth).val() * beam1->magS();
+                double offset = std::max(beamClearance * sc->mag(), minOffset) * _spatium;
+                double sh = stem1->length() + (beamWidthSp / 2) + offset;
                 if (_up) {
-                    po.ry() = sc->downNote()->pos().y() - sh;
+                    po.ry() = sc->stemPos().y() - sc->pagePos().y() - sh;
                 } else {
-                    po.ry() = sc->upNote()->pos().y() + sh;
+                    po.ry() = sc->stemPos().y() - sc->pagePos().y() + sh;
                 }
-                po.rx() = stem1->pos().x() + ((stem1->lineWidthMag() / 2) * __up) + (beamAnchorInset * _spatium);
+                po.rx() = (sc->stemPosX() / stem1->mag()) + (beamAnchorInset * _spatium * sc->mag()) + (stem1->lineWidthMag() / 2 * __up);
 
                 // account for articulations
                 fixArticulations(po, sc, __up, true);
@@ -1168,6 +1186,9 @@ void Slur::slurPos(SlurPos* sp)
                                && sc && (sc->noteType() == NoteType::NORMAL)
                                )
                            ) {
+                    if (beam2) {
+                        beam2->layout();
+                    }
                     // slur start was laid out to stem and start and end have same direction
                     // OR
                     // end chord is beamed but not the first chord of beam group
@@ -1175,14 +1196,17 @@ void Slur::slurPos(SlurPos* sp)
                     // and start chordrest is not a grace chord
 
                     // in these cases, layout end of slur to stem
-                    double beamWidthSp = beam2 ? score()->styleS(Sid::beamWidth).val() * beam2->mag() : 0;
-                    double sh = stem2->height() + ((beamClearance + (beamWidthSp / 2)) * _spatium);
+                    double beamWidthSp = beam2 ? score()->styleS(Sid::beamWidth).val() : 0;
+                    double offset = std::max(beamClearance * ec->mag(), minOffset) * _spatium;
+                    double sh = stem2->length() + (beamWidthSp / 2) + offset;
                     if (_up) {
-                        po.ry() = ec->downNote()->pos().y() - sh;
+                        po.ry() = ec->stemPos().y() - ec->pagePos().y() - sh;
                     } else {
-                        po.ry() = ec->upNote()->pos().y() + sh;
+                        po.ry() = ec->stemPos().y() - ec->pagePos().y() + sh;
                     }
-                    po.rx() = stem2->pos().x() + ((stem2->lineWidthMag() / 2) * __up) - (beamAnchorInset * _spatium);
+
+                    po.rx() = (ec->stemPosX() / stem2->mag()) - (beamAnchorInset * _spatium * ec->mag())
+                              + (stem2->lineWidthMag() / 2 * __up);
 
                     // account for articulations
                     fixArticulations(po, ec, __up, true);
