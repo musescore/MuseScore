@@ -201,6 +201,14 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
         return;
     }
 
+    if (languageCode == PLACEHOLDER_LANGUAGE_CODE) {
+        Ret load = loadLanguage(languageCode);
+        if (!load) {
+            LOGE() << load.toString();
+        }
+        return; // no hash for this language
+    }
+
     LanguagesHash languageHash = languages().val;
     if (!languageHash.contains(languageCode)) {
         LOGE() << "Unknown language: " << languageCode;
