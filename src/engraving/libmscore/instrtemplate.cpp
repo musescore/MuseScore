@@ -775,20 +775,23 @@ InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& name
     return bestMatch; // nullptr if no matches found
 }
 
-InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const bool useDrumSet)
+InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, const bool useDrumSet)
 {
     for (InstrumentGroup* g : instrumentGroups) {
         for (InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->channel.empty() || it->useDrumset != useDrumSet) {
+            if (it->useDrumset != useDrumSet) {
                 continue;
             }
 
-            if (it->channel[0].program() == midiProgram) {
-                return it;
+            for (const InstrChannel& channel : it->channel) {
+                if (channel.bank() == bank && channel.program() == program) {
+                    return it;
+                }
             }
         }
     }
-    return 0;
+
+    return nullptr;
 }
 
 InstrumentTemplate* guessTemplateByNameData(const std::list<String>& nameDataList)

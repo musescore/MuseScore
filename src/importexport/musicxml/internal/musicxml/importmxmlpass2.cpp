@@ -484,7 +484,7 @@ static Instrument createInstrument(const MusicXMLInstrument& mxmlInstr, const In
     }
 
     if (!it) {
-        it = mu::engraving::searchTemplateForMidiProgram(mxmlInstr.midiProgram);
+        it = mu::engraving::searchTemplateForMidiProgram(0, mxmlInstr.midiProgram);
     }
 
     if (it) {
