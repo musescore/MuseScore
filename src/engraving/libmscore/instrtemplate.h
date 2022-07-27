@@ -181,7 +181,6 @@ extern InstrumentIndex searchTemplateIndexForId(const String& id);
 extern InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId);
 extern InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& nameList);
 extern InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, const bool useDrumKit = false);
-extern InstrumentTemplate* guessTemplateByNameData(const std::list<String>& nameDataList);
 extern InstrumentGroup* searchInstrumentGroup(const String& name);
 extern ClefType defaultClef(int patch);
 extern String translateInstrumentName(const String& instrumentId, const String& nameType, const String& text);
