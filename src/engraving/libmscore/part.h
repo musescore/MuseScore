@@ -180,6 +180,7 @@ public:
 
     void updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval = false);
     const InstrChannel* harmonyChannel() const;
+    bool hasChordSymbol() const;
 
     const Part* masterPart() const;
     Part* masterPart();

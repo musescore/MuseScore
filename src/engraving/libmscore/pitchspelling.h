@@ -104,6 +104,11 @@ inline static AccidentalVal tpc2alter(int tpc)
     return AccidentalVal(((tpc - Tpc::TPC_MIN) / TPC_DELTA_SEMITONE) + int(AccidentalVal::MIN));
 }
 
+inline static int playingOctave(int pitch, int tpc)
+{
+    return ((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1;
+}
+
 extern Char tpc2stepName(int tpc);
 extern bool tpcIsValid(int val);
 inline bool pitchIsValid(int pitch) { return pitch >= 0 && pitch <= 127; }

@@ -50,9 +50,12 @@ public:
     void init(INotationUndoStackPtr undoStack) override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;
+    const engraving::InstrumentTrackId& chordSymbolsTrackId() const override;
+
     const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
     void triggerEventsForItem(const EngravingItem* item) override;
 
+    engraving::InstrumentTrackIdSet existingTrackIdSet() const override;
     async::Channel<engraving::InstrumentTrackId> trackAdded() const override;
     async::Channel<engraving::InstrumentTrackId> trackRemoved() const override;
 

@@ -41,9 +41,12 @@ public:
     virtual void init(INotationUndoStackPtr undoStack) = 0;
 
     virtual const engraving::InstrumentTrackId& metronomeTrackId() const = 0;
+    virtual const engraving::InstrumentTrackId& chordSymbolsTrackId() const = 0;
+
     virtual const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void triggerEventsForItem(const EngravingItem* item) = 0;
 
+    virtual engraving::InstrumentTrackIdSet existingTrackIdSet() const = 0;
     virtual async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
     virtual async::Channel<engraving::InstrumentTrackId> trackRemoved() const = 0;
 

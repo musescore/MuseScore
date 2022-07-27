@@ -3528,7 +3528,7 @@ void Score::cmdSlashRhythm()
 
 void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration durationType)
 {
-    const std::vector<EngravingItem*> elist = selection().elements();
+    const std::vector<EngravingItem*>& elist = selection().elements();
     for (EngravingItem* e : elist) {
         if (!e->isHarmony()) {
             continue;
@@ -3537,7 +3537,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
         if (!h->isRealizable()) {
             continue;
         }
-        RealizedHarmony r = h->getRealizedHarmony();
+        const RealizedHarmony& r = h->getRealizedHarmony();
         Segment* seg = h->explicitParent()->isSegment() ? toSegment(h->explicitParent()) : toSegment(h->explicitParent()->explicitParent());
         Fraction tick = seg->tick();
         Fraction duration = r.getActualDuration(tick.ticks(), durationType);
@@ -3583,7 +3583,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
 //   setChord
 //    return segment of last created chord
 //---------------------------------------------------------
-Segment* Score::setChord(Segment* segment, track_idx_t track, Chord* chordTemplate, Fraction dur, DirectionV stemDirection)
+Segment* Score::setChord(Segment* segment, track_idx_t track, const Chord* chordTemplate, Fraction dur, DirectionV stemDirection)
 {
     assert(segment->segmentType() == SegmentType::ChordRest);
 
