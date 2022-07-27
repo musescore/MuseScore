@@ -38,11 +38,6 @@ install(FILES
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
       )
 
-install(FILES
-      ${CMAKE_CURRENT_LIST_DIR}/musescore_en_US.qm
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
-      )
-
 install(DIRECTORY ./
     DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
     FILES_MATCHING
