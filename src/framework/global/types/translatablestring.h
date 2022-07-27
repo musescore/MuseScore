@@ -249,7 +249,7 @@ template<typename ... Args>
 TranslatableString TranslatableString::arg(const Args& ... args) const
 {
     TranslatableString res = *this;
-    res.args.push_back(std::shared_ptr<IArg>(new Arg(args ...)));
+    res.args.push_back(std::make_shared<Arg<Args...> >(args ...));
     return res;
 }
 }
