@@ -29,7 +29,7 @@
 
 typedef typename std::variant<Steinberg::Vst::Event, Steinberg::Vst::ParameterInfo, mu::audio::gain_t> VstSequencerEvent;
 
-template <>
+template<>
 struct std::less<VstSequencerEvent>
 {
     bool operator()(const VstSequencerEvent& first,
@@ -40,13 +40,13 @@ struct std::less<VstSequencerEvent>
         }
 
         if (std::holds_alternative<Steinberg::Vst::Event>(first)) {
-            return std::less<Steinberg::Vst::Event>{}(std::get<Steinberg::Vst::Event>(first),
-                                                      std::get<Steinberg::Vst::Event>(second));
+            return std::less<Steinberg::Vst::Event> {}(std::get<Steinberg::Vst::Event>(first),
+                                                       std::get<Steinberg::Vst::Event>(second));
         }
 
         if (std::holds_alternative<Steinberg::Vst::ParameterInfo>(first)) {
-            return std::less<Steinberg::Vst::ParameterInfo>{}(std::get<Steinberg::Vst::ParameterInfo>(first),
-                                                              std::get<Steinberg::Vst::ParameterInfo>(second));
+            return std::less<Steinberg::Vst::ParameterInfo> {}(std::get<Steinberg::Vst::ParameterInfo>(first),
+                                                               std::get<Steinberg::Vst::ParameterInfo>(second));
         }
 
         return std::get<mu::audio::gain_t>(first) < std::get<mu::audio::gain_t>(second);

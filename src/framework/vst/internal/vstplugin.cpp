@@ -22,8 +22,6 @@
 
 #include "vstplugin.h"
 
-#include <exception>
-
 #include "log.h"
 #include "async/async.h"
 

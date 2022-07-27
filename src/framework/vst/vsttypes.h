@@ -117,7 +117,7 @@ using VstBufferStream = Steinberg::Vst::BufferStream;
 namespace PluginEditorViewType = Steinberg::Vst::ViewType;
 }
 
-template <>
+template<>
 struct std::less<mu::vst::PluginParamInfo>
 {
     bool operator()(const mu::vst::PluginParamInfo& first,
@@ -128,7 +128,7 @@ struct std::less<mu::vst::PluginParamInfo>
     }
 };
 
-template <>
+template<>
 struct std::less<Steinberg::Vst::NoteOnEvent>
 {
     bool operator()(const Steinberg::Vst::NoteOnEvent& first,
@@ -143,7 +143,7 @@ struct std::less<Steinberg::Vst::NoteOnEvent>
     }
 };
 
-template <>
+template<>
 struct std::less<Steinberg::Vst::NoteOffEvent>
 {
     bool operator()(const Steinberg::Vst::NoteOffEvent& first,
@@ -157,7 +157,7 @@ struct std::less<Steinberg::Vst::NoteOffEvent>
     }
 };
 
-template <>
+template<>
 struct std::less<mu::vst::VstEvent>
 {
     bool operator()(const mu::vst::VstEvent& first,
@@ -168,11 +168,11 @@ struct std::less<mu::vst::VstEvent>
         }
 
         if (first.type == Steinberg::Vst::Event::kNoteOnEvent && first.type == second.type) {
-            return std::less<Steinberg::Vst::NoteOnEvent>{}(first.noteOn, second.noteOn);
+            return std::less<Steinberg::Vst::NoteOnEvent> {}(first.noteOn, second.noteOn);
         }
 
         if (first.type == Steinberg::Vst::Event::kNoteOffEvent && first.type == second.type) {
-            return std::less<Steinberg::Vst::NoteOffEvent>{}(first.noteOff, second.noteOff);
+            return std::less<Steinberg::Vst::NoteOffEvent> {}(first.noteOff, second.noteOff);
         }
 
         return false;
