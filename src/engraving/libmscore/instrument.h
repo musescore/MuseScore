@@ -120,7 +120,6 @@ class InstrChannel
     // this are the indexes of controllers which are always present in
     // Channel init EventList (maybe zero)
     String _name;
-    String _descr;
 
     static const int DEFAULT_COLOR = 0x3399ff;
     int _color;    //rgb
@@ -160,7 +159,7 @@ public:
     };
 
     enum class Prop : char {
-        VOLUME, PAN, CHORUS, REVERB, NAME, DESCR, PROGRAM, BANK, COLOR,
+        VOLUME, PAN, CHORUS, REVERB, NAME, PROGRAM, BANK, COLOR,
         SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL, USER_BANK_CONTROL
     };
 
@@ -173,8 +172,6 @@ public:
 
     String name() const { return _name; }
     void setName(const String& value);
-    String descr() const { return _descr; }
-    void setDescr(const String& value);
     String synti() const { return _synti; }
     void setSynti(const String& value);
     int color() const { return _color; }
