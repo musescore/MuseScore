@@ -33,6 +33,19 @@ ARGS="-recursive \
     -extensions cpp,h,mm,ui,qml,js \
     -no-obsolete"
 
-# We only need to update one file, it will be sent to Transifex.
-# We get .ts files for other languages from Transifex
+# We only need to update one ts file per "resource", that will be sent to Transifex.
+# We get .ts files for other languages from Transifex.
+
+# musescore
+echo "MuseScore:"
 $LUPDATE $ARGS $SRC_DIR -ts $TS_FILE
+
+echo ""
+
+# instruments (and templates, and score orders, currently)
+FAKE_HEADER_FILE=$HERE/../../share/instruments/instrumentsxml.h
+TS_FILE=$HERE/../../share/locale/instruments_en.ts
+ARGS="-no-obsolete"
+
+echo "Instruments:"
+$LUPDATE $ARGS $FAKE_HEADER_FILE -ts $TS_FILE
