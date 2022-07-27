@@ -772,6 +772,19 @@ InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& name
             }
         }
     }
+
+    if (!bestMatch) {
+        for (const String& name : nameList) {
+            if (name.contains(u"drum", mu::CaseInsensitive)) {
+                return searchTemplate(u"drumset");
+            }
+
+            if (name.contains(u"piano", mu::CaseInsensitive)) {
+                return searchTemplate(u"piano");
+            }
+        }
+    }
+
     return bestMatch; // nullptr if no matches found
 }
 
@@ -788,33 +801,6 @@ InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, const bo
                     return it;
                 }
             }
-        }
-    }
-
-    return nullptr;
-}
-
-InstrumentTemplate* guessTemplateByNameData(const std::list<String>& nameDataList)
-{
-    for (InstrumentGroup* g : instrumentGroups) {
-        for (InstrumentTemplate* it : g->instrumentTemplates) {
-            for (const String& name : nameDataList) {
-                if (name.contains(it->trackName, mu::CaseInsensitive)
-                    || name.contains(!it->longNames.empty() ? it->longNames.front().name() : String(), mu::CaseInsensitive)
-                    || name.contains(!it->shortNames.empty() ? it->shortNames.front().name() : String(), mu::CaseInsensitive)) {
-                    return it;
-                }
-            }
-        }
-    }
-
-    for (const String& name : nameDataList) {
-        if (name.contains(u"drum", mu::CaseInsensitive)) {
-            return searchTemplate(u"drumset");
-        }
-
-        if (name.contains(u"piano", mu::CaseInsensitive)) {
-            return searchTemplate(u"piano");
         }
     }
 

@@ -380,12 +380,6 @@ String Instrument::recognizeInstrumentId() const
         return tmplMidiProgram->musicXMLid;
     }
 
-    const InstrumentTemplate* guessedTmpl = mu::engraving::guessTemplateByNameData(nameList);
-
-    if (guessedTmpl && !guessedTmpl->musicXMLid.isEmpty()) {
-        return guessedTmpl->musicXMLid;
-    }
-
     return defaultInstrumentId;
 }
 
@@ -470,12 +464,6 @@ int Instrument::recognizeMidiProgram() const
 
     if (tmplByName && !tmplByName->channel.empty() && tmplByName->channel[0].program() >= 0) {
         return tmplByName->channel[0].program();
-    }
-
-    InstrumentTemplate* guessedTmpl = mu::engraving::guessTemplateByNameData(nameList);
-
-    if (guessedTmpl && !guessedTmpl->channel.empty() && guessedTmpl->channel[0].program() >= 0) {
-        return guessedTmpl->channel[0].program();
     }
 
     return 0;
