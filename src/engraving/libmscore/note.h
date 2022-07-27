@@ -281,6 +281,8 @@ public:
 
     ~Note();
 
+    std::vector<const Note*> compoundNotes() const;
+
     double computePadding(const EngravingItem* nextItem) const override;
 
     Note& operator=(const Note&) = delete;

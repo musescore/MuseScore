@@ -183,6 +183,7 @@ public:
     const SelectionInfo& redoSelectionInfo() const;
 
     std::unordered_set<ElementType> changedTypes() const;
+    std::vector<const EngravingItem*> changedElements() const;
 
     static bool canRecordSelectedElement(const EngravingItem* e);
 
@@ -700,7 +701,7 @@ public:
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
 
-    UNDO_CHANGED_OBJECTS({ element });
+    std::vector<const EngravingObject*> objectItems() const override;
 };
 
 //---------------------------------------------------------
@@ -1302,7 +1303,8 @@ public:
     EngravingObject* getElement() const { return element; }
     PropertyValue data() const { return property; }
     UNDO_NAME("ChangeProperty")
-    UNDO_CHANGED_OBJECTS({ element });
+
+    std::vector<const EngravingObject*> objectItems() const override;
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
     {

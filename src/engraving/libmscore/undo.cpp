@@ -104,6 +104,29 @@ using namespace mu::engraving;
 namespace mu::engraving {
 extern Measure* tick2measure(int tick);
 
+static std::vector<const EngravingObject*> compoundObjects(const EngravingObject* object)
+{
+    std::vector<const EngravingObject*> objects;
+
+    if (object->isChord()) {
+        const Chord* chord = toChord(object);
+        for (const Note* note : chord->notes()) {
+            for (const Note* compoundNote : note->compoundNotes()) {
+                objects.push_back(compoundNote);
+            }
+        }
+    } else if (object->isNote()) {
+        const Note* note = toNote(object);
+        for (const Note* compoundNote : note->compoundNotes()) {
+            objects.push_back(compoundNote);
+        }
+    }
+
+    objects.push_back(object);
+
+    return objects;
+}
+
 //---------------------------------------------------------
 //   updateNoteLines
 //    compute line position of noteheads after
@@ -645,6 +668,24 @@ std::unordered_set<ElementType> UndoMacro::changedTypes() const
     return result;
 }
 
+std::vector<const EngravingItem*> UndoMacro::changedElements() const
+{
+    std::vector<const EngravingItem*> result;
+
+    for (const UndoCommand* command : commands()) {
+        for (const EngravingObject* object : command->objectItems()) {
+            auto item = dynamic_cast<const EngravingItem*>(object);
+            if (!item) {
+                continue;
+            }
+
+            result.push_back(item);
+        }
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   CloneVoice
 //---------------------------------------------------------
@@ -883,6 +924,11 @@ bool AddElement::isFiltered(UndoCommand::Filter f, const EngravingItem* target) 
         break;
     }
     return false;
+}
+
+std::vector<const EngravingObject*> AddElement::objectItems() const
+{
+    return compoundObjects(element);
 }
 
 //---------------------------------------------------------
@@ -2472,6 +2518,11 @@ void ChangeProperty::flip(EditData*)
     element->setPropertyFlags(id, flags);
     property = v;
     flags = ps;
+}
+
+std::vector<const EngravingObject*> ChangeProperty::objectItems() const
+{
+    return compoundObjects(element);
 }
 
 //---------------------------------------------------------
