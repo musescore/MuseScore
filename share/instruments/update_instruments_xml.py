@@ -437,6 +437,8 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
                                                         disambiguation(instrumentId, 'channel'))
 
     # Orders
+    f.write("\n")
+    f.write("// Score orders\n")
     ordersTree = ET.parse('orders.xml')
     for order in ordersTree.getroot().findall('Order'):
-        add_translatable_string(f, 'OrderXML', order.find('name').text)
+        add_translatable_string(f, 'engraving/scoreorder', order.find('name').text)
