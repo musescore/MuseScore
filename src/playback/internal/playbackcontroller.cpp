@@ -223,6 +223,14 @@ void PlaybackController::playElement(const notation::EngravingItem* element)
         return;
     }
 
+    if (element->isChord() && !configuration()->playChordWhenEditing()) {
+        return;
+    }
+
+    if (element->isHarmony() && !configuration()->playHarmonyWhenEditing()) {
+        return;
+    }
+
     notationPlayback()->triggerEventsForItem(element);
 }
 
@@ -651,8 +659,28 @@ void PlaybackController::setCurrentTick(const tick_t tick)
     m_playbackPositionChanged.notify();
 }
 
-void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const std::string& title,
-                                  const std::function<void(const engraving::InstrumentTrackId&)>& callBack)
+void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished)
+{
+    if (notationPlayback()->chordSymbolsTrackId() == instrumentTrackId) {
+        doAddTrack(instrumentTrackId, trc("playback", "Chord symbols"), onFinished);
+        return;
+    }
+
+    if (notationPlayback()->metronomeTrackId() == instrumentTrackId) {
+        doAddTrack(instrumentTrackId, trc("playback", "Metronome"), onFinished);
+        return;
+    }
+
+    const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
+    if (!part) {
+        return;
+    }
+
+    doAddTrack(instrumentTrackId, part->partName().toStdString(), onFinished);
+}
+
+void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, const std::string& title,
+                                    const TrackAddFinished& onFinished)
 {
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
         return;
@@ -673,7 +701,7 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
     uint64_t notationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
 
     playback()->tracks()->addTrack(m_currentSequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
-    .onResolve(this, [this, instrumentTrackId, notationPlaybackKey, callBack](const TrackId trackId, const AudioParams& appliedParams) {
+    .onResolve(this, [this, instrumentTrackId, notationPlaybackKey, onFinished](const TrackId trackId, const AudioParams& appliedParams) {
         //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
         //! This situation can be if the notation was opened and immediately closed.
         quint64 currentNotationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
@@ -688,12 +716,12 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
 
         updateMuteStates();
 
-        callBack(instrumentTrackId);
+        onFinished(instrumentTrackId);
     })
-    .onReject(this, [instrumentTrackId, callBack](int code, const std::string& msg) {
+    .onReject(this, [instrumentTrackId, onFinished](int code, const std::string& msg) {
         LOGE() << "can't add a new track, code: [" << code << "] " << msg;
 
-        callBack(instrumentTrackId);
+        onFinished(instrumentTrackId);
     });
 
     m_loadingTracks.push_back(instrumentTrackId);
@@ -742,7 +770,8 @@ InstrumentTrackIdSet PlaybackController::availableInstrumentTracks() const
 void PlaybackController::removeNonExistingTracks()
 {
     for (const InstrumentTrackId& instrumentTrackId : availableInstrumentTracks()) {
-        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
+        if (instrumentTrackId == notationPlayback()->metronomeTrackId()
+            || instrumentTrackId == notationPlayback()->chordSymbolsTrackId()) {
             continue;
         }
 
@@ -848,28 +877,17 @@ void PlaybackController::setupSequenceTracks()
         return;
     }
 
-    std::map<InstrumentTrackId, std::string> tracks;
     m_loadingTracks.clear();
 
-    NotifyList<const Part*> partList = masterNotationParts()->partList();
-
-    for (const Part* part : partList) {
-        for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
-            tracks.insert({ trackId, part->partName().toStdString() });
-        }
-    }
-
-    tracks.insert({ notationPlayback()->metronomeTrackId(), qtrc("playback", "Metronome").toStdString() });
-
+    InstrumentTrackIdSet trackIdSet = notationPlayback()->existingTrackIdSet();
+    size_t trackCount = trackIdSet.size();
     std::string title = trc("playback", "Loading audio samples");
-    m_loadingProgress.progressChanged.send(0, tracks.size(), title);
 
-    auto doTrackAddFinished = [this, tracks, title](const engraving::InstrumentTrackId& instrumentTrackId) {
+    auto onAddFinished = [this, trackCount, title](const engraving::InstrumentTrackId& instrumentTrackId) {
         m_loadingTracks.remove(instrumentTrackId);
 
-        size_t current = tracks.size() - m_loadingTracks.size();
-        size_t total = tracks.size();
-        m_loadingProgress.progressChanged.send(current, total, title);
+        size_t current = trackCount - m_loadingTracks.size();
+        m_loadingProgress.progressChanged.send(current, trackCount, title);
 
         if (m_loadingTracks.empty()) {
             m_loadingProgress.finished.send(make_ok());
@@ -877,30 +895,27 @@ void PlaybackController::setupSequenceTracks()
         }
     };
 
-    for (const auto& track : tracks) {
-        addTrack(track.first, track.second, doTrackAddFinished);
+    for (const InstrumentTrackId& trackId : trackIdSet) {
+        addTrack(trackId, onAddFinished);
     }
 
-    notationPlayback()->trackAdded().onReceive(this, [this, doTrackAddFinished](const InstrumentTrackId& instrumentTrackId) {
-        const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
+    m_loadingProgress.progressChanged.send(0, trackCount, title);
 
-        if (!part) {
-            return;
-        }
-
-        addTrack(instrumentTrackId, part->partName().toStdString(), doTrackAddFinished);
+    notationPlayback()->trackAdded().onReceive(this, [this, onAddFinished](const InstrumentTrackId& instrumentTrackId) {
+        addTrack(instrumentTrackId, onAddFinished);
     });
 
     notationPlayback()->trackRemoved().onReceive(this, [this](const InstrumentTrackId& instrumentTrackId) {
         removeTrack(instrumentTrackId);
     });
 
-    partList.onItemChanged(this, [this, doTrackAddFinished](const Part* part) {
+    NotifyList<const Part*> partList = masterNotationParts()->partList();
+    partList.onItemChanged(this, [this, onAddFinished](const Part* part) {
         for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
             auto search = m_trackIdMap.find(trackId);
             if (search == m_trackIdMap.cend()) {
                 removeNonExistingTracks();
-                addTrack(trackId, part->partName().toStdString(), doTrackAddFinished);
+                doAddTrack(trackId, part->partName().toStdString(), onAddFinished);
             }
         }
 

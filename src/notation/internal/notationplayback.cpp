@@ -100,6 +100,11 @@ const engraving::InstrumentTrackId& NotationPlayback::metronomeTrackId() const
     return m_playbackModel.metronomeTrackId();
 }
 
+const engraving::InstrumentTrackId& NotationPlayback::chordSymbolsTrackId() const
+{
+    return m_playbackModel.chordSymbolsTrackId();
+}
+
 const mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engraving::InstrumentTrackId& trackId) const
 {
     return m_playbackModel.resolveTrackPlaybackData(trackId);
@@ -108,6 +113,11 @@ const mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engraving::In
 void NotationPlayback::triggerEventsForItem(const EngravingItem* item)
 {
     m_playbackModel.triggerEventsForItem(item);
+}
+
+InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const
+{
+    return m_playbackModel.existingTrackIdSet();
 }
 
 async::Channel<InstrumentTrackId> NotationPlayback::trackAdded() const

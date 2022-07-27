@@ -145,7 +145,7 @@ public:
     virtual bool readProperties(XmlReader&) override;
 
     Fraction tick() const override;
-    void setTick(const Fraction& f) { _tick = f; }
+    void setTick(const Fraction& f);
 
     Fraction ticks() const { return _len; }
     void setTicks(const Fraction& f) { _len = f; }

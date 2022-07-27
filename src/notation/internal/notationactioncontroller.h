@@ -32,7 +32,6 @@
 #include "inotation.h"
 #include "iinteractive.h"
 #include "playback/iplaybackcontroller.h"
-#include "playback/iplaybackconfiguration.h"
 #include "inotationconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
 
@@ -44,7 +43,6 @@ class NotationActionController : public actions::Actionable, public async::Async
     INJECT(notation, context::IUiContextResolver, uiContextResolver)
     INJECT(notation, framework::IInteractive, interactive)
     INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(notation, INotationConfiguration, configuration)
     INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
 
@@ -189,6 +187,8 @@ private:
     bool hasSelection() const;
     mu::engraving::EngravingItem* selectedElement() const;
     bool noteOrRestSelected() const;
+
+    const mu::engraving::Harmony* editedChordSymbol() const;
 
     bool canUndo() const;
     bool canRedo() const;
