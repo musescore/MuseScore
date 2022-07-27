@@ -945,6 +945,22 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         }
     }
 
+    //-------------------------------------------------------------
+    // Fermata, TremoloBar
+    //-------------------------------------------------------------
+
+    for (const Segment* s : sl) {
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isFermata() || e->isTremoloBar()) {
+                e->layout();
+            }
+        }
+    }
+
+    //-------------------------------------------------------------
+    // Dynamics
+    //-------------------------------------------------------------
+
     std::vector<Dynamic*> dynamics;
     for (Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
@@ -977,7 +993,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     //-------------------------------------------------------------
     // layout SpannerSegments for current system
-    // ottavas, pedals, voltas are collected here, but laid out later
+    // voltas and tempo change lines are collected here, but laid out later
     //-------------------------------------------------------------
 
     spanner.clear();
@@ -1010,25 +1026,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         }
     }
     processLines(system, hairpins, false);
-    processLines(system, tempoChangeLines, false);
     processLines(system, spanner, false);
-
-    //-------------------------------------------------------------
-    // Fermata, TremoloBar
-    //-------------------------------------------------------------
-
-    for (const Segment* s : sl) {
-        for (EngravingItem* e : s->annotations()) {
-            if (e->isFermata() || e->isTremoloBar()) {
-                e->layout();
-            }
-        }
-    }
-
-    //-------------------------------------------------------------
-    // Ottava, Pedal
-    //-------------------------------------------------------------
-
     processLines(system, ottavas, false);
     processLines(system, pedal,   true);
 
@@ -1088,7 +1086,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     }
 
     //-------------------------------------------------------------
-    // Jump, Marker
+    // Jump
     //-------------------------------------------------------------
 
     for (MeasureBase* mb : system->measures()) {
@@ -1097,19 +1095,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         }
         Measure* m = toMeasure(mb);
         for (EngravingItem* e : m->el()) {
-            if (e->isJump() || e->isMarker()) {
-                e->layout();
-            }
-        }
-    }
-
-    //-------------------------------------------------------------
-    // TempoText
-    //-------------------------------------------------------------
-
-    for (const Segment* s : sl) {
-        for (EngravingItem* e : s->annotations()) {
-            if (e->isTempoText()) {
+            if (e->isJump()) {
                 e->layout();
             }
         }
@@ -1184,6 +1170,35 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
         LayoutHarmonies::layoutHarmonies(sl);
         LayoutHarmonies::alignHarmonies(system, sl, false, options.maxFretShiftAbove, options.maxFretShiftBelow);
+    }
+
+    //-------------------------------------------------------------
+    // TempoText, tempo change lines
+    //-------------------------------------------------------------
+
+    for (const Segment* s : sl) {
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isTempoText()) {
+                e->layout();
+            }
+        }
+    }
+    processLines(system, tempoChangeLines, false);
+
+    //-------------------------------------------------------------
+    // Marker
+    //-------------------------------------------------------------
+
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* m = toMeasure(mb);
+        for (EngravingItem* e : m->el()) {
+            if (e->isMarker()) {
+                e->layout();
+            }
+        }
     }
 
     //-------------------------------------------------------------
