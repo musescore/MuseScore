@@ -55,7 +55,7 @@ bool Smufl::init()
 
 bool Smufl::initGlyphNamesJson()
 {
-    File file(":fonts/smufl/glyphnames.json");
+    File file(":/fonts/smufl/glyphnames.json");
     if (!file.open(IODevice::ReadOnly)) {
         LOGE() << "could not open glyph names JSON file.";
         return false;
@@ -116,7 +116,7 @@ const std::map<String, StringList>& Smufl::smuflRanges()
     StringList allSymbols;
 
     if (ranges.empty()) {
-        File fi(":fonts/smufl/ranges.json");
+        File fi(":/fonts/smufl/ranges.json");
         if (!fi.open(IODevice::ReadOnly)) {
             LOGE() << "failed open: " << fi.filePath();
         }
