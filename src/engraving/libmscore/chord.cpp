@@ -872,7 +872,8 @@ void Chord::addLedgerLines()
         int from, delta;
         std::vector<LedgerLineData> vecLines;
         hw = 0.0;
-        minX  = maxX = 0;
+        minX = std::numeric_limits<double>::max();
+        maxX = std::numeric_limits<double>::min();
         minLine = 0;
         maxLine = lineBelow;
         if (j == 0) {                           // ...once from lowest up...
