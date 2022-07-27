@@ -39,6 +39,8 @@ public:
 private:
     static void renderDiscreteGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result);
     static void renderContinuousGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result);
+
+    static mpe::pitch_level_t pitchLevelStep(const mpe::ArticulationAppliedData& articulationData);
 };
 }
 

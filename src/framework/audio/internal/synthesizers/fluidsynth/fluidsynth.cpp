@@ -277,7 +277,7 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
 
     for (const auto& pair : m_channels) {
         fluid_synth_set_interp_method(m_fluid->synth, pair.first, FLUID_INTERP_DEFAULT);
-        fluid_synth_pitch_wheel_sens(m_fluid->synth, pair.first, 2);
+        fluid_synth_pitch_wheel_sens(m_fluid->synth, pair.first, 12);
         fluid_synth_bank_select(m_fluid->synth, pair.first, pair.second.bank);
         fluid_synth_program_change(m_fluid->synth, pair.first, pair.second.program);
         fluid_synth_cc(m_fluid->synth, pair.first, 7, m_currentExpressionLevel);
