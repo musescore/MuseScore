@@ -679,18 +679,6 @@ void InstrChannel::setName(const String& value)
 }
 
 //---------------------------------------------------------
-//   setDescr
-//---------------------------------------------------------
-
-void InstrChannel::setDescr(const String& value)
-{
-    if (_descr != value) {
-        _descr = value;
-        firePropertyChanged(Prop::DESCR);
-    }
-}
-
-//---------------------------------------------------------
 //   setSynti
 //---------------------------------------------------------
 
@@ -810,9 +798,6 @@ void InstrChannel::write(XmlWriter& xml, const Part* part) const
         xml.startElement("Channel");
     } else {
         xml.startElement("Channel", { { "name", _name } });
-    }
-    if (!_descr.isEmpty()) {
-        xml.tag("descr", _descr);
     }
     if (_color != DEFAULT_COLOR) {
         xml.tag("color", _color);
@@ -940,8 +925,6 @@ void InstrChannel::read(XmlReader& e, Part* part)
             midiActions.push_back(a);
         } else if (tag == "synti") {
             _synti = e.readText();
-        } else if (tag == "descr") {
-            _descr = e.readText();
         } else if (tag == "color") {
             _color = e.readInt();
         } else if (tag == "mute") {
@@ -1167,9 +1150,6 @@ void PartChannelSettingsLink::applyProperty(InstrChannel::Prop p, const InstrCha
         break;
     case InstrChannel::Prop::NAME:
         to->setName(from->name());
-        break;
-    case InstrChannel::Prop::DESCR:
-        to->setDescr(from->descr());
         break;
     case InstrChannel::Prop::PROGRAM:
         to->setProgram(from->program());

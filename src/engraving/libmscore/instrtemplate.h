@@ -184,5 +184,6 @@ extern InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const b
 extern InstrumentTemplate* guessTemplateByNameData(const std::list<String>& nameDataList);
 extern InstrumentGroup* searchInstrumentGroup(const String& name);
 extern ClefType defaultClef(int patch);
+extern String translateInstrumentName(const String& instrumentId, const String& nameType, const String& text);
 } // namespace mu::engraving
 #endif
