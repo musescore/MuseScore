@@ -55,6 +55,6 @@ static mu::testing::SuiteEnvironment musicxml_se(
     new mu::engraving::MuseScoreCore();
     mu::engraving::MScore::init(); // initialize libmscore
 
-    loadInstrumentTemplates(u":/data/instruments.xml");
+    loadInstrumentTemplates(":/data/instruments.xml");
 }
     );
