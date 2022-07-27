@@ -47,9 +47,9 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 //: Channel name for otherwise unnamed channels
-const char* InstrChannel::DEFAULT_NAME = QT_TRANSLATE_NOOP("InstrumentsXML", "normal");
+const char* InstrChannel::DEFAULT_NAME = QT_TRANSLATE_NOOP("engraving/instruments", "normal");
 //: Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters
-const char* InstrChannel::HARMONY_NAME = QT_TRANSLATE_NOOP("InstrumentsXML", "harmony");
+const char* InstrChannel::HARMONY_NAME = QT_TRANSLATE_NOOP("engraving/instruments", "harmony");
 
 Instrument InstrumentList::defaultInstrument;
 const std::initializer_list<InstrChannel::Prop> PartChannelSettingsLink::excerptProperties {
