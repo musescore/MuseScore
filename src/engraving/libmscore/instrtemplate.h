@@ -50,7 +50,6 @@ public:
 
     InstrumentGenre() {}
     void write(XmlWriter& xml) const;
-    void write1(XmlWriter& xml) const;
     void read(XmlReader&);
 };
 
@@ -66,7 +65,6 @@ public:
 
     InstrumentFamily() {}
     void write(XmlWriter& xml) const;
-    void write1(XmlWriter& xml) const;
     void read(XmlReader&);
 };
 
@@ -129,7 +127,6 @@ public:
     bool isValid() const;
 
     void write(XmlWriter& xml) const;
-    void write1(XmlWriter& xml) const;
     void read(XmlReader&);
     ClefTypeList clefType(staff_idx_t staffIdx) const;
     String familyId() const;

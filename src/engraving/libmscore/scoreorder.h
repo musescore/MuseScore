@@ -26,9 +26,13 @@
 
 #include "types/translatablestring.h"
 
-#include "instrtemplate.h"
-
 namespace mu::engraving {
+class InstrumentTemplate;
+class Score;
+
+class XmlReader;
+class XmlWriter;
+
 //---------------------------------------------------------
 //   ScoreGroup
 //---------------------------------------------------------

@@ -420,23 +420,6 @@ void InstrumentTemplate::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   write1
-//    output only translatable names
-//---------------------------------------------------------
-
-void InstrumentTemplate::write1(XmlWriter& xml) const
-{
-    xml.startElement("Instrument", { { "id", id } });
-    longNames.write(xml, "longName");
-    shortNames.write(xml, "shortName");
-    if (longNames.size() > 1) {
-        xml.tag("trackName", trackName);
-    }
-    xml.tag("description", description);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -897,11 +880,6 @@ void InstrumentGenre::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void InstrumentGenre::write1(XmlWriter& xml) const
-{
-    write(xml);
-}
-
 void InstrumentGenre::read(XmlReader& e)
 {
     id = e.attribute("id");
@@ -920,11 +898,6 @@ void InstrumentFamily::write(XmlWriter& xml) const
     xml.startElement("Family", { { "id", id } });
     xml.tag("name", name);
     xml.endElement();
-}
-
-void InstrumentFamily::write1(XmlWriter& xml) const
-{
-    write(xml);
 }
 
 void InstrumentFamily::read(XmlReader& e)
