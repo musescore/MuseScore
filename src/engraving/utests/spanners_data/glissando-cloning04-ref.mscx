@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument id="treble-flute">
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -154,7 +154,7 @@
             </StaffType>
           </Staff>
         <trackName>Flute</trackName>
-        <Instrument id="treble-flute">
+        <Instrument id="flute">
           <longName>Flute</longName>
           <shortName>Fl.</shortName>
           <trackName>Flute</trackName>

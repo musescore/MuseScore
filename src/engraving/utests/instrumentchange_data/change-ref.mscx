@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument id="treble-flute">
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -66,7 +66,7 @@
           </StaffType>
         </Staff>
       <trackName>Oboe</trackName>
-      <Instrument id="baroque-oboe">
+      <Instrument id="oboe">
         <longName>Oboe</longName>
         <shortName>Ob.</shortName>
         <trackName>Oboe</trackName>
@@ -133,7 +133,7 @@
       <Measure>
         <voice>
           <InstrumentChange>
-            <Instrument id="baroque-oboe">
+            <Instrument id="oboe">
               <longName>Oboe</longName>
               <shortName>Ob.</shortName>
               <trackName>Oboe</trackName>
