@@ -954,10 +954,10 @@ void Slur::slurPos(SlurPos* sp)
         }
     } else if (ecr->segment()->system() != scr->segment()->system()) {
         // in the case of continued slurs, we anchor to stem when necessary
-        if (scr->up() == _up) {
+        if (scr->up() == _up && stem1) {
             sa1 = SlurAnchor::STEM;
         }
-        if (ecr->up() == _up) {
+        if (ecr->up() == _up && stem2) {
             sa2 = SlurAnchor::STEM;
         }
     }
