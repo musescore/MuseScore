@@ -502,11 +502,11 @@
     </SC>
   <SC>
     <key>add-hairpin</key>
-    <seq>&lt;</seq>
+    <seq>Shift+,</seq>
     </SC>
   <SC>
     <key>add-hairpin-reverse</key>
-    <seq>&gt;</seq>
+    <seq>Shift+.</seq>
     </SC>
   <SC>
     <key>add-8va</key>
@@ -896,7 +896,7 @@
   </SC>
   <SC>
     <key>add-melisma</key>
-    <seq>_</seq>
+    <seq>Shift+-</seq>
   </SC>
   <SC>
     <key>next-lyric-verse</key>
