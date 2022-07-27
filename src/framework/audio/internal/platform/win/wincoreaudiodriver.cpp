@@ -32,6 +32,7 @@
 #endif
 #include <Functiondiscoverykeys_devpkey.h>
 
+#include "translation.h"
 #include "log.h"
 
 #define REFTIMES_PER_SEC  10000000
@@ -158,33 +159,18 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     unsigned int minBufferSize = refTimeToSamples(minimumTime, spec.sampleRate);
     m_bufferSizes = resolveBufferSizes(minBufferSize);
 
-    WAVEFORMATEXTENSIBLE format;
-    memset((void*)&format, 0, sizeof(format));
-    format.Format.wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
-    format.Format.nChannels = spec.channels;
-    format.Format.nSamplesPerSec = (DWORD)spec.sampleRate;
-    format.Format.wBitsPerSample = 32;
-    format.Format.nAvgBytesPerSec = format.Format.nSamplesPerSec * format.Format.nChannels * sizeof(float);
-    format.Format.nBlockAlign = (format.Format.nChannels * format.Format.wBitsPerSample) / 8;
-    format.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
-    format.dwChannelMask = 3;
-
-    WAVEFORMATEX* nearestFormat = nullptr;
-    hr = s_data->audioClient->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, (WAVEFORMATEX*)&format, &nearestFormat);
-    if (hr == S_FALSE) {
-        copyWavFormat(format, nearestFormat);
-
-        format.Format.nSamplesPerSec  = (DWORD)spec.sampleRate;
-        format.Format.nAvgBytesPerSec = (DWORD)(format.Format.nSamplesPerSec * format.Format.nBlockAlign);
-    }
-
-    s_data->pFormat = *((WAVEFORMATEX*)&format);
-
-    LOGI() << s_data->pFormat.nSamplesPerSec;
+    s_data->pFormat = *deviceFormat;
+    s_data->pFormat.wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
+    s_data->pFormat.nChannels = spec.channels;
+    s_data->pFormat.wBitsPerSample = 32;
+    s_data->pFormat.nAvgBytesPerSec = s_data->pFormat.nSamplesPerSec * s_data->pFormat.nChannels * sizeof(float);
+    s_data->pFormat.nBlockAlign = (s_data->pFormat.nChannels * s_data->pFormat.wBitsPerSample) / 8;
+    s_data->pFormat.cbSize = 0;
     s_data->callback = spec.callback;
     if (activeSpec) {
         *activeSpec = spec;
         activeSpec->format = Format::AudioF32;
+        activeSpec->sampleRate = s_data->pFormat.nSamplesPerSec;
         s_activeSpec = *activeSpec;
     }
 
@@ -192,7 +178,7 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
 
     hr = s_data->audioClient->Initialize(AUDCLNT_SHAREMODE_SHARED,
                                          AUDCLNT_STREAMFLAGS_EVENTCALLBACK | AUDCLNT_STREAMFLAGS_NOPERSIST,
-                                         defaultTime, defaultTime, (WAVEFORMATEX*)&format, NULL);
+                                         defaultTime, defaultTime, &s_data->pFormat, NULL);
     CHECK_HRESULT(hr, false);
 
     UINT32 bufferFrameCount;
@@ -441,7 +427,7 @@ std::vector<unsigned int> CoreAudioDriver::resolveBufferSizes(unsigned int minBu
 {
     std::vector<unsigned int> result;
 
-    unsigned int n = 2048;
+    unsigned int n = 4096;
     while (n >= minBufferSize) {
         result.push_back(n);
         n /= 2;
@@ -465,7 +451,7 @@ AudioDeviceList CoreAudioDriver::availableOutputDevices() const
     CoInitialize(NULL);
 
     AudioDeviceList result;
-    result.push_back({ DEFAULT_DEVICE_ID, DEFAULT_DEVICE_ID });
+    result.push_back({ DEFAULT_DEVICE_ID, trc("audio", "System default") });
 
     HRESULT hr;
     IMMDeviceCollection* devices;

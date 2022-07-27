@@ -30,6 +30,7 @@
 #include <math.h>
 #include <pthread.h>
 
+#include "translation.h"
 #include "log.h"
 #include "runtime.h"
 
@@ -243,44 +244,7 @@ mu::async::Notification LinuxAudioDriver::outputDeviceChanged() const
 AudioDeviceList LinuxAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
-
-    snd_ctl_card_info_t* cardInfo;
-    snd_ctl_card_info_alloca(&cardInfo);
-    snd_pcm_info_t* pcmInfo;
-    snd_pcm_info_alloca(&pcmInfo);
-    int cardIndex = -1;
-
-    while (!snd_card_next(&cardIndex) && cardIndex >= 0)
-    {
-        const QString dev = "hw:" + QString::number(cardIndex);
-        snd_ctl_t* ctl;
-        if (snd_ctl_open(&ctl, dev.toLocal8Bit(), 0)) {
-            continue;
-        }
-
-        if (!snd_ctl_card_info(ctl, cardInfo)) {
-            const QString cardName = snd_ctl_card_info_get_name(cardInfo);
-            int devIndex = -1;
-            while (!snd_ctl_pcm_next_device(ctl, &devIndex) && devIndex >= 0)
-            {
-                snd_pcm_info_set_device(pcmInfo, static_cast<unsigned>(devIndex));
-                snd_pcm_info_set_stream(pcmInfo, SND_PCM_STREAM_PLAYBACK);
-
-                if (snd_ctl_pcm_info(ctl, pcmInfo) >= 0) {
-                    const QString pcmName = snd_pcm_info_get_name(pcmInfo);
-                    QString deviceId = dev + "," + QString::number(devIndex);
-                    QString name = cardName + (!pcmName.isEmpty() ? QString(": ") + snd_pcm_info_get_name(pcmInfo) : QString());
-                    devices.push_back({ deviceId.toStdString(), name.toStdString() });
-                }
-            }
-        }
-
-        snd_ctl_close(ctl);
-    }
-
-    if (devices.size() > 0) {
-        devices.insert(devices.begin(), { DEFAULT_DEVICE_ID, DEFAULT_DEVICE_ID });
-    }
+    devices.push_back({ DEFAULT_DEVICE_ID, trc("audio", "System default") });
 
     return devices;
 }
@@ -324,15 +288,17 @@ mu::async::Notification LinuxAudioDriver::outputDeviceBufferSizeChanged() const
 
 std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() const
 {
-    std::vector<unsigned int> sizes;
-    int n = 16;
+    std::vector<unsigned int> result;
 
-    for (int i = 0; i < 50; ++i) {
-        sizes.push_back(n);
-        n += n < 64 ? 16 : (n < 512 ? 32 : (n < 1024 ? 64 : (n < 2048 ? 128 : 256)));
+    unsigned int n = 4096;
+    while (n >= 256) {
+        result.push_back(n);
+        n /= 2;
     }
 
-    return sizes;
+    std::sort(result.begin(), result.end());
+
+    return result;
 }
 
 void LinuxAudioDriver::resume()
