@@ -31,6 +31,7 @@
 
 namespace mu::languages {
 const QString SYSTEM_LANGUAGE_CODE = "system";
+const QString PLACEHOLDER_LANGUAGE_CODE = "en@placeholder";
 
 class LanguageStatus
 {
