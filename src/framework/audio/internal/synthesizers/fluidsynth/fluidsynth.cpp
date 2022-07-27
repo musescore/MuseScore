@@ -44,8 +44,6 @@ using namespace mu::mpe;
 static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 4.8;
 static constexpr int DEFAULT_MIDI_VOLUME = 100;
 
-static std::vector<double> FLUID_STANDARD_TUNING(12, -150.0);
-
 /// @note
 ///  Fluid does not support MONO, so they start counting audio channels from 1, which means "1 pair of audio channels"
 /// @see https://www.fluidsynth.org/api/settings_synth.html
@@ -272,8 +270,6 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
     for (const auto& pair : m_articulationMapping) {
         m_channels.emplace(static_cast<int>(m_channels.size()), pair.second);
     }
-
-    fluid_synth_activate_octave_tuning(m_fluid->synth, 0, 0, "standard", FLUID_STANDARD_TUNING.data(), 0);
 
     for (const auto& pair : m_channels) {
         fluid_synth_set_interp_method(m_fluid->synth, pair.first, FLUID_INTERP_DEFAULT);
