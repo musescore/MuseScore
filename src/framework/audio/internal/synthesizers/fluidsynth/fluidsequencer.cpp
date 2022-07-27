@@ -147,35 +147,39 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
     }
 
     timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
+    midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
+    event.setChannel(channelIdx);
 
     if (currentType != mpe::ArticulationType::Undefined) {
-        for (const auto& pair : noteEvent.pitchCtx().pitchCurve) {
-            midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
-            event.setChannel(channelIdx);
+        auto it = noteEvent.pitchCtx().pitchCurve.cbegin();
+        auto last = noteEvent.pitchCtx().pitchCurve.cend();
 
-            timestamp_t currentPoint = timestampFrom + noteEvent.arrangementCtx().actualDuration * percentageToFactor(pair.first);
+        while (it != last) {
+            auto nextToCurrent = std::next(it);
+            if (nextToCurrent == last) {
+                timestamp_t currentPoint = timestampFrom + noteEvent.arrangementCtx().actualDuration * percentageToFactor(it->first);
 
-            int pitchBendValue = 8192;
-
-            if (pair.first == HUNDRED_PERCENT) {
-                event.setData(pitchBendValue);
-                destination[currentPoint].emplace(std::move(event));
+                event.setData(pitchBendLevel(it->second));
+                destination[currentPoint].emplace(event);
                 return;
             }
 
-            float ratio = pair.second / static_cast<float>(ONE_PERCENT);
-            ratio = std::clamp(ratio, -2.f, 2.f);
+            percentage_t positionDistance = nextToCurrent->first - it->first;
+            int stepsCount = positionDistance / (mpe::ONE_PERCENT * 5);
+            float posStep = positionDistance / static_cast<float>(stepsCount);
+            float pitchStep = (nextToCurrent->second - it->second) / static_cast<float>(stepsCount);
 
-            pitchBendValue = 8192 + RealRound(ratio * 4096, 0);
-            pitchBendValue = std::clamp(pitchBendValue, 0, 16383);
+            for (int i = 0; i < stepsCount; ++i) {
+                timestamp_t currentPoint = timestampFrom + noteEvent.arrangementCtx().actualDuration
+                                           * percentageToFactor(it->first + (i * posStep));
 
-            event.setData(pitchBendValue);
-            destination[currentPoint].emplace(std::move(event));
-            return;
+                event.setData(pitchBendLevel(it->second + (i * pitchStep)));
+                destination[currentPoint].emplace(event);
+            }
+
+            it++;
         }
     } else {
-        midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
-        event.setChannel(channelIdx);
         event.setData(8192);
         destination[timestampFrom].emplace(std::move(event));
     }
@@ -261,4 +265,15 @@ int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) con
     dynamic_level_t result = RealRound(MIN_SUPPORTED_VOLUME + (stepCount * VOLUME_STEP), 0);
 
     return std::min(result, MAX_SUPPORTED_LEVEL);
+}
+
+int FluidSequencer::pitchBendLevel(const mpe::pitch_level_t pitchLevel) const
+{
+    static constexpr int PITCH_BEND_SEMITONE_STEP = 4096 / 12;
+
+    float pitchLevelSteps = pitchLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP);
+
+    int offset = pitchLevelSteps * PITCH_BEND_SEMITONE_STEP;
+
+    return std::clamp(8192 + offset, 0, 16383);
 }

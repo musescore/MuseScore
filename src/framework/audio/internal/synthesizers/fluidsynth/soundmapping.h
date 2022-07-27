@@ -919,8 +919,7 @@ static const mpe::ArticulationTypeSet PEDAL_CC_SUPPORTED_TYPES = {
 };
 
 static const mpe::ArticulationTypeSet BEND_SUPPORTED_TYPES = {
-    mpe::ArticulationType::Bend, mpe::ArticulationType::SlideOutUp,
-    mpe::ArticulationType::DiscreteGlissando, mpe::ArticulationType::ContinuousGlissando,
+    mpe::ArticulationType::Bend, mpe::ArticulationType::SlideOutUp, mpe::ArticulationType::ContinuousGlissando,
     mpe::ArticulationType::Fall, mpe::ArticulationType::QuickFall, mpe::ArticulationType::Doit,
     mpe::ArticulationType::Plop, mpe::ArticulationType::Scoop, mpe::ArticulationType::SlideOutDown,
     mpe::ArticulationType::SlideInAbove, mpe::ArticulationType::SlideInBelow

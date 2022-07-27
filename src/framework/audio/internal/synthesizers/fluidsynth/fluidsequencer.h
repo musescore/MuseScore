@@ -53,6 +53,7 @@ private:
     midi::note_idx_t noteIndex(const mpe::pitch_level_t pitchLevel) const;
     midi::velocity_t noteVelocity(const mpe::NoteEvent& noteEvent) const;
     int expressionLevel(const mpe::dynamic_level_t dynamicLevel) const;
+    int pitchBendLevel(const mpe::pitch_level_t pitchLevel) const;
 
     ArticulationMapping m_articulationMapping;
     std::unordered_map<midi::channel_t, midi::Program> m_channels;
