@@ -174,7 +174,7 @@ EventAudioSource::SynthCtx EventAudioSource::currentSynthCtx() const
     return { m_synth->isActive(), m_synth->playbackPosition() };
 }
 
-void EventAudioSource::restoreSynthCtx(SynthCtx &&ctx)
+void EventAudioSource::restoreSynthCtx(SynthCtx&& ctx)
 {
     m_synth->setPlaybackPosition(ctx.playbackPosition);
     m_synth->setIsActive(ctx.isActive);

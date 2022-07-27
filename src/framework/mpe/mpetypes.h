@@ -372,7 +372,7 @@ struct ArrangementPattern
     bool operator==(const ArrangementPattern& other) const
     {
         return durationFactor == other.durationFactor
-                && timestampOffset == other.timestampOffset;
+               && timestampOffset == other.timestampOffset;
     }
 };
 
@@ -451,8 +451,8 @@ struct ArticulationPatternSegment
     bool operator==(const ArticulationPatternSegment& other) const
     {
         return arrangementPattern == other.arrangementPattern
-                && pitchPattern == other.pitchPattern
-                && expressionPattern == other.expressionPattern;
+               && pitchPattern == other.pitchPattern
+               && expressionPattern == other.expressionPattern;
     }
 };
 
@@ -525,11 +525,11 @@ struct ArticulationMeta
                      const pitch_level_t overallPitchRange = 0,
                      const dynamic_level_t overallDynamicRange = 0)
         : type(_type),
-          pattern(_pattern),
-          timestamp(_timestamp),
-          overallDuration(_duration),
-          overallPitchChangesRange(overallPitchRange),
-          overallDynamicChangesRange(overallDynamicRange)
+        pattern(_pattern),
+        timestamp(_timestamp),
+        overallDuration(_duration),
+        overallPitchChangesRange(overallPitchRange),
+        overallDynamicChangesRange(overallDynamicRange)
     {}
 
     ArticulationType type = ArticulationType::Undefined;
@@ -543,11 +543,11 @@ struct ArticulationMeta
     bool operator==(const ArticulationMeta& other) const
     {
         return type == other.type
-                && pattern == other.pattern
-                && timestamp == other.timestamp
-                && overallDuration == other.overallDuration
-                && overallPitchChangesRange == other.overallPitchChangesRange
-                && overallDynamicChangesRange == other.overallDynamicChangesRange;
+               && pattern == other.pattern
+               && timestamp == other.timestamp
+               && overallDuration == other.overallDuration
+               && overallPitchChangesRange == other.overallPitchChangesRange
+               && overallDynamicChangesRange == other.overallDynamicChangesRange;
     }
 };
 
@@ -614,11 +614,11 @@ struct ArticulationAppliedData {
     bool operator==(const ArticulationAppliedData& other) const
     {
         return meta == other.meta
-                && appliedPatternSegment == other.appliedPatternSegment
-                && occupiedFrom == other.occupiedFrom
-                && occupiedTo == other.occupiedTo
-                && occupiedPitchChangesRange == other.occupiedPitchChangesRange
-                && occupiedDynamicChangesRange == other.occupiedDynamicChangesRange;
+               && appliedPatternSegment == other.appliedPatternSegment
+               && occupiedFrom == other.occupiedFrom
+               && occupiedTo == other.occupiedTo
+               && occupiedPitchChangesRange == other.occupiedPitchChangesRange
+               && occupiedDynamicChangesRange == other.occupiedDynamicChangesRange;
     }
 };
 
@@ -720,7 +720,6 @@ private:
 
         while (segmentDynamicOffsetIt != segment.expressionPattern.dynamicOffsetMap.cend()
                && segmentPitchOffsetIt != segment.pitchPattern.pitchOffsetMap.cend()) {
-
             if (hasMeaningDynamicOffset) {
                 averageDynamicOffsetIt->second += segmentDynamicOffsetIt->second;
             }
