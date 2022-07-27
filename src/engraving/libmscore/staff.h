@@ -59,8 +59,10 @@ enum class Key;
 //---------------------------------------------------------
 
 struct SwingParameters {
-    int swingUnit;
-    int swingRatio;
+    int swingUnit = 0;
+    int swingRatio = 0;
+
+    bool isValid() const { return swingRatio >= 50 && swingUnit != 0; }
 };
 
 //---------------------------------------------------------

@@ -95,6 +95,7 @@ void MasterNotation::setMasterScore(mu::engraving::MasterScore* score)
     TRACEFUNC;
 
     setScore(score);
+    score->updateSwing();
     m_notationPlayback->init(m_undoStack);
     initExcerptNotations(masterScore()->excerpts());
 }
@@ -247,6 +248,7 @@ mu::Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const S
     parts()->setParts(scoreOptions.parts, scoreOptions.order);
 
     score->checkChordList();
+    score->updateSwing();
 
     applyOptions(score, scoreOptions);
 
