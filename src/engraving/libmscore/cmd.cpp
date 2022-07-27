@@ -311,13 +311,13 @@ void Score::endCmd(bool rollback)
         rollback = true;
     }
 
-    ScoreChangesRange range = changesRange();
-
     if (rollback) {
         undoStack()->current()->unwind();
     }
 
     update(false);
+
+    ScoreChangesRange range = changesRange();
 
     LOGD() << "Undo stack current macro child count: " << undoStack()->current()->childCount();
 
@@ -362,10 +362,39 @@ ElementTypeSet Score::changedTypes() const
     return actualMacro->changedTypes();
 }
 
+std::pair<int, int> Score::changedTicksRange() const
+{
+    const UndoMacro* actualMacro = undoStack()->current();
+
+    if (!actualMacro) {
+        actualMacro = undoStack()->last();
+    }
+
+    const CmdState& cmdState = score()->cmdState();
+    int startTick = cmdState.startTick().ticks();
+    int endTick = cmdState.endTick().ticks();
+
+    if (actualMacro) {
+        auto elements = actualMacro->changedElements();
+        for (const EngravingItem* element : elements) {
+            if (startTick > element->tick().ticks()) {
+                startTick = element->tick().ticks();
+            }
+
+            if (endTick < element->tick().ticks()) {
+                endTick = element->tick().ticks();
+            }
+        }
+    }
+
+    return { startTick, endTick };
+}
+
 ScoreChangesRange Score::changesRange() const
 {
     const CmdState& cmdState = score()->cmdState();
-    return { cmdState.startTick().ticks(), cmdState.endTick().ticks(),
+    auto ticksRange = changedTicksRange();
+    return { ticksRange.first, ticksRange.second,
              cmdState.startStaff(), cmdState.endStaff(), changedTypes() };
 }
 
