@@ -580,6 +580,36 @@ Note::~Note()
     _rightParenthesis = nullptr;
 }
 
+std::vector<const Note*> Note::compoundNotes() const
+{
+    std::vector<const Note*> elements;
+    if (const Note* note = firstTiedNote()) {
+        elements.push_back(note);
+    }
+
+    if (const Note* note = lastTiedNote()) {
+        elements.push_back(note);
+    }
+
+    for (Spanner* e : _spannerFor) {
+        elements.push_back(toNote(e->endElement()));
+    }
+    for (Spanner* e : _spannerBack) {
+        elements.push_back(toNote(e->startElement()));
+    }
+
+    Beam* beam = chord()->beam();
+    if (beam) {
+        for (EngravingItem* e : beam->elements()) {
+            if (e && e->isNote() && e != this) {
+                elements.push_back(toNote(e));
+            }
+        }
+    }
+
+    return elements;
+}
+
 Note::Note(const Note& n, bool link)
     : EngravingItem(n)
 {
