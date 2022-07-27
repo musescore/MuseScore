@@ -26,12 +26,13 @@
           </StaffType>
         </Staff>
       <trackName>Guitar</trackName>
-      <Instrument>
+      <Instrument id="guitar-steel">
         <longName>Guitar</longName>
         <shortName>N-Gt</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar.acoustic</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>

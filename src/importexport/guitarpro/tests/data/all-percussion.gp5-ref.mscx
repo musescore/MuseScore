@@ -27,9 +27,10 @@
           </StaffType>
         </Staff>
       <trackName>Percussions</trackName>
-      <Instrument>
+      <Instrument id="automobile-brake-drums">
         <longName>Percussions</longName>
         <trackName></trackName>
+        <instrumentId>metal.brake-drums</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>

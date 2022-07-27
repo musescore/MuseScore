@@ -33,10 +33,11 @@
           </StaffType>
         </Staff>
       <trackName>Acoustic Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Acoustic Piano</longName>
         <shortName>A-Piano</shortName>
         <trackName></trackName>
+        <instrumentId>keyboard.piano</instrumentId>
         <Channel>
           <program value="0"/>
           <controller ctrl="7" value="101"/>

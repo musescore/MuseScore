@@ -26,12 +26,13 @@
           </StaffType>
         </Staff>
       <trackName>Track 1</trackName>
-      <Instrument>
+      <Instrument id="cavaquinho">
         <longName>Track 1</longName>
         <shortName>S-Gt</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>

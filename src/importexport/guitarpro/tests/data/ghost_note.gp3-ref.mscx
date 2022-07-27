@@ -26,9 +26,10 @@
           </StaffType>
         </Staff>
       <trackName>Track 1</trackName>
-      <Instrument>
+      <Instrument id="electric-bass">
         <longName>Track 1</longName>
         <trackName></trackName>
+        <instrumentId>pluck.bass.electric</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>

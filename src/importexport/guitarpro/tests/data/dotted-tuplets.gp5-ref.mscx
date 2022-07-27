@@ -26,9 +26,10 @@
           </StaffType>
         </Staff>
       <trackName>Bells</trackName>
-      <Instrument>
+      <Instrument id="xylomarimba">
         <longName>Bells</longName>
         <trackName></trackName>
+        <instrumentId>pitched-percussion.xylomarimba</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>

@@ -26,12 +26,13 @@
           </StaffType>
         </Staff>
       <trackName>Steel Guitar</trackName>
-      <Instrument>
+      <Instrument id="cavaquinho">
         <longName>Steel Guitar</longName>
         <shortName>S-Gt</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
@@ -57,12 +58,13 @@
           </StaffType>
         </Staff>
       <trackName>Nylon Guitar</trackName>
-      <Instrument>
+      <Instrument id="cavaquinho">
         <longName>Nylon Guitar</longName>
         <shortName>N-Gt</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>

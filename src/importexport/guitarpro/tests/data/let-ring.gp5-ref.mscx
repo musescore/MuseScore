@@ -26,9 +26,10 @@
           </StaffType>
         </Staff>
       <trackName>Electric Guitar</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar">
         <longName>Electric Guitar</longName>
         <trackName></trackName>
+        <instrumentId>pluck.guitar.electric</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>32</frets>

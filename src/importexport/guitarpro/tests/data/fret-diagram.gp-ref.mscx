@@ -26,12 +26,13 @@
           </StaffType>
         </Staff>
       <trackName>Acoustic (DADGAD, capo 6)</trackName>
-      <Instrument>
+      <Instrument id="cavaquinho">
         <longName>Acoustic (DADGAD, capo 6)</longName>
         <shortName>S-Gt7</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>

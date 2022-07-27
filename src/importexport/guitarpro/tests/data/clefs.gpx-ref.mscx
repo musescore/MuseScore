@@ -26,10 +26,11 @@
           </StaffType>
         </Staff>
       <trackName>Acoustic Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Acoustic Piano</longName>
         <shortName>A-Piano</shortName>
         <trackName></trackName>
+        <instrumentId>keyboard.piano</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
