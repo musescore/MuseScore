@@ -27,7 +27,7 @@
 #include "engraving/engravingmodule.h"
 #include "engraving/utests/utils/scorerw.h"
 
-#include "libmscore/masterscore.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
 #include "log.h"
@@ -48,5 +48,7 @@ static mu::testing::SuiteEnvironment importexport_se(
 
     new mu::engraving::MuseScoreCore();
     mu::engraving::MScore::init(); // initialize libmscore
+
+    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 }
     );

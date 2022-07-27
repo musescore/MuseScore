@@ -656,11 +656,11 @@ void clearInstrumentTemplates()
 //   loadInstrumentTemplates
 //---------------------------------------------------------
 
-bool loadInstrumentTemplates(const String& instrTemplates)
+bool loadInstrumentTemplates(const io::path_t& instrTemplatesPath)
 {
-    File qf(instrTemplates);
+    File qf(instrTemplatesPath);
     if (!qf.open(IODevice::ReadOnly)) {
-        LOGD("cannot load instrument templates at <%s>", muPrintable(instrTemplates));
+        LOGE() << "Could not load instrument templates from " << instrTemplatesPath;
         return false;
     }
 

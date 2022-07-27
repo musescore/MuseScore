@@ -142,6 +142,6 @@ void MTest::initMTest(const QString& rootDir)
     mscore->init();
 
     root = rootDir;
-    loadInstrumentTemplates(u":/data/instruments.xml");
+    loadInstrumentTemplates(":/data/instruments.xml");
 }
 }
