@@ -27,7 +27,7 @@
 #include "fonts/fontsmodule.h"
 #include "draw/drawmodule.h"
 
-#include "libmscore/masterscore.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
 #include "mocks/engravingconfigurationmock.h"

@@ -55,6 +55,7 @@
 #include "libmscore/harmony.h"
 #include "libmscore/realizedharmony.h"
 #include "libmscore/instrument.h"
+#include "libmscore/instrtemplate.h"
 
 #include "engraving/layout/layoutoptions.h"
 

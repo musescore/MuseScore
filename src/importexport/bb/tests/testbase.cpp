@@ -27,7 +27,7 @@
 
 #include "io/file.h"
 
-#include "config.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
 
