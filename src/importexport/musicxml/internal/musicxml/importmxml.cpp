@@ -77,6 +77,12 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
         res = pass2.parse(dev);
     }
 
+    for (const Part* part : score->parts()) {
+        for (const auto& pair : part->instruments()) {
+            pair.second->updateInstrumentId();
+        }
+    }
+
     // report result
     const auto pass2_errors = pass2.errors();
     if (!(pass1_errors.isEmpty() && pass2_errors.isEmpty())) {
