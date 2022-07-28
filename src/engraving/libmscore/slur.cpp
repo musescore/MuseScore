@@ -1444,6 +1444,11 @@ SpannerSegment* Slur::layoutSystem(System* system)
             }
             Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
             Chord* c2 = endCR()->isChord() ? toChord(endCR()) : 0;
+            if (startCR()->measure()->system() != endCR()->measure()->system()) {
+                // If the end chord is in a different system its direction may
+                // have never been computed, so we need to compute it here.
+                c2->computeUp();
+            }
 
             if (_sourceStemArrangement != -1) {
                 if (_sourceStemArrangement != calcStemArrangement(c1, c2)) {
@@ -1462,23 +1467,30 @@ SpannerSegment* Slur::layoutSystem(System* system)
 
             _up = !(startCR()->up());
 
+            // Check if multiple voices
+            bool multipleVoices = false;
             Measure* m1 = startCR()->measure();
-            if (c1 && c2 && !c1->isGrace() && isDirectionMixture(c1, c2)) {
+            while (m1 && m1->tick() <= endCR()->tick()) {
+                if ((m1->hasVoices(startCR()->staffIdx(), tick(), ticks() + endCR()->ticks()))
+                    && c1) {
+                    multipleVoices = true;
+                    break;
+                }
+                m1 = m1->nextMeasure();
+            }
+            if (multipleVoices) {
+                // slurs go on the stem side
+                if (startCR()->voice() > 0 || endCR()->voice() > 0) {
+                    _up = false;
+                } else {
+                    _up = true;
+                }
+            } else if (c1 && c2 && !c1->isGrace() && isDirectionMixture(c1, c2)) {
                 // slurs go above if there are mixed direction stems between c1 and c2
                 // but grace notes are exceptions
                 _up = true;
-            } else if (c1->isGrace() && c2 != c1->parent() && isDirectionMixture(c1, c2)) {
+            } else if (c1 && c2 && c1->isGrace() && c2 != c1->parent() && isDirectionMixture(c1, c2)) {
                 _up = true;
-            } else {
-                ChordRest* cr2 = endCR() ? endCR() : startCR();
-                while (m1 && m1->tick() <= cr2->tick()) {
-                    if ((m1->hasVoices(startCR()->staffIdx(), tick(), ticks() + (cr2 ? cr2->ticks() : startCR()->ticks())))
-                        && c1) {
-                        // in polyphonic passage, slurs go on the stem side
-                        _up = startCR()->up();
-                    }
-                    m1 = m1->nextMeasure();
-                }
             }
         }
         break;
