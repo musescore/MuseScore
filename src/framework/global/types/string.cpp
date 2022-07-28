@@ -204,45 +204,81 @@ void UtfCodec::utf32to8(std::u32string_view src, std::string& dst)
 
 String::String()
 {
+#ifdef DISABLED_IMPLICIT_SHARED
+    // noop
+#else
     m_data = std::make_shared<std::u16string>();
+#endif
 }
 
 String::String(const char16_t* str)
 {
+#ifdef DISABLED_IMPLICIT_SHARED
+    m_data = str ? str : u"";
+#else
     m_data = std::make_shared<std::u16string>(str ? str : u"");
+#endif
 }
 
 String::String(const Char& ch)
 {
+#ifdef DISABLED_IMPLICIT_SHARED
+    // noop
+#else
     m_data = std::make_shared<std::u16string>();
-    *m_data.get() += ch.unicode();
+#endif
+
+    mutStr(false) += ch.unicode();
 }
 
 String::String(const Char* unicode, size_t size)
 {
     if (!unicode) {
+#ifdef DISABLED_IMPLICIT_SHARED
+        // noop
+#else
         m_data = std::make_shared<std::u16string>();
+#endif
         return;
     }
 
     static_assert(sizeof(Char) == sizeof(char16_t));
     const char16_t* str = reinterpret_cast<const char16_t*>(unicode);
+
+#ifdef DISABLED_IMPLICIT_SHARED
+    if (size == mu::nidx) {
+        m_data = std::u16string(str);
+    } else {
+        m_data = std::u16string(str, size);
+    }
+#else
     if (size == mu::nidx) {
         m_data = std::make_shared<std::u16string>(str);
     } else {
         m_data = std::make_shared<std::u16string>(str, size);
     }
+#endif
 }
 
 const std::u16string& String::constStr() const
 {
+#ifdef DISABLED_IMPLICIT_SHARED
+    return m_data;
+#else
     return *m_data.get();
+#endif
 }
 
-std::u16string& String::mutStr()
+std::u16string& String::mutStr(bool do_detach)
 {
-    detach();
+    if (do_detach) {
+        detach();
+    }
+#ifdef DISABLED_IMPLICIT_SHARED
+    return m_data;
+#else
     return *m_data.get();
+#endif
 }
 
 void String::reserve(size_t i)
@@ -287,6 +323,9 @@ bool String::operator ==(const char* s) const
 
 void String::detach()
 {
+#ifdef DISABLED_IMPLICIT_SHARED
+    // noop
+#else
     if (!m_data) {
         return;
     }
@@ -296,11 +335,16 @@ void String::detach()
     }
 
     m_data = std::make_shared<std::u16string>(*m_data);
+#endif
 }
 
 String& String::operator=(const char16_t* str)
 {
+#ifdef DISABLED_IMPLICIT_SHARED
+    m_data = str;
+#else
     m_data = std::make_shared<std::u16string>(str);
+#endif
     return *this;
 }
 
@@ -447,13 +491,13 @@ String String::fromQString(const QString& str)
     const char16_t* u = reinterpret_cast<const char16_t*>(qu);
 
     String s;
-    s.m_data.reset(new std::u16string(u, u + str.size()));
+    s.mutStr() = std::u16string(u, u + str.size());
     return s;
 }
 
 QString String::toQString() const
 {
-    const char16_t* u = &m_data->front();
+    const char16_t* u = &constStr().front();
     static_assert(sizeof(QChar) == sizeof(char16_t));
     return QString(reinterpret_cast<const QChar*>(u), static_cast<int>(size()));
 }

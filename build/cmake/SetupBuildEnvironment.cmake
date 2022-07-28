@@ -20,6 +20,10 @@ if (NOT BUILD_ALLOCATOR)
     add_definitions(-DCUSTOM_ALLOCATOR_DISABLED)
 endif()
 
+if (DISABLED_IMPLICIT_SHARED)
+    add_definitions(-DDISABLED_IMPLICIT_SHARED)
+endif()
+
 if (CC_IS_GCC)
     message(STATUS "Using Compiler GCC ${CMAKE_CXX_COMPILER_VERSION}")
 

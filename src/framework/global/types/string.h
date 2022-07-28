@@ -338,11 +338,15 @@ public:
 
 private:
     const std::u16string& constStr() const;
-    std::u16string& mutStr();
+    std::u16string& mutStr(bool do_detach = true);
     void detach();
     void doArgs(std::u16string& out, const std::vector<std::u16string_view>& args) const;
 
+#ifdef DISABLED_IMPLICIT_SHARED
+    std::u16string m_data;
+#else
     std::shared_ptr<std::u16string> m_data;
+#endif
 };
 
 class StringList : public std::vector<String>
