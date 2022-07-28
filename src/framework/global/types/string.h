@@ -337,12 +337,52 @@ public:
     inline size_t hash() const { return std::hash<std::u16string> {}(constStr()); }
 
 private:
+
+    struct Mutator {
+        std::u16string& s;
+        String* self = nullptr;
+        Mutator(std::u16string& s, String* self)
+            : s(s), self(self) {}
+        ~Mutator()
+        {
+#ifdef MU_STRING_DEBUG_HACK
+            self->updateDebugView();
+#endif
+        }
+
+        operator std::u16string& () {
+            return s;
+        }
+
+        void reserve(size_t n) { s.reserve(n); }
+        void resize(size_t n) { s.resize(n); }
+        void clear() { s.clear(); }
+        void insert(size_t p, const std::u16string& v) { s.insert(p, v); }
+        void erase(size_t p, size_t n) { s.erase(p, n); }
+
+        std::u16string& operator=(const std::u16string& v) { return s.operator=(v); }
+        std::u16string& operator=(const char16_t* v) { return s.operator=(v); }
+        std::u16string& operator=(const char16_t v) { return s.operator=(v); }
+
+        std::u16string& operator+=(const std::u16string& v) { return s.operator+=(v); }
+        std::u16string& operator+=(const char16_t* v) { return s.operator+=(v); }
+        std::u16string& operator+=(const char16_t v) { return s.operator+=(v); }
+        char16_t& operator[](size_t i) { return s.operator[](i); }
+    };
+
     const std::u16string& constStr() const;
-    std::u16string& mutStr();
+    Mutator mutStr(bool do_detach = true);
     void detach();
     void doArgs(std::u16string& out, const std::vector<std::u16string_view>& args) const;
 
     std::shared_ptr<std::u16string> m_data;
+
+#ifdef MU_STRING_DEBUG_HACK
+    //! HACK On MacOS with clang there are problems with debugging - the value of the std::u16string is not visible.
+    //! This is hack for debugging on MacOS
+    void updateDebugView();
+    std::string dview;
+#endif
 };
 
 class StringList : public std::vector<String>

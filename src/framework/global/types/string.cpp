@@ -210,12 +210,18 @@ String::String()
 String::String(const char16_t* str)
 {
     m_data = std::make_shared<std::u16string>(str ? str : u"");
+#ifdef STRING_DEBUG_HACK
+    updateDebugView();
+#endif
 }
 
 String::String(const Char& ch)
 {
     m_data = std::make_shared<std::u16string>();
     *m_data.get() += ch.unicode();
+#ifdef STRING_DEBUG_HACK
+    updateDebugView();
+#endif
 }
 
 String::String(const Char* unicode, size_t size)
@@ -232,17 +238,35 @@ String::String(const Char* unicode, size_t size)
     } else {
         m_data = std::make_shared<std::u16string>(str, size);
     }
+
+#ifdef STRING_DEBUG_HACK
+    updateDebugView();
+#endif
 }
+
+#ifdef STRING_DEBUG_HACK
+void String::updateDebugView()
+{
+    try {
+        dview = toStdString();
+    }  catch (const std::exception& e) {
+        dview = "exception: " + std::string(e.what());
+    }
+}
+
+#endif
 
 const std::u16string& String::constStr() const
 {
     return *m_data.get();
 }
 
-std::u16string& String::mutStr()
+String::Mutator String::mutStr(bool do_detach)
 {
-    detach();
-    return *m_data.get();
+    if (do_detach) {
+        detach();
+    }
+    return Mutator(*m_data.get(), this);
 }
 
 void String::reserve(size_t i)
@@ -300,7 +324,7 @@ void String::detach()
 
 String& String::operator=(const char16_t* str)
 {
-    m_data = std::make_shared<std::u16string>(str);
+    mutStr() = str;
     return *this;
 }
 
@@ -447,13 +471,13 @@ String String::fromQString(const QString& str)
     const char16_t* u = reinterpret_cast<const char16_t*>(qu);
 
     String s;
-    s.m_data.reset(new std::u16string(u, u + str.size()));
+    s.mutStr() = std::u16string(u, u + str.size());
     return s;
 }
 
 QString String::toQString() const
 {
-    const char16_t* u = &m_data->front();
+    const char16_t* u = &constStr().front();
     static_assert(sizeof(QChar) == sizeof(char16_t));
     return QString(reinterpret_cast<const QChar*>(u), static_cast<int>(size()));
 }
@@ -699,7 +723,8 @@ StringList String::split(const std::regex& re, SplitBehavior behavior) const
 
 String& String::replace(const String& before, const String& after)
 {
-    std::u16string& str = mutStr();
+    Mutator h = mutStr();
+    std::u16string& str = h.s;
     size_t start_pos = 0;
     while ((start_pos = str.find(before.constStr(), start_pos)) != std::string::npos) {
         str.replace(start_pos, before.size(), after.constStr());
@@ -710,7 +735,8 @@ String& String::replace(const String& before, const String& after)
 
 String& String::replace(char16_t before, char16_t after)
 {
-    std::u16string& str = mutStr();
+    Mutator h = mutStr();
+    std::u16string& str = h.s;
     for (size_t i = 0; i < str.size(); ++i) {
         if (str.at(i) == before) {
             str[i] = after;
@@ -728,7 +754,8 @@ String& String::replace(const std::regex& re, const String& after)
     UtfCodec::utf16to8(std::u16string_view(constStr()), originU8);
     std::string replasedU8 = std::regex_replace(originU8, re, afterU8);
 
-    std::u16string& sefl = mutStr();
+    Mutator h = mutStr();
+    std::u16string& sefl = h.s;
     sefl.clear();
     UtfCodec::utf8to16(std::string_view(replasedU8), sefl);
     return *this;
