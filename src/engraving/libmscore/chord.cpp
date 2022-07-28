@@ -427,6 +427,18 @@ Chord::~Chord()
     DeleteAll(_notes);
 }
 
+std::vector<const Note*> Chord::compoundNotes() const
+{
+    std::vector<const Note*> result;
+
+    for (const Note* note : notes()) {
+        std::vector<const Note*> compoundNotes = note->compoundNotes();
+        result.insert(result.begin(), compoundNotes.begin(), compoundNotes.end());
+    }
+
+    return result;
+}
+
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 AccessibleItemPtr Chord::createAccessible()
 {

@@ -229,6 +229,12 @@ static Acc accList[] = {
     Acc(AccidentalVal::NATURAL, 111.1, SymId::accidental5CommaSharp),
 };
 
+std::vector<const Note*> Accidental::compoundNotes() const
+{
+    const Note* note = this->note();
+    return note->compoundNotes();
+}
+
 //---------------------------------------------------------
 //   sym2accidentalVal
 //---------------------------------------------------------

@@ -91,6 +91,16 @@ Articulation::Articulation(ChordRest* parent)
     setupShowOnTabStyles();
 }
 
+std::vector<const Note*> Articulation::compoundNotes() const
+{
+    if (!parent() || parent()->isChord()) {
+        return {};
+    }
+
+    const Chord* chord = toChord(parent());
+    return chord->compoundNotes();
+}
+
 //---------------------------------------------------------
 //   setSymId
 //---------------------------------------------------------

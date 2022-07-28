@@ -108,20 +108,22 @@ static std::vector<const EngravingObject*> compoundObjects(const EngravingObject
 {
     std::vector<const EngravingObject*> objects;
 
+    std::vector<const Note*> notes;
     if (object->isChord()) {
         const Chord* chord = toChord(object);
-        for (const Note* note : chord->notes()) {
-            for (const Note* compoundNote : note->compoundNotes()) {
-                objects.push_back(compoundNote);
-            }
-        }
+        notes = chord->compoundNotes();
     } else if (object->isNote()) {
         const Note* note = toNote(object);
-        for (const Note* compoundNote : note->compoundNotes()) {
-            objects.push_back(compoundNote);
-        }
+        notes = note->compoundNotes();
+    } else if (object->isAccidental()) {
+        const Accidental* accidental = toAccidental(object);
+        notes = accidental->compoundNotes();
+    } else if (object->isArticulation()) {
+        const Articulation* articulation = toArticulation(object);
+        notes = articulation->compoundNotes();
     }
 
+    objects.insert(objects.begin(), notes.begin(), notes.end());
     objects.push_back(object);
 
     return objects;

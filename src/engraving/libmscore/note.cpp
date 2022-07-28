@@ -583,32 +583,41 @@ Note::~Note()
 
 std::vector<const Note*> Note::compoundNotes() const
 {
-    std::vector<const Note*> elements;
+    std::vector<const Note*> result;
+
     if (const Note* note = firstTiedNote()) {
-        elements.push_back(note);
+        result.push_back(note);
     }
 
     if (const Note* note = lastTiedNote()) {
-        elements.push_back(note);
+        result.push_back(note);
     }
 
     for (Spanner* e : _spannerFor) {
-        elements.push_back(toNote(e->endElement()));
+        result.push_back(toNote(e->endElement()));
     }
+
     for (Spanner* e : _spannerBack) {
-        elements.push_back(toNote(e->startElement()));
+        result.push_back(toNote(e->startElement()));
     }
 
     Beam* beam = chord()->beam();
     if (beam) {
-        for (EngravingItem* e : beam->elements()) {
-            if (e && e->isNote() && e != this) {
-                elements.push_back(toNote(e));
+        for (const EngravingItem* e : beam->elements()) {
+            if (!e || !e->isChordRest()) {
+                continue;
+            }
+
+            const ChordRest* chordRest = toChordRest(e);
+            for (const EngravingObject* obj : chordRest->children()) {
+                if (obj && obj->isNote() && obj != this) {
+                    result.push_back(toNote(obj));
+                }
             }
         }
     }
 
-    return elements;
+    return result;
 }
 
 Note::Note(const Note& n, bool link)

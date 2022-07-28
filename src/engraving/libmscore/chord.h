@@ -155,6 +155,8 @@ public:
     ~Chord();
     Chord& operator=(const Chord&) = delete;
 
+    std::vector<const Note*> compoundNotes() const;
+
     bool containsEqualArticulations(const Chord* other) const;
     bool containsEqualArpeggio(const Chord* other) const;
     bool containsEqualTremolo(const Chord* other) const;

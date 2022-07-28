@@ -88,6 +88,8 @@ public:
     // Score Tree functions
     EngravingObject* scanParent() const override;
 
+    std::vector<const Note*> compoundNotes() const;
+
     TranslatableString subtypeUserName() const override;
     void setSubtype(const AsciiStringView& s);
     void setAccidentalType(AccidentalType t) { _accidentalType = t; }

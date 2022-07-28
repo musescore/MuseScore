@@ -130,6 +130,8 @@ public:
 
     Articulation* clone() const override { return new Articulation(*this); }
 
+    std::vector<const Note*> compoundNotes() const;
+
     double mag() const override;
 
     SymId symId() const { return _symId; }
