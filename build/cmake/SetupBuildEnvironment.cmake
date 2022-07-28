@@ -83,6 +83,10 @@ elseif(CC_IS_CLANG)
         string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-pointer")
     endif()
 
+    if (BUILD_IS_DEBUG)
+        add_definitions(-DSTRING_DEBUG_HACK)
+    endif()
+
 elseif(CC_IS_EMSCRIPTEN)
     message(STATUS "Using Compiler Emscripten ${CMAKE_CXX_COMPILER_VERSION}")
 
