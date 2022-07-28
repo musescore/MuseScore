@@ -54,7 +54,7 @@ public:
     void reload(bool onlyDef = false) override;
 
     const ShortcutList& shortcuts() const override;
-    Ret setShortcuts(const ShortcutList& shortcuts, QModelIndex cellIdx = QModelIndex()) override;
+    Ret setShortcuts(const ShortcutList& shortcuts) override;
     Ret setShortcut(const Shortcut toAddShortcut);
     void resetShortcuts() override;
     async::Notification shortcutsChanged() const override;

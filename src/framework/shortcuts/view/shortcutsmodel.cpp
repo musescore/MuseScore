@@ -274,7 +274,7 @@ void ShortcutsModel::applySequenceToPalette(QString action, const QString& newSe
         shortcuts.push_back(shortcut);
     }
 
-    Ret ret = shortcutsRegister()->setShortcuts(shortcuts, cellIdx);
+    Ret ret = shortcutsRegister()->setShortcuts(shortcuts);
 
     if (!ret) {
         LOGE() << ret.toString();

@@ -543,7 +543,7 @@ StyledGridView {
                 visible: !parent.paletteDrag || parent.dragCopy
             }
 
-            hint: model.toolTip
+            hint: model.cellID
 
             navigation.accessible.name: model.accessibleText
 

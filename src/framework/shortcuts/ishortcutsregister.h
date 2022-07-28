@@ -39,7 +39,7 @@ public:
     virtual ~IShortcutsRegister() = default;
 
     virtual const ShortcutList& shortcuts() const = 0;
-    virtual Ret setShortcuts(const ShortcutList& shortcuts, QModelIndex cellIdx = QModelIndex()) = 0;
+    virtual Ret setShortcuts(const ShortcutList& shortcuts) = 0;
     virtual Ret setShortcut(const Shortcut toAddShortcut) = 0;
     virtual void resetShortcuts() = 0;
     virtual async::Notification shortcutsChanged() const = 0;

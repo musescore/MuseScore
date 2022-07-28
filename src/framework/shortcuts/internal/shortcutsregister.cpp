@@ -294,7 +294,7 @@ const ShortcutList& ShortcutsRegister::shortcuts() const
     return m_shortcuts;
 }
 
-mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts, QModelIndex cellIdx)
+mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
 {
     TRACEFUNC;
 
@@ -328,7 +328,6 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts, QModelInd
         config.xOffset = cell->xoffset;
         config.yOffset = cell->yoffset;
         config.scale = cell->mag;
-        config.idx = cellIdx;
 
         for (auto shrtct : PaletteShortcuts) {
             std::string cellId = "";
