@@ -420,143 +420,141 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     // we will do (0 = only shape, 1 = only end point)
     double balance = 0.4; // TODO: style (maybe?)
 
-    if (autoplace()) {
-        static constexpr unsigned maxIter = 30; // Max iterations allowed
-        const double vertClearance = slur()->up() ? clearance : -clearance;
-        const double step = slur()->up() ? -0.25 * spatium() : 0.25 * spatium();
-        // Divide slur in several rectangles to localize collisions
-        const unsigned npoints = 20;
-        std::vector<RectF> slurRects;
-        slurRects.reserve(npoints);
-        // Define separate collision areas (left-mid-center)
-        SlurCollision collision;
+    static constexpr unsigned maxIter = 30;     // Max iterations allowed
+    const double vertClearance = slur()->up() ? clearance : -clearance;
+    const double step = slur()->up() ? -0.25 * spatium() : 0.25 * spatium();
+    // Divide slur in several rectangles to localize collisions
+    const unsigned npoints = 20;
+    std::vector<RectF> slurRects;
+    slurRects.reserve(npoints);
+    // Define separate collision areas (left-mid-center)
+    SlurCollision collision;
 
-        // CHECK FOR COLLISIONS
-        unsigned iter = 0;
-        do {
-            collision.reset();
-            // Update tranform because pp1 may change
-            toSystemCoordinates.reset();
-            toSystemCoordinates.translate(pp1.x(), pp1.y());
-            toSystemCoordinates.rotateRadians(slurAngle);
-            // Create rectangles
-            slurRects.clear();
-            CubicBezier clearanceBezier(PointF(0, 0), p3 + PointF(0.0, vertClearance), p4 + PointF(0.0, vertClearance), p2);
-            for (unsigned i = 0; i < npoints - 1; i++) {
-                PointF clearancePoint1 = clearanceBezier.pointAtPercent(double(i) / double(npoints));
-                PointF clearancePoint2 = clearanceBezier.pointAtPercent(double(i + 1) / double(npoints));
-                clearancePoint1 = toSystemCoordinates.map(clearancePoint1);
-                clearancePoint2 = toSystemCoordinates.map(clearancePoint2);
-                slurRects.push_back(RectF(clearancePoint1, clearancePoint2));
+    // CHECK FOR COLLISIONS
+    unsigned iter = 0;
+    do {
+        collision.reset();
+        // Update tranform because pp1 may change
+        toSystemCoordinates.reset();
+        toSystemCoordinates.translate(pp1.x(), pp1.y());
+        toSystemCoordinates.rotateRadians(slurAngle);
+        // Create rectangles
+        slurRects.clear();
+        CubicBezier clearanceBezier(PointF(0, 0), p3 + PointF(0.0, vertClearance), p4 + PointF(0.0, vertClearance), p2);
+        for (unsigned i = 0; i < npoints - 1; i++) {
+            PointF clearancePoint1 = clearanceBezier.pointAtPercent(double(i) / double(npoints));
+            PointF clearancePoint2 = clearanceBezier.pointAtPercent(double(i + 1) / double(npoints));
+            clearancePoint1 = toSystemCoordinates.map(clearancePoint1);
+            clearancePoint2 = toSystemCoordinates.map(clearancePoint2);
+            slurRects.push_back(RectF(clearancePoint1, clearancePoint2));
+        }
+        // Check collisions
+        for (Segment* seg : segList) {
+            Shape segShape = seg->staffShape(startCR->vStaffIdx()).translated(seg->pos() + seg->measure()->pos());
+            // If cross-staff, also add the shape of second staff
+            if (isCrossStaff) {
+                SysStaff* startStaff = system()->staves().at(startCR->vStaffIdx());
+                SysStaff* endStaff = system()->staves().at(endCR->vStaffIdx());
+                double dist = endStaff->y() - startStaff->y();
+                Shape secondStaffShape;
+                secondStaffShape.add(seg->staffShape(endCR->vStaffIdx()).translated(seg->pos() + seg->measure()->pos()));
+                secondStaffShape.translate(PointF(0.0, dist));
+                segShape.add(secondStaffShape);
             }
-            // Check collisions
-            for (Segment* seg : segList) {
-                Shape segShape = seg->staffShape(startCR->vStaffIdx()).translated(seg->pos() + seg->measure()->pos());
-                // If cross-staff, also add the shape of second staff
-                if (isCrossStaff) {
-                    SysStaff* startStaff = system()->staves().at(startCR->vStaffIdx());
-                    SysStaff* endStaff = system()->staves().at(endCR->vStaffIdx());
-                    double dist = endStaff->y() - startStaff->y();
-                    Shape secondStaffShape;
-                    secondStaffShape.add(seg->staffShape(endCR->vStaffIdx()).translated(seg->pos() + seg->measure()->pos()));
-                    secondStaffShape.translate(PointF(0.0, dist));
-                    segShape.add(secondStaffShape);
+            for (unsigned i=0; i < slurRects.size(); i++) {
+                bool leftSection = i < slurRects.size() / 3;
+                bool midSection = i >= slurRects.size() / 3 && i < 2 * slurRects.size() / 3;
+                bool rightSection = i >= 2 * slurRects.size() / 3;
+                if ((leftSection && collision.left)
+                    || (midSection && collision.mid)
+                    || (rightSection && collision.right)) {     // If a collision is already found in this section, no need to check again
+                    continue;
                 }
-                for (unsigned i=0; i < slurRects.size(); i++) {
-                    bool leftSection = i < slurRects.size() / 3;
-                    bool midSection = i >= slurRects.size() / 3 && i < 2 * slurRects.size() / 3;
-                    bool rightSection = i >= 2 * slurRects.size() / 3;
-                    if ((leftSection && collision.left)
-                        || (midSection && collision.mid)
-                        || (rightSection && collision.right)) { // If a collision is already found in this section, no need to check again
-                        continue;
+                bool intersection = slur()->up() ? !Shape(slurRects[i]).clearsVertically(segShape)
+                                    : !segShape.clearsVertically(slurRects[i]);
+                if (intersection) {
+                    if (leftSection) {
+                        collision.left = true;
                     }
-                    bool intersection = slur()->up() ? !Shape(slurRects[i]).clearsVertically(segShape)
-                                        : !segShape.clearsVertically(slurRects[i]);
-                    if (intersection) {
-                        if (leftSection) {
-                            collision.left = true;
-                        }
-                        if (midSection) {
-                            collision.mid = true;
-                        }
-                        if (rightSection) {
-                            collision.right = true;
-                        }
+                    if (midSection) {
+                        collision.mid = true;
+                    }
+                    if (rightSection) {
+                        collision.right = true;
                     }
                 }
             }
-            // In the even iterations, adjust the shape
-            if (iter % 2 == 0) {
-                double shapeStep = (1 - balance) * step;
-                if (collision.left) {
-                    // Move left Bezier point up(/down) and outwards
-                    p3 += PointF(-abs(shapeStep), shapeStep);
-                    // and a bit also the right point to compensate asymmetry
-                    p4 += PointF(abs(shapeStep), shapeStep) / 2.0;
-                }
-                if (collision.mid) { // Move both Bezier points up(/down)
-                    p3 += PointF(0.0, shapeStep);
-                    p4 += PointF(0.0, shapeStep);
-                }
-                if (collision.right) {
-                    // Move right Bezier point up(/down) and outwards
-                    p4 += PointF(abs(shapeStep), shapeStep);
-                    // and a bit also the left point to compensate asymmetry
-                    p3 += PointF(-abs(shapeStep), shapeStep) / 2.0;
-                }
-            } else if (!isEndPointsEdited()) {
-                // In the odd iterations, adjust the end points
-                // Slurs steeper than 45° are gently compensated
-                double steepLimit = M_PI / 4;
-                double endPointStep = balance * step;
-                if (collision.left || slurAngle < -steepLimit) {
-                    // Lift the left end point, i.e. tilt the slur around p2
-                    double stepX = sin(slurAngle) * endPointStep;
-                    double stepY = cos(slurAngle) * endPointStep;
-                    PointF pp1delta = PointF(stepX, stepY);
-                    pp1 += PointF(0.0, endPointStep);
-                    p3 += pp1delta * (p2.x() - p3.x()) / p2.x();
-                    p4 += pp1delta * (p2.x() - p4.x()) / p2.x();
-                    // All points are expressed with respect to pp1, so we need
-                    // to subtract pp1delta to avoid the whole slur moving up
-                    p2 -= pp1delta;
-                    p3 -= pp1delta;
-                    p4 -= pp1delta;
-                }
-                if (collision.mid && !(abs(slurAngle) > steepLimit)) {
-                    // Lift the whole slur
-                    pp1 += PointF(0.0, endPointStep);
-                }
-                if (collision.right || slurAngle > steepLimit) {
-                    // Lift the right end point, i.e. tilt the slur around p1
-                    double stepX = sin(slurAngle) * endPointStep;
-                    double stepY = cos(slurAngle) * endPointStep;
-                    PointF p2delta = PointF(stepX, stepY);
-                    p2 += p2delta;
-                    p3 += p2delta * p3.x() / p2.x();
-                    p4 += p2delta * p4.x() / p2.x();
-                }
+        }
+        // In the even iterations, adjust the shape
+        if (iter % 2 == 0) {
+            double shapeStep = (1 - balance) * step;
+            if (collision.left) {
+                // Move left Bezier point up(/down) and outwards
+                p3 += PointF(-abs(shapeStep), shapeStep);
+                // and a bit also the right point to compensate asymmetry
+                p4 += PointF(abs(shapeStep), shapeStep) / 2.0;
             }
-            // Enforce non-ugliness rules
-            // 1) Slur cannot be taller than it is wide
-            const double maxRelativeHeight = abs(p2.x());
-            p3 = slur()->up() ? PointF(p3.x(), std::max(p3.y(), -maxRelativeHeight)) : PointF(p3.x(), std::min(p3.y(), maxRelativeHeight));
-            p4 = slur()->up() ? PointF(p4.x(), std::max(p4.y(), -maxRelativeHeight)) : PointF(p4.x(), std::min(p4.y(), maxRelativeHeight));
-            // 2) Tangent rule: p3 and p4 cannot be further left than p1 nor further right than p2
-            PointF p3SysCoord = toSystemCoordinates.map(p3);
-            PointF p4SysCoord = toSystemCoordinates.map(p4);
-            PointF p2SysCoord = toSystemCoordinates.map(p2);
-            p3SysCoord = PointF(std::max(pp1.x(), p3SysCoord.x()), p3SysCoord.y());
-            p3SysCoord = PointF(std::min(p2SysCoord.x(), p3SysCoord.x()), p3SysCoord.y());
-            p4SysCoord = PointF(std::max(pp1.x(), p4SysCoord.x()), p4SysCoord.y());
-            p4SysCoord = PointF(std::min(p2SysCoord.x(), p4SysCoord.x()), p4SysCoord.y());
-            p3 = toSystemCoordinates.inverted().map(p3SysCoord);
-            p4 = toSystemCoordinates.inverted().map(p4SysCoord);
+            if (collision.mid) {     // Move both Bezier points up(/down)
+                p3 += PointF(0.0, shapeStep);
+                p4 += PointF(0.0, shapeStep);
+            }
+            if (collision.right) {
+                // Move right Bezier point up(/down) and outwards
+                p4 += PointF(abs(shapeStep), shapeStep);
+                // and a bit also the left point to compensate asymmetry
+                p3 += PointF(-abs(shapeStep), shapeStep) / 2.0;
+            }
+        } else if (!isEndPointsEdited()) {
+            // In the odd iterations, adjust the end points
+            // Slurs steeper than 45° are gently compensated
+            double steepLimit = M_PI / 4;
+            double endPointStep = balance * step;
+            if (collision.left || slurAngle < -steepLimit) {
+                // Lift the left end point, i.e. tilt the slur around p2
+                double stepX = sin(slurAngle) * endPointStep;
+                double stepY = cos(slurAngle) * endPointStep;
+                PointF pp1delta = PointF(stepX, stepY);
+                pp1 += PointF(0.0, endPointStep);
+                p3 += pp1delta * (p2.x() - p3.x()) / p2.x();
+                p4 += pp1delta * (p2.x() - p4.x()) / p2.x();
+                // All points are expressed with respect to pp1, so we need
+                // to subtract pp1delta to avoid the whole slur moving up
+                p2 -= pp1delta;
+                p3 -= pp1delta;
+                p4 -= pp1delta;
+            }
+            if (collision.mid && !(abs(slurAngle) > steepLimit)) {
+                // Lift the whole slur
+                pp1 += PointF(0.0, endPointStep);
+            }
+            if (collision.right || slurAngle > steepLimit) {
+                // Lift the right end point, i.e. tilt the slur around p1
+                double stepX = sin(slurAngle) * endPointStep;
+                double stepY = cos(slurAngle) * endPointStep;
+                PointF p2delta = PointF(stepX, stepY);
+                p2 += p2delta;
+                p3 += p2delta * p3.x() / p2.x();
+                p4 += p2delta * p4.x() / p2.x();
+            }
+        }
+        // Enforce non-ugliness rules
+        // 1) Slur cannot be taller than it is wide
+        const double maxRelativeHeight = abs(p2.x());
+        p3 = slur()->up() ? PointF(p3.x(), std::max(p3.y(), -maxRelativeHeight)) : PointF(p3.x(), std::min(p3.y(), maxRelativeHeight));
+        p4 = slur()->up() ? PointF(p4.x(), std::max(p4.y(), -maxRelativeHeight)) : PointF(p4.x(), std::min(p4.y(), maxRelativeHeight));
+        // 2) Tangent rule: p3 and p4 cannot be further left than p1 nor further right than p2
+        PointF p3SysCoord = toSystemCoordinates.map(p3);
+        PointF p4SysCoord = toSystemCoordinates.map(p4);
+        PointF p2SysCoord = toSystemCoordinates.map(p2);
+        p3SysCoord = PointF(std::max(pp1.x(), p3SysCoord.x()), p3SysCoord.y());
+        p3SysCoord = PointF(std::min(p2SysCoord.x(), p3SysCoord.x()), p3SysCoord.y());
+        p4SysCoord = PointF(std::max(pp1.x(), p4SysCoord.x()), p4SysCoord.y());
+        p4SysCoord = PointF(std::min(p2SysCoord.x(), p4SysCoord.x()), p4SysCoord.y());
+        p3 = toSystemCoordinates.inverted().map(p3SysCoord);
+        p4 = toSystemCoordinates.inverted().map(p4SysCoord);
 
-            ++iter;
-        } while ((collision.left || collision.mid || collision.right) && iter < maxIter);
-    }
+        ++iter;
+    } while ((collision.left || collision.mid || collision.right) && iter < maxIter);
 }
 
 //---------------------------------------------------------
@@ -652,7 +650,9 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
 
     // ADAPT SLUR SHAPE AND ENDPOINT POSITION
     // to clear collisions with underlying items
-    avoidCollisions(pp1, p2, p3, p4, toSystemCoordinates, slurAngle);
+    if (autoplace()) {
+        avoidCollisions(pp1, p2, p3, p4, toSystemCoordinates, slurAngle);
+    }
 
     // Re-check end points for bad staff line collisions
     ups(Grip::START).p = pp1 - ups(Grip::START).off;
