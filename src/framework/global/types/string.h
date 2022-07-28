@@ -345,7 +345,7 @@ private:
             : s(s), self(self) {}
         ~Mutator()
         {
-#ifdef MU_STRING_DEBUG_HACK
+#ifdef STRING_DEBUG_HACK
             self->updateDebugView();
 #endif
         }
@@ -377,7 +377,7 @@ private:
 
     std::shared_ptr<std::u16string> m_data;
 
-#ifdef MU_STRING_DEBUG_HACK
+#ifdef STRING_DEBUG_HACK
     //! HACK On MacOS with clang there are problems with debugging - the value of the std::u16string is not visible.
     //! This is hack for debugging on MacOS
     void updateDebugView();
