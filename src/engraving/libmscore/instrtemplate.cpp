@@ -745,14 +745,14 @@ InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId)
     return 0;
 }
 
-InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& nameList)
+InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& nameList, bool useDrumset)
 {
     InstrumentTemplate* bestMatch = nullptr; // default if no matches
     int bestMatchStrength = 0; // higher for better matches
     for (InstrumentGroup* g : instrumentGroups) {
         for (InstrumentTemplate* it : g->instrumentTemplates) {
             for (const String& name : nameList) {
-                if (name.isEmpty()) {
+                if (name.isEmpty() || it->useDrumset != useDrumset) {
                     continue;
                 }
 
@@ -788,11 +788,11 @@ InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& name
     return bestMatch; // nullptr if no matches found
 }
 
-InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, const bool useDrumSet)
+InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, bool useDrumset)
 {
     for (InstrumentGroup* g : instrumentGroups) {
         for (InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->useDrumset != useDrumSet) {
+            if (it->useDrumset != useDrumset) {
                 continue;
             }
 

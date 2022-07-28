@@ -361,7 +361,7 @@ String Instrument::recognizeInstrumentId() const
     mu::join(nameList, _longNames.toStringList());
     mu::join(nameList, _shortNames.toStringList());
 
-    const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList);
+    const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList, _useDrumset);
 
     if (tmplByName && !tmplByName->musicXMLid.isEmpty()) {
         return tmplByName->musicXMLid;
@@ -374,10 +374,15 @@ String Instrument::recognizeInstrumentId() const
     }
 
     const InstrumentTemplate* tmplMidiProgram = mu::engraving::searchTemplateForMidiProgram(channel->bank(), channel->program(),
-                                                                                            useDrumset());
+                                                                                            _useDrumset);
 
     if (tmplMidiProgram && !tmplMidiProgram->musicXMLid.isEmpty()) {
         return tmplMidiProgram->musicXMLid;
+    }
+
+    if (_useDrumset) {
+        static const String drumsetId(u"drumset");
+        return drumsetId;
     }
 
     return defaultInstrumentId;
