@@ -31,7 +31,7 @@
         <longName>Percussions</longName>
         <shortName>drm.</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>

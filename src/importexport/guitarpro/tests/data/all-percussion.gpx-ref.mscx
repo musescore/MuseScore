@@ -1001,7 +1001,7 @@
         <longName>Timbale</longName>
         <shortName>tmblKit</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -1486,7 +1486,7 @@
         <longName>Agogo</longName>
         <shortName>agogoKit</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -2941,7 +2941,7 @@
         <longName>Whistle</longName>
         <shortName>whstlKit</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -6336,7 +6336,7 @@
         <longName>Shaker</longName>
         <shortName>shkr</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -6821,7 +6821,7 @@
         <longName>Jingle Bell</longName>
         <shortName>jngl-bell</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -7306,7 +7306,7 @@
         <longName>Bell Tree</longName>
         <shortName>bell-tree</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -7791,7 +7791,7 @@
         <longName>Woodblock</longName>
         <shortName>wdblckKit</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -8276,7 +8276,7 @@
         <longName>Guiro</longName>
         <shortName>guiro</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -9246,7 +9246,7 @@
         <longName>Surdo</longName>
         <shortName>surdo</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
