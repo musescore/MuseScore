@@ -73,7 +73,6 @@ void ShortcutsRegister::reload(bool onlyDef)
     m_shortcuts.clear();
     m_defaultShortcuts.clear();
 
-
     io::path_t defPath = configuration()->shortcutsAppDataPath();
     io::path_t userPath = configuration()->shortcutsUserAppDataPath();
 
@@ -96,7 +95,7 @@ void ShortcutsRegister::reload(bool onlyDef)
             mergeShortcuts(m_shortcuts, m_defaultShortcuts);
             mergeAdditionalShortcuts(m_shortcuts);
         }
-        
+
         ok = true;
     }
 
@@ -303,7 +302,6 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts, QModelInd
         return true;
     }
 
-
     ShortcutList filtered = filterAndUpdateAdditionalShortcuts(shortcuts);
     ShortcutList needToWrite;
     ShortcutList PaletteShortcuts;
@@ -314,12 +312,10 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts, QModelInd
         if (isPaletteCellShortcut) {
             //LOGE() << "We think this is a palette shortcut: " << shortcut.action;
             PaletteShortcuts.push_back(shortcut);
-        }
-        else {
+        } else {
             needToWrite.push_back(shortcut);
         }
     }
-
 
     bool ok = writeToFile(needToWrite, configuration()->shortcutsUserAppDataPath());
 
@@ -345,11 +341,6 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts, QModelInd
             }
             if (cell->id.toStdString() != cellId) {
                 continue;
-            }
-
-            LOGE() << "Cell being modified: " << cell->name << " with shortcut: ";
-            for (auto seq : shrtct.sequences) {
-                LOGE() << seq;
             }
 
             config.shortcut = shrtct;

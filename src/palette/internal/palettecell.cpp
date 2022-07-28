@@ -194,7 +194,9 @@ bool PaletteCell::read(XmlReader& e)
             shortcut.context = e.readText().toStdString();
         } else if (s == "sseq") {
             shortcut.sequences.push_back(e.readText().toStdString());
-            LOGE() << "Sequence found for: " << name << " as:" << shortcut.sequencesAsString();
+            if (!shortcut.sequencesAsString().empty()) {
+                LOGE() << "Sequence found for: " << name << " as:" << shortcut.sequencesAsString();
+            }
         }
         // added on palettes rework
         // TODO: remove or leave to switch from using attributes later?
@@ -223,8 +225,8 @@ bool PaletteCell::read(XmlReader& e)
         }
     }
 
-    if (shortcut.context == "") {
-        shortcut.context = "notation-focused";
+    if (shortcut.context.empty()) {
+        shortcut.context = mu::context::CTX_NOTATION_FOCUSED;
     }
 
     setElementTranslated(translateElement);
@@ -232,10 +234,6 @@ bool PaletteCell::read(XmlReader& e)
     std::stringstream pointerAddr;
     pointerAddr << element.get();
     shortcut.action = "palette-item-" + id.toStdString() + "_" + pointerAddr.str();
-
-    if (shortcut.isValid()) {
-        LOGE() << "Valid";
-    }
 
     action = QString::fromStdString(shortcut.action);
     PaletteCell::allActions.push_back(shortcut);
@@ -289,7 +287,6 @@ void PaletteCell::write(XmlWriter& xml) const
     }
 
     if (!shortcut.action.empty()) {
-
         LOGE() << "Sequence written for: " << name << " as:" << shortcut.sequencesAsString();
         for (std::string seq : shortcut.sequences) {
             xml.tag("sseq", QString::fromStdString(seq));
