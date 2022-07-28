@@ -377,9 +377,42 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
 {
     ChordRest* startCR = slur()->startCR();
     ChordRest* endCR = slur()->endCR();
-    Segment* startSeg = startCR ? startCR->segment() : nullptr;
-    Segment* endSeg = endCR ? endCR->segment() : nullptr;
     bool isCrossStaff = (startCR && endCR) ? startCR->vStaffIdx() != endCR->vStaffIdx() : false;
+
+    Segment* startSeg = nullptr;
+    if (isSingleBeginType()) {
+        startSeg = startCR ? startCR->segment() : nullptr; // first of the slur
+    } else {
+        startSeg = system()->firstMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 0)); // first of the system
+    }
+    Segment* endSeg = nullptr;
+    if (isSingleEndType()) {
+        endSeg = endCR ? endCR->segment() : nullptr; // last of the slur
+    } else {
+        endSeg = system()->lastMeasure()->last(); // last of the system
+    }
+    if (!startSeg || !endSeg || startSeg == endSeg) {
+        return;
+    }
+
+    // Collect all the segments spanned by this slur segment in a single vector
+    std::vector<Segment*> segList;
+    Segment* seg = startSeg;
+    while (seg && seg->tick() <= endSeg->tick()) {
+        if (seg != startCR->segment()) { // don't include first segment
+            segList.push_back(seg);
+        }
+        if (seg->next() && !seg->next()->isEndBarLineType()) {
+            seg = seg->next();
+        } else if (seg->measure()->next() && seg->measure()->next()->isMeasure()) {
+            seg = toMeasure(seg->measure()->next())->first();
+        } else {
+            break;
+        }
+    }
+    if (segList.empty()) {
+        return;
+    }
 
     // Collision clearance at the center of the slur
     double clearance = 0.75 * spatium(); // TODO: style
@@ -387,7 +420,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     // we will do (0 = only shape, 1 = only end point)
     double balance = 0.4; // TODO: style (maybe?)
 
-    if (startSeg && endSeg && startSeg != endSeg && autoplace()) {
+    if (autoplace()) {
         static constexpr unsigned maxIter = 30; // Max iterations allowed
         const double vertClearance = slur()->up() ? clearance : -clearance;
         const double step = slur()->up() ? -0.25 * spatium() : 0.25 * spatium();
@@ -417,14 +450,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
                 slurRects.push_back(RectF(clearancePoint1, clearancePoint2));
             }
             // Check collisions
-            for (Segment* seg = startSeg;;) {
-                if (seg->next() && !seg->next()->isEndBarLineType()) {
-                    seg = seg->next();
-                } else if (seg->measure()->next() && seg->measure()->next()->isMeasure()) {
-                    seg = toMeasure(seg->measure()->next())->first();
-                } else {
-                    break;
-                }
+            for (Segment* seg : segList) {
                 Shape segShape = seg->staffShape(startCR->vStaffIdx()).translated(seg->pos() + seg->measure()->pos());
                 // If cross-staff, also add the shape of second staff
                 if (isCrossStaff) {
@@ -458,9 +484,6 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
                             collision.right = true;
                         }
                     }
-                }
-                if (seg == endSeg) {
-                    break;
                 }
             }
             // In the even iterations, adjust the shape
