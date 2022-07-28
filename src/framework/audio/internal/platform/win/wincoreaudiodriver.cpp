@@ -49,10 +49,9 @@ struct WinCoreData {
     HANDLE hEvent;
 };
 
-static LPWSTR stringToLPWSTR(const std::string& str)
+static std::wstring stringToWString(const std::string& str)
 {
-    static std::wstring wstr = QString::fromStdString(str).toStdWString();
-    return LPWSTR(wstr.c_str());
+    return QString::fromStdString(str).toStdWString();
 }
 
 static std::string lpwstrToString(const LPWSTR& lpwstr)
@@ -115,7 +114,8 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     if (outputDeviceId == DEFAULT_DEVICE_ID) {
         hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDdevice);
     } else {
-        hr = pEnumerator->GetDevice(stringToLPWSTR(outputDeviceId), &pDdevice);
+        std::wstring wstr = stringToWString(outputDeviceId);
+        hr = pEnumerator->GetDevice(wstr.c_str(), &pDdevice);
     }
     pEnumerator->Release();
     CHECK_HRESULT(hr, false);
