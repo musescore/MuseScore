@@ -1089,10 +1089,7 @@ void Slur::slurPos(SlurPos* sp)
 
         if (stem1) {     //sc not null
             Beam* beam1 = sc->beam();
-            if (beam1 && beam1->cross()) {
-                // TODO: stem direction is not finalized, so we cannot use it here
-                fixArticulations(po, sc, __up, false);
-            } else if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
+            if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
                 beam1->layout();
                 // start chord is beamed but not the last chord of beam group
                 // and slur direction is same as start chord (stem side)
@@ -1198,13 +1195,10 @@ void Slur::slurPos(SlurPos* sp)
 
             if (stem2) {       //ec can't be null
                 Beam* beam2 = ec->beam();
-                if (beam2 && beam2->cross()) {
-                    // TODO: stem direction is not finalized, so we cannot use it here
-                    fixArticulations(po, ec, __up, false);
-                } else if ((stemPos && (scr->up() == ec->up()))
-                           || (beam2
-                               && (!beam2->elements().empty())
-                               && (beam2->elements().front() != ec)
+                if ((stemPos && (scr->up() == ec->up()))
+                    || (beam2
+                        && (!beam2->elements().empty())
+                        && (beam2->elements().front() != ec)
                                && (ec->up() == _up)
                                && sc && (sc->noteType() == NoteType::NORMAL)
                                )
