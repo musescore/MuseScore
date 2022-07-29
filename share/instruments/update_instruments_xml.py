@@ -340,9 +340,11 @@ with open('instruments.xml', 'w', newline='\n', encoding='utf-8') as f:
         f.write(line.replace('" />', '"/>'))
 
 # Helper functions to facilitate writing instrumentsxml.h
-def add_translatable_string(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = ''):
+def add_translatable_string(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = '', keyValuePairs: dict[str, str] = {}):
     if comment:
         f.write('//: ' + comment + '\n')
+    for (key, value) in keyValuePairs.items():
+        f.write('//~ {k} {v}\n'.format(k=key, v=value))
     if disambiguation:
         f.write('QT_TRANSLATE_NOOP3("{context}", "{text}", "{disambiguation}"),\n'
                 .format(context=context, text=text, disambiguation=disambiguation))
@@ -350,9 +352,9 @@ def add_translatable_string(f: io.TextIOWrapper, context: str, text: str, disamb
         f.write('QT_TRANSLATE_NOOP("{context}", "{text}"),\n'
                 .format(context=context, text=text))
 
-def add_translatable_string_if_not_null(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = ''):
+def add_translatable_string_if_not_null(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = '', keyValuePairs: dict[str, str] = {}):
     if text and text != null:
-        add_translatable_string(f, context, text, disambiguation, comment)
+        add_translatable_string(f, context, text, disambiguation, comment, keyValuePairs)
 
 def disambiguation(instrumentId: str, nameType: str):
     return instrumentId + '|' + nameType
@@ -413,6 +415,7 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
 
     f.write("\n")
     f.write("// Groups & Instruments\n")
+    instrumentNamesComment = 'Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names'
     for group in groups.values():
         f.write("\n// " + group['name'] + "\n")
         add_translatable_string(f, 'engraving/instruments/group', group['name'])
@@ -422,21 +425,25 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
             instrumentId = instrument['id']
 
             add_translatable_string_if_not_null(f, 'engraving/instruments', instrument['description'],
-                                                disambiguation(instrumentId, 'description'))
+                                                disambiguation(instrumentId, 'description'),
+                                                instrumentNamesComment)
 
             for nameType in ['trackName', 'longName', 'shortName']:
                 add_translatable_string_if_not_null(f, 'engraving/instruments', instrument[nameType],
-                                                    disambiguation(instrumentId, nameType))
+                                                    disambiguation(instrumentId, nameType),
+                                                    instrumentNamesComment)
                 
             if instrument['traitName'] != '[hide]':
                 add_translatable_string_if_not_null(f, 'engraving/instruments', instrument['traitName'],
                                                     disambiguation(instrumentId, 'traitName'), 
-                                                    'traitName codes: * most common for instrument; () hide in score')
+                                                    instrumentNamesComment,
+                                                    { 'Trait-type': instrument['traitType'] })
 
             if instrumentId in channels:
                 for channel in channels[instrumentId].values():
                     add_translatable_string_if_not_null(f, 'engraving/instruments', channel['channel'],
-                                                        disambiguation(instrumentId, 'channel'))
+                                                        disambiguation(instrumentId, 'channel'),
+                                                        instrumentNamesComment)
 
     # Orders
     f.write("\n")
