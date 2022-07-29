@@ -210,6 +210,7 @@ enum class ActionCategory {
     Musicalsymbols,
     Dialogspanels,
     Noteinput,
+    Workspace,
     Plugins
 };
 
@@ -219,7 +220,7 @@ struct UiAction
         = { "Undefined", "Internal", "Tablature", "Viewing & Navigation", "Playback", "Layout & Formatting", "Selecting & Editing",
             "Application", "Accessibility", "File", "Selection & Navigation",
             "Text & Lyrics", "Chord symbols & figured bass", "Measures", "Musical Symbols", "Dialogs & Panels",
-            "Note Input", "Plugins" };
+            "Note Input", "Workspace", "Plugins" };
 
     actions::ActionCode code;
     UiContext uiCtx = UiCtxAny;
