@@ -31,10 +31,7 @@ using namespace mu::audio;
 
 void AudioOutputController::init()
 {
-    AudioDeviceID preferredDeviceId = configuration()->audioOutputDeviceId();
-    if (!preferredDeviceId.empty()) {
-        audioDriver()->selectOutputDevice(configuration()->audioOutputDeviceId());
-    }
+    checkConnection();
 
     audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
         checkConnection();
