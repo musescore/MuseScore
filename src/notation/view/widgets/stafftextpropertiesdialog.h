@@ -66,6 +66,8 @@ private:
 
     void saveChannel(int channel);
 
+    INotationUndoStackPtr undoStack() const;
+
     engraving::StaffTextBase* m_originStaffText = nullptr;
     engraving::StaffTextBase* m_staffText = nullptr;
     QToolButton* m_vb[engraving::VOICES][engraving::VOICES];
