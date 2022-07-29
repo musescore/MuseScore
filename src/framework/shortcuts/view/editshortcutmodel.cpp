@@ -50,7 +50,7 @@ void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList&
         for (const Shortcut& shortcut : shortcutsRegister()->shortcuts()) {
             QVariantMap obj;
 
-            obj["title"] = uiactionsRegister()->action(shortcut.action).title;
+            obj["title"] = uiactionsRegister()->action(shortcut.action).title.str.toQString();
             obj["action"] = QString::fromStdString(shortcut.action);
             obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
             obj["context"] = QString::fromStdString(shortcut.context);
@@ -96,7 +96,7 @@ void EditShortcutModel::loadByAction(const QString& actionCode)
     }
 
     QVariantMap obj;
-    obj["title"] = uiactionsRegister()->action(shortcut.action).title;
+    obj["title"] = uiactionsRegister()->action(shortcut.action).title.str.toQString();
     obj["action"] = QString::fromStdString(shortcut.action);
     obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
     obj["context"] = QString::fromStdString(shortcut.context);
