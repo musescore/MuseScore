@@ -27,6 +27,7 @@
 #include "draw/types/brush.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "layout/layouttremolo.h"
@@ -714,9 +715,9 @@ Fraction Tremolo::tremoloLen() const
 //   subtypeName
 //---------------------------------------------------------
 
-String Tremolo::subtypeName() const
+TranslatableString Tremolo::subtypeUserName() const
 {
-    return TConv::translatedUserName(tremoloType());
+    return TConv::userName(tremoloType());
 }
 
 //---------------------------------------------------------
@@ -725,7 +726,7 @@ String Tremolo::subtypeName() const
 
 String Tremolo::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), subtypeName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }
 
 //---------------------------------------------------------

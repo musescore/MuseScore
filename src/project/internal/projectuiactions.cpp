@@ -21,6 +21,8 @@
  */
 #include "projectuiactions.h"
 
+#include "types/translatablestring.h"
+
 using namespace mu::project;
 using namespace mu::ui;
 
@@ -28,92 +30,92 @@ const UiActionList ProjectUiActions::m_actions = {
     UiAction("file-open",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "&Open…"),
-             QT_TRANSLATE_NOOP("action", "Open…"),
+             TranslatableString("action", "&Open…"),
+             TranslatableString("action", "Open…"),
              IconCode::Code::OPEN_FILE
              ),
     UiAction("file-new",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "&New…"),
-             QT_TRANSLATE_NOOP("action", "New…"),
+             TranslatableString("action", "&New…"),
+             TranslatableString("action", "New…"),
              IconCode::Code::NEW_FILE
              ),
     UiAction("file-close",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "&Close"),
-             QT_TRANSLATE_NOOP("action", "Close")
+             TranslatableString("action", "&Close"),
+             TranslatableString("action", "Close")
              ),
     UiAction("file-save",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "&Save"),
-             QT_TRANSLATE_NOOP("action", "Save"),
+             TranslatableString("action", "&Save"),
+             TranslatableString("action", "Save"),
              IconCode::Code::SAVE
              ),
     UiAction("file-save-as",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "Save &as…"),
-             QT_TRANSLATE_NOOP("action", "Save as…")
+             TranslatableString("action", "Save &as…"),
+             TranslatableString("action", "Save as…")
              ),
     UiAction("file-save-a-copy",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "Save a cop&y…"),
-             QT_TRANSLATE_NOOP("action", "Save a copy…")
+             TranslatableString("action", "Save a cop&y…"),
+             TranslatableString("action", "Save a copy…")
              ),
     UiAction("file-save-selection",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "Save se&lection…"),
-             QT_TRANSLATE_NOOP("action", "Save selection…")
+             TranslatableString("action", "Save se&lection…"),
+             TranslatableString("action", "Save selection…")
              ),
     UiAction("file-save-to-cloud",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "Save to clo&ud…"),
-             QT_TRANSLATE_NOOP("action", "Save to cloud…"),
+             TranslatableString("action", "Save to clo&ud…"),
+             TranslatableString("action", "Save to cloud…"),
              IconCode::Code::CLOUD_FILE
              ),
     UiAction("file-publish",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             QT_TRANSLATE_NOOP("action", "Pu&blish to MuseScore.com…"),
-             QT_TRANSLATE_NOOP("action", "Publish to MuseScore.com…"),
+             TranslatableString("action", "Pu&blish to MuseScore.com…"),
+             TranslatableString("action", "Publish to MuseScore.com…"),
              IconCode::Code::CLOUD_FILE
              ),
     UiAction("file-export",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             QT_TRANSLATE_NOOP("action", "Export…"),
-             QT_TRANSLATE_NOOP("action", "Export…"),
+             TranslatableString("action", "Export…"),
+             TranslatableString("action", "Export…"),
              IconCode::Code::SHARE_FILE
              ),
     UiAction("file-import-pdf",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "Import P&DF…"),
+             TranslatableString("action", "Import P&DF…"),
              IconCode::Code::IMPORT
              ),
     UiAction("project-properties",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             QT_TRANSLATE_NOOP("action", "Project propert&ies…"),
-             QT_TRANSLATE_NOOP("action", "Project properties…")
+             TranslatableString("action", "Project propert&ies…"),
+             TranslatableString("action", "Project properties…")
              ),
     UiAction("print",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "Print…"),
-             QT_TRANSLATE_NOOP("action", "Print…"),
+             TranslatableString("action", "Print…"),
+             TranslatableString("action", "Print…"),
              IconCode::Code::PRINT
              ),
     UiAction("clear-recent",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "&Clear recent files")
+             TranslatableString("action", "&Clear recent files")
              )
 };
 

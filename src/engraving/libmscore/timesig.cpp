@@ -564,19 +564,19 @@ String TimeSig::accessibleInfo() const
     String timeSigString;
     switch (timeSigType()) {
     case TimeSigType::FOUR_FOUR:
-        timeSigString = mtrc("engraving", "Common time");
+        timeSigString = mtrc("engraving/timesig", "Common time");
         break;
     case TimeSigType::ALLA_BREVE:
-        timeSigString = mtrc("engraving", "Cut time");
+        timeSigString = mtrc("engraving/timesig", "Cut time");
         break;
     case TimeSigType::CUT_BACH:
-        timeSigString = mtrc("engraving", "Cut time (Bach)");
+        timeSigString = mtrc("engraving/timesig", "Cut time (Bach)");
         break;
     case TimeSigType::CUT_TRIPLE:
-        timeSigString = mtrc("engraving", "Cut triple time (9/8)");
+        timeSigString = mtrc("engraving/timesig", "Cut triple time (9/8)");
         break;
     default:
-        timeSigString = mtrc("engraving", "%1/%2 time").arg(numerator(), denominator());
+        timeSigString = mtrc("engraving/timesig", "%1/%2 time").arg(numerator(), denominator());
     }
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), timeSigString);
 }

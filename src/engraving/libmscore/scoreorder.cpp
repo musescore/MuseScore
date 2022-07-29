@@ -23,8 +23,8 @@
 
 #include <iostream>
 
-#include "translation.h"
 #include "rw/xml.h"
+#include "types/translatablestring.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
@@ -116,7 +116,7 @@ void ScoreOrder::readInstrument(XmlReader& reader)
         if (reader.name() == "family") {
             InstrumentOverwrite io;
             io.id = reader.attribute("id");
-            io.name = mtrc("OrderXML", reader.readText());
+            io.name = reader.readText();
             instrumentMap.insert({ instrumentId, io });
         } else {
             reader.unknown();
@@ -218,9 +218,9 @@ bool ScoreOrder::isCustom() const
 //   getName
 //---------------------------------------------------------
 
-String ScoreOrder::getName() const
+TranslatableString ScoreOrder::getName() const
 {
-    return customized ? mtrc("engraving", "%1 (Customized)").arg(name) : name;
+    return customized ? TranslatableString("engraving/scoreorder", "%1 (Customized)").arg(name) : name;
 }
 
 //---------------------------------------------------------
@@ -491,7 +491,7 @@ void ScoreOrder::read(XmlReader& reader)
     const String sectionId;
     while (reader.readNextStartElement()) {
         if (reader.name() == "name") {
-            name = mtrc("OrderXML", reader.readText());
+            name = TranslatableString("engraving/scoreorder", reader.readText());
         } else if (reader.name() == "section") {
             readSection(reader);
         } else if (reader.name() == "instrument") {
@@ -536,7 +536,7 @@ void ScoreOrder::write(XmlWriter& xml) const
     }
 
     xml.startElement("Order", { { "id", id } });
-    xml.tag("name", name);
+    xml.tag("name", name.str);
 
     for (const auto& p : instrumentMap) {
         xml.startElement("instrument", { { "id", p.first } });

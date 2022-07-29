@@ -23,6 +23,7 @@
 
 #include <QVariantMap>
 
+#include "types/translatablestring.h"
 #include "shortcuts/shortcutstypes.h"
 
 using namespace mu::uicomponents;
@@ -45,9 +46,14 @@ QString MenuItem::id() const
     return m_id;
 }
 
-QString MenuItem::title() const
+mu::TranslatableString MenuItem::title() const
 {
     return m_action.title;
+}
+
+QString MenuItem::translatedTitle() const
+{
+    return m_action.title.qTranslated();
 }
 
 QString MenuItem::section() const
@@ -115,7 +121,7 @@ void MenuItem::setId(const QString& id)
     emit idChanged(m_id);
 }
 
-void MenuItem::setTitle(const QString& title)
+void MenuItem::setTitle(const TranslatableString& title)
 {
     if (m_action.title == title) {
         return;
@@ -207,7 +213,7 @@ QString mu::uicomponents::MenuItem::code_property() const
 
 QString MenuItem::description_property() const
 {
-    return m_action.description;
+    return m_action.description.qTranslated();
 }
 
 int MenuItem::icon_property() const

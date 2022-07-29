@@ -23,12 +23,13 @@
 #include "harmony.h"
 
 #include "containers.h"
-#include "translation.h"
 #include "draw/fontmetrics.h"
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
+#include "translation.h"
+#include "types/translatablestring.h"
 
 #include "chordlist.h"
 #include "fret.h"
@@ -2063,13 +2064,13 @@ void Harmony::setHarmonyType(HarmonyType val)
 //   typeUserName
 //---------------------------------------------------------
 
-String Harmony::typeUserName() const
+TranslatableString Harmony::typeUserName() const
 {
     switch (_harmonyType) {
     case HarmonyType::ROMAN:
-        return mtrc("engraving", "Roman numeral");
+        return TranslatableString("engraving", "Roman numeral");
     case HarmonyType::NASHVILLE:
-        return mtrc("engraving", "Nashville number");
+        return TranslatableString("engraving", "Nashville number");
     case HarmonyType::STANDARD:
         break;
     }
@@ -2082,7 +2083,7 @@ String Harmony::typeUserName() const
 
 String Harmony::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(typeUserName(), harmonyName());
+    return String(u"%1: %2").arg(translatedTypeUserName(), harmonyName());
 }
 
 //---------------------------------------------------------
@@ -2091,7 +2092,7 @@ String Harmony::accessibleInfo() const
 
 String Harmony::screenReaderInfo() const
 {
-    return String(u"%1 %2").arg(typeUserName(), generateScreenReaderInfo());
+    return String(u"%1 %2").arg(translatedTypeUserName(), generateScreenReaderInfo());
 }
 
 //---------------------------------------------------------

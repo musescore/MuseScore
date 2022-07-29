@@ -32,6 +32,7 @@
 #include "translation.h"
 #include "draw/types/brush.h"
 #include "rw/xml.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "accidental.h"
@@ -3351,7 +3352,7 @@ String Note::accessibleInfo() const
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = mtrc("engraving", drumset->name(pitch()));
+        pitchName = drumset->translatedName(pitch());
     } else if (staff()->isTabStaff(tick())) {
         pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
                     .arg(tpcUserName(false), String::number(string() + 1), String::number(fret()));
@@ -3378,7 +3379,7 @@ String Note::screenReaderInfo() const
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = mtrc("engraving", drumset->name(pitch()));
+        pitchName = drumset->translatedName(pitch());
     } else if (staff()->isTabStaff(tick())) {
         pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
                     .arg(tpcUserName(true, true), String::number(string() + 1), String::number(fret()));
@@ -3386,7 +3387,7 @@ String Note::screenReaderInfo() const
         pitchName = _headGroup == NoteHeadGroup::HEAD_NORMAL
                     ? tpcUserName(true, true)
                     //: head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).
-                    : mtrc("engraving", "%1 head %2").arg(subtypeName()).arg(tpcUserName(true));
+                    : mtrc("engraving", "%1 head %2").arg(translatedSubtypeUserName()).arg(tpcUserName(true));
         if (chord()->staffMove() < 0) {
             duration += u"; " + mtrc("engraving", "Cross-staff above");
         } else if (chord()->staffMove() > 0) {
@@ -3475,12 +3476,12 @@ int Note::qmlDotsCount()
 }
 
 //---------------------------------------------------------
-//   subtypeName
+//   subtypeUserName
 //---------------------------------------------------------
 
-String Note::subtypeName() const
+TranslatableString Note::subtypeUserName() const
 {
-    return TConv::translatedUserName(_headGroup);
+    return TConv::userName(_headGroup);
 }
 
 //---------------------------------------------------------

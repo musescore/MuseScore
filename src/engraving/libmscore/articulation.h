@@ -92,11 +92,6 @@ public:
         POP
     };
 
-    struct TextTypeMapping {
-        String text;
-        String name;
-    };
-
 private:
 
     SymId _symId;
@@ -141,7 +136,8 @@ public:
     void setSymId(SymId id);
     int subtype() const override;
     void setTextType(TextType textType);
-    String typeUserName() const override;
+    TranslatableString typeUserName() const override;
+    String translatedTypeUserName() const override;
     String articulationName() const;    // type-name of articulation; used for midi rendering
     static String symId2ArticulationName(SymId symId);
 

@@ -23,6 +23,7 @@
 #include "paletteuiactions.h"
 
 #include "context/uicontext.h"
+#include "types/translatablestring.h"
 
 using namespace mu::palette;
 using namespace mu::ui;
@@ -33,33 +34,33 @@ const UiActionList PaletteUiActions::m_actions = {
     UiAction(MASTERPALETTE_CODE,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "&Master palette"),
-             QT_TRANSLATE_NOOP("action", "Open master palette…"),
+             TranslatableString("action", "&Master palette"),
+             TranslatableString("action", "Open master palette…"),
              Checkable::Yes
              ),
     UiAction("palette-search",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             QT_TRANSLATE_NOOP("action", "Palette search"),
-             QT_TRANSLATE_NOOP("action", "Search palettes")
+             TranslatableString("action", "Palette search"),
+             TranslatableString("action", "Search palettes")
              ),
     UiAction("time-signature-properties",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             QT_TRANSLATE_NOOP("action", "Time signature properties…"),
-             QT_TRANSLATE_NOOP("action", "Time signature properties…")
+             TranslatableString("action", "Time signature properties…"),
+             TranslatableString("action", "Time signature properties…")
              ),
     UiAction("edit-drumset",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             QT_TRANSLATE_NOOP("action", "Edit drumset…"),
-             QT_TRANSLATE_NOOP("action", "Edit drumset…")
+             TranslatableString("action", "Edit drumset…"),
+             TranslatableString("action", "Edit drumset…")
              ),
     UiAction("show-keys",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_TEXT_EDITING,
-             QT_TRANSLATE_NOOP("action", "Insert special characters"),
-             QT_TRANSLATE_NOOP("action", "Insert special characters…")
+             TranslatableString("action", "Insert special characters"),
+             TranslatableString("action", "Insert special characters…")
              )
 };
 

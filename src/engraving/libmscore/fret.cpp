@@ -1461,7 +1461,7 @@ String FretDiagram::accessibleInfo() const
     } else {
         chordName = mtrc("engraving", "without chord symbol");
     }
-    return String(u"%1 %2").arg(typeUserName(), chordName);
+    return String(u"%1 %2").arg(translatedTypeUserName(), chordName);
 }
 
 //---------------------------------------------------------
@@ -1561,7 +1561,7 @@ String FretDiagram::screenReaderInfo() const
                        ? mtrc("engraving", "with chord symbol %1").arg(_harmony->generateScreenReaderInfo())
                        : mtrc("engraving", "without chord symbol");
 
-    String basicInfo = String(u"%1 %2").arg(typeUserName(), chordName);
+    String basicInfo = String(u"%1 %2").arg(translatedTypeUserName(), chordName);
 
     String generalInfo = mtrc("engraving", "%n string(s) total", "", _strings);
 

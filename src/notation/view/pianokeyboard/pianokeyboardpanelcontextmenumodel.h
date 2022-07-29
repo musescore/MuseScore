@@ -29,6 +29,10 @@
 #include "inotationconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 
+namespace mu {
+class TranslatableString;
+}
+
 namespace mu::notation {
 class PianoKeyboardPanelContextMenuModel : public uicomponents::AbstractMenuModel, public actions::Actionable
 {
@@ -58,8 +62,8 @@ signals:
 private:
     uicomponents::MenuItem* makeViewMenu();
 
-    uicomponents::MenuItem* makeKeyWidthScalingItem(const QString& title, qreal scaling);
-    uicomponents::MenuItem* makeNumberOfKeysItem(const QString& title, int numberOfKeys);
+    uicomponents::MenuItem* makeKeyWidthScalingItem(const TranslatableString& title, qreal scaling);
+    uicomponents::MenuItem* makeNumberOfKeysItem(const TranslatableString& title, int numberOfKeys);
 
     void updateKeyWidthScalingItems();
 

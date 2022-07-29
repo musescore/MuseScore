@@ -3070,7 +3070,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             && symIdToOrnam(sid) == ""
             && symIdToTechn(sid) == ""
             && !isLaissezVibrer(sid)) {
-            LOGD("unknown chord attribute %d %s", static_cast<int>(sid), qPrintable(a->typeUserName()));
+            LOGD("unknown chord attribute %d %s", static_cast<int>(sid), qPrintable(a->translatedTypeUserName()));
         }
     }
 }

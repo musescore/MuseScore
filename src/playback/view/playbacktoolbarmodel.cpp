@@ -21,8 +21,7 @@
  */
 #include "playbacktoolbarmodel.h"
 
-#include "log.h"
-#include "translation.h"
+#include "types/translatablestring.h"
 
 #include "ui/view/musicalsymbolcodes.h"
 #include "playback/playbacktypes.h"
@@ -112,7 +111,7 @@ void PlaybackToolBarModel::updateActions()
         }
     }
 
-    MenuItem* settingsItem = makeMenu(qtrc("action", "Playback settings"), settingsItems);
+    MenuItem* settingsItem = makeMenu(TranslatableString("action", "Playback settings"), settingsItems);
 
     UiAction action = settingsItem->action();
     action.iconCode = IconCode::Code::SETTINGS_COG;
@@ -147,7 +146,7 @@ MenuItem* PlaybackToolBarModel::makeActionWithDescriptionAsTitle(const actions::
     MenuItem* item = makeMenuItem(actionCode);
 
     UiAction action = item->action();
-    action.title = item->action().description;
+    action.title = action.description;
     item->setAction(action);
 
     return item;

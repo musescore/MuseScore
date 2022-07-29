@@ -22,8 +22,9 @@
 
 #include "lyrics.h"
 
-#include "translation.h"
 #include "rw/xml.h"
+#include "translation.h"
+#include "types/translatablestring.h"
 
 #include "chord.h"
 #include "masterscore.h"
@@ -162,9 +163,9 @@ bool Lyrics::readProperties(XmlReader& e)
     return true;
 }
 
-String Lyrics::subtypeName() const
+TranslatableString Lyrics::subtypeUserName() const
 {
-    return mtrc("engraving", "Verse %1").arg(_no + 1);
+    return TranslatableString("engraving", "Verse %1").arg(_no + 1);
 }
 
 //---------------------------------------------------------

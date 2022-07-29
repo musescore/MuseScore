@@ -59,9 +59,9 @@ Arpeggio::Arpeggio(Chord* parent)
     _stretch = 1.0;
 }
 
-String Arpeggio::arpeggioTypeName() const
+const TranslatableString& Arpeggio::arpeggioTypeName() const
 {
-    return TConv::translatedUserName(_arpeggioType);
+    return TConv::userName(_arpeggioType);
 }
 
 //---------------------------------------------------------

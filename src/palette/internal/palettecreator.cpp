@@ -229,7 +229,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
     for (const char* dynamicType : defaultPalette ? defaultDynamics : masterDynamics) {
         auto dynamic = makeElement<Dynamic>(mu::engraving::gpaletteScore);
         dynamic->setDynamicType(String::fromAscii(dynamicType));
-        sp->appendElement(dynamic, TConv::translatedUserName(dynamic->dynamicType()));
+        sp->appendElement(dynamic, dynamicType);
     }
 
     std::pair<HairpinType, const char*> hairpins[] = {
@@ -341,7 +341,7 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
     for (const BarLineTableItem& bti : BarLine::barLineTable) {
         auto b = Factory::makeBarLine(gpaletteScore->dummy()->segment());
         b->setBarLineType(bti.type);
-        sp->appendElement(b, BarLine::userTypeName(bti.type));
+        sp->appendElement(b, bti.userName);
     }
 
     // bar line spans
@@ -394,7 +394,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         auto rm = makeElement<MeasureRepeat>(gpaletteScore);
         rm->setSymId(repeat.id);
         rm->setNumMeasures(repeat.measuresCount);
-        sp->appendElement(rm, mu::qtrc("engraving/sym", SymNames::userNameForSymId(repeat.id)));
+        sp->appendElement(rm, SymNames::userNameForSymId(repeat.id));
     }
 
     const std::vector<MarkerType> defaultMarkers = {
@@ -451,7 +451,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 
         auto b = Factory::makeBarLine(gpaletteScore->dummy()->segment());
         b->setBarLineType(bti.type);
-        PaletteCellPtr cell = sp->appendElement(b, BarLine::userTypeName(bti.type));
+        PaletteCellPtr cell = sp->appendElement(b, bti.userName);
         cell->drawStaff = false;
     }
 
@@ -501,7 +501,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         vibrato = makeElement<Vibrato>(gpaletteScore);
         vibrato->setVibratoType(VibratoType::VIBRATO_SAWTOOTH_WIDE);
         vibrato->setLen(w);
-        sp->appendElement(vibrato, TConv::userName(VibratoType::VIBRATO_SAWTOOTH));
+        sp->appendElement(vibrato, TConv::userName(VibratoType::VIBRATO_SAWTOOTH_WIDE));
     }
 
     return sp;
@@ -635,7 +635,7 @@ PalettePtr PaletteCreator::newTremoloPalette()
     for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
         auto tremolo = Factory::makeTremolo(gpaletteScore->dummy()->chord());
         tremolo->setTremoloType(TremoloType(i));
-        sp->appendElement(tremolo, tremolo->subtypeName().toQString());
+        sp->appendElement(tremolo, tremolo->subtypeUserName());
     }
     return sp;
 }
@@ -657,7 +657,7 @@ PalettePtr PaletteCreator::newNoteHeadsPalette()
         }
         auto nh = makeElement<NoteHead>(gpaletteScore);
         nh->setSym(sym);
-        sp->appendElement(nh, TConv::translatedUserName((NoteHeadGroup(i))));
+        sp->appendElement(nh, TConv::userName((NoteHeadGroup(i))));
     }
 
     sp->appendActionIcon(ActionIconType::PARENTHESES, "add-parentheses");
@@ -898,7 +898,7 @@ PalettePtr PaletteCreator::newAccordionPalette()
     for (auto i : art) {
         auto s = makeElement<Symbol>(gpaletteScore);
         s->setSym(i);
-        sp->appendElement(s, SymNames::translatedUserNameForSymId(i));
+        sp->appendElement(s, SymNames::userNameForSymId(i));
     }
     return sp;
 }
@@ -968,14 +968,14 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
         sp->appendElement(f, f->typeUserName());
     }
 
-    for (BreathType breath : Breath::breathList) { //Last breath is not a default breath. Hence, - 1
+    for (BreathType breath : Breath::breathList) {
         if (breath.id == SymId::chantCaesura && defaultPalette) {
             continue;
         }
         auto a = Factory::makeBreath(gpaletteScore->dummy()->segment());
         a->setSymId(breath.id);
         a->setPause(breath.pause);
-        sp->appendElement(a, SymNames::translatedUserNameForSymId(breath.id));
+        sp->appendElement(a, SymNames::userNameForSymId(breath.id));
     }
 
     return sp;
@@ -1070,7 +1070,7 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
     for (ClefType clefType : defaultPalette ? clefsDefault : clefsMaster) {
         auto clef = Factory::makeClef(gpaletteScore->dummy()->segment());
         clef->setClefType(ClefTypeList(clefType, clefType));
-        sp->appendElement(clef, TConv::translatedUserName(clefType));
+        sp->appendElement(clef, TConv::userName(clefType));
     }
     return sp;
 }
@@ -1108,7 +1108,8 @@ PalettePtr PaletteCreator::newBagpipeEmbellishmentPalette()
     for (size_t i = 0; i < TConv::embellishmentsCount(); ++i) {
         auto b = makeElement<BagpipeEmbellishment>(gpaletteScore);
         b->setEmbelType(EmbellishmentType(i));
-        sp->appendElement(b, TConv::userName(static_cast<EmbellishmentType>(i)));
+        // TODO: pass TranslatableString
+        sp->appendElement(b, TConv::userName(static_cast<EmbellishmentType>(i)).str);
     }
 
     return sp;
@@ -1427,13 +1428,13 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
         tt->setXmlText(tp.pattern);
         if (tp.relative) {
             tt->setRelative(tp.f);
-            sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
+            sp->appendElement(tt, tp.name, 1.5);
         } else if (tp.italian) {
             tt->setTempo(tp.f);
             sp->appendElement(tt, tp.name, 1.3);
         } else {
             tt->setTempo(tp.f);
-            sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
+            sp->appendElement(tt, tp.name, 1.5);
         }
     }
 
@@ -1669,7 +1670,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
         int numerator;
         int denominator;
         TimeSigType type;
-        QString name;
+        const char* name;
     };
 
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::TimeSig);
@@ -1691,8 +1692,8 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
         { 7,  8, TimeSigType::NORMAL, "7/8" },
         { 9,  8, TimeSigType::NORMAL, "9/8" },
         { 12, 8, TimeSigType::NORMAL, "12/8" },
-        { 4,  4, TimeSigType::FOUR_FOUR,  QT_TRANSLATE_NOOP("engraving/sym", "Common time") },
-        { 2,  2, TimeSigType::ALLA_BREVE, QT_TRANSLATE_NOOP("engraving/sym", "Cut time") },
+        { 4,  4, TimeSigType::FOUR_FOUR,  QT_TRANSLATE_NOOP("engraving/timesig", "Common time") },
+        { 2,  2, TimeSigType::ALLA_BREVE, QT_TRANSLATE_NOOP("engraving/timesig", "Cut time") },
         { 2,  2, TimeSigType::NORMAL, "2/2" },
         { 3,  2, TimeSigType::NORMAL, "3/2" }
     };
@@ -1710,13 +1711,13 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
         { 7,  8, TimeSigType::NORMAL, "7/8" },
         { 9,  8, TimeSigType::NORMAL, "9/8" },
         { 12, 8, TimeSigType::NORMAL, "12/8" },
-        { 4,  4, TimeSigType::FOUR_FOUR,  QT_TRANSLATE_NOOP("engraving/sym", "Common time") },
-        { 2,  2, TimeSigType::ALLA_BREVE, QT_TRANSLATE_NOOP("engraving/sym", "Cut time") },
+        { 4,  4, TimeSigType::FOUR_FOUR,  QT_TRANSLATE_NOOP("engraving/timesig", "Common time") },
+        { 2,  2, TimeSigType::ALLA_BREVE, QT_TRANSLATE_NOOP("engraving/timesig", "Cut time") },
         { 2,  2, TimeSigType::NORMAL, "2/2" },
         { 3,  2, TimeSigType::NORMAL, "3/2" },
         { 4,  2, TimeSigType::NORMAL, "4/2" },
-        { 2,  2, TimeSigType::CUT_BACH, QT_TRANSLATE_NOOP("engraving/sym", "Cut time (Bach)") },
-        { 9,  8, TimeSigType::CUT_TRIPLE, QT_TRANSLATE_NOOP("engraving/sym", "Cut triple time (9/8)") }
+        { 2,  2, TimeSigType::CUT_BACH, QT_TRANSLATE_NOOP("engraving/timesig", "Cut time (Bach)") },
+        { 9,  8, TimeSigType::CUT_TRIPLE, QT_TRANSLATE_NOOP("engraving/timesig", "Cut triple time (9/8)") }
     };
 
     for (TS timeSignatureType : defaultPalette ? defaultTimeSignatureList : masterTimeSignatureList) {

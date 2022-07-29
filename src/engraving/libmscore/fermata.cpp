@@ -25,6 +25,7 @@
 #include "log.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "types/translatablestring.h"
 
 #include "score.h"
 #include "chordrest.h"
@@ -145,9 +146,9 @@ int Fermata::subtype() const
 //   typeUserName
 //---------------------------------------------------------
 
-String Fermata::typeUserName() const
+TranslatableString Fermata::typeUserName() const
 {
-    return SymNames::translatedUserNameForSymId(symId());
+    return TranslatableString("engraving/sym", SymNames::userNameForSymId(symId()));
 }
 
 //---------------------------------------------------------
@@ -412,7 +413,7 @@ FermataType Fermata::fermataType() const
 
 String Fermata::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedTypeUserName());
 }
 
 void Fermata::added()

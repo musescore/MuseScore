@@ -37,6 +37,7 @@
 #include "compat/writescorehook.h"
 #include "compat/dummyelement.h"
 #include "rw/xml.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "infrastructure/symbolfonts.h"
 
@@ -5238,19 +5239,18 @@ void Score::setStyle(const MStyle& s, const bool overlap)
 //   getTextStyleUserName
 //---------------------------------------------------------
 
-String Score::getTextStyleUserName(TextStyleType tid)
+TranslatableString Score::getTextStyleUserName(TextStyleType tid)
 {
-    String name;
     if (int(tid) >= int(TextStyleType::USER1) && int(tid) <= int(TextStyleType::USER12)) {
         int idx = int(tid) - int(TextStyleType::USER1);
         Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name,
                       Sid::user7Name, Sid::user8Name, Sid::user9Name, Sid::user10Name, Sid::user11Name, Sid::user12Name };
-        name = styleSt(sid[idx]);
+        String userName = styleSt(sid[idx]);
+        if (!userName.empty()) {
+            return TranslatableString::untranslatable(userName);
+        }
     }
-    if (name == u"") {
-        name = TConv::translatedUserName(tid);
-    }
-    return name;
+    return TConv::userName(tid);
 }
 
 String Score::name() const

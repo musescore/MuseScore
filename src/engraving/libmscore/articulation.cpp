@@ -25,6 +25,7 @@
 #include "rw/compat/read206.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "types/translatablestring.h"
 
 #include "score.h"
 #include "chordrest.h"
@@ -51,14 +52,21 @@ static const ElementStyle articulationStyle {
     { Sid::articulationAnchorDefault, Pid::ARTICULATION_ANCHOR },
 };
 
-static const std::map<Articulation::TextType, Articulation::TextTypeMapping> artTypeToInfo {
-    { Articulation::TextType::SLAP, { String(u"S"), String(u"Slap") } },
-    { Articulation::TextType::POP, { String(u"P"), String(u"Pop") } },
+struct ArticulationTextTypeMapping {
+    AsciiStringView xml;
+    String text;
+    TranslatableString name;
 };
 
-static const std::map<String, Articulation::TextType> artTextToType {
-    { String(u"Slap"), Articulation::TextType::SLAP },
-    { String(u"Pop"), Articulation::TextType::POP },
+// Note about "engraving/sym": they need to be in this context because PaletteCell::translationContext expects them there
+static const std::map<Articulation::TextType, ArticulationTextTypeMapping> artTypeToInfo {
+    { Articulation::TextType::SLAP, { "Slap", String(u"S"), TranslatableString("engraving/sym", "Slap") } },
+    { Articulation::TextType::POP, { "Pop", String(u"P"), TranslatableString("engraving/sym", "Pop") } },
+};
+
+static const std::map<AsciiStringView, Articulation::TextType> artTextToType {
+    { "Slap", Articulation::TextType::SLAP },
+    { "Pop", Articulation::TextType::POP },
 };
 
 //---------------------------------------------------------
@@ -167,9 +175,8 @@ bool Articulation::readProperties(XmlReader& e)
 
     if (tag == "subtype") {
         AsciiStringView s = e.readAsciiText();
-        String typeName = String::fromAscii(s.ascii());
-        if (artTextToType.find(typeName) != artTextToType.end()) {
-            m_textType = artTextToType.at(typeName);
+        if (artTextToType.find(s) != artTextToType.end()) {
+            m_textType = artTextToType.at(s);
         } else {
             SymId id = SymNames::symIdByName(s);
             if (id == SymId::noSym) {
@@ -225,7 +232,7 @@ void Articulation::write(XmlWriter& xml) const
     }
     writeProperty(xml, Pid::DIRECTION);
     if (m_textType != TextType::NO_TEXT) {
-        xml.tag("subtype", artTypeToInfo.at(m_textType).name);
+        xml.tag("subtype", artTypeToInfo.at(m_textType).xml);
     } else {
         xml.tag("subtype", SymNames::nameForSymId(_symId));
     }
@@ -243,10 +250,19 @@ void Articulation::write(XmlWriter& xml) const
 //   typeUserName
 //---------------------------------------------------------
 
-String Articulation::typeUserName() const
+TranslatableString Articulation::typeUserName() const
 {
     if (m_textType != TextType::NO_TEXT) {
         return artTypeToInfo.at(m_textType).name;
+    }
+
+    return TranslatableString("engraving/sym", SymNames::userNameForSymId(symId()));
+}
+
+String Articulation::translatedTypeUserName() const
+{
+    if (m_textType != TextType::NO_TEXT) {
+        return artTypeToInfo.at(m_textType).name.translated();
     }
 
     return SymNames::translatedUserNameForSymId(symId());
@@ -742,7 +758,7 @@ bool Articulation::isOrnament(int subtype)
 
 String Articulation::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedTypeUserName());
 }
 
 //---------------------------------------------------------
