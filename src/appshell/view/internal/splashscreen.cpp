@@ -46,6 +46,8 @@ SplashScreen::SplashScreen()
     : QSplashScreen(QPixmap(splashScreenSize)),
     m_backgroundRenderer(new QSvgRenderer(imagePath, this))
 {
+    setAttribute(Qt::WA_TranslucentBackground);
+
     // Can't make translatable, because translation system not yet initialized
     showMessage("Loading…");
 }
