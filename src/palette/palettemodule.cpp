@@ -166,7 +166,7 @@ void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
     if (framework::IApplication::RunMode::Editor != mode) {
         return;
     }
-   
+
     //! NOTE We need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onAllInited
     s_paletteWorkspaceSetup->setup();
@@ -174,11 +174,11 @@ void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
     int i = 0;
     for (auto action : PaletteCell::allActions) {
         auto a = UiAction(action.action,
-            mu::context::UiCtxNotationOpened,
-            mu::context::CTX_NOTATION_FOCUSED,
-            QT_TRANSLATE_NOOP("action", ("Test Action " + std::to_string(i) + ": " + action.action).c_str()),
-            QT_TRANSLATE_NOOP("action", ("Test Action " + std::to_string(i++) + ": " + action.action).c_str())
-        );
+                          mu::context::UiCtxNotationOpened,
+                          mu::context::CTX_NOTATION_FOCUSED,
+                          TranslatableString("action", ("Test Action " + std::to_string(i) + ": " + action.action).c_str()),
+                          TranslatableString("action", ("Test Action " + std::to_string(i++) + ": " + action.action).c_str())
+                          );
 
         s_paletteUiActions->addAction(a);
     }
