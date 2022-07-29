@@ -44,30 +44,6 @@ InspectorPopupController::~InspectorPopupController()
 
 void InspectorPopupController::load()
 {
-    IF_ASSERT_FAILED(m_popup && m_visualControl) {
-        return;
-    }
-
-    connect(m_popup, &PopupView::isOpenedChanged, this, [this]() {
-        if (m_popup->isOpened()) {
-            qApp->installEventFilter(this);
-        } else {
-            qApp->removeEventFilter(this);
-        }
-    });
-
-    connect(m_visualControl, &QQuickItem::visibleChanged, this, [this]() {
-        if (!m_visualControl->isVisible()) {
-            closePopup();
-        }
-    });
-
-    connect(m_visualControl, &QQuickItem::enabledChanged, this, [this]() {
-        if (!m_visualControl->isEnabled()) {
-            closePopup();
-        }
-    });
-
     connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
         if (state != Qt::ApplicationActive) {
             closePopup();
@@ -97,6 +73,21 @@ void InspectorPopupController::setVisualControl(QQuickItem* control)
     }
 
     m_visualControl = control;
+
+    if (m_visualControl) {
+        connect(m_visualControl, &QQuickItem::visibleChanged, this, [this]() {
+            if (!m_visualControl->isVisible()) {
+                closePopup();
+            }
+        });
+
+        connect(m_visualControl, &QQuickItem::enabledChanged, this, [this]() {
+            if (!m_visualControl->isEnabled()) {
+                closePopup();
+            }
+        });
+    }
+
     emit visualControlChanged();
 }
 
@@ -107,6 +98,19 @@ void InspectorPopupController::setPopup(PopupView* popup)
     }
 
     m_popup = popup;
+
+    if (m_popup) {
+        qApp->installEventFilter(this);
+
+        connect(m_popup, &PopupView::isOpenedChanged, this, [this]() {
+            if (m_popup && !m_popup->isOpened()) {
+                setPopup(nullptr);
+            }
+        });
+    } else {
+        qApp->removeEventFilter(this);
+    }
+
     emit popupChanged();
 }
 

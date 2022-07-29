@@ -54,8 +54,6 @@ InspectorSectionView {
 
                 visible: !modelData["isEmpty"]
 
-                notationView: root.notationView
-
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRow(index)
 
@@ -78,7 +76,7 @@ InspectorSectionView {
                 }
 
                 onPopupOpened: {
-                    root.popupOpened(button.popup)
+                    root.popupOpened(popup, control)
                 }
             }
         }
