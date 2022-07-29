@@ -226,13 +226,13 @@ struct UiAction
     std::string scCtx = "any";
     MnemonicString title;
     TranslatableString description;
-    ActionCategory category;
+    ActionCategory category = ActionCategory::Internal;
     IconCode::Code iconCode = IconCode::Code::NONE;
     Checkable checkable = Checkable::No;
     std::vector<std::string> shortcuts;
 
     UiAction() = default;
-    UiAction(const actions::ActionCode& code, ActionCategory cat = ActionCategory::Internal, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
+    UiAction(const actions::ActionCode& code, ActionCategory cat, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
         : code(code), category(cat), uiCtx(ctx), scCtx(scCtx), checkable(ch) {}
 
     UiAction(const actions::ActionCode& code, ActionCategory cat = ActionCategory::Internal, UiContext ctx, std::string scCtx, const MnemonicString& title,
