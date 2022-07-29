@@ -32,8 +32,6 @@ ExpandableBlank {
 
     property QtObject model: null
 
-    property int navigationRowEnd: contentItem.navigationRowEnd
-
     enabled: model ? !model.isEmpty : false
     title: model ? model.title : ""
 
