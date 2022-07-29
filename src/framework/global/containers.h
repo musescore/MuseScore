@@ -253,8 +253,8 @@ inline auto key(const Map& m, const V& v) -> typename Map::key_type
     return def;
 }
 
-template<typename Map, typename K>
-inline auto value(const Map& m, const K& k) -> typename Map::mapped_type
+template<typename Map>
+inline auto value(const Map& m, const typename Map::key_type& k) -> typename Map::mapped_type
 {
     auto it = m.find(k);
     if (it != m.end()) {
@@ -264,8 +264,8 @@ inline auto value(const Map& m, const K& k) -> typename Map::mapped_type
     return def;
 }
 
-template<typename Map, typename K, typename V>
-inline auto value(const Map& m, const K& k, const V& def) -> typename Map::mapped_type
+template<typename Map>
+inline auto value(const Map& m, const typename Map::key_type& k, const typename Map::mapped_type& def) -> typename Map::mapped_type
 {
     auto it = m.find(k);
     if (it != m.end()) {

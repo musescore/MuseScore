@@ -56,7 +56,7 @@ static String elementToText(EngravingObject* element)
     if (element->isEngravingItem()) {
         return toEngravingItem(element)->accessibleInfo();
     }
-    return element->typeUserName();
+    return element->translatedTypeUserName();
 }
 
 void Engraving_ScanTreeTests::tstTree(String file)

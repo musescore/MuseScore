@@ -139,7 +139,7 @@ public:
 
     const ElementList* el() const { return &_el; }
 
-    static String userTypeName(BarLineType);
+    static String translatedUserTypeName(BarLineType);
 
     void setBarLineType(BarLineType i) { _barLineType = i; }
     BarLineType barLineType() const { return _barLineType; }

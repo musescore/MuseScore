@@ -22,10 +22,11 @@
 
 #include "pluginsservice.h"
 
+#include "types/translatablestring.h"
+
 #include "shortcuts/shortcutstypes.h"
 
 #include "pluginserrors.h"
-#include "pluginsuiactions.h"
 
 #include "view/pluginview.h"
 
@@ -33,7 +34,6 @@
 #include "log.h"
 
 using namespace mu::plugins;
-using namespace mu::framework;
 using namespace mu::async;
 using namespace mu::shortcuts;
 
@@ -75,13 +75,15 @@ Notification PluginsService::pluginsChanged() const
     return m_pluginsChanged;
 }
 
-PluginsService::CategoryInfoMap PluginsService::categories() const
+IPluginsService::CategoryInfoMap PluginsService::categories() const
 {
-    return {
-        { "composing-arranging-tools", trc("plugins", "Composing/arranging tools") },
-        { "color-notes", trc("plugins", "Color notes") },
-        { "playback", trc("plugins", "Playback") }
+    static CategoryInfoMap categories {
+        { "composing-arranging-tools", TranslatableString("plugins", "Composing/arranging tools") },
+        { "color-notes", TranslatableString("plugins", "Color notes") },
+        { "playback", TranslatableString("plugins", "Playback") }
     };
+
+    return categories;
 }
 
 bool PluginsService::isAccepted(const CodeKey& codeKey, PluginsStatus status) const

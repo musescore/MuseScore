@@ -165,7 +165,7 @@ QVariantList PluginsModel::categories() const
     for (const auto& category: service()->categories()) {
         QVariantMap obj;
         obj["code"] = QString::fromStdString(category.first);
-        obj["title"] = QString::fromStdString(category.second);
+        obj["title"] = category.second.qTranslated();
 
         result << obj;
     }

@@ -29,6 +29,7 @@
 #include <QMetaType>
 
 #include "types/ret.h"
+#include "types/translatablestring.h"
 #include "types/val.h"
 #include "actions/actiontypes.h"
 #include "view/iconcodes.h"
@@ -191,8 +192,8 @@ struct UiAction
     actions::ActionCode code;
     UiContext uiCtx = UiCtxAny;
     std::string scCtx = "any";
-    QString title;
-    QString description;
+    TranslatableString title;
+    TranslatableString description;
     IconCode::Code iconCode = IconCode::Code::NONE;
     Checkable checkable = Checkable::No;
     std::vector<std::string> shortcuts;
@@ -201,42 +202,25 @@ struct UiAction
     UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const QString& title,  Checkable ch = Checkable::No)
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const TranslatableString& title,
+             Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const QString& title, const QString& desc,
-             Checkable ch = Checkable::No)
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const TranslatableString& title,
+             const TranslatableString& desc, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc),  checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const QString& title, const QString& desc,
-             IconCode::Code icon,
-             Checkable ch = Checkable::No)
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const TranslatableString& title,
+             const TranslatableString& desc, IconCode::Code icon, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const QString& title, IconCode::Code icon,
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const TranslatableString& title, IconCode::Code icon,
              Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), iconCode(icon), checkable(ch) {}
 
     bool isValid() const
     {
         return !code.empty();
-    }
-
-    QVariantMap toMap() const
-    {
-        QStringList list;
-        for (const std::string& sc : shortcuts) {
-            list << QString::fromStdString(sc);
-        }
-
-        return {
-            { "code", QString::fromStdString(code) },
-            { "title", title },
-            { "description", description },
-            { "icon", static_cast<int>(iconCode) },
-            { "shortcuts", list.join("; ") },
-            { "checkable", checkable == Checkable::No ? 0 : 1 }
-        };
     }
 
     bool operator==(const UiAction& other) const

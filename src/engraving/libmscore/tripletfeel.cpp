@@ -22,8 +22,10 @@
 
 #include "tripletfeel.h"
 
+#include "types/string.h"
+#include "types/translatablestring.h"
+
 #include "score.h"
-#include "string.h"
 
 namespace mu::engraving {
 static const ElementStyle tripletFeelStyle {
@@ -99,16 +101,15 @@ static std::map<TripletFeelType, String> tupletSymbols =
                                                "%1textBlackNoteFrac8thShortStem%2") }
 };
 
-// TODO: move to s_symNames
-static std::map<TripletFeelType, String> tupletNames =
+static std::map<TripletFeelType, TranslatableString> tripletFeelNames =
 {
-    { TripletFeelType::TRIPLET_8TH,     String(u"Triplet 8th") },
-    { TripletFeelType::TRIPLET_16TH,    String(u"Triplet 16th") },
-    { TripletFeelType::DOTTED_8TH,      String(u"Dotted 8th") },
-    { TripletFeelType::DOTTED_16TH,     String(u"Dotted 16th") },
-    { TripletFeelType::SCOTTISH_8TH,    String(u"Scottish 8th") },
-    { TripletFeelType::SCOTTISH_16TH,   String(u"Scottish 16th") },
-    { TripletFeelType::NONE,            String(u"No Triplet Feel") }
+    { TripletFeelType::TRIPLET_8TH,     TranslatableString("engraving/tripletfeel", "Triplet 8th") },
+    { TripletFeelType::TRIPLET_16TH,    TranslatableString("engraving/tripletfeel", "Triplet 16th") },
+    { TripletFeelType::DOTTED_8TH,      TranslatableString("engraving/tripletfeel", "Dotted 8th") },
+    { TripletFeelType::DOTTED_16TH,     TranslatableString("engraving/tripletfeel", "Dotted 16th") },
+    { TripletFeelType::SCOTTISH_8TH,    TranslatableString("engraving/tripletfeel", "Scottish 8th") },
+    { TripletFeelType::SCOTTISH_16TH,   TranslatableString("engraving/tripletfeel", "Scottish 16th") },
+    { TripletFeelType::NONE,            TranslatableString("engraving/tripletfeel", "No triplet feel") }
 };
 
 TripletFeel::TripletFeel(Segment* parent, TripletFeelType tripletFillType)
@@ -198,10 +199,9 @@ Sid TripletFeel::getPropertyStyle(Pid id) const
 //   typeUserName
 //---------------------------------------------------------
 
-String TripletFeel::typeUserName() const
+TranslatableString TripletFeel::subtypeUserName() const
 {
-    // TODO: SymNames::translatedUserNameForSymId(symId());
-    return tupletNames.at(m_tripletFeelType);
+    return tripletFeelNames.at(m_tripletFeelType);
 }
 
 //---------------------------------------------------------
@@ -210,6 +210,6 @@ String TripletFeel::typeUserName() const
 
 String TripletFeel::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedTypeUserName());
 }
 }

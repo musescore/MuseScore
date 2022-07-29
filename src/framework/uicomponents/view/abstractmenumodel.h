@@ -32,6 +32,10 @@
 #include "ui/iuiactionsregister.h"
 #include "actions/iactionsdispatcher.h"
 
+namespace mu {
+class TranslatableString;
+}
+
 namespace mu::uicomponents {
 class AbstractMenuModel : public QAbstractListModel, public async::Asyncable
 {
@@ -84,9 +88,9 @@ protected:
     MenuItem& findItem(const actions::ActionCode& actionCode);
     MenuItem& findMenu(const QString& menuId);
 
-    MenuItem* makeMenu(const QString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true);
+    MenuItem* makeMenu(const TranslatableString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true);
 
-    MenuItem* makeMenuItem(const actions::ActionCode& actionCode, const QString& title = "");
+    MenuItem* makeMenuItem(const actions::ActionCode& actionCode, const TranslatableString& title = {});
     MenuItem* makeSeparator();
 
     bool isIndexValid(int index) const;

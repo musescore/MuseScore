@@ -416,7 +416,8 @@ public:
 
     // debug functions
     virtual void dump() const;
-    virtual String subtypeName() const;
+    virtual TranslatableString subtypeUserName() const;
+    virtual String translatedSubtypeUserName() const;
 
     virtual mu::draw::Color color() const;
     mu::draw::Color curColor() const;

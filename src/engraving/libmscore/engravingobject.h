@@ -35,6 +35,10 @@
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
 
+namespace mu {
+class TranslatableString;
+}
+
 namespace mu::diagnostics {
 class EngravingElementsProvider;
 }
@@ -224,7 +228,8 @@ public:
     inline ElementType type() const { return m_type; }
     inline bool isType(ElementType t) const { return t == m_type; }
     const char* typeName() const;
-    virtual String typeUserName() const;
+    virtual TranslatableString typeUserName() const;
+    virtual String translatedTypeUserName() const;
 
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);

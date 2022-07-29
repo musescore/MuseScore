@@ -22,6 +22,8 @@
 
 #include "instrumentsonscorelistmodel.h"
 
+#include "types/translatablestring.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;
@@ -113,7 +115,7 @@ QStringList InstrumentsOnScoreListModel::orders() const
     QStringList result;
 
     for (const ScoreOrder& order: m_scoreOrders) {
-        result << order.getName();
+        result << order.getName().qTranslated();
     }
 
     return result;
