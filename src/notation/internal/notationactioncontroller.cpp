@@ -164,7 +164,7 @@ void NotationActionController::init()
     registerAction("septuplet", [this]() { putTuplet(7); }, &Controller::noteOrRestSelected);
     registerAction("octuplet", [this]() { putTuplet(8); }, &Controller::noteOrRestSelected);
     registerAction("nonuplet", [this]() { putTuplet(9); }, &Controller::noteOrRestSelected);
-    registerAction("custom-tuplet", &Controller::putTuplet);
+    registerAction("custom-tuplet", &Controller::putTuplet, &Controller::noteOrRestSelected);
     registerAction("tuplet-dialog", &Controller::openTupletOtherDialog, &Controller::noteOrRestSelected);
 
     registerAction("put-note", &Controller::putNote);
