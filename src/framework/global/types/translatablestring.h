@@ -129,11 +129,6 @@ private:
     template<typename ... Args>
     struct Arg;
 
-    template<typename ... Args>
-    using fake_deduction_guides_t = std::conditional_t<std::is_constructible_v<String, Args...>,
-                                                       Arg<String>,
-                                                       Arg<Args...> >;
-
     std::vector<std::shared_ptr<const IArg> > args;
 };
 
@@ -254,7 +249,7 @@ template<typename ... Args>
 TranslatableString TranslatableString::arg(const Args& ... args) const
 {
     TranslatableString res = *this;
-    res.args.push_back(std::make_shared<fake_deduction_guides_t<Args...> >(args ...));
+    res.args.push_back(std::make_shared<Arg<Args...> >(args ...));
     return res;
 }
 }
