@@ -36,7 +36,7 @@
 using namespace mu::inspector;
 
 FretCanvas::FretCanvas(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : uicomponents::QuickPaintedView(parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);

@@ -23,15 +23,15 @@
 #ifndef MU_INSPECTOR_FRETCANVAS_H
 #define MU_INSPECTOR_FRETCANVAS_H
 
-#include <QQuickPaintedItem>
 #include <QPainter>
 #include <QVariant>
 
+#include "uicomponents/view/quickpaintedview.h"
 #include "context/iglobalcontext.h"
 #include "fret.h"
 
 namespace mu::inspector {
-class FretCanvas : public QQuickPaintedItem
+class FretCanvas : public uicomponents::QuickPaintedView
 {
     INJECT(instruments, context::IGlobalContext, globalContext)
 

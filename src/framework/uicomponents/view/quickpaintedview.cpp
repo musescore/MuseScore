@@ -19,28 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "scorethumbnail.h"
+#include "quickpaintedview.h"
 
-using namespace mu::project;
+using namespace mu::uicomponents;
 
-ScoreThumbnail::ScoreThumbnail(QQuickItem* parent)
-    : uicomponents::QuickPaintedView(parent)
+QuickPaintedView::QuickPaintedView(QQuickItem* parent)
+    : QQuickPaintedItem(parent)
 {
+    //! NOTE It is necessary that when UI scaling is displayed without a blur
+    setAntialiasing(false);
+    setSmooth(false);
 }
 
-QPixmap ScoreThumbnail::thumbnail() const
+QSGNode* QuickPaintedView::updatePaintNode(QSGNode* old, UpdatePaintNodeData* d)
 {
-    return m_thumbnail;
-}
-
-void ScoreThumbnail::setThumbnail(QPixmap pixmap)
-{
-    m_thumbnail = std::move(pixmap);
-    emit thumbnailChanged();
-    update();
-}
-
-void ScoreThumbnail::paint(QPainter* painter)
-{
-    painter->drawPixmap(0, 0, width(), height(), m_thumbnail);
+    //! NOTE It is necessary that when UI scaling is displayed without a blur
+    setTextureSize(QSize(width(), height()));
+    QSGNode* n = QQuickPaintedItem::updatePaintNode(old, d);
+    return n;
 }

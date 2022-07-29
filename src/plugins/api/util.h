@@ -25,8 +25,9 @@
 
 #include <QDir>
 #include <QProcess>
-#include <QQuickPaintedItem>
 #include <QNetworkAccessManager>
+
+#include "uicomponents/view/quickpaintedview.h"
 
 #include "config.h"
 
@@ -150,7 +151,7 @@ public slots:
 ///    This is an GUI element to show a score. \since MuseScore 3.2
 //---------------------------------------------------------
 
-class ScoreView : public QQuickPaintedItem, public MuseScoreView
+class ScoreView : public uicomponents::QuickPaintedView, public MuseScoreView
 {
     Q_OBJECT
     /** Background color */

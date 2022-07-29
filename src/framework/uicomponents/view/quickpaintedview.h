@@ -19,49 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_UI_WIDGETVIEW_H
-#define MU_UI_WIDGETVIEW_H
+#ifndef MU_UICOMPONENTS_QUICKPAINTEDVIEW_H
+#define MU_UICOMPONENTS_QUICKPAINTEDVIEW_H
 
 #include <QQuickPaintedItem>
 
-class QWidget;
-
-namespace mu::ui {
-class IDisplayableWidget
-{
-public:
-    virtual ~IDisplayableWidget() = default;
-
-private:
-    friend class WidgetView;
-
-    virtual bool handleEvent(QEvent* event) = 0;
-    virtual QWidget* qWidget() = 0;
-};
-
-class WidgetView : public QQuickPaintedItem
+namespace mu::uicomponents {
+class QuickPaintedView : public QQuickPaintedItem
 {
     Q_OBJECT
-
 public:
-    explicit WidgetView(QQuickItem* parent = nullptr);
+    QuickPaintedView(QQuickItem* parent = nullptr);
 
 protected:
-    void componentComplete() override;
-
-    void setWidget(std::shared_ptr<IDisplayableWidget> widget);
-
-private:
-    void paint(QPainter* painter) override;
-    bool event(QEvent* event) override;
-    bool handleHoverEvent(QHoverEvent* event);
-
-    QWidget* qWidget() const;
-    void updateSizeConstraints();
-
-    std::shared_ptr<IDisplayableWidget> m_widget = nullptr;
+    QSGNode* updatePaintNode(QSGNode* old, UpdatePaintNodeData* d) override;
 };
 }
 
-#endif // MU_UI_WIDGETVIEW_H
+#endif // MU_UICOMPONENTS_QUICKPAINTEDVIEW_H
