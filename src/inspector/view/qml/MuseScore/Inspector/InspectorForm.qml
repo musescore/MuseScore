@@ -32,7 +32,7 @@ Rectangle {
     id: root
 
     property alias model: inspectorRepeater.model
-    property var notationView: null
+    property alias notationView: popupController.notationView
 
     property NavigationSection navigationSection: null
 
@@ -48,15 +48,18 @@ Rectangle {
     QtObject {
         id: prv
 
-        property var openedPopup: null
-
-        function closePreviousOpenedPopup(newOpenedPopup) {
-            if (Boolean(openedPopup) && openedPopup !== newOpenedPopup) {
-                openedPopup.close()
+        function closePreviousOpenedPopup(newOpenedPopup, visualControl) {
+            if (Boolean(popupController.popup) && popupController.popup !== newOpenedPopup) {
+                popupController.popup.close()
             }
 
-            openedPopup = newOpenedPopup
+            popupController.visualControl = visualControl
+            popupController.popup = newOpenedPopup
         }
+    }
+
+    InspectorPopupController {
+        id: popupController
     }
 
     StyledFlickable {
@@ -114,8 +117,6 @@ Rectangle {
                         anchorItem: root
                         navigationSection: root.navigationSection
 
-                        notationView: root.notationView
-
                         onReturnToBoundsRequested: {
                             flickableArea.returnToBounds()
                         }
@@ -125,7 +126,7 @@ Rectangle {
                         }
 
                         onPopupOpened: {
-                            prv.closePreviousOpenedPopup(openedPopup)
+                            prv.closePreviousOpenedPopup(openedPopup, visualControl)
                         }
                     }
                 }

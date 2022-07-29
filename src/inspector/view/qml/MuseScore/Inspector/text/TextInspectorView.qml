@@ -275,8 +275,6 @@ InspectorSectionView {
             text: qsTrc("inspector", "More…")
             visible: root.model ? !root.model.isEmpty : false
 
-            notationView: root.notationView
-
             popupContent: TextSettings {
                 model: root.model
 
@@ -288,7 +286,7 @@ InspectorSectionView {
             }
 
             onPopupOpened: {
-                root.popupOpened(textAdvancedSettingsButton.popup)
+                root.popupOpened(popup, control)
             }
         }
     }

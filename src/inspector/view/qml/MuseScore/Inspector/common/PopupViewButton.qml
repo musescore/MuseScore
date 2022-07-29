@@ -29,7 +29,8 @@ import MuseScore.Inspector 1.0
 FlatButton {
     id: root
 
-    property alias popup: popup
+    property bool isOpened: popup.isOpened
+
     property alias popupNavigationPanel: popup.navigationPanel
 
     property Component popupContent
@@ -37,10 +38,8 @@ FlatButton {
     property int popupAvailableWidth: parent ? parent.width : 0
     property var anchorItem: null
 
-    property alias notationView: popupController.notationView
-
     signal ensureContentVisibleRequested(int invisibleContentHeight)
-    signal popupOpened()
+    signal popupOpened(var popup, var control)
 
     Layout.fillWidth: true
     Layout.minimumWidth: (popupAvailableWidth - 4) / 2
@@ -53,13 +52,6 @@ FlatButton {
         id: prv
 
         property bool needActiveFirstItem: false
-    }
-
-    InspectorPopupController {
-        id: popupController
-
-        visualControl: root
-        popup: popup
     }
 
     Component.onCompleted: {
@@ -102,7 +94,7 @@ FlatButton {
                 forceFocusIn()
             }
 
-            root.popupOpened()
+            root.popupOpened(popup, root)
         }
 
         onClosed: {

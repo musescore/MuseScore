@@ -40,11 +40,9 @@ ExpandableBlank {
     property var anchorItem: null
     property var navigationSection: null
 
-    property var notationView: null
-
     signal returnToBoundsRequested()
     signal ensureContentVisibleRequested(int invisibleContentHeight)
-    signal popupOpened(var openedPopup)
+    signal popupOpened(var openedPopup, var visualControl)
 
     NavigationPanel {
         id: navPanel
@@ -96,14 +94,12 @@ ExpandableBlank {
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
-            notationView: root.notationView
-
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
             onPopupOpened: {
-                root.popupOpened(openedPopup)
+                root.popupOpened(openedPopup, control)
             }
         }
     }
@@ -117,14 +113,12 @@ ExpandableBlank {
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
-            notationView: root.notationView
-
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
             onPopupOpened: {
-                root.popupOpened(openedPopup)
+                root.popupOpened(openedPopup, control)
             }
         }
     }
@@ -138,14 +132,12 @@ ExpandableBlank {
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
-            notationView: root.notationView
-
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
             onPopupOpened: {
-                root.popupOpened(openedPopup)
+                root.popupOpened(openedPopup, control)
             }
         }
     }
@@ -159,14 +151,12 @@ ExpandableBlank {
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
-            notationView: root.notationView
-
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
             onPopupOpened: {
-                root.popupOpened(openedPopup)
+                root.popupOpened(openedPopup, control)
             }
         }
     }
@@ -179,10 +169,8 @@ ExpandableBlank {
             navigationPanel: navPanel
             navigationRowStart: root.navigation.row + 1
 
-            notationView: root.notationView
-
             onPopupOpened: {
-                root.popupOpened(openedPopup)
+                root.popupOpened(openedPopup, control)
             }
         }
     }
@@ -195,10 +183,8 @@ ExpandableBlank {
             navigationPanel: navPanel
             navigationRowStart: root.navigation.row + 1
 
-            notationView: root.notationView
-
             onPopupOpened: {
-                root.popupOpened(openedPopup)
+                root.popupOpened(openedPopup, control)
             }
         }
     }
@@ -212,14 +198,12 @@ ExpandableBlank {
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
-            notationView: root.notationView
-
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
             onPopupOpened: {
-                root.popupOpened(openedPopup)
+                root.popupOpened(openedPopup, control)
             }
         }
     }
