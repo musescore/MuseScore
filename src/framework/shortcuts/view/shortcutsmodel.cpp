@@ -66,7 +66,7 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     case RoleSectionValue:
         return SectionName(shortcut).toString() + sequencesToNativeText(shortcut.sequences);
     case RoleSectionKey:
-        return SectionName(shortcut).toString() + this->action(shortcut.action).title;
+        return SectionName(shortcut).toString() + this->action(shortcut.action).title.qTranslated();
     }
 
     return QVariant();
