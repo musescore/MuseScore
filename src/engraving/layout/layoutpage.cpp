@@ -341,9 +341,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
             if (!sp->isSlur()) {
                 continue;
             }
-            ChordRest* scr = sp->startCR();
-            ChordRest* ecr = sp->endCR();
-            if (scr && ecr && scr->vStaffIdx() != ecr->vStaffIdx()) {
+            if (toSlur(sp)->isCrossStaff()) {
                 toSlur(sp)->layout();
             }
         }

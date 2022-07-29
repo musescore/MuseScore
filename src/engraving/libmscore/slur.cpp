@@ -377,7 +377,6 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
 {
     ChordRest* startCR = slur()->startCR();
     ChordRest* endCR = slur()->endCR();
-    bool isCrossStaff = (startCR && endCR) ? startCR->vStaffIdx() != endCR->vStaffIdx() : false;
 
     Segment* startSeg = nullptr;
     if (isSingleBeginType()) {
@@ -452,12 +451,14 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
         for (Segment* seg : segList) {
             Shape segShape = seg->staffShape(startCR->vStaffIdx()).translated(seg->pos() + seg->measure()->pos());
             // If cross-staff, also add the shape of second staff
-            if (isCrossStaff) {
-                SysStaff* startStaff = system()->staves().at(startCR->vStaffIdx());
-                SysStaff* endStaff = system()->staves().at(endCR->vStaffIdx());
+            if (slur()->isCrossStaff()) {
+                unsigned startStaffIdx = startCR->vStaffIdx();
+                unsigned endStaffIdx = (endCR->vStaffIdx() != startStaffIdx) ? endCR->vStaffIdx() : endCR->staffIdx();
+                SysStaff* startStaff = system()->staves().at(startStaffIdx);
+                SysStaff* endStaff = system()->staves().at(endStaffIdx);
                 double dist = endStaff->y() - startStaff->y();
                 Shape secondStaffShape;
-                secondStaffShape.add(seg->staffShape(endCR->vStaffIdx()).translated(seg->pos() + seg->measure()->pos()));
+                secondStaffShape.add(seg->staffShape(endStaffIdx).translated(seg->pos() + seg->measure()->pos()));
                 secondStaffShape.translate(PointF(0.0, dist));
                 segShape.add(secondStaffShape);
             }
@@ -1199,10 +1200,10 @@ void Slur::slurPos(SlurPos* sp)
                     || (beam2
                         && (!beam2->elements().empty())
                         && (beam2->elements().front() != ec)
-                               && (ec->up() == _up)
-                               && sc && (sc->noteType() == NoteType::NORMAL)
-                               )
-                           ) {
+                        && (ec->up() == _up)
+                        && sc && (sc->noteType() == NoteType::NORMAL)
+                        )
+                    ) {
                     if (beam2) {
                         beam2->layout();
                     }
@@ -1877,5 +1878,12 @@ void Slur::setTrack(track_idx_t n)
     for (SpannerSegment* ss : spannerSegments()) {
         ss->setTrack(n);
     }
+}
+
+bool Slur::isCrossStaff()
+{
+    return startCR() && endCR()
+           && (startCR()->staffMove() != 0 || endCR()->staffMove() != 0
+               || startCR()->vStaffIdx() != endCR()->vStaffIdx());
 }
 }

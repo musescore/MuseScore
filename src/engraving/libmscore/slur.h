@@ -99,6 +99,8 @@ public:
     SlurSegment* segmentAt(int n) { return toSlurSegment(Spanner::segmentAt(n)); }
     const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n)); }
 
+    bool isCrossStaff();
+
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 };
 } // namespace mu::engraving
