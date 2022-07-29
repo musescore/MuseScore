@@ -541,13 +541,13 @@ bool UserPaletteController::connectOnPaletteCellConfigChange(const QModelIndex& 
     }
 
     configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
-        [this, srcIndex, cell](
-            const IPaletteConfiguration::PaletteCellConfig& config) {
-                modifyCellfromConfig(cell, config);
+                                                              [this, srcIndex, cell](
+                                                                  const IPaletteConfiguration::PaletteCellConfig& config) {
+        modifyCellfromConfig(cell, config);
 
-                _userPalette->itemDataChanged(srcIndex);
-                _userPalette->itemDataChanged(srcIndex.parent());
-        });
+        _userPalette->itemDataChanged(srcIndex);
+        _userPalette->itemDataChanged(srcIndex.parent());
+    });
     return true;
 }
 
@@ -684,7 +684,7 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
     }
 
     LOGE() << "BEGIN ROW COUNT";
-    umap.clear();
+    actionToItem.clear();
 
     int ctr = 0;
     for (int i = 0; i < m_mainPalette->rowCount(); i++) {
@@ -694,13 +694,13 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
             if (!cell || !cell->element) {
                 continue;
             }
-            auto el = cell->element.get();
-            auto ac_name = cell->action;
+
+            QString ac_name = cell->action;
             ctr++;
-            umap[ac_name] = cell->element.get();
+            actionToItem[ac_name] = cell->element.get();
             dispatcher()->reg(this, ac_name.toStdString(), [this, ac_name]() {
                 LOGE() << "You are trying to call: " << ac_name;
-                globalContext()->currentNotation()->interaction()->applyPaletteElement(umap[ac_name]);
+                globalContext()->currentNotation()->interaction()->applyPaletteElement(actionToItem[ac_name]);
             });
         }
     }

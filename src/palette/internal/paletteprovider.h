@@ -320,7 +320,7 @@ private:
 
     async::Channel<engraving::ElementPtr> m_addCustomItemRequested;
 
-    std::unordered_map<QString, mu::engraving::EngravingItem*> umap;
+    std::unordered_map<QString, mu::engraving::EngravingItem*> actionToItem;
 };
 }
 
