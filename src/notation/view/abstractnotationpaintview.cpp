@@ -36,13 +36,12 @@ static constexpr qreal SCROLL_LIMIT_OFF_OFFSET = 0.75;
 static constexpr qreal SCROLL_LIMIT_ON_OFFSET = 0.02;
 
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : uicomponents::QuickPaintedView(parent)
 {
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);
     setFlag(ItemAcceptsInputMethod, true);
     setAcceptedMouseButtons(Qt::AllButtons);
-    setAntialiasing(true);
 
     connect(this, &QQuickPaintedItem::widthChanged, this, &AbstractNotationPaintView::onViewSizeChanged);
     connect(this, &QQuickPaintedItem::heightChanged, this, &AbstractNotationPaintView::onViewSizeChanged);

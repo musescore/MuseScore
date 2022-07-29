@@ -20,44 +20,48 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UICOMPONENTS_ICONVIEW_H
-#define MU_UICOMPONENTS_ICONVIEW_H
+#ifndef MU_UI_WIDGETVIEW_H
+#define MU_UI_WIDGETVIEW_H
 
-#include <QQuickPaintedItem>
-#include <QIcon>
-#include <QColor>
 #include "quickpaintedview.h"
 
+class QWidget;
+
 namespace mu::uicomponents {
-class IconView : public QuickPaintedView
+class IDisplayableWidget
+{
+public:
+    virtual ~IDisplayableWidget() = default;
+
+private:
+    friend class WidgetView;
+
+    virtual bool handleEvent(QEvent* event) = 0;
+    virtual QWidget* qWidget() = 0;
+};
+
+class WidgetView : public QuickPaintedView
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVariant icon READ icon WRITE setIcon)
-    Q_PROPERTY(bool selected READ selected WRITE setSelected)
-    Q_PROPERTY(bool active READ active WRITE setActive)
-
 public:
-    IconView(QQuickItem* parent = nullptr);
+    explicit WidgetView(QQuickItem* parent = nullptr);
 
-    QVariant icon() const;
-    void setIcon(QVariant val);
+protected:
+    void componentComplete() override;
 
-    bool selected() const;
-    void setSelected(bool val);
-
-    bool active() const;
-    void setActive(bool val);
-
-    void paint(QPainter*) override;
+    void setWidget(std::shared_ptr<IDisplayableWidget> widget);
 
 private:
+    void paint(QPainter* painter) override;
+    bool event(QEvent* event) override;
+    bool handleHoverEvent(QHoverEvent* event);
 
-    QColor m_color;
-    QIcon m_icon;
-    bool m_selected { false };
-    bool m_active   { false };
+    QWidget* qWidget() const;
+    void updateSizeConstraints();
+
+    std::shared_ptr<IDisplayableWidget> m_widget = nullptr;
 };
 }
 
-#endif // MU_UICOMPONENTS_ICONVIEW_H
+#endif // MU_UI_WIDGETVIEW_H
