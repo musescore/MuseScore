@@ -126,8 +126,8 @@ void InspectorPopupController::setNotationView(QQuickItem* notationView)
 
 bool InspectorPopupController::eventFilter(QObject* watched, QEvent* event)
 {
-    if (event->type() == QEvent::FocusOut
-        || event->type() == QEvent::MouseButtonPress) {
+    if ((event->type() == QEvent::FocusOut || event->type() == QEvent::MouseButtonPress)
+        && watched == popup()->window()) {
         closePopupIfNeed(QCursor::pos());
     } else if (event->type() == QEvent::Move && watched == mainWindow()->qWindow()) {
         if (m_popup->isOpened()) {
