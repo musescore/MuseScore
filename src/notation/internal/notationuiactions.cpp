@@ -1976,7 +1976,7 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("pad-note-8",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_STAFF_NOT_TAB,
-             TranslatableString("action", "8th note"),
+             TranslatableString("action", "Eighth note"),
              TranslatableString("action", "Set duration: eighth note"),
              IconCode::Code::NOTE_8TH
              ),
@@ -2053,7 +2053,7 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("pad-note-8-TAB",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             X_TAB.arg(TranslatableString("action", "8th note")),
+             X_TAB.arg(TranslatableString("action", "Eighth note")),
              X_TAB.arg(TranslatableString("action", "Set duration: eighth note")),
              IconCode::Code::NOTE_8TH
              ),
