@@ -60,7 +60,7 @@ Item {
     QtObject {
         id: prv
 
-        readonly property int buttonWidth: 105
+        readonly property int buttonMinWidth: 104
     }
 
     EditShortcutDialog {
@@ -91,7 +91,7 @@ Item {
             canEditCurrentShortcut: editShortcutDialog.canEditCurrentShortcut
             canClearCurrentShortcuts: shortcutsView.hasSelection
 
-            buttonWidth: prv.buttonWidth
+            buttonMinWidth: prv.buttonMinWidth
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
@@ -128,7 +128,7 @@ Item {
 
             canResetCurrentShortcut: shortcutsView.hasSelection
 
-            buttonWidth: prv.buttonWidth
+            buttonMinWidth: prv.buttonMinWidth
 
             navigation.section: root.navigationSection
             //! NOTE: 4 because ShortcutsList have two panels(header and content)
