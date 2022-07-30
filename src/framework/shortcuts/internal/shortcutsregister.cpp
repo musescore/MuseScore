@@ -348,10 +348,9 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
             }
 
             config.shortcut = shrtct;
-            if (!shrtct.sequencesAsString().empty()) {
-                LOGE() << "Shortcut before setting at palette cell:" << shrtct.sequencesAsString();
-            }
-            LOGE() << "Modifying from register (" << ctr++ << "):" << cell->id;
+            
+            LOGE() << "Shortcut before setting at palette cell:" << shrtct.sequencesAsString();
+
             paletteConfiguration()->setPaletteCellConfig(cell->id, config);
         }
     }
