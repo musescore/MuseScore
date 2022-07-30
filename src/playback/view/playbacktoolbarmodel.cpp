@@ -93,7 +93,7 @@ void PlaybackToolBarModel::updateActions()
     MenuItemList settingsItems;
 
     for (const UiAction& action : PlaybackUiActions::settingsActions()) {
-        settingsItems << makeActionWithDescriptionAsTitle(action.code);
+        settingsItems << makeMenuItem(action.code);
     }
 
     if (!m_isToolbarFloating) {
@@ -105,7 +105,7 @@ void PlaybackToolBarModel::updateActions()
     for (const ToolConfig::Item& item : config.items) {
         if (isAdditionalAction(item.action) && !m_isToolbarFloating) {
             //! NOTE In this case, we want to see the actions' description instead of the title
-            settingsItems << makeActionWithDescriptionAsTitle(item.action);
+            settingsItems << makeMenuItem(item.action);
         } else {
             result << makeMenuItem(item.action);
         }
