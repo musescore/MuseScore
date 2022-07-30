@@ -340,9 +340,11 @@ with open('instruments.xml', 'w', newline='\n', encoding='utf-8') as f:
         f.write(line.replace('" />', '"/>'))
 
 # Helper functions to facilitate writing instrumentsxml.h
-def add_translatable_string(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = ''):
+def add_translatable_string(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = '', keyValuePairs: dict[str, str] = {}):
     if comment:
         f.write('//: ' + comment + '\n')
+    for (key, value) in keyValuePairs.items():
+        f.write('//~ {k} {v}\n'.format(k=key, v=value))
     if disambiguation:
         f.write('QT_TRANSLATE_NOOP3("{context}", "{text}", "{disambiguation}"),\n'
                 .format(context=context, text=text, disambiguation=disambiguation))
@@ -350,9 +352,9 @@ def add_translatable_string(f: io.TextIOWrapper, context: str, text: str, disamb
         f.write('QT_TRANSLATE_NOOP("{context}", "{text}"),\n'
                 .format(context=context, text=text))
 
-def add_translatable_string_if_not_null(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = ''):
+def add_translatable_string_if_not_null(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = '', keyValuePairs: dict[str, str] = {}):
     if text and text != null:
-        add_translatable_string(f, context, text, disambiguation, comment)
+        add_translatable_string(f, context, text, disambiguation, comment, keyValuePairs)
 
 def disambiguation(instrumentId: str, nameType: str):
     return instrumentId + '|' + nameType
@@ -360,30 +362,32 @@ def disambiguation(instrumentId: str, nameType: str):
 # Write instrumentsxml.h file (used to generate translatable strings)
 with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
     # Header
-    f.write("/*\n\
- * SPDX-License-Identifier: GPL-3.0-only\n\
- * MuseScore-CLA-applies\n\
- *\n\
- * MuseScore\n\
- * Music Composition & Notation\n\
- *\n\
- * Copyright (C) 2022 MuseScore BVBA and others\n\
- *\n\
- * This program is free software: you can redistribute it and/or modify\n\
- * it under the terms of the GNU General Public License version 3 as\n\
- * published by the Free Software Foundation.\n\
- *\n\
- * This program is distributed in the hope that it will be useful,\n\
- * but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
- * GNU General Public License for more details.\n\
- *\n\
- * You should have received a copy of the GNU General Public License\n\
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.\n\
- */\n\
-\n")
+    f.write("""/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2022 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+""")
 
     # Templates
+    # TODO: generate based on categories.json
     f.write("// Templates\n")
     d = "../templates"
     # sort to get same ordering on all platforms
@@ -391,52 +395,59 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
         ofullPath = os.path.join(d, o)
         if os.path.isdir(ofullPath):
             templateCategory = o.split("-")[1].replace("_", " ")
-            add_translatable_string(f, 'Templates', templateCategory)
+            add_translatable_string(f, 'project/templatecategory', templateCategory)
 
             # sort to get same ordering on all platforms
             for t in sorted(os.listdir(ofullPath)):
                 if os.path.isdir(os.path.join(ofullPath, t)):
                     templateName = t.split("-")[1].replace("_", " ")
-                    add_translatable_string(f, 'Templates', templateName)
+                    add_translatable_string(f, 'project/template', templateName)
 
     f.write("\n")
     f.write("// Genres\n")
     for genre in genres.values():
-        add_translatable_string(f, 'InstrumentsXML', genre['name'])
+        add_translatable_string(f, 'engraving/instruments/genre', genre['name'])
 
     f.write("\n")
     f.write("// Families\n")
     for family in families.values():
-        add_translatable_string(f, 'InstrumentsXML', family['name'])
+        add_translatable_string(f, 'engraving/instruments/family', family['name'])
 
     f.write("\n")
     f.write("// Groups & Instruments\n")
+    instrumentNamesComment = 'Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names'
     for group in groups.values():
         f.write("\n// " + group['name'] + "\n")
-        add_translatable_string(f, 'InstrumentsXML', group['name'])
+        add_translatable_string(f, 'engraving/instruments/group', group['name'])
 
         for instrument in instruments[group['id']].values():
             f.write('\n')
             instrumentId = instrument['id']
 
-            add_translatable_string_if_not_null(f, 'InstrumentsXML', instrument['description'],
-                                                disambiguation(instrumentId, 'description'))
+            add_translatable_string_if_not_null(f, 'engraving/instruments', instrument['description'],
+                                                disambiguation(instrumentId, 'description'),
+                                                instrumentNamesComment)
 
             for nameType in ['trackName', 'longName', 'shortName']:
-                add_translatable_string_if_not_null(f, 'InstrumentsXML', instrument[nameType],
-                                                    disambiguation(instrumentId, nameType))
+                add_translatable_string_if_not_null(f, 'engraving/instruments', instrument[nameType],
+                                                    disambiguation(instrumentId, nameType),
+                                                    instrumentNamesComment)
                 
             if instrument['traitName'] != '[hide]':
-                add_translatable_string_if_not_null(f, 'InstrumentsXML', instrument['traitName'],
+                add_translatable_string_if_not_null(f, 'engraving/instruments', instrument['traitName'],
                                                     disambiguation(instrumentId, 'traitName'), 
-                                                    'traitName codes: * most common for instrument; () hide in score')
+                                                    instrumentNamesComment,
+                                                    { 'Trait-type': instrument['traitType'] })
 
             if instrumentId in channels:
                 for channel in channels[instrumentId].values():
-                    add_translatable_string_if_not_null(f, 'InstrumentsXML', channel['channel'],
-                                                        disambiguation(instrumentId, 'channel'))
+                    add_translatable_string_if_not_null(f, 'engraving/instruments', channel['channel'],
+                                                        disambiguation(instrumentId, 'channel'),
+                                                        instrumentNamesComment)
 
     # Orders
+    f.write("\n")
+    f.write("// Score orders\n")
     ordersTree = ET.parse('orders.xml')
     for order in ordersTree.getroot().findall('Order'):
-        add_translatable_string(f, 'OrderXML', order.find('name').text)
+        add_translatable_string(f, 'engraving/scoreorder', order.find('name').text)

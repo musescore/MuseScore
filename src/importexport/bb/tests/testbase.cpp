@@ -27,7 +27,7 @@
 
 #include "io/file.h"
 
-#include "config.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
 
@@ -142,6 +142,6 @@ void MTest::initMTest(const QString& rootDir)
     mscore->init();
 
     root = rootDir;
-    loadInstrumentTemplates(u":/data/instruments.xml");
+    loadInstrumentTemplates(":/data/instruments.xml");
 }
 }

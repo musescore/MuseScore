@@ -153,7 +153,7 @@ static TraitType traitTypeFromString(const String& str)
 void InstrumentGroup::read(XmlReader& e)
 {
     id       = e.attribute("id");
-    name     = mtrc("InstrumentsXML", e.attribute("name"));
+    name     = mtrc("engraving/instruments/group", e.attribute("name"));
     extended = e.intAttribute("extended", 0);
 
     while (e.readNextStartElement()) {
@@ -178,7 +178,7 @@ void InstrumentGroup::read(XmlReader& e)
                 LOGD("instrument reference not found <%s>", e.text().toUtf8().data());
             }
         } else if (tag == "name") {
-            name = mtrc("InstrumentsXML", e.readAsciiText().ascii());
+            name = mtrc("engraving/instruments/group", e.readAsciiText().ascii());
         } else if (tag == "extended") {
             extended = e.readInt();
         } else {
@@ -420,30 +420,13 @@ void InstrumentTemplate::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   write1
-//    output only translatable names
-//---------------------------------------------------------
-
-void InstrumentTemplate::write1(XmlWriter& xml) const
-{
-    xml.startElement("Instrument", { { "id", id } });
-    longNames.write(xml, "longName");
-    shortNames.write(xml, "shortName");
-    if (longNames.size() > 1) {
-        xml.tag("trackName", trackName);
-    }
-    xml.tag("description", description);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
-static String translateInstrumentName(const String& instrumentId, const String& nameType, const String& text)
+String translateInstrumentName(const String& instrumentId, const String& nameType, const String& text)
 {
     String disambiguation = instrumentId + u'|' + nameType;
-    return mtrc("InstrumentsXML", text, disambiguation);
+    return mtrc("engraving/instruments", text, disambiguation);
 }
 
 void InstrumentTemplate::read(XmlReader& e)
@@ -673,11 +656,11 @@ void clearInstrumentTemplates()
 //   loadInstrumentTemplates
 //---------------------------------------------------------
 
-bool loadInstrumentTemplates(const String& instrTemplates)
+bool loadInstrumentTemplates(const io::path_t& instrTemplatesPath)
 {
-    File qf(instrTemplates);
+    File qf(instrTemplatesPath);
     if (!qf.open(IODevice::ReadOnly)) {
-        LOGD("cannot load instrument templates at <%s>", muPrintable(instrTemplates));
+        LOGE() << "Could not load instrument templates from " << instrTemplatesPath;
         return false;
     }
 
@@ -897,18 +880,13 @@ void InstrumentGenre::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void InstrumentGenre::write1(XmlWriter& xml) const
-{
-    write(xml);
-}
-
 void InstrumentGenre::read(XmlReader& e)
 {
     id = e.attribute("id");
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            name = mtrc("InstrumentsXML", e.readText());
+            name = mtrc("engraving/instruments/genre", e.readText());
         } else {
             e.unknown();
         }
@@ -922,18 +900,13 @@ void InstrumentFamily::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void InstrumentFamily::write1(XmlWriter& xml) const
-{
-    write(xml);
-}
-
 void InstrumentFamily::read(XmlReader& e)
 {
     id = e.attribute("id");
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            name = mtrc("InstrumentsXML", e.readText());
+            name = mtrc("engraving/instruments/family", e.readText());
         } else {
             e.unknown();
         }
