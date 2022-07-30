@@ -30,7 +30,7 @@ import MuseScore.Shortcuts 1.0
 Dialog {
     id: root
 
-    signal applySequenceRequested(string newSequence, var shortcut2change, int conflictShortcutIndex)
+    signal applySequenceRequested(string newSequence, int conflictShortcutIndex, var shortcut2change)
 
     function clearConflicts() {
         model.clearConflicts()
@@ -54,7 +54,7 @@ Dialog {
         id: model
 
         onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
-            root.applySequenceRequested(newSequence, model.originAction, conflictShortcutIndex)
+            root.applySequenceRequested(newSequence, conflictShortcutIndex, model.originAction)
         }
     }
 

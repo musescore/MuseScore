@@ -215,7 +215,7 @@ StyledGridView {
     EditShortcutDialog {
         id: editShortcutDialog
 
-        onApplySequenceRequested: function(newSequence, shortcutAction, conflictShortcutIndex) {
+        onApplySequenceRequested: function(newSequence, conflictShortcutIndex, shortcutAction) {
             console.log("Applying to " + shortcutAction + " with " + newSequence)
             shortcutsModel.applySequenceToPalette(shortcutAction, newSequence, paletteView.currentCellIdx, conflictShortcutIndex)
             paletteController.applyPaletteCellProperties(paletteView.currentCellIdx)
