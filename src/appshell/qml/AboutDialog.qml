@@ -100,10 +100,9 @@ StyledDialogView {
                     let line1 = qsTrc("appshell/about", "Visit %1 for new versions and more information.")
                                 .arg(`<a href="${museScoreUrl.url}">${museScoreUrl.displayName}</a>`)
 
-                    //: The text between %1 and %2 will be a clickable link (same for %3 and %4)
-                    let line2 = qsTrc("appshell/about", "Get %1help%2 with the program or %3contribute%4 to its development.")
-                                .arg(`<a href="${aboutModel.museScoreForumUrl().url}">`).arg("</a>")
-                                .arg(`<a href="${aboutModel.museScoreContributionUrl().url}">`).arg("</a>")
+                    let line2 = qsTrc("appshell/about", "Get <a href=\"%1\">help</a> with the program or <a href=\"%2\">contribute</a> to its development.")
+                                .arg(aboutModel.museScoreForumUrl().url)
+                                .arg(aboutModel.museScoreContributionUrl().url)
 
                     return line1 + "<br>" + line2
                 }
@@ -114,9 +113,8 @@ StyledDialogView {
             StyledTextLabel {
                 Layout.fillWidth: true
 
-                //: The text between %1 and %2 will be a clickable link
-                text: qsTrc("appshell/about", "For privacy information, see our %1privacy policy%2.")
-                      .arg(`<a href="${aboutModel.museScorePrivacyPolicyUrl().url}">`).arg("</a>")
+                text: qsTrc("appshell/about", "For privacy information, see our <a href=\"%1\">privacy policy</a>.")
+                      .arg(aboutModel.museScorePrivacyPolicyUrl().url)
 
                 wrapMode: Text.WordWrap
                 maximumLineCount: 3
@@ -124,14 +122,9 @@ StyledDialogView {
 
             StyledTextLabel {
                 Layout.fillWidth: true
-                text: {
-                    //: The text between %1 and %2 will be a clickable link
-                    var message = qsTrc("appshell/about", "Copyright © 1999-2022 MuseScore BVBA and others.\nPublished under the %1GNU General Public License version 3%2.")
-                    return message
-                    .arg("<a href='https://www.gnu.org/licenses/gpl-3.0.html'>")
-                    .arg("</a>")
-                    .replace("\n", "<br>")
-                }
+                text: qsTrc("appshell/about", "Copyright © 1999-2022 MuseScore BVBA and others.\nPublished under the <a href=\"%1\">GNU General Public License version 3</a>.")
+                      .arg("https://www.gnu.org/licenses/gpl-3.0.html")
+                      .replace("\n", "<br>")
 
                 wrapMode: Text.WordWrap
                 maximumLineCount: 3

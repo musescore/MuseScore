@@ -55,9 +55,8 @@ BaseSection {
     StyledTextLabel {
         width: parent.width
 
-        //: The text between %1 and %2 will be a clickable link
-        text: qsTrc("appshell/preferences", "Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our %1privacy policy%2 for more info.")
-              .arg(`<a href="${root.museScorePrivacyPolicyUrl}">`).arg("</a>")
+        text: qsTrc("appshell/preferences", "Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our <a href=\"%1\">privacy policy</a> for more info.")
+              .arg(root.museScorePrivacyPolicyUrl)
               .replace("\n", "<br>")
 
         horizontalAlignment: Qt.AlignLeft
