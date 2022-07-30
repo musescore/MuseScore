@@ -6,3 +6,9 @@ file_filter = share/locale/musescore_<lang>.ts
 source_file = share/locale/musescore_en.ts
 source_lang = en
 type        = QT
+
+[o:musescore:p:musescore:r:instruments]
+file_filter = share/locale/instruments_<lang>.ts
+source_file = share/locale/instruments_en.ts
+source_lang = en
+type        = QT
