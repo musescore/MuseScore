@@ -76,7 +76,7 @@ RowLayout {
 
         minWidth: root.buttonMinWidth
 
-        text: qsTrc("shortcuts", "Clear")
+        text: qsTrc("global", "Clear")
 
         navigation.name: "ClearShortcutsButton"
         navigation.panel: root.navigation
