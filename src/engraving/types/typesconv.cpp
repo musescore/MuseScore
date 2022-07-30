@@ -35,7 +35,7 @@ struct Item
 {
     T type;
     AsciiStringView xml;
-    TranslatableString userName = {};
+    TranslatableString userName;
 };
 
 template<typename T, typename C>
