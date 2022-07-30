@@ -544,10 +544,12 @@ bool UserPaletteController::connectOnPaletteCellConfigChange(const QModelIndex& 
                                                               [this, srcIndex, cell](
                                                                   const IPaletteConfiguration::PaletteCellConfig& config) {
         modifyCellfromConfig(cell, config);
-
+        LOGE() << "Modifying:" << cell->id;
         _userPalette->itemDataChanged(srcIndex);
         _userPalette->itemDataChanged(srcIndex.parent());
     });
+
+
     return true;
 }
 

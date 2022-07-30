@@ -301,7 +301,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
     if (shortcuts == m_shortcuts) {
         return true;
     }
-
+    LOGE() << "Back at set shortcuts??";
     ShortcutList filtered = filterAndUpdateAdditionalShortcuts(shortcuts);
     ShortcutList needToWrite;
     ShortcutList PaletteShortcuts;
@@ -318,7 +318,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
     }
 
     bool ok = writeToFile(needToWrite, configuration()->shortcutsUserAppDataPath());
-
+    int ctr = 0;
     for (auto cell : mu::palette::PaletteCell::cells) {
         //LOGE() << "Name of Palette cell: " << cell->name << " whose action is: " << cell->action;
 
@@ -328,7 +328,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
         config.xOffset = cell->xoffset;
         config.yOffset = cell->yoffset;
         config.scale = cell->mag;
-
+        
         for (auto shrtct : PaletteShortcuts) {
             std::string cellId = "";
 
@@ -338,11 +338,20 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
                 }
                 cellId += shrtct.action[i];
             }
+
             if (cell->id.toStdString() != cellId) {
                 continue;
             }
 
+            if (cell->shortcut.sequencesAsString() == shrtct.sequencesAsString()) {
+                break;
+            }
+
             config.shortcut = shrtct;
+            if (!shrtct.sequencesAsString().empty()) {
+                LOGE() << "Shortcut before setting at palette cell:" << shrtct.sequencesAsString();
+            }
+            LOGE() << "Modifying from register (" << ctr++ << "):" << cell->id;
             paletteConfiguration()->setPaletteCellConfig(cell->id, config);
         }
     }

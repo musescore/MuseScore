@@ -510,6 +510,12 @@ StyledGridView {
             property bool internalDrag: false
             property bool dragCopy: false
 
+            Component.onCompleted: {
+                if(!paletteView.paletteController.connectOnPaletteCellConfigChange(modelIndex)) {
+                    console.log("Prepare failed")
+                }
+            }
+
             isSelected: (paletteView.selectionModel && paletteView.selectionModel.hasSelection) ? paletteView.isSelected(modelIndex) : false // hasSelection is to trigger property bindings if selection changes, see https://doc.qt.io/qt-5/qml-qtqml-models-itemselectionmodel.html#hasSelection-prop
 
             width: paletteView.cellWidth
@@ -649,19 +655,19 @@ StyledGridView {
                     switch(itemId) {
                     case "assign":
                         paletteView.currentCellIdx = contextMenu.modelIndex
-                        if(!paletteView.paletteController.connectOnPaletteCellConfigChange(contextMenu.modelIndex)) {
-                            console.log("Prepare failed")
-                            break
-                        }
+                        //                        if(!paletteView.paletteController.connectOnPaletteCellConfigChange(contextMenu.modelIndex)) {
+                        //                            console.log("Prepare failed")
+                        //                            break
+                        //                        }
 
                         console.log("Adding shortcut for: " + model.cellAction + " with ID:" + model.cellID)
                         editShortcutDialog.startEditShortcut(shortcutsModel.getShortcut(model.cellAction))
                         break
                     case "delshortcut":
-                        if(!paletteView.paletteController.connectOnPaletteCellConfigChange(contextMenu.modelIndex)) {
-                            console.log("Prepare failed")
-                            break
-                        }
+                        //                        if(!paletteView.paletteController.connectOnPaletteCellConfigChange(contextMenu.modelIndex)) {
+                        //                            console.log("Prepare failed")
+                        //                            break
+                        //                        }
 
                         shortcutsModel.clearSequenceOfShortcut(model.cellAction)
                         shortcutsModel.apply()

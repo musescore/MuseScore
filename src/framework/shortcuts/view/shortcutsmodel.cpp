@@ -232,7 +232,8 @@ void ShortcutsModel::applySequenceToCurrentShortcut(const QString& newSequence, 
 
     int row = currIndex.row();
     m_shortcuts[row].sequences = Shortcut::sequencesFromString(newSequence.toStdString());
-
+    notifyAboutShortcutChanged(index(row));
+    LOGE() << "Conflict at: " << conflictShortcutIndex;
     if (conflictShortcutIndex >= 0 && conflictShortcutIndex < m_shortcuts.size()) {
         m_shortcuts[conflictShortcutIndex].clear();
         notifyAboutShortcutChanged(index(conflictShortcutIndex));
@@ -259,6 +260,7 @@ void ShortcutsModel::applySequenceToPalette(QString action, const QString& newSe
     LOGE() << "after size:" << m_shortcuts.size();
 
     if (conflictShortcutIndex >= 0 && conflictShortcutIndex < m_shortcuts.size()) {
+
         m_shortcuts[conflictShortcutIndex].sequences.clear();
         notifyAboutShortcutChanged(index(conflictShortcutIndex));
     }
