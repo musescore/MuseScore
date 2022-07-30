@@ -27,7 +27,7 @@
 #include "fonts/fontsmodule.h"
 #include "draw/drawmodule.h"
 
-#include "libmscore/masterscore.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
 #include "mocks/engravingconfigurationmock.h"
@@ -54,7 +54,7 @@ static mu::testing::SuiteEnvironment engraving_se(
     mu::engraving::MScore* mscore = new mu::engraving::MScore();
     mscore->init();
 
-    mu::engraving::loadInstrumentTemplates(u":/data/instruments.xml");
+    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 
     std::shared_ptr<testing::NiceMock<mu::engraving::EngravingConfigurationMock> > configurator
         = std::make_shared<testing::NiceMock<mu::engraving::EngravingConfigurationMock> >();

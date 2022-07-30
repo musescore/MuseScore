@@ -25,6 +25,8 @@
 
 #include <list>
 
+#include "io/path.h"
+
 #include "mscore.h"
 #include "instrument.h"
 #include "clef.h"
@@ -50,7 +52,6 @@ public:
 
     InstrumentGenre() {}
     void write(XmlWriter& xml) const;
-    void write1(XmlWriter& xml) const;
     void read(XmlReader&);
 };
 
@@ -66,7 +67,6 @@ public:
 
     InstrumentFamily() {}
     void write(XmlWriter& xml) const;
-    void write1(XmlWriter& xml) const;
     void read(XmlReader&);
 };
 
@@ -129,7 +129,6 @@ public:
     bool isValid() const;
 
     void write(XmlWriter& xml) const;
-    void write1(XmlWriter& xml) const;
     void read(XmlReader&);
     ClefTypeList clefType(staff_idx_t staffIdx) const;
     String familyId() const;
@@ -175,7 +174,7 @@ extern std::vector<MidiArticulation> midiArticulations;
 extern std::vector<InstrumentGroup*> instrumentGroups;
 extern std::vector<ScoreOrder> instrumentOrders;
 extern void clearInstrumentTemplates();
-extern bool loadInstrumentTemplates(const String& instrTemplates);
+extern bool loadInstrumentTemplates(const io::path_t& instrTemplatesPath);
 extern InstrumentTemplate* searchTemplate(const String& name);
 extern InstrumentIndex searchTemplateIndexForTrackName(const String& trackName);
 extern InstrumentIndex searchTemplateIndexForId(const String& id);
@@ -185,5 +184,6 @@ extern InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const b
 extern InstrumentTemplate* guessTemplateByNameData(const std::list<String>& nameDataList);
 extern InstrumentGroup* searchInstrumentGroup(const String& name);
 extern ClefType defaultClef(int patch);
+extern String translateInstrumentName(const String& instrumentId, const String& nameType, const String& text);
 } // namespace mu::engraving
 #endif
