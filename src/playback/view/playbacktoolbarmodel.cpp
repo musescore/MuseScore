@@ -141,17 +141,6 @@ bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionC
     return PlaybackUiActions::loopBoundaryActions().contains(actionCode);
 }
 
-MenuItem* PlaybackToolBarModel::makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode)
-{
-    MenuItem* item = makeMenuItem(actionCode);
-
-    UiAction action = item->action();
-    action.title = action.description;
-    item->setAction(action);
-
-    return item;
-}
-
 bool PlaybackToolBarModel::isPlayAllowed() const
 {
     return playbackController()->isPlayAllowed();

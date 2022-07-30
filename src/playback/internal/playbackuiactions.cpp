@@ -72,7 +72,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
     UiAction("midi-on",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Enable ‘MIDI input’"),
+             TranslatableString("action", "Enable MIDI input"),
              TranslatableString("action", "Toggle MIDI input"),
              IconCode::Code::MIDI_INPUT,
              Checkable::Yes
