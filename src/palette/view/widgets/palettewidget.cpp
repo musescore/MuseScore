@@ -1185,6 +1185,7 @@ void PaletteWidget::read(XmlReader& e)
 
 void PaletteWidget::write(XmlWriter& xml) const
 {
+    LOGE() << "Here3";
     m_palette->write(xml);
 }
 

@@ -21,7 +21,7 @@
  */
 
 #include "paletteprovider.h"
-
+#include "io/buffer.h"
 #include <QFileDialog>
 #include <QStandardItemModel>
 #include <QJsonDocument>
@@ -31,7 +31,7 @@
 
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
-
+#include "engraving/rw/xml.h"
 #include "palettecreator.h"
 #include "view/widgets/keyedit.h"
 #include "view/widgets/timedialog.h"
@@ -45,7 +45,7 @@
 using namespace mu::palette;
 using namespace mu::framework;
 using namespace mu::engraving;
-
+using namespace mu::io;
 // ========================================================
 // PaletteElementEditor
 // ========================================================
@@ -541,11 +541,23 @@ bool UserPaletteController::connectOnPaletteCellConfigChange(const QModelIndex& 
     }
 
     configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
-                                                              [this, srcIndex, cell](
+                                                              [this, cell](
                                                                   const IPaletteConfiguration::PaletteCellConfig& config) {
         modifyCellfromConfig(cell, config);
-        _userPalette->itemDataChanged(srcIndex);
-        _userPalette->itemDataChanged(srcIndex.parent());
+        /*_userPalette->itemDataChanged(srcIndex);
+        _userPalette->itemDataChanged(srcIndex.parent());*/
+        PaletteTreePtr tree = paletteProvider()->userPaletteTree();
+
+        QByteArray newData;
+        LOGE() << "Here221";
+
+        Buffer buf;
+        buf.open(IODevice::WriteOnly);
+        mu::engraving::XmlWriter writer(&buf);
+        LOGE() << "Here22DIRECT";
+        tree->write(writer);
+        newData = buf.data().toQByteArray();
+        workspacesDataProvider()->setRawData(mu::workspace::DataKey::Palettes, newData);
     });
 
     return true;
@@ -986,7 +998,7 @@ bool PaletteProvider::savePalette(const QModelIndex& index)
     if (!pp) {
         return false;
     }
-
+    LOGE() << "Saving palette:" << srcIndex.row();
     const QString path = getPaletteFilename(/* load? */ false, pp->translatedName());
 
     if (path.isEmpty()) {
@@ -1059,6 +1071,7 @@ void PaletteProvider::write(XmlWriter& xml) const
         return;
     }
     if (const PaletteTree* tree = m_userPaletteModel->paletteTree()) {
+        LOGE() << "Here21";
         tree->write(xml);
     }
 }

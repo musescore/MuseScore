@@ -36,6 +36,7 @@
 #include "iinteractive.h"
 #include "ipaletteconfiguration.h"
 #include "context/iglobalcontext.h"
+#include "workspace/iworkspacesdataprovider.h"
 
 namespace mu::palette {
 class AbstractPaletteController;
@@ -142,6 +143,8 @@ class UserPaletteController : public AbstractPaletteController, public async::As
     INJECT(palette, context::IGlobalContext, globalContext)
     INJECT(palette, framework::IInteractive, interactive)
     INJECT(palette, IPaletteConfiguration, configuration)
+    INJECT(palette, workspace::IWorkspacesDataProvider, workspacesDataProvider)
+    INJECT(palette, IPaletteProvider, paletteProvider)
 
     QAbstractItemModel* _model;
     PaletteTreeModel* _userPalette;
@@ -215,7 +218,7 @@ class PaletteProvider : public QObject, public IPaletteProvider, public async::A
     INJECT(palette, framework::IInteractive, interactive)
     INJECT(palette, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
- 
+
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
     Q_PROPERTY(mu::palette::AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
 
