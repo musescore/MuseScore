@@ -196,7 +196,7 @@ private:
         float patternUnitRatio = PITCH_LEVEL_STEP / static_cast<float>(ONE_PERCENT);
 
         for (auto& pair : m_pitchCtx.pitchCurve) {
-            pair.second = RealRound(static_cast<float>(pair.second) * ratio * patternUnitRatio, 0);
+            pair.second = static_cast<pitch_level_t>(RealRound(static_cast<float>(pair.second) * ratio * patternUnitRatio, 0));
         }
     }
 
@@ -225,7 +225,7 @@ private:
         float ratio = static_cast<float>(actualDynamicLevel) / static_cast<float>(articulationDynamicLevel);
 
         for (auto& pair : m_expressionCtx.expressionCurve) {
-            pair.second = RealRound(static_cast<float>(pair.second) * ratio, 0);
+            pair.second = static_cast<pitch_level_t>(RealRound(static_cast<float>(pair.second) * ratio, 0));
         }
     }
 

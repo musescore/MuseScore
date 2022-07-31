@@ -170,7 +170,7 @@ void DrumsetPalette::drumNoteSelected(int val)
     const Chord* ch = mu::engraving::toChord(element.get());
     const Note* note = ch->downNote();
 
-    int track = (noteInput->state().currentTrack / mu::engraving::VOICES) * mu::engraving::VOICES + element->track();
+    track_idx_t track = (noteInput->state().currentTrack / mu::engraving::VOICES) * mu::engraving::VOICES + element->track();
 
     noteInput->setCurrentTrack(track);
     noteInput->setDrumNote(note->pitch());

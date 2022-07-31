@@ -174,7 +174,7 @@ TEST_F(Global_AllocatorTests, Many_NewCleanup)
     //! DO Create Items (more then one block size)
     std::vector<ItemBase*> items;
     for (size_t i = 0; i < 10; ++i) {
-        items.push_back(new Item8(i));
+        items.push_back(new Item8(static_cast<uint8_t>(i)));
     }
 
     //! CHECK
