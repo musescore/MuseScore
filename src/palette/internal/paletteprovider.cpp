@@ -699,22 +699,41 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
     actionToItem.clear();
 
     int ctr = 0;
-    for (int i = 0; i < m_mainPalette->rowCount(); i++) {
-        for (int j = 0; j < m_mainPalette->rowCount(m_mainPalette->index(i, 0)); j++) {
-            auto it = m_mainPalette->index(j, 0, m_mainPalette->index(i, 0));
-            const PaletteCell* cell = m_mainPalette->data(it, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
-            if (!cell || !cell->element) {
-                continue;
-            }
-
-            QString ac_name = cell->action;
-            ctr++;
-            actionToItem[ac_name] = cell->element.get();
-            dispatcher()->reg(this, ac_name.toStdString(), [this, ac_name]() {
-                LOGE() << "You are trying to call: " << ac_name;
-                globalContext()->currentNotation()->interaction()->applyPaletteElement(actionToItem[ac_name]);
-            });
+    for (PaletteCell* cell: PaletteCell::cells) {
+        if (!cell || !cell->element) {
+            continue;
         }
+
+        configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
+                                                                  [this, cell](
+                                                                      const IPaletteConfiguration::PaletteCellConfig& config) {
+            cell->name = config.name;
+            cell->mag = config.scale;
+            cell->drawStaff = config.drawStaff;
+            cell->xoffset = config.xOffset;
+            cell->yoffset = config.yOffset;
+            cell->shortcut = config.shortcut;
+
+            PaletteTreePtr tree = userPaletteTree();
+
+            QByteArray newData;
+            LOGE() << "Here221";
+
+            Buffer buf;
+            buf.open(IODevice::WriteOnly);
+            mu::engraving::XmlWriter writer(&buf);
+            LOGE() << "Here22DIRECT";
+            tree->write(writer);
+            newData = buf.data().toQByteArray();
+            workspacesDataProvider()->setRawData(mu::workspace::DataKey::Palettes, newData);
+        });
+        QString ac_name = cell->action;
+        ctr++;
+        actionToItem[ac_name] = cell->element.get();
+        dispatcher()->reg(this, ac_name.toStdString(), [this, ac_name]() {
+            LOGE() << "You are trying to call: " << ac_name;
+            globalContext()->currentNotation()->interaction()->applyPaletteElement(actionToItem[ac_name]);
+        });
     }
 
     LOGE() << ctr;

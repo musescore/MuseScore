@@ -218,7 +218,7 @@ class PaletteProvider : public QObject, public IPaletteProvider, public async::A
     INJECT(palette, framework::IInteractive, interactive)
     INJECT(palette, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
-
+    INJECT(palette, workspace::IWorkspacesDataProvider, workspacesDataProvider)
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
     Q_PROPERTY(mu::palette::AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
 
