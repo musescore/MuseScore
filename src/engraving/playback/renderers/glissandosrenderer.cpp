@@ -67,7 +67,7 @@ void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const Renderi
         NominalNoteCtx noteCtx(note, context);
         noteCtx.duration = durationStep;
         noteCtx.timestamp += i * durationStep;
-        noteCtx.pitchLevel += i * pitchStep;
+        noteCtx.pitchLevel += static_cast<pitch_level_t>(i) * pitchStep;
 
         updateArticulationBoundaries(ArticulationType::DiscreteGlissando,
                                      noteCtx.timestamp,

@@ -419,7 +419,7 @@ void GuitarPro6::readGPX(ByteArray* buffer)
                 int offs = readBitsReversed(buffer, bits);
                 int size = readBitsReversed(buffer, bits);
 
-                int pos = (bcfsBuffer.size() - offs);
+                int pos = (static_cast<int>(bcfsBuffer.size()) - offs);
                 for (int i = 0; i < (size > offs ? offs : size); i++) {
                     bcfsBuffer.insert(positionCounter, bcfsBuffer[pos + i]);
                     positionCounter++;
@@ -438,8 +438,8 @@ void GuitarPro6::readGPX(ByteArray* buffer)
         // this is an uncompressed file - strip the header off
         *buffer = buffer->right(buffer->size() - sizeof(int));
         size_t sectorSize = 0x1000;
-        size_t offset     = 0;
-        while ((offset = (offset + sectorSize)) + 3 < buffer->size()) {
+        int offset        = 0;
+        while ((offset = (offset + static_cast<int>(sectorSize))) + 3 < static_cast<int>(buffer->size())) {
             int newInt = readInteger(buffer, offset);
             if (newInt == 2) {
                 int indexFileName = (offset + 4);
@@ -451,14 +451,14 @@ void GuitarPro6::readGPX(ByteArray* buffer)
                 int blockCount        = 0;
                 ByteArray* fileBytes = new ByteArray();
                 while ((block = (readInteger(buffer, (indexOfBlock + (4 * (blockCount++)))))) != 0) {
-                    fileBytes->push_back(getBytes(buffer, (offset = (block * sectorSize)), sectorSize));
+                    fileBytes->push_back(getBytes(buffer, (offset = (block * static_cast<int>(sectorSize))), static_cast<int>(sectorSize)));
                 }
                 // get file information and read the file
                 size_t fileSize = readInteger(buffer, indexFileSize);
                 if (fileBytes->size() >= fileSize) {
                     ByteArray filenameBytes = readString(buffer, indexFileName, 127);
                     const char* filename = filenameBytes.constChar();
-                    ByteArray data = getBytes(fileBytes, 0, fileSize);
+                    ByteArray data = getBytes(fileBytes, 0, static_cast<int>(fileSize));
                     parseFile(filename, &data);
                 }
                 delete fileBytes;

@@ -114,7 +114,7 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
 
     int durationTicks = realized.getActualDuration(positionTick).ticks();
     duration_t duration = durationFromTicks(bps.val, durationTicks);
-    voice_layer_idx_t voiceIdx = chordSymbol->voice();
+    voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int octave = playingOctave(it->first, it->second);

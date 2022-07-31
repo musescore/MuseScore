@@ -634,7 +634,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
             _beat_counter = 0;
-            readMeasure(measure, staffIdx, &tuplets[0], mixChange);
+            readMeasure(measure, static_cast<int>(staffIdx), &tuplets[0], mixChange);
             if (!(((bar == (measures - 1)) && (staffIdx == (staves - 1))))) {
                 /*int a = */
                 readChar();
@@ -777,7 +777,7 @@ bool GuitarPro5::read(IODevice* io)
 
     for (size_t str = 0; str < 7; ++str) {
         for (size_t staff = 0; staff < staves; ++staff) {
-            dead_end[{ staff, str }] = true;
+            dead_end[{ static_cast<int>(staff), static_cast<int>(str) }] = true;
         }
     }
 
