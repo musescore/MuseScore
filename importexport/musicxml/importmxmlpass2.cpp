@@ -5128,16 +5128,19 @@ static Chord* findOrCreateChord(Score* score, Measure* m,
 NoteType graceNoteType(const TDuration duration, const bool slash)
       {
       NoteType nt = NoteType::APPOGGIATURA;
-      if (slash)
+      if (slash) {
             nt = NoteType::ACCIACCATURA;
-      if (duration.type() == TDuration::DurationType::V_QUARTER) {
-            nt = NoteType::GRACE4;
             }
-      else if (duration.type() == TDuration::DurationType::V_16TH) {
-            nt = NoteType::GRACE16;
-            }
-      else if (duration.type() == TDuration::DurationType::V_32ND) {
-            nt = NoteType::GRACE32;
+      else {
+            if (duration.type() == TDuration::DurationType::V_QUARTER) {
+                  nt = NoteType::GRACE4;
+                  }
+            else if (duration.type() == TDuration::DurationType::V_16TH) {
+                  nt = NoteType::GRACE16;
+                  }
+            else if (duration.type() == TDuration::DurationType::V_32ND) {
+                  nt = NoteType::GRACE32;
+                  }
             }
       return nt;
       }

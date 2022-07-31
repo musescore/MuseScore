@@ -133,6 +133,7 @@ private slots:
       void fretDiagramLayoutOrder() { mxmlImportTestRef("testFretDiagramLayoutOrder"); }
       void grace1() { mxmlIoTest("testGrace1"); }
       void grace2() { mxmlIoTest("testGrace2"); }
+      void grace3() { mxmlIoTest("testGrace3"); }
       void hairpinDynamics() { mxmlMscxExportTestRef("testHairpinDynamics"); }
       void harmony1() { mxmlIoTest("testHarmony1"); }
       void harmony2() { mxmlIoTest("testHarmony2"); }
