@@ -882,7 +882,6 @@ void Slur::slurPos(SlurPos* sp)
     const double stemSideInset = 0.5;
     const double stemOffsetX = 0.35;
     const double beamClearance = 0.35;
-    const double hookClearanceX = 0.3;
     const double beamAnchorInset = 0.15;
     const double straightStemXOffset = 0.5; // how far down a straight stem a slur attaches (percent)
     const double minOffset = 0.2;
