@@ -49,6 +49,8 @@ public:
     virtual void addExcerpts(const ExcerptNotationList& excerpts) = 0;
     virtual void removeExcerpts(const ExcerptNotationList& excerpts) = 0;
 
+    virtual std::optional<size_t> findExcerptIndex(INotationPtr excerpt) const = 0;
+
     virtual void setExcerptIsOpen(const INotationPtr excerptNotation, bool opened) = 0;
 
     virtual INotationPartsPtr parts() const = 0;

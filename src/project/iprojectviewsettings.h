@@ -33,8 +33,12 @@ class IProjectViewSettings
 public:
     virtual ~IProjectViewSettings() = default;
 
-    virtual notation::ViewMode notationViewMode() const = 0;
-    virtual void setNotationViewMode(const notation::ViewMode& mode) = 0;
+    virtual notation::ViewMode masterNotationViewMode() const = 0;
+    virtual void setMasterNotationViewMode(const notation::ViewMode& mode) = 0;
+
+    virtual notation::ViewMode excerptViewMode(size_t excerptIndex) const = 0;
+    virtual void setExcerptViewMode(size_t excerptIndex, const notation::ViewMode& mode) = 0;
+    virtual void removeExcerpt(size_t excerptIndex) = 0;
 
     virtual mu::ValNt<bool> needSave() const = 0;
 };

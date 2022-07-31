@@ -62,6 +62,8 @@ public:
     void addExcerpts(const ExcerptNotationList& excerpts) override;
     void removeExcerpts(const ExcerptNotationList& excerpts) override;
 
+    std::optional<size_t> findExcerptIndex(INotationPtr excerpt) const override;
+
     void setExcerptIsOpen(const INotationPtr excerptNotation, bool open) override;
 
     INotationPartsPtr parts() const override;

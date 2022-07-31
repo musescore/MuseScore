@@ -24,6 +24,7 @@
 
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 #include "types/bytearray.h"
 
@@ -31,6 +32,8 @@ using namespace mu;
 using namespace mu::project;
 using namespace mu::engraving;
 using namespace mu::notation;
+
+#define DEFAULT_VIEW_MODE ViewMode::PAGE
 
 static ViewMode viewModeFromString(const QString& str)
 {
@@ -54,7 +57,7 @@ static ViewMode viewModeFromString(const QString& str)
         return ViewMode::HORIZONTAL_FIXED;
     }
 
-    return ViewMode::PAGE;
+    return DEFAULT_VIEW_MODE;
 }
 
 static QString viewModeToString(ViewMode m)
@@ -75,15 +78,38 @@ Ret ProjectViewSettings::read(const MscReader& reader)
     QJsonObject rootObj = QJsonDocument::fromJson(json.toQByteArrayNoCopy()).object();
     QJsonObject notationObj = rootObj.value("notation").toObject();
 
-    m_viewMode = viewModeFromString(notationObj.value("viewMode").toString());
+    m_masterViewMode = viewModeFromString(notationObj.value("viewMode").toString());
+
+    if (notationObj.contains("excerpts")) {
+        QJsonArray excerptsArray = notationObj.value("excerpts").toArray();
+
+        m_excerptsViewModes.clear();
+        m_excerptsViewModes.reserve(excerptsArray.size());
+
+        for (const QJsonValue& excerptVal : excerptsArray) {
+            QJsonObject excerptObj = excerptVal.toObject();
+            m_excerptsViewModes.push_back(viewModeFromString(excerptObj.value("viewMode").toString()));
+        }
+    }
 
     return make_ret(Ret::Code::Ok);
 }
 
 Ret ProjectViewSettings::write(MscWriter& writer)
 {
+    QJsonArray excerptsArray;
+
+    for (const notation::ViewMode& mode : m_excerptsViewModes) {
+        // Use an object to allow to store more values in the future if needed
+        QJsonObject excerptObj;
+        excerptObj["viewMode"] = viewModeToString(mode);
+
+        excerptsArray.append(excerptObj);
+    }
+
     QJsonObject notationObj;
-    notationObj["viewMode"] = viewModeToString(m_viewMode);
+    notationObj["viewMode"] = viewModeToString(m_masterViewMode);
+    notationObj["excerpts"] = excerptsArray;
 
     QJsonObject rootObj;
     rootObj["notation"] = notationObj;
@@ -98,7 +124,8 @@ Ret ProjectViewSettings::write(MscWriter& writer)
 
 void ProjectViewSettings::makeDefault()
 {
-    m_viewMode = ViewMode::PAGE;
+    m_masterViewMode = DEFAULT_VIEW_MODE;
+    m_excerptsViewModes.clear();
 }
 
 void ProjectViewSettings::setNeedSave(bool needSave)
@@ -111,19 +138,56 @@ void ProjectViewSettings::setNeedSave(bool needSave)
     m_needSaveNotification.notify();
 }
 
-ViewMode ProjectViewSettings::notationViewMode() const
+ViewMode ProjectViewSettings::masterNotationViewMode() const
 {
-    return m_viewMode;
+    return m_masterViewMode;
 }
 
-void ProjectViewSettings::setNotationViewMode(const ViewMode& mode)
+void ProjectViewSettings::setMasterNotationViewMode(const ViewMode& mode)
 {
-    if (m_viewMode == mode) {
+    if (m_masterViewMode == mode) {
         return;
     }
 
-    m_viewMode = mode;
+    m_masterViewMode = mode;
     setNeedSave(true);
+}
+
+ViewMode ProjectViewSettings::excerptViewMode(size_t excerptIndex) const
+{
+    if (excerptIndex >= m_excerptsViewModes.size()) {
+        return DEFAULT_VIEW_MODE;
+    }
+
+    return m_excerptsViewModes[excerptIndex];
+}
+
+void ProjectViewSettings::setExcerptViewMode(size_t excerptIndex, const ViewMode& mode)
+{
+    // Avoid big resize if the index is too big by mistake
+    assert(excerptIndex < 10000);
+
+    if (excerptIndex >= m_excerptsViewModes.size()) {
+        m_excerptsViewModes.resize(excerptIndex + 1, DEFAULT_VIEW_MODE);
+    }
+
+    if (m_excerptsViewModes[excerptIndex] == mode) {
+        return;
+    }
+
+    m_excerptsViewModes[excerptIndex] = mode;
+    setNeedSave(true);
+}
+
+void ProjectViewSettings::removeExcerpt(size_t excerptIndex)
+{
+    if (excerptIndex >= m_excerptsViewModes.size()) {
+        return;
+    }
+
+    // Since the excerpt view mode use the index of the excerpt in the master score,
+    // if a excerpt is removed, we need to shift the index of the following excerpts.
+    m_excerptsViewModes.erase(m_excerptsViewModes.begin() + excerptIndex);
 }
 
 mu::ValNt<bool> ProjectViewSettings::needSave() const

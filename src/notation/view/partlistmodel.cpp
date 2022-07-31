@@ -156,6 +156,7 @@ void PartListModel::doRemovePart(int partIndex)
     beginRemoveRows(QModelIndex(), partIndex, partIndex);
 
     masterNotation()->removeExcerpts({ m_excerpts[partIndex] });
+    context()->currentProject()->viewSettings()->removeExcerpt(partIndex);
     m_excerpts.removeAt(partIndex);
 
     endRemoveRows();

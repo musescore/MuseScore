@@ -222,7 +222,22 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     if (publishMode()) {
         m_notation->setViewMode(ViewMode::PAGE);
     } else {
-        m_notation->setViewMode(globalContext()->currentProject()->viewSettings()->notationViewMode());
+        auto viewSettings = globalContext()->currentProject()->viewSettings();
+
+        const IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+
+        if (masterNotation->notation() == m_notation) {
+            m_notation->setViewMode(viewSettings->masterNotationViewMode());
+        } else {
+            const std::optional<size_t> excerptIndex = masterNotation->findExcerptIndex(m_notation);
+
+            // If the excerpt was found, use its index for independent view mode
+            if (excerptIndex.has_value()) {
+                m_notation->setViewMode(viewSettings->excerptViewMode(excerptIndex.value()));
+            }
+
+            // If nothing found, leave it as is
+        }
     }
 
     INotationInteractionPtr interaction = notationInteraction();

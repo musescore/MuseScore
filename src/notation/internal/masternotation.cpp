@@ -480,6 +480,17 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
     doSetExcerpts(m_excerpts.val);
 }
 
+std::optional<size_t> MasterNotation::findExcerptIndex(INotationPtr excerpt) const
+{
+    for (size_t i = 0; i < m_excerpts.val.size(); ++i) {
+        if (m_excerpts.val[i]->notation() == excerpt) {
+            return i;
+        }
+    }
+
+    return std::nullopt;
+}
+
 void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool open)
 {
     excerptNotation->setIsOpen(open);

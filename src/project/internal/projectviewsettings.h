@@ -33,8 +33,12 @@ namespace mu::project {
 class ProjectViewSettings : public IProjectViewSettings
 {
 public:
-    notation::ViewMode notationViewMode() const override;
-    void setNotationViewMode(const notation::ViewMode& mode) override;
+    notation::ViewMode masterNotationViewMode() const override;
+    void setMasterNotationViewMode(const notation::ViewMode& mode) override;
+
+    notation::ViewMode excerptViewMode(size_t excerptIndex) const override;
+    void setExcerptViewMode(size_t excerptIndex, const notation::ViewMode& mode) override;
+    void removeExcerpt(size_t excerptIndex) override;
 
     mu::ValNt<bool> needSave() const override;
 
@@ -50,7 +54,8 @@ private:
 
     void setNeedSave(bool needSave);
 
-    notation::ViewMode m_viewMode = notation::ViewMode::PAGE;
+    notation::ViewMode m_masterViewMode = notation::ViewMode::PAGE;
+    std::vector<notation::ViewMode> m_excerptsViewModes;
 
     bool m_needSave = false;
     async::Notification m_needSaveNotification;

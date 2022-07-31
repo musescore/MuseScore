@@ -275,14 +275,29 @@ int NotationViewInputController::zoomPercentageFromScaling(qreal scaling) const
 
 void NotationViewInputController::setViewMode(const ViewMode& viewMode)
 {
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+    notation->setViewMode(viewMode);
+
     auto project = globalContext()->currentProject();
     if (project) {
-        project->viewSettings()->setNotationViewMode(viewMode);
-    }
+        auto masterNotation = globalContext()->currentMasterNotation();
 
-    auto notation = globalContext()->currentNotation();
-    if (notation) {
-        notation->setViewMode(viewMode);
+        if (notation == masterNotation->notation()) {
+            project->viewSettings()->setMasterNotationViewMode(viewMode);
+        }
+        // Excerpt: find index to save independent view mode
+        else {
+            auto excerptIndex = masterNotation->findExcerptIndex(notation);
+
+            if (excerptIndex.has_value()) {
+                project->viewSettings()->setExcerptViewMode(excerptIndex.value(), viewMode);
+            }
+
+            // Ignore otherwise: change current view but don't save it
+        }
     }
 }
 
