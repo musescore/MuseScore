@@ -512,8 +512,8 @@ String TempoText::accessibleInfo() const
             //: %1 and %2 are note durations. If your language does not have different terms
             //: for "quarter note" and "quarter" (for example), or if the translations for
             //: the durations as separate strings are not suitable to be used as adjectives
-            //: here, //: translate "%1 note" with "%1" and "%2 note" with "%2", so that
-            //: just the duration will be shown.
+            //: here, translate "%1 note" with "%1" and "%2 note" with "%2", so that just the
+            //: duration will be shown.
             info = mtrc("engraving", "%1 note = %2 note").arg(dots1, dots2);
         } else {
             //: %1 is a note duration. If your language does not have different terms for
