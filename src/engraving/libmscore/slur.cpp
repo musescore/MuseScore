@@ -449,11 +449,11 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
         }
         // Check collisions
         for (Segment* seg : segList) {
-            unsigned startStaffIdx = startCR->staffIdx();
+            staff_idx_t startStaffIdx = startCR->staffIdx();
             Shape segShape = seg->staffShape(startStaffIdx).translated(seg->pos() + seg->measure()->pos());
             // If cross-staff, also add the shape of second staff
             if (slur()->isCrossStaff()) {
-                unsigned endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
+                staff_idx_t endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
                 SysStaff* startStaff = system()->staves().at(startStaffIdx);
                 SysStaff* endStaff = system()->staves().at(endStaffIdx);
                 double dist = endStaff->y() - startStaff->y();
@@ -1538,7 +1538,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                 && sc->notes()[0]->tieBack()->up() == up()) {
                 // there is a tie that ends on this chordrest
                 tie = sc->notes()[0]->tieBack();
-                endPoint = tie->segmentAt(tie->nsegments() - 1)->ups(Grip::END).pos();
+                endPoint = tie->segmentAt(static_cast<int>(tie->nsegments()) - 1)->ups(Grip::END).pos();
                 if (abs(endPoint.y() - p1.y()) < tieClearance) {
                     p1.rx() += horizontalTieClearance;
                 }

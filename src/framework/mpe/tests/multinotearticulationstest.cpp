@@ -309,7 +309,7 @@ TEST_F(Engraving_MultiNoteArticulationsTest, CrescendoPattern)
         // [THEN] We expect that ExpressionCurve of every note will be adapted to the applied CrescendoPattern
         //        That means that every note will be played louder on 125% than the previous one
 
-        dynamic_level_t actualResult = dynamicLevelFromType(DynamicType::f) + i * static_cast<float>(dynamicLevelDiff)
+        dynamic_level_t actualResult = dynamicLevelFromType(DynamicType::f) + i * static_cast<dynamic_level_t>(dynamicLevelDiff)
                                        / dynamicSegmentsCount;
         EXPECT_EQ(noteEvents.at(i).expressionCtx().expressionCurve.maxAmplitudeLevel(),
                   actualResult);

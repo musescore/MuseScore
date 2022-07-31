@@ -832,14 +832,14 @@ bool GuitarPro4::read(IODevice* io)
             Fraction measureLen = { 0, 1 };
             Fraction tick  = measure->tick();
             int beats = readInt();
-            int track = staffIdx * VOICES;
+            track_idx_t track = staffIdx * VOICES;
 
             if (!f->isReadable()) {
                 break;
             }
             for (int beat = 0; beat < beats; ++beat) {
                 slide = -1;
-                if (mu::contains(slides, track)) {
+                if (mu::contains(slides, static_cast<int>(track))) {
                     slide = mu::take(slides, track);
                 }
 
@@ -861,12 +861,12 @@ bool GuitarPro4::read(IODevice* io)
                     String name;
                     if ((header & 1) == 0) {
                         name = readDelphiString();
-                        readChord(segment, staffIdx * VOICES, static_cast<int>(numStrings), name, false);
+                        readChord(segment, static_cast<int>(staffIdx * VOICES), static_cast<int>(numStrings), name, false);
                     } else {
                         skip(16);
                         name = readPascalString(21);
                         skip(4);
-                        readChord(segment, staffIdx * VOICES, static_cast<int>(numStrings), name, true);
+                        readChord(segment, static_cast<int>(staffIdx * VOICES), static_cast<int>(numStrings), name, true);
                         skip(32);
                     }
                 }
@@ -888,7 +888,7 @@ bool GuitarPro4::read(IODevice* io)
                 }
                 int beatEffects = 0;
                 if (beatBits & BEAT_EFFECTS) {
-                    beatEffects = readBeatEffects(track, segment);
+                    beatEffects = readBeatEffects(static_cast<int>(track), segment);
                 }
                 last_segment = segment;
                 if (beatBits & BEAT_MIX_CHANGE) {
@@ -972,7 +972,7 @@ bool GuitarPro4::read(IODevice* io)
                             }
                             toChord(cr)->add(note);
 
-                            hasSlur = readNote(6 - i, staffIdx, note);
+                            hasSlur = readNote(6 - i, static_cast<int>(staffIdx), note);
                             dynam = std::max(dynam, previousDynamic);
                             note->setTpcFromPitch();
                         }
@@ -987,9 +987,9 @@ bool GuitarPro4::read(IODevice* io)
                 }
 
                 // if we see that a tied note has been constructed do not create the tie
-                if (slides[track] == -2) {
+                if (slides[static_cast<int>(track)] == -2) {
                     slide = 0;
-                    slides[track] = -1;
+                    slides[static_cast<int>(track)] = -1;
                 }
                 bool slurSwap = true;
                 if (slide != 2) {
@@ -1020,7 +1020,7 @@ bool GuitarPro4::read(IODevice* io)
                     auto chord = toChord(cr);
                     auto effect = convertGP4SlideNum(slide);
                     if (slide > 2) {
-                        createSlide(convertGP4SlideNum(slide), cr, staffIdx);
+                        createSlide(convertGP4SlideNum(slide), cr, static_cast<int>(staffIdx));
                     }
                     if (slide < 3 || effect == SLIDE_OUT_UP) {
                         Note* last = chord->upNote();
@@ -1068,7 +1068,7 @@ bool GuitarPro4::read(IODevice* io)
                 if (slurSwap) {
                     lastSlurAdd = false;
                 }
-                restsForEmptyBeats(segment, measure, cr, l, track, tick);
+                restsForEmptyBeats(segment, measure, cr, l, static_cast<int>(track), tick);
                 createSlur(hasSlur, staffIdx, cr);
                 tick += cr->actualTicks();
                 measureLen += cr->actualTicks();

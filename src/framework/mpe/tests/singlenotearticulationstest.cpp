@@ -379,7 +379,7 @@ TEST_F(Engraving_SingleNoteArticulationsTest, Scoop)
 {
     // [GIVEN] Articulation pattern "Scoop", which instructs a performer to play ahead of a nominal duration,
     //         starting at a lower pitch, and then placing it on the note being played.
-    duration_percentage_t timestampOffset = -2.5 * TEN_PERCENT;
+    duration_percentage_t timestampOffset = static_cast<duration_percentage_t>(-2.5 * TEN_PERCENT);
     m_nominalTimestamp = 1000; //msecs
 
     ArticulationPatternSegment scoopPattern;

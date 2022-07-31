@@ -544,13 +544,13 @@ double LayoutChords::layoutChords2(std::vector<Note*>& notes, bool up)
                                     // value is retained and may be used on next iteration
                                     // to track mirror status of previous note
     bool isLeft   = notes[startIdx]->chord()->up();               // is notehead on left?
-    int lStaffIdx = notes[startIdx]->chord()->vStaffIdx();        // staff of last note (including staffMove)
+    staff_idx_t lStaffIdx = notes[startIdx]->chord()->vStaffIdx();        // staff of last note (including staffMove)
 
     for (int idx = startIdx; idx != endIdx; idx += incIdx) {
         Note* note    = notes[idx];                         // current note
         int line      = note->line();                       // line of current note
         Chord* chord  = note->chord();
-        int staffIdx  = chord->vStaffIdx();                 // staff of current note
+        staff_idx_t staffIdx  = chord->vStaffIdx();                 // staff of current note
 
         // there is a conflict
         // if this is same or adjacent line as previous note (and chords are on same staff!)

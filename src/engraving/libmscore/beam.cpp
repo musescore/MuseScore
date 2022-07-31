@@ -1024,7 +1024,8 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
             } else {
                 if (startChord && endChord) {
                     if (startChord == endChord) {
-                        bool isBeamletBefore = calcIsBeamletBefore(startChord, i - 1 - prevRests, level, previousBreak32, previousBreak64);
+                        bool isBeamletBefore = calcIsBeamletBefore(startChord, static_cast<int>(i) - 1 - prevRests, level, previousBreak32,
+                                                                   previousBreak64);
                         createBeamletSegment(startChord, isBeamletBefore, level);
                     } else {
                         createBeamSegment(startChord, endChord, level);

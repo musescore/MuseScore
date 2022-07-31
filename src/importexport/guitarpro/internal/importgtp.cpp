@@ -1214,7 +1214,7 @@ bool GuitarPro1::read(IODevice* io)
 
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
             Fraction measureLen = { 0, 1 };
-            int track = staffIdx * VOICES;
+            track_idx_t track = staffIdx * VOICES;
             Fraction fraction  = measure->tick();
             int beats = readInt();
             for (int beat = 0; beat < beats; ++beat) {
@@ -1237,11 +1237,11 @@ bool GuitarPro1::read(IODevice* io)
                     String name;
                     if ((header & 1) == 0) {
                         name = readDelphiString();
-                        readChord(segment, track, numStrings, name, false);
+                        readChord(segment, static_cast<int>(track), numStrings, name, false);
                     } else {
                         skip(25);
                         name = readPascalString(34);
-                        readChord(segment, track, numStrings, name, true);
+                        readChord(segment, static_cast<int>(track), numStrings, name, true);
                         skip(36);
                     }
                 }
@@ -1251,7 +1251,7 @@ bool GuitarPro1::read(IODevice* io)
                     lyrics->setPlainText(readDelphiString());
                 }
                 if (beatBits & BEAT_EFFECTS) {
-                    readBeatEffects(track, segment);
+                    readBeatEffects(static_cast<int>(track), segment);
                 }
 
                 if (beatBits & BEAT_MIX_CHANGE) {
@@ -1309,7 +1309,7 @@ bool GuitarPro1::read(IODevice* io)
                         note->setTpcFromPitch();
                     }
                 }
-                restsForEmptyBeats(segment, measure, cr, l, track, fraction);
+                restsForEmptyBeats(segment, measure, cr, l, static_cast<int>(track), fraction);
                 fraction += cr->actualTicks();
                 measureLen += cr->actualTicks();
             }
@@ -1749,7 +1749,7 @@ bool GuitarPro2::read(IODevice* io)
 
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
             Fraction measureLen = { 0, 1 };
-            int track = staffIdx * VOICES;
+            track_idx_t track = staffIdx * VOICES;
             Fraction fraction = measure->tick();
             int beats = readInt();
             for (int beat = 0; beat < beats; ++beat) {
@@ -1772,11 +1772,11 @@ bool GuitarPro2::read(IODevice* io)
                     String name;
                     if ((header & 1) == 0) {
                         name = readDelphiString();
-                        readChord(segment, track, numStrings, name, false);
+                        readChord(segment, static_cast<int>(track), numStrings, name, false);
                     } else {
                         skip(25);
                         name = readPascalString(34);
-                        readChord(segment, track, numStrings, name, true);
+                        readChord(segment, static_cast<int>(track), numStrings, name, true);
                         skip(36);
                     }
                 }
@@ -1787,7 +1787,7 @@ bool GuitarPro2::read(IODevice* io)
                     lyrics->setPlainText(txt);
                 }
                 if (beatBits & BEAT_EFFECTS) {
-                    readBeatEffects(track, segment);
+                    readBeatEffects(static_cast<int>(track), segment);
                 }
 
                 if (beatBits & BEAT_MIX_CHANGE) {
@@ -1846,7 +1846,7 @@ bool GuitarPro2::read(IODevice* io)
                         note->setTpcFromPitch();
                     }
                 }
-                restsForEmptyBeats(segment, measure, cr, l, track, fraction);
+                restsForEmptyBeats(segment, measure, cr, l, static_cast<int>(track), fraction);
                 fraction += cr->actualTicks();
                 measureLen += cr->actualTicks();
             }
@@ -2465,7 +2465,7 @@ bool GuitarPro3::read(IODevice* io)
 
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
             Fraction measureLen = { 0, 1 };
-            int track = staffIdx * VOICES;
+            track_idx_t track = staffIdx * VOICES;
             Fraction fraction = measure->tick();
             int beats = readInt();
             if (beats > 200) {
@@ -2481,7 +2481,7 @@ bool GuitarPro3::read(IODevice* io)
                 }
 
                 slide = -1;
-                if (mu::contains(slides, track)) {
+                if (mu::contains(slides, static_cast<int>(track))) {
                     slide = mu::take(slides, track);
                 }
 
@@ -2498,11 +2498,11 @@ bool GuitarPro3::read(IODevice* io)
                     String name;
                     if ((header & 1) == 0) {
                         name = readDelphiString();
-                        readChord(segment, track, numStrings, name, false);
+                        readChord(segment, static_cast<int>(track), numStrings, name, false);
                     } else {
                         skip(25);
                         name = readPascalString(34);
-                        readChord(segment, track, numStrings, name, false);
+                        readChord(segment, static_cast<int>(track), numStrings, name, false);
                         skip(36);
                     }
                 }
@@ -2515,7 +2515,7 @@ bool GuitarPro3::read(IODevice* io)
                 int beatEffects = 0;
 
                 if (beatBits & BEAT_EFFECTS) {
-                    beatEffects = readBeatEffects(track, segment);
+                    beatEffects = readBeatEffects(static_cast<int>(track), segment);
                 }
                 bool vibrato = beatEffects & 0x1 || beatEffects & 0x2;
 
@@ -2634,11 +2634,11 @@ bool GuitarPro3::read(IODevice* io)
 
                     applyBeatEffects(static_cast<Chord*>(cr), beatEffects);
                     if (slide > 0) {
-                        createSlide(slide, cr, staffIdx);
+                        createSlide(slide, cr, static_cast<int>(staffIdx));
                     }
                 }
 
-                restsForEmptyBeats(segment, measure, cr, l, track, fraction);
+                restsForEmptyBeats(segment, measure, cr, l, static_cast<int>(track), fraction);
                 fraction += cr->actualTicks();
                 measureLen += cr->actualTicks();
             }
