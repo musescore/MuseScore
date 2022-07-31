@@ -128,7 +128,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Previous measure / Shift text left quickly"),
-             TranslatableString("action", "Select first element in previous measure / move text left quickly")
+             TranslatableString("action", "Go to previous measure / move text left quickly")
              ),
     UiAction("up-chord",
              mu::context::UiCtxNotationOpened,
