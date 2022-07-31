@@ -95,6 +95,9 @@ void* ObjectAllocator::alloc(size_t size)
 
 void ObjectAllocator::free(void* chunk, size_t size)
 {
+#ifdef NDEBUG
+    UNUSED(size);
+#endif
     assert(m_chunkSize == size);
 
     // The freed chunk's next pointer points to the
