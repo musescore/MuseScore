@@ -182,7 +182,7 @@ void* ObjectAllocator::not_supported(const char* info)
 {
     LOGE() << m_name << ": " << info << " not supported";
     std::abort();
-    return nullptr;
+    //return nullptr; // NOTREACHED
 }
 
 ObjectAllocator::Info ObjectAllocator::stateInfo() const
