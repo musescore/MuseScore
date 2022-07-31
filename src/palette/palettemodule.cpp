@@ -172,12 +172,12 @@ void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
     s_paletteWorkspaceSetup->setup();
     LOGE() << "Actions in cell prepped here" << PaletteCell::allActions.size();
     int i = 0;
-    for (auto action : PaletteCell::allActions) {
-        auto a = UiAction(action.action,
+    for (auto cell : PaletteCell::cells) {
+        auto a = UiAction(cell->action.toStdString(),
                           mu::context::UiCtxNotationOpened,
                           mu::context::CTX_NOTATION_FOCUSED,
-                          TranslatableString("action", ("Test Action " + std::to_string(i) + ": " + action.action).c_str()),
-                          TranslatableString("action", ("Test Action " + std::to_string(i++) + ": " + action.action).c_str())
+                          TranslatableString("action", ("Cell ID: " + cell->id.toStdString() + " | " + cell->name.toStdString()).c_str()),
+                          TranslatableString("action", ("Cell ID: " + cell->id.toStdString() + " | " + cell->name.toStdString()).c_str())
                           );
 
         s_paletteUiActions->addAction(a);

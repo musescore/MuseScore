@@ -192,7 +192,7 @@ public:
 
     void editPaletteProperties(const QModelIndex& index) override;
     Q_INVOKABLE void applyPaletteCellProperties(const QModelIndex& index);
-    Q_INVOKABLE bool connectOnPaletteCellConfigChange(const QModelIndex& index);
+
     void editCellProperties(const QModelIndex& index) override;
 
     void modifyCellfromConfig(const mu::palette::PaletteCellPtr& cell, const mu::palette::IPaletteConfiguration::PaletteCellConfig& config);

@@ -532,36 +532,6 @@ void UserPaletteController::applyPaletteCellProperties(const QModelIndex& index)
     _userPalette->itemDataChanged(srcindex.parent());
 }
 
-bool UserPaletteController::connectOnPaletteCellConfigChange(const QModelIndex& index)
-{
-    QModelIndex srcIndex = convertProxyIndex(index, _userPalette);
-    PaletteCellPtr cell = _userPalette->findCell(srcIndex);
-    if (!cell) {
-        return false;
-    }
-
-    configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
-                                                              [this, cell](
-                                                                  const IPaletteConfiguration::PaletteCellConfig& config) {
-        modifyCellfromConfig(cell, config);
-        /*_userPalette->itemDataChanged(srcIndex);
-        _userPalette->itemDataChanged(srcIndex.parent());*/
-        PaletteTreePtr tree = paletteProvider()->userPaletteTree();
-
-        QByteArray newData;
-        LOGE() << "Here221";
-
-        Buffer buf;
-        buf.open(IODevice::WriteOnly);
-        mu::engraving::XmlWriter writer(&buf);
-        LOGE() << "Here22DIRECT";
-        tree->write(writer);
-        newData = buf.data().toQByteArray();
-        workspacesDataProvider()->setRawData(mu::workspace::DataKey::Palettes, newData);
-    });
-
-    return true;
-}
 
 void UserPaletteController::editCellProperties(const QModelIndex& index)
 {
