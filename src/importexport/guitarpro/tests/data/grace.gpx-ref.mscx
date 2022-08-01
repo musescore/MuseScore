@@ -26,12 +26,13 @@
           </StaffType>
         </Staff>
       <trackName>E. Guitar 2</trackName>
-      <Instrument>
+      <Instrument id="grand-piano">
         <longName>E. Guitar 2</longName>
         <shortName>S-Gt</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>keyboard.piano.grand</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>

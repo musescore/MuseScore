@@ -745,14 +745,14 @@ InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId)
     return 0;
 }
 
-InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& nameList)
+InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& nameList, bool useDrumset)
 {
     InstrumentTemplate* bestMatch = nullptr; // default if no matches
     int bestMatchStrength = 0; // higher for better matches
     for (InstrumentGroup* g : instrumentGroups) {
         for (InstrumentTemplate* it : g->instrumentTemplates) {
             for (const String& name : nameList) {
-                if (name.isEmpty()) {
+                if (name.isEmpty() || it->useDrumset != useDrumset) {
                     continue;
                 }
 
@@ -772,46 +772,35 @@ InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& name
             }
         }
     }
+
+    if (!bestMatch) {
+        for (const String& name : nameList) {
+            if (name.contains(u"drum", mu::CaseInsensitive)) {
+                return searchTemplate(u"drumset");
+            }
+
+            if (name.contains(u"piano", mu::CaseInsensitive)) {
+                return searchTemplate(u"piano");
+            }
+        }
+    }
+
     return bestMatch; // nullptr if no matches found
 }
 
-InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const bool useDrumSet)
+InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, bool useDrumset)
 {
     for (InstrumentGroup* g : instrumentGroups) {
         for (InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->channel.empty() || it->useDrumset != useDrumSet) {
+            if (it->useDrumset != useDrumset) {
                 continue;
             }
 
-            if (it->channel[0].program() == midiProgram) {
-                return it;
-            }
-        }
-    }
-    return 0;
-}
-
-InstrumentTemplate* guessTemplateByNameData(const std::list<String>& nameDataList)
-{
-    for (InstrumentGroup* g : instrumentGroups) {
-        for (InstrumentTemplate* it : g->instrumentTemplates) {
-            for (const String& name : nameDataList) {
-                if (name.contains(it->trackName, mu::CaseInsensitive)
-                    || name.contains(!it->longNames.empty() ? it->longNames.front().name() : String(), mu::CaseInsensitive)
-                    || name.contains(!it->shortNames.empty() ? it->shortNames.front().name() : String(), mu::CaseInsensitive)) {
+            for (const InstrChannel& channel : it->channel) {
+                if (channel.bank() == bank && channel.program() == program) {
                     return it;
                 }
             }
-        }
-    }
-
-    for (const String& name : nameDataList) {
-        if (name.contains(u"drum", mu::CaseInsensitive)) {
-            return searchTemplate(u"drumset");
-        }
-
-        if (name.contains(u"piano", mu::CaseInsensitive)) {
-            return searchTemplate(u"piano");
         }
     }
 

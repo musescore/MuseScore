@@ -26,12 +26,13 @@
           </StaffType>
         </Staff>
       <trackName>Gtr 2</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar">
         <longName>Gtr 2</longName>
         <shortName>od.guit.</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar.electric</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>

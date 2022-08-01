@@ -27,10 +27,11 @@
           </StaffType>
         </Staff>
       <trackName>Hand Clap</trackName>
-      <Instrument>
+      <Instrument id="hand-clap">
         <longName>Hand Clap</longName>
         <shortName>hclap</shortName>
         <trackName></trackName>
+        <instrumentId>effect.hand-clap</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -511,10 +512,11 @@
           </StaffType>
         </Staff>
       <trackName>Congas</trackName>
-      <Instrument>
+      <Instrument id="congas">
         <longName>Congas</longName>
         <shortName>cngKit</shortName>
         <trackName></trackName>
+        <instrumentId>drum.conga</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -995,10 +997,11 @@
           </StaffType>
         </Staff>
       <trackName>Timbale</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Timbale</longName>
         <shortName>tmblKit</shortName>
         <trackName></trackName>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -1479,10 +1482,11 @@
           </StaffType>
         </Staff>
       <trackName>Agogo</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Agogo</longName>
         <shortName>agogoKit</shortName>
         <trackName></trackName>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -1963,10 +1967,11 @@
           </StaffType>
         </Staff>
       <trackName>Cabasa</trackName>
-      <Instrument>
+      <Instrument id="cabasa">
         <longName>Cabasa</longName>
         <shortName>cbs</shortName>
         <trackName></trackName>
+        <instrumentId>rattle.cabasa</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -2447,10 +2452,11 @@
           </StaffType>
         </Staff>
       <trackName>Maracas</trackName>
-      <Instrument>
+      <Instrument id="maracas">
         <longName>Maracas</longName>
         <shortName>mrcs</shortName>
         <trackName></trackName>
+        <instrumentId>rattle.maraca</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -2931,10 +2937,11 @@
           </StaffType>
         </Staff>
       <trackName>Whistle</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Whistle</longName>
         <shortName>whstlKit</shortName>
         <trackName></trackName>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -3415,10 +3422,11 @@
           </StaffType>
         </Staff>
       <trackName>Bongos</trackName>
-      <Instrument>
+      <Instrument id="bongos">
         <longName>Bongos</longName>
         <shortName>bngKit</shortName>
         <trackName></trackName>
+        <instrumentId>drum.bongo</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -3899,10 +3907,11 @@
           </StaffType>
         </Staff>
       <trackName>Vibraslap</trackName>
-      <Instrument>
+      <Instrument id="vibraslap">
         <longName>Vibraslap</longName>
         <shortName>vbrslp</shortName>
         <trackName></trackName>
+        <instrumentId>rattle.vibraslap</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -4383,10 +4392,11 @@
           </StaffType>
         </Staff>
       <trackName>Tambourine</trackName>
-      <Instrument>
+      <Instrument id="tambourine">
         <longName>Tambourine</longName>
         <shortName>tmbrn</shortName>
         <trackName></trackName>
+        <instrumentId>drum.tambourine</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -4867,10 +4877,11 @@
           </StaffType>
         </Staff>
       <trackName>Cuica</trackName>
-      <Instrument>
+      <Instrument id="cuica">
         <longName>Cuica</longName>
         <shortName>cuicaKit</shortName>
         <trackName></trackName>
+        <instrumentId>drum.cuica</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -5351,10 +5362,11 @@
           </StaffType>
         </Staff>
       <trackName>Triangle</trackName>
-      <Instrument>
+      <Instrument id="triangle">
         <longName>Triangle</longName>
         <shortName>trngl</shortName>
         <trackName></trackName>
+        <instrumentId>metal.triangle</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -5835,10 +5847,11 @@
           </StaffType>
         </Staff>
       <trackName>Claves</trackName>
-      <Instrument>
+      <Instrument id="claves">
         <longName>Claves</longName>
         <shortName>clvs</shortName>
         <trackName></trackName>
+        <instrumentId>wood.claves</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -6319,10 +6332,11 @@
           </StaffType>
         </Staff>
       <trackName>Shaker</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Shaker</longName>
         <shortName>shkr</shortName>
         <trackName></trackName>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -6803,10 +6817,11 @@
           </StaffType>
         </Staff>
       <trackName>Jingle Bell</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Jingle Bell</longName>
         <shortName>jngl-bell</shortName>
         <trackName></trackName>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -7287,10 +7302,11 @@
           </StaffType>
         </Staff>
       <trackName>Bell Tree</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Bell Tree</longName>
         <shortName>bell-tree</shortName>
         <trackName></trackName>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -7771,10 +7787,11 @@
           </StaffType>
         </Staff>
       <trackName>Woodblock</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Woodblock</longName>
         <shortName>wdblckKit</shortName>
         <trackName></trackName>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -8255,10 +8272,11 @@
           </StaffType>
         </Staff>
       <trackName>Guiro</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Guiro</longName>
         <shortName>guiro</shortName>
         <trackName></trackName>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -8739,10 +8757,11 @@
           </StaffType>
         </Staff>
       <trackName>Castanets</trackName>
-      <Instrument>
+      <Instrument id="castanets">
         <longName>Castanets</longName>
         <shortName>cstnt</shortName>
         <trackName></trackName>
+        <instrumentId>wood.castanets</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -9223,10 +9242,11 @@
           </StaffType>
         </Staff>
       <trackName>Surdo</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Surdo</longName>
         <shortName>surdo</shortName>
         <trackName></trackName>
+        <instrumentId>drumset</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
@@ -9707,10 +9727,11 @@
           </StaffType>
         </Staff>
       <trackName>Drumkit</trackName>
-      <Instrument>
+      <Instrument id="drumset">
         <longName>Drumkit</longName>
         <shortName>drmkt</shortName>
         <trackName></trackName>
+        <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>

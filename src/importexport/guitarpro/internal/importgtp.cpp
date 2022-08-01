@@ -3049,6 +3049,12 @@ static Score::FileError importScore(MasterScore* score, mu::io::IODevice* io)
         score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
     }
 
+    for (const Part* part : score->parts()) {
+        for (const auto& pair : part->instruments()) {
+            pair.second->updateInstrumentId();
+        }
+    }
+
     delete gp;
 
     return Score::FileError::FILE_NO_ERROR;
