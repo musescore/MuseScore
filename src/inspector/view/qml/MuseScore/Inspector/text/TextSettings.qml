@@ -146,11 +146,11 @@ Column {
             navigationPanel: root.navigationPanel
             navigationRowStart: borderColorSection.navigationRowEnd + 1
 
-            visible: root.model ? root.model.frameHighlightColor.isEnabled : false
+            visible: root.model ? root.model.frameFillColor.isEnabled : false
             height: visible ? implicitHeight : 0
 
-            titleText: qsTrc("inspector", "Highlight")
-            propertyItem: root.model ? root.model.frameHighlightColor : null
+            titleText: qsTrc("inspector", "Fill color")
+            propertyItem: root.model ? root.model.frameFillColor : null
         }
     }
 

@@ -69,7 +69,7 @@ void TextSettingsModel::createProperties()
     });
 
     m_frameBorderColor = buildPropertyItem(mu::engraving::Pid::FRAME_FG_COLOR);
-    m_frameHighlightColor = buildPropertyItem(mu::engraving::Pid::FRAME_BG_COLOR);
+    m_frameFillColor = buildPropertyItem(mu::engraving::Pid::FRAME_BG_COLOR);
     m_frameThickness = buildPropertyItem(mu::engraving::Pid::FRAME_WIDTH);
     m_frameMargin = buildPropertyItem(mu::engraving::Pid::FRAME_PADDING);
     m_frameCornerRadius = buildPropertyItem(mu::engraving::Pid::FRAME_ROUND);
@@ -121,7 +121,7 @@ void TextSettingsModel::loadProperties()
 
     loadPropertyItem(m_frameType);
     loadPropertyItem(m_frameBorderColor);
-    loadPropertyItem(m_frameHighlightColor);
+    loadPropertyItem(m_frameFillColor);
 
     loadPropertyItem(m_frameThickness, formatDoubleFunc);
     loadPropertyItem(m_frameMargin, formatDoubleFunc);
@@ -147,7 +147,7 @@ void TextSettingsModel::resetProperties()
 
     m_frameType->resetToDefault();
     m_frameBorderColor->resetToDefault();
-    m_frameHighlightColor->resetToDefault();
+    m_frameFillColor->resetToDefault();
     m_frameThickness->resetToDefault();
     m_frameMargin->resetToDefault();
     m_frameCornerRadius->resetToDefault();
@@ -207,9 +207,9 @@ PropertyItem* TextSettingsModel::frameBorderColor() const
     return m_frameBorderColor;
 }
 
-PropertyItem* TextSettingsModel::frameHighlightColor() const
+PropertyItem* TextSettingsModel::frameFillColor() const
 {
-    return m_frameHighlightColor;
+    return m_frameFillColor;
 }
 
 PropertyItem* TextSettingsModel::frameThickness() const
@@ -279,7 +279,7 @@ void TextSettingsModel::updateFramePropertiesAvailability()
 
     m_frameThickness->setIsEnabled(isFrameVisible);
     m_frameBorderColor->setIsEnabled(isFrameVisible);
-    m_frameHighlightColor->setIsEnabled(isFrameVisible);
+    m_frameFillColor->setIsEnabled(isFrameVisible);
     m_frameMargin->setIsEnabled(isFrameVisible);
     m_frameCornerRadius->setIsEnabled(
         static_cast<TextTypes::FrameType>(m_frameType->value().toInt()) == TextTypes::FrameType::FRAME_TYPE_SQUARE);
