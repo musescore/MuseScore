@@ -296,6 +296,7 @@ enum class SoundSubCategory
     Pocket,
     Garklein,
     Toy,
+    String,
     TwelveString,
 
     Grand,
@@ -340,6 +341,7 @@ enum class SoundSubCategory
     Sub_Contra_Bass,
     Double_Contra_Bass,
     Bass,
+    Bowed,
     Great_Bass,
     Hyper_Bass,
     Melody,
@@ -352,6 +354,18 @@ enum class SoundSubCategory
     FX_Rain,
     FX_SciFi,
     FX_SoundTrack,
+
+    Sweep,
+    Warm,
+    NewAge,
+    Polysynth,
+    Halo,
+    Metallic,
+    Choir,
+
+    Sine_Wave,
+    Square_Wave,
+    Sawtooth_Wave,
 };
 
 using SoundCategories = std::set<SoundCategory>;
