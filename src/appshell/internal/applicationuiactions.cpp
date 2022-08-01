@@ -73,7 +73,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Online &handbook"),
-             TranslatableString("action", "Go to online handbook")
+             TranslatableString("action", "Open online handbook")
              ),
     UiAction("ask-help",
              mu::context::UiCtxAny,
