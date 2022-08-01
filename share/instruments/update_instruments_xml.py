@@ -357,7 +357,7 @@ def add_translatable_string_if_not_null(f: io.TextIOWrapper, context: str, text:
         add_translatable_string(f, context, text, disambiguation, comment, keyValuePairs)
 
 def disambiguation(instrumentId: str, nameType: str):
-    return instrumentId + '|' + nameType
+    return instrumentId + ' ' + nameType
 
 # Write instrumentsxml.h file (used to generate translatable strings)
 with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:

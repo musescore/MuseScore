@@ -425,7 +425,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
 
 String translateInstrumentName(const String& instrumentId, const String& nameType, const String& text)
 {
-    String disambiguation = instrumentId + u'|' + nameType;
+    String disambiguation = instrumentId + u' ' + nameType;
     return mtrc("engraving/instruments", text, disambiguation);
 }
 
