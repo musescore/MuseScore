@@ -72,6 +72,7 @@ PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, const Q
 {
     id = makeId();
     drawStaff = needsStaff(element);
+    cells.insert(this);
 }
 
 QAccessibleInterface* PaletteCell::accessibleInterface(QObject* object)
@@ -237,8 +238,7 @@ bool PaletteCell::read(XmlReader& e)
 
     action = QString::fromStdString(shortcut.action);
     PaletteCell::allActions.push_back(shortcut);
-    //shortcutsRegister()->setShortcut(shortcut);  // Makes the application extremely slow, need to run this when cells are done being set up
-
+  
     //LOGE() << PaletteCell::allActions.size() << " is the size and the addr is " << pointerAddr.str();
 
     return add && element;

@@ -170,15 +170,28 @@ void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
     //! NOTE We need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onAllInited
     s_paletteWorkspaceSetup->setup();
-    LOGE() << "Actions in cell prepped here" << PaletteCell::allActions.size();
+
+    registerCellActions();
+}
+
+void PaletteModule::registerCellActions()
+{
+    LOGE() << "Actions in cell prepped here" << PaletteCell::cells.size();
     int i = 0;
-    for (auto cell : PaletteCell::cells) {
-        auto a = UiAction(cell->action.toStdString(),
-                          mu::context::UiCtxNotationOpened,
-                          mu::context::CTX_NOTATION_FOCUSED,
-                          TranslatableString("action", ("Cell ID: " + cell->id.toStdString() + " | " + cell->name.toStdString()).c_str()),
-                          TranslatableString("action", ("Cell ID: " + cell->id.toStdString() + " | " + cell->name.toStdString()).c_str())
-                          );
+    for (auto &cell : PaletteCell::cells) {
+        if (cell->action.isEmpty()) {
+            std::stringstream pointerAddr;
+            pointerAddr << cell->element.get();
+            cell->shortcut.action = "palette-item-" + cell->id.toStdString() + "_" + pointerAddr.str();
+            cell->action = QString::fromStdString(cell->shortcut.action);
+        }
+
+        auto a = UiAction(cell->shortcut.action,
+            mu::context::UiCtxNotationOpened,
+            mu::context::CTX_NOTATION_FOCUSED,
+            TranslatableString("action", ("Cell ID: " + cell->id.toStdString() + " | " + cell->name.toStdString()).c_str()),
+            TranslatableString("action", ("Cell ID: " + cell->id.toStdString() + " | " + cell->name.toStdString()).c_str())
+        );
 
         s_paletteUiActions->addAction(a);
     }

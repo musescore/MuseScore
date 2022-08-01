@@ -86,14 +86,16 @@ void PaletteWorkspaceSetup::setup()
     });
 
     auto loadData = [this]() {
+        //workspacesDataProvider()->setRawData(DataKey::Palettes, "");
         RetVal<QByteArray> data = workspacesDataProvider()->rawData(DataKey::Palettes);
+        
         PaletteTreePtr tree;
         if (data.ret && !data.val.isEmpty()) {
             LOGD() << "there is palette data in the workspace, we will use it";
             ByteArray ba = ByteArray::fromQByteArrayNoCopy(data.val);
             tree = readPalette(ba);
         } else {
-            LOGD() << "no palette data in workspace, will use default";
+            LOGD() << "no palette data in workspace, will use default"; // TODO: Do the shortcuts work when no data in workspace?
             tree = PaletteCreator::newDefaultPaletteTree();
         }
         paletteProvider()->setUserPaletteTree(tree);
