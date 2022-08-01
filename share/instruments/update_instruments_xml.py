@@ -340,11 +340,9 @@ with open('instruments.xml', 'w', newline='\n', encoding='utf-8') as f:
         f.write(line.replace('" />', '"/>'))
 
 # Helper functions to facilitate writing instrumentsxml.h
-def add_translatable_string(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = '', keyValuePairs: dict[str, str] = {}):
+def add_translatable_string(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = ''):
     if comment:
         f.write('//: ' + comment + '\n')
-    for (key, value) in keyValuePairs.items():
-        f.write('//~ {k} {v}\n'.format(k=key, v=value))
     if disambiguation:
         f.write('QT_TRANSLATE_NOOP3("{context}", "{text}", "{disambiguation}"),\n'
                 .format(context=context, text=text, disambiguation=disambiguation))
@@ -352,12 +350,27 @@ def add_translatable_string(f: io.TextIOWrapper, context: str, text: str, disamb
         f.write('QT_TRANSLATE_NOOP("{context}", "{text}"),\n'
                 .format(context=context, text=text))
 
-def add_translatable_string_if_not_null(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = '', keyValuePairs: dict[str, str] = {}):
+def add_translatable_string_if_not_null(f: io.TextIOWrapper, context: str, text: str, disambiguation: str = '', comment: str = ''):
     if text and text != null:
-        add_translatable_string(f, context, text, disambiguation, comment, keyValuePairs)
+        add_translatable_string(f, context, text, disambiguation, comment)
 
 def disambiguation(instrumentId: str, nameType: str):
     return instrumentId + ' ' + nameType
+
+
+hintComment = 'Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names'
+def get_comment(instrument, nameType: str, hasTrait: bool):
+    if hasTrait:
+        traitName: str = instrument['traitName'].removeprefix('*').removeprefix('(').removesuffix(')')
+        return "{nameType} for {trackName}; {traitType}: {traitName}; {hint}".format(nameType=nameType,
+                                                                                     trackName=instrument['trackName'],
+                                                                                     traitType=instrument['traitType'],
+                                                                                     traitName=traitName,
+                                                                                     hint=hintComment)
+
+    return "{nameType} for {trackName}; {hint}".format(nameType=nameType,
+                                                       trackName=instrument['trackName'],
+                                                       hint=hintComment)
 
 # Write instrumentsxml.h file (used to generate translatable strings)
 with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
@@ -415,7 +428,6 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
 
     f.write("\n")
     f.write("// Groups & Instruments\n")
-    instrumentNamesComment = 'Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names'
     for group in groups.values():
         f.write("\n// " + group['name'] + "\n")
         add_translatable_string(f, 'engraving/instruments/group', group['name'])
@@ -423,27 +435,27 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
         for instrument in instruments[group['id']].values():
             f.write('\n')
             instrumentId = instrument['id']
+            hasTrait = instrument['traitName'] and instrument['traitName'] != '[hide]'
 
             add_translatable_string_if_not_null(f, 'engraving/instruments', instrument['description'],
                                                 disambiguation(instrumentId, 'description'),
-                                                instrumentNamesComment)
+                                                get_comment(instrument, 'description', hasTrait))
 
             for nameType in ['trackName', 'longName', 'shortName']:
                 add_translatable_string_if_not_null(f, 'engraving/instruments', instrument[nameType],
                                                     disambiguation(instrumentId, nameType),
-                                                    instrumentNamesComment)
+                                                    get_comment(instrument, nameType, hasTrait))
                 
-            if instrument['traitName'] != '[hide]':
+            if hasTrait:
                 add_translatable_string_if_not_null(f, 'engraving/instruments', instrument['traitName'],
                                                     disambiguation(instrumentId, 'traitName'), 
-                                                    instrumentNamesComment,
-                                                    { 'Trait-type': instrument['traitType'] })
+                                                    get_comment(instrument, 'traitName', hasTrait))
 
             if instrumentId in channels:
                 for channel in channels[instrumentId].values():
                     add_translatable_string_if_not_null(f, 'engraving/instruments', channel['channel'],
                                                         disambiguation(instrumentId, 'channel'),
-                                                        instrumentNamesComment)
+                                                        get_comment(instrument, 'channel', hasTrait))
 
     # Orders
     f.write("\n")
