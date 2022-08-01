@@ -23,6 +23,8 @@
 
 #include "translation.h"
 
+#include "log.h"
+
 using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::framework;
