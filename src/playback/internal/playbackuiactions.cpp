@@ -73,7 +73,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "MIDI input"),
-             TranslatableString("action", "Toggle ‘Enable MIDI input’"),
+             TranslatableString("action", "Toggle MIDI input"),
              IconCode::Code::MIDI_INPUT,
              Checkable::Yes
              ),
@@ -89,7 +89,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Pan score"),
-             TranslatableString("action", "Pan score automatically"),
+             TranslatableString("action", "Pan score automatically during playback"),
              IconCode::Code::PAN_SCORE,
              Checkable::Yes
              ),
@@ -97,7 +97,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Count-in"),
-             TranslatableString("action", "Enable count-in"),
+             TranslatableString("action", "Enable count-in when playing"),
              IconCode::Code::COUNT_IN,
              Checkable::Yes
              ),
