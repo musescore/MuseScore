@@ -41,11 +41,13 @@ using namespace mu::engraving;
 //   layoutSegmentElements
 //---------------------------------------------------------
 
-static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, track_idx_t endTrack)
+static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, track_idx_t endTrack, staff_idx_t staffIdx)
 {
     for (track_idx_t track = startTrack; track < endTrack; ++track) {
         if (EngravingItem* e = segment->element(track)) {
-            e->layout();
+            if (!e->isChord() || (e->isChord() && toChord(e)->vStaffIdx() == staffIdx)) {
+                e->layout();
+            }
         }
     }
 }
@@ -70,7 +72,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
     const track_idx_t partEndTrack = part ? part->endTrack() : endTrack;
 
     if (staff->isTabStaff(tick)) {
-        layoutSegmentElements(segment, startTrack, endTrack);
+        layoutSegmentElements(segment, startTrack, endTrack, staffIdx);
         return;
     }
 
@@ -235,9 +237,9 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
             Note* bottomUpNote = upStemNotes.front();
             Note* topDownNote  = downStemNotes.back();
             int separation;
-            // TODO: handle conflicts for cross-staff notes and notes on cross-staff beams
+            // TODO: handle conflicts for notes on cross-staff beams
             // for now we simply treat these as though there is no conflict
-            if (bottomUpNote->chord()->staffMove() == topDownNote->chord()->staffMove() && !crossBeamFound) {
+            if (!crossBeamFound) {
                 separation = topDownNote->line() - bottomUpNote->line();
             } else {
                 separation = 2;           // no conflict
@@ -505,7 +507,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
         layoutChords3(score->style(), notes, staff, segment);
     }
 
-    layoutSegmentElements(segment, startTrack, endTrack);
+    layoutSegmentElements(segment, partStartTrack, partEndTrack, staffIdx);
 }
 
 //---------------------------------------------------------
@@ -542,18 +544,18 @@ double LayoutChords::layoutChords2(std::vector<Note*>& notes, bool up)
                                     // value is retained and may be used on next iteration
                                     // to track mirror status of previous note
     bool isLeft   = notes[startIdx]->chord()->up();               // is notehead on left?
-    int lmove     = notes[startIdx]->chord()->staffMove();        // staff offset of last note (for cross-staff beaming)
+    int lStaffIdx = notes[startIdx]->chord()->vStaffIdx();        // staff of last note (including staffMove)
 
     for (int idx = startIdx; idx != endIdx; idx += incIdx) {
         Note* note    = notes[idx];                         // current note
         int line      = note->line();                       // line of current note
         Chord* chord  = note->chord();
-        int move      = chord->staffMove();                 // staff offset of current note
+        int staffIdx  = chord->vStaffIdx();                 // staff of current note
 
         // there is a conflict
         // if this is same or adjacent line as previous note (and chords are on same staff!)
         // but no need to do anything about it if either note is invisible
-        bool conflict = (std::abs(ll - line) < 2) && (lmove == move) && note->visible() && lvisible;
+        bool conflict = (std::abs(ll - line) < 2) && (lStaffIdx == staffIdx) && note->visible() && lvisible;
 
         // this note is on opposite side of stem as previous note
         // if there is a conflict
@@ -596,7 +598,7 @@ double LayoutChords::layoutChords2(std::vector<Note*>& notes, bool up)
 
         // prepare for next iteration
         lvisible = note->visible();
-        lmove    = move;
+        lStaffIdx = staffIdx;
         ll       = line;
     }
 
