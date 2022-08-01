@@ -33,6 +33,7 @@
 #include "libmscore/stemslash.h"
 #include "libmscore/tie.h"
 #include "libmscore/glissando.h"
+#include "libmscore/part.h"
 
 using namespace mu::engraving;
 
@@ -62,6 +63,12 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
     const track_idx_t endTrack   = startTrack + VOICES;
     const Fraction tick = segment->tick();
 
+    // we need to check all the notes in all the staves of the part so that we don't get weird collisions
+    // between accidentals etc with moved notes
+    const Part* part = staff->part();
+    const track_idx_t partStartTrack = part ? part->startTrack() : startTrack;
+    const track_idx_t partEndTrack = part ? part->endTrack() : endTrack;
+
     if (staff->isTabStaff(tick)) {
         layoutSegmentElements(segment, startTrack, endTrack);
         return;
@@ -88,9 +95,9 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
     bool upGrace       = false;
     bool downGrace     = false;
 
-    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+    for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
         EngravingItem* e = segment->element(track);
-        if (e && e->isChord()) {
+        if (e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx) {
             Chord* chord = toChord(e);
             if (chord->beam() && chord->beam()->cross()) {
                 crossBeamFound = true;
@@ -457,9 +464,9 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
         }
 
         // apply chord offsets
-        for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
             EngravingItem* e = segment->element(track);
-            if (e && e->isChord()) {
+            if (e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx) {
                 Chord* chord = toChord(e);
                 if (chord->up()) {
                     if (upOffset != 0.0) {
