@@ -71,7 +71,7 @@ Ret FileSystem::copy(const io::path_t& src, const io::path_t& dst, bool replace)
     QFileInfo dstFileInfo(dst.toQString());
     if (dstFileInfo.exists()) {
         if (!replace) {
-            return make_ret(Err::FSIsExist);
+            return make_ret(Err::FSAlreadyExists);
         }
 
         Ret ret = remove(dst);
@@ -94,7 +94,7 @@ Ret FileSystem::move(const io::path_t& src, const io::path_t& dst, bool replace)
     QFileInfo dstFileInfo(dst.toQString());
     if (dstFileInfo.exists()) {
         if (!replace) {
-            return make_ret(Err::FSIsExist);
+            return make_ret(Err::FSAlreadyExists);
         }
 
         Ret ret = remove(dst);

@@ -32,7 +32,7 @@ RowLayout {
 
     property alias canResetCurrentShortcut: resetButton.enabled
 
-    property int buttonWidth: 0
+    property int buttonMinWidth: 0
 
     signal importShortcutsFromFileRequested()
     signal exportShortcutsToFileRequested()
@@ -52,7 +52,7 @@ RowLayout {
     }
 
     FlatButton {
-        Layout.preferredWidth: root.buttonWidth
+        minWidth: root.buttonMinWidth
 
         text: qsTrc("shortcuts", "Import")
 
@@ -66,7 +66,7 @@ RowLayout {
     }
 
     FlatButton {
-        Layout.preferredWidth: root.buttonWidth
+        minWidth: root.buttonMinWidth
 
         text: qsTrc("shortcuts", "Export")
 
@@ -84,7 +84,7 @@ RowLayout {
     FlatButton {
         id: resetButton
 
-        Layout.preferredWidth: root.buttonWidth
+        minWidth: root.buttonMinWidth
 
         text: qsTrc("shortcuts", "Reset to default")
 

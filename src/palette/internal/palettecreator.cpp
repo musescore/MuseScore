@@ -1506,7 +1506,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     staffTextLine->setLen(w);
     staffTextLine->setBeginText(u"Staff");
     staffTextLine->setEndHookType(HookType::HOOK_90);
-    sp->appendElement(staffTextLine, QT_TRANSLATE_NOOP("palette", "Staff Text line"));
+    sp->appendElement(staffTextLine, QT_TRANSLATE_NOOP("palette", "Staff text line"));
 
     auto stxt = makeElement<SystemText>(gpaletteScore);
     stxt->setXmlText(QT_TRANSLATE_NOOP("palette", "System text"));
@@ -1517,7 +1517,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     systemTextLine->setLen(w * 1.5);
     systemTextLine->setBeginText(u"System");
     systemTextLine->setEndHookType(HookType::HOOK_90);
-    sp->appendElement(systemTextLine, QT_TRANSLATE_NOOP("palette", "System Text line"));
+    sp->appendElement(systemTextLine, QT_TRANSLATE_NOOP("palette", "System text line"));
 
     auto expressionText = makeElement<StaffText>(gpaletteScore);
     expressionText->setTextStyleType(TextStyleType::EXPRESSION);
