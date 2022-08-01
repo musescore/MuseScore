@@ -803,10 +803,19 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
 
     int nNotes = int(notes.size());
     int nAcc = 0;
+    int prevSubtype = 0;
+    int prevLine = std::numeric_limits<int>::min();
     for (int i = nNotes - 1; i >= 0; --i) {
         Note* note     = notes[i];
         Accidental* ac = note->accidental();
-        if (ac && !note->fixed()) {
+        if (ac && ac->subtype() == prevSubtype && note->line() == prevLine) {
+            // we shouldn't have two of the same accidental on the same line.
+            // if we find one that is identical to the one before it, don't lay it out
+            ac->setbbox(RectF());
+            ac->setPos(PointF());
+        } else if (ac && !note->fixed()) {
+            prevLine = note->line();
+            prevSubtype = ac->subtype();
             ac->layout();
             if (!ac->visible()) {
                 ac->setPos(ac->bbox().x() - ac->width(), 0.0);
