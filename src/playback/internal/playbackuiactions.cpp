@@ -72,7 +72,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
     UiAction("midi-on",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "MIDI input"),
+             TranslatableString("action", "Enable MIDI input"),
              TranslatableString("action", "Toggle MIDI input"),
              IconCode::Code::MIDI_INPUT,
              Checkable::Yes
@@ -88,7 +88,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
     UiAction("pan",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Pan score"),
+             TranslatableString("action", "Pan score automatically"),
              TranslatableString("action", "Pan score automatically during playback"),
              IconCode::Code::PAN_SCORE,
              Checkable::Yes
@@ -96,7 +96,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
     UiAction("countin",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Count-in"),
+             TranslatableString("action", "Enable count-in when playing"),
              TranslatableString("action", "Enable count-in when playing"),
              IconCode::Code::COUNT_IN,
              Checkable::Yes
@@ -107,14 +107,14 @@ const UiActionList PlaybackUiActions::m_loopBoundaryActions = {
     UiAction("loop-in",
              mu::context::UiCtxAny,
              mu::context::CTX_NOTATION_FOCUSED,
-             TranslatableString("action", "Loop in"),
+             TranslatableString("action", "Set loop marker left"),
              TranslatableString("action", "Set loop marker left"),
              IconCode::Code::LOOP_IN
              ),
     UiAction("loop-out",
              mu::context::UiCtxAny,
              mu::context::CTX_NOTATION_FOCUSED,
-             TranslatableString("action", "Loop out"),
+             TranslatableString("action", "Set loop marker right"),
              TranslatableString("action", "Set loop marker right"),
              IconCode::Code::LOOP_OUT
              ),
