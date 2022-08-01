@@ -606,19 +606,19 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("system-break",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_FOCUSED,
-             TranslatableString("action", "Toggle system break"),
-             TranslatableString("action", "Toggle system break")
+             TranslatableString("action", "Add/remove system break"),
+             TranslatableString("action", "Add/remove system break")
              ),
     UiAction("page-break",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Toggle page break"),
-             TranslatableString("action", "Toggle page break")
+             TranslatableString("action", "Add/remove page break"),
+             TranslatableString("action", "Add/remove page break")
              ),
     UiAction("section-break",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Toggle section break"),
+             TranslatableString("action", "Add/remove section break"),
              TranslatableString("action", "Add/remove section break")
              ),
     UiAction("split-measure",
@@ -776,7 +776,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "No beam"),
-             TranslatableString("action", "Remove beams"),
+             TranslatableString("action", "No beam"),
              IconCode::Code::NOTE_HEAD_EIGHTH
              ),
     UiAction("beam-break-left",
@@ -1187,13 +1187,13 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Ottava 8va &alta"),
-             TranslatableString("action", "Add line: ottava 8va alta")
+             TranslatableString("action", "Add ottava 8va alta")
              ),
     UiAction("add-8vb",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Ottava 8va &bassa"),
-             TranslatableString("action", "Add line: ottava 8va bassa")
+             TranslatableString("action", "Add ottava 8va bassa")
              ),
     UiAction("add-hairpin",
              mu::context::UiCtxNotationOpened,
@@ -1211,7 +1211,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Note anchored line"),
-             TranslatableString("action", "Add line: note anchored")
+             TranslatableString("action", "Add note anchored line")
              ),
     UiAction("chord-tie",
              mu::context::UiCtxNotationOpened,
@@ -1378,7 +1378,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Othe&r…"),
-             TranslatableString("action", "Create custom tuplet…")
+             TranslatableString("action", "Enter tuplet: create custom…")
              ),
     UiAction("stretch-",
              mu::context::UiCtxNotationOpened,
@@ -1500,37 +1500,37 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Screen: Previous"),
-             TranslatableString("action", "Go to screen: previous")
+             TranslatableString("action", "Jump to previous screen")
              ),
     UiAction("scr-next",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Screen: Next"),
-             TranslatableString("action", "Go to screen: next")
+             TranslatableString("action", "Jump to next screen")
              ),
     UiAction("page-prev",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Page: Previous"),
-             TranslatableString("action", "Go to page: previous")
+             TranslatableString("action", "Jump to previous page")
              ),
     UiAction("page-next",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Page: Next"),
-             TranslatableString("action", "Go to page: next")
+             TranslatableString("action", "Jump to next page")
              ),
     UiAction("page-top",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Page: Top of first"),
-             TranslatableString("action", "Go to page: top of first")
+             TranslatableString("action", "Jump to beginning")
              ),
     UiAction("page-end",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Page: Bottom of last"),
-             TranslatableString("action", "Go to page: bottom of last")
+             TranslatableString("action", "Jump to end")
              ),
     UiAction("help",
              mu::context::UiCtxNotationOpened,
@@ -1672,13 +1672,13 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_TEXT_EDITING,
              TranslatableString("action", "Next syllable"),
-             TranslatableString("action", "Hyphenate lyrics")
+             TranslatableString("action", "Lyrics: enter hyphen")
              ),
     UiAction("add-melisma",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_TEXT_EDITING,
              TranslatableString("action", "Add melisma"),
-             TranslatableString("action", "Enter melisma")
+             TranslatableString("action", "Lyrics: enter melisma")
              ),
     UiAction("add-lyric-verse",
              mu::context::UiCtxNotationOpened,
@@ -2198,7 +2198,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Slur"),
-             TranslatableString("action", "Add articulation: slur"),
+             TranslatableString("action", "Add slur"),
              IconCode::Code::NOTE_SLUR
              ),
     UiAction("add-marcato",
