@@ -33,7 +33,7 @@ RowLayout {
 
     property alias searchText: searchField.searchText
 
-    property int buttonWidth: 0
+    property int buttonMinWidth: 0
 
     signal startEditCurrentShortcutRequested()
     signal clearSelectedShortcutsRequested()
@@ -58,7 +58,7 @@ RowLayout {
     FlatButton {
         id: editButton
 
-        Layout.preferredWidth: root.buttonWidth
+        minWidth: root.buttonMinWidth
 
         text: qsTrc("shortcuts", "Define…")
 
@@ -74,9 +74,9 @@ RowLayout {
     FlatButton {
         id: clearButton
 
-        Layout.preferredWidth: root.buttonWidth
+        minWidth: root.buttonMinWidth
 
-        text: qsTrc("shortcuts", "Clear")
+        text: qsTrc("global", "Clear")
 
         navigation.name: "ClearShortcutsButton"
         navigation.panel: root.navigation

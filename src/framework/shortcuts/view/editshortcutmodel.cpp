@@ -171,7 +171,7 @@ void EditShortcutModel::applyNewSequence()
         return;
     }
 
-    QString str = conflictWarn + "<br><br>" + mu::qtrc("shortcuts", "Are you sure you want to assign it to <b>%2</b> instead?")
+    QString str = conflictWarn + "<br><br>" + mu::qtrc("shortcuts", "Are you sure you want to assign it to <b>%1</b> instead?")
                   .arg(m_originShortcutTitle);
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);

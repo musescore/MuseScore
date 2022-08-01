@@ -54,6 +54,7 @@ Column {
     }
 
     DropdownPropertyView {
+        //: Musical mode (major, minor, dorian, phrygian, lydian, etc.)
         titleText: qsTrc("inspector", "Mode")
         propertyItem: root.model ? root.model.mode : null
 

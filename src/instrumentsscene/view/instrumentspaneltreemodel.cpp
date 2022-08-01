@@ -37,6 +37,8 @@ using namespace mu::notation;
 using namespace mu::uicomponents;
 using ItemType = InstrumentsTreeItemType::ItemType;
 
+static const mu::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
+
 namespace mu::instrumentsscene {
 static QString notationToKey(const INotationPtr notation)
 {
@@ -72,6 +74,10 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
     onNotationChanged();
     context()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
+    });
+
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+        emit addInstrumentsKeyboardShortcutChanged();
     });
 }
 
@@ -330,7 +336,7 @@ void InstrumentsPanelTreeModel::clearSelection()
 
 void InstrumentsPanelTreeModel::addInstruments()
 {
-    dispatcher()->dispatch("instruments");
+    dispatcher()->dispatch(ADD_INSTRUMENTS_ACTIONCODE);
 }
 
 void InstrumentsPanelTreeModel::moveSelectedRowsUp()
@@ -556,6 +562,17 @@ bool InstrumentsPanelTreeModel::isAddingAvailable() const
 bool InstrumentsPanelTreeModel::isEmpty() const
 {
     return m_rootItem ? m_rootItem->isEmpty() : true;
+}
+
+QString InstrumentsPanelTreeModel::addInstrumentsKeyboardShortcut() const
+{
+    const shortcuts::Shortcut& shortcut = shortcutsRegister()->shortcut(ADD_INSTRUMENTS_ACTIONCODE);
+
+    if (shortcut.sequences.empty()) {
+        return {};
+    }
+
+    return shortcuts::sequencesToNativeText({ shortcut.sequences[0] });
 }
 
 void InstrumentsPanelTreeModel::setIsRemovingAvailable(bool isRemovingAvailable)

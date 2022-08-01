@@ -6823,12 +6823,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1979"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2056"/>
-        <source>8th note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2014"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2091"/>
         <source>256th note</source>
@@ -7777,6 +7771,16 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1527"/>
+        <source>Jump to top of first page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1533"/>
+        <source>Jump to bottom of last page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1556"/>
         <source>Change enharmonic spelling (concert and written pitch)</source>
         <translation type="unfinished"></translation>
@@ -8127,6 +8131,12 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1973"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2050"/>
         <source>Set duration: quarter note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1979"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2056"/>
+        <source>Eighth note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9457,16 +9467,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1527"/>
-        <source>Jump to beginning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1533"/>
-        <source>Jump to end</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1603"/>
         <source>Advance cursor: previous beat (chord symbols)</source>
         <translation type="unfinished"></translation>
@@ -10001,22 +10001,19 @@ This action will not delete any of your scores.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/AboutDialog.qml" line="104"/>
-        <source>Get %1help%2 with the program or %3contribute%4 to its development.</source>
-        <extracomment>The text between %1 and %2 will be a clickable link (same for %3 and %4)</extracomment>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="103"/>
+        <source>Get &lt;a href=&quot;%1&quot;&gt;help&lt;/a&gt; with the program or &lt;a href=&quot;%2&quot;&gt;contribute&lt;/a&gt; to its development.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/AboutDialog.qml" line="118"/>
-        <source>For privacy information, see our %1privacy policy%2.</source>
-        <extracomment>The text between %1 and %2 will be a clickable link</extracomment>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="116"/>
+        <source>For privacy information, see our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/AboutDialog.qml" line="129"/>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="125"/>
         <source>Copyright © 1999-2022 MuseScore BVBA and others.
-Published under the %1GNU General Public License version 3%2.</source>
-        <extracomment>The text between %1 and %2 will be a clickable link</extracomment>
+Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10217,9 +10214,8 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="59"/>
-        <source>Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our %1privacy policy%2 for more info.</source>
-        <extracomment>The text between %1 and %2 will be a clickable link</extracomment>
+        <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
+        <source>Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -12580,29 +12576,27 @@ Published under the %1GNU General Public License version 3%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="75"/>
-        <source>It was last saved with a version older than 2.0.0. You can convert this score by opening and then saving with MuseScore version 2.x. Visit the %1MuseScore download page%2 to obtain such a 2.x version.</source>
-        <extracomment>The text between %1 and %2 will be a clickable link.</extracomment>
+        <location filename="../../src/engraving/engravingerrors.h" line="74"/>
+        <source>This file was last saved in a version older than 2.0.0. You can convert this score by opening and then saving in MuseScore version 2.x. Visit the &lt;a href=&quot;%1&quot;&gt;MuseScore download page&lt;/a&gt; to obtain such a 2.x version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="83"/>
-        <source>This score was saved using a newer version of MuseScore. Visit the %1MuseScore website%2 to obtain the latest version.</source>
-        <extracomment>The text between %1 and %2 will be a clickable link.</extracomment>
+        <location filename="../../src/engraving/engravingerrors.h" line="81"/>
+        <source>This file was saved using a newer version of MuseScore. Visit the &lt;a href=&quot;%1&quot;&gt;MuseScore website&lt;/a&gt; to obtain the latest version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="88"/>
-        <source>It was last saved with a development version of 3.0.</source>
+        <location filename="../../src/engraving/engravingerrors.h" line="86"/>
+        <source>This file was last saved with a development version of 3.0.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="91"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="89"/>
         <source>File &quot;%1&quot; is corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="94"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="92"/>
         <source>File &quot;%1&quot; is critically corrupted and cannot be processed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12619,7 +12613,7 @@ Published under the %1GNU General Public License version 3%2.</source>
     <message>
         <location filename="../../src/engraving/libmscore/tempotext.cpp" line="517"/>
         <source>%1 note = %2 note</source>
-        <extracomment>%1 and %2 are note durations. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, //: translate &quot;%1 note&quot; with &quot;%1&quot; and &quot;%2 note&quot; with &quot;%2&quot;, so that just the duration will be shown.</extracomment>
+        <extracomment>%1 and %2 are note durations. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot; and &quot;%2 note&quot; with &quot;%2&quot;, so that just the duration will be shown.</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -16464,7 +16458,7 @@ Published under the %1GNU General Public License version 3%2.</source>
 <context>
     <name>global</name>
     <message>
-        <location filename="../../src/appshell/qml/AboutDialog.qml" line="149"/>
+        <location filename="../../src/appshell/qml/AboutDialog.qml" line="142"/>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="122"/>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="98"/>
         <location filename="../../src/framework/ui/qml/MuseScore/Ui/internal/StandardDialog.qml" line="41"/>
@@ -16523,7 +16517,9 @@ Published under the %1GNU General Public License version 3%2.</source>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/MidiMappingBottomPanel.qml" line="69"/>
+        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsTopPanel.qml" line="79"/>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/TextInputField.qml" line="225"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="73"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17140,7 +17136,7 @@ pickup measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="84"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="90"/>
         <source>%n error(s) found, import may be incomplete.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -17562,7 +17558,7 @@ pickup measure</source>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="56"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="66"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="67"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="101"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="112"/>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="69"/>
@@ -17964,11 +17960,6 @@ pickup measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="73"/>
-        <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="103"/>
         <source>You have multiple fretboard diagrams selected. Select a single diagram to edit its settings.</source>
         <translation type="unfinished"></translation>
@@ -18115,52 +18106,53 @@ pickup measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="57"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
         <source>Mode</source>
+        <extracomment>Musical mode (major, minor, dorian, phrygian, lydian, etc.)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="65"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="66"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="67"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="68"/>
         <source>Major</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="68"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="69"/>
         <source>Minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="69"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="70"/>
         <source>Dorian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="70"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="71"/>
         <source>Phrygian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="71"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="72"/>
         <source>Lydian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="72"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="73"/>
         <source>Mixolydian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="73"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="74"/>
         <source>Ionian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="74"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="75"/>
         <source>Locrian</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19467,8 +19459,9 @@ pickup measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="67"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="68"/>
         <source>Add</source>
+        <extracomment>Keep in sync with the message that appears if there are no instruments in the score (InstrumentsPanel.qml)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -19478,18 +19471,18 @@ pickup measure</source>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="233"/>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="83"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="84"/>
         <source>Move selected instruments up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="248"/>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="101"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="102"/>
         <source>Move selected instruments down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="119"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="120"/>
         <source>Remove selected instruments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19631,9 +19624,15 @@ pickup measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="120"/>
-        <source>There are no instruments in your score. To choose some, press %1Add%2, or use the shortcut %1‘i’%2</source>
-        <extracomment>Text between %1 and %2 will be printed in a bold font.</extracomment>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="121"/>
+        <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the keyboard shortcut %1.</source>
+        <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="124"/>
+        <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;.</source>
+        <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -21642,27 +21641,19 @@ Whether you are just getting started with music notation software, or are a powe
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1509"/>
-        <source>Staff Text line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1520"/>
-        <source>System Text line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1308"/>
         <source>Text line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1294"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1509"/>
         <source>Staff text line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1301"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1520"/>
         <source>System text line</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25240,11 +25231,6 @@ failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsTopPanel.qml" line="79"/>
-        <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsTopPanel.qml" line="97"/>
         <source>Search shortcut</source>
         <translation type="unfinished"></translation>
@@ -25311,7 +25297,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="174"/>
-        <source>Are you sure you want to assign it to &lt;b&gt;%2&lt;/b&gt; instead?</source>
+        <source>Are you sure you want to assign it to &lt;b&gt;%1&lt;/b&gt; instead?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -25329,7 +25315,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="54"/>
-        <source>The file is exist</source>
+        <source>The file already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
