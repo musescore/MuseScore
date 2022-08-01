@@ -372,6 +372,8 @@ public:
 
         CROSS_STAFF_BEAMING = 0xF43D,
 
+        TEMPO_CHANGE = 0xF43F,
+
         NONE = 0xFFFF
     };
 
