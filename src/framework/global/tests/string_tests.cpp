@@ -431,6 +431,60 @@ TEST_F(Global_Types_StringTests, String_Args)
         //! CHECK
         EXPECT_EQ(newStr, u"{123}, [abc]");
     }
+
+    {
+        //! GIVEN Some String containing a % character not followed by 1-9
+        String str = u"%1%";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100%");
+    }
+
+    {
+        //! GIVEN Some String containing a % character not followed by 1-9
+        String str = u"%1%a";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100%a");
+    }
+
+    {
+        //! GIVEN Some String containing a % character not followed by 1-9
+        String str = u"%1%0";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100%0");
+    }
+
+    {
+        //! GIVEN Some String containing multiple %1s in succession
+        String str = u"%1%1";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100100");
+    }
+
+    {
+        //! GIVEN Some String containing multiple %1s in succession and a % character not followed by 1-9
+        String str = u"%1%1%";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100100%");
+    }
+
+    {
+        //! GIVEN Some String containing a % character followed by another % character
+        String str = u"%1%%1% %1%%%1%%";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100%100% 100%%100%%");
+    }
 }
 
 TEST_F(Global_Types_StringTests, String_Number)
