@@ -6514,23 +6514,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="609"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="610"/>
-        <source>Toggle system break</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="615"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="616"/>
-        <source>Toggle page break</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="621"/>
-        <source>Toggle section break</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="639"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="640"/>
         <source>Insert one measure before selection</source>
@@ -7356,6 +7339,19 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="609"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="610"/>
+        <source>Add/remove system break</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="615"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="616"/>
+        <source>Add/remove page break</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="621"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="622"/>
         <source>Add/remove section break</source>
         <translation type="unfinished"></translation>
@@ -7438,11 +7434,6 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="765"/>
         <source>Add grace note: 32nd after</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="779"/>
-        <source>Remove beams</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7566,16 +7557,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1190"/>
-        <source>Add line: ottava 8va alta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1196"/>
-        <source>Add line: ottava 8va bassa</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1202"/>
         <source>Add hairpin: crescendo</source>
         <translation type="unfinished"></translation>
@@ -7583,11 +7564,6 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1208"/>
         <source>Add hairpin: decrescendo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1214"/>
-        <source>Add line: note anchored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7721,11 +7697,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1381"/>
-        <source>Create custom tuplet…</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1387"/>
         <source>Decrease layout stretch</source>
         <translation type="unfinished"></translation>
@@ -7806,43 +7777,13 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1503"/>
-        <source>Go to screen: previous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1509"/>
-        <source>Go to screen: next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1514"/>
         <source>Page: Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1515"/>
-        <source>Go to page: previous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1520"/>
         <source>Page: Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1521"/>
-        <source>Go to page: next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1527"/>
-        <source>Go to page: top of first</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1533"/>
-        <source>Go to page: bottom of last</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7978,16 +7919,6 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1669"/>
         <source>Move text/go to previous lyric verse</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1675"/>
-        <source>Hyphenate lyrics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1681"/>
-        <source>Enter melisma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8479,11 +8410,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2201"/>
-        <source>Add articulation: slur</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2208"/>
         <source>Add articulation: marcato</source>
         <translation type="unfinished"></translation>
@@ -8536,11 +8462,6 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2268"/>
         <source>Voice 4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="92"/>
-        <source>Pan score automatically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8623,6 +8544,7 @@ By default, they will be placed such as that their right end are at the same lev
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="778"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="779"/>
         <source>No beam</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8660,11 +8582,6 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="75"/>
         <source>Online &amp;handbook</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="76"/>
-        <source>Go to online handbook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8793,6 +8710,11 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="76"/>
+        <source>Open online handbook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="104"/>
         <source>Restore the &amp;default layout</source>
         <translation type="unfinished"></translation>
@@ -8860,13 +8782,28 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="76"/>
+        <source>Toggle MIDI input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="91"/>
         <source>Pan score</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="92"/>
+        <source>Pan score automatically during playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="99"/>
         <source>Count-in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="100"/>
+        <source>Enable count-in when playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8877,16 +8814,6 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="65"/>
         <source>Toggle metronome playback</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="76"/>
-        <source>Toggle ‘Enable MIDI input’</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="100"/>
-        <source>Enable count-in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9310,8 +9237,18 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1190"/>
+        <source>Add ottava 8va alta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1195"/>
         <source>Ottava 8va &amp;bassa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1196"/>
+        <source>Add ottava 8va bassa</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9327,6 +9264,11 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1213"/>
         <source>&amp;Note anchored line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1214"/>
+        <source>Add note anchored line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9465,6 +9407,11 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1381"/>
+        <source>Enter tuplet: create custom…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1386"/>
         <source>&amp;Decrease layout stretch</source>
         <translation type="unfinished"></translation>
@@ -9492,6 +9439,51 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1416"/>
         <source>Reset shapes and &amp;positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1503"/>
+        <source>Jump to previous screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1509"/>
+        <source>Jump to next screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1515"/>
+        <source>Jump to previous page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1521"/>
+        <source>Jump to next page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1527"/>
+        <source>Jump to beginning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1533"/>
+        <source>Jump to end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1675"/>
+        <source>Lyrics: enter hyphen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1681"/>
+        <source>Lyrics: enter melisma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2201"/>
+        <source>Add slur</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9573,7 +9565,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="35"/>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="36"/>
-        <source>Add or remove instruments…</source>
+        <source>Add/remove instruments…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
