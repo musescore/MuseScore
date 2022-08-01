@@ -7029,11 +7029,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="107"/>
-        <source>Select previous element</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="113"/>
         <source>Select next chord / move text right</source>
         <translation type="unfinished"></translation>
@@ -7046,11 +7041,6 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="125"/>
         <source>Go to next measure / move text right quickly</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="131"/>
-        <source>Select first element in previous measure / move text left quickly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7814,11 +7804,6 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1597"/>
         <source>Advance cursor: next beat (chord symbols)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1603"/>
-        <source>Move cursor to previous beat (chord symbols)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9007,6 +8992,16 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="107"/>
+        <source>Select previous element in score</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="131"/>
+        <source>Go to previous measure / move text left quickly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="392"/>
         <source>&amp;Style…</source>
         <translation type="unfinished"></translation>
@@ -9469,6 +9464,11 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1533"/>
         <source>Jump to end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1603"/>
+        <source>Advance cursor: previous beat (chord symbols)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10854,13 +10854,13 @@ Published under the %1GNU General Public License version 3%2.</source>
 <context>
     <name>engraving</name>
     <message>
-        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="100"/>
+        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="103"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="132"/>
         <source>Score</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="136"/>
+        <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="139"/>
         <source>Staff %1</source>
         <translation type="unfinished"></translation>
     </message>
