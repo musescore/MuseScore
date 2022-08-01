@@ -39,8 +39,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/beam.h
     ${CMAKE_CURRENT_LIST_DIR}/bend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bend.h
-    ${CMAKE_CURRENT_LIST_DIR}/stretchedbend.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/stretchedbend.h
     ${CMAKE_CURRENT_LIST_DIR}/box.cpp
     ${CMAKE_CURRENT_LIST_DIR}/box.h
     ${CMAKE_CURRENT_LIST_DIR}/bracket.cpp
@@ -110,6 +108,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/fret.h
     ${CMAKE_CURRENT_LIST_DIR}/glissando.cpp
     ${CMAKE_CURRENT_LIST_DIR}/glissando.h
+    ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.h
     ${CMAKE_CURRENT_LIST_DIR}/groups.cpp
     ${CMAKE_CURRENT_LIST_DIR}/groups.h
     ${CMAKE_CURRENT_LIST_DIR}/hairpin.cpp
@@ -124,8 +124,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/image.h
     ${CMAKE_CURRENT_LIST_DIR}/imageStore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/imageStore.h
-    ${CMAKE_CURRENT_LIST_DIR}/instrumentname.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/instrumentname.h
     ${CMAKE_CURRENT_LIST_DIR}/input.cpp
     ${CMAKE_CURRENT_LIST_DIR}/input.h
     ${CMAKE_CURRENT_LIST_DIR}/instrchange.cpp
@@ -134,6 +132,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/instrtemplate.h
     ${CMAKE_CURRENT_LIST_DIR}/instrument.cpp
     ${CMAKE_CURRENT_LIST_DIR}/instrument.h
+    ${CMAKE_CURRENT_LIST_DIR}/instrumentname.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/instrumentname.h
     ${CMAKE_CURRENT_LIST_DIR}/interval.cpp
     ${CMAKE_CURRENT_LIST_DIR}/interval.h
     ${CMAKE_CURRENT_LIST_DIR}/joinMeasure.cpp
@@ -168,10 +168,10 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/masterscore.h
     ${CMAKE_CURRENT_LIST_DIR}/mcursor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mcursor.h
-    ${CMAKE_CURRENT_LIST_DIR}/measurebase.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/measurebase.h
     ${CMAKE_CURRENT_LIST_DIR}/measure.cpp
     ${CMAKE_CURRENT_LIST_DIR}/measure.h
+    ${CMAKE_CURRENT_LIST_DIR}/measurebase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/measurebase.h
     ${CMAKE_CURRENT_LIST_DIR}/measurenumber.cpp
     ${CMAKE_CURRENT_LIST_DIR}/measurenumber.h
     ${CMAKE_CURRENT_LIST_DIR}/measurenumberbase.cpp
@@ -191,12 +191,12 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/navigate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/navigate.h
     ${CMAKE_CURRENT_LIST_DIR}/note.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/note.h
     ${CMAKE_CURRENT_LIST_DIR}/notedot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notedot.h
     ${CMAKE_CURRENT_LIST_DIR}/noteentry.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteevent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteevent.h
-    ${CMAKE_CURRENT_LIST_DIR}/note.h
     ${CMAKE_CURRENT_LIST_DIR}/noteline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteline.h
     ${CMAKE_CURRENT_LIST_DIR}/notifier.h
@@ -215,6 +215,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/pitch.h
     ${CMAKE_CURRENT_LIST_DIR}/pitchspelling.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pitchspelling.h
+    ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.h
     ${CMAKE_CURRENT_LIST_DIR}/pos.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pos.h
     ${CMAKE_CURRENT_LIST_DIR}/property.cpp
@@ -236,10 +238,10 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rootitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rootitem.h
     ${CMAKE_CURRENT_LIST_DIR}/score.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/score.h
     ${CMAKE_CURRENT_LIST_DIR}/scorefile.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreorder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreorder.h
-    ${CMAKE_CURRENT_LIST_DIR}/score.h
     ${CMAKE_CURRENT_LIST_DIR}/scoretree.cpp
     ${CMAKE_CURRENT_LIST_DIR}/segment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/segment.h
@@ -272,14 +274,14 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stafflines.h
     ${CMAKE_CURRENT_LIST_DIR}/staffstate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staffstate.h
-    ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftext.h
-    ${CMAKE_CURRENT_LIST_DIR}/stafftypechange.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/stafftypechange.h
+    ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftype.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftype.h
+    ${CMAKE_CURRENT_LIST_DIR}/stafftypechange.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stafftypechange.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftypelist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftypelist.h
     ${CMAKE_CURRENT_LIST_DIR}/stem.cpp
@@ -288,44 +290,48 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stemslash.h
     ${CMAKE_CURRENT_LIST_DIR}/sticking.cpp
     ${CMAKE_CURRENT_LIST_DIR}/sticking.h
+    ${CMAKE_CURRENT_LIST_DIR}/stretchedbend.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stretchedbend.h
     ${CMAKE_CURRENT_LIST_DIR}/stringdata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stringdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/swing.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/swing.h
     ${CMAKE_CURRENT_LIST_DIR}/symbol.cpp
     ${CMAKE_CURRENT_LIST_DIR}/symbol.h
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstate.h
     ${CMAKE_CURRENT_LIST_DIR}/system.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/system.h
     ${CMAKE_CURRENT_LIST_DIR}/systemdivider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemdivider.h
-    ${CMAKE_CURRENT_LIST_DIR}/system.h
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.h
     ${CMAKE_CURRENT_LIST_DIR}/tempo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempo.h
     ${CMAKE_CURRENT_LIST_DIR}/tempotext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempotext.h
+    ${CMAKE_CURRENT_LIST_DIR}/text.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/text.h
     ${CMAKE_CURRENT_LIST_DIR}/textbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/text.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textedit.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textedit.h
     ${CMAKE_CURRENT_LIST_DIR}/textframe.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textframe.h
-    ${CMAKE_CURRENT_LIST_DIR}/text.h
-    ${CMAKE_CURRENT_LIST_DIR}/textlinebase.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/textlinebase.h
     ${CMAKE_CURRENT_LIST_DIR}/textline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textline.h
+    ${CMAKE_CURRENT_LIST_DIR}/textlinebase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/textlinebase.h
     ${CMAKE_CURRENT_LIST_DIR}/tie.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tie.h
     ${CMAKE_CURRENT_LIST_DIR}/tiemap.h
     ${CMAKE_CURRENT_LIST_DIR}/timesig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/timesig.h
     ${CMAKE_CURRENT_LIST_DIR}/transpose.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tremolobar.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tremolobar.h
     ${CMAKE_CURRENT_LIST_DIR}/tremolo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tremolo.h
+    ${CMAKE_CURRENT_LIST_DIR}/tremolobar.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tremolobar.h
     ${CMAKE_CURRENT_LIST_DIR}/trill.cpp
     ${CMAKE_CURRENT_LIST_DIR}/trill.h
     ${CMAKE_CURRENT_LIST_DIR}/tripletfeel.cpp
@@ -345,10 +351,4 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/volta.h
     ${CMAKE_CURRENT_LIST_DIR}/whammybar.cpp
     ${CMAKE_CURRENT_LIST_DIR}/whammybar.h
-    ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.h
-    ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.h
-    ${CMAKE_CURRENT_LIST_DIR}/swing.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/swing.h
 )
