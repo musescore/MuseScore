@@ -92,10 +92,12 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     bool curTrailer = ctx.curMeasure->trailer();
     MeasureBase* breakMeasure = nullptr;
 
-    Fraction minTicks = Fraction::max(); // Initializing this variable at an arbitrary high value.
-    // In principle, it just needs to be longer than any possible note.
+    Fraction minTicks = Fraction::max(); // Initializing at highest possible value
     Fraction prevMinTicks = Fraction(1, 1);
-    bool changeMinSysTicks = false;
+    bool minSysTicksChanged = false;
+    Fraction maxTicks = Fraction(0, 1); // Initializing at lowest possible value
+    Fraction prevMaxTicks = Fraction(1, 1);
+    bool maxSysTicksChanged = false;
     double oldStretch = 1;
     System* oldSystem = nullptr;
 
@@ -109,23 +111,34 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // we need to recompute the layout of the previous measures. When updating the width of these
         // measures, curSysWidth must be updated accordingly.
         if (ctx.curMeasure->isMeasure()) {
-            if (toMeasure(ctx.curMeasure)->shortestChordRest() < minTicks) {
+            Fraction curMinTicks = toMeasure(ctx.curMeasure)->shortestChordRest();
+            Fraction curMaxTicks = toMeasure(ctx.curMeasure)->maxTicks();
+            if (curMinTicks < minTicks) {
                 prevMinTicks = minTicks; // We save the previous value in case we need to restore it (see later)
-                minTicks = toMeasure(ctx.curMeasure)->shortestChordRest();
-                changeMinSysTicks = true;
+                minTicks = curMinTicks;
+                minSysTicksChanged = true;
+            } else {
+                minSysTicksChanged = false;
+            }
+            if (curMaxTicks > maxTicks) {
+                prevMaxTicks = maxTicks;
+                maxTicks = curMaxTicks;
+                maxSysTicksChanged = true;
+            } else {
+                maxSysTicksChanged = false;
+            }
+            if (minSysTicksChanged || maxSysTicksChanged) {
                 for (MeasureBase* mb : system->measures()) {
                     if (mb == ctx.curMeasure) {
                         break; // Cause I want to change only previous measures, not current one
                     }
                     if (mb->isMeasure()) {
                         double prevWidth = toMeasure(mb)->width();
-                        toMeasure(mb)->computeWidth(minTicks, 1);
+                        toMeasure(mb)->computeWidth(minTicks, maxTicks, 1);
                         double newWidth = toMeasure(mb)->width();
                         curSysWidth += newWidth - prevWidth;
                     }
                 }
-            } else {
-                changeMinSysTicks = false;
             }
         }
 
@@ -161,7 +174,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             } else {
                 m->addSystemTrailer(m->nextMeasure());
             }
-            m->computeWidth(minTicks, 1);
+            m->computeWidth(minTicks, maxTicks, 1);
             ww = m->width();
         } else if (ctx.curMeasure->isHBox()) {
             ctx.curMeasure->computeMinWidth();
@@ -203,12 +216,17 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             }
             // If the last appended measure caused a re-layout of the previous measures, now that we are
             // removing it we need to re-layout the previous measures again.
-            if (changeMinSysTicks) {
+            if (minSysTicksChanged) {
                 minTicks = prevMinTicks; // If the last measure caused it to change, now we need to restore it!
+            }
+            if (maxSysTicksChanged) {
+                maxTicks = prevMaxTicks;
+            }
+            if (minSysTicksChanged || maxSysTicksChanged) {
                 for (MeasureBase* mb : system->measures()) {
                     if (mb->isMeasure()) {
                         double prevWidth = toMeasure(mb)->width();
-                        toMeasure(mb)->computeWidth(minTicks, 1);
+                        toMeasure(mb)->computeWidth(minTicks, maxTicks, 1);
                         double newWidth = toMeasure(mb)->width();
                         curSysWidth += newWidth - prevWidth;
                     }
@@ -242,7 +260,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     Segment* s = m1->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
-                        m1->computeWidth(minTicks, 1);
+                        m1->computeWidth(minTicks, maxTicks, 1);
                         ww = m1->width();
                     }
                 }
@@ -337,7 +355,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     } else {
                         m->removeSystemTrailer();
                     }
-                    m->computeWidth(m->system()->minSysTicks(), oldStretch);
+                    m->computeWidth(m->system()->minSysTicks(), m->system()->maxSysTicks(), oldStretch);
                     m->layoutMeasureElements();
                     LayoutBeams::restoreBeams(m);
                     if (m == nm || !m->noBreak()) {
@@ -381,7 +399,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             double w = lm->width();
             lm->addSystemTrailer(nm);
             if (lm->trailer()) {
-                lm->computeWidth(minTicks, 1);
+                lm->computeWidth(minTicks, maxTicks, 1);
             }
             curSysWidth += lm->width() - w;
         }
@@ -418,7 +436,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                 Measure* m = toMeasure(mb);
                 if (!(m->isWidthLocked() && stretchCoeff < m->layoutStretch())) { // It would be pointless to re-compute the layout of a measure
                     prevWidth = m->width();                                       // that is already widthLocked to a larger value.
-                    m->computeWidth(minTicks, stretchCoeff);
+                    m->computeWidth(minTicks, maxTicks, stretchCoeff);
                     curSysWidth += m->width() - prevWidth;
                 }
             }
