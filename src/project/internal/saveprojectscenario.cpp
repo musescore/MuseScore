@@ -227,7 +227,7 @@ bool SaveProjectScenario::warnBeforePublishing() const
                             "score privately until you’re ready to share it to the world. "),
         buttons,
         int(IInteractive::Button::Ok),
-        IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain);
+        IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 
     bool publish = result.standardButton() == IInteractive::Button::Ok;
     if (publish && !result.showAgain()) {
