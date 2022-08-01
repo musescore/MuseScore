@@ -128,7 +128,7 @@ void InteractiveTestsModel::customQuestion()
 void InteractiveTestsModel::information()
 {
     IInteractive::Result result = interactive()->info("Tuplet cannot cross barlines", "", {}, 0,
-                                                      IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain);
+                                                      IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
     LOGD() << interactive()->buttonData(result.standardButton()).text;
 }
 
