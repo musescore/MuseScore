@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "duration.h"
+#include "durationelement.h"
 
 #include "rw/xml.h"
 

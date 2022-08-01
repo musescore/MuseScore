@@ -29,7 +29,7 @@
 #include "bracket.h"
 #include "bsymbol.h"
 #include "chord.h"
-#include "duration.h"
+#include "durationelement.h"
 #include "fret.h"
 #include "hook.h"
 #include "instrumentname.h"

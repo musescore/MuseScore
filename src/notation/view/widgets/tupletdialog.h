@@ -22,7 +22,7 @@
 #ifndef MU_NOTATION_TUPLETDIALOG_H
 #define MU_NOTATION_TUPLETDIALOG_H
 
-#include "libmscore/duration.h"
+#include "libmscore/durationelement.h"
 #include "ui_tupletdialog.h"
 
 #include "modularity/ioc.h"
