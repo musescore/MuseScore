@@ -22,6 +22,8 @@
 
 #include "notationstatusbarmodel.h"
 
+#include "types/translatablestring.h"
+
 #include "log.h"
 
 using namespace mu::appshell;
@@ -109,9 +111,14 @@ QVariant NotationStatusBarModel::currentViewMode()
 {
     ViewMode viewMode = notation() ? notation()->viewMode() : ViewMode::PAGE;
 
-    for (MenuItem* mode : makeAvailableViewModeList()) {
-        if (ALL_MODE_MAP.key(mode->id().toStdString()) == viewMode) {
-            return QVariant::fromValue(mode);
+    for (MenuItem* modeItem : makeAvailableViewModeList()) {
+        if (ALL_MODE_MAP.key(modeItem->id().toStdString()) == viewMode) {
+            if (viewMode == ViewMode::LINE || viewMode == ViewMode::SYSTEM) {
+                // In continuous view, we don't want to see "horizontal" or "vertical" (those should only be visible in the menu)
+                modeItem->setTitle(TranslatableString("notation", "Continuous view"));
+            }
+
+            return QVariant::fromValue(modeItem);
         }
     }
 
@@ -198,23 +205,19 @@ void NotationStatusBarModel::load()
             }
         }
     });
-
-    emit availableViewModeListChanged();
-    emit availableZoomListChanged();
 }
 
 void NotationStatusBarModel::onCurrentNotationChanged()
 {
     emit currentViewModeChanged();
     emit availableViewModeListChanged();
+    emit currentZoomPercentageChanged();
     emit availableZoomListChanged();
     emit zoomEnabledChanged();
 
     if (!notation()) {
         return;
     }
-
-    emit currentZoomPercentageChanged();
 
     notation()->notationChanged().onNotify(this, [this]() {
         emit currentViewModeChanged();
@@ -223,7 +226,7 @@ void NotationStatusBarModel::onCurrentNotationChanged()
 
     notation()->viewState()->zoomPercentage().ch.onReceive(this, [this](int) {
         emit currentZoomPercentageChanged();
-        emit availableViewModeListChanged();
+        emit availableZoomListChanged();
     });
 
     listenChangesInAccessibility();

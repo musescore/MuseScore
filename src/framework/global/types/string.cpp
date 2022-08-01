@@ -801,6 +801,11 @@ void String::truncate(size_t position)
     mutStr().resize(position);
 }
 
+static constexpr bool is1To9(char16_t chr)
+{
+    return u'1' <= chr && chr <= '9';
+}
+
 void String::doArgs(std::u16string& out, const std::vector<std::u16string_view>& args) const
 {
     const std::u16string& str = constStr();
@@ -808,15 +813,20 @@ void String::doArgs(std::u16string& out, const std::vector<std::u16string_view>&
     std::vector<std::u16string_view> parts;
 
     {
-        std::size_t current, previous = 0;
-        current = view.find(u'%');
+        std::size_t current = view.find(u'%'), previousCut = 0, previousPercent = 0;
+
         while (current != std::string::npos) {
-            std::u16string_view sub = view.substr(previous, current - previous);
-            parts.push_back(std::move(sub));
-            previous = current + 1;
-            current = view.find(u'%', previous);
+            std::u16string_view sub = view.substr(previousCut, current - previousCut);
+            std::size_t next = current + 1;
+            if (next < view.size() && is1To9(view.at(next))) {
+                parts.push_back(std::move(sub));
+                previousCut = next;
+            }
+            previousPercent = next;
+            current = view.find(u'%', previousPercent);
         }
-        std::u16string_view sub = view.substr(previous, current - previous);
+
+        std::u16string_view sub = view.substr(previousCut);
         parts.push_back(std::move(sub));
     }
 
@@ -827,10 +837,10 @@ void String::doArgs(std::u16string& out, const std::vector<std::u16string_view>&
             }
 
             char16_t first = p.at(0);
-            if (!Char::isDigit(first)) {
+            if (!is1To9(first)) {
                 out += p;
             } else {
-                size_t idx = first - 49;
+                size_t idx = first - u'1';
                 if (idx < args.size()) {
                     out += args.at(idx);
                     out.append(p.cbegin() + 1, p.cend());
