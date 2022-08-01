@@ -35,7 +35,7 @@
         </Staff>
       <trackName>D♭ Piccolo</trackName>
       <preferSharpFlat>flats</preferSharpFlat>
-      <Instrument id="eb-piccolo">
+      <Instrument id="db-piccolo">
         <longName>D♭ Piccolo</longName>
         <shortName>D♭ Picc.</shortName>
         <trackName>D♭ Piccolo</trackName>

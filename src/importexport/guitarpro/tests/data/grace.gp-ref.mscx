@@ -26,10 +26,11 @@
           </StaffType>
         </Staff>
       <trackName>E. Guitar 2</trackName>
-      <Instrument>
+      <Instrument id="grand-piano">
         <longName>E. Guitar 2</longName>
         <shortName>pno.</shortName>
         <trackName></trackName>
+        <instrumentId>keyboard.piano.grand</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>

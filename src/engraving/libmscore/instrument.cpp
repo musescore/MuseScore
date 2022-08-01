@@ -361,26 +361,28 @@ String Instrument::recognizeInstrumentId() const
     mu::join(nameList, _longNames.toStringList());
     mu::join(nameList, _shortNames.toStringList());
 
-    InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList);
+    const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList, _useDrumset);
 
     if (tmplByName && !tmplByName->musicXMLid.isEmpty()) {
         return tmplByName->musicXMLid;
     }
 
-    if (!channel(0)) {
+    const InstrChannel* channel = this->channel(0);
+
+    if (!channel) {
         return defaultInstrumentId;
     }
 
-    InstrumentTemplate* tmplMidiProgram = mu::engraving::searchTemplateForMidiProgram(channel(0)->program(), useDrumset());
+    const InstrumentTemplate* tmplMidiProgram = mu::engraving::searchTemplateForMidiProgram(channel->bank(), channel->program(),
+                                                                                            _useDrumset);
 
     if (tmplMidiProgram && !tmplMidiProgram->musicXMLid.isEmpty()) {
         return tmplMidiProgram->musicXMLid;
     }
 
-    InstrumentTemplate* guessedTmpl = mu::engraving::guessTemplateByNameData(nameList);
-
-    if (guessedTmpl && !guessedTmpl->musicXMLid.isEmpty()) {
-        return guessedTmpl->musicXMLid;
+    if (_useDrumset) {
+        static const String drumsetId(u"drumset");
+        return drumsetId;
     }
 
     return defaultInstrumentId;
@@ -388,14 +390,65 @@ String Instrument::recognizeInstrumentId() const
 
 String Instrument::recognizeId() const
 {
-    InstrumentTemplate* t = searchTemplateForMusicXmlId(_instrumentId);
+    // When reading a score create with pre-3.6, instruments doesn't
+    // have an id define in the instrument. So try to find the instrumentId
+    // based on MusicXMLid.
+    // This requires a hack for instruments using MusicXMLid "strings.group"
+    // because there are multiple instrument using this same id.
+    // For these instruments, use the value of controller 32 of the "arco"
+    // channel to find the correct instrument.
+    // There are some duplicate MusicXML IDs among other instruments too. In
+    // that case we check the pitch range and use the shortest ID that matches.
+    const String arco = String(u"arco");
+    const bool groupHack = instrumentId() == String(u"strings.group");
+    const int idxref = channelIdx(arco);
+    const int val32ref = (idxref < 0) ? -1 : channel(idxref)->bank();
+    String fallback;
+    int bestMatchStrength = 0;     // higher when fallback ID provides better match for instrument data
 
-    if (!t) {
-        static const String defaultInstrumentId(u"piano");
-        return defaultInstrumentId;
+    for (InstrumentGroup* g : instrumentGroups) {
+        for (InstrumentTemplate* it : g->instrumentTemplates) {
+            if (it->musicXMLid != instrumentId()) {
+                continue;
+            }
+            if (groupHack) {
+                if (fallback.isEmpty()) {
+                    // Instrument "Strings" doesn't have bank defined so
+                    // if no "strings.group" instrument with requested bank
+                    // is found, assume "Strings".
+                    fallback = it->id;
+                }
+                for (const InstrChannel& chan : it->channel) {
+                    if ((chan.name() == arco) && (chan.bank() == val32ref)) {
+                        return it->id;
+                    }
+                }
+            } else {
+                int matchStrength = 0
+                                    + ((minPitchP() == it->minPitchP) ? 1 : 0)
+                                    + ((minPitchA() == it->minPitchA) ? 1 : 0)
+                                    + ((maxPitchA() == it->maxPitchA) ? 1 : 0)
+                                    + ((maxPitchP() == it->maxPitchP) ? 1 : 0);
+                const int perfectMatchStrength = 4;
+                assert(matchStrength <= perfectMatchStrength);
+                if (fallback.isEmpty() || matchStrength > bestMatchStrength) {
+                    // Set a fallback ID or update it because we've found a better one.
+                    fallback = it->id;
+                    bestMatchStrength = matchStrength;
+                    if (bestMatchStrength == perfectMatchStrength) {
+                        break;     // stop looking for matches
+                    }
+                } else if ((matchStrength == bestMatchStrength) && (it->id.size() < fallback.size())) {
+                    // Update fallback ID because we've found a shorter one that is equally good.
+                    // Shorter IDs tend to correspond to more generic instruments (e.g. "piano"
+                    // vs. "grand-piano") so it's better to use a shorter one if unsure.
+                    fallback = it->id;
+                }
+            }
+        }
     }
 
-    return t->id;
+    return fallback.isEmpty() ? String(u"piano") : fallback;
 }
 
 int Instrument::recognizeMidiProgram() const
@@ -416,12 +469,6 @@ int Instrument::recognizeMidiProgram() const
 
     if (tmplByName && !tmplByName->channel.empty() && tmplByName->channel[0].program() >= 0) {
         return tmplByName->channel[0].program();
-    }
-
-    InstrumentTemplate* guessedTmpl = mu::engraving::guessTemplateByNameData(nameList);
-
-    if (guessedTmpl && !guessedTmpl->channel.empty() && guessedTmpl->channel[0].program() >= 0) {
-        return guessedTmpl->channel[0].program();
     }
 
     return 0;
@@ -1713,76 +1760,15 @@ void Instrument::setTrait(const Trait& trait)
     _trait = trait;
 }
 
-//---------------------------------------------------------
-//  updateInstrumentId
-//---------------------------------------------------------
-
 void Instrument::updateInstrumentId()
 {
-    if (!_id.isEmpty() || _instrumentId.isEmpty()) {
-        return;
+    if (_instrumentId.isEmpty()) {
+        _instrumentId = recognizeInstrumentId();
     }
 
-    // When reading a score create with pre-3.6, instruments doesn't
-    // have an id define in the instrument. So try to find the instrumentId
-    // based on MusicXMLid.
-    // This requires a hack for instruments using MusicXMLid "strings.group"
-    // because there are multiple instrument using this same id.
-    // For these instruments, use the value of controller 32 of the "arco"
-    // channel to find the correct instrument.
-    // There are some duplicate MusicXML IDs among other instruments too. In
-    // that case we check the pitch range and use the shortest ID that matches.
-    const String arco = String(u"arco");
-    const bool groupHack = instrumentId() == String(u"strings.group");
-    const int idxref = channelIdx(arco);
-    const int val32ref = (idxref < 0) ? -1 : channel(idxref)->bank();
-    String fallback;
-    int bestMatchStrength = 0; // higher when fallback ID provides better match for instrument data
-
-    for (InstrumentGroup* g : instrumentGroups) {
-        for (InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->musicXMLid != instrumentId()) {
-                continue;
-            }
-            if (groupHack) {
-                if (fallback.isEmpty()) {
-                    // Instrument "Strings" doesn't have bank defined so
-                    // if no "strings.group" instrument with requested bank
-                    // is found, assume "Strings".
-                    fallback = it->id;
-                }
-                for (const InstrChannel& chan : it->channel) {
-                    if ((chan.name() == arco) && (chan.bank() == val32ref)) {
-                        _id = it->id;
-                        return;
-                    }
-                }
-            } else {
-                int matchStrength = 0
-                                    + ((minPitchP() == it->minPitchP) ? 1 : 0)
-                                    + ((minPitchA() == it->minPitchA) ? 1 : 0)
-                                    + ((maxPitchA() == it->maxPitchA) ? 1 : 0)
-                                    + ((maxPitchP() == it->maxPitchP) ? 1 : 0);
-                const int perfectMatchStrength = 4;
-                assert(matchStrength <= perfectMatchStrength);
-                if (fallback.isEmpty() || matchStrength > bestMatchStrength) {
-                    // Set a fallback ID or update it because we've found a better one.
-                    fallback = it->id;
-                    bestMatchStrength = matchStrength;
-                    if (bestMatchStrength == perfectMatchStrength) {
-                        break; // stop looking for matches
-                    }
-                } else if ((matchStrength == bestMatchStrength) && (it->id.size() < fallback.size())) {
-                    // Update fallback ID because we've found a shorter one that is equally good.
-                    // Shorter IDs tend to correspond to more generic instruments (e.g. "piano"
-                    // vs. "grand-piano") so it's better to use a shorter one if unsure.
-                    fallback = it->id;
-                }
-            }
-        }
+    if (_id.isEmpty()) {
+        _id = recognizeId();
     }
-
-    _id = fallback.isEmpty() ? String(u"piano") : fallback;
 }
 
 //---------------------------------------------------------

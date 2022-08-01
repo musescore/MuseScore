@@ -32,7 +32,7 @@
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument id="treble-flute">
+      <Instrument id="flute">
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
