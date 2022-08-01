@@ -1524,13 +1524,13 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Page: Top of first"),
-             TranslatableString("action", "Jump to beginning")
+             TranslatableString("action", "Jump to top of first page")
              ),
     UiAction("page-end",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Page: Bottom of last"),
-             TranslatableString("action", "Jump to end")
+             TranslatableString("action", "Jump to bottom of last page")
              ),
     UiAction("help",
              mu::context::UiCtxNotationOpened,
