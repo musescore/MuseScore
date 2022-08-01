@@ -346,8 +346,8 @@ public:
     void triggerLayout() const override;
     double basicStretch() const;
     double basicWidth() const;
-    float durationStretch(Fraction curTicks, const Fraction minTicks) const;
-    void computeWidth(Fraction minTicks, double stretchCoeff);
+    float durationStretch(Fraction curTicks, const Fraction minTicks, const Fraction maxTicks) const;
+    void computeWidth(Fraction minTicks, Fraction maxTicks, double stretchCoeff);
     void checkHeader();
     void checkTrailer();
     void layoutStaffLines();
@@ -383,7 +383,7 @@ private:
     void push_front(Segment* e);
 
     void fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests = true);
-    void computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, double stretchCoeff);
+    void computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks, double stretchCoeff);
     void setWidthToTargetValue(Segment* s, double x, bool isSystemHeader, Fraction minTicks, double stretchCoeff, double targetWidth);
     double computeMinMeasureWidth() const;
 
