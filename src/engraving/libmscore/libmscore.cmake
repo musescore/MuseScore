@@ -75,8 +75,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/connector.h
     ${CMAKE_CURRENT_LIST_DIR}/drumset.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drumset.h
-    ${CMAKE_CURRENT_LIST_DIR}/duration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/duration.h
+    ${CMAKE_CURRENT_LIST_DIR}/durationelement.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/durationelement.h
     ${CMAKE_CURRENT_LIST_DIR}/durationtype.cpp
     ${CMAKE_CURRENT_LIST_DIR}/durationtype.h
     ${CMAKE_CURRENT_LIST_DIR}/dynamic.cpp

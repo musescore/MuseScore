@@ -29,7 +29,7 @@
 #include "libmscore/bracketItem.h"
 #include "libmscore/chord.h"
 #include "libmscore/chordrest.h"
-#include "libmscore/duration.h"
+#include "libmscore/durationelement.h"
 #include "libmscore/factory.h"
 #include "libmscore/measure.h"
 #include "libmscore/measurebase.h"

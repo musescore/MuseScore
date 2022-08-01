@@ -25,7 +25,7 @@
 
 #include <functional>
 
-#include "duration.h"
+#include "durationelement.h"
 #include "types/types.h"
 
 namespace mu::engraving {

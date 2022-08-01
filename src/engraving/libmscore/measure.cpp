@@ -44,7 +44,7 @@
 #include "bracketItem.h"
 #include "chord.h"
 #include "clef.h"
-#include "duration.h"
+#include "durationelement.h"
 #include "factory.h"
 #include "hook.h"
 #include "key.h"
