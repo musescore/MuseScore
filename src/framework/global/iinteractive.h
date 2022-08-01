@@ -116,7 +116,7 @@ public:
     enum Option {
         NoOptions = 0x0,
         WithIcon = 0x1,
-        WithShowAgain = 0x2
+        WithDontShowAgainCheckBox = 0x2
     };
     DECLARE_FLAGS(Options, Option)
 
