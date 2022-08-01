@@ -322,8 +322,8 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
         params["withIcon"] = true;
     }
 
-    if (options.testFlag(IInteractive::Option::WithShowAgain)) {
-        params["withShowAgain"] = true;
+    if (options.testFlag(IInteractive::Option::WithDontShowAgainCheckBox)) {
+        params["withDontShowAgainCheckBox"] = true;
     }
 
     data->setValue("params", params);
