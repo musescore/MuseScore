@@ -198,23 +198,19 @@ void NotationStatusBarModel::load()
             }
         }
     });
-
-    emit availableViewModeListChanged();
-    emit availableZoomListChanged();
 }
 
 void NotationStatusBarModel::onCurrentNotationChanged()
 {
     emit currentViewModeChanged();
     emit availableViewModeListChanged();
+    emit currentZoomPercentageChanged();
     emit availableZoomListChanged();
     emit zoomEnabledChanged();
 
     if (!notation()) {
         return;
     }
-
-    emit currentZoomPercentageChanged();
 
     notation()->notationChanged().onNotify(this, [this]() {
         emit currentViewModeChanged();
@@ -223,7 +219,7 @@ void NotationStatusBarModel::onCurrentNotationChanged()
 
     notation()->viewState()->zoomPercentage().ch.onReceive(this, [this](int) {
         emit currentZoomPercentageChanged();
-        emit availableViewModeListChanged();
+        emit availableZoomListChanged();
     });
 
     listenChangesInAccessibility();
