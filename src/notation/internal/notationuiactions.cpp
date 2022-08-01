@@ -104,7 +104,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Previous element"),
-             TranslatableString("action", "Select previous element")
+             TranslatableString("action", "Select previous element in score")
              ),
     UiAction("notation-move-right",
              mu::context::UiCtxNotationOpened,
@@ -128,7 +128,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Previous measure / Shift text left quickly"),
-             TranslatableString("action", "Select first element in previous measure / move text left quickly")
+             TranslatableString("action", "Go to previous measure / move text left quickly")
              ),
     UiAction("up-chord",
              mu::context::UiCtxNotationOpened,
@@ -1600,7 +1600,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationFocused,
              mu::context::CTX_ANY,
              TranslatableString("action", "Previous beat (Chord symbol)"),
-             TranslatableString("action", "Move cursor to previous beat (chord symbols)")
+             TranslatableString("action", "Advance cursor: previous beat (chord symbols)")
              ),
     UiAction("advance-longa",
              mu::context::UiCtxNotationFocused,
