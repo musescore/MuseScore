@@ -35,28 +35,23 @@ using namespace mu::mpe;
 
 void PlaybackSetupDataResolver::resolveSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const
 {
-    if (KeyboardsSetupDataResolver::isAbleToResolve(instrument)) {
-        KeyboardsSetupDataResolver::resolve(instrument, result);
+    if (KeyboardsSetupDataResolver::resolve(instrument, result)) {
         return;
     }
 
-    if (StringsSetupDataResolver::isAbleToResolve(instrument)) {
-        StringsSetupDataResolver::resolve(instrument, result);
+    if (StringsSetupDataResolver::resolve(instrument, result)) {
         return;
     }
 
-    if (WindsSetupDataResolver::isAbleToResolve(instrument)) {
-        WindsSetupDataResolver::resolve(instrument, result);
+    if (WindsSetupDataResolver::resolve(instrument, result)) {
         return;
     }
 
-    if (PercussionsSetupDataResolver::isAbleToResolve(instrument)) {
-        PercussionsSetupDataResolver::resolve(instrument, result);
+    if (PercussionsSetupDataResolver::resolve(instrument, result)) {
         return;
     }
 
-    if (VoicesSetupDataResolver::isAbleToResolve(instrument)) {
-        VoicesSetupDataResolver::resolve(instrument, result);
+    if (VoicesSetupDataResolver::resolve(instrument, result)) {
         return;
     }
 
