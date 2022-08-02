@@ -84,8 +84,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     double layoutSystemMinWidth = 0;
     bool firstMeasure = true;
     bool createHeader = false;
-    double systemWidth = score->styleD(Sid::pagePrintableWidth) * DPI;
-    system->setWidth(systemWidth);
+    double targetSystemWidth = score->styleD(Sid::pagePrintableWidth) * DPI;
+    system->setWidth(targetSystemWidth);
 
     // save state of measure
     bool curHeader = ctx.curMeasure->header();
@@ -191,7 +191,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // collect at least one measure and the break
         static constexpr double squeezability = 0.3; // We may consider exposing in Style settings (M.S.)
         double acceptanceRange = squeezability * system->squeezableSpace();
-        bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > systemWidth + acceptanceRange);
+        bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > targetSystemWidth + acceptanceRange);
         /* acceptanceRange allows some systems to be initially slightly larger than the margins and be
          * justified by squeezing instead of stretching. Allows to make much better choices of how many
          * measures to fit per system. */
@@ -405,44 +405,11 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         }
     }
 
-    // BRING THE WIDTH OF THE SYSTEM TO THE DESIRED VALUE
-    // Gradient descent method: calls the computeWidth() function with a stretch parameter
-    // proportional to the difference between the current length and the target length.
-    // After few iterations, the length will converge to the target length.
-    double newRest = systemWidth - curSysWidth;
-    if ((ctx.curMeasure == 0 || (lm && lm->sectionBreak()))
-        && ((curSysWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
-        // We do not stretch last system of a section (or the last of the piece) if curSysWidth is <= lastSystemFillLimit
-        newRest = 0;
-    }
-    if (MScore::noHorizontalStretch) { // Debug feature
-        newRest = 0;
-    }
-    double stretchCoeff = 1;
-    double prevWidth = 0;
-    int iter = 0;
-    double epsilon = score->spatium() * 0.05; // For reference: this is smaller than the width of a note stem
-    static constexpr float multiplier = 1.4f; // Empirically optimized value which allows the fastest convergence of the following algorithm.
-    static constexpr int maxIter = 100;
-    // Different systems need different numbers of iterations of the following loop to reach the target width.
-    // The average is less than 3 iterations, and the maximum I've ever seen (very rare) is 30-40 iterations.
-    // maxIter just serves as a safety exit to not get stuck in the loop in case a system can't be justified
-    // (which can only happen if errors are made before getting here). It's set to a very high value to make
-    // sure that the system really can't be justified, and it isn't just a "tricky" one needing more iterations.
-    while (abs(newRest) > epsilon && iter < maxIter) {
-        stretchCoeff *= (1 + multiplier * newRest / curSysWidth);
-        for (MeasureBase* mb : system->measures()) {
-            if (mb->isMeasure()) {
-                Measure* m = toMeasure(mb);
-                if (!(m->isWidthLocked() && stretchCoeff < m->layoutStretch())) { // It would be pointless to re-compute the layout of a measure
-                    prevWidth = m->width();                                       // that is already widthLocked to a larger value.
-                    m->computeWidth(minTicks, maxTicks, stretchCoeff);
-                    curSysWidth += m->width() - prevWidth;
-                }
-            }
-        }
-        newRest = systemWidth - curSysWidth;
-        iter++;
+    // JUSTIFY SYSTEM
+    if (!((ctx.curMeasure == 0 || (lm && lm->sectionBreak()))
+          && ((curSysWidth / targetSystemWidth) <= score->styleD(Sid::lastSystemFillLimit))) // Do not justify last system of a section if curSysWidth is <= lastSystemFillLimit
+        && !MScore::noHorizontalStretch) {     // debug feature
+        justifySystem(system, curSysWidth, targetSystemWidth);
     }
 
     // LAYOUT MEASURES
@@ -498,6 +465,67 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     }
 
     return system;
+}
+
+/***********************************************************************
+ * justifySystem()
+ * runs a bisection algorithm which adjusts the stretch coefficient
+ * of all measures until the width of the system coincides with the
+ * desidered one, within a given tolerance.
+ * ********************************************************************/
+
+void LayoutSystem::justifySystem(System* system, double curSysWidth, double targetSystemWidth)
+{
+    double rest = targetSystemWidth - curSysWidth;
+    double tolerance = system->score()->spatium() * 0.05; // For reference: this is smaller than the width of a note stem
+    if (abs(rest) < tolerance) {
+        return;
+    }
+    // Find longest and shortest note/rest of the system
+    Fraction minTicks = system->minSysTicks();
+    Fraction maxTicks = system->maxSysTicks();
+    // Define upper and lower bounds for stretchCoeff
+    double lowerBound, upperBound;
+    if (rest < 0) {
+        lowerBound = 0;
+        upperBound = 1;
+    } else {
+        lowerBound = 1;
+        upperBound = 0; // intentionally invalid value: needs to be defined later
+    }
+    // Begin binary search
+    double stretchCoeff = 1;
+    double prevWidth = 0;
+    int iter = 0;
+    static constexpr double multiplier = 1.5; // empirical value which optimizes convergence of the algorithm
+    static constexpr int maxIter = 50;
+    while (abs(rest) > tolerance && iter < maxIter) {
+        if (!upperBound) {
+            stretchCoeff *= multiplier;
+        } else {
+            stretchCoeff = (upperBound + lowerBound) / 2;
+        }
+        for (MeasureBase* mb : system->measures()) {
+            if (mb->isMeasure()) {
+                Measure* m = toMeasure(mb);
+                if (!(m->isWidthLocked() && stretchCoeff < m->layoutStretch())) { // It would be pointless to re-compute the layout of a measure
+                    prevWidth = m->width();                                       // that is already widthLocked to a larger value.
+                    m->computeWidth(minTicks, maxTicks, stretchCoeff);
+                    curSysWidth += m->width() - prevWidth;
+                }
+            }
+        }
+        rest = targetSystemWidth - curSysWidth;
+        if (rest > 0) {
+            lowerBound = stretchCoeff;
+        } else {
+            upperBound = stretchCoeff;
+        }
+        iter++;
+    }
+    if (iter == maxIter) {
+        LOGE() << "**************** CAUTION: System may not be well justified ***************** ";
+    }
 }
 
 //---------------------------------------------------------
