@@ -832,13 +832,18 @@ QAbstractItemModel* PaletteProvider::availableExtraPalettesModel() const
 
 bool PaletteProvider::addPalette(const QPersistentModelIndex& index)
 {
+
+    // Adding logs to find out if someday later I get an error here again causing wrong IDs of the cells
     if (!index.isValid()) {
+        LOGE() << "addPaletteError: Invalid index";
         return false;
     }
 
     if (index.model() == m_userPaletteModel) {
+        LOGE() << "I am User Palette Model";
         const bool ok = m_userPaletteModel->setData(index, true, PaletteTreeModel::VisibleRole);
         if (!ok) {
+            LOGE() << "addPaletteError: Could not set data in the userPaletteModel";
             return false;
         }
         const QModelIndex parent = index.parent();
@@ -847,12 +852,19 @@ bool PaletteProvider::addPalette(const QPersistentModelIndex& index)
     }
 
     if (index.model() == m_masterPaletteModel) {
+        LOGE() << "I am Master Palette Model";
         QMimeData* data = m_masterPaletteModel->mimeData({ QModelIndex(index) });
         const bool success = m_userPaletteModel->dropMimeData(data, Qt::CopyAction, 0, 0, QModelIndex());
         data->deleteLater();
+        
+        if (!success) {
+            LOGE() << "addPaletteError: Success in masterPaletteModel: " << success;
+        }
+
         return success;
     }
 
+    LOGE() << "addPaletteError: Running the end false";
     return false;
 }
 
