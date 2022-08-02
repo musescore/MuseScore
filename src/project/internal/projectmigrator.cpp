@@ -182,7 +182,6 @@ void ProjectMigrator::resetStyleSettings(mu::engraving::MasterScore* score)
     repeatBarlineDotSeparation -= (style->styleMM(mu::engraving::Sid::barWidth) + dotWidth) / 2;
     style->set(mu::engraving::Sid::repeatBarlineDotSeparation, repeatBarlineDotSeparation / sp);
     score->resetStyleValue(mu::engraving::Sid::measureSpacing);
-    score->setResetDefaults();
 }
 
 Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt)
@@ -220,7 +219,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
     if (ok && m_resetStyleSettings) {
         resetStyleSettings(score);
     }
-
+    score->setResetDefaults(); // some defaults need to be reset on first layout
     score->endCmd();
 
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
