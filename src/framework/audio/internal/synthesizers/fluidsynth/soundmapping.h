@@ -103,6 +103,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
                                          mpe::SoundSubCategory::NewAge } }, { midi::Program(0, 88) } },
         { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Pad } }, { midi::Program(0, 88) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
                                          mpe::SoundSubCategory::Warm } }, { midi::Program(0, 89) } },
         { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
                                          mpe::SoundSubCategory::Polysynth } }, { midi::Program(0, 90) } },
@@ -680,7 +682,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Slap,  { mpe::SoundSubCategory::Hand } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Stamp,  { mpe::SoundSubCategory::Foot } }, { midi::Program(128, 0) } },
 
-        { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric } }, { midi::Program(128, 0) } }
+        { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric,
+                                          mpe::SoundSubCategory::Percussive } }, { midi::Program(128, 0) } }
     };
 
     static const std::map<SoundMappingKey, midi::Programs> VOICE_MAPPINGS = {

@@ -79,6 +79,8 @@ const PlaybackSetupData& KeyboardsSetupDataResolver::doResolve(const Instrument*
                                                                            SoundSubCategory::Sawtooth_Wave }, {} } },
         { "new-age-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
                                                                                SoundSubCategory::NewAge }, {} } },
+        { "pad-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                           SoundSubCategory::Pad }, {} } },
         { "warm-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
                                                                             SoundSubCategory::Warm }, {} } },
         { "poly-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
