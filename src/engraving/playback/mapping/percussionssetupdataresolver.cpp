@@ -191,7 +191,8 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Instrumen
         { "slap", { SoundId::Slap, SoundCategory::Percussions, { SoundSubCategory::Hand }, {} } },
         { "stamp", { SoundId::Stamp, SoundCategory::Percussions, { SoundSubCategory::Foot }, {} } },
 
-        { "percussion-synthesizer", { SoundId::Synthesizer, SoundCategory::Percussions, { SoundSubCategory::Electric }, {} } },
+        { "percussion-synthesizer", { SoundId::Synthesizer, SoundCategory::Percussions, { SoundSubCategory::Electric,
+                                                                                          SoundSubCategory::Percussive }, {} } },
     };
 
     auto search = SETUP_DATA_MAP.find(instrument->id().toStdString());
