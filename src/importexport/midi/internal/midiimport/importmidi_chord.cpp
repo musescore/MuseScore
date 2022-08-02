@@ -143,7 +143,7 @@ void removeOverlappingNotes(QList<MidiNote>& notes)
                     noteIt1->offTime = noteIt2->offTime;
                 }
                 noteIt2 = tempNotes.erase(noteIt2);
-                LOGD() << "Midi import: removeOverlappingNotes: note was removed";
+                LOGD() << "MIDI import: removeOverlappingNotes: note was removed";
                 continue;
             }
             ++noteIt2;
@@ -207,7 +207,7 @@ void removeOverlappingNotes(std::multimap<int, MTrack>& tracks)
                 }
                 if (note1.offTime - onTime1 < MChord::minAllowedDuration()) {
                     note1It = chord1.notes.erase(note1It);
-                    LOGD("Midi import: removeOverlappingNotes: note was removed");
+                    LOGD("MIDI import: removeOverlappingNotes: note was removed");
                     continue;
                 }
                 ++note1It;
