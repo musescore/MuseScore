@@ -36,6 +36,14 @@ struct Item
     T type;
     AsciiStringView xml;
     TranslatableString userName;
+
+    // NOTE Ideally we would write `TranslatableString userName = {};` and omit these constructors
+    // But that causes internal compiler errors with certain versions of GCC/MinGW
+    // See discussion at https://github.com/musescore/MuseScore/pull/12612
+
+    Item() = default;
+    Item(T type, AsciiStringView xml, const TranslatableString& userName = {})
+        : type(type), xml(xml), userName(userName) {}
 };
 
 template<typename T, typename C>
