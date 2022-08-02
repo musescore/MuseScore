@@ -2696,6 +2696,24 @@ Fraction Segment::shortestChordRest() const
     return shortest;
 }
 
+bool Segment::hasAccidentals() const
+{
+    if (!isChordRestType()) {
+        return false;
+    }
+    for (EngravingItem* e : elist()) {
+        if (!e || !e->isChord()) {
+            continue;
+        }
+        for (Note* note : toChord(e)->notes()) {
+            if (note->accidental()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 CrossStaffContent Segment::crossStaffContent() const
 {
     CrossStaffContent crossStaffContent;

@@ -4386,23 +4386,43 @@ void Measure::computeWidth(Fraction minTicks, double stretchCoeff)
     computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
 
     // Check against minimum width and increase if needed
-    double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
-    double maxWidth = system()->width() - system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
-
-    // System width may not yet be available for the linear mode (e.g. continuous view)
-    // Will use the minimum width from the style in this case
-    if (maxWidth <= 0) {
-        maxWidth = minWidth;
-    }
-
-    minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
-
+    double minWidth = computeMinMeasureWidth();
     if (width() < minWidth) {
         setWidthToTargetValue(s, x, isSystemHeader, minTicks, stretchCoeff, minWidth);
         setWidthLocked(true);
     } else {
         setWidthLocked(false);
     }
+}
+
+double Measure::computeMinMeasureWidth() const
+{
+    double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
+    double maxWidth = system()->width() - system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
+    if (maxWidth <= 0) {
+        // System width may not yet be available for the linear mode (e.g. continuous view)
+        // Will use the minimum width from the style in this case
+        maxWidth = minWidth;
+    }
+    minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
+    Segment* firstCRSegment = findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    if (!firstCRSegment) {
+        return minWidth;
+    }
+    if (firstCRSegment == firstEnabled()) {
+        return minWidth;
+    }
+    // If there is a header, don't count the width of the header.
+    // Start counting from the "virtual" position of the preceding barline if there wasn't the header.
+    double startPosition = firstCRSegment->x() - firstCRSegment->minLeft();
+    if (firstCRSegment->hasAccidentals()) {
+        startPosition -= score()->styleMM(Sid::barAccidentalDistance);
+    } else {
+        startPosition -= score()->styleMM(Sid::barNoteDistance);
+    }
+    minWidth += startPosition;
+    minWidth = std::min(minWidth, maxWidth);
+    return minWidth;
 }
 
 void Measure::setWidthToTargetValue(Segment* s, double x, bool isSystemHeader, Fraction minTicks, double stretchCoeff, double targetWidth)
