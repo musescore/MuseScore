@@ -574,7 +574,7 @@ bool MidiFile::readEvent(MidiEvent* event)
     for (;;) {
         read(&me, 1);
         if (me >= 0xf1 && me <= 0xfe && me != 0xf7) {
-            LOGD("Midi: Unknown Message 0x%02x", me & 0xff);
+            LOGD("MIDI: Unknown Message 0x%02x", me & 0xff);
         } else {
             break;
         }

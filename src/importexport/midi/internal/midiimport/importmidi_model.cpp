@@ -437,7 +437,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
         {
             const QStringList list = value.toStringList();
 
-            Q_ASSERT_X(list.size() > 5, "Midi import operations",
+            Q_ASSERT_X(list.size() > 5, "MIDI import operations",
                        "Invalid size of the tuplets value list");
 
             bool searchTuplets = false;
@@ -569,18 +569,18 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
             {
                 const QStringList list = value.toStringList();
 
-                Q_ASSERT_X(list.size() == 2, "Midi import operations",
+                Q_ASSERT_X(list.size() == 2, "MIDI import operations",
                            "Invalid size of the time signature value list");
 
                 bool ok = false;
                 _opers.timeSigNumerator.setValue((MidiOperations::TimeSigNumerator)list[0].toInt(&ok));
 
-                Q_ASSERT_X(ok, "Midi import operations", "Invalid numerator value");
+                Q_ASSERT_X(ok, "MIDI import operations", "Invalid numerator value");
 
                 ok = false;
                 _opers.timeSigDenominator.setValue((MidiOperations::TimeSigDenominator)list[1].toInt(&ok));
 
-                Q_ASSERT_X(ok, "Midi import operations", "Invalid denominator value");
+                Q_ASSERT_X(ok, "MIDI import operations", "Invalid denominator value");
             }
 
             QStringList valueList(int /*trackIndex*/) const override
