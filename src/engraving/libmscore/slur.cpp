@@ -377,7 +377,6 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
 {
     ChordRest* startCR = slur()->startCR();
     ChordRest* endCR = slur()->endCR();
-    bool isCrossStaff = (startCR && endCR) ? startCR->vStaffIdx() != endCR->vStaffIdx() : false;
 
     Segment* startSeg = nullptr;
     if (isSingleBeginType()) {
@@ -450,14 +449,16 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
         }
         // Check collisions
         for (Segment* seg : segList) {
-            Shape segShape = seg->staffShape(startCR->vStaffIdx()).translated(seg->pos() + seg->measure()->pos());
+            unsigned startStaffIdx = startCR->staffIdx();
+            Shape segShape = seg->staffShape(startStaffIdx).translated(seg->pos() + seg->measure()->pos());
             // If cross-staff, also add the shape of second staff
-            if (isCrossStaff) {
-                SysStaff* startStaff = system()->staves().at(startCR->vStaffIdx());
-                SysStaff* endStaff = system()->staves().at(endCR->vStaffIdx());
+            if (slur()->isCrossStaff()) {
+                unsigned endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
+                SysStaff* startStaff = system()->staves().at(startStaffIdx);
+                SysStaff* endStaff = system()->staves().at(endStaffIdx);
                 double dist = endStaff->y() - startStaff->y();
                 Shape secondStaffShape;
-                secondStaffShape.add(seg->staffShape(endCR->vStaffIdx()).translated(seg->pos() + seg->measure()->pos()));
+                secondStaffShape.add(seg->staffShape(endStaffIdx).translated(seg->pos() + seg->measure()->pos()));
                 secondStaffShape.translate(PointF(0.0, dist));
                 segShape.add(secondStaffShape);
             }
@@ -1089,10 +1090,7 @@ void Slur::slurPos(SlurPos* sp)
 
         if (stem1) {     //sc not null
             Beam* beam1 = sc->beam();
-            if (beam1 && beam1->cross()) {
-                // TODO: stem direction is not finalized, so we cannot use it here
-                fixArticulations(po, sc, __up, false);
-            } else if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
+            if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
                 beam1->layout();
                 // start chord is beamed but not the last chord of beam group
                 // and slur direction is same as start chord (stem side)
@@ -1198,17 +1196,14 @@ void Slur::slurPos(SlurPos* sp)
 
             if (stem2) {       //ec can't be null
                 Beam* beam2 = ec->beam();
-                if (beam2 && beam2->cross()) {
-                    // TODO: stem direction is not finalized, so we cannot use it here
-                    fixArticulations(po, ec, __up, false);
-                } else if ((stemPos && (scr->up() == ec->up()))
-                           || (beam2
-                               && (!beam2->elements().empty())
-                               && (beam2->elements().front() != ec)
-                               && (ec->up() == _up)
-                               && sc && (sc->noteType() == NoteType::NORMAL)
-                               )
-                           ) {
+                if ((stemPos && (scr->up() == ec->up()))
+                    || (beam2
+                        && (!beam2->elements().empty())
+                        && (beam2->elements().front() != ec)
+                        && (ec->up() == _up)
+                        && sc && (sc->noteType() == NoteType::NORMAL)
+                        )
+                    ) {
                     if (beam2) {
                         beam2->layout();
                     }
@@ -1883,5 +1878,12 @@ void Slur::setTrack(track_idx_t n)
     for (SpannerSegment* ss : spannerSegments()) {
         ss->setTrack(n);
     }
+}
+
+bool Slur::isCrossStaff()
+{
+    return startCR() && endCR()
+           && (startCR()->staffMove() != 0 || endCR()->staffMove() != 0
+               || startCR()->vStaffIdx() != endCR()->vStaffIdx());
 }
 }

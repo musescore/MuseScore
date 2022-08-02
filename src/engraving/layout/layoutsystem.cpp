@@ -920,14 +920,8 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         sp->computeEndElement();
         lc.processedSpanners.insert(sp);
         if (sp->tick() < etick && sp->tick2() >= stick) {
-            if (sp->isSlur()) {
-                // skip cross-staff slurs
-                ChordRest* scr = sp->startCR();
-                ChordRest* ecr = sp->endCR();
-                staff_idx_t idx = sp->vStaffIdx();
-                if (scr && ecr && (scr->vStaffIdx() != idx || ecr->vStaffIdx() != idx)) {
-                    continue;
-                }
+            if (sp->isSlur() && !toSlur(sp)->isCrossStaff()) {
+                // skip cross-staff slurs, will be done after page layout
                 spanner.push_back(sp);
             }
         }
