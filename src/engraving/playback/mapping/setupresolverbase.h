@@ -34,25 +34,17 @@ template<class T>
 class SetupDataResolverBase
 {
 public:
-    static bool isAbleToResolve(const Instrument* instrument)
+    static bool resolve(const Instrument* instrument, mpe::PlaybackSetupData& result)
     {
         assert(instrument);
         if (!instrument) {
             return false;
         }
 
-        return T::supportsInstrument(instrument);
-    }
-
-    static void resolve(const Instrument* instrument, mpe::PlaybackSetupData& result)
-    {
-        assert(instrument);
-        if (!instrument) {
-            return;
-        }
-
         result = T::doResolve(instrument);
         result.musicXmlSoundId = std::make_optional(instrument->instrumentId().toStdString());
+
+        return result.isValid();
     }
 };
 }
