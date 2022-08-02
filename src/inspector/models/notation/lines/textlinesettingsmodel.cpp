@@ -38,6 +38,7 @@ TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepository
 {
     setModelType(InspectorModelType::TYPE_TEXT_LINE);
     setTitle(qtrc("inspector", "Text line"));
+    setIcon(ui::IconCode::Code::TEXT_BELOW_STAFF);
 
     static const QList<HookTypeInfo> endHookTypes {
         { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
