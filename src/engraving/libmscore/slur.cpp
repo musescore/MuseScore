@@ -449,11 +449,11 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
         }
         // Check collisions
         for (Segment* seg : segList) {
-            Shape segShape = seg->staffShape(startCR->vStaffIdx()).translated(seg->pos() + seg->measure()->pos());
+            unsigned startStaffIdx = startCR->staffIdx();
+            Shape segShape = seg->staffShape(startStaffIdx).translated(seg->pos() + seg->measure()->pos());
             // If cross-staff, also add the shape of second staff
             if (slur()->isCrossStaff()) {
-                unsigned startStaffIdx = startCR->vStaffIdx();
-                unsigned endStaffIdx = (endCR->vStaffIdx() != startStaffIdx) ? endCR->vStaffIdx() : endCR->staffIdx();
+                unsigned endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
                 SysStaff* startStaff = system()->staves().at(startStaffIdx);
                 SysStaff* endStaff = system()->staves().at(endStaffIdx);
                 double dist = endStaff->y() - startStaff->y();
