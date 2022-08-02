@@ -1712,6 +1712,10 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
                                                   Qt::KeyboardModifiers modifiers,
                                                   PointF pt, bool pasteMode)
 {
+    if (!target) {
+        return;
+    }
+
     mu::engraving::EditData newData(&m_scoreCallbacks);
     mu::engraving::EditData* dropData = &newData;
 
