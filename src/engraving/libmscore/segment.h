@@ -300,6 +300,8 @@ public:
     Fraction shortestChordRest() const;
     CrossStaffContent crossStaffContent() const;
 
+    bool hasAccidentals() const;
+
     EngravingItem* preAppendedItem(int track) { return _preAppendedItems[track]; }
     void preAppend(EngravingItem* item, int track) { _preAppendedItems[track] = item; }
     void clearPreAppended(int track) { _preAppendedItems[track] = nullptr; }
