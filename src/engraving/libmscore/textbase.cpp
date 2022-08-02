@@ -257,6 +257,10 @@ RectF TextCursor::cursorRect() const
     const TextFragment* fragment = tline.fragment(static_cast<int>(column()));
 
     mu::draw::Font _font  = fragment ? fragment->font(_text) : _text->font();
+    if (_font.family() == _text->score()->styleSt(Sid::MusicalSymbolFont)) {
+        _font.setFamily(_text->score()->styleSt(Sid::MusicalTextFont));
+        _font.setPointSizeF(fragment->format.fontSize());
+    }
     double ascent = mu::draw::FontMetrics::ascent(_font);
     double h = ascent;
     double x = tline.xpos(column(), _text);
