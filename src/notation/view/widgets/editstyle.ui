@@ -11843,7 +11843,7 @@ By default, they will be placed such as that their right end are at the same lev
                <item>
                 <widget class="QLabel" name="label">
                  <property name="text">
-                  <string> Select the elements you would like displayed in common and simple tablature staves</string>
+                  <string>Select the elements you would like displayed in common and simple tablature staves</string>
                  </property>
                  <property name="margin">
                   <number>0</number>
