@@ -990,7 +990,7 @@ void Chord::computeUp()
     _usesAutoUp = false;
 
     bool hasCustomStemDirection = _stemDirection != DirectionV::AUTO;
-    if (hasCustomStemDirection) {
+    if (hasCustomStemDirection && !(_beam && _beam->cross())) {
         _up = _stemDirection == DirectionV::UP;
         return;
     }

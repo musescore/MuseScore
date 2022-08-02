@@ -1906,7 +1906,7 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 
 void Beam::setBeamDirection(DirectionV d)
 {
-    if (_direction == d) {
+    if (_direction == d || _cross) {
         return;
     }
 
