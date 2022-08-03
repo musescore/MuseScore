@@ -142,6 +142,10 @@ Ret FluidSynth::init()
 
     m_currentExpressionLevel = DEFAULT_MIDI_VOLUME;
 
+    m_sequencer.flushedOffStreamEvents().onNotify(this, [this]() {
+        revokePlayingNotes();
+    });
+
     LOGD() << "synth inited\n";
     return true;
 }

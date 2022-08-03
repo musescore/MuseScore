@@ -199,7 +199,7 @@ void PlaybackModel::triggerEventsForItem(const EngravingItem* item)
     }
 
     int utick = repeatList().tick2utick(item->tick().ticks());
-    timestamp_t actualTimestamp = timestampFromTicks(item->score(), utick);
+    timestamp_t actualTimestamp = 0;
     duration_t actualDuration = MScore::defaultPlayDuration;
     dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
 
