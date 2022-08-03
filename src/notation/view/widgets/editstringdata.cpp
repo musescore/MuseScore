@@ -47,7 +47,7 @@ EditStringData::EditStringData(QWidget* parent, std::vector<mu::engraving::instr
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     _strings = strings;
-    stringList->setHorizontalHeaderLabels({ qtrc("notation/editstringdata", "Open"),
+    stringList->setHorizontalHeaderLabels({ qtrc("notation/editstringdata", "Always open"),
                                             qtrc("notation/editstringdata", "Pitch") });
     int numOfStrings = static_cast<int>(_strings->size());
     stringList->setRowCount(numOfStrings);
@@ -64,7 +64,7 @@ EditStringData::EditStringData(QWidget* parent, std::vector<mu::engraving::instr
             newCheck->setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
             newCheck->setCheckState(strg.open ? Qt::Checked : Qt::Unchecked);
 
-            newCheck->setData(OPEN_ACCESSIBLE_TITLE_ROLE, qtrc("notation/editstringdata", "Open"));
+            newCheck->setData(OPEN_ACCESSIBLE_TITLE_ROLE, qtrc("notation/editstringdata", "Always open"));
             newCheck->setData(Qt::AccessibleTextRole, openColumnAccessibleText(newCheck));
 
             stringList->setItem(i, 0, newCheck);
