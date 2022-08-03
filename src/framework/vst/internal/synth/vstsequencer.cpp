@@ -35,6 +35,7 @@ void VstSequencer::init(ParamsMapping&& mapping)
 void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
 {
     m_offStreamEvents.clear();
+    m_offStreamFlushed.notify();
     updatePlaybackEvents(m_offStreamEvents, changes);
     updateOffSequenceIterator();
 }
@@ -42,6 +43,7 @@ void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
 void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
 {
     m_mainStreamEvents.clear();
+    m_mainStreamFlushed.notify();
     updatePlaybackEvents(m_mainStreamEvents, changes);
     updateMainSequenceIterator();
 }

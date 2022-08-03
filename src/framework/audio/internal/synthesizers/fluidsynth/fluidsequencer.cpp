@@ -36,6 +36,7 @@ void FluidSequencer::init(const ArticulationMapping& mapping, const std::unorder
 void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
 {
     m_offStreamEvents.clear();
+    m_offStreamFlushed.notify();
     updatePlaybackEvents(m_offStreamEvents, changes);
     updateOffSequenceIterator();
 }
@@ -43,6 +44,7 @@ void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes
 void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
 {
     m_mainStreamEvents.clear();
+    m_mainStreamFlushed.notify();
     updatePlaybackEvents(m_mainStreamEvents, changes);
     updateMainSequenceIterator();
 }

@@ -28,6 +28,7 @@
 
 #include "async/asyncable.h"
 #include "async/channel.h"
+#include "async/notification.h"
 #include "mpe/events.h"
 
 #include "internal/audiosanitizer.h"
@@ -80,6 +81,16 @@ public:
     virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) = 0;
     virtual void updateDynamicChanges(const mpe::DynamicLevelMap& changes) = 0;
 
+    async::Notification flushedOffStreamEvents() const
+    {
+        return m_offStreamFlushed;
+    }
+
+    async::Notification flushedMainStreamEvents() const
+    {
+        return m_mainStreamFlushed;
+    }
+
     void setActive(const bool active)
     {
         m_isActive = active;
@@ -114,7 +125,7 @@ public:
         result.clear();
 
         if (!m_isActive) {
-            handleOffStream(result);
+            handleOffStream(result, nextMsecs);
             return result;
         }
 
@@ -145,7 +156,7 @@ protected:
 
     void updateOffSequenceIterator()
     {
-        m_currentOffSequenceIt = m_offStreamEvents.lower_bound(m_playbackPosition);
+        m_currentOffSequenceIt = m_offStreamEvents.cbegin();
     }
 
     void updateDynamicChangesIterator()
@@ -153,15 +164,20 @@ protected:
         m_currentDynamicsIt = m_dynamicEvents.lower_bound(m_playbackPosition);
     }
 
-    void handleOffStream(EventSequence& result)
+    void handleOffStream(EventSequence& result, const msecs_t nextMsecs)
     {
-        if (m_offStreamEvents.empty()) {
+        if (m_offStreamEvents.empty() || m_currentOffSequenceIt == m_offStreamEvents.cend()) {
             return;
         }
 
-        if (m_currentOffSequenceIt != m_offStreamEvents.cend()) {
+        if (m_currentOffSequenceIt->first <= nextMsecs) {
             result = m_currentOffSequenceIt->second;
             m_currentOffSequenceIt = m_offStreamEvents.erase(m_currentOffSequenceIt);
+        } else {
+            auto node = m_offStreamEvents.extract(m_currentOffSequenceIt);
+            node.key() -= nextMsecs;
+            m_offStreamEvents.insert(std::move(node));
+            updateOffSequenceIterator();
         }
     }
 
@@ -198,6 +214,9 @@ protected:
     EventSequenceMap m_mainStreamEvents;
     EventSequenceMap m_offStreamEvents;
     EventSequenceMap m_dynamicEvents;
+
+    async::Notification m_offStreamFlushed;
+    async::Notification m_mainStreamFlushed;
 
     bool m_isActive = false;
 
