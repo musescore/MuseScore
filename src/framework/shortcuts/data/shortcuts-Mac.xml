@@ -1062,7 +1062,7 @@
     </SC>
   <SC>
     <key>prev-beat-TEXT</key>
-    <seq>:</seq>
+    <seq>Shift+;</seq>
     </SC>
   <SC>
     <key>next-beat-TEXT</key>
