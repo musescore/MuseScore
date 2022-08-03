@@ -4162,7 +4162,7 @@ void GraceNotesGroup::layout()
         double offset;
         offset = -std::max(chordShape.minHorizontalDistance(_shape, score()), 0.0);
         _shape.add(chordShape.translated(mu::PointF(offset, 0.0)));
-        double xpos = offset - parent()->rxoffset() - parent()->xpos() - chord->rxoffset();
+        double xpos = offset - parent()->rxoffset() - parent()->xpos();
         chord->setPos(xpos, 0.0);
     }
     double offset = _shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->vStaffIdx()), score());
