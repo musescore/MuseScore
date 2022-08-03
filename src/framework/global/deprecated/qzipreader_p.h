@@ -87,11 +87,11 @@ public:
         bool isValid() const Q_DECL_NOTHROW { return isDir || isFile || isSymLink; }
 
         QString filePath;
-        uint isDir : 1;
-        uint isFile : 1;
-        uint isSymLink : 1;
+        unsigned int isDir : 1;
+        unsigned int isFile : 1;
+        unsigned int isSymLink : 1;
         QFile::Permissions permissions;
-        uint crc;
+        unsigned int crc;
         qint64 size;
         QDateTime lastModified;
     };

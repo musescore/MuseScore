@@ -112,7 +112,7 @@ static void removeRepeatMarkings(Score* score)
     Segment* last = score->lastMeasure()->segments().last();
     if (last->segmentType() == SegmentType::EndBarLine) {
         auto els = last->elist();
-        for (uint i = 0; i < els.size(); i++) {
+        for (size_t i = 0; i < els.size(); i++) {
             if (!els[i]) {
                 continue;
             }

@@ -58,8 +58,8 @@ public:
     std::unordered_map<Sid, PropertyValue> engravingDefaults();
     double textEnclosureThickness();
 
-    uint symCode(SymId id) const;
-    SymId fromCode(uint code) const;
+    char32_t symCode(SymId id) const;
+    SymId fromCode(char32_t code) const;
     String toString(SymId id) const;
 
     bool isValid(SymId id) const;

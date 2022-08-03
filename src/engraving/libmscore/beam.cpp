@@ -401,7 +401,7 @@ void Beam::layout1()
 
     ChordRest* firstNote = _elements.front();
     int middleStaffLine = firstNote->staffType()->middleLine();
-    for (uint i = 0; i < _notes.size(); i++) {
+    for (size_t i = 0; i < _notes.size(); i++) {
         _notes[i] += middleStaffLine;
     }
 
@@ -1000,7 +1000,7 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
         bool previousBreak64 = false;
         int prevRests = 0;
 
-        for (uint i = 0; i < chordRests.size(); i++) {
+        for (size_t i = 0; i < chordRests.size(); i++) {
             ChordRest* chordRest = chordRests[i];
             ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
             if (!chordRest->isChord()) {

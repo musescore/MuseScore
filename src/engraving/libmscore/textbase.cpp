@@ -820,7 +820,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
                 }
                 const Char& c2 = text.at(i + 1);
                 ++i;
-                uint v = Char::surrogateToUcs4(c, c2);
+                char32_t v = Char::surrogateToUcs4(c, c2);
                 if (!fm.inFontUcs4(v)) {
                     fail = true;
                     break;
@@ -1745,8 +1745,8 @@ void TextBase::createLayout()
                     if (id != SymId::noSym) {
                         CharFormat fmt = *cursor.format(); // save format
 
-                        //uint code = score()->scoreFont()->symCode(id);
-                        uint code = id == SymId::space ? static_cast<uint>(' ') : SymbolFonts::fallbackFont()->symCode(id);
+                        //char32_t code = score()->scoreFont()->symCode(id);
+                        char32_t code = id == SymId::space ? static_cast<char32_t>(' ') : SymbolFonts::fallbackFont()->symCode(id);
                         cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code);
                         cursor.setFormat(fmt); // restore format

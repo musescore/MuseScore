@@ -59,7 +59,7 @@ struct mu::draw::FTData
 {
     ByteArray fontData;
     FT_Face face = nullptr;
-    QHash<uint, FTGlyphMetrics> metrics;
+    QHash<char32_t, FTGlyphMetrics> metrics;
 };
 
 FontEngineFT::FontEngineFT()
@@ -99,7 +99,7 @@ bool FontEngineFT::load(const io::path_t& path)
     return true;
 }
 
-QRectF FontEngineFT::bbox(uint ucs4, double dpi_f) const
+QRectF FontEngineFT::bbox(char32_t ucs4, double dpi_f) const
 {
     FTGlyphMetrics* gm = glyphMetrics(ucs4);
     if (!gm) {
@@ -114,7 +114,7 @@ QRectF FontEngineFT::bbox(uint ucs4, double dpi_f) const
     return bbox;
 }
 
-double FontEngineFT::advance(uint ucs4, double dpi_f) const
+double FontEngineFT::advance(char32_t ucs4, double dpi_f) const
 {
     FTGlyphMetrics* gm = glyphMetrics(ucs4);
     if (!gm) {
@@ -125,7 +125,7 @@ double FontEngineFT::advance(uint ucs4, double dpi_f) const
     return gm->linearHoriAdvance * dpi_f / 655360.0;
 }
 
-FTGlyphMetrics* FontEngineFT::glyphMetrics(uint ucs4) const
+FTGlyphMetrics* FontEngineFT::glyphMetrics(char32_t ucs4) const
 {
     if (m_data->metrics.contains(ucs4)) {
         return &m_data->metrics[ucs4];
