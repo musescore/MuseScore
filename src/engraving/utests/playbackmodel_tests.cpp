@@ -555,7 +555,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
     });
 
     // [WHEN] User has clicked on the first note
-    model.triggerEventsForItem(firstNote);
+    model.triggerEventsForItems({ firstNote });
 }
 
 /**
@@ -621,7 +621,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     });
 
     // [WHEN] User has clicked on the first note
-    model.triggerEventsForItem(thirdChord);
+    model.triggerEventsForItems({ thirdChord });
 }
 
 /**

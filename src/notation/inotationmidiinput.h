@@ -31,7 +31,7 @@ class INotationMidiInput
 public:
     virtual ~INotationMidiInput() = default;
 
-    virtual void onMidiEventReceived(const midi::Event& e) = 0;
+    virtual void onMidiEventsReceived(const std::vector<midi::Event>& events) = 0;
     virtual async::Notification noteChanged() const = 0;
 };
 
