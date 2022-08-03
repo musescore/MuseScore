@@ -110,9 +110,9 @@ const mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engraving::In
     return m_playbackModel.resolveTrackPlaybackData(trackId);
 }
 
-void NotationPlayback::triggerEventsForItem(const EngravingItem* item)
+void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingItem*>& items)
 {
-    m_playbackModel.triggerEventsForItem(item);
+    m_playbackModel.triggerEventsForItems(items);
 }
 
 InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const

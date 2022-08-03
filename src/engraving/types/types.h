@@ -779,6 +779,11 @@ struct InstrumentTrackId {
         return partId == other.partId && instrumentId == other.instrumentId;
     }
 
+    bool operator !=(const InstrumentTrackId& other) const
+    {
+        return !operator ==(other);
+    }
+
     bool operator <(const InstrumentTrackId& other) const noexcept
     {
         if (partId < other.partId) {

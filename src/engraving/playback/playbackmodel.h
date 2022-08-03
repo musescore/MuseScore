@@ -66,7 +66,7 @@ public:
 
     const mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
     const mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId);
-    void triggerEventsForItem(const EngravingItem* item);
+    void triggerEventsForItems(const std::vector<const EngravingItem*>& items);
 
     InstrumentTrackIdSet existingTrackIdSet() const;
     async::Channel<InstrumentTrackId> trackAdded() const;

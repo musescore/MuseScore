@@ -169,51 +169,64 @@ const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, co
     return resolveTrackPlaybackData(idKey(partId, instrumentId));
 }
 
-void PlaybackModel::triggerEventsForItem(const EngravingItem* item)
+void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items)
 {
-    IF_ASSERT_FAILED(item) {
-        return;
-    }
+    InstrumentTrackId trackId;
 
-    if (!item->isPlayable()) {
-        return;
-    }
+    for (const EngravingItem* item : items) {
+        InstrumentTrackId itemTrackId = idKey(item);
+        if (trackId.isValid() && trackId != itemTrackId) {
+            LOGE() << "Triggering events for elements with different tracks";
+            return;
+        }
 
-    InstrumentTrackId trackId = idKey(item);
+        trackId = itemTrackId;
+    }
 
     auto trackPlaybackData = m_playbackDataMap.find(trackId);
     if (trackPlaybackData == m_playbackDataMap.cend()) {
         return;
     }
 
-    constexpr timestamp_t actualTimestamp = 0;
-    duration_t actualDuration = MScore::defaultPlayDuration;
+    PlaybackEventsMap result;
 
-    if (item->isHarmony()) {
-        const Harmony* chordSymbol = toHarmony(item);
-
-        if (chordSymbol->isRealizable()) {
-            PlaybackEventsMap result;
-            m_renderer.renderChordSymbol(chordSymbol, actualTimestamp, actualDuration, result);
-            trackPlaybackData->second.offStream.send(std::move(result));
+    for (const EngravingItem* item : items) {
+        IF_ASSERT_FAILED(item) {
+            continue;
         }
 
-        return;
+        if (!item->isPlayable()) {
+            continue;
+        }
+
+        constexpr timestamp_t actualTimestamp = 0;
+        duration_t actualDuration = MScore::defaultPlayDuration;
+
+        if (item->isHarmony()) {
+            const Harmony* chordSymbol = toHarmony(item);
+
+            if (chordSymbol->isRealizable()) {
+                PlaybackEventsMap result;
+                m_renderer.renderChordSymbol(chordSymbol, actualTimestamp, actualDuration, result);
+            }
+
+            continue;
+        }
+
+        int utick = repeatList().tick2utick(item->tick().ticks());
+        dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
+
+        const PlaybackContext& ctx = m_playbackCtxMap[trackId];
+
+        ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
+        if (!profile) {
+            LOGE() << "unsupported instrument family: " << trackId.partId.toUint64();
+            return;
+        }
+
+        m_renderer.render(item, actualTimestamp, actualDuration, actualDynamicLevel, ctx.persistentArticulationType(utick), profile,
+                          result);
     }
-
-    int utick = repeatList().tick2utick(item->tick().ticks());
-    dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
-
-    const PlaybackContext& ctx = m_playbackCtxMap[trackId];
-
-    ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
-    if (!profile) {
-        LOGE() << "unsupported instrument family: " << trackId.partId.toUint64();
-        return;
-    }
-
-    PlaybackEventsMap result;
-    m_renderer.render(item, actualTimestamp, actualDuration, actualDynamicLevel, ctx.persistentArticulationType(utick), profile, result);
 
     trackPlaybackData->second.offStream.send(std::move(result));
 }
