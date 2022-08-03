@@ -30,15 +30,16 @@
 #include "compat/midi/event.h"
 #include "compat/midi/midipatch.h"
 
-#include "drumset.h"
 #include "articulation.h"
-#include "utils.h"
-#include "stringdata.h"
+#include "drumset.h"
 #include "instrtemplate.h"
+#include "masterscore.h"
 #include "mscore.h"
 #include "part.h"
 #include "score.h"
-#include "masterscore.h"
+#include "stringdata.h"
+#include "textbase.h"
+#include "utils.h"
 
 #include "log.h"
 
@@ -236,10 +237,10 @@ Instrument::~Instrument()
 //   StaffName
 //---------------------------------------------------------
 
-StaffName::StaffName(const String& s, int p)
-    : _name(s), _pos(p)
+StaffName::StaffName(const String& xmlText, int pos)
+    : _name(xmlText), _pos(pos)
 {
-    Text::validateText(_name);   // enforce HTML encoding
+    TextBase::validateText(_name);   // enforce HTML encoding
 }
 
 //---------------------------------------------------------
@@ -1425,6 +1426,16 @@ String Instrument::family() const
     return search.instrTemplate->familyId();
 }
 
+String StaffName::toPlainText() const
+{
+    return TextBase::unEscape(_name);
+}
+
+StaffName StaffName::fromPlainText(const String& plainText, int pos)
+{
+    return { TextBase::plainToXmlText(plainText), pos };
+}
+
 //---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
@@ -1694,14 +1705,24 @@ void Instrument::setTrackName(const String& s)
     _trackName = s;
 }
 
-String Instrument::name() const
+String Instrument::nameAsXmlText() const
 {
     return !_longNames.empty() ? _longNames.front().name() : String();
 }
 
-String Instrument::abbreviature() const
+String Instrument::nameAsPlainText() const
+{
+    return !_longNames.empty() ? _longNames.front().toPlainText() : String();
+}
+
+String Instrument::abbreviatureAsXmlText() const
 {
     return !_shortNames.empty() ? _shortNames.front().name() : String();
+}
+
+String Instrument::abbreviatureAsPlainText() const
+{
+    return !_shortNames.empty() ? _shortNames.front().toPlainText() : String();
 }
 
 //---------------------------------------------------------

@@ -387,7 +387,7 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
         return;
     }
 
-    if (instrument->abbreviature() == abbreviature) {
+    if (instrument->abbreviatureAsPlainText() == abbreviature) {
         return;
     }
 
