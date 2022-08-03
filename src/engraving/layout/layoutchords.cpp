@@ -1275,7 +1275,7 @@ void LayoutChords::repositionGraceNotesAfter(Segment* segment)
         for (Chord* chord : *gng) {
             double offset = segment->xpos() - chord->parentItem()->parentItem()->xpos();
             // Difference between the segment they "belong" and the segment they are "appended" to.
-            chord->setPos(chord->pos().x() + offset, 0.0);
+            chord->setPos(chord->xpos() + offset, 0.0);
         }
     }
 }
