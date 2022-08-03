@@ -285,10 +285,10 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const R
     Swing::ChordDurationAdjustment swingDurationAdjustment;
 
     if (!chord->tuplet()) {
-        SwingParameters params = chord->staff()->swing(chord->tick());
+        SwingParameters swing = chord->staff()->swing(chord->tick());
 
-        if (params.isValid()) {
-            swingDurationAdjustment = Swing::applySwing(chord, params);
+        if (swing.isOn()) {
+            swingDurationAdjustment = Swing::applySwing(chord, swing);
         }
     }
 

@@ -62,7 +62,7 @@ struct SwingParameters {
     int swingUnit = 0;
     int swingRatio = 0;
 
-    bool isValid() const { return swingRatio >= 50 && swingUnit != 0; }
+    bool isOn() const { return swingUnit != 0; }
 };
 
 //---------------------------------------------------------
