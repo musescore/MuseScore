@@ -377,12 +377,13 @@ std::pair<int, int> Score::changedTicksRange() const
     if (actualMacro) {
         auto elements = actualMacro->changedElements();
         for (const EngravingItem* element : elements) {
-            if (startTick > element->tick().ticks()) {
-                startTick = element->tick().ticks();
+            int tick = element->tick().ticks();
+            if (startTick > tick) {
+                startTick = tick;
             }
 
-            if (endTick < element->tick().ticks()) {
-                endTick = element->tick().ticks();
+            if (endTick < tick) {
+                endTick = tick;
             }
         }
     }

@@ -676,6 +676,10 @@ std::vector<const EngravingItem*> UndoMacro::changedElements() const
 
     for (const UndoCommand* command : commands()) {
         for (const EngravingObject* object : command->objectItems()) {
+            if (!object || !object->parent()) {
+                continue;
+            }
+
             auto item = dynamic_cast<const EngravingItem*>(object);
             if (!item) {
                 continue;
