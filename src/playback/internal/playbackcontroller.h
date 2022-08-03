@@ -180,8 +180,6 @@ private:
     async::Channel<uint32_t> m_tickPlayed;
     async::Channel<actions::ActionCode> m_actionCheckedChanged;
 
-    bool m_needRewindBeforePlay = false;
-
     audio::TrackSequenceId m_currentSequenceId = -1;
     async::Notification m_currentSequenceIdChanged;
     audio::PlaybackStatus m_currentPlaybackStatus = audio::PlaybackStatus::Stopped;
