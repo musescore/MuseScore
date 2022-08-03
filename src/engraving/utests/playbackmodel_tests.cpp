@@ -604,17 +604,17 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     const PlaybackEventList& expectedEvents = result.originEvents.at(thirdChordTimestamp);
 
     // [THEN] Triggered events map will match our expectations
-    result.offStream.onReceive(this, [thirdChordTimestamp, expectedEvents](const PlaybackEventsMap& triggeredEvents) {
+    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents) {
         EXPECT_EQ(triggeredEvents.size(), 1);
 
-        const PlaybackEventList& actualEvents = triggeredEvents.at(thirdChordTimestamp);
+        const PlaybackEventList& actualEvents = triggeredEvents.at(0);
         EXPECT_EQ(actualEvents.size(), expectedEvents.size());
 
         for (size_t i = 0; i < expectedEvents.size(); ++i) {
             const mu::mpe::NoteEvent expectedNoteEvent = std::get<mu::mpe::NoteEvent>(expectedEvents.at(i));
             const mu::mpe::NoteEvent actualNoteEvent = std::get<mu::mpe::NoteEvent>(actualEvents.at(i));
 
-            EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == expectedNoteEvent.arrangementCtx().actualTimestamp);
+            EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == 0);
             EXPECT_FALSE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());
             EXPECT_TRUE(actualNoteEvent.pitchCtx() == expectedNoteEvent.pitchCtx());
         }

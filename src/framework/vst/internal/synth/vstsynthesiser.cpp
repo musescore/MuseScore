@@ -68,6 +68,14 @@ Ret VstSynthesiser::init()
         m_paramsChanges.send(m_params);
     });
 
+    m_sequencer.flushedOffStreamEvents().onNotify(this, [this]() {
+        if (!m_vstAudioClient) {
+            return;
+        }
+
+        revokePlayingNotes();
+    });
+
     return make_ret(Ret::Code::Ok);
 }
 
