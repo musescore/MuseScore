@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+trap 'code=$?; echo "Error: command \`$BASH_COMMAND\` exited with code $code." >&2; exit 1' ERR
+
 command -v s3cmd >/dev/null 2>&1 || { echo "error: not found 's3cmd'" >&2; exit 1; }
 
 echo "s3cmd: $(s3cmd --version)"
