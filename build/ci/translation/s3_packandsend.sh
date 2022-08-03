@@ -19,6 +19,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+BUILD_TOOLS=$HOME/build_tools
+ENV_FILE=$BUILD_TOOLS/environment.sh
+
+source $ENV_FILE
+
 trap 'code=$?; echo "Error: command \`$BASH_COMMAND\` exited with code $code." >&2; exit 1' ERR
 
 command -v s3cmd >/dev/null 2>&1 || { echo "error: not found 's3cmd'" >&2; exit 1; }
@@ -27,5 +32,5 @@ echo "s3cmd: $(s3cmd --version)"
 
 echo "Updating translation on s3..."
 SCRIPT_PATH=$(dirname $0)
-python3 $SCRIPT_PATH/tx2s3.py
+python3 $SCRIPT_PATH/s3_packandsend.py
 echo "Translation updated"
