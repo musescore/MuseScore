@@ -148,7 +148,7 @@ class EngravingItem : public EngravingObject
     track_idx_t _track = mu::nidx; ///< staffIdx * VOICES + voice
     mutable ElementFlags _flags;
     ///< valid after call to layout()
-    uint _tag;                    ///< tag bitmask
+    unsigned int _tag;                    ///< tag bitmask
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr m_accessible;
@@ -496,8 +496,8 @@ public:
     bool enabled() const { return flag(ElementFlag::ENABLED); }
     void setEnabled(bool val) { setFlag(ElementFlag::ENABLED, val); }
 
-    uint tag() const { return _tag; }
-    void setTag(uint val) { _tag = val; }
+    unsigned int tag() const { return _tag; }
+    void setTag(unsigned int val) { _tag = val; }
 
     bool autoplace() const;
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }

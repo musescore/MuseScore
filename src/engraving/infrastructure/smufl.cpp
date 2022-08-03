@@ -88,14 +88,14 @@ bool Smufl::initGlyphNamesJson()
         }
 
         bool ok;
-        uint code = symObj.value("codepoint").toString().mid(2).toUInt(&ok, 16);
+        char32_t code = symObj.value("codepoint").toString().mid(2).toUInt(&ok, 16);
         if (ok) {
             s_symIdCodes[i].smuflCode = code;
         } else if (MScore::debugMode) {
             LOGD() << "could not read codepoint for glyph " << name;
         }
 
-        uint alernativeCode = symObj.value("alternateCodepoint").toString().mid(2).toUInt(&ok, 16);
+        char32_t alernativeCode = symObj.value("alternateCodepoint").toString().mid(2).toUInt(&ok, 16);
         if (ok) {
             s_symIdCodes[i].musicSymBlockCode = alernativeCode;
         } else if (MScore::debugMode) {

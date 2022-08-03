@@ -40,7 +40,8 @@ public:
     XmlStreamWriter(const XmlStreamWriter&) = delete;
     XmlStreamWriter& operator=(const XmlStreamWriter&) = delete;
 
-    using Value = std::variant<std::monostate, int, unsigned int, int64_t, size_t, double, const char*, AsciiStringView, String>;
+    using Value = std::variant<std::monostate, int, unsigned int, signed long int, unsigned long int, signed long long, unsigned long long,
+                               double, const char*, AsciiStringView, String>;
     using Attribute = std::pair<AsciiStringView, Value>;
     using Attributes = std::vector<Attribute>;
 

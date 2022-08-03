@@ -48,6 +48,10 @@
 
 #include <zlib.h>
 
+typedef unsigned long int ulong;
+typedef unsigned short int ushort;
+typedef unsigned int uint;
+
 // Zip standard version for archives handled by this API
 // (actually, the only basic support of this version is implemented but it is enough for now)
 #define ZIP_VERSION 20

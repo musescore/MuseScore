@@ -55,7 +55,7 @@ public:
     RectF tightBoundingRect(const Char& ch) const;
 
     bool inFont(Char ch) const;
-    bool inFontUcs4(uint ucs4) const;
+    bool inFontUcs4(char32_t ucs4) const;
 
     static double width(const Font& f, const String& string);
     static RectF boundingRect(const Font& f, const String& string);

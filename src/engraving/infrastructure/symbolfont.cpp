@@ -526,7 +526,7 @@ const SymbolFont::Sym& SymbolFont::sym(SymId id) const
     return m_symbols.at(static_cast<size_t>(id));
 }
 
-uint SymbolFont::symCode(SymId id) const
+char32_t SymbolFont::symCode(SymId id) const
 {
     const Sym& s = sym(id);
     if (s.isValid()) {
@@ -537,7 +537,7 @@ uint SymbolFont::symCode(SymId id) const
     return Smufl::smuflCode(id);
 }
 
-SymId SymbolFont::fromCode(uint code) const
+SymId SymbolFont::fromCode(char32_t code) const
 {
     auto it = std::find_if(m_symbols.begin(), m_symbols.end(), [code](const Sym& s) { return s.code == code; });
     return static_cast<SymId>(it == m_symbols.end() ? 0 : it - m_symbols.begin());

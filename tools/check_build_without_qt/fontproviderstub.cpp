@@ -47,7 +47,7 @@ bool FontProviderStub::inFont(const Font&, Char) const
     return false;
 }
 
-bool FontProviderStub::inFontUcs4(const Font&, uint) const
+bool FontProviderStub::inFontUcs4(const Font&, char32_t) const
 {
     return false;
 }
@@ -84,12 +84,12 @@ RectF FontProviderStub::tightBoundingRect(const Font&, const String&) const
 }
 
 // Score symbols
-RectF FontProviderStub::symBBox(const Font&, uint, double) const
+RectF FontProviderStub::symBBox(const Font&, char32_t, double) const
 {
     return RectF();
 }
 
-double FontProviderStub::symAdvance(const Font&, uint, double) const
+double FontProviderStub::symAdvance(const Font&, char32_t, double) const
 {
     return 0.0;
 }

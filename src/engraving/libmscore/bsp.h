@@ -56,7 +56,7 @@ public:
         Type type;
     };
 private:
-    uint depth;
+    unsigned int depth;
     void initialize(const mu::RectF& rect, int depth, int index);
     void climbTree(BspTreeVisitor* visitor, const mu::PointF& pos, int index = 0);
     void climbTree(BspTreeVisitor* visitor, const mu::RectF& rect, int index = 0);

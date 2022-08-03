@@ -43,7 +43,7 @@ public:
     double descent(const Font& f) const override;
 
     bool inFont(const Font& f, Char ch) const override;
-    bool inFontUcs4(const Font& f, uint ucs4) const override;
+    bool inFontUcs4(const Font& f, char32_t ucs4) const override;
 
     // Text
     double horizontalAdvance(const Font& f, const String& string) const override;
@@ -55,8 +55,8 @@ public:
     RectF tightBoundingRect(const Font& f, const String& string) const override;
 
     // Score symbols
-    RectF symBBox(const Font& f, uint ucs4, double DPI_F) const override;
-    double symAdvance(const Font& f, uint ucs4, double DPI_F) const override;
+    RectF symBBox(const Font& f, char32_t ucs4, double DPI_F) const override;
+    double symAdvance(const Font& f, char32_t ucs4, double DPI_F) const override;
 
 private:
 
