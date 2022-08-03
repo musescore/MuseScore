@@ -130,6 +130,16 @@ void PlaybackUiActions::init()
     m_controller->actionCheckedChanged().onReceive(this, [this](const ActionCode& code) {
         m_actionCheckedChanged.send({ code });
     });
+
+    m_controller->isPlayAllowedChanged().onNotify(this, [this]() {
+        ActionCodeList codes;
+
+        for (const UiAction& action : actionsList()) {
+            codes.push_back(action.code);
+        }
+
+        m_actionEnabledChanged.send(codes);
+    });
 }
 
 const UiActionList& PlaybackUiActions::actionsList() const
