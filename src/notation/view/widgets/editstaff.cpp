@@ -209,21 +209,15 @@ void EditStaff::updateInstrument()
 {
     updateInterval(m_instrument.transpose());
 
-    std::list<mu::engraving::StaffName>& snl = m_instrument.shortNames();
-    QString df = snl.empty() ? u"" : snl.front().name();
-    shortName->setPlainText(df);
-
-    std::list<mu::engraving::StaffName>& lnl = m_instrument.longNames();
-    df = lnl.empty() ? u"" : lnl.front().name();
-
-    longName->setPlainText(df);
+    longName->setPlainText(m_instrument.nameAsPlainText());
+    shortName->setPlainText(m_instrument.abbreviatureAsPlainText());
 
     if (partName->text() == instrumentName->text()) {
         // Updates part name if no custom name has been set before
-        partName->setText(m_instrument.name());
+        partName->setText(m_instrument.nameAsPlainText());
     }
 
-    instrumentName->setText(m_instrument.name());
+    instrumentName->setText(m_instrument.nameAsPlainText());
 
     m_minPitchA = m_instrument.minPitchA();
     m_maxPitchA = m_instrument.maxPitchA();

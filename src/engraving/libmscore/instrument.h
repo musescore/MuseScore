@@ -56,8 +56,11 @@ class StaffName
     int _pos = 0;       // even number -> between staves
 
 public:
-    StaffName() {}
-    StaffName(const String& s, int p=0);
+    StaffName() = default;
+    StaffName(const String& xmlText, int pos = 0);
+
+    String toPlainText() const;
+    static StaffName fromPlainText(const String& plainText, int pos = 0);
 
     bool operator==(const StaffName&) const;
     String toString() const;
@@ -416,8 +419,10 @@ public:
 
     String trackName() const;
     void setTrackName(const String& s);
-    String name() const;
-    String abbreviature() const;
+    String nameAsXmlText() const;
+    String nameAsPlainText() const;
+    String abbreviatureAsXmlText() const;
+    String abbreviatureAsPlainText() const;
     static Instrument fromTemplate(const InstrumentTemplate* t);
 
     Trait trait() const;
