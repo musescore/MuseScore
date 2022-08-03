@@ -6645,7 +6645,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="3" column="0" colspan="3">
             <widget class="QCheckBox" name="arpeggioHiddenInStdIfTab">
              <property name="text">
-              <string>Do not show arpeggio in standard notation when displayed in tablature</string>
+              <string>Do not show arpeggios in standard notation when displayed in tablature</string>
              </property>
             </widget>
            </item>
