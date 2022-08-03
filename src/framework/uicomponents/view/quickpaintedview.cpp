@@ -31,10 +31,10 @@ QuickPaintedView::QuickPaintedView(QQuickItem* parent)
     setSmooth(false);
 }
 
-QSGNode* QuickPaintedView::updatePaintNode(QSGNode* old, UpdatePaintNodeData* d)
+QSGNode* QuickPaintedView::updatePaintNode(QSGNode* old, UpdatePaintNodeData* data)
 {
     //! NOTE It is necessary that when UI scaling is displayed without a blur
     setTextureSize(QSize(width(), height()));
-    QSGNode* n = QQuickPaintedItem::updatePaintNode(old, d);
+    QSGNode* n = QQuickPaintedItem::updatePaintNode(old, data);
     return n;
 }
