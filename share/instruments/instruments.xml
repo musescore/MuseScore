@@ -10293,17 +10293,9 @@
                   <description>Percussion synthesizer.</description>
                   <musicXMLid>drum.snare-drum.electric</musicXMLid>
                   <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
-                  <Drum pitch="40"> <!--Electric Snare-->
-                        <head>normal</head>
-                        <line>4</line>
-                        <voice>0</voice>
-                        <name>Electric Snare</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
-                  </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
                         <controller ctrl="0" value="1"/> <!--Bank MSB-->
