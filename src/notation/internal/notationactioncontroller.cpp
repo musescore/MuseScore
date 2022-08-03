@@ -35,6 +35,8 @@ using namespace mu::framework;
 static constexpr qreal STRETCH_STEP = 0.1;
 static constexpr bool NEAR_NOTE_OR_REST = true;
 
+static constexpr bool DONT_PLAY_CHORD = false;
+
 static const ActionCode UNDO_ACTION_CODE = "undo";
 static const ActionCode REDO_ACTION_CODE = "redo";
 
@@ -889,6 +891,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         break;
     }
 
+    seekSelectedElement();
     playSelectedElement(playChord);
 }
 
@@ -902,7 +905,7 @@ void NotationActionController::moveWithinChord(MoveDirection direction)
 
     interaction->moveChordNoteSelection(direction);
 
-    playSelectedElement(false);
+    playSelectedElement(DONT_PLAY_CHORD);
 }
 
 void NotationActionController::selectTopOrBottomOfChord(MoveDirection direction)
@@ -915,7 +918,7 @@ void NotationActionController::selectTopOrBottomOfChord(MoveDirection direction)
 
     interaction->selectTopOrBottomOfChord(direction);
 
-    playSelectedElement(false);
+    playSelectedElement(DONT_PLAY_CHORD);
 }
 
 void NotationActionController::changeVoice(voice_idx_t voiceIndex)
@@ -976,7 +979,7 @@ void NotationActionController::pasteSelection(PastingType type)
 
     Fraction scale = resolvePastingScale(interaction, type);
     interaction->pasteSelection(scale);
-    playSelectedElement(false);
+    playSelectedElement(DONT_PLAY_CHORD);
 }
 
 Fraction NotationActionController::resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const
@@ -1713,16 +1716,18 @@ void NotationActionController::toggleConcertPitch()
     currentNotationUndoStack()->commitChanges();
 }
 
+void NotationActionController::seekSelectedElement()
+{
+    if (const EngravingItem* element = selectedElement()) {
+        playbackController()->seekElement(element);
+    }
+}
+
 void NotationActionController::playSelectedElement(bool playChord)
 {
     TRACEFUNC;
 
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    EngravingItem* element = interaction->selection()->element();
+    const EngravingItem* element = selectedElement();
     if (!element) {
         return;
     }
