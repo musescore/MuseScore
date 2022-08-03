@@ -235,7 +235,7 @@ enum class PlayMode : char {
 
 struct Layer {
     String name;
-    uint tags = 0;
+    unsigned int tags = 0;
 };
 
 //---------------------------------------------------------
@@ -1099,14 +1099,14 @@ public:
     void setMscoreVersion(const String& val) { _mscoreVersion = val; }
     void setMscoreRevision(int val) { _mscoreRevision = val; }
 
-    uint currentLayerMask() const { return _layer[_currentLayer].tags; }
+    unsigned int currentLayerMask() const { return _layer[_currentLayer].tags; }
     void setCurrentLayer(int val) { _currentLayer = val; }
     int currentLayer() const { return _currentLayer; }
     String* layerTags() { return _layerTags; }
     String* layerTagComments() { return _layerTagComments; }
     std::vector<Layer>& layer() { return _layer; }
     const std::vector<Layer>& layer() const { return _layer; }
-    bool tagIsValid(uint tag) const { return tag & _layer[_currentLayer].tags; }
+    bool tagIsValid(unsigned int tag) const { return tag & _layer[_currentLayer].tags; }
 
     void addViewer(MuseScoreView* v) { viewer.push_back(v); }
     void removeViewer(MuseScoreView* v) { viewer.remove(v); }

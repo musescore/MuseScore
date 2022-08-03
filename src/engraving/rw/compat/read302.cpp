@@ -91,7 +91,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Layer") {
             Layer layer;
             layer.name = e.attribute("name");
-            layer.tags = static_cast<uint>(e.intAttribute("mask"));
+            layer.tags = static_cast<unsigned int>(e.intAttribute("mask"));
             score->_layer.push_back(layer);
             e.readNext();
         } else if (tag == "currentLayer") {

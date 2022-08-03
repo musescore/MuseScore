@@ -47,7 +47,7 @@ public:
         bool isDir = false;
         bool isFile  = false;
         bool isSymLink = false;
-        uint crc = 0;
+        unsigned int crc = 0;
         int64_t size = 0;
         std::tm lastModified;
 

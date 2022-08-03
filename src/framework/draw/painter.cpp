@@ -430,7 +430,7 @@ void Painter::drawTextWorkaround(Font& f, const PointF pos, const String& text)
     }
 }
 
-void Painter::drawSymbol(const PointF& point, uint ucs4Code)
+void Painter::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
     m_provider->drawSymbol(point, ucs4Code);
     if (extended) {

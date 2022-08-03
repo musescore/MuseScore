@@ -46,7 +46,7 @@ public:
 
     bool isNull() const { return m_data.empty(); }
 
-    uint key() const { return m_key; }
+    unsigned int key() const { return m_key; }
 
 #ifndef NO_QT_SUPPORT
     static Pixmap fromQPixmap(const QPixmap& qtPixmap)
@@ -74,9 +74,9 @@ public:
 
 private:
 
-    inline uint doKey(const uint8_t* p, size_t len) const
+    inline unsigned int doKey(const uint8_t* p, size_t len) const
     {
-        uint h = 0;
+        unsigned int h = 0;
         for (size_t i = 0; i < len; ++i) {
             h = 31 * h + p[i];
         }
@@ -91,7 +91,7 @@ private:
 
     Size m_size;
     ByteArray m_data; //! usually png
-    uint m_key = 0;
+    unsigned int m_key = 0;
 };
 }
 

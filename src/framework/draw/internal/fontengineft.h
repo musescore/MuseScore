@@ -35,12 +35,12 @@ public:
 
     bool load(const io::path_t& path);
 
-    QRectF bbox(uint ucs4, double DPI_F) const;
-    double advance(uint ucs4, double DPI_F) const;
+    QRectF bbox(char32_t ucs4, double DPI_F) const;
+    double advance(char32_t ucs4, double DPI_F) const;
 
 private:
 
-    FTGlyphMetrics* glyphMetrics(uint ucs4) const;
+    FTGlyphMetrics* glyphMetrics(char32_t ucs4) const;
 
     FTData* m_data = nullptr;
 };

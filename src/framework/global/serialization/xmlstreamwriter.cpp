@@ -95,7 +95,8 @@ String XmlStreamWriter::escapeString(const AsciiStringView& s)
 
 void XmlStreamWriter::writeValue(const Value& v)
 {
-    // int, unsigned int, int64_t, size_t, double, const char*, AsciiString, String;
+    // std::monostate, int, unsigned int, signed long int, unsigned long int, signed long long, unsigned long long,
+    // double, const char*, AsciiStringView, String
     switch (v.index()) {
     case 0:
         break;
@@ -103,17 +104,21 @@ void XmlStreamWriter::writeValue(const Value& v)
         break;
     case 2: m_impl->stream << std::get<unsigned int>(v);
         break;
-    case 3: m_impl->stream << std::get<int64_t>(v);
+    case 3: m_impl->stream << std::get<signed long int>(v);
         break;
-    case 4: m_impl->stream << std::get<size_t>(v);
+    case 4: m_impl->stream << std::get<unsigned long int>(v);
         break;
-    case 5: m_impl->stream << std::get<double>(v);
+    case 5: m_impl->stream << std::get<signed long long>(v);
         break;
-    case 6: m_impl->stream << escapeString(AsciiStringView(std::get<const char*>(v)));
+    case 6: m_impl->stream << std::get<unsigned long long>(v);
         break;
-    case 7: m_impl->stream << escapeString(std::get<AsciiStringView>(v));
+    case 7: m_impl->stream << std::get<double>(v);
         break;
-    case 8: m_impl->stream << escapeString(std::get<String>(v));
+    case 8: m_impl->stream << escapeString(AsciiStringView(std::get<const char*>(v)));
+        break;
+    case 9: m_impl->stream << escapeString(std::get<AsciiStringView>(v));
+        break;
+    case 10: m_impl->stream << escapeString(std::get<String>(v));
         break;
     default:
         LOGI() << "index: " << v.index();

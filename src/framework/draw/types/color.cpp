@@ -4,7 +4,7 @@
 #include <iomanip>
 
 namespace mu::draw {
-static constexpr int fromHex(uint c);
+static constexpr int fromHex(char c);
 static int hex2int(const char* s, int n);
 static bool getHexRgb(const char* name, size_t len, Rgba* rgba);
 static std::string rgb2hex(int r, int g, int b, int a = Color::DEFAULT_ALPHA);
@@ -189,7 +189,7 @@ void Color::setRgba(Rgba rgba)
     m_isValid = true;
 }
 
-static constexpr int fromHex(uint c)
+static constexpr int fromHex(char c)
 {
     return ((c >= '0') && (c <= '9')) ? int(c - '0')
            : ((c >= 'A') && (c <= 'F')) ? int(c - 'A' + 10)
