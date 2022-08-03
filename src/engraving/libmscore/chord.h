@@ -64,10 +64,13 @@ public:
     Shape shape() const override { return _shape; }
     void layout() override;
     void setPos(double x, double y) override;
+    Segment* appendedSegment() const { return _appendedSegment; }
+    void setAppendedSegment(Segment* s) { _appendedSegment = s; }
 
 private:
     Chord* _parent = nullptr;
     Shape _shape;
+    Segment* _appendedSegment = nullptr; // the graceNoteGroup is appended to this segment
 };
 
 //---------------------------------------------------------
