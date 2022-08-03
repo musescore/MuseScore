@@ -221,7 +221,7 @@ private:
     void movePlaybackCursor(midi::tick_t tick);
     bool needAdjustCanvasVerticallyWhilePlayback(const RectF& cursorRect);
 
-    void updateLoopMarkers(const LoopBoundaries& boundaries);
+    void updateLoopMarkers();
 
     const Page* pointToPage(const PointF& point) const;
     PointF alignToCurrentPageBorder(const RectF& showRect, const PointF& pos) const;

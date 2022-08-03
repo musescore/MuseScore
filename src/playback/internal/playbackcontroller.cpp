@@ -85,8 +85,6 @@ void PlaybackController::init()
     m_playbackPositionChanged.onNotify(this, [this]() {
         updateCurrentTempo();
     });
-
-    m_needRewindBeforePlay = true;
 }
 
 void PlaybackController::updateCurrentTempo()
@@ -137,12 +135,12 @@ bool PlaybackController::isLoaded() const
 
 bool PlaybackController::isLoopVisible() const
 {
-    return notationPlayback() ? notationPlayback()->loopBoundaries().val.visible : false;
+    return notationPlayback() ? notationPlayback()->loopBoundaries().visible : false;
 }
 
 bool PlaybackController::isPlaybackLooped() const
 {
-    return notationPlayback() ? !notationPlayback()->loopBoundaries().val.isNull() : false;
+    return notationPlayback() ? !notationPlayback()->loopBoundaries().isNull() : false;
 }
 
 Notification PlaybackController::isPlayingChanged() const
@@ -157,11 +155,7 @@ void PlaybackController::reset()
 
 void PlaybackController::seek(const midi::tick_t tick)
 {
-    IF_ASSERT_FAILED(notationPlayback() && playback()) {
-        return;
-    }
-
-    playback()->player()->seek(m_currentSequenceId, tickToMsecs(tick));
+    seek(tickToMsecs(tick));
 }
 
 void PlaybackController::seek(const audio::msecs_t msecs)
@@ -322,8 +316,8 @@ void PlaybackController::onNotationChanged()
         updateMuteStates();
     });
 
-    notationPlayback()->loopBoundaries().ch.onReceive(this, [this](const LoopBoundaries& boundaries) {
-        setLoop(boundaries);
+    notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
+        setLoop(notationPlayback()->loopBoundaries());
     });
 
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
@@ -341,7 +335,7 @@ void PlaybackController::onSelectionChanged()
 
     if (!isRangeSelection) {
         if (selectionTypeChanged) {
-            setLoop(notationPlayback()->loopBoundaries().val);
+            setLoop(notationPlayback()->loopBoundaries());
             updateMuteStates();
         }
 
@@ -382,15 +376,13 @@ void PlaybackController::togglePlay()
 
 void PlaybackController::play()
 {
-    IF_ASSERT_FAILED(notationPlayback() && playback()) {
+    IF_ASSERT_FAILED(playback()) {
         return;
     }
 
-    if (m_needRewindBeforePlay) {
+    if (isPlaybackLooped()) {
         msecs_t startMsecs = playbackStartMsecs();
         seek(startMsecs);
-    } else {
-        m_needRewindBeforePlay = true;
     }
 
     playback()->player()->play(m_currentSequenceId);
@@ -399,17 +391,12 @@ void PlaybackController::play()
 
 void PlaybackController::rewind(const ActionData& args)
 {
-    IF_ASSERT_FAILED(playback()) {
-        return;
-    }
-
     msecs_t startMsecs = playbackStartMsecs();
     msecs_t endMsecs = playbackEndMsecs();
     msecs_t newPosition = !args.empty() ? args.arg<msecs_t>(0) : 0;
     newPosition = std::clamp(newPosition, startMsecs, endMsecs);
 
     seek(newPosition);
-    m_needRewindBeforePlay = false;
 }
 
 void PlaybackController::pause()
@@ -448,7 +435,7 @@ msecs_t PlaybackController::playbackStartMsecs() const
         return 0;
     }
 
-    LoopBoundaries loop = notationPlayback()->loopBoundaries().val;
+    const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
     if (loop.visible) {
         return tickToMsecs(loop.loopInTick);
     }

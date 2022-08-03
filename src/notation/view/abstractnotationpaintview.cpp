@@ -258,9 +258,9 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         }
     });
 
-    updateLoopMarkers(notationPlayback()->loopBoundaries().val);
-    notationPlayback()->loopBoundaries().ch.onReceive(this, [this](const LoopBoundaries& boundaries) {
-        updateLoopMarkers(boundaries);
+    updateLoopMarkers();
+    notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
+        updateLoopMarkers();
     });
 
     if (accessibilityEnabled()) {
@@ -347,15 +347,17 @@ void AbstractNotationPaintView::onViewSizeChanged()
     emit viewportChanged();
 }
 
-void AbstractNotationPaintView::updateLoopMarkers(const LoopBoundaries& boundaries)
+void AbstractNotationPaintView::updateLoopMarkers()
 {
     TRACEFUNC;
 
-    m_loopInMarker->move(boundaries.loopInTick);
-    m_loopOutMarker->move(boundaries.loopOutTick);
+    const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
 
-    m_loopInMarker->setVisible(boundaries.visible);
-    m_loopOutMarker->setVisible(boundaries.visible);
+    m_loopInMarker->move(loop.loopInTick);
+    m_loopOutMarker->move(loop.loopOutTick);
+
+    m_loopInMarker->setVisible(loop.visible);
+    m_loopOutMarker->setVisible(loop.visible);
 
     update();
 }

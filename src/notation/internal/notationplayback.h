@@ -71,7 +71,8 @@ public:
 
     void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) override;
     void setLoopBoundariesVisible(bool visible) override;
-    ValCh<LoopBoundaries> loopBoundaries() const override;
+    const LoopBoundaries& loopBoundaries() const override;
+    async::Notification loopBoundariesChanged() const override;
 
     const Tempo& tempo(midi::tick_t tick) const override;
     MeasureBeat beat(midi::tick_t tick) const override;
@@ -90,7 +91,9 @@ private:
 
     IGetScore* m_getScore = nullptr;
     async::Channel<int> m_playPositionTickChanged;
-    ValCh<LoopBoundaries> m_loopBoundaries;
+
+    LoopBoundaries m_loopBoundaries;
+    async::Notification m_loopBoundariesChanged;
 
     audio::msecs_t m_totalPlayTime = 0;
     async::Channel<audio::msecs_t> m_totalPlayTimeChanged;
