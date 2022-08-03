@@ -68,7 +68,8 @@ public:
 
     virtual void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) = 0;
     virtual void setLoopBoundariesVisible(bool visible) = 0;
-    virtual ValCh<LoopBoundaries> loopBoundaries() const = 0;
+    virtual const LoopBoundaries& loopBoundaries() const = 0;
+    virtual async::Notification loopBoundariesChanged() const = 0;
 
     virtual const Tempo& tempo(midi::tick_t tick) const = 0;
     virtual MeasureBeat beat(midi::tick_t tick) const = 0;

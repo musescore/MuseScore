@@ -132,24 +132,20 @@ async::Channel<InstrumentTrackId> NotationPlayback::trackRemoved() const
 
 void NotationPlayback::updateLoopBoundaries()
 {
-    LoopBoundaries boundaries;
-    boundaries.loopInTick = score()->loopInTick().ticks();
-    boundaries.loopOutTick = score()->loopOutTick().ticks();
+    LoopBoundaries newBoundaries;
+    newBoundaries.loopInTick = score()->loopInTick().ticks();
+    newBoundaries.loopOutTick = score()->loopOutTick().ticks();
+    newBoundaries.visible = m_loopBoundaries.visible;
 
-    if (boundaries.isNull()) {
-        return;
-    }
-
-    boundaries.visible = m_loopBoundaries.val.visible;
-
-    if (m_loopBoundaries.val != boundaries) {
-        m_loopBoundaries.set(boundaries);
+    if (m_loopBoundaries != newBoundaries) {
+        m_loopBoundaries = newBoundaries;
+        m_loopBoundariesChanged.notify();
     }
 }
 
 void NotationPlayback::updateTotalPlayTime()
 {
-    mu::engraving::Score* score = m_getScore->score();
+    const mu::engraving::Score* score = m_getScore->score();
     if (!score) {
         return;
     }
@@ -282,17 +278,22 @@ void NotationPlayback::addLoopOut(int _tick)
 
 void NotationPlayback::setLoopBoundariesVisible(bool visible)
 {
-    if (m_loopBoundaries.val.visible == visible) {
+    if (m_loopBoundaries.visible == visible) {
         return;
     }
 
-    m_loopBoundaries.val.visible = visible;
-    m_loopBoundaries.set(m_loopBoundaries.val);
+    m_loopBoundaries.visible = visible;
+    m_loopBoundariesChanged.notify();
 }
 
-mu::ValCh<LoopBoundaries> NotationPlayback::loopBoundaries() const
+const LoopBoundaries& NotationPlayback::loopBoundaries() const
 {
     return m_loopBoundaries;
+}
+
+Notification NotationPlayback::loopBoundariesChanged() const
+{
+    return m_loopBoundariesChanged;
 }
 
 const Tempo& NotationPlayback::tempo(tick_t tick) const
