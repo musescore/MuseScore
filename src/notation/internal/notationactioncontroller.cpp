@@ -648,6 +648,7 @@ void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
 
     noteInput->addNote(note, addingMode);
 
+    seekSelectedElement();
     playSelectedElement();
 }
 
@@ -683,6 +684,7 @@ void NotationActionController::putNote(const actions::ActionData& args)
 
     noteInput->putNote(pos, replace, insert);
 
+    seekSelectedElement();
     playSelectedElement();
 }
 
