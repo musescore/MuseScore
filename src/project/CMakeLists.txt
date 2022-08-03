@@ -137,6 +137,9 @@ set(MODULE_SRC
 
     )
 
-set(MODULE_LINK notation)
+set(MODULE_LINK
+    uicomponents
+    notation
+)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
