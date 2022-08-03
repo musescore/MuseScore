@@ -4165,10 +4165,13 @@ void GraceNotesGroup::layout()
         double xpos = offset - parent()->rxoffset() - parent()->xpos() - chord->rxoffset();
         chord->setPos(xpos, 0.0);
     }
+    double offset = _shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->vStaffIdx()), score());
+    setPos(-offset, 0.0);
 }
 
 void GraceNotesGroup::setPos(double x, double y)
 {
+    doSetPos(x, y);
     for (unsigned i = 0; i < this->size(); ++i) {
         Chord* chord = this->at(i);
         chord->movePos(PointF(x, y));

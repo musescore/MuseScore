@@ -2333,11 +2333,7 @@ void Segment::addPreAppendedToShape(int staffIdx, Shape& s)
             continue;
         }
         EngravingItem* item = _preAppendedItems[track];
-        item->layout();
-        Shape itemShape = item->shape();
-        double offset = -itemShape.minHorizontalDistance(s, score());
-        s.add(itemShape.translated(mu::PointF(offset, 0.0)));
-        item->setPos(offset, 0.0);
+        s.add(item->shape().translated(item->pos()));
     }
 }
 
