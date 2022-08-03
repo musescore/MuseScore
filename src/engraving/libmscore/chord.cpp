@@ -2923,7 +2923,7 @@ void Chord::setColor(const mu::draw::Color& color)
 double Chord::dotPosX() const
 {
     if (explicitParent()) {
-        return segment()->dotPosX(staffIdx());
+        return segment()->dotPosX(vStaffIdx());
     }
     return -1000.0;
 }
