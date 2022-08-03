@@ -990,7 +990,7 @@ void Chord::computeUp()
     _usesAutoUp = false;
 
     bool hasCustomStemDirection = _stemDirection != DirectionV::AUTO;
-    if (hasCustomStemDirection) {
+    if (hasCustomStemDirection && !(_beam && _beam->cross())) {
         _up = _stemDirection == DirectionV::UP;
         return;
     }
@@ -1007,17 +1007,19 @@ void Chord::computeUp()
         for (ChordRest* cr : _beam->elements()) {
             if (cr->isChord() && toChord(cr)->staffMove() != 0) {
                 cross = true;
-                int move = toChord(cr)->staffMove();
-                // we have to determine the first and last chord direction for the beam
-                // so that we can calculate the beam anchor points
-                if (move > 0) {
-                    _up = staffMove() != 0;
-                    firstCr->setUp(firstCr->staffMove() != 0);
-                    lastCr->setUp(lastCr->staffMove() != 0);
-                } else {
-                    _up = staffMove() == 0;
-                    firstCr->setUp(firstCr->staffMove() == 0);
-                    lastCr->setUp(lastCr->staffMove() == 0);
+                if (!_beam->userModified()) { // if the beam is user-modified _up must be decided later down
+                    int move = toChord(cr)->staffMove();
+                    // we have to determine the first and last chord direction for the beam
+                    // so that we can calculate the beam anchor points
+                    if (move > 0) {
+                        _up = staffMove() > 0;
+                        firstCr->setUp(firstCr->staffMove() > 0);
+                        lastCr->setUp(lastCr->staffMove() > 0);
+                    } else {
+                        _up = staffMove() >= 0;
+                        firstCr->setUp(firstCr->staffMove() >= 0);
+                        lastCr->setUp(lastCr->staffMove() >= 0);
+                    }
                 }
                 break;
             }
@@ -1034,6 +1036,11 @@ void Chord::computeUp()
             return;
         }
         if (_beam->userModified()) {
+            if (cross && this == firstCr) {
+                // necessary because this beam was never laid out before, so its position isn't known
+                // and the first chord would calculate wrong stem direction
+                _beam->layout();
+            }
             PointF base = _beam->pagePos();
             Note* baseNote = _up ? downNote() : upNote();
             double noteY = baseNote->canvasPos().y();
