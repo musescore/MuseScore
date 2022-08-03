@@ -24,10 +24,10 @@
 
 #include <QWidget>
 
-using namespace mu::ui;
+using namespace mu::uicomponents;
 
 WidgetView::WidgetView(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : QuickPaintedView(parent)
 {
     setFlag(QQuickItem::ItemAcceptsDrops, true);
     setFlag(QQuickItem::ItemHasContents, true);

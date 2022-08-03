@@ -22,7 +22,7 @@
 #ifndef MU_PALETTE_DRUMSETOOLSPANELVIEW_H
 #define MU_PALETTE_DRUMSETOOLSPANELVIEW_H
 
-#include "ui/view/widgetview.h"
+#include "uicomponents/view/widgetview.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
@@ -33,7 +33,7 @@
 
 namespace mu::palette {
 class DrumsetPaletteAdapter;
-class DrumsetPanelView : public ui::WidgetView, public async::Asyncable
+class DrumsetPanelView : public uicomponents::WidgetView, public async::Asyncable
 {
     Q_OBJECT
 

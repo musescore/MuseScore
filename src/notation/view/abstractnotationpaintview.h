@@ -22,7 +22,6 @@
 #ifndef MU_NOTATION_ABSTRACTNOTATIONPAINTVIEW_H
 #define MU_NOTATION_ABSTRACTNOTATIONPAINTVIEW_H
 
-#include <QQuickPaintedItem>
 #include <QTimer>
 
 #include "modularity/ioc.h"
@@ -39,6 +38,7 @@
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
 #include "uicomponents/view/abstractmenumodel.h"
+#include "uicomponents/view/quickpaintedview.h"
 
 #include "notationviewinputcontroller.h"
 #include "noteinputcursor.h"
@@ -47,7 +47,8 @@
 #include "continuouspanel.h"
 
 namespace mu::notation {
-class AbstractNotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable, public actions::Actionable
+class AbstractNotationPaintView : public uicomponents::QuickPaintedView, public IControlledView, public async::Asyncable,
+    public actions::Actionable
 {
     Q_OBJECT
 
