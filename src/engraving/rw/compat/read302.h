@@ -25,6 +25,7 @@
 #include "engravingerrors.h"
 
 namespace mu::engraving {
+class Instrument;
 class MasterScore;
 class Score;
 
@@ -41,6 +42,8 @@ public:
 
 private:
     static bool readScore302(Score* score, XmlReader& e, ReadContext& ctx);
+
+    static void fixInstrumentId(Instrument* instrument);
 };
 }
 
