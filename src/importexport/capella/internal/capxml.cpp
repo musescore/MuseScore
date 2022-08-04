@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "capella.h"
+
 //    CapXML import filter
 //    Supports the CapXML 1.0 file format version 1.0.8 (capella 2008)
 //    The implementation shares as much code as possible with the capella
@@ -28,11 +30,12 @@
 
 #include <assert.h>
 #include <cmath>
+
 #include <QRegularExpression>
 
+#include "engravingerrors.h"
 #include "libmscore/masterscore.h"
 #include "serialization/zipreader.h"
-#include "capella.h"
 
 #include "log.h"
 
@@ -1301,13 +1304,13 @@ void Capella::readCapx(XmlReader& e)
 
 void convertCapella(Score* score, Capella* cap, bool capxMode);
 
-Score::FileError importCapXml(MasterScore* score, const QString& name)
+Err importCapXml(MasterScore* score, const QString& name)
 {
     LOGD("importCapXml(score %p, name %s)", score, qPrintable(name));
     ZipReader uz(name);
     if (!uz.exists()) {
         LOGD("importCapXml: <%s> not found", qPrintable(name));
-        return Score::FileError::FILE_NOT_FOUND;
+        return Err::FileNotFound;
     }
 
     ByteArray dbuf = uz.fileData("score.xml");
@@ -1326,6 +1329,6 @@ Score::FileError importCapXml(MasterScore* score, const QString& name)
     }
 
     convertCapella(score, &cf, true);
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 }

@@ -1231,10 +1231,10 @@ void PowerTab::ptPosition::addComponent(ptComponent* c)
 //   read
 //---------------------------------------------------------
 
-Score::FileError PowerTab::read()
+Err PowerTab::read()
 {
     if (!readVersion()) {
-        return Score::FileError::FILE_BAD_FORMAT;
+        return Err::FileBadFormat;
     }
     ptSong song;
 
@@ -1293,6 +1293,6 @@ Score::FileError PowerTab::read()
         s->setPlainText(String::fromStdString(name));
         m->add(s);
     }
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 }

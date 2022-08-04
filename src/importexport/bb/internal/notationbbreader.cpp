@@ -28,11 +28,11 @@ using namespace mu::iex::bb;
 using namespace mu::engraving;
 
 namespace mu::iex::bb {
-extern Score::FileError importBB(MasterScore* score, const QString& name);
+extern Err importBB(MasterScore* score, const QString& name);
 }
 
 mu::Ret NotationBBReader::read(MasterScore* score, const io::path_t& path, const Options&)
 {
-    Score::FileError err = importBB(score, path.toQString());
-    return scoreFileErrorToRet(err, path);
+    Err err = importBB(score, path.toQString());
+    return make_ret(err, path);
 }

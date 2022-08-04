@@ -192,7 +192,7 @@ mu::Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const mu::io
 {
     mu::engraving::ScoreLoad sl;
 
-    if (compat::loadMsczOrMscx(score, path.toQString()) != mu::engraving::Score::FileError::FILE_NO_ERROR) {
+    if (compat::loadMsczOrMscx(score, path.toQString()) != engraving::Err::NoError) {
         return make_ret(Ret::Code::UnknownError);
     }
 

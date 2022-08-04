@@ -945,13 +945,13 @@ static void fixupSigmap(MxmlLogger* logger, Score* score, const QVector<Fraction
  Parse MusicXML in \a device and extract pass 1 data.
  */
 
-Score::FileError MusicXMLParserPass1::parse(QIODevice* device)
+Err MusicXMLParserPass1::parse(QIODevice* device)
 {
     _logger->logDebugTrace("MusicXMLParserPass1::parse device");
     _parts.clear();
     _e.setDevice(device);
     auto res = parse();
-    if (res != Score::FileError::FILE_NO_ERROR) {
+    if (res != Err::NoError) {
         return res;
     }
 
@@ -974,7 +974,7 @@ Score::FileError MusicXMLParserPass1::parse(QIODevice* device)
  Start the parsing process, after verifying the top-level node is score-partwise
  */
 
-Score::FileError MusicXMLParserPass1::parse()
+Err MusicXMLParserPass1::parse()
 {
     _logger->logDebugTrace("MusicXMLParserPass1::parse");
 
@@ -987,16 +987,16 @@ Score::FileError MusicXMLParserPass1::parse()
             _logger->logError(QString("this is not a MusicXML score-partwise file (top-level node '%1')")
                               .arg(_e.name().toString()), &_e);
             _e.skipCurrentElement();
-            return Score::FileError::FILE_BAD_FORMAT;
+            return Err::FileBadFormat;
         }
     }
 
     if (!found) {
         _logger->logError("this is not a MusicXML score-partwise file, node <score-partwise> not found", &_e);
-        return Score::FileError::FILE_BAD_FORMAT;
+        return Err::FileBadFormat;
     }
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 
 //---------------------------------------------------------

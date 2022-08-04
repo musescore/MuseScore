@@ -33,12 +33,12 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-Score::FileError mu::engraving::compat::mscxToMscz(const String& mscxFilePath, ByteArray* msczData)
+Err mu::engraving::compat::mscxToMscz(const String& mscxFilePath, ByteArray* msczData)
 {
     File mscxFile(mscxFilePath);
     if (!mscxFile.open(IODevice::ReadOnly)) {
         LOGE() << "failed open file: " << mscxFilePath;
-        return Score::FileError::FILE_OPEN_ERROR;
+        return Err::FileOpenError;
     }
 
     ByteArray mscxData = mscxFile.readAll();
@@ -52,30 +52,30 @@ Score::FileError mu::engraving::compat::mscxToMscz(const String& mscxFilePath, B
     writer.open();
     writer.writeScoreFile(mscxData);
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 
-Score::FileError mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& path, bool ignoreVersionError)
+Err mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& path, bool ignoreVersionError)
 {
     ByteArray msczData;
     if (path.endsWith(u".mscx", mu::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
-        Score::FileError err = mscxToMscz(path, &msczData);
-        if (err != Score::FileError::FILE_NO_ERROR) {
+        Err err = mscxToMscz(path, &msczData);
+        if (err != Err::NoError) {
             return err;
         }
     } else if (path.endsWith(u".mscz", mu::CaseInsensitive)) {
         File msczFile(path);
         if (!msczFile.open(IODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;
-            return Score::FileError::FILE_OPEN_ERROR;
+            return Err::FileOpenError;
         }
 
         msczData = msczFile.readAll();
     } else {
         LOGE() << "unknown type, path: " << path;
-        return Score::FileError::FILE_UNKNOWN_TYPE;
+        return Err::FileUnknownType;
     }
 
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
@@ -90,8 +90,8 @@ Score::FileError mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const
     reader.open();
 
     ScoreReader scoreReader;
-    engraving::Err err = scoreReader.loadMscz(score, reader, ignoreVersionError);
-    return err == Err::NoError ? Score::FileError::FILE_NO_ERROR : Score::FileError::FILE_ERROR;
+    Err err = scoreReader.loadMscz(score, reader, ignoreVersionError);
+    return err;
 }
 
 Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const String& path, bool ignoreVersionError)
@@ -101,21 +101,21 @@ Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const Str
     if (path.endsWith(u".mscx", mu::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
-        Score::FileError err = mscxToMscz(path, &msczData);
-        if (err != Score::FileError::FILE_NO_ERROR) {
-            return scoreFileErrorToErr(err);
+        Err err = mscxToMscz(path, &msczData);
+        if (err != Err::NoError) {
+            return err;
         }
     } else if (path.endsWith(u".mscz", mu::CaseInsensitive)) {
         File msczFile(path);
         if (!msczFile.open(IODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;
-            return scoreFileErrorToErr(Score::FileError::FILE_OPEN_ERROR);
+            return Err::FileOpenError;
         }
 
         msczData = msczFile.readAll();
     } else {
         LOGE() << "unknown type, path: " << path;
-        return scoreFileErrorToErr(Score::FileError::FILE_UNKNOWN_TYPE);
+        return Err::FileUnknownType;
     }
 
     project->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));

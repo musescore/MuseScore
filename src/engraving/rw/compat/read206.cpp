@@ -3367,7 +3367,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Score::FileError Read206::read206(mu::engraving::MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
+Err Read206::read206(mu::engraving::MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -3377,7 +3377,7 @@ Score::FileError Read206::read206(mu::engraving::MasterScore* masterScore, XmlRe
             masterScore->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
             if (!readScore206(masterScore, e, ctx)) {
-                return Score::FileError::FILE_BAD_FORMAT;
+                return Err::FileBadFormat;
             }
         } else if (tag == "Revision") {
             e.skipCurrentElement();
@@ -3438,5 +3438,5 @@ Score::FileError Read206::read206(mu::engraving::MasterScore* masterScore, XmlRe
         i.first->setOffset(i.second - i.first->pos());
     }
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
