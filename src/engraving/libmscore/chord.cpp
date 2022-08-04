@@ -4165,8 +4165,21 @@ void GraceNotesGroup::layout()
         double xpos = offset - parent()->rxoffset() - parent()->xpos();
         chord->setPos(xpos, 0.0);
     }
-    double offset = _shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->vStaffIdx()), score());
-    setPos(-offset, 0.0);
+    double xPos = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->staffIdx()), score());
+    // If the parent chord is cross-staff, also check against shape in the other staff and take the minimum
+    if (_parent->staffMove() != 0) {
+        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->vStaffIdx()), score());
+        xPos = std::min(xPos, xPosCross);
+    }
+    // Same if the grace note itself is cross-staff
+    Chord* firstGN = this->back();
+    if (firstGN->staffMove() != 0) {
+        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(firstGN->vStaffIdx()), score());
+        xPos = std::min(xPos, xPosCross);
+    }
+    // Safety net in case the shape checks don't succeed
+    xPos = std::min(xPos, -double(score()->styleMM(Sid::graceToMainNoteDist) + firstGN->notes().front()->headWidth() / 2));
+    setPos(xPos, 0.0);
 }
 
 void GraceNotesGroup::setPos(double x, double y)
