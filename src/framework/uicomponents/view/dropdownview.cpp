@@ -72,6 +72,11 @@ void DropdownView::updatePosition()
         movePos(m_globalPos.x() - (popupRect.right() - anchorRect.right()), m_globalPos.y());
     }
 
+    if (popupRect.top() < anchorRect.top()) {
+        // move to the bottom to an area that doesn't fit
+        movePos(m_globalPos.x(), anchorRect.top() + padding());
+    }
+
     // remove padding for arrow
     movePos(m_globalPos.x() - padding(), m_globalPos.y());
 }
