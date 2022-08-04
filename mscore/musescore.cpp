@@ -23,6 +23,7 @@
 #include "cloud/uploadscoredialog.h"
 
 #include "musescoredialogs.h"
+#include "qjsondocument.h"
 #include "scoreview.h"
 #include "libmscore/style.h"
 #include "libmscore/score.h"
@@ -208,6 +209,7 @@ bool exportScoreMedia = false;
 bool exportScoreMeta = false;
 bool exportScoreMp3 = false;
 bool exportScorePartsPdf = false;
+bool unrollRepeats = false;
 bool needUpdateSource = false;
 static bool exportTransposedScore = false;
 static QString transposeExportOptions;
@@ -3841,6 +3843,8 @@ static bool processNonGui(const QStringList& argv)
             return mscore->saveScoreParts(argv[0]);
       else if (exportScorePartsPdf)
             return mscore->exportPartsPdfsToJSON(argv[0]);
+      else if (unrollRepeats)
+            return mscore->exportUnrolled(outFileName);
       else if (exportTransposedScore)
             return mscore->exportTransposedScoreToJSON(argv[0], transposeExportOptions);
       else if (needUpdateSource)
@@ -7582,6 +7586,7 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
       parser.addOption(QCommandLineOption({"I", "dump-midi-in"}, "Dump midi input"));
       parser.addOption(QCommandLineOption({"O", "dump-midi-out"}, "Dump midi output"));
       parser.addOption(QCommandLineOption({"o", "export-to"}, "Export to 'file'. Format depends on file's extension", "file"));
+      parser.addOption(QCommandLineOption({"u", "unroll-repeats"}, "Unroll repeats", "file"));
       parser.addOption(QCommandLineOption({"r", "image-resolution"}, "Use with '-o <file>.png'. Set output resolution for image export", "DPI"));
       parser.addOption(QCommandLineOption({"T", "trim-image"}, "Use with '-o <file>.png' and '-o <file.svg>'. Trim exported image with specified margin (in pixels)", "margin"));
       parser.addOption(QCommandLineOption({"x", "gui-scaling"}, "Set scaling factor for GUI elements", "factor"));
@@ -7644,6 +7649,12 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
       if ((converterMode = parser.isSet("o"))) {
             MScore::noGui = true;
             outFileName = parser.value("o");
+            if (outFileName.isEmpty())
+                  parser.showHelp(EXIT_FAILURE);
+            }
+      if ((converterMode = parser.isSet("u"))) {
+            MScore::noGui = true;
+            outFileName = parser.value("u");
             if (outFileName.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
             }
@@ -8395,6 +8406,21 @@ QByteArray MuseScore::exportMsczAsJSON(Score* score)
     buffer.close();
 
     return scoreData.toBase64();
+}
+
+bool MuseScore::exportUnrolled(const QString& inFilePath)
+{
+      MasterScore* score = mscore->readScore(inFilePath);
+      if (!score)
+            return false;
+
+      score = score->unrollRepeats();
+
+      QString outPath = inFilePath + QString(".unrolled.mscx");
+      QFileInfo fi(outPath);
+      bool rv = score->Score::saveFile(fi);
+      delete score;
+      return rv;
 }
 
 //---------------------------------------------------------

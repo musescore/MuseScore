@@ -1,9 +1,9 @@
 .\" New manual page for MuseScore 3
-.\" Copyright (c) 2018, 2019, 2020, 2021
+.\" Copyright (c) 2018, 2019, 2020, 2021, 2022
 .\"	mirabilos <m@mirbsd.org>
 .\" Published under the same terms as MuseScore itself.
 .\"-
-.Dd Janurary 12, 2021
+.Dd August 05, 2022
 .Dt @MAN_MSCORE_UPPER@ 1
 .Os MuseScore
 .Sh NAME@Variables_substituted_by_CMAKE_on_installation@
@@ -22,6 +22,7 @@
 .Op Fl M | Fl \-midi\-operations Ar file
 .Op Fl o | Fl \-export\-to Ar file
 .Op Fl p | Fl \-plugin Ar name
+.Op Fl u | Fl \-unroll\-repeats Ar file
 .Op Fl r | Fl \-image\-resolution Ar DPI
 .Op Fl S | Fl \-style Ar style
 .Op Fl T | Fl \-trim\-image Ar margin
@@ -207,6 +208,13 @@ When converting to PDF with the
 option, append each part's pages to the created PDF file.
 If the score has no parts, all default parts will
 temporarily be generated automatically.
+.It Fl u | Fl \-unroll\-repeats Ar file
+Saves the given (or currently opened) file to the specified output
+.Ar file .
+It unrolls repeats and appends ".unrolled" to the name of Ar file .
+This option switches to
+.Dq converter mode
+and avoids the graphical user interface.
 .It Fl p | Fl \-plugin Ar name
 Execute the named plugin
 .It Fl R | \-revert\-settings
@@ -524,7 +532,7 @@ Documentation of automatic Qt command line options
 MuseScore attempts to implement the following standards:
 .Bl -bullet
 .It
-MusicXML 3.1 (score interchange format)
+MusicXML 4.0 (score interchange format)
 .It
 SF2 (SoundFont 2.01)
 .It
