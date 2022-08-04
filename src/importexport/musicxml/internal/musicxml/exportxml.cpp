@@ -6173,10 +6173,14 @@ static int findPartGroupNumber(int* partGroupEnd)
 //  scoreInstrument
 //---------------------------------------------------------
 
-static void scoreInstrument(XmlWriter& xml, const int partNr, const int instrNr, const QString& instrName)
+static void scoreInstrument(XmlWriter& xml, const int partNr, const int instrNr, const QString& instrName,
+                            const Instrument* instr = nullptr)
 {
     xml.startElementRaw(QString("score-instrument %1").arg(instrId(partNr, instrNr)));
     xml.tag("instrument-name", instrName);
+    if (instr && !instr->musicXmlId().isEmpty()) {
+        xml.tag("instrument-sound", instr->musicXmlId());
+    }
     xml.endElement();
 }
 
@@ -6685,7 +6689,9 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
             MxmlReverseInstrumentMap rim;
             initReverseInstrMap(rim, instrMap);
             for (int instNr : rim.keys()) {
-                scoreInstrument(xml, static_cast<int>(idx) + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
+                scoreInstrument(xml, static_cast<int>(idx) + 1, instNr + 1,
+                                MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()),
+                                rim.value(instNr));
             }
             for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
                 int instNr = ii.key();
