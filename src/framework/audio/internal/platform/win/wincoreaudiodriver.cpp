@@ -27,6 +27,9 @@
 #include "windows.h"
 #include "audioclient.h"
 
+#if defined __MINGW32__ // hack against "undefined reference" when linking in MinGW
+#define INITGUID
+#endif
 #include <Functiondiscoverykeys_devpkey.h>
 
 #include "log.h"
