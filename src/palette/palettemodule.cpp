@@ -184,10 +184,6 @@ void PaletteModule::registerCellActions()
     // TODO Begin moving the below for loop to this one
     for (int paletteIt = 0; paletteIt < s_paletteProvider->userPaletteModel()->rowCount(); paletteIt++)
     {
-        if (!s_paletteProvider->userPaletteModel()->data(s_paletteProvider->userPaletteModel()->index(paletteIt, 0), PaletteTreeModel::PaletteTreeModelRoles::VisibleRole).toBool()) {
-            continue;
-        }
-
         for (int cellIt = 0; cellIt < s_paletteProvider->userPaletteModel()->rowCount(s_paletteProvider->userPaletteModel()->index(paletteIt, 0)); cellIt++)
         {
             auto it = s_paletteProvider->userPaletteModel()->index(cellIt, 0, s_paletteProvider->userPaletteModel()->index(paletteIt, 0));
