@@ -24,13 +24,13 @@
 
 #include "realfn.h"
 
-#include "libmscore/chord.h"
+#include "libmscore/utils.h"
 #include "playback/metaparsers/notearticulationsparser.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RULES = {
+static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_RULES = {
     {
         ArticulationType::Trill,
         {
@@ -214,6 +214,13 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
         return;
     }
 
+    auto search = DISCLOSURE_RULES.find(preferredType);
+    if (search == DISCLOSURE_RULES.end()) {
+        return;
+    }
+
+    const DisclosurePattern& nominalPattern = search->second;
+
     for (const Note* note : chord->notes()) {
         if (!isNotePlayable(note)) {
             continue;
@@ -222,48 +229,44 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
         NominalNoteCtx noteCtx(note, context);
         NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.chordCtx.commonArticulations);
 
-        convert(preferredType, std::move(noteCtx), result);
+        convert(preferredType, nominalPattern.buildActualPattern(note), std::move(noteCtx), result);
     }
 }
 
-void OrnamentsRenderer::convert(const ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result)
+void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePattern& patern, NominalNoteCtx&& noteCtx,
+                                mpe::PlaybackEventList& result)
 {
-    auto search = DISCLOSURE_RULES.find(type);
-    if (search == DISCLOSURE_RULES.end()) {
-        return;
-    }
-
-    if (noteCtx.chordCtx.nominalDurationTicks <= search->second.minSupportedNoteDurationTicks) {
+    if (noteCtx.chordCtx.nominalDurationTicks <= patern.minSupportedNoteDurationTicks) {
         result.push_back(buildNoteEvent(std::move(noteCtx)));
         return;
     }
 
     // convert prefix
-    if (!search->second.prefixPitchOffsets.empty()) {
-        createEvents(type, noteCtx, 1, search->second.prefixDurationTicks,
-                     noteCtx.chordCtx.nominalDurationTicks, search->second.prefixPitchOffsets, result);
+    if (!patern.prefixPitchOffsets.empty()) {
+        createEvents(type, noteCtx, 1, patern.prefixDurationTicks,
+                     noteCtx.chordCtx.nominalDurationTicks, patern.prefixPitchOffsets, result);
     }
 
     // convert body
-    if (!search->second.alterationStepPitchOffsets.empty()) {
+    if (!patern.alterationStepPitchOffsets.empty()) {
         int alterationsCount = 1;
 
-        if (search->second.isAlterationsRepeatAllowed) {
+        if (patern.isAlterationsRepeatAllowed) {
             alterationsCount = alterationsNumberByTempo(noteCtx.chordCtx.beatsPerSecond.val, noteCtx.chordCtx.nominalDurationTicks);
         }
 
         createEvents(type, noteCtx, alterationsCount,
-                     noteCtx.chordCtx.nominalDurationTicks - search->second.prefixDurationTicks - search->second.suffixDurationTicks,
+                     noteCtx.chordCtx.nominalDurationTicks - patern.prefixDurationTicks - patern.suffixDurationTicks,
                      noteCtx.chordCtx.nominalDurationTicks,
-                     search->second.alterationStepPitchOffsets, result);
+                     patern.alterationStepPitchOffsets, result);
     }
 
     // convert suffix
-    if (!search->second.suffixPitchOffsets.empty()) {
+    if (!patern.suffixPitchOffsets.empty()) {
         createEvents(type, noteCtx, 1,
-                     search->second.suffixDurationTicks,
+                     patern.suffixDurationTicks,
                      noteCtx.chordCtx.nominalDurationTicks,
-                     search->second.suffixPitchOffsets, result);
+                     patern.suffixPitchOffsets, result);
     }
 }
 
@@ -308,5 +311,23 @@ void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx
 
             noteCtx.timestamp += durationStep;
         }
+    }
+}
+
+DisclosurePattern DisclosurePattern::buildActualPattern(const Note* note) const
+{
+    DisclosurePattern result = *this;
+
+    result.updatePitchOffsets(note, result.prefixPitchOffsets);
+    result.updatePitchOffsets(note, result.alterationStepPitchOffsets);
+    result.updatePitchOffsets(note, result.suffixPitchOffsets);
+
+    return result;
+}
+
+void DisclosurePattern::updatePitchOffsets(const Note* note, std::vector<mpe::pitch_level_t> &pitchOffsets)
+{
+    for (auto& pitchOffset : pitchOffsets) {
+        pitchOffset *= std::abs(chromaticPitchSteps(note, note, pitchOffset / mpe::PITCH_LEVEL_STEP));
     }
 }
