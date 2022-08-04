@@ -275,6 +275,7 @@ enum class SoundSubCategory
     Girl,
     Male,
     Female,
+    Pad,
 
     Temple,
     Military,

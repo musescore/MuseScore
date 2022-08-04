@@ -25,15 +25,6 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-bool VoicesSetupDataResolver::supportsInstrument(const Instrument* instrument)
-{
-    static const std::unordered_set<std::string> VOICE_FAMILY_SET = {
-        "voices", "voice-groups"
-    };
-
-    return VOICE_FAMILY_SET.find(instrument->family().toStdString()) != VOICE_FAMILY_SET.cend();
-}
-
 const PlaybackSetupData& VoicesSetupDataResolver::doResolve(const Instrument* instrument)
 {
     static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {

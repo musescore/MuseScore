@@ -25,31 +25,6 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-bool WindsSetupDataResolver::supportsInstrument(const Instrument* instrument)
-{
-    static const std::unordered_set<std::string> WINDS_FAMILY_SET = {
-        "winds", "flutes", "dizis", "shakuhachis",
-        "fifes", "whistles", "flageolets", "recorders",
-        "ocarinas", "gemshorns", "pan-flutes", "quenas",
-        "oboes", "shawms", "cromornes", "crumhorns",
-        "cornamuses", "kelhorns", "rauschpfeifes", "duduks",
-        "shenais", "clarinets", "chalumeaus", "xaphoons",
-        "tarogatos", "octavins", "saxophones", "bassoons",
-        "reed-contrabasses", "dulcians", "racketts", "sarrusophones",
-        "bagpipes", "accordions", "harmonicas", "melodicas",
-        "shengs", "brass", "horns", "wagner-tubas",
-        "cornets", "saxhorns", "alto-horns", "baritone-horns",
-        "posthorns", "trumpets", "baroque-trumpets", "bugles",
-        "flugelhorns", "ophicleides", "cornetts", "serpents",
-        "trombones", "sackbuts", "euphoniums", "tubas",
-        "sousaphones", "conches", "alphorns", "rag-dungs",
-        "didgeridoos", "shofars", "vuvuzelas", "klaxon-horns",
-        "kazoos"
-    };
-
-    return WINDS_FAMILY_SET.find(instrument->family().toStdString()) != WINDS_FAMILY_SET.cend();
-}
-
 const PlaybackSetupData& WindsSetupDataResolver::doResolve(const Instrument* instrument)
 {
     static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {

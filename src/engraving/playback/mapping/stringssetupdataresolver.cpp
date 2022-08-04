@@ -25,20 +25,6 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-bool StringsSetupDataResolver::supportsInstrument(const Instrument* instrument)
-{
-    static const std::unordered_set<std::string> STRINGS_FAMILY_SET = {
-        "harps", "guitars", "bass-guitars", "banjos",
-        "ukuleles", "mandolins", "mtn-dulcimers",  "lutes",
-        "balalaikas", "bouzoukis", "kotos", "ouds",
-        "shamisens", "sitars", "tamburicas", "bandurrias",
-        "lauds", "strings", "orchestral-strings", "viols",
-        "octobasses", "erhus", "nyckelharpas", "synths"
-    };
-
-    return STRINGS_FAMILY_SET.find(instrument->family().toStdString()) != STRINGS_FAMILY_SET.cend();
-}
-
 const PlaybackSetupData& StringsSetupDataResolver::doResolve(const Instrument* instrument)
 {
     static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
