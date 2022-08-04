@@ -675,7 +675,9 @@ void Staff::addTimeSig(TimeSig* timesig)
 void Staff::removeTimeSig(TimeSig* timesig)
 {
     if (timesig->segment()->segmentType() == SegmentType::TimeSig) {
-        timesigs.erase(timesig->segment()->tick().ticks());
+        if (timesigs[timesig->segment()->tick().ticks()] == timesig) {
+            timesigs.erase(timesig->segment()->tick().ticks());
+        }
     }
 //      dumpTimeSigs("after removeTimeSig");
 }
