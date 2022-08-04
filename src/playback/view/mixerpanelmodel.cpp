@@ -333,7 +333,7 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackId tr
         }
 
         item->loadOutputParams(std::move(params));
-    }, AsyncMode::AsyncSetRepeat);
+    });
 
     playback()->audioOutput()->signalChanges(m_currentTrackSequenceId, trackId)
     .onResolve(this, [item](AudioSignalChanges signalChanges) {
