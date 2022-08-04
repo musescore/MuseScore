@@ -1439,132 +1439,6 @@ void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell)
 }
 
 //---------------------------------------------------------
-//   convertLine
-// find the line in clefF corresponding to lineL2 in clefR
-//---------------------------------------------------------
-
-int convertLine(int lineL2, ClefType clefL, ClefType clefR)
-{
-    int lineR2 = lineL2;
-    int goalpitch = line2pitch(lineL2, clefL, Key::C);
-    int p;
-    while ((p = line2pitch(lineR2, clefR, Key::C)) > goalpitch && p < 127) {
-        lineR2++;
-    }
-    while ((p = line2pitch(lineR2, clefR, Key::C)) < goalpitch && p > 0) {
-        lineR2--;
-    }
-    return lineR2;
-}
-
-//---------------------------------------------------------
-//   convertLine
-// find the line in clef for NoteL corresponding to lineL2 in clef for noteR
-// for example middle C is line 10 in Treble clef, but is line -2 in Bass clef.
-//---------------------------------------------------------
-
-int convertLine(int lineL2, Note* noteL, Note* noteR)
-{
-    return convertLine(lineL2,
-                       noteL->chord()->staff()->clef(noteL->chord()->tick()),
-                       noteR->chord()->staff()->clef(noteR->chord()->tick()));
-}
-
-//---------------------------------------------------------
-//   articulationExcursion -- an articulation such as a trill, or modant consists of several notes
-// played in succession.  The pitch offsets of each such note in the sequence can be represented either
-// as a number of steps in the diatonic scale, or in half steps as on a piano keyboard.
-// this function, articulationExcursion, takes deltastep indicating the number of steps in the
-// diatonic scale, and calculates (and returns) the number of half steps, taking several things into account.
-// E.g., the key signature, a trill from e to f, is to be understood as a trill between E and F# if we are
-// in the key of G.
-// E.g., if previously (looking backward in time) in the same measure there is another note on the same
-// staff line/space, and that note has an accidental (sharp,flat,natural,etc), then we want to match that
-// tone exactly.
-// E.g., If there are multiple notes on the same line/space, then we only consider the most
-// recent one, but avoid looking forward in time after the current note.
-// E.g., Also if there is an accidental     // on a note one (or more) octaves above or below we
-// observe its accidental as well.
-// E.g., Still another case is that if two staves are involved (such as a glissando between two
-// notes on different staves) then we have to search both staves for the most recent accidental.
-//
-// noteL is the note to measure the deltastep from, i.e., ornaments are w.r.t. this note
-// noteR is the note to search backward from to find accidentals.
-//    for ornament calculation noteL and noteR are the same, but for glissando they are
-//     the start and end note of glissando.
-// deltastep is the desired number of diatonic steps between the base note and this articulation step.
-//---------------------------------------------------------
-
-int articulationExcursion(Note* noteL, Note* noteR, int deltastep)
-{
-    if (0 == deltastep) {
-        return 0;
-    }
-    Chord* chordL = noteL->chord();
-    Chord* chordR = noteR->chord();
-    int epitchL = noteL->epitch();
-    Fraction tickL = chordL->tick();
-    // we cannot use staffL = chord->staff() because that won't correspond to the noteL->line()
-    //   in the case the user has pressed Shift-Cmd->Up or Shift-Cmd-Down.
-    //   Therefore we have to take staffMove() into account using vStaffIdx().
-    Staff* staffL = noteL->score()->staff(chordL->vStaffIdx());
-    ClefType clefL = staffL->clef(tickL);
-    // line represents the ledger line of the staff.  0 is the top line, 1, is the space between the top 2 lines,
-    //  ... 8 is the bottom line.
-    int lineL     = noteL->line();
-    // we use line - deltastep, because lines are oriented from top to bottom, while step is oriented from bottom to top.
-    int lineL2    = lineL - deltastep;
-    Measure* measureR = chordR->segment()->measure();
-
-    Segment* segment = noteL->chord()->segment();
-    int lineR2 = convertLine(lineL2, noteL, noteR);
-    // is there another note in this segment on the same line?
-    // if so, use its pitch exactly.
-    int halfsteps = 0;
-    staff_idx_t staffIdx = noteL->chord()->staff()->idx();   // cannot use staffL->idx() because of staffMove()
-    track_idx_t startTrack = staffIdx * VOICES;
-    track_idx_t endTrack   = startTrack + VOICES;
-    bool done = false;
-    for (track_idx_t track = startTrack; track < endTrack; ++track) {
-        EngravingItem* e = segment->element(track);
-        if (!e || e->type() != ElementType::CHORD) {
-            continue;
-        }
-        Chord* chord = toChord(e);
-        if (chord->vStaffIdx() != chordL->vStaffIdx()) {
-            continue;
-        }
-        for (Note* note : chord->notes()) {
-            if (note->tieBack()) {
-                continue;
-            }
-            int pc = (note->line() + 700) % 7;
-            int pc2 = (lineL2 + 700) % 7;
-            if (pc2 == pc) {
-                // e.g., if there is an F# note at this staff/tick, then force every F to be F#.
-                int octaves = (note->line() - lineL2) / 7;
-                halfsteps = note->epitch() + 12 * octaves - epitchL;
-                done = true;
-                break;
-            }
-        }
-        if (!done) {
-            if (staffL->isPitchedStaff(segment->tick())) {
-                bool error = false;
-                AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->vStaffIdx(), lineR2, error);
-                int acci2 = int(acciv2);
-                // epitch (effective pitch) is a visible pitch so line2pitch returns exactly that.
-                halfsteps = line2pitch(lineL - deltastep, clefL, Key::C) + acci2 - epitchL;
-            } else {
-                // cannot rely on accidentals or key signatures
-                halfsteps = deltastep;
-            }
-        }
-    }
-    return halfsteps;
-}
-
-//---------------------------------------------------------
 // totalTiedNoteTicks
 //      return the total of the actualTicks of the given note plus
 //      the chain of zero or more notes tied to it to the right.
@@ -1683,7 +1557,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     //   the given chromatic relative pitch.
     //   RETURNS the new ontime value.  The caller is expected to assign this value.
     auto makeEvent = [note, chord, chromatic, events](int pitch, int ontime, int duration) {
-        events->push_back(NoteEvent(chromatic ? pitch : articulationExcursion(note, note, pitch),
+        events->push_back(NoteEvent(chromatic ? pitch : chromaticPitchSteps(note, note, pitch),
                                     ontime / chord->actualTicks().ticks(),
                                     duration / chord->actualTicks().ticks()));
         return ontime + duration;
@@ -1925,8 +1799,8 @@ bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>& pitchOffset
         return false;
     }
     // only consider glissando connected to NOTE.
-    Note* noteStart = toNote(spanner->startElement());
-    Note* noteEnd = toNote(spanner->endElement());
+    const Note* noteStart = toNote(spanner->startElement());
+    const Note* noteEnd = toNote(spanner->endElement());
     int pitchStart = noteStart->ppitch();
     int pitchEnd = noteEnd->ppitch();
     if (pitchEnd == pitchStart) {
@@ -1938,7 +1812,7 @@ bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>& pitchOffset
         int lineStart = noteStart->line();
         // scale obeying accidentals
         for (int line = lineStart, pitch = pitchStart; (direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd); line -= direction) {
-            int halfSteps = articulationExcursion(noteStart, noteEnd, lineStart - line);
+            int halfSteps = chromaticPitchSteps(noteStart, noteEnd, lineStart - line);
             pitch = pitchStart + halfSteps;
             if ((direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd)) {
                 pitchOffsets.push_back(halfSteps);
