@@ -366,28 +366,12 @@ public:
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
 typedef std::map<ElementType, std::map<ElementType, double> > PaddingTable;
+
 class Score : public EngravingObject
 {
     OBJECT_ALLOCATOR(engraving, Score)
 
     INJECT(engraving, mu::draw::IImageProvider, imageProvider)
-public:
-    enum class FileError : char {
-        FILE_NO_ERROR,
-        FILE_ERROR,
-        FILE_NOT_FOUND,
-        FILE_OPEN_ERROR,
-        FILE_BAD_FORMAT,
-        FILE_UNKNOWN_TYPE,
-        FILE_NO_ROOTFILE,
-        FILE_TOO_OLD,
-        FILE_TOO_NEW,
-        FILE_OLD_300_FORMAT,
-        FILE_CORRUPTED,
-        FILE_CRITICALLY_CORRUPTED,
-        FILE_USER_ABORT,
-        FILE_IGNORE_ERROR
-    };
 
 private:
 

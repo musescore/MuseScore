@@ -23,12 +23,17 @@
 #ifndef __IMPORTMXMLPASS1_H__
 #define __IMPORTMXMLPASS1_H__
 
-#include "libmscore/masterscore.h"
+#include <QXmlStreamReader>
+
 #include "importxmlfirstpass.h"
 #include "musicxml.h" // for the creditwords and MusicXmlPartGroupList definitions
 #include "musicxmlsupport.h"
 
+#include "engraving/engravingerrors.h"
+
 namespace mu::engraving {
+class Score;
+
 //---------------------------------------------------------
 //   PageFormat
 //---------------------------------------------------------
@@ -117,8 +122,8 @@ class MusicXMLParserPass1
 public:
     MusicXMLParserPass1(Score* score, MxmlLogger* logger);
     void initPartState(const QString& partId);
-    Score::FileError parse(QIODevice* device);
-    Score::FileError parse();
+    Err parse(QIODevice* device);
+    Err parse();
     QString errors() const { return _errors; }
     void scorePartwise();
     void identification();

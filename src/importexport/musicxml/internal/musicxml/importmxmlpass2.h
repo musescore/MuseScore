@@ -251,7 +251,7 @@ class MusicXMLParserPass2
 {
 public:
     MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger);
-    Score::FileError parse(QIODevice* device);
+    Err parse(QIODevice* device);
     QString errors() const { return _errors; }
 
     // part specific data interface functions
@@ -263,7 +263,7 @@ private:
     void addError(const QString& error);      ///< Add an error to be shown in the GUI
     void initPartState(const QString& partId);
     SpannerSet findIncompleteSpannersAtPartEnd();
-    Score::FileError parse();
+    Err parse();
     void scorePartwise();
     void partList();
     void scorePart();

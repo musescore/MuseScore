@@ -22,13 +22,8 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/masterscore.h"
-
-// start includes required for fixupScore()
-#include "libmscore/measure.h"
-#include "libmscore/staff.h"
-#include "libmscore/keysig.h"
-// end includes required for fixupScore()
+#include "engraving/engravingerrors.h"
+#include "engraving/libmscore/masterscore.h"
 
 #include "settings.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
@@ -46,8 +41,8 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 extern bool saveMxl(Score*, const QString&);
-extern Score::FileError importMusicXml(MasterScore*, const QString&);
-extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
+extern engraving::Err importMusicXml(MasterScore*, const QString&);
+extern engraving::Err importCompressedMusicXml(MasterScore*, const QString&);
 }
 
 static const String XML_IO_DATA_DIR("data/");
@@ -102,11 +97,11 @@ MasterScore* Musicxml_Tests::readScore(const String& fileName, bool isAbsolutePa
 {
     String suffix = io::FileInfo::suffix(fileName);
 
-    auto importXml = [](MasterScore* score, const io::path_t& path) -> Score::FileError {
+    auto importXml = [](MasterScore* score, const io::path_t& path) -> engraving::Err {
         return mu::engraving::importMusicXml(score, path.toQString());
     };
 
-    auto importMxl = [](MasterScore* score, const io::path_t& path) -> Score::FileError {
+    auto importMxl = [](MasterScore* score, const io::path_t& path) -> engraving::Err {
         return mu::engraving::importCompressedMusicXml(score, path.toQString());
     };
 

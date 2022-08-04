@@ -23,9 +23,11 @@
 #ifndef MU_ENGRAVING_READ114_H
 #define MU_ENGRAVING_READ114_H
 
-#include "libmscore/masterscore.h"
+#include "engravingerrors.h"
 
 namespace mu::engraving {
+class MasterScore;
+class ReadContext;
 class XmlReader;
 }
 
@@ -37,7 +39,7 @@ public:
     //   read114
     //    import old version <= 1.3 files
     //---------------------------------------------------------
-    static Score::FileError read114(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
+    static Err read114(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
 };
 }
 

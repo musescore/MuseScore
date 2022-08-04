@@ -28,11 +28,11 @@ using namespace mu::iex::midi;
 using namespace mu::engraving;
 
 namespace mu::iex::midi {
-extern Score::FileError importMidi(MasterScore*, const QString& name);
+extern Err importMidi(MasterScore*, const QString& name);
 }
 
 mu::Ret NotationMidiReader::read(MasterScore* score, const io::path_t& path, const Options&)
 {
-    Score::FileError err = importMidi(score, path.toQString());
-    return scoreFileErrorToRet(err, path);
+    Err err = importMidi(score, path.toQString());
+    return make_ret(err, path);
 }

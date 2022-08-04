@@ -22,7 +22,10 @@
 
 #include "ove.h"
 
+#include <QFile>
 #include <QtMath>
+
+#include "engraving/engravingerrors.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/sig.h"
@@ -2503,18 +2506,18 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
     }
 }
 
-Score::FileError importOve(MasterScore* score, const QString& name)
+Err importOve(MasterScore* score, const QString& name)
 {
     ovebase::IOVEStreamLoader* oveLoader = ovebase::createOveStreamLoader();
     ovebase::OveSong oveSong;
 
     QFile oveFile(name);
     if (!oveFile.exists()) {
-        return Score::FileError::FILE_NOT_FOUND;
+        return Err::FileNotFound;
     }
     if (!oveFile.open(QFile::ReadOnly)) {
         // messageOutString(QString("can't read file!"));
-        return Score::FileError::FILE_OPEN_ERROR;
+        return Err::FileOpenError;
     }
 
     QByteArray buffer = oveFile.readAll();
@@ -2534,5 +2537,5 @@ Score::FileError importOve(MasterScore* score, const QString& name)
         // score->connectSlurs();
     }
 
-    return result ? Score::FileError::FILE_NO_ERROR : Score::FileError::FILE_ERROR;
+    return result ? Err::NoError : Err::FileUnknownError;
 }

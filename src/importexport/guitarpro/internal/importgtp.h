@@ -31,6 +31,7 @@
 #include "gtp/gp67dombuilder.h"
 #include "libmscore/score.h"
 #include "libmscore/vibrato.h"
+#include "engraving/engravingerrors.h"
 
 #include "modularity/ioc.h"
 #include "iguitarproconfiguration.h"
@@ -55,7 +56,7 @@ static constexpr int GP_INVALID_KEYSIG = 127;
 static constexpr int GP_VOLTA_BINARY = 1;
 static constexpr int GP_VOLTA_FLAGS = 2;
 
-Score::FileError importGTP(Score* score, const String& filename, const char* data, unsigned int data_len);
+Err importGTP(Score* score, const String& filename, const char* data, unsigned int data_len);
 
 enum class Repeat : char;
 
