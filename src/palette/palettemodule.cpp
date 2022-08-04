@@ -179,14 +179,25 @@ void PaletteModule::registerCellActions()
     LOGE() << "Actions in cell prepped here" << PaletteCell::cells.size();
     int i = 0;
     int invisCounter = 0;
-    std::unordered_set <QString> invisiblePalettes;
-    for (auto& cell : PaletteCell::cells) {
-        // TODO Differentiate between master palette and user palette
+    std::unordered_set <QString> allowedCells;
 
-        if (((Palette*)cell->parent())->isVisible()) {
-            LOGE() << invisCounter++ << " | " << ((Palette*)cell->parent())->name() << " | " << cell->id << " | " << cell->name <<
-                ": " << cell->visible;
-            invisiblePalettes.insert(((Palette*)cell->parent())->name());
+    // TODO Begin moving the below for loop to this one
+    for (int paletteIt = 0; paletteIt < s_paletteProvider->userPaletteModel()->rowCount(); paletteIt++)
+    {
+        if (!s_paletteProvider->userPaletteModel()->data(s_paletteProvider->userPaletteModel()->index(paletteIt, 0), PaletteTreeModel::PaletteTreeModelRoles::VisibleRole).toBool()) {
+            continue;
+        }
+
+        for (int cellIt = 0; cellIt < s_paletteProvider->userPaletteModel()->rowCount(s_paletteProvider->userPaletteModel()->index(paletteIt, 0)); cellIt++)
+        {
+            auto it = s_paletteProvider->userPaletteModel()->index(cellIt, 0, s_paletteProvider->userPaletteModel()->index(paletteIt, 0));
+            const PaletteCell* cell = s_paletteProvider->userPaletteModel()->data(it, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
+            allowedCells.insert(cell->id);
+        }
+    }
+
+    for (auto& cell : PaletteCell::cells) {
+        if (allowedCells.find(cell->id) == allowedCells.end()) {
             continue;
         }
 
@@ -206,11 +217,14 @@ void PaletteModule::registerCellActions()
 
         s_paletteUiActions->addAction(a);
     }
-//    assert(false);
-    LOGE() << "Invisible Palettes";
-    for (auto x : invisiblePalettes) {
-        LOGE() << x;
+
+    for (int ii = 0; ii < s_paletteProvider->userPaletteModel()->rowCount(); ii++) {
+        LOGE() <<
+            s_paletteProvider->userPaletteModel()->data(s_paletteProvider->userPaletteModel()->index(ii, 0), Qt::DisplayRole).toString() << ": " << s_paletteProvider->userPaletteModel()->data(s_paletteProvider->userPaletteModel()->index(ii, 0), PaletteTreeModel::PaletteTreeModelRoles::VisibleRole).toBool() << " with number of cells:" << s_paletteProvider->userPaletteModel()->rowCount(s_paletteProvider->userPaletteModel()->index(ii, 0));
+
     }
+    //assert(false);
+
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(s_paletteUiActions, true);
