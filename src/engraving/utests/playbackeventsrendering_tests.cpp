@@ -238,9 +238,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Modern)
                 EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4));
             }
 
-            // [THEN] In modern trills each even note should be higher than the principal one on a single pitch level
+            // [THEN] In modern trills each even note should be higher than the principal one on a single diatonic step
             if ((i + 1) % 2 == 0) {
-                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + 2 * PITCH_LEVEL_STEP);
             }
         }
     }
@@ -326,22 +326,22 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
 
             // [THEN] The amount of trill alterations depends on various things, such as a tempo
             //        However, there is a couple of general rules of this disclosure in Baroque style:
-            //        - Trill should start from a principal note + 1 pitch level
+            //        - Trill should start from a principal note + 1 diatonic step
             //        - Trill should end up on a principal note. For that reasons is highly common to put a triplet on the last notes
             if (i == 0) {
-                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + 2 * PITCH_LEVEL_STEP);
             }
 
             if (i == pair.second.size() - 1) {
                 EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4));
             }
 
-            // [THEN] In baroque trills each odd note should be higher than the principal one on a single pitch level
+            // [THEN] In baroque trills each odd note should be higher than the principal one on a single diatonic step
             if (i % 2 == 0 && i < pair.second.size() - 2) {
-                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + 2 * PITCH_LEVEL_STEP);
             }
 
-            // [THEN] However, the note before the last should be lowe than the principal one on a single pitch level
+            // [THEN] However, the note before the last should be lowe than the principal one on a single diatonic step
             if (i == pair.second.size() - 2) {
                 EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) - PITCH_LEVEL_STEP);
             }
@@ -373,7 +373,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Regular)
     int expectedSubNotesCount = 4;
     duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
-    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
+    pitch_level_t plus = nominalPitchLevel + 2 * PITCH_LEVEL_STEP;
     pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
     std::vector<pitch_level_t> expectedPitches = { plus,
                                                    nominalPitchLevel,
@@ -433,7 +433,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
     int expectedSubNotesCount = 4;
     duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
-    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
+    pitch_level_t plus = nominalPitchLevel + 2 * PITCH_LEVEL_STEP;
     pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
     std::vector<pitch_level_t> expectedPitches = { minus,
                                                    nominalPitchLevel,
@@ -494,7 +494,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Var
     int expectedSubNotesCount = 4;
     duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
-    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
+    pitch_level_t plus = nominalPitchLevel + 2 * PITCH_LEVEL_STEP;
     pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
     std::vector<pitch_level_t> expectedPitches = { minus,
                                                    nominalPitchLevel,
@@ -566,7 +566,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
     };
 
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
-    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
+    pitch_level_t plus = nominalPitchLevel + 2 * PITCH_LEVEL_STEP;
 
     std::vector<pitch_level_t> expectedPitches = {
         nominalPitchLevel,
