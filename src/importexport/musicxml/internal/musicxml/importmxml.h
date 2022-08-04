@@ -23,12 +23,15 @@
 #ifndef __IMPORTMXML_H__
 #define __IMPORTMXML_H__
 
-#include "libmscore/masterscore.h"
-#include "importxmlfirstpass.h"
-#include "musicxml.h" // for the creditwords definition
-#include "musicxmlsupport.h"
+#include "engravingerrors.h"
+
+class QString;
+class QIODevice;
 
 namespace mu::engraving {
-Score::FileError importMusicXMLfromBuffer(Score* score, const QString&, QIODevice* dev);
-} // namespace Ms
+class Score;
+
+Err importMusicXMLfromBuffer(Score* score, const QString&, QIODevice* dev);
+}
+
 #endif

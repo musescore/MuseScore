@@ -27,6 +27,7 @@
 
 #include "types/string.h"
 
+#include "engraving/engravingerrors.h"
 #include "engraving/libmscore/masterscore.h"
 
 namespace mu::engraving {
@@ -38,7 +39,7 @@ public:
     static void setRootPath(const String& path);
     static String rootPath();
 
-    using ImportFunc = std::function<Score::FileError(MasterScore* score, const io::path_t& path)>;
+    using ImportFunc = std::function<Err(MasterScore* score, const io::path_t& path)>;
 
     static MasterScore* readScore(const String& path, bool isAbsolutePath = false, ImportFunc importFunc = nullptr);
     static bool saveScore(Score* score, const String& name);

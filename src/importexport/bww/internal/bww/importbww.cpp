@@ -29,6 +29,7 @@
 #include "writer.h"
 #include "parser.h"
 
+#include "engraving/engravingerrors.h"
 #include "engraving/types/fraction.h"
 
 #include "libmscore/factory.h"
@@ -543,16 +544,16 @@ namespace mu::iex::bww {
 //   importBww
 //---------------------------------------------------------
 
-Score::FileError importBww(MasterScore* score, const QString& path)
+Err importBww(MasterScore* score, const QString& path)
 {
     LOGD("Score::importBww(%s)", qPrintable(path));
 
     QFile fp(path);
     if (!fp.exists()) {
-        return Score::FileError::FILE_NOT_FOUND;
+        return engraving::Err::FileNotFound;
     }
     if (!fp.open(QIODevice::ReadOnly)) {
-        return Score::FileError::FILE_OPEN_ERROR;
+        return engraving::Err::FileOpenError;
     }
 
     Part* part = new Part(score);
@@ -570,6 +571,6 @@ Score::FileError importBww(MasterScore* score, const QString& path)
     score->setSaved(false);
     score->connectTies();
     LOGD("Score::importBww() done");
-    return Score::FileError::FILE_NO_ERROR;        // OK
+    return engraving::Err::NoError; // OK
 }
 }

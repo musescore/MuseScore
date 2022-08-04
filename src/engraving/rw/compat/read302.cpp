@@ -263,7 +263,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Score::FileError Read302::read302(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
+Err Read302::read302(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -274,14 +274,14 @@ Score::FileError Read302::read302(MasterScore* masterScore, XmlReader& e, ReadCo
         } else if (tag == "Score") {
             if (!readScore302(masterScore, e, ctx)) {
                 if (e.error() == XmlStreamReader::CustomError) {
-                    return Score::FileError::FILE_CRITICALLY_CORRUPTED;
+                    return Err::FileCriticallyCorrupted;
                 }
-                return Score::FileError::FILE_BAD_FORMAT;
+                return Err::FileBadFormat;
             }
         } else if (tag == "Revision") {
             e.skipCurrentElement();
         }
     }
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
