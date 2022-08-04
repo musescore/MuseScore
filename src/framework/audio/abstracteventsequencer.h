@@ -61,6 +61,8 @@ public:
         m_offStreamChanges = data.offStream;
         m_dynamicLevelChanges = data.dynamicLevelChanges;
 
+        m_dynamicLevelMap = data.dynamicLevelMap;
+
         m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& changes) {
             updateOffStreamEvents(changes);
         });
@@ -70,6 +72,7 @@ public:
         });
 
         m_dynamicLevelChanges.onReceive(this, [this](const mpe::DynamicLevelMap& changes) {
+            m_dynamicLevelMap = changes;
             updateDynamicChanges(changes);
         });
 
@@ -114,6 +117,24 @@ public:
         ONLY_AUDIO_WORKER_THREAD;
 
         return m_playbackPosition;
+    }
+
+    mpe::dynamic_level_t dynamicLevel(const msecs_t position) const
+    {
+        if (m_dynamicLevelMap.empty()) {
+            return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+        }
+
+        if (m_dynamicLevelMap.size() == 1) {
+            return m_dynamicLevelMap.cbegin()->second;
+        }
+
+        auto upper = m_dynamicLevelMap.upper_bound(position);
+        if (upper == m_dynamicLevelMap.cbegin()) {
+            return upper->second;
+        }
+
+        return std::prev(upper)->second;
     }
 
     const EventSequence& eventsToBePlayed(const msecs_t nextMsecs)
@@ -214,6 +235,8 @@ protected:
     EventSequenceMap m_mainStreamEvents;
     EventSequenceMap m_offStreamEvents;
     EventSequenceMap m_dynamicEvents;
+
+    mpe::DynamicLevelMap m_dynamicLevelMap;
 
     async::Notification m_offStreamFlushed;
     async::Notification m_mainStreamFlushed;

@@ -29,7 +29,7 @@ void VstSequencer::init(ParamsMapping&& mapping)
 {
     m_mapping = std::move(mapping);
 
-    updateDynamicChanges(m_dynamicLevels);
+    updateDynamicChanges(m_dynamicLevelMap);
 }
 
 void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
@@ -51,13 +51,18 @@ void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
 void VstSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
 {
     m_dynamicEvents.clear();
-    m_dynamicLevels = changes;
 
     for (const auto& pair : changes) {
         m_dynamicEvents[pair.first].emplace(expressionLevel(pair.second));
     }
 
     updateDynamicChangesIterator();
+}
+
+audio::gain_t VstSequencer::currentGain() const
+{
+    mpe::dynamic_level_t currentDynamicLevel = dynamicLevel(m_playbackPosition);
+    return expressionLevel(currentDynamicLevel);
 }
 
 void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)

@@ -63,6 +63,8 @@ public:
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) override;
     void updateDynamicChanges(const mpe::DynamicLevelMap& changes) override;
 
+    audio::gain_t currentGain() const;
+
 private:
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes);
 
@@ -73,7 +75,6 @@ private:
     float expressionLevel(const mpe::dynamic_level_t dynamicLevel) const;
 
     ParamsMapping m_mapping;
-    mpe::DynamicLevelMap m_dynamicLevels;
 };
 }
 

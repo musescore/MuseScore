@@ -84,7 +84,7 @@ void VstSynthesiser::toggleVolumeGain(const bool isActive)
     static constexpr audio::gain_t NON_ACTIVE_GAIN = 0.5f;
 
     if (isActive) {
-        m_vstAudioClient->setVolumeGain(m_currentGain);
+        m_vstAudioClient->setVolumeGain(m_sequencer.currentGain());
     } else {
         m_vstAudioClient->setVolumeGain(NON_ACTIVE_GAIN);
     }
@@ -191,7 +191,6 @@ audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samples
         } else {
             audio::gain_t newGain = std::get<audio::gain_t>(event);
             m_vstAudioClient->setVolumeGain(newGain);
-            m_currentGain = newGain;
         }
     }
 
