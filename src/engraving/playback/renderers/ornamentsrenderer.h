@@ -25,8 +25,12 @@
 
 #include "renderbase.h"
 
+namespace Ms {
+class Note;
+};
+
 namespace mu::engraving {
-struct DisclosureRule {
+struct DisclosurePattern {
     int prefixDurationTicks = 0;
     std::vector<mpe::pitch_level_t> prefixPitchOffsets;
 
@@ -37,6 +41,11 @@ struct DisclosureRule {
     std::vector<mpe::pitch_level_t> suffixPitchOffsets;
 
     int minSupportedNoteDurationTicks = 0;
+
+    DisclosurePattern buildActualPattern(const Note* note) const;
+
+private:
+    void updatePitchOffsets(const Note *note, std::vector<mpe::pitch_level_t>& pitchOffsets);
 };
 
 class OrnamentsRenderer : public RenderBase<OrnamentsRenderer>
@@ -48,7 +57,8 @@ public:
                          mpe::PlaybackEventList& result);
 
 private:
-    static void convert(const mpe::ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result);
+    static void convert(const mpe::ArticulationType type, const DisclosurePattern& patern, NominalNoteCtx&& noteCtx,
+                        mpe::PlaybackEventList& result);
 
     static int alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks);
 
