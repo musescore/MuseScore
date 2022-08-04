@@ -1557,11 +1557,11 @@ void MusicXMLParserPass2::skipLogCurrElem()
  Parse MusicXML in \a device and extract pass 2 data.
  */
 
-Score::FileError MusicXMLParserPass2::parse(QIODevice* device)
+Err MusicXMLParserPass2::parse(QIODevice* device)
 {
     //LOGD("MusicXMLParserPass2::parse()");
     _e.setDevice(device);
-    Score::FileError res = parse();
+    Err res = parse();
     //LOGD("MusicXMLParserPass2::parse() res %d", int(res));
     return res;
 }
@@ -1574,7 +1574,7 @@ Score::FileError MusicXMLParserPass2::parse(QIODevice* device)
  Start the parsing process, after verifying the top-level node is score-partwise
  */
 
-Score::FileError MusicXMLParserPass2::parse()
+Err MusicXMLParserPass2::parse()
 {
     bool found = false;
     while (_e.readNextStartElement()) {
@@ -1584,16 +1584,16 @@ Score::FileError MusicXMLParserPass2::parse()
         } else {
             _logger->logError("this is not a MusicXML score-partwise file", &_e);
             _e.skipCurrentElement();
-            return Score::FileError::FILE_BAD_FORMAT;
+            return Err::FileBadFormat;
         }
     }
 
     if (!found) {
         _logger->logError("this is not a MusicXML score-partwise file", &_e);
-        return Score::FileError::FILE_BAD_FORMAT;
+        return Err::FileBadFormat;
     }
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 
 //---------------------------------------------------------

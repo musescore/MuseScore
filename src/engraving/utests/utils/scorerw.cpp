@@ -58,16 +58,16 @@ MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath, ImportF
     std::string suffix = io::suffix(path);
 
     ScoreLoad sl;
-    Score::FileError rv;
+    Err rv;
     if (suffix == "mscz" || suffix == "mscx") {
         rv = compat::loadMsczOrMscx(score, path.toString(), false);
     } else if (importFunc) {
         rv = importFunc(score, path);
     } else {
-        rv = Score::FileError::FILE_UNKNOWN_TYPE;
+        rv = Err::FileUnknownType;
     }
 
-    if (rv != Score::FileError::FILE_NO_ERROR) {
+    if (rv != Err::NoError) {
         LOGE() << "can't load score, path: " << path;
         delete score;
         score = nullptr;

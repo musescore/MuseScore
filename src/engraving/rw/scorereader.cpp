@@ -177,14 +177,11 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
 
             Err err = Err::NoError;
             if (score->mscVersion() <= 114) {
-                Score::FileError error = compat::Read114::read114(score, e, ctx);
-                err = scoreFileErrorToErr(error);
+                err = compat::Read114::read114(score, e, ctx);
             } else if (score->mscVersion() <= 207) {
-                Score::FileError error = compat::Read206::read206(score, e, ctx);
-                err = scoreFileErrorToErr(error);
+                err = compat::Read206::read206(score, e, ctx);
             } else if (score->mscVersion() < 400 || MScore::testMode) {
-                Score::FileError error = compat::Read302::read302(score, e, ctx);
-                err = scoreFileErrorToErr(error);
+                err = compat::Read302::read302(score, e, ctx);
             } else {
                 //! NOTE: make sure we have a chord list
                 //! Load the default chord list otherwise
@@ -217,7 +214,7 @@ Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Score") {
             if (!Read400::readScore400(score, e, ctx)) {
                 if (e.error() == XmlStreamReader::CustomError) {
-                    return Err::FileCriticalCorrupted;
+                    return Err::FileCriticallyCorrupted;
                 }
                 return Err::FileBadFormat;
             }

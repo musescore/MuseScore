@@ -23,6 +23,7 @@
 #ifndef MU_ENGRAVING_READ206_H
 #define MU_ENGRAVING_READ206_H
 
+#include "engravingerrors.h"
 #include "style/styledef.h"
 #include "draw/types/geometry.h"
 #include "libmscore/score.h"
@@ -55,7 +56,7 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    static Score::FileError read206(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
+    static Err read206(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
 
     static EngravingItem* readArticulation(EngravingItem*, XmlReader&, const ReadContext& ctx);
     static void readAccidental206(Accidental*, XmlReader&);

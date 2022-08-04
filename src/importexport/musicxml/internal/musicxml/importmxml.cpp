@@ -54,7 +54,7 @@ static int musicXMLImportErrorDialog(QString text, QString detailedText)
 //   importMusicXMLfromBuffer
 //---------------------------------------------------------
 
-Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* dev)
+Err importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* dev)
 {
     //LOGD("importMusicXMLfromBuffer(score %p, name '%s', dev %p)",
     //       score, qPrintable(name), dev);
@@ -67,12 +67,12 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
     // pass 1
     dev->seek(0);
     MusicXMLParserPass1 pass1(score, &logger);
-    Score::FileError res = pass1.parse(dev);
+    Err res = pass1.parse(dev);
     const auto pass1_errors = pass1.errors();
 
     // pass 2
     MusicXMLParserPass2 pass2(score, pass1, &logger);
-    if (res == Score::FileError::FILE_NO_ERROR) {
+    if (res == Err::NoError) {
         dev->seek(0);
         res = pass2.parse(dev);
     }
@@ -90,7 +90,7 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
             const QString text = qtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
                                       nullptr, pass1_errors.count() + pass2_errors.count());
             if (musicXMLImportErrorDialog(text, pass1.errors() + pass2.errors()) != QMessageBox::Yes) {
-                res = Score::FileError::FILE_USER_ABORT;
+                res = Err::UserAbort;
             }
         }
     }

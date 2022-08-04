@@ -2751,7 +2751,7 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
 //    import old version <= 1.3 files
 //---------------------------------------------------------
 
-Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
+Err Read114::read114(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
 {
     TempoMap tm;
     while (e.readNextStartElement()) {
@@ -2917,7 +2917,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
 
     if (e.error() != XmlStreamReader::NoError) {
         LOGD("%lld %lld: %s ", e.lineNumber(), e.columnNumber(), muPrintable(e.errorString()));
-        return Score::FileError::FILE_BAD_FORMAT;
+        return Err::FileBadFormat;
     }
 
     for (Staff* s : masterScore->staves()) {
@@ -3161,5 +3161,5 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     masterScore->rebuildMidiMapping();
     masterScore->updateChannel();
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }

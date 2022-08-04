@@ -2952,10 +2952,10 @@ static void createLinkedTabs(MasterScore* score)
 //   importScore
 //---------------------------------------------------------
 
-static Score::FileError importScore(MasterScore* score, mu::io::IODevice* io)
+static Err importScore(MasterScore* score, mu::io::IODevice* io)
 {
     if (!io->open(IODevice::ReadOnly)) {
-        return Score::FileError::FILE_OPEN_ERROR;
+        return Err::FileOpenError;
     }
 
     score->loadStyle(u":/engraving/styles/gp-style.mss");
@@ -3000,7 +3000,7 @@ static Score::FileError importScore(MasterScore* score, mu::io::IODevice* io)
             s = s.mid(21);
         } else {
             LOGD("unknown gtp format <%s>", ss);
-            return Score::FileError::FILE_BAD_FORMAT;
+            return Err::FileBadFormat;
         }
         int a = s.left(1).toInt();
         int b = s.mid(2).toInt();
@@ -3017,18 +3017,18 @@ static Score::FileError importScore(MasterScore* score, mu::io::IODevice* io)
             gp = new GuitarPro5(score, version);
         } else {
             LOGD("unknown gtp format %d", version);
-            return Score::FileError::FILE_BAD_FORMAT;
+            return Err::FileBadFormat;
         }
         gp->initGuitarProDrumset();
         readResult = gp->read(io);
         gp->setTempo(0, 0);
     } else {
-        return Score::FileError::FILE_BAD_FORMAT;
+        return Err::FileBadFormat;
     }
     if (readResult == false) {
         LOGD("guitar pro import error====");
         // avoid another error message box
-        return Score::FileError::FILE_NO_ERROR;
+        return Err::NoError;
     }
 
     addMetaInfo(score, gp);
@@ -3057,18 +3057,18 @@ static Score::FileError importScore(MasterScore* score, mu::io::IODevice* io)
 
     delete gp;
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 
 //---------------------------------------------------------
 //   importGTP
 //---------------------------------------------------------
 
-Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool createLinkedTabForce)
+Err importGTP(MasterScore* score, mu::io::IODevice* io, bool createLinkedTabForce)
 {
-    Score::FileError error = importScore(score, io);
+    Err error = importScore(score, io);
 
-    if (error != Score::FileError::FILE_NO_ERROR) {
+    if (error != Err::NoError) {
         return error;
     }
 
@@ -3076,6 +3076,6 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io, bool create
         createLinkedTabs(score);
     }
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 }

@@ -23,16 +23,19 @@
 //
 //    Capella 2000 import filter
 //
+#include "capella.h"
+
 #include <assert.h>
 #include <cmath>
+
+#include <QFile>
 #include <QtMath>
 
+#include "engraving/engravingerrors.h"
 #include "libmscore/mscore.h"
-#include "capella.h"
 
 #include "translation.h"
 #include "infrastructure/messagebox.h"
-#include "types/typesconv.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -2793,14 +2796,14 @@ void Capella::read(QFile* fp)
 //   importCapella
 //---------------------------------------------------------
 
-Score::FileError importCapella(MasterScore* score, const QString& name)
+Err importCapella(MasterScore* score, const QString& name)
 {
     QFile fp(name);
     if (!fp.exists()) {
-        return Score::FileError::FILE_NOT_FOUND;
+        return Err::FileNotFound;
     }
     if (!fp.open(QIODevice::ReadOnly)) {
-        return Score::FileError::FILE_OPEN_ERROR;
+        return Err::FileOpenError;
     }
 
     Capella cf;
@@ -2815,10 +2818,10 @@ Score::FileError importCapella(MasterScore* score, const QString& name)
         }
         fp.close();
         // avoid another error message box
-        return Score::FileError::FILE_NO_ERROR;
+        return Err::NoError;
     }
     fp.close();
     convertCapella(score, &cf, false);
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 }

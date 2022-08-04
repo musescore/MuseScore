@@ -20,8 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "libmscore/mscore.h"
 #include "bb.h"
+
+#include "engravingerrors.h"
+#include "libmscore/mscore.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -389,15 +391,15 @@ bool BBFile::read(const QString& name)
 //   importBB
 //---------------------------------------------------------
 
-Score::FileError importBB(MasterScore* score, const QString& name)
+Err importBB(MasterScore* score, const QString& name)
 {
     BBFile bb;
     if (!QFileInfo::exists(name)) {
-        return Score::FileError::FILE_NOT_FOUND;
+        return engraving::Err::FileNotFound;
     }
     if (!bb.read(name)) {
         LOGD("Cannot open file <%s>", qPrintable(name));
-        return Score::FileError::FILE_OPEN_ERROR;
+        return engraving::Err::FileOpenError;
     }
     score->style().set(Sid::chordsXmlFile, true);
     score->chordList()->read(u"chords.xml");
@@ -561,7 +563,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
         sks->add(keysig);
     }
     score->setUpTempoMap();
-    return Score::FileError::FILE_NO_ERROR;
+    return engraving::Err::NoError;
 }
 
 //---------------------------------------------------------

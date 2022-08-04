@@ -22,17 +22,18 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/masterscore.h"
+#include "engraving/engravingerrors.h"
+#include "engraving/libmscore/masterscore.h"
 
-#include "engraving/utests/utils/scorerw.h"
 #include "engraving/utests/utils/scorecomp.h"
+#include "engraving/utests/utils/scorerw.h"
 
 using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::iex::capella {
-extern Score::FileError importCapella(MasterScore*, const QString& name);
-extern Score::FileError importCapXml(MasterScore*, const QString& name);
+extern engraving::Err importCapella(MasterScore*, const QString& name);
+extern engraving::Err importCapXml(MasterScore*, const QString& name);
 }
 
 static const String CAPELLA_DIR("data/");
@@ -51,7 +52,7 @@ public:
 
 void Capella_Tests::capReadTest(const char* file)
 {
-    auto importFunc = [](MasterScore* score, const io::path_t& path) -> Score::FileError {
+    auto importFunc = [](MasterScore* score, const io::path_t& path) -> engraving::Err {
         return mu::iex::capella::importCapella(score, path.toQString());
     };
 
@@ -71,7 +72,7 @@ void Capella_Tests::capReadTest(const char* file)
 
 void Capella_Tests::capxReadTest(const char* file)
 {
-    auto importFunc = [](MasterScore* score, const io::path_t& path) -> Score::FileError {
+    auto importFunc = [](MasterScore* score, const io::path_t& path) -> engraving::Err {
         return mu::iex::capella::importCapXml(score, path.toQString());
     };
 

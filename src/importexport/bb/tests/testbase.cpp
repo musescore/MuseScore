@@ -43,7 +43,7 @@ using namespace mu::io;
 using namespace mu::engraving;
 
 namespace mu::iex::bb {
-extern Score::FileError importBB(MasterScore* score, const QString& name);
+extern Err importBB(MasterScore* score, const QString& name);
 }
 
 namespace mu::engraving {
@@ -60,16 +60,16 @@ MasterScore* MTest::readScore(const QString& name)
     std::string suffix = io::suffix(path);
 
     ScoreLoad sl;
-    Score::FileError rv;
+    Err rv;
     if (suffix == "mscz" || suffix == "mscx") {
         rv = compat::loadMsczOrMscx(score, path, false);
     } else if (suffix == "sgu") {
         rv = iex::bb::importBB(score, path);
     } else {
-        rv = Score::FileError::FILE_UNKNOWN_TYPE;
+        rv = Err::FileUnknownType;
     }
 
-    if (rv != Score::FileError::FILE_NO_ERROR) {
+    if (rv != Err::NoError) {
         LOGE() << "cannot load file at " << path;
         delete score;
         score = nullptr;
