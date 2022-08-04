@@ -178,7 +178,18 @@ void PaletteModule::registerCellActions()
 {
     LOGE() << "Actions in cell prepped here" << PaletteCell::cells.size();
     int i = 0;
-    for (auto &cell : PaletteCell::cells) {
+    int invisCounter = 0;
+    std::unordered_set <QString> invisiblePalettes;
+    for (auto& cell : PaletteCell::cells) {
+        // TODO Differentiate between master palette and user palette
+
+        if (((Palette*)cell->parent())->isVisible()) {
+            LOGE() << invisCounter++ << " | " << ((Palette*)cell->parent())->name() << " | " << cell->id << " | " << cell->name <<
+                ": " << cell->visible;
+            invisiblePalettes.insert(((Palette*)cell->parent())->name());
+            continue;
+        }
+
         if (cell->action.isEmpty()) {
             std::stringstream pointerAddr;
             pointerAddr << cell->element.get();
@@ -187,15 +198,19 @@ void PaletteModule::registerCellActions()
         }
 
         auto a = UiAction(cell->shortcut.action,
-            mu::context::UiCtxNotationOpened,
-            mu::context::CTX_NOTATION_FOCUSED,
-            TranslatableString("action", ("Cell ID: " + cell->id.toStdString() + " | " + cell->name.toStdString()).c_str()),
-            TranslatableString("action", ("Cell ID: " + cell->id.toStdString() + " | " + cell->name.toStdString()).c_str())
-        );
+                          mu::context::UiCtxNotationOpened,
+                          mu::context::CTX_NOTATION_FOCUSED,
+                          TranslatableString("action", ("Cell ID: " + cell->id.toStdString() + " | " + cell->name.toStdString()).c_str()),
+                          TranslatableString("action", ("Cell ID: " + cell->id.toStdString() + " | " + cell->name.toStdString()).c_str())
+                          );
 
         s_paletteUiActions->addAction(a);
     }
-
+//    assert(false);
+    LOGE() << "Invisible Palettes";
+    for (auto x : invisiblePalettes) {
+        LOGE() << x;
+    }
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(s_paletteUiActions, true);

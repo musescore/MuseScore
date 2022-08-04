@@ -441,6 +441,7 @@ void UserPaletteController::remove(const QModelIndexList& unsortedRemoveIndices,
         case RemoveAction::NoAction:
             break;
         case RemoveAction::Hide:
+            LOGE() << "Setting invisible";
             model()->setData(index, false, PaletteTreeModel::VisibleRole);
             break;
         case RemoveAction::DeletePermanently:
@@ -459,6 +460,8 @@ void UserPaletteController::remove(const QModelIndex& index)
     if (!canEdit(index.parent())) {
         return;
     }
+
+    LOGE() << "In userpc remove";
 
     const bool customItem = index.data(PaletteTreeModel::CustomRole).toBool();
     queryRemove({ index }, customItem ? 1 : 0);
@@ -531,7 +534,6 @@ void UserPaletteController::applyPaletteCellProperties(const QModelIndex& index)
     _userPalette->itemDataChanged(srcindex);
     _userPalette->itemDataChanged(srcindex.parent());
 }
-
 
 void UserPaletteController::editCellProperties(const QModelIndex& index)
 {
@@ -832,7 +834,6 @@ QAbstractItemModel* PaletteProvider::availableExtraPalettesModel() const
 
 bool PaletteProvider::addPalette(const QPersistentModelIndex& index)
 {
-
     // Adding logs to find out if someday later I get an error here again causing wrong IDs of the cells
     if (!index.isValid()) {
         LOGE() << "addPaletteError: Invalid index";
@@ -856,9 +857,9 @@ bool PaletteProvider::addPalette(const QPersistentModelIndex& index)
         QMimeData* data = m_masterPaletteModel->mimeData({ QModelIndex(index) });
         const bool success = m_userPaletteModel->dropMimeData(data, Qt::CopyAction, 0, 0, QModelIndex());
         data->deleteLater();
-        
+
         if (!success) {
-            LOGE() << "addPaletteError: Success in masterPaletteModel: " << success;
+            LOGE() << "addPaletteError: Success variable in masterPaletteModel: " << success;
         }
 
         return success;
