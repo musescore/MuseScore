@@ -27,15 +27,6 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-bool KeyboardsSetupDataResolver::supportsInstrument(const Instrument* instrument)
-{
-    static const std::unordered_set<std::string> KEYBOARDS_FAMILY_SET = {
-        "keyboards", "organs", "synths",
-    };
-
-    return KEYBOARDS_FAMILY_SET.find(instrument->family().toStdString()) != KEYBOARDS_FAMILY_SET.cend();
-}
-
 const PlaybackSetupData& KeyboardsSetupDataResolver::doResolve(const Instrument* instrument)
 {
     static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
@@ -88,6 +79,8 @@ const PlaybackSetupData& KeyboardsSetupDataResolver::doResolve(const Instrument*
                                                                            SoundSubCategory::Sawtooth_Wave }, {} } },
         { "new-age-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
                                                                                SoundSubCategory::NewAge }, {} } },
+        { "pad-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                           SoundSubCategory::Pad }, {} } },
         { "warm-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
                                                                             SoundSubCategory::Warm }, {} } },
         { "poly-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
