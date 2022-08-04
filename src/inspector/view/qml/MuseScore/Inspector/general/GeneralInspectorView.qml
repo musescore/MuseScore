@@ -115,8 +115,6 @@ InspectorSectionView {
                 popupAvailableWidth: parent ? parent.width : 0
                 anchorItem: root.anchorItem
 
-                notationView: root.notationView
-
                 navigation.panel: root.navigationPanel
                 navigation.name: "Playback"
                 navigation.row: root.navigationRow(5)
@@ -137,7 +135,7 @@ InspectorSectionView {
                 }
 
                 onPopupOpened: {
-                    root.popupOpened(playbackButton.popup)
+                    root.popupOpened(popup, control)
                 }
             }
 
@@ -146,8 +144,6 @@ InspectorSectionView {
 
                 popupAvailableWidth: parent ? parent.width : 0
                 anchorItem: root.anchorItem
-
-                notationView: root.notationView
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "Appearance"
@@ -167,7 +163,7 @@ InspectorSectionView {
                 }
 
                 onPopupOpened: {
-                    root.popupOpened(appearanceButton.popup)
+                    root.popupOpened(popup, control)
                 }
             }
         }
