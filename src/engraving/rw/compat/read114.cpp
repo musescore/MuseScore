@@ -2482,13 +2482,7 @@ static void readInstrument(Instrument* i, Part* p, XmlReader& e)
         }
     }
 
-    if (i->instrumentId().isEmpty()) {
-        i->setInstrumentId(i->recognizeInstrumentId());
-    }
-
-    if (i->id().isEmpty()) {
-        i->setId(i->recognizeId());
-    }
+    i->updateInstrumentId();
 
     if (program == -1) {
         program = i->recognizeMidiProgram();
