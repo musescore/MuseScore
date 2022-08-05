@@ -82,7 +82,6 @@ private:
     audio::samples_t m_samplesPerChannel = 0;
 
     VstSequencer m_sequencer;
-    audio::gain_t m_currentGain = 0.f;
 };
 
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;
