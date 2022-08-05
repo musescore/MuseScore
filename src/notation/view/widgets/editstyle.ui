@@ -5385,7 +5385,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="1" column="3" colspan="2">
             <widget class="QCheckBox" name="mmRestNumberMaskHBar">
              <property name="text">
-              <string>Mask H-bar around number</string>
+              <string>Break H-bar if it collides with number</string>
              </property>
             </widget>
            </item>
