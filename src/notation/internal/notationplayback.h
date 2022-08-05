@@ -35,8 +35,6 @@
 
 namespace mu::engraving {
 class Score;
-class EventMap;
-class MidiRenderer;
 }
 
 namespace mu::notation {
@@ -79,7 +77,7 @@ public:
     midi::tick_t beatToTick(int measureIndex, int beatIndex) const override;
 
 private:
-    mu::engraving::Score* score() const;
+    engraving::Score* score() const;
 
     void addLoopIn(int tick);
     void addLoopOut(int tick);
@@ -87,7 +85,7 @@ private:
     void updateLoopBoundaries();
     void updateTotalPlayTime();
 
-    const mu::engraving::TempoText* tempoText(int tick) const;
+    const engraving::TempoText* tempoText(int tick) const;
 
     IGetScore* m_getScore = nullptr;
     async::Channel<int> m_playPositionTickChanged;

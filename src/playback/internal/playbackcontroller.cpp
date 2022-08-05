@@ -192,15 +192,19 @@ Notification PlaybackController::currentTrackSequenceIdChanged() const
     return m_currentSequenceIdChanged;
 }
 
-mu::engraving::InstrumentTrackId PlaybackController::instrumentTrackIdForAudioTrackId(audio::TrackId theTrackId) const
+const IPlaybackController::InstrumentTrackIdMap& PlaybackController::instrumentTrackIdMap() const
 {
-    for (auto [instrumentTrackId, audioTrackId] : m_trackIdMap) {
-        if (audioTrackId == theTrackId) {
-            return instrumentTrackId;
-        }
-    }
+    return m_trackIdMap;
+}
 
-    return {};
+Channel<TrackId, mu::engraving::InstrumentTrackId> PlaybackController::trackAdded() const
+{
+    return m_trackAdded;
+}
+
+Channel<TrackId, mu::engraving::InstrumentTrackId> PlaybackController::trackRemoved() const
+{
+    return m_trackRemoved;
 }
 
 void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements)
@@ -639,7 +643,11 @@ void PlaybackController::resetCurrentSequence()
     setCurrentPlaybackStatus(PlaybackStatus::Stopped);
 
     playback()->removeSequence(m_currentSequenceId);
+
+    m_trackIdMap.clear();
+
     m_currentSequenceId = -1;
+    m_currentSequenceIdChanged.notify();
 }
 
 void PlaybackController::setCurrentTick(const tick_t tick)
@@ -669,7 +677,13 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
         return;
     }
 
-    doAddTrack(instrumentTrackId, part->partName().toStdString(), onFinished);
+    const std::string primaryInstrId = part->instrument()->id().toStdString();
+
+    const std::string trackName = (instrumentTrackId.instrumentId == primaryInstrId)
+                                  ? part->partName().toStdString()
+                                  : "(" + part->instrumentById(instrumentTrackId.instrumentId)->trackName().toStdString() + ")";
+
+    doAddTrack(instrumentTrackId, trackName, onFinished);
 }
 
 void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, const std::string& title,
@@ -710,6 +724,8 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
         updateMuteStates();
 
         onFinished(instrumentTrackId);
+
+        m_trackAdded.send(trackId, instrumentTrackId);
     })
     .onReject(this, [instrumentTrackId, onFinished](int code, const std::string& msg) {
         LOGE() << "can't add a new track, code: [" << code << "] " << msg;
@@ -799,6 +815,7 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
     playback()->tracks()->removeTrack(m_currentSequenceId, search->second);
     audioSettings()->removeTrackParams(instrumentTrackId);
 
+    m_trackRemoved.send(search->second, instrumentTrackId);
     m_trackIdMap.erase(instrumentTrackId);
 }
 
@@ -908,15 +925,15 @@ void PlaybackController::setupSequenceTracks()
             auto search = m_trackIdMap.find(trackId);
             if (search == m_trackIdMap.cend()) {
                 removeNonExistingTracks();
-                doAddTrack(trackId, part->partName().toStdString(), onAddFinished);
+                addTrack(trackId, onAddFinished);
             }
         }
 
         updateMuteStates();
     });
 
-    audioSettings()->soloMuteStateChanged().onReceive(this,
-                                                      [this](const InstrumentTrackId&, const project::IProjectAudioSettings::SoloMuteState&) {
+    audioSettings()->soloMuteStateChanged().onReceive(
+        this, [this](const InstrumentTrackId&, const project::IProjectAudioSettings::SoloMuteState&) {
         updateMuteStates();
     });
 

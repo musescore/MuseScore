@@ -475,6 +475,17 @@ const Instrument* Part::instrument(Fraction tick) const
     return _instruments.instrument(tick.ticks());
 }
 
+const Instrument* Part::instrumentById(const std::string& id) const
+{
+    for (const auto& pair: _instruments) {
+        if (pair.second->id().toStdString() == id) {
+            return pair.second;
+        }
+    }
+
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   instruments
 //---------------------------------------------------------
@@ -616,6 +627,21 @@ track_idx_t Part::startTrack() const
 track_idx_t Part::endTrack() const
 {
     return _staves.back()->idx() * VOICES + VOICES;
+}
+
+InstrumentTrackIdList Part::instrumentTrackIdList() const
+{
+    InstrumentTrackIdList result;
+    std::set<std::string> seen;
+
+    for (const auto& pair : _instruments) {
+        std::string instrId = pair.second->id().toStdString();
+        if (seen.insert(instrId).second) {
+            result.push_back({ _id, instrId });
+        }
+    }
+
+    return result;
 }
 
 InstrumentTrackIdSet Part::instrumentTrackIdSet() const
