@@ -547,10 +547,12 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
         return;
     }
 
+    //configuration()->paletteCellConfig(cell->id).ch.resetOnReceive(this); 
     configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
                                                               [this, srcIndex, cell](
                                                                   const IPaletteConfiguration::PaletteCellConfig& config) {
         modifyCellfromConfig(cell, config);
+        LOGE() << "Editing OnReceive for ID: " + cell->id;
 
         _userPalette->itemDataChanged(srcIndex);
         _userPalette->itemDataChanged(srcIndex.parent());
@@ -686,17 +688,17 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
             cell->yoffset = config.yOffset;
             cell->shortcut = config.shortcut;
 
-            PaletteTreePtr tree = userPaletteTree();
+            LOGE() << "Editing OnReceive for ID: " + cell->id;;
 
-            QByteArray newData;
-            LOGE() << "Here221";
+            PaletteTreePtr tree = userPaletteTree();
 
             Buffer buf;
             buf.open(IODevice::WriteOnly);
+
             mu::engraving::XmlWriter writer(&buf);
-            LOGE() << "Here22DIRECT";
             tree->write(writer);
-            newData = buf.data().toQByteArray();
+
+            QByteArray newData = buf.data().toQByteArray();
             workspacesDataProvider()->setRawData(mu::workspace::DataKey::Palettes, newData);
         });
         QString ac_name = cell->action;
