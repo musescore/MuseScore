@@ -73,7 +73,10 @@ public:
     audio::TrackSequenceId currentTrackSequenceId() const override;
     async::Notification currentTrackSequenceIdChanged() const override;
 
-    engraving::InstrumentTrackId instrumentTrackIdForAudioTrackId(audio::TrackId trackId) const override;
+    const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
+
+    async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackAdded() const override;
+    async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const override;
 
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void seekElement(const notation::EngravingItem* element) override;
@@ -186,7 +189,10 @@ private:
     midi::tick_t m_currentTick = 0;
     notation::Tempo m_currentTempo;
 
-    std::unordered_map<engraving::InstrumentTrackId, audio::TrackId> m_trackIdMap;
+    async::Channel<audio::TrackId, engraving::InstrumentTrackId> m_trackAdded;
+    async::Channel<audio::TrackId, engraving::InstrumentTrackId> m_trackRemoved;
+
+    InstrumentTrackIdMap m_trackIdMap;
 
     framework::Progress m_loadingProgress;
     std::list<engraving::InstrumentTrackId> m_loadingTracks;

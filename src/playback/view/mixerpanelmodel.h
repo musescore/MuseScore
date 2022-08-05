@@ -65,22 +65,25 @@ private:
         ChannelItemRole = Qt::UserRole + 1
     };
 
-    void loadItems(const audio::TrackSequenceId sequenceId, const audio::TrackIdList& trackIdList);
-    void addItem(const audio::TrackSequenceId sequenceId, const audio::TrackId trackId);
+    void loadItems();
+    void addItem(const audio::TrackId trackId, const engraving::InstrumentTrackId instrumentTrackId);
     void removeItem(const audio::TrackId trackId);
     void updateItemsPanelsOrder();
     void clear();
 
-    int resolveInsertIndex(const audio::TrackId trackId) const;
+    int resolveInsertIndex(const engraving::InstrumentTrackId instrumentTrackId) const;
     int indexOf(const audio::TrackId trackId) const;
 
-    MixerChannelItem* buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId);
+    MixerChannelItem* buildTrackChannelItem(const audio::TrackId trackId, const engraving::InstrumentTrackId instrumentTrackId,
+                                            bool isPrimary = true);
     MixerChannelItem* buildMasterChannelItem();
 
-    MixerChannelItem* trackChannelItem(const audio::TrackId& trackId) const;
+    TrackMixerChannelItem* trackChannelItem(const audio::TrackId& trackId) const;
 
     project::INotationProjectPtr currentProject() const;
     project::IProjectAudioSettingsPtr audioSettings() const;
+    notation::INotationPlaybackPtr notationPlayback() const;
+    notation::INotationPartsPtr masterNotationParts() const;
 
     QList<MixerChannelItem*> m_mixerChannelList;
     audio::TrackSequenceId m_currentTrackSequenceId = -1;

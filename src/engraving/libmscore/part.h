@@ -111,6 +111,7 @@ public:
     track_idx_t startTrack() const;
     track_idx_t endTrack() const;
 
+    InstrumentTrackIdList instrumentTrackIdList() const;
     InstrumentTrackIdSet instrumentTrackIdSet() const;
 
     String longName(const Fraction& tick = { -1, 1 }) const;
@@ -151,6 +152,7 @@ public:
 
     Instrument* instrument(Fraction = { -1, 1 });
     const Instrument* instrument(Fraction = { -1, 1 }) const;
+    const Instrument* instrumentById(const std::string& id) const;
     void setInstrument(Instrument*, Fraction = { -1, 1 });         // transfer ownership
     void setInstrument(Instrument*, int tick);
     void setInstrument(const Instrument&&, Fraction = { -1, 1 });
