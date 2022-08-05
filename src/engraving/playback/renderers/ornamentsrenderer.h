@@ -27,7 +27,7 @@
 
 namespace Ms {
 class Note;
-};
+}
 
 namespace mu::engraving {
 struct DisclosurePattern {
@@ -45,7 +45,7 @@ struct DisclosurePattern {
     DisclosurePattern buildActualPattern(const Note* note) const;
 
 private:
-    void updatePitchOffsets(const Note *note, std::vector<mpe::pitch_level_t>& pitchOffsets);
+    void updatePitchOffsets(const Note* note, std::vector<mpe::pitch_level_t>& pitchOffsets);
 };
 
 class OrnamentsRenderer : public RenderBase<OrnamentsRenderer>
