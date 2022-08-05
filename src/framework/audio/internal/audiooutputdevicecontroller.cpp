@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "audiooutputcontroller.h"
+#include "audiooutputdevicecontroller.h"
 
 #include "async/async.h"
 
@@ -29,7 +29,7 @@
 
 using namespace mu::audio;
 
-void AudioOutputController::init()
+void AudioOutputDeviceController::init()
 {
     checkConnection();
 
@@ -53,7 +53,7 @@ void AudioOutputController::init()
     });
 }
 
-void AudioOutputController::checkConnection()
+void AudioOutputDeviceController::checkConnection()
 {
     auto containsDevice = [](const AudioDeviceList& devices, const AudioDeviceID& deviceId) {
         for (const AudioDevice& device : devices) {
