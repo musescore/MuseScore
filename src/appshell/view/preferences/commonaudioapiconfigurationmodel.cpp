@@ -40,6 +40,11 @@ QString CommonAudioApiConfigurationModel::currentDeviceId() const
     return QString::fromStdString(audioDriver()->outputDevice());
 }
 
+unsigned int CommonAudioApiConfigurationModel::bufferSize() const
+{
+    return audioDriver()->bufferSize(currentDeviceId().toStdString());
+}
+
 int CommonAudioApiConfigurationModel::currentSampleRateIndex() const
 {
     return m_currentSampleRateIndex;
@@ -53,6 +58,11 @@ void CommonAudioApiConfigurationModel::load()
 
     audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
         emit currentDeviceIdChanged();
+        emit bufferSizeChanged();
+    });
+
+    audioDriver()->bufferSizeChanged().onNotify(this, [this]() {
+        emit bufferSizeChanged();
     });
 }
 
@@ -77,6 +87,31 @@ QVariantList CommonAudioApiConfigurationModel::deviceList() const
     }
 
     return result;
+}
+
+QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
+{
+    QList<unsigned int> result;
+    std::pair<unsigned int, unsigned int> bufferSizeRange = audioDriver()->availableBufferSizeRange(currentDeviceId().toStdString());
+
+    unsigned int start = bufferSizeRange.first;
+    unsigned int end = bufferSizeRange.second;
+
+    if (start == end) {
+        return {};
+    }
+
+    for (unsigned int bufferSize = end; bufferSize >= start;) {
+        result.prepend(bufferSize);
+        bufferSize /= 2;
+    }
+
+    return result;
+}
+
+void CommonAudioApiConfigurationModel::bufferSizeSelected(const QString& bufferSizeStr)
+{
+    audioConfiguration()->setDriverBufferSize(bufferSizeStr.toInt());
 }
 
 void CommonAudioApiConfigurationModel::deviceSelected(const QString& deviceId)

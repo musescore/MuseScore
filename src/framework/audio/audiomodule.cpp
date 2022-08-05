@@ -174,7 +174,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
 
     // Setup audio driver
     IAudioDriver::Spec requiredSpec;
-    requiredSpec.sampleRate = 48000;
+    requiredSpec.sampleRate = s_audioConfiguration->sampleRate();
     requiredSpec.format = IAudioDriver::Format::AudioF32;
     requiredSpec.channels = s_audioConfiguration->audioChannelsCount();
     requiredSpec.samples = s_audioConfiguration->driverBufferSize();
@@ -204,7 +204,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
 
         // Setup audio engine
         AudioEngine::instance()->init(s_audioBuffer);
-        AudioEngine::instance()->setAudioChannelsCount(s_audioConfiguration->audioChannelsCount());
+        AudioEngine::instance()->setAudioChannelsCount(activeSpec.channels);
         AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
         AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
 
@@ -242,7 +242,7 @@ void AudioModule::onDeinit()
     if (s_audioWorker->isRunning()) {
         s_audioWorker->stop([]() {
             ONLY_AUDIO_WORKER_THREAD;
-            s_playbackFacade->deInit();
+            s_playbackFacade->deinit();
             AudioEngine::instance()->deinit();
         });
     }

@@ -41,7 +41,7 @@ static const audioch_t AUDIO_CHANNELS = 2;
 //TODO: add other setting: audio device etc
 static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
 static const Settings::Key AUDIO_OUTPUT_DEVICE_ID_KEY("audio", "io/outputDevice");
-static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
+static const Settings::Key AUDIO_BUFFER_SIZE_KEY("audio", "driver_buffer");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
@@ -51,18 +51,14 @@ static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
 
 void AudioConfiguration::init()
 {
-    int defaultBufferSize = 0;
-#ifdef Q_OS_WASM
-    defaultBufferSize = 8192;
-#else
-    defaultBufferSize = 1024;
-#endif
-    settings()->setDefaultValue(AUDIO_BUFFER_SIZE, Val(defaultBufferSize));
-
     settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
 
     settings()->valueChanged(AUDIO_OUTPUT_DEVICE_ID_KEY).onReceive(nullptr, [this](const Val&) {
-        m_audioOutputDeviceNameChanged.notify();
+        m_audioOutputDeviceIdChanged.notify();
+    });
+
+    settings()->valueChanged(AUDIO_BUFFER_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_driverBufferSizeChanged.notify();
     });
 
     settings()->setDefaultValue(USER_SOUNDFONTS_PATHS, Val(globalConfiguration()->userDataPath() + "/SoundFonts"));
@@ -109,7 +105,7 @@ void AudioConfiguration::setAudioOutputDeviceId(const std::string& deviceId)
 
 async::Notification AudioConfiguration::audioOutputDeviceIdChanged() const
 {
-    return m_audioOutputDeviceNameChanged;
+    return m_audioOutputDeviceIdChanged;
 }
 
 audioch_t AudioConfiguration::audioChannelsCount() const
@@ -119,7 +115,17 @@ audioch_t AudioConfiguration::audioChannelsCount() const
 
 unsigned int AudioConfiguration::driverBufferSize() const
 {
-    return settings()->value(AUDIO_BUFFER_SIZE).toInt();
+    return settings()->value(AUDIO_BUFFER_SIZE_KEY).toInt();
+}
+
+void AudioConfiguration::setDriverBufferSize(unsigned int size)
+{
+    settings()->setSharedValue(AUDIO_BUFFER_SIZE_KEY, Val(static_cast<int>(size)));
+}
+
+async::Notification AudioConfiguration::driverBufferSizeChanged() const
+{
+    return m_driverBufferSizeChanged;
 }
 
 SoundFontPaths AudioConfiguration::soundFontDirectories() const
