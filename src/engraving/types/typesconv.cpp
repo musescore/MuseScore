@@ -2155,7 +2155,7 @@ static const std::vector<Item<JumpType> > JUMP_TYPES = {
     { JumpType::DS,             "", TranslatableString("engraving", "D.S.") },
 
     { JumpType::DC_AL_DBLCODA,  "", TranslatableString("engraving", "Da Capo al Double Coda") },
-    { JumpType::DS_AL_DBLCODA,  "", TranslatableString("engraving", "Da Segno al Double Coda") },
+    { JumpType::DS_AL_DBLCODA,  "", TranslatableString("engraving", "Dal Segno al Double Coda") },
     { JumpType::DSS,            "", TranslatableString("engraving", "Dal Segno Segno") },
     { JumpType::DSS_AL_CODA,    "", TranslatableString("engraving", "Dal Segno Segno al Coda") },
     { JumpType::DSS_AL_DBLCODA, "", TranslatableString("engraving", "Dal Segno Segno al Double Coda") },
