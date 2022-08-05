@@ -3330,6 +3330,13 @@ void Measure::layoutCrossStaff()
                 if (c->beam() && (c->beam()->cross() || c->beam()->userModified())) {
                     c->computeUp(); // for cross-staff beams
                 }
+                if (!c->graceNotes().empty()) {
+                    for (Chord* grace : c->graceNotes()) {
+                        if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
+                            grace->computeUp(); // for cross-staff beams
+                        }
+                    }
+                }
             }
         }
     }
