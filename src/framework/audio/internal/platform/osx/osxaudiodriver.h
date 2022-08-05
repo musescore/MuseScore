@@ -63,12 +63,21 @@ public:
     async::Notification availableOutputDevicesChanged() const override;
     void updateDeviceMap();
 
+    unsigned int outputDeviceBufferSize() const override;
+    bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
+    async::Notification outputDeviceBufferSizeChanged() const override;
+
+    std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+
 private:
     static void OnFillBuffer(void* context, OpaqueAudioQueue* queue, AudioQueueBuffer* buffer);
     static void logError(const std::string message, OSStatus error);
 
     void initDeviceMapListener();
     bool audioQueueSetDeviceName(const AudioDeviceID& deviceId);
+
+    AudioDeviceID defaultDeviceId() const;
+    UInt32 osxDeviceId() const;
 
     struct Data;
 
@@ -77,6 +86,9 @@ private:
     async::Notification m_outputDeviceChanged;
     async::Notification m_availableOutputDevicesChanged;
     AudioDeviceID m_deviceId;
+
+    async::Notification m_bufferSizeChanged;
+    async::Notification m_sampleRateChanged;
 };
 }
 #endif // MU_AUDIO_OSXAUDIODRIVER_H

@@ -35,16 +35,6 @@ CommonAudioApiConfigurationModel::CommonAudioApiConfigurationModel(QObject* pare
 {
 }
 
-QString CommonAudioApiConfigurationModel::currentDeviceId() const
-{
-    return QString::fromStdString(audioDriver()->outputDevice());
-}
-
-int CommonAudioApiConfigurationModel::currentSampleRateIndex() const
-{
-    return m_currentSampleRateIndex;
-}
-
 void CommonAudioApiConfigurationModel::load()
 {
     audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
@@ -53,14 +43,17 @@ void CommonAudioApiConfigurationModel::load()
 
     audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
         emit currentDeviceIdChanged();
+        emit bufferSizeChanged();
+    });
+
+    audioDriver()->outputDeviceBufferSizeChanged().onNotify(this, [this]() {
+        emit bufferSizeChanged();
     });
 }
 
-void CommonAudioApiConfigurationModel::setCurrentSampleRateIndex(int index)
+QString CommonAudioApiConfigurationModel::currentDeviceId() const
 {
-    NOT_IMPLEMENTED;
-    m_currentSampleRateIndex = index;
-    emit currentSampleRateIndexChanged();
+    return QString::fromStdString(audioDriver()->outputDevice());
 }
 
 QVariantList CommonAudioApiConfigurationModel::deviceList() const
@@ -84,23 +77,24 @@ void CommonAudioApiConfigurationModel::deviceSelected(const QString& deviceId)
     audioConfiguration()->setAudioOutputDeviceId(deviceId.toStdString());
 }
 
-QStringList CommonAudioApiConfigurationModel::sampleRateHzList() const
+unsigned int CommonAudioApiConfigurationModel::bufferSize() const
 {
-    QList<int> sampleRateList {
-        192000,
-        96000,
-        88200,
-        48000,
-        44100,
-        32000,
-        22050
-    };
+    return audioDriver()->outputDeviceBufferSize();
+}
 
-    QStringList result;
-    for (int sampleRate : sampleRateList) {
-        //: Abbreviation of Hertz
-        result << QString::number(sampleRate) + " " + qtrc("global", "Hz");
+QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
+{
+    QList<unsigned int> result;
+    std::vector<unsigned int> bufferSizes = audioDriver()->availableOutputDeviceBufferSizes();
+
+    for (unsigned int bufferSize : bufferSizes) {
+        result << bufferSize;
     }
 
     return result;
+}
+
+void CommonAudioApiConfigurationModel::bufferSizeSelected(const QString& bufferSizeStr)
+{
+    audioConfiguration()->setDriverBufferSize(bufferSizeStr.toInt());
 }
