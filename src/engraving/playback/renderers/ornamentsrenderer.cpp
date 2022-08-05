@@ -187,6 +187,30 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*minSupportedNoteDurationTicks*/ 0
         }
     },
+    {
+        ArticulationType::Tremblement,
+        {
+            /*prefixDurationTicks*/ SEMIQUAVER_TICKS* 2,
+            /*prefixPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
+            /*isAlterationsRepeatAllowed*/ false,
+            /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
+            /*suffixDurationTicks*/ 0,
+            /*suffixPitchOffsets*/ {},
+            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+        }
+    },
+    {
+        ArticulationType::PrallMordent,
+        {
+            /*prefixDurationTicks*/ 0,
+            /*prefixPitchOffsets*/ {},
+            /*isAlterationsRepeatAllowed*/ false,
+            /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0, -PITCH_LEVEL_STEP, 0 },
+            /*suffixDurationTicks*/ 0,
+            /*suffixPitchOffsets*/ {},
+            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+        }
+    },
 };
 
 const ArticulationTypeSet& OrnamentsRenderer::supportedTypes()
@@ -198,7 +222,8 @@ const ArticulationTypeSet& OrnamentsRenderer::supportedTypes()
         ArticulationType::LowerMordent, ArticulationType::MordentWithUpperPrefix,
         ArticulationType::DownMordent, ArticulationType::PrallUp,
         ArticulationType::PrallDown, ArticulationType::Turn,
-        ArticulationType::InvertedTurn
+        ArticulationType::InvertedTurn, ArticulationType::Tremblement,
+        ArticulationType::PrallMordent
     };
 
     return types;
@@ -325,7 +350,7 @@ DisclosurePattern DisclosurePattern::buildActualPattern(const Note* note) const
     return result;
 }
 
-void DisclosurePattern::updatePitchOffsets(const Note* note, std::vector<mpe::pitch_level_t> &pitchOffsets)
+void DisclosurePattern::updatePitchOffsets(const Note* note, std::vector<mpe::pitch_level_t>& pitchOffsets)
 {
     for (auto& pitchOffset : pitchOffsets) {
         pitchOffset *= std::abs(chromaticPitchSteps(note, note, pitchOffset / mpe::PITCH_LEVEL_STEP));
