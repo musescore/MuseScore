@@ -24,9 +24,11 @@
 #include <CoreAudio/HostTime.h>
 #include <CoreServices/CoreServices.h>
 #include <CoreMIDI/CoreMIDI.h>
+
 #include <algorithm>
-#include "log.h"
+
 #include "midierrors.h"
+#include "log.h"
 
 using namespace mu;
 using namespace mu::midi;
@@ -39,7 +41,7 @@ struct mu::midi::CoreMidiInPort::Core {
 };
 
 CoreMidiInPort::CoreMidiInPort()
-    : m_core(std::make_unique<Core>())
+    : AbstractMidiInPort(), m_core(std::make_unique<Core>())
 {
 }
 
@@ -61,6 +63,8 @@ CoreMidiInPort::~CoreMidiInPort()
 void CoreMidiInPort::init()
 {
     initCore();
+
+    AbstractMidiInPort::init();
 }
 
 MidiDeviceList CoreMidiInPort::devices() const
@@ -174,12 +178,14 @@ void CoreMidiInPort::initCore()
     if (__builtin_available(macOS 11.0, *)) {
         MIDIReceiveBlock receiveBlock = ^ (const MIDIEventList* eventList, void* /*srcConnRefCon*/) {
             const MIDIEventPacket* packet = eventList->packet;
+            std::vector<std::pair<tick_t, Event> > events;
+
             for (UInt32 index = 0; index < eventList->numPackets; index++) {
                 // Handle packet
                 if (packet->wordCount != 0 && packet->wordCount <= 4) {
                     Event e = Event::fromRawData(packet->words, packet->wordCount);
                     if (e) {
-                        m_eventReceived.send((tick_t)packet->timeStamp, e);
+                        events.push_back({ (tick_t)packet->timeStamp, e });
                     }
                 } else if (packet->wordCount > 4) {
                     LOGW() << "unsupported midi message size " << packet->wordCount << " bytes";
@@ -187,6 +193,8 @@ void CoreMidiInPort::initCore()
 
                 packet = MIDIEventPacketNext(packet);
             }
+
+            doEventsRecived(events);
         };
 
         result
@@ -195,6 +203,8 @@ void CoreMidiInPort::initCore()
         MIDIReadBlock readBlock = ^ (const MIDIPacketList* packetList, void* /*srcConnRefCon*/)
         {
             const MIDIPacket* packet = packetList->packet;
+            std::vector<std::pair<tick_t, Event> > events;
+
             for (UInt32 index = 0; index < packetList->numPackets; index++) {
                 if (packet->length != 0 && packet->length <= 4) {
                     uint32_t message(0);
@@ -202,7 +212,7 @@ void CoreMidiInPort::initCore()
 
                     auto e = Event::fromMIDI10Package(message).toMIDI20();
                     if (e) {
-                        m_eventReceived.send((tick_t)packet->timeStamp, e);
+                        events.push_back({ (tick_t)packet->timeStamp, e });
                     }
                 } else if (packet->length > 4) {
                     LOGW() << "unsupported midi message size " << packet->length << " bytes";
@@ -210,6 +220,8 @@ void CoreMidiInPort::initCore()
 
                 packet = MIDIPacketNext(packet);
             }
+
+            doEventsRecived(events);
         };
 
         result = MIDIInputPortCreateWithBlock(m_core->client, portName.toCFString(), &m_core->inputPort, readBlock);
@@ -298,9 +310,4 @@ void CoreMidiInPort::stop()
         LOGE() << "can't disconnect midi port " << result;
     }
     m_running = false;
-}
-
-async::Channel<tick_t, Event> CoreMidiInPort::eventReceived() const
-{
-    return m_eventReceived;
 }

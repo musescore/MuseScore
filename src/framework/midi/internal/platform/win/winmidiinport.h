@@ -25,17 +25,18 @@
 #include <memory>
 
 #include "async/asyncable.h"
-#include "imidiinport.h"
+
+#include "../../abstractmidiinport.h"
 #include "internal/midideviceslistener.h"
 
 namespace mu::midi {
-class WinMidiInPort : public IMidiInPort, public async::Asyncable
+class WinMidiInPort : public AbstractMidiInPort
 {
 public:
     WinMidiInPort() = default;
     ~WinMidiInPort() override;
 
-    void init();
+    void init() override;
 
     MidiDeviceList devices() const override;
     async::Notification devicesChanged() const override;
@@ -44,8 +45,6 @@ public:
     void disconnect() override;
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
-
-    async::Channel<tick_t, Event> eventReceived() const override;
 
     // internal;
     void doProcess(uint32_t message, tick_t timing);
@@ -58,7 +57,6 @@ private:
     std::shared_ptr<Win> m_win;
     MidiDeviceID m_deviceID;
     bool m_running = false;
-    async::Channel<tick_t, Event> m_eventReceived;
 
     async::Notification m_devicesChanged;
     MidiDevicesListener m_devicesListener;

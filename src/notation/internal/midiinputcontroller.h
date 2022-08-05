@@ -48,7 +48,7 @@ private:
     void connectCurrentInputDevice();
     void connectCurrentOutputDevice();
 
-    void onMidiEventReceived(midi::tick_t tick, const midi::Event& event);
+    void onMidiEventsReceived(const std::vector<std::pair<midi::tick_t, midi::Event> >& events);
 };
 }
 
