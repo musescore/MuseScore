@@ -21,6 +21,10 @@
  */
 #include "audiooutputcontroller.h"
 
+#include "async/async.h"
+
+#include "worker/audioengine.h"
+
 #include "log.h"
 
 using namespace mu::audio;
@@ -39,6 +43,16 @@ void AudioOutputController::init()
     configuration()->audioOutputDeviceIdChanged().onNotify(this, [this]() {
         AudioDeviceID deviceId = configuration()->audioOutputDeviceId();
         audioDriver()->selectOutputDevice(deviceId);
+    });
+
+    configuration()->driverBufferSizeChanged().onNotify(this, [this]() {
+        unsigned int bufferSize = configuration()->driverBufferSize();
+        bool ok = audioDriver()->setBufferSize(audioDriver()->outputDevice(), bufferSize);
+        if (ok) {
+            async::Async::call(this, [bufferSize](){
+                AudioEngine::instance()->setReadBufferSize(bufferSize);
+            }, AudioThread::ID);
+        }
     });
 }
 

@@ -36,8 +36,8 @@ namespace mu::audio {
 class Playback : public IPlayback, public IGetTrackSequence, public async::Asyncable
 {
 public:
-    void init();
-    void deInit();
+    void init() override;
+    void deinit() override;
 
     // IPlayback
     async::Promise<TrackSequenceId> addSequence() override;

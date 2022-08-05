@@ -65,6 +65,24 @@ Item {
             }
         }
 
+        ComboBoxWithTitle {
+            id: sampleRate
+
+            title: qsTrc("appshell", "Buffer size:")
+            columnWidth: root.columnWidth
+
+            currentIndex: indexOfValue(apiModel.bufferSize)
+            model: apiModel.bufferSizeList
+
+            navigation.name: "BufferSizeBox"
+            navigation.panel: root.navigation
+            navigation.row: root.navigationOrderStart + 1
+
+            onValueEdited: function(newIndex, newValue) {
+                apiModel.bufferSizeSelected(newValue)
+            }
+        }
+
         /*
          * TODO: https://github.com/musescore/MuseScore/issues/9807
         ComboBoxWithTitle {
