@@ -4157,18 +4157,46 @@ void GraceNotesGroup::layout()
 {
     _shape.clear();
     for (size_t i = this->size() - 1; i != mu::nidx; --i) {
-        Chord* chord = this->at(i);
-        Shape chordShape = chord->shape();
+        Chord* grace = this->at(i);
+        Shape graceShape = grace->shape();
         double offset;
-        offset = -std::max(chordShape.minHorizontalDistance(_shape, score()), 0.0);
-        _shape.add(chordShape.translated(mu::PointF(offset, 0.0)));
-        double xpos = offset - parent()->rxoffset() - parent()->xpos() - chord->rxoffset();
-        chord->setPos(xpos, 0.0);
+        offset = -std::max(graceShape.minHorizontalDistance(_shape, score()), 0.0);
+        // Adjust for cross-staff grace notes
+        if (i < this->size() - 1) {
+            Chord* prevGrace = this->at(i + 1);
+            if (prevGrace->vStaffIdx() != grace->vStaffIdx()) {
+                double crossCorrection = grace->notes().front()->headWidth() - grace->stem()->width();
+                if (prevGrace->vStaffIdx() < grace->vStaffIdx()) {
+                    offset -= crossCorrection;
+                } else {
+                    offset += crossCorrection;
+                }
+            }
+        }
+        _shape.add(graceShape.translated(mu::PointF(offset, 0.0)));
+        double xpos = offset - parent()->rxoffset() - parent()->xpos();
+        grace->setPos(xpos, 0.0);
     }
+    double xPos = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->staffIdx()), score());
+    // If the parent chord is cross-staff, also check against shape in the other staff and take the minimum
+    if (_parent->staffMove() != 0) {
+        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->vStaffIdx()), score());
+        xPos = std::min(xPos, xPosCross);
+    }
+    // Same if the grace note itself is cross-staff
+    Chord* firstGN = this->back();
+    if (firstGN->staffMove() != 0) {
+        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(firstGN->vStaffIdx()), score());
+        xPos = std::min(xPos, xPosCross);
+    }
+    // Safety net in case the shape checks don't succeed
+    xPos = std::min(xPos, -double(score()->styleMM(Sid::graceToMainNoteDist) + firstGN->notes().front()->headWidth() / 2));
+    setPos(xPos, 0.0);
 }
 
 void GraceNotesGroup::setPos(double x, double y)
 {
+    doSetPos(x, y);
     for (unsigned i = 0; i < this->size(); ++i) {
         Chord* chord = this->at(i);
         chord->movePos(PointF(x, y));

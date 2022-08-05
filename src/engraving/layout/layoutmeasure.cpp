@@ -827,6 +827,8 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         s.createShapes();
     }
 
+    LayoutChords::updateGraceNotes(measure);
+
     measure->computeTicks(); // Must be called *after* Segment::createShapes() because it relies on the
     // Segment::visible() property, which is determined by Segment::createShapes().
 

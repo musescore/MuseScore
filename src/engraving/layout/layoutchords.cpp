@@ -1190,22 +1190,34 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
 void LayoutChords::updateGraceNotes(Measure* measure)
 {
     Score* score = measure->score();
-    for (Segment& s : measure->segments()) { // Clean everything
+    // Clean everything
+    for (Segment& s : measure->segments()) {
         for (unsigned track = 0; track < score->staves().size() * VOICES; ++track) {
-            EngravingItem* item = s.preAppendedItem(track);
-            if (item && item->isGraceNotesGroup()) {
+            EngravingItem* e = s.preAppendedItem(track);
+            if (e && e->isGraceNotesGroup()) {
                 s.clearPreAppended(track);
+                s.createShape(track2staff(track));
             }
         }
     }
-
-    for (Segment& s : measure->segments()) { // Attach grace notes to appropriate segment
+    // Append grace notes to appropriate segment
+    for (Segment& s : measure->segments()) {
         if (!s.isChordRestType()) {
             continue;
         }
         for (auto el : s.elist()) {
-            if (el && el->isChord()) {
+            if (el && el->isChord() && !toChord(el)->graceNotes().empty()) {
                 appendGraceNotes(toChord(el));
+            }
+        }
+    }
+    // Layout grace note groups
+    for (Segment& s : measure->segments()) {
+        for (unsigned track = 0; track < score->staves().size() * VOICES; ++track) {
+            EngravingItem* e = s.preAppendedItem(track);
+            if (e && e->isGraceNotesGroup()) {
+                toGraceNotesGroup(e)->layout();
+                s.createShape(track2staff(track));
             }
         }
     }
@@ -1229,9 +1241,9 @@ void LayoutChords::appendGraceNotes(Chord* chord)
             GraceNotesGroup* gng = toGraceNotesGroup(item);
             gng->insert(gng->end(), gnb.begin(), gnb.end());
         } else {
+            gnb.setAppendedSegment(segment);
             segment->preAppend(&gnb, static_cast<int>(track));
         }
-        segment->createShape(staffIdx);
     }
 
     //Attach graceNotesAfter of this chord to the *following* segment
@@ -1242,8 +1254,8 @@ void LayoutChords::appendGraceNotes(Chord* chord)
             followingSeg = followingSeg->next();
         }
         if (followingSeg) {
+            gna.setAppendedSegment(followingSeg);
             followingSeg->preAppend(&gna, static_cast<int>(track));
-            followingSeg->createShape(staffIdx);
         }
     }
 }
@@ -1263,7 +1275,7 @@ void LayoutChords::repositionGraceNotesAfter(Segment* segment)
         for (Chord* chord : *gng) {
             double offset = segment->xpos() - chord->parentItem()->parentItem()->xpos();
             // Difference between the segment they "belong" and the segment they are "appended" to.
-            chord->setPos(chord->pos().x() + offset, 0.0);
+            chord->setPos(chord->xpos() + offset, 0.0);
         }
     }
 }
