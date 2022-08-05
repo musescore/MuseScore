@@ -186,12 +186,15 @@ void PlaybackModel::triggerEventsForItem(const EngravingItem* item)
         return;
     }
 
+    constexpr timestamp_t actualTimestamp = 0;
+    duration_t actualDuration = MScore::defaultPlayDuration;
+
     if (item->isHarmony()) {
         const Harmony* chordSymbol = toHarmony(item);
 
         if (chordSymbol->isRealizable()) {
             PlaybackEventsMap result;
-            m_renderer.renderChordSymbol(chordSymbol, 0 /*ticksPositionOffset*/, result);
+            m_renderer.renderChordSymbol(chordSymbol, actualTimestamp, actualDuration, result);
             trackPlaybackData->second.offStream.send(std::move(result));
         }
 
@@ -199,8 +202,6 @@ void PlaybackModel::triggerEventsForItem(const EngravingItem* item)
     }
 
     int utick = repeatList().tick2utick(item->tick().ticks());
-    timestamp_t actualTimestamp = 0;
-    duration_t actualDuration = MScore::defaultPlayDuration;
     dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
 
     const PlaybackContext& ctx = m_playbackCtxMap[trackId];
