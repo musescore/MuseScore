@@ -26,7 +26,7 @@
 #include <QSize>
 
 #include "modularity/imoduleexport.h"
-
+#include "shortcuts/shortcutstypes.h"
 #include "types/retval.h"
 #include "io/path.h"
 

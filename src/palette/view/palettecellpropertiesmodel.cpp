@@ -37,14 +37,22 @@ void PaletteCellPropertiesModel::load(const QVariant& properties)
     m_originConfig.yOffset = map["yOffset"].toDouble();
     m_originConfig.scale = map["scale"].toDouble();
     m_originConfig.drawStaff = map["drawStaff"].toBool();
+    m_originConfig.shortcut.action = map["shortcutCode"].toString().toStdString();
+    m_originConfig.shortcut.context = map["shortcutCtx"].toString().toStdString();
+    m_originConfig.shortcut.sequences = mu::shortcuts::Shortcut::sequencesFromString(map["shortcutSeq"].toString().toStdString());
     m_currentConfig = m_originConfig;
+
+    //properties["shortcutSeq"] = QString::fromStdString(cell->shortcut.sequencesAsString());
+    //properties["shortcutCode"] = QString::fromStdString(cell->shortcut.action);
+    //properties["shortcutCtx"] = QString::fromStdString(cell->shortcut.context);
+
 
     emit propertiesChanged();
 }
 
-void PaletteCellPropertiesModel::reject()
+void PaletteCellPropertiesModel::accept()
 {
-    setConfig(m_originConfig);
+    setConfig(m_currentConfig);
 }
 
 void PaletteCellPropertiesModel::setConfig(const IPaletteConfiguration::PaletteCellConfig& config)
@@ -86,7 +94,6 @@ void PaletteCellPropertiesModel::setName(const QString& name)
     }
 
     m_currentConfig.name = name;
-    setConfig(m_currentConfig);
 }
 
 void PaletteCellPropertiesModel::setXOffset(double xOffset)
@@ -96,7 +103,6 @@ void PaletteCellPropertiesModel::setXOffset(double xOffset)
     }
 
     m_currentConfig.xOffset = xOffset;
-    setConfig(m_currentConfig);
 }
 
 void PaletteCellPropertiesModel::setYOffset(double yOffset)
@@ -106,7 +112,6 @@ void PaletteCellPropertiesModel::setYOffset(double yOffset)
     }
 
     m_currentConfig.yOffset = yOffset;
-    setConfig(m_currentConfig);
 }
 
 void PaletteCellPropertiesModel::setScaleFactor(double scale)
@@ -116,7 +121,6 @@ void PaletteCellPropertiesModel::setScaleFactor(double scale)
     }
 
     m_currentConfig.scale = scale;
-    setConfig(m_currentConfig);
 }
 
 void PaletteCellPropertiesModel::setDrawStaff(bool drawStaff)
@@ -126,5 +130,4 @@ void PaletteCellPropertiesModel::setDrawStaff(bool drawStaff)
     }
 
     m_currentConfig.drawStaff = drawStaff;
-    setConfig(m_currentConfig);
 }

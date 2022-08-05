@@ -564,6 +564,9 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
     properties["yOffset"] = cell->yoffset;
     properties["scale"] = cell->mag;
     properties["drawStaff"] = cell->drawStaff;
+    properties["shortcutSeq"] = QString::fromStdString(cell->shortcut.sequencesAsString());
+    properties["shortcutCode"] = QString::fromStdString(cell->shortcut.action);
+    properties["shortcutCtx"] = QString::fromStdString(cell->shortcut.context);
 
     QJsonDocument document = QJsonDocument::fromVariant(properties);
     QString uri = QString("musescore://palette/cellproperties?sync=true&properties=%1")
@@ -683,8 +686,9 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
             bool writeRequired = cell->name != config.name || cell->mag != config.scale || cell->drawStaff != config.drawStaff
                                  || cell->xoffset != config.xOffset || cell->yoffset != config.yOffset || cell->shortcut != config.shortcut;
 
-            if (!writeRequired)
+            if (!writeRequired) {
                 return;
+            }
 
             cell->name = config.name;
             cell->mag = config.scale;

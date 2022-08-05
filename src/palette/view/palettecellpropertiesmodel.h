@@ -29,6 +29,7 @@
 
 #include "ipaletteconfiguration.h"
 
+
 namespace mu::palette {
 class PaletteCellPropertiesModel : public QObject
 {
@@ -50,7 +51,7 @@ public:
     bool drawStaff() const;
 
     Q_INVOKABLE void load(const QVariant& properties);
-    Q_INVOKABLE void reject();
+    Q_INVOKABLE void accept();
 
 public slots:
     void setName(const QString& name);
