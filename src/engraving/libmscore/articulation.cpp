@@ -205,7 +205,7 @@ bool Articulation::readProperties(XmlReader& e)
     } else if (tag == "play") {
         setPlayArticulation(e.readBool());
     } else if (tag == "offset") {
-        if (score()->mscVersion() > 114) {
+        if (score()->mscVersion() >= 400) {
             EngravingItem::readProperties(e);
         } else {
             e.skipCurrentElement();       // ignore manual layout in older scores
