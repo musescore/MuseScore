@@ -99,22 +99,21 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timest
 void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
                                                const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const
 {
-    const Score* score = chordSymbol->score();
-
-    int positionTick = chordSymbol->tick().ticks() + ticksPositionOffset;
-    BeatsPerSecond bps = score->tempomap()->tempo(positionTick);
-
     const RealizedHarmony& realized = chordSymbol->getRealizedHarmony();
     const RealizedHarmony::PitchMap& notes = realized.notes();
 
-    static ArticulationMap emptyArticulations;
+    const Score* score = chordSymbol->score();
+    int positionTick = chordSymbol->tick().ticks() + ticksPositionOffset;
 
     timestamp_t eventTimestamp = timestampFromTicks(score, positionTick);
     PlaybackEventList& events = result[eventTimestamp];
 
     int durationTicks = realized.getActualDuration(positionTick).ticks();
+    BeatsPerSecond bps = score->tempomap()->tempo(positionTick);
     duration_t duration = durationFromTicks(bps.val, durationTicks);
+
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
+    static ArticulationMap emptyArticulations;
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int octave = playingOctave(it->first, it->second);
@@ -122,6 +121,30 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
 
         events.emplace_back(mpe::NoteEvent(eventTimestamp,
                                            duration,
+                                           voiceIdx,
+                                           pitchLevel,
+                                           dynamicLevelFromType(mpe::DynamicType::Natural),
+                                           emptyArticulations));
+    }
+}
+
+void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const mpe::timestamp_t actualTimestamp,
+                                               const mpe::duration_t actualDuration, mpe::PlaybackEventsMap& result) const
+{
+    const RealizedHarmony& realized = chordSymbol->getRealizedHarmony();
+    const RealizedHarmony::PitchMap& notes = realized.notes();
+
+    PlaybackEventList& events = result[actualTimestamp];
+
+    voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
+    static ArticulationMap emptyArticulations;
+
+    for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
+        int octave = playingOctave(it->first, it->second);
+        pitch_level_t pitchLevel = notePitchLevel(it->second, octave);
+
+        events.emplace_back(mpe::NoteEvent(actualTimestamp,
+                                           actualDuration,
                                            voiceIdx,
                                            pitchLevel,
                                            dynamicLevelFromType(mpe::DynamicType::Natural),
