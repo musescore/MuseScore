@@ -19,18 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "audiooutputcontroller.h"
+#include "audiooutputdevicecontroller.h"
+
+#include "async/async.h"
+
+#include "worker/audioengine.h"
 
 #include "log.h"
 
 using namespace mu::audio;
 
-void AudioOutputController::init()
+void AudioOutputDeviceController::init()
 {
-    AudioDeviceID preferredDeviceId = configuration()->audioOutputDeviceId();
-    if (!preferredDeviceId.empty()) {
-        audioDriver()->selectOutputDevice(configuration()->audioOutputDeviceId());
-    }
+    checkConnection();
 
     audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
         checkConnection();
@@ -40,9 +41,19 @@ void AudioOutputController::init()
         AudioDeviceID deviceId = configuration()->audioOutputDeviceId();
         audioDriver()->selectOutputDevice(deviceId);
     });
+
+    configuration()->driverBufferSizeChanged().onNotify(this, [this]() {
+        unsigned int bufferSize = configuration()->driverBufferSize();
+        bool ok = audioDriver()->setOutputDeviceBufferSize(bufferSize);
+        if (ok) {
+            async::Async::call(this, [bufferSize](){
+                AudioEngine::instance()->setReadBufferSize(bufferSize);
+            }, AudioThread::ID);
+        }
+    });
 }
 
-void AudioOutputController::checkConnection()
+void AudioOutputDeviceController::checkConnection()
 {
     auto containsDevice = [](const AudioDeviceList& devices, const AudioDeviceID& deviceId) {
         for (const AudioDevice& device : devices) {

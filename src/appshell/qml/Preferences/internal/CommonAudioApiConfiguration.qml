@@ -65,26 +65,22 @@ Item {
             }
         }
 
-        /*
-         * TODO: https://github.com/musescore/MuseScore/issues/9807
         ComboBoxWithTitle {
-            id: sampleRate
+            id: bufferSize
 
-            title: qsTrc("appshell/preferences", "Sample rate:")
+            title: qsTrc("appshell", "Buffer size:")
             columnWidth: root.columnWidth
 
-            currentIndex: apiModel.currentSampleRateIndex
-            model: apiModel.sampleRateHzList()
-            control.displayText: currentValue
+            currentIndex: indexOfValue(apiModel.bufferSize)
+            model: apiModel.bufferSizeList
 
-            navigation.name: "SampleRateBox"
+            navigation.name: "BufferSizeBox"
             navigation.panel: root.navigation
             navigation.row: root.navigationOrderStart + 1
 
             onValueEdited: function(newIndex, newValue) {
-                apiModel.currentSampleRateIndex = newIndex
+                apiModel.bufferSizeSelected(newValue)
             }
         }
-        */
     }
 }

@@ -48,7 +48,14 @@ public:
     virtual async::Notification audioOutputDeviceIdChanged() const = 0;
 
     virtual audioch_t audioChannelsCount() const = 0;
+
     virtual unsigned int driverBufferSize() const = 0; // samples
+    virtual void setDriverBufferSize(unsigned int size) = 0;
+    virtual async::Notification driverBufferSizeChanged() const = 0;
+
+    virtual unsigned int sampleRate() const = 0;
+    virtual void setSampleRate(unsigned int sampleRate) = 0;
+    virtual async::Notification sampleRateChanged() const = 0;
 
     // synthesizers
     virtual AudioInputParams defaultAudioInputParams() const = 0;

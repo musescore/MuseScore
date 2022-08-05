@@ -47,7 +47,7 @@ void Playback::init()
     m_audioOutputPtr = std::make_shared<AudioOutputHandler>(this);
 }
 
-void Playback::deInit()
+void Playback::deinit()
 {
     ONLY_AUDIO_WORKER_THREAD;
 

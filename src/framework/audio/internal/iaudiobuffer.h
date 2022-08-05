@@ -23,7 +23,7 @@
 #define MU_AUDIO_IAUDIOBUFFER_H
 
 #include <memory>
-#include "iaudiosource.h"
+#include "../iaudiosource.h"
 
 namespace mu::audio {
 class IAudioBuffer

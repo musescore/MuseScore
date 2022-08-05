@@ -73,6 +73,12 @@ public:
     virtual AudioDeviceList availableOutputDevices() const = 0;
     virtual async::Notification availableOutputDevicesChanged() const = 0;
 
+    virtual unsigned int outputDeviceBufferSize() const = 0;
+    virtual bool setOutputDeviceBufferSize(unsigned int bufferSize) = 0;
+    virtual async::Notification outputDeviceBufferSizeChanged() const = 0;
+
+    virtual std::vector<unsigned int> availableOutputDeviceBufferSizes() const = 0;
+
     virtual void resume() = 0;
     virtual void suspend() = 0;
 };
