@@ -51,6 +51,11 @@ struct Shortcut
         return action == sc.action && sequences == sc.sequences && standardKey == sc.standardKey;
     }
 
+    bool operator !=(const Shortcut& sc) const
+    {
+        return !(*this == sc);
+    }
+
     std::string sequencesAsString() const { return sequencesToString(sequences); }
 
     static std::string sequencesToString(const std::vector<std::string>& seqs)
