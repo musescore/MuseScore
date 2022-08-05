@@ -203,12 +203,8 @@ mu::engraving::InstrumentTrackId PlaybackController::instrumentTrackIdForAudioTr
     return {};
 }
 
-void PlaybackController::playElement(const notation::EngravingItem* element)
+void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements)
 {
-    IF_ASSERT_FAILED(element) {
-        return;
-    }
-
     IF_ASSERT_FAILED(notationPlayback()) {
         return;
     }
@@ -217,15 +213,25 @@ void PlaybackController::playElement(const notation::EngravingItem* element)
         return;
     }
 
-    if (element->isChord() && !configuration()->playChordWhenEditing()) {
-        return;
+    std::vector<const notation::EngravingItem*> elementsForPlaying;
+
+    for (const EngravingItem* element : elements) {
+        IF_ASSERT_FAILED(element) {
+            continue;
+        }
+
+        if (element->isChord() && !configuration()->playChordWhenEditing()) {
+            continue;
+        }
+
+        if (element->isHarmony() && !configuration()->playHarmonyWhenEditing()) {
+            continue;
+        }
+
+        elementsForPlaying.push_back(element);
     }
 
-    if (element->isHarmony() && !configuration()->playHarmonyWhenEditing()) {
-        return;
-    }
-
-    notationPlayback()->triggerEventsForItem(element);
+    notationPlayback()->triggerEventsForItems(elementsForPlaying);
 }
 
 void PlaybackController::seekElement(const notation::EngravingItem* element)

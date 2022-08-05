@@ -1566,7 +1566,7 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
     } else if (element->isHarmony()) {
         const Harmony* chordSymbol = editedChordSymbol();
         currentNotationInteraction()->navigateToNearHarmony(direction, nearNoteOrRest);
-        playbackController()->playElement(chordSymbol);
+        playbackController()->playElements({ chordSymbol });
     } else if (element->isFiguredBass()) {
         currentNotationInteraction()->navigateToNearFiguredBass(direction);
     } else {
@@ -1584,7 +1584,7 @@ void NotationActionController::navigateToTextElementByFraction(const Fraction& f
     if (element->isHarmony()) {
         const Harmony* chordSymbol = editedChordSymbol();
         currentNotationInteraction()->navigateToHarmony(fraction);
-        playbackController()->playElement(chordSymbol);
+        playbackController()->playElements({ chordSymbol });
     } else if (element->isFiguredBass()) {
         currentNotationInteraction()->navigateToFiguredBass(fraction);
     }
@@ -1600,7 +1600,7 @@ void NotationActionController::navigateToTextElementInNearMeasure(MoveDirection 
     if (element->isHarmony()) {
         const Harmony* chordSymbol = editedChordSymbol();
         currentNotationInteraction()->navigateToHarmonyInNearMeasure(direction);
-        playbackController()->playElement(chordSymbol);
+        playbackController()->playElements({ chordSymbol });
     } else if (element->isFiguredBass()) {
         currentNotationInteraction()->navigateToFiguredBassInNearMeasure(direction);
     }
@@ -1738,7 +1738,7 @@ void NotationActionController::playSelectedElement(bool playChord)
         element = element->elementBase();
     }
 
-    playbackController()->playElement(element);
+    playbackController()->playElements({ element });
 }
 
 void NotationActionController::startNoteInputIfNeed()

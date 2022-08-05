@@ -75,7 +75,7 @@ public:
 
     engraving::InstrumentTrackId instrumentTrackIdForAudioTrackId(audio::TrackId trackId) const override;
 
-    void playElement(const notation::EngravingItem* element) override;
+    void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void seekElement(const notation::EngravingItem* element) override;
 
     bool actionChecked(const actions::ActionCode& actionCode) const override;

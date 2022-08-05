@@ -19,43 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_COREMIDIINPORT_H
-#define MU_MIDI_COREMIDIINPORT_H
+#ifndef MU_MIDI_ABSTRACTMIDIINPORT_H
+#define MU_MIDI_ABSTRACTMIDIINPORT_H
 
-#include <memory>
+#include <QTimer>
 
-#include "../../abstractmidiinport.h"
+#include "async/asyncable.h"
+
+#include "imidiinport.h"
 
 namespace mu::midi {
-class CoreMidiInPort : public AbstractMidiInPort
+class AbstractMidiInPort : public IMidiInPort, public async::Asyncable
 {
 public:
-    CoreMidiInPort();
-    ~CoreMidiInPort() override;
+    virtual void init();
 
-    void init() override;
+    async::Channel<std::vector<std::pair<tick_t, Event> > > eventsReceived() const override;
 
-    MidiDeviceList devices() const override;
-    async::Notification devicesChanged() const override;
-
-    Ret connect(const MidiDeviceID& deviceID) override;
-    void disconnect() override;
-    bool isConnected() const override;
-    MidiDeviceID deviceID() const override;
+protected:
+    void doEventsRecived(const std::vector<std::pair<tick_t, Event> >& events);
 
 private:
-    Ret run();
-    void stop();
+    void doProcessEvents();
 
-    void initCore();
+    async::Channel<std::vector<std::pair<tick_t, Event> > > m_eventReceived;
 
-    struct Core;
-    std::unique_ptr<Core> m_core;
-    MidiDeviceID m_deviceID;
-    async::Notification m_devicesChanged;
+    QTimer m_processTimer;
+    std::vector<std::pair<tick_t, Event> > m_eventsQueue;
 
-    bool m_running = false;
+    std::thread::id m_mainThreadID;
 };
 }
 
-#endif // MU_MIDI_COREMIDIINPORT_H
+#endif // MU_MIDI_ABSTRACTMIDIINPORT_H
