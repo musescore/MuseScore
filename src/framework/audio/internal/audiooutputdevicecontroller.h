@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_AUDIOOUTPUTCONTROLLER_H
-#define MU_NOTATION_AUDIOOUTPUTCONTROLLER_H
+#ifndef MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H
+#define MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H
 
 #include "async/asyncable.h"
 
@@ -29,7 +29,7 @@
 #include "../iaudiodriver.h"
 
 namespace mu::audio {
-class AudioOutputController : public async::Asyncable
+class AudioOutputDeviceController : public async::Asyncable
 {
     INJECT(audio, IAudioConfiguration, configuration)
     INJECT(audio, IAudioDriver, audioDriver)
@@ -44,4 +44,4 @@ private:
 };
 }
 
-#endif // MU_NOTATION_AUDIOOUTPUTCONTROLLER_H
+#endif // MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H

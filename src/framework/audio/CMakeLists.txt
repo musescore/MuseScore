@@ -90,8 +90,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiodeviceslistener.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiodeviceslistener.h
 
