@@ -169,10 +169,10 @@ class TrackMixerChannelItem : public MixerChannelItem
     Q_PROPERTY(InputResourceItem * inputResourceItem READ inputResourceItem NOTIFY inputResourceItemChanged)
 
 public:
-    explicit TrackMixerChannelItem(QObject* parent, audio::TrackId trackId, engraving::InstrumentTrackId instrumentTrackId,
+    explicit TrackMixerChannelItem(QObject* parent, audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
                                    bool isPrimary = true);
 
-    engraving::InstrumentTrackId instrumentTrackId() const;
+    const engraving::InstrumentTrackId& instrumentTrackId() const;
 
     void loadInputParams(audio::AudioInputParams&& newParams);
 

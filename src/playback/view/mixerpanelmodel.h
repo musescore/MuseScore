@@ -66,15 +66,15 @@ private:
     };
 
     void loadItems();
-    void addItem(const audio::TrackId trackId, const engraving::InstrumentTrackId instrumentTrackId);
+    void addItem(const audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId);
     void removeItem(const audio::TrackId trackId);
     void updateItemsPanelsOrder();
     void clear();
 
-    int resolveInsertIndex(const engraving::InstrumentTrackId instrumentTrackId) const;
+    int resolveInsertIndex(const engraving::InstrumentTrackId& instrumentTrackId) const;
     int indexOf(const audio::TrackId trackId) const;
 
-    MixerChannelItem* buildTrackChannelItem(const audio::TrackId trackId, const engraving::InstrumentTrackId instrumentTrackId,
+    MixerChannelItem* buildTrackChannelItem(const audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
                                             bool isPrimary = true);
     MixerChannelItem* buildMasterChannelItem();
 
