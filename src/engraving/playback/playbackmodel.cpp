@@ -190,6 +190,10 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     PlaybackEventsMap result;
 
+    constexpr timestamp_t actualTimestamp = 0;
+    constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
+    duration_t actualDuration = MScore::defaultPlayDuration;
+
     for (const EngravingItem* item : items) {
         IF_ASSERT_FAILED(item) {
             continue;
@@ -199,30 +203,24 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
             continue;
         }
 
-        constexpr timestamp_t actualTimestamp = 0;
-        duration_t actualDuration = MScore::defaultPlayDuration;
-
         if (item->isHarmony()) {
             const Harmony* chordSymbol = toHarmony(item);
 
             if (chordSymbol->isRealizable()) {
-                PlaybackEventsMap result;
                 m_renderer.renderChordSymbol(chordSymbol, actualTimestamp, actualDuration, result);
             }
 
             continue;
         }
 
-        int utick = repeatList().tick2utick(item->tick().ticks());
-        dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
-
-        const PlaybackContext& ctx = m_playbackCtxMap[trackId];
-
         ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
         if (!profile) {
             LOGE() << "unsupported instrument family: " << trackId.partId.toUint64();
             return;
         }
+
+        int utick = repeatList().tick2utick(item->tick().ticks());
+        const PlaybackContext& ctx = m_playbackCtxMap[trackId];
 
         m_renderer.render(item, actualTimestamp, actualDuration, actualDynamicLevel, ctx.persistentArticulationType(utick), profile,
                           result);
