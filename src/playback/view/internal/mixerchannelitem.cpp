@@ -433,14 +433,14 @@ const QList<OutputResourceItem*>& MixerChannelItem::outputResourceItemList() con
 // TrackMixerChannelItem
 //================================
 
-TrackMixerChannelItem::TrackMixerChannelItem(QObject* parent, audio::TrackId trackId, engraving::InstrumentTrackId instrumentTrackId,
+TrackMixerChannelItem::TrackMixerChannelItem(QObject* parent, audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
                                              bool isPrimary)
     : MixerChannelItem(parent, trackId, isPrimary), m_instrumentTrackId(instrumentTrackId)
 {
     m_inputResourceItem = buildInputResourceItem();
 }
 
-mu::engraving::InstrumentTrackId TrackMixerChannelItem::instrumentTrackId() const
+const mu::engraving::InstrumentTrackId& TrackMixerChannelItem::instrumentTrackId() const
 {
     return m_instrumentTrackId;
 }
