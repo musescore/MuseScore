@@ -234,7 +234,10 @@ void Fermata::layout()
     EngravingItem* e = s->element(track());
     if (e) {
         if (e->isChord()) {
-            movePosX(score()->noteHeadWidth() * staff()->staffMag(Fraction(0, 1)) * .5 + toChord(e)->pos().x());
+            Chord* chord = toChord(e);
+            Note* note = chord->up() ? chord->downNote() : chord->upNote();
+            double offset = chord->xpos() + note->xpos() + note->headWidth() / 2;
+            movePosX(offset);
         } else {
             movePosX(e->x() + e->width() * staff()->staffMag(Fraction(0, 1)) * .5);
         }
