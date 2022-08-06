@@ -76,6 +76,8 @@ public:
         double scale = 0;
         bool drawStaff = false;
         mu::shortcuts::Shortcut shortcut = mu::shortcuts::Shortcut();
+
+        bool writeToFile = true;
     };
 
     virtual ValCh<PaletteConfig> paletteConfig(const QString& paletteId) const = 0;

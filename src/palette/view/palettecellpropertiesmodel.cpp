@@ -21,7 +21,7 @@
  */
 
 #include "palettecellpropertiesmodel.h"
-
+#include "log.h"
 #include <QJsonDocument>
 
 using namespace mu::palette;
@@ -41,17 +41,20 @@ void PaletteCellPropertiesModel::load(const QVariant& properties)
     m_originConfig.shortcut.context = map["shortcutCtx"].toString().toStdString();
     m_originConfig.shortcut.sequences = mu::shortcuts::Shortcut::sequencesFromString(map["shortcutSeq"].toString().toStdString());
     m_currentConfig = m_originConfig;
-
-    //properties["shortcutSeq"] = QString::fromStdString(cell->shortcut.sequencesAsString());
-    //properties["shortcutCode"] = QString::fromStdString(cell->shortcut.action);
-    //properties["shortcutCtx"] = QString::fromStdString(cell->shortcut.context);
-
+    m_currentConfig.writeToFile = false;
 
     emit propertiesChanged();
 }
 
+void PaletteCellPropertiesModel::reject()
+{
+    setConfig(m_originConfig);
+}
+
 void PaletteCellPropertiesModel::accept()
 {
+    m_currentConfig.writeToFile = true;
+    LOGE() << "Setting config?";
     setConfig(m_currentConfig);
 }
 
@@ -94,6 +97,8 @@ void PaletteCellPropertiesModel::setName(const QString& name)
     }
 
     m_currentConfig.name = name;
+    setConfig(m_currentConfig);
+
 }
 
 void PaletteCellPropertiesModel::setXOffset(double xOffset)
@@ -103,6 +108,7 @@ void PaletteCellPropertiesModel::setXOffset(double xOffset)
     }
 
     m_currentConfig.xOffset = xOffset;
+    setConfig(m_currentConfig);
 }
 
 void PaletteCellPropertiesModel::setYOffset(double yOffset)
@@ -112,6 +118,7 @@ void PaletteCellPropertiesModel::setYOffset(double yOffset)
     }
 
     m_currentConfig.yOffset = yOffset;
+    setConfig(m_currentConfig);
 }
 
 void PaletteCellPropertiesModel::setScaleFactor(double scale)
@@ -121,6 +128,7 @@ void PaletteCellPropertiesModel::setScaleFactor(double scale)
     }
 
     m_currentConfig.scale = scale;
+    setConfig(m_currentConfig);
 }
 
 void PaletteCellPropertiesModel::setDrawStaff(bool drawStaff)
@@ -130,4 +138,5 @@ void PaletteCellPropertiesModel::setDrawStaff(bool drawStaff)
     }
 
     m_currentConfig.drawStaff = drawStaff;
+    setConfig(m_currentConfig);
 }

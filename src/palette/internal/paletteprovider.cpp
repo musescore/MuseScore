@@ -547,15 +547,27 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
         return;
     }
 
-    //configuration()->paletteCellConfig(cell->id).ch.resetOnReceive(this);
-    //configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
-    //                                                          [this, srcIndex, cell](
-    //                                                              const IPaletteConfiguration::PaletteCellConfig& config) {
-    //    modifyCellfromConfig(cell, config);
-    //    LOGE() << "Editing OnReceive for ID: " + cell->id;
-    //    _userPalette->itemDataChanged(srcIndex);
-    //    _userPalette->itemDataChanged(srcIndex.parent());
-    //});
+    configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
+                                                              [this, cell, srcIndex](
+                                                                  const IPaletteConfiguration::PaletteCellConfig& config) {
+        bool writeRequired = cell->name != config.name || cell->mag != config.scale || cell->drawStaff != config.drawStaff
+                             || cell->xoffset != config.xOffset || cell->yoffset != config.yOffset || cell->shortcut != config.shortcut;
+
+        if (!writeRequired) {
+            _userPalette->itemDataChanged(srcIndex);
+            //_userPalette->itemDataChanged(srcIndex.parent());
+            return;
+        }
+
+        cell->name = config.name;
+        cell->mag = config.scale;
+        cell->drawStaff = config.drawStaff;
+        cell->xoffset = config.xOffset;
+        cell->yoffset = config.yOffset;
+        cell->shortcut = config.shortcut;
+        _userPalette->itemDataChanged(srcIndex);
+        //_userPalette->itemDataChanged(srcIndex.parent());
+    });
 
     QVariantMap properties;
     properties["cellId"] = cell->id;
@@ -684,7 +696,7 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
                                                                   [this, cell](
                                                                       const IPaletteConfiguration::PaletteCellConfig& config) {
             bool writeRequired = cell->name != config.name || cell->mag != config.scale || cell->drawStaff != config.drawStaff
-                                 || cell->xoffset != config.xOffset || cell->yoffset != config.yOffset || cell->shortcut != config.shortcut;
+                                 || cell->xoffset != config.xOffset || cell->yoffset != config.yOffset || cell->shortcut != config.shortcut || config.writeToFile;
 
             if (!writeRequired) {
                 return;
@@ -697,18 +709,20 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
             cell->yoffset = config.yOffset;
             cell->shortcut = config.shortcut;
 
-            LOGE() << "Initial OnReceive for ID: " + cell->id;
+            LOGE() << "Initial OnReceive for ID: " + cell->id + " with writeToFile: " << config.writeToFile;
+            if (config.writeToFile) {
+                LOGE() << "Why is this running?";
+                PaletteTreePtr tree = userPaletteTree();
 
-            PaletteTreePtr tree = userPaletteTree();
+                Buffer buf;
+                buf.open(IODevice::WriteOnly);
 
-            Buffer buf;
-            buf.open(IODevice::WriteOnly);
+                mu::engraving::XmlWriter writer(&buf);
+                tree->write(writer);
 
-            mu::engraving::XmlWriter writer(&buf);
-            tree->write(writer);
-
-            QByteArray newData = buf.data().toQByteArray();
-            workspacesDataProvider()->setRawData(mu::workspace::DataKey::Palettes, newData);
+                QByteArray newData = buf.data().toQByteArray();
+                workspacesDataProvider()->setRawData(mu::workspace::DataKey::Palettes, newData);
+            }
         });
         QString ac_name = cell->action;
         ctr++;

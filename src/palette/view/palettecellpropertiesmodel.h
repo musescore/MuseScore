@@ -52,6 +52,7 @@ public:
 
     Q_INVOKABLE void load(const QVariant& properties);
     Q_INVOKABLE void accept();
+    Q_INVOKABLE void reject();
 
 public slots:
     void setName(const QString& name);
