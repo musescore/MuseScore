@@ -68,7 +68,7 @@ void GlobalModule::registerExports()
     ioc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
 }
 
-void GlobalModule::onInit(const IApplication::RunMode& mode)
+void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 {
     mu::runtime::mainThreadId(); //! NOTE Needs only call
     mu::runtime::setThreadName("main");
