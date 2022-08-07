@@ -45,7 +45,7 @@ void LanguagesModule::registerExports()
     ioc()->registerExport<ILanguagesService>(moduleName(), s_languagesService);
 }
 
-void LanguagesModule::onInit(const framework::IApplication::RunMode& mode)
+void LanguagesModule::onPreInit(const framework::IApplication::RunMode& mode)
 {
     //! NOTE: configurator must be initialized before any service that uses it
     s_languagesConfiguration->init();
