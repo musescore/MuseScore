@@ -178,7 +178,7 @@ QT_TRANSLATE_NOOP("engraving/instruments/family", "Bass Guitars"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Banjos"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Ukuleles"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Mandolins"),
-QT_TRANSLATE_NOOP("engraving/instruments/family", "Mtn Dulcimers"),
+QT_TRANSLATE_NOOP("engraving/instruments/family", "Mtn. Dulcimers"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Lutes"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Balalaikas"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Bouzoukis"),
@@ -435,15 +435,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Shakuhachi", "shakuhachi longName")
 //: shortName for Shakuhachi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Shak.", "shakuhachi shortName"),
 
-//: description for B♭ Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Fife pitched in B♭ (when all 6 holes are covered), notated in A♭, sounding a minor sixth higher than written.", "fife description"),
-//: trackName for B♭ Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "B♭ Fife", "fife trackName"),
-//: longName for B♭ Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Fife", "fife trackName"),
+//: longName for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "B♭ Fife", "fife longName"),
-//: shortName for B♭ Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: shortName for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "B♭ Fife", "fife shortName"),
-//: traitName for B♭ Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "B♭", "fife traitName"),
 
 //: description for Tin Whistle; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -1850,149 +1850,149 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Harmonica", "harmonica longName"),
 //: shortName for Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica shortName"),
 
-//: description for 10 Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "10-hole diatonic harmonica pitched in high G.", "harmonica-d10high-g description"),
-//: trackName for 10 Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole Diatonic Harmonica", "harmonica-d10high-g trackName"),
-//: longName for 10 Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole High G Diatonic Harmonica", "harmonica-d10high-g longName"),
-//: shortName for 10 Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole Diatonic Harmonica", "harmonica-d10high-g trackName"),
+//: longName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole High G Diatonic Harmonica", "harmonica-d10high-g longName"),
+//: shortName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-d10high-g shortName"),
-//: traitName for 10 Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "High G", "harmonica-d10high-g traitName"),
 
-//: description for 10 Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10-hole diatonic harmonic pitched in F.", "harmonica-d10f description"),
-//: trackName for 10 Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole Diatonic Harmonica", "harmonica-d10f trackName"),
-//: longName for 10 Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole F Diatonic Harmonica", "harmonica-d10f longName"),
-//: shortName for 10 Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-hole diatonic harmonica pitched in F.", "harmonica-d10f description"),
+//: trackName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole Diatonic Harmonica", "harmonica-d10f trackName"),
+//: longName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole F Diatonic Harmonica", "harmonica-d10f longName"),
+//: shortName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-d10f shortName"),
-//: traitName for 10 Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "F", "harmonica-d10f traitName"),
 
-//: description for 10 Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "10-hole diatonic harmonica pitched in D.", "harmonica-d10d description"),
-//: trackName for 10 Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole Diatonic Harmonica", "harmonica-d10d trackName"),
-//: longName for 10 Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole D Diatonic Harmonica", "harmonica-d10d longName"),
-//: shortName for 10 Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole Diatonic Harmonica", "harmonica-d10d trackName"),
+//: longName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole D Diatonic Harmonica", "harmonica-d10d longName"),
+//: shortName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-d10d shortName"),
-//: traitName for 10 Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "D", "harmonica-d10d traitName"),
 
-//: description for 10 Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "10-hole diatonic harmonica pitched in C.", "harmonica-d10c description"),
-//: trackName for 10 Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole Diatonic Harmonica", "harmonica-d10c trackName"),
-//: longName for 10 Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole C Diatonic Harmonica", "harmonica-d10c longName"),
-//: shortName for 10 Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole Diatonic Harmonica", "harmonica-d10c trackName"),
+//: longName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole C Diatonic Harmonica", "harmonica-d10c longName"),
+//: shortName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-d10c shortName"),
-//: traitName for 10 Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "*C", "harmonica-d10c traitName"),
 
-//: description for 10 Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "10-hole diatonic harmonica pitched in A.", "harmonica-d10a description"),
-//: trackName for 10 Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole Diatonic Harmonica", "harmonica-d10a trackName"),
-//: longName for 10 Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole A Diatonic Harmonica", "harmonica-d10a longName"),
-//: shortName for 10 Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole Diatonic Harmonica", "harmonica-d10a trackName"),
+//: longName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole A Diatonic Harmonica", "harmonica-d10a longName"),
+//: shortName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-d10a shortName"),
-//: traitName for 10 Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "A", "harmonica-d10a traitName"),
 
-//: description for 10 Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "10-hole diatonic harmonica pitched in G.", "harmonica-d10g description"),
-//: trackName for 10 Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole Diatonic Harmonica", "harmonica-d10g trackName"),
-//: longName for 10 Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole G Diatonic Harmonica", "harmonica-d10g longName"),
-//: shortName for 10 Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole Diatonic Harmonica", "harmonica-d10g trackName"),
+//: longName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole G Diatonic Harmonica", "harmonica-d10g longName"),
+//: shortName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-d10g shortName"),
-//: traitName for 10 Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "G", "harmonica-d10g traitName"),
 
-//: description for 10 Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "10-hole diatonic harmonica pitched in low D.", "harmonica-d10low-d description"),
-//: trackName for 10 Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole Diatonic Harmonica", "harmonica-d10low-d trackName"),
-//: longName for 10 Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "10 Hole Low D Diatonic Harmonica", "harmonica-d10low-d longName"),
-//: shortName for 10 Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole Diatonic Harmonica", "harmonica-d10low-d trackName"),
+//: longName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "10-Hole Low D Diatonic Harmonica", "harmonica-d10low-d longName"),
+//: shortName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-d10low-d shortName"),
-//: traitName for 10 Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Low D", "harmonica-d10low-d traitName"),
 
-//: description for 12 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "12-hole chromatic harmonica pitched in C.", "harmonica-c12c description"),
-//: trackName for 12 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "12 Hole Chromatic Harmonica", "harmonica-c12c trackName"),
-//: longName for 12 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "12 Hole C Chromatic Harmonica", "harmonica-c12c longName"),
-//: shortName for 12 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "12-Hole Chromatic Harmonica", "harmonica-c12c trackName"),
+//: longName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "12-Hole C Chromatic Harmonica", "harmonica-c12c longName"),
+//: shortName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-c12c shortName"),
-//: traitName for 12 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "*C", "harmonica-c12c traitName"),
 
-//: description for 12 Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "12-hole chromatic harmonica pitched in G.", "harmonica-c12g description"),
-//: trackName for 12 Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "12 Hole Chromatic Harmonica", "harmonica-c12g trackName"),
-//: longName for 12 Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "12 Hole G Chromatic Harmonica", "harmonica-c12g longName"),
-//: shortName for 12 Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "12-Hole Chromatic Harmonica", "harmonica-c12g trackName"),
+//: longName for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "12-Hole G Chromatic Harmonica", "harmonica-c12g longName"),
+//: shortName for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-c12g shortName"),
-//: traitName for 12 Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "G", "harmonica-c12g traitName"),
 
-//: description for 12 Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "12-hole chromatic tenor harmonica pitched in C.", "harmonica-c12tenor-c description"),
-//: trackName for 12 Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "12 Hole Chromatic Harmonica", "harmonica-c12tenor-c trackName"),
-//: longName for 12 Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "12 Hole Tenor C Chromatic Harmonica", "harmonica-c12tenor-c longName"),
-//: shortName for 12 Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "12-Hole Chromatic Harmonica", "harmonica-c12tenor-c trackName"),
+//: longName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "12-Hole Tenor C Chromatic Harmonica", "harmonica-c12tenor-c longName"),
+//: shortName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-c12tenor-c shortName"),
-//: traitName for 12 Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor C", "harmonica-c12tenor-c traitName"),
 
-//: description for 14 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "14-hole chromatic harmonica pitched in C.", "harmonica-c14c description"),
-//: trackName for 14 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "14 Hole Chromatic Harmonica", "harmonica-c14c trackName"),
-//: longName for 14 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "14 Hole C Chromatic Harmonica", "harmonica-c14c longName"),
-//: shortName for 14 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "14-Hole Chromatic Harmonica", "harmonica-c14c trackName"),
+//: longName for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "14-Hole C Chromatic Harmonica", "harmonica-c14c longName"),
+//: shortName for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-c14c shortName"),
-//: traitName for 14 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "*C", "harmonica-c14c traitName"),
 
-//: description for 16 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "16-hole chromatic harmonica pitched in C.", "harmonica-c16c description"),
-//: trackName for 16 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "16 Hole Chromatic Harmonica", "harmonica-c16c trackName"),
-//: longName for 16 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "16 Hole C Chromatic Harmonica", "harmonica-c16c longName"),
-//: shortName for 16 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "16-Hole Chromatic Harmonica", "harmonica-c16c trackName"),
+//: longName for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "16-Hole C Chromatic Harmonica", "harmonica-c16c longName"),
+//: shortName for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-c16c shortName"),
-//: traitName for 16 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "*C", "harmonica-c16c traitName"),
 
-//: description for 20 Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for 20-Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Huang Chordet 20-hole double harmonica.", "harmonica-chordet description"),
-//: trackName for 20 Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "20 Hole Chordet Harmonica", "harmonica-chordet trackName"),
-//: longName for 20 Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "20 Hole Chordet Harmonica", "harmonica-chordet longName"),
-//: shortName for 20 Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for 20-Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "20-Hole Chordet Harmonica", "harmonica-chordet trackName"),
+//: longName for 20-Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "20-Hole Chordet Harmonica", "harmonica-chordet longName"),
+//: shortName for 20-Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harm.", "harmonica-chordet shortName"),
 
 //: description for Bass Hohner Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Hohner 31-hole bas harmonica.", "bass-harmonica-hohner description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Hohner 31-hole bass harmonica.", "bass-harmonica-hohner description"),
 //: trackName for Bass Hohner Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bass Hohner Harmonica", "bass-harmonica-hohner trackName"),
 //: longName for Bass Hohner Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5106,7 +5106,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Electric Guitar", "electric-guitar-
 QT_TRANSLATE_NOOP3("engraving/instruments", "El. Guit.", "electric-guitar-treble-clef shortName"),
 
 //: description for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic steel-strung guitar (staff notation, with 8va bassa treble clef).", "guitar-steel description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic steel-string guitar (staff notation, with 8va bassa treble clef).", "guitar-steel description"),
 //: trackName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Guitar", "guitar-steel trackName"),
 //: longName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5121,7 +5121,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "guitar-steel channel"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "jazz", "guitar-steel channel"),
 
 //: description for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic steel-strung guitar (staff notation, with normal treble clef).", "guitar-steel-treble-clef description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic steel-string guitar (staff notation, with normal treble clef).", "guitar-steel-treble-clef description"),
 //: trackName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Guitar (treble clef)", "guitar-steel-treble-clef trackName"),
 //: longName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5130,7 +5130,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar", "guitar-steel-treble-clef 
 QT_TRANSLATE_NOOP3("engraving/instruments", "Guit.", "guitar-steel-treble-clef shortName"),
 
 //: description for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic nylon-strung guitar (staff notation, with 8va bassa treble clef).", "guitar-nylon description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic nylon-string guitar (staff notation, with 8va bassa treble clef).", "guitar-nylon description"),
 //: trackName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Classical Guitar", "guitar-nylon trackName"),
 //: longName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5143,7 +5143,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "open", "guitar-nylon channel"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "guitar-nylon channel"),
 
 //: description for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic nylon-strung guitar (staff notation, with normal treble clef).", "guitar-nylon-treble-clef description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic nylon-string guitar (staff notation, with normal treble clef).", "guitar-nylon-treble-clef description"),
 //: trackName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar (treble clef)", "guitar-nylon-treble-clef trackName"),
 //: longName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5576,7 +5576,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Mtn. Dulcimer - Bass", "mtn-dulcime
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bs. M.D.", "mtn-dulcimer-bass shortName"),
 
 //: description for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Larger version of the mountain or Appalachian dulcimer. (Tablature).", "mtn-dulcimer-bass-chrom-tab description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Tablature).", "mtn-dulcimer-bass-chrom-tab description"),
 //: trackName for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Mtn. Dulcimer - Bass (tablature)", "mtn-dulcimer-bass-chrom-tab trackName"),
 //: longName for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -6137,34 +6137,38 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Viola da gamba", "viola-da-gamba-ta
 //: shortName for Viola da gamba (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Vla. d. g.", "viola-da-gamba-tablature shortName"),
 
-//: description for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol.", "violone description"),
-//: trackName for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "G Violone", "violone trackName"),
-//: longName for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Violone", "violone trackName"),
+//: longName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "G Violone", "violone longName"),
-//: shortName for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: shortName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "G Vne.", "violone shortName"),
-//: channel for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "*G", "violone traitName"),
+//: channel for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "arco", "violone channel"),
-//: channel for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: channel for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "pizzicato", "violone channel"),
-//: channel for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: channel for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "tremolo", "violone channel"),
 
-//: description for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Large viol with the lowest string tuned to D. Sometimes called the D violone.", "d-violone description"),
-//: trackName for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "D Violone", "d-violone trackName"),
-//: longName for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Violone", "d-violone trackName"),
+//: longName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "D Violone", "d-violone longName"),
-//: shortName for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: shortName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "D Vne.", "d-violone shortName"),
-//: channel for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: traitName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "D", "d-violone traitName"),
+//: channel for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "arco", "d-violone channel"),
-//: channel for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: channel for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "pizzicato", "d-violone channel"),
-//: channel for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: channel for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "tremolo", "d-violone channel"),
 
 //: description for Octobass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
