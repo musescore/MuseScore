@@ -31,7 +31,7 @@ public:
     std::string moduleName() const override;
 
     void registerExports() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    void onPreInit(const framework::IApplication::RunMode& mode) override;
 };
 }
 
