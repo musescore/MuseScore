@@ -133,6 +133,14 @@ int AppShell::run(int argc, char** argv)
     commandLine.apply();
     framework::IApplication::RunMode runMode = muapplication()->runMode();
 
+    // ====================================================
+    // Setup modules: onPreInit
+    // ====================================================
+    globalModule.onPreInit(runMode);
+    for (mu::modularity::IModuleSetup* m : m_modules) {
+        m->onPreInit(runMode);
+    }
+
     SplashScreen splashScreen;
     if (runMode == framework::IApplication::RunMode::Editor) {
         splashScreen.show();
