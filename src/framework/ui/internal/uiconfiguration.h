@@ -40,7 +40,8 @@ class UiConfiguration : public IUiConfiguration, public async::Asyncable
     INJECT(ui, IPlatformTheme, platformTheme)
 
 public:
-    void init();
+    void initSettings();
+    void initThemes();
     void load();
     void deinit();
 
@@ -109,7 +110,6 @@ public:
     int flickableMaxVelocity() const override;
 
 private:
-    void initThemes();
     void notifyAboutCurrentThemeChanged();
     void updateCurrentTheme();
     void updateThemes();

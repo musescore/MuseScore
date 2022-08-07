@@ -35,8 +35,6 @@ class SplashScreen : public QWidget
 {
     Q_OBJECT
 
-    //! The uiConfiguration has not yet been initialized, so we can't use user settings.
-    //! We only use it for querying the default system font
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
 
 public:
