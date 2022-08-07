@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -42,7 +43,7 @@ StyledDialogView {
         switch (dialog.migrationType) {
         case MigrationType.Pre300: return 588
         case MigrationType.Post300AndPre362: return 556
-        case MigrationType.Ver362: return 160
+        case MigrationType.Ver362: return 208
         case MigrationType.Unknown: return 0
         }
         return 600
@@ -62,7 +63,6 @@ StyledDialogView {
 
     //! NOTE Can be set three a fixed version, for each version different dialog content
     onOpened: {
-
         switch(dialog.migrationType) {
         case MigrationType.Pre300:
             loader.sourceComponent = migrComp
@@ -111,69 +111,63 @@ StyledDialogView {
     Component {
         id: noteComp
 
-        Item {
+        ColumnLayout {
             id: content
 
             anchors.fill: parent
+            anchors.margins: 16
+            spacing: 16
 
-            Column {
-                id: mainContent
-                anchors.fill: parent
-                anchors.margins: 16
-                spacing: 16
+            StyledTextLabel {
+                id: headerTitle
 
-                StyledTextLabel {
-                    id: headerTitle
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    height: 32
+                Layout.fillWidth: true
 
-                    font: ui.theme.tabBoldFont
+                font: ui.theme.tabBoldFont
 
-                    horizontalAlignment: Qt.AlignLeft
-                    verticalAlignment: Qt.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignTop
 
-                    text: qsTrc("project/migration", "This file was last saved in MuseScore %1").arg(dialog.appVersion)
-                }
-
-                StyledTextLabel {
-                    id: headerSubtitle
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    height: 24
-
-                    horizontalAlignment: Qt.AlignLeft
-                    verticalAlignment: Qt.AlignVCenter
-                    wrapMode: Text.WordWrap
-                    elide: Text.ElideNone
-
-                    text: qsTrc("project/migration", "Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.")
-                }
+                text: qsTrc("project/migration", "This file was last saved in MuseScore %1").arg(dialog.appVersion)
             }
 
-            Item {
-                id: footer
+            StyledTextLabel {
+                id: headerSubtitle
 
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                anchors.leftMargin: 16
-                anchors.rightMargin: 16
-                height: 56
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+                elide: Text.ElideNone
+
+                text: qsTrc("project/migration", "Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.")
+            }
+
+            CheckBox {
+                id: askAgain
+
+                Layout.fillWidth: true
+
+                text: qsTrc("global", "Don't show this message again")
+                checked: !dialog.isAskAgain
+                onClicked: { dialog.isAskAgain = !dialog.isAskAgain }
+            }
+
+            RowLayout {
                 FlatButton {
                     id: watchVideo
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
 
                     text: qsTrc("project/migration", "Watch video about changes")
-                    onClicked: dialog.watchVideo()
+                    onClicked: { dialog.watchVideo() }
                 }
+
+                Item { Layout.fillWidth: true } // spacer
 
                 FlatButton {
                     id: applyBtn
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
+
                     text: qsTrc("global", "OK")
                     onClicked: {
                         dialog.ret = dialog.makeRet(true)
