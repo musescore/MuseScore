@@ -52,8 +52,6 @@ SplashScreen::SplashScreen()
     setAttribute(Qt::WA_TranslucentBackground);
     setSize(splashScreenSize);
 
-    // TODO: this is just to make it translatable, but translation won't
-    // actually work here because translation system not yet initialized
     m_message = qtrc("appshell", "Loading…");
 
     repaint();
@@ -84,9 +82,8 @@ void SplashScreen::draw(QPainter* painter)
     m_backgroundRenderer->render(painter);
 
     // Draw message
-    // Can't use font from settings, because that's not yet initialized
-    QFont font(QString::fromStdString(uiConfiguration()->defaultFontFamily()));
-    font.setPixelSize(uiConfiguration()->defaultFontSize());
+    QFont font(QString::fromStdString(uiConfiguration()->fontFamily()));
+    font.setPixelSize(uiConfiguration()->fontSize());
 
     painter->setFont(font);
 

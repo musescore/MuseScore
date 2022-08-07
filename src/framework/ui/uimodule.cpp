@@ -147,11 +147,16 @@ void UiModule::registerUiTypes()
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }
 
+void UiModule::onPreInit(const framework::IApplication::RunMode&)
+{
+    s_configuration->initSettings();
+}
+
 void UiModule::onInit(const framework::IApplication::RunMode&)
 {
     QFontDatabase::addApplicationFont(":/fonts/mscore/MusescoreIcon.ttf"); // icons
 
-    s_configuration->init();
+    s_configuration->initThemes();
     s_keyNavigationController->init();
 }
 
