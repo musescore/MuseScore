@@ -314,7 +314,7 @@
             <name>Mandolins</name>
       </Family>
       <Family id="mtn-dulcimers">
-            <name>Mtn Dulcimers</name>
+            <name>Mtn. Dulcimers</name>
       </Family>
       <Family id="lutes">
             <name>Lutes</name>
@@ -870,7 +870,7 @@
             </Instrument>
             <Instrument id="fife">
                   <family>fifes</family>
-                  <trackName>B♭ Fife</trackName>
+                  <trackName>Fife</trackName>
                   <longName>B♭ Fife</longName>
                   <shortName>B♭ Fife</shortName>
                   <traitName type="tuning">B♭</traitName>
@@ -3517,8 +3517,8 @@
             </Instrument>
             <Instrument id="harmonica-d10high-g">
                   <family>harmonicas</family>
-                  <trackName>10 Hole Diatonic Harmonica</trackName>
-                  <longName>10 Hole High G Diatonic Harmonica</longName>
+                  <trackName>10-Hole Diatonic Harmonica</trackName>
+                  <longName>10-Hole High G Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">High G</traitName>
                   <description>10-hole diatonic harmonica pitched in high G.</description>
@@ -3534,11 +3534,11 @@
             </Instrument>
             <Instrument id="harmonica-d10f">
                   <family>harmonicas</family>
-                  <trackName>10 Hole Diatonic Harmonica</trackName>
-                  <longName>10 Hole F Diatonic Harmonica</longName>
+                  <trackName>10-Hole Diatonic Harmonica</trackName>
+                  <longName>10-Hole F Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">F</traitName>
-                  <description>10-hole diatonic harmonic pitched in F.</description>
+                  <description>10-hole diatonic harmonica pitched in F.</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3551,8 +3551,8 @@
             </Instrument>
             <Instrument id="harmonica-d10d">
                   <family>harmonicas</family>
-                  <trackName>10 Hole Diatonic Harmonica</trackName>
-                  <longName>10 Hole D Diatonic Harmonica</longName>
+                  <trackName>10-Hole Diatonic Harmonica</trackName>
+                  <longName>10-Hole D Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">D</traitName>
                   <description>10-hole diatonic harmonica pitched in D.</description>
@@ -3568,8 +3568,8 @@
             </Instrument>
             <Instrument id="harmonica-d10c">
                   <family>harmonicas</family>
-                  <trackName>10 Hole Diatonic Harmonica</trackName>
-                  <longName>10 Hole C Diatonic Harmonica</longName>
+                  <trackName>10-Hole Diatonic Harmonica</trackName>
+                  <longName>10-Hole C Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">*C</traitName>
                   <description>10-hole diatonic harmonica pitched in C.</description>
@@ -3585,8 +3585,8 @@
             </Instrument>
             <Instrument id="harmonica-d10a">
                   <family>harmonicas</family>
-                  <trackName>10 Hole Diatonic Harmonica</trackName>
-                  <longName>10 Hole A Diatonic Harmonica</longName>
+                  <trackName>10-Hole Diatonic Harmonica</trackName>
+                  <longName>10-Hole A Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">A</traitName>
                   <description>10-hole diatonic harmonica pitched in A.</description>
@@ -3602,8 +3602,8 @@
             </Instrument>
             <Instrument id="harmonica-d10g">
                   <family>harmonicas</family>
-                  <trackName>10 Hole Diatonic Harmonica</trackName>
-                  <longName>10 Hole G Diatonic Harmonica</longName>
+                  <trackName>10-Hole Diatonic Harmonica</trackName>
+                  <longName>10-Hole G Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">G</traitName>
                   <description>10-hole diatonic harmonica pitched in G.</description>
@@ -3619,8 +3619,8 @@
             </Instrument>
             <Instrument id="harmonica-d10low-d">
                   <family>harmonicas</family>
-                  <trackName>10 Hole Diatonic Harmonica</trackName>
-                  <longName>10 Hole Low D Diatonic Harmonica</longName>
+                  <trackName>10-Hole Diatonic Harmonica</trackName>
+                  <longName>10-Hole Low D Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">Low D</traitName>
                   <description>10-hole diatonic harmonica pitched in low D.</description>
@@ -3636,8 +3636,8 @@
             </Instrument>
             <Instrument id="harmonica-c12c">
                   <family>harmonicas</family>
-                  <trackName>12 Hole Chromatic Harmonica</trackName>
-                  <longName>12 Hole C Chromatic Harmonica</longName>
+                  <trackName>12-Hole Chromatic Harmonica</trackName>
+                  <longName>12-Hole C Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">*C</traitName>
                   <description>12-hole chromatic harmonica pitched in C.</description>
@@ -3653,8 +3653,8 @@
             </Instrument>
             <Instrument id="harmonica-c12g">
                   <family>harmonicas</family>
-                  <trackName>12 Hole Chromatic Harmonica</trackName>
-                  <longName>12 Hole G Chromatic Harmonica</longName>
+                  <trackName>12-Hole Chromatic Harmonica</trackName>
+                  <longName>12-Hole G Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">G</traitName>
                   <description>12-hole chromatic harmonica pitched in G.</description>
@@ -3670,8 +3670,8 @@
             </Instrument>
             <Instrument id="harmonica-c12tenor-c">
                   <family>harmonicas</family>
-                  <trackName>12 Hole Chromatic Harmonica</trackName>
-                  <longName>12 Hole Tenor C Chromatic Harmonica</longName>
+                  <trackName>12-Hole Chromatic Harmonica</trackName>
+                  <longName>12-Hole Tenor C Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">Tenor C</traitName>
                   <description>12-hole chromatic tenor harmonica pitched in C.</description>
@@ -3687,8 +3687,8 @@
             </Instrument>
             <Instrument id="harmonica-c14c">
                   <family>harmonicas</family>
-                  <trackName>14 Hole Chromatic Harmonica</trackName>
-                  <longName>14 Hole C Chromatic Harmonica</longName>
+                  <trackName>14-Hole Chromatic Harmonica</trackName>
+                  <longName>14-Hole C Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">*C</traitName>
                   <description>14-hole chromatic harmonica pitched in C.</description>
@@ -3704,8 +3704,8 @@
             </Instrument>
             <Instrument id="harmonica-c16c">
                   <family>harmonicas</family>
-                  <trackName>16 Hole Chromatic Harmonica</trackName>
-                  <longName>16 Hole C Chromatic Harmonica</longName>
+                  <trackName>16-Hole Chromatic Harmonica</trackName>
+                  <longName>16-Hole C Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <traitName type="tuning">*C</traitName>
                   <description>16-hole chromatic harmonica pitched in C.</description>
@@ -3721,8 +3721,8 @@
             </Instrument>
             <Instrument id="harmonica-chordet">
                   <family>harmonicas</family>
-                  <trackName>20 Hole Chordet Harmonica</trackName>
-                  <longName>20 Hole Chordet Harmonica</longName>
+                  <trackName>20-Hole Chordet Harmonica</trackName>
+                  <longName>20-Hole Chordet Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>Huang Chordet 20-hole double harmonica.</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
@@ -3740,7 +3740,7 @@
                   <trackName>Bass Hohner Harmonica</trackName>
                   <longName>Bass Hohner Harmonica</longName>
                   <shortName>Bs. Harm.</shortName>
-                  <description>Hohner 31-hole bas harmonica.</description>
+                  <description>Hohner 31-hole bass harmonica.</description>
                   <musicXMLid>wind.reed.harmonica.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
@@ -11162,7 +11162,7 @@
                   <trackName>Acoustic Guitar</trackName>
                   <longName>Acoustic Guitar</longName>
                   <shortName>Guit.</shortName>
-                  <description>Acoustic steel-strung guitar (staff notation, with 8va bassa treble clef).</description>
+                  <description>Acoustic steel-string guitar (staff notation, with 8va bassa treble clef).</description>
                   <musicXMLid>pluck.guitar.acoustic</musicXMLid>
                   <StringData>
                         <frets>20</frets>
@@ -11200,7 +11200,7 @@
                   <trackName>Acoustic Guitar (treble clef)</trackName>
                   <longName>Guitar</longName>
                   <shortName>Guit.</shortName>
-                  <description>Acoustic steel-strung guitar (staff notation, with normal treble clef).</description>
+                  <description>Acoustic steel-string guitar (staff notation, with normal treble clef).</description>
                   <musicXMLid>pluck.guitar.acoustic</musicXMLid>
                   <StringData>
                         <frets>20</frets>
@@ -11229,7 +11229,7 @@
                   <trackName>Classical Guitar</trackName>
                   <longName>Classical Guitar</longName>
                   <shortName>Guit.</shortName>
-                  <description>Acoustic nylon-strung guitar (staff notation, with 8va bassa treble clef).</description>
+                  <description>Acoustic nylon-string guitar (staff notation, with 8va bassa treble clef).</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <StringData>
                         <frets>19</frets>
@@ -11261,7 +11261,7 @@
                   <trackName>Guitar (treble clef)</trackName>
                   <longName>Guitar</longName>
                   <shortName>Guit.</shortName>
-                  <description>Acoustic nylon-strung guitar (staff notation, with normal treble clef).</description>
+                  <description>Acoustic nylon-string guitar (staff notation, with normal treble clef).</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <StringData>
                         <frets>19</frets>
@@ -12317,7 +12317,7 @@
                   <family>mtn-dulcimers</family>
                   <trackName>Mtn. Dulcimer - Bass (tablature)</trackName>
                   <longName>Mtn. Dulcimer - Bass</longName>
-                  <description>Larger version of the mountain or Appalachian dulcimer. (Tablature).</description>
+                  <description>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Tablature).</description>
                   <stafftype staffTypePreset="tabDulcimer">tablature</stafftype>
                   <genre>world</genre>
             </Instrument>
@@ -13628,9 +13628,10 @@
             </Instrument>
             <Instrument id="violone">
                   <family>viols</family>
-                  <trackName>G Violone</trackName>
+                  <trackName>Violone</trackName>
                   <longName>G Violone</longName>
                   <shortName>G Vne.</shortName>
+                  <traitName type="tuning">*G</traitName>
                   <description>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol.</description>
                   <musicXMLid>strings.viol.violone</musicXMLid>
                   <StringData>
@@ -13662,9 +13663,10 @@
             </Instrument>
             <Instrument id="d-violone">
                   <family>viols</family>
-                  <trackName>D Violone</trackName>
+                  <trackName>Violone</trackName>
                   <longName>D Violone</longName>
                   <shortName>D Vne.</shortName>
+                  <traitName type="tuning">D</traitName>
                   <description>Large viol with the lowest string tuned to D. Sometimes called the D violone.</description>
                   <musicXMLid>strings.viol.violone</musicXMLid>
                   <StringData>
