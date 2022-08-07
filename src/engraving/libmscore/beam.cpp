@@ -604,20 +604,22 @@ int Beam::getMaxSlope() const
     // maxSlopes[i] = max slope of beam for notes with interval i
 
     // calculate max slope based on distance between first and last chords
-    double beamWidth = _elements[_elements.size() - 1]->stemPos().x() - _elements[0]->stemPos().x();
+    double endX = chordBeamAnchorX(_elements[_elements.size() - 1], ChordBeamAnchorType::Start);
+    double startX = chordBeamAnchorX(_elements[0], ChordBeamAnchorType::End);
+    double beamWidth = endX - startX;
     beamWidth /= spatium();
     int maxSlope = _maxSlopes.back();
     if (beamWidth < 3.0) {
         maxSlope = _maxSlopes[1];
     } else if (beamWidth < 5.0) {
         maxSlope = _maxSlopes[2];
-    } else if (beamWidth < 8.0) {
+    } else if (beamWidth < 7.5) {
         maxSlope = _maxSlopes[3];
-    } else if (beamWidth < 13.0) {
+    } else if (beamWidth < 10.0) {
         maxSlope = _maxSlopes[4];
-    } else if (beamWidth < 21.0) {
+    } else if (beamWidth < 15.0) {
         maxSlope = _maxSlopes[5];
-    } else if (beamWidth < 34.0) {
+    } else if (beamWidth < 20.0) {
         maxSlope = _maxSlopes[6];
     } else {
         maxSlope = _maxSlopes[7];
@@ -637,13 +639,19 @@ int Beam::getBeamCount(const std::vector<ChordRest*> chordRests) const
     return beamCount;
 }
 
-double Beam::chordBeamAnchorX(const Chord* chord, ChordBeamAnchorType anchorType) const
+double Beam::chordBeamAnchorX(const ChordRest* cr, ChordBeamAnchorType anchorType) const
 {
-    double stemPosX = chord->stemPosX() + chord->pagePos().x() - pagePos().x();
+    double stemPosX = cr->stemPosX() + cr->pagePos().x() - pagePos().x();
 
-    if (!chord->stem()) {
+    if (!cr->isChord() || !toChord(cr)->stem()) {
+        if (!_up) {
+            // rests always return the right side of the glyph as their stemPosX
+            // so we need to adjust back to the left side if stems are down
+            stemPosX -= cr->stemPosX();
+        }
         return stemPosX;
     }
+    const Chord* chord = toChord(cr);
 
     double stemWidth = chord->stem()->lineWidth().val() * chord->mag();
 
@@ -680,9 +688,14 @@ double Beam::chordBeamAnchorX(const Chord* chord, ChordBeamAnchorType anchorType
     return stemPosX;
 }
 
-double Beam::chordBeamAnchorY(const Chord* chord) const
+double Beam::chordBeamAnchorY(const ChordRest* cr) const
 {
-    Note* note = chord->up() ? chord->downNote() : chord->upNote();
+    if (!cr->isChord()) {
+        return cr->pagePos().y();
+    }
+
+    const Chord* chord = toChord(cr);
+    Note* note = cr->up() ? chord->downNote() : chord->upNote();
     PointF position = note->pagePos();
 
     int upValue = chord->up() ? -1 : 1;
@@ -699,15 +712,27 @@ double Beam::chordBeamAnchorY(const Chord* chord) const
     return position.y() + (chord->defaultStemLength() * upValue) - beamOffset;
 }
 
-PointF Beam::chordBeamAnchor(const Chord* chord, ChordBeamAnchorType anchorType) const
+PointF Beam::chordBeamAnchor(const ChordRest* cr, ChordBeamAnchorType anchorType) const
 {
-    return PointF(chordBeamAnchorX(chord, anchorType), chordBeamAnchorY(chord));
+    return PointF(chordBeamAnchorX(cr, anchorType), chordBeamAnchorY(cr));
 }
 
-void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
+void Beam::createBeamSegment(ChordRest* startCr, ChordRest* endCr, int level)
 {
-    const bool isFirstSubgroup = startChord == toChord(_elements.front());
-    const bool isLastSubgroup = endChord == toChord(_elements.back());
+    Chord* startChord = nullptr;
+    Chord* endChord = nullptr;
+    for (ChordRest* cr : _elements) {
+        if (!startChord && cr->isChord()) {
+            startChord = toChord(cr);
+        } else if (!endChord && cr->isChord()) {
+            endChord = toChord(cr);
+        }
+    }
+    if (!endChord) {
+        endChord = startChord;
+    }
+    const bool isFirstSubgroup = startCr == _elements.front();
+    const bool isLastSubgroup = endCr == _elements.back();
     const bool firstUp = startChord->up();
     const bool lastUp = endChord->up();
     bool overallUp = _up;
@@ -723,16 +748,16 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
             int upStems, downStems;
             upStems = downStems = 0;
             for (ChordRest* cr : _elements) {
-                if (!cr->isChord() || cr->tick() < startChord->tick()) {
+                if (!cr->isChord() || cr->tick() < startCr->tick()) {
                     continue;
                 }
-                if (cr->tick() > endChord->tick()) {
+                if (cr->tick() > endCr->tick()) {
                     break;
                 }
 
                 ++(toChord(cr)->up() ? upStems : downStems);
 
-                if (cr == endChord) {
+                if (cr == endCr) {
                     break;
                 }
             }
@@ -751,8 +776,8 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
         overallUp = firstUp;
     }
 
-    const double startX = chordBeamAnchorX(startChord, ChordBeamAnchorType::Start);
-    const double endX = chordBeamAnchorX(endChord, ChordBeamAnchorType::End);
+    const double startX = chordBeamAnchorX(startCr, ChordBeamAnchorType::Start);
+    const double endX = chordBeamAnchorX(endCr, ChordBeamAnchorType::End);
 
     double startY = _slope * (startX - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
     double endY = _slope * (endX - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
@@ -802,10 +827,10 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
 
     // extend stems properly
     for (ChordRest* cr : _elements) {
-        if (!cr->isChord() || cr->tick() < startChord->tick()) {
+        if (!cr->isChord() || cr->tick() < startCr->tick()) {
             continue;
         }
-        if (cr->tick() > endChord->tick()) {
+        if (cr->tick() > endCr->tick()) {
             break;
         }
 
@@ -826,7 +851,7 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
 
         extendStem(chord, addition);
 
-        if (chord == endChord) {
+        if (chord == endCr) {
             break;
         }
     }
@@ -915,13 +940,13 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Bre
     return false;
 }
 
-void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
+void Beam::createBeamletSegment(ChordRest* cr, bool isBefore, int level)
 {
-    const double startX = chordBeamAnchorX(chord, isBefore ? ChordBeamAnchorType::End : ChordBeamAnchorType::Start);
+    const double startX = chordBeamAnchorX(cr, isBefore ? ChordBeamAnchorType::End : ChordBeamAnchorType::Start);
 
     const double beamletLength = score()->styleMM(Sid::beamMinLen).val()
                                  * mag()
-                                 * chord->staff()->staffMag(chord);
+                                 * cr->staff()->staffMag(cr);
 
     const double endX = startX + (isBefore ? -beamletLength : beamletLength);
 
@@ -937,12 +962,12 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
             continue;
         }
 
-        if (chord->up() == beam->above) {
+        if (cr->up() == beam->above) {
             extraBeamAdjust++;
         }
     }
 
-    const int upValue = chord->up() ? -1 : 1;
+    const int upValue = cr->up() ? -1 : 1;
     const double verticalOffset = _beamDist * (level - extraBeamAdjust) * upValue;
 
     if (RealIsEqual(_grow1, _grow2)) {
@@ -961,7 +986,7 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
     }
 
     BeamSegment* b = new BeamSegment();
-    b->above = !chord->up();
+    b->above = !cr->up();
     b->level = level;
     b->line = LineF(startX, startY, endX, endY);
     _beamSegments.push_back(b);
@@ -993,8 +1018,8 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
     int level = 0;
     do {
         levelHasBeam = false;
-        Chord* startChord = nullptr;
-        Chord* endChord = nullptr;
+        ChordRest* startCr = nullptr;
+        ChordRest* endCr = nullptr;
         bool breakBeam = false;
         bool previousBreak32 = false;
         bool previousBreak64 = false;
@@ -1004,11 +1029,12 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
             ChordRest* chordRest = chordRests[i];
             ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
             if (!chordRest->isChord()) {
-                prevRests++;
-                continue;
+                if ((chordRest != chordRests.front() && chordRest != chordRests.back()) || level >= chordRest->beams()) {
+                    prevRests++;
+                    continue;
+                }
             }
-            Chord* chord = toChord(chordRest);
-            if (level < chord->beams()) {
+            if (level < chordRest->beams()) {
                 levelHasBeam = true;
             }
             bool isBroken32 = false;
@@ -1016,23 +1042,24 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
             // updates isBroken32 and isBroken64
             calcBeamBreaks(chordRest, prevChordRest, level, isBroken32, isBroken64);
             breakBeam = isBroken32 || isBroken64;
-            if (level < chord->beams() && !breakBeam) {
-                endChord = chord;
-                if (!startChord) {
-                    startChord = chord;
+            if (level < chordRest->beams() && !breakBeam) {
+                endCr = chordRest;
+                if (!startCr) {
+                    startCr = chordRest;
                 }
             } else {
-                if (startChord && endChord) {
-                    if (startChord == endChord) {
-                        bool isBeamletBefore = calcIsBeamletBefore(startChord, static_cast<int>(i) - 1 - prevRests, level, previousBreak32,
+                if (startCr && endCr) {
+                    if (startCr == endCr && startCr->isChord()) {
+                        bool isBeamletBefore = calcIsBeamletBefore(toChord(
+                                                                       startCr), static_cast<int>(i) - 1 - prevRests, level, previousBreak32,
                                                                    previousBreak64);
-                        createBeamletSegment(startChord, isBeamletBefore, level);
+                        createBeamletSegment(toChord(startCr), isBeamletBefore, level);
                     } else {
-                        createBeamSegment(startChord, endChord, level);
+                        createBeamSegment(startCr, endCr, level);
                     }
                 }
-                startChord = breakBeam && level < chord->beams() ? chord : nullptr;
-                endChord = breakBeam && level < chord->beams() ? chord : nullptr;
+                startCr = chordRest && breakBeam && level < chordRest->beams() ? chordRest : nullptr;
+                endCr = chordRest && breakBeam && level < chordRest->beams() ? chordRest : nullptr;
             }
             previousBreak32 = isBroken32;
             previousBreak64 = isBroken64;
@@ -1040,12 +1067,12 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
         }
 
         // if the beam ends on the last chord
-        if (startChord && (endChord || breakBeam)) {
-            if (startChord == endChord || !endChord) {
+        if (startCr && (endCr || breakBeam)) {
+            if ((startCr == endCr || !endCr) && startCr->isChord()) {
                 // since it's the last chord, beamlet always goes before
-                createBeamletSegment(startChord, true, level);
+                createBeamletSegment(toChord(startCr), true, level);
             } else {
-                createBeamSegment(startChord, endChord, level);
+                createBeamSegment(startCr, endCr, level);
             }
         }
         level++;
@@ -1126,14 +1153,26 @@ void Beam::offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, in
                                           bool isStartDictator, int stemLengthDictator, int stemLengthPointer) const
 {
     UNUSED(stemLengthPointer);
+    Chord* startChord = nullptr;
+    Chord* endChord = nullptr;
+    for (ChordRest* cr : chordRests) {
+        if (!startChord && cr->isChord()) {
+            startChord = toChord(cr);
+        } else if (!endChord && cr->isChord()) {
+            endChord = toChord(cr);
+        }
+    }
+    if (!endChord) {
+        endChord = startChord;
+    }
     // min stem lengths according to how many beams there are (starting with 1)
     static const int minStemLengths[] = { 11, 13, 15, 18, 21 };
-    const int middleLine = getMiddleStaffLine(chordRests.front(), chordRests.back(), staffLines);
-    int maxDictatorReduce = stemLengthDictator - minStemLengths[(isStartDictator ? chordRests.back() : chordRests.front())->beams() - 1];
+    const int middleLine = getMiddleStaffLine(startChord, endChord, staffLines);
+    int maxDictatorReduce = stemLengthDictator - minStemLengths[(isStartDictator ? endChord : startChord)->beams() - 1];
     maxDictatorReduce = std::min(abs(dictator - middleLine), maxDictatorReduce);
 
     bool isFlat = dictator == pointer;
-    bool isAscending = chordRests.front()->line() > chordRests.back()->line();
+    bool isAscending = startChord->line() > endChord->line();
     int towardBeam = _up ? -1 : 1;
     int newDictator = dictator;
     int newPointer = pointer;
@@ -1194,8 +1233,8 @@ void Beam::extendStem(Chord* chord, double addition)
 
 bool Beam::isBeamInsideStaff(int yPos, int staffLines, bool isDictator) const
 {
-    int aboveStaff = isDictator ? -3 : -2;
-    int belowStaff = (staffLines - 1) * 4 + (isDictator ? 3 : 2);
+    int aboveStaff = -3;
+    int belowStaff = (staffLines - 1) * 4 + 3;
     return yPos > aboveStaff && yPos < belowStaff;
 }
 
@@ -1357,34 +1396,40 @@ void Beam::add8thSpaceSlant(PointF& dictatorAnchor, int dictator, int pointer, i
 
 void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag)
 {
+    Chord* startChord = nullptr;
+    Chord* endChord = nullptr;
     if (chordRests.empty()) {
         return;
     }
     for (auto chordRest : chordRests) {
         if (chordRest->isChord()) {
+            if (!startChord) {
+                startChord = toChord(chordRest);
+                endChord = startChord;
+            } else {
+                endChord = toChord(chordRest);
+            }
             toChord(chordRest)->layoutStem();
         }
+    }
+    IF_ASSERT_FAILED(startChord) {
+        // we were passed a vector of only rests. we don't support beams across only rests
+        return;
     }
     if (_distribute) {
         // fix horizontal spacing of stems
         LayoutBeams::respace(chordRests);
     }
 
-    if (!chordRests.front()->isChord() || !chordRests.back()->isChord()) {
-        NOT_IMPLEMENTED;
-        return;
-    }
-
-    // todo: add edge case for when a beam starts or ends on a rest
-
     _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
     _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
     _beamWidth = point(score()->styleS(Sid::beamWidth)) * mag();
 
-    Chord* startChord = toChord(chordRests.front());
-    Chord* endChord = toChord(chordRests.back());
+    ChordRest* startCr = chordRests.front();
+    ChordRest* endCr = chordRests.back();
     _startAnchor = chordBeamAnchor(startChord, ChordBeamAnchorType::Start);
     _endAnchor = chordBeamAnchor(endChord, ChordBeamAnchorType::End);
+
     double startLength = startChord->defaultStemLength();
     double endLength = endChord->defaultStemLength();
     double startAnchorBase = _startAnchor.y() + (_up ? startLength : -startLength);
@@ -1690,6 +1735,8 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         if (!_tab && add8th) {
             add8thSpaceSlant(isStartDictator ? _startAnchor : _endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
         }
+        _startAnchor.setX(chordBeamAnchorX(startCr, ChordBeamAnchorType::Start));
+        _endAnchor.setX(chordBeamAnchorX(endCr, ChordBeamAnchorType::End));
         _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
     } else {
         _slope = 0;
@@ -1890,13 +1937,14 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
     }
 
     int y = pagePos().y();
-
-    double middleX = (c1->stemPosX() + c1->pageX() + c2->stemPosX() + c2->pageX()) / 2;
+    double beamStartX = _startAnchor.x() + (system() ? system()->x() : 0);
+    double beamEndX = _endAnchor.x() + (system() ? system()->x() : 0);
+    double middleX = (beamStartX + beamEndX) / 2;
     double middleY = (f->py1[idx] + y + f->py2[idx] + y) / 2;
 
     return {
-        PointF(c1->stemPosX() + c1->pageX(), f->py1[idx] + y),
-        PointF(c2->stemPosX() + c2->pageX(), f->py2[idx] + y),
+        PointF(beamStartX, f->py1[idx] + y),
+        PointF(beamEndX, f->py2[idx] + y),
         PointF(middleX, middleY)
     };
 }
