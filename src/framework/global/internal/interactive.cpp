@@ -172,12 +172,7 @@ io::paths_t Interactive::selectMultipleDirectories(const QString& title, const i
         return selectedDirectories;
     }
 
-    io::paths_t result;
-    for (const QString& path: paths.val.toQVariant().toStringList()) {
-        result.push_back(path.toStdString());
-    }
-
-    return result;
+    return io::pathsFromString(paths.val.toQString().toStdString());
 }
 
 RetVal<Val> Interactive::open(const std::string& uri) const
