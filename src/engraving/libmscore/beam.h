@@ -114,8 +114,8 @@ class Beam final : public EngravingItem
     void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
     void extendStem(Chord* chord, double addition);
     bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
-    void createBeamSegment(Chord* startChord, Chord* endChord, int level);
-    void createBeamletSegment(Chord* chord, bool isBefore, int level);
+    void createBeamSegment(ChordRest* startChord, ChordRest* endChord, int level);
+    void createBeamletSegment(ChordRest* chord, bool isBefore, int level);
     void createBeamSegments(const std::vector<ChordRest*>& chordRests);
     void layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
     void addChordRest(ChordRest* a);
@@ -157,9 +157,9 @@ public:
         Start, End, Middle
     };
 
-    double chordBeamAnchorX(const Chord* chord, ChordBeamAnchorType anchorType) const;
-    double chordBeamAnchorY(const Chord* chord) const;
-    PointF chordBeamAnchor(const Chord* chord, ChordBeamAnchorType anchorType) const;
+    double chordBeamAnchorX(const ChordRest* chord, ChordBeamAnchorType anchorType) const;
+    double chordBeamAnchorY(const ChordRest* chord) const;
+    PointF chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const;
 
     const std::vector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }
