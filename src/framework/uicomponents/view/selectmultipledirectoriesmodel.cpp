@@ -140,14 +140,9 @@ void SelectMultipleDirectoriesModel::addDirectory()
     emit directoryAdded(row);
 }
 
-QStringList SelectMultipleDirectoriesModel::directories() const
+QString SelectMultipleDirectoriesModel::directories() const
 {
-    QStringList directories;
-    for (const io::path_t& directory : m_directories) {
-        directories << directory.toQString();
-    }
-
-    return directories;
+    return QString::fromStdString(io::pathsToString(m_directories));
 }
 
 bool SelectMultipleDirectoriesModel::isRemovingAvailable() const
