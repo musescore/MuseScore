@@ -872,9 +872,16 @@ void AddElement::endUndoRedo(bool isUndo) const
 
 void AddElement::undo(EditData*)
 {
+    Score* score = element->score();
+
     if (!element->isTuplet()) {
-        element->score()->removeElement(element);
+        score->removeElement(element);
     }
+
+    if (element->isStaffTextBase()) {
+        score->updateSwing();
+    }
+
     endUndoRedo(true);
 }
 
@@ -884,9 +891,16 @@ void AddElement::undo(EditData*)
 
 void AddElement::redo(EditData*)
 {
+    Score* score = element->score();
+
     if (!element->isTuplet()) {
-        element->score()->addElement(element);
+        score->addElement(element);
     }
+
+    if (element->isStaffTextBase()) {
+        score->updateSwing();
+    }
+
     endUndoRedo(false);
 }
 
@@ -1005,9 +1019,16 @@ void RemoveElement::cleanup(bool undo)
 
 void RemoveElement::undo(EditData*)
 {
+    Score* score = element->score();
+
     if (!element->isTuplet()) {
-        element->score()->addElement(element);
+        score->addElement(element);
     }
+
+    if (element->isStaffTextBase()) {
+        score->updateSwing();
+    }
+
     if (element->isChordRest()) {
         if (element->isChord()) {
             Chord* chord = toChord(element);
@@ -1017,9 +1038,9 @@ void RemoveElement::undo(EditData*)
         }
         undoAddTuplet(toChordRest(element));
     } else if (element->isClef()) {
-        element->score()->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
+        score->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
     } else if (element->isKeySig()) {
-        element->score()->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
+        score->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
     }
 }
 
@@ -1029,9 +1050,16 @@ void RemoveElement::undo(EditData*)
 
 void RemoveElement::redo(EditData*)
 {
+    Score* score = element->score();
+
     if (!element->isTuplet()) {
-        element->score()->removeElement(element);
+        score->removeElement(element);
     }
+
+    if (element->isStaffTextBase()) {
+        score->updateSwing();
+    }
+
     if (element->isChordRest()) {
         undoRemoveTuplet(toChordRest(element));
         if (element->isChord()) {
@@ -1041,9 +1069,9 @@ void RemoveElement::redo(EditData*)
             }
         }
     } else if (element->isClef()) {
-        element->score()->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
+        score->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
     } else if (element->isKeySig()) {
-        element->score()->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
+        score->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
     }
 }
 
@@ -1389,6 +1417,7 @@ void ChangeElement::flip(EditData*)
             score->select(newElement, SelectType::ADD);
         }
     }
+
     if (oldElement->explicitParent() == 0) {
         score->removeElement(oldElement);
         score->addElement(newElement);
@@ -1407,7 +1436,7 @@ void ChangeElement::flip(EditData*)
         TempoText* t = toTempoText(oldElement);
         score->setTempo(t->segment(), t->tempo());
     }
-//      if (newElement->isSegmentFlag()) {
+
     if (newElement->isSpannerSegment()) {
         SpannerSegment* os = toSpannerSegment(oldElement);
         SpannerSegment* ns = toSpannerSegment(newElement);
@@ -1418,10 +1447,14 @@ void ChangeElement::flip(EditData*)
             ns->system()->add(ns);
         }
     }
+
+    if (newElement->isStaffTextBase()) {
+        score->updateSwing();
+    }
+
     std::swap(oldElement, newElement);
     oldElement->triggerLayout();
     newElement->triggerLayout();
-    // score->setLayoutAll();
 }
 
 //---------------------------------------------------------
