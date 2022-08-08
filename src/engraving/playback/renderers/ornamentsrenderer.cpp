@@ -178,13 +178,13 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
     {
         ArticulationType::Turn,
         {
-            /*prefixDurationTicks*/ 0,
-            /*prefixPitchOffsets*/ {},
+            /*prefixDurationTicks*/ DEMISEMIQUAVER_TICKS * 3,
+            /*prefixPitchOffsets*/ { PITCH_LEVEL_STEP, 0, -PITCH_LEVEL_STEP },
             /*isAlterationsRepeatAllowed*/ false,
-            /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0, -PITCH_LEVEL_STEP, 0 },
+            /*alterationStepPitchOffsets*/ { 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ 0
+            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
         }
     },
     {
