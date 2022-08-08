@@ -31,61 +31,36 @@ ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, IEle
 {
     setSectionType(InspectorSectionType::SECTION_SCORE_APPEARANCE);
     setTitle(qtrc("inspector", "Score appearance"));
-
-    auto onCurrentNotationChanged = [this]() {
-        emit styleChanged();
-
-        if (style()) {
-            style()->styleChanged().onNotify(this, [this]() {
-                emit styleChanged();
-            });
-        }
-    };
-
-    onCurrentNotationChanged();
-    context()->currentNotationChanged().onNotify(this, onCurrentNotationChanged);
 }
 
 bool ScoreAppearanceSettingsModel::hideEmptyStaves() const
 {
-    return style() ? style()->styleValue(StyleId::hideEmptyStaves).toBool() : false;
+    return styleValue(StyleId::hideEmptyStaves).toBool();
 }
 
 void ScoreAppearanceSettingsModel::setHideEmptyStaves(bool hide)
 {
-    if (hide == hideEmptyStaves() || !style()) {
-        return;
-    }
-
-    style()->setStyleValue(StyleId::hideEmptyStaves, hide);
+    updateStyleValue(StyleId::hideEmptyStaves, hide);
 }
 
 bool ScoreAppearanceSettingsModel::dontHideEmptyStavesInFirstSystem() const
 {
-    return style() ? style()->styleValue(StyleId::dontHideStavesInFirstSystem).toBool() : false;
+    return styleValue(StyleId::dontHideStavesInFirstSystem).toBool();
 }
 
 void ScoreAppearanceSettingsModel::setDontHideEmptyStavesInFirstSystem(bool dont)
 {
-    if (dont == dontHideEmptyStavesInFirstSystem() || !style()) {
-        return;
-    }
-
-    style()->setStyleValue(StyleId::dontHideStavesInFirstSystem, dont);
+    updateStyleValue(StyleId::dontHideStavesInFirstSystem, dont);
 }
 
 bool ScoreAppearanceSettingsModel::showBracketsWhenSpanningSingleStaff() const
 {
-    return style() ? style()->styleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden).toBool() : false;
+    return styleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden).toBool();
 }
 
 void ScoreAppearanceSettingsModel::setShowBracketsWhenSpanningSingleStaff(bool show)
 {
-    if (show == showBracketsWhenSpanningSingleStaff() || !style()) {
-        return;
-    }
-
-    style()->setStyleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden, show);
+    updateStyleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden, show);
 }
 
 bool ScoreAppearanceSettingsModel::isEmpty() const
@@ -101,4 +76,9 @@ void ScoreAppearanceSettingsModel::showPageSettings()
 void ScoreAppearanceSettingsModel::showStyleSettings()
 {
     dispatcher()->dispatch("edit-style");
+}
+
+void ScoreAppearanceSettingsModel::onStyleChanged()
+{
+    emit styleChanged();
 }
