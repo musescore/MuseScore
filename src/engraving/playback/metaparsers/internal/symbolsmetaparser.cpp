@@ -301,7 +301,11 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
         }
         break;
     case SymId::ornamentShortTrill:
-        types.emplace(mpe::ArticulationType::UpperMordent);
+        if (articulationSymbol->ornamentStyle() == OrnamentStyle::DEFAULT) {
+            types.emplace(mpe::ArticulationType::UpperMordent);
+        } else {
+            types.emplace(mpe::ArticulationType::UpperMordentBaroque);
+        }
         break;
     case SymId::ornamentTremblement:
     case SymId::ornamentTremblementCouperin:

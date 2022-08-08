@@ -248,6 +248,8 @@ enum class ArticulationType {
     TrillBaroque,
     UpperMordent,
     LowerMordent,
+    UpperMordentBaroque,
+    LowerMordentBaroque,
     PrallMordent,
     MordentWithUpperPrefix,
     UpMordent,
