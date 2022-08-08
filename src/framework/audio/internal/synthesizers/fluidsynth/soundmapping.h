@@ -273,6 +273,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Recorder,  {} }, { midi::Program(0, 74) } },
         { { mpe::SoundId::Recorder,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 74) } },
         { { mpe::SoundId::Recorder,  { mpe::SoundSubCategory::Bass } }, { midi::Program(0, 74) } },
+        { { mpe::SoundId::Recorder,  { mpe::SoundSubCategory::Tenor } }, { midi::Program(0, 74) } },
         { { mpe::SoundId::Recorder,  { mpe::SoundSubCategory::Great_Bass } }, { midi::Program(0, 74) } },
         { { mpe::SoundId::Recorder,  { mpe::SoundSubCategory::Contra_Bass } }, { midi::Program(0, 74) } },
 
