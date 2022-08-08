@@ -184,12 +184,18 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
 
     Ret ret = project->load(loadPath, "" /*stylePath*/, false /*forceMode*/, format);
 
-    if (!ret && checkCanIgnoreError(ret, filePath)) {
-        ret = project->load(loadPath, "" /*stylePath*/, true /*forceMode*/, format);
-    }
-
     if (!ret) {
-        return ret;
+        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+            return ret;
+        }
+
+        if (checkCanIgnoreError(ret, filePath)) {
+            ret = project->load(loadPath, "" /*stylePath*/, true /*forceMode*/, format);
+        }
+
+        if (!ret) {
+            return ret;
+        }
     }
 
     if (hasUnsavedChanges) {
