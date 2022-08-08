@@ -71,6 +71,7 @@ const PlaybackSetupData& WindsSetupDataResolver::doResolve(const Instrument* ins
         { "recorder", { SoundId::Recorder, SoundCategory::Winds, {}, {} } },
         { "alto-recorder", { SoundId::Recorder, SoundCategory::Winds, { SoundSubCategory::Alto }, {} } },
         { "bass-recorder", { SoundId::Recorder, SoundCategory::Winds, { SoundSubCategory::Bass }, {} } },
+        { "tenor-recorder", { SoundId::Recorder, SoundCategory::Winds, { SoundSubCategory::Tenor }, {} } },
         { "greatbass-recorder", { SoundId::Recorder, SoundCategory::Winds, { SoundSubCategory::Great_Bass }, {} } },
         { "contrabass-recorder", { SoundId::Recorder, SoundCategory::Winds, { SoundSubCategory::Contra_Bass }, {} } },
 
@@ -168,6 +169,7 @@ const PlaybackSetupData& WindsSetupDataResolver::doResolve(const Instrument* ins
         { "a-clarinet", { SoundId::Clarinet, SoundCategory::Winds, { SoundSubCategory::Soprano }, {} } },
         { "g-clarinet", { SoundId::Clarinet, SoundCategory::Winds, { SoundSubCategory::Soprano }, {} } },
         { "basset-clarinet", { SoundId::Clarinet, SoundCategory::Winds, { SoundSubCategory::Soprano }, {} } },
+        { "basset-horn", { SoundId::Clarinet, SoundCategory::Winds, { SoundSubCategory::Soprano }, {} } },
         { "alto-clarinet", { SoundId::Clarinet, SoundCategory::Winds, { SoundSubCategory::Alto }, {} } },
         { "bass-clarinet", { SoundId::Clarinet, SoundCategory::Winds, { SoundSubCategory::Bass }, {} } },
         { "bb-bass-clarinet", { SoundId::Clarinet, SoundCategory::Winds, { SoundSubCategory::Bass }, {} } },
