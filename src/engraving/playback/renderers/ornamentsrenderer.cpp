@@ -116,6 +116,18 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
         }
     },
     {
+        ArticulationType::UpperMordentBaroque,
+        {
+            /*prefixDurationTicks*/ DEMISEMIQUAVER_TICKS * 3,
+            /*prefixPitchOffsets*/ { PITCH_LEVEL_STEP, 0, PITCH_LEVEL_STEP },
+            /*isAlterationsRepeatAllowed*/ false,
+            /*alterationStepPitchOffsets*/ { 0 },
+            /*suffixDurationTicks*/ 0,
+            /*suffixPitchOffsets*/ {},
+            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+        }
+    },
+    {
         ArticulationType::MordentWithUpperPrefix,
         {
             /*prefixDurationTicks*/ SEMIQUAVER_TICKS* 4,
@@ -223,7 +235,8 @@ const ArticulationTypeSet& OrnamentsRenderer::supportedTypes()
         ArticulationType::DownMordent, ArticulationType::PrallUp,
         ArticulationType::PrallDown, ArticulationType::Turn,
         ArticulationType::InvertedTurn, ArticulationType::Tremblement,
-        ArticulationType::PrallMordent
+        ArticulationType::PrallMordent, ArticulationType::UpperMordentBaroque,
+        ArticulationType::LowerMordentBaroque
     };
 
     return types;
