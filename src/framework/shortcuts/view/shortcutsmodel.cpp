@@ -297,9 +297,9 @@ QVariantList ShortcutsModel::shortcuts() const
 QVariant ShortcutsModel::shortcutToObject(const Shortcut& shortcut) const
 {
     const UiAction& action = this->action(shortcut.action);
-    
+
     QVariantMap obj;
-    obj["title"] = actionText(action);
+    obj["title"] = actionText(shortcut.action);
     obj["icon"] = static_cast<int>(action.iconCode);
     obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
     obj["context"] = QString::fromStdString(shortcut.context);
