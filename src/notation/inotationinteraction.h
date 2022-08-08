@@ -131,6 +131,7 @@ public:
     virtual const TextBase* editedText() const = 0;
     virtual async::Notification textEditingStarted() const = 0;
     virtual async::Notification textEditingChanged() const = 0;
+    virtual async::Notification textEditingEnded() const = 0;
 
     // Display
     virtual async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;

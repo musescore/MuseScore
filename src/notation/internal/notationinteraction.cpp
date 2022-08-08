@@ -242,6 +242,11 @@ void NotationInteraction::notifyAboutTextEditingChanged()
     m_textEditingChanged.notify();
 }
 
+void NotationInteraction::notifyAboutTextEditingEnded()
+{
+    m_textEditingEnded.notify();
+}
+
 void NotationInteraction::notifyAboutSelectionChangedIfNeed()
 {
     if (!score()->selectionChanged()) {
@@ -2764,6 +2769,7 @@ void NotationInteraction::endEditText()
 
     doEndEditElement();
 
+    notifyAboutTextEditingEnded();
     notifyAboutTextEditingChanged();
     notifyAboutSelectionChangedIfNeed();
 }
@@ -2815,6 +2821,11 @@ mu::async::Notification NotationInteraction::textEditingStarted() const
 mu::async::Notification NotationInteraction::textEditingChanged() const
 {
     return m_textEditingChanged;
+}
+
+mu::async::Notification NotationInteraction::textEditingEnded() const
+{
+    return m_textEditingEnded;
 }
 
 mu::async::Channel<ScoreConfigType> NotationInteraction::scoreConfigChanged() const
