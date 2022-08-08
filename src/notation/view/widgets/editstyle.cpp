@@ -732,7 +732,7 @@ EditStyle::EditStyle(QWidget* parent)
                                                /*parent*/ groupBox_beams);
     beamsPage->setObjectName("beamsPage_QQuickWidget");
     beamsPage->setSource(QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml")));
-    beamsPage->setMinimumSize(224, 273);
+    beamsPage->setMinimumSize(224, 280);
     beamsPage->setResizeMode(QQuickWidget::SizeRootObjectToView);
     groupBox_beams->layout()->addWidget(beamsPage);
 
