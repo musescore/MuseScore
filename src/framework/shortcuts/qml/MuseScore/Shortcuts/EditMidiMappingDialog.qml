@@ -41,10 +41,10 @@ Dialog {
 
     function startEdit(action) {
         model.load(action.mappedType, action.mappedValue)
-        open()
-
         actionNameLabel.text = action.title
         actionIconLabel.iconCode = action.icon
+
+        open()
     }
 
     EditMidiMappingModel {
