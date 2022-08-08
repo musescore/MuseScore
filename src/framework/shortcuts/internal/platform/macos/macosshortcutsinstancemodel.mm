@@ -277,5 +277,5 @@ void MacOSShortcutsInstanceModel::doLoadShortcuts()
 
 void MacOSShortcutsInstanceModel::doActivate(const QString& key)
 {
-    ShortcutsInstanceModel::doActivate(m_shortcutMap[key]);
+    ShortcutsInstanceModel::doActivate(m_shortcutMap.value(key));
 }
