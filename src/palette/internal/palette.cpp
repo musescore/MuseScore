@@ -153,10 +153,12 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const TranslatableStri
 PaletteCellPtr Palette::appendActionIcon(ActionIconType type, actions::ActionCode code)
 {
     const ui::UiAction& action = actionsRegister()->action(code);
+    QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslated();
     auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
     icon->setActionType(type);
     icon->setAction(code, static_cast<char16_t>(action.iconCode));
-    return appendElement(icon, action.title);
+
+    return appendElement(icon, name);
 }
 
 bool Palette::insertCell(size_t idx, PaletteCellPtr cell)

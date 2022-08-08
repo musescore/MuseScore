@@ -249,7 +249,8 @@ Item {
             }
 
             onDoubleClicked: {
-                root.handleItem(sortFilterProxyModel.mapToSource(modelIndex), item)
+                selectionModel.select(modelIndex)
+                Qt.callLater(root.handleItem, sortFilterProxyModel.mapToSource(modelIndex), item)
             }
 
             onNavigationTriggered: {
