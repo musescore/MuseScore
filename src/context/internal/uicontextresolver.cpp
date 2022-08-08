@@ -59,6 +59,14 @@ void UiContextResolver::init()
             notation->undoStack()->stackChanged().onNotify(this, [this]() {
                 notifyAboutContextChanged();
             });
+
+            notation->interaction()->noteInput()->noteInputStarted().onNotify(this, [this]() {
+                notifyAboutContextChanged();
+            });
+
+            notation->interaction()->noteInput()->noteInputEnded().onNotify(this, [this]() {
+                notifyAboutContextChanged();
+            });
         }
         notifyAboutContextChanged();
     });
