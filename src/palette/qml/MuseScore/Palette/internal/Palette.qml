@@ -517,8 +517,6 @@ StyledGridView {
                 paletteView.updateSelection(true)
             }
 
-            navigation.onTriggered: paletteCell.clicked(null)
-
             IconView {
                 anchors.fill: parent
                 icon: model.decoration
