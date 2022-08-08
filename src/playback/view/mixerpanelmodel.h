@@ -70,6 +70,7 @@ private:
     void removeItem(const audio::TrackId trackId);
     void updateItemsPanelsOrder();
     void clear();
+    void setupConnections();
 
     int resolveInsertIndex(const engraving::InstrumentTrackId& instrumentTrackId) const;
     int indexOf(const audio::TrackId trackId) const;
@@ -79,6 +80,7 @@ private:
     MixerChannelItem* buildMasterChannelItem();
 
     TrackMixerChannelItem* trackChannelItem(const audio::TrackId& trackId) const;
+    TrackMixerChannelItem* trackChannelItem(const engraving::InstrumentTrackId& instrumentTrackId) const;
 
     project::INotationProjectPtr currentProject() const;
     project::IProjectAudioSettingsPtr audioSettings() const;
