@@ -27,7 +27,7 @@
 #include <QJSValue>
 
 #include "io/path.h"
-#include "ret.h"
+#include "types/ret.h"
 
 namespace mu::autobot {
 struct File {
@@ -123,6 +123,19 @@ enum class StepStatus {
     Skipped,
     Aborted,
     Error
+};
+
+struct StepInfo
+{
+    QString name;
+    StepStatus status;
+    int durationMsec = 0;
+
+    StepInfo() = default;
+    StepInfo(const QString& n, StepStatus s)
+        : name(n), status(s) {}
+    StepInfo(const QString& n, StepStatus s, int dur)
+        : name(n), status(s), durationMsec(dur) {}
 };
 
 enum class SpeedMode {

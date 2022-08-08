@@ -25,7 +25,6 @@
 
 #include <map>
 #include <vector>
-#include <QtGlobal>
 
 #include "midicoreevent.h"
 
@@ -42,6 +41,7 @@ enum class BeatType : char;
 
 class PlayEvent : public MidiCoreEvent
 {
+    OBJECT_ALLOCATOR(engraving, PlayEvent)
 protected:
     float _tuning = .0f;
 
@@ -50,7 +50,7 @@ public:
         : MidiCoreEvent() {}
     PlayEvent(const MidiCoreEvent& e)
         : MidiCoreEvent(e) {}
-    PlayEvent(uchar t, uchar c, uchar a, uchar b)
+    PlayEvent(uint8_t t, uint8_t c, uint8_t a, uint8_t b)
         : MidiCoreEvent(t, c, a, b) {}
     float tuning() const { return _tuning; }
     void setTuning(float v) { _tuning = v; }
@@ -63,6 +63,8 @@ public:
 
 class NPlayEvent : public PlayEvent
 {
+    OBJECT_ALLOCATOR(engraving, NPlayEvent)
+
     const Note* _note{ nullptr };
     const Harmony* _harmony{ nullptr };
     int _origin = -1;
@@ -72,7 +74,7 @@ class NPlayEvent : public PlayEvent
 public:
     NPlayEvent()
         : PlayEvent() {}
-    NPlayEvent(uchar t, uchar c, uchar a, uchar b)
+    NPlayEvent(uint8_t t, uint8_t c, uint8_t a, uint8_t b)
         : PlayEvent(t, c, a, b) {}
     NPlayEvent(const MidiCoreEvent& e)
         : PlayEvent(e) {}
@@ -104,6 +106,8 @@ public:
 
 class Event : public PlayEvent
 {
+    OBJECT_ALLOCATOR(engraving, Event)
+
     int _ontime;
     int _noquantOntime;
     int _noquantDuration;
@@ -111,7 +115,7 @@ class Event : public PlayEvent
     int _tpc;                 // tonal pitch class
     int _voice;
     std::vector<Event> _notes;
-    uchar* _edata;             // always zero terminated (_data[_len] == 0; )
+    uint8_t* _edata;             // always zero terminated (_data[_len] == 0; )
     int _len;
     int _metaType;
     const Note* _note;
@@ -139,8 +143,8 @@ public:
     void setVoice(int val) { _voice = val; }
     int offtime() const { return _ontime + _duration; }
     std::vector<Event>& notes() { return _notes; }
-    const uchar* edata() const { return _edata; }
-    void setEData(uchar* d) { _edata = d; }
+    const uint8_t* edata() const { return _edata; }
+    void setEData(uint8_t* d) { _edata = d; }
     int len() const { return _len; }
     void setLen(int l) { _len = l; }
     int metaType() const { return _metaType; }
@@ -158,6 +162,7 @@ public:
 
 class EventList : public std::vector<Event>
 {
+    OBJECT_ALLOCATOR(engraving, EventList)
 public:
     void insert(const Event&);
     void insertNote(int channel, Note*);
@@ -165,6 +170,8 @@ public:
 
 class EventMap : public std::multimap<int, NPlayEvent>
 {
+    OBJECT_ALLOCATOR(engraving, EventMap)
+
     int _highestChannel = 15;
 public:
     void fixupMIDI();

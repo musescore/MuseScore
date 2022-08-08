@@ -170,7 +170,6 @@ private:
     bool m_readonly = false;
     bool m_isCanvasDragged = false;
 
-    bool m_isZoomInited = false;
     PointF m_beginPoint;
 
     mu::engraving::EngravingItem* m_prevHitElement = nullptr;

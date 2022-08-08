@@ -62,7 +62,7 @@ int ScoreElement::type() const
 
 QString ScoreElement::userName() const
 {
-    return e->typeUserName();
+    return e->translatedTypeUserName();
 }
 
 //---------------------------------------------------------
@@ -118,7 +118,7 @@ void ScoreElement::set(mu::engraving::Pid pid, QVariant val)
             LOGW("ScoreElement::set: trying to assign value of wrong type to fractional property");
             return;
         }
-        val = f->fraction().toString();
+        val = f->fraction().toString().toQString();
     }
     break;
     case P_TYPE::POINT:

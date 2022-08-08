@@ -28,36 +28,46 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/writescorehook.h"
-#include "engraving/infrastructure/io/localfileinfoprovider.h"
+#include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/rw/xml.h"
 #include "engraving/libmscore/factory.h"
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-QString ScoreRW::rootPath()
+String ScoreRW::m_rootPath;
+
+void ScoreRW::setRootPath(const String& path)
 {
-    return QString(engraving_utests_DATA_ROOT);
+    m_rootPath = path;
 }
 
-MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
+String ScoreRW::rootPath()
 {
-    io::path_t path = isAbsolutePath ? name : (rootPath() + "/" + name);
+    return m_rootPath;
+}
+
+MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath, ImportFunc importFunc)
+{
+    io::path_t path = isAbsolutePath ? name : (rootPath() + u"/" + name);
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
     std::string suffix = io::suffix(path);
 
     ScoreLoad sl;
-    Score::FileError rv;
+    Err rv;
     if (suffix == "mscz" || suffix == "mscx") {
-        rv = compat::loadMsczOrMscx(score, path.toQString(), false);
+        rv = compat::loadMsczOrMscx(score, path.toString(), false);
+    } else if (importFunc) {
+        rv = importFunc(score, path);
     } else {
-        rv = Score::FileError::FILE_UNKNOWN_TYPE;
+        rv = Err::FileUnknownType;
     }
 
-    if (rv != Score::FileError::FILE_NO_ERROR) {
+    if (rv != Err::NoError) {
         LOGE() << "can't load score, path: " << path;
         delete score;
         score = nullptr;
@@ -70,7 +80,7 @@ MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
     return score;
 }
 
-bool ScoreRW::saveScore(Score* score, const QString& name)
+bool ScoreRW::saveScore(Score* score, const String& name)
 {
     File file(name);
     if (file.exists()) {
@@ -108,7 +118,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     return element;
 }
 
-bool ScoreRW::saveMimeData(ByteArray mimeData, const QString& saveName)
+bool ScoreRW::saveMimeData(ByteArray mimeData, const String& saveName)
 {
     File f(saveName);
     if (!f.open(IODevice::WriteOnly)) {

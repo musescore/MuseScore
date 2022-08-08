@@ -22,6 +22,7 @@
 
 #include "instrchange.h"
 
+#include "translation.h"
 #include "rw/xml.h"
 
 #include "score.h"
@@ -138,7 +139,8 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             score()->transpositionChanged(part, oldV, tickStart, tickEnd);
         }
 
-        const QString newInstrChangeText = tr("To %1").arg(instrument->trackName());
+        //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.
+        const String newInstrChangeText = mtrc("engraving", "To %1").arg(instrument->trackName());
         undoChangeProperty(Pid::TEXT, TextBase::plainToXmlText(newInstrChangeText));
     }
 }

@@ -124,7 +124,6 @@
     <shortenStem>1</shortenStem>
     <stemLength>3.5</stemLength>
     <stemLengthSmall>2.25</stemLengthSmall>
-    <shortStemProgression>0.25</shortStemProgression>
     <shortStemStartLocation>1</shortStemStartLocation>
     <shortestStem>2.5</shortestStem>
     <minStaffSizeForAutoStems>4</minStaffSizeForAutoStems>
@@ -158,9 +157,9 @@
     <dotNoteDistance>0.5</dotNoteDistance>
     <dotRestDistance>0.25</dotRestDistance>
     <dotDotDistance>0.65</dotDotDistance>
-    <propertyDistanceHead>1</propertyDistanceHead>
-    <propertyDistanceStem>1.8</propertyDistanceStem>
-    <propertyDistance>1</propertyDistance>
+    <propertyDistanceHead>0.5</propertyDistanceHead>
+    <propertyDistanceStem>0.5</propertyDistanceStem>
+    <propertyDistance>0.5</propertyDistance>
     <articulationMag>1</articulationMag>
     <articulationPosAbove x="0" y="0"/>
     <articulationAnchorDefault>2</articulationAnchorDefault>
@@ -170,8 +169,8 @@
     <hairpinPlacement>1</hairpinPlacement>
     <hairpinPosAbove x="0" y="-2"/>
     <hairpinPosBelow x="0" y="2"/>
-    <hairpinLinePosAbove x="0" y="-3"/>
-    <hairpinLinePosBelow x="0" y="4"/>
+    <hairpinLinePosAbove x="0" y="-1.5"/>
+    <hairpinLinePosBelow x="0" y="2.5"/>
     <hairpinHeight>1.15</hairpinHeight>
     <hairpinContHeight>0.5</hairpinContHeight>
     <hairpinWidth>0.12</hairpinWidth>

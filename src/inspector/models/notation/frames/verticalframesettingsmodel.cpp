@@ -55,8 +55,8 @@ void VerticalFrameSettingsModel::requestElements()
 void VerticalFrameSettingsModel::loadProperties()
 {
     loadPropertyItem(m_frameHeight, formatDoubleFunc);
-    loadPropertyItem(m_gapAbove);
-    loadPropertyItem(m_gapBelow);
+    loadPropertyItem(m_gapAbove, formatDoubleFunc);
+    loadPropertyItem(m_gapBelow, formatDoubleFunc);
     loadPropertyItem(m_frameLeftMargin);
     loadPropertyItem(m_frameRightMargin);
     loadPropertyItem(m_frameTopMargin);
@@ -72,6 +72,11 @@ void VerticalFrameSettingsModel::resetProperties()
     m_frameRightMargin->resetToDefault();
     m_frameTopMargin->resetToDefault();
     m_frameBottomMargin->resetToDefault();
+}
+
+void VerticalFrameSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadProperties();
 }
 
 PropertyItem* VerticalFrameSettingsModel::frameHeight() const

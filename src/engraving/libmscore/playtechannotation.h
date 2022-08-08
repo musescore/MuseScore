@@ -29,6 +29,7 @@
 namespace mu::engraving {
 class PlayTechAnnotation final : public StaffTextBase
 {
+    OBJECT_ALLOCATOR(engraving, PlayTechAnnotation)
 public:
     PlayTechAnnotation(Segment* parent = nullptr, PlayingTechniqueType techniqueType = PlayingTechniqueType::Natural,
                        TextStyleType tid = TextStyleType::STAFF);

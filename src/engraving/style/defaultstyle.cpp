@@ -25,6 +25,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
@@ -33,10 +34,10 @@ static const int LEGACY_MSC_VERSION_V3 = 301;
 static const int LEGACY_MSC_VERSION_V2 = 206;
 static const int LEGACY_MSC_VERSION_V1 = 114;
 
-static const QString LEGACY_MSS_V1_PATH(":/engraving/styles/legacy-style-defaults-v1.mss");
-static const QString LEGACY_MSS_V2_PATH(":/engraving/styles/legacy-style-defaults-v2.mss");
-static const QString LEGACY_MSS_V3_PATH(":/engraving/styles/legacy-style-defaults-v3.mss");
-static const QString LEGACY_MSS_V302_PATH(":/engraving/styles/legacy-style-defaults-v302.mss");
+static const String LEGACY_MSS_V1_PATH(u":/engraving/styles/legacy-style-defaults-v1.mss");
+static const String LEGACY_MSS_V2_PATH(u":/engraving/styles/legacy-style-defaults-v2.mss");
+static const String LEGACY_MSS_V3_PATH(u":/engraving/styles/legacy-style-defaults-v3.mss");
+static const String LEGACY_MSS_V302_PATH(u":/engraving/styles/legacy-style-defaults-v302.mss");
 
 DefaultStyle* DefaultStyle::instance()
 {
@@ -44,11 +45,11 @@ DefaultStyle* DefaultStyle::instance()
     return &s;
 }
 
-void DefaultStyle::init(const QString& defaultStyleFilePath, const QString& partStyleFilePath)
+void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath)
 {
     m_baseStyle.precomputeValues();
 
-    if (!defaultStyleFilePath.isEmpty()) {
+    if (!defaultStyleFilePath.empty()) {
         m_defaultStyle = new MStyle();
         bool ok = doLoadStyle(m_defaultStyle, defaultStyleFilePath);
         if (!ok) {
@@ -59,7 +60,7 @@ void DefaultStyle::init(const QString& defaultStyleFilePath, const QString& part
         }
     }
 
-    if (!partStyleFilePath.isEmpty()) {
+    if (!partStyleFilePath.empty()) {
         m_defaultStyleForParts = new MStyle();
         bool ok = doLoadStyle(m_defaultStyleForParts, defaultStyleFilePath);
         if (!ok) {
@@ -71,7 +72,7 @@ void DefaultStyle::init(const QString& defaultStyleFilePath, const QString& part
     }
 }
 
-bool DefaultStyle::doLoadStyle(MStyle* style, const QString& filePath)
+bool DefaultStyle::doLoadStyle(MStyle* style, const path_t& filePath)
 {
     File file(filePath);
     if (!file.open(IODevice::ReadOnly)) {
@@ -112,7 +113,7 @@ const MStyle* DefaultStyle::defaultStyleForParts()
 
 const MStyle& DefaultStyle::resolveStyleDefaults(const int defaultsVersion)
 {
-    static auto loadedStyle = [](MStyle& style, const QString& path, bool& loaded_flag) -> const MStyle&
+    static auto loadedStyle = [](MStyle& style, const String& path, bool& loaded_flag) -> const MStyle&
     {
         if (loaded_flag) {
             return style;

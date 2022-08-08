@@ -50,7 +50,7 @@ void PopupViewCloseController::setActive(bool active)
 
     m_active = active;
 
-    doUpdateEventFiletrs();
+    doUpdateEventFilters();
 }
 
 QQuickItem* PopupViewCloseController::parentItem() const
@@ -138,7 +138,7 @@ void PopupViewCloseController::doFocusOut()
     }
 }
 
-void PopupViewCloseController::doUpdateEventFiletrs()
+void PopupViewCloseController::doUpdateEventFilters()
 {
     if (active()) {
         qApp->installEventFilter(this);

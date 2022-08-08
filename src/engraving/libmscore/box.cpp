@@ -105,7 +105,7 @@ void Box::draw(mu::draw::Painter* painter) const
     const bool showFrame = showHighlightedFrame || (score() ? score()->showFrames() : false);
 
     if (showFrame) {
-        qreal lineWidth = spatium() * .15;
+        double lineWidth = spatium() * .15;
         Pen pen;
         pen.setWidthF(lineWidth);
         pen.setJoinStyle(PenJoinStyle::MiterJoin);
@@ -157,7 +157,7 @@ void Box::editDrag(EditData& ed)
     if (isVBox()) {
         _boxHeight += Spatium(ed.delta.y() / spatium());
         if (ed.vRaster) {
-            qreal vRaster = 1.0 / MScore::vRaster();
+            double vRaster = 1.0 / MScore::vRaster();
             int n = lrint(_boxHeight.val() / vRaster);
             _boxHeight = Spatium(vRaster * n);
         }
@@ -167,7 +167,7 @@ void Box::editDrag(EditData& ed)
     } else {
         _boxWidth += Spatium(ed.delta.x() / spatium());
         if (ed.hRaster) {
-            qreal hRaster = 1.0 / MScore::hRaster();
+            double hRaster = 1.0 / MScore::hRaster();
             int n = lrint(_boxWidth.val() / hRaster);
             _boxWidth = Spatium(hRaster * n);
         }
@@ -471,7 +471,7 @@ void Box::copyValues(Box* origin)
     _boxHeight    = origin->boxHeight();
     _boxWidth     = origin->boxWidth();
 
-    qreal factor  = magS() / origin->magS();
+    double factor  = magS() / origin->magS();
     _bottomGap    = origin->bottomGap() * factor;
     _topGap       = origin->topGap() * factor;
     _bottomMargin = origin->bottomMargin() * factor;
@@ -499,10 +499,10 @@ void HBox::layout()
 {
     if (explicitParent() && explicitParent()->isVBox()) {
         VBox* vb = toVBox(explicitParent());
-        qreal x = vb->leftMargin() * DPMM;
-        qreal y = vb->topMargin() * DPMM;
-        qreal w = point(boxWidth());
-        qreal h = vb->height() - (vb->topMargin() + vb->bottomMargin()) * DPMM;
+        double x = vb->leftMargin() * DPMM;
+        double y = vb->topMargin() * DPMM;
+        double w = point(boxWidth());
+        double h = vb->height() - (vb->topMargin() + vb->bottomMargin()) * DPMM;
         setPos(x, y);
         bbox().setRect(0.0, 0.0, w, h);
     } else if (system()) {
@@ -657,11 +657,11 @@ EngravingItem* Box::drop(EditData& data)
 RectF HBox::drag(EditData& data)
 {
     RectF r(canvasBoundingRect());
-    qreal diff = data.evtDelta.x();
-    qreal x1   = offset().x() + diff;
+    double diff = data.evtDelta.x();
+    double x1   = offset().x() + diff;
     if (explicitParent()->type() == ElementType::VBOX) {
         VBox* vb = toVBox(explicitParent());
-        qreal x2 = parentItem()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
+        double x2 = parentItem()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
         if (x1 < 0.0) {
             x1 = 0.0;
         } else if (x1 > x2) {
@@ -779,12 +779,12 @@ VBox::VBox(System* parent)
 {
 }
 
-qreal VBox::minHeight() const
+double VBox::minHeight() const
 {
     return point(Spatium(10));
 }
 
-qreal VBox::maxHeight() const
+double VBox::maxHeight() const
 {
     return point(Spatium(30));
 }
@@ -820,7 +820,7 @@ void VBox::layout()
     }
 
     if (getProperty(Pid::BOX_AUTOSIZE).toBool()) {
-        qreal contentHeight = contentRect().height();
+        double contentHeight = contentRect().height();
 
         if (contentHeight < minHeight()) {
             contentHeight = minHeight();
@@ -838,7 +838,7 @@ void VBox::layout()
 
 void VBox::adjustLayoutWithoutImages()
 {
-    qreal calculatedVBoxHeight = 0;
+    double calculatedVBoxHeight = 0;
     const int padding = score()->spatium();
     auto elementList = el();
 
@@ -901,11 +901,11 @@ void FBox::add(EngravingItem* e)
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString Box::accessibleExtraInfo() const
+String Box::accessibleExtraInfo() const
 {
-    QString rez = "";
+    String rez;
     for (EngravingItem* e : el()) {
-        rez += " " + e->screenReaderInfo();
+        rez += u' ' + e->screenReaderInfo();
     }
     return rez;
 }
@@ -914,9 +914,9 @@ QString Box::accessibleExtraInfo() const
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString TBox::accessibleExtraInfo() const
+String TBox::accessibleExtraInfo() const
 {
-    QString rez = m_text->screenReaderInfo();
+    String rez = m_text->screenReaderInfo();
     return rez;
 }
 

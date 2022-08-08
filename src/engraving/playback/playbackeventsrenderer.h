@@ -31,6 +31,7 @@ namespace mu::engraving {
 class Chord;
 class Rest;
 class Score;
+class Note;
 
 class PlaybackEventsRenderer
 {
@@ -49,7 +50,11 @@ public:
                 const mpe::dynamic_level_t actualDynamicLevel, const mpe::ArticulationType persistentArticulationApplied,
                 const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const;
 
-    void renderMetronome(const Score* score, const int positionTick, const int durationTicks, const int ticksPositionOffset,
+    void renderChordSymbol(const Harmony* chordSymbol, const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const;
+    void renderChordSymbol(const Harmony* chordSymbol, const mpe::timestamp_t actualTimestamp, const mpe::duration_t actualDuration,
+                           mpe::PlaybackEventsMap& result) const;
+
+    void renderMetronome(const Score* score, const int measureStartTick, const int measureEndTick, const int ticksPositionOffset,
                          mpe::PlaybackEventsMap& result) const;
 
 private:
@@ -66,6 +71,7 @@ private:
     void renderArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
     bool renderChordArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
     void renderNoteArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
+    mpe::duration_t lastTiedNoteDurationOffset(const Note* lastTiedNote, const RenderingContext& ctx) const;
 };
 }
 

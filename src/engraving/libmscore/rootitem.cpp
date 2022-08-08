@@ -22,7 +22,10 @@
 #include "rootitem.h"
 
 #include "score.h"
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "../accessibility/accessibleroot.h"
+#endif
 
 using namespace mu::engraving;
 
@@ -44,7 +47,9 @@ compat::DummyElement* RootItem::dummy() const
 
 void RootItem::init()
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     setupAccessible();
+#endif
 
     m_dummy->setParent(this);
     m_dummy->init();
@@ -55,7 +60,10 @@ EngravingObject* RootItem::scanParent() const
     return m_score->scanParent();
 }
 
-AccessibleItem* RootItem::createAccessible()
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+AccessibleItemPtr RootItem::createAccessible()
 {
-    return new AccessibleRoot(this);
+    return std::make_shared<AccessibleRoot>(this, AccessibleItem::Group);
 }
+
+#endif

@@ -4187,7 +4187,7 @@ bool NameBlock::isEqual(const QString& name) const
     }
 
     for (int i = 0; i < size() && nsize; ++i) {
-        if (data()[i] != name[i]) {
+        if (name[i] != data()[i]) {
             return false;
         }
     }

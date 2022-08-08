@@ -27,7 +27,7 @@
 #include "engraving/engravingerrors.h"
 
 namespace mu::engraving {
-extern Score::FileError importGTP(MasterScore*, mu::io::IODevice* io);
+extern Err importGTP(MasterScore*, mu::io::IODevice* io, bool createLinkedTabForce = false);
 }
 
 using namespace mu::iex::guitarpro;
@@ -35,6 +35,6 @@ using namespace mu::iex::guitarpro;
 mu::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
 {
     mu::io::File file(path);
-    mu::engraving::Score::FileError err = mu::engraving::importGTP(score, &file);
-    return mu::engraving::scoreFileErrorToRet(err, path);
+    mu::engraving::Err err = mu::engraving::importGTP(score, &file);
+    return mu::engraving::make_ret(err, path);
 }

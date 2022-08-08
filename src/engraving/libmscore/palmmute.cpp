@@ -26,6 +26,7 @@
 #include "measure.h"
 #include "chordrest.h"
 #include "score.h"
+#include "stafftype.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -48,7 +49,8 @@ static const ElementStyle palmMuteStyle {
     { Sid::palmMuteHookHeight,                    Pid::END_HOOK_HEIGHT },
     { Sid::palmMutePosBelow,                      Pid::OFFSET },
     { Sid::palmMuteLineStyle,                     Pid::LINE_STYLE },
-    { Sid::palmMuteBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET },
+    { Sid::palmMuteDashLineLen,                   Pid::DASH_LINE_LEN },
+    { Sid::palmMuteDashGapLen,                    Pid::DASH_GAP_LEN },
     { Sid::palmMuteEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::palmMuteLineWidth,                     Pid::LINE_WIDTH },
     { Sid::palmMutePlacement,                     Pid::PLACEMENT },
@@ -66,6 +68,13 @@ PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
 
 void PalmMuteSegment::layout()
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }

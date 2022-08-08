@@ -23,8 +23,8 @@
 
 #include <QKeySequence>
 
-#include "global/xmlreader.h"
-#include "global/xmlwriter.h"
+#include "global/deprecated/xmlreader.h"
+#include "global/deprecated/xmlwriter.h"
 #include "multiinstances/resourcelockguard.h"
 
 #include "log.h"
@@ -277,16 +277,12 @@ Shortcut ShortcutsRegister::readShortcut(framework::XmlReader& reader) const
             shortcut.standardKey = QKeySequence::StandardKey(reader.readInt());
         } else if (tag == SEQUENCE_TAG) {
             shortcut.sequences.push_back(reader.readString());
-        } else if (tag == CONTEXT_TAG) {
-            shortcut.context = reader.readString();
         } else {
             reader.skipCurrentElement();
         }
     }
 
-    if (shortcut.context.empty()) {
-        shortcut.context = "any";
-    }
+    shortcut.context = uiactionsRegister()->action(shortcut.action).scCtx;
 
     return shortcut;
 }

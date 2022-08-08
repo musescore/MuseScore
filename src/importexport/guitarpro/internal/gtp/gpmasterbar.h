@@ -48,9 +48,14 @@ public:
         int offsetNum; //numerator of offset field in GP
         int offsetDenom; //denominator of offset field in GP
     };
+
     struct Direction {
-        QString target;
-        QString jump;
+        enum class Type {
+            Repeat, Jump
+        };
+
+        Type type = Type::Repeat;
+        String name;
     };
 
     ~GPMasterBar() = default;
@@ -80,12 +85,11 @@ public:
     void setAlternativeEnding(std::vector<int>&& r) { _alternateEndings.swap(r); }
     const std::vector<int>& alternateEnding() const { return _alternateEndings; }
 
-    void setSection(std::pair<QString, QString>&& s) { _section.swap(s); }
-    const std::pair<QString, QString>& section() const { return _section; }
+    void setSection(std::pair<String, String>&& s) { _section.swap(s); }
+    const std::pair<String, String>& section() const { return _section; }
 
-    void setDirectionTarget(const QString& d) { _direction.target = d; }
-    void setDirectionJump(const QString& d) { _direction.jump = d; }
-    const Direction& direction() const { return _direction; }
+    void setDirections(std::vector<Direction>&& d) { _directions.swap(d); }
+    const std::vector<Direction>& directions() const { return _directions; }
 
     void setId(int id) { _id = id; }
     int id() const { return _id; } //debug helper
@@ -97,6 +101,7 @@ private:
     int _id{ -1 };
     std::vector<std::unique_ptr<GPBar> > _bars;
     std::vector<Fermata> _fermatas;
+    std::vector<Direction> _directions;
     TimeSig _timeSig;
     KeySig _keySig;
     Repeat _repeat;
@@ -104,7 +109,7 @@ private:
     TripletFeelType _tripletFeel = TripletFeelType::None;
     BarlineType _barlineType = BarlineType::NORMAL;
     bool _freeTime = false;
-    std::pair<QString, QString> _section;
+    std::pair<String, String> _section;
     Direction _direction;
 };
 }

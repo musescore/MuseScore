@@ -23,16 +23,21 @@
 #ifndef MU_ENGRAVING_OBJECT_H
 #define MU_ENGRAVING_OBJECT_H
 
+#include "global/allocator.h"
 #include "types/string.h"
 
 #include "types.h"
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 #include "style/styledef.h"
 #include "style/textstyle.h"
 #include "style/style.h"
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
+
+namespace mu {
+class TranslatableString;
+}
 
 namespace mu::diagnostics {
 class EngravingElementsProvider;
@@ -71,6 +76,7 @@ class Glissando;
 class GlissandoSegment;
 class SystemDivider;
 class RehearsalMark;
+class TripletFeel;
 class Harmony;
 class Volta;
 class Jump;
@@ -105,6 +111,7 @@ class TextBase;
 class Hairpin;
 class HairpinSegment;
 class Bend;
+class StretchedBend;
 class TremoloBar;
 class MeasureRepeat;
 class Tuplet;
@@ -132,7 +139,6 @@ class StaffState;
 class Arpeggio;
 class Image;
 class ChordLine;
-class Slide;
 class SlurTieSegment;
 class FretDiagram;
 class StaffTypeChange;
@@ -178,6 +184,7 @@ class EngravingObject;
 
 class EngravingObjectList : public std::list<EngravingObject*>
 {
+    OBJECT_ALLOCATOR(engraving, EngravingObjectList)
 public:
 
     EngravingObject* at(size_t i) const;
@@ -221,7 +228,8 @@ public:
     inline ElementType type() const { return m_type; }
     inline bool isType(ElementType t) const { return t == m_type; }
     const char* typeName() const;
-    virtual QString typeUserName() const;
+    virtual TranslatableString typeUserName() const;
+    virtual String translatedTypeUserName() const;
 
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);
@@ -242,7 +250,6 @@ public:
     MasterScore* masterScore() const;
     bool onSameScore(const EngravingObject* other) const;
     const MStyle* style() const;
-    QString mscoreVersion() const;
 
     virtual PropertyValue getProperty(Pid) const = 0;
     virtual bool setProperty(Pid, const PropertyValue&) = 0;
@@ -253,8 +260,6 @@ public:
     virtual bool offsetIsSpatiumDependent() const { return true; }
 
     virtual void reset();                       // reset all properties & position to default
-
-    virtual Pid propertyId(const QStringRef& xmlName) const;
 
     virtual void initElementStyle(const ElementStyle*);
     virtual const ElementStyle* styledProperties() const { return _elementStyle; }
@@ -329,6 +334,7 @@ public:
     CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
     CONVERT(SystemDivider, SYSTEM_DIVIDER)
     CONVERT(RehearsalMark, REHEARSAL_MARK)
+    CONVERT(TripletFeel, TRIPLET_FEEL)
     CONVERT(Harmony,       HARMONY)
     CONVERT(Volta,         VOLTA)
     CONVERT(Jump,          JUMP)
@@ -353,6 +359,7 @@ public:
     CONVERT(Hairpin,       HAIRPIN)
     CONVERT(HairpinSegment, HAIRPIN_SEGMENT)
     CONVERT(Bend,          BEND)
+    CONVERT(StretchedBend, STRETCHED_BEND)
     CONVERT(TremoloBar,    TREMOLOBAR)
     CONVERT(MeasureRepeat, MEASURE_REPEAT)
     CONVERT(Tuplet,        TUPLET)
@@ -396,7 +403,6 @@ public:
     CONVERT(Arpeggio,      ARPEGGIO)
     CONVERT(Image,         IMAGE)
     CONVERT(ChordLine,     CHORDLINE)
-    CONVERT(Slide,         SLIDE)
     CONVERT(FretDiagram,   FRET_DIAGRAM)
     CONVERT(Page,          PAGE)
     CONVERT(Text,          TEXT)
@@ -492,7 +498,7 @@ public:
 
     bool isStaffTextBase() const
     {
-        return isStaffText() || isSystemText() || isPlayTechAnnotation();
+        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation();
     }
 };
 
@@ -506,127 +512,127 @@ public:
 
 static inline ChordRest* toChordRest(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-             || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
+    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
     return (ChordRest*)e;
 }
 
 static inline const ChordRest* toChordRest(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-             || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
+    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
     return (const ChordRest*)e;
 }
 
 static inline DurationElement* toDurationElement(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-             || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
-             || e->type() == ElementType::TUPLET);
+    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
+           || e->type() == ElementType::TUPLET);
     return (DurationElement*)e;
 }
 
 static inline const DurationElement* toDurationElement(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
-             || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
-             || e->type() == ElementType::TUPLET);
+    assert(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+           || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
+           || e->type() == ElementType::TUPLET);
     return (const DurationElement*)e;
 }
 
 static inline Rest* toRest(EngravingObject* e)
 {
-    Q_ASSERT(!e || e->isRestFamily());
+    assert(!e || e->isRestFamily());
     return (Rest*)e;
 }
 
 static inline const Rest* toRest(const EngravingObject* e)
 {
-    Q_ASSERT(!e || e->isRestFamily());
+    assert(!e || e->isRestFamily());
     return (const Rest*)e;
 }
 
 static inline SlurTieSegment* toSlurTieSegment(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+    assert(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
     return (SlurTieSegment*)e;
 }
 
 static inline const SlurTieSegment* toSlurTieSegment(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+    assert(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
     return (const SlurTieSegment*)e;
 }
 
 static inline const MeasureBase* toMeasureBase(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isMeasure() || e->isVBox() || e->isHBox() || e->isTBox() || e->isFBox());
+    assert(e == 0 || e->isMeasure() || e->isVBox() || e->isHBox() || e->isTBox() || e->isFBox());
     return (const MeasureBase*)e;
 }
 
 static inline MeasureBase* toMeasureBase(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isMeasureBase());
+    assert(e == 0 || e->isMeasureBase());
     return (MeasureBase*)e;
 }
 
 static inline Box* toBox(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isBox());
+    assert(e == 0 || e->isBox());
     return (Box*)e;
 }
 
 static inline SpannerSegment* toSpannerSegment(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isSpannerSegment());
+    assert(e == 0 || e->isSpannerSegment());
     return (SpannerSegment*)e;
 }
 
 static inline const SpannerSegment* toSpannerSegment(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isSpannerSegment());
+    assert(e == 0 || e->isSpannerSegment());
     return (const SpannerSegment*)e;
 }
 
 static inline BSymbol* toBSymbol(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isBSymbol());
+    assert(e == 0 || e->isBSymbol());
     return (BSymbol*)e;
 }
 
 static inline TextLineBase* toTextLineBase(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isTextLineBase());
+    assert(e == 0 || e->isTextLineBase());
     return (TextLineBase*)e;
 }
 
 static inline TextBase* toTextBase(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isTextBase());
+    assert(e == 0 || e->isTextBase());
     return (TextBase*)e;
 }
 
 static inline const TextBase* toTextBase(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isTextBase());
+    assert(e == 0 || e->isTextBase());
     return (const TextBase*)e;
 }
 
 static inline StaffTextBase* toStaffTextBase(EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isStaffTextBase());
+    assert(e == 0 || e->isStaffTextBase());
     return (StaffTextBase*)e;
 }
 
 static inline const StaffTextBase* toStaffTextBase(const EngravingObject* e)
 {
-    Q_ASSERT(e == 0 || e->isStaffTextBase());
+    assert(e == 0 || e->isStaffTextBase());
     return (const StaffTextBase*)e;
 }
 
 #define CONVERT(a)  \
-    static inline a* to##a(EngravingObject * e) { Q_ASSERT(e == 0 || e->is##a()); return (a*)e; } \
-    static inline const a* to##a(const EngravingObject * e) { Q_ASSERT(e == 0 || e->is##a()); return (const a*)e; }
+    static inline a* to##a(EngravingObject * e) { assert(e == 0 || e->is##a()); return (a*)e; } \
+    static inline const a* to##a(const EngravingObject * e) { assert(e == 0 || e->is##a()); return (const a*)e; }
 
 CONVERT(EngravingItem)
 CONVERT(Note)
@@ -652,6 +658,7 @@ CONVERT(Glissando)
 CONVERT(GlissandoSegment)
 CONVERT(SystemDivider)
 CONVERT(RehearsalMark)
+CONVERT(TripletFeel)
 CONVERT(Harmony)
 CONVERT(Volta)
 CONVERT(Jump)
@@ -682,6 +689,7 @@ CONVERT(MMRestRange)
 CONVERT(Hairpin)
 CONVERT(HairpinSegment)
 CONVERT(Bend)
+CONVERT(StretchedBend)
 CONVERT(TremoloBar)
 CONVERT(MeasureRepeat)
 CONVERT(MMRest)
@@ -726,7 +734,6 @@ CONVERT(StaffState)
 CONVERT(Arpeggio)
 CONVERT(Image)
 CONVERT(ChordLine)
-CONVERT(Slide)
 CONVERT(FretDiagram)
 CONVERT(Page)
 CONVERT(SystemText)

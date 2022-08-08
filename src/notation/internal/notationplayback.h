@@ -35,8 +35,6 @@
 
 namespace mu::engraving {
 class Score;
-class EventMap;
-class MidiRenderer;
 }
 
 namespace mu::notation {
@@ -50,9 +48,12 @@ public:
     void init(INotationUndoStackPtr undoStack) override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;
-    const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
-    void triggerEventsForItem(const EngravingItem* item) override;
+    const engraving::InstrumentTrackId& chordSymbolsTrackId() const override;
 
+    const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
+    void triggerEventsForItems(const std::vector<const EngravingItem*>& items) override;
+
+    engraving::InstrumentTrackIdSet existingTrackIdSet() const override;
     async::Channel<engraving::InstrumentTrackId> trackAdded() const override;
     async::Channel<engraving::InstrumentTrackId> trackRemoved() const override;
 
@@ -63,18 +64,20 @@ public:
     midi::tick_t secToPlayedTick(float sec) const override;
     midi::tick_t secToTick(float sec) const override;
 
+    RetVal<midi::tick_t> playPositionTickByRawTick(midi::tick_t tick) const override;
     RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const override;
 
     void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) override;
     void setLoopBoundariesVisible(bool visible) override;
-    ValCh<LoopBoundaries> loopBoundaries() const override;
+    const LoopBoundaries& loopBoundaries() const override;
+    async::Notification loopBoundariesChanged() const override;
 
     const Tempo& tempo(midi::tick_t tick) const override;
     MeasureBeat beat(midi::tick_t tick) const override;
     midi::tick_t beatToTick(int measureIndex, int beatIndex) const override;
 
 private:
-    mu::engraving::Score* score() const;
+    engraving::Score* score() const;
 
     void addLoopIn(int tick);
     void addLoopOut(int tick);
@@ -82,11 +85,13 @@ private:
     void updateLoopBoundaries();
     void updateTotalPlayTime();
 
-    const mu::engraving::TempoText* tempoText(int tick) const;
+    const engraving::TempoText* tempoText(int tick) const;
 
     IGetScore* m_getScore = nullptr;
     async::Channel<int> m_playPositionTickChanged;
-    ValCh<LoopBoundaries> m_loopBoundaries;
+
+    LoopBoundaries m_loopBoundaries;
+    async::Notification m_loopBoundariesChanged;
 
     audio::msecs_t m_totalPlayTime = 0;
     async::Channel<audio::msecs_t> m_totalPlayTimeChanged;

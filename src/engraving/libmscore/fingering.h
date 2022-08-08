@@ -32,6 +32,7 @@ namespace mu::engraving {
 
 class Fingering final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, Fingering)
 public:
     Fingering(Note* parent, TextStyleType tid, ElementFlags ef = ElementFlag::HAS_TAG);
     Fingering(Note* parent, ElementFlags ef = ElementFlag::HAS_TAG);
@@ -50,7 +51,7 @@ public:
 
     PropertyValue propertyDefault(Pid id) const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 };
 } // namespace mu::engraving
 #endif

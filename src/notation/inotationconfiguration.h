@@ -26,7 +26,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
-#include "retval.h"
+#include "types/retval.h"
 #include "io/path.h"
 #include "notationtypes.h"
 #include "global/globaltypes.h"
@@ -86,10 +86,10 @@ public:
     virtual int defaultZoom() const = 0;
     virtual void setDefaultZoom(int zoomPercentage) = 0;
 
-    virtual ValCh<int> currentZoom() const = 0;
-    virtual void setCurrentZoom(int zoomPercentage) = 0;
-
     virtual QList<int> possibleZoomPercentageList() const = 0;
+
+    virtual qreal scalingFromZoomPercentage(int zoomPercentage) const = 0;
+    virtual int zoomPercentageFromScaling(qreal scaling) const = 0;
 
     virtual int mouseZoomPrecision() const = 0;
     virtual void setMouseZoomPrecision(int precision) = 0;
@@ -125,9 +125,6 @@ public:
 
     virtual double guiScaling() const = 0;
     virtual double notationScaling() const = 0;
-
-    virtual std::string notationRevision() const = 0;
-    virtual int notationDivision() const = 0;
 
     virtual ValCh<framework::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(framework::Orientation orientation) = 0;

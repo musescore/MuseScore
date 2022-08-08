@@ -24,7 +24,7 @@
 
 #include <QObject>
 
-#include "uri.h"
+#include "types/uri.h"
 #include "log.h"
 
 namespace mu::diagnostics {

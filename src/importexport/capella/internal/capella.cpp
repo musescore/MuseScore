@@ -23,16 +23,19 @@
 //
 //    Capella 2000 import filter
 //
-#include <assert.h>
-#include <cmath>
-#include <QMessageBox>
-#include <QtMath>
-
-#include "libmscore/mscore.h"
 #include "capella.h"
 
+#include <assert.h>
+#include <cmath>
+
+#include <QFile>
+#include <QtMath>
+
+#include "engraving/engravingerrors.h"
+#include "libmscore/mscore.h"
+
 #include "translation.h"
-#include "interactive/messagebox.h"
+#include "infrastructure/messagebox.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -93,7 +96,7 @@ const char* Capella::errmsg[] = {
 static void addDynamic(Score*, Segment* s, int track, const char* name)
 {
     Dynamic* d = Factory::createDynamic(s);
-    d->setDynamicType(name);
+    d->setDynamicType(String::fromUtf8(name));
     d->setTrack(track);
     s->add(d);
 }
@@ -1066,7 +1069,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         trill->setTick(cr1->tick());
                         trill->setTick2(cr2->tick());
                         if (!(tro->trillSign)) {
-                            trill->setTrillType("prallprall");
+                            trill->setTrillType(TrillType::PRALLPRALL_LINE);
                         }
                         score->addElement(trill);
                     }
@@ -1208,7 +1211,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     Part* part = 0;
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         CapStaffLayout* cl = cap->staffLayout(staffIdx);
-        // LOGD("Midi staff %d program %d", staffIdx, cl->sound);
+        // LOGD("MIDI staff %d program %d", staffIdx, cl->sound);
 
         // create a new part if necessary
         if (needPart(midiPatch, cl->sound, staffIdx, cap->brackets)) {
@@ -2793,14 +2796,14 @@ void Capella::read(QFile* fp)
 //   importCapella
 //---------------------------------------------------------
 
-Score::FileError importCapella(MasterScore* score, const QString& name)
+Err importCapella(MasterScore* score, const QString& name)
 {
     QFile fp(name);
     if (!fp.exists()) {
-        return Score::FileError::FILE_NOT_FOUND;
+        return Err::FileNotFound;
     }
     if (!fp.open(QIODevice::ReadOnly)) {
-        return Score::FileError::FILE_OPEN_ERROR;
+        return Err::FileOpenError;
     }
 
     Capella cf;
@@ -2815,10 +2818,10 @@ Score::FileError importCapella(MasterScore* score, const QString& name)
         }
         fp.close();
         // avoid another error message box
-        return Score::FileError::FILE_NO_ERROR;
+        return Err::NoError;
     }
     fp.close();
     convertCapella(score, &cf, false);
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 }

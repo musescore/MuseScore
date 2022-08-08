@@ -42,6 +42,7 @@ class Spanner;
 
 class DurationElement : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, DurationElement)
 public:
     ~DurationElement();
 

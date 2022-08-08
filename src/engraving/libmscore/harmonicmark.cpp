@@ -26,6 +26,7 @@
 #include "measure.h"
 #include "chordrest.h"
 #include "score.h"
+#include "stafftype.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -47,7 +48,8 @@ static const ElementStyle harmonicMarkStyle {
     { Sid::letRingHookHeight,                    Pid::BEGIN_HOOK_HEIGHT },
     { Sid::letRingHookHeight,                    Pid::END_HOOK_HEIGHT },
     { Sid::letRingLineStyle,                     Pid::LINE_STYLE },
-    { Sid::letRingBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET },
+    { Sid::letRingDashLineLen,                   Pid::DASH_LINE_LEN },
+    { Sid::letRingDashGapLen,                    Pid::DASH_GAP_LEN },
     { Sid::letRingEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::letRingLineWidth,                     Pid::LINE_WIDTH },
     { Sid::ottava8VAPlacement,                   Pid::PLACEMENT }
@@ -64,6 +66,13 @@ HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
 
 void HarmonicMarkSegment::layout()
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }
@@ -89,7 +98,7 @@ HarmonicMark::HarmonicMark(EngravingItem* parent)
 bool HarmonicMark::setProperty(Pid propertyId, const PropertyValue& value)
 {
     if (propertyId == Pid::BEGIN_TEXT) {
-        m_text = value.toString();
+        m_text = value.value<String>();
     }
 
     return TextLineBase::setProperty(propertyId, value);

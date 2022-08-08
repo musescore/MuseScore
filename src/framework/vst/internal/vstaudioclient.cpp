@@ -50,81 +50,38 @@ void VstAudioClient::init(VstPluginType&& type, VstPluginPtr plugin, audio::audi
     m_audioChannelsCount = audioChannelsCount;
 }
 
-bool VstAudioClient::handleNoteOnEvents(const mpe::PlaybackEvent& event, const audio::msecs_t from, const audio::msecs_t to)
+bool VstAudioClient::handleEvent(const VstEvent& event)
 {
-    if (!std::holds_alternative<NoteEvent>(event)) {
-        return false;
-    }
-
-    const NoteEvent& noteEvent = std::get<NoteEvent>(event);
-
-    timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-
-    if (timestampFrom < from || timestampFrom >= to) {
-        return false;
-    }
-
     ensureActivity();
 
-    VstEvent vstEvent;
-
-    vstEvent.busIndex = 0;
-    vstEvent.sampleOffset = 0;
-    vstEvent.ppqPosition = 0;
-    vstEvent.flags = VstEvent::kIsLive;
-
-    int noteId = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
-
-    vstEvent.type = VstEvent::kNoteOnEvent;
-    vstEvent.noteOn.noteId = noteId;
-    vstEvent.noteOn.channel = 0;
-    vstEvent.noteOn.pitch = noteId;
-    vstEvent.noteOn.tuning = 0;
-    vstEvent.noteOn.velocity = noteVelocityFraction(noteEvent.expressionCtx().expressionCurve.maxAmplitudeLevel());
-
-    if (m_eventList.addEvent(vstEvent) == Steinberg::kResultTrue) {
+    if (m_eventList.addEvent(const_cast<VstEvent&>(event)) == Steinberg::kResultTrue) {
         return true;
     }
 
     return false;
 }
 
-bool VstAudioClient::handleNoteOffEvents(const mpe::PlaybackEvent& event, const audio::msecs_t from, const audio::msecs_t to)
+bool VstAudioClient::handleParamChange(const PluginParamInfo& param)
 {
-    if (!std::holds_alternative<NoteEvent>(event)) {
+    IF_ASSERT_FAILED(m_pluginPtr && m_pluginPtr->provider()) {
         return false;
     }
 
-    const NoteEvent& noteEvent = std::get<NoteEvent>(event);
+    ensureActivity();
 
-    timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-    timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
-
-    if (timestampTo <= from || timestampTo > to) {
+    Steinberg::Vst::IEditController* controller = m_pluginPtr->provider()->getController();
+    if (!controller) {
         return false;
     }
 
-    VstEvent vstEvent;
+    controller->setParamNormalized(param.id, param.defaultNormalizedValue);
 
-    vstEvent.busIndex = 0;
-    vstEvent.sampleOffset = 0;
-    vstEvent.ppqPosition = 0;
-    vstEvent.flags = VstEvent::kIsLive;
+    return true;
+}
 
-    int noteId = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
-
-    vstEvent.type = VstEvent::kNoteOffEvent;
-    vstEvent.noteOn.noteId = noteId;
-    vstEvent.noteOn.channel = 0;
-    vstEvent.noteOn.pitch = noteId;
-    vstEvent.noteOn.tuning = 0;
-    vstEvent.noteOn.velocity = noteVelocityFraction(noteEvent.expressionCtx().expressionCurve.maxAmplitudeLevel());
-
-    if (m_eventList.addEvent(vstEvent) == Steinberg::kResultTrue) {
-        return true;
-    }
-
-    return false;
+void VstAudioClient::setVolumeGain(const audio::gain_t newVolumeGain)
+{
+    m_volumeGain = newVolumeGain;
 }
 
 audio::samples_t VstAudioClient::process(float* output, audio::samples_t samplesPerChannel)
@@ -139,6 +96,15 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
     }
 
     m_processData.numSamples = samplesPerChannel;
+
+    //! NOTE: From the VST3 documentation:
+    //!
+    //! Note that the ProcessData->numSamples
+    //! which indicates how many samples are used in a process call can change from call to call,
+    //! but never bigger than the maxSamplesPerBlock
+    if (samplesPerChannel != m_samplesInfo.samplesPerBlock) {
+        setBlockSize(samplesPerChannel);
+    }
 
     if (m_type == VstPluginType::Fx) {
         extractInputSamples(samplesPerChannel, output);
@@ -164,6 +130,8 @@ void VstAudioClient::flush()
     flushBuffers();
 
     disableActivity();
+
+    m_eventList.clear();
 }
 
 void VstAudioClient::setBlockSize(unsigned int samples)
@@ -173,20 +141,55 @@ void VstAudioClient::setBlockSize(unsigned int samples)
     }
 
     m_samplesInfo.samplesPerBlock = samples;
+    m_needUnprepareProcessData = true;
 
     updateProcessSetup();
 }
 
 void VstAudioClient::setSampleRate(unsigned int sampleRate)
 {
+    if (m_samplesInfo.sampleRate == sampleRate) {
+        return;
+    }
+
     m_samplesInfo.sampleRate = sampleRate;
 
     updateProcessSetup();
 }
 
-bool VstAudioClient::isPluginInputAvailable() const
+ParamsMapping VstAudioClient::paramsMapping(const std::set<Steinberg::Vst::CtrlNumber>& controllers) const
 {
-    return m_isPluginInputAvailable;
+    ParamsMapping result;
+
+    if (!m_pluginPtr || !m_pluginPtr->provider()) {
+        return result;
+    }
+
+    auto controller = m_pluginPtr->provider()->getController();
+    if (!controller) {
+        return result;
+    }
+
+    Steinberg::Vst::IMidiMapping* midiMapping = nullptr;
+    controller->queryInterface(Steinberg::Vst::IMidiMapping_iid, (void**)&midiMapping);
+
+    if (!midiMapping) {
+        return result;
+    }
+
+    for (const int busIdx : m_activeInputBusses) {
+        for (const auto& ctrlNum : controllers) {
+            PluginParamId id = 0;
+
+            if (midiMapping->getMidiControllerAssignment(busIdx, 0, ctrlNum, id) != Steinberg::kResultOk) {
+                continue;
+            }
+
+            result.emplace(ctrlNum, std::move(id));
+        }
+    }
+
+    return result;
 }
 
 IAudioProcessorPtr VstAudioClient::pluginProcessor() const
@@ -202,7 +205,6 @@ PluginComponentPtr VstAudioClient::pluginComponent() const
 
     if (!m_pluginComponent) {
         m_pluginComponent = m_pluginPtr->provider()->getComponent();
-        m_isPluginInputAvailable = m_pluginPtr->isAbleForInput();
     }
 
     return m_pluginComponent;
@@ -215,7 +217,18 @@ void VstAudioClient::setUpProcessData()
     m_processData.inputEvents = &m_eventList;
     m_processData.processContext = &m_processContext;
 
-    m_processData.prepare(*m_pluginComponent, m_samplesInfo.samplesPerBlock, Steinberg::Vst::kSample32);
+    if (m_needUnprepareProcessData) {
+        m_processData.unprepare();
+        m_needUnprepareProcessData = false;
+    }
+
+    if (!m_processData.outputs || !m_processData.inputs) {
+        m_processData.prepare(*m_pluginComponent, m_samplesInfo.samplesPerBlock, Steinberg::Vst::kSample32);
+    }
+
+    if (!m_activeOutputBusses.empty() && !m_activeInputBusses.empty()) {
+        return;
+    }
 
     BusInfo busInfo;
 
@@ -275,6 +288,8 @@ void VstAudioClient::updateProcessSetup()
         return;
     }
 
+    disableActivity();
+
     VstProcessSetup setup;
     setup.processMode = Steinberg::Vst::kRealtime;
     setup.symbolicSampleSize = Steinberg::Vst::kSample32;
@@ -320,7 +335,7 @@ bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
         for (audio::samples_t sampleIndex = 0; sampleIndex < samples; ++sampleIndex) {
             for (audio::audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
                 float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
-                output[sampleIndex * m_audioChannelsCount + audioChannelIndex] += sample;
+                output[sampleIndex * m_audioChannelsCount + audioChannelIndex] += sample * m_volumeGain;
 
                 if (hasMeaningSamples) {
                     continue;
@@ -336,46 +351,13 @@ bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
     return hasMeaningSamples;
 }
 
-int VstAudioClient::noteIndex(const mpe::pitch_level_t pitchLevel) const
-{
-    static constexpr mpe::pitch_level_t MIN_SUPPORTED_LEVEL = mpe::pitchLevel(PitchClass::C, 0);
-    static constexpr int MIN_SUPPORTED_NOTE = 12; // VST equivalent for C0
-    static constexpr mpe::pitch_level_t MAX_SUPPORTED_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
-    static constexpr int MAX_SUPPORTED_NOTE = 108; // VST equivalent for C8
-
-    if (pitchLevel <= MIN_SUPPORTED_LEVEL) {
-        return MIN_SUPPORTED_NOTE;
-    }
-
-    if (pitchLevel >= MAX_SUPPORTED_LEVEL) {
-        return MAX_SUPPORTED_NOTE;
-    }
-
-    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
-
-    return RealRound(stepCount, 0);
-}
-
-float VstAudioClient::noteVelocityFraction(const mpe::dynamic_level_t dynamicLevel) const
-{
-    return RealRound(dynamicLevel / static_cast<float>(mpe::MAX_PITCH_LEVEL), 2);
-}
-
 void VstAudioClient::ensureActivity()
 {
     if (m_isActive) {
         return;
     }
 
-    IAudioProcessorPtr processor = pluginProcessor();
-    if (!processor) {
-        return;
-    }
-    processor->setProcessing(true);
-
     updateProcessSetup();
-
-    m_isActive = true;
 }
 
 void VstAudioClient::disableActivity()
@@ -388,7 +370,10 @@ void VstAudioClient::disableActivity()
     if (!processor) {
         return;
     }
+
     processor->setProcessing(false);
+    m_pluginComponent->setActive(false);
+
     m_isActive = false;
 }
 

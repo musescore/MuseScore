@@ -23,9 +23,9 @@
 #ifndef MU_ENGRAVING_ENGRAVINGERRORS_H
 #define MU_ENGRAVING_ENGRAVINGERRORS_H
 
-#include "libmscore/masterscore.h"
+#include "io/path.h"
+#include "types/ret.h"
 
-#include "ret.h"
 #include "translation.h"
 
 namespace mu::engraving {
@@ -44,7 +44,7 @@ enum class Err {
     FileTooNew = 2007,
     FileOld300Format = 2008,
     FileCorrupted = 2009,
-    FileCriticalCorrupted = 2010,
+    FileCriticallyCorrupted = 2010,
 
     UserAbort = 2011,
     IgnoreError = 2012
@@ -52,47 +52,44 @@ enum class Err {
 
 inline Ret make_ret(Err err, const io::path_t& filePath = "")
 {
-    QString text;
+    String text;
 
     switch (err) {
     case Err::FileUnknownError:
-        text = qtrc("engraving", "Unknown error");
+        text = mtrc("engraving", "Unknown error");
         break;
     case Err::FileNotFound:
-        text = qtrc("engraving", "File \"%1\" not found")
-               .arg(filePath.toQString());
+        text = mtrc("engraving", "File \"%1\" not found").arg(filePath.toString());
         break;
     case Err::FileOpenError:
-        text = qtrc("engraving", "File open error");
+        text = mtrc("engraving", "File open error");
         break;
     case Err::FileBadFormat:
-        text = qtrc("engraving", "Bad format");
+        text = mtrc("engraving", "Bad format");
         break;
     case Err::FileUnknownType:
-        text = qtrc("engraving", "Unknown filetype");
+        text = mtrc("engraving", "Unknown filetype");
         break;
     case Err::FileTooOld:
-        text = qtrc("engraving", "It was last saved with a version older than 2.0.0.\n"
-                                 "You can convert this score by opening and then\n"
-                                 "saving with MuseScore version 2.x.\n"
-                                 "Visit the %1MuseScore download page%2 to obtain such a 2.x version.")
-               .arg("<a href=\"https://musescore.org/download#older-versions\">", "</a>");
+        text = mtrc("engraving", "This file was last saved in a version older than 2.0.0. "
+                                 "You can convert this score by opening and then "
+                                 "saving in MuseScore version 2.x. "
+                                 "Visit the <a href=\"%1\">MuseScore download page</a> to obtain such a 2.x version.")
+               .arg(u"https://musescore.org/download#older-versions");
         break;
     case Err::FileTooNew:
-        text = qtrc("engraving", "This score was saved using a newer version of MuseScore.\n "
-                                 "Visit the %1MuseScore website%2 to obtain the latest version.")
-               .arg("<a href=\"https://musescore.org\">", "</a>");
+        text = mtrc("engraving", "This file was saved using a newer version of MuseScore. "
+                                 "Visit the <a href=\"%1\">MuseScore website</a> to obtain the latest version.")
+               .arg(u"https://musescore.org");
         break;
     case Err::FileOld300Format:
-        text = qtrc("engraving", "It was last saved with a developer version of 3.0.");
+        text = mtrc("engraving", "This file was last saved with a development version of 3.0.");
         break;
     case Err::FileCorrupted:
-        text = qtrc("engraving", "File \"%1\" corrupted.")
-               .arg(filePath.toQString());
+        text = mtrc("engraving", "File \"%1\" is corrupted.").arg(filePath.toString());
         break;
-    case Err::FileCriticalCorrupted:
-        text = qtrc("engraving", "File \"%1\" is critically corrupted and cannot be processed.")
-               .arg(filePath.toQString());
+    case Err::FileCriticallyCorrupted:
+        text = mtrc("engraving", "File \"%1\" is critically corrupted and cannot be processed.").arg(filePath.toString());
         break;
     case Err::Undefined:
     case Err::NoError:
@@ -103,32 +100,6 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
     }
 
     return mu::Ret(static_cast<int>(err), text.toStdString());
-}
-
-inline Err scoreFileErrorToErr(Score::FileError err)
-{
-    switch (err) {
-    case Score::FileError::FILE_NO_ERROR:       return Err::NoError;
-    case Score::FileError::FILE_ERROR:          return Err::FileUnknownError;
-    case Score::FileError::FILE_NOT_FOUND:      return Err::FileNotFound;
-    case Score::FileError::FILE_OPEN_ERROR:     return Err::FileOpenError;
-    case Score::FileError::FILE_BAD_FORMAT:     return Err::FileBadFormat;
-    case Score::FileError::FILE_UNKNOWN_TYPE:   return Err::FileUnknownType;
-    case Score::FileError::FILE_NO_ROOTFILE:    return Err::FileBadFormat;
-    case Score::FileError::FILE_TOO_OLD:        return Err::FileTooOld;
-    case Score::FileError::FILE_TOO_NEW:        return Err::FileTooNew;
-    case Score::FileError::FILE_OLD_300_FORMAT: return Err::FileOld300Format;
-    case Score::FileError::FILE_CORRUPTED:      return Err::FileCorrupted;
-    case Score::FileError::FILE_CRITICALLY_CORRUPTED: return Err::FileCriticalCorrupted;
-    case Score::FileError::FILE_USER_ABORT:      return Err::UserAbort;
-    case Score::FileError::FILE_IGNORE_ERROR:    return Err::IgnoreError;
-    }
-    return Err::FileUnknownError;
-}
-
-inline Ret scoreFileErrorToRet(Score::FileError err, const io::path_t& filePath)
-{
-    return make_ret(scoreFileErrorToErr(err), filePath);
 }
 }
 

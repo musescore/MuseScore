@@ -28,26 +28,27 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString RHYTHMICGRP_DATA_DIR("rhythmicGrouping_data/");
-
+using namespace mu;
 using namespace mu::engraving;
 
-class RhythmicGroupingTests : public ::testing::Test
+static const String RHYTHMICGRP_DATA_DIR("rhythmicGrouping_data/");
+
+class Engraving_RhythmicGroupingTests : public ::testing::Test
 {
 public:
     void group(const char* p1, const char* p2, size_t staves = 0);
 };
 
-void RhythmicGroupingTests::group(const char* p1, const char* p2, size_t staves)
+void Engraving_RhythmicGroupingTests::group(const char* p1, const char* p2, size_t staves)
 {
-    MasterScore* score = ScoreRW::readScore(RHYTHMICGRP_DATA_DIR + p1);
+    MasterScore* score = ScoreRW::readScore(RHYTHMICGRP_DATA_DIR + String::fromUtf8(p1));
     EXPECT_TRUE(score);
 
     if (!staves) {
         score->cmdSelectAll();
         score->cmdResetNoteAndRestGroupings();
     } else {
-        Q_ASSERT(staves < score->nstaves());
+        assert(staves < score->nstaves());
         score->startCmd();
         for (size_t track = 0; track < staves * VOICES; track++) {
             score->regroupNotesAndRests(score->firstSegment(SegmentType::All)->tick(),
@@ -57,46 +58,46 @@ void RhythmicGroupingTests::group(const char* p1, const char* p2, size_t staves)
     }
 
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, p1, RHYTHMICGRP_DATA_DIR + p2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(p1), RHYTHMICGRP_DATA_DIR + String::fromUtf8(p2)));
     delete score;
 }
 
-TEST_F(RhythmicGroupingTests, group8ths44)
+TEST_F(Engraving_RhythmicGroupingTests, group8ths44)
 {
     group("group8ths4-4.mscx", "group8ths4-4-ref.mscx");
 }
 
-TEST_F(RhythmicGroupingTests, group8thsSimple)
+TEST_F(Engraving_RhythmicGroupingTests, group8thsSimple)
 {
     group("group8thsSimple.mscx", "group8thsSimple-ref.mscx");
 }
 
-TEST_F(RhythmicGroupingTests, group8thsCompound)
+TEST_F(Engraving_RhythmicGroupingTests, group8thsCompound)
 {
     group("group8thsCompound.mscx", "group8thsCompound-ref.mscx");
 }
 
-TEST_F(RhythmicGroupingTests, groupSubbeats)
+TEST_F(Engraving_RhythmicGroupingTests, groupSubbeats)
 {
     group("groupSubbeats.mscx", "groupSubbeats-ref.mscx");
 }
 
-TEST_F(RhythmicGroupingTests, groupVoices)
+TEST_F(Engraving_RhythmicGroupingTests, groupVoices)
 {
     group("groupVoices.mscx", "groupVoices-ref.mscx");
 }
 
-TEST_F(RhythmicGroupingTests, groupConflicts)
+TEST_F(Engraving_RhythmicGroupingTests, groupConflicts)
 {
     group("groupConflicts.mscx", "groupConflicts-ref.mscx", 1);  // only group 1st staff
 }
 
-TEST_F(RhythmicGroupingTests, groupArticulationsTies)
+TEST_F(Engraving_RhythmicGroupingTests, groupArticulationsTies)
 {
     group("groupArticulationsTies.mscx", "groupArticulationsTies-ref.mscx"); // test for articulations and forward/backward ties
 }
 
-TEST_F(RhythmicGroupingTests, groupShortenNotes)
+TEST_F(Engraving_RhythmicGroupingTests, groupShortenNotes)
 {
     group("groupShortenNotes.mscx", "groupShortenNotes-ref.mscx");  // test for regrouping rhythms when notes should be shortened
 }

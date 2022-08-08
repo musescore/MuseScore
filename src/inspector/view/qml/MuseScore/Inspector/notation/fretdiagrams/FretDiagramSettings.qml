@@ -70,7 +70,7 @@ Item {
 
                 visible: root.model ? root.model.areSettingsAvailable : false
 
-                text: qsTrc("inspector", "Clear")
+                text: qsTrc("global", "Clear")
 
                 navigation.name: "Clear"
                 navigation.panel: root.navigationPanel

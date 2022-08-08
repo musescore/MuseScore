@@ -22,7 +22,7 @@
 #ifndef MU_NETWORK_INETWORKMANAGER_H
 #define MU_NETWORK_INETWORKMANAGER_H
 
-#include "ret.h"
+#include "types/ret.h"
 #include "async/channel.h"
 #include "global/progress.h"
 #include "networktypes.h"
@@ -43,7 +43,7 @@ public:
                     const RequestHeaders& headers = RequestHeaders()) = 0;
     virtual Ret del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) = 0;
 
-    virtual framework::ProgressChannel progressChannel() const = 0;
+    virtual framework::Progress progress() const = 0;
 
     virtual void abort() = 0;
 };

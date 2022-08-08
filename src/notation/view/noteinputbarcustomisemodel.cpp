@@ -218,7 +218,7 @@ NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeItem(const UiAction& 
 
     NoteInputBarCustomiseItem* item = new NoteInputBarCustomiseItem(NoteInputBarCustomiseItem::ItemType::ACTION, this);
     item->setId(QString::fromStdString(action.code));
-    item->setTitle(action.title);
+    item->setTitle(action.title.qTranslated());
     item->setIcon(action.iconCode);
     item->setChecked(checked);
 
@@ -232,7 +232,7 @@ NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeItem(const UiAction& 
 NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeSeparatorItem()
 {
     NoteInputBarCustomiseItem* item = new NoteInputBarCustomiseItem(NoteInputBarCustomiseItem::ItemType::SEPARATOR, this);
-    item->setTitle(qtrc("notation", "-------  Separator line  -------"));
+    item->setTitle(QString("-------  %1  -------").arg(qtrc("notation", "Separator line")));
     item->setChecked(true); //! NOTE Can't be unchecked
     return item;
 }

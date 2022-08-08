@@ -24,12 +24,13 @@
 
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
+#include "infrastructure/symbolfont.h"
 
 #include "note.h"
 #include "symbol.h"
 #include "score.h"
-#include "scorefont.h"
 #include "actionicon.h"
 #include "staff.h"
 #include "undo.h"
@@ -296,9 +297,9 @@ void Accidental::write(XmlWriter& xml) const
 //   subTypeUserName
 //---------------------------------------------------------
 
-QString Accidental::subtypeUserName() const
+TranslatableString Accidental::subtypeUserName() const
 {
-    return SymNames::translatedUserNameForSymId(symbol());
+    return TranslatableString("engraving/sym", SymNames::userNameForSymId(symbol()));
 }
 
 //---------------------------------------------------------
@@ -383,7 +384,7 @@ void Accidental::layout()
         return;
     }
 
-    qreal m = explicitParent() ? parentItem()->mag() : 1.0;
+    double m = explicitParent() ? parentItem()->mag() : 1.0;
     if (m_isSmall) {
         m *= score()->styleD(Sid::smallNoteMag);
     }
@@ -429,7 +430,7 @@ void Accidental::layoutSingleGlyphAccidental()
         default:
             break;
         }
-        if (!score()->scoreFont()->isValid(s)) {
+        if (!score()->symbolFont()->isValid(s)) {
             layoutMultiGlyphAccidental();
             return;
         }
@@ -443,9 +444,9 @@ void Accidental::layoutSingleGlyphAccidental()
 
 void Accidental::layoutMultiGlyphAccidental()
 {
-    qreal margin = score()->styleMM(Sid::bracketedAccidentalPadding);
+    double margin = score()->styleMM(Sid::bracketedAccidentalPadding);
     RectF r;
-    qreal x = 0.0;
+    double x = 0.0;
 
     // should always be true
     if (_bracket != AccidentalBracket::NONE) {
@@ -513,7 +514,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
     case AccidentalVal::FLAT2:   return AccidentalType::FLAT2;
     case AccidentalVal::FLAT3:   return AccidentalType::FLAT3;
     default:
-        ASSERT_X("value2subtype: illegal accidental val %d" + QString::number(int(v)));
+        ASSERT_X(u"value2subtype: illegal accidental val: " + String::number(int(v)));
     }
     return AccidentalType::NONE;
 }
@@ -532,7 +533,7 @@ void Accidental::draw(mu::draw::Painter* painter) const
 
     painter->setPen(curColor());
     for (const SymElement& e : el) {
-        score()->scoreFont()->draw(e.sym, painter, magS(), PointF(e.x, e.y));
+        score()->symbolFont()->draw(e.sym, painter, magS(), PointF(e.x, e.y));
     }
 }
 
@@ -649,23 +650,11 @@ bool Accidental::setProperty(Pid propertyId, const PropertyValue& v)
 }
 
 //---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid Accidental::propertyId(const QStringRef& xmlName) const
-{
-    if (xmlName == propertyName(Pid::ACCIDENTAL_TYPE)) {
-        return Pid::ACCIDENTAL_TYPE;
-    }
-    return EngravingItem::propertyId(xmlName);
-}
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Accidental::accessibleInfo() const
+String Accidental::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), Accidental::subtypeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }
 }

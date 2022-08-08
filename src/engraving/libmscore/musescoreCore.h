@@ -24,7 +24,7 @@
 #define __MUSESCORECORE_H__
 
 #include <vector>
-#include <QString>
+#include "types/string.h"
 
 namespace mu::engraving {
 class MasterScore;
@@ -47,14 +47,14 @@ public:
     Score* currentScore() const { return cs; }
     void setCurrentScore(Score* score) { cs = score; }
 
-    virtual bool saveAs(Score*, bool /*saveCopy*/, const QString& /*path*/, const QString& /*ext*/,
+    virtual bool saveAs(Score*, bool /*saveCopy*/, const String& /*path*/, const String& /*ext*/,
                         SaveReplacePolicy* /*replacePolicy*/ = nullptr) { return false; }
     virtual void closeScore(Score*) {}
     virtual void setCurrentView(int /*tabIdx*/, int /*idx*/) {}
 
     virtual int appendScore(MasterScore* s) { scoreList.push_back(s); return 0; }
-    virtual MasterScore* openScore(const QString& /*fn*/, bool /*switchTab*/, bool considerInCurrentSession = true,
-                                   const QString& /*withFilename*/ = "") { Q_UNUSED(considerInCurrentSession); return 0; }
+    virtual MasterScore* openScore(const String& /*fn*/, bool /*switchTab*/, bool considerInCurrentSession = true,
+                                   const String& /*withFilename*/ = String()) { (void)(considerInCurrentSession); return 0; }
     std::vector<MasterScore*>& scores() { return scoreList; }
 };
 } // namespace mu::engraving

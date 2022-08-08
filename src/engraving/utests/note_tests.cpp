@@ -41,11 +41,12 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString NOTE_DATA_DIR("note_data/");
-
+using namespace mu;
 using namespace mu::engraving;
 
-class NoteTests : public ::testing::Test
+static const String NOTE_DATA_DIR("note_data/");
+
+class Engraving_NoteTests : public ::testing::Test
 {
 };
 
@@ -54,7 +55,7 @@ class NoteTests : public ::testing::Test
 ///   read/write test of note
 //---------------------------------------------------------
 
-TEST_F(NoteTests, note)
+TEST_F(Engraving_NoteTests, note)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScore();
     Chord* chord = Factory::createChord(score->dummy()->segment());
@@ -311,9 +312,9 @@ TEST_F(NoteTests, note)
 ///   read/write test of grace notes
 //---------------------------------------------------------
 
-TEST_F(NoteTests, grace)
+TEST_F(Engraving_NoteTests, grace)
 {
-    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + "grace.mscx");
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"grace.mscx");
     score->doLayout();
     Chord* chord = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     Note* note = chord->upNote();
@@ -357,7 +358,7 @@ TEST_F(NoteTests, grace)
 //      QVERIFY(c->articulations().size() == 1);
 //      delete c;
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "grace-test.mscx", NOTE_DATA_DIR + "grace-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"grace-test.mscx", NOTE_DATA_DIR + u"grace-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -365,9 +366,9 @@ TEST_F(NoteTests, grace)
 ///   test of note tpc values
 //---------------------------------------------------------
 
-TEST_F(NoteTests, tpc)
+TEST_F(Engraving_NoteTests, tpc)
 {
-    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + "tpc.mscx");
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"tpc.mscx");
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
@@ -385,7 +386,7 @@ TEST_F(NoteTests, tpc)
 
     score->cmdConcertPitchChanged(true);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "tpc-test.mscx", NOTE_DATA_DIR + "tpc-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"tpc-test.mscx", NOTE_DATA_DIR + u"tpc-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -393,9 +394,9 @@ TEST_F(NoteTests, tpc)
 ///   test of note tpc values & transposition
 //---------------------------------------------------------
 
-TEST_F(NoteTests, tpcTranspose)
+TEST_F(Engraving_NoteTests, tpcTranspose)
 {
-    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + "tpc-transpose.mscx");
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"tpc-transpose.mscx");
 
     score->startCmd();
     Measure* m = score->firstMeasure();
@@ -413,7 +414,7 @@ TEST_F(NoteTests, tpcTranspose)
     score->cmdConcertPitchChanged(true);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "tpc-transpose-test.mscx", NOTE_DATA_DIR + "tpc-transpose-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"tpc-transpose-test.mscx", NOTE_DATA_DIR + u"tpc-transpose-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -421,9 +422,9 @@ TEST_F(NoteTests, tpcTranspose)
 ///   more tests of note tpc values & transposition
 //---------------------------------------------------------
 
-TEST_F(NoteTests, tpcTranspose2)
+TEST_F(Engraving_NoteTests, tpcTranspose2)
 {
-    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + "tpc-transpose2.mscx");
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"tpc-transpose2.mscx");
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
@@ -438,16 +439,16 @@ TEST_F(NoteTests, tpcTranspose2)
 
     printf("================\n");
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "tpc-transpose2-test.mscx", NOTE_DATA_DIR + "tpc-transpose2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"tpc-transpose2-test.mscx", NOTE_DATA_DIR + u"tpc-transpose2-ref.mscx"));
 }
 
 //---------------------------------------------------------
 ///   noteLimits
 //---------------------------------------------------------
 
-TEST_F(NoteTests, noteLimits)
+TEST_F(Engraving_NoteTests, noteLimits)
 {
-    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + "empty.mscx");
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"empty.mscx");
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
@@ -482,10 +483,10 @@ TEST_F(NoteTests, noteLimits)
         score->addInterval(8, nl);
         score->endCmd();
     }
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "notelimits-test.mscx", NOTE_DATA_DIR + "notelimits-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"notelimits-test.mscx", NOTE_DATA_DIR + u"notelimits-ref.mscx"));
 }
 
-TEST_F(NoteTests, tpcDegrees)
+TEST_F(Engraving_NoteTests, tpcDegrees)
 {
     EXPECT_EQ(tpc2degree(Tpc::TPC_C,   Key::C),   0);
     //QCOMPARE(tpc2degree(Tpc::TPC_E_S, Key::C),   3);
@@ -496,9 +497,9 @@ TEST_F(NoteTests, tpcDegrees)
     //QCOMPARE(tpc2degree(Tpc::TPC_B_S, Key::C_S), 7);
 }
 
-TEST_F(NoteTests, alteredUnison)
+TEST_F(Engraving_NoteTests, alteredUnison)
 {
-    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + "altered-unison.mscx");
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"altered-unison.mscx");
     Measure* m = score->firstMeasure();
     Chord* c = m->findChord(Fraction(0, 1), 0);
     EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == AccidentalType::FLAT);
@@ -517,7 +518,7 @@ TEST_F(NoteTests, alteredUnison)
 ///    regardless of how the breve was divided up.
 //---------------------------------------------------------
 
-TEST_F(NoteTests, LongNoteAfterShort_183746)
+TEST_F(Engraving_NoteTests, LongNoteAfterShort_183746)
 {
     Score* score = ScoreRW::readScore(NOTE_DATA_DIR + "empty.mscx");
     score->doLayout();

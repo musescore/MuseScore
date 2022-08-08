@@ -22,6 +22,12 @@
 
 #include "editstaff.h"
 
+#include "translation.h"
+#include "global/utils.h"
+
+#include "ui/view/widgetstatestore.h"
+#include "ui/view/widgetutils.h"
+
 #include "editpitch.h"
 #include "editstafftype.h"
 #include "editstringdata.h"
@@ -36,11 +42,6 @@
 #include "libmscore/undo.h"
 #include "libmscore/instrumentname.h"
 #include "libmscore/system.h"
-
-#include "translation.h"
-
-#include "ui/view/widgetstatestore.h"
-#include "ui/view/widgetutils.h"
 
 #include "log.h"
 
@@ -201,28 +202,22 @@ void EditStaff::updateStaffType(const mu::engraving::StaffType& staffType)
     showBarlines->setChecked(staffType.showBarlines());
     invisible->setChecked(staffType.invisible());
     isSmallCheckbox->setChecked(staffType.isSmall());
-    staffGroupName->setText(qtrc("Staff type group name", staffType.groupName()));
+    staffGroupName->setText(staffType.translatedGroupName());
 }
 
 void EditStaff::updateInstrument()
 {
     updateInterval(m_instrument.transpose());
 
-    std::list<mu::engraving::StaffName>& snl = m_instrument.shortNames();
-    QString df = snl.empty() ? "" : snl.front().name();
-    shortName->setPlainText(df);
-
-    std::list<mu::engraving::StaffName>& lnl = m_instrument.longNames();
-    df = lnl.empty() ? "" : lnl.front().name();
-
-    longName->setPlainText(df);
+    longName->setPlainText(m_instrument.nameAsPlainText());
+    shortName->setPlainText(m_instrument.abbreviatureAsPlainText());
 
     if (partName->text() == instrumentName->text()) {
         // Updates part name if no custom name has been set before
-        partName->setText(m_instrument.name());
+        partName->setText(m_instrument.nameAsPlainText());
     }
 
-    instrumentName->setText(m_instrument.name());
+    instrumentName->setText(m_instrument.nameAsPlainText());
 
     m_minPitchA = m_instrument.minPitchA();
     m_maxPitchA = m_instrument.maxPitchA();
@@ -508,13 +503,15 @@ void EditStaff::applyPartProperties()
 {
     Part* part    = m_orgStaff->part();
 
-    QString sn = shortName->toPlainText();
-    QString ln = longName->toPlainText();
-    if (!mu::engraving::Text::validateText(sn) || !mu::engraving::Text::validateText(ln)) {
-        interactive()->warning(trc("notation", "Invalid instrument name"),
-                               trc("notation", "The instrument name is invalid."));
+    String _sn = shortName->toPlainText();
+    String _ln = longName->toPlainText();
+    if (!mu::engraving::Text::validateText(_sn) || !mu::engraving::Text::validateText(_ln)) {
+        interactive()->warning(trc("notation/staffpartproperties", "Invalid instrument name"),
+                               trc("notation/staffpartproperties", "The instrument name is invalid."));
         return;
     }
+    QString sn = _sn;
+    QString ln = _ln;
     shortName->setPlainText(sn);    // show the fixed text
     longName->setPlainText(ln);
 
@@ -636,24 +633,9 @@ void EditStaff::editStringDataClicked()
     }
 }
 
-static const char* s_es_noteNames[] = {
-    QT_TRANSLATE_NOOP("editstaff", "C"),
-    QT_TRANSLATE_NOOP("editstaff", "C♯"),
-    QT_TRANSLATE_NOOP("editstaff", "D"),
-    QT_TRANSLATE_NOOP("editstaff", "E♭"),
-    QT_TRANSLATE_NOOP("editstaff", "E"),
-    QT_TRANSLATE_NOOP("editstaff", "F"),
-    QT_TRANSLATE_NOOP("editstaff", "F♯"),
-    QT_TRANSLATE_NOOP("editstaff", "G"),
-    QT_TRANSLATE_NOOP("editstaff", "A♭"),
-    QT_TRANSLATE_NOOP("editstaff", "A"),
-    QT_TRANSLATE_NOOP("editstaff", "B♭"),
-    QT_TRANSLATE_NOOP("editstaff", "B")
-};
-
 QString EditStaff::midiCodeToStr(int midiCode)
 {
-    return QString("%1 %2").arg(qtrc("editstaff", s_es_noteNames[midiCode % 12])).arg(midiCode / 12 - 1);
+    return QString::fromStdString(mu::pitchToString(midiCode));
 }
 
 void EditStaff::showStaffTypeDialog()

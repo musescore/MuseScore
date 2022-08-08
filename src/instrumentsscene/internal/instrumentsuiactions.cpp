@@ -23,7 +23,7 @@
 #include "instrumentsuiactions.h"
 
 #include "context/uicontext.h"
-#include "log.h"
+#include "types/translatablestring.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::ui;
@@ -31,11 +31,15 @@ using namespace mu::ui;
 const UiActionList InstrumentsUiActions::m_actions = {
     UiAction("instruments",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Add/change instruments…")
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Add/remove instruments…"),
+             TranslatableString("action", "Add/remove instruments…")
              ),
     UiAction("change-instrument",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Select instrument…")
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Select instrument…"),
+             TranslatableString("action", "Select instrument…")
              )
 };
 

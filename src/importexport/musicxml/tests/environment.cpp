@@ -22,18 +22,39 @@
 
 #include "testing/environment.h"
 
-#include "log.h"
-#include "framework/fonts/fontsmodule.h"
+#include "fonts/fontsmodule.h"
+#include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
 #include "importexport/musicxml/musicxmlmodule.h"
 
+#include "engraving/utests/utils/scorerw.h"
+
+#include "libmscore/instrtemplate.h"
+#include "libmscore/musescoreCore.h"
+
+#include "log.h"
+
+using namespace mu;
+using namespace mu::engraving;
+
 static mu::testing::SuiteEnvironment musicxml_se(
 {
+    new mu::draw::DrawModule(),
     new mu::fonts::FontsModule(), // needs for libmscore
     new mu::engraving::EngravingModule(),
     new mu::iex::musicxml::MusicXmlModule() // needs for init resources
 },
     []() {
     LOGI() << "musicxml tests suite post init";
+
+    mu::engraving::ScoreRW::setRootPath(mu::String::fromUtf8(iex_musicxml_tests_DATA_ROOT));
+
+    mu::engraving::MScore::testMode = true;
+    mu::engraving::MScore::noGui = true;
+
+    new mu::engraving::MuseScoreCore();
+    mu::engraving::MScore::init(); // initialize libmscore
+
+    loadInstrumentTemplates(":/data/instruments.xml");
 }
     );

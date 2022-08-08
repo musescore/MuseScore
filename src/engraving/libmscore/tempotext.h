@@ -37,6 +37,7 @@ namespace mu::engraving {
 
 class TempoText final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, TempoText)
 public:
     TempoText(Segment* parent);
 
@@ -49,11 +50,11 @@ public:
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 
     BeatsPerSecond tempo() const { return _tempo; }
-    qreal tempoBpm() const;
+    double tempoBpm() const;
     void setTempo(BeatsPerSecond v);
-    void undoSetTempo(qreal v);
+    void undoSetTempo(double v);
     bool isRelative() { return _isRelative; }
-    void setRelative(qreal v) { _isRelative = true; _relative = v; }
+    void setRelative(double v) { _isRelative = true; _relative = v; }
 
     bool followText() const { return _followText; }
     void setFollowText(bool v) { _followText = v; }
@@ -64,14 +65,14 @@ public:
 
     TDuration duration() const;
 
-    static int findTempoDuration(const QString& s, int& len, TDuration& dur);
-    static QString duration2tempoTextString(const TDuration dur);
-    static QString duration2userName(const TDuration t);
+    static int findTempoDuration(const String& s, int& len, TDuration& dur);
+    static String duration2tempoTextString(const TDuration dur);
+    static String duration2userName(const TDuration t);
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 
 protected:
     void added() override;
@@ -85,7 +86,7 @@ protected:
 
     BeatsPerSecond _tempo;             // beats per second
     bool _followText;         // parse text to determine tempo
-    qreal _relative;
+    double _relative;
     bool _isRelative;
 };
 } // namespace mu::engraving

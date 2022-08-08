@@ -35,14 +35,14 @@ set(MODULE_BIG_QRC
     fonts_MScore.qrc
     fonts_MuseJazz.qrc
     fonts_Petaluma.qrc
+    fonts_FinaleMaestro.qrc
+    fonts_FinaleBroadway.qrc
     fonts_Tabulature.qrc
     )
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/fontsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fontsmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fontssetup.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fontssetup.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

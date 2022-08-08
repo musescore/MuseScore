@@ -24,6 +24,7 @@
 #include <QGuiApplication>
 #include <QAccessible>
 #include <QWindow>
+#include <QTimer>
 
 #ifdef Q_OS_LINUX
 #include <QKeyEvent>
@@ -31,6 +32,7 @@
 #endif
 
 #include "accessibleobject.h"
+#include "accessiblestub.h"
 #include "accessibleiteminterface.h"
 #include "async/async.h"
 
@@ -69,7 +71,7 @@ static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObje
         return interfaceGetter(object);
     }
 
-    return nullptr;
+    return AccessibleStub::accessibleInterface(object);
 }
 
 void AccessibilityController::init()
@@ -179,8 +181,16 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
         return;
     case IAccessible::Property::Parent: etype = QAccessible::ParentChanged;
         break;
-    case IAccessible::Property::Name: etype = QAccessible::NameChanged;
+    case IAccessible::Property::Name: {
+#ifdef Q_OS_MAC
+        m_needToVoicePanelInfo = false;
+        etype = QAccessible::NameChanged;
         break;
+#else
+        triggerRevoicingOfChangedName(item);
+        return;
+#endif
+    }
     case IAccessible::Property::Description: etype = QAccessible::DescriptionChanged;
         break;
     case IAccessible::Property::Value: {
@@ -296,6 +306,11 @@ void AccessibilityController::cancelPreviousReading()
 
 void AccessibilityController::savePanelAccessibleName(const IAccessible* oldItem, const IAccessible* newItem)
 {
+    if (m_ignorePanelChangingVoice) {
+        m_needToVoicePanelInfo = false;
+        return;
+    }
+
     const IAccessible* oldItemPanel = panel(oldItem);
     QString oldItemPanelName = oldItemPanel ? oldItemPanel->accessibleName() : "";
 
@@ -304,6 +319,40 @@ void AccessibilityController::savePanelAccessibleName(const IAccessible* oldItem
 
     m_needToVoicePanelInfo = oldItemPanelName != newItemPanelName;
 }
+
+#ifndef Q_OS_MAC
+void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
+{
+    if (!configuration()->active()) {
+        return;
+    }
+
+    if (m_lastFocused != item) {
+        return;
+    }
+
+    m_ignorePanelChangingVoice = true;
+
+    item->setState(State::Focused, false);
+
+    const IAccessible* itemPanel = panel(item);
+    IAccessible* tmpFocusedItem = findSiblingItem(itemPanel, item);
+    if (!tmpFocusedItem) {
+        tmpFocusedItem = const_cast<IAccessible*>(itemPanel);
+    }
+
+    tmpFocusedItem->setState(State::Focused, true);
+    m_itemForRestoreFocus = item;
+
+    //! NOTE: Restore the focused element after some delay(this value was found experimentally)
+    QTimer::singleShot(200, [=]() {
+        m_lastFocused->setState(State::Focused, false);
+        m_itemForRestoreFocus->setState(State::Focused, true);
+        m_ignorePanelChangingVoice = false;
+    });
+}
+
+#endif
 
 const IAccessible* AccessibilityController::panel(const IAccessible* item) const
 {
@@ -318,6 +367,33 @@ const IAccessible* AccessibilityController::panel(const IAccessible* item) const
         }
 
         parent = parent->accessibleParent();
+    }
+
+    return nullptr;
+}
+
+IAccessible* AccessibilityController::findSiblingItem(const IAccessible* item, const IAccessible* currentItem) const
+{
+    TRACEFUNC;
+    size_t count = item->accessibleChildCount();
+    for (size_t i = 0; i < count; ++i) {
+        const IAccessible* ch = item->accessibleChild(i);
+        const Item& chIt = findItem(ch);
+        if (!chIt.isValid() || !chIt.iface || chIt.item->accessibleIgnored() || ch == currentItem) {
+            continue;
+        }
+
+        if (!chIt.iface->state().invisible && ch->accessibleRole() != IAccessible::Group
+            && ch->accessibleRole() != IAccessible::Panel) {
+            return chIt.item;
+        }
+
+        if (chIt.item->accessibleChildCount() > 0) {
+            IAccessible* subItem = findSiblingItem(chIt.item, currentItem);
+            if (subItem) {
+                return subItem;
+            }
+        }
     }
 
     return nullptr;
@@ -556,4 +632,8 @@ mu::async::Channel<IAccessible::State, bool> AccessibilityController::accessible
 {
     static async::Channel<IAccessible::State, bool> ch;
     return ch;
+}
+
+void AccessibilityController::setState(State, bool)
+{
 }

@@ -24,21 +24,27 @@
 
 #include <map>
 
-#include "libmscore/mscore.h"
-#include "instrtemplate.h"
+#include "types/translatablestring.h"
 
 namespace mu::engraving {
+class InstrumentTemplate;
+class Score;
+
+class XmlReader;
+class XmlWriter;
+
 //---------------------------------------------------------
 //   ScoreGroup
 //---------------------------------------------------------
 
 struct ScoreGroup
 {
-    QString family { QString("") };
-    QString section { QString("") };
-    QString unsorted { QString() };    // isNull()   : not an unsorted group
-                                       // isEmpty()  : equal to <unsorted/>
-                                       // !isEmpty() : equal to <unsorted group="unsorted"/>
+    String family;
+    String section;
+    String unsorted;            // isEmpty()  : equal to <unsorted/>
+                                // !isEmpty() : equal to <unsorted group="unsorted"/>
+    bool notUnsorted = true;    // not an unsorted group
+
     bool bracket { false };
     bool barLineSpan { true };
     bool thinBracket { true };
@@ -61,7 +67,7 @@ struct InstrumentOverwrite
 struct ScoreOrder
 {
     String id;
-    String name;
+    TranslatableString name;
     std::map<String, InstrumentOverwrite> instrumentMap;
     std::vector<ScoreGroup> groups;
     bool customized = false;
@@ -74,16 +80,16 @@ struct ScoreOrder
 
     bool readBoolAttribute(XmlReader& reader, const char* name, bool defValue);
     void readInstrument(XmlReader& reader);
-    void readSoloists(XmlReader& reader, const QString section);
+    void readSoloists(XmlReader& reader, const String section);
     void readSection(XmlReader& reader);
-    bool hasGroup(const QString& id, const QString& group=QString()) const;
+    bool hasGroup(const String& id, const String& group=String()) const;
 
     bool isValid() const;
     bool isCustom() const;
-    String getName() const;
-    QString getFamilyName(const InstrumentTemplate* instrTemplate, bool soloist) const;
-    ScoreGroup newUnsortedGroup(const QString group, const QString section) const;
-    ScoreGroup getGroup(const QString family, const QString instrumentGroup) const;
+    TranslatableString getName() const;
+    String getFamilyName(const InstrumentTemplate* instrTemplate, bool soloist) const;
+    ScoreGroup newUnsortedGroup(const String group, const String section) const;
+    ScoreGroup getGroup(const String family, const String instrumentGroup) const;
     int instrumentSortingIndex(const String& instrumentId, bool isSoloist) const;
     bool isScoreOrder(const std::list<int>& indices) const;
     bool isScoreOrder(const Score* score) const;

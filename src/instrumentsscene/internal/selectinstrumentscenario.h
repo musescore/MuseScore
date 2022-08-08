@@ -23,6 +23,7 @@
 #define MU_INSTRUMENTSSCENE_SELECTINSTRUMENTSSCENARIO_H
 
 #include "notation/iselectinstrumentscenario.h"
+#include "notation/iinstrumentsrepository.h"
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 
@@ -30,6 +31,7 @@ namespace mu::instrumentsscene {
 class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario
 {
     INJECT(instruments, framework::IInteractive, interactive)
+    INJECT(instruments, notation::IInstrumentsRepository, instrumentsRepository)
 
 public:
     RetVal<notation::PartInstrumentListScoreOrder> selectInstruments() const override;

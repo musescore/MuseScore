@@ -254,10 +254,6 @@ void NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
-
-    if (mu::engraving::ChordRest* chordRest = score()->inputState().cr()) {
-        m_interaction->showItem(chordRest);
-    }
 }
 
 void NotationNoteInput::removeNote(const PointF& pos)
@@ -308,7 +304,7 @@ void NotationNoteInput::setDrumNote(int note)
     notifyAboutStateChanged();
 }
 
-void NotationNoteInput::setCurrentVoiceIndex(int voiceIndex)
+void NotationNoteInput::setCurrentVoice(voice_idx_t voiceIndex)
 {
     TRACEFUNC;
 
@@ -324,6 +320,14 @@ void NotationNoteInput::setCurrentVoiceIndex(int voiceIndex)
         inputState.setSegment(segment);
     }
 
+    notifyAboutStateChanged();
+}
+
+void NotationNoteInput::setCurrentTrack(track_idx_t trackIndex)
+{
+    TRACEFUNC;
+
+    score()->inputState().setTrack(trackIndex);
     notifyAboutStateChanged();
 }
 
@@ -483,6 +487,10 @@ void NotationNoteInput::startEdit()
 void NotationNoteInput::apply()
 {
     m_undoStack->commitChanges();
+
+    if (mu::engraving::ChordRest* chordRest = score()->inputState().cr()) {
+        m_interaction->showItem(chordRest);
+    }
 }
 
 void NotationNoteInput::updateInputState()

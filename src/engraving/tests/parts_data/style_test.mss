@@ -37,7 +37,6 @@
     <clefBarlineDistance>0.18</clefBarlineDistance>
     <stemWidth>0.13</stemWidth>
     <shortenStem>1</shortenStem>
-    <shortStemProgression>0.25</shortStemProgression>
     <shortestStem>2.25</shortestStem>
     <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
     <minNoteDistance>0.25</minNoteDistance>
@@ -57,9 +56,9 @@
     <dotNoteDistance>0.35</dotNoteDistance>
     <dotRestDistance>0.25</dotRestDistance>
     <dotDotDistance>0.5</dotDotDistance>
-    <propertyDistanceHead>1</propertyDistanceHead>
-    <propertyDistanceStem>1.8</propertyDistanceStem>
-    <propertyDistance>1</propertyDistance>
+    <propertyDistanceHead>0.5</propertyDistanceHead>
+    <propertyDistanceStem>0.5</propertyDistanceStem>
+    <propertyDistance>0.5</propertyDistance>
     <articulationMag>1</articulationMag>
     <lastSystemFillLimit>0.3</lastSystemFillLimit>
     <hairpinY>8</hairpinY>

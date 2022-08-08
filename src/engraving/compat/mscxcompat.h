@@ -22,14 +22,13 @@
 #ifndef MU_ENGRAVING_MSCXCOMPAT_H
 #define MU_ENGRAVING_MSCXCOMPAT_H
 
-#include <QByteArray>
 #include "libmscore/masterscore.h"
 #include "engravingproject.h"
 
 namespace mu::engraving::compat {
-Score::FileError mscxToMscz(const QString& mscxFilePath, ByteArray* msczData);
-Score::FileError loadMsczOrMscx(MasterScore* score, const QString& path, bool ignoreVersionError = false);
-Err loadMsczOrMscx(EngravingProjectPtr project, const QString& path, bool ignoreVersionError = false);
+Err mscxToMscz(const String& mscxFilePath, ByteArray* msczData);
+Err loadMsczOrMscx(MasterScore* score, const String& path, bool ignoreVersionError = false);
+Err loadMsczOrMscx(EngravingProjectPtr project, const String& path, bool ignoreVersionError = false);
 }
 
 #endif // MU_ENGRAVING_MSCXCOMPAT_H

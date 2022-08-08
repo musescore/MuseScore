@@ -5,45 +5,45 @@
 #include "global/log.h"
 
 namespace mu::engraving {
-std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(QDomNode* trackNode)
+std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNode* trackNode)
 {
-    static const std::set<QString> sUnusedNodes = {
-        "Color",                                        // we dont use icon color for the tracks
-        "SystemsDefaultLayout", "SystemsLayout",        // we have our own layout algorithms
-        "SystemsDefautLayout",                          // GP has a typo here :)
-        "PalmMute",                                     // currently our synthesizer is unable to simulate this feature
-        "AutoAccentuation",                             // currently our synthesizer is unable to simulate this feature
-        "PlayingStyle",                                 // currently we ignore playing style
-        "UseOneChannelPerString",                       // we have our own channel management system in synth
-        "PartSounding",                                 // don't know what this is
-        "PlaybackState"                                 // ignored
+    static const std::set<String> sUnusedNodes = {
+        u"Color",                                        // we dont use icon color for the tracks
+        u"SystemsDefaultLayout", u"SystemsLayout",        // we have our own layout algorithms
+        u"SystemsDefautLayout",                          // GP has a typo here :)
+        u"PalmMute",                                     // currently our synthesizer is unable to simulate this feature
+        u"AutoAccentuation",                             // currently our synthesizer is unable to simulate this feature
+        u"PlayingStyle",                                 // currently we ignore playing style
+        u"UseOneChannelPerString",                       // we have our own channel management system in synth
+        u"PartSounding",                                 // don't know what this is
+        u"PlaybackState"                                 // ignored
     };
 
-    int trackIdx = trackNode->attributes().namedItem("id").toAttr().value().toInt();
+    int trackIdx = trackNode->attribute("id").toInt();
     auto track = std::make_unique<GPTrack>(trackIdx);
-    QDomNode trackChildNode = trackNode->firstChild();
+    XmlDomNode trackChildNode = trackNode->firstChild();
 
     while (!trackChildNode.isNull()) {
-        QString nodeName = trackChildNode.nodeName();
-        if (nodeName == "Name") {
+        String nodeName = trackChildNode.nodeName();
+        if (nodeName == u"Name") {
             track->setName(trackChildNode.toElement().text());
-        } else if (nodeName == "RSE") {
+        } else if (nodeName == u"RSE") {
             GPTrack::RSE rse = readTrackRSE(&trackChildNode);
             track->setRSE(rse);
-        } else if (nodeName == "GeneralMidi") {
-            if (trackChildNode.toElement().hasChildNodes()) {
+        } else if (nodeName == u"GeneralMidi") {
+            if (trackChildNode.hasChildNodes()) {
                 auto programm = trackChildNode.firstChildElement("Program").text().toInt();
                 track->setProgramm(programm);
                 int midiChannel = trackChildNode.firstChildElement("PrimaryChannel").text().toInt();
                 track->setMidiChannel(midiChannel);
             }
-        } else if (nodeName == "ShortName") {
+        } else if (nodeName == u"ShortName") {
             track->setShortName(trackChildNode.toElement().text());
-        } else if (nodeName == "Properties") {
+        } else if (nodeName == u"Properties") {
             readTrackProperties(&trackChildNode, track.get());
-        } else if (nodeName == "Instrument") {
+        } else if (nodeName == u"Instrument") {
             setUpInstrument(&trackChildNode, track.get());
-        } else if ("Lyrics" == nodeName) {
+        } else if (nodeName == u"Lyrics") {
             readLyrics(trackChildNode, track.get());
         } else if (sUnusedNodes.find(nodeName) != sUnusedNodes.end()) {
             // these nodes are not used (see comment to the sUnusedNodes variable)
@@ -57,15 +57,15 @@ std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(QDomNode*
     return std::make_pair(trackIdx, std::move(track));
 }
 
-void GP6DomBuilder::setUpInstrument(QDomNode* trackChildNode, GPTrack* track)
+void GP6DomBuilder::setUpInstrument(XmlDomNode* trackChildNode, GPTrack* track)
 {
-    auto ref = trackChildNode->attributes().namedItem("ref").toAttr().value();
+    String ref = trackChildNode->attribute("ref");
     track->setInstrument(ref);
-    if (ref.endsWith("-gs") || ref.startsWith("2")) { // grand staff
+    if (ref.endsWith(u"-gs") || ref.startsWith(u'2')) { // grand staff
         track->setStaffCount(2);
     }
 
-    if (ref.contains("gtr") || ref.contains("bass")) {
+    if (ref.contains(u"gtr") || ref.contains(u"bass")) {
         //! NOTE Guitar notation is transposed to octave by default (see music grammar)
         track->setTranspose(-12);
 

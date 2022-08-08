@@ -22,7 +22,7 @@
 #ifndef MU_LANGUAGES_LANGUAGESERRORS_H
 #define MU_LANGUAGES_LANGUAGESERRORS_H
 
-#include "ret.h"
+#include "types/ret.h"
 #include "translation.h"
 
 namespace mu::languages {
@@ -51,16 +51,16 @@ inline Ret make_ret(Err e)
     case Err::Undefined: return Ret(retCode);
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
-    case Err::ErrorParseConfig: return Ret(retCode, trc("languages", "Error parsing response from server"));
-    case Err::ErrorDownloadLanguage: return Ret(retCode, trc("languages", "Error download language"));
+    case Err::ErrorParseConfig: return Ret(retCode, trc("languages", "Error while parsing response from server"));
+    case Err::ErrorDownloadLanguage: return Ret(retCode, trc("languages", "Error while downloading language"));
     case Err::ErrorLanguageNotFound: return Ret(retCode, trc("languages", "Language not found"));
-    case Err::ErrorRemoveLanguageDirectory: return Ret(retCode, trc("languages", "Error remove language directory"));
+    case Err::ErrorRemoveLanguageDirectory: return Ret(retCode, trc("languages", "Error while removing language directory"));
     case Err::ErrorAnotherOperationStarted: return Ret(retCode,
-                                                       trc("language", "Another operation on this language has already started"));
+                                                       trc("languages", "Another operation on this language has already been started"));
     case Err::UnpackDestinationReadOnly: return Ret(retCode, trc("languages", "Cannot import language on read-only storage"));
-    case Err::UnpackNoFreeSpace: return Ret(retCode, trc("languages", "Cannot import language on full storage"));
-    case Err::UnpackErrorRemovePreviousVersion: return Ret(retCode, trc("languages", "Error removing previous version"));
-    case Err::UnpackError: return Ret(retCode, trc("languages", "Error unpacking language"));
+    case Err::UnpackNoFreeSpace: return Ret(retCode, trc("languages", "Cannot import language due to lack of free disk space"));
+    case Err::UnpackErrorRemovePreviousVersion: return Ret(retCode, trc("languages", "Error while removing previous version of language"));
+    case Err::UnpackError: return Ret(retCode, trc("languages", "Error while unpacking language"));
     }
 
     return retCode;

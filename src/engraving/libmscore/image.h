@@ -23,10 +23,10 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
-#include "modularity/ioc.h"
-
-#include "infrastructure/draw/iimageprovider.h"
 #include "bsymbol.h"
+
+#include "modularity/ioc.h"
+#include "draw/iimageprovider.h"
 
 namespace mu::draw {
 class Pixmap;
@@ -46,6 +46,8 @@ enum class ImageType : char {
 
 class Image final : public BSymbol
 {
+    OBJECT_ALLOCATOR(engraving, Image)
+
     INJECT(engraving, mu::draw::IImageProvider, imageProvider)
 
 public:
@@ -57,19 +59,19 @@ public:
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
-    bool load(const QString& s);
-    bool loadFromData(const QString&, const mu::ByteArray&);
+    bool load(const io::path_t& s);
+    bool loadFromData(const io::path_t& name, const mu::ByteArray&);
     void layout() override;
     void draw(mu::draw::Painter*) const override;
 
     bool isImageFramed() const;
-    qreal imageAspectRatio() const;
+    double imageAspectRatio() const;
     void setSize(const mu::SizeF& s) { _size = s; }
     mu::SizeF size() const { return _size; }
-    void updateImageHeight(const qreal& height);
-    void updateImageWidth(const qreal& width);
-    qreal imageHeight() const;
-    qreal imageWidth() const;
+    void updateImageHeight(const double& height);
+    void updateImageWidth(const double& width);
+    double imageHeight() const;
+    double imageWidth() const;
     bool lockAspectRatio() const { return _lockAspectRatio; }
     void setLockAspectRatio(bool v) { _lockAspectRatio = v; }
     bool autoScale() const { return _autoScale; }
@@ -96,8 +98,8 @@ public:
 
 protected:
     ImageStoreItem* _storeItem;
-    QString _storePath;             // the path of the img in the ImageStore
-    QString _linkPath;              // the path of an external linked img
+    String _storePath;             // the path of the img in the ImageStore
+    String _linkPath;              // the path of an external linked img
     bool _linkIsValid;              // whether _linkPath file exists or not
     mutable mu::draw::Pixmap buffer;         ///< cached rendering
     mu::SizeF _size;                   // in mm or spatium units

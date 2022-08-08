@@ -23,7 +23,8 @@
 #ifndef __SHAPE_H__
 #define __SHAPE_H__
 
-#include "infrastructure/draw/geometry.h"
+#include "global/allocator.h"
+#include "draw/types/geometry.h"
 
 namespace mu::draw {
 class Painter;
@@ -40,6 +41,8 @@ class Measure;
 //---------------------------------------------------------
 
 struct ShapeElement : public mu::RectF {
+    OBJECT_ALLOCATOR(engraving, ShapeElement)
+public:
     const EngravingItem* toItem = nullptr;
     ShapeElement(const mu::RectF& f, const EngravingItem* p)
         : mu::RectF(f), toItem(p) {}
@@ -56,7 +59,7 @@ struct ShapeElement : public mu::RectF {
 
 class Shape : public std::vector<ShapeElement>
 {
-// class Shape : std::vector<ShapeElement> {
+    OBJECT_ALLOCATOR(engraving, Shape)
 public:
     enum HorizontalSpacingType {
         SPACING_GENERAL = 0,
@@ -75,21 +78,21 @@ public:
     void remove(const mu::RectF&);
     void remove(const Shape&);
 
-    void addHorizontalSpacing(EngravingItem* item, qreal left, qreal right);
+    void addHorizontalSpacing(EngravingItem* item, double left, double right);
 
     void translate(const mu::PointF&);
-    void translateX(qreal);
-    void translateY(qreal);
+    void translateX(double);
+    void translateY(double);
     Shape translated(const mu::PointF&) const;
 
-    qreal minHorizontalDistance(const Shape&, Score* score) const;
-    qreal minVerticalDistance(const Shape&) const;
-    qreal topDistance(const mu::PointF&) const;
-    qreal bottomDistance(const mu::PointF&) const;
-    qreal left() const;
-    qreal right() const;
-    qreal top() const;
-    qreal bottom() const;
+    double minHorizontalDistance(const Shape&, Score* score) const;
+    double minVerticalDistance(const Shape&) const;
+    double topDistance(const mu::PointF&) const;
+    double bottomDistance(const mu::PointF&) const;
+    double left() const;
+    double right() const;
+    double top() const;
+    double bottom() const;
 
     size_t size() const { return std::vector<ShapeElement>::size(); }
     bool empty() const { return std::vector<ShapeElement>::empty(); }
@@ -98,6 +101,7 @@ public:
     bool contains(const mu::PointF&) const;
     bool intersects(const mu::RectF& rr) const;
     bool intersects(const Shape&) const;
+    bool clearsVertically(const Shape& a) const;
 
     void paint(mu::draw::Painter& painter) const;
 #ifndef NDEBUG
@@ -109,7 +113,7 @@ public:
 //   intersects
 //---------------------------------------------------------
 
-inline static bool intersects(qreal a, qreal b, qreal c, qreal d, qreal verticalClearance)
+inline static bool intersects(double a, double b, double c, double d, double verticalClearance)
 {
     // return (a >= c && a < d) || (b >= c && b < d) || (a < c && b >= b);
     // return (std::max(a,b) > std::min(c,d)) && (std::min(a,b) < std::max(c,d));

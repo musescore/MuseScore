@@ -36,7 +36,7 @@ int ticks_beat(int n)
 {
     int m = (Constants::division * 4) / n;
     if ((Constants::division* 4) % n) {
-        ASSERT_X(QString::asprintf("Mscore: ticks_beat(): bad divisor %d", n));
+        ASSERT_X(String(u"Mscore: ticks_beat(): bad divisor %1").arg(n));
     }
     return m;
 }
@@ -102,7 +102,7 @@ BeatType TimeSigFrac::rtick2beatType(int rtick) const
 
 BeatType TimeSigFrac::strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCrossed, int* subbeatTick, bool saveLast) const
 {
-    Q_ASSERT(rtick2 > rtick1);
+    assert(rtick2 > rtick1);
 
     BeatType strongest = BeatType::SUBBEAT;
 
@@ -129,7 +129,7 @@ BeatType TimeSigFrac::strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCr
 
 int TimeSigFrac::subbeatTicks(int level) const
 {
-    Q_ASSERT(level <= maxSubbeatLevel());
+    assert(level <= maxSubbeatLevel());
     int subbeatTicks = dUnitTicks();
     while (level > 0) {
         subbeatTicks /= 2;
@@ -194,7 +194,7 @@ int TimeSigFrac::rtick2subbeatLevel(int rtick) const
 
 int TimeSigFrac::strongestSubbeatLevelInRange(int rtick1, int rtick2, int* subbeatTick) const
 {
-    Q_ASSERT(rtick2 > rtick1);
+    assert(rtick2 > rtick1);
 
     for (int level = 0, subbeatTicks = dUnitTicks();;) {
         int n = rtick1 / subbeatTicks;
@@ -326,14 +326,14 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
     }
     auto e = upper_bound(t);
     if (empty() || e == begin()) {
-        ASSERT_X(QString::asprintf("tickValue(0x%x) not found", t));
+        ASSERT_X(String(u"tickValue(0x%1) not found").arg(t));
     }
     --e;
     int delta  = t - e->first;
     int ticksB = ticks_beat(e->second.timesig().denominator());   // ticks in beat
     int ticksM = ticksB * e->second.timesig().numerator();        // ticks in measure (bar)
     if (ticksM == 0) {
-        LOGD("TimeSigMap::tickValues: at %d %s", t, qPrintable(e->second.timesig().toString()));
+        LOGD("TimeSigMap::tickValues: at %d %s", t, muPrintable(e->second.timesig().toString()));
         *bar  = 0;
         *beat = 0;
         *tick = 0;
@@ -351,11 +351,11 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
 //    This is not reentrant and only for debugging!
 //---------------------------------------------------------
 
-QString TimeSigMap::pos(int t) const
+String TimeSigMap::pos(int t) const
 {
     int bar, beat, tick;
     tickValues(t, &bar, &beat, &tick);
-    return QString("%1:%2:%3").arg(bar + 1).arg(beat).arg(tick);
+    return String(u"%1:%2:%3").arg(bar + 1, beat, tick);
 }
 
 //---------------------------------------------------------
@@ -568,7 +568,7 @@ void TimeSigMap::dump() const
     LOGD("TimeSigMap:");
     for (auto i = begin(); i != end(); ++i) {
         LOGD("%6d timesig: %s measure: %d",
-             i->first, qPrintable(i->second.timesig().toString()), i->second.bar());
+             i->first, muPrintable(i->second.timesig().toString()), i->second.bar());
     }
 }
 

@@ -32,6 +32,7 @@ namespace mu::engraving {
 
 class RehearsalMark final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, RehearsalMark)
 public:
     enum class Type {
         Main = 0,

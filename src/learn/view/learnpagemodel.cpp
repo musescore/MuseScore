@@ -47,6 +47,8 @@ QVariantList LearnPageModel::advancedPlaylist() const
 
 void LearnPageModel::load()
 {
+    learnService()->refreshPlaylists();
+
     setStartedPlaylist(learnService()->startedPlaylist());
     learnService()->startedPlaylistChanged().onReceive(this, [this](const Playlist& playlist) {
         setStartedPlaylist(playlist);
@@ -130,12 +132,11 @@ QVariantList LearnPageModel::playlistToVariantList(const Playlist& playlist) con
     QVariantList result;
 
     auto formatDuration = [](int durationSecs) {
-        QTime duration = QDateTime::fromSecsSinceEpoch(durationSecs).time();
-        int hour = duration.hour();
-        int minute = duration.minute();
-        int second = duration.second();
+        int seconds = durationSecs;
+        int minutes = seconds / 60;
+        int hours = minutes / 60;
 
-        return (hour > 0 ? QString::number(hour) + ":" : "") + QString::number(minute) + ":" + QString::number(second);
+        return (hours > 0 ? QString::number(hours) + ":" : "") + QString::number(minutes % 60) + ":" + QString::number(seconds % 60);
     };
 
     for (const PlaylistItem& item : playlist) {

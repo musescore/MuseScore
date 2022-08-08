@@ -27,7 +27,7 @@
 using namespace mu::uicomponents;
 
 IconView::IconView(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : QuickPaintedView(parent)
 {
 }
 

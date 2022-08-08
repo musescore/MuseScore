@@ -60,7 +60,9 @@ static const ElementStyle tempoStyle {
 
     { Sid::tempoFontSpatiumDependent, Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::tempoChangeLineWidth, Pid::LINE_WIDTH },
-    { Sid::tempoChangeLineStyle, Pid::LINE_STYLE }
+    { Sid::tempoChangeLineStyle, Pid::LINE_STYLE },
+    { Sid::tempoChangeDashLineLen, Pid::DASH_LINE_LEN },
+    { Sid::tempoChangeDashGapLen, Pid::DASH_GAP_LEN }
 };
 
 static const ElementStyle tempoSegmentStyle {
@@ -82,11 +84,12 @@ static const std::unordered_map<GradualTempoChangeType, double> DEFAULT_FACTORS_
 };
 
 GradualTempoChange::GradualTempoChange(EngravingItem* parent)
-    : ChordTextLineBase(ElementType::GRADUAL_TEMPO_CHANGE, parent)
+    : TextLineBase(ElementType::GRADUAL_TEMPO_CHANGE, parent, ElementFlag::SYSTEM)
 {
     initElementStyle(&tempoStyle);
-    resetProperty(Pid::LINE_VISIBLE);
+    setAnchor(Anchor::SEGMENT);
 
+    resetProperty(Pid::LINE_VISIBLE);
     resetProperty(Pid::BEGIN_TEXT_PLACE);
     resetProperty(Pid::BEGIN_TEXT);
     resetProperty(Pid::CONTINUE_TEXT_PLACE);
@@ -144,6 +147,14 @@ LineSegment* GradualTempoChange::createLineSegment(System* parent)
     lineSegment->setTrack(track());
     lineSegment->initElementStyle(&tempoSegmentStyle);
     return lineSegment;
+}
+
+SpannerSegment* GradualTempoChange::layoutSystem(System* system)
+{
+    SpannerSegment* segment = TextLineBase::layoutSystem(system);
+    moveToSystemTopIfNeed(segment);
+
+    return segment;
 }
 
 GradualTempoChangeType GradualTempoChange::tempoChangeType() const
@@ -301,7 +312,8 @@ void GradualTempoChange::requestToRebuildTempo()
 }
 
 GradualTempoChangeSegment::GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent)
-    : TextLineBaseSegment(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, annotation, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextLineBaseSegment(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, annotation, parent,
+                          ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
 }
 

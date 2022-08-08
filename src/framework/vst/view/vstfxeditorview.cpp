@@ -28,8 +28,6 @@
 using namespace mu::vst;
 using namespace Steinberg;
 
-IMPLEMENT_FUNKNOWN_METHODS(VstFxEditorView, IPlugFrame, IPlugFrame::iid)
-
 VstFxEditorView::VstFxEditorView(QWidget* parent)
     : AbstractVstEditorView(parent)
 {

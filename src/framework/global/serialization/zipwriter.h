@@ -29,22 +29,15 @@ namespace mu {
 class ZipWriter
 {
 public:
-    enum Status {
-        NoError,
-        FileWriteError,
-        FileOpenError,
-        FilePermissionsError,
-        FileError
-    };
 
     explicit ZipWriter(const io::path_t& filePath);
     explicit ZipWriter(io::IODevice* device);
     ~ZipWriter();
 
     void close();
-    Status status() const;
+    bool hasError() const;
 
-    void addFile(const QString& fileName, const ByteArray& data);
+    void addFile(const std::string& fileName, const ByteArray& data);
 
 private:
 

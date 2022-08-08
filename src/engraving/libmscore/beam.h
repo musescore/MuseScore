@@ -52,6 +52,8 @@ struct BeamSegment {
 
 class Beam final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Beam)
+
     std::vector<ChordRest*> _elements;          // must be sorted by tick
     std::vector<BeamSegment*> _beamSegments;
     DirectionV _direction    { DirectionV::AUTO };
@@ -63,10 +65,11 @@ class Beam final : public EngravingItem
     bool _isGrace           { false };
     bool _cross             { false };
 
-    qreal _grow1            { 1.0f };                     // define "feather" beams
-    qreal _grow2            { 1.0f };
-    qreal _beamDist         { 0.0f };
+    double _grow1            { 1.0f };                     // define "feather" beams
+    double _grow2            { 1.0f };
+    double _beamDist         { 0.0f };
     int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
+    double _beamWidth        { 0.0f }; // how wide each beam is
     mu::PointF _startAnchor;
     mu::PointF _endAnchor;
 
@@ -81,7 +84,10 @@ class Beam final : public EngravingItem
     int _minMove             { 0 };                // set in layout1()
     int _maxMove             { 0 };
     TDuration _maxDuration;
-    qreal _slope             { 0.0 };
+
+    bool _noSlope = false;
+    double _slope             { 0.0 };
+
     std::vector<int> _notes;
 
     friend class Factory;
@@ -90,20 +96,23 @@ class Beam final : public EngravingItem
 
     int getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const;
     int computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const;
+    int isSlopeConstrained(int startNote, int endNote) const;
     int getMaxSlope() const;
     int getBeamCount(std::vector<ChordRest*> chordRests) const;
-    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, qreal startX, qreal endX,
-                                      bool isFlat, bool isStartDictator) const;
-    bool isBeamInsideStaff(int yPos, int staffLines) const;
+    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, const double startX,
+                                      const double endX, bool isFlat, bool isStartDictator) const;
+    void offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, int beamCount, int staffLines,
+                                        bool isStartDictator, int stemLengthDictator, int stemLengthPointer) const;
+    bool isBeamInsideStaff(int yPos, int staffLines, bool isDictator) const;
     int getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const;
-    bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines) const;
+    bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, int beamCount) const;
     bool is64thBeamPositionException(int& yPos, int staffLines) const;
     int findValidBeamOffset(int outer, int beamCount, int staffLines, bool isStart, bool isAscending, bool isFlat) const;
     void setValidBeamPositions(int& dictator, int& pointer, int beamCount, int staffLines, bool isStartDictator, bool isFlat,
                                bool isAscending);
-    void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval);
+    void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval, int desiredSlant);
     void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
-    void extendStem(Chord* chord, int extraBeamAdjust);
+    void extendStem(Chord* chord, double addition);
     bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
     void createBeamSegment(Chord* startChord, Chord* endChord, int level);
     void createBeamletSegment(Chord* chord, bool isBefore, int level);
@@ -135,16 +144,22 @@ public:
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     void reset() override;
 
     System* system() const { return toSystem(explicitParent()); }
 
     void layout1();
-    void layoutGraceNotes();
     void layout() override;
-    mu::PointF chordBeamAnchor(Chord* chord) const;
+
+    enum class ChordBeamAnchorType {
+        Start, End, Middle
+    };
+
+    double chordBeamAnchorX(const Chord* chord, ChordBeamAnchorType anchorType) const;
+    double chordBeamAnchorY(const Chord* chord) const;
+    PointF chordBeamAnchor(const Chord* chord, ChordBeamAnchorType anchorType) const;
 
     const std::vector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }
@@ -175,10 +190,10 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    qreal growLeft() const { return _grow1; }
-    qreal growRight() const { return _grow2; }
-    void setGrowLeft(qreal val) { _grow1 = val; }
-    void setGrowRight(qreal val) { _grow2 = val; }
+    double growLeft() const { return _grow1; }
+    double growRight() const { return _grow2; }
+    void setGrowLeft(double val) { _grow1 = val; }
+    void setGrowRight(double val) { _grow2 = val; }
 
     bool distribute() const { return _distribute; }
     void setDistribute(bool val) { _distribute = val; }
@@ -189,7 +204,10 @@ public:
     PairF beamPos() const;
     void setBeamPos(const PairF& bp);
 
-    qreal beamDist() const { return _beamDist; }
+    double beamDist() const { return _beamDist; }
+
+    bool noSlope() const { return _noSlope; }
+    void setNoSlope(bool b);
 
     inline const mu::PointF startAnchor() const { return _startAnchor; }
     inline const mu::PointF endAnchor() const { return _endAnchor; }
@@ -198,7 +216,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    bool isGrace() const { return _isGrace; }    // for debugger
+    void setIsGrace(bool val) { _isGrace = val; }
     bool cross() const { return _cross; }
 
     void addSkyline(Skyline&);
@@ -220,7 +238,7 @@ public:
 private:
     void initBeamEditData(EditData& ed);
 
-    static constexpr std::array _maxSlopes = { 1, 2, 3, 4, 5, 6, 7 };
+    static constexpr std::array _maxSlopes = { 0, 1, 2, 3, 4, 5, 6, 7 };
 };
 } // namespace mu::engraving
 #endif

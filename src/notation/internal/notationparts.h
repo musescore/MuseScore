@@ -64,8 +64,8 @@ public:
     void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) override;
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
-    void appendStaff(Staff* staff, const ID& destinationPartId) override;
-    void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
+    bool appendStaff(Staff* staff, const ID& destinationPartId) override;
+    bool appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
 
     void insertPart(Part* part, size_t index) override;
 
@@ -88,7 +88,6 @@ private:
     void updatePartTitles();
 
     void doSetScoreOrder(const ScoreOrder& order);
-    void doMoveStaves(const std::vector<Staff*>& staves, engraving::staff_idx_t destinationStaffIndex, Part* destinationPart = nullptr);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);
@@ -110,8 +109,6 @@ private:
     void appendNewParts(const PartInstrumentList& parts);
     void updateSoloist(const PartInstrumentList& parts);
     void sortParts(const PartInstrumentList& parts, const std::vector<mu::engraving::Staff*>& originalStaves);
-
-    void updateTracks();
 
     int resolveNewInstrumentNumber(const InstrumentTemplate& instrument, const PartInstrumentList& allNewInstruments) const;
 

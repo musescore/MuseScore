@@ -24,7 +24,6 @@
 
 #include <list>
 #include <variant>
-#include <QString>
 
 #include "types/string.h"
 #include "io/iodevice.h"
@@ -41,7 +40,8 @@ public:
     XmlStreamWriter(const XmlStreamWriter&) = delete;
     XmlStreamWriter& operator=(const XmlStreamWriter&) = delete;
 
-    using Value = std::variant<std::monostate, int, unsigned int, int64_t, size_t, double, const char*, AsciiStringView, String>;
+    using Value = std::variant<std::monostate, int, unsigned int, signed long int, unsigned long int, signed long long, unsigned long long,
+                               double, const char*, AsciiStringView, String>;
     using Attribute = std::pair<AsciiStringView, Value>;
     using Attributes = std::vector<Attribute>;
 
@@ -49,7 +49,7 @@ public:
     void flush();
 
     void startDocument();
-    void writeDoctype(const QString& type);
+    void writeDoctype(const String& type);
 
     void startElement(const AsciiStringView& name, const Attributes& attrs = {});
     void startElement(const String& name, const Attributes& attrs = {});
@@ -66,9 +66,9 @@ public:
     static String escapeString(const String& s);
 
 protected:
-    void startElementRaw(const QString& name);
-    void elementRaw(const QString& nameWithAttributes, const Value& body);
-    void elementStringRaw(const QString& nameWithAttributes, const QString& body);
+    void startElementRaw(const String& name);
+    void elementRaw(const String& nameWithAttributes, const Value& body);
+    void elementStringRaw(const String& nameWithAttributes, const String& body);
 
 private:
 

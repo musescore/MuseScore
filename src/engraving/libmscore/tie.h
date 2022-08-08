@@ -33,12 +33,14 @@ namespace mu::engraving {
 
 class TieSegment final : public SlurTieSegment
 {
+    OBJECT_ALLOCATOR(engraving, TieSegment)
+
     mu::PointF autoAdjustOffset;
-    qreal shoulderHeightMin = 0.4;
-    qreal shoulderHeightMax = 1.3;
+    double shoulderHeightMin = 0.4;
+    double shoulderHeightMax = 1.3;
 
     void setAutoAdjust(const mu::PointF& offset);
-    void setAutoAdjust(qreal x, qreal y) { setAutoAdjust(mu::PointF(x, y)); }
+    void setAutoAdjust(double x, double y) { setAutoAdjust(mu::PointF(x, y)); }
     mu::PointF getAutoAdjust() const { return autoAdjustOffset; }
 
 protected:
@@ -65,6 +67,7 @@ public:
     Tie* tie() const { return (Tie*)spanner(); }
 
     void computeBezier(mu::PointF so = mu::PointF()) override;
+    void addLineAttachPoints();
 };
 
 //---------------------------------------------------------
@@ -74,6 +77,8 @@ public:
 
 class Tie final : public SlurTie
 {
+    OBJECT_ALLOCATOR(engraving, Tie)
+
     static Note* editStartNote;
     static Note* editEndNote;
 

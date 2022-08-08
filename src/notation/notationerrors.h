@@ -22,7 +22,7 @@
 #ifndef MU_NOTATION_NOTATIONERRORS_H
 #define MU_NOTATION_NOTATIONERRORS_H
 
-#include "ret.h"
+#include "types/ret.h"
 #include "translation.h"
 
 namespace mu::notation {
@@ -48,13 +48,16 @@ inline Ret make_ret(Err err)
         text = trc("notation", "Unknown error");
         break;
     case Err::NoteOrRestIsNotSelected:
-        text = trc("notation", "No note or rest selected: Please select a note or rest and retry");
+        text = trc("notation", "No note or rest selected")
+               + "\n" + trc("notation", "Please select a note or rest and retry");
         break;
     case Err::NoteOrFiguredBassIsNotSelected:
-        text = trc("notation", "No note or figured bass selected: Please select a note or figured bass and retry");
+        text = trc("notation", "No note or figured bass selected")
+               + "\n" + trc("notation", "Please select a note or figured bass and retry");
         break;
     case Err::MeasureIsNotSelected:
-        text = trc("notation", "No measure selected: Please select a measure and retry");
+        text = trc("notation", "No measure selected")
+               + "\n" + trc("notation", "Please select a measure and retry");
         break;
     case Err::SelectCompleteTupletOrTremolo:
         text = trc("notation", "Please select the complete tuplet/tremolo and retry the command");

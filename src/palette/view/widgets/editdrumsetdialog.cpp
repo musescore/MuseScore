@@ -27,6 +27,8 @@
 #include "engraving/rw/xml.h"
 #include "engraving/types/typesconv.h"
 #include "engraving/types/symnames.h"
+#include "engraving/infrastructure/smufl.h"
+#include "engraving/infrastructure/symbolfont.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/utils.h"
@@ -34,14 +36,12 @@
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/stem.h"
-#include "libmscore/scorefont.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
-
-#include "framework/global/smuflranges.h"
+#include "draw/types/geometry.h"
 
 #include <QMessageBox>
 
+using namespace mu::palette;
 using namespace mu::io;
 using namespace mu::framework;
 using namespace mu::notation;
@@ -49,7 +49,6 @@ using namespace mu::engraving;
 
 static const QString EDIT_DRUMSET_DIALOG_NAME("EditDrumsetDialog");
 
-namespace mu::engraving {
 enum Column : char {
     PITCH, NOTE, SHORTCUT, NAME
 };
@@ -118,13 +117,13 @@ struct SymbolIcon {
         QPixmap image(w, h);
         image.fill(Qt::transparent);
         mu::draw::Painter painter(&image, "generateicon");
-        const mu::RectF& bbox = ScoreFont::fallbackFont()->bbox(id, 1);
+        const mu::RectF& bbox = SymbolFonts::fallbackFont()->bbox(id, 1);
         const qreal actualSymbolScale = std::min(w / bbox.width(), h / bbox.height());
         qreal mag = std::min(defaultScale, actualSymbolScale);
         const qreal& xStShift = (w - mag * bbox.width()) / 2 - mag * bbox.left();
         const qreal& yStShift = (h - mag * bbox.height()) / 2 - mag * bbox.top();
         const mu::PointF& stPtPos = mu::PointF(xStShift, yStShift);
-        ScoreFont::fallbackFont()->draw(id, &painter, mag, stPtPos);
+        SymbolFonts::fallbackFont()->draw(id, &painter, mag, stPtPos);
         icon.addPixmap(image);
         return SymbolIcon(id, icon);
     }
@@ -153,7 +152,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     } else {
         NoteInputState state = m_notation->interaction()->noteInput()->state();
         const Staff* staff = m_notation->elements()->msScore()->staff(track2staff(state.currentTrack));
-        m_instrumentKey.instrumentId = staff ? staff->part()->instrumentId() : QString();
+        m_instrumentKey.instrumentId = staff ? staff->part()->instrumentId().toQString() : QString();
         m_instrumentKey.partId = staff ? staff->part()->id() : ID();
         m_editedDrumset = state.drumset ? *state.drumset : Drumset();
     }
@@ -168,7 +167,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     updatePitchesList();
 
     for (auto g : noteHeadNames) {
-        noteHead->addItem(TConv::toUserName(g), int(g));
+        noteHead->addItem(TConv::translatedUserName(g), int(g));
     }
 
     connect(pitchList, &QTreeWidget::currentItemChanged, this, &EditDrumsetDialog::itemChanged);
@@ -236,7 +235,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     }
 
     for (QString range : validNoteheadRanges) {
-        for (auto symName : (*mu::smuflRanges())[range]) {
+        for (auto symName : Smufl::smuflRanges().at(range)) {
             SymId id = SymNames::symIdByName(symName);
             if (!excludeSym.contains(symName) && !primaryNoteheads.contains(symName)) {
                 resNoteheads.append(SymbolIcon::generateIcon(id, w, h, defaultScale));
@@ -314,7 +313,7 @@ void EditDrumsetDialog::updatePitchesList()
             QString s(QChar(m_editedDrumset.shortcut(i)));
             item->setText(Column::SHORTCUT, s);
         }
-        item->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(i)));
+        item->setText(Column::NAME, m_editedDrumset.translatedName(i));
         item->setData(Column::PITCH, Qt::UserRole, i);
     }
     pitchList->sortItems(3, Qt::SortOrder::DescendingOrder);
@@ -334,7 +333,7 @@ void EditDrumsetDialog::refreshPitchesList()
             QString s(QChar(m_editedDrumset.shortcut(pitch)));
             item->setText(Column::SHORTCUT, s);
         }
-        item->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(pitch)));
+        item->setText(Column::NAME,  m_editedDrumset.translatedName(i));
         item->setData(0, Qt::UserRole, pitch);
     }
 }
@@ -508,7 +507,7 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
             m_editedDrumset.drum(pitch).shortcut = "ABCDEFG"[shortcut->currentIndex()];
         }
         m_editedDrumset.drum(pitch).stemDirection = DirectionV(stemDirection->currentIndex());
-        previous->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(pitch)));
+        previous->setText(Column::NAME, m_editedDrumset.translatedName(pitch));
     }
     if (current == 0) {
         return;
@@ -520,7 +519,7 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
     noteHead->blockSignals(true);
 
     int pitch = current->data(0, Qt::UserRole).toInt();
-    name->setText(mu::qtrc("drumset", m_editedDrumset.name(pitch)));
+    name->setText(m_editedDrumset.translatedName(pitch));
     staffLine->setValue(m_editedDrumset.line(pitch));
     voice->setCurrentIndex(m_editedDrumset.voice(pitch));
     stemDirection->setCurrentIndex(int(m_editedDrumset.stemDirection(pitch)));
@@ -627,7 +626,7 @@ void EditDrumsetDialog::updateExample()
     Stem* stem = Factory::createStem(chord.get());
     stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * gpaletteScore->spatium()));
     chord->add(stem);
-    drumNote->appendElement(chord, mu::qtrc("drumset", m_editedDrumset.name(pitch)));
+    drumNote->appendElement(chord, m_editedDrumset.translatedName(pitch));
 }
 
 //---------------------------------------------------------
@@ -636,9 +635,9 @@ void EditDrumsetDialog::updateExample()
 
 void EditDrumsetDialog::load()
 {
-    QString filter = mu::qtrc("palette", "MuseScore Drumset File") + " (*.drm)";
+    QString filter = mu::qtrc("palette", "MuseScore drumset file") + " (*.drm)";
     mu::io::path_t dir = notationConfiguration()->userStylesPath();
-    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Load Drumset"), dir, filter);
+    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Load drumset"), dir, filter);
 
     if (fname.empty()) {
         return;
@@ -657,9 +656,9 @@ void EditDrumsetDialog::load()
                 auto result = interactive()->warning(
                     mu::trc("palette", "Drumset file too old"),
                     mu::trc("palette", "MuseScore may not be able to load this drumset file."), {
-                        IInteractive::Button::Cancel,
-                        IInteractive::Button::Ignore
-                    }, IInteractive::Button::Cancel);
+                    IInteractive::Button::Cancel,
+                    IInteractive::Button::Ignore
+                }, IInteractive::Button::Cancel);
 
                 if (result.standardButton() != IInteractive::Button::Ignore) { // covers Cancel and Esc
                     return;
@@ -684,9 +683,9 @@ void EditDrumsetDialog::load()
 
 void EditDrumsetDialog::save()
 {
-    QString filter = mu::qtrc("palette", "MuseScore Drumset File") + " (*.drm)";
+    QString filter = mu::qtrc("palette", "MuseScore drumset file") + " (*.drm)";
     mu::io::path_t dir = notationConfiguration()->userStylesPath();
-    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Save Drumset"), dir, filter);
+    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Save drumset"), dir, filter);
 
     if (fname.empty()) {
         return;
@@ -694,8 +693,8 @@ void EditDrumsetDialog::save()
 
     File f(fname);
     if (!f.open(IODevice::WriteOnly)) {
-        QString s = mu::qtrc("palette", "Open File\n%1\nfailed: %2").arg(f.filePath().toQString()).arg(strerror(errno));
-        interactive()->error(mu::trc("palette", "Open File"), s.toStdString());
+        QString s = mu::qtrc("palette", "Opening file\n%1\nfailed: %2").arg(f.filePath().toQString()).arg(strerror(errno));
+        interactive()->error(mu::trc("palette", "Open file"), s.toStdString());
         return;
     }
     valueChanged();    //save last changes in name
@@ -705,8 +704,8 @@ void EditDrumsetDialog::save()
     m_editedDrumset.save(xml);
     xml.endElement();
     if (f.error() != File::NoError) {
-        QString s = mu::qtrc("palette", "Write File failed: %1").arg(QString::fromStdString(f.errorString()));
-        interactive()->error(mu::trc("palette", "Write Drumset"), s.toStdString());
+        QString s = mu::qtrc("palette", "Writing file failed: %1").arg(QString::fromStdString(f.errorString()));
+        interactive()->error(mu::trc("palette", "Write drumset"), s.toStdString());
     }
 }
 
@@ -716,5 +715,4 @@ void EditDrumsetDialog::save()
 void EditDrumsetDialog::customQuarterChanged(int)
 {
     updateExample();
-}
 }

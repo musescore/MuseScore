@@ -28,8 +28,10 @@
 #include <functional>
 #include <memory>
 
-#include "modularity/imoduleexport.h"
 #include "async/notification.h"
+#include "modularity/imoduleexport.h"
+
+#include "audiotypes.h"
 
 namespace mu::audio {
 class IAudioDriver : MODULE_EXPORT_INTERFACE
@@ -56,15 +58,26 @@ public:
         void* userdata;               // Userdata passed to callback (ignored for NULL callbacks).
     };
 
+    virtual void init() = 0;
+
     virtual std::string name() const = 0;
     virtual bool open(const Spec& spec, Spec* activeSpec) = 0;
     virtual void close() = 0;
     virtual bool isOpened() const = 0;
 
-    virtual std::string outputDevice() const = 0;
-    virtual bool selectOutputDevice(const std::string& name) = 0;
-    virtual std::vector<std::string> availableOutputDevices() const = 0;
+    virtual AudioDeviceID outputDevice() const = 0;
+    virtual bool selectOutputDevice(const AudioDeviceID& id) = 0;
+    virtual bool resetToDefaultOutputDevice() = 0;
+    virtual async::Notification outputDeviceChanged() const = 0;
+
+    virtual AudioDeviceList availableOutputDevices() const = 0;
     virtual async::Notification availableOutputDevicesChanged() const = 0;
+
+    virtual unsigned int outputDeviceBufferSize() const = 0;
+    virtual bool setOutputDeviceBufferSize(unsigned int bufferSize) = 0;
+    virtual async::Notification outputDeviceBufferSizeChanged() const = 0;
+
+    virtual std::vector<unsigned int> availableOutputDeviceBufferSizes() const = 0;
 
     virtual void resume() = 0;
     virtual void suspend() = 0;

@@ -54,10 +54,14 @@ public:
     io::path_t languageArchivePath(const QString& languageCode) const override;
 
 private:
-    LanguagesHash parseLanguagesConfig(const QByteArray& json) const;
+    LanguagesHash parseLanguagesState(const ByteArray& json) const;
+    LanguagesHash parseDefaultLanguages(const ByteArray& json) const;
+
     io::path_t languageFileName(const QString& languageCode) const;
 
-    RetVal<QByteArray> readLanguagesState() const;
+    RetVal<ByteArray> readDefaultLanguages() const;
+
+    RetVal<ByteArray> readLanguagesState() const;
     Ret writeLanguagesState(const QByteArray& data);
 
     async::Channel<QString> m_currentLanguageCodeChanged;

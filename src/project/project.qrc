@@ -6,24 +6,9 @@
         <file>qml/MuseScore/Project/AskSaveLocationTypeDialog.qml</file>
         <file>qml/MuseScore/Project/SaveToCloudDialog.qml</file>
         <file>qml/MuseScore/Project/ExportDialog.qml</file>
-        <file>qml/MuseScore/Project/internal/AdditionalInfoView.qml</file>
-        <file>qml/MuseScore/Project/internal/GeneralInfoItem.qml</file>
-        <file>qml/MuseScore/Project/internal/KeySignatureListView.qml</file>
-        <file>qml/MuseScore/Project/internal/KeySignatureSettings.qml</file>
-        <file>qml/MuseScore/Project/internal/KeySignature.qml</file>
-        <file>qml/MuseScore/Project/internal/MeasuresSettings.qml</file>
+        <file>qml/MuseScore/Project/ExportProgressDialog.qml</file>
         <file>qml/MuseScore/Project/internal/RecentScoresView.qml</file>
         <file>qml/MuseScore/Project/internal/ScoreItem.qml</file>
-        <file>qml/MuseScore/Project/internal/TemplatePreview.qml</file>
-        <file>qml/MuseScore/Project/internal/TempoSettings.qml</file>
-        <file>qml/MuseScore/Project/internal/TimeSignatureFraction.qml</file>
-        <file>qml/MuseScore/Project/internal/TimeSignatureSettings.qml</file>
-        <file>qml/MuseScore/Project/internal/TimeSignatureView.qml</file>
-        <file>qml/MuseScore/Project/internal/TitleListView.qml</file>
-        <file>qml/MuseScore/Project/internal/GeneralInfoView.qml</file>
-        <file>qml/MuseScore/Project/internal/ChooseInstrumentsAndTemplatesPage.qml</file>
-        <file>qml/MuseScore/Project/internal/CreateFromTemplatePage.qml</file>
-        <file>qml/MuseScore/Project/internal/ScoreInfoPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/ExportScoresListView.qml</file>
         <file>qml/MuseScore/Project/internal/Export/ExportOptionsView.qml</file>
         <file>qml/MuseScore/Project/internal/Export/ExportOptionItem.qml</file>
@@ -35,16 +20,32 @@
         <file>qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/MusicXmlSettingsPage.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/GeneralInfoItem.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/KeySignature.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/KeySignatureListView.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/KeySignatureSettings.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/ScoreInfoPage.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/TemplatePreview.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/TempoSettings.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/TimeSignatureFraction.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/TimeSignatureSettings.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/TimeSignatureView.qml</file>
+        <file>qml/MuseScore/Project/internal/NewScore/TitleListView.qml</file>
         <file>qml/MuseScore/Project/MigrationDialog.qml</file>
         <file>qml/MuseScore/Project/migration.png</file>
         <file>qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml</file>
         <file>qml/MuseScore/Project/internal/SaveToCloud/images/Cloud.png</file>
         <file>qml/MuseScore/Project/internal/SaveToCloud/images/Laptop.png</file>
         <file>qml/MuseScore/Project/ProjectPropertiesDialog.qml</file>
-        <file>qml/MuseScore/Project/internal/ProjectPropertiesFileInfoPanel.qml</file>
-        <file>qml/MuseScore/Project/internal/ProjectPropertiesBottomPanel.qml</file>
-        <file>qml/MuseScore/Project/internal/ProjectPropertiesView.qml</file>
-        <file>qml/MuseScore/Project/internal/PropertyItem.qml</file>
+        <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml</file>
+        <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesBottomPanel.qml</file>
+        <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesView.qml</file>
+        <file>qml/MuseScore/Project/internal/Properties/PropertyItem.qml</file>
         <file>resources/Placeholder_GP.png</file>
         <file>resources/Placeholder_MIDI.png</file>
         <file>resources/Placeholder_MXML.png</file>

@@ -46,6 +46,44 @@ const InstrumentTemplateList& InstrumentsRepository::instrumentTemplates() const
     return m_instrumentTemplates;
 }
 
+const InstrumentTemplate& InstrumentsRepository::instrumentTemplate(const std::string& instrumentId) const
+{
+    const InstrumentTemplateList& templates = m_instrumentTemplates;
+
+    auto it = std::find_if(templates.begin(), templates.end(), [instrumentId](const InstrumentTemplate* templ) {
+        return templ->id == instrumentId;
+    });
+
+    if (it == m_instrumentTemplates.cend()) {
+        static InstrumentTemplate dummy;
+        return dummy;
+    }
+
+    const InstrumentTemplate* templ = *it;
+    return *templ;
+}
+
+const ScoreOrderList& InstrumentsRepository::orders() const
+{
+    return mu::engraving::instrumentOrders;
+}
+
+const ScoreOrder& InstrumentsRepository::order(const std::string& orderId) const
+{
+    const ScoreOrderList& orders = mu::engraving::instrumentOrders;
+
+    auto it = std::find_if(orders.begin(), orders.end(), [orderId](const ScoreOrder& order) {
+        return order.id == orderId;
+    });
+
+    if (it == orders.cend()) {
+        static ScoreOrder dummy;
+        return dummy;
+    }
+
+    return *it;
+}
+
 const InstrumentGenreList& InstrumentsRepository::genres() const
 {
     return m_genres;
@@ -54,13 +92,6 @@ const InstrumentGenreList& InstrumentsRepository::genres() const
 const InstrumentGroupList& InstrumentsRepository::groups() const
 {
     return m_groups;
-}
-
-const ScoreOrderList& InstrumentsRepository::orders() const
-{
-    static ScoreOrderList list;
-    list = ScoreOrderList(mu::engraving::instrumentOrders.begin(), mu::engraving::instrumentOrders.end());
-    return list;
 }
 
 void InstrumentsRepository::load()

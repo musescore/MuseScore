@@ -85,7 +85,7 @@ Column {
 
             model: [
                 qsTrc("cloud", "Enjoy free cloud storage for your scores"),
-                qsTrc("cloud", "Get social by following other creators, and liking and commenting on your favourite works"),
+                qsTrc("cloud", "Get social by following other creators, and liking and commenting on your favorite works"),
                 qsTrc("cloud", "Create a portfolio for your music and share it with millions of users worldwide"),
                 qsTrc("cloud", "Upload high quality audio for superb playback")
             ]

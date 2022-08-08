@@ -39,7 +39,7 @@ using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::io;
 
-class TemplatesRepositoryTest : public ::testing::Test
+class Project_TemplatesRepositoryTest : public ::testing::Test
 {
 protected:
     void SetUp() override
@@ -101,7 +101,7 @@ inline bool operator==(const Template& templ1, const Template& templ2)
 }
 }
 
-TEST_F(TemplatesRepositoryTest, Templates)
+TEST_F(Project_TemplatesRepositoryTest, Templates)
 {
     // [GIVEN] All template dirs
     io::paths_t templateDirs {
@@ -140,8 +140,8 @@ TEST_F(TemplatesRepositoryTest, Templates)
         "/path/to/user/templates/without/categories_json/BBB.mscx"
     };
 
-    QStringList filters = { "*.mscz", "*.mscx" };
-    ON_CALL(*m_fileSystem, scanFiles(otherUserTemplatesDir, filters, IFileSystem::ScanMode::FilesInCurrentDirAndSubdirs))
+    std::vector<std::string> filters = { "*.mscz", "*.mscx" };
+    ON_CALL(*m_fileSystem, scanFiles(otherUserTemplatesDir, filters, ScanMode::FilesInCurrentDirAndSubdirs))
     .WillByDefault(Return(RetVal<io::paths_t>::make_ok(otherUserTemplates)));
 
     // [GIVEN] All templates
@@ -150,17 +150,17 @@ TEST_F(TemplatesRepositoryTest, Templates)
         buildCategory("Solo", { "Guitar.mscx" })
     };
 
-    QByteArray standardTemplatesJson = categoriesToJson(standardTemplates);
+    ByteArray standardTemplatesJson = ByteArray::fromQByteArray(categoriesToJson(standardTemplates));
     ON_CALL(*m_fileSystem, readFile(categoriesJsonPaths[0]))
-    .WillByDefault(Return(RetVal<QByteArray>::make_ok(standardTemplatesJson)));
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(standardTemplatesJson)));
 
     QVariantList userTemplates {
         buildCategory("Popular", { "Rock_Band.mscz" })
     };
 
-    QByteArray userTemplatesJson = categoriesToJson(userTemplates);
+    ByteArray userTemplatesJson = ByteArray::fromQByteArray(categoriesToJson(userTemplates));
     ON_CALL(*m_fileSystem, readFile(categoriesJsonPaths[1]))
-    .WillByDefault(Return(RetVal<QByteArray>::make_ok(userTemplatesJson)));
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(userTemplatesJson)));
 
     // [GIVEN] Expected templates after reading
     Templates expectedTemplates {
@@ -171,7 +171,7 @@ TEST_F(TemplatesRepositoryTest, Templates)
     };
 
     for (const io::path_t& otherTemplatePath : otherUserTemplates) {
-        expectedTemplates << buildTemplate("My Templates", otherTemplatePath);
+        expectedTemplates << buildTemplate("My templates", otherTemplatePath);
     }
 
     for (const Template& templ : expectedTemplates) {

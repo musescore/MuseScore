@@ -29,15 +29,12 @@
 #include "types/types.h"
 
 namespace mu::engraving {
-class Factory;
-}
-
-namespace mu::engraving {
 class ChordRest;
-class Segment;
+class Factory;
 class Measure;
-class System;
 class Page;
+class Segment;
+class System;
 
 //---------------------------------------------------------
 //    Fermata
@@ -45,8 +42,10 @@ class Page;
 
 class Fermata final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Fermata)
+
     SymId _symId;
-    qreal _timeStretch;
+    double _timeStretch;
     bool _play;
 
     friend class Factory;
@@ -62,13 +61,13 @@ public:
 
     Fermata* clone() const override { return new Fermata(*this); }
 
-    qreal mag() const override;
+    double mag() const override;
 
     SymId symId() const { return _symId; }
     void setSymId(SymId id) { _symId  = id; }
     FermataType fermataType() const;
     int subtype() const override;
-    QString typeUserName() const override;
+    TranslatableString typeUserName() const override;
 
     void layout() override;
 
@@ -83,21 +82,19 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
 
-    Pid propertyId(const QStringRef& xmlName) const override;
-
     ChordRest* chordRest() const;
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const;
     System* system() const;
     Page* page() const;
 
-    qreal timeStretch() const { return _timeStretch; }
-    void setTimeStretch(qreal val) { _timeStretch = val; }
+    double timeStretch() const { return _timeStretch; }
+    void setTimeStretch(double val) { _timeStretch = val; }
 
     bool play() const { return _play; }
     void setPlay(bool val) { _play = val; }
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 
 protected:
     void added() override;

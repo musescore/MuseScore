@@ -50,6 +50,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::palette;
 
@@ -122,7 +123,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     qreal x = 3;
     qreal w = ww - 6;
 
-    painter.setWorldTransform(mu::Transform::fromQTransform(_matrix));
+    painter.setWorldTransform(Transform::fromQTransform(_matrix));
 
     QRectF r = imatrix.mapRect(QRectF(x, y, w, wh));
 
@@ -278,7 +279,7 @@ void KeyCanvas::snap(Accidental* a)
     double y = a->ipos().y();
     int line = round(y / spatium2);
     y = line * spatium2;
-    a->rypos() = y;
+    a->setPosY(y);
     // take default xposition unless Control is pressed
     int i = accidentals.indexOf(a);
     if (i > 0) {
@@ -287,7 +288,7 @@ void KeyCanvas::snap(Accidental* a)
         double prevX = prev->ipos().x();
         qreal prevWidth = prev->symWidth(prev->symbol());
         if (!QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
-            a->rxpos() = prevX + prevWidth + accidentalGap * _spatium;
+            a->setPosX(prevX + prevWidth + accidentalGap * _spatium);
         }
     }
 }

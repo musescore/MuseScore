@@ -25,13 +25,26 @@
 #include "../libmscore/score.h"
 #include "../libmscore/measure.h"
 
+#include "translation.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 using namespace mu::accessibility;
 using namespace mu::engraving;
 
 bool AccessibleItem::enabled = true;
+
+static QString readable(QString s)
+{
+    // Remove undesired pauses in screen reader speech output
+    s.remove(u':');
+
+    // Handle desired pauses
+    s.replace(u';', u','); // NVDA doesn't pause for semicolon
+
+    return s;
+}
 
 AccessibleItem::AccessibleItem(EngravingItem* e, Role role)
     : m_element(e), m_role(role)
@@ -40,17 +53,12 @@ AccessibleItem::AccessibleItem(EngravingItem* e, Role role)
 
 AccessibleItem::~AccessibleItem()
 {
-    AccessibleRoot* root = accessibleRoot();
-    if (root && root->focusedElement() == this) {
-        root->setFocusedElement(nullptr);
-    }
+    m_element = nullptr;
 
     if (m_registred && accessibilityController()) {
         accessibilityController()->unreg(this);
         m_registred = false;
     }
-
-    m_element = nullptr;
 }
 
 AccessibleItem* AccessibleItem::clone(EngravingItem* e) const
@@ -84,7 +92,7 @@ AccessibleRoot* AccessibleItem::accessibleRoot() const
     }
 
     RootItem* rootItem = m_element->explicitParent() ? score->rootItem() : score->dummy()->rootItem();
-    return dynamic_cast<AccessibleRoot*>(rootItem->accessible());
+    return dynamic_cast<AccessibleRoot*>(rootItem->accessible().get());
 }
 
 const EngravingItem* AccessibleItem::element() const
@@ -104,21 +112,30 @@ void AccessibleItem::notifyAboutFocus(bool focused)
 
 const IAccessible* AccessibleItem::accessibleParent() const
 {
+    if (!m_element) {
+        return nullptr;
+    }
+
     EngravingObject* p = m_element->parent();
     if (!p || !p->isEngravingItem()) {
         return nullptr;
     }
 
-    return static_cast<EngravingItem*>(p)->accessible();
+    return static_cast<EngravingItem*>(p)->accessible().get();
 }
 
 size_t AccessibleItem::accessibleChildCount() const
 {
     TRACEFUNC;
+
+    if (!m_element) {
+        return 0;
+    }
+
     size_t count = 0;
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
-            AccessibleItem* access = toEngravingItem(obj)->accessible();
+            AccessibleItemPtr access = toEngravingItem(obj)->accessible();
             if (access && access->registered()) {
                 ++count;
             }
@@ -130,13 +147,18 @@ size_t AccessibleItem::accessibleChildCount() const
 const IAccessible* AccessibleItem::accessibleChild(size_t i) const
 {
     TRACEFUNC;
+
+    if (!m_element) {
+        return nullptr;
+    }
+
     size_t count = 0;
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
-            AccessibleItem* access = toEngravingItem(obj)->accessible();
+            AccessibleItemPtr access = toEngravingItem(obj)->accessible();
             if (access && access->registered()) {
                 if (count == i) {
-                    return access;
+                    return access.get();
                 }
                 ++count;
             }
@@ -152,23 +174,37 @@ IAccessible::Role AccessibleItem::accessibleRole() const
 
 QString AccessibleItem::accessibleName() const
 {
+    if (!m_element) {
+        return QString();
+    }
+
     AccessibleRoot* root = accessibleRoot();
     QString staffInfo = root ? root->staffInfo() : "";
     QString barsAndBeats = m_element->formatBarsAndBeats();
 
-    return QString("%1%2%3").arg(!staffInfo.isEmpty() ? (staffInfo + "; ") : "")
-           .arg(m_element->accessibleInfo())
-           .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "");
+    barsAndBeats.remove(u';'); // Too many pauses in speech
+
+    QString name = QString("%1%2%3%4")
+                   .arg(!staffInfo.isEmpty() ? (staffInfo + "; ") : "")
+                   .arg(m_element->screenReaderInfo().toQString())
+                   .arg(m_element->visible() ? "" : " " + qtrc("engraving", "invisible"))
+                   .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "");
+
+    return readable(name);
 }
 
 QString AccessibleItem::accessibleDescription() const
 {
+    if (!m_element) {
+        return QString();
+    }
+
     QString result;
 #ifdef Q_OS_MACOS
     result = accessibleName() + " ";
 #endif
 
-    result += m_element->accessibleExtraInfo();
+    result += readable(m_element->accessibleExtraInfo());
     return result;
 }
 
@@ -212,7 +248,7 @@ int AccessibleItem::accessibleSelectionCount() const
         return 0;
     }
 
-    return textCursor->selectedText().length();
+    return static_cast<int>(textCursor->selectedText().size());
 }
 
 int AccessibleItem::accessibleCursorPosition() const
@@ -310,7 +346,7 @@ int AccessibleItem::accessibleCharacterCount() const
     }
 
     TextBase* text = toTextBase(m_element);
-    return text->plainText().length();
+    return static_cast<int>(text->plainText().size());
 }
 
 bool AccessibleItem::accessibleState(State st) const
@@ -319,7 +355,7 @@ bool AccessibleItem::accessibleState(State st) const
         return false;
     }
 
-    auto root = accessibleRoot();
+    AccessibleRoot* root = accessibleRoot();
     if (!root || !root->enabled()) {
         return false;
     }
@@ -327,7 +363,12 @@ bool AccessibleItem::accessibleState(State st) const
     switch (st) {
     case IAccessible::State::Enabled: return true;
     case IAccessible::State::Active: return true;
-    case IAccessible::State::Focused: return root->focusedElement() == this;
+    case IAccessible::State::Focused: {
+        if (AccessibleItemPtr focusedElement = root->focusedElement().lock()) {
+            return focusedElement->element() == element();
+        }
+        return false;
+    }
     case IAccessible::State::Selected: return m_element->selected();
     default:
         break;
@@ -367,6 +408,18 @@ mu::async::Channel<IAccessible::Property, mu::Val> AccessibleItem::accessiblePro
 mu::async::Channel<IAccessible::State, bool> AccessibleItem::accessibleStateChanged() const
 {
     return m_accessibleStateChanged;
+}
+
+void AccessibleItem::setState(State state, bool arg)
+{
+    if (state != State::Focused) {
+        return;
+    }
+
+    AccessibleRoot* root = accessibleRoot();
+    if (arg) {
+        root->setFocusedElement(shared_from_this(), false /*voiceStaffInfoChange*/);
+    }
 }
 
 TextCursor* AccessibleItem::textCursor() const

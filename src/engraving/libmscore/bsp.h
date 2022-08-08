@@ -25,7 +25,9 @@
 
 #include <list>
 
-#include "infrastructure/draw/geometry.h"
+#include "global/allocator.h"
+#include "types/string.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
 class BspTreeVisitor;
@@ -48,13 +50,13 @@ public:
             HORIZONTAL, VERTICAL, LEAF
         };
         union {
-            qreal offset;
+            double offset;
             int leafIndex;
         };
         Type type;
     };
 private:
-    uint depth;
+    unsigned int depth;
     void initialize(const mu::RectF& rect, int depth, int index);
     void climbTree(BspTreeVisitor* visitor, const mu::PointF& pos, int index = 0);
     void climbTree(BspTreeVisitor* visitor, const mu::RectF& rect, int index = 0);
@@ -89,7 +91,7 @@ public:
     }
 
 #ifndef NDEBUG
-    QString debug(int index) const;
+    String debug(int index) const;
 #endif
 };
 
@@ -99,6 +101,7 @@ public:
 
 class BspTreeVisitor
 {
+    OBJECT_ALLOCATOR(engraving, BspTreeVisitor)
 public:
     virtual ~BspTreeVisitor() {}
     virtual void visit(std::list<EngravingItem*>* items) = 0;

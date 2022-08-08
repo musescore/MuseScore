@@ -39,6 +39,7 @@
 #include "project/iprojectfilescontroller.h"
 #include "audio/isoundfontrepository.h"
 #include "istartupscenario.h"
+#include "iapplication.h"
 
 namespace mu::appshell {
 class ApplicationActionController : public QObject, public IApplicationActionController, public actions::Actionable, public async::Asyncable
@@ -53,6 +54,7 @@ class ApplicationActionController : public QObject, public IApplicationActionCon
     INJECT(appshell, project::IProjectFilesController, projectFilesController)
     INJECT(appshell, audio::ISoundFontRepository, soundFontRepository)
     INJECT(appshell, IStartupScenario, startupScenario)
+    INJECT(appshell, framework::IApplication, application)
 
 public:
     void init();
@@ -62,6 +64,7 @@ public:
     void onDragEnterEvent(QDragEnterEvent* event) override;
     void onDragMoveEvent(QDragMoveEvent* event) override;
     void onDropEvent(QDropEvent* event) override;
+    bool canReceiveAction(const mu::actions::ActionCode&) const override;
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
@@ -69,6 +72,8 @@ private:
     void setupConnections();
 
     void quit(bool isAllInstances);
+    void restart();
+
     void toggleFullScreen();
     void openAboutDialog();
     void openAboutQtDialog();

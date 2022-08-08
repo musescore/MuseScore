@@ -31,7 +31,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/stafflines.h"
 #include "libmscore/repeatlist.h"
-#include "engraving/paint/paint.h"
+#include "engraving/infrastructure/paint.h"
 
 #include "log.h"
 
@@ -45,7 +45,7 @@ std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
     return { UnitType::PER_PAGE };
 }
 
-mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const Options& options)
+mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -166,7 +166,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
 
     BeatsColors beatsColors = parseBeatsColors(options.value(OptionKey::BEATS_COLORS, Val()).toQVariant());
 
-    // 2st pass: Set color for elements on beats
+    // 2nd pass: Set color for elements on beats
     int beatIndex = 0;
     for (const mu::engraving::RepeatSegment* repeatSegment : score->repeatList()) {
         for (const mu::engraving::Measure* measure : repeatSegment->measureList()) {
@@ -196,7 +196,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
         }
     }
 
-    // 3nd pass: the rest of the elements
+    // 3rd pass: the rest of the elements
     std::vector<mu::engraving::EngravingItem*> elements = page->elements();
     std::sort(elements.begin(), elements.end(), mu::engraving::elementLessThan);
 

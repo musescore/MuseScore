@@ -60,6 +60,8 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
     // Contains harmonies/fretboard per segment.
     class HarmonyList : public std::vector<EngravingItem*>
     {
+        OBJECT_ALLOCATOR(engraving, HarmonyList)
+
         std::map<const Segment*, std::vector<EngravingItem*> > elements;
         std::vector<EngravingItem*> modified;
 
@@ -99,31 +101,31 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
             elements[s].push_back(e);
         }
 
-        qreal getReferenceHeight(bool above) const
+        double getReferenceHeight(bool above) const
         {
             // The reference height is the height of
             //    the lowest element if placed above
             // or
             //    the highest element if placed below.
             bool first { true };
-            qreal ref { 0.0 };
+            double ref { 0.0 };
             for (auto s : mu::keys(elements)) {
                 EngravingItem* e { getReferenceElement(s, above, true) };
                 if (!e) {
                     continue;
                 }
                 if (e->placeAbove() && above) {
-                    ref = first ? e->y() : qMin(ref, e->y());
+                    ref = first ? e->y() : std::min(ref, e->y());
                     first = false;
                 } else if (e->placeBelow() && !above) {
-                    ref = first ? e->y() : qMax(ref, e->y());
+                    ref = first ? e->y() : std::max(ref, e->y());
                     first = false;
                 }
             }
             return ref;
         }
 
-        bool align(bool above, qreal reference, qreal maxShift)
+        bool align(bool above, double reference, double maxShift)
         {
             // Align the elements. If a segment contains multiple elements,
             // only the reference elements is used in the algorithm. All other
@@ -143,9 +145,9 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
                     be = getReferenceElement(s, above, true);
                 }
                 if (be && ((above && (be->y() < (reference + maxShift))) || ((!above && (be->y() > (reference - maxShift)))))) {
-                    qreal shift = be->rypos();
-                    be->rypos() = reference - be->ryoffset();
-                    shift -= be->rypos();
+                    double shift = be->ypos();
+                    be->setPosY(reference - be->ryoffset());
+                    shift -= be->ypos();
                     for (EngravingItem* e : elements[s]) {
                         if ((above && e->placeBelow()) || (!above && e->placeAbove())) {
                             continue;
@@ -154,7 +156,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
                         handled.push_back(e);
                         moved = true;
                         if (e != be) {
-                            e->rypos() -= shift;
+                            e->movePosY(-shift);
                         }
                     }
                     for (auto e : handled) {
@@ -167,7 +169,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
 
         void addToSkyline(const System* system)
         {
-            for (EngravingItem* e : qAsConst(modified)) {
+            for (EngravingItem* e : modified) {
                 const Segment* s = toSegment(e->explicitParent());
                 const MeasureBase* m = toMeasureBase(s->explicitParent());
                 system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));

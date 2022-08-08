@@ -20,11 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "xml.h"
-
-#include "libmscore/property.h"
+#include "xmlwriter.h"
 
 #include "types/typesconv.h"
+#include "rw/writecontext.h"
+#include "libmscore/engravingitem.h"
+#include "libmscore/property.h"
 
 #include "log.h"
 
@@ -44,7 +45,7 @@ XmlWriter::~XmlWriter()
     }
 }
 
-void XmlWriter::startElementRaw(const QString& s)
+void XmlWriter::startElementRaw(const String& s)
 {
     XmlStreamWriter::startElementRaw(s);
 }
@@ -91,7 +92,7 @@ void XmlWriter::tag(const AsciiStringView& name, const Attributes& attrs, const 
     XmlStreamWriter::element(name, attrs, body);
 }
 
-void XmlWriter::tagRaw(const QString& elementWithAttrs, const Value& body)
+void XmlWriter::tagRaw(const String& elementWithAttrs, const Value& body)
 {
     XmlStreamWriter::elementRaw(elementWithAttrs, body);
 }
@@ -117,7 +118,7 @@ void XmlWriter::tagProperty(Pid id, const PropertyValue& val, const PropertyValu
         LOGD() << "property value type mismatch, prop: " << name;
     }
 
-    const QString writableVal(propertyToString(id, val, /* mscx */ true));
+    const String writableVal(propertyToString(id, val, /* mscx */ true));
     if (writableVal.isEmpty()) {
         //! NOTE The data type is MILLIMETRE, but we write SPATIUM
         //! (the conversion from Millimetre to Spatium occurred higher up the stack)
@@ -161,10 +162,10 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
         element(name, data.value<int>());
         break;
     case P_TYPE::REAL:
-        element(name, data.value<qreal>());
+        element(name, data.value<double>());
         break;
     case P_TYPE::STRING:
-        element(name, data.value<QString>());
+        element(name, data.value<String>());
         break;
     // geometry
     case P_TYPE::POINT: {
@@ -269,6 +270,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::DYNAMIC_SPEED: {
         element(name, TConv::toXml(data.value<DynamicSpeed>()));
     } break;
+    case P_TYPE::LINE_TYPE: {
+        element(name, TConv::toXml(data.value<LineType>()));
+    } break;
     case P_TYPE::HOOK_TYPE: {
         element(name, TConv::toXml(data.value<HookType>()));
     } break;
@@ -311,12 +315,12 @@ void XmlWriter::tagFraction(const AsciiStringView& name, const Fraction& v, cons
     element(name, v.toString());
 }
 
-void XmlWriter::writeXml(const QString& name, QString s)
+void XmlWriter::writeXml(const String& name, String s)
 {
-    for (int i = 0; i < s.size(); ++i) {
-        ushort c = s.at(i).unicode();
+    for (size_t i = 0; i < s.size(); ++i) {
+        char16_t c = s.at(i).unicode();
         if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) {
-            s[i] = '?';
+            s[i] = u'?';
         }
     }
 
@@ -328,7 +332,7 @@ void XmlWriter::comment(const String& text)
     XmlStreamWriter::comment(text);
 }
 
-QString XmlWriter::xmlString(const QString& s)
+String XmlWriter::xmlString(const String& s)
 {
     return XmlStreamWriter::escapeString(s);
 }

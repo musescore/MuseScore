@@ -27,15 +27,6 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-bool KeyboardsSetupDataResolver::supportsInstrument(const Instrument* instrument)
-{
-    static const std::unordered_set<std::string> KEYBOARDS_FAMILY_SET = {
-        "keyboards", "organs", "synths",
-    };
-
-    return KEYBOARDS_FAMILY_SET.find(instrument->family().toStdString()) != KEYBOARDS_FAMILY_SET.cend();
-}
-
 const PlaybackSetupData& KeyboardsSetupDataResolver::doResolve(const Instrument* instrument)
 {
     static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
@@ -60,6 +51,10 @@ const PlaybackSetupData& KeyboardsSetupDataResolver::doResolve(const Instrument*
         { "harmonium", { SoundId::Organ, SoundCategory::Keyboards, { SoundSubCategory::Reed }, {} } },
         { "reed-organ", { SoundId::Organ, SoundCategory::Keyboards, { SoundSubCategory::Reed }, {} } },
 
+        { "brass-synthesizer", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                                   SoundSubCategory::Brass }, {} } },
+        { "string-synthesizer", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                                    SoundSubCategory::String }, {} } },
         { "mallet-synthesizer", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric }, {} } },
         { "atmosphere-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
                                                                                   SoundSubCategory::FX_Atmosphere }, {} } },
@@ -76,6 +71,32 @@ const PlaybackSetupData& KeyboardsSetupDataResolver::doResolve(const Instrument*
                                                                               SoundSubCategory::FX_Brightness, SoundSubCategory::FX_Crystal,
                                                                               SoundSubCategory::FX_Echoes, SoundSubCategory::FX_Goblins,
                                                                               SoundSubCategory::FX_Rain }, {} } },
+        { "sine-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                            SoundSubCategory::Sine_Wave }, {} } },
+        { "square-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                              SoundSubCategory::Square_Wave }, {} } },
+        { "saw-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                           SoundSubCategory::Sawtooth_Wave }, {} } },
+        { "new-age-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                               SoundSubCategory::NewAge }, {} } },
+        { "pad-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                           SoundSubCategory::Pad }, {} } },
+        { "warm-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                            SoundSubCategory::Warm }, {} } },
+        { "poly-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                            SoundSubCategory::Polysynth }, {} } },
+        { "choir-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                             SoundSubCategory::Choir }, {} } },
+        { "metallic-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                                SoundSubCategory::Metallic }, {} } },
+        { "halo-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                            SoundSubCategory::Halo }, {} } },
+        { "sweep-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                             SoundSubCategory::Sweep }, {} } },
+        { "soundtrack-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                                  SoundSubCategory::FX_SoundTrack }, {} } },
+        { "sci-fi-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                              SoundSubCategory::FX_SciFi }, {} } },
     };
 
     auto search = SETUP_DATA_MAP.find(instrument->id().toStdString());

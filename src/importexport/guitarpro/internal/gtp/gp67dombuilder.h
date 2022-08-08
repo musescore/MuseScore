@@ -2,7 +2,6 @@
 #define GPDOMBUILDER_H
 
 #include <memory>
-#include <QDomNode>
 
 #include "igpdombuilder.h"
 #include "gpdommodel.h"
@@ -14,54 +13,55 @@ class GP67DomBuilder : public IGPDomBuilder
 public:
     GP67DomBuilder();
 
-    void buildGPDomModel(QDomElement* qdomElem) override;
+    void buildGPDomModel(XmlDomElement* domElem) override;
     std::unique_ptr<GPDomModel> getGPDomModel() override;
 
 protected:
 
-    void buildGPScore(QDomNode* scoreNode);
-    void buildGPMasterTracks(QDomNode* masterTrack);
-    void buildGPAudioTracks(QDomNode* audioTrack);
-    void buildGPTracks(QDomNode* tracksNode);
-    void buildGPMasterBars(QDomNode* masterBars);
-    void buildGPBars(QDomNode* bars);
-    void buildGPVoices(QDomNode* voicesNode);
-    void buildGPBeats(QDomNode* beats);
-    void buildGPNotes(QDomNode* notesNode);
-    void buildGPRhythms(QDomNode* rhythms);
+    void buildGPScore(XmlDomNode* scoreNode);
+    void buildGPMasterTracks(XmlDomNode* masterTrack);
+    void buildGPAudioTracks(XmlDomNode* audioTrack);
+    void buildGPTracks(XmlDomNode* tracksNode);
+    void buildGPMasterBars(XmlDomNode* masterBars);
+    void buildGPBars(XmlDomNode* bars);
+    void buildGPVoices(XmlDomNode* voicesNode);
+    void buildGPBeats(XmlDomNode* beats);
+    void buildGPNotes(XmlDomNode* notesNode);
+    void buildGPRhythms(XmlDomNode* rhythms);
 
     void breakLyricsOnBeatsIfNeed();
     bool isLyricsOnBeats() const;
 
-    virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(QDomNode* trackNode) = 0;
+    virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(XmlDomNode* trackNode) = 0;
 
-    std::unique_ptr<GPMasterTracks> createGPMasterTrack(QDomNode* metadata);
-    std::unique_ptr<GPAudioTrack> createGPAudioTrack(QDomNode* metadata);
-    std::unique_ptr<GPMasterBar> createGPMasterBar(QDomNode* masterBarNode);
-    std::pair<int, std::unique_ptr<GPBar> > createGPBar(QDomNode* barNode);
-    std::pair<int, std::unique_ptr<GPVoice> > createGPVoice(QDomNode* voiceNode);
-    std::pair<int, std::shared_ptr<GPBeat> > createGPBeat(QDomNode* beatNode);
-    std::pair<int, std::shared_ptr<GPNote> > createGPNote(QDomNode* noteNode);
-    std::pair<int, std::shared_ptr<GPRhythm> > createGPRhythm(QDomNode* rhythmNode);
+    std::unique_ptr<GPMasterTracks> createGPMasterTrack(XmlDomNode* metadata);
+    std::unique_ptr<GPAudioTrack> createGPAudioTrack(XmlDomNode* metadata);
+    std::unique_ptr<GPMasterBar> createGPMasterBar(XmlDomNode* masterBarNode);
+    std::pair<int, std::unique_ptr<GPBar> > createGPBar(XmlDomNode* barNode);
+    std::pair<int, std::unique_ptr<GPVoice> > createGPVoice(XmlDomNode* voiceNode);
+    std::pair<int, std::shared_ptr<GPBeat> > createGPBeat(XmlDomNode* beatNode);
+    std::pair<int, std::shared_ptr<GPNote> > createGPNote(XmlDomNode* noteNode);
+    std::pair<int, std::shared_ptr<GPRhythm> > createGPRhythm(XmlDomNode* rhythmNode);
 
-    void readNoteXProperties(const QDomNode& propertiesNode, GPNote* n);
-    void readNoteProperties(QDomNode* propertiesNode, GPNote* n);
-    void readBeatXProperties(const QDomNode& propertiesNode, GPBeat* b);
-    std::unique_ptr<GPNote::Bend> createBend(QDomNode* propertyNode);
-    void readHarmonic(QDomNode* propertyNode, GPNote* note) const;
+    void readNoteXProperties(const XmlDomNode& propertiesNode, GPNote* n);
+    void readNoteProperties(XmlDomNode* propertiesNode, GPNote* n);
+    void readBeatXProperties(const XmlDomNode& propertiesNode, GPBeat* b);
+    std::unique_ptr<GPNote::Bend> createBend(XmlDomNode* propertyNode);
+    void readHarmonic(XmlDomNode* propertyNode, GPNote* note) const;
 
-    std::vector<GPMasterTracks::Automation> readTempoMap(QDomNode* currentNode);
-    GPTrack::RSE readTrackRSE(QDomNode* trackChildNode) const;
-    GPMasterBar::KeySig readKeySig(QDomNode* keyNode) const;
-    GPMasterBar::TimeSig readTimeSig(QDomNode* timeNode) const;
-    void readTrackProperties(QDomNode* propertiesNode, GPTrack* track) const;
-    void readBeatProperties(const QDomNode& propertiesNode, GPBeat* beat) const;
-    void readDiagram(const QDomNode& items, GPTrack* track) const;
-    void readLyrics(const QDomNode& items, GPTrack* track) const;
-    std::vector<GPMasterBar::Fermata> readFermatas(QDomNode* fermatasNode) const;
-    std::pair<QString, QString> readMasterBarSection(const QDomNode& sectionNode) const;
-    GPMasterBar::Repeat readRepeat(QDomNode* repeatNode) const;
-    std::vector<int> readEnding(QDomNode* endNode) const;
+    std::vector<GPMasterTracks::Automation> readTempoMap(XmlDomNode* currentNode);
+    GPTrack::RSE readTrackRSE(XmlDomNode* trackChildNode) const;
+    GPMasterBar::KeySig readKeySig(XmlDomNode* keyNode) const;
+    GPMasterBar::TimeSig readTimeSig(XmlDomNode* timeNode) const;
+    void readTrackProperties(XmlDomNode* propertiesNode, GPTrack* track) const;
+    void readBeatProperties(const XmlDomNode& propertiesNode, GPBeat* beat) const;
+    void readDiagram(const XmlDomNode& items, GPTrack* track) const;
+    void readLyrics(const XmlDomNode& items, GPTrack* track) const;
+    std::vector<GPMasterBar::Fermata> readFermatas(XmlDomNode* fermatasNode) const;
+    std::vector<GPMasterBar::Direction> readRepeatsJumps(XmlDomNode* repeatsJumpsNode) const;
+    std::pair<String, String> readMasterBarSection(const XmlDomNode& sectionNode) const;
+    GPMasterBar::Repeat readRepeat(XmlDomNode* repeatNode) const;
+    std::vector<int> readEnding(XmlDomNode* endNode) const;
 
     std::unordered_map<int, std::shared_ptr<GPNote> > _notes;
     std::unordered_map<int, std::shared_ptr<GPRhythm> > _rhythms;

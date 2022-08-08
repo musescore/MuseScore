@@ -35,6 +35,8 @@ class Accidental;
 
 class TrillSegment final : public LineSegment
 {
+    OBJECT_ALLOCATOR(engraving, TrillSegment)
+
     SymIdList _symbols;
 
     void symbolLine(SymId start, SymId fill);
@@ -70,15 +72,12 @@ public:
 
 class Trill final : public SLine
 {
+    OBJECT_ALLOCATOR(engraving, Trill)
+
     Sid getPropertyStyle(Pid) const override;
 
-public:
-    enum class Type : char {
-        TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,
-    };
-
 private:
-    Type _trillType;
+    TrillType _trillType;
     Accidental* _accidental;
     OrnamentStyle _ornamentStyle;   // for use in ornaments such as trill
     bool _playArticulation;
@@ -101,16 +100,13 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    void setTrillType(const QString& s);
-    void setTrillType(Type tt) { _trillType = tt; }
-    Type trillType() const { return _trillType; }
+    void setTrillType(TrillType tt) { _trillType = tt; }
+    TrillType trillType() const { return _trillType; }
     void setOrnamentStyle(OrnamentStyle val) { _ornamentStyle = val; }
     OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
     void setPlayArticulation(bool val) { _playArticulation = val; }
     bool playArticulation() const { return _playArticulation; }
-    static QString type2name(Trill::Type t);
-    QString trillTypeName() const;
-    QString trillTypeUserName() const;
+    String trillTypeUserName() const;
     Accidental* accidental() const { return _accidental; }
     void setAccidental(Accidental* a) { _accidental = a; }
 
@@ -119,20 +115,9 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 };
-
-struct TrillTableItem {
-    Trill::Type type;
-    const char* name;
-    QString userName;
-};
-
-extern const std::vector<TrillTableItem> trillTable;
 } // namespace mu::engraving
-
-Q_DECLARE_METATYPE(mu::engraving::Trill::Type);
 
 #endif

@@ -14,6 +14,12 @@ else()
     add_definitions(-DNO_QT_SUPPORT)
 endif()
 
+add_definitions(-DHAW_PROFILER_ENABLED)
+
+if (NOT BUILD_ALLOCATOR)
+    add_definitions(-DCUSTOM_ALLOCATOR_DISABLED)
+endif()
+
 if (CC_IS_GCC)
     message(STATUS "Using Compiler GCC ${CMAKE_CXX_COMPILER_VERSION}")
 
@@ -22,6 +28,10 @@ if (CC_IS_GCC)
 
     if (TRY_BUILD_SHARED_LIBS_IN_DEBUG AND BUILD_IS_DEBUG)
         set(BUILD_SHARED_LIBS ON)
+    endif()
+
+    if (BUILD_ASAN)
+        string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-pointer")
     endif()
 
 elseif(CC_IS_MSVC)
@@ -68,6 +78,14 @@ elseif(CC_IS_CLANG)
 
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
+    if (BUILD_ASAN)
+        string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-pointer")
+    endif()
+
+    if (BUILD_IS_DEBUG)
+        add_definitions(-DSTRING_DEBUG_HACK)
+    endif()
 
 elseif(CC_IS_EMSCRIPTEN)
     message(STATUS "Using Compiler Emscripten ${CMAKE_CXX_COMPILER_VERSION}")

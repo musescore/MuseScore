@@ -48,13 +48,294 @@
     <score-part id="P3">
       <part-name>Drumset</part-name>
       <part-abbreviation>Drs.</part-abbreviation>
-      <score-instrument id="P3-I1">
-        <instrument-name>Drum Set</instrument-name>
+      <score-instrument id="P3-I36">
+        <instrument-name>Acoustic Bass Drum</instrument-name>
         </score-instrument>
-      <midi-device id="P3-I1" port="1"></midi-device>
-      <midi-instrument id="P3-I1">
-        <midi-channel>5</midi-channel>
+      <score-instrument id="P3-I37">
+        <instrument-name>Bass Drum 1</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I38">
+        <instrument-name>Side Stick</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I39">
+        <instrument-name>Acoustic Snare</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I41">
+        <instrument-name>Electric Snare</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I42">
+        <instrument-name>Low Floor Tom</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I43">
+        <instrument-name>Closed Hi-Hat</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I44">
+        <instrument-name>High Floor Tom</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I45">
+        <instrument-name>Pedal Hi-Hat</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I46">
+        <instrument-name>Low Tom</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I47">
+        <instrument-name>Open Hi-Hat</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I48">
+        <instrument-name>Low-Mid Tom</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I49">
+        <instrument-name>Hi-Mid Tom</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I50">
+        <instrument-name>Crash Cymbal 1</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I51">
+        <instrument-name>High Tom</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I52">
+        <instrument-name>Ride Cymbal 1</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I53">
+        <instrument-name>Chinese Cymbal</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I54">
+        <instrument-name>Ride Bell</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I55">
+        <instrument-name>Tambourine</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I56">
+        <instrument-name>Splash Cymbal</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I57">
+        <instrument-name>Cowbell</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I58">
+        <instrument-name>Crash Cymbal 2</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I60">
+        <instrument-name>Ride Cymbal 2</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I63">
+        <instrument-name>Instrument 63</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I64">
+        <instrument-name>Open Hi Conga</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I65">
+        <instrument-name>Low Conga</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I66">
+        <instrument-name>Instrument 66</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I70">
+        <instrument-name>Instrument 70</instrument-name>
+        </score-instrument>
+      <score-instrument id="P3-I80">
+        <instrument-name>Instrument 80</instrument-name>
+        </score-instrument>
+      <midi-device port="1"></midi-device>
+      <midi-instrument id="P3-I36">
+        <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
+        <midi-unpitched>36</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I37">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>37</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I38">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>38</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I39">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>39</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I41">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>41</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I42">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>42</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I43">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>43</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I44">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>44</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I45">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>45</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I46">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>46</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I47">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>47</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I48">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>48</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I49">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>49</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I50">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>50</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I51">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>51</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I52">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>52</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I53">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>53</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I54">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>54</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I55">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>55</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I56">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>56</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I57">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>57</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I58">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>58</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I60">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>60</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I63">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>63</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I64">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>64</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I65">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>65</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I66">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>66</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I70">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>70</midi-unpitched>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-instrument id="P3-I80">
+        <midi-channel>10</midi-channel>
+        <midi-program>1</midi-program>
+        <midi-unpitched>80</midi-unpitched>
         <volume>78.7402</volume>
         <pan>0</pan>
         </midi-instrument>
@@ -201,11 +482,12 @@
           </clef>
         </attributes>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>1</duration>
+        <instrument id="P3-I80"/>
         <voice>1</voice>
         <type>eighth</type>
         <stem>up</stem>
@@ -213,11 +495,12 @@
         <beam number="1">begin</beam>
         </note>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>1</duration>
+        <instrument id="P3-I80"/>
         <voice>1</voice>
         <type>eighth</type>
         <stem>up</stem>
@@ -225,11 +508,12 @@
         <beam number="1">end</beam>
         </note>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>1</duration>
+        <instrument id="P3-I80"/>
         <voice>1</voice>
         <type>eighth</type>
         <stem>up</stem>
@@ -237,11 +521,12 @@
         <beam number="1">begin</beam>
         </note>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>1</duration>
+        <instrument id="P3-I80"/>
         <voice>1</voice>
         <type>eighth</type>
         <stem>up</stem>
@@ -249,11 +534,12 @@
         <beam number="1">end</beam>
         </note>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>1</duration>
+        <instrument id="P3-I80"/>
         <voice>1</voice>
         <type>eighth</type>
         <stem>up</stem>
@@ -261,11 +547,12 @@
         <beam number="1">begin</beam>
         </note>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>1</duration>
+        <instrument id="P3-I80"/>
         <voice>1</voice>
         <type>eighth</type>
         <stem>up</stem>
@@ -273,11 +560,12 @@
         <beam number="1">end</beam>
         </note>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>1</duration>
+        <instrument id="P3-I80"/>
         <voice>1</voice>
         <type>eighth</type>
         <stem>up</stem>
@@ -285,11 +573,12 @@
         <beam number="1">begin</beam>
         </note>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>1</duration>
+        <instrument id="P3-I80"/>
         <voice>1</voice>
         <type>eighth</type>
         <stem>up</stem>
@@ -300,41 +589,45 @@
         <duration>8</duration>
         </backup>
       <note>
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>2</duration>
+        <instrument id="P3-I66"/>
         <voice>2</voice>
         <type>quarter</type>
         <stem>down</stem>
         </note>
       <note>
-        <pitch>
-          <step>A</step>
-          <octave>4</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>2</duration>
+        <instrument id="P3-I70"/>
         <voice>2</voice>
         <type>quarter</type>
         <stem>down</stem>
         </note>
       <note>
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>2</duration>
+        <instrument id="P3-I66"/>
         <voice>2</voice>
         <type>quarter</type>
         <stem>down</stem>
         </note>
       <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-          </pitch>
+        <unpitched>
+          <display-step>F</display-step>
+          <display-octave>5</display-octave>
+          </unpitched>
         <duration>2</duration>
+        <instrument id="P3-I63"/>
         <voice>2</voice>
         <type>quarter</type>
         <stem>down</stem>

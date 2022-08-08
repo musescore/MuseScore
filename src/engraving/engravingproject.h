@@ -25,9 +25,9 @@
 #include <memory>
 
 #include "engravingerrors.h"
-#include "infrastructure/io/mscreader.h"
-#include "infrastructure/io/mscwriter.h"
-#include "infrastructure/io/ifileinfoprovider.h"
+#include "infrastructure/mscreader.h"
+#include "infrastructure/mscwriter.h"
+#include "infrastructure/ifileinfoprovider.h"
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
@@ -48,7 +48,7 @@ class MStyle;
 
 class EngravingProject : public std::enable_shared_from_this<EngravingProject>
 {
-    INJECT(engraving, diagnostics::IEngravingElementsProvider, engravingElementsProvider)
+    INJECT_STATIC(engraving, diagnostics::IEngravingElementsProvider, engravingElementsProvider)
 
 public:
     ~EngravingProject();
@@ -59,7 +59,7 @@ public:
     IFileInfoProviderPtr fileInfoProvider() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 
-    QString appVersion() const;
+    String appVersion() const;
     int mscVersion() const;
 
     bool readOnly() const;
@@ -73,7 +73,7 @@ public:
 private:
     friend class MasterScore;
 
-    EngravingProject() = default;
+    EngravingProject();
 
     void init(const MStyle& style);
 

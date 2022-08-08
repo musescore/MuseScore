@@ -23,6 +23,7 @@
 #include "paletteuiactions.h"
 
 #include "context/uicontext.h"
+#include "types/translatablestring.h"
 
 using namespace mu::palette;
 using namespace mu::ui;
@@ -32,22 +33,34 @@ static const mu::actions::ActionCode MASTERPALETTE_CODE("masterpalette");
 const UiActionList PaletteUiActions::m_actions = {
     UiAction(MASTERPALETTE_CODE,
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Master palette"),
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Master palette"),
+             TranslatableString("action", "Open master palette…"),
              Checkable::Yes
              ),
     UiAction("palette-search",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Palette Search")
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Palette search"),
+             TranslatableString("action", "Search palettes")
              ),
     UiAction("time-signature-properties",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Time Signature Properties…"),
-             QT_TRANSLATE_NOOP("action", "Time signature properties")
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Time signature properties…"),
+             TranslatableString("action", "Time signature properties…")
              ),
     UiAction("edit-drumset",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Edit Drumset…"),
-             QT_TRANSLATE_NOOP("action", "Edit drumset")
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Edit drumset…"),
+             TranslatableString("action", "Edit drumset…")
+             ),
+    UiAction("show-keys",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_TEXT_EDITING,
+             TranslatableString("action", "Insert special characters"),
+             TranslatableString("action", "Insert special characters…")
              )
 };
 

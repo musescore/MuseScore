@@ -30,7 +30,7 @@
 #include "inotationinteraction.h"
 #include "inotationundostack.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
 class Score;
@@ -57,9 +57,7 @@ public:
     void padNote(const Pad& pad) override;
     void putNote(const PointF& pos, bool replace, bool insert) override;
     void removeNote(const PointF& pos) override;
-    void setAccidental(AccidentalType accidentalType) override;
-    void setArticulation(SymbolId articulationSymbolId) override;
-    void setDrumNote(int note) override;
+
     void addTuplet(const TupletOptions& options) override;
 
     void addSlur(mu::engraving::Slur* slur) override;
@@ -69,7 +67,11 @@ public:
     void doubleNoteInputDuration() override;
     void halveNoteInputDuration() override;
 
-    void setCurrentVoiceIndex(int voiceIndex) override;
+    void setAccidental(AccidentalType accidentalType) override;
+    void setArticulation(SymbolId articulationSymbolId) override;
+    void setDrumNote(int note) override;
+    void setCurrentVoice(voice_idx_t voiceIndex) override;
+    void setCurrentTrack(track_idx_t trackIndex) override;
 
     void resetInputPosition() override;
 

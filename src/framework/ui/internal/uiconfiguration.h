@@ -29,7 +29,7 @@
 #include "imainwindow.h"
 #include "internal/iplatformtheme.h"
 
-#include "val.h"
+#include "types/val.h"
 #include "uiarrangement.h"
 #include "async/asyncable.h"
 

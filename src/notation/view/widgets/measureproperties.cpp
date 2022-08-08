@@ -24,6 +24,8 @@
 
 #include <QKeyEvent>
 
+#include "translation.h"
+
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/measure.h"
 #include "engraving/libmscore/measurerepeat.h"
@@ -160,7 +162,7 @@ bool MeasurePropertiesDialog::eventFilter(QObject* obj, QEvent* event)
         QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
         if (keyEvent
             && WidgetNavigationFix::fixNavigationForTableWidget(
-                new WidgetNavigationFix::NavigationChain { staves, actualZ, buttonBox },
+                WidgetNavigationFix::NavigationChain { staves, actualZ, buttonBox },
                 keyEvent->key())) {
             return true;
         }
@@ -179,7 +181,7 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
     nextButton->setEnabled(m_measure->nextMeasure() != 0);
     previousButton->setEnabled(m_measure->prevMeasure() != 0);
 
-    setWindowTitle(tr("Measure Properties for Measure %1").arg(m_measure->no() + 1));
+    setWindowTitle(qtrc("notation/measureproperties", "Measure properties for measure %1").arg(m_measure->no() + 1));
     m_notation->interaction()->clearSelection();
     m_notation->interaction()->select({ m_measure }, mu::engraving::SelectType::ADD, 0);
 
@@ -210,9 +212,8 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
     staves->setColumnCount(3);
 
     auto itemAccessibleText = [](const QTableWidgetItem* item){
-        QString accessibleText = item->data(ITEM_ACCESSIBLE_TITLE_ROLE).toString() + ": "
-                                 + (item->checkState() == Qt::Checked ? tr("checked") : tr("unchecked"));
-        return accessibleText;
+        return item->data(ITEM_ACCESSIBLE_TITLE_ROLE).toString() + ": "
+               + (item->checkState() == Qt::Checked ? qtrc("ui", "checked", "checkstate") : qtrc("ui", "unchecked", "checkstate"));
     };
 
     for (size_t staffIdx = 0; staffIdx < rows; ++staffIdx) {
@@ -225,14 +226,14 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
         if (rows == 1) {                  // cannot be invisible if only one row
             item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }
-        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, qtrc("notation", "Visible"));
+        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, qtrc("notation/measureproperties", "Visible"));
         item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
         staves->setItem(static_cast<int>(staffIdx), 1, item);
 
         item = new QTableWidgetItem();
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
         item->setCheckState(m_measure->stemless(staffIdx) ? Qt::Checked : Qt::Unchecked);
-        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, qtrc("notation", "Stemless"));
+        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, qtrc("notation/measureproperties", "Stemless"));
         item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
         staves->setItem(static_cast<int>(staffIdx), 2, item);
     }

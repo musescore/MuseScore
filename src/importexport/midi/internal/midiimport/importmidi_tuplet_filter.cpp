@@ -442,7 +442,7 @@ bool validateSelectedTuplets(Iter beginIt,
                              const std::vector<TupletInfo>& tuplets)
 {
     // <chord address, used voices>
-    std::map<std::pair<const ReducedFraction, MidiChord>*, int> usedChords;
+    std::map<std::pair<const ReducedFraction, MidiChord>*, size_t> usedChords;
     for (auto indexIt = beginIt; indexIt != endIt; ++indexIt) {
         const auto& tuplet = tuplets[*indexIt];
         const auto& chords = tuplet.chords;
@@ -455,7 +455,7 @@ bool validateSelectedTuplets(Iter beginIt,
                 if (!isFirstChord) {
                     return false;
                 }
-                if (!isMoreTupletVoicesAllowed(fit->second, it->second->second.notes.size())) {
+                if (!isMoreTupletVoicesAllowed(static_cast<int>(fit->second), it->second->second.notes.size())) {
                     return false;
                 }
                 ++(fit->second);

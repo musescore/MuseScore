@@ -20,9 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QJsonDocument>
-#include <QJsonObject>
-
+#include "translation.h"
 #include "io/file.h"
 
 #include "factory.h"
@@ -59,7 +57,7 @@ void Score::checkScore()
 
         if (s->segmentType() & (SegmentType::ChordRest)) {
             bool empty = true;
-            foreach (EngravingItem* e, s->elist()) {
+            for (EngravingItem* e : s->elist()) {
                 if (e) {
                     empty = false;
                     break;
@@ -111,11 +109,11 @@ void Score::checkScore()
 ///    Check that voices > 1 contains less than measure duration
 //---------------------------------------------------------
 
-bool Score::sanityCheck(const QString& name)
+bool Score::sanityCheck()
 {
     bool result = true;
     int mNumber = 1;
-    QString error;
+    String error;
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         Fraction mLen = m->ticks();
         size_t endStaff  = staves().size();
@@ -141,10 +139,9 @@ bool Score::sanityCheck(const QString& name)
                 }
             }
             if (voices[0] != mLen) {
-                QString msg = QObject::tr("Measure %1, staff %2 incomplete. Expected: %3; Found: %4").arg(mNumber).arg(staffIdx + 1).arg(
-                    mLen.toString(), voices[0].toString());
-                LOGE() << msg;
-                error += QString("%1\n").arg(msg);
+                LOGE() << String(u"Measure %1, staff %2 incomplete. Expected: %3; Found: %4")
+                    .arg(mNumber).arg(staffIdx + 1).arg(mLen.toString(), voices[0].toString());
+
 #ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
 #endif
@@ -160,10 +157,9 @@ bool Score::sanityCheck(const QString& name)
             }
             for (voice_idx_t v = 1; v < VOICES; ++v) {
                 if (voices[v] > mLen) {
-                    QString msg = QObject::tr("Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5").arg(mNumber).arg(
-                        staffIdx + 1).arg(v + 1).arg(mLen.toString(), voices[v].toString());
-                    LOGE() << msg;
-                    error += QString("%1\n").arg(msg);
+                    LOGE() << String(u"Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5")
+                        .arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(mLen.toString(), voices[v].toString());
+
 #ifndef NDEBUG
                     m->setCorrupted(staffIdx, true);
 #endif
@@ -173,25 +169,7 @@ bool Score::sanityCheck(const QString& name)
         }
         mNumber++;
     }
-    if (!name.isEmpty()) {
-        QJsonObject json;
-        if (result) {
-            json["result"] = 0;
-        } else {
-            json["result"] = 1;
-            json["error"] = error.trimmed().replace("\n", "\\n");
-        }
-        QJsonDocument jsonDoc(json);
-        io::File fp(name);
-        if (!fp.open(io::IODevice::WriteOnly)) {
-            LOGE() << "Failed open file: " << name;
-            return false;
-        }
-        fp.write(jsonDoc.toJson(QJsonDocument::Compact));
-        fp.close();
-    } else {
-        MScore::lastError = error;
-    }
+
     return result;
 }
 

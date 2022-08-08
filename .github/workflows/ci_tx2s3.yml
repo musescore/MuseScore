@@ -1,9 +1,6 @@
 name: CI_Run_tx2s3
 
 on:
-  pull_request:
-    branches:
-    - master_off
   schedule:
     - cron: '*/15 * * * *' # Every 15 minutes
   workflow_dispatch:
@@ -15,8 +12,7 @@ jobs:
     - name: "Configure workflow"
       run: |
         DO_RUN='true'
-        if [ -z "${{ secrets.TRANSIFEX_USER }}" ]; then DO_RUN='false'; fi
-        if [ -z "${{ secrets.TRANSIFEX_PASSWORD }}" ]; then DO_RUN='false'; fi
+        if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then DO_RUN='false'; fi
         if [ -z "${{ secrets.S3_KEY }}" ]; then DO_RUN='false'; fi
         if [ -z "${{ secrets.S3_SECRET }}" ]; then DO_RUN='false'; fi
 
@@ -34,63 +30,24 @@ jobs:
     - name: Setup environment
       if: env.DO_RUN == 'true'
       run: |
-        sudo bash ./build/ci/tx2s3/setup.sh --tx_user ${{ secrets.TRANSIFEX_USER }} --tx_password ${{ secrets.TRANSIFEX_PASSWORD }} --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
+        # lrelease
+        sudo bash ./build/ci/translation/qt_install.sh 
+        sudo bash ./build/ci/translation/tx_install.sh -s linux -t ${{ secrets.TRANSIFEX_API_TOKEN }}
+        sudo bash ./build/ci/translation/s3_install.sh --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
     
-    - name: Run tx2s3
+    - name: Update .ts files (tx pull)
       if: env.DO_RUN == 'true'
       run: |
-        sudo bash ./build/ci/tx2s3/tx2s3.sh
+        sudo bash ./build/ci/translation/tx_pull.sh
+
+    - name: Pack and send to s3
+      if: env.DO_RUN == 'true'
+      run: |
+        sudo bash ./build/ci/translation/s3_packandsend.sh
         
     - name: Upload artifacts on GitHub
       if: env.DO_RUN == 'true'
       uses: actions/upload-artifact@v2
       with:
         name: MuseScore_locale_${{ github.run_id }}
-        path: ./share/locale
-  tx2s3_mu3:
-    runs-on: ubuntu-18.04
-    steps:
-    - name: "Configure workflow"
-      run: |
-        DO_RUN='true'
-        if [ -z "${{ secrets.TRANSIFEX_USER }}" ]; then DO_RUN='false'; fi
-        if [ -z "${{ secrets.TRANSIFEX_PASSWORD }}" ]; then DO_RUN='false'; fi
-        if [ -z "${{ secrets.S3_KEY }}" ]; then DO_RUN='false'; fi
-        if [ -z "${{ secrets.S3_SECRET }}" ]; then DO_RUN='false'; fi
-
-        if [ $DO_RUN == 'false' ]; then
-          echo "not set credentials, not possible run"
-        fi 
-        
-        echo "github.event_name: ${{ github.event_name }}"
-
-        # if [ ${{ github.event_name != 'schedule' }} ]; then 
-        #   echo "This is job only for schedule run tx2s3 for 3.x branch"
-        #   DO_RUN='false'; 
-        # fi
-
-        echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
-        echo "DO_RUN: $DO_RUN"
-
-    - name: Clone repository
-      if: env.DO_RUN == 'true'
-      uses: actions/checkout@v2
-      with:
-        ref: 3.x
-
-    - name: Setup environment
-      if: env.DO_RUN == 'true'
-      run: |
-        sudo bash ./build/ci/tx2s3/setup.sh --tx_user ${{ secrets.TRANSIFEX_USER }} --tx_password ${{ secrets.TRANSIFEX_PASSWORD }} --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
-    
-    - name: Run tx2s3
-      if: env.DO_RUN == 'true'
-      run: |
-        sudo bash ./build/ci/tx2s3/tx2s3.sh
-        
-    - name: Upload artifacts on GitHub
-      if: env.DO_RUN == 'true'
-      uses: actions/upload-artifact@v2
-      with:
-        name: MuseScore_MU3_locale_${{ github.run_id }}
-        path: ./share/locale        
+        path: ./share/locale      

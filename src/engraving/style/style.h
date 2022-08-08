@@ -23,17 +23,16 @@
 #ifndef MU_ENGRAVING_STYLE_H
 #define MU_ENGRAVING_STYLE_H
 
-#include <functional>
-
 #include <array>
+#include <cassert>
+
 #include "io/iodevice.h"
-#include <QSet>
 
 #include "libmscore/types.h"
 #include "types/dimension.h"
 
-#include "property/propertyvalue.h"
-#include "infrastructure/draw/geometry.h"
+#include "types/propertyvalue.h"
+#include "draw/types/geometry.h"
 
 #include "styledef.h"
 
@@ -54,14 +53,14 @@ public:
     const PropertyValue& styleV(Sid idx) const { return value(idx); }
     Spatium styleS(Sid idx) const
     {
-        Q_ASSERT(MStyle::valueType(idx) == P_TYPE::SPATIUM);
+        assert(MStyle::valueType(idx) == P_TYPE::SPATIUM);
         return value(idx).value<Spatium>();
     }
 
-    Millimetre styleMM(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::SPATIUM); return valueMM(idx); }
-    QString  styleSt(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::STRING); return value(idx).toString(); }
-    bool     styleB(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::BOOL); return value(idx).toBool(); }
-    qreal    styleD(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::REAL); return value(idx).toReal(); }
+    Millimetre styleMM(Sid idx) const { assert(MStyle::valueType(idx) == P_TYPE::SPATIUM); return valueMM(idx); }
+    String  styleSt(Sid idx) const { assert(MStyle::valueType(idx) == P_TYPE::STRING); return value(idx).value<String>(); }
+    bool     styleB(Sid idx) const { assert(MStyle::valueType(idx) == P_TYPE::BOOL); return value(idx).toBool(); }
+    double   styleD(Sid idx) const { assert(MStyle::valueType(idx) == P_TYPE::REAL); return value(idx).toReal(); }
     int      styleI(Sid idx) const { /* can be int or enum, so no assert */ return value(idx).toInt(); }
 
     const PropertyValue& value(Sid idx) const;
@@ -82,7 +81,7 @@ public:
 
     static P_TYPE valueType(const Sid);
     static const char* valueName(const Sid);
-    static Sid styleIdx(const QString& name);
+    static Sid styleIdx(const String& name);
 
 private:
 

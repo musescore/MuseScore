@@ -35,6 +35,7 @@ class LyricsLine;
 
 class Lyrics final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, Lyrics)
 public:
     enum class Syllabic : char {
         ///.\{
@@ -51,7 +52,7 @@ public:
     static constexpr int TEMP_MELISMA_TICKS      = 1;
 
     // WORD_MIN_DISTANCE has never been implemented
-    // static constexpr qreal  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
+    // static constexpr double  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
 
 private:
     Fraction _ticks;          ///< if > 0 then draw an underline to tick() + _ticks
@@ -65,8 +66,6 @@ private:
 
     bool isMelisma() const;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
-
-    bool alwaysKernable() const override { return true; }
 
 protected:
     int _no;                  ///< row index
@@ -94,7 +93,7 @@ public:
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
     int subtype() const override { return _no; }
-    QString subtypeName() const override { return QObject::tr("Verse %1").arg(_no + 1); }
+    TranslatableString subtypeUserName() const override;
     void setNo(int n) { _no = n; }
     int no() const { return _no; }
     bool isEven() const { return _no % 1; }
@@ -112,7 +111,7 @@ public:
     void removeFromScore();
 
     using EngravingObject::undoChangeProperty;
-    void paste(EditData& ed, const QString& txt) override;
+    void paste(EditData& ed, const String& txt) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -126,6 +125,7 @@ public:
 
 class LyricsLine final : public SLine
 {
+    OBJECT_ALLOCATOR(engraving, LyricsLine)
 protected:
     Lyrics* _nextLyrics;
 
@@ -154,9 +154,10 @@ public:
 
 class LyricsLineSegment final : public LineSegment
 {
+    OBJECT_ALLOCATOR(engraving, LyricsLineSegment)
 protected:
     int _numOfDashes = 0;
-    qreal _dashLength = 0;
+    double _dashLength = 0;
 
 public:
     LyricsLineSegment(LyricsLine*, System* parent);

@@ -21,8 +21,7 @@
  */
 #include "playbacktoolbarmodel.h"
 
-#include "log.h"
-#include "translation.h"
+#include "types/translatablestring.h"
 
 #include "ui/view/musicalsymbolcodes.h"
 #include "playback/playbacktypes.h"
@@ -94,7 +93,7 @@ void PlaybackToolBarModel::updateActions()
     MenuItemList settingsItems;
 
     for (const UiAction& action : PlaybackUiActions::settingsActions()) {
-        settingsItems << makeActionWithDescriptionAsTitle(action.code);
+        settingsItems << makeMenuItem(action.code);
     }
 
     if (!m_isToolbarFloating) {
@@ -106,13 +105,13 @@ void PlaybackToolBarModel::updateActions()
     for (const ToolConfig::Item& item : config.items) {
         if (isAdditionalAction(item.action) && !m_isToolbarFloating) {
             //! NOTE In this case, we want to see the actions' description instead of the title
-            settingsItems << makeActionWithDescriptionAsTitle(item.action);
+            settingsItems << makeMenuItem(item.action);
         } else {
             result << makeMenuItem(item.action);
         }
     }
 
-    MenuItem* settingsItem = makeMenu(qtrc("action", "Playback settings"), settingsItems);
+    MenuItem* settingsItem = makeMenu(TranslatableString("action", "Playback settings"), settingsItems);
 
     UiAction action = settingsItem->action();
     action.iconCode = IconCode::Code::SETTINGS_COG;
@@ -140,17 +139,6 @@ void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& 
 bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionCode) const
 {
     return PlaybackUiActions::loopBoundaryActions().contains(actionCode);
-}
-
-MenuItem* PlaybackToolBarModel::makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode)
-{
-    MenuItem* item = makeMenuItem(actionCode);
-
-    UiAction action = item->action();
-    action.title = item->action().description;
-    item->setAction(action);
-
-    return item;
 }
 
 bool PlaybackToolBarModel::isPlayAllowed() const

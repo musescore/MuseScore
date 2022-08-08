@@ -22,7 +22,7 @@
 #ifndef MU_LEARN_LEARNERRORS_H
 #define MU_LEARN_LEARNERRORS_H
 
-#include "ret.h"
+#include "types/ret.h"
 #include "translation.h"
 
 namespace mu::learn {
@@ -42,7 +42,7 @@ inline Ret make_ret(Err e)
     case Err::Undefined: return Ret(retCode);
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
-    case Err::PlaylistIsEmpty: return Ret(retCode, trc("learn", "Received an empty list of playlist items"));
+    case Err::PlaylistIsEmpty: return Ret(retCode, trc("learn", "The received playlist is empty."));
     }
 
     return Ret(static_cast<int>(e));

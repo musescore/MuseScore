@@ -22,7 +22,7 @@
 
 #include "tuplet.h"
 
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
@@ -187,7 +187,7 @@ void Tuplet::layout()
     //
     // create tuplet number if necessary
     //
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     if (_numberType != TupletNumberType::NO_TEXT) {
         if (_number == 0) {
             _number = Factory::createText(this, TextStyleType::TUPLET);
@@ -204,9 +204,9 @@ void Tuplet::layout()
         _number->setPropertyFlags(Pid::FONT_STYLE, propertyFlags(Pid::FONT_STYLE));
         _number->setPropertyFlags(Pid::ALIGN, propertyFlags(Pid::ALIGN));
         if (_numberType == TupletNumberType::SHOW_NUMBER) {
-            _number->setXmlText(QString("%1").arg(_ratio.numerator()));
+            _number->setXmlText(String(u"%1").arg(_ratio.numerator()));
         } else {
-            _number->setXmlText(QString("%1:%2").arg(_ratio.numerator()).arg(_ratio.denominator()));
+            _number->setXmlText(String(u"%1:%2").arg(_ratio.numerator(), _ratio.denominator()));
         }
 
         _isSmall = true;
@@ -274,14 +274,14 @@ void Tuplet::layout()
     //
     //    calculate bracket start and end point p1 p2
     //
-    qreal maxSlope      = score()->styleD(Sid::tupletMaxSlope);
+    double maxSlope      = score()->styleD(Sid::tupletMaxSlope);
     bool outOfStaff     = score()->styleB(Sid::tupletOufOfStaff);
-    qreal vHeadDistance = score()->styleMM(Sid::tupletVHeadDistance);
-    qreal vStemDistance = score()->styleMM(Sid::tupletVStemDistance);
-    qreal stemLeft      = score()->styleMM(Sid::tupletStemLeftDistance);
-    qreal stemRight     = score()->styleMM(Sid::tupletStemRightDistance);
-    qreal noteLeft      = score()->styleMM(Sid::tupletNoteLeftDistance);
-    qreal noteRight     = score()->styleMM(Sid::tupletNoteRightDistance);
+    double vHeadDistance = score()->styleMM(Sid::tupletVHeadDistance);
+    double vStemDistance = score()->styleMM(Sid::tupletVStemDistance);
+    double stemLeft      = score()->styleMM(Sid::tupletStemLeftDistance);
+    double stemRight     = score()->styleMM(Sid::tupletStemRightDistance);
+    double noteLeft      = score()->styleMM(Sid::tupletNoteLeftDistance);
+    double noteRight     = score()->styleMM(Sid::tupletNoteRightDistance);
 
     int move = 0;
     setStaffIdx(cr1->vStaffIdx());
@@ -298,9 +298,9 @@ void Tuplet::layout()
         }
     }
 
-    qreal l1  =  score()->styleMM(Sid::tupletBracketHookHeight);
-    qreal l2l = vHeadDistance;      // left bracket vertical distance
-    qreal l2r = vHeadDistance;      // right bracket vertical distance right
+    double l1  =  score()->styleMM(Sid::tupletBracketHookHeight);
+    double l2l = vHeadDistance;      // left bracket vertical distance
+    double l2r = vHeadDistance;      // right bracket vertical distance right
 
     if (_isUp) {
         vHeadDistance = -vHeadDistance;
@@ -314,11 +314,11 @@ void Tuplet::layout()
     p1.ry() += vHeadDistance;          // TODO: Direction ?
     p2.ry() += vHeadDistance;
 
-    qreal xx1 = p1.x();   // use to center the number on the beam
+    double xx1 = p1.x();   // use to center the number on the beam
 
     // follow beam angle if one beam extends over entire tuplet
     bool followBeam = false;
-    qreal beamAdjust = 0.0;
+    double beamAdjust = 0.0;
     if (cr1->beam() && cr1->beam() == cr2->beam()) {
         followBeam = true;
         beamAdjust = point(score()->styleS(Sid::beamWidth)) * 0.5 * mag();
@@ -389,7 +389,7 @@ void Tuplet::layout()
 
         // outOfStaff
         if (outOfStaff) {
-            qreal min = cr1->measure()->staffabbox(cr1->staffIdx() + move).y();
+            double min = cr1->measure()->staffabbox(cr1->staffIdx() + move).y();
             if (min < p1.y()) {
                 p1.ry() = min;
                 l2l = vStemDistance;
@@ -402,7 +402,7 @@ void Tuplet::layout()
         }
 
         // check that slope is no more than max
-        qreal d = (p2.y() - p1.y()) / (p2.x() - p1.x());
+        double d = (p2.y() - p1.y()) / (p2.x() - p1.x());
         if (d < -maxSlope) {
             // move p1 y up
             p1.ry() = p2.y() + maxSlope * (p2.x() - p1.x());
@@ -422,10 +422,10 @@ void Tuplet::layout()
                     const Stem* stem = chord->stem();
                     if (stem) {
                         RectF r(chord->up() ? stem->abbox() : chord->upNote()->abbox());
-                        qreal y3 = r.top();
-                        qreal x3 = r.x() + r.width() * .5;
-                        qreal y0 = p1.y() + (x3 - p1.x()) * d;
-                        qreal c  = y0 - y3;
+                        double y3 = r.top();
+                        double x3 = r.x() + r.width() * .5;
+                        double y0 = p1.y() + (x3 - p1.x()) * d;
+                        double c  = y0 - y3;
                         if (c > 0) {
                             p1.ry() -= c;
                             p2.ry() -= c;
@@ -501,7 +501,7 @@ void Tuplet::layout()
         }
         // outOfStaff
         if (outOfStaff) {
-            qreal max = cr1->measure()->staffabbox(cr1->staffIdx() + move).bottom();
+            double max = cr1->measure()->staffabbox(cr1->staffIdx() + move).bottom();
             if (max > p1.y()) {
                 p1.ry() = max;
                 l2l = vStemDistance;
@@ -513,7 +513,7 @@ void Tuplet::layout()
             }
         }
         // check that slope is no more than max
-        qreal d = (p2.y() - p1.y()) / (p2.x() - p1.x());
+        double d = (p2.y() - p1.y()) / (p2.x() - p1.x());
         if (d < -maxSlope) {
             // move p1 y up
             p2.ry() = p1.y() - maxSlope * (p2.x() - p1.x());
@@ -533,10 +533,10 @@ void Tuplet::layout()
                     const Stem* stem = chord->stem();
                     if (stem) {
                         RectF r(chord->up() ? chord->downNote()->abbox() : stem->abbox());
-                        qreal y3 = r.bottom();
-                        qreal x3 = r.x() + r.width() * .5;
-                        qreal y0 = p1.y() + (x3 - p1.x()) * d;
-                        qreal c  = y0 - y3;
+                        double y3 = r.bottom();
+                        double x3 = r.x() + r.width() * .5;
+                        double y0 = p1.y() + (x3 - p1.x()) * d;
+                        double c  = y0 - y3;
                         if (c < 0) {
                             p1.ry() -= c;
                             p2.ry() -= c;
@@ -568,27 +568,27 @@ void Tuplet::layout()
     // l2l l2r, mp, _p1, _p2 const
 
     // center number
-    qreal x3 = 0.0;
-    qreal numberWidth = 0.0;
+    double x3 = 0.0;
+    double numberWidth = 0.0;
     if (_number) {
         _number->layout();
         numberWidth = _number->bbox().width();
 
-        qreal y3 = p1.y() + (p2.y() - p1.y()) * .5 - l1 * (_isUp ? 1.0 : -1.0);
+        double y3 = p1.y() + (p2.y() - p1.y()) * .5 - l1 * (_isUp ? 1.0 : -1.0);
         //
         // for beamed tuplets, center number on beam
         //
         if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam()) {
             const ChordRest* crr = toChordRest(cr1);
             if (_isUp == crr->up()) {
-                qreal deltax = cr2->pagePos().x() - cr1->pagePos().x();
+                double deltax = cr2->pagePos().x() - cr1->pagePos().x();
                 x3 = xx1 + deltax * .5;
             } else {
-                qreal deltax = p2.x() - p1.x();
+                double deltax = p2.x() - p1.x();
                 x3 = p1.x() + deltax * .5;
             }
         } else {
-            qreal deltax = p2.x() - p1.x();
+            double deltax = p2.x() - p1.x();
             x3 = p1.x() + deltax * .5;
         }
 
@@ -596,16 +596,16 @@ void Tuplet::layout()
     }
 
     if (_hasBracket) {
-        qreal slope = (p2.y() - p1.y()) / (p2.x() - p1.x());
+        double slope = (p2.y() - p1.y()) / (p2.x() - p1.x());
 
         if (_isUp) {
             if (_number) {
                 bracketL[0] = PointF(p1.x(), p1.y());
                 bracketL[1] = PointF(p1.x(), p1.y() - l1);
                 //set width of bracket hole
-                qreal x     = x3 - numberWidth * .5 - _spatium * .5;
+                double x     = x3 - numberWidth * .5 - _spatium * .5;
 
-                qreal y     = p1.y() + (x - p1.x()) * slope;
+                double y     = p1.y() + (x - p1.x()) * slope;
                 bracketL[2] = PointF(x,   y - l1);
 
                 //set width of bracket hole
@@ -625,8 +625,8 @@ void Tuplet::layout()
                 bracketL[0] = PointF(p1.x(), p1.y());
                 bracketL[1] = PointF(p1.x(), p1.y() + l1);
                 //set width of bracket hole
-                qreal x     = x3 - numberWidth * .5 - _spatium * .5;
-                qreal y     = p1.y() + (x - p1.x()) * slope;
+                double x     = x3 - numberWidth * .5 - _spatium * .5;
+                double y     = p1.y() + (x - p1.x()) * slope;
                 bracketL[2] = PointF(x,   y + l1);
 
                 //set width of bracket hole
@@ -780,11 +780,13 @@ void Tuplet::draw(mu::draw::Painter* painter) const
 
 class TupletRect : public RectF
 {
+    OBJECT_ALLOCATOR(engraving, TupletRect)
 public:
-    TupletRect(const PointF& p1, const PointF& p2, qreal w)
+    TupletRect(const PointF& p1, const PointF& p2, double w)
     {
-        qreal w2 = w * .5;
-        setCoords(qMin(p1.x(), p2.x()) - w2, qMin(p1.y(), p2.y()) - w2,  qMax(p1.x(), p2.x()) + w2, qMax(p1.y(), p2.y()) + w2);
+        double w2 = w * .5;
+        setCoords(std::min(p1.x(), p2.x()) - w2, std::min(p1.y(), p2.y()) - w2,  std::max(p1.x(), p2.x()) + w2, std::max(p1.y(),
+                                                                                                                         p2.y()) + w2);
     }
 };
 
@@ -796,7 +798,7 @@ Shape Tuplet::shape() const
 {
     Shape s;
     if (_hasBracket) {
-        qreal w = _bracketWidth.val();
+        double w = _bracketWidth.val();
         s.add(TupletRect(bracketL[0], bracketL[1], w));
         s.add(TupletRect(bracketL[1], bracketL[2], w));
         if (_number) {
@@ -1261,7 +1263,7 @@ PropertyValue Tuplet::propertyDefault(Pid id) const
     case Pid::SYSTEM_FLAG:
         return false;
     case Pid::TEXT:
-        return QString("");
+        return String(u"");
     case Pid::NORMAL_NOTES:
     case Pid::ACTUAL_NOTES:
         return 0;

@@ -22,6 +22,7 @@
 
 #include "property.h"
 
+#include "translation.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
@@ -183,7 +184,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::HAIRPIN_HEIGHT,          false, "hairpinHeight",         P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "hairpin height") },
     { Pid::HAIRPIN_CONT_HEIGHT,     false, "hairpinContHeight",     P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "hairpin cont height") },
     { Pid::VELO_CHANGE,             true,  "veloChange",            P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "velocity change") },
-    { Pid::VELO_CHANGE_METHOD,      true,  "veloChangeMethod",      P_TYPE::CHANGE_METHOD,  DUMMY_QT_TR_NOOP("propertyName", "velocity change method") }, // left as a compatability property - we need to be able to read it correctly
+    { Pid::VELO_CHANGE_METHOD,      true,  "veloChangeMethod",      P_TYPE::CHANGE_METHOD,  DUMMY_QT_TR_NOOP("propertyName", "velocity change method") }, // left as a compatibility property - we need to be able to read it correctly
     { Pid::VELO_CHANGE_SPEED,       true,  "veloChangeSpeed",       P_TYPE::DYNAMIC_SPEED,   DUMMY_QT_TR_NOOP("propertyName", "velocity change speed") },
     { Pid::DYNAMIC_TYPE,            true,  "subtype",               P_TYPE::DYNAMIC_TYPE,   DUMMY_QT_TR_NOOP("propertyName", "dynamic type") },
     { Pid::DYNAMIC_RANGE,           true,  "dynType",               P_TYPE::DYNAMIC_RANGE,  DUMMY_QT_TR_NOOP("propertyName", "dynamic range") },
@@ -213,8 +214,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::GLISS_EASEIN,            false, "easeInSpin",            P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName","ease in") },
     { Pid::GLISS_EASEOUT,           false, "easeOutSpin",           P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "ease out") },
     { Pid::DIAGONAL,                false, 0,                       P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "diagonal") },
-    { Pid::GROUP_NODES,                  false, 0,                       P_TYPE::GROUPS,         DUMMY_QT_TR_NOOP("propertyName", "groups") },
-    { Pid::LINE_STYLE,              false, "lineStyle",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "line style") },
+    { Pid::GROUP_NODES,             false, 0,                       P_TYPE::GROUPS,         DUMMY_QT_TR_NOOP("propertyName", "groups") },
+    { Pid::LINE_STYLE,              false, "lineStyle",             P_TYPE::LINE_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "line style") },
     { Pid::LINE_WIDTH,              false, "lineWidth",             P_TYPE::MILLIMETRE,     DUMMY_QT_TR_NOOP("propertyName", "line width") },
     { Pid::LINE_WIDTH_SPATIUM,      false, "lineWidth",             P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "line width (spatium)") },
     { Pid::TIME_STRETCH,            true,  "timeStretch",           P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "time stretch") },
@@ -402,23 +403,14 @@ static constexpr PropertyMetaData propertyList[] = {
 //   propertyId
 //---------------------------------------------------------
 
-Pid propertyId(const QStringRef& s)
+Pid propertyId(const AsciiStringView& s)
 {
     for (const PropertyMetaData& pd : propertyList) {
-        if (pd.name == s) {
+        if (s == pd.name) {
             return pd.id;
         }
     }
     return Pid::END;
-}
-
-//---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid propertyId(const QString& s)
-{
-    return propertyId(QStringRef(&s));
 }
 
 //---------------------------------------------------------
@@ -427,7 +419,7 @@ Pid propertyId(const QString& s)
 
 P_TYPE propertyType(Pid id)
 {
-    Q_ASSERT(propertyList[int(id)].id == id);
+    assert(propertyList[int(id)].id == id);
     return propertyList[int(id)].type;
 }
 
@@ -437,7 +429,7 @@ P_TYPE propertyType(Pid id)
 
 bool propertyLink(Pid id)
 {
-    Q_ASSERT(propertyList[int(id)].id == id);
+    assert(propertyList[int(id)].id == id);
     return propertyList[int(id)].link;
 }
 
@@ -447,7 +439,7 @@ bool propertyLink(Pid id)
 
 const char* propertyName(Pid id)
 {
-    Q_ASSERT(propertyList[int(id)].id == id);
+    assert(propertyList[int(id)].id == id);
     return propertyList[int(id)].name;
 }
 
@@ -455,17 +447,17 @@ const char* propertyName(Pid id)
 //   propertyUserName
 //---------------------------------------------------------
 
-QString propertyUserName(Pid id)
+String propertyUserName(Pid id)
 {
-    Q_ASSERT(propertyList[int(id)].id == id);
-    return QObject::tr(propertyList[int(id)].userName, "propertyName");
+    assert(propertyList[int(id)].id == id);
+    return mtrc("engraving", propertyList[int(id)].userName, "propertyName");
 }
 
 //---------------------------------------------------------
 //    propertyFromString
 //---------------------------------------------------------
 
-PropertyValue propertyFromString(P_TYPE type, QString)
+PropertyValue propertyFromString(P_TYPE type, String)
 {
     switch (type) {
     case P_TYPE::BEAM_MODE:
@@ -554,6 +546,8 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::DYNAMIC_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), DynamicType::OTHER));
 
+    case P_TYPE::LINE_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), LineType::SOLID));
     case P_TYPE::HOOK_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), HookType::NONE));
 
@@ -593,25 +587,25 @@ PropertyValue readProperty(Pid id, XmlReader& e)
 //    Originally extracted from XmlWriter
 //---------------------------------------------------------
 
-QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
+String propertyToString(Pid id, const PropertyValue& value, bool mscx)
 {
     if (!value.isValid()) {
-        return QString();
+        return String();
     }
 
     switch (id) {
     case Pid::SYSTEM_BRACKET:         // system bracket type
-        return TConv::toXml(BracketType(value.toInt())).toQLatin1String();
+        return String::fromAscii(TConv::toXml(BracketType(value.toInt())).ascii());
     case Pid::ACCIDENTAL_TYPE:
-        return Accidental::subtype2name(AccidentalType(value.toInt())).toQLatin1String();
+        return String::fromAscii(Accidental::subtype2name(AccidentalType(value.toInt())).ascii());
     case Pid::OTTAVA_TYPE:
-        return Ottava::ottavaTypeName(OttavaType(value.toInt()));
+        return String::fromAscii(Ottava::ottavaTypeName(OttavaType(value.toInt())));
     case Pid::TREMOLO_TYPE:
-        return TConv::toXml(TremoloType(value.toInt())).toQLatin1String();
+        return String::fromAscii(TConv::toXml(TremoloType(value.toInt())).ascii());
     case Pid::TRILL_TYPE:
-        return Trill::type2name(Trill::Type(value.toInt()));
+        return String::fromAscii(TConv::toXml(TrillType(value.toInt())).ascii());
     case Pid::VIBRATO_TYPE:
-        return Vibrato::type2name(Vibrato::Type(value.toInt()));
+        return String::fromAscii(TConv::toXml(VibratoType(value.toInt())).ascii());
     default:
         break;
     }
@@ -640,14 +634,14 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         switch (value.type()) {
         case P_TYPE::POINT: {
             const PointF p(value.value<PointF>());
-            return QString("%1;%2").arg(QString::number(p.x()), QString::number(p.y()));
+            return String(u"%1;%2").arg(String::number(p.x()), String::number(p.y()));
         }
         case P_TYPE::SIZE: {
             const SizeF s(value.value<SizeF>());
-            return QString("%1x%2").arg(QString::number(s.width()), QString::number(s.height()));
+            return String(u"%1x%2").arg(String::number(s.width()), String::number(s.height()));
         }
         case P_TYPE::STRING: {
-            return value.toString();
+            return value.value<String>();
         }
         // TODO: support QVariant::Rect and QVariant::RectF?
         default:
@@ -655,6 +649,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         }
     }
 
-    return QString();
+    return String();
 }
 }

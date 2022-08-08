@@ -24,7 +24,7 @@
 #define __LAYOUTBREAK_H__
 
 #include "engravingitem.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 class Factory;
@@ -35,6 +35,7 @@ class Factory;
 //---------------------------------------------------------
 class LayoutBreak final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, LayoutBreak)
 public:
 
     void setParent(MeasureBase* parent);
@@ -51,8 +52,8 @@ public:
     void read(XmlReader&) override;
 
     MeasureBase* measure() const { return (MeasureBase*)explicitParent(); }
-    qreal pause() const { return _pause; }
-    void setPause(qreal v) { _pause = v; }
+    double pause() const { return _pause; }
+    void setPause(double v) { _pause = v; }
     bool startWithLongNames() const { return _startWithLongNames; }
     void setStartWithLongNames(bool v) { _startWithLongNames = v; }
     bool startWithMeasureOne() const { return _startWithMeasureOne; }
@@ -68,7 +69,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
 protected:
     void added() override;
@@ -82,12 +82,12 @@ private:
 
     void draw(mu::draw::Painter*) const override;
     void layout0();
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
+    void spatiumChanged(double oldValue, double newValue) override;
 
-    qreal lw;
+    double lw;
     mu::RectF m_iconBorderRect;
-    mu::PainterPath m_iconPath;
-    qreal _pause;
+    mu::draw::PainterPath m_iconPath;
+    double _pause;
     bool _startWithLongNames;
     bool _startWithMeasureOne;
     bool _firstSystemIndentation;

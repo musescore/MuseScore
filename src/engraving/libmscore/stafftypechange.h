@@ -34,16 +34,18 @@ class StaffType;
 
 class StaffTypeChange final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, StaffTypeChange)
+
     StaffType* m_staffType { nullptr };
     bool m_ownsStaffType = false;
-    qreal lw;
+    double lw;
 
     friend class Factory;
     StaffTypeChange(MeasureBase* parent = 0);
     StaffTypeChange(const StaffTypeChange&);
 
     void layout() override;
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
+    void spatiumChanged(double oldValue, double newValue) override;
     void draw(mu::draw::Painter*) const override;
 
 public:

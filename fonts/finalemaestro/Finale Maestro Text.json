@@ -1,0 +1,1241 @@
+{
+ "engravingDefaults": {
+  "arrowShaftThickness": 0.1, 
+  "barlineSeparation": 0.5, 
+  "beamSpacing": 0.25, 
+  "beamThickness": 0.5, 
+  "bracketThickness": 0.5, 
+  "dashedBarlineDashLength": 0.42, 
+  "dashedBarlineGapLength": 0.3, 
+  "dashedBarlineThickness": 0.08, 
+  "hairpinThickness": 0.1, 
+  "legerLineExtension": 0.25, 
+  "legerLineThickness": 0.11, 
+  "lyricLineThickness": 0.1, 
+  "octaveLineThickness": 0.1, 
+  "pedalLineThickness": 0.1, 
+  "repeatBarlineDotSeparation": 0.34, 
+  "repeatEndingLineThickness": 0.13, 
+  "slurEndpointThickness": 0.05, 
+  "slurMidpointThickness": 0.25, 
+  "staffLineThickness": 0.091, 
+  "stemThickness": 0.091, 
+  "subBracketThickness": 0.1, 
+  "textEnclosureThickness": 0.13, 
+  "thickBarlineThickness": 0.5, 
+  "thinBarlineThickness": 0.1,
+  "thinThickBarlineSeparation": 0.5,
+  "tieEndpointThickness": 0.05, 
+  "tieMidpointThickness": 0.25, 
+  "tupletBracketThickness": 0.1
+ }, 
+ "fontName": "Finale Maestro Text", 
+ "fontVersion": 1.6, 
+ "glyphBBoxes": {
+  "U+F720": {
+   "bBoxNE": [
+    2.22, 
+    3.32
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.644
+   ]
+  }, 
+  "U+F721": {
+   "bBoxNE": [
+    2.32, 
+    3.32
+   ], 
+   "bBoxSW": [
+    -0.16, 
+    -0.644
+   ]
+  }, 
+  "U+F722": {
+   "bBoxNE": [
+    0.692, 
+    3.32
+   ], 
+   "bBoxSW": [
+    -1.528, 
+    -0.644
+   ]
+  }, 
+  "U+F7CA": {
+   "bBoxNE": [
+    2.344, 
+    2.68
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.524
+   ]
+  }, 
+  "U+F7CB": {
+   "bBoxNE": [
+    2.624, 
+    4.32
+   ], 
+   "bBoxSW": [
+    -0.016, 
+    -0.52
+   ]
+  }, 
+  "U+F7CC": {
+   "bBoxNE": [
+    2.224, 
+    3.64
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.516
+   ]
+  }, 
+  "U+F7CD": {
+   "bBoxNE": [
+    2.036, 
+    1.028
+   ], 
+   "bBoxSW": [
+    -0.036, 
+    0.884
+   ]
+  }, 
+  "U+F7CE": {
+   "bBoxNE": [
+    2.432, 
+    1.196
+   ], 
+   "bBoxSW": [
+    -0.184, 
+    1.008
+   ]
+  }, 
+  "U+F7D2": {
+   "bBoxNE": [
+    3.452, 
+    4.676
+   ], 
+   "bBoxSW": [
+    -1.516, 
+    3.296
+   ]
+  }, 
+  "U+F7D3": {
+   "bBoxNE": [
+    2.404, 
+    2.68
+   ], 
+   "bBoxSW": [
+    -0.016, 
+    -0.524
+   ]
+  }, 
+  "U+F7D4": {
+   "bBoxNE": [
+    2.404, 
+    2.68
+   ], 
+   "bBoxSW": [
+    -0.016, 
+    -0.524
+   ]
+  }, 
+  "U+F7D5": {
+   "bBoxNE": [
+    2.404, 
+    2.68
+   ], 
+   "bBoxSW": [
+    -0.016, 
+    -0.524
+   ]
+  }, 
+  "U+F7D6": {
+   "bBoxNE": [
+    2.404, 
+    2.68
+   ], 
+   "bBoxSW": [
+    -0.016, 
+    -0.516
+   ]
+  }, 
+  "accidentalDoubleFlat": {
+   "bBoxNE": [
+    2.216, 
+    3.136
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.156
+   ]
+  }, 
+  "accidentalDoubleSharp": {
+   "bBoxNE": [
+    1.36, 
+    2.132
+   ], 
+   "bBoxSW": [
+    0.0, 
+    0.768
+   ]
+  }, 
+  "accidentalFlat": {
+   "bBoxNE": [
+    1.152, 
+    3.136
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.156
+   ]
+  }, 
+  "accidentalNatural": {
+   "bBoxNE": [
+    0.724, 
+    3.084
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.244
+   ]
+  }, 
+  "accidentalSharp": {
+   "bBoxNE": [
+    1.068, 
+    3.196
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.288
+   ]
+  }, 
+  "cClef": {
+   "bBoxNE": [
+    3.476, 
+    3.5
+   ], 
+   "bBoxSW": [
+    0.988, 
+    -0.38
+   ]
+  }, 
+  "coda": {
+   "bBoxNE": [
+    3.396, 
+    3.24
+   ], 
+   "bBoxSW": [
+    0.136, 
+    -0.6
+   ]
+  }, 
+  "csymAugmented": {
+   "bBoxNE": [
+    1.248, 
+    1.236
+   ], 
+   "bBoxSW": [
+    0.0, 
+    0.0
+   ]
+  }, 
+  "csymDiminished": {
+   "bBoxNE": [
+    1.184, 
+    1.184
+   ], 
+   "bBoxSW": [
+    0.0, 
+    0.0
+   ]
+  }, 
+  "csymHalfDiminished": {
+   "bBoxNE": [
+    1.356, 
+    1.284
+   ], 
+   "bBoxSW": [
+    -0.148, 
+    -0.064
+   ]
+  }, 
+  "csymMajorSeventh": {
+   "bBoxNE": [
+    1.492, 
+    1.292
+   ], 
+   "bBoxSW": [
+    0.0, 
+    0.0
+   ]
+  }, 
+  "csymMinor": {
+   "bBoxNE": [
+    1.248, 
+    0.716
+   ], 
+   "bBoxSW": [
+    0.0, 
+    0.512
+   ]
+  }, 
+  "dynamicFF": {
+   "bBoxNE": [
+    4.252, 
+    3.076
+   ], 
+   "bBoxSW": [
+    -0.992, 
+    -1.164
+   ]
+  }, 
+  "dynamicFFF": {
+   "bBoxNE": [
+    5.992, 
+    3.076
+   ], 
+   "bBoxSW": [
+    -0.952, 
+    -1.164
+   ]
+  }, 
+  "dynamicForte": {
+   "bBoxNE": [
+    2.52, 
+    3.116
+   ], 
+   "bBoxSW": [
+    -1.016, 
+    -1.128
+   ]
+  }, 
+  "dynamicMF": {
+   "bBoxNE": [
+    5.3, 
+    3.004
+   ], 
+   "bBoxSW": [
+    -0.404, 
+    -1.256
+   ]
+  }, 
+  "dynamicMP": {
+   "bBoxNE": [
+    5.312, 
+    1.808
+   ], 
+   "bBoxSW": [
+    -0.42, 
+    -1.136
+   ]
+  }, 
+  "dynamicPP": {
+   "bBoxNE": [
+    4.72, 
+    1.824
+   ], 
+   "bBoxSW": [
+    -1.088, 
+    -1.084
+   ]
+  }, 
+  "dynamicPPP": {
+   "bBoxNE": [
+    7.136, 
+    1.824
+   ], 
+   "bBoxSW": [
+    -1.156, 
+    -1.084
+   ]
+  }, 
+  "dynamicPiano": {
+   "bBoxNE": [
+    2.176, 
+    1.824
+   ], 
+   "bBoxSW": [
+    -1.16, 
+    -1.084
+   ]
+  }, 
+  "dynamicRinforzando": {
+   "bBoxNE": [
+    1.748, 
+    1.84
+   ], 
+   "bBoxSW": [
+    -0.268, 
+    -0.008
+   ]
+  }, 
+  "dynamicSforzando": {
+   "bBoxNE": [
+    1.28, 
+    2.008
+   ], 
+   "bBoxSW": [
+    -0.136, 
+    -0.02
+   ]
+  }, 
+  "dynamicSforzato": {
+   "bBoxNE": [
+    4.812, 
+    3.04
+   ], 
+   "bBoxSW": [
+    -0.264, 
+    -1.204
+   ]
+  }, 
+  "dynamicZ": {
+   "bBoxNE": [
+    1.64, 
+    1.756
+   ], 
+   "bBoxSW": [
+    -0.356, 
+    -0.116
+   ]
+  }, 
+  "fClef": {
+   "bBoxNE": [
+    3.384, 
+    3.396
+   ], 
+   "bBoxSW": [
+    0.692, 
+    0.22
+   ]
+  }, 
+  "figbassBracketLeft": {
+   "bBoxNE": [
+    0.516, 
+    1.972
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.128
+   ]
+  }, 
+  "figbassBracketRight": {
+   "bBoxNE": [
+    0.236, 
+    1.972
+   ], 
+   "bBoxSW": [
+    -0.28, 
+    -0.128
+   ]
+  }, 
+  "figbassDoubleFlat": {
+   "bBoxNE": [
+    1.928, 
+    2.644
+   ], 
+   "bBoxSW": [
+    0.0, 
+    0.04
+   ]
+  }, 
+  "figbassDoubleSharp": {
+   "bBoxNE": [
+    1.22, 
+    1.524
+   ], 
+   "bBoxSW": [
+    0.0, 
+    0.32
+   ]
+  }, 
+  "figbassFlat": {
+   "bBoxNE": [
+    0.928, 
+    2.644
+   ], 
+   "bBoxSW": [
+    0.0, 
+    0.04
+   ]
+  }, 
+  "figbassNatural": {
+   "bBoxNE": [
+    0.804, 
+    2.292
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.532
+   ]
+  }, 
+  "figbassParensLeft": {
+   "bBoxNE": [
+    0.648, 
+    2.024
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.16
+   ]
+  }, 
+  "figbassParensRight": {
+   "bBoxNE": [
+    0.408, 
+    2.024
+   ], 
+   "bBoxSW": [
+    -0.24, 
+    -0.16
+   ]
+  }, 
+  "figbassSharp": {
+   "bBoxNE": [
+    0.952, 
+    2.444
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.284
+   ]
+  }, 
+  "gClef": {
+   "bBoxNE": [
+    3.232, 
+    5.052
+   ], 
+   "bBoxSW": [
+    0.612, 
+    -2.092
+   ]
+  }, 
+  "metAugmentationDot": {
+   "bBoxNE": [
+    0.432, 
+    0.216
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.216
+   ]
+  }, 
+  "metNote1024thDown": {
+   "bBoxNE": [
+    1.276, 
+    0.512
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -7.888
+   ]
+  }, 
+  "metNote1024thUp": {
+   "bBoxNE": [
+    2.388, 
+    4.548
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.62
+   ]
+  }, 
+  "metNote128thDown": {
+   "bBoxNE": [
+    1.276, 
+    0.512
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -5.488
+   ]
+  }, 
+  "metNote128thUp": {
+   "bBoxNE": [
+    2.388, 
+    5.348
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.62
+   ]
+  }, 
+  "metNote16thDown": {
+   "bBoxNE": [
+    1.276, 
+    0.512
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -3.264
+   ]
+  }, 
+  "metNote16thUp": {
+   "bBoxNE": [
+    2.392, 
+    3.268
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.528
+   ]
+  }, 
+  "metNote256thDown": {
+   "bBoxNE": [
+    1.276, 
+    0.512
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -6.288
+   ]
+  }, 
+  "metNote256thUp": {
+   "bBoxNE": [
+    2.388, 
+    6.148
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.62
+   ]
+  }, 
+  "metNote32ndDown": {
+   "bBoxNE": [
+    1.276, 
+    0.512
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -3.884
+   ]
+  }, 
+  "metNote32ndUp": {
+   "bBoxNE": [
+    2.388, 
+    3.748
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.62
+   ]
+  }, 
+  "metNote512thDown": {
+   "bBoxNE": [
+    1.276, 
+    0.512
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -7.088
+   ]
+  }, 
+  "metNote512thUp": {
+   "bBoxNE": [
+    2.388, 
+    6.948
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.62
+   ]
+  }, 
+  "metNote64thDown": {
+   "bBoxNE": [
+    1.276, 
+    0.512
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -4.688
+   ]
+  }, 
+  "metNote64thUp": {
+   "bBoxNE": [
+    2.388, 
+    4.548
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.62
+   ]
+  }, 
+  "metNote8thDown": {
+   "bBoxNE": [
+    1.276, 
+    0.528
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -3.092
+   ]
+  }, 
+  "metNote8thUp": {
+   "bBoxNE": [
+    2.224, 
+    3.096
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.528
+   ]
+  }, 
+  "metNoteDoubleWhole": {
+   "bBoxNE": [
+    2.38, 
+    0.988
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.988
+   ]
+  }, 
+  "metNoteDoubleWholeSquare": {
+   "bBoxNE": [
+    2.028, 
+    1.016
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -1.016
+   ]
+  }, 
+  "metNoteHalfDown": {
+   "bBoxNE": [
+    1.34, 
+    0.548
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -2.648
+   ]
+  }, 
+  "metNoteHalfUp": {
+   "bBoxNE": [
+    1.34, 
+    2.648
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.548
+   ]
+  }, 
+  "metNoteQuarterDown": {
+   "bBoxNE": [
+    1.276, 
+    0.524
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -2.68
+   ]
+  }, 
+  "metNoteQuarterUp": {
+   "bBoxNE": [
+    1.276, 
+    2.68
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.524
+   ]
+  }, 
+  "metNoteWhole": {
+   "bBoxNE": [
+    1.752, 
+    0.556
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.552
+   ]
+  }, 
+  "metricModulationArrowLeft": {
+   "bBoxNE": [
+    3.292, 
+    1.544
+   ], 
+   "bBoxSW": [
+    0.14, 
+    0.66
+   ]
+  }, 
+  "metricModulationArrowRight": {
+   "bBoxNE": [
+    3.336, 
+    1.544
+   ], 
+   "bBoxSW": [
+    0.184, 
+    0.66
+   ]
+  }, 
+  "note16thUp": {
+   "bBoxNE": [
+    2.376, 
+    3.388
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.528
+   ]
+  }, 
+  "note8thUp": {
+   "bBoxNE": [
+    2.248, 
+    3.576
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.528
+   ]
+  }, 
+  "noteHalfUp": {
+   "bBoxNE": [
+    1.312, 
+    3.6
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.536
+   ]
+  }, 
+  "noteWhole": {
+   "bBoxNE": [
+    1.68, 
+    0.536
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.528
+   ]
+  }, 
+  "ottava": {
+   "bBoxNE": [
+    1.072, 
+    1.9
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.032
+   ]
+  }, 
+  "rest16th": {
+   "bBoxNE": [
+    0.996, 
+    2.244
+   ], 
+   "bBoxSW": [
+    0.0, 
+    0.072
+   ]
+  }, 
+  "rest8th": {
+   "bBoxNE": [
+    1.06, 
+    2.224
+   ], 
+   "bBoxSW": [
+    0.0, 
+    0.368
+   ]
+  }, 
+  "restHalfLegerLine": {
+   "bBoxNE": [
+    2.0, 
+    1.604
+   ], 
+   "bBoxSW": [
+    0.0, 
+    1.2
+   ]
+  }, 
+  "restQuarter": {
+   "bBoxNE": [
+    1.004, 
+    2.868
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.116
+   ]
+  }, 
+  "restWholeLegerLine": {
+   "bBoxNE": [
+    2.0, 
+    1.604
+   ], 
+   "bBoxSW": [
+    0.0, 
+    1.2
+   ]
+  }, 
+  "segno": {
+   "bBoxNE": [
+    2.936, 
+    3.132
+   ], 
+   "bBoxSW": [
+    0.444, 
+    -0.196
+   ]
+  }, 
+  "textAugmentationDot": {
+   "bBoxNE": [
+    0.432, 
+    0.268
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.164
+   ]
+  }, 
+  "textBlackNoteFrac16thLongStem": {
+   "bBoxNE": [
+    1.332, 
+    3.804
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.524
+   ]
+  }, 
+  "textBlackNoteFrac16thShortStem": {
+   "bBoxNE": [
+    1.332, 
+    2.68
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.524
+   ]
+  }, 
+  "textBlackNoteFrac32ndLongStem": {
+   "bBoxNE": [
+    1.336, 
+    3.8
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.524
+   ]
+  }, 
+  "textBlackNoteFrac8thLongStem": {
+   "bBoxNE": [
+    1.332, 
+    3.8
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.524
+   ]
+  }, 
+  "textBlackNoteFrac8thShortStem": {
+   "bBoxNE": [
+    1.332, 
+    2.68
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.524
+   ]
+  }, 
+  "textBlackNoteLongStem": {
+   "bBoxNE": [
+    1.276, 
+    3.8
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.524
+   ]
+  }, 
+  "textBlackNoteShortStem": {
+   "bBoxNE": [
+    1.276, 
+    2.68
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.524
+   ]
+  }, 
+  "textCont16thBeamLongStem": {
+   "bBoxNE": [
+    1.332, 
+    3.296
+   ], 
+   "bBoxSW": [
+    0.0, 
+    2.28
+   ]
+  }, 
+  "textCont16thBeamShortStem": {
+   "bBoxNE": [
+    1.332, 
+    2.68
+   ], 
+   "bBoxSW": [
+    0.0, 
+    1.664
+   ]
+  }, 
+  "textCont32ndBeamLongStem": {
+   "bBoxNE": [
+    1.336, 
+    3.8
+   ], 
+   "bBoxSW": [
+    0.0, 
+    2.144
+   ]
+  }, 
+  "textCont8thBeamLongStem": {
+   "bBoxNE": [
+    1.332, 
+    3.8
+   ], 
+   "bBoxSW": [
+    0.0, 
+    3.428
+   ]
+  }, 
+  "textCont8thBeamShortStem": {
+   "bBoxNE": [
+    1.332, 
+    2.68
+   ], 
+   "bBoxSW": [
+    0.0, 
+    2.308
+   ]
+  }, 
+  "textTie": {
+   "bBoxNE": [
+    1.852, 
+    -0.708
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -1.12
+   ]
+  }, 
+  "textTuplet3LongStem": {
+   "bBoxNE": [
+    1.052, 
+    5.608
+   ], 
+   "bBoxSW": [
+    0.3, 
+    4.228
+   ]
+  }, 
+  "textTuplet3ShortStem": {
+   "bBoxNE": [
+    0.756, 
+    4.536
+   ], 
+   "bBoxSW": [
+    0.004, 
+    3.156
+   ]
+  }, 
+  "textTupletBracketEndLongStem": {
+   "bBoxNE": [
+    1.404, 
+    4.996
+   ], 
+   "bBoxSW": [
+    0.0, 
+    4.232
+   ]
+  }, 
+  "textTupletBracketEndShortStem": {
+   "bBoxNE": [
+    1.644, 
+    3.952
+   ], 
+   "bBoxSW": [
+    0.0, 
+    3.54
+   ]
+  }, 
+  "textTupletBracketStartLongStem": {
+   "bBoxNE": [
+    1.404, 
+    4.996
+   ], 
+   "bBoxSW": [
+    0.0, 
+    4.232
+   ]
+  }, 
+  "textTupletBracketStartShortStem": {
+   "bBoxNE": [
+    1.644, 
+    3.952
+   ], 
+   "bBoxSW": [
+    0.0, 
+    3.54
+   ]
+  }, 
+  "tuplet0": {
+   "bBoxNE": [
+    1.232, 
+    1.908
+   ], 
+   "bBoxSW": [
+    0.032, 
+    -0.024
+   ]
+  }, 
+  "tuplet1": {
+   "bBoxNE": [
+    0.724, 
+    1.892
+   ], 
+   "bBoxSW": [
+    -0.008, 
+    0.0
+   ]
+  }, 
+  "tuplet2": {
+   "bBoxNE": [
+    1.24, 
+    1.892
+   ], 
+   "bBoxSW": [
+    0.016, 
+    0.0
+   ]
+  }, 
+  "tuplet3": {
+   "bBoxNE": [
+    1.072, 
+    1.908
+   ], 
+   "bBoxSW": [
+    0.02, 
+    -0.024
+   ]
+  }, 
+  "tuplet4": {
+   "bBoxNE": [
+    1.296, 
+    1.892
+   ], 
+   "bBoxSW": [
+    0.036, 
+    0.0
+   ]
+  }, 
+  "tuplet5": {
+   "bBoxNE": [
+    1.116, 
+    1.868
+   ], 
+   "bBoxSW": [
+    0.036, 
+    -0.024
+   ]
+  }, 
+  "tuplet6": {
+   "bBoxNE": [
+    1.2, 
+    1.908
+   ], 
+   "bBoxSW": [
+    0.028, 
+    -0.024
+   ]
+  }, 
+  "tuplet7": {
+   "bBoxNE": [
+    1.208, 
+    1.892
+   ], 
+   "bBoxSW": [
+    0.036, 
+    0.0
+   ]
+  }, 
+  "tuplet8": {
+   "bBoxNE": [
+    1.1, 
+    1.908
+   ], 
+   "bBoxSW": [
+    0.028, 
+    -0.024
+   ]
+  }, 
+  "tuplet9": {
+   "bBoxNE": [
+    1.192, 
+    1.916
+   ], 
+   "bBoxSW": [
+    0.024, 
+    -0.016
+   ]
+  }
+ }, 
+ "glyphsWithAnchors": {}, 
+ "optionalGlyphs": {
+  "U+F720": {
+   "classes": [], 
+   "codepoint": "U+F720"
+  }, 
+  "U+F721": {
+   "classes": [], 
+   "codepoint": "U+F721"
+  }, 
+  "U+F722": {
+   "classes": [], 
+   "codepoint": "U+F722"
+  }, 
+  "U+F7CA": {
+   "classes": [], 
+   "codepoint": "U+F7CA"
+  }, 
+  "U+F7CB": {
+   "classes": [], 
+   "codepoint": "U+F7CB"
+  }, 
+  "U+F7CC": {
+   "classes": [], 
+   "codepoint": "U+F7CC"
+  }, 
+  "U+F7CD": {
+   "classes": [], 
+   "codepoint": "U+F7CD"
+  }, 
+  "U+F7CE": {
+   "classes": [], 
+   "codepoint": "U+F7CE"
+  }, 
+  "U+F7D2": {
+   "classes": [], 
+   "codepoint": "U+F7D2"
+  }, 
+  "U+F7D3": {
+   "classes": [], 
+   "codepoint": "U+F7D3"
+  }, 
+  "U+F7D4": {
+   "classes": [], 
+   "codepoint": "U+F7D4"
+  }, 
+  "U+F7D5": {
+   "classes": [], 
+   "codepoint": "U+F7D5"
+  }, 
+  "U+F7D6": {
+   "classes": [], 
+   "codepoint": "U+F7D6"
+  }
+ }
+}

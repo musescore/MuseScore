@@ -28,11 +28,13 @@
 #include <QString>
 #include <QMetaType>
 
-#include "ret.h"
-#include "val.h"
+#include "types/ret.h"
+#include "types/translatablestring.h"
+#include "types/val.h"
 #include "actions/actiontypes.h"
 #include "view/iconcodes.h"
 #include "shortcuts/shortcutstypes.h"
+#include "context/shortcutcontext.h"
 
 namespace mu::ui {
 using ThemeCode = std::string;
@@ -188,52 +190,44 @@ enum class Checkable {
 struct UiAction
 {
     actions::ActionCode code;
-    UiContext context = UiCtxAny;
-    QString title;
-    QString description;
+    UiContext uiCtx = UiCtxAny;
+    std::string scCtx = "any";
+    TranslatableString title;
+    TranslatableString description;
     IconCode::Code iconCode = IconCode::Code::NONE;
     Checkable checkable = Checkable::No;
     std::vector<std::string> shortcuts;
 
     UiAction() = default;
-    UiAction(const actions::ActionCode& code, UiContext ctx, Checkable ch = Checkable::No)
-        : code(code), context(ctx), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, Checkable ch = Checkable::No)
-        : code(code), context(ctx), title(title), description(title), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, const char* desc, Checkable ch = Checkable::No)
-        : code(code), context(ctx), title(title), description(desc), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, const char* desc, IconCode::Code icon,
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
+        : code(code), uiCtx(ctx), scCtx(scCtx), checkable(ch) {}
+
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const TranslatableString& title,
              Checkable ch = Checkable::No)
-        : code(code), context(ctx), title(title), description(desc), iconCode(icon), checkable(ch) {}
-    UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, IconCode::Code icon, Checkable ch = Checkable::No)
-        : code(code), context(ctx), title(title), description(title), iconCode(icon), checkable(ch) {}
+        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), checkable(ch) {}
+
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const TranslatableString& title,
+             const TranslatableString& desc, Checkable ch = Checkable::No)
+        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc),  checkable(ch) {}
+
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const TranslatableString& title,
+             const TranslatableString& desc, IconCode::Code icon, Checkable ch = Checkable::No)
+        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), checkable(ch) {}
+
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const TranslatableString& title, IconCode::Code icon,
+             Checkable ch = Checkable::No)
+        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), iconCode(icon), checkable(ch) {}
 
     bool isValid() const
     {
         return !code.empty();
     }
 
-    QVariantMap toMap() const
-    {
-        QStringList list;
-        for (const std::string& sc : shortcuts) {
-            list << QString::fromStdString(sc);
-        }
-
-        return {
-            { "code", QString::fromStdString(code) },
-            { "title", title },
-            { "description", description },
-            { "icon", static_cast<int>(iconCode) },
-            { "shortcuts", list.join("; ") },
-            { "checkable", checkable == Checkable::No ? 0 : 1 }
-        };
-    }
-
     bool operator==(const UiAction& other) const
     {
         return code == other.code
-               && context == other.context
+               && uiCtx == other.uiCtx
+               && scCtx == other.scCtx
                && title == other.title
                && description == other.description
                && iconCode == other.iconCode

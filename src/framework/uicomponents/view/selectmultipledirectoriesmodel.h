@@ -51,7 +51,7 @@ public:
     Q_INVOKABLE void removeSelectedDirectories();
     Q_INVOKABLE void addDirectory();
 
-    Q_INVOKABLE QStringList directories() const;
+    Q_INVOKABLE QString directories() const;
 
     bool isRemovingAvailable() const;
 

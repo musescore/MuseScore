@@ -25,7 +25,7 @@
 
 #include "spanner.h"
 #include "mscore.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -72,10 +72,10 @@ public:
     CubicBezier(mu::PointF _p1, mu::PointF _p2, mu::PointF _p3, mu::PointF _p4)
         : p1(_p1), p2(_p2), p3(_p3), p4(_p4) {}
 
-    mu::PointF pointAtPercent(qreal t) const
+    mu::PointF pointAtPercent(double t) const
     {
-        Q_ASSERT(t >= 0.0 && t <= 1.0);
-        const qreal r = 1.0 - t;
+        assert(t >= 0.0 && t <= 1.0);
+        const double r = 1.0 - t;
         const mu::PointF B123 = r * (r * p1 + t * p2) + t * (r * p2 + t * p3);
         const mu::PointF B234 = r * (r * p2 + t * p3) + t * (r * p3 + t * p4);
         return r * B123 + t * B234;
@@ -90,11 +90,12 @@ class SlurTie;
 
 class SlurTieSegment : public SpannerSegment
 {
+    OBJECT_ALLOCATOR(engraving, SlurTieSegment)
 protected:
     struct UP _ups[int(Grip::GRIPS)];
 
-    mu::PainterPath path;
-    mu::PainterPath shapePath;
+    mu::draw::PainterPath path;
+    mu::draw::PainterPath shapePath;
     Shape _shape;
 
     SlurTieSegment(const ElementType& type, System*);
@@ -105,7 +106,7 @@ protected:
 
 public:
 
-    virtual void spatiumChanged(qreal, qreal) override;
+    virtual void spatiumChanged(double, double) override;
     SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 
     void startEditDrag(EditData& ed) override;
@@ -133,7 +134,7 @@ public:
 
     void writeSlur(XmlWriter& xml, int no) const;
     void read(XmlReader&) override;
-    virtual void drawEditMode(mu::draw::Painter* painter, EditData& editData, qreal currentViewScaling) override;
+    virtual void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
     virtual void computeBezier(mu::PointF so = mu::PointF()) = 0;
 };
 
@@ -145,6 +146,8 @@ public:
 
 class SlurTie : public Spanner
 {
+    OBJECT_ALLOCATOR(engraving, SlurTie)
+
     SlurStyleType _styleType = SlurStyleType::Undefined;
 
 protected:

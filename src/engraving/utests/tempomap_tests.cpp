@@ -30,9 +30,9 @@
 using namespace mu;
 using namespace mu::engraving;
 
-static const QString TEMPOMAP_TEST_FILES_DIR("tempomap_data/");
+static const String TEMPOMAP_TEST_FILES_DIR("tempomap_data/");
 
-class TempoMapTests : public ::testing::Test
+class Engraving_TempoMapTests : public ::testing::Test
 {
 protected:
     void SetUp() override {}
@@ -43,7 +43,7 @@ protected:
  * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 120 bpm, Treble Cleff)
  *          There is no visible tempo marking on the score, so default tempo will be applied 120BPM
  */
-TEST_F(TempoMapTests, DEFAULT_TEMPO)
+TEST_F(Engraving_TempoMapTests, DEFAULT_TEMPO)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "default_tempo/default_tempo.mscx");
@@ -68,7 +68,7 @@ TEST_F(TempoMapTests, DEFAULT_TEMPO)
  * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 80 bpm, Treble Cleff)
  *          Tempo marking (80 BPM) should be applied on the entire score
  */
-TEST_F(TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
+TEST_F(Engraving_TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "custom_tempo_80_bpm/custom_tempo_80_bpm.mscx");
@@ -93,7 +93,7 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
  * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 80 bpm, Treble Cleff)
  *          There is a tempo marking (80 BPM) on the very first measure. The 4-th measure marked by 120BPM tempo
  */
-TEST_F(TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
+TEST_F(Engraving_TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 80 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
@@ -123,7 +123,7 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
  *          There is a tempo marking (120 BPM) on the very first measure. Additionally, there is "accelerando" tempo annotation
  *          above measures 5 and 6
  */
-TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
+TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Score* score
@@ -153,7 +153,7 @@ TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
  *          There is a tempo marking (120 BPM) on the very first measure. Additionally, there is "rallentando" tempo annotation
  *          above measures 5 and 6
  */
-TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_RALLENTANDO)
+TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_RALLENTANDO)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "gradual_tempo_change_rallentando/gradual_tempo_change_rallentando.mscx");

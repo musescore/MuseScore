@@ -100,11 +100,6 @@ void HairpinSettingsModel::requestElements()
     });
 }
 
-void HairpinSettingsModel::updatePropertiesOnNotationChanged()
-{
-    loadPropertyItem(m_height, formatDoubleFunc);
-}
-
 bool HairpinSettingsModel::isTextVisible(TextType) const
 {
     return true;

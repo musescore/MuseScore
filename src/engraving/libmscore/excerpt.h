@@ -46,12 +46,17 @@ public:
 
     ~Excerpt();
 
+    bool inited() const;
+
+    const ID& initialPartId() const;
+    void setInitialPartId(const ID& id);
+
     MasterScore* masterScore() const { return m_masterScore; }
     Score* excerptScore() const { return m_excerptScore; }
     void setExcerptScore(Score* s);
 
     String name() const { return m_name; }
-    void setName(const QString& title) { m_name = title; }
+    void setName(const String& title) { m_name = title; }
 
     std::vector<Part*>& parts() { return m_parts; }
     const std::vector<Part*>& parts() const { return m_parts; }
@@ -64,17 +69,12 @@ public:
     size_t nstaves() const;
     bool isEmpty() const;
 
-    TracksMap& tracksMapping() { return m_tracksMapping; }
+    TracksMap& tracksMapping();
     void setTracksMapping(const TracksMap& tracksMapping);
-
-    void updateTracksMapping();
 
     void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
 
     void read(XmlReader&);
-
-    bool operator==(const Excerpt& other) const;
-    bool operator!=(const Excerpt& other) const;
 
     static std::vector<Excerpt*> createExcerptsFromParts(const std::vector<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);
@@ -87,13 +87,21 @@ public:
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
 
 private:
-    static QString formatName(const QString& partName, const std::vector<Excerpt*>&);
+    friend class MasterScore;
+
+    static String formatName(const String& partName, const std::vector<Excerpt*>&);
+
+    void setInited(bool inited);
+
+    void updateTracksMapping(bool voicesVisibilityChanged = false);
 
     MasterScore* m_masterScore = nullptr;
     Score* m_excerptScore = nullptr;
     String m_name;
     std::vector<Part*> m_parts;
     TracksMap m_tracksMapping;
+    bool m_inited = false;
+    ID m_initialPartId;
 };
 }
 

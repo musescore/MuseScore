@@ -38,6 +38,8 @@
 #include <libmscore/ottava.h>
 #include <libmscore/drumset.h>
 
+#include "engraving/engravingerrors.h"
+
 namespace mu::engraving {
 class PalmMute;
 
@@ -47,7 +49,7 @@ class PowerTab
     MasterScore* score = nullptr;
 
     bool              readBoolean();
-    unsigned char     readUChar();
+    unsigned char     readUInt8();
     char              readChar();
     unsigned short    readShort();
     int               readInt();
@@ -392,6 +394,6 @@ class PowerTab
 public:
     PowerTab(mu::io::IODevice* f, MasterScore* s)
         : _file(f), score(s) {}
-    Score::FileError read();
+    Err read();
 };
 }

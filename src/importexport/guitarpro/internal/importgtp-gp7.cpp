@@ -31,6 +31,8 @@
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 
+#include "log.h"
+
 using namespace mu::io;
 using namespace mu::engraving;
 
@@ -44,12 +46,44 @@ bool GuitarPro7::read(IODevice* io)
     f = io;
     previousTempo = -1;
 
-    mu::ZipReader zip(io);
-    mu::ByteArray fileData = zip.fileData("Content/score.gpif");
+    ZipReader zip(io);
+    ByteArray fileData = zip.fileData("Content/score.gpif");
+    ByteArray partsData = zip.fileData("Content/PartConfiguration");
     zip.close();
-    QByteArray ba = fileData.toQByteArrayNoCopy();
-    readGpif(&ba);
+
+    m_properties = readProperties(&partsData);
+
+    readGpif(&fileData);
     return true;
+}
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+GuitarPro::GPProperties GuitarPro7::readProperties(ByteArray* data)
+{
+    GPProperties properties;
+    size_t partsInfoSize = data->size();
+    const size_t numInstrOffset = 8;
+    if (partsInfoSize <= numInstrOffset) {
+        LOGE() << "failed to read gp properties";
+        return properties;
+    }
+
+    size_t numberOfInstruments = static_cast<size_t>(data->at(numInstrOffset));
+    if (partsInfoSize <= numInstrOffset + numberOfInstruments) {
+        LOGE() << "failed to read gp properties";
+        return properties;
+    }
+
+    std::vector<TabImportOption> partsImportOpts = properties.partsImportOptions;
+
+    for (size_t i = numInstrOffset + 1; i <= numInstrOffset + numberOfInstruments; i++) {
+        partsImportOpts.push_back(static_cast<TabImportOption>(data->at(static_cast<int>(i))));
+    }
+
+    return properties;
 }
 
 std::unique_ptr<IGPDomBuilder> GuitarPro7::createGPDomBuilder() const

@@ -47,9 +47,24 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
     int overallDurationTicks = spanner->ticks().ticks();
 
     switch (spanner->type()) {
-    case ElementType::SLUR:
+    case ElementType::SLUR: {
         type = mpe::ArticulationType::Legato;
+
+        EngravingItem* startItem = spanner->startElement();
+        EngravingItem* endItem = spanner->endElement();
+
+        if (!startItem || !endItem) {
+            break;
+        }
+
+        if (startItem->isChordRest() && endItem->isChordRest()) {
+            ChordRest* startChord = toChordRest(startItem);
+            ChordRest* endChord = toChordRest(endItem);
+            overallDurationTicks = endChord->tick().ticks() + endChord->ticks().ticks() - startChord->tick().ticks();
+        }
+
         break;
+    }
     case ElementType::PEDAL:
         type = mpe::ArticulationType::Pedal;
         break;
@@ -67,13 +82,13 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
             return;
         }
 
-        if (trill->trillType() == Trill::Type::TRILL_LINE) {
+        if (trill->trillType() == TrillType::TRILL_LINE) {
             type = mpe::ArticulationType::Trill;
-        } else if (trill->trillType() == Trill::Type::UPPRALL_LINE) {
+        } else if (trill->trillType() == TrillType::UPPRALL_LINE) {
             type = mpe::ArticulationType::UpPrall;
-        } else if (trill->trillType() == Trill::Type::DOWNPRALL_LINE) {
+        } else if (trill->trillType() == TrillType::DOWNPRALL_LINE) {
             type = mpe::ArticulationType::PrallDown;
-        } else if (trill->trillType() == Trill::Type::PRALLPRALL_LINE) {
+        } else if (trill->trillType() == TrillType::PRALLPRALL_LINE) {
             type = mpe::ArticulationType::LinePrall;
         }
         overallDurationTicks = ctx.nominalDurationTicks;

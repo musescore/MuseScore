@@ -22,6 +22,8 @@
 
 #include <QMessageBox>
 
+#include "translation.h"
+
 #include "importmxml.h"
 #include "importmxmllogger.h"
 #include "importmxmlpass1.h"
@@ -41,7 +43,7 @@ static int musicXMLImportErrorDialog(QString text, QString detailedText)
     QMessageBox errorDialog;
     errorDialog.setIcon(QMessageBox::Question);
     errorDialog.setText(text);
-    errorDialog.setInformativeText(QObject::tr("Do you want to try to load this file anyway?"));
+    errorDialog.setInformativeText(qtrc("iex_musicxml", "Do you want to try to load this file anyway?"));
     errorDialog.setDetailedText(detailedText);
     errorDialog.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     errorDialog.setDefaultButton(QMessageBox::No);
@@ -52,7 +54,7 @@ static int musicXMLImportErrorDialog(QString text, QString detailedText)
 //   importMusicXMLfromBuffer
 //---------------------------------------------------------
 
-Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* dev)
+Err importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* dev)
 {
     //LOGD("importMusicXMLfromBuffer(score %p, name '%s', dev %p)",
     //       score, qPrintable(name), dev);
@@ -65,23 +67,30 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
     // pass 1
     dev->seek(0);
     MusicXMLParserPass1 pass1(score, &logger);
-    Score::FileError res = pass1.parse(dev);
+    Err res = pass1.parse(dev);
     const auto pass1_errors = pass1.errors();
 
     // pass 2
     MusicXMLParserPass2 pass2(score, pass1, &logger);
-    if (res == Score::FileError::FILE_NO_ERROR) {
+    if (res == Err::NoError) {
         dev->seek(0);
         res = pass2.parse(dev);
+    }
+
+    for (const Part* part : score->parts()) {
+        for (const auto& pair : part->instruments()) {
+            pair.second->updateInstrumentId();
+        }
     }
 
     // report result
     const auto pass2_errors = pass2.errors();
     if (!(pass1_errors.isEmpty() && pass2_errors.isEmpty())) {
         if (!MScore::noGui) {
-            const QString text { QObject::tr("Error(s) found, import may be incomplete.") };
+            const QString text = qtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
+                                      nullptr, pass1_errors.count() + pass2_errors.count());
             if (musicXMLImportErrorDialog(text, pass1.errors() + pass2.errors()) != QMessageBox::Yes) {
-                res = Score::FileError::FILE_USER_ABORT;
+                res = Err::UserAbort;
             }
         }
     }

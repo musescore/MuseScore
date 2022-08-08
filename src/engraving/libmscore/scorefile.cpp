@@ -21,8 +21,6 @@
  */
 
 #include <cmath>
-#include <QDir>
-#include <QRegularExpression>
 
 #include "translation.h"
 #include "io/file.h"
@@ -44,7 +42,6 @@
 #include "chord.h"
 #include "tuplet.h"
 #include "beam.h"
-#include "revisions.h"
 #include "page.h"
 #include "part.h"
 #include "staff.h"
@@ -111,11 +108,15 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     if (excerpt()) {
         Excerpt* e = excerpt();
-        TracksMap trackList = e->tracksMapping();
-        if (!(trackList.size() == e->nstaves() * VOICES) && !trackList.empty()) {
-            for (auto it = trackList.begin(); it != trackList.end(); ++it) {
+        const TracksMap& tracks = e->tracksMapping();
+        if (!(tracks.size() == e->nstaves() * VOICES) && !tracks.empty()) {
+            for (auto it = tracks.begin(); it != tracks.end(); ++it) {
                 xml.tag("Tracklist", { { "sTrack", it->first }, { "dstTrack", it->second } });
             }
+        }
+
+        if (e->initialPartId().isValid()) {
+            xml.tag("initialPartId", e->initialPartId().toUint64());
         }
     }
 
@@ -155,20 +156,20 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     hook.onWriteStyle302(this, xml);
 
-    xml.tag("showInvisible",   _showInvisible);
+    xml.tag("showInvisible", _showInvisible);
     xml.tag("showUnprintable", _showUnprintable);
-    xml.tag("showFrames",      _showFrames);
-    xml.tag("showMargins",     _showPageborders);
+    xml.tag("showFrames", _showFrames);
+    xml.tag("showMargins", _showPageborders);
     xml.tag("markIrregularMeasures", _markIrregularMeasures, true);
 
-    if (!_isOpen) {
+    if (_isOpen) {
         xml.tag("open", _isOpen);
     }
 
     for (const auto& t : _metaTags) {
         // do not output "platform" and "creationDate" in test and save template mode
         if ((!MScore::testMode && !MScore::saveTemplateMode) || (t.first != "platform" && t.first != "creationDate")) {
-            xml.tag("metaTag", { { "name", t.first.toHtmlEscaped() } }, t.second);
+            xml.tag("metaTag", { { "name", t.first.toXmlEscaped() } }, t.second);
         }
     }
 
@@ -183,7 +184,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         xml.startElement("SystemObjects");
         for (Staff* s : systemObjectStaves) {
             // TODO: when we add more granularity to system object display, construct this string per staff
-            QString sysObjForStaff = "barNumbers=\"false\"";
+            String sysObjForStaff = u"barNumbers=\"false\"";
             // for now, everything except bar numbers is shown on system object staves
             // (also, the code to display bar numbers on system staves other than the first currently does not exist!)
             xml.tag("Instance", { { "staffId", s->idx() + 1 }, { "barNumbers", "false" } });
@@ -285,7 +286,7 @@ std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
 
     Page* page = pages().at(0);
     RectF fr = page->abbox();
-    qreal mag = 256.0 / qMax(fr.width(), fr.height());
+    double mag = 256.0 / std::max(fr.width(), fr.height());
     int w = int(fr.width() * mag);
     int h = int(fr.height() * mag);
 
@@ -317,7 +318,7 @@ std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
 //   loadStyle
 //---------------------------------------------------------
 
-bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
+bool Score::loadStyle(const String& fn, bool ign, const bool overlap)
 {
     TRACEFUNC;
 
@@ -328,11 +329,11 @@ bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
             undo(new ChangeStyle(this, st, overlap));
             return true;
         } else {
-            MScore::lastError = QObject::tr("The style file is not compatible with this version of MuseScore.");
+            LOGE() << "The style file is not compatible with this version of MuseScore.";
             return false;
         }
     }
-    MScore::lastError = strerror(errno);
+
     return false;
 }
 
@@ -340,9 +341,9 @@ bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
 //   saveStyle
 //---------------------------------------------------------
 
-bool Score::saveStyle(const QString& name)
+bool Score::saveStyle(const String& name)
 {
-    QString ext(".mss");
+    String ext(u".mss");
     FileInfo info(name);
 
     if (info.suffix().isEmpty()) {
@@ -350,13 +351,13 @@ bool Score::saveStyle(const QString& name)
     }
     File f(info.filePath());
     if (!f.open(IODevice::WriteOnly)) {
-        MScore::lastError = QObject::tr("Failed open style file: %1 ").arg(info.filePath());
+        LOGE() << "Failed open style file: " << info.filePath();
         return false;
     }
 
     bool ok = style().write(&f);
     if (!ok) {
-        MScore::lastError = QObject::tr("Failed write style file: %1").arg(info.filePath());
+        LOGE() << "Failed write style file: " << info.filePath();
         return false;
     }
 
@@ -367,10 +368,6 @@ bool Score::saveStyle(const QString& name)
 //   saveFile
 //    return true on success
 //---------------------------------------------------------
-
-//! FIXME
-//extern QString revision;
-static QString revision;
 
 bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook)
 {
@@ -389,19 +386,16 @@ bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, com
 
     if (!MScore::testMode) {
         xml.tag("programVersion", VERSION);
-        xml.tag("programRevision", revision);
+        xml.tag("programRevision", MUSESCORE_REVISION);
     }
     write(xml, onlySelection, hook);
 
     xml.endElement();
 
-    if (isMaster()) {
-        masterScore()->revisions()->write(xml);
-    }
     if (!onlySelection) {
         //update version values for i.e. plugin access
-        _mscoreVersion = VERSION;
-        _mscoreRevision = revision.toInt(0, 16);
+        _mscoreVersion = String::fromAscii(VERSION);
+        _mscoreRevision = AsciiStringView(MUSESCORE_REVISION).toInt(nullptr, 16);
         _mscVersion = MSCVERSION;
     }
     return true;
@@ -570,12 +564,13 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
                     ElementType et = e1->type();
                     if ((et == ElementType::REHEARSAL_MARK)
                         || (et == ElementType::SYSTEM_TEXT)
+                        || (et == ElementType::TRIPLET_FEEL)
                         || (et == ElementType::PLAYTECH_ANNOTATION)
                         || (et == ElementType::JUMP)
                         || (et == ElementType::MARKER)
                         || (et == ElementType::TEMPO_TEXT)
                         || (et == ElementType::VOLTA)
-                        || (et == ElementType::TEXTLINE)) {
+                        || (et == ElementType::GRADUAL_TEMPO_CHANGE)) {
                         writeSystem = (e1->track() == track); // always show these on appropriate staves
                     }
                 }

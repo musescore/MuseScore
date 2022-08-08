@@ -21,7 +21,7 @@
  */
 
 #include "tremolobar.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
@@ -79,7 +79,7 @@ TremoloBar::TremoloBar(EngravingItem* parent)
 
 void TremoloBar::layout()
 {
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     if (explicitParent()) {
         setPos(0.0, -_spatium * 3.0);
     } else {
@@ -94,15 +94,15 @@ void TremoloBar::layout()
      *  consistently to values that make sense to draw with the
      *  Musescore scale. */
 
-    qreal timeFactor  = m_userMag / 1.0;
-    qreal pitchFactor = -_spatium * .02;
+    double timeFactor  = m_userMag / 1.0;
+    double pitchFactor = -_spatium * .02;
 
     m_polygon.clear();
-    for (auto v : qAsConst(m_points)) {
+    for (auto v : m_points) {
         m_polygon << PointF(v.time * timeFactor, v.pitch * pitchFactor);
     }
 
-    qreal w = m_lw.val();
+    double w = m_lw.val();
     setbbox(m_polygon.boundingRect().adjusted(-w, -w, w, w));
 }
 
@@ -192,7 +192,7 @@ bool TremoloBar::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        setLineWidth(Spatium(v.value<qreal>()));
+        setLineWidth(Spatium(v.value<double>()));
         break;
     case Pid::MAG:
         setUserMag(v.toDouble());

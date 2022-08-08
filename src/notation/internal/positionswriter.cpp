@@ -29,7 +29,7 @@
 #include "engraving/types/types.h"
 
 #include "log.h"
-#include "global/xmlwriter.h"
+#include "global/deprecated/xmlwriter.h"
 
 using namespace mu::project;
 using namespace mu::notation;
@@ -91,7 +91,7 @@ bool PositionsWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret PositionsWriter::write(INotationPtr notation, Device& destinationDevice, const Options&)
+mu::Ret PositionsWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -102,8 +102,6 @@ mu::Ret PositionsWriter::write(INotationPtr notation, Device& destinationDevice,
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
-
-    QHash<void*, int> segments;
 
     mu::framework::XmlWriter writer(&destinationDevice);
 
@@ -119,22 +117,10 @@ mu::Ret PositionsWriter::write(INotationPtr notation, Device& destinationDevice,
     return true;
 }
 
-mu::Ret PositionsWriter::writeList(const INotationPtrList&, io::Device&, const Options&)
+mu::Ret PositionsWriter::writeList(const INotationPtrList&, QIODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
-}
-
-void PositionsWriter::abort()
-{
-    NOT_IMPLEMENTED;
-}
-
-ProgressChannel PositionsWriter::progress() const
-{
-    NOT_IMPLEMENTED;
-    static ProgressChannel prog;
-    return prog;
 }
 
 qreal PositionsWriter::pngDpiResolution() const

@@ -73,7 +73,7 @@ void MStyle::set(const Sid t, const PropertyValue& val)
         precomputeValues();
     } else {
         if (StyleDef::styleValues[idx].valueType() == P_TYPE::SPATIUM) {
-            qreal _spatium = value(Sid::spatium).toReal();
+            double _spatium = value(Sid::spatium).toReal();
             m_precomputedValues[idx] = m_values[idx].value<Spatium>().val() * _spatium;
         }
     }
@@ -81,7 +81,7 @@ void MStyle::set(const Sid t, const PropertyValue& val)
 
 void MStyle::precomputeValues()
 {
-    qreal _spatium = value(Sid::spatium).toReal();
+    double _spatium = value(Sid::spatium).toReal();
     for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
         if (t.valueType() == P_TYPE::SPATIUM) {
             m_precomputedValues[t.idx()] = value(t.styleIdx()).value<Spatium>().val() * _spatium;
@@ -112,37 +112,48 @@ bool MStyle::readProperties(XmlReader& e)
         Sid idx = t.styleIdx();
         if (t.name() == tag) {
             P_TYPE type = t.valueType();
-            if (P_TYPE::SPATIUM == type) {
+            switch (type) {
+            case P_TYPE::SPATIUM:
                 set(idx, Spatium(e.readDouble()));
-            } else if (P_TYPE::REAL == type) {
+                break;
+            case P_TYPE::REAL:
                 set(idx, e.readDouble());
-            } else if (P_TYPE::BOOL == type) {
+                break;
+            case P_TYPE::BOOL:
                 set(idx, bool(e.readInt()));
-            } else if (P_TYPE::INT == type) {
+                break;
+            case P_TYPE::INT:
                 set(idx, e.readInt());
-            } else if (P_TYPE::DIRECTION_V == type) {
+                break;
+            case P_TYPE::DIRECTION_V:
                 set(idx, DirectionV(e.readInt()));
-            } else if (P_TYPE::STRING == type) {
-                set(idx, e.readText().toQString());
-            } else if (P_TYPE::ALIGN == type) {
+                break;
+            case P_TYPE::STRING:
+                set(idx, e.readText());
+                break;
+            case P_TYPE::ALIGN: {
                 Align align = TConv::fromXml(e.readText(), Align());
                 set(idx, align);
-            } else if (P_TYPE::POINT == type) {
-                qreal x = e.doubleAttribute("x", 0.0);
-                qreal y = e.doubleAttribute("y", 0.0);
+            } break;
+            case P_TYPE::POINT: {
+                double x = e.doubleAttribute("x", 0.0);
+                double y = e.doubleAttribute("y", 0.0);
                 set(idx, PointF(x, y));
                 e.readText();
-            } else if (P_TYPE::SIZE == type) {
-                qreal x = e.doubleAttribute("w", 0.0);
-                qreal y = e.doubleAttribute("h", 0.0);
+            } break;
+            case P_TYPE::SIZE: {
+                double x = e.doubleAttribute("w", 0.0);
+                double y = e.doubleAttribute("h", 0.0);
                 set(idx, SizeF(x, y));
                 e.readText();
-            } else if (P_TYPE::SCALE == type) {
-                qreal sx = e.doubleAttribute("w", 0.0);
-                qreal sy = e.doubleAttribute("h", 0.0);
+            } break;
+            case P_TYPE::SCALE: {
+                double sx = e.doubleAttribute("w", 0.0);
+                double sy = e.doubleAttribute("h", 0.0);
                 set(idx, ScaleF(sx, sy));
                 e.readText();
-            } else if (P_TYPE::COLOR == type) {
+            } break;
+            case P_TYPE::COLOR: {
                 mu::draw::Color c;
                 c.setRed(e.intAttribute("r"));
                 c.setGreen(e.intAttribute("g"));
@@ -150,14 +161,21 @@ bool MStyle::readProperties(XmlReader& e)
                 c.setAlpha(e.intAttribute("a", 255));
                 set(idx, c);
                 e.readText();
-            } else if (P_TYPE::PLACEMENT_V == type) {
+            } break;
+            case P_TYPE::PLACEMENT_V:
                 set(idx, PlacementV(e.readText().toInt()));
-            } else if (P_TYPE::PLACEMENT_H == type) {
+                break;
+            case P_TYPE::PLACEMENT_H:
                 set(idx, PlacementH(e.readText().toInt()));
-            } else if (P_TYPE::HOOK_TYPE == type) {
+                break;
+            case P_TYPE::HOOK_TYPE:
                 set(idx, HookType(e.readText().toInt()));
-            } else {
-                ASSERT_X("unhandled type " + QString::number(int(type)));
+                break;
+            case P_TYPE::LINE_TYPE:
+                set(idx, TConv::fromXml(e.readAsciiText(), LineType::SOLID));
+                break;
+            default:
+                ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
             return true;
         }
@@ -178,8 +196,8 @@ bool MStyle::readStyleValCompat(XmlReader& e)
 {
     const AsciiStringView tag(e.name());
     if (tag == "tempoOffset") {   // pre-3.0-beta
-        const qreal x = e.doubleAttribute("x", 0.0);
-        const qreal y = e.doubleAttribute("y", 0.0);
+        const double x = e.doubleAttribute("x", 0.0);
+        const double y = e.doubleAttribute("y", 0.0);
         const PointF val(x, y);
         set(Sid::tempoPosAbove, val);
         set(Sid::tempoPosBelow, val);
@@ -201,20 +219,20 @@ bool MStyle::readStyleValCompat(XmlReader& e)
 
 bool MStyle::readTextStyleValCompat(XmlReader& e)
 {
-    static const std::array<std::pair<const char*, FontStyle>, 4> styleNamesEndings { {
-        { "FontBold",      FontStyle::Bold },
-        { "FontItalic",    FontStyle::Italic },
-        { "FontUnderline", FontStyle::Underline },
-        { "FontStrike",    FontStyle::Strike }
+    static const std::array<std::pair<String, FontStyle>, 4> styleNamesEndings { {
+        { u"FontBold",      FontStyle::Bold },
+        { u"FontItalic",    FontStyle::Italic },
+        { u"FontUnderline", FontStyle::Underline },
+        { u"FontStrike",    FontStyle::Strike }
     } };
 
-    const QString tag(e.name().toQLatin1String());
+    const String tag = String::fromAscii(e.name().ascii());
     FontStyle readFontStyle = FontStyle::Normal;
-    QString typeName;
+    String typeName;
     for (auto& fontStyle : styleNamesEndings) {
         if (tag.endsWith(fontStyle.first)) {
             readFontStyle = fontStyle.second;
-            typeName = tag.mid(0, tag.length() - int(strlen(fontStyle.first)));
+            typeName = tag.mid(0, tag.size() - fontStyle.first.size());
             break;
         }
     }
@@ -222,7 +240,7 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
         return false;
     }
 
-    const QString newFontStyleName = typeName + "FontStyle";
+    const String newFontStyleName = typeName + u"FontStyle";
     const Sid sid = MStyle::styleIdx(newFontStyleName);
     if (sid == Sid::NOSTYLE) {
         LOGW() << "readFontStyleValCompat: couldn't read text readFontStyle value:" << tag;
@@ -247,8 +265,8 @@ bool MStyle::read(IODevice* device, bool ign)
     XmlReader e(device);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            QString version = e.attribute("version");
-            QStringList sl  = version.split('.');
+            String version = e.attribute("version");
+            StringList sl  = version.split('.');
             int mscVersion  = sl[0].toInt() * 100 + sl[1].toInt();
             if (mscVersion != MSCVERSION && !ign) {
                 return false;
@@ -291,7 +309,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             //readTextStyle206(this, e);        // obsolete
             e.readText();
         } else if (tag == "ottavaHook") {             // obsolete, for 3.0dev bw. compatibility, should be removed in final release
-            qreal y = qAbs(e.readDouble());
+            double y = std::abs(e.readDouble());
             set(Sid::ottavaHookAbove, y);
             set(Sid::ottavaHookBelow, -y);
         } else if (tag == "Spatium") {
@@ -354,6 +372,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
                 continue;
             }
             xml.tag(st.name(), TConv::toXml(a));
+        } else if (P_TYPE::LINE_TYPE == type) {
+            xml.tagProperty(st.name(), value(idx));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility
@@ -386,11 +406,11 @@ const char* MStyle::valueName(const Sid i)
     return StyleDef::styleValues[size_t(i)].name().ascii();
 }
 
-Sid MStyle::styleIdx(const QString& name)
+Sid MStyle::styleIdx(const String& name)
 {
-    QByteArray ba = name.toLatin1();
+    ByteArray ba = name.toAscii();
     for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
-        if (st.name() == ba.constData()) {
+        if (st.name() == ba.constChar()) {
             return st.styleIdx();
         }
     }

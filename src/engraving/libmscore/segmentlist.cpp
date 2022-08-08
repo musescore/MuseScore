@@ -81,7 +81,7 @@ void SegmentList::check()
         case SegmentType::KeySigAnnounce:
             break;
         default:
-            ASSERT_X(QString::asprintf("SegmentList::check: invalid segment type 0x%x", int(s->segmentType())));
+            ASSERT_X(String(u"SegmentList::check: invalid segment type: %1").arg(int(s->segmentType())));
             break;
         }
         Segment* ss = s->next();
@@ -105,7 +105,7 @@ void SegmentList::check()
         ASSERT_X("SegmentList::check: last has next");
     }
     if (n != _size) {
-        ASSERT_X(QString::asprintf("SegmentList::check: counted %d but _size is %d", n, _size));
+        ASSERT_X(String(u"SegmentList::check: counted %1 but _size is %d2").arg(n, _size));
         _size = n;
     }
 }
@@ -149,7 +149,7 @@ void SegmentList::remove(Segment* e)
         }
     }
     if (!found) {
-        ASSERT_X(QString::asprintf("segment %p %s not in list", e, e->subTypeName()));
+        ASSERT_X(String(u"segment %1 not in list").arg(String::fromAscii(e->subTypeName())));
     }
 #endif
     --_size;

@@ -35,12 +35,6 @@ using namespace mu::framework;
 using namespace mu::async;
 using namespace mu::ui;
 
-// Global variable
-namespace mu::engraving {
-QString revision;
-}
-// -----
-
 static const std::string module_name("notation");
 
 static const Settings::Key LIGHT_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/lightTheme_score_background_color");
@@ -395,7 +389,9 @@ int NotationConfiguration::borderWidth() const
 
 QColor NotationConfiguration::playbackCursorColor() const
 {
-    return selectionColor();
+    QColor color = selectionColor();
+    color.setAlpha(178);
+    return color;
 }
 
 int NotationConfiguration::cursorOpacity() const
@@ -448,14 +444,14 @@ void NotationConfiguration::setDefaultZoom(int zoomPercentage)
     settings()->setSharedValue(DEFAULT_ZOOM, Val(zoomPercentage));
 }
 
-mu::ValCh<int> NotationConfiguration::currentZoom() const
+qreal NotationConfiguration::scalingFromZoomPercentage(int zoomPercentage) const
 {
-    return m_currentZoomPercentage;
+    return zoomPercentage / 100.0 * notationScaling();
 }
 
-void NotationConfiguration::setCurrentZoom(int zoomPercentage)
+int NotationConfiguration::zoomPercentageFromScaling(qreal scaling) const
 {
-    m_currentZoomPercentage.set(zoomPercentage);
+    return std::round(scaling * 100.0 / notationScaling());
 }
 
 QList<int> NotationConfiguration::possibleZoomPercentageList() const
@@ -585,16 +581,6 @@ double NotationConfiguration::guiScaling() const
 double NotationConfiguration::notationScaling() const
 {
     return uiConfiguration()->physicalDpi() / mu::engraving::DPI;
-}
-
-std::string NotationConfiguration::notationRevision() const
-{
-    return mu::engraving::revision.toStdString();
-}
-
-int NotationConfiguration::notationDivision() const
-{
-    return mu::engraving::Constants::division;
 }
 
 ValCh<framework::Orientation> NotationConfiguration::canvasOrientation() const

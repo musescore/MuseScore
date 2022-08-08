@@ -21,7 +21,7 @@
  */
 #include "slurtie.h"
 
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 
 #include "chord.h"
@@ -120,10 +120,10 @@ void SlurTieSegment::move(const PointF& s)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void SlurTieSegment::spatiumChanged(qreal oldValue, qreal newValue)
+void SlurTieSegment::spatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::spatiumChanged(oldValue, newValue);
-    qreal diff = newValue / oldValue;
+    double diff = newValue / oldValue;
     for (UP& u : _ups) {
         u.off *= diff;
     }
@@ -190,13 +190,13 @@ void SlurTieSegment::editDrag(EditData& ed)
         //
         if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
             Spanner* spanner = slurTie();
-            Qt::KeyboardModifiers km = ed.modifiers;
+            KeyboardModifiers km = ed.modifiers;
             EngravingItem* e = ed.view()->elementNear(ed.pos);
             if (e && e->isNote()) {
                 Note* note = toNote(e);
                 Fraction tick = note->chord()->tick();
                 if ((g == Grip::END && tick > slurTie()->tick()) || (g == Grip::START && tick < slurTie()->tick2())) {
-                    if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+                    if (km != (ShiftModifier | ControlModifier)) {
                         Chord* c = note->chord();
                         ed.view()->setDropTarget(note);
                         if (c->part() == spanner->part() && c != spanner->endCR()) {
@@ -351,7 +351,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 
     xml.startElement(this, { { "no", no } });
 
-    qreal _spatium = score()->spatium();
+    double _spatium = score()->spatium();
     if (!ups(Grip::START).off.isNull()) {
         xml.tagPoint("o1", ups(Grip::START).off / _spatium);
     }
@@ -374,7 +374,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 
 void SlurTieSegment::read(XmlReader& e)
 {
-    qreal _spatium = score()->spatium();
+    double _spatium = score()->spatium();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "o1") {
@@ -395,7 +395,7 @@ void SlurTieSegment::read(XmlReader& e)
 //   drawEditMode
 //---------------------------------------------------------
 
-void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal /*currentViewScaling*/)
+void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed, double /*currentViewScaling*/)
 {
     using namespace mu::draw;
     PolygonF polygon(7);

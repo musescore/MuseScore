@@ -23,12 +23,11 @@
 #ifndef MU_PROJECT_INOTATIONWRITER_H
 #define MU_PROJECT_INOTATIONWRITER_H
 
-#include "ret.h"
-#include "val.h"
+#include "types/ret.h"
+#include "types/val.h"
 
 #include "async/channel.h"
 #include "global/progress.h"
-#include "io/device.h"
 #include "notation/inotation.h"
 
 namespace mu::project {
@@ -56,10 +55,13 @@ public:
     virtual std::vector<UnitType> supportedUnitTypes() const = 0;
     virtual bool supportsUnitType(UnitType unitType) const = 0;
 
-    virtual Ret write(notation::INotationPtr notation, io::Device& device, const Options& options = Options()) = 0;
-    virtual Ret writeList(const notation::INotationPtrList& notations, io::Device& device, const Options& options = Options()) = 0;
-    virtual void abort() = 0;
-    virtual framework::ProgressChannel progress() const = 0;
+    virtual Ret write(notation::INotationPtr notation, QIODevice& device, const Options& options = Options()) = 0;
+    virtual Ret writeList(const notation::INotationPtrList& notations, QIODevice& device, const Options& options = Options()) = 0;
+
+    virtual bool supportsProgressNotifications() const { return false; }
+    virtual framework::Progress progress() const { return framework::Progress(); }
+
+    virtual void abort() {}
 };
 
 using INotationWriterPtr = std::shared_ptr<INotationWriter>;

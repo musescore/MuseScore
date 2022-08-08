@@ -23,12 +23,7 @@
 
 #include <QtGlobal>
 
-#include "modularity/ioc.h"
-#include "internal/fontssetup.h"
-
 using namespace mu::fonts;
-
-static std::shared_ptr<FontsSetup> s_fontsSetup = std::make_shared<FontsSetup>();
 
 static void init_fonts_qrc()
 {
@@ -44,6 +39,8 @@ static void init_fonts_qrc()
     Q_INIT_RESOURCE(fonts_MuseJazz);
     Q_INIT_RESOURCE(fonts_Smufl);
     Q_INIT_RESOURCE(fonts_Petaluma);
+    Q_INIT_RESOURCE(fonts_FinaleMaestro);
+    Q_INIT_RESOURCE(fonts_FinaleBroadway);
     Q_INIT_RESOURCE(fonts_Tabulature);
 }
 
@@ -55,9 +52,4 @@ std::string FontsModule::moduleName() const
 void FontsModule::registerResources()
 {
     init_fonts_qrc();
-}
-
-void FontsModule::onInit(const mu::framework::IApplication::RunMode&)
-{
-    s_fontsSetup->setup();
 }

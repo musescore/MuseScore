@@ -25,7 +25,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Repeats</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -76,7 +76,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -270,7 +270,7 @@
             </Chord>
           <Beam>
             <l1>44</l1>
-            <l2>38</l2>
+            <l2>36</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -473,7 +473,7 @@
             </Chord>
           <Beam>
             <l1>44</l1>
-            <l2>38</l2>
+            <l2>36</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -811,7 +811,7 @@
             </Chord>
           <Beam>
             <l1>44</l1>
-            <l2>38</l2>
+            <l2>36</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -1110,8 +1110,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-8</l1>
-            <l2>-6</l2>
+            <l1>-6</l1>
+            <l2>-4</l2>
             </Beam>
           <Chord>
             <linkedMain/>
@@ -1345,7 +1345,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">TestPart</metaTag>
-      <Part>
+      <Part id="2">
         <Staff id="1">
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">
@@ -1653,8 +1653,8 @@
                 </Note>
               </Chord>
             <Beam>
-              <l1>-8</l1>
-              <l2>-6</l2>
+              <l1>-6</l1>
+              <l2>-4</l2>
               </Beam>
             <Chord>
               <linked>

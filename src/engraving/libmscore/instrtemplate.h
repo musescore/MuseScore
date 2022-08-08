@@ -25,6 +25,8 @@
 
 #include <list>
 
+#include "io/path.h"
+
 #include "mscore.h"
 #include "instrument.h"
 #include "clef.h"
@@ -45,12 +47,11 @@ struct ScoreOrder;
 class InstrumentGenre
 {
 public:
-    QString id;
-    QString name;
+    String id;
+    String name;
 
     InstrumentGenre() {}
     void write(XmlWriter& xml) const;
-    void write1(XmlWriter& xml) const;
     void read(XmlReader&);
 };
 
@@ -66,7 +67,6 @@ public:
 
     InstrumentFamily() {}
     void write(XmlWriter& xml) const;
-    void write1(XmlWriter& xml) const;
     void read(XmlReader&);
 };
 
@@ -83,11 +83,11 @@ public:
     InstrumentTemplate& operator=(const InstrumentTemplate&);
 
     String id;
-    QString trackName;
+    String trackName;
     StaffNameList longNames;     ///< shown on first system
     StaffNameList shortNames;    ///< shown on followup systems
-    QString musicXMLid;          ///< used in MusicXML 3.0
-    QString description;         ///< a longer description of the instrument
+    String musicXMLid;          ///< used in MusicXML 3.0
+    String description;         ///< a longer description of the instrument
 
     size_t staffCount = 0;
     int sequenceOrder = 0;
@@ -124,19 +124,20 @@ public:
     bool extended = false;            // belongs to extended instrument set if true
     bool singleNoteDynamics = false;
 
-    QString groupId;
+    String groupId;
+
+    bool isValid() const;
 
     void write(XmlWriter& xml) const;
-    void write1(XmlWriter& xml) const;
     void read(XmlReader&);
     ClefTypeList clefType(staff_idx_t staffIdx) const;
     String familyId() const;
-    bool containsGenre(const QString& genreId) const;
+    bool containsGenre(const String& genreId) const;
 
 private:
     void init(const InstrumentTemplate&);
     void setPitchRange(const String& s, char* a, char* b) const;
-    void linkGenre(const QString&);
+    void linkGenre(const String&);
 };
 
 //---------------------------------------------------------
@@ -144,8 +145,8 @@ private:
 //---------------------------------------------------------
 
 struct InstrumentGroup {
-    QString id;
-    QString name;
+    String id;
+    String name;
     bool extended;            // belongs to extended instruments set if true
     std::list<InstrumentTemplate*> instrumentTemplates;
     void read(XmlReader&);
@@ -173,15 +174,15 @@ extern std::vector<MidiArticulation> midiArticulations;
 extern std::vector<InstrumentGroup*> instrumentGroups;
 extern std::vector<ScoreOrder> instrumentOrders;
 extern void clearInstrumentTemplates();
-extern bool loadInstrumentTemplates(const QString& instrTemplates);
+extern bool loadInstrumentTemplates(const io::path_t& instrTemplatesPath);
 extern InstrumentTemplate* searchTemplate(const String& name);
-extern InstrumentIndex searchTemplateIndexForTrackName(const QString& trackName);
+extern InstrumentIndex searchTemplateIndexForTrackName(const String& trackName);
 extern InstrumentIndex searchTemplateIndexForId(const String& id);
-extern InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId);
-extern InstrumentTemplate* searchTemplateForInstrNameList(const std::list<QString>& nameList);
-extern InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const bool useDrumKit = false);
-extern InstrumentTemplate* guessTemplateByNameData(const std::list<QString>& nameDataList);
-extern InstrumentGroup* searchInstrumentGroup(const QString& name);
+extern InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId);
+extern InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& nameList, bool useDrumset = false);
+extern InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, bool useDrumset = false);
+extern InstrumentGroup* searchInstrumentGroup(const String& name);
 extern ClefType defaultClef(int patch);
+extern String translateInstrumentName(const String& instrumentId, const String& nameType, const String& text);
 } // namespace mu::engraving
 #endif

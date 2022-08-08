@@ -24,9 +24,13 @@
 //  algorithmus from Emilios Cambouropoulos as published in:
 //  "Automatic Pitch Spelling: From Numbers to Sharps and Flats"
 
+#include "pitchspelling.h"
+
+#include "translation.h"
+#include "types/typesconv.h"
+
 #include "note.h"
 #include "key.h"
-#include "pitchspelling.h"
 #include "staff.h"
 #include "chord.h"
 #include "score.h"
@@ -66,7 +70,7 @@ int step2tpc(int step, AccidentalVal alter)
     };
 
     int i = (step * TPCS_PER_STEP) + (int(alter) - int(AccidentalVal::MIN));
-    Q_ASSERT(i >= 0 && (i < int(sizeof(spellings) / sizeof(*spellings))));
+    assert(i >= 0 && (i < int(sizeof(spellings) / sizeof(*spellings))));
     return spellings[i];
 }
 
@@ -133,13 +137,13 @@ int tpc2stepByKey(int tpc, Key key, int& alter)
 //   step2tpc
 //---------------------------------------------------------
 
-int step2tpc(const QString& stepName, AccidentalVal alter)
+int step2tpc(const String& stepName, AccidentalVal alter)
 {
     if (stepName.isEmpty()) {
         return Tpc::TPC_INVALID;
     }
     int r;
-    switch (stepName[0].toLower().toLatin1()) {
+    switch (stepName.at(0).toLower().toAscii()) {
     case 'c': r = 0;
         break;
     case 'd': r = 1;
@@ -207,7 +211,7 @@ int step2deltaPitchByKey(int step, Key key)
 
 int tpc2pitch(int tpc)
 {
-    Q_ASSERT(tpcIsValid(tpc));
+    assert(tpcIsValid(tpc));
 
     static int pitches[] = {
 //step: F   C   G   D   A   E   B
@@ -253,88 +257,88 @@ int tpc2alterByKey(int tpc, Key key)
 //    return note name
 //---------------------------------------------------------
 
-QString tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, bool explicitAccidental)
+String tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, bool explicitAccidental, bool full)
 {
-    QString s;
-    QString acc;
-    tpc2name(tpc, noteSpelling, noteCase, s, acc, explicitAccidental);
-    return s + (explicitAccidental ? " " : "") + acc;
+    String s;
+    String acc;
+    tpc2name(tpc, noteSpelling, noteCase, s, acc, explicitAccidental, full);
+    return s + (explicitAccidental ? u" " : u"") + acc;
 }
 
 //---------------------------------------------------------
 //   tpc2name
 //---------------------------------------------------------
 
-void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, QString& acc, bool explicitAccidental)
+void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, String& acc, bool explicitAccidental, bool full)
 {
     AccidentalVal accVal;
     tpc2name(tpc, noteSpelling, noteCase, s, accVal);
     switch (accVal) {
     case AccidentalVal::FLAT3:
         if (explicitAccidental) {
-            acc = QObject::tr("triple ♭");
+            acc = mtrc("engraving", TConv::userName(AccidentalVal::FLAT3, full));
         } else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
             switch (tpc) {
-            case TPC_A_BBB: acc = "sasas";
+            case TPC_A_BBB: acc = u"sasas";
                 break;
-            case TPC_E_BBB: acc = "seses";
+            case TPC_E_BBB: acc = u"seses";
                 break;
-            default: acc = "eseses";
+            default: acc = u"eseses";
             }
         } else {
-            acc = "bbb";
+            acc = u"bbb";
         }
         break;
     case AccidentalVal::FLAT2:
         if (explicitAccidental) {
-            acc = QObject::tr("double ♭");
+            acc = mtrc("engraving", TConv::userName(AccidentalVal::FLAT2, full));
         } else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
             switch (tpc) {
-            case TPC_A_BB: acc = "sas";
+            case TPC_A_BB: acc = u"sas";
                 break;
-            case TPC_E_BB: acc = "ses";
+            case TPC_E_BB: acc = u"ses";
                 break;
-            default: acc = "eses";
+            default: acc = u"eses";
             }
         } else {
-            acc = "bb";
+            acc = u"bb";
         }
         break;
     case AccidentalVal::FLAT:
         if (explicitAccidental) {
-            acc = QObject::tr("♭");
+            acc = mtrc("engraving", TConv::userName(AccidentalVal::FLAT, full));
         } else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
-            acc = (tpc == TPC_A_B || tpc == TPC_E_B) ? "s" : "es";
+            acc = (tpc == TPC_A_B || tpc == TPC_E_B) ? u"s" : u"es";
         } else {
-            acc = "b";
+            acc = u"b";
         }
         break;
-    case  AccidentalVal::NATURAL: acc = "";
+    case  AccidentalVal::NATURAL: acc = u"";
         break;
     case  AccidentalVal::SHARP:
         if (explicitAccidental) {
-            acc = QObject::tr("♯");
+            acc = mtrc("engraving", TConv::userName(AccidentalVal::SHARP, full));
         } else {
-            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "is" : "#";
+            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? u"is" : u"#";
         }
         break;
     case  AccidentalVal::SHARP2:
         if (explicitAccidental) {
-            acc = QObject::tr("double ♯");
+            acc = mtrc("engraving", TConv::userName(AccidentalVal::SHARP2, full));
         } else {
-            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "isis" : "##";
+            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? u"isis" : u"##";
         }
         break;
     case AccidentalVal::SHARP3:
         if (explicitAccidental) {
-            acc = QObject::tr("triple ♯");
+            acc = mtrc("engraving", TConv::userName(AccidentalVal::SHARP3, full));
         } else {
-            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "isisis" : "###";
+            acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? u"isisis" : u"###";
         }
         break;
     default:
         LOGD("tpc2name(%d): acc %d", tpc, static_cast<int>(accVal));
-        acc = "";
+        acc = u"";
         break;
     }
 }
@@ -343,20 +347,20 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
 //   tpc2name
 //---------------------------------------------------------
 
-void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, AccidentalVal& acc)
+void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, AccidentalVal& acc)
 {
     const char names[]  = "FCGDAEB";
     const char gnames[] = "FCGDAEH";
-    const QString snames[] = { "Fa", "Do", "Sol", "Re", "La", "Mi", "Si" };
+    const String snames[] = { u"Fa", u"Do", u"Sol", u"Re", u"La", u"Mi", u"Si" };
 
     acc = tpc2alter(tpc);
     int idx = (tpc - Tpc::TPC_MIN) % TPC_DELTA_SEMITONE;
     switch (noteSpelling) {
     case NoteSpellingType::GERMAN:
     case NoteSpellingType::GERMAN_PURE:
-        s = gnames[idx];
+        s = String(Char::fromAscii(gnames[idx]));
         if (s == "H" && acc == AccidentalVal::FLAT) {
-            s = "B";
+            s = u"B";
             if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
                 acc = AccidentalVal::NATURAL;
             }
@@ -367,12 +371,12 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
         break;
     case NoteSpellingType::FRENCH:
         s = snames[idx];
-        if (s == "Re") {
-            s = "Ré";
+        if (s == u"Re") {
+            s = u"Ré";
         }
         break;
     default:
-        s = names[idx];
+        s = String(Char::fromAscii(names[idx]));
         break;
     }
     switch (noteCase) {
@@ -391,10 +395,10 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
 //   tpc2stepName
 //---------------------------------------------------------
 
-QString tpc2stepName(int tpc)
+Char tpc2stepName(int tpc)
 {
-    const char names[] = "FCGDAEB";
-    return QString(names[(tpc - Tpc::TPC_MIN) % 7]);
+    static const String names = u"FCGDAEB";
+    return names.at((tpc - Tpc::TPC_MIN) % 7);
 }
 
 // table of alternative spellings for one octave
@@ -569,11 +573,11 @@ static const int enharmonicSpelling[15][34] = {
 
 static int penalty(int lof1, int lof2, int k)
 {
-    if (k < 0 || k >= 15) {
-        ASSERT_X(QString::asprintf("Illegal key %d >= 15", k));
+    IF_ASSERT_FAILED((k >= 0 && k < 15)) {
+        return 0;
     }
-    Q_ASSERT(lof1 >= 0 && lof1 < 34);
-    Q_ASSERT(lof2 >= 0 && lof2 < 34);
+    assert(lof1 >= 0 && lof1 < 34);
+    assert(lof2 >= 0 && lof2 < 34);
     int penalty  = enharmonicSpelling[k][lof1] * 4 + enharmonicSpelling[k][lof2] * 4;
     int distance = lof2 > lof1 ? lof2 - lof1 : lof1 - lof2;
     if (distance > 12) {
@@ -600,7 +604,7 @@ int tpc(int idx, int pitch, int opt)
         tab = tab1;
     }
     int i = (pitch % 12) * 2 + ((opt & (1 << idx)) >> idx);
-    Q_ASSERT(i >= 0 && i < 24);
+    assert(i >= 0 && i < 24);
     return tab[i];
 }
 
@@ -640,13 +644,13 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
         int pa    = 0;
         int pb    = 0;
         int l     = pitch[0] * 2 + (i & 1);
-        Q_ASSERT(l >= 0 && l <= static_cast<int>(sizeof(tab1) / sizeof(*tab1)));
+        assert(l >= 0 && l <= static_cast<int>(sizeof(tab1) / sizeof(*tab1)));
         int lof1a = tab1[l];
         int lof1b = tab2[l];
 
         for (k = 1; k < 10; ++k) {
             int l1 = pitch[k] * 2 + ((i & (1 << k)) >> k);
-            Q_ASSERT(l1 >= 0 && l1 <= static_cast<int>(sizeof(tab1) / sizeof(*tab1)));
+            assert(l1 >= 0 && l1 <= static_cast<int>(sizeof(tab1) / sizeof(*tab1)));
             int lof2a = tab1[l1];
             int lof2b = tab2[l1];
             pa += penalty(lof1a, lof2a, key[k]);
@@ -743,11 +747,11 @@ void Score::spellNotelist(std::vector<Note*>& notes)
             case 3:
                 k = end - start - 3;
                 changeAllTpcs(notes[end - 3], tab[(notes[end - 3]->pitch() % 12) * 2 + ((opt & (1 << k)) >> k)]);
-                Q_FALLTHROUGH();
+            // FALLTHROUGH
             case 2:
                 k = end - start - 2;
                 changeAllTpcs(notes[end - 2], tab[(notes[end - 2]->pitch() % 12) * 2 + ((opt & (1 << k)) >> k)]);
-                Q_FALLTHROUGH();
+            // FALLTHROUGH
             case 1:
                 k = end - start - 1;
                 changeAllTpcs(notes[end - 1], tab[(notes[end - 1]->pitch() % 12) * 2 + ((opt & (1 << k)) >> k)]);
@@ -862,10 +866,10 @@ int absStep2pitchByKey(int step, Key key)
 
 int tpc2degree(int tpc, Key key)
 {
-    const QString names("CDEFGAB");
-    const QString scales("CGDAEBFCGDAEBFC");
-    QString scale = scales[int(key) + 7];
-    QString stepName = tpc2stepName(tpc);
+    static const String names(u"CDEFGAB");
+    static const String scales(u"CGDAEBFCGDAEBFC");
+    Char scale = scales.at(int(key) + 7);
+    Char stepName = tpc2stepName(tpc);
     return (names.indexOf(stepName) - names.indexOf(scale) + 28) % 7;
 }
 
@@ -877,7 +881,7 @@ int tpc2degree(int tpc, Key key)
 
 int tpcInterval(int startTpc, int interval, int alter)
 {
-    Q_ASSERT(interval > 0);
+    assert(interval > 0);
     static const int intervals[7] = {
 //          1  2  3   4  5  6  7
         0, 2, 4, -1, 1, 3, 5
@@ -908,7 +912,7 @@ int tpcInterval(int startTpc, int interval, int alter)
 
 int step2pitchInterval(int step, int alter)
 {
-    Q_ASSERT(step > 0);
+    assert(step > 0);
     static const int intervals[7] = {
 //          1  2  3  4  5  6  7
         0, 2, 4, 5, 7, 9, 11
@@ -922,18 +926,18 @@ int step2pitchInterval(int step, int alter)
 ///   might be temporary, just used to parse nashville notation now
 ///
 //----------------------------------------------
-int function2Tpc(const QString& s, Key key)
+int function2Tpc(const String& s, Key key)
 {
     //TODO - PHV: allow for alternate spellings
     int alter = 0;
     int step;
-    if (!s.isEmpty() && s[0].isDigit()) {
-        step = s[0].digitValue();
-    } else if (s.size() > 1 && s[1].isDigit()) {
-        step = s[1].digitValue();
-        if (s[0] == 'b') {
+    if (!s.isEmpty() && s.at(0).isDigit()) {
+        step = s.at(0).digitValue();
+    } else if (s.size() > 1 && s.at(1).isDigit()) {
+        step = s.at(1).digitValue();
+        if (s.at(0) == u'b') {
             alter = -1;
-        } else if (s[0] == '#') {
+        } else if (s.at(0) == u'#') {
             alter = 1;
         }
     } else {

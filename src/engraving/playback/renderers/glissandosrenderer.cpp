@@ -54,10 +54,12 @@ void GlissandosRenderer::doRender(const EngravingItem* item, const mpe::Articula
 void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result)
 {
     const mpe::ArticulationAppliedData& articulationData = context.commonArticulations.at(ArticulationType::DiscreteGlissando);
-    int stepsCount = pitchStepsCount(articulationData.meta.overallPitchChangesRange);
-    float durationStep = context.nominalDuration / static_cast<float>(stepsCount);
+    size_t stepsCount = pitchStepsCount(articulationData.meta.overallPitchChangesRange);
 
-    for (int i = 0; i < stepsCount; ++i) {
+    float durationStep = context.nominalDuration / static_cast<float>(stepsCount);
+    mpe::pitch_level_t pitchStep = pitchLevelStep(articulationData);
+
+    for (size_t i = 0; i < stepsCount; ++i) {
         if (!isNotePlayable(note)) {
             continue;
         }
@@ -65,7 +67,7 @@ void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const Renderi
         NominalNoteCtx noteCtx(note, context);
         noteCtx.duration = durationStep;
         noteCtx.timestamp += i * durationStep;
-        noteCtx.pitchLevel += i * mpe::PITCH_LEVEL_STEP;
+        noteCtx.pitchLevel += static_cast<pitch_level_t>(i) * pitchStep;
 
         updateArticulationBoundaries(ArticulationType::DiscreteGlissando,
                                      noteCtx.timestamp,
@@ -83,4 +85,13 @@ void GlissandosRenderer::renderContinuousGlissando(const Note* note, const Rende
     }
 
     result.emplace_back(buildNoteEvent(note, context));
+}
+
+pitch_level_t GlissandosRenderer::pitchLevelStep(const mpe::ArticulationAppliedData& articulationData)
+{
+    if (articulationData.meta.overallPitchChangesRange < 0) {
+        return -mpe::PITCH_LEVEL_STEP;
+    }
+
+    return mpe::PITCH_LEVEL_STEP;
 }

@@ -25,8 +25,7 @@
 #include <memory>
 #include "notationtypes.h"
 
-#include "infrastructure/draw/painter.h"
-#include "infrastructure/draw/paintdevice.h"
+#include "draw/painter.h"
 
 namespace mu::notation {
 class INotationPainting

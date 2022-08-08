@@ -28,10 +28,10 @@
 #include "io/file.h"
 #include "io/buffer.h"
 
-#include "config.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
-#include "engraving/infrastructure/io/localfileinfoprovider.h"
+#include "engraving/infrastructure/localfileinfoprovider.h"
 
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
@@ -57,14 +57,14 @@ MasterScore* MTest::readScore(const QString& name)
     std::string suffix = io::suffix(path);
 
     ScoreLoad sl;
-    Score::FileError rv;
+    Err rv;
     if (suffix == "mscz" || suffix == "mscx") {
         rv = compat::loadMsczOrMscx(score, path.toQString(), false);
     } else {
-        rv = Score::FileError::FILE_UNKNOWN_TYPE;
+        rv = Err::FileUnknownType;
     }
 
-    if (rv != Score::FileError::FILE_NO_ERROR) {
+    if (rv != Err::NoError) {
         LOGE() << "cannot load file at " << path;
         delete score;
         score = nullptr;

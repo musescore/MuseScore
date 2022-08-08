@@ -53,6 +53,7 @@ private:
     std::unique_ptr<std::thread> m_thread = nullptr;
     std::atomic<bool> m_running = false;
 };
+using AudioThreadPtr = std::shared_ptr<AudioThread>;
 }
 
 #endif // MU_AUDIO_AUDIOTHREAD_H

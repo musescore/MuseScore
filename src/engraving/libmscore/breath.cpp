@@ -83,11 +83,11 @@ void Breath::layout()
     if (!palette) {
         int voiceOffset = placeBelow() * (staff()->lines(tick()) - 1) * spatium();
         if (isCaesura()) {
-            setPos(rxpos(), spatium() + voiceOffset);
+            setPos(xpos(), spatium() + voiceOffset);
         } else if ((score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler") && (symId() == SymId::breathMarkComma)) {
-            setPos(rxpos(), 0.5 * spatium() + voiceOffset);
+            setPos(xpos(), 0.5 * spatium() + voiceOffset);
         } else {
-            setPos(rxpos(), -0.5 * spatium() + voiceOffset);
+            setPos(xpos(), -0.5 * spatium() + voiceOffset);
         }
     }
     setbbox(symBbox(_symId));
@@ -144,7 +144,7 @@ void Breath::read(XmlReader& e)
 //   mag
 //---------------------------------------------------------
 
-qreal Breath::mag() const
+double Breath::mag() const
 {
     return staff() ? staff()->staffMag(tick()) : 1.0;
 }
@@ -170,7 +170,7 @@ mu::PointF Breath::pagePos() const
         return pos();
     }
     System* system = segment()->measure()->system();
-    qreal yp = y();
+    double yp = y();
     if (system) {
         yp += system->staff(staffIdx())->y() + system->y();
     }
@@ -255,7 +255,7 @@ EngravingItem* Breath::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Breath::accessibleInfo() const
+String Breath::accessibleInfo() const
 {
     return SymNames::translatedUserNameForSymId(_symId);
 }

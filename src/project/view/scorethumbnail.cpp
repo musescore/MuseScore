@@ -24,7 +24,7 @@
 using namespace mu::project;
 
 ScoreThumbnail::ScoreThumbnail(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : uicomponents::QuickPaintedView(parent)
 {
 }
 

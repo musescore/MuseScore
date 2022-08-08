@@ -114,20 +114,20 @@ FocusableItem {
             }
 
             SpinBoxPropertyView {
-                id: startingFretNumber
+                id: fretNumber
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                titleText: qsTrc("inspector", "Starting fret number")
-                propertyItem: root.model ? root.model : null
+                titleText: qsTrc("inspector", "Fret number")
+                propertyItem: root.model ? root.model.fretNumber : null
 
                 step: 1
                 decimals: 0
                 maxValue: 12
                 minValue: 1
 
-                navigationName: "StartingFretNumber"
+                navigationName: "FretNumber"
                 navigationPanel: root.navigationPanel
                 navigationRowStart: visibleFrets.navigationRowEnd + 1
             }
@@ -139,7 +139,7 @@ FocusableItem {
             propertyItem: root.model ? root.model.placement : null
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: startingFretNumber.navigationRowEnd + 1
+            navigationRowStart: fretNumber.navigationRowEnd + 1
         }
 
         CheckBoxPropertyView {

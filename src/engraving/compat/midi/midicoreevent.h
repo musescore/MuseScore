@@ -23,6 +23,10 @@
 #ifndef MU_ENGRAVING_COMPAT_MIDICOREEVENT_H
 #define MU_ENGRAVING_COMPAT_MIDICOREEVENT_H
 
+#include <cstdint>
+
+#include "global/allocator.h"
+
 namespace mu::engraving {
 //---------------------------------------------------------
 //   Event types
@@ -143,18 +147,19 @@ enum CntrType {
 
 class MidiCoreEvent
 {
+    OBJECT_ALLOCATOR(engraving, MidiCoreEvent)
 protected:
-    uchar _type    = 0;
-    uchar _channel = 0;
-    uchar _a       = 0;
-    uchar _b       = 0;
+    uint8_t _type    = 0;
+    uint8_t _channel = 0;
+    uint8_t _a       = 0;
+    uint8_t _b       = 0;
 
 public:
     MidiCoreEvent() {}
-    MidiCoreEvent(uchar t, uchar c, uchar a, uchar b)
+    MidiCoreEvent(uint8_t t, uint8_t c, uint8_t a, uint8_t b)
         : _type(t), _channel(c), _a(a), _b(b) {}
 
-    void set(uchar t, uchar c, uchar a, uchar b)
+    void set(uint8_t t, uint8_t c, uint8_t a, uint8_t b)
     {
         _type    = t;
         _channel = c;
@@ -162,29 +167,29 @@ public:
         _b       = b;
     }
 
-    uchar type() const { return _type; }
-    void  setType(uchar t) { _type = t; }
-    uchar channel() const { return _channel; }
-    void  setChannel(uchar c) { _channel = c; }
+    uint8_t type() const { return _type; }
+    void  setType(uint8_t t) { _type = t; }
+    uint8_t channel() const { return _channel; }
+    void  setChannel(uint8_t c) { _channel = c; }
 
-    uchar dataA() const { return _a; }
-    uchar pitch() const { return _a; }
-    uchar controller() const { return _a; }
+    uint8_t dataA() const { return _a; }
+    uint8_t pitch() const { return _a; }
+    uint8_t controller() const { return _a; }
 
-    void setDataA(int v) { _a = static_cast<uchar>(v); }
-    void setPitch(int v) { _a = static_cast<uchar>(v); }
-    void setController(int v) { _a = static_cast<uchar>(v); }
+    void setDataA(int v) { _a = static_cast<uint8_t>(v); }
+    void setPitch(int v) { _a = static_cast<uint8_t>(v); }
+    void setController(int v) { _a = static_cast<uint8_t>(v); }
 
-    uchar dataB() const { return _b; }
-    uchar velo() const { return _b; }
-    uchar value() const { return _b; }
+    uint8_t dataB() const { return _b; }
+    uint8_t velo() const { return _b; }
+    uint8_t value() const { return _b; }
 
-    void setDataB(int v) { _b = static_cast<uchar>(v); }
-    void setVelo(int v) { _b = static_cast<uchar>(v); }
-    void setValue(int v) { _b = static_cast<uchar>(v); }
+    void setDataB(int v) { _b = static_cast<uint8_t>(v); }
+    void setVelo(int v) { _b = static_cast<uint8_t>(v); }
+    void setValue(int v) { _b = static_cast<uint8_t>(v); }
 
-    void setData(int a, int b) { _a = static_cast<uchar>(a); _b = static_cast<uchar>(b); }
-    void setData(int t, int a, int b) { _type = static_cast<uchar>(t); _a = static_cast<uchar>(a); _b = static_cast<uchar>(b); }
+    void setData(int a, int b) { _a = static_cast<uint8_t>(a); _b = static_cast<uint8_t>(b); }
+    void setData(int t, int a, int b) { _type = static_cast<uint8_t>(t); _a = static_cast<uint8_t>(a); _b = static_cast<uint8_t>(b); }
 
     bool isChannelEvent() const
     {

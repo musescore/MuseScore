@@ -37,8 +37,8 @@ public:
     void removeParts(const IDList& partsIds) override;
     void removeStaves(const IDList& stavesIds) override;
 
-    void appendStaff(Staff* staff, const ID& destinationPartId) override;
-    void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
+    bool appendStaff(Staff* staff, const ID& destinationPartId) override;
+    bool appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
 
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;

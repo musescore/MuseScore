@@ -78,6 +78,8 @@ class Ottava;
 
 class OttavaSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOCATOR(engraving, OttavaSegment)
+
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     Sid getPropertyStyle(Pid) const override;
 
@@ -97,6 +99,8 @@ public:
 
 class Ottava final : public TextLineBase
 {
+    OBJECT_ALLOCATOR(engraving, Ottava)
+
     OttavaType _ottavaType;
     bool _numbersOnly;
 
@@ -131,9 +135,8 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
     static const char* ottavaTypeName(OttavaType type);
 };
 } // namespace mu::engraving

@@ -27,7 +27,7 @@
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 #include "notation/inotation.h"
 
 namespace mu::engraving {

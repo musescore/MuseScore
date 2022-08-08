@@ -24,7 +24,7 @@
 
 #include <cmath>
 
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
 
@@ -89,6 +89,14 @@ void TextLineBaseSegment::setSelected(bool f)
 //   draw
 //---------------------------------------------------------
 
+static std::vector<double> distributedDashPattern(double dash, double gap, double lineLength)
+{
+    int numPairs = std::max(1.0, lineLength / (dash + gap));
+    double newGap = (lineLength - dash * (numPairs + 1)) / numPairs;
+
+    return { dash, newGap };
+}
+
 void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
@@ -116,96 +124,100 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     // color for line (text color comes from the text properties)
     Color color = curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
-    qreal textlineLineWidth = tl->lineWidth();
-    if (staff()) {
-        textlineLineWidth *= mag();
-    }
-    Pen pen(color, textlineLineWidth, tl->lineStyle());
-    Pen solidPen(color, textlineLineWidth, PenStyle::SolidLine);
+    double lineWidth = tl->lineWidth() * mag();
 
-    //Replace generic Qt dash patterns with improved equivalents to show true dots
-    std::vector<double> dotted        = { 0.01, 1.99 };   // 0.01 for cap dots. tighter than default Qt Dotline (would be { 0.01, 2.99 }).
-    std::vector<double> dashed        = { 3.0, 3.0 };     // Compensating for caps. Qt default PenStyle::DashLine is { 4.0, 2.0 }
-    std::vector<double> dashDotted    = { 3.0, 3.0, 0.01, 2.99 };
-    std::vector<double> dashDotDotted = { 3.0, 3.0, 0.01, 2.99, 0.01, 2.99 };
-    std::vector<double> customDashes  = { tl->dashLineLen(), tl->dashGapLen() };
+    const Pen solidPen(color, lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
+    Pen pen(solidPen);
+
+    double dash = 0;
+    double gap = 0;
 
     switch (tl->lineStyle()) {
-    case PenStyle::DashLine:
-        pen.setDashPattern(dashed);
+    case LineType::SOLID:
         break;
-    case PenStyle::DotLine:
-        pen.setDashPattern(dotted);
-        pen.setCapStyle(PenCapStyle::RoundCap);         // round dots
+    case LineType::DASHED:
+        dash = tl->dashLineLen(), gap = tl->dashGapLen();
         break;
-    case PenStyle::DashDotLine:
-        pen.setDashPattern(dashDotted);
-        break;
-    case PenStyle::DashDotDotLine:
-        pen.setDashPattern(dashDotDotted);
-        break;
-    case PenStyle::CustomDashLine:
-        pen.setDashPattern(customDashes);
-        break;
-    default:
+    case LineType::DOTTED:
+        dash = 0.01, gap = 1.99;
+        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
         break;
     }
 
-    //Draw lines
-    if (twoLines) {     // hairpins
+    const bool isNonSolid = tl->lineStyle() != LineType::SOLID;
+
+    // Draw lines
+    if (twoLines) { // hairpins
+        if (isNonSolid) {
+            pen.setDashPattern({ dash, gap });
+        }
+
         painter->setPen(pen);
         painter->drawLines(&points[0], 1);
         painter->drawLines(&points[2], 1);
-    } else {
-        int start = 0;
-        int end = npoints;
-        //draw centered hooks as solid
-        painter->setPen(solidPen);
-        if (tl->beginHookType() == HookType::HOOK_90T && (isSingleType() || isBeginType())) {
-            painter->drawLines(&points[0], 1);
-            start++;
-        }
-        if (tl->endHookType() == HookType::HOOK_90T && (isSingleType() || isEndType())) {
-            painter->drawLines(&points[npoints - 1], 1);
-            end--;
-        }
-        //draw rest of line as regular
-        //calculate new gap
-        if (tl->lineStyle() == PenStyle::CustomDashLine) {
-            qreal adjustedLineLength = lineLength / textlineLineWidth;
-            qreal dash = tl->dashLineLen();
-            qreal gap = tl->dashGapLen();
-            int numPairs;
-            qreal newGap = 0;
-            std::vector<double> nDashes { dash, newGap };
-            if (tl->beginHookType() == HookType::HOOK_45 || tl->beginHookType() == HookType::HOOK_90) {
-                qreal absD
-                    = sqrt(PointF::dotProduct(points[start + 1] - points[start], points[start + 1] - points[start])) / textlineLineWidth;
-                numPairs = std::max(qreal(1), absD / (dash + gap));
-                nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
-                pen.setDashPattern(nDashes);
+        return;
+    }
+
+    int start = 0, end = npoints;
+
+    // Draw begin hook, if it needs to be drawn separately
+    if (isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
+        bool isTHook = tl->beginHookType() == HookType::HOOK_90T;
+
+        if (isNonSolid || isTHook) {
+            const PointF& p1 = points[start++];
+            const PointF& p2 = points[start++];
+
+            if (isTHook) {
+                painter->setPen(solidPen);
+            } else {
+                double hookLength = sqrt(PointF::dotProduct(p2 - p1, p2 - p1));
+                pen.setDashPattern(distributedDashPattern(dash, gap, hookLength / lineWidth));
                 painter->setPen(pen);
-                painter->drawLine(points[start + 1], points[start]);
-                start++;
             }
-            if (tl->endHookType() == HookType::HOOK_45 || tl->endHookType() == HookType::HOOK_90) {
-                qreal absD = sqrt(PointF::dotProduct(points[end] - points[end - 1], points[end] - points[end - 1])) / textlineLineWidth;
-                numPairs = std::max(qreal(1), absD / (dash + gap));
-                nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
-                pen.setDashPattern(nDashes);
-                painter->setPen(pen);
-                painter->drawLines(&points[end - 1], 1);
-                end--;
-            }
-            numPairs = std::max(qreal(1), adjustedLineLength / (dash + gap));
-            nDashes[1] = (adjustedLineLength - dash * (numPairs + 1)) / numPairs;
-            pen.setDashPattern(nDashes);
-        }
-        painter->setPen(pen);
-        for (int i = start; i < end; ++i) {
-            painter->drawLines(&points[i], 1);
+
+            painter->drawLine(p1, p2);
         }
     }
+
+    // Draw end hook, if it needs to be drawn separately
+    if (isSingleEndType() && tl->endHookType() != HookType::NONE) {
+        bool isTHook = tl->endHookType() == HookType::HOOK_90T;
+
+        if (isNonSolid || isTHook) {
+            const PointF& p1 = points[--end];
+            const PointF& p2 = points[--end];
+
+            if (isTHook) {
+                painter->setPen(solidPen);
+            } else {
+                double hookLength = sqrt(PointF::dotProduct(p2 - p1, p2 - p1));
+                pen.setDashPattern(distributedDashPattern(dash, gap, hookLength / lineWidth));
+                painter->setPen(pen);
+            }
+
+            painter->drawLine(p1, p2);
+        }
+    }
+
+    // Draw the rest
+    if (isNonSolid) {
+        pen.setDashPattern(distributedDashPattern(dash, gap, lineLength / lineWidth));
+    }
+
+    painter->setPen(pen);
+    painter->drawPolyline(&points[start], end - start);
+}
+
+static RectF boundingBoxOfLine(const PointF& p1, const PointF& p2, double lw2, bool isDottedLine)
+{
+    if (isDottedLine) {
+        return RectF(p1, p2).normalized().adjusted(-lw2, -lw2, lw2, lw2);
+    }
+
+    PointF a = lw2 * (p2 - p1).normalized();
+    PointF b(-a.y(), a.x());
+    return RectF(p1 - b, p1 + b).normalized().united(RectF(p2 - b, p2 + b).normalized());
 }
 
 //---------------------------------------------------------
@@ -221,17 +233,14 @@ Shape TextLineBaseSegment::shape() const
     if (!_endText->empty()) {
         shape.add(_endText->bbox().translated(_endText->pos()));
     }
-    qreal lw  = textLineBase()->lineWidth();
-    qreal lw2 = lw * .5;
+    double lw2 = 0.5 * textLineBase()->lineWidth();
+    bool isDottedLine = textLineBase()->lineStyle() == LineType::DOTTED;
     if (twoLines) {     // hairpins
-        shape.add(RectF(points[0].x(), points[0].y() - lw2,
-                        points[1].x() - points[0].x(), points[1].y() - points[0].y() + lw));
-        shape.add(RectF(points[2].x(), points[2].y() - lw2,
-                        points[3].x() - points[2].x(), points[3].y() - points[2].y() + lw));
+        shape.add(boundingBoxOfLine(points[0], points[1], lw2, isDottedLine));
+        shape.add(boundingBoxOfLine(points[2], points[3], lw2, isDottedLine));
     } else if (textLineBase()->lineVisible()) {
-        for (int i = 0; i < npoints; ++i) {
-            shape.add(RectF(points[i].x() - lw2, points[i].y() - lw2,
-                            points[i + 1].x() - points[i].x() + lw, points[i + 1].y() - points[i].y() + lw));
+        for (int i = 0; i < npoints - 1; ++i) {
+            shape.add(boundingBoxOfLine(points[i], points[i + 1], lw2, isDottedLine));
         }
     }
     return shape;
@@ -258,24 +267,63 @@ bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 //   layout
 //---------------------------------------------------------
 
+// Extends lines to fill the corner between them.
+// Assumes that l1p2 == l2p1 is the intersection between the lines.
+// If checkAngle is false, assumes that the lines are perpendicular,
+// and some calculations are saved.
+static inline void extendLines(const PointF& l1p1, PointF& l1p2, PointF& l2p1, const PointF& l2p2, double lineWidth, bool checkAngle)
+{
+    PointF l1UnitVector = (l1p2 - l1p1).normalized();
+    PointF l2UnitVector = (l2p1 - l2p2).normalized();
+
+    double addedLength = lineWidth * 0.5;
+
+    if (checkAngle) {
+        double angle = M_PI - acos(PointF::dotProduct(l1UnitVector, l2UnitVector));
+
+        if (angle <= M_PI_2) {
+            addedLength *= tan(0.5 * angle);
+        }
+    }
+
+    l1p2 += l1UnitVector * addedLength;
+    l2p1 += l2UnitVector * addedLength;
+}
+
 void TextLineBaseSegment::layout()
 {
     npoints      = 0;
     TextLineBase* tl = textLineBase();
-    qreal _spatium = tl->spatium();
+    double _spatium = tl->spatium();
 
     if (spanner()->placeBelow()) {
-        rypos() = staff() ? staff()->height() : 0.0;
+        setPosY(staff() ? staff()->height() : 0.0);
     }
 
     // adjust Y pos to staffType offset
-    if (staffType()) {
-        rypos() += staffType()->yoffset().val() * spatium();
+    if (const StaffType* st = staffType()) {
+        movePosY(st->yoffset().val() * spatium());
     }
 
     if (!tl->diagonal()) {
         _offset2.setY(0);
     }
+
+    auto alignText = [tl](Text* text) {
+        switch (text->align().vertical) {
+        case AlignV::TOP:
+            text->movePosY(-tl->lineWidth() / 2);
+            break;
+        case AlignV::VCENTER:
+            break;
+        case AlignV::BOTTOM:
+            text->movePosY(tl->lineWidth() / 2);
+            break;
+        case AlignV::BASELINE:
+            text->movePosY(tl->lineWidth() / 2);
+            break;
+        }
+    };
 
     switch (spannerSegmentType()) {
     case SpannerSegmentType::SINGLE:
@@ -285,10 +333,7 @@ void TextLineBaseSegment::layout()
         _text->setSize(tl->beginFontSize());
         _text->setOffset(tl->beginTextOffset() * mag());
         _text->setAlign(tl->beginTextAlign());
-        _text->setBold(tl->beginFontStyle() & FontStyle::Bold);
-        _text->setItalic(tl->beginFontStyle() & FontStyle::Italic);
-        _text->setUnderline(tl->beginFontStyle() & FontStyle::Underline);
-        _text->setStrike(tl->beginFontStyle() & FontStyle::Strike);
+        _text->setFontStyle(tl->beginFontStyle());
         break;
     case SpannerSegmentType::MIDDLE:
     case SpannerSegmentType::END:
@@ -297,15 +342,16 @@ void TextLineBaseSegment::layout()
         _text->setSize(tl->continueFontSize());
         _text->setOffset(tl->continueTextOffset() * mag());
         _text->setAlign(tl->continueTextAlign());
-        _text->setBold(tl->continueFontStyle() & FontStyle::Bold);
-        _text->setItalic(tl->continueFontStyle() & FontStyle::Italic);
-        _text->setUnderline(tl->continueFontStyle() & FontStyle::Underline);
-        _text->setStrike(tl->continueFontStyle() & FontStyle::Strike);
+        _text->setFontStyle(tl->continueFontStyle());
         break;
     }
     _text->setPlacement(PlacementV::ABOVE);
     _text->setTrack(track());
     _text->layout();
+    if ((isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
+        || (!isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
+        alignText(_text);
+    }
 
     if ((isSingleType() || isEndType())) {
         _endText->setXmlText(tl->endText());
@@ -313,63 +359,64 @@ void TextLineBaseSegment::layout()
         _endText->setSize(tl->endFontSize());
         _endText->setOffset(tl->endTextOffset());
         _endText->setAlign(tl->endTextAlign());
-        _endText->setBold(tl->endFontStyle() & FontStyle::Bold);
-        _endText->setItalic(tl->endFontStyle() & FontStyle::Italic);
-        _endText->setUnderline(tl->endFontStyle() & FontStyle::Underline);
-        _endText->setStrike(tl->endFontStyle() & FontStyle::Strike);
+        _endText->setFontStyle(tl->endFontStyle());
         _endText->setPlacement(PlacementV::ABOVE);
         _endText->setTrack(track());
         _endText->layout();
+
+        if (tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO) {
+            alignText(_endText);
+        }
     } else {
-        _endText->setXmlText("");
+        _endText->setXmlText(u"");
     }
 
     PointF pp1;
     PointF pp2(pos2());
 
-    // diagonal line with no text or hooks - just use the basic rectangle for line
-    if (_text->empty() && _endText->empty() && pp2.y() != 0
-        && textLineBase()->beginHookType() == HookType::NONE
-        && textLineBase()->endHookType() == HookType::NONE) {
-        npoints = 1;     // 2 points, but only one line must be drawn
+    // line with no text or hooks - just use the basic rectangle for line
+    if (_text->empty() && _endText->empty()
+        && (!isSingleBeginType() || tl->beginHookType() == HookType::NONE)
+        && (!isSingleEndType() || tl->endHookType() == HookType::NONE)) {
+        npoints = 2;
         points[0] = pp1;
         points[1] = pp2;
         lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
 
-        setbbox(RectF(pp1, pp2).normalized());
+        setbbox(boundingBoxOfLine(pp1, pp2, tl->lineWidth() / 2, tl->lineStyle() == LineType::DOTTED));
         return;
     }
 
     // line has text or hooks or is not diagonal - calculate reasonable bbox
 
-    qreal x1 = qMin(0.0, pp2.x());
-    qreal x2 = qMax(0.0, pp2.x());
-    qreal y0 = -textLineBase()->lineWidth();
-    qreal y1 = qMin(0.0, pp2.y()) + y0;
-    qreal y2 = qMax(0.0, pp2.y()) - y0;
+    double x1 = std::min(0.0, pp2.x());
+    double x2 = std::max(0.0, pp2.x());
+    double y0 = -tl->lineWidth();
+    double y1 = std::min(0.0, pp2.y()) + y0;
+    double y2 = std::max(0.0, pp2.y()) - y0;
 
-    qreal l = 0.0;
+    double l = 0.0;
     if (!_text->empty()) {
-        qreal textlineTextDistance = _spatium * .5;
-        if (((isSingleType() || isBeginType())
-             && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
-            || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == TextPlace::LEFT))) {
+        double textlineTextDistance = _spatium * .5;
+        if ((isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
+            || (!isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
             l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
         }
-        qreal h = _text->height();
-        if (textLineBase()->beginTextPlace() == TextPlace::ABOVE) {
-            y1 = qMin(y1, -h);
-        } else if (textLineBase()->beginTextPlace() == TextPlace::BELOW) {
-            y2 = qMax(y2, h);
+
+        double h = _text->height();
+        if (tl->beginTextPlace() == TextPlace::ABOVE) {
+            y1 = std::min(y1, -h);
+        } else if (tl->beginTextPlace() == TextPlace::BELOW) {
+            y2 = std::max(y2, h);
         } else {
-            y1 = qMin(y1, -h * .5);
-            y2 = qMax(y2, h * .5);
+            y1 = std::min(y1, -h * .5);
+            y2 = std::max(y2, h * .5);
         }
-        x2 = qMax(x2, _text->width());
+        x2 = std::max(x2, _text->width());
     }
 
-    if (textLineBase()->endHookType() != HookType::NONE) {
-        qreal h = pp2.y() + textLineBase()->endHookHeight().val() * _spatium;
+    if (tl->endHookType() != HookType::NONE) {
+        double h = pp2.y() + tl->endHookHeight().val() * _spatium;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -377,8 +424,8 @@ void TextLineBaseSegment::layout()
         }
     }
 
-    if (textLineBase()->beginHookType() != HookType::NONE) {
-        qreal h = textLineBase()->beginHookHeight().val() * _spatium;
+    if (tl->beginHookType() != HookType::NONE) {
+        double h = tl->beginHookHeight().val() * _spatium;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -391,7 +438,7 @@ void TextLineBaseSegment::layout()
     }
     // set end text position and extend bbox
     if (!_endText->empty()) {
-        _endText->setPos(bbox().right(), 0);
+        _endText->movePosX(bbox().right());
         bbox() |= _endText->bbox().translated(_endText->pos());
     }
 
@@ -402,52 +449,74 @@ void TextLineBaseSegment::layout()
     if (tl->lineVisible() || !score()->printing()) {
         pp1 = PointF(l, 0.0);
 
-        qreal beginHookWidth;
-        qreal endHookWidth;
+        double beginHookHeight = tl->beginHookHeight().val() * _spatium;
+        double endHookHeight = tl->endHookHeight().val() * _spatium;
+        double beginHookWidth = 0.0;
+        double endHookWidth = 0.0;
 
         if (tl->beginHookType() == HookType::HOOK_45) {
-            beginHookWidth = fabs(tl->beginHookHeight().val() * _spatium * .4);
+            beginHookWidth = fabs(beginHookHeight * .4);
             pp1.rx() += beginHookWidth;
-        } else {
-            beginHookWidth = 0;
         }
 
         if (tl->endHookType() == HookType::HOOK_45) {
-            endHookWidth = fabs(tl->endHookHeight().val() * _spatium * .4);
+            endHookWidth = fabs(endHookHeight * .4);
             pp2.rx() -= endHookWidth;
-        } else {
-            endHookWidth = 0;
         }
 
         // don't draw backwards lines (or hooks) if text is longer than nominal line length
-        bool backwards = !_text->empty() && pp1.x() > pp2.x() && !tl->diagonal();
-
-        if ((tl->beginHookType() != HookType::NONE) && (isSingleType() || isBeginType())) {
-            qreal hh = tl->beginHookHeight().val() * _spatium;
-            if (tl->beginHookType() == HookType::HOOK_90T) {
-                points[npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() - hh);
-            }
-            points[npoints] = PointF(pp1.x() - beginHookWidth, pp1.y() + hh);
-            ++npoints;
-            points[npoints] = pp1;
+        if (!_text->empty() && pp1.x() > pp2.x() && !tl->diagonal()) {
+            return;
         }
-        if (!backwards) {
-            points[npoints] = pp1;
-            ++npoints;
-            points[npoints] = pp2;
-            lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
-            // painter->drawLine(LineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
 
-            if ((tl->endHookType() != HookType::NONE) && (isSingleType() || isEndType())) {
-                ++npoints;
-                qreal hh = tl->endHookHeight().val() * _spatium;
-                // painter->drawLine(LineF(pp2.x(), pp2.y(), pp2.x() + endHookWidth, pp2.y() + hh));
-                points[npoints] = PointF(pp2.x() + endHookWidth, pp2.y() + hh);
-                if (tl->endHookType() == HookType::HOOK_90T) {
-                    points[++npoints] = PointF(pp2.x() + endHookWidth, pp2.y() - hh);
+        if (isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
+            // We use the term "endpoint" for the point that does not touch the main line.
+            const PointF& beginHookEndpoint = points[npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() + beginHookHeight);
+
+            if (tl->beginHookType() == HookType::HOOK_90T) {
+                // A T-hook needs to be drawn separately, so we add an extra point
+                points[npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() - beginHookHeight);
+            } else if (tl->lineStyle() != LineType::SOLID) {
+                // For non-solid lines, we also draw the hook separately,
+                // so that we can distribute the dashes/dots for each linepiece individually
+                PointF& beginHookStartpoint = points[npoints++] = pp1;
+
+                if (tl->lineStyle() == LineType::DASHED) {
+                    // For dashes lines, we extend the lines somewhat,
+                    // so that the corner between them gets filled
+                    bool checkAngle = tl->beginHookType() == HookType::HOOK_45 || tl->diagonal();
+                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->lineWidth() * mag(), checkAngle);
                 }
             }
         }
+
+        points[npoints++] = pp1;
+        PointF& pp22 = points[npoints++] = pp2; // Keep a reference so that we can modify later
+
+        if (isSingleEndType() && tl->endHookType() != HookType::NONE) {
+            const PointF endHookEndpoint = PointF(pp2.x() + endHookWidth, pp2.y() + endHookHeight);
+
+            if (tl->endHookType() == HookType::HOOK_90T) {
+                // A T-hook needs to be drawn separately, so we add an extra point
+                points[npoints++] = PointF(pp2.x() + endHookWidth, pp2.y() - endHookHeight);
+            } else if (tl->lineStyle() != LineType::SOLID) {
+                // For non-solid lines, we also draw the hook separately,
+                // so that we can distribute the dashes/dots for each linepiece individually
+                PointF& endHookStartpoint = points[npoints++] = pp2;
+
+                if (tl->lineStyle() == LineType::DASHED) {
+                    bool checkAngle = tl->endHookType() == HookType::HOOK_45 || tl->diagonal();
+
+                    // For dashes lines, we extend the lines somewhat,
+                    // so that the corner between them gets filled
+                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->lineWidth() * mag(), checkAngle);
+                }
+            }
+
+            points[npoints++] = endHookEndpoint;
+        }
+
+        lineLength = sqrt(PointF::dotProduct(pp22 - pp1, pp22 - pp1));
     }
 }
 
@@ -455,7 +524,7 @@ void TextLineBaseSegment::layout()
 //   spatiumChanged
 //---------------------------------------------------------
 
-void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
+void TextLineBaseSegment::spatiumChanged(double ov, double nv)
 {
     LineSegment::spatiumChanged(ov, nv);
 
@@ -555,7 +624,7 @@ void TextLineBase::read(XmlReader& e)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void TextLineBase::spatiumChanged(qreal /*ov*/, qreal /*nv*/)
+void TextLineBase::spatiumChanged(double /*ov*/, double /*nv*/)
 {
 }
 
@@ -588,20 +657,6 @@ bool TextLineBase::readProperties(XmlReader& e)
         }
     }
     return SLine::readProperties(e);
-}
-
-//---------------------------------------------------------
-//   TextLineBase::propertyId
-//---------------------------------------------------------
-
-Pid TextLineBase::propertyId(const QStringRef& name) const
-{
-    for (Pid pid : TextLineBasePropertyId) {
-        if (propertyName(pid) == name) {
-            return pid;
-        }
-    }
-    return SLine::propertyId(name);
 }
 
 //---------------------------------------------------------
@@ -706,7 +761,7 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         _endHookType = v.value<HookType>();
         break;
     case Pid::BEGIN_TEXT:
-        setBeginText(v.toString());
+        setBeginText(v.value<String>());
         break;
     case Pid::BEGIN_TEXT_OFFSET:
         setBeginTextOffset(v.value<PointF>());
@@ -718,20 +773,20 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         setEndTextOffset(v.value<PointF>());
         break;
     case Pid::CONTINUE_TEXT:
-        setContinueText(v.toString());
+        setContinueText(v.value<String>());
         break;
     case Pid::END_TEXT:
-        setEndText(v.toString());
+        setEndText(v.value<String>());
         break;
     case Pid::LINE_VISIBLE:
         setLineVisible(v.toBool());
         break;
     case Pid::BEGIN_FONT_FACE:
-        setBeginFontFamily(v.toString());
+        setBeginFontFamily(v.value<String>());
         break;
     case Pid::BEGIN_FONT_SIZE:
         if (v.toReal() <= 0) {
-            ASSERT_X(QString::asprintf("font size is %f", v.toReal()));
+            ASSERT_X(String(u"font size is %1").arg(v.toReal()));
         }
         setBeginFontSize(v.toReal());
         break;
@@ -739,7 +794,7 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         setBeginFontStyle(FontStyle(v.toInt()));
         break;
     case Pid::CONTINUE_FONT_FACE:
-        setContinueFontFamily(v.toString());
+        setContinueFontFamily(v.value<String>());
         break;
     case Pid::CONTINUE_FONT_SIZE:
         setContinueFontSize(v.toReal());
@@ -748,7 +803,7 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         setContinueFontStyle(FontStyle(v.toInt()));
         break;
     case Pid::END_FONT_FACE:
-        setEndFontFamily(v.toString());
+        setEndFontFamily(v.value<String>());
         break;
     case Pid::END_FONT_SIZE:
         setEndFontSize(v.toReal());

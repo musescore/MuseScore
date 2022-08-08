@@ -160,17 +160,17 @@ QVariantMap EngravingElementsModel::makeData(const mu::engraving::EngravingObjec
 
     auto formatRect = [](const mu::RectF& r) {
         QString str = "[";
-        str += DataFormatter::formatReal(r.x(), 1) + ", ";
-        str += DataFormatter::formatReal(r.y(), 1) + ", ";
-        str += DataFormatter::formatReal(r.width(), 1) + ", ";
-        str += DataFormatter::formatReal(r.height(), 1) + "]";
+        str += DataFormatter::formatReal(r.x(), 1) + u", ";
+        str += DataFormatter::formatReal(r.y(), 1) + u", ";
+        str += DataFormatter::formatReal(r.width(), 1) + u", ";
+        str += DataFormatter::formatReal(r.height(), 1) + u"]";
         return str;
     };
 
     auto formatPoint= [](const mu::PointF& p) {
         QString str = "[";
-        str += DataFormatter::formatReal(p.x(), 1) + ", ";
-        str += DataFormatter::formatReal(p.y(), 1) + "]";
+        str += DataFormatter::formatReal(p.x(), 1) + u", ";
+        str += DataFormatter::formatReal(p.y(), 1) + u"]";
         return str;
     };
 
@@ -178,9 +178,9 @@ QVariantMap EngravingElementsModel::makeData(const mu::engraving::EngravingObjec
     if (el->isScore()) {
         const mu::engraving::Score* score = mu::engraving::toScore(el);
         if (score->isMaster()) {
-            name = "MasterScore: " + score->name();
+            name = "MasterScore: " + score->name().toQString();
         } else {
-            name = "Score: " + score->name();
+            name = "Score: " + score->name().toQString();
         }
     } else {
         name = el->typeName();

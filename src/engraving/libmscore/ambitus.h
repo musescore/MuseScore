@@ -36,6 +36,8 @@ class Factory;
 
 class Ambitus final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Ambitus)
+
     NoteHeadGroup _noteHeadGroup;
     NoteHeadType _noteHeadType;
     DirectionH _dir;
@@ -66,7 +68,7 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
 
-    qreal mag() const override;
+    double mag() const override;
 
     void initFrom(Ambitus* a);
 
@@ -96,7 +98,7 @@ public:
     // some utility functions
     Segment* segment() const { return (Segment*)explicitParent(); }
     SymId noteHead() const;
-    qreal headWidth() const;
+    double headWidth() const;
 
     // re-implemented virtual functions
     void      draw(mu::draw::Painter* painter) const override;
@@ -107,7 +109,7 @@ public:
     void      setTrack(track_idx_t val) override;
     void      write(XmlWriter&) const override;
     bool      readProperties(XmlReader&) override;
-    QString   accessibleInfo() const override;
+    String    accessibleInfo() const override;
 
     void remove(EngravingItem*) override;
 

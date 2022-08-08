@@ -22,6 +22,7 @@
 #include "dynamic.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "dynamichairpingroup.h"
@@ -257,7 +258,7 @@ void Dynamic::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "subtype") {
-            setDynamicType(e.readText().toQString());
+            setDynamicType(e.readText());
         } else if (tag == "velocity") {
             _velocity = e.readInt();
         } else if (tag == "dynType") {
@@ -278,6 +279,13 @@ void Dynamic::read(XmlReader& e)
 
 void Dynamic::layout()
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     TextBase::layout();
 
     Segment* s = segment();
@@ -291,29 +299,28 @@ void Dynamic::layout()
             if (e->isChord() && (align() == AlignH::HCENTER)) {
                 SymId symId = TConv::symId(dynamicType());
 
-                // this value is different than chord()->mag() or mag()
-                // as it reflects the actual scaling of the text
-                // using chord()->mag(), mag() or fontSize will yield
-                // undesirable results with small staves or cue notes
-                qreal dynamicMag = spatium() / SPATIUM20;
-
-                qreal noteHeadWidth = score()->noteHeadWidth() * dynamicMag;
-                rxpos() += noteHeadWidth * .5;
-
-                qreal opticalCenter = symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x() * dynamicMag;
+                // FIRST: move it at the center of the notehead width
+                // Note: the simplest way to get the correct notehead width (accounting for all
+                // the various spatium changes, staff scaling, note scaling...) is to just look
+                // at the first note of the chord and get it from there.
+                Note* note = toChord(e)->notes().at(0);
+                double noteHeadWidth = note->headWidth();// * dynamicMag;
+                movePosX(noteHeadWidth * .5);
+                // SECOND: center around the SMUFL optical center, rather than using the geometrical
+                // center of the bounding box
+                double opticalCenter = symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x();
                 if (symId != SymId::noSym && opticalCenter) {
-                    static const qreal DEFAULT_DYNAMIC_FONT_SIZE = 10.0;
-                    qreal fontScaling = size() / DEFAULT_DYNAMIC_FONT_SIZE;
-                    qreal left = symBbox(symId).bottomLeft().x() * dynamicMag; // this is negative per SMuFL spec
-
-                    opticalCenter *= fontScaling;
-                    left *= fontScaling;
-
-                    qreal offset = opticalCenter - left - bbox().width() * 0.5;
-                    rxpos() -= offset;
+                    double symWidth = symBbox(symId).width();
+                    double offset = symWidth / 2 - opticalCenter + symBbox(symId).left();
+                    // Account for scaling factors
+                    double spatiumScaling = spatium() / score()->spatium();
+                    static const double DEFAULT_DYNAMIC_FONT_SIZE = 10.0;
+                    double fontScaling = size() / DEFAULT_DYNAMIC_FONT_SIZE;
+                    offset *= spatiumScaling * fontScaling;
+                    movePosX(offset);
                 }
             } else {
-                rxpos() += e->width() * .5;
+                movePosX(e->width() * .5);
             }
             break;
         }
@@ -335,9 +342,9 @@ void Dynamic::doAutoplace()
         return;
     }
 
-    qreal minDistance = score()->styleS(Sid::dynamicsMinDistance).val() * spatium();
+    double minDistance = score()->styleS(Sid::dynamicsMinDistance).val() * spatium();
     RectF r = bbox().translated(pos() + s->pos() + s->measure()->pos());
-    qreal yOff = offset().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
+    double yOff = offset().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
     r.translate(0.0, -yOff);
 
     Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
@@ -345,14 +352,14 @@ void Dynamic::doAutoplace()
     sk.add(r);
 
     if (placeAbove()) {
-        qreal d = sk.minDistance(sl.north());
+        double d = sk.minDistance(sl.north());
         if (d > -minDistance) {
-            rypos() += -(d + minDistance);
+            movePosY(-(d + minDistance));
         }
     } else {
-        qreal d = sl.south().minDistance(sk);
+        double d = sl.south().minDistance(sk);
         if (d > -minDistance) {
-            rypos() += d + minDistance;
+            movePosY(d + minDistance);
         }
     }
 }
@@ -361,29 +368,35 @@ void Dynamic::doAutoplace()
 //   setDynamicType
 //---------------------------------------------------------
 
-void Dynamic::setDynamicType(const QString& tag)
+void Dynamic::setDynamicType(const String& tag)
 {
+    std::string utf8Tag = tag.toStdString();
     int n = sizeof(dynList) / sizeof(*dynList);
     for (int i = 0; i < n; ++i) {
-        if (TConv::toXml(DynamicType(i)).ascii() == tag || dynList[i].text == tag) {
+        if (TConv::toXml(DynamicType(i)).ascii() == utf8Tag || dynList[i].text == utf8Tag) {
             setDynamicType(DynamicType(i));
-            setXmlText(QString::fromUtf8(dynList[i].text));
+            setXmlText(String::fromUtf8(dynList[i].text));
             return;
         }
     }
-    LOGD("setDynamicType: other <%s>", qPrintable(tag));
+    LOGD("setDynamicType: other <%s>", muPrintable(tag));
     setDynamicType(DynamicType::OTHER);
     setXmlText(tag);
 }
 
-QString Dynamic::dynamicText(DynamicType t)
+String Dynamic::dynamicText(DynamicType t)
 {
-    return dynList[int(t)].text;
+    return String::fromUtf8(dynList[int(t)].text);
 }
 
-QString Dynamic::subtypeName() const
+TranslatableString Dynamic::subtypeUserName() const
 {
-    return TConv::toXml(dynamicType()).ascii();
+    return TranslatableString::untranslatable(TConv::toXml(dynamicType()).ascii());
+}
+
+String Dynamic::translatedSubtypeUserName() const
+{
+    return String::fromAscii(TConv::toXml(dynamicType()).ascii());
 }
 
 //---------------------------------------------------------
@@ -402,7 +415,7 @@ void Dynamic::startEdit(EditData& ed)
 void Dynamic::endEdit(EditData& ed)
 {
     TextBase::endEdit(ed);
-    if (xmlText() != QString::fromUtf8(dynList[int(_dynamicType)].text)) {
+    if (xmlText() != String::fromUtf8(dynList[int(_dynamicType)].text)) {
         _dynamicType = DynamicType::OTHER;
     }
 }
@@ -442,8 +455,8 @@ mu::RectF Dynamic::drag(EditData& ed)
     //
     // move anchor
     //
-    Qt::KeyboardModifiers km = ed.modifiers;
-    if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+    KeyboardModifiers km = ed.modifiers;
+    if (km != (ShiftModifier | ControlModifier)) {
         staff_idx_t si = staffIdx();
         Segment* seg = segment();
         score()->dragPosition(canvasPos(), &si, &seg);
@@ -564,50 +577,38 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
 }
 
 //---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid Dynamic::propertyId(const QStringRef& name) const
-{
-    if (name == propertyName(Pid::DYNAMIC_TYPE)) {
-        return Pid::DYNAMIC_TYPE;
-    }
-    return TextBase::propertyId(name);
-}
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Dynamic::accessibleInfo() const
+String Dynamic::accessibleInfo() const
 {
-    QString s;
+    String s;
 
     if (dynamicType() == DynamicType::OTHER) {
         s = plainText().simplified();
-        if (s.length() > 20) {
+        if (s.size() > 20) {
             s.truncate(20);
-            s += "…";
+            s += u"…";
         }
     } else {
-        s = TConv::toUserName(dynamicType());
+        s = TConv::translatedUserName(dynamicType());
     }
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), s);
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
 
 //---------------------------------------------------------
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString Dynamic::screenReaderInfo() const
+String Dynamic::screenReaderInfo() const
 {
-    QString s;
+    String s;
 
     if (dynamicType() == DynamicType::OTHER) {
         s = plainText().simplified();
     } else {
-        s = TConv::toUserName(dynamicType());
+        s = TConv::translatedUserName(dynamicType());
     }
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), s);
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
 }

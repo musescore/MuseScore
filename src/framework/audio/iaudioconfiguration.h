@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "io/path.h"
-#include "ret.h"
+#include "types/ret.h"
 #include "async/channel.h"
 #include "async/notification.h"
 
@@ -43,8 +43,19 @@ public:
     virtual std::string currentAudioApi() const = 0;
     virtual void setCurrentAudioApi(const std::string& name) = 0;
 
+    virtual std::string audioOutputDeviceId() const = 0;
+    virtual void setAudioOutputDeviceId(const std::string& deviceId) = 0;
+    virtual async::Notification audioOutputDeviceIdChanged() const = 0;
+
     virtual audioch_t audioChannelsCount() const = 0;
+
     virtual unsigned int driverBufferSize() const = 0; // samples
+    virtual void setDriverBufferSize(unsigned int size) = 0;
+    virtual async::Notification driverBufferSizeChanged() const = 0;
+
+    virtual unsigned int sampleRate() const = 0;
+    virtual void setSampleRate(unsigned int sampleRate) = 0;
+    virtual async::Notification sampleRateChanged() const = 0;
 
     // synthesizers
     virtual AudioInputParams defaultAudioInputParams() const = 0;

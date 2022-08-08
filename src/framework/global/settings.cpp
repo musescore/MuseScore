@@ -24,6 +24,7 @@
 #include "config.h"
 #include "log.h"
 
+#include <QDateTime>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QDir>
@@ -88,7 +89,7 @@ void Settings::load()
     m_items = readItems();
 }
 
-void Settings::reset(bool keepDefaultSettings)
+void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges)
 {
     m_settings->clear();
 
@@ -100,12 +101,40 @@ void Settings::reset(bool keepDefaultSettings)
         QDir().mkpath(dataPath());
     }
 
+    if (!notifyAboutChanges) {
+        return;
+    }
+
     for (auto it = m_items.begin(); it != m_items.end(); ++it) {
         it->second.value = it->second.defaultValue;
 
         Channel<Val>& channel = findChannel(it->first);
         channel.send(it->second.value);
     }
+}
+
+static Val compat_QVariantToVal(const QVariant& var)
+{
+    if (!var.isValid()) {
+        return Val();
+    }
+
+    switch (var.type()) {
+    case QVariant::ByteArray: return Val(var.toByteArray().toStdString());
+    case QVariant::DateTime: return Val(var.toDateTime().toString(Qt::ISODate));
+    case QVariant::StringList: {
+        QStringList sl = var.toStringList();
+        ValList vl;
+        for (const QString& s : sl) {
+            vl.push_back(Val(s));
+        }
+        return Val(vl);
+    }
+    default:
+        break;
+    }
+
+    return Val::fromQVariant(var);
 }
 
 Settings::Items Settings::readItems() const
@@ -117,7 +146,7 @@ Settings::Items Settings::readItems() const
     for (const QString& key : m_settings->allKeys()) {
         Item item;
         item.key = Key(std::string(), key.toStdString());
-        item.value = Val::fromQVariant(m_settings->value(key));
+        item.value = compat_QVariantToVal(m_settings->value(key));
 
         result[item.key] = item;
     }

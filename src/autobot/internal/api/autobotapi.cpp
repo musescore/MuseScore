@@ -28,6 +28,7 @@
 #include <QDateTime>
 
 #include "async/async.h"
+#include "io/fileinfo.h"
 
 #include "log.h"
 
@@ -109,14 +110,24 @@ void AutobotApi::fatal(const QString& msg)
 
 bool AutobotApi::openProject(const QString& name)
 {
-    io::path_t dir = autobotConfiguration()->testingFilesDirPath();
-    io::path_t filePath = dir + "/" + name;
+    TRACEFUNC;
+    io::paths_t dirs = autobotConfiguration()->testingFilesDirPaths();
+
+    io::path_t filePath;
+    for (const io::path_t& dir : dirs) {
+        filePath = dir + "/" + name;
+        if (io::FileInfo::exists(filePath)) {
+            break;
+        }
+    }
+
     Ret ret = projectFilesController()->openProject(filePath);
     return ret;
 }
 
 void AutobotApi::saveProject(const QString& name)
 {
+    TRACEFUNC;
     io::path_t dir = autobotConfiguration()->savingFilesPath();
     if (!QFileInfo::exists(dir.toQString())) {
         QDir().mkpath(dir.toQString());

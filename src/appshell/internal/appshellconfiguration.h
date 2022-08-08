@@ -92,7 +92,7 @@ public:
     void applySettings() override;
     void rollbackSettings() override;
 
-    void revertToFactorySettings(bool keepDefaultSettings = false) const override;
+    void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true) const override;
 
     io::paths_t sessionProjectsPaths() const override;
     Ret setSessionProjectsPaths(const io::paths_t& paths) override;
@@ -106,7 +106,7 @@ private:
     io::path_t sessionDataPath() const;
     io::path_t sessionFilePath() const;
 
-    RetVal<QByteArray> readSessionState() const;
+    RetVal<mu::ByteArray> readSessionState() const;
     Ret writeSessionState(const QByteArray& data);
 
     io::paths_t parseSessionProjectsPaths(const QByteArray& json) const;

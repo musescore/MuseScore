@@ -35,31 +35,18 @@ namespace mu::engraving {
 
 class Marker final : public TextBase
 {
-public:
-    enum class Type : char {
-        SEGNO,
-        VARSEGNO,
-        CODA,
-        VARCODA,
-        CODETTA, // not in SMuFL, but still needed for 1.x compatibility, rendered as a double coda
-        FINE,
-        TOCODA,
-        TOCODASYM,
-        USER
-    };
-
+    OBJECT_ALLOCATOR(engraving, Marker)
 private:
-    Type _markerType;
-    QString _label;                 ///< referenced from Jump() element
+    MarkerType _markerType;
+    String _label;                 ///< referenced from Jump() element
 
 public:
     Marker(EngravingItem* parent);
     Marker(EngravingItem* parent, TextStyleType);
 
-    void setMarkerType(Type t);
-    Type markerType() const { return _markerType; }
-    QString markerTypeUserName() const;
-    Type markerType(const QString&) const;
+    void setMarkerType(MarkerType t);
+    MarkerType markerType() const { return _markerType; }
+    String markerTypeUserName() const;
 
     Marker* clone() const override { return new Marker(*this); }
 
@@ -71,10 +58,10 @@ public:
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    QString label() const { return _label; }
-    void setLabel(const QString& s) { _label = s; }
-    void undoSetLabel(const QString& s);
-    void undoSetMarkerType(Type t);
+    String label() const { return _label; }
+    void setLabel(const String& s) { _label = s; }
+    void undoSetLabel(const String& s);
+    void undoSetMarkerType(MarkerType t);
 
     void styleChanged() override;
 
@@ -84,21 +71,8 @@ public:
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 };
-
-//---------------------------------------------------------
-//   MarkerTypeItem
-//---------------------------------------------------------
-
-struct MarkerTypeItem {
-    Marker::Type type;
-    QString name;
-};
-
-extern const std::vector<MarkerTypeItem> markerTypeTable;
 } // namespace mu::engraving
-
-Q_DECLARE_METATYPE(mu::engraving::Marker::Type);
 
 #endif

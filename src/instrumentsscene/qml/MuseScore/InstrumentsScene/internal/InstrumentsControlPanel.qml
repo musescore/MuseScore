@@ -64,6 +64,7 @@ RowLayout {
         navigation.order: 1
         accessible.name: qsTrc("instruments", "Add instruments")
 
+        //: Keep in sync with the message that appears if there are no instruments in the score (InstrumentsPanel.qml)
         text: qsTrc("instruments", "Add")
 
         enabled: root.isAddingAvailable

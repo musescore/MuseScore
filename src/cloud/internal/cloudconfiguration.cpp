@@ -72,7 +72,7 @@ static QString userAgent()
 void CloudConfiguration::init()
 {
     if (settings()->value(CLIENT_ID_KEY).isNull()) {
-        settings()->setSharedValue(CLIENT_ID_KEY, Val(QVariant(generateClientId())));
+        settings()->setSharedValue(CLIENT_ID_KEY, Val(generateClientId().toStdString()));
     }
 }
 
@@ -80,7 +80,6 @@ RequestHeaders CloudConfiguration::headers() const
 {
     RequestHeaders headers;
     headers.rawHeaders["Accept"] = "application/json";
-    headers.rawHeaders["X-MS-API-KEY"] = "0b19809bab331d70fb9983a0b9866290";
     headers.rawHeaders["X-MS-CLIENT-ID"] = clientId();
     headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
 
@@ -89,7 +88,7 @@ RequestHeaders CloudConfiguration::headers() const
 
 QByteArray CloudConfiguration::clientId() const
 {
-    return settings()->value(CLIENT_ID_KEY).toQVariant().toByteArray();
+    return QByteArray::fromStdString(settings()->value(CLIENT_ID_KEY).toString());
 }
 
 QByteArray CloudConfiguration::uploadingLicense() const
@@ -99,27 +98,27 @@ QByteArray CloudConfiguration::uploadingLicense() const
 
 QUrl CloudConfiguration::authorizationUrl() const
 {
-    return QUrl("https://musescore.com/user/auth/oauth2server");
+    return QUrl("https://musescore.com/oauth/authorize");
 }
 
 QUrl CloudConfiguration::accessTokenUrl() const
 {
-    return QUrl("https://musescore.com/user/auth/oauth2server/token");
+    return apiRootUrl() + "/oauth/token";
 }
 
 QUrl CloudConfiguration::refreshApiUrl() const
 {
-    return apiRootUrl() + "/auth/refresh";
+    return apiRootUrl() + "/oauth/refresh";
 }
 
 QUrl CloudConfiguration::userInfoApiUrl() const
 {
-    return apiRootUrl() + "/user/me";
+    return apiRootUrl() + "/me";
 }
 
 QUrl CloudConfiguration::loginApiUrl() const
 {
-    return apiRootUrl() + "/auth/login";
+    return apiRootUrl() + "/oauth/logout";
 }
 
 QUrl CloudConfiguration::uploadingApiUrl() const
@@ -134,5 +133,5 @@ mu::io::path_t CloudConfiguration::tokensFilePath() const
 
 QString CloudConfiguration::apiRootUrl() const
 {
-    return "https://api.musescore.com/v2";
+    return "https://api.musescore.com/editor/v1";
 }

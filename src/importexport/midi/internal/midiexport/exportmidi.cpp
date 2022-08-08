@@ -59,17 +59,17 @@ void ExportMidi::writeHeader()
     for (auto& track1: m_midiFile.tracks()) {
         Staff* staff  = m_score->staff(staffIdx);
 
-        QByteArray partName = staff->partName().toUtf8();
-        int len = partName.length() + 1;
+        ByteArray partName = staff->partName().toUtf8();
+        size_t len = partName.size() + 1;
         unsigned char* data = new unsigned char[len];
 
-        memcpy(data, partName.data(), len);
+        memcpy(data, partName.constData(), len);
 
         MidiEvent ev;
         ev.setType(ME_META);
         ev.setMetaType(META_TRACK_NAME);
         ev.setEData(data);
-        ev.setLen(len);
+        ev.setLen(static_cast<int>(len));
 
         track1.insert(0, ev);
 

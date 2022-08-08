@@ -267,7 +267,7 @@ void OrnamentsRenderer::convert(const ArticulationType type, NominalNoteCtx&& no
     }
 }
 
-int OrnamentsRenderer::alterationsNumberByTempo(const qreal beatsPerSeconds, const int principalNoteDurationTicks)
+int OrnamentsRenderer::alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks)
 {
     float ratio = static_cast<float>(principalNoteDurationTicks) / static_cast<float>(CROTCHET_TICKS);
 

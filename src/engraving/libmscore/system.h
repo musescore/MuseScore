@@ -57,10 +57,10 @@ class SysStaff
 {
     mu::RectF _bbox;                   // Bbox of StaffLines.
     Skyline _skyline;
-    qreal _yOff   { 0.0 };          // offset of top staff line within bbox
-    qreal _yPos   { 0.0 };          // y position of bbox after System::layout2
-    qreal _height { 0.0 };          // height of bbox after System::layout2
-    qreal _continuousDist { -1.0 }; // distance for continuous mode
+    double _yOff   { 0.0 };          // offset of top staff line within bbox
+    double _yPos   { 0.0 };          // y position of bbox after System::layout2
+    double _height { 0.0 };          // height of bbox after System::layout2
+    double _continuousDist { -1.0 }; // distance for continuous mode
     bool _show  { true };           // derived from Staff or false if empty
                                     // staff is hidden
 public:
@@ -70,16 +70,16 @@ public:
     const mu::RectF& bbox() const { return _bbox; }
     mu::RectF& bbox() { return _bbox; }
     void setbbox(const mu::RectF& r) { _bbox = r; }
-    qreal y() const { return _bbox.y() + _yOff; }
-    void setYOff(qreal offset) { _yOff = offset; }
-    qreal yOffset() const { return _yOff; }
-    qreal yBottom() const;
+    double y() const { return _bbox.y() + _yOff; }
+    void setYOff(double offset) { _yOff = offset; }
+    double yOffset() const { return _yOff; }
+    double yBottom() const;
 
     void saveLayout();
     void restoreLayout();
 
-    qreal continuousDist() const { return _continuousDist; }
-    void setContinuousDist(qreal val) { _continuousDist = val; }
+    double continuousDist() const { return _continuousDist; }
+    void setContinuousDist(double val) { _continuousDist = val; }
 
     bool show() const { return _show; }
     void setShow(bool v) { _show = v; }
@@ -99,6 +99,8 @@ public:
 
 class System final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, System)
+
     SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
     SystemDivider* _systemDividerRight   { nullptr };
 
@@ -107,10 +109,10 @@ class System final : public EngravingItem
     std::vector<Bracket*> _brackets;
     std::list<SpannerSegment*> _spannerSegments;
 
-    qreal _leftMargin              { 0.0 };     ///< left margin for instrument name, brackets etc.
+    double _leftMargin              { 0.0 };     ///< left margin for instrument name, brackets etc.
     mutable bool fixedDownDistance { false };
-    qreal _distance                { 0.0 };     /// temp. variable used during layout
-    qreal _systemHeight            { 0.0 };
+    double _distance                { 0.0 };     /// temp. variable used during layout
+    double _systemHeight            { 0.0 };
 
     friend class Factory;
     System(Page* parent);
@@ -121,16 +123,15 @@ class System final : public EngravingItem
     staff_idx_t firstVisibleStaffFrom(staff_idx_t startStaffIdx) const;
 
     size_t getBracketsColumnsCount();
-    void setBracketsXPosition(const qreal xOffset);
+    void setBracketsXPosition(const double xOffset);
     Bracket* createBracket(const LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx, std::vector<Bracket*>& bl,
                            Measure* measure);
 
-    qreal systemNamesWidth();
-    qreal layoutBrackets(const LayoutContext& ctx);
-    qreal totalBracketOffset(const LayoutContext& ctx);
+    double instrumentNamesWidth();
+    double layoutBrackets(const LayoutContext& ctx);
+    double totalBracketOffset(const LayoutContext& ctx);
 
 public:
-
     ~System();
 
     void moveToPage(Page* parent);
@@ -155,9 +156,9 @@ public:
 
     Page* page() const { return (Page*)explicitParent(); }
 
-    void layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
+    void layoutSystem(const LayoutContext& ctx, double xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
 
-    void setMeasureHeight(qreal height);
+    void setMeasureHeight(double height);
     void layoutBracketsVertical();
     void layoutInstrumentNames();
 
@@ -170,8 +171,8 @@ public:
     mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
     std::vector<SysStaff*>& staves() { return _staves; }
     const std::vector<SysStaff*>& staves() const { return _staves; }
-    qreal staffYpage(staff_idx_t staffIdx) const;
-    qreal staffCanvasYpage(staff_idx_t staffIdx) const;
+    double staffYpage(staff_idx_t staffIdx) const;
+    double staffCanvasYpage(staff_idx_t staffIdx) const;
     SysStaff* staff(size_t staffIdx) const;
 
     bool pageBreak() const;
@@ -180,8 +181,8 @@ public:
     void removeStaff(int);
     void adjustStavesNumber(size_t nstaves);
 
-    int y2staff(qreal y) const;
-    staff_idx_t searchStaff(qreal y, staff_idx_t preferredStaff = mu::nidx, qreal spacingFactor = 0.5) const;
+    int y2staff(double y) const;
+    staff_idx_t searchStaff(double y, staff_idx_t preferredStaff = mu::nidx, double spacingFactor = 0.5) const;
     void setInstrumentNames(const LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
@@ -195,7 +196,7 @@ public:
 
     MeasureBase* nextMeasure(const MeasureBase*) const;
 
-    qreal leftMargin() const { return _leftMargin; }
+    double leftMargin() const { return _leftMargin; }
     Box* vbox() const;
 
     const std::vector<Bracket*>& brackets() const { return _brackets; }
@@ -209,25 +210,25 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
-    qreal minDistance(System*) const;
-    qreal topDistance(staff_idx_t staffIdx, const SkylineLine&) const;
-    qreal bottomDistance(staff_idx_t staffIdx, const SkylineLine&) const;
-    qreal minTop() const;
-    qreal minBottom() const;
-    qreal spacerDistance(bool up) const;
+    double minDistance(System*) const;
+    double topDistance(staff_idx_t staffIdx, const SkylineLine&) const;
+    double bottomDistance(staff_idx_t staffIdx, const SkylineLine&) const;
+    double minTop() const;
+    double minBottom() const;
+    double spacerDistance(bool up) const;
     Spacer* upSpacer(staff_idx_t staffIdx, Spacer* prevDownSpacer) const;
     Spacer* downSpacer(staff_idx_t staffIdx) const;
 
-    qreal firstNoteRestSegmentX(bool leading = false);
-    qreal lastNoteRestSegmentX(bool trailing = false);
+    double firstNoteRestSegmentX(bool leading = false);
+    double lastNoteRestSegmentX(bool trailing = false);
     ChordRest* lastChordRest(track_idx_t track);
     ChordRest* firstChordRest(track_idx_t track);
 
     bool hasFixedDownDistance() const { return fixedDownDistance; }
     staff_idx_t firstVisibleStaff() const;
     staff_idx_t nextVisibleStaff(staff_idx_t) const;
-    qreal distance() const { return _distance; }
-    void setDistance(qreal d) { _distance = d; }
+    double distance() const { return _distance; }
+    void setDistance(double d) { _distance = d; }
 
     staff_idx_t firstSysStaffOfPart(const Part* part) const;
     staff_idx_t firstVisibleSysStaffOfPart(const Part* part) const;
@@ -238,6 +239,10 @@ public:
     Fraction maxSysTicks() const;
 
     double squeezableSpace() const;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 };
 
 typedef std::vector<System*>::iterator iSystem;

@@ -22,10 +22,9 @@
 #ifndef MU_CONVERTER_BACKENDAPI_H
 #define MU_CONVERTER_BACKENDAPI_H
 
-#include "retval.h"
+#include "types/retval.h"
 
 #include "io/path.h"
-#include "io/device.h"
 
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
@@ -71,7 +70,7 @@ private:
     static Ret exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const notation::INotationPtr notation,
                                             BackendJsonWriter& jsonWriter, bool addSeparator = false);
     static Ret exportScorePdf(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
-    static Ret exportScorePdf(const notation::INotationPtr notation, mu::io::Device& destinationDevice);
+    static Ret exportScorePdf(const notation::INotationPtr notation, QIODevice& destinationDevice);
     static Ret exportScoreMidi(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
     static Ret exportScoreMusicXML(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
     static Ret exportScoreMetaData(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
@@ -80,8 +79,8 @@ private:
     static mu::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtrList notations,
                                                 const project::INotationWriter::Options& options);
 
-    static Ret doExportScoreParts(const notation::INotationPtr notation, mu::io::Device& destinationDevice);
-    static Ret doExportScorePartsPdfs(const notation::IMasterNotationPtr notation, mu::io::Device& destinationDevice,
+    static Ret doExportScoreParts(const notation::INotationPtr notation, QIODevice& destinationDevice);
+    static Ret doExportScorePartsPdfs(const notation::IMasterNotationPtr notation, QIODevice& destinationDevice,
                                       const std::string& scoreFileName);
     static Ret doExportScoreTranspose(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
 

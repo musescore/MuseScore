@@ -92,9 +92,9 @@ ExpandableBlank {
             model: [
                 { text: qsTrc("inspector", "Linear (default)"), value: Hairpin.VELOCITY_EASING_LINEAR },
                 { text: qsTrc("inspector", "Exponential"), value: Hairpin.VELOCITY_EASING_EXPONENTIAL },
-                { text: qsTrc("inspector", "Ease-in"), value: Hairpin.VELOCITY_EASING_IN },
-                { text: qsTrc("inspector", "Ease-out"), value: Hairpin.VELOCITY_EASING_OUT },
-                { text: qsTrc("inspector", "Ease-in and out"), value: Hairpin.VELOCITY_EASING_IN_OUT }
+                { text: qsTrc("inspector", "Ease in"), value: Hairpin.VELOCITY_EASING_IN },
+                { text: qsTrc("inspector", "Ease out"), value: Hairpin.VELOCITY_EASING_OUT },
+                { text: qsTrc("inspector", "Ease in and out"), value: Hairpin.VELOCITY_EASING_IN_OUT }
             ]
         }
     }

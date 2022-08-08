@@ -25,7 +25,7 @@
 
 #include <list>
 
-#include "infrastructure/draw/painter.h"
+#include "draw/painter.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -47,7 +47,7 @@ class MuseScoreView
 public:
     virtual ~MuseScoreView() = default;
 
-    virtual qreal selectionProximity() const { return 0.0f; }
+    virtual double selectionProximity() const { return 0.0f; }
 
     virtual void layoutChanged() {}
     virtual void dataChanged(const mu::RectF&) = 0;

@@ -45,7 +45,7 @@ Item {
     property int navigationRowOrderStart: 0
     property int navigationColumnOrderStart: 0
 
-    property string pathFieldTitle: qsTrc("uicomponents", "Current path:")
+    property string pathFieldTitle: qsTrc("ui", "Current path:")
 
     property alias pathFieldWidth: pathField.implicitWidth
     property alias spacing: row.spacing
@@ -94,8 +94,8 @@ Item {
             navigation.row: root.navigationRowOrderStart
             navigation.enabled: root.visible && root.enabled
             navigation.column: root.navigationColumnOrderStart + 1
-            accessible.name: root.pickerType === FilePicker.PickerType.File ? qsTrc("uicomponents", "Choose file")
-                                                                            : qsTrc("uicomponents", "Choose directory")
+            accessible.name: root.pickerType === FilePicker.PickerType.File ? qsTrc("ui", "Choose file")
+                                                                            : qsTrc("ui", "Choose directory")
 
             onClicked: {
                 switch (pickerType) {

@@ -360,9 +360,9 @@ void InstrumentListModel::selectInstrument(int instrumentIndex)
     }
 }
 
-QVariantList InstrumentListModel::selectedInstruments() const
+QStringList InstrumentListModel::selectedInstrumentIdList() const
 {
-    QVariantList result;
+    QSet<QString> result;
 
     for (int row : m_selection->selectedRows()) {
         const CombinedInstrument& instrument = m_instruments[row];
@@ -372,13 +372,15 @@ QVariantList InstrumentListModel::selectedInstruments() const
             continue;
         }
 
-        QVariantMap obj;
-        obj[INSTRUMENT_TEMPLATE_KEY] = QVariant::fromValue(*instrument.templates[templateIndex]);
+        const InstrumentTemplate* templ = instrument.templates[templateIndex];
+        if (templ->id.empty()) {
+            continue;
+        }
 
-        result << obj;
+        result << templ->id.toQString();
     }
 
-    return result;
+    return QStringList(result.begin(), result.end());
 }
 
 void InstrumentListModel::saveCurrentGroup()
@@ -423,14 +425,21 @@ bool InstrumentListModel::hasSelection() const
     return m_selection->hasSelection();
 }
 
-QString InstrumentListModel::selectedInstrumentDescription() const
+QVariant InstrumentListModel::selectedInstrument() const
 {
     QList<int> selectedRows = m_selection->selectedRows();
     if (selectedRows.length() != 1) {
-        return QString();
+        return QVariant();
     }
-    CombinedInstrument instrument = m_instruments.at(selectedRows.at(0));
-    return instrument.templates.at(instrument.currentTemplateIndex)->description;
+
+    const CombinedInstrument& instrument = m_instruments.at(selectedRows.at(0));
+    const InstrumentTemplate* templ = instrument.templates[instrument.currentTemplateIndex];
+
+    QVariantMap obj;
+    obj["instrumentId"] = templ->id.toQString();
+    obj["description"] = templ->description.toQString();
+
+    return obj;
 }
 
 bool InstrumentListModel::isSearching() const
@@ -470,7 +479,7 @@ void InstrumentListModel::updateStateBySearch()
 bool InstrumentListModel::isInstrumentAccepted(const InstrumentTemplate& instrument, bool compareWithCurrentGroup) const
 {
     if (isSearching()) {
-        return instrument.trackName.contains(m_searchText, Qt::CaseInsensitive);
+        return instrument.trackName.toQString().contains(m_searchText, Qt::CaseInsensitive);
     }
 
     if (instrument.groupId != m_currentGroupId && compareWithCurrentGroup) {

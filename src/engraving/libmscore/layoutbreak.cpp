@@ -158,9 +158,9 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
 
 void LayoutBreak::layout0()
 {
-    qreal _spatium = spatium();
-    qreal w = _spatium * 2.5;
-    qreal h = w;
+    double _spatium = spatium();
+    double w = _spatium * 2.5;
+    double h = w;
 
     m_iconBorderRect = RectF(0.0, 0.0, w, h);
     m_iconPath = PainterPath();
@@ -237,7 +237,7 @@ void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void LayoutBreak::spatiumChanged(qreal, qreal)
+void LayoutBreak::spatiumChanged(double, double)
 {
     lw = spatium() * 0.3;
     layout0();
@@ -340,18 +340,6 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
     default:
         return EngravingItem::propertyDefault(id);
     }
-}
-
-//---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid LayoutBreak::propertyId(const QStringRef& name) const
-{
-    if (name == propertyName(Pid::LAYOUT_BREAK)) {
-        return Pid::LAYOUT_BREAK;
-    }
-    return EngravingItem::propertyId(name);
 }
 
 void LayoutBreak::added()

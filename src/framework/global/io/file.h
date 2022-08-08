@@ -53,6 +53,7 @@ public:
     std::string errorString() const;
 
     static bool exists(const path_t& filePath);
+    static bool remove(const path_t& filePath);
     static bool setPermissionsAllowedForAll(const path_t& filePath);
 
 protected:

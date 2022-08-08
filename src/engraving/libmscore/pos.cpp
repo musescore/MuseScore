@@ -73,12 +73,12 @@ Pos::Pos(TempoMap* tl, TimeSigMap* sl, unsigned t, TType timeType)
     _valid = true;
 }
 
-Pos::Pos(TempoMap* tl, TimeSigMap* sl, const QString& s)
+Pos::Pos(TempoMap* tl, TimeSigMap* sl, const String& s)
 {
     tempo  = tl;
     sig    = sl;
     int m, b, t;
-    sscanf(s.toLatin1().data(), "%04d.%02d.%03d", &m, &b, &t);
+    sscanf(s.toAscii().constChar(), "%04d.%02d.%03d", &m, &b, &t);
     _tick  = sig->bar2tick(m, b) + t;
     _type  = TType::TICKS;
     _frame = 0;
@@ -302,7 +302,7 @@ unsigned Pos::tick() const
 unsigned Pos::frame() const
 {
     if (_type == TType::TICKS) {
-        // qreal time = _frame / MScore::sampleRate;
+        // double time = _frame / MScore::sampleRate;
         // _frame = tempo->tick2time(_tick, time, &sn) * MScore::sampleRate;
         _frame = tempo->tick2time(_tick) * MScore::sampleRate;
     }

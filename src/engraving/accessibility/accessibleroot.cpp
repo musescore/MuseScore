@@ -25,15 +25,13 @@
 #include "../libmscore/staff.h"
 #include "../libmscore/part.h"
 
-#include "context/uicontext.h"
-
 #include "translation.h"
 
 using namespace mu::engraving;
 using namespace mu::accessibility;
 
-AccessibleRoot::AccessibleRoot(RootItem* e)
-    : AccessibleItem(e)
+AccessibleRoot::AccessibleRoot(RootItem* e, Role role)
+    : AccessibleItem(e, role)
 {
 }
 
@@ -47,26 +45,33 @@ AccessibleRoot::~AccessibleRoot()
     m_element = nullptr;
 }
 
-void AccessibleRoot::setFocusedElement(AccessibleItem* e)
+void AccessibleRoot::setFocusedElement(AccessibleItemPtr e, bool voiceStaffInfoChange)
 {
-    AccessibleItem* old = m_focusedElement;
-    m_focusedElement = nullptr;
+    AccessibleItemWeakPtr old = m_focusedElement;
+    updateStaffInfo(e, old, voiceStaffInfoChange);
 
-    updateStaffInfo(e, old);
-
-    if (old) {
-        old->notifyAboutFocus(false);
+    if (auto oldItem = old.lock()) {
+        oldItem->notifyAboutFocus(false);
     }
 
     m_focusedElement = e;
-    if (m_focusedElement) {
-        m_focusedElement->notifyAboutFocus(true);
+    if (auto newItem = m_focusedElement.lock()) {
+        newItem->notifyAboutFocus(true);
     }
 }
 
-AccessibleItem* AccessibleRoot::focusedElement() const
+AccessibleItemWeakPtr AccessibleRoot::focusedElement() const
 {
     return m_focusedElement;
+}
+
+void AccessibleRoot::notifyAboutFocuedElemntNameChanged()
+{
+    m_staffInfo = "";
+
+    if (auto focusedElement = m_focusedElement.lock()) {
+        focusedElement->accessiblePropertyChanged().send(accessibility::IAccessible::Property::Name, Val());
+    }
 }
 
 mu::RectF AccessibleRoot::toScreenRect(const RectF& rect, bool* ok) const
@@ -113,16 +118,24 @@ QString AccessibleRoot::staffInfo() const
     return m_staffInfo;
 }
 
-void AccessibleRoot::updateStaffInfo(const AccessibleItem* newAccessibleItem, const AccessibleItem* oldAccessibleItem)
+void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem,
+                                     bool voiceStaffInfoChange)
 {
     m_staffInfo = "";
 
-    if (newAccessibleItem && newAccessibleItem->element()->hasStaff()) {
-        staff_idx_t newStaffIdx = newAccessibleItem->element()->staffIdx();
-        staff_idx_t oldStaffIdx = oldAccessibleItem ? oldAccessibleItem->element()->staffIdx() : nidx;
+    if (!voiceStaffInfoChange) {
+        return;
+    }
+
+    AccessibleItemPtr newItem = newAccessibleItem.lock();
+    AccessibleItemPtr oldItem = oldAccessibleItem.lock();
+
+    if (newItem && newItem->element()->hasStaff()) {
+        staff_idx_t newStaffIdx = newItem->element()->staffIdx();
+        staff_idx_t oldStaffIdx = oldItem ? oldItem->element()->staffIdx() : nidx;
 
         if (newStaffIdx != oldStaffIdx) {
-            auto element = newAccessibleItem->element();
+            auto element = newItem->element();
             QString staff = qtrc("engraving", "Staff %1").arg(QString::number(element->staffIdx() + 1));
 
             QString staffName = element->staff()->part()->longName(element->tick());
@@ -133,7 +146,7 @@ void AccessibleRoot::updateStaffInfo(const AccessibleItem* newAccessibleItem, co
             if (staffName.isEmpty()) {
                 m_staffInfo = staff;
             } else {
-                m_staffInfo = QString("%2 (%3)").arg(staff).arg(staffName);
+                m_staffInfo = QString("%2 (%3)").arg(staff, staffName);
             }
         }
     }

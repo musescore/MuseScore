@@ -21,7 +21,7 @@
  */
 #include "diagnosticsactionscontroller.h"
 
-#include "uri.h"
+#include "types/uri.h"
 
 #include "view/diagnosticaccessiblemodel.h"
 

@@ -22,7 +22,7 @@
 #ifndef MU_IO_IORETCODES_H
 #define MU_IO_IORETCODES_H
 
-#include "ret.h"
+#include "types/ret.h"
 #include "translation.h"
 
 namespace mu::io {
@@ -32,7 +32,7 @@ enum class Err {
     UnknownError    = int(Ret::Code::SystemFirst),
 
     FSNotExist,
-    FSIsExist,
+    FSAlreadyExists,
     FSRemoveError,
     FSDirNotEmptyError,
     FSReadError,
@@ -51,13 +51,13 @@ inline Ret make_ret(Err e)
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
     case Err::FSNotExist: return Ret(retCode, trc("system", "The file does not exist"));
-    case Err::FSIsExist: return Ret(retCode, trc("system", "The file is exist"));
+    case Err::FSAlreadyExists: return Ret(retCode, trc("system", "The file already exists"));
     case Err::FSRemoveError: return Ret(retCode, trc("system", "The file could not be removed"));
     case Err::FSDirNotEmptyError: return Ret(retCode, trc("system", "The directory is not empty"));
     case Err::FSReadError: return Ret(retCode, trc("system", "An error occurred when reading from the file"));
     case Err::FSWriteError: return Ret(retCode, trc("system", "An error occurred when writing to the file"));
     case Err::FSMakingError: return Ret(retCode, trc("system", "An error occurred when making a path"));
-    case Err::FSCopyError: return Ret(retCode, trc("system", "An error occurred when coping the file"));
+    case Err::FSCopyError: return Ret(retCode, trc("system", "An error occurred when copying the file"));
     case Err::FSMoveErrors: return Ret(retCode, trc("system", "An error occurred when moving the file"));
     }
 

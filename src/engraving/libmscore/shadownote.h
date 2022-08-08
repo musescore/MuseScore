@@ -41,6 +41,8 @@ namespace mu::engraving {
 
 class ShadowNote final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, ShadowNote)
+
     INJECT(notation, IEngravingConfiguration, engravingConfiguration)
 
     Fraction m_tick;
@@ -49,8 +51,8 @@ class ShadowNote final : public EngravingItem
     TDuration m_duration;
     bool m_isRest;
 
-    qreal m_segmentSkylineTopY = 0;
-    qreal m_segmentSkylineBottomY = 0;
+    double m_segmentSkylineTopY = 0;
+    double m_segmentSkylineBottomY = 0;
 
 public:
     ShadowNote(Score*);
@@ -65,7 +67,7 @@ public:
     int lineIndex() const { return m_lineIndex; }
     void setLineIndex(int n) { m_lineIndex = n; }
 
-    void setState(SymId noteSymbol, TDuration duration, bool isRest, qreal segmentSkylineTopY, qreal segmentSkylineBottomY);
+    void setState(SymId noteSymbol, TDuration duration, bool isRest, double segmentSkylineTopY, double segmentSkylineBottomY);
 
     void layout() override;
 

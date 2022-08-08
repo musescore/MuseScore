@@ -57,7 +57,7 @@ LedgerLine::~LedgerLine()
 PointF LedgerLine::pagePos() const
 {
     System* system = chord()->measure()->system();
-    qreal yp = y() + system->staff(staffIdx())->y() + system->y();
+    double yp = y() + system->staff(staffIdx())->y() + system->y();
     return PointF(pageX(), yp);
 }
 
@@ -65,9 +65,9 @@ PointF LedgerLine::pagePos() const
 //   measureXPos
 //---------------------------------------------------------
 
-qreal LedgerLine::measureXPos() const
+double LedgerLine::measureXPos() const
 {
-    qreal xp = x();                     // chord relative
+    double xp = x();                     // chord relative
     xp += chord()->x();                  // segment relative
     xp += chord()->segment()->x();       // measure relative
     return xp;
@@ -83,11 +83,11 @@ void LedgerLine::layout()
     if (staff()) {
         setColor(staff()->staffType(tick())->color());
     }
-    qreal w2 = _width * .5;
+    double w2 = _width * .5;
 
     //Adjust Y position to staffType offset
     if (staffType()) {
-        rypos() += staffType()->yoffset().val() * spatium();
+        movePosY(staffType()->yoffset().val() * spatium());
     }
 
     if (vertical) {
@@ -120,7 +120,7 @@ void LedgerLine::draw(mu::draw::Painter* painter) const
 //   spatiumChanged
 //---------------------------------------------------------
 
-void LedgerLine::spatiumChanged(qreal oldValue, qreal newValue)
+void LedgerLine::spatiumChanged(double oldValue, double newValue)
 {
     _width = (_width / oldValue) * newValue;
     _len   = (_len / oldValue) * newValue;

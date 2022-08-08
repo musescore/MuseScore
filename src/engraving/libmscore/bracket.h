@@ -25,7 +25,7 @@
 
 #include "engravingitem.h"
 #include "bracketItem.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 class Factory;
@@ -38,20 +38,22 @@ enum class BracketType : signed char;
 
 class Bracket final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Bracket)
+
     BracketItem* _bi;
-    qreal ay1;
-    qreal h2;
+    double ay1;
+    double h2;
 
     size_t _firstStaff = 0;
     size_t _lastStaff = 0;
 
-    mu::PainterPath path;
+    mu::draw::PainterPath path;
     SymId _braceSymbol;
     Shape _shape;
 
     // horizontal scaling factor for brace symbol. Cannot be equal to magY or depend on h
     // because layout needs width of brace before knowing height of system...
-    qreal _magx;
+    double _magx;
     Measure* _measure = nullptr;
 
     friend class Factory;
@@ -76,7 +78,7 @@ public:
     void setBraceSymbol(const SymId& sym) { _braceSymbol = sym; }
     size_t column() const { return _bi->column(); }
     size_t span() const { return _bi->bracketSpan(); }
-    qreal magx() const { return _magx; }
+    double magx() const { return _magx; }
 
     System* system() const { return (System*)explicitParent(); }
 
@@ -85,8 +87,8 @@ public:
 
     Fraction playTick() const override;
 
-    void setHeight(qreal) override;
-    qreal width() const override;
+    void setHeight(double) override;
+    double width() const override;
 
     Shape shape() const override { return _shape; }
 

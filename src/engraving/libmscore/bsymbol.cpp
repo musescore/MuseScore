@@ -127,7 +127,7 @@ void BSymbol::add(EngravingItem* e)
 void BSymbol::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     func(data, this);
-    foreach (EngravingItem* e, _leafs) {
+    for (EngravingItem* e : _leafs) {
         e->scanElements(data, func, all);
     }
 }
@@ -206,17 +206,17 @@ mu::RectF BSymbol::drag(EditData& ed)
         r.unite(e->canvasBoundingRect());
     }
 
-    qreal x = ed.delta.x();
-    qreal y = ed.delta.y();
+    double x = ed.delta.x();
+    double y = ed.delta.y();
 
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     if (ed.hRaster) {
-        qreal hRaster = _spatium / MScore::hRaster();
+        double hRaster = _spatium / MScore::hRaster();
         int n = lrint(x / hRaster);
         x = hRaster * n;
     }
     if (ed.vRaster) {
-        qreal vRaster = _spatium / MScore::vRaster();
+        double vRaster = _spatium / MScore::vRaster();
         int n = lrint(y / vRaster);
         y = vRaster * n;
     }

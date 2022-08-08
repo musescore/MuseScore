@@ -167,9 +167,9 @@ bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)
     p.start(cmd, args);
     if (!p.waitForFinished() || p.exitCode()) {
         QByteArray ba = p.readAll();
-        //LOGD("%s", qPrintable(ba));
-        //LOGD("   <diff -u %s %s failed", qPrintable(compareWith),
-        //   qPrintable(QString(root + "/" + saveName)));
+        //LOGD("%s", muPrintable(ba));
+        //LOGD("   <diff -u %s %s failed", muPrintable(compareWith),
+        //   muPrintable(QString(root + "/" + saveName)));
         QTextStream outputText(stdout);
         outputText << QString(ba);
         outputText << QString("   <diff -u %1 %2 failed").arg(f2).arg(f1);
@@ -243,7 +243,7 @@ void MTest::initMTest()
     mscore->init();
 
     root = rootPath();
-    loadInstrumentTemplates(":/data/instruments.xml");
+    loadInstrumentTemplates(u":/data/instruments.xml");
     score = readScore("test.mscx");
     MScore::_error = mu::engraving::MsError::MS_NO_ERROR;
 }

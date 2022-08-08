@@ -40,13 +40,14 @@ class Text;
 
 class TextLineBaseSegment : public LineSegment
 {
+    OBJECT_ALLOCATOR(engraving, TextLineBaseSegment)
 protected:
     Text* _text;
     Text* _endText;
     mu::PointF points[6];
-    int npoints;
-    qreal lineLength;
-    bool twoLines { false };
+    int npoints = 0;
+    double lineLength = 0;
+    bool twoLines = false;
 
 public:
     TextLineBaseSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::NOTHING);
@@ -59,7 +60,7 @@ public:
     void layout() override;
     void setSelected(bool f) override;
 
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     EngravingItem* propertyDelegate(Pid) override;
 
@@ -74,38 +75,37 @@ public:
 
 class TextLineBase : public SLine
 {
-    M_PROPERTY(bool,      lineVisible,           setLineVisible)
-    M_PROPERTY2(HookType, beginHookType,         setBeginHookType,          HookType::NONE)
-    M_PROPERTY2(HookType, endHookType,           setEndHookType,            HookType::NONE)
-    M_PROPERTY(Spatium,   beginHookHeight,       setBeginHookHeight)
-    M_PROPERTY(Spatium,   endHookHeight,         setEndHookHeight)
+    OBJECT_ALLOCATOR(engraving, TextLineBase)
 
-    M_PROPERTY(TextPlace, beginTextPlace,        setBeginTextPlace)
-    M_PROPERTY(QString,   beginText,             setBeginText)
-    M_PROPERTY(Align,     beginTextAlign,        setBeginTextAlign)
-    M_PROPERTY(QString,   beginFontFamily,       setBeginFontFamily)
-    M_PROPERTY(qreal,     beginFontSize,         setBeginFontSize)
-    M_PROPERTY(FontStyle, beginFontStyle,        setBeginFontStyle)
-    M_PROPERTY(mu::PointF,   beginTextOffset,       setBeginTextOffset)
+    M_PROPERTY(bool,       lineVisible,           setLineVisible)
+    M_PROPERTY2(HookType,  beginHookType,         setBeginHookType,     HookType::NONE)
+    M_PROPERTY2(HookType,  endHookType,           setEndHookType,       HookType::NONE)
+    M_PROPERTY(Spatium,    beginHookHeight,       setBeginHookHeight)
+    M_PROPERTY(Spatium,    endHookHeight,         setEndHookHeight)
 
-    M_PROPERTY(TextPlace, continueTextPlace,     setContinueTextPlace)
-    M_PROPERTY(QString,   continueText,          setContinueText)
-    M_PROPERTY(Align,     continueTextAlign,     setContinueTextAlign)
-    M_PROPERTY(QString,   continueFontFamily,    setContinueFontFamily)
-    M_PROPERTY(qreal,     continueFontSize,      setContinueFontSize)
-    M_PROPERTY(FontStyle, continueFontStyle,     setContinueFontStyle)
-    M_PROPERTY(mu::PointF,   continueTextOffset,    setContinueTextOffset)
+    M_PROPERTY2(TextPlace, beginTextPlace,        setBeginTextPlace,    TextPlace::AUTO)
+    M_PROPERTY(String,     beginText,             setBeginText)
+    M_PROPERTY(Align,      beginTextAlign,        setBeginTextAlign)
+    M_PROPERTY(String,     beginFontFamily,       setBeginFontFamily)
+    M_PROPERTY(double,     beginFontSize,         setBeginFontSize)
+    M_PROPERTY(FontStyle,  beginFontStyle,        setBeginFontStyle)
+    M_PROPERTY(PointF,     beginTextOffset,       setBeginTextOffset)
 
-    M_PROPERTY(TextPlace, endTextPlace,          setEndTextPlace)
-    M_PROPERTY(QString,   endText,               setEndText)
-    M_PROPERTY(Align,     endTextAlign,          setEndTextAlign)
-    M_PROPERTY(QString,   endFontFamily,         setEndFontFamily)
-    M_PROPERTY(qreal,     endFontSize,           setEndFontSize)
-    M_PROPERTY(FontStyle, endFontStyle,          setEndFontStyle)
-    M_PROPERTY(mu::PointF,   endTextOffset,         setEndTextOffset)
+    M_PROPERTY2(TextPlace, continueTextPlace,     setContinueTextPlace, TextPlace::AUTO)
+    M_PROPERTY(String,     continueText,          setContinueText)
+    M_PROPERTY(Align,      continueTextAlign,     setContinueTextAlign)
+    M_PROPERTY(String,     continueFontFamily,    setContinueFontFamily)
+    M_PROPERTY(double,     continueFontSize,      setContinueFontSize)
+    M_PROPERTY(FontStyle,  continueFontStyle,     setContinueFontStyle)
+    M_PROPERTY(PointF,     continueTextOffset,    setContinueTextOffset)
 
-protected:
-    friend class TextLineBaseSegment;
+    M_PROPERTY2(TextPlace, endTextPlace,          setEndTextPlace,      TextPlace::AUTO)
+    M_PROPERTY(String,     endText,               setEndText)
+    M_PROPERTY(Align,      endTextAlign,          setEndTextAlign)
+    M_PROPERTY(String,     endFontFamily,         setEndFontFamily)
+    M_PROPERTY(double,     endFontSize,           setEndFontSize)
+    M_PROPERTY(FontStyle,  endFontStyle,          setEndFontStyle)
+    M_PROPERTY(PointF,     endTextOffset,         setEndTextOffset)
 
 public:
     TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
@@ -116,12 +116,19 @@ public:
     void writeProperties(XmlWriter& xml) const override;
     bool readProperties(XmlReader& node) override;
 
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
-    Pid propertyId(const QStringRef& xmlName) const override;
+
+protected:
+    friend class TextLineBaseSegment;
 };
+
+inline bool isSystemTextLine(const EngravingItem* element)
+{
+    return element && element->isTextLineBase() && element->systemFlag();
+}
 } // namespace mu::engraving
 
 #endif

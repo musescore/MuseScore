@@ -29,8 +29,6 @@ namespace mu::engraving {
 class WindsSetupDataResolver : public SetupDataResolverBase<WindsSetupDataResolver>
 {
 public:
-    static bool supportsInstrument(const Instrument* instrument);
-
     static const mpe::PlaybackSetupData& doResolve(const Instrument* instrument);
 };
 }

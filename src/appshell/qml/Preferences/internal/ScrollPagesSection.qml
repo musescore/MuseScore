@@ -27,7 +27,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Scroll pages")
+    title: qsTrc("appshell/preferences", "Scroll pages")
 
     property int orientation: Qt.Horizontal
     property alias limitScrollArea: limitScrollAreaBox.checked
@@ -45,8 +45,8 @@ BaseSection {
         orientation: ListView.Vertical
 
         model: [
-            { title: qsTrc("appshell", "Horizontal"), value: Qt.Horizontal },
-            { title: qsTrc("appshell", "Vertical"), value: Qt.Vertical }
+            { title: qsTrc("appshell/preferences", "Horizontal"), value: Qt.Horizontal },
+            { title: qsTrc("appshell/preferences", "Vertical"), value: Qt.Vertical }
         ]
 
         delegate: RoundedRadioButton {
@@ -77,7 +77,7 @@ BaseSection {
         id: limitScrollAreaBox
         width: parent.width
 
-        text: qsTrc("appshell", "Limit scroll area to page borders")
+        text: qsTrc("appshell/preferences", "Limit scroll area to page borders")
 
         navigation.name: "LimitScrollAreaBox"
         navigation.panel: root.navigation

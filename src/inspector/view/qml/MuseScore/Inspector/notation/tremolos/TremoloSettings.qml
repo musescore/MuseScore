@@ -58,4 +58,14 @@ Column {
             { iconCode: IconCode.TREMOLO_STYLE_TRADITIONAL_ALTERNATE, value: TremoloTypes.STYLE_TRADITIONAL_ALTERNATE, title: qsTrc("inspector", "Traditional alternative") }
         ]
     }
+
+    DirectionSection {
+        id: directionSection
+
+        titleText: qsTrc("inspector", "Stem direction")
+        propertyItem: root.model ? root.model.direction : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 2
+    }
 }

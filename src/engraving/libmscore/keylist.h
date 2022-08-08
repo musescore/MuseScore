@@ -25,6 +25,7 @@
 
 #include <map>
 
+#include "global/allocator.h"
 #include "key.h"
 
 namespace mu::engraving {
@@ -39,6 +40,7 @@ class XmlReader;
 
 class KeyList : public std::map<const int, KeySigEvent>
 {
+    OBJECT_ALLOCATOR(engraving, KeyList)
 public:
     KeyList() {}
     KeySigEvent key(int tick) const;

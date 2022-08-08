@@ -23,7 +23,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Title</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -90,8 +90,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>38</l1>
-            <l2>40</l2>
+            <l1>36</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

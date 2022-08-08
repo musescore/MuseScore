@@ -27,7 +27,7 @@
 #include <vector>
 
 #include "types/string.h"
-#include "property/propertyvalue.h"
+#include "types/propertyvalue.h"
 #include "libmscore/property.h"
 #include "config.h"
 
@@ -195,7 +195,6 @@ enum class Sid {
     shortenStem,
     stemLength,
     stemLengthSmall,
-    shortStemProgression,
     shortStemStartLocation,
     shortestStem,
     minStaffSizeForAutoStems,
@@ -270,13 +269,16 @@ enum class Sid {
     hairpinDecrescContText,
     hairpinLineStyle,
     hairpinLineLineStyle,
+    hairpinLineDashLineLen,
+    hairpinLineDashGapLen,
 
     pedalPlacement,
     pedalPosAbove,
     pedalPosBelow,
     pedalLineWidth,
     pedalLineStyle,
-    pedalBeginTextOffset,
+    pedalDashLineLen,
+    pedalDashGapLen,
     pedalHookHeight,
     pedalFontFace,
     pedalFontSize,
@@ -475,6 +477,7 @@ enum class Sid {
     SlurDottedWidth,
     MinTieLength,
     SlurMinDistance,
+    HeaderToLineStartDistance, // determines start point of "dangling" lines (ties, gliss, lyrics...) at start of system
 
     SectionPause,
     MusicalSymbolFont,
@@ -504,6 +507,8 @@ enum class Sid {
     voltaHook,
     voltaLineWidth,
     voltaLineStyle,
+    voltaDashLineLen,
+    voltaDashGapLen,
     voltaFontFace,
     voltaFontSize,
     voltaLineSpacing,
@@ -558,6 +563,8 @@ enum class Sid {
     ottavaHookBelow,
     ottavaLineWidth,
     ottavaLineStyle,
+    ottavaDashLineLen,
+    ottavaDashGapLen,
     ottavaNumbersOnly,
     ottavaFontFace,
     ottavaFontSize,
@@ -565,7 +572,8 @@ enum class Sid {
     ottavaFontSpatiumDependent,
     ottavaFontStyle,
     ottavaColor,
-    ottavaTextAlign,
+    ottavaTextAlignAbove,
+    ottavaTextAlignBelow,
     ottavaFrameType,
     ottavaFramePadding,
     ottavaFrameWidth,
@@ -895,6 +903,8 @@ enum class Sid {
     tempoFrameBgColor,
     tempoChangeLineWidth,
     tempoChangeLineStyle,
+    tempoChangeDashLineLen,
+    tempoChangeDashGapLen,
 
     metronomeFontFace,
     metronomeFontSize,
@@ -1411,7 +1421,8 @@ enum class Sid {
     letRingPosBelow,
     letRingLineWidth,
     letRingLineStyle,
-    letRingBeginTextOffset,
+    letRingDashLineLen,
+    letRingDashGapLen,
     letRingText,
     letRingFrameType,
     letRingFramePadding,
@@ -1434,7 +1445,8 @@ enum class Sid {
     palmMutePosBelow,
     palmMuteLineWidth,
     palmMuteLineStyle,
-    palmMuteBeginTextOffset,
+    palmMuteDashLineLen,
+    palmMuteDashGapLen,
     palmMuteText,
     palmMuteFrameType,
     palmMuteFramePadding,
@@ -1465,6 +1477,37 @@ enum class Sid {
     voltaMinDistance,
     figuredBassMinDistance,
     tupletMinDistance,
+
+    /// Display options for tab elements (simple and common styles)
+
+    slurShowTabSimple,
+    slurShowTabCommon,
+    fermataShowTabSimple,
+    fermataShowTabCommon,
+    dynamicsShowTabSimple,
+    dynamicsShowTabCommon,
+    hairpinShowTabSimple,
+    hairpinShowTabCommon,
+    accentShowTabSimple,
+    accentShowTabCommon,
+    staccatoShowTabSimple,
+    staccatoShowTabCommon,
+    harmonicMarkShowTabSimple,
+    harmonicMarkShowTabCommon,
+    letRingShowTabSimple,
+    letRingShowTabCommon,
+    palmMuteShowTabSimple,
+    palmMuteShowTabCommon,
+    rasgueadoShowTabSimple,
+    rasgueadoShowTabCommon,
+    mordentShowTabSimple,
+    mordentShowTabCommon,
+    turnShowTabSimple,
+    turnShowTabCommon,
+    wahShowTabSimple,
+    wahShowTabCommon,
+    golpeShowTabSimple,
+    golpeShowTabCommon,
 
     autoplaceEnabled,
     defaultsVersion,

@@ -303,7 +303,8 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
             }
         }
 
-        break;
+        event->accept();
+        return true;
     }
     case QEvent::MouseButtonPress: {
         resetNavigation();
@@ -479,7 +480,7 @@ QString NavigableAppMenuModel::openedMenuId() const
 QString NavigableAppMenuModel::menuItemId(const MenuItemList& items, const QSet<int>& activatePossibleKeys)
 {
     for (const MenuItem* item : items) {
-        QString title = item->action().title;
+        QString title = item->action().title.translated();
 
         int activateKeyIndex = title.indexOf('&');
         if (activateKeyIndex == -1) {

@@ -24,45 +24,47 @@
  MusicXML import.
  */
 
+#include <QBuffer>
+#include <QDomDocument>
 #include <QMessageBox>
 #include <QXmlSchema>
 #include <QXmlSchemaValidator>
-#include <QBuffer>
 
-#include "serialization/internal/qzipreader_p.h"
 #include "importmxml.h"
+#include "musicxmlsupport.h"
+
+#include "translation.h"
+
+#include "global/deprecated/qzipreader_p.h"
+
+#include "engraving/types/types.h"
+
+#include "engraving/libmscore/masterscore.h"
 
 #include "log.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
-//   tupletAssert -- check assertions for tuplet handling
+//   check assertions for tuplet handling
 //---------------------------------------------------------
 
 /**
  Check assertions for tuplet handling. If this fails, MusicXML
  import will almost certainly break in non-obvious ways.
- Should never happen, thus it is OK to quit the application.
  */
 
-static void tupletAssert()
-{
-    if (!(int(DurationType::V_BREVE) == int(DurationType::V_LONG) + 1
-          && int(DurationType::V_WHOLE) == int(DurationType::V_BREVE) + 1
-          && int(DurationType::V_HALF) == int(DurationType::V_WHOLE) + 1
-          && int(DurationType::V_QUARTER) == int(DurationType::V_HALF) + 1
-          && int(DurationType::V_EIGHTH) == int(DurationType::V_QUARTER) + 1
-          && int(DurationType::V_16TH) == int(DurationType::V_EIGHTH) + 1
-          && int(DurationType::V_32ND) == int(DurationType::V_16TH) + 1
-          && int(DurationType::V_64TH) == int(DurationType::V_32ND) + 1
-          && int(DurationType::V_128TH) == int(DurationType::V_64TH) + 1
-          && int(DurationType::V_256TH) == int(DurationType::V_128TH) + 1
-          && int(DurationType::V_512TH) == int(DurationType::V_256TH) + 1
-          && int(DurationType::V_1024TH) == int(DurationType::V_512TH) + 1
-          )) {
-        ASSERT_X(QString::asprintf("tupletAssert() failed"));
-    }
-}
+static_assert(int(DurationType::V_BREVE) == int(DurationType::V_LONG) + 1
+              && int(DurationType::V_WHOLE) == int(DurationType::V_BREVE) + 1
+              && int(DurationType::V_HALF) == int(DurationType::V_WHOLE) + 1
+              && int(DurationType::V_QUARTER) == int(DurationType::V_HALF) + 1
+              && int(DurationType::V_EIGHTH) == int(DurationType::V_QUARTER) + 1
+              && int(DurationType::V_16TH) == int(DurationType::V_EIGHTH) + 1
+              && int(DurationType::V_32ND) == int(DurationType::V_16TH) + 1
+              && int(DurationType::V_64TH) == int(DurationType::V_32ND) + 1
+              && int(DurationType::V_128TH) == int(DurationType::V_64TH) + 1
+              && int(DurationType::V_256TH) == int(DurationType::V_128TH) + 1
+              && int(DurationType::V_512TH) == int(DurationType::V_256TH) + 1
+              && int(DurationType::V_1024TH) == int(DurationType::V_512TH) + 1);
 
 //---------------------------------------------------------
 //   initMusicXmlSchema
@@ -74,8 +76,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
     // read the MusicXML schema from the application resources
     QFile schemaFile(":/schema/musicxml.xsd");
     if (!schemaFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        LOGD("initMusicXmlSchema() could not open resource musicxml.xsd");
-        MScore::lastError = QObject::tr("Internal error: Could not open resource musicxml.xsd\n");
+        LOGE("initMusicXmlSchema() could not open resource musicxml.xsd");
         return false;
     }
 
@@ -96,8 +97,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
     // load and validate the schema
     schema.load(schemaBa);
     if (!schema.isValid()) {
-        LOGD("initMusicXmlSchema() internal error: MusicXML schema is invalid");
-        MScore::lastError = QObject::tr("Internal error: MusicXML schema is invalid\n");
+        LOGE("initMusicXmlSchema() internal error: MusicXML schema is invalid");
         return false;
     }
 
@@ -119,7 +119,7 @@ static int musicXMLValidationErrorDialog(QString text, QString detailedText)
     QMessageBox errorDialog;
     errorDialog.setIcon(QMessageBox::Question);
     errorDialog.setText(text);
-    errorDialog.setInformativeText(QObject::tr("Do you want to try to load this file anyway?"));
+    errorDialog.setInformativeText(qtrc("iex_musicxml", "Do you want to try to load this file anyway?"));
     errorDialog.setDetailedText(detailedText);
     errorDialog.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     errorDialog.setDefaultButton(QMessageBox::No);
@@ -143,7 +143,7 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
     int line, column;
     QString err;
     if (!container.setContent(data, false, &err, &line, &column)) {
-        MScore::lastError = QObject::tr("Error reading container.xml at line %1 column %2: %3\n").arg(line).arg(column).arg(err);
+        LOGE() << QString("Error reading container.xml at line %1 column %2: %3\n").arg(line).arg(column).arg(err);
         return false;
     }
 
@@ -172,8 +172,7 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
     }
 
     if (rootfile == "") {
-        LOGD("can't find rootfile in: %s", qPrintable(qf->fileName()));
-        MScore::lastError = QObject::tr("Can't find rootfile\n%1").arg(qf->fileName());
+        LOGE("can't find rootfile in: %s", qPrintable(qf->fileName()));
         return false;
     }
 
@@ -190,7 +189,7 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
  Validate MusicXML data from file \a name contained in QIODevice \a dev.
  */
 
-static Score::FileError doValidate(const QString& name, QIODevice* dev)
+static Err doValidate(const QString& name, QIODevice* dev)
 {
     //QElapsedTimer t;
     //t.start();
@@ -200,7 +199,7 @@ static Score::FileError doValidate(const QString& name, QIODevice* dev)
     QXmlSchema schema;
     schema.setMessageHandler(&messageHandler);
     if (!initMusicXmlSchema(schema)) {
-        return Score::FileError::FILE_BAD_FORMAT;      // appropriate error message has been printed by initMusicXmlSchema
+        return Err::FileBadFormat;      // appropriate error message has been printed by initMusicXmlSchema
     }
     // validate the data
     QXmlSchemaValidator validator(schema);
@@ -209,17 +208,16 @@ static Score::FileError doValidate(const QString& name, QIODevice* dev)
 
     if (!valid) {
         LOGD("importMusicXml() file '%s' is not a valid MusicXML file", qPrintable(name));
-        MScore::lastError = QObject::tr("File '%1' is not a valid MusicXML file").arg(name);
+        QString strErr = qtrc("iex_musicxml", "File '%1' is not a valid MusicXML file.").arg(name);
         if (MScore::noGui) {
-            return Score::FileError::FILE_NO_ERROR;         // might as well try anyhow in converter mode
+            return Err::NoError;         // might as well try anyhow in converter mode
         }
-        if (musicXMLValidationErrorDialog(MScore::lastError, messageHandler.getErrors()) != QMessageBox::Yes) {
-            return Score::FileError::FILE_USER_ABORT;
+        if (musicXMLValidationErrorDialog(strErr, messageHandler.getErrors()) != QMessageBox::Yes) {
+            return Err::UserAbort;
         }
     }
 
-    // return OK
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 
 //---------------------------------------------------------
@@ -230,15 +228,11 @@ static Score::FileError doValidate(const QString& name, QIODevice* dev)
  Validate and import MusicXML data from file \a name contained in QIODevice \a dev into score \a score.
  */
 
-static Score::FileError doValidateAndImport(Score* score, const QString& name, QIODevice* dev)
+static Err doValidateAndImport(Score* score, const QString& name, QIODevice* dev)
 {
-    // verify tuplet DurationType dependencies
-    tupletAssert();
-
     // validate the file
-    Score::FileError res;
-    res = doValidate(name, dev);
-    if (res != Score::FileError::FILE_NO_ERROR) {
+    Err res = doValidate(name, dev);
+    if (res != Err::NoError) {
         return res;
     }
 
@@ -250,28 +244,27 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
 
 //---------------------------------------------------------
 //   importMusicXml
-//    return Score::FileError::FILE_* errors
+//    return Err::File* errors
 //---------------------------------------------------------
 
 /**
  Import MusicXML file \a name into the Score.
  */
 
-Score::FileError importMusicXml(MasterScore* score, QIODevice* dev, const QString& name)
+Err importMusicXml(MasterScore* score, QIODevice* dev, const QString& name)
 {
     ScoreLoad sl;       // suppress warnings for undo push/pop
 
     if (!dev->open(QIODevice::ReadOnly)) {
-        LOGD("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
-        MScore::lastError = QObject::tr("Could not open MusicXML file\n%1").arg(name);
-        return Score::FileError::FILE_OPEN_ERROR;
+        LOGE("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
+        return Err::FileOpenError;
     }
 
     // and import it
     return doValidateAndImport(score, name, dev);
 }
 
-Score::FileError importMusicXml(MasterScore* score, const QString& name)
+Err importMusicXml(MasterScore* score, const QString& name)
 {
     ScoreLoad sl;     // suppress warnings for undo push/pop
 
@@ -280,12 +273,11 @@ Score::FileError importMusicXml(MasterScore* score, const QString& name)
     // open the MusicXML file
     QFile xmlFile(name);
     if (!xmlFile.exists()) {
-        return Score::FileError::FILE_NOT_FOUND;
+        return Err::FileNotFound;
     }
     if (!xmlFile.open(QIODevice::ReadOnly)) {
-        LOGD("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
-        MScore::lastError = QObject::tr("Could not open MusicXML file\n%1").arg(name);
-        return Score::FileError::FILE_OPEN_ERROR;
+        LOGE("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
+        return Err::FileOpenError;
     }
 
     // and import it
@@ -301,25 +293,24 @@ Score::FileError importMusicXml(MasterScore* score, const QString& name)
  Import compressed MusicXML file \a name into the Score.
  */
 
-Score::FileError importCompressedMusicXml(MasterScore* score, const QString& name)
+Err importCompressedMusicXml(MasterScore* score, const QString& name)
 {
     //LOGD("importCompressedMusicXml(%p, %s)", score, qPrintable(name));
 
     // open the compressed MusicXML file
     QFile mxlFile(name);
     if (!mxlFile.exists()) {
-        return Score::FileError::FILE_NOT_FOUND;
+        return Err::FileNotFound;
     }
     if (!mxlFile.open(QIODevice::ReadOnly)) {
-        LOGD("importCompressedMusicXml() could not open compressed MusicXML file '%s'", qPrintable(name));
-        MScore::lastError = QObject::tr("Could not open compressed MusicXML file\n%1").arg(name);
-        return Score::FileError::FILE_OPEN_ERROR;
+        LOGE("importCompressedMusicXml() could not open compressed MusicXML file '%s'", qPrintable(name));
+        return Err::FileOpenError;
     }
 
     // extract the root file
     QByteArray data;
     if (!extractRootfile(&mxlFile, data)) {
-        return Score::FileError::FILE_BAD_FORMAT;      // appropriate error message has been printed by extractRootfile
+        return Err::FileBadFormat;      // appropriate error message has been printed by extractRootfile
     }
     QBuffer buffer(&data);
     buffer.open(QIODevice::ReadOnly);

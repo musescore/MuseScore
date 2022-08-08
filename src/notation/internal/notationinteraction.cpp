@@ -36,8 +36,9 @@
 #include "containers.h"
 
 #include "engraving/rw/xml.h"
-#include "engraving/infrastructure/draw/pen.h"
-#include "engraving/infrastructure/draw/painterpath.h"
+#include "draw/types/pen.h"
+#include "draw/types/painterpath.h"
+#include "engraving/internal/qmimedataadapter.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/page.h"
@@ -81,6 +82,11 @@ using namespace mu::io;
 using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::engraving;
+
+static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
+{
+    return mu::engraving::KeyboardModifier(int(km));
+}
 
 static qreal nudgeDistance(const mu::engraving::EditData& editData)
 {
@@ -530,7 +536,7 @@ NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF
     return result;
 }
 
-bool NotationInteraction::elementIsLess(const mu::engraving::EngravingItem* e1, const mu::engraving::EngravingItem* e2)
+bool NotationInteraction::elementIsLess(const EngravingItem* e1, const EngravingItem* e2)
 {
     if (e1->selectable() && !e2->selectable()) {
         return false;
@@ -538,13 +544,19 @@ bool NotationInteraction::elementIsLess(const mu::engraving::EngravingItem* e1, 
     if (!e1->selectable() && e2->selectable()) {
         return true;
     }
-    if (e1->isNote() && e2->isStem()) {
+    if (e1->isNote() && (e2->isStem() || e2->isHook())) {
         return false;
     }
-    if (e2->isNote() && e1->isStem()) {
+    if (e2->isNote() && (e1->isStem() || e1->isHook())) {
         return true;
     }
-    if (e1->isText() && e1->isBox()) {
+    if (e1->isStem() && e2->isHook()) {
+        return false;
+    }
+    if (e2->isStem() && e1->isHook()) {
+        return true;
+    }
+    if (e1->isText() && e2->isBox()) {
         return false;
     }
     if (e1->isBox() && e2->isText()) {
@@ -553,17 +565,17 @@ bool NotationInteraction::elementIsLess(const mu::engraving::EngravingItem* e1, 
     if (e1->z() == e2->z()) {
         // same stacking order, prefer non-hidden elements
         if (e1->type() == e2->type()) {
-            if (e1->type() == mu::engraving::ElementType::NOTEDOT) {
-                const mu::engraving::NoteDot* n1 = static_cast<const mu::engraving::NoteDot*>(e1);
-                const mu::engraving::NoteDot* n2 = static_cast<const mu::engraving::NoteDot*>(e2);
+            if (e1->isNoteDot()) {
+                const NoteDot* n1 = toNoteDot(e1);
+                const NoteDot* n2 = toNoteDot(e2);
                 if (n1->note() && n1->note()->hidden()) {
                     return false;
                 } else if (n2->note() && n2->note()->hidden()) {
                     return true;
                 }
-            } else if (e1->type() == mu::engraving::ElementType::NOTE) {
-                const mu::engraving::Note* n1 = static_cast<const mu::engraving::Note*>(e1);
-                const mu::engraving::Note* n2 = static_cast<const mu::engraving::Note*>(e2);
+            } else if (e1->isNote()) {
+                const Note* n1 = toNote(e1);
+                const Note* n2 = toNote(e2);
                 if (n1->hidden()) {
                     return false;
                 } else if (n2->hidden()) {
@@ -851,7 +863,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
     m_dragData.reset();
     m_dragData.elements = elems;
     m_dragData.elementOffset = eoffset;
-    m_editData.modifiers = QGuiApplication::keyboardModifiers();
+    m_editData.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
 
     for (EngravingItem* e : m_dragData.elements) {
         bool draggable = isDraggable(e);
@@ -872,8 +884,8 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
 
     startEdit();
 
-    qreal zoom = configuration()->currentZoom().val / 100.f;
-    qreal proximity = configuration()->selectionProximity() * 0.5f / zoom;
+    qreal scaling = m_notation->viewState()->matrix().m11();
+    qreal proximity = configuration()->selectionProximity() * 0.5f / scaling;
     m_scoreCallbacks.setSelectionProximity(proximity);
 
     if (isGripEditStarted()) {
@@ -881,7 +893,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
         return;
     }
 
-    m_dragData.ed.modifiers = QGuiApplication::keyboardModifiers();
+    m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
     for (auto& group : m_dragData.dragGroups) {
         group->startDrag(m_dragData.ed);
     }
@@ -949,7 +961,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     m_dragData.ed.moveDelta = delta - m_dragData.elementOffset;
     m_dragData.ed.evtDelta = evtDelta;
     m_dragData.ed.pos = toPos;
-    m_dragData.ed.modifiers = QGuiApplication::keyboardModifiers();
+    m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
 
     if (isTextEditingStarted()) {
         m_editData.pos = toPos;
@@ -1086,14 +1098,14 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     }
 
     m_dropData.ed.pos = pos;
-    m_dropData.ed.modifiers = modifiers;
+    m_dropData.ed.modifiers = keyboardModifier(modifiers);
 
     switch (m_dropData.ed.dropElement->type()) {
     case ElementType::VOLTA:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
         return dragMeasureAnchorElement(pos);
     case ElementType::PEDAL:
     case ElementType::LET_RING:
-    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     case ElementType::PALM_MUTE:
     case ElementType::OTTAVA:
@@ -1124,6 +1136,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::NOTEHEAD:
     case ElementType::TREMOLO:
@@ -1178,7 +1191,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     bool accepted = false;
 
     m_dropData.ed.pos       = pos;
-    m_dropData.ed.modifiers = modifiers;
+    m_dropData.ed.modifiers = keyboardModifier(modifiers);
     m_dropData.ed.dropElement->styleChanged();
 
     bool systemStavesOnly = false;
@@ -1192,6 +1205,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         systemStavesOnly = m_dropData.ed.dropElement->systemFlag();
     // fall-thru
     case ElementType::VOLTA:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
         // voltas drop to system staves by default, or closest staff if Control is held
         systemStavesOnly = systemStavesOnly || !(m_dropData.ed.modifiers & Qt::ControlModifier);
     // fall-thru
@@ -1199,7 +1213,6 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::TRILL:
     case ElementType::PEDAL:
     case ElementType::LET_RING:
-    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     case ElementType::PALM_MUTE:
     case ElementType::HAIRPIN:
@@ -1277,6 +1290,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::NOTEHEAD:
     case ElementType::TREMOLO:
@@ -1523,7 +1537,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 PointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                 pt += m->system()->page()->pos();
                 applyDropPaletteElement(score, m, element, modifiers, pt);
-                if (m == last) {
+                if ((m == last) || (element->type() == ElementType::BRACKET)) {
                     break;
                 }
             }
@@ -1629,7 +1643,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         } else if (element->isSLine() && element->type() != ElementType::GLISSANDO) {
             mu::engraving::Segment* startSegment = sel.startSegment();
             mu::engraving::Segment* endSegment = sel.endSegment();
-            bool firstStaffOnly = element->isVolta() && !(modifiers & Qt::ControlModifier);
+            bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & Qt::ControlModifier);
             staff_idx_t startStaff = firstStaffOnly ? 0 : sel.staffStart();
             staff_idx_t endStaff   = firstStaffOnly ? 1 : sel.staffEnd();
             for (staff_idx_t i = startStaff; i < endStaff; ++i) {
@@ -1698,6 +1712,10 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
                                                   Qt::KeyboardModifiers modifiers,
                                                   PointF pt, bool pasteMode)
 {
+    if (!target) {
+        return;
+    }
+
     mu::engraving::EditData newData(&m_scoreCallbacks);
     mu::engraving::EditData* dropData = &newData;
 
@@ -1707,7 +1725,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
 
     dropData->pos         = pt.isNull() ? target->pagePos() : pt;
     dropData->dragOffset  = QPointF();
-    dropData->modifiers   = modifiers;
+    dropData->modifiers   = keyboardModifier(modifiers);
     dropData->dropElement = e;
 
     if (target->acceptDrop(*dropData)) {
@@ -1947,7 +1965,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
         m_dropData.ed.dropElement->setTrack(track);
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
-        m_notifyAboutDropChanged = true;
+        notifyAboutDragChanged();
         return true;
     }
     m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
@@ -2114,7 +2132,7 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
 
     std::vector<RectF> rangeArea = m_selection->range()->boundingArea();
     for (const RectF& rect: rangeArea) {
-        mu::PainterPath path;
+        PainterPath path;
         path.addRoundedRect(rect, 6, 6);
 
         QColor fillColor = selectionColor;
@@ -2336,6 +2354,7 @@ void NotationInteraction::selectTopStaff()
     }
 
     select({ el }, SelectType::SINGLE, 0);
+    showItem(el);
     resetHitElementContext();
 }
 
@@ -2634,10 +2653,10 @@ void NotationInteraction::editText(QInputMethodEvent* event)
 
     mu::engraving::TextBase* text = mu::engraving::toTextBase(m_editData.element);
     mu::engraving::TextCursor* cursor = text->cursor();
-    QString& preeditString = m_editData.preeditString;
+    String& preeditString = m_editData.preeditString;
 
     // remove preedit string
-    int n = preeditString.size();
+    size_t n = preeditString.size();
     while (n--) {
         if (cursor->movePosition(mu::engraving::TextCursor::MoveOperation::Left)) {
             mu::engraving::TextBlock& curLine = cursor->curLine();
@@ -2760,7 +2779,7 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     mu::engraving::TextBase* textEl = mu::engraving::toTextBase(m_editData.element);
 
     textEl->mousePress(m_editData);
-    if (m_editData.buttons == Qt::MiddleButton) {
+    if (m_editData.buttons == mu::engraving::MiddleButton) {
         #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
         QClipboard::Mode mode = QClipboard::Clipboard;
         #else
@@ -2923,7 +2942,7 @@ bool NotationInteraction::isEditAllowed(QKeyEvent* event)
     }
 
     mu::engraving::EditData editData = m_editData;
-    editData.modifiers = event->modifiers();
+    editData.modifiers = keyboardModifier(event->modifiers());
     editData.key = event->key();
     editData.s = event->text();
 
@@ -2959,7 +2978,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
         return;
     }
 
-    m_editData.modifiers = event->modifiers();
+    m_editData.modifiers = keyboardModifier(event->modifiers());
 
     if (isDragStarted()) {
         return; // ignore all key strokes while dragging
@@ -3238,7 +3257,12 @@ void NotationInteraction::copySelection()
         m_editData.element->editCopy(m_editData);
         mu::engraving::TextEditData* ted = static_cast<mu::engraving::TextEditData*>(m_editData.getData(m_editData.element).get());
         if (!ted->selectedText.isEmpty()) {
-            QGuiApplication::clipboard()->setText(ted->selectedText, QClipboard::Clipboard);
+            #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+            QClipboard::Mode mode = QClipboard::Clipboard;
+            #else
+            QClipboard::Mode mode = QClipboard::Selection;
+            #endif
+            QGuiApplication::clipboard()->setText(ted->selectedText, mode);
         }
     } else {
         QMimeData* mimeData = selection()->mimeData();
@@ -3263,6 +3287,7 @@ mu::Ret NotationInteraction::repeatSelection()
             }
             apply();
         }
+        return make_ok();
     }
 
     if (!selection.isRange()) {
@@ -3319,7 +3344,8 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
         toTextBase(m_editData.element)->paste(m_editData, txt);
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
-        score()->cmdPaste(mimeData, nullptr, scale);
+        QMimeDataAdapter ma(mimeData);
+        score()->cmdPaste(&ma, nullptr, scale);
     }
     apply();
 }
@@ -3452,7 +3478,7 @@ void NotationInteraction::addHairpinsToSelection(HairpinType type)
     std::vector<mu::engraving::Hairpin*> hairpins = score()->addHairpins(type);
     apply();
 
-    if (hairpins.size() == 1) {
+    if (!noteInput()->isNoteInputMode() && hairpins.size() == 1) {
         mu::engraving::LineSegment* segment = hairpins.front()->frontSegment();
         select({ segment });
         startEditGrip(segment, mu::engraving::Grip::END);

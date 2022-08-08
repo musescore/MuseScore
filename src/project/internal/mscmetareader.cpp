@@ -26,8 +26,8 @@
 #include "io/buffer.h"
 
 #include "stringutils.h"
-#include "framework/global/xmlreader.h"
-#include "engraving/infrastructure/io/mscreader.h"
+#include "global/deprecated/xmlreader.h"
+#include "engraving/infrastructure/mscreader.h"
 
 #include "log.h"
 

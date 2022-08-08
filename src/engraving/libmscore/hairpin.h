@@ -47,9 +47,11 @@ enum class HairpinType : signed char {
 
 class HairpinSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOCATOR(engraving, HairpinSegment)
+
     bool drawCircledTip;
     mu::PointF circledTip;
-    qreal circledTipRadius;
+    double circledTipRadius;
 
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
@@ -74,7 +76,7 @@ public:
     void layout() override;
     Shape shape() const override;
 
-    int gripsCount() const override { return 4; }
+    int gripsCount() const override;
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
@@ -89,6 +91,8 @@ public:
 
 class Hairpin final : public TextLineBase
 {
+    OBJECT_ALLOCATOR(engraving, Hairpin)
+
     HairpinType _hairpinType { HairpinType::INVALID };
     int _veloChange;
     bool _hairpinCircledTip;
@@ -155,9 +159,8 @@ public:
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
     bool isLineType() const
     {
         return _hairpinType == HairpinType::CRESC_LINE || _hairpinType == HairpinType::DECRESC_LINE;
@@ -165,6 +168,8 @@ public:
 };
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::HairpinType);
+#endif
 
 #endif

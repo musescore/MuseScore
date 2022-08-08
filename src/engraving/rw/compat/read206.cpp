@@ -23,22 +23,21 @@
 #include "read206.h"
 
 #include <cmath>
-#include <QRegularExpression>
 
+#include "translation.h"
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 #include "types/symnames.h"
+#include "infrastructure/symbolfonts.h"
 
 #include "compat/pageformat.h"
 
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
-#include "libmscore/revisions.h"
 #include "libmscore/part.h"
 #include "libmscore/page.h"
-#include "libmscore/scorefont.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/audio.h"
 #include "libmscore/sig.h"
@@ -109,11 +108,11 @@ static void readText206(XmlReader& e, const ReadContext& ctx, TextBase* t, Engra
 //    to the default value for that sid.
 //---------------------------------------------------------
 
-static std::map<QString, std::map<Sid, PropertyValue> > excessTextStyles206;
+static std::map<String, std::map<Sid, PropertyValue> > excessTextStyles206;
 
-void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Sid, PropertyValue> >& excessStyles)
+void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<String, std::map<Sid, PropertyValue> >& excessStyles)
 {
-    QString family = "FreeSerif";
+    String family = u"FreeSerif";
     double size = 10;
     bool sizeIsSpatiumDependent = false;
     FontStyle fontStyle = FontStyle::Normal;
@@ -130,11 +129,11 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
     PlacementV placement = PlacementV::ABOVE;
     bool placementValid = false;
 
-    QString name = e.attribute("name");
+    String name = e.attribute("name");
     mu::draw::Color frameColor = mu::draw::Color::black;
 
     bool systemFlag = false;
-    qreal lineWidth = -1.0;
+    double lineWidth = -1.0;
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -172,13 +171,13 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         } else if (tag == "valign") {
             align.vertical = TConv::fromXml(e.readAsciiText(), AlignV::TOP);
         } else if (tag == "xoffset") {
-            qreal xo = e.readDouble();
+            double xo = e.readDouble();
             if (offsetType == OffsetType::ABS) {
                 xo /= INCH;
             }
             offset.setX(xo);
         } else if (tag == "yoffset") {
-            qreal yo = e.readDouble();
+            double yo = e.readDouble();
             if (offsetType == OffsetType::ABS) {
                 yo /= INCH;
             }
@@ -186,7 +185,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         } else if (tag == "rxoffset" || tag == "ryoffset") {         // obsolete
             e.readDouble();
         } else if (tag == "offsetType") {
-            const QString& val(e.readText());
+            const String& val(e.readText());
             OffsetType ot = OffsetType::ABS;
             if (val == "spatium" || val == "1") {
                 ot = OffsetType::SPATIUM;
@@ -227,7 +226,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         } else if (tag == "systemFlag") {
             systemFlag = e.readInt();
         } else if (tag == "placement") {
-            QString value(e.readText());
+            String value(e.readText());
             if (value == "above") {
                 placement = PlacementV::ABOVE;
             } else if (value == "below") {
@@ -241,7 +240,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         }
     }
     if (family == "MuseJazz") {
-        family = "MuseJazz Text";
+        family = u"MuseJazz Text";
     }
 
     struct StyleTable {
@@ -305,7 +304,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
     if (ss == TextStyleType::TEXT_TYPES) {
         ss = e.context()->addUserTextStyle(name);
         if (ss == TextStyleType::TEXT_TYPES) {
-            LOGD("unhandled substyle <%s>", qPrintable(name));
+            LOGD("unhandled substyle <%s>", muPrintable(name));
             isExcessStyle = true;
         } else {
             int idx = int(ss) - int(TextStyleType::USER1);
@@ -424,34 +423,34 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e)
                 a->setBracket(AccidentalBracket(i));
             }
         } else if (tag == "subtype") {
-            QString text = e.readText();
-            const static std::map<QString, AccidentalType> accMap = {
-                { "none",               AccidentalType::NONE },
-                { "sharp",              AccidentalType::SHARP },
-                { "flat",               AccidentalType::FLAT },
-                { "natural",            AccidentalType::NATURAL },
-                { "double sharp",       AccidentalType::SHARP2 },
-                { "double flat",        AccidentalType::FLAT2 },
-                { "flat-slash",         AccidentalType::FLAT_SLASH },
-                { "flat-slash2",        AccidentalType::FLAT_SLASH2 },
-                { "mirrored-flat2",     AccidentalType::MIRRORED_FLAT2 },
-                { "mirrored-flat",      AccidentalType::MIRRORED_FLAT },
-                { "sharp-slash",        AccidentalType::SHARP_SLASH },
-                { "sharp-slash2",       AccidentalType::SHARP_SLASH2 },
-                { "sharp-slash3",       AccidentalType::SHARP_SLASH3 },
-                { "sharp-slash4",       AccidentalType::SHARP_SLASH4 },
-                { "sharp arrow up",     AccidentalType::SHARP_ARROW_UP },
-                { "sharp arrow down",   AccidentalType::SHARP_ARROW_DOWN },
-                { "flat arrow up",      AccidentalType::FLAT_ARROW_UP },
-                { "flat arrow down",    AccidentalType::FLAT_ARROW_DOWN },
-                { "natural arrow up",   AccidentalType::NATURAL_ARROW_UP },
-                { "natural arrow down", AccidentalType::NATURAL_ARROW_DOWN },
-                { "sori",               AccidentalType::SORI },
-                { "koron",              AccidentalType::KORON }
+            String text = e.readText();
+            const static std::map<String, AccidentalType> accMap = {
+                { u"none",               AccidentalType::NONE },
+                { u"sharp",              AccidentalType::SHARP },
+                { u"flat",               AccidentalType::FLAT },
+                { u"natural",            AccidentalType::NATURAL },
+                { u"double sharp",       AccidentalType::SHARP2 },
+                { u"double flat",        AccidentalType::FLAT2 },
+                { u"flat-slash",         AccidentalType::FLAT_SLASH },
+                { u"flat-slash2",        AccidentalType::FLAT_SLASH2 },
+                { u"mirrored-flat2",     AccidentalType::MIRRORED_FLAT2 },
+                { u"mirrored-flat",      AccidentalType::MIRRORED_FLAT },
+                { u"sharp-slash",        AccidentalType::SHARP_SLASH },
+                { u"sharp-slash2",       AccidentalType::SHARP_SLASH2 },
+                { u"sharp-slash3",       AccidentalType::SHARP_SLASH3 },
+                { u"sharp-slash4",       AccidentalType::SHARP_SLASH4 },
+                { u"sharp arrow up",     AccidentalType::SHARP_ARROW_UP },
+                { u"sharp arrow down",   AccidentalType::SHARP_ARROW_DOWN },
+                { u"flat arrow up",      AccidentalType::FLAT_ARROW_UP },
+                { u"flat arrow down",    AccidentalType::FLAT_ARROW_DOWN },
+                { u"natural arrow up",   AccidentalType::NATURAL_ARROW_UP },
+                { u"natural arrow down", AccidentalType::NATURAL_ARROW_DOWN },
+                { u"sori",               AccidentalType::SORI },
+                { u"koron",              AccidentalType::KORON }
             };
             auto it = accMap.find(text);
             if (it == accMap.end()) {
-                LOGD("invalid type %s", qPrintable(text));
+                LOGD("invalid type %s", muPrintable(text));
                 a->setAccidentalType(AccidentalType::NONE);
             } else {
                 a->setAccidentalType(it->second);
@@ -692,7 +691,7 @@ static void readInstrument206(Instrument* i, Part* p, XmlReader& e)
 
     if (i->channel().empty()) {        // for backward compatibility
         InstrChannel* a = new InstrChannel;
-        a->setName(InstrChannel::DEFAULT_NAME);
+        a->setName(String::fromUtf8(InstrChannel::DEFAULT_NAME));
         a->setProgram(i->recognizeMidiProgram());
         a->setBank(bank);
         a->setVolume(volume);
@@ -751,7 +750,7 @@ void Read206::readPart206(Part* part, XmlReader& e, ReadContext& ctx)
             readInstrument206(i, part, e);
             Drumset* ds = i->drumset();
             Staff* s = part->staff(0);
-            int lld = s ? qRound(s->lineDistance(Fraction(0, 1))) : 1;
+            int lld = s ? std::round(s->lineDistance(Fraction(0, 1))) : 1;
             if (ds && s && lld > 1) {
                 for (int j = 0; j < DRUM_INSTRUMENTS; ++j) {
                     ds->drum(j).line /= lld;
@@ -878,20 +877,20 @@ static void adjustPlacement(EngravingItem* e)
 
     // determine placement based on offset
     // anything below staff will be set to below
-    qreal staffHeight = e->staff()->height();
-    qreal threshold = staffHeight;
-    qreal offsetAdjust = 0.0;
+    double staffHeight = e->staff()->height();
+    double threshold = staffHeight;
+    double offsetAdjust = 0.0;
     PlacementV defaultPlacement = e->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
     PlacementV newPlacement;
     // most offsets will be recorded as relative to top staff line
     // exceptions are styled offsets on elements with default placement below
-    qreal normalize;
+    double normalize;
     if (defaultPlacement == PlacementV::BELOW && ee->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
         normalize = staffHeight;
     } else {
         normalize = 0.0;
     }
-    qreal ypos = ee->offset().y() + normalize;
+    double ypos = ee->offset().y() + normalize;
     if (ypos >= threshold) {
         newPlacement = PlacementV::BELOW;
         offsetAdjust -= staffHeight;
@@ -916,7 +915,7 @@ static void adjustPlacement(EngravingItem* e)
             } else {
                 normalize = 0.0;
             }
-            qreal yp = a->offset().y() + normalize;
+            double yp = a->offset().y() + normalize;
             a->ryoffset() += normalize + offsetAdjust;
 
             // if any segments are offset to opposite side of staff from placement,
@@ -1132,23 +1131,23 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
 //---------------------------------------------------------
 //   ReadStyleName206
 //    Retrieve the content of the "style" tag from the
-//    QString with the content of the whole text tag
+//    String with the content of the whole text tag
 //---------------------------------------------------------
 
-static QString ReadStyleName206(QString xmlTag)
+static String ReadStyleName206(String xmlTag)
 {
-    int beginIdx = xmlTag.indexOf("<style>");
-    if (beginIdx == -1) {
-        return QString();
+    size_t beginIdx = xmlTag.indexOf(u"<style>");
+    if (beginIdx == mu::nidx) {
+        return String();
     }
-    beginIdx += QString("<style>").size();
+    beginIdx += String(u"<style>").size();
 
-    int endIdx = xmlTag.indexOf("</style>");
+    size_t endIdx = xmlTag.indexOf(u"</style>");
     IF_ASSERT_FAILED(endIdx > 0) {
-        return QString();
+        return String();
     }
 
-    QString s = xmlTag.mid(beginIdx, (endIdx - beginIdx));
+    String s = xmlTag.mid(beginIdx, (endIdx - beginIdx));
     return s;
 }
 
@@ -1158,9 +1157,9 @@ static QString ReadStyleName206(QString xmlTag)
 //    before setting anything else.
 //---------------------------------------------------------
 
-static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBase* t, EngravingItem* be)
+static bool readTextPropertyStyle206(String xmlTag, const XmlReader& e, TextBase* t, EngravingItem* be)
 {
-    QString s = ReadStyleName206(xmlTag);
+    String s = ReadStyleName206(xmlTag);
 
     if (s.isEmpty()) {
         return false;
@@ -1182,8 +1181,8 @@ static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBas
             TextStyleType ss;
             ss = e.context()->lookupUserTextStyle(s);
             if (ss == TextStyleType::TEXT_TYPES) {
-                QByteArray ba = s.toLatin1();
-                ss = TConv::fromXml(ba.constData(), TextStyleType::DEFAULT);
+                ByteArray ba = s.toAscii();
+                ss = TConv::fromXml(ba.constChar(), TextStyleType::DEFAULT);
             }
             if (ss != TextStyleType::TEXT_TYPES) {
                 t->initTextStyleType(ss);
@@ -1259,7 +1258,7 @@ static bool readTextProperties206(XmlReader& e, const ReadContext& ctx, TextBase
 //    two single-byte characters and thus the reading could
 //    start at the wrong position), a copy of the text tag
 //    is created and read in a separate XmlReader, while
-//    the text style is extracted from a QString containing
+//    the text style is extracted from a String containing
 //    the whole text xml tag.
 //    TextReaderContext206 takes care of this process
 //---------------------------------------------------------
@@ -1268,20 +1267,19 @@ class TextReaderContext206
 {
     XmlReader& origReader;
     XmlReader tagReader;
-    QString xmlTag;
+    String xmlTag;
 
 public:
     TextReaderContext206(XmlReader& e)
         : origReader(e)
     {
         // Create a new xml document containing only the (text) xml chunk
-        QString name = origReader.name().toQLatin1String();
-        qint64 additionalLines = origReader.lineNumber() - 2;     // Subtracting the 2 new lines that will be added
+        String name = String::fromAscii(origReader.name().ascii());
+        int64_t additionalLines = origReader.lineNumber() - 2;     // Subtracting the 2 new lines that will be added
         xmlTag = origReader.readXml();
-        xmlTag.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<" + name + ">");
-        xmlTag.append("</" + name + ">\n");
-        QByteArray ba = xmlTag.toUtf8();
-        ByteArray data = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
+        xmlTag.prepend(u"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<" + name + u">");
+        xmlTag.append(u"</" + name + u">\n");
+        ByteArray data = xmlTag.toUtf8();
         tagReader.setData(data);  // Add the xml data to the XmlReader
         // the additional lines are needed to output the correct line number
         // of the original file in case of error
@@ -1302,7 +1300,7 @@ public:
     }
 
     XmlReader& reader() { return tagReader; }
-    const QString& tag() { return xmlTag; }
+    const String& tag() { return xmlTag; }
 private:
     void copyProperties(XmlReader& original, XmlReader& derived);
 };
@@ -1319,7 +1317,7 @@ private:
 
 void TextReaderContext206::copyProperties(XmlReader& original, XmlReader& derived)
 {
-    derived.setDocName(original.getDocName());
+    derived.setDocName(original.docName());
     derived.setContext(original.context());
 }
 
@@ -1358,10 +1356,10 @@ static void readTempoText(TempoText* t, XmlReader& e, const ReadContext& ctx)
     }
     // check sanity
     if (t->xmlText().isEmpty()) {
-        t->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(t->tempo().toBPM().val)));
+        t->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(int(lrint(t->tempo().toBPM().val))));
         t->setVisible(false);
     } else {
-        t->setXmlText(t->xmlText().replace("<sym>unicode", "<sym>met"));
+        t->setXmlText(t->xmlText().replace(u"<sym>unicode", u"<sym>met"));
     }
 }
 
@@ -1373,14 +1371,14 @@ static void readMarker(Marker* m, XmlReader& e, const ReadContext& ctx)
 {
     TextReaderContext206 tctx(e);
     readTextPropertyStyle206(tctx.tag(), e, m, m);
-    Marker::Type mt = Marker::Type::SEGNO;
+    MarkerType mt = MarkerType::SEGNO;
 
     while (tctx.reader().readNextStartElement()) {
         const AsciiStringView tag(tctx.reader().name());
         if (tag == "label") {
-            QString s(tctx.reader().readText());
-            m->setLabel(s);
-            mt = m->markerType(s);
+            AsciiStringView s(tctx.reader().readAsciiText());
+            m->setLabel(String::fromAscii(s.ascii()));
+            mt = TConv::fromXml(s, MarkerType::USER);
         } else if (!readTextProperties206(tctx.reader(), ctx, m)) {
             tctx.reader().unknown();
         }
@@ -1626,7 +1624,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
             id = e.intAttribute("number");                        // obsolete
         }
         Spanner* spanner = ctx.findSpanner(id);
-        QString atype(e.attribute("type"));
+        String atype(e.attribute("type"));
 
         if (!spanner) {
             if (atype == "stop") {
@@ -1697,7 +1695,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
                     }
                 }
             } else {
-                LOGD("readChordRestProperties206(): unknown Slur type <%s>", qPrintable(atype));
+                LOGD("readChordRestProperties206(): unknown Slur type <%s>", muPrintable(atype));
             }
         }
         e.readNext();
@@ -2009,10 +2007,10 @@ static void readVolta206(XmlReader& e, const ReadContext& ctx, Volta* volta)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "endings") {
-            QString s = e.readText();
-            QStringList sl = s.split(",", Qt::SkipEmptyParts);
+            String s = e.readText();
+            StringList sl = s.split(u',', mu::SkipEmptyParts);
             volta->endings().clear();
-            for (const QString& l : qAsConst(sl)) {
+            for (const String& l : sl) {
                 int i = l.simplified().toInt();
                 volta->endings().push_back(i);
             }
@@ -2048,13 +2046,13 @@ static void readOttava(XmlReader& e, const ReadContext& ctx, Ottava* ottava)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            QString s = e.readText();
+            String s = e.readText();
             bool ok;
             int idx = s.toInt(&ok);
             if (!ok) {
                 idx = 0;            // OttavaType::OTTAVA_8VA;
                 int i = 0;
-                for (auto p :  { "8va", "8vb", "15ma", "15mb", "22ma", "22mb" }) {
+                for (auto p :  { u"8va", u"8vb", u"15ma", u"15mb", u"22ma", u"22mb" }) {
                     if (p == s) {
                         idx = i;
                         break;
@@ -2108,9 +2106,9 @@ void Read206::readHairpin206(XmlReader& e, const ReadContext& ctx, Hairpin* h)
         }
     }
     if (!useText) {
-        h->setBeginText("");
-        h->setContinueText("");
-        h->setEndText("");
+        h->setBeginText(u"");
+        h->setContinueText(u"");
+        h->setEndText(u"");
     }
     adjustPlacement(h);
 }
@@ -2120,7 +2118,7 @@ void Read206::readTrill206(XmlReader& e, Trill* t)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            t->setTrillType(e.readText());
+            t->setTrillType(TConv::fromXml(e.readAsciiText(), TrillType::TRILL_LINE));
         } else if (tag == "Accidental") {
             Accidental* _accidental = Factory::createAccidental(t);
             readAccidental206(_accidental, e);
@@ -2192,13 +2190,13 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            QString s = e.readText();
-            if (s[0].isDigit()) {
+            String s = e.readText();
+            if (s.at(0).isDigit()) {
                 int oldType = s.toInt();
                 sym = articulationNames[oldType].id;
             } else {
-                QByteArray ba = s.toLatin1();
-                sym = articulationNames2SymId206(ba.constData());
+                ByteArray ba = s.toAscii();
+                sym = articulationNames2SymId206(ba.constChar());
                 if (sym == SymId::noSym) {
                     struct {
                         const char* name;
@@ -2246,7 +2244,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
                     if (i == n) {
                         sym = SymNames::symIdByName(s);
                         if (sym == SymId::noSym) {
-                            LOGD("Articulation: unknown type <%s>", qPrintable(s));
+                            LOGD("Articulation: unknown type <%s>", muPrintable(s));
                         }
                     }
                 }
@@ -2387,7 +2385,7 @@ void Read206::readTie206(XmlReader& e, ReadContext& ctx, Tie* t)
 static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx)
 {
     Segment* segment = 0;
-    qreal _spatium = m->spatium();
+    double _spatium = m->spatium();
 
     std::vector<Chord*> graceNotes;
     ctx.tuplets().clear();
@@ -2406,7 +2404,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         if (sl.size() == 2) {
             m->setTicks(Fraction(sl.at(0).toInt(), sl.at(1).toInt()));
         } else {
-            LOGD("illegal measure size <%s>", qPrintable(e.attribute("len")));
+            LOGD("illegal measure size <%s>", muPrintable(e.attribute("len")));
         }
         irregular = true;
         ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
@@ -2761,7 +2759,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             // staff text while MuseScore 2 didn't.
             // We need to decide first which one we should create.
             TextReaderContext206 tctx(e);
-            QString styleName = ReadStyleName206(tctx.tag());
+            String styleName = ReadStyleName206(tctx.tag());
             StaffTextBase* t;
             if (styleName == "System" || styleName == "Tempo"
                 || styleName == "Marker" || styleName == "Jump"
@@ -3138,17 +3136,17 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readCho
         } else if (tag == "displayInConcertPitch") {
             style->set(Sid::concertPitch, bool(e.readInt()));
         } else if (tag == "pedalY") {
-            qreal y = e.readDouble();
+            double y = e.readDouble();
             style->set(Sid::pedalPosBelow, PointF(0.0, y));
         } else if (tag == "lyricsDistance") {
-            qreal y = e.readDouble();
+            double y = e.readDouble();
             style->set(Sid::lyricsPosBelow, PointF(0.0, y));
         } else if (tag == "lyricsMinBottomDistance") {
             // no longer meaningful since it is now measured from skyline rather than staff
             //style->set(Sid::lyricsMinBottomDistance, PointF(0.0, y));
             e.skipCurrentElement();
         } else if (tag == "ottavaHook") {
-            qreal y = qAbs(e.readDouble());
+            double y = std::abs(e.readDouble());
             style->set(Sid::ottavaHookAbove, y);
             style->set(Sid::ottavaHookBelow, -y);
         } else if (tag == "endBarDistance") {
@@ -3159,7 +3157,7 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readCho
         } else if (tag == "ChordList") {
             readChordListHook.read(e);
         } else if (tag == "harmonyY") {
-            qreal val = -e.readDouble();
+            double val = -e.readDouble();
             if (val > 0.0) {
                 style->set(Sid::harmonyPlacement, PlacementV::BELOW);
                 style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
@@ -3202,8 +3200,8 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             score->setPlayMode(PlayMode(e.readInt()));
         } else if (tag == "LayerTag") {
             int id = e.intAttribute("id");
-            const QString& t = e.attribute("tag");
-            QString val(e.readText());
+            const String& t = e.attribute("tag");
+            String val(e.readText());
             if (id >= 0 && id < 32) {
                 score->layerTags()[id] = t;
                 score->layerTagComments()[id] = val;
@@ -3211,7 +3209,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Layer") {
             Layer layer;
             layer.name = e.attribute("name");
-            layer.tags = static_cast<uint>(e.intAttribute("mask"));
+            layer.tags = static_cast<unsigned int>(e.intAttribute("mask"));
             score->layer().push_back(layer);
             e.readNext();
         } else if (tag == "currentLayer") {
@@ -3231,10 +3229,10 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "showMargins") {
             score->setShowPageborders(e.readInt());
         } else if (tag == "Style") {
-            qreal sp = score->style().value(Sid::spatium).toReal();
+            double sp = score->style().value(Sid::spatium).toReal();
             ReadChordListHook clhook(score);
             readStyle206(&score->style(), e, clhook);
-            if (score->style().value(Sid::MusicalTextFont).toString() == "MuseJazz") {
+            if (score->style().styleSt(Sid::MusicalTextFont) == "MuseJazz") {
                 score->style().set(Sid::MusicalTextFont, "MuseJazz Text");
             }
             // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
@@ -3243,24 +3241,24 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 // float mode
                 score->style().set(Sid::spatium, sp);
             }
-            score->setScoreFont(ScoreFont::fontByName(score->style().value(Sid::MusicalSymbolFont).toString()));
+            score->setSymbolFont(SymbolFonts::fontByName(score->style().styleSt(Sid::MusicalSymbolFont)));
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(score->dummy(), TextStyleType::DEFAULT, false);
             readText206(e, ctx, text, text);
-            score->setMetaTag("copyright", text->xmlText());
+            score->setMetaTag(u"copyright", text->xmlText());
             delete text;
         } else if (tag == "movement-number") {
-            score->setMetaTag("movementNumber", e.readText());
+            score->setMetaTag(u"movementNumber", e.readText());
         } else if (tag == "movement-title") {
-            score->setMetaTag("movementTitle", e.readText());
+            score->setMetaTag(u"movementTitle", e.readText());
         } else if (tag == "work-number") {
-            score->setMetaTag("workNumber", e.readText());
+            score->setMetaTag(u"workNumber", e.readText());
         } else if (tag == "work-title") {
-            score->setMetaTag("workTitle", e.readText());
+            score->setMetaTag(u"workTitle", e.readText());
         } else if (tag == "source") {
-            score->setMetaTag("source", e.readText());
+            score->setMetaTag(u"source", e.readText());
         } else if (tag == "metaTag") {
-            QString name = e.attribute("name");
+            String name = e.attribute("name");
             score->setMetaTag(name, e.readText());
         } else if (tag == "Part") {
             Part* part = new Part(score);
@@ -3287,7 +3285,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             } else if (tag == "Slur") {
                 readSlur206(e, ctx, toSlur(s));
             } else {
-                Q_ASSERT(tag == "Pedal");
+                assert(tag == "Pedal");
                 readPedal(e, ctx, toPedal(s));
             }
             score->addSpanner(s);
@@ -3326,28 +3324,26 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "PageList") {
             e.skipCurrentElement();
         } else if (tag == "name") {
-            QString n = e.readText();
+            String n = e.readText();
             if (!score->isMaster()) {                 //ignore the name if it's not a child score
                 score->excerpt()->setName(n);
             }
         } else if (tag == "layoutMode") {
-            QString s = e.readText();
+            String s = e.readText();
             if (s == "line") {
                 score->setLayoutMode(LayoutMode::LINE);
             } else if (s == "system") {
                 score->setLayoutMode(LayoutMode::SYSTEM);
             } else {
-                LOGD("layoutMode: %s", qPrintable(s));
+                LOGD("layoutMode: %s", muPrintable(s));
             }
         } else {
             e.unknown();
         }
     }
     if (e.error() != XmlStreamReader::NoError) {
-        LOGD("%s: xml read error at line %lld col %lld: %s",
-             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
-        MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
-            e.name().ascii());
+        LOGE() << String(u"XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber())
+            .arg(String::fromAscii(e.name().ascii()));
         return false;
     }
 
@@ -3371,7 +3367,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Score::FileError Read206::read206(mu::engraving::MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
+Err Read206::read206(mu::engraving::MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -3381,12 +3377,10 @@ Score::FileError Read206::read206(mu::engraving::MasterScore* masterScore, XmlRe
             masterScore->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
             if (!readScore206(masterScore, e, ctx)) {
-                return Score::FileError::FILE_BAD_FORMAT;
+                return Err::FileBadFormat;
             }
         } else if (tag == "Revision") {
-            Revision* revision = new Revision;
-            revision->read(e);
-            masterScore->revisions()->add(revision);
+            e.skipCurrentElement();
         }
     }
 
@@ -3444,5 +3438,5 @@ Score::FileError Read206::read206(mu::engraving::MasterScore* masterScore, XmlRe
         i.first->setOffset(i.second - i.first->pos());
     }
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }

@@ -83,9 +83,23 @@ std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, 
 
 class Articulation final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Articulation)
+public:
+
+    enum TextType {
+        NO_TEXT,
+        SLAP,
+        POP
+    };
+
+private:
+
     SymId _symId;
     DirectionV _direction;
-    QString _channelName;
+    String _channelName;
+
+    TextType m_textType;
+    mu::draw::Font m_font; // used for drawing text type articulations
 
     ArticulationAnchor _anchor;
 
@@ -93,10 +107,14 @@ class Articulation final : public EngravingItem
     OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
     bool _playArticulation;
 
-    friend class Factory;
+    std::pair<Sid, Sid> m_showOnTabStyles = { Sid::NOSTYLE, Sid::NOSTYLE };
+
+    friend class mu::engraving::Factory;
     Articulation(ChordRest* parent);
 
     void draw(mu::draw::Painter*) const override;
+    bool isHiddenOnTabStaff() const;
+    void setupShowOnTabStyles();
 
     enum class AnchorGroup {
         ARTICULATION,
@@ -112,12 +130,14 @@ public:
 
     Articulation* clone() const override { return new Articulation(*this); }
 
-    qreal mag() const override;
+    double mag() const override;
 
     SymId symId() const { return _symId; }
     void setSymId(SymId id);
     int subtype() const override;
-    QString typeUserName() const override;
+    void setTextType(TextType textType);
+    TranslatableString typeUserName() const override;
+    String translatedTypeUserName() const override;
     String articulationName() const;    // type-name of articulation; used for midi rendering
     static String symId2ArticulationName(SymId symId);
 
@@ -135,8 +155,6 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
     Sid getPropertyStyle(Pid id) const override;
-
-    Pid propertyId(const QStringRef& xmlName) const override;
 
     bool up() const { return _up; }
     void setUp(bool val);
@@ -158,10 +176,10 @@ public:
     bool playArticulation() const { return _playArticulation; }
     void setPlayArticulation(bool val) { _playArticulation = val; }
 
-    QString channelName() const { return _channelName; }
-    void setChannelName(const QString& s) { _channelName = s; }
+    String channelName() const { return _channelName; }
+    void setChannelName(const String& s) { _channelName = s; }
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 
     bool isDouble() const;
     bool isTenuto() const;

@@ -65,11 +65,13 @@ struct CrossStaffContent
 
 class Segment final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Segment)
+
     SegmentType _segmentType { SegmentType::Invalid };
     Fraction _tick;    // { Fraction(0, 1) };
     Fraction _ticks;   // { Fraction(0, 1) };
     Spatium _extraLeadingSpace;
-    qreal _stretch;
+    double _stretch;
 
     Segment* _next = nullptr;                       // linked list of segments inside a measure
     Segment* _prev = nullptr;
@@ -78,8 +80,8 @@ class Segment final : public EngravingItem
     std::vector<EngravingItem*> _elist;         // EngravingItem storage, size = staves * VOICES.
     std::vector<EngravingItem*> _preAppendedItems; // Container for items appended to the left of this segment (example: grace notes), size = staves * VOICES.
     std::vector<Shape> _shapes;           // size = staves
-    std::vector<qreal> _dotPosX;          // size = staves
-    qreal m_spacing{ 0 };
+    std::vector<double> _dotPosX;          // size = staves
+    double m_spacing{ 0 };
 
     friend class Factory;
     Segment(Measure* m = 0);
@@ -155,8 +157,7 @@ public:
 
     Measure* measure() const { return toMeasure(explicitParent()); }
     System* system() const { return toSystem(explicitParent()->explicitParent()); }
-    qreal x() const override { return ipos().x(); }
-    void setX(qreal v) { rxpos() = v; }
+    double x() const override { return ipos().x(); }
 
     mu::RectF contentRect() const;
 
@@ -182,17 +183,17 @@ public:
 
     void fixStaffIdx();
 
-    qreal stretch() const { return _stretch; }
-    void setStretch(qreal v) { _stretch = v; }
+    double stretch() const { return _stretch; }
+    void setStretch(double v) { _stretch = v; }
 
     Fraction rtick() const override { return _tick; }
-    void setRtick(const Fraction& v) { Q_ASSERT(v >= Fraction(0, 1)); _tick = v; }
+    void setRtick(const Fraction& v) { assert(v >= Fraction(0, 1)); _tick = v; }
     Fraction tick() const override;
 
     Fraction ticks() const { return _ticks; }
     void setTicks(const Fraction& v) { _ticks = v; }
 
-    qreal widthInStaff(staff_idx_t staffIdx, SegmentType t = SegmentType::ChordRest) const;
+    double widthInStaff(staff_idx_t staffIdx, SegmentType t = SegmentType::ChordRest) const;
     Fraction ticksInStaff(staff_idx_t staffIdx) const;
 
     bool splitsTuplet() const;
@@ -207,8 +208,8 @@ public:
     bool hasElements(track_idx_t minTrack, track_idx_t maxTrack) const;
     bool allElementsInvisible() const;
 
-    qreal dotPosX(staff_idx_t staffIdx) const { return _dotPosX[staffIdx]; }
-    void setDotPosX(staff_idx_t staffIdx, qreal val) { _dotPosX[staffIdx] = val; }
+    double dotPosX(staff_idx_t staffIdx) const { return _dotPosX[staffIdx]; }
+    void setDotPosX(staff_idx_t staffIdx, double val) { _dotPosX[staffIdx] = val; }
 
     Spatium extraLeadingSpace() const { return _extraLeadingSpace; }
     void setExtraLeadingSpace(Spatium v) { _extraLeadingSpace = v; }
@@ -223,7 +224,11 @@ public:
     bool operator<(const Segment&) const;
     bool operator>(const Segment&) const;
 
-    virtual QString accessibleExtraInfo() const override;
+    String accessibleExtraInfo() const override;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 
     EngravingItem* firstInNextSegments(staff_idx_t activeStaff);   //<
     EngravingItem* lastInPrevSegments(staff_idx_t activeStaff);     //<
@@ -251,19 +256,19 @@ public:
     Shape& staffShape(staff_idx_t staffIdx) { return _shapes[staffIdx]; }
     void createShapes();
     void createShape(staff_idx_t staffIdx);
-    qreal minRight() const;
-    qreal minLeft(const Shape&) const;
-    qreal minLeft() const;
-    qreal minHorizontalDistance(Segment*, bool isSystemGap) const;
-    qreal minHorizontalCollidingDistance(Segment* ns) const;
+    double minRight() const;
+    double minLeft(const Shape&) const;
+    double minLeft() const;
+    double minHorizontalDistance(Segment*, bool isSystemGap) const;
+    double minHorizontalCollidingDistance(Segment* ns) const;
 
-    qreal elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const;
-    qreal elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const;
+    double elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const;
+    double elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const;
 
     /*! \brief callulate width of segment and additional spacing of segment depends on duration of segment
      *  \return pair of {spacing, width}
      */
-    std::pair<qreal, qreal> computeCellWidth(const std::vector<int>& visibleParts) const;
+    std::pair<double, double> computeCellWidth(const std::vector<int>& visibleParts) const;
 
     /*! \brief get among all ChordRests of segment the ChordRest with minimum ticks,
     * take into account visibleParts
@@ -271,8 +276,8 @@ public:
     static ChordRest* ChordRestWithMinDuration(const Segment* seg, const std::vector<int>& visibleParts);
 
     //! spacing is additional width of segment, for example accidental needs this spacing to avoid overlapping
-    void setSpacing(qreal);
-    qreal spacing() const;
+    void setSpacing(double);
+    double spacing() const;
 
     // some helper function
     ChordRest* cr(track_idx_t track) const { return toChordRest(_elist[track]); }
@@ -356,6 +361,8 @@ inline Segment* Segment::prevEnabled() const
 }
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::SegmentType);
+#endif
 
 #endif

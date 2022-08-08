@@ -21,8 +21,11 @@
  */
 
 #include "connector.h"
+
 #include "rw/xml.h"
 #include "rw/writecontext.h"
+#include "types/typesconv.h"
+
 #include "engravingitem.h"
 #include "score.h"
 #include "engravingobject.h"
@@ -41,9 +44,10 @@ namespace mu::engraving {
 ConnectorInfo::ConnectorInfo(const EngravingItem* current, int track, Fraction frac)
     : _current(current), _score(current->score()), _currentLoc(Location::absolute())
 {
-    if (!current) {
-        ASSERT_X(QString::asprintf("ConnectorInfo::ConnectorInfo(): invalid argument: %p", current));
+    IF_ASSERT_FAILED(current) {
+        return;
     }
+
     // It is not always possible to determine the track number correctly from
     // the current element (for example, in case of a Segment).
     // If the caller does not know the track number and passes -1
@@ -144,8 +148,9 @@ static int distance(const Location& l1, const Location& l2)
     constexpr int commonDenominator = 1000;
     Fraction dfrac = (l2.frac() - l1.frac()).absValue();
     int dpos = dfrac.numerator() * commonDenominator / dfrac.denominator();
-    dpos += 10000 * qAbs(l2.measure() - l1.measure());
-    return 1000 * dpos + 100 * qAbs(l2.track() - l1.track()) + 10 * qAbs(l2.note() - l1.note()) + qAbs(l2.graceIndex() - l1.graceIndex());
+    dpos += 10000 * std::abs(l2.measure() - l1.measure());
+    return 1000 * dpos + 100 * std::abs(l2.track() - l1.track()) + 10 * std::abs(l2.note() - l1.note()) + std::abs(
+        l2.graceIndex() - l1.graceIndex());
 }
 
 //---------------------------------------------------------
@@ -338,8 +343,7 @@ ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* cu
                                          Fraction frac)
     : ConnectorInfo(current, track, frac), _xml(&xml), _connector(connector)
 {
-    if (!connector) {
-        ASSERT_X(QString::asprintf("ConnectorInfoWriter::ConnectorInfoWriter(): invalid arguments: %p, %p", connector, current));
+    IF_ASSERT_FAILED(current) {
         return;
     }
     _type = connector->type();
@@ -383,7 +387,7 @@ bool ConnectorInfoReader::read()
 {
     XmlReader& e = *_reader;
     const AsciiStringView name(e.asciiAttribute("type"));
-    _type = Factory::name2type(name);
+    _type = TConv::fromXml(name, ElementType::INVALID);
 
     e.context()->fillLocation(_currentLoc);
 

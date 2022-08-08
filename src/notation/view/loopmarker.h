@@ -28,7 +28,7 @@
 
 #include "notation/inotation.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::notation {
 class LoopMarker

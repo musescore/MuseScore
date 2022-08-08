@@ -24,7 +24,7 @@
 #define __SPACER_H__
 
 #include "engravingitem.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 class Factory;
@@ -44,10 +44,12 @@ enum class SpacerType : char {
 
 class Spacer final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Spacer)
+
     SpacerType _spacerType;
     Millimetre _gap;
 
-    mu::PainterPath path;
+    mu::draw::PainterPath path;
 
     friend class Factory;
     Spacer(Measure* parent);
@@ -71,7 +73,7 @@ public:
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
-    void spatiumChanged(qreal, qreal) override;
+    void spatiumChanged(double, double) override;
 
     void setGap(Millimetre sp);
     Millimetre gap() const { return _gap; }

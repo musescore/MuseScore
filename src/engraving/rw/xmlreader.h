@@ -26,8 +26,8 @@
 #include "containers.h"
 #include "serialization/xmlstreamreader.h"
 
-#include "infrastructure/draw/color.h"
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/color.h"
+#include "draw/types/geometry.h"
 
 #include "types/fraction.h"
 
@@ -44,8 +44,10 @@ public:
     XmlReader(mu::io::IODevice* d)
         : XmlStreamReader(d) {}
 
+#ifndef NO_QT_SUPPORT
     XmlReader(const QByteArray& d)
         : XmlStreamReader(d) {}
+#endif
 
     XmlReader(const XmlReader&) = delete;
     XmlReader& operator=(const XmlReader&) = delete;
@@ -58,19 +60,19 @@ public:
     double readDouble(bool* ok = nullptr) { return XmlStreamReader::readDouble(ok); }
     double readDouble(double min, double max);
 
-    mu::PointF readPoint();
-    mu::SizeF readSize();
-    mu::ScaleF readScale();
-    mu::RectF readRect();
-    mu::draw::Color readColor();
+    PointF readPoint();
+    SizeF readSize();
+    ScaleF readScale();
+    RectF readRect();
+    draw::Color readColor();
     Fraction readFraction();
     String readXml();
 
-    void setDocName(const QString& s) { docName = s; }
-    QString getDocName() const { return docName; }
+    void setDocName(const String& s) { m_docName = s; }
+    String docName() const { return m_docName; }
 
     // for reading old files (< 3.01)
-    void setOffsetLines(qint64 val) { _offsetLines = val; }
+    void setOffsetLines(int64_t val) { m_offsetLines = val; }
 
     ReadContext* context() const;
     void setContext(ReadContext* context);
@@ -79,8 +81,8 @@ private:
 
     void htmlToString(int level, String*);
 
-    QString docName;    // used for error reporting
-    qint64 _offsetLines = 0;
+    String m_docName;    // used for error reporting
+    int64_t m_offsetLines = 0;
     mutable ReadContext* m_context = nullptr;
     mutable bool m_selfContext = false;
 };

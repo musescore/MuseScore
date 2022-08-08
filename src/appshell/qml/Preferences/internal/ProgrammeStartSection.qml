@@ -27,7 +27,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Programme start")
+    title: qsTrc("appshell/preferences", "Program start")
 
     navigation.direction: NavigationPanel.Both
 
@@ -75,7 +75,7 @@ BaseSection {
                 pathFieldWidth: root.columnWidth
                 spacing: root.columnSpacing
 
-                dialogTitle: qsTrc("appshell", "Choose starting score")
+                dialogTitle: qsTrc("appshell/preferences", "Choose starting score")
                 filter: root.scorePathFilter
 
                 visible: modelData.canSelectScorePath

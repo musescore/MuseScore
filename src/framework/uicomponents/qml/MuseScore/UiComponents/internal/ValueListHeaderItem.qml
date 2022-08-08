@@ -47,12 +47,11 @@ Item {
 
         accessible.role: MUAccessible.Button
         accessible.name: {
-            var text = root.headerTitle
+            var text = root.headerTitle + ", "
             if (root.isSorterEnabled) {
-                var sortOrderName = root.sortOrder === Qt.AscendingOrder ? qsTrc("uicomponents", "ascending") : qsTrc("uicomponents", "descending")
-                text += " " + qsTrc("uicomponents", "sort ") + sortOrderName
+                text += root.sortOrder === Qt.AscendingOrder ? qsTrc("ui", "sorted ascending") : qsTrc("ui", "sorted descending")
             } else {
-                text += qsTrc("uicomponents", "sort default")
+                text += qsTrc("ui", "not sorted")
             }
 
             return text

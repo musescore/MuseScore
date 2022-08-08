@@ -34,6 +34,8 @@ namespace mu::engraving {
 
 class StemSlash final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, StemSlash)
+
     mu::LineF line;
 
     friend class Factory;
@@ -41,7 +43,7 @@ class StemSlash final : public EngravingItem
 
 public:
 
-    qreal mag() const override { return parentItem()->mag(); }
+    double mag() const override { return parentItem()->mag(); }
     void setLine(const mu::LineF& l);
 
     StemSlash* clone() const override { return new StemSlash(*this); }

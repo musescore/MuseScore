@@ -37,23 +37,21 @@ class AbstractAudioWriter : public project::INotationWriter, public async::Async
     INJECT(audioexport, IAudioExportConfiguration, configuration)
 
 public:
-    AbstractAudioWriter() = default;
-    virtual ~AbstractAudioWriter() = default;
-
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
-    Ret writeList(const notation::INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
+    Ret writeList(const notation::INotationPtrList& notations, QIODevice& destinationDevice, const Options& options = Options()) override;
 
+    bool supportsProgressNotifications() const override;
+    framework::Progress progress() const override;
     void abort() override;
-    framework::ProgressChannel progress() const override;
 
 protected:
-    void doWriteAndWait(io::Device& destinationDevice, const audio::SoundTrackFormat& format);
+    void doWriteAndWait(QIODevice& destinationDevice, const audio::SoundTrackFormat& format);
 
     UnitType unitTypeFromOptions(const Options& options) const;
-    framework::ProgressChannel m_progress;
+    framework::Progress m_progress;
     bool m_isCompleted = false;
 };
 }

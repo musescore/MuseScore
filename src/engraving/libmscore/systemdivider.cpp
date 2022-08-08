@@ -61,7 +61,7 @@ SystemDivider::SystemDivider(const SystemDivider& sd)
 void SystemDivider::layout()
 {
     SymId sid;
-    ScoreFont* sf = score()->scoreFont();
+    SymbolFont* sf = score()->symbolFont();
 
     if (_dividerType == SystemDivider::Type::LEFT) {
         sid = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));
@@ -113,7 +113,7 @@ void SystemDivider::write(XmlWriter& xml) const
 
 void SystemDivider::read(XmlReader& e)
 {
-    ScoreFont* sf = score()->scoreFont();
+    SymbolFont* sf = score()->symbolFont();
     if (e.attribute("type") == "left") {
         _dividerType = SystemDivider::Type::LEFT;
         SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));

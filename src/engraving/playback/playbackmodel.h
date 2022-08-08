@@ -30,7 +30,7 @@
 #include "async/asyncable.h"
 #include "async/channel.h"
 #include "async/notification.h"
-#include "id.h"
+#include "types/id.h"
 #include "modularity/ioc.h"
 #include "mpe/events.h"
 #include "mpe/iarticulationprofilesrepository.h"
@@ -62,16 +62,19 @@ public:
     void setPlayRepeats(const bool isEnabled);
 
     const InstrumentTrackId& metronomeTrackId() const;
+    const InstrumentTrackId& chordSymbolsTrackId() const;
 
     const mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
     const mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId);
-    void triggerEventsForItem(const EngravingItem* item);
+    void triggerEventsForItems(const std::vector<const EngravingItem*>& items);
 
+    InstrumentTrackIdSet existingTrackIdSet() const;
     async::Channel<InstrumentTrackId> trackAdded() const;
     async::Channel<InstrumentTrackId> trackRemoved() const;
 
 private:
     static const InstrumentTrackId METRONOME_TRACK_ID;
+    static const InstrumentTrackId CHORD_SYMBOLS_TRACK_ID;
 
     using ChangedTrackIdSet = InstrumentTrackIdSet;
 
@@ -89,7 +92,6 @@ private:
 
     InstrumentTrackId idKey(const EngravingItem* item) const;
     InstrumentTrackId idKey(const ID& partId, const std::string& instrumentId) const;
-    InstrumentTrackIdSet existingTrackIdSet() const;
 
     void update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                 ChangedTrackIdSet* trackChanges = nullptr);
@@ -106,7 +108,7 @@ private:
     void clearExpiredContexts(const track_idx_t trackFrom, const track_idx_t trackTo);
     void clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo);
     void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
-    void notifyAboutChanges(ChangedTrackIdSet&& trackChanges, InstrumentTrackIdSet&& existingTracks);
+    void notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, const InstrumentTrackIdSet& changedTracks);
 
     void removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom, const mpe::timestamp_t timestampTo);
 

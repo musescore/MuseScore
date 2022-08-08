@@ -46,6 +46,9 @@ void Clock::forward(const msecs_t nextMsecs)
 
     if (m_timeLoopStart < m_timeLoopEnd && newTime >= m_timeLoopEnd) {
         seek(m_timeLoopStart);
+
+        //!Note No matter of the time loop boundaries, the current frame still should be handled
+        setCurrentTime(m_timeLoopStart + nextMsecs);
         return;
     }
 

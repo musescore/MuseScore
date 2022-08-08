@@ -22,11 +22,11 @@
 #ifndef MU_PROJECT_SCORETHUMBNAIL_H
 #define MU_PROJECT_SCORETHUMBNAIL_H
 
-#include <QQuickPaintedItem>
 #include <QPainter>
+#include "uicomponents/view/quickpaintedview.h"
 
 namespace mu::project {
-class ScoreThumbnail : public QQuickPaintedItem
+class ScoreThumbnail : public uicomponents::QuickPaintedView
 {
     Q_OBJECT
 

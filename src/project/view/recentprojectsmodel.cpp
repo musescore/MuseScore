@@ -24,8 +24,9 @@
 #include "translation.h"
 #include "actions/actiontypes.h"
 #include "dataformatter.h"
+#include "io/fileinfo.h"
 
-#include "engraving/infrastructure/io/mscio.h"
+#include "engraving/infrastructure/mscio.h"
 
 #include "log.h"
 
@@ -130,7 +131,7 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
             obj[SCORE_THUMBNAIL_KEY] = !meta.thumbnail.isNull() ? meta.thumbnail : QVariant();
         }
 
-        obj[SCORE_TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(QFileInfo(meta.filePath.toQString()).lastModified().date());
+        obj[SCORE_TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(meta.filePath).lastModified().date()).toQString();
         obj[SCORE_ADD_NEW_KEY] = false;
 
         recentScores << obj;

@@ -21,7 +21,7 @@
  */
 
 #include "translation.h"
-#include "interactive/messagebox.h"
+#include "infrastructure/messagebox.h"
 
 #include "factory.h"
 #include "utils.h"
@@ -347,8 +347,8 @@ void Score::putNote(const PointF& pos, bool replace, bool insert)
     //  calculate actual clicked line from staffType offset and stepOffset
     Staff* ss = score->staff(p.staffIdx);
     int stepOffset = ss->staffType(p.segment->tick())->stepOffset();
-    qreal stYOffset = ss->staffType(p.segment->tick())->yoffset().val();
-    qreal lineDist = ss->staffType(p.segment->tick())->lineDistance().val();
+    double stYOffset = ss->staffType(p.segment->tick())->yoffset().val();
+    double lineDist = ss->staffType(p.segment->tick())->lineDistance().val();
     p.line -= stepOffset + 2 * stYOffset / lineDist;
 
     if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH) && !isTablature) {
@@ -370,9 +370,12 @@ void Score::putNote(const Position& p, bool replace)
     _is.setTrack(p.staffIdx * VOICES + _is.voice());
     _is.setSegment(s);
 
-    if (score()->excerpt() && !score()->excerpt()->tracksMapping().empty()
-        && mu::key(score()->excerpt()->tracksMapping(), _is.track(), mu::nidx) == mu::nidx) {
-        return;
+    if (mu::engraving::Excerpt* excerpt = score()->excerpt()) {
+        const TracksMap& tracks = excerpt->tracksMapping();
+
+        if (!tracks.empty() && mu::key(tracks, _is.track(), mu::nidx) == mu::nidx) {
+            return;
+        }
     }
 
     DirectionV stemDirection = DirectionV::AUTO;
@@ -387,8 +390,9 @@ void Score::putNote(const Position& p, bool replace)
     staff_idx_t staffIdx = track2staff(_is.track());
     if (m->isMeasureRepeatGroup(staffIdx)) {
         auto b = MessageBox::warning(trc("engraving", "Note input will remove measure repeat"),
-                                     trc("engraving", "There is a measure repeat here.")
-                                     + trc("engraving", "\nContinue with adding note and delete measure repeat?"));
+                                     trc("engraving", "This measure contains a measure repeat."
+                                                      " If you enter notes here, it will be deleted."
+                                                      " Do you want to continue?"));
         if (b == MessageBox::Cancel) {
             return;
         }
@@ -433,7 +437,7 @@ void Score::putNote(const Position& p, bool replace)
             && !_is.rest()) {
             if (st->isTabStaff(cr->tick())) {            // TAB
                 // if a note on same string already exists, update to new pitch/fret
-                foreach (Note* note, toChord(cr)->notes()) {
+                for (Note* note : toChord(cr)->notes()) {
                     if (note->string() == nval.string) {                 // if string is the same
                         // if adding a new digit will keep fret number within fret limit,
                         // add a digit to existing fret number

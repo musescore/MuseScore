@@ -70,7 +70,9 @@ enum class PreferSharpFlat : char {
 
 class Part final : public EngravingObject
 {
-    QString _partName;              ///< used in tracklist (mixer)
+    OBJECT_ALLOCATOR(engraving, Part)
+
+    String _partName;              ///< used in tracklist (mixer)
     InstrumentList _instruments;
     std::vector<Staff*> _staves;
     ID _id = INVALID_ID;             ///< used for MusicXml import
@@ -89,7 +91,7 @@ public:
     Part(Score* score = nullptr);
     void initFromInstrTemplate(const InstrumentTemplate*);
 
-    ID id() const;
+    const ID& id() const;
     void setId(const ID& id);
 
     Part* clone() const;
@@ -104,17 +106,18 @@ public:
     void clearStaves();
 
     Staff* staff(staff_idx_t idx) const;
-    QString familyId() const;
+    String familyId() const;
 
     track_idx_t startTrack() const;
     track_idx_t endTrack() const;
 
+    InstrumentTrackIdList instrumentTrackIdList() const;
     InstrumentTrackIdSet instrumentTrackIdSet() const;
 
-    QString longName(const Fraction& tick = { -1, 1 }) const;
-    QString shortName(const Fraction& tick = { -1, 1 }) const;
-    QString instrumentName(const Fraction& tick = { -1, 1 }) const;
-    QString instrumentId(const Fraction& tick = { -1, 1 }) const;
+    String longName(const Fraction& tick = { -1, 1 }) const;
+    String shortName(const Fraction& tick = { -1, 1 }) const;
+    String instrumentName(const Fraction& tick = { -1, 1 }) const;
+    String instrumentId(const Fraction& tick = { -1, 1 }) const;
 
     const std::list<StaffName>& longNames(const Fraction& tick = { -1, 1 }) const { return instrument(tick)->longNames(); }
     const std::list<StaffName>& shortNames(const Fraction& tick = { -1, 1 }) const { return instrument(tick)->shortNames(); }
@@ -122,11 +125,11 @@ public:
     void setLongNames(std::list<StaffName>& s,  const Fraction& tick = { -1, 1 });
     void setShortNames(std::list<StaffName>& s, const Fraction& tick = { -1, 1 });
 
-    void setLongName(const QString& s);
-    void setShortName(const QString& s);
+    void setLongName(const String& s);
+    void setShortName(const String& s);
 
-    void setPlainLongName(const QString& s);
-    void setPlainShortName(const QString& s);
+    void setPlainLongName(const String& s);
+    void setPlainShortName(const String& s);
 
     void setStaves(int);
 
@@ -149,19 +152,20 @@ public:
 
     Instrument* instrument(Fraction = { -1, 1 });
     const Instrument* instrument(Fraction = { -1, 1 }) const;
+    const Instrument* instrumentById(const std::string& id) const;
     void setInstrument(Instrument*, Fraction = { -1, 1 });         // transfer ownership
     void setInstrument(Instrument*, int tick);
     void setInstrument(const Instrument&&, Fraction = { -1, 1 });
     void setInstrument(const Instrument&, Fraction = { -1, 1 });
     void setInstruments(const InstrumentList& instruments);
     void removeInstrument(const Fraction&);
-    void removeInstrument(const QString&);
+    void removeInstrument(const String&);
     const InstrumentList& instruments() const;
 
     void insertTime(const Fraction& tick, const Fraction& len);
 
-    QString partName() const { return _partName; }
-    void setPartName(const QString& s) { _partName = s; }
+    String partName() const { return _partName; }
+    void setPartName(const String& s) { _partName = s; }
     int color() const { return _color; }
     void setColor(int value) { _color = value; }
 
@@ -178,6 +182,7 @@ public:
 
     void updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval = false);
     const InstrChannel* harmonyChannel() const;
+    bool hasChordSymbol() const;
 
     const Part* masterPart() const;
     Part* masterPart();

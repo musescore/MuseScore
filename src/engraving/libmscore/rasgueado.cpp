@@ -26,6 +26,7 @@
 #include "measure.h"
 #include "chordrest.h"
 #include "score.h"
+#include "stafftype.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -47,7 +48,8 @@ static const ElementStyle rasgueadoStyle {
     { Sid::letRingHookHeight,                    Pid::BEGIN_HOOK_HEIGHT },
     { Sid::letRingHookHeight,                    Pid::END_HOOK_HEIGHT },
     { Sid::letRingLineStyle,                     Pid::LINE_STYLE },
-    { Sid::letRingBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET },
+    { Sid::letRingDashLineLen,                   Pid::DASH_LINE_LEN },
+    { Sid::letRingDashGapLen,                    Pid::DASH_GAP_LEN },
     { Sid::letRingEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::letRingLineWidth,                     Pid::LINE_WIDTH },
     { Sid::ottava8VAPlacement,                   Pid::PLACEMENT }
@@ -64,6 +66,13 @@ RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
 
 void RasgueadoSegment::layout()
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::rasgueadoShowTabCommon, Sid::rasgueadoShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }

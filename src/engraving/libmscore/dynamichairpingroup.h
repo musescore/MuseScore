@@ -27,7 +27,7 @@
 #include <functional>
 
 #include "elementgroup.h"
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
 class Dynamic;
@@ -41,6 +41,8 @@ class HairpinSegment;
 
 class HairpinWithDynamicsDragGroup : public ElementGroup
 {
+    OBJECT_ALLOCATOR(engraving, HairpinWithDynamicsDragGroup)
+
     Dynamic* startDynamic;
     HairpinSegment* hairpinSegment;
     Dynamic* endDynamic;
@@ -63,6 +65,8 @@ public:
 
 class DynamicNearHairpinsDragGroup : public ElementGroup
 {
+    OBJECT_ALLOCATOR(engraving, DynamicNearHairpinsDragGroup)
+
     Hairpin* leftHairpin;
     Dynamic* dynamic;
     Hairpin* rightHairpin;

@@ -37,6 +37,7 @@
 #include "pluginterfaces/gui/iplugviewcontentscalesupport.h"
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
 #include "pluginterfaces/vst/ivsteditcontroller.h"
+#include "pluginterfaces/vst/ivstmidicontrollers.h"
 
 #include "framework/midi/miditypes.h"
 
@@ -62,6 +63,7 @@ using PluginParamInfo = Steinberg::Vst::ParameterInfo;
 using PluginParamId = Steinberg::Vst::ParamID;
 using PluginParamValue = Steinberg::Vst::ParamValue;
 using PluginPreset = Steinberg::Vst::PresetFile;
+using ControllIdx = Steinberg::Vst::CtrlNumber;
 using IAudioProcessorPtr = Steinberg::FUnknownPtr<Steinberg::Vst::IAudioProcessor>;
 using IComponentHandler = Steinberg::Vst::IComponentHandler;
 using IAdvancedComponentHandler = Steinberg::Vst::IComponentHandler2;
@@ -71,6 +73,7 @@ using BusInfo = Steinberg::Vst::BusInfo;
 using BusDirection = Steinberg::Vst::BusDirections;
 using BusType = Steinberg::Vst::BusTypes;
 using BusMediaType = Steinberg::Vst::MediaTypes;
+using ParamsMapping = std::unordered_map<ControllIdx, PluginParamId>;
 
 enum class VstPluginType {
     Undefined,
@@ -113,4 +116,67 @@ using VstBufferStream = Steinberg::Vst::BufferStream;
 
 namespace PluginEditorViewType = Steinberg::Vst::ViewType;
 }
+
+template<>
+struct std::less<mu::vst::PluginParamInfo>
+{
+    bool operator()(const mu::vst::PluginParamInfo& first,
+                    const mu::vst::PluginParamInfo& second) const
+    {
+        return first.id < second.id
+               && first.defaultNormalizedValue < second.defaultNormalizedValue;
+    }
+};
+
+template<>
+struct std::less<Steinberg::Vst::NoteOnEvent>
+{
+    bool operator()(const Steinberg::Vst::NoteOnEvent& first,
+                    const Steinberg::Vst::NoteOnEvent& second) const
+    {
+        return first.channel < second.channel
+               || first.pitch < second.pitch
+               || first.tuning < second.tuning
+               || first.velocity < second.velocity
+               || first.length < second.length
+               || first.noteId < second.noteId;
+    }
+};
+
+template<>
+struct std::less<Steinberg::Vst::NoteOffEvent>
+{
+    bool operator()(const Steinberg::Vst::NoteOffEvent& first,
+                    const Steinberg::Vst::NoteOffEvent& second) const
+    {
+        return first.channel < second.channel
+               || first.pitch < second.pitch
+               || first.tuning < second.tuning
+               || first.velocity < second.velocity
+               || first.noteId < second.noteId;
+    }
+};
+
+template<>
+struct std::less<mu::vst::VstEvent>
+{
+    bool operator()(const mu::vst::VstEvent& first,
+                    const mu::vst::VstEvent& second) const
+    {
+        if (first.type < second.type || first.busIndex < second.busIndex) {
+            return true;
+        }
+
+        if (first.type == Steinberg::Vst::Event::kNoteOnEvent && first.type == second.type) {
+            return std::less<Steinberg::Vst::NoteOnEvent> {}(first.noteOn, second.noteOn);
+        }
+
+        if (first.type == Steinberg::Vst::Event::kNoteOffEvent && first.type == second.type) {
+            return std::less<Steinberg::Vst::NoteOffEvent> {}(first.noteOff, second.noteOff);
+        }
+
+        return false;
+    }
+};
+
 #endif // MU_VST_VSTTYPES_H

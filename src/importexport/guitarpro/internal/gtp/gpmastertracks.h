@@ -1,6 +1,7 @@
 #ifndef GPMASTERTRACKS_H
 #define GPMASTERTRACKS_H
 
+#include <stddef.h>
 #include <vector>
 
 namespace mu::engraving {

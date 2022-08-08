@@ -21,6 +21,9 @@
  */
 #include "engravingproject.h"
 
+#include "global/allocator.h"
+#include "async/async.h"
+
 #include "style/defaultstyle.h"
 #include "rw/scorereader.h"
 #include "libmscore/masterscore.h"
@@ -29,10 +32,15 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
 std::shared_ptr<EngravingProject> EngravingProject::create()
 {
+    if (engravingElementsProvider()) {
+        engravingElementsProvider()->clearStatistic();
+    }
+
     std::shared_ptr<EngravingProject> p = std::shared_ptr<EngravingProject>(new EngravingProject());
     p->init(DefaultStyle::defaultStyle());
     return p;
@@ -40,14 +48,29 @@ std::shared_ptr<EngravingProject> EngravingProject::create()
 
 std::shared_ptr<EngravingProject> EngravingProject::create(const MStyle& style)
 {
+    if (engravingElementsProvider()) {
+        engravingElementsProvider()->clearStatistic();
+    }
+
     std::shared_ptr<EngravingProject> p = std::shared_ptr<EngravingProject>(new EngravingProject());
     p->init(style);
     return p;
 }
 
+EngravingProject::EngravingProject()
+{
+    ObjectAllocator::used++;
+}
+
 EngravingProject::~EngravingProject()
 {
     delete m_masterScore;
+
+    ObjectAllocator::used--;
+
+    AllocatorsRegister::instance()->printStatistic("=== Destroy engraving project ===");
+    //! NOTE At the moment, the allocator is working as leak detector. No need to do cleanup, at the moment it can lead to crashes
+    // AllocatorsRegister::instance()->cleanupAll("engraving");
 }
 
 void EngravingProject::init(const MStyle& style)
@@ -65,7 +88,7 @@ void EngravingProject::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider
     m_masterScore->setFileInfoProvider(fileInfoProvider);
 }
 
-QString EngravingProject::appVersion() const
+String EngravingProject::appVersion() const
 {
     return m_masterScore->mscoreVersion();
 }
@@ -83,10 +106,7 @@ bool EngravingProject::readOnly() const
 Err EngravingProject::setupMasterScore(bool forceMode)
 {
     TRACEFUNC;
-
-    engravingElementsProvider()->clearStatistic();
     Err err = doSetupMasterScore(m_masterScore, forceMode);
-    engravingElementsProvider()->printStatistic("=== Update and Layout ===");
     return err;
 }
 
@@ -130,12 +150,9 @@ MasterScore* EngravingProject::masterScore() const
 Err EngravingProject::loadMscz(const MscReader& msc, bool ignoreVersionError)
 {
     TRACEFUNC;
-
-    engravingElementsProvider()->clearStatistic();
     MScore::setError(MsError::MS_NO_ERROR);
     ScoreReader scoreReader;
     Err err = scoreReader.loadMscz(m_masterScore, msc, ignoreVersionError);
-    engravingElementsProvider()->printStatistic("=== Load ===");
     return err;
 }
 

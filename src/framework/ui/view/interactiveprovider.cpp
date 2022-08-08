@@ -112,14 +112,15 @@ RetVal<Val> InteractiveProvider::info(const std::string& title, const std::strin
     return openStandardDialog("INFO", QString::fromStdString(title), text, buttons, defBtn, options);
 }
 
-RetVal<Val> InteractiveProvider::warning(const std::string& title, const std::string& text, const IInteractive::ButtonDatas& buttons,
+RetVal<Val> InteractiveProvider::warning(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
                                          int defBtn,
                                          const IInteractive::Options& options)
 {
     return openStandardDialog("WARNING", QString::fromStdString(title), text, buttons, defBtn, options);
 }
 
-RetVal<Val> InteractiveProvider::error(const std::string& title, const std::string& text, const IInteractive::ButtonDatas& buttons,
+RetVal<Val> InteractiveProvider::error(const std::string& title, const framework::IInteractive::Text& text,
+                                       const IInteractive::ButtonDatas& buttons,
                                        int defBtn,
                                        const IInteractive::Options& options)
 {
@@ -321,8 +322,8 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
         params["withIcon"] = true;
     }
 
-    if (options.testFlag(IInteractive::Option::WithShowAgain)) {
-        params["withShowAgain"] = true;
+    if (options.testFlag(IInteractive::Option::WithDontShowAgainCheckBox)) {
+        params["withDontShowAgainCheckBox"] = true;
     }
 
     data->setValue("params", params);
@@ -473,6 +474,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
         dialog->exec();
     } else {
         dialog->show();
+        dialog->activateWindow(); // give keyboard focus to aid blind users
     }
 
     result.ret = make_ret(Ret::Code::Ok);

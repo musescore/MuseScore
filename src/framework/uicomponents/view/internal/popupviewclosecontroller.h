@@ -67,7 +67,7 @@ protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
     void doFocusOut();
-    virtual void doUpdateEventFiletrs();
+    virtual void doUpdateEventFilters();
 
     bool isMouseWithinBoundaries(const QPoint& mousePos) const;
 

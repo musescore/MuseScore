@@ -98,16 +98,16 @@ void TestCaseReport::endReport(bool aborted)
     m_file.close();
 }
 
-void TestCaseReport::onStepStatusChanged(const QString& name, StepStatus status, const ITestCaseContextPtr& ctx)
+void TestCaseReport::onStepStatusChanged(const StepInfo& stepInfo, const ITestCaseContextPtr& ctx)
 {
     if (!m_opened) {
         return;
     }
 
-    switch (status) {
+    switch (stepInfo.status) {
     case StepStatus::Undefined: break;
     case StepStatus::Started: {
-        m_stream << "  started step: " << name << Qt::endl;
+        m_stream << "  started step: " << stepInfo.name << Qt::endl;
     } break;
     case StepStatus::Finished: {
         const ITestCaseContext::StepContext& step = ctx->currentStep();
@@ -115,18 +115,18 @@ void TestCaseReport::onStepStatusChanged(const QString& name, StepStatus status,
             m_stream << "    " << it->first << ": " << formatVal(it->second) << Qt::endl;
         }
 
-        m_stream << "  finished step: " << name << Qt::endl;
+        m_stream << "  finished step: " << stepInfo.name << " [" << stepInfo.durationMsec << " msec]" << Qt::endl;
     } break;
     case StepStatus::Skipped: {
-        m_stream << "  skipped step: " << name << Qt::endl;
+        m_stream << "  skipped step: " << stepInfo.name << Qt::endl;
     } break;
     case StepStatus::Paused:
         return;
     case StepStatus::Aborted: {
-        m_stream << "  abort step: " << name << Qt::endl;
+        m_stream << "  abort step: " << stepInfo.name << Qt::endl;
     } break;
     case StepStatus::Error: {
-        m_stream << "  error step: " << name << Qt::endl;
+        m_stream << "  error step: " << stepInfo.name << Qt::endl;
     } break;
     }
 

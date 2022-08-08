@@ -82,9 +82,13 @@ void MasterNotationParts::removeStaves(const IDList& stavesIds)
     endGlobalEdit();
 }
 
-void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
+bool MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     TRACEFUNC;
+
+    IF_ASSERT_FAILED(staff) {
+        return false;
+    }
 
     startGlobalEdit();
 
@@ -95,15 +99,23 @@ void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 
     for (INotationPartsPtr parts : excerptsParts()) {
         Staff* excerptStaff = mu::engraving::toStaff(staff->linkedClone());
-        parts->appendStaff(excerptStaff, destinationPartId);
+        if (!parts->appendStaff(excerptStaff, destinationPartId)) {
+            excerptStaff->unlink();
+            delete excerptStaff;
+        }
     }
 
     endGlobalEdit();
+    return true;
 }
 
-void MasterNotationParts::appendLinkedStaff(Staff* staff, const mu::ID& sourceStaffId, const mu::ID& destinationPartId)
+bool MasterNotationParts::appendLinkedStaff(Staff* staff, const mu::ID& sourceStaffId, const mu::ID& destinationPartId)
 {
     TRACEFUNC;
+
+    IF_ASSERT_FAILED(staff) {
+        return false;
+    }
 
     startGlobalEdit();
 
@@ -113,10 +125,15 @@ void MasterNotationParts::appendLinkedStaff(Staff* staff, const mu::ID& sourceSt
     NotationParts::appendLinkedStaff(staff, sourceStaffId, destinationPartId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->appendLinkedStaff(staff->clone(), sourceStaffId, destinationPartId);
+        Staff* excerptStaff = staff->clone();
+        if (!parts->appendLinkedStaff(excerptStaff, sourceStaffId, destinationPartId)) {
+            excerptStaff->unlink();
+            delete excerptStaff;
+        }
     }
 
     endGlobalEdit();
+    return true;
 }
 
 void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument)

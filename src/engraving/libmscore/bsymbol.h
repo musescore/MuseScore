@@ -35,6 +35,7 @@ namespace mu::engraving {
 
 class BSymbol : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, BSymbol)
 public:
 
     Segment* segment() const { return (Segment*)explicitParent(); }

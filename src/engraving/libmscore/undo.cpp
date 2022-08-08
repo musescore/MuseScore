@@ -34,6 +34,8 @@
 
 #include "undo.h"
 
+#include "infrastructure/symbolfonts.h"
+
 #include "engravingitem.h"
 #include "note.h"
 #include "score.h"
@@ -81,7 +83,6 @@
 #include "stafftext.h"
 #include "chordline.h"
 #include "tremolo.h"
-#include "scorefont.h"
 #include "utils.h"
 #include "glissando.h"
 #include "stafflines.h"
@@ -90,6 +91,7 @@
 #include "textedit.h"
 #include "textline.h"
 #include "linkedobjects.h"
+#include "stafftypechange.h"
 
 #include "masterscore.h"
 
@@ -101,6 +103,29 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 extern Measure* tick2measure(int tick);
+
+static std::vector<const EngravingObject*> compoundObjects(const EngravingObject* object)
+{
+    std::vector<const EngravingObject*> objects;
+
+    if (object->isChord()) {
+        const Chord* chord = toChord(object);
+        for (const Note* note : chord->notes()) {
+            for (const Note* compoundNote : note->compoundNotes()) {
+                objects.push_back(compoundNote);
+            }
+        }
+    } else if (object->isNote()) {
+        const Note* note = toNote(object);
+        for (const Note* compoundNote : note->compoundNotes()) {
+            objects.push_back(compoundNote);
+        }
+    }
+
+    objects.push_back(object);
+
+    return objects;
+}
 
 //---------------------------------------------------------
 //   updateNoteLines
@@ -290,7 +315,7 @@ UndoStack::~UndoStack()
     for (auto c : list) {
         c->cleanup(idx++ < curIdx);
     }
-    qDeleteAll(list);
+    DeleteAll(list);
 }
 
 //---------------------------------------------------------
@@ -355,8 +380,8 @@ void UndoStack::push1(UndoCommand* cmd)
 
 void UndoStack::remove(size_t idx)
 {
-    Q_ASSERT(idx <= curIdx);
-    Q_ASSERT(curIdx != mu::nidx);
+    assert(idx <= curIdx);
+    assert(curIdx != mu::nidx);
     // remove redo stack
     while (list.size() > curIdx) {
         UndoCommand* cmd = mu::takeLast(list);
@@ -380,7 +405,7 @@ void UndoStack::remove(size_t idx)
 
 void UndoStack::mergeCommands(size_t startIdx)
 {
-    Q_ASSERT(startIdx <= curIdx);
+    assert(startIdx <= curIdx);
 
     if (startIdx >= list.size()) {
         return;
@@ -417,8 +442,8 @@ void UndoStack::pop()
 void UndoStack::rollback()
 {
     LOG_UNDO() << "called";
-    Q_ASSERT(curCmd == 0);
-    Q_ASSERT(curIdx > 0);
+    assert(curCmd == 0);
+    assert(curIdx > 0);
     size_t idx = curIdx - 1;
     list[idx]->unwind();
     remove(idx);
@@ -458,8 +483,8 @@ void UndoStack::endMacro(bool rollback)
 void UndoStack::reopen()
 {
     LOG_UNDO() << "curIdx: " << curIdx << ", size: " << list.size();
-    Q_ASSERT(curCmd == 0);
-    Q_ASSERT(curIdx > 0);
+    assert(curCmd == 0);
+    assert(curIdx > 0);
     --curIdx;
     curCmd = mu::takeAt(list, curIdx);
     stateList.erase(stateList.begin() + curIdx);
@@ -494,7 +519,7 @@ void UndoStack::undo(EditData* ed)
     }
     if (curIdx) {
         --curIdx;
-        Q_ASSERT(curIdx < list.size());
+        assert(curIdx < list.size());
         list[curIdx]->undo(ed);
     }
 }
@@ -637,6 +662,24 @@ std::unordered_set<ElementType> UndoMacro::changedTypes() const
             }
 
             result.insert(object->type());
+        }
+    }
+
+    return result;
+}
+
+std::vector<const EngravingItem*> UndoMacro::changedElements() const
+{
+    std::vector<const EngravingItem*> result;
+
+    for (const UndoCommand* command : commands()) {
+        for (const EngravingObject* object : command->objectItems()) {
+            auto item = dynamic_cast<const EngravingItem*>(object);
+            if (!item) {
+                continue;
+            }
+
+            result.push_back(item);
         }
     }
 
@@ -829,9 +872,16 @@ void AddElement::endUndoRedo(bool isUndo) const
 
 void AddElement::undo(EditData*)
 {
+    Score* score = element->score();
+
     if (!element->isTuplet()) {
-        element->score()->removeElement(element);
+        score->removeElement(element);
     }
+
+    if (element->isStaffTextBase()) {
+        score->updateSwing();
+    }
+
     endUndoRedo(true);
 }
 
@@ -841,9 +891,16 @@ void AddElement::undo(EditData*)
 
 void AddElement::redo(EditData*)
 {
+    Score* score = element->score();
+
     if (!element->isTuplet()) {
-        element->score()->addElement(element);
+        score->addElement(element);
     }
+
+    if (element->isStaffTextBase()) {
+        score->updateSwing();
+    }
+
     endUndoRedo(false);
 }
 
@@ -856,7 +913,7 @@ const char* AddElement::name() const
     static char buffer[64];
     if (element->isTextBase()) {
         snprintf(buffer, 64, "Add:    %s <%s> %p", element->typeName(),
-                 qPrintable(toTextBase(element)->plainText()), element);
+                 muPrintable(toTextBase(element)->plainText()), element);
     } else if (element->isSegment()) {
         snprintf(buffer, 64, "Add:    <%s-%s> %p", element->typeName(), toSegment(element)->subTypeName(), element);
     } else {
@@ -881,6 +938,11 @@ bool AddElement::isFiltered(UndoCommand::Filter f, const EngravingItem* target) 
         break;
     }
     return false;
+}
+
+std::vector<const EngravingObject*> AddElement::objectItems() const
+{
+    return compoundObjects(element);
 }
 
 //---------------------------------------------------------
@@ -957,9 +1019,16 @@ void RemoveElement::cleanup(bool undo)
 
 void RemoveElement::undo(EditData*)
 {
+    Score* score = element->score();
+
     if (!element->isTuplet()) {
-        element->score()->addElement(element);
+        score->addElement(element);
     }
+
+    if (element->isStaffTextBase()) {
+        score->updateSwing();
+    }
+
     if (element->isChordRest()) {
         if (element->isChord()) {
             Chord* chord = toChord(element);
@@ -969,9 +1038,9 @@ void RemoveElement::undo(EditData*)
         }
         undoAddTuplet(toChordRest(element));
     } else if (element->isClef()) {
-        element->score()->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
+        score->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
     } else if (element->isKeySig()) {
-        element->score()->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
+        score->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
     }
 }
 
@@ -981,9 +1050,16 @@ void RemoveElement::undo(EditData*)
 
 void RemoveElement::redo(EditData*)
 {
+    Score* score = element->score();
+
     if (!element->isTuplet()) {
-        element->score()->removeElement(element);
+        score->removeElement(element);
     }
+
+    if (element->isStaffTextBase()) {
+        score->updateSwing();
+    }
+
     if (element->isChordRest()) {
         undoRemoveTuplet(toChordRest(element));
         if (element->isChord()) {
@@ -993,9 +1069,9 @@ void RemoveElement::redo(EditData*)
             }
         }
     } else if (element->isClef()) {
-        element->score()->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
+        score->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
     } else if (element->isKeySig()) {
-        element->score()->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
+        score->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
     }
 }
 
@@ -1008,7 +1084,7 @@ const char* RemoveElement::name() const
     static char buffer[64];
     if (element->isTextBase()) {
         snprintf(buffer, 64, "Remove: %s <%s> %p", element->typeName(),
-                 qPrintable(toTextBase(element)->plainText()), element);
+                 muPrintable(toTextBase(element)->plainText()), element);
     } else if (element->isSegment()) {
         snprintf(buffer, 64, "Remove: <%s-%s> %p", element->typeName(), toSegment(element)->subTypeName(), element);
     } else {
@@ -1341,6 +1417,7 @@ void ChangeElement::flip(EditData*)
             score->select(newElement, SelectType::ADD);
         }
     }
+
     if (oldElement->explicitParent() == 0) {
         score->removeElement(oldElement);
         score->addElement(newElement);
@@ -1359,7 +1436,7 @@ void ChangeElement::flip(EditData*)
         TempoText* t = toTempoText(oldElement);
         score->setTempo(t->segment(), t->tempo());
     }
-//      if (newElement->isSegmentFlag()) {
+
     if (newElement->isSpannerSegment()) {
         SpannerSegment* os = toSpannerSegment(oldElement);
         SpannerSegment* ns = toSpannerSegment(newElement);
@@ -1370,10 +1447,14 @@ void ChangeElement::flip(EditData*)
             ns->system()->add(ns);
         }
     }
-    qSwap(oldElement, newElement);
+
+    if (newElement->isStaffTextBase()) {
+        score->updateSwing();
+    }
+
+    std::swap(oldElement, newElement);
     oldElement->triggerLayout();
     newElement->triggerLayout();
-    // score->setLayoutAll();
 }
 
 //---------------------------------------------------------
@@ -1611,7 +1692,7 @@ void EditText::redo(EditData*)
 
 void EditText::undoRedo()
 {
-    QString s = text->xmlText();
+    String s = text->xmlText();
     text->setXmlText(oldText);
     oldText = s;
     text->triggerLayout();
@@ -1692,7 +1773,7 @@ ChangeStaff::ChangeStaff(Staff* _staff)
 }
 
 ChangeStaff::ChangeStaff(Staff* _staff, bool _visible, ClefTypeList _clefType,
-                         qreal _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
+                         double _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
                          bool _hideSystemBarLine, bool _mergeMatchingRests)
 {
     staff       = _staff;
@@ -1714,7 +1795,7 @@ void ChangeStaff::flip(EditData*)
 {
     bool oldVisible = staff->visible();
     ClefTypeList oldClefType = staff->defaultClefType();
-    qreal oldUserDist   = staff->userDist();
+    double oldUserDist   = staff->userDist();
     Staff::HideMode oldHideMode    = staff->hideWhenEmpty();
     bool oldShowIfEmpty = staff->showIfEmpty();
     bool oldCutaway     = staff->cutaway();
@@ -1773,7 +1854,7 @@ void ChangeStaffType::flip(EditData*)
 //   ChangePart
 //---------------------------------------------------------
 
-ChangePart::ChangePart(Part* _part, Instrument* i, const QString& s)
+ChangePart::ChangePart(Part* _part, Instrument* i, const String& s)
 {
     instrument = i;
     part       = _part;
@@ -1787,7 +1868,7 @@ ChangePart::ChangePart(Part* _part, Instrument* i, const QString& s)
 void ChangePart::flip(EditData*)
 {
     Instrument* oi = part->instrument(); //tick?
-    QString s      = part->partName();
+    String s      = part->partName();
     part->setInstrument(instrument);
     part->setPartName(partName);
 
@@ -1828,7 +1909,7 @@ void ChangeStyle::flip(EditData*)
         score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool());
     }
     if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
-        score->setScoreFont(ScoreFont::fontByName(style.value(Sid::MusicalSymbolFont).toString()));
+        score->setSymbolFont(SymbolFonts::fontByName(style.styleSt(Sid::MusicalSymbolFont)));
     }
 
     score->setStyle(style, overlap);
@@ -1858,13 +1939,13 @@ void ChangeStyleVal::flip(EditData*)
         case Sid::chordModifierAdjust:
         case Sid::chordDescriptionFile: {
             score->chordList()->unload();
-            qreal emag = score->styleD(Sid::chordExtensionMag);
-            qreal eadjust = score->styleD(Sid::chordExtensionAdjust);
-            qreal mmag = score->styleD(Sid::chordModifierMag);
-            qreal madjust = score->styleD(Sid::chordModifierAdjust);
+            double emag = score->styleD(Sid::chordExtensionMag);
+            double eadjust = score->styleD(Sid::chordExtensionAdjust);
+            double mmag = score->styleD(Sid::chordModifierMag);
+            double madjust = score->styleD(Sid::chordModifierAdjust);
             score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
             if (score->styleB(Sid::chordsXmlFile)) {
-                score->chordList()->read("chords.xml");
+                score->chordList()->read(u"chords.xml");
             }
             score->chordList()->read(score->styleSt(Sid::chordDescriptionFile));
             score->chordList()->setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");
@@ -1991,6 +2072,7 @@ std::vector<Clef*> InsertRemoveMeasures::getCourtesyClefs(Measure* m)
 void InsertRemoveMeasures::insertMeasures()
 {
     Score* score = fm->score();
+
     std::list<Clef*> clefs;
     std::vector<Clef*> prevMeasureClefs;
     std::list<KeySig*> keys;
@@ -2045,6 +2127,21 @@ void InsertRemoveMeasures::insertMeasures()
 
     score->setLayoutAll();
 
+    if (Measure* nextMeasure = lm->nextMeasure()) {
+        for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            Staff* staff = score->staff(staffIdx);
+            if (staff->isStaffTypeStartFrom(fm->tick())) {
+                staff->moveStaffType(fm->tick(), nextMeasure->tick());
+
+                for (auto el : nextMeasure->el()) {
+                    if (el && el->isStaffTypeChange()) {
+                        toStaffTypeChange(el)->setStaffType(staff->staffType(nextMeasure->tick()), false);
+                    }
+                }
+            }
+        }
+    }
+
     //
     // connect ties
     //
@@ -2060,7 +2157,7 @@ void InsertRemoveMeasures::insertMeasures()
                 continue;
             }
             Chord* chord = toChord(e);
-            foreach (Note* n, chord->notes()) {
+            for (Note* n : chord->notes()) {
                 Tie* tie = n->tieFor();
                 if (!tie) {
                     continue;
@@ -2101,6 +2198,22 @@ void InsertRemoveMeasures::removeMeasures()
             break;
         }
     }
+
+    if (Measure* nextMeasure = lm->nextMeasure()) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            Staff* staff = score->staff(staffIdx);
+            if (staff->isStaffTypeStartFrom(nextMeasure->tick())) {
+                staff->moveStaffType(nextMeasure->tick(), fm->tick());
+
+                for (auto el : nextMeasure->el()) {
+                    if (el && el->isStaffTypeChange()) {
+                        toStaffTypeChange(el)->setStaffType(staff->staffType(fm->tick()), false);
+                    }
+                }
+            }
+        }
+    }
+
     score->measures()->remove(fm, lm);
 
     score->setUpTempoMap();
@@ -2126,9 +2239,7 @@ void InsertRemoveMeasures::removeMeasures()
         // remember clefs at the end of previous measure
         const auto clefs = getCourtesyClefs(toMeasure(fm));
 
-        if (score->firstMeasure()) {
-            score->insertTime(tick1, -(tick2 - tick1));
-        }
+        score->insertTime(tick1, -(tick2 - tick1));
 
         // Restore clefs that were backed up. Events for them could be lost
         // as a result of the recent insertTime() call.
@@ -2258,7 +2369,7 @@ void SwapExcerpt::flip(EditData*)
 
 void ChangeExcerptTitle::flip(EditData*)
 {
-    QString s = title;
+    String s = title;
     title = excerpt->name();
     excerpt->setName(s);
     excerpt->masterScore()->setExcerptsChanged(true);
@@ -2442,6 +2553,11 @@ void ChangeProperty::flip(EditData*)
     flags = ps;
 }
 
+std::vector<const EngravingObject*> ChangeProperty::objectItems() const
+{
+    return compoundObjects(element);
+}
+
 //---------------------------------------------------------
 //   ChangeBracketProperty::flip
 //---------------------------------------------------------
@@ -2475,7 +2591,7 @@ void ChangeTextLineProperty::flip(EditData* ed)
 
 void ChangeMetaText::flip(EditData*)
 {
-    QString s = score->metaTag(id);
+    String s = score->metaTag(id);
     score->setMetaTag(id, text);
     text = s;
 }
@@ -2652,7 +2768,7 @@ void ChangeNoteEvent::flip(EditData*)
 LinkUnlink::~LinkUnlink()
 {
     if (le && mustDelete) {
-        Q_ASSERT(le->size() <= 1);
+        assert(le->size() <= 1);
         delete le;
     }
 }
@@ -2669,7 +2785,7 @@ void LinkUnlink::link()
 
 void LinkUnlink::unlink()
 {
-    Q_ASSERT(le->contains(e));
+    assert(le->contains(e));
     le->remove(e);
     if (le->size() == 1) {
         le->front()->setLinks(0);
@@ -2686,7 +2802,7 @@ void LinkUnlink::unlink()
 
 Link::Link(EngravingObject* e1, EngravingObject* e2)
 {
-    Q_ASSERT(e1->links() == 0);
+    assert(e1->links() == 0);
     le = e2->links();
     if (!le) {
         if (e1->isStaff()) {
@@ -2720,7 +2836,7 @@ Unlink::Unlink(EngravingObject* _e)
 {
     e  = _e;
     le = e->links();
-    Q_ASSERT(le);
+    assert(le);
 }
 
 //---------------------------------------------------------
@@ -2743,7 +2859,7 @@ void ChangeStartEndSpanner::flip(EditData*)
 
 void ChangeMetaTags::flip(EditData*)
 {
-    std::map<QString, QString> t = score->metaTags();
+    std::map<String, String> t = score->metaTags();
     score->setMetaTags(metaTags);
     metaTags = t;
 }

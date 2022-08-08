@@ -34,6 +34,7 @@ namespace mu::engraving {
 
 class InsertItemBspTreeVisitor : public BspTreeVisitor
 {
+    OBJECT_ALLOCATOR(engraving, InsertItemBspTreeVisitor)
 public:
     EngravingItem* item;
 
@@ -46,6 +47,7 @@ public:
 
 class RemoveItemBspTreeVisitor : public BspTreeVisitor
 {
+    OBJECT_ALLOCATOR(engraving, RemoveItemBspTreeVisitor)
 public:
     EngravingItem* item;
 
@@ -58,6 +60,7 @@ public:
 
 class FindItemBspTreeVisitor : public BspTreeVisitor
 {
+    OBJECT_ALLOCATOR(engraving, FindItemBspTreeVisitor)
 public:
     std::list<EngravingItem*> foundItems;
 
@@ -89,7 +92,7 @@ BspTree::BspTree()
 
 static inline int intmaxlog(int n)
 {
-    return n > 0 ? qMax(int(::ceil(::log(qreal(n)) / ::log(qreal(2)))), 5) : 0;
+    return n > 0 ? std::max(int(::ceil(::log(double(n)) / ::log(double(2)))), 5) : 0;
 }
 
 //---------------------------------------------------------
@@ -150,7 +153,7 @@ std::vector<EngravingItem*> BspTree::items(const RectF& rec)
     FindItemBspTreeVisitor findVisitor;
     climbTree(&findVisitor, rec);
     std::vector<EngravingItem*> l;
-    for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
+    for (EngravingItem* e : findVisitor.foundItems) {
         e->itemDiscovered = false;
         if (e->pageBoundingRect().intersects(rec)) {
             l.push_back(e);
@@ -169,7 +172,7 @@ std::vector<EngravingItem*> BspTree::items(const PointF& pos)
     climbTree(&findVisitor, pos);
 
     std::vector<EngravingItem*> l;
-    for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
+    for (EngravingItem* e : findVisitor.foundItems) {
         e->itemDiscovered = false;
         if (e->contains(pos)) {
             l.push_back(e);
@@ -183,15 +186,15 @@ std::vector<EngravingItem*> BspTree::items(const PointF& pos)
 //   debug
 //---------------------------------------------------------
 
-QString BspTree::debug(int index) const
+String BspTree::debug(int index) const
 {
     const Node* node = &nodes.at(index);
 
-    QString tmp;
+    String tmp;
     if (node->type == Node::Type::LEAF) {
         RectF rec = rectForIndex(index);
         if (!leaves[node->leafIndex].empty()) {
-            tmp += QString::fromLatin1("[%1, %2, %3, %4] contains %5 items\n")
+            tmp += String(u"[%1, %2, %3, %4] contains %5 items\n")
                    .arg(rec.left()).arg(rec.top())
                    .arg(rec.width()).arg(rec.height())
                    .arg(leaves[node->leafIndex].size());
@@ -225,7 +228,7 @@ void BspTree::initialize(const RectF& rec, int dep, int index)
     if (dep) {
         Node::Type type;
         RectF rect1, rect2;
-        qreal offset1, offset2;
+        double offset1, offset2;
 
         if (node->type == Node::Type::HORIZONTAL) {
             type = Node::Type::VERTICAL;

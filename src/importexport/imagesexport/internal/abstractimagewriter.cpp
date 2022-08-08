@@ -38,7 +38,7 @@ bool AbstractImageWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret AbstractImageWriter::write(INotationPtr, io::Device&, const Options& options)
+mu::Ret AbstractImageWriter::write(INotationPtr, QIODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) != UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
@@ -53,7 +53,7 @@ mu::Ret AbstractImageWriter::write(INotationPtr, io::Device&, const Options& opt
     return Ret(Ret::Code::NotSupported);
 }
 
-mu::Ret AbstractImageWriter::writeList(const INotationPtrList&, io::Device&, const Options& options)
+mu::Ret AbstractImageWriter::writeList(const INotationPtrList&, QIODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) == UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
@@ -66,16 +66,6 @@ mu::Ret AbstractImageWriter::writeList(const INotationPtrList&, io::Device&, con
 
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
-}
-
-void AbstractImageWriter::abort()
-{
-    NOT_IMPLEMENTED;
-}
-
-mu::framework::ProgressChannel AbstractImageWriter::progress() const
-{
-    return m_progress;
 }
 
 INotationWriter::UnitType AbstractImageWriter::unitTypeFromOptions(const Options& options) const

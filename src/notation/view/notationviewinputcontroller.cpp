@@ -25,7 +25,7 @@
 #include <QtMath>
 
 #include "log.h"
-#include "notationpaintview.h"
+#include "abstractnotationpaintview.h"
 #include "commonscene/commonscenetypes.h"
 
 using namespace mu;
@@ -78,16 +78,6 @@ void NotationViewInputController::init()
                                     m_view->fromLogical(selectionElementPos()).toQPointF(), true);
         });
     }
-
-    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
-        m_isZoomInited = false;
-        initZoom();
-    });
-}
-
-bool NotationViewInputController::isZoomInited()
-{
-    return m_isZoomInited;
 }
 
 void NotationViewInputController::initZoom()
@@ -96,7 +86,6 @@ void NotationViewInputController::initZoom()
     switch (defaultZoomType) {
     case ZoomType::Percentage:
         setZoom(configuration()->defaultZoom());
-        m_isZoomInited = true;
         break;
     case ZoomType::PageWidth:
         zoomToPageWidth();
@@ -108,6 +97,8 @@ void NotationViewInputController::initZoom()
         zoomToTwoPages();
         break;
     }
+
+    currentNotation()->viewState()->setMatrixInited(true);
 }
 
 bool NotationViewInputController::readonly() const
@@ -191,7 +182,6 @@ void NotationViewInputController::zoomToPageWidth()
 
     qreal scale = m_view->width() / pageWidth;
     setScaling(scale);
-    m_isZoomInited = true;
 }
 
 void NotationViewInputController::zoomToWholePage()
@@ -208,7 +198,6 @@ void NotationViewInputController::zoomToWholePage()
 
     qreal scale = std::min(pageWidthScale, pageHeightScale);
     setScaling(scale, PointF());
-    m_isZoomInited = true;
 }
 
 void NotationViewInputController::zoomToTwoPages()
@@ -237,7 +226,6 @@ void NotationViewInputController::zoomToTwoPages()
 
     qreal scale = std::min(pageHeightScale, pageWidthScale);
     setScaling(scale, PointF());
-    m_isZoomInited = true;
 }
 
 int NotationViewInputController::currentZoomIndex() const
@@ -262,11 +250,6 @@ void NotationViewInputController::setScaling(qreal scaling, const PointF& pos)
     qreal maxScaling = scalingFromZoomPercentage(m_possibleZoomPercentages.last());
     qreal correctedScaling = std::clamp(scaling, minScaling, maxScaling);
 
-    if (!m_readonly) {
-        int zoomPercentage = zoomPercentageFromScaling(correctedScaling);
-        configuration()->setCurrentZoom(zoomPercentage);
-    }
-
     m_view->setScaling(correctedScaling, pos);
 }
 
@@ -276,22 +259,18 @@ void NotationViewInputController::setZoom(int zoomPercentage, const PointF& pos)
     int maxZoom = m_possibleZoomPercentages.last();
     int correctedZoom = std::clamp(zoomPercentage, minZoom, maxZoom);
 
-    if (!m_readonly) {
-        configuration()->setCurrentZoom(correctedZoom);
-    }
-
     qreal scaling = scalingFromZoomPercentage(correctedZoom);
     m_view->setScaling(scaling, pos);
 }
 
 qreal NotationViewInputController::scalingFromZoomPercentage(int zoomPercentage) const
 {
-    return zoomPercentage / 100.0 * configuration()->notationScaling();
+    return configuration()->scalingFromZoomPercentage(zoomPercentage);
 }
 
 int NotationViewInputController::zoomPercentageFromScaling(qreal scaling) const
 {
-    return qRound(scaling * 100.0 / configuration()->notationScaling());
+    return configuration()->zoomPercentageFromScaling(scaling);
 }
 
 void NotationViewInputController::setViewMode(const ViewMode& viewMode)
@@ -419,6 +398,15 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
     qreal stepsX = 0.0;
     qreal stepsY = 0.0;
 
+// pixelDelta is unreliable on X11
+#ifdef Q_OS_LINUX
+    if (std::getenv("WAYLAND_DISPLAY") == NULL) {
+        // Ignore pixelsScrolled unless Wayland is used
+        pixelsScrolled.setX(0);
+        pixelsScrolled.setY(0);
+    }
+#endif
+
     if (!pixelsScrolled.isNull()) {
         dx = pixelsScrolled.x();
         dy = pixelsScrolled.y();
@@ -492,15 +480,10 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         hitStaffIndex = context.staff ? context.staff->idx() : mu::nidx;
     }
 
-    if (hitElement) {
-        RetVal<midi::tick_t> tick = m_view->notationPlayback()->playPositionTickByElement(hitElement);
-
-        if (tick.ret) {
-            playbackController()->seek(tick.val);
-        }
-    }
-
     if (playbackController()->isPlaying()) {
+        if (hitElement) {
+            playbackController()->seekElement(hitElement);
+        }
         return;
     }
 
@@ -525,6 +508,10 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->select({ hitElement }, SelectType::ADD, hitStaffIndex);
     }
 
+    if (hitElement && !viewInteraction()->selection()->isRange()) {
+        playbackController()->seekElement(hitElement);
+    }
+
     if (button == Qt::LeftButton) {
         handleLeftClick(ctx);
     } else if (button == Qt::RightButton) {
@@ -542,14 +529,12 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
         return false;
     }
 
-    if (!ctx.hitElement->selected()) {
-        return true;
-    }
-
     INotationSelectionPtr selection = viewInteraction()->selection();
 
     if (selection->isRange()) {
         return !selection->range()->containsPoint(ctx.logicClickPos);
+    } else if (!ctx.hitElement->selected()) {
+        return true;
     }
 
     return false;
@@ -573,7 +558,7 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
     }
 
     if (ctx.hitElement->isPlayable()) {
-        playbackController()->playElement(ctx.hitElement);
+        playbackController()->playElements({ ctx.hitElement });
     }
 
     if (!viewInteraction()->isTextSelected()) {
@@ -957,12 +942,9 @@ ElementType NotationViewInputController::selectionType() const
         return ElementType::STAFF;
     } else if (auto selectedElement = selection->element()) {
         return selectedElement->type();
-    } else {
-        return ElementType::PAGE;
     }
 
-    UNREACHABLE;
-    return type;
+    return ElementType::PAGE;
 }
 
 mu::PointF NotationViewInputController::selectionElementPos() const

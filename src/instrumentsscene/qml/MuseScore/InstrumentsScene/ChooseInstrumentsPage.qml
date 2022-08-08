@@ -33,7 +33,7 @@ Rectangle {
 
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
-    property string description: instrumentsModel.selectedInstrumentDescription
+    property string description: instrumentsModel.selectedInstrument ? instrumentsModel.selectedInstrument.description : ""
 
     property bool hasSelectedInstruments: instrumentsOnScoreView.hasInstruments
 
@@ -46,7 +46,7 @@ Rectangle {
             return instrumentsOnScoreView.instruments()
         }
 
-        return instrumentsModel.selectedInstruments()
+        return [ instrumentsModel.selectedInstrument ]
     }
 
     function currentOrder() {
@@ -76,8 +76,7 @@ Rectangle {
         id: prv
 
         function addSelectedInstrumentsToScore() {
-            var selectedInstruments = instrumentsModel.selectedInstruments()
-            instrumentsOnScoreView.addInstruments(selectedInstruments)
+            instrumentsOnScoreView.addInstruments(instrumentsModel.selectedInstrumentIdList())
 
             Qt.callLater(instrumentsOnScoreView.scrollViewToEnd)
         }
@@ -169,7 +168,7 @@ Rectangle {
             navigation.panel: navSelectPanel
             navigation.order: 1
 
-            toolTipTitle: qsTrc("project", "Add selected instruments to score")
+            toolTipTitle: qsTrc("instruments", "Add selected instruments to score")
 
             visible: root.canSelectMultipleInstruments
 
@@ -231,7 +230,7 @@ Rectangle {
                 navigation.panel: navUpDownPanel
                 navigation.row: 1
 
-                toolTipTitle: qsTrc("project", "Move selected instruments up")
+                toolTipTitle: qsTrc("instruments", "Move selected instruments up")
 
                 onClicked: {
                     instrumentsOnScoreView.moveSelectedInstrumentsUp()
@@ -246,7 +245,7 @@ Rectangle {
                 navigation.panel: navUpDownPanel
                 navigation.row: 2
 
-                toolTipTitle: qsTrc("project", "Move selected instruments down")
+                toolTipTitle: qsTrc("instruments", "Move selected instruments down")
 
                 onClicked: {
                     instrumentsOnScoreView.moveSelectedInstrumentsDown()

@@ -30,7 +30,9 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
+#endif
 
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
@@ -53,10 +55,16 @@ DummyElement::~DummyElement()
 
 void DummyElement::init()
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     setupAccessible();
+#endif
+
     m_root = new RootItem(score());
     m_root->setParent(explicitParent());
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     m_root->setupAccessible();
+#endif
 
     m_page = Factory::createPage(m_root);
     m_page->setParent(explicitParent());
@@ -117,7 +125,10 @@ EngravingItem* DummyElement::clone() const
     return nullptr;
 }
 
-AccessibleItem* DummyElement::createAccessible()
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+AccessibleItemPtr DummyElement::createAccessible()
 {
-    return new AccessibleItem(this, accessibility::IAccessible::Panel);
+    return std::make_shared<AccessibleItem>(this, accessibility::IAccessible::Panel);
 }
+
+#endif

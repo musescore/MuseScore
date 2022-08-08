@@ -30,12 +30,15 @@ using AccessibleMapToScreenFunc = std::function<RectF(const RectF&)>;
 
 class AccessibleRoot : public AccessibleItem
 {
+    OBJECT_ALLOCATOR(engraving, AccessibleRoot)
 public:
-    AccessibleRoot(RootItem* e);
+    AccessibleRoot(RootItem* e, Role role);
     ~AccessibleRoot() override;
 
-    void setFocusedElement(AccessibleItem* e);
-    AccessibleItem* focusedElement() const;
+    void setFocusedElement(AccessibleItemPtr e, bool voiceStaffInfoChange = true);
+    AccessibleItemWeakPtr focusedElement() const;
+
+    void notifyAboutFocuedElemntNameChanged();
 
     void setMapToScreenFunc(const AccessibleMapToScreenFunc& func);
     RectF toScreenRect(const RectF& rect, bool* ok = nullptr) const;
@@ -50,11 +53,12 @@ public:
     QString staffInfo() const;
 
 private:
-    void updateStaffInfo(const AccessibleItem* newAccessibleItem, const AccessibleItem* oldAccessibleItem);
+    void updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem,
+                         bool voiceStaffInfoChange = true);
 
     bool m_enabled = false;
 
-    AccessibleItem* m_focusedElement = nullptr;
+    AccessibleItemWeakPtr m_focusedElement;
 
     AccessibleMapToScreenFunc m_accessibleMapToScreenFunc;
 

@@ -22,8 +22,6 @@
 #ifndef MU_SYSTEM_FILESYSTEM_H
 #define MU_SYSTEM_FILESYSTEM_H
 
-#include <QDateTime>
-
 #include "../ifilesystem.h"
 
 namespace mu::io {
@@ -40,22 +38,21 @@ public:
 
     RetVal<uint64_t> fileSize(const io::path_t& path) const override;
 
-    RetVal<io::paths_t> scanFiles(const io::path_t& rootDir, const QStringList& filters,
+    RetVal<io::paths_t> scanFiles(const io::path_t& rootDir, const std::vector<std::string>& filters,
                                   ScanMode mode = ScanMode::FilesInCurrentDirAndSubdirs) const override;
 
-    RetVal<QByteArray> readFile(const io::path_t& filePath) const override;
-    Ret writeToFile(const io::path_t& filePath, const QByteArray& data) const override;
-
+    RetVal<ByteArray> readFile(const io::path_t& filePath) const override;
     bool readFile(const io::path_t& filePath, ByteArray& data) const override;
-    bool writeFile(const io::path_t& filePath, const ByteArray& data) const override;
+    Ret writeFile(const io::path_t& filePath, const ByteArray& data) const override;
 
     void setAttribute(const io::path_t& path, Attribute attribute) const override;
     bool setPermissionsAllowedForAll(const io::path_t& path) const override;
 
     io::path_t canonicalFilePath(const io::path_t& filePath) const override;
     io::path_t absolutePath(const io::path_t& filePath) const override;
-    QDateTime birthTime(const io::path_t& filePath) const override;
-    QDateTime lastModified(const io::path_t& filePath) const override;
+    io::path_t absoluteFilePath(const io::path_t& filePath) const override;
+    DateTime birthTime(const io::path_t& filePath) const override;
+    DateTime lastModified(const io::path_t& filePath) const override;
     bool isWritable(const path_t& filePath) const override;
 
 private:

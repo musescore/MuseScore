@@ -30,7 +30,7 @@
 #include "libmscore/tempotext.h"
 
 #include "log.h"
-#include "global/xmlwriter.h"
+#include "global/deprecated/xmlwriter.h"
 
 using namespace mu::converter;
 using namespace mu::engraving;
@@ -58,17 +58,17 @@ mu::RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
     json["subtitle"] =  subtitle(score);
     json["composer"] =  composer(score);
     json["poet"] =  poet(score);
-    json["mscoreVersion"] =  score->mscoreVersion();
+    json["mscoreVersion"] =  score->mscoreVersion().toQString();
     json["fileVersion"] =  score->mscVersion();
     json["pages"] =  static_cast<int>(score->npages()); // no = operator for size_t
     json["measures"] = static_cast<int>(score->nmeasures()); // no = operator for size_t
     json["hasLyrics"] =  boolToString(score->hasLyrics());
     json["hasHarmonies"] =  boolToString(score->hasHarmonies());
     json["keysig"] =  score->keysig();
-    json["previousSource"] =  score->metaTag("source");
+    json["previousSource"] =  score->metaTag(u"source").toQString();
     json["timesig"] =  timesig(score);
     json["duration"] =  score->duration();
-    json["lyrics"] =  score->extractLyrics();
+    json["lyrics"] =  score->extractLyrics().toQString();
 
     auto _tempo = tempo(score);
     json["tempo"] =  _tempo.first;
@@ -94,7 +94,7 @@ QString NotationMeta::title(const mu::engraving::Score* score)
     }
 
     if (title.isEmpty()) {
-        title = score->metaTag("workTitle");
+        title = score->metaTag(u"workTitle");
     }
 
     if (title.isEmpty()) {
@@ -124,7 +124,7 @@ QString NotationMeta::composer(const mu::engraving::Score* score)
     }
 
     if (composer.isEmpty()) {
-        composer = score->metaTag("composer");
+        composer = score->metaTag(u"composer");
     }
 
     return composer;
@@ -139,7 +139,7 @@ QString NotationMeta::poet(const mu::engraving::Score* score)
     }
 
     if (poet.isEmpty()) {
-        poet = score->metaTag("lyricist");
+        poet = score->metaTag(u"lyricist");
     }
 
     return poet;
@@ -195,10 +195,10 @@ QJsonArray NotationMeta::partsJsonArray(const mu::engraving::Score* score)
     QJsonArray jsonPartsArray;
     for (const mu::engraving::Part* part : score->parts()) {
         QJsonObject jsonPart;
-        jsonPart.insert("name", part->longName().replace("\n", ""));
+        jsonPart.insert("name", part->longName().replace(u"\n", u"").toQString());
         int midiProgram = part->midiProgram();
         jsonPart.insert("program", midiProgram);
-        jsonPart.insert("instrumentId", part->instrumentId());
+        jsonPart.insert("instrumentId", part->instrumentId().toQString());
         jsonPart.insert("lyricCount", part->lyricCount());
         jsonPart.insert("harmonyCount", part->harmonyCount());
         jsonPart.insert("hasPitchedStaff", boolToString(part->hasPitchedStaff()));

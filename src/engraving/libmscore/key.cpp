@@ -362,7 +362,7 @@ void AccidentalState::init(const KeySigEvent& keySig)
                 if (i >= MAX_ACC_STATE) {
                     break;
                 }
-                state[i] = static_cast<uchar>(int(a) - int(AccidentalVal::MIN));
+                state[i] = static_cast<uint8_t>(int(a) - int(AccidentalVal::MIN));
             }
         }
     }
@@ -374,7 +374,7 @@ void AccidentalState::init(const KeySigEvent& keySig)
 
 AccidentalVal AccidentalState::accidentalVal(int line) const
 {
-    Q_ASSERT(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
+    assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
     return AccidentalVal((state[line] & 0x0f) + int(AccidentalVal::MIN));
 }
 
@@ -384,7 +384,7 @@ AccidentalVal AccidentalState::accidentalVal(int line) const
 
 bool AccidentalState::tieContext(int line) const
 {
-    Q_ASSERT(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
+    assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
     return state[line] & TIE_CONTEXT;
 }
 
@@ -394,9 +394,9 @@ bool AccidentalState::tieContext(int line) const
 
 void AccidentalState::setAccidentalVal(int line, AccidentalVal val, bool tieContext)
 {
-    Q_ASSERT(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
+    assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
     // casts needed to work around a bug in Xcode 4.2 on Mac, see #25910
-    Q_ASSERT(int(val) >= int(AccidentalVal::MIN) && int(val) <= int(AccidentalVal::MAX));
+    assert(int(val) >= int(AccidentalVal::MIN) && int(val) <= int(AccidentalVal::MAX));
     state[line] = (int(val) - int(AccidentalVal::MIN)) | (tieContext ? TIE_CONTEXT : 0);
 }
 

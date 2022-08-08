@@ -32,6 +32,7 @@ class Segment;
 
 class MeasureRepeat final : public Rest
 {
+    OBJECT_ALLOCATOR(engraving, MeasureRepeat)
 public:
     MeasureRepeat(Segment* parent);
     MeasureRepeat(const MeasureRepeat&) = default;
@@ -44,10 +45,10 @@ public:
     int numMeasures() const { return m_numMeasures; }
     void setSymId(SymId id) { m_symId = id; }
     SymId symId() const { return m_symId; }
-    void setNumberSym(int n) { m_numberSym = timeSigSymIdsFromString(QString::number(n)); }
+    void setNumberSym(int n) { m_numberSym = timeSigSymIdsFromString(String::number(n)); }
     SymIdList numberSym() const { return m_numberSym; }
-    void setNumberPos(qreal d) { m_numberPos = d; }
-    qreal numberPos() const { return m_numberPos; }
+    void setNumberPos(double d) { m_numberPos = d; }
+    double numberPos() const { return m_numberPos; }
 
     Measure* firstMeasureOfGroup() const { return measure()->firstOfMeasureRepeatGroup(staffIdx()); }
 
@@ -65,7 +66,7 @@ public:
 
     Shape shape() const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 
     bool placeMultiple() const override { return numMeasures() == 1; }     // prevent overlapping additions with range selection
 
@@ -77,7 +78,7 @@ private:
 
     int m_numMeasures;
     SymIdList m_numberSym;
-    qreal m_numberPos;
+    double m_numberPos;
     SymId m_symId;
 };
 } // namespace mu::engraving

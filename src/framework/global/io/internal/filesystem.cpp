@@ -71,7 +71,7 @@ Ret FileSystem::copy(const io::path_t& src, const io::path_t& dst, bool replace)
     QFileInfo dstFileInfo(dst.toQString());
     if (dstFileInfo.exists()) {
         if (!replace) {
-            return make_ret(Err::FSIsExist);
+            return make_ret(Err::FSAlreadyExists);
         }
 
         Ret ret = remove(dst);
@@ -94,7 +94,7 @@ Ret FileSystem::move(const io::path_t& src, const io::path_t& dst, bool replace)
     QFileInfo dstFileInfo(dst.toQString());
     if (dstFileInfo.exists()) {
         if (!replace) {
-            return make_ret(Err::FSIsExist);
+            return make_ret(Err::FSAlreadyExists);
         }
 
         Ret ret = remove(dst);
@@ -116,9 +116,9 @@ Ret FileSystem::move(const io::path_t& src, const io::path_t& dst, bool replace)
     return make_ret(Ret::Code::Ok);
 }
 
-RetVal<QByteArray> FileSystem::readFile(const io::path_t& filePath) const
+RetVal<ByteArray> FileSystem::readFile(const io::path_t& filePath) const
 {
-    RetVal<QByteArray> result;
+    RetVal<ByteArray> result;
     Ret ret = exists(filePath);
     if (!ret) {
         result.ret = ret;
@@ -131,28 +131,14 @@ RetVal<QByteArray> FileSystem::readFile(const io::path_t& filePath) const
         return result;
     }
 
+    qint64 size = file.size();
+    result.val.resize(static_cast<size_t>(size));
+
+    file.read(reinterpret_cast<char*>(result.val.data()), size);
+    file.close();
+
     result.ret = make_ret(Err::NoError);
-    result.val = file.readAll();
-
-    file.close();
-
     return result;
-}
-
-Ret FileSystem::writeToFile(const io::path_t& filePath, const QByteArray& data) const
-{
-    Ret ret = make_ret(Err::NoError);
-
-    QFile file(filePath.toQString());
-    if (!file.open(QIODevice::WriteOnly)) {
-        ret = make_ret(Err::FSWriteError);
-        return ret;
-    }
-
-    file.write(data);
-    file.close();
-
-    return ret;
 }
 
 bool FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
@@ -168,14 +154,14 @@ bool FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
     file.read(reinterpret_cast<char*>(data.data()), size);
     file.close();
 
-    return true;
+    return make_ret(Err::NoError);
 }
 
-bool FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data) const
+Ret FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data) const
 {
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::WriteOnly)) {
-        return false;
+        return make_ret(Err::FSWriteError);
     }
 
     file.write(reinterpret_cast<const char*>(data.constData()), static_cast<qint64>(data.size()));
@@ -206,7 +192,7 @@ RetVal<uint64_t> FileSystem::fileSize(const io::path_t& path) const
     return rv;
 }
 
-RetVal<io::paths_t> FileSystem::scanFiles(const io::path_t& rootDir, const QStringList& nameFilters, ScanMode mode) const
+RetVal<io::paths_t> FileSystem::scanFiles(const io::path_t& rootDir, const std::vector<std::string>& nameFilters, ScanMode mode) const
 {
     RetVal<io::paths_t> result;
     Ret ret = exists(rootDir);
@@ -222,16 +208,21 @@ RetVal<io::paths_t> FileSystem::scanFiles(const io::path_t& rootDir, const QStri
     case ScanMode::FilesInCurrentDir:
         filters |= QDir::Files;
         break;
-    case IFileSystem::ScanMode::FilesAndFoldersInCurrentDir:
+    case ScanMode::FilesAndFoldersInCurrentDir:
         filters |= QDir::Files | QDir::Dirs;
         break;
-    case IFileSystem::ScanMode::FilesInCurrentDirAndSubdirs:
+    case ScanMode::FilesInCurrentDirAndSubdirs:
         flags |= QDirIterator::Subdirectories;
         filters |= QDir::Files;
         break;
     }
 
-    QDirIterator it(rootDir.toQString(), nameFilters, filters, flags);
+    QStringList qnameFilters;
+    for (const std::string& f : nameFilters) {
+        qnameFilters << QString::fromStdString(f);
+    }
+
+    QDirIterator it(rootDir.toQString(), qnameFilters, filters, flags);
 
     while (it.hasNext()) {
         result.val.push_back(it.next());
@@ -330,14 +321,19 @@ io::path_t FileSystem::absolutePath(const io::path_t& filePath) const
     return QFileInfo(filePath.toQString()).absolutePath();
 }
 
-QDateTime FileSystem::birthTime(const io::path_t& filePath) const
+path_t FileSystem::absoluteFilePath(const path_t& filePath) const
 {
-    return QFileInfo(filePath.toQString()).birthTime();
+    return QFileInfo(filePath.toQString()).absoluteFilePath();
 }
 
-QDateTime FileSystem::lastModified(const io::path_t& filePath) const
+DateTime FileSystem::birthTime(const io::path_t& filePath) const
 {
-    return QFileInfo(filePath.toQString()).lastModified();
+    return DateTime::fromQDateTime(QFileInfo(filePath.toQString()).birthTime());
+}
+
+DateTime FileSystem::lastModified(const io::path_t& filePath) const
+{
+    return DateTime::fromQDateTime(QFileInfo(filePath.toQString()).lastModified());
 }
 
 bool FileSystem::isWritable(const io::path_t& filePath) const

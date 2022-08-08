@@ -24,34 +24,45 @@
 
 #include <QObject>
 
+#include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "audio/iaudioconfiguration.h"
+#include "audio/iaudiodriver.h"
+
 namespace mu::appshell {
-class CommonAudioApiConfigurationModel : public QObject
+class CommonAudioApiConfigurationModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(int currentDeviceIndex READ currentDeviceIndex WRITE setCurrentDeviceIndex NOTIFY currentDeviceIndexChanged)
-    Q_PROPERTY(int currentSampleRateIndex READ currentSampleRateIndex WRITE setCurrentSampleRateIndex NOTIFY currentSampleRateIndexChanged)
+    Q_PROPERTY(QString currentDeviceId READ currentDeviceId NOTIFY currentDeviceIdChanged)
+    Q_PROPERTY(QVariantList deviceList READ deviceList NOTIFY deviceListChanged)
+
+    Q_PROPERTY(unsigned int bufferSize READ bufferSize NOTIFY bufferSizeChanged)
+    Q_PROPERTY(QList<unsigned int> bufferSizeList READ bufferSizeList NOTIFY bufferSizeListChanged)
+
+    INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
+    INJECT(appshell, audio::IAudioDriver, audioDriver)
 
 public:
     explicit CommonAudioApiConfigurationModel(QObject* parent = nullptr);
 
-    int currentDeviceIndex() const;
-    int currentSampleRateIndex() const;
+    Q_INVOKABLE void load();
 
-    Q_INVOKABLE QStringList deviceList() const;
-    Q_INVOKABLE QStringList sampleRateHzList() const;
+    QString currentDeviceId() const;
+    QVariantList deviceList() const;
+    Q_INVOKABLE void deviceSelected(const QString& deviceId);
 
-public slots:
-    void setCurrentDeviceIndex(int index);
-    void setCurrentSampleRateIndex(int index);
+    unsigned int bufferSize() const;
+    QList<unsigned int> bufferSizeList() const;
+    Q_INVOKABLE void bufferSizeSelected(const QString& bufferSizeStr);
 
 signals:
-    void currentDeviceIndexChanged(int index);
-    void currentSampleRateIndexChanged(int index);
+    void currentDeviceIdChanged();
+    void deviceListChanged();
 
-private:
-    int m_currentDeviceIndex = 0;
-    int m_currentSampleRateIndex = 0;
+    void bufferSizeChanged();
+    void bufferSizeListChanged();
 };
 }
 

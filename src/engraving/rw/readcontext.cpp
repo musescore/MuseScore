@@ -29,6 +29,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
 ReadContext::ReadContext(Score* score)
@@ -39,7 +40,7 @@ ReadContext::ReadContext(Score* score)
 ReadContext::~ReadContext()
 {
     if (!_connectors.empty() || !_pendingConnectors.empty()) {
-        qDebug("XmlReader::~XmlReader: there are unpaired connectors left");
+        LOGD("XmlReader::~XmlReader: there are unpaired connectors left");
         for (auto& c : _connectors) {
             EngravingItem* conn = c->releaseConnector();
             if (conn && !conn->isTuplet()) { // tuplets are added to score even when not finished
@@ -72,7 +73,7 @@ bool ReadContext::ignoreVersionError() const
     return m_ignoreVersionError;
 }
 
-QString ReadContext::mscoreVersion() const
+String ReadContext::mscoreVersion() const
 {
     return m_score->mscoreVersion();
 }
@@ -92,7 +93,7 @@ int ReadContext::fileDivision(int t) const
     return m_score->fileDivision(t);
 }
 
-qreal ReadContext::spatium() const
+double ReadContext::spatium() const
 {
     return m_score->spatium();
 }
@@ -275,7 +276,7 @@ void ReadContext::setLocation(const Location& l)
     setTrack(l.track() - _trackOffset);
     setTick(l.frac() - _tickOffset);
     if (!pasteMode()) {
-        Q_ASSERT(l.measure() == currentMeasureIndex());
+        assert(l.measure() == currentMeasureIndex());
         incTick(currentMeasure()->tick());
     }
 }
@@ -413,7 +414,7 @@ void ReadContext::reconnectBrokenConnectors()
     if (_connectors.empty()) {
         return;
     }
-    qDebug("Reconnecting broken connectors (%d nodes)", int(_connectors.size()));
+    LOGD("Reconnecting broken connectors (%d nodes)", int(_connectors.size()));
     std::vector<std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> > > brokenPairs;
     for (size_t i = 1; i < _connectors.size(); ++i) {
         for (size_t j = 0; j < i; ++j) {
@@ -458,7 +459,7 @@ void ReadContext::reconnectBrokenConnectors()
 //      (too many user text styles)
 //---------------------------------------------------------
 
-TextStyleType ReadContext::addUserTextStyle(const QString& name)
+TextStyleType ReadContext::addUserTextStyle(const String& name)
 {
     LOGD() << name;
     TextStyleType id = TextStyleType::TEXT_TYPES;
@@ -495,7 +496,7 @@ TextStyleType ReadContext::addUserTextStyle(const QString& name)
     return id;
 }
 
-TextStyleType ReadContext::lookupUserTextStyle(const QString& name) const
+TextStyleType ReadContext::lookupUserTextStyle(const String& name) const
 {
     for (const auto& i : userTextStyles) {
         if (i.name == name) {

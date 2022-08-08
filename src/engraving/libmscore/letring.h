@@ -34,6 +34,7 @@ class LetRing;
 
 class LetRingSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOCATOR(engraving, LetRingSegment)
 public:
     LetRingSegment(LetRing* sp, System* parent);
 
@@ -52,6 +53,7 @@ public:
 
 class LetRing final : public ChordTextLineBase
 {
+    OBJECT_ALLOCATOR(engraving, LetRing)
 public:
     LetRing(EngravingItem* parent);
 

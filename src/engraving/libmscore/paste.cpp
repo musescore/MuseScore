@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QMimeData>
-
 #include "io/buffer.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
@@ -104,7 +102,7 @@ static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
 
 bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
 {
-    Q_ASSERT(dst->isChordRestType());
+    assert(dst->isChordRestType());
 
     std::vector<Harmony*> pastedHarmony;
     std::vector<Chord*> graceNotes;
@@ -125,7 +123,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
             e.unknown();
             break;
         }
-        QString version = e.attribute("version", u"NONE");
+        String version = e.attribute("version", u"NONE");
         if (!MScore::testMode) {
             if (version != MSC_VERSION) {
                 LOGD("pasteStaff: bad version");
@@ -183,7 +181,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                             e.unknown();
                         }
                         voice_idx_t voiceId = static_cast<voice_idx_t>(e.intAttribute("id", -1));
-                        Q_ASSERT(voiceId < VOICES);
+                        assert(voiceId < VOICES);
                         voiceOffset[voiceId] = e.readInt();
                     }
                     if (!makeGap1(dstTick, dstStaffIdx, tickLen, voiceOffset)) {
@@ -800,7 +798,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
             e.unknown();
             break;
         }
-        QString version = e.attribute("version", u"NONE");
+        String version = e.attribute("version", u"NONE");
         if (version != MSC_VERSION) {
             break;
         }
@@ -956,7 +954,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                 // in any case, look for a f.b. in annotations:
                                 // if there is a f.b. element in the right track,
                                 // this is an (actual) f.b. location
-                                foreach (EngravingItem* a, prevSegm->annotations()) {
+                                for (EngravingItem* a : prevSegm->annotations()) {
                                     if (a->isFiguredBass() && a->track() == destTrack) {
                                         onNoteFB = toFiguredBass(a);
                                         done1 = true;
@@ -1073,7 +1071,8 @@ static EngravingItem* prepareTarget(EngravingItem* target, Note* with, const Fra
     if (target->isNote() && toNote(target)->chord()->ticks() != duration) {
         return prepareTarget(toNote(target)->chord(), with, duration);
     }
-    if (target->isChordRest() && toChordRest(target)->ticks() != duration) {
+    if (target->isChordRest()
+        && (toChordRest(target)->ticks() != duration || toChordRest(target)->durationType().type() == DurationType::V_MEASURE)) {
         return prepareTarget(toChordRest(target), with, duration);
     }
     return target;
@@ -1109,7 +1108,7 @@ inline static bool canPasteStaff(const ByteArray& mimeData, const Fraction& scal
 //   cmdPaste
 //---------------------------------------------------------
 
-void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
+void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
 {
     if (ms == 0) {
         LOGD("no application mime data");
@@ -1117,8 +1116,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         return;
     }
     if ((_selection.isSingle() || _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
-        QByteArray ba(ms->data(mimeSymbolFormat));
-        ByteArray data = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
+        ByteArray data = ms->data(mimeSymbolFormat);
 
         PointF dragOffset;
         Fraction duration(1, 4);
@@ -1180,8 +1178,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             MScore::setError(MsError::DEST_TUPLET);
             return;
         } else {
-            QByteArray ba(ms->data(mimeStaffListFormat));
-            ByteArray data = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
+            ByteArray data = ms->data(mimeStaffListFormat);
             if (MScore::debugMode) {
                 LOGD("paste <%s>", data.data());
             }
@@ -1213,8 +1210,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             MScore::setError(MsError::NO_DEST);
             return;
         } else {
-            QByteArray ba(ms->data(mimeSymbolListFormat));
-            ByteArray data = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
+            ByteArray data = ms->data(mimeSymbolListFormat);
             if (MScore::debugMode) {
                 LOGD("paste <%s>", data.data());
             }
@@ -1226,7 +1222,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         Buffer buffer(&ba);
         buffer.open(IODevice::WriteOnly);
 
-        auto px = imageProvider()->pixmapFromQVariant(ms->imageData());
+        auto px = ms->imageData();
         imageProvider()->saveAsPng(px, &buffer);
 
         Image* image = new Image(this->dummy());
@@ -1254,10 +1250,9 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         }
         delete image;
     } else {
-        LOGD("cannot paste selState %d staffList %s",
-             int(_selection.state()), (ms->hasFormat(mimeStaffListFormat)) ? "true" : "false");
-        for (const QString& s : ms->formats()) {
-            LOGD("  format %s", qPrintable(s));
+        LOGD("cannot paste selState %d staffList %s", int(_selection.state()), (ms->hasFormat(mimeStaffListFormat)) ? "true" : "false");
+        for (const std::string& s : ms->formats()) {
+            LOGD() << " format: " << s;
         }
     }
 }

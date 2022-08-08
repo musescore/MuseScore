@@ -24,6 +24,7 @@
 #define __PITCH_H__
 
 #include <map>
+#include "global/allocator.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -33,6 +34,7 @@ namespace mu::engraving {
 
 class PitchList : public std::map<int, int>
 {
+    OBJECT_ALLOCATOR(engraving, PitchList)
 public:
     PitchList() {}
     int pitchOffset(int tick) const;

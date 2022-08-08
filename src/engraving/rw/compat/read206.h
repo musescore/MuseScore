@@ -23,8 +23,9 @@
 #ifndef MU_ENGRAVING_READ206_H
 #define MU_ENGRAVING_READ206_H
 
+#include "engravingerrors.h"
 #include "style/styledef.h"
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 #include "libmscore/score.h"
 
 namespace mu::engraving {
@@ -55,12 +56,12 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    static Score::FileError read206(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
+    static Err read206(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
 
     static EngravingItem* readArticulation(EngravingItem*, XmlReader&, const ReadContext& ctx);
     static void readAccidental206(Accidental*, XmlReader&);
-    static void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Sid,
-                                                                                         PropertyValue> >& excessStyles);
+    static void readTextStyle206(MStyle* style, XmlReader& e, std::map<String, std::map<Sid,
+                                                                                        PropertyValue> >& excessStyles);
     static void readTextLine206(XmlReader& e, const ReadContext& ctx, TextLineBase* tlb);
     static void readTrill206(XmlReader& e, Trill* t);
     static void readHairpin206(XmlReader& e, const ReadContext& ctx, Hairpin* h);

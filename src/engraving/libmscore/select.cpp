@@ -430,7 +430,7 @@ void Selection::clear()
         return;
     }
 
-    for (EngravingItem* e : qAsConst(_el)) {
+    for (EngravingItem* e : _el) {
         if (e->isSpanner()) {       // TODO: only visible elements should be selectable?
             Spanner* sp = toSpanner(e);
             for (auto s : sp->spannerSegments()) {
@@ -509,7 +509,7 @@ void Selection::appendChord(Chord* chord)
         if (note->accidental()) {
             _el.push_back(note->accidental());
         }
-        foreach (EngravingItem* el, note->el()) {
+        for (EngravingItem* el : note->el()) {
             appendFiltered(el);
         }
         for (NoteDot* dot : note->dots()) {
@@ -572,7 +572,7 @@ void Selection::updateSelectedElements()
         _plannedTick2 = Fraction(-1, 1);
     }
 
-    for (EngravingItem* e : qAsConst(_el)) {
+    for (EngravingItem* e : _el) {
         e->setSelected(false);
     }
     _el.clear();
@@ -671,8 +671,8 @@ void Selection::updateSelectedElements()
 
 void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffEnd <= _score->nstaves());
-    Q_ASSERT(!(endSegment && !startSegment));
+    assert(staffEnd > staffStart && staffEnd <= _score->nstaves());
+    assert(!(endSegment && !startSegment));
 
     _startSegment  = startSegment;
     _endSegment    = endSegment;
@@ -692,7 +692,7 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t
 
 void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart, staff_idx_t staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffEnd <= _score->nstaves());
+    assert(staffEnd > staffStart && staffEnd <= _score->nstaves());
 
     deselectAll();
     _plannedTick1 = tick1;
@@ -710,7 +710,7 @@ void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staf
 
 void Selection::update()
 {
-    for (EngravingItem* e : qAsConst(_el)) {
+    for (EngravingItem* e : _el) {
         e->setSelected(true);
     }
     updateState();
@@ -727,7 +727,7 @@ void Selection::dump()
     case SelState::LIST:   LOGD("LIST");
         break;
     }
-    foreach (const EngravingItem* e, _el) {
+    for (const EngravingItem* e : _el) {
         LOGD("  %p %s", e, e->typeName());
     }
 }
@@ -765,16 +765,16 @@ void Selection::setState(SelState s)
     _score->setSelectionChanged(true);
 }
 
-QString Selection::mimeType() const
+String Selection::mimeType() const
 {
     switch (_state) {
     default:
     case SelState::NONE:
-        return QString();
+        return String();
     case SelState::LIST:
-        return isSingle() ? mimeSymbolFormat : mimeSymbolListFormat;
+        return isSingle() ? String::fromAscii(mimeSymbolFormat) : String::fromAscii(mimeSymbolListFormat);
     case SelState::RANGE:
-        return mimeStaffListFormat;
+        return String::fromAscii(mimeStaffListFormat);
     }
 }
 
@@ -897,10 +897,10 @@ ByteArray Selection::symbolListMimeData() const
     Fraction firstTick   = Fraction(0x7FFFFFFF, 1);
     MapData mapData;
     Segment* seg         = 0;
-    std::multimap<qint64, MapData> map;
+    std::multimap<int64_t, MapData> map;
 
     // scan selection element list, inserting relevant elements in a tick-sorted map
-    foreach (EngravingItem* e, _el) {
+    for (EngravingItem* e : _el) {
         switch (e->type()) {
         /* All these element types are ignored:
 
@@ -1048,7 +1048,7 @@ ByteArray Selection::symbolListMimeData() const
         }
         mapData.e = e;
         mapData.s = seg;
-        map.insert(std::pair<qint64, MapData>(((qint64)track << 32) + seg->tick().ticks(), mapData));
+        map.insert(std::pair<int64_t, MapData>(((int64_t)track << 32) + seg->tick().ticks(), mapData));
     }
 
     xml.startElement("SymbolList", { { "version", MSC_VERSION },
@@ -1076,7 +1076,7 @@ ByteArray Selection::symbolListMimeData() const
                 if (seg->isChordRestType()) {
                     // if no ChordRest in right track, look in annotations
                     if (seg->element(currTrack) == nullptr) {
-                        foreach (EngravingItem* el, seg->annotations()) {
+                        for (EngravingItem* el : seg->annotations()) {
                             // do annotations include our element?
                             if (el == iter->second.e) {
                                 done = true;
@@ -1133,7 +1133,7 @@ std::vector<Note*> Selection::noteList(track_idx_t selTrack) const
     std::vector<Note*> nl;
 
     if (_state == SelState::LIST) {
-        foreach (EngravingItem* e, _el) {
+        for (EngravingItem* e : _el) {
             if (e->isNote()) {
                 nl.push_back(toNote(e));
             }
@@ -1438,7 +1438,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_
     }
     activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
     _score->setSelectionChanged(true);
-    Q_ASSERT(!(_endSegment && !_startSegment));
+    assert(!(_endSegment && !_startSegment));
 }
 
 SelectionFilter Selection::selectionFilter() const

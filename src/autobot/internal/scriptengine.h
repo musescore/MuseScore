@@ -30,7 +30,7 @@
 
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
-#include "ret.h"
+#include "types/ret.h"
 
 #include "api/iapiengine.h"
 #include "api/scriptapi.h"
@@ -76,7 +76,7 @@ private:
 
     ScriptEngine(ScriptEngine* engine);
 
-    RetVal<QByteArray> readScriptContent(const io::path_t& scriptPath) const;
+    RetVal<ByteArray> readScriptContent(const io::path_t& scriptPath) const;
     RetVal<QJSValue> evaluateContent(const QByteArray& fileContent, const io::path_t& filePath);
     Ret jsValueToRet(const QJSValue& val) const;
     Ret doCall(const QString& funcName, const CallData& data, QJSValue* retVal);

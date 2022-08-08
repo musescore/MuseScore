@@ -24,8 +24,6 @@
 #define MU_ENGRAVING_FACTORY_H
 
 #include <memory>
-#include <QStringRef>
-#include <QString>
 
 #include "engravingitem.h"
 #include "durationtype.h"
@@ -33,17 +31,11 @@
 
 namespace mu::engraving {
 class Instrument;
-}
-
-namespace mu::engraving {
 class RootItem;
+
 class Factory
 {
 public:
-
-    static ElementType name2type(const AsciiStringView& name, bool silent = false);
-    static const char* name(ElementType type);
-    static const char* userName(ElementType type);
 
     static EngravingItem* createItem(ElementType type, EngravingItem* parent, bool isAccessibleEnabled = true);
     static EngravingItem* createItemByName(const AsciiStringView& name, EngravingItem* parent, bool isAccessibleEnabled = true);
@@ -67,8 +59,10 @@ public:
     static Beam* createBeam(System* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Beam> makeBeam(System* parent);
 
-    static Bend* createBend(Note* parent, bool isAccessibleEnabled = true);
+    static Bend* createBend(Note* parent, ElementType type = ElementType::BEND, bool isAccessibleEnabled = true);
     static std::shared_ptr<Bend> makeBend(Note* parent);
+
+    static StretchedBend* createStretchedBend(Note* parent, bool isAccessibleEnabled = true);
 
     static Bracket* createBracket(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Bracket> makeBracket(EngravingItem* parent);
@@ -85,10 +79,6 @@ public:
     static ChordLine* createChordLine(Chord* parent, bool isAccessibleEnabled = true);
     static ChordLine* copyChordLine(const ChordLine& src);
     static std::shared_ptr<ChordLine> makeChordLine(Chord* parent);
-
-    static Slide* createSlide(Chord* parent, bool isAccessibleEnabled = true);
-    static Slide* copySlide(const Slide& src);
-    static std::shared_ptr<Slide> makeSlide(Chord* parent);
 
     static Clef* createClef(Segment* parent, bool isAccessibleEnabled = true);
     static Clef* copyClef(const Clef& src);
@@ -167,7 +157,7 @@ public:
 
     static System* createSystem(Page* parent, bool isAccessibleEnabled = true);
     static SystemText* createSystemText(Segment* parent, TextStyleType textStyleType = TextStyleType::SYSTEM,
-                                        bool isAccessibleEnabled = true);
+                                        ElementType type = ElementType::SYSTEM_TEXT, bool isAccessibleEnabled = true);
 
     static InstrumentChange* createInstrumentChange(Segment* parent, bool isAccessibleEnabled = true);
     static InstrumentChange* createInstrumentChange(Segment* parent, const Instrument& instrument, bool isAccessibleEnabled = true);
@@ -197,6 +187,8 @@ public:
 
     static TremoloBar* createTremoloBar(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<TremoloBar> makeTremoloBar(EngravingItem* parent);
+
+    static TripletFeel* createTripletFeel(Segment* parent, TripletFeelType type = TripletFeelType::NONE, bool isAccessibleEnabled = true);
 
     static Tuplet* createTuplet(Measure* parent, bool isAccessibleEnabled = true);
     static Tuplet* copyTuplet(const Tuplet& src);

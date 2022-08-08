@@ -21,12 +21,10 @@
  */
 #include "masterscore.h"
 
-#include <QDate>
-#include <QRegularExpression>
-
+#include "types/datetime.h"
 #include "io/buffer.h"
-#include "io/mscreader.h"
-#include "io/mscwriter.h"
+#include "infrastructure/mscreader.h"
+#include "infrastructure/mscwriter.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
 #include "style/defaultstyle.h"
@@ -37,7 +35,6 @@
 
 #include "repeatlist.h"
 #include "undo.h"
-#include "revisions.h"
 #include "imageStore.h"
 #include "audio.h"
 #include "utils.h"
@@ -64,7 +61,6 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     _sigmap      = new TimeSigMap();
     _repeatList  = new RepeatList(this);
     _repeatList2 = new RepeatList(this);
-    _revisions   = new Revisions;
     setMasterScore(this);
 
     _pos[int(POS::CURRENT)] = Fraction(0, 1);
@@ -72,26 +68,26 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     _pos[int(POS::RIGHT)]   = Fraction(0, 1);
 
 #if defined(Q_OS_WIN)
-    metaTags().insert({ "platform", "Microsoft Windows" });
+    metaTags().insert({ u"platform", u"Microsoft Windows" });
 #elif defined(Q_OS_MAC)
-    metaTags().insert({ "platform", "Apple Macintosh" });
+    metaTags().insert({ u"platform", u"Apple Macintosh" });
 #elif defined(Q_OS_LINUX)
-    metaTags().insert({ "platform", "Linux" });
+    metaTags().insert({ u"platform", u"Linux" });
 #else
-    metaTags().insert({ "platform", "Unknown" });
+    metaTags().insert({ u"platform", u"Unknown" });
 #endif
-    metaTags().insert({ "movementNumber", "" });
-    metaTags().insert({ "movementTitle", "" });
-    metaTags().insert({ "workNumber", "" });
-    metaTags().insert({ "workTitle", "" });
-    metaTags().insert({ "arranger", "" });
-    metaTags().insert({ "composer", "" });
-    metaTags().insert({ "lyricist", "" });
-    metaTags().insert({ "poet", "" });
-    metaTags().insert({ "translator", "" });
-    metaTags().insert({ "source", "" });
-    metaTags().insert({ "copyright", "" });
-    metaTags().insert({ "creationDate", QDate::currentDate().toString(Qt::ISODate) });
+    metaTags().insert({ u"movementNumber", u"" });
+    metaTags().insert({ u"movementTitle", u"" });
+    metaTags().insert({ u"workNumber", u"" });
+    metaTags().insert({ u"workTitle", u"" });
+    metaTags().insert({ u"arranger", u"" });
+    metaTags().insert({ u"composer", u"" });
+    metaTags().insert({ u"lyricist", u"" });
+    metaTags().insert({ u"poet", u"" });
+    metaTags().insert({ u"translator", u"" });
+    metaTags().insert({ u"source", u"" });
+    metaTags().insert({ u"copyright", u"" });
+    metaTags().insert({ u"creationDate", Date::currentDate().toString(DateFormat::ISODate) });
 }
 
 MasterScore::MasterScore(const MStyle& s, std::weak_ptr<engraving::EngravingProject> project)
@@ -106,13 +102,12 @@ MasterScore::~MasterScore()
         m_project.lock()->m_masterScore = nullptr;
     }
 
-    delete _revisions;
     delete _repeatList;
     delete _repeatList2;
     delete _sigmap;
     delete _tempomap;
     delete _undoStack;
-    qDeleteAll(_excerpts);
+    DeleteAll(_excerpts);
 }
 
 //---------------------------------------------------------
@@ -159,9 +154,9 @@ void MasterScore::setAutosaveDirty(bool v)
     m_autosaveDirty = v;
 }
 
-QString MasterScore::name() const
+String MasterScore::name() const
 {
-    return fileInfo()->fileName(false).toQString();
+    return fileInfo()->fileName(false).toString();
 }
 
 //---------------------------------------------------------
@@ -253,7 +248,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     // Write Excerpts
     {
         if (!onlySelection) {
-            for (const Excerpt* excerpt : qAsConst(this->excerpts())) {
+            for (const Excerpt* excerpt : this->excerpts()) {
                 Score* partScore = excerpt->excerptScore();
                 if (partScore != this) {
                     // Write excerpt style
@@ -374,49 +369,8 @@ bool MasterScore::exportPart(MscWriter& mscWriter, Score* partScore)
 
 void MasterScore::addExcerpt(Excerpt* ex, size_t index)
 {
-    Score* score = ex->excerptScore();
-
-    int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
-    std::set<ID> assignedStavesIds;
-    for (Staff* excerptStaff : score->staves()) {
-        const LinkedObjects* ls = excerptStaff->links();
-        if (ls == 0) {
-            continue;
-        }
-
-        for (auto le : *ls) {
-            if (le->score() != this) {
-                continue;
-            }
-
-            Staff* linkedMasterStaff = toStaff(le);
-            if (mu::contains(assignedStavesIds, linkedMasterStaff->id())) {
-                continue;
-            }
-
-            Part* excerptPart = excerptStaff->part();
-            Part* masterPart = linkedMasterStaff->part();
-
-            //! NOTE: parts/staves of excerpt must have the same ID as parts/staves of the master score
-            //! In fact, excerpts are just viewers for the master score
-            excerptStaff->setId(linkedMasterStaff->id());
-            excerptPart->setId(masterPart->id());
-
-            assignedStavesIds.insert(linkedMasterStaff->id());
-
-            // For instruments with multiple staves, every staff will point to the
-            // same part. To prevent adding the same part several times to the excerpt,
-            // add only the part of the first staff pointing to the part.
-            if (!(--nstaves)) {
-                ex->parts().push_back(linkedMasterStaff->part());
-                nstaves = static_cast<int>(linkedMasterStaff->part()->nstaves());
-            }
-            break;
-        }
-    }
-
-    if (ex->tracksMapping().empty()) {   // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
-        ex->updateTracksMapping();
+    if (!ex->inited()) {
+        initParts(ex);
     }
 
     excerpts().insert(excerpts().begin() + (index == mu::nidx ? excerpts().size() : index), ex);
@@ -641,7 +595,7 @@ void MasterScore::setPlaybackScore(Score* score)
 void MasterScore::updateExpressive(Synthesizer* synth)
 {
     SynthesizerState s = synthesizerState();
-    SynthesizerGroup g = s.group("master");
+    SynthesizerGroup g = s.group(u"master");
 
     int method = 1;
     for (const IdValue& idVal : g) {
@@ -662,7 +616,7 @@ void MasterScore::updateExpressive(Synthesizer* synth, bool expressive, bool for
 
     if (!force) {
         SynthesizerState s = synthesizerState();
-        SynthesizerGroup g = s.group("master");
+        SynthesizerGroup g = s.group(u"master");
 
         for (const IdValue& idVal : g) {
             if (idVal.id == 4) {

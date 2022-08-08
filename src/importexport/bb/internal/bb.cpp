@@ -20,8 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "libmscore/mscore.h"
 #include "bb.h"
+
+#include "engravingerrors.h"
+#include "libmscore/mscore.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -389,18 +391,18 @@ bool BBFile::read(const QString& name)
 //   importBB
 //---------------------------------------------------------
 
-Score::FileError importBB(MasterScore* score, const QString& name)
+Err importBB(MasterScore* score, const QString& name)
 {
     BBFile bb;
     if (!QFileInfo::exists(name)) {
-        return Score::FileError::FILE_NOT_FOUND;
+        return engraving::Err::FileNotFound;
     }
     if (!bb.read(name)) {
         LOGD("Cannot open file <%s>", qPrintable(name));
-        return Score::FileError::FILE_OPEN_ERROR;
+        return engraving::Err::FileOpenError;
     }
     score->style().set(Sid::chordsXmlFile, true);
-    score->chordList()->read("chords.xml");
+    score->chordList()->read(u"chords.xml");
     *(score->sigmap()) = bb.siglist();
 
     QList<BBTrack*>* tracks = bb.tracks();
@@ -479,7 +481,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
 
     MeasureBase* measureB = score->first();
     Text* text = Factory::createText(measureB, TextStyleType::TITLE);
-    text->setPlainText(bb.title());
+    text->setPlainText(String::fromUtf8(bb.title()));
 
     if (measureB->type() != ElementType::VBOX) {
         measureB = Factory::createVBox(score->dummy()->system());
@@ -561,7 +563,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
         sks->add(keysig);
     }
     score->setUpTempoMap();
-    return Score::FileError::FILE_NO_ERROR;
+    return engraving::Err::NoError;
 }
 
 //---------------------------------------------------------

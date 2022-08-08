@@ -31,20 +31,21 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString JOIN_DATA_DIR("join_data/");
-
+using namespace mu;
 using namespace mu::engraving;
 
-class JoinTests : public ::testing::Test
+static const String JOIN_DATA_DIR("join_data/");
+
+class Engraving_JoinTests : public ::testing::Test
 {
 public:
     void join(const char* p1, const char* p2, int index = 0);
     void join1(const char* p1);
 };
 
-void JoinTests::join(const char* p1, const char* p2, int index)
+void Engraving_JoinTests::join(const char* p1, const char* p2, int index)
 {
-    MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + p1);
+    MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + String::fromUtf8(p1));
     EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
@@ -61,13 +62,13 @@ void JoinTests::join(const char* p1, const char* p2, int index)
 
     score->cmdJoinMeasure(m1, m2);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, p1, JOIN_DATA_DIR + p2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(p1), JOIN_DATA_DIR + String::fromUtf8(p2)));
     delete score;
 }
 
-void JoinTests::join1(const char* p1)
+void Engraving_JoinTests::join1(const char* p1)
 {
-    MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + p1);
+    MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + String::fromUtf8(p1));
     EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
@@ -92,42 +93,42 @@ void JoinTests::join1(const char* p1)
     delete score;
 }
 
-TEST_F(JoinTests, join01)
+TEST_F(Engraving_JoinTests, join01)
 {
     join("join01.mscx", "join01-ref.mscx");
 }
 
-TEST_F(JoinTests, join02)
+TEST_F(Engraving_JoinTests, join02)
 {
     join("join02.mscx", "join02-ref.mscx");
 }
 
-TEST_F(JoinTests, join03)
+TEST_F(Engraving_JoinTests, join03)
 {
     join("join03.mscx", "join03-ref.mscx");
 }
 
-TEST_F(JoinTests, join04)
+TEST_F(Engraving_JoinTests, join04)
 {
     join("join04.mscx", "join04-ref.mscx");
 }
 
-TEST_F(JoinTests, join05)
+TEST_F(Engraving_JoinTests, join05)
 {
     join("join05.mscx", "join05-ref.mscx");
 }
 
-TEST_F(JoinTests, join06)
+TEST_F(Engraving_JoinTests, join06)
 {
     join("join06.mscx", "join06-ref.mscx", 1);
 }
 
-TEST_F(JoinTests, join07)
+TEST_F(Engraving_JoinTests, join07)
 {
     join("join07.mscx", "join07-ref.mscx");
 }
 
-TEST_F(JoinTests, join08)
+TEST_F(Engraving_JoinTests, join08)
 {
     join1("join08.mscx");
 }

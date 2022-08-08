@@ -30,11 +30,12 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString BOX_DATA_DIR("box_data/");
-
+using namespace mu;
 using namespace mu::engraving;
 
-class BoxTests : public ::testing::Test
+static const String BOX_DATA_DIR(u"box_data/");
+
+class Engraving_BoxTests : public ::testing::Test
 {
 };
 
@@ -42,13 +43,13 @@ class BoxTests : public ::testing::Test
 //   undoRemoveVBox
 ///   read a file with a vbox. Delete it, and undo. Check that the VBox still exists.
 //---------------------------------------------------------
-TEST_F(BoxTests, undoRemoveVBox)
+TEST_F(Engraving_BoxTests, undoRemoveVBox)
 {
-    QString readFile(BOX_DATA_DIR + "undoRemoveVBox.mscx");
-    QString writeFile1("undoRemoveVBox1-test.mscx");
-    QString reference1(BOX_DATA_DIR + "undoRemoveVBox1-ref.mscx");
-    QString writeFile2("undoRemoveVBox2-test.mscx");
-    QString reference2(BOX_DATA_DIR + "undoRemoveVBox2-ref.mscx");
+    String readFile(BOX_DATA_DIR + u"undoRemoveVBox.mscx");
+    String writeFile1(u"undoRemoveVBox1-test.mscx");
+    String reference1(BOX_DATA_DIR + u"undoRemoveVBox1-ref.mscx");
+    String writeFile2(u"undoRemoveVBox2-test.mscx");
+    String reference2(BOX_DATA_DIR + u"undoRemoveVBox2-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     EXPECT_TRUE(score);

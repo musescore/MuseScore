@@ -51,6 +51,8 @@ MenuView {
     }
 
     function calculateSize() {
+        var menuMetricsComponent = Qt.createComponent("MenuMetrics.qml");
+        root.menuMetrics = menuMetricsComponent.createObject(root)
         root.menuMetrics.calculate(model)
 
         //! NOTE: Due to the fact that the view has a dynamic delegate,
@@ -93,7 +95,7 @@ MenuView {
     }
 
     property var subMenuLoader: null
-    property MenuMetrics menuMetrics: MenuMetrics {}
+    property MenuMetrics menuMetrics: null
 
     contentItem: PopupContent {
         id: content
@@ -113,7 +115,7 @@ MenuView {
         isOpened: root.isOpened
 
         animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
-        isCloseByEscape: false
+        closeOnEscape: false
 
         navigationSection.onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.Escape) {

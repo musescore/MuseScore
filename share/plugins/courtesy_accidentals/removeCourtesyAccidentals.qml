@@ -26,6 +26,7 @@ MuseScore {
       description: "This plugin removes courtesy accidentals"
       title: "Remove Courtesy Accidentals"
       categoryCode: "composing-arranging-tools"
+      thumbnailName: "accidentals.png"
 
       //pluginType: "dock"
       requiresScore: true
@@ -104,7 +105,7 @@ MuseScore {
                         }
                   }
                   // if the tied back note is not part of
-                  // the current key sig, we need to remeber it.
+                  // the current key sig, we need to remember it.
                   //if( ! (note.tpc > keySig+12 && note.tpc < keySig+20)) {
                   //       curMeasureArray[noteClass]=noteName;
                   //}
@@ -245,8 +246,6 @@ MuseScore {
       function removeAcc() {
             console.log("start remove courtesy accidentals");
 
-            //curScore.startCmd();
-
              if (typeof curScore === 'undefined' || curScore == null) {
                    console.log("error: no score!");
                    quit();
@@ -297,19 +296,19 @@ MuseScore {
                   curStartStaff = curEndStaff;
             }
 
-            //curScore.endCmd();
-            //curScore.doLayout();
-
             console.log("end remove courtesy accidentals");
-            quit();
       }
 
       onRun: {
-            if(mscoreMajorVersion == 3 && mscoreMinorVersion == 0
-            && mscoreUpdateVersion < 5) {
-                  versionError.open();
-            } else {
-                  removeAcc();
-            }
+          if(mscoreMajorVersion == 3 && mscoreMinorVersion == 0
+                  && mscoreUpdateVersion < 5) {
+              versionError.open()
+          } else {
+              curScore.startCmd()
+              removeAcc()
+              curScore.endCmd()
+
+              quit()
+          }
       }
 }

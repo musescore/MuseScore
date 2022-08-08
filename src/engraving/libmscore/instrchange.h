@@ -23,8 +23,6 @@
 #ifndef __INSTRCHANGE_H__
 #define __INSTRCHANGE_H__
 
-#include <QCoreApplication>
-
 #include "text.h"
 #include "instrument.h"
 #include "clef.h"
@@ -36,7 +34,8 @@ namespace mu::engraving {
 
 class InstrumentChange final : public TextBase
 {
-    Q_DECLARE_TR_FUNCTIONS(InstrumentChange)
+    OBJECT_ALLOCATOR(engraving, InstrumentChange)
+
     Instrument* _instrument;    // Staff holds ownership if part of score
     bool _init = false;   // Set if the instrument has been set by the user, as there is no other way to tell.
 

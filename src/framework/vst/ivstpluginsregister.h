@@ -13,7 +13,7 @@ class IVstPluginsRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IVstPluginsRegister() = default;
 
-    virtual void registerInstrPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId, VstPluginPtr pluginPtr) = 0;
+    virtual void registerInstrPlugin(const audio::TrackId trackId, VstPluginPtr pluginPtr) = 0;
     virtual void registerFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
                                   const audio::AudioFxChainOrder chainOrder, VstPluginPtr pluginPtr) = 0;
     virtual void registerMasterFxPlugin(const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder,

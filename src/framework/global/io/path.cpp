@@ -21,42 +21,46 @@
  */
 #include "path.h"
 
-#include <QDir>
-#include <QFileInfo>
-#include <QRegularExpression>
-
 #include "stringutils.h"
+#include "fileinfo.h"
 
+using namespace mu;
 using namespace mu::io;
 
-path_t::path_t(const QByteArray& s)
-    : m_path(s)
-{
-}
-
-path_t::path_t(const QString& s)
-    : m_path(s.toUtf8())
+path_t::path_t(const String& s)
+    : m_path(s.toStdString())
 {
 }
 
 path_t::path_t(const std::string& s)
-    : m_path(s.c_str())
+    : m_path(s)
 {
 }
 
 path_t::path_t(const char* s)
-    : m_path(s)
+    : m_path(s ? s : "")
 {
 }
 
 bool path_t::empty() const
 {
-    return m_path.isEmpty();
+    return m_path.empty();
+}
+
+size_t path_t::size() const
+{
+    return m_path.size();
+}
+
+bool path_t::withSuffix(const char* str) const
+{
+    return io::FileInfo::suffix(m_path).toLower() == str;
 }
 
 path_t path_t::appendingComponent(const path_t& other) const
 {
-    if (m_path.endsWith('/') || other.m_path.startsWith('/')) {
+    if ((!m_path.empty() && m_path.back() == '/')
+        || (!other.m_path.empty() && other.m_path.front() == '/')) {
         return m_path + other.m_path;
     }
 
@@ -65,133 +69,140 @@ path_t path_t::appendingComponent(const path_t& other) const
 
 path_t path_t::appendingSuffix(const path_t& suffix) const
 {
-    if (suffix.m_path.startsWith('.')) {
+    if (!suffix.m_path.empty() && suffix.m_path.front() == '.') {
         return m_path + suffix.m_path;
     }
 
     return m_path + '.' + suffix.m_path;
 }
 
-QString path_t::toQString() const
+String path_t::toString() const
 {
-    return QString(m_path);
+    return String::fromStdString(m_path);
 }
 
 std::string path_t::toStdString() const
 {
-    return std::string(m_path.data());
-}
-
-std::wstring path_t::toStdWString() const
-{
-    return QString(m_path).toStdWString();
+    return m_path;
 }
 
 const char* path_t::c_str() const
 {
-    return m_path.data();
+    return m_path.c_str();
 }
 
-const QByteArray& path_t::constData() const
+#ifndef NO_QT_SUPPORT
+path_t::path_t(const QString& s)
+    : m_path(s.toStdString())
 {
-    return m_path;
 }
+
+QString path_t::toQString() const
+{
+    return QString::fromStdString(m_path);
+}
+
+std::wstring path_t::toStdWString() const
+{
+    return QString::fromStdString(m_path).toStdWString();
+}
+
+#endif
 
 std::string mu::io::suffix(const mu::io::path_t& path)
 {
-    QFileInfo fi(path.toQString());
-    return fi.suffix().toLower().toStdString();
+    return FileInfo::suffix(path).toLower().toStdString();
 }
 
 mu::io::path_t mu::io::filename(const mu::io::path_t& path, bool includingExtension)
 {
-    QFileInfo fi(path.toQString());
+    FileInfo fi(path);
     return includingExtension ? fi.fileName() : fi.completeBaseName();
 }
 
 mu::io::path_t mu::io::basename(const mu::io::path_t& path)
 {
-    QFileInfo fi(path.toQString());
+    FileInfo fi(path);
     return fi.baseName();
 }
 
 mu::io::path_t mu::io::completeBasename(const mu::io::path_t& path)
 {
-    QFileInfo fi(path.toQString());
+    FileInfo fi(path);
     return fi.completeBaseName();
 }
 
 mu::io::path_t mu::io::absolutePath(const path_t& path)
 {
-    return QFileInfo(path.toQString()).absolutePath();
-}
-
-mu::io::path_t mu::io::dirname(const mu::io::path_t& path)
-{
-    return QFileInfo(path.toQString()).dir().dirName();
+    return FileInfo(path).absolutePath();
 }
 
 mu::io::path_t mu::io::dirpath(const mu::io::path_t& path)
 {
-    return QFileInfo(path.toQString()).dir().path();
+    return FileInfo(path).dir().path();
 }
 
 mu::io::path_t mu::io::absoluteDirpath(const mu::io::path_t& path)
 {
-    return QFileInfo(path.toQString()).dir().absolutePath();
+    return FileInfo(path).dir().absolutePath();
 }
 
 bool mu::io::isAbsolute(const path_t& path)
 {
-    return QFileInfo(path.toQString()).isAbsolute();
+    return FileInfo(path).isAbsolute();
 }
 
 bool mu::io::isAllowedFileName(const path_t& fn_)
 {
-    QString fn = basename(fn_).toQString();
+    std::string fn = basename(fn_).toStdString();
+    if (fn.empty()) {
+        return false;
+    }
 
     // Windows filenames are not case sensitive.
-    fn = fn.toUpper();
+    fn = String::fromStdString(fn).toUpper().toStdString();
 
-    static const QString illegal="<>:\"|?*";
+    static const std::string illegal="<>:\"|?*";
 
-    for (const QChar& c : fn) {
+    for (const char& c : fn) {
         // Check for control characters
-        if (c.toLatin1() > 0 && c.toLatin1() < 32) {
+        if (c > 0 && c < 32) {
             return false;
         }
 
         // Check for illegal characters
-        if (illegal.contains(c)) {
-            return false;
+        for (const char& ilc : illegal) {
+            if (c == ilc) {
+                return false;
+            }
         }
     }
 
     // Check for device names in filenames
-    static const QStringList devices = {
+    static const std::vector<std::string> devices = {
         "CON", "PRN",  "AUX",  "NUL",
         "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
         "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
     };
 
-    foreach (const QString& s, devices) {
+    for (const std::string& s : devices) {
         if (fn == s) {
             return false;
         }
     }
 
     // Check for trailing periods or spaces
-    if (fn.right(1) == "." || fn.right(1) == " ") {
+    if (fn.back() == '.' || fn.back() == ' ') {
         return false;
     }
 
     // Check for pathnames that are too long
-    if (fn.length() > 96) {
+    if (fn.size() > 96) {
         return false;
     }
 
     // Since we are checking for a filename, it mustn't be a directory
-    if (fn.right(1) == "\\") {
+    if (fn.back() == '\\') {
         return false;
     }
 
@@ -204,32 +215,31 @@ mu::io::path_t mu::io::escapeFileName(const mu::io::path_t& fn_)
     // special characters in filenames are a constant source
     // of trouble, this replaces some of them common in german:
     //
-    QString fn = fn_.toQString();
+    String fn = fn_.toString();
     fn = fn.simplified();
-    fn = fn.replace(QChar(' '),  "_");
-    fn = fn.replace(QChar('\n'), "_");
-    fn = fn.replace(QChar(0xe4), "ae"); // &auml;
-    fn = fn.replace(QChar(0xf6), "oe"); // &ouml;
-    fn = fn.replace(QChar(0xfc), "ue"); // &uuml;
-    fn = fn.replace(QChar(0xdf), "ss"); // &szlig;
-    fn = fn.replace(QChar(0xc4), "Ae"); // &Auml;
-    fn = fn.replace(QChar(0xd6), "Oe"); // &Ouml;
-    fn = fn.replace(QChar(0xdc), "Ue"); // &Uuml;
-    fn = fn.replace(QChar(0x266d), "b"); // musical flat sign, happen in instrument names, so can happen in part (file) names
-    fn = fn.replace(QChar(0x266f), "#"); // musical sharp sign, can happen in titles, so can happen in score (file) names
-    fn = fn.replace(QRegularExpression("[" + QRegularExpression::escape("\\/:*?\"<>|") + "]"), "_"); //FAT/NTFS special chars
+    fn = fn.replace(' ',  '_');
+    fn = fn.replace('\n', '_');
+    fn = fn.replace(Char(0xe4), u"ae"); // &auml;
+    fn = fn.replace(Char(0xf6), u"oe"); // &ouml;
+    fn = fn.replace(Char(0xfc), u"ue"); // &uuml;
+    fn = fn.replace(Char(0xdf), u"ss"); // &szlig;
+    fn = fn.replace(Char(0xc4), u"Ae"); // &Auml;
+    fn = fn.replace(Char(0xd6), u"Oe"); // &Ouml;
+    fn = fn.replace(Char(0xdc), u"Ue"); // &Uuml;
+    fn = fn.replace(Char(0x266d), u"b"); // musical flat sign, happen in instrument names, so can happen in part (file) names
+    fn = fn.replace(Char(0x266f), u"#"); // musical sharp sign, can happen in titles, so can happen in score (file) names
+    //FAT/NTFS special chars
+    fn = fn.replace('<', '_')
+         .replace('>', '_')
+         .replace(':', '_')
+         .replace('"', '_')
+         .replace('/', '_')
+         .replace('\\', '_')
+         .replace('|', '_')
+         .replace('?', '_')
+         .replace('*', '_');
+
     return fn;
-}
-
-paths_t mu::io::pathsFromStrings(const QStringList& list)
-{
-    paths_t result;
-
-    for (const QString& path : list) {
-        result.push_back(path);
-    }
-
-    return result;
 }
 
 paths_t mu::io::pathsFromString(const std::string& str, const std::string& delim)

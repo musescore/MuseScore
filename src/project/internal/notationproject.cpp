@@ -30,7 +30,7 @@
 #include "engraving/engravingproject.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
-#include "engraving/infrastructure/io/mscio.h"
+#include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/style/defaultstyle.h"
 
@@ -107,7 +107,7 @@ static void setupScoreMetaTags(mu::engraving::MasterScore* masterScore, const Pr
 
 static QString scoreDefaultTitle()
 {
-    return qtrc("project", "Untitled Score");
+    return qtrc("project", "Untitled score");
 }
 
 NotationProject::~NotationProject()
@@ -210,9 +210,6 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     // Load style if present
     if (!stylePath.empty()) {
         m_engravingProject->masterScore()->loadStyle(stylePath.toQString());
-        if (!mu::engraving::MScore::lastError.isEmpty()) {
-            LOGE() << mu::engraving::MScore::lastError;
-        }
     }
 
     // Load other stuff from the project file
@@ -246,7 +243,7 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     // Setup import reader
     INotationReader::Options options;
     if (forceMode) {
-        options[INotationReader::OptionKey::ForceMode] = forceMode;
+        options[INotationReader::OptionKey::ForceMode] = Val(forceMode);
     }
 
     // Read(import) master score
@@ -258,10 +255,6 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
         return ret;
     }
 
-    if (!mu::engraving::MScore::lastError.isEmpty()) {
-        LOGE() << mu::engraving::MScore::lastError;
-    }
-
     // Setup master score
     engraving::Err err = m_engravingProject->setupMasterScore(forceMode);
     if (err != engraving::Err::NoError) {
@@ -271,9 +264,6 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     // Load style if present
     if (!stylePath.empty()) {
         score->loadStyle(stylePath.toQString());
-        if (!mu::engraving::MScore::lastError.isEmpty()) {
-            LOGE() << mu::engraving::MScore::lastError;
-        }
     }
 
     // Setup other stuff
@@ -284,7 +274,7 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     m_masterNotation->setMasterScore(score);
     setPath(path);
     score->setSaved(true);
-    score->setMetaTag("originalFormat", QString::fromStdString(suffix));
+    score->setMetaTag(u"originalFormat", QString::fromStdString(suffix));
 
     m_isNewlyCreated = true;
 
@@ -451,7 +441,7 @@ mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
     return make_ret(notation::Err::UnknownError);
 }
 
-mu::Ret NotationProject::writeToDevice(io::Device* device)
+mu::Ret NotationProject::writeToDevice(QIODevice* device)
 {
     IF_ASSERT_FAILED(!m_path.empty()) {
         return make_ret(notation::Err::UnknownError);
@@ -541,8 +531,7 @@ mu::Ret NotationProject::doSave(const io::path_t& path, bool generateBackup, eng
     // Step 4: replace to saved file
     {
         if (ioMode == MscIoMode::Dir) {
-            RetVal<io::paths_t> filesToBeMoved
-                = fileSystem()->scanFiles(savePath, { "*" }, io::IFileSystem::ScanMode::FilesAndFoldersInCurrentDir);
+            RetVal<io::paths_t> filesToBeMoved = fileSystem()->scanFiles(savePath, { "*" }, io::ScanMode::FilesAndFoldersInCurrentDir);
             if (!filesToBeMoved.ret) {
                 return filesToBeMoved.ret;
             }
@@ -761,12 +750,12 @@ ProjectMeta NotationProject::metaInfo() const
     meta.musescoreRevision = score->mscoreRevision();
     meta.mscVersion = score->mscVersion();
 
-    for (const QString& tag : mu::keys(allTags)) {
+    for (const String& tag : mu::keys(allTags)) {
         if (isStandardTag(tag)) {
             continue;
         }
 
-        meta.additionalTags[tag] = allTags[tag];
+        meta.additionalTags[tag] = allTags[tag].toQString();
     }
 
     meta.filePath = m_path;
@@ -778,7 +767,7 @@ ProjectMeta NotationProject::metaInfo() const
 
 void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
 {
-    std::map<QString, QString> tags {
+    std::map<String, String> tags {
         { WORK_TITLE_TAG, meta.title },
         { SUBTITLE_TAG, meta.subtitle },
         { COMPOSER_TAG, meta.composer },

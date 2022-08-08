@@ -22,13 +22,13 @@
 
 #include <set>
 
-#include <QMessageBox>
+#include <QFile>
 
-#include "engraving/style/style.h"
+#include "engraving/engravingerrors.h"
 #include "engraving/rw/xml.h"
 
 #include "translation.h"
-#include "interactive/messagebox.h"
+#include "infrastructure/messagebox.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -359,7 +359,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
 
         MeasureBase* measure = cs->first();
         Text* text = Factory::createText(measure, ssid);
-        text->setPlainText((const char*)(mm.edata()));
+        text->setPlainText(String::fromUtf8((const char*)(mm.edata())));
 
         if (!measure->isVBox()) {
             measure = Factory::createVBox(cs->dummy()->system());
@@ -371,7 +371,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
     }
     break;
     case META_COPYRIGHT:
-        cs->setMetaTag("copyright", QString((const char*)(mm.edata())));
+        cs->setMetaTag(u"copyright", QString((const char*)(mm.edata())));
         break;
     case META_TIME_SIGNATURE:
         break;                                  // added earlier
@@ -1222,10 +1222,10 @@ void loadMidiData(MidiFile& mf)
     mf.setMidiType(mt);
 }
 
-Score::FileError importMidi(MasterScore* score, const QString& name)
+Err importMidi(MasterScore* score, const QString& name)
 {
     if (name.isEmpty()) {
-        return Score::FileError::FILE_NOT_FOUND;
+        return Err::FileNotFound;
     }
 
     auto& opers = midiImportOperations;
@@ -1239,7 +1239,7 @@ Score::FileError importMidi(MasterScore* score, const QString& name)
         QFile fp(name);
         if (!fp.open(QIODevice::ReadOnly)) {
             LOGD("importMidi: file open error <%s>", qPrintable(name));
-            return Score::FileError::FILE_OPEN_ERROR;
+            return Err::FileOpenError;
         }
         MidiFile mf;
         try {
@@ -1253,7 +1253,7 @@ Score::FileError importMidi(MasterScore* score, const QString& name)
             }
             fp.close();
             LOGD("importMidi: bad file format");
-            return Score::FileError::FILE_BAD_FORMAT;
+            return Err::FileBadFormat;
         }
         fp.close();
 
@@ -1264,6 +1264,6 @@ Score::FileError importMidi(MasterScore* score, const QString& name)
     opers.data()->tracks = convertMidi(score, opers.midiFile(name));
     ++opers.data()->processingsOfOpenedFile;
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 }

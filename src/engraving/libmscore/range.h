@@ -26,6 +26,8 @@
 #include <list>
 #include <vector>
 
+#include "global/allocator.h"
+
 #include "types/fraction.h"
 #include "types/types.h"
 
@@ -45,6 +47,8 @@ class Score;
 
 class TrackList : public std::vector<EngravingItem*>
 {
+    OBJECT_ALLOCATOR(engraving, TrackList)
+
     Fraction _duration;
     ScoreRange* _range = nullptr;
     track_idx_t _track = 0;

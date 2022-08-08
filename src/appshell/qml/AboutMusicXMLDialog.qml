@@ -29,7 +29,7 @@ import MuseScore.AppShell 1.0
 StyledDialogView {
     id: root
 
-    title: qsTrc("appshell", "About MusicXML")
+    title: qsTrc("appshell/about", "About MusicXML")
 
     contentHeight: 312
     contentWidth: 456
@@ -56,7 +56,7 @@ StyledDialogView {
             StyledTextLabel {
                 Layout.fillWidth: true
 
-                text: qsTrc("appshell", "MusicXML is an open file format for exchanging digital sheet music, supported by many applications.")
+                text: qsTrc("appshell/about", "MusicXML is an open file format for exchanging digital sheet music, supported by many applications.")
                 font: ui.theme.bodyBoldFont
                 wrapMode: Text.WordWrap
             }
@@ -68,7 +68,7 @@ StyledDialogView {
                 StyledTextLabel {
                     width: parent.width
 
-                    text: qsTrc("appshell", "Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published by the W3C Music Notation Community Group under the W3C Community Final Specification Agreement:")
+                    text: qsTrc("appshell/about", "Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published by the W3C Music Notation Community Group under the W3C Community Final Specification Agreement:")
                     wrapMode: Text.WordWrap
                     maximumLineCount: 3
                 }
@@ -92,7 +92,7 @@ StyledDialogView {
 
                 StyledTextLabel {
                     width: parent.width
-                    text: qsTrc("appshell", "A human-readable summary is available:")
+                    text: qsTrc("appshell/about", "A human-readable summary is available:")
                     wrapMode: Text.WordWrap
                     maximumLineCount: 3
                 }

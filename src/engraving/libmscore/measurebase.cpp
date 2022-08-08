@@ -73,7 +73,7 @@ MeasureBase::MeasureBase(const MeasureBase& m)
 
 void MeasureBase::clearElements()
 {
-    qDeleteAll(_el);
+    DeleteAll(_el);
     _el.clear();
 }
 
@@ -106,7 +106,7 @@ void MeasureBase::setScore(Score* score)
 
 MeasureBase::~MeasureBase()
 {
-    qDeleteAll(_el);
+    DeleteAll(_el);
 }
 
 //---------------------------------------------------------
@@ -283,7 +283,7 @@ const MeasureBase* MeasureBase::findPotentialSectionBreak() const
 //   pause
 //---------------------------------------------------------
 
-qreal MeasureBase::pause() const
+double MeasureBase::pause() const
 {
     const LayoutBreak* layoutBreak = sectionBreakElement();
     return layoutBreak ? layoutBreak->pause() : 0.0;
@@ -302,9 +302,9 @@ void MeasureBase::layout()
             continue;
         }
         if (element->isLayoutBreak()) {
-            qreal _spatium = spatium();
-            qreal x;
-            qreal y;
+            double _spatium = spatium();
+            double x;
+            double y;
             if (toLayoutBreak(element)->isNoBreak()) {
                 x = width() + score()->styleMM(Sid::barWidth) - element->width() * .5;
             } else {
@@ -346,6 +346,11 @@ Fraction MeasureBase::tick() const
 {
     const MeasureBase* mb = top();
     return mb ? mb->_tick : Fraction(-1, 1);
+}
+
+void MeasureBase::setTick(const Fraction& f)
+{
+    _tick = f;
 }
 
 //---------------------------------------------------------

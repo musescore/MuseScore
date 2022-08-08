@@ -23,7 +23,6 @@
 #define MU_ENGRAVING_DUMMYELEMENT_H
 
 #include <list>
-#include <QVariant>
 #include "libmscore/engravingitem.h"
 
 namespace mu::engraving {
@@ -35,6 +34,7 @@ class RootItem;
 namespace mu::engraving::compat {
 class DummyElement : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, DummyElement)
 public:
     DummyElement(EngravingObject* parent);
     ~DummyElement();
@@ -55,7 +55,9 @@ public:
     bool setProperty(Pid, const PropertyValue&) override { return false; }
 
 private:
-    AccessibleItem* createAccessible() override;
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 
     RootItem* m_root = nullptr;
     Page* m_page = nullptr;

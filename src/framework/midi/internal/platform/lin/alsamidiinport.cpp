@@ -66,6 +66,8 @@ void AlsaMidiInPort::init()
 
         m_devicesChanged.notify();
     });
+
+    AbstractMidiInPort::init();
 }
 
 MidiDeviceList AlsaMidiInPort::devices() const
@@ -209,7 +211,7 @@ mu::Ret AlsaMidiInPort::run()
 void AlsaMidiInPort::stop()
 {
     if (!m_thread) {
-        LOGW() << "already stoped";
+        LOGW() << "already stopped";
         return;
     }
 
@@ -298,16 +300,11 @@ void AlsaMidiInPort::doProcess()
 
         e = e.toMIDI20();
         if (e) {
-            m_eventReceived.send(static_cast<tick_t>(ev->time.tick), e);
+            doEventsRecived({ { static_cast<tick_t>(ev->time.tick), e } });
         }
 
         sleep();
     }
-}
-
-mu::async::Channel<tick_t, Event> AlsaMidiInPort::eventReceived() const
-{
-    return m_eventReceived;
 }
 
 bool AlsaMidiInPort::deviceExists(const MidiDeviceID& deviceId) const

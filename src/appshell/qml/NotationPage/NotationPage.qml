@@ -286,7 +286,7 @@ DockPage {
             id: selectionFilterPanel
 
             objectName: pageModel.selectionFiltersPanelName()
-            title: qsTrc("appshell", "Selection Filter")
+            title: qsTrc("appshell", "Selection filter")
 
             navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
 
@@ -396,7 +396,7 @@ DockPage {
             id: drumsetPanel
 
             objectName: pageModel.drumsetPanelName()
-            title: qsTrc("appshell", "Drumset Tools")
+            title: qsTrc("appshell", "Drumset tools")
 
             height: 64
             minimumHeight: 64

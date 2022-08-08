@@ -28,6 +28,7 @@
 
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
+#include "infrastructure/symbolfont.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/accidental.h"
@@ -64,7 +65,6 @@
 #include "libmscore/pedal.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/rest.h"
-#include "libmscore/scorefont.h"
 #include "libmscore/slur.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
@@ -484,7 +484,7 @@ static Instrument createInstrument(const MusicXMLInstrument& mxmlInstr, const In
     }
 
     if (!it) {
-        it = mu::engraving::searchTemplateForMidiProgram(mxmlInstr.midiProgram);
+        it = mu::engraving::searchTemplateForMidiProgram(0, mxmlInstr.midiProgram);
     }
 
     if (it) {
@@ -672,7 +672,7 @@ static QString text2syms(const QString& t)
     // note that this takes about 1 msec on a Core i5,
     // caching does not gain much
 
-    ScoreFont* sf = ScoreFont::fallbackFont();
+    SymbolFont* sf = SymbolFonts::fallbackFont();
     QMap<QString, SymId> map;
     int maxStringSize = 0;          // maximum string size found
 
@@ -1318,8 +1318,7 @@ void MusicXMLParserPass2::addError(const QString& error)
 {
     if (error != "") {
         _logger->logError(error, &_e);
-        QString errorWithLocation = xmlReaderLocation(_e) + ' ' + error + '\n';
-        _errors += errorWithLocation;
+        _errors += errorStringWithLocation(_e.lineNumber(), _e.columnNumber(), error) + '\n';
     }
 }
 
@@ -1558,11 +1557,11 @@ void MusicXMLParserPass2::skipLogCurrElem()
  Parse MusicXML in \a device and extract pass 2 data.
  */
 
-Score::FileError MusicXMLParserPass2::parse(QIODevice* device)
+Err MusicXMLParserPass2::parse(QIODevice* device)
 {
     //LOGD("MusicXMLParserPass2::parse()");
     _e.setDevice(device);
-    Score::FileError res = parse();
+    Err res = parse();
     //LOGD("MusicXMLParserPass2::parse() res %d", int(res));
     return res;
 }
@@ -1575,7 +1574,7 @@ Score::FileError MusicXMLParserPass2::parse(QIODevice* device)
  Start the parsing process, after verifying the top-level node is score-partwise
  */
 
-Score::FileError MusicXMLParserPass2::parse()
+Err MusicXMLParserPass2::parse()
 {
     bool found = false;
     while (_e.readNextStartElement()) {
@@ -1585,16 +1584,16 @@ Score::FileError MusicXMLParserPass2::parse()
         } else {
             _logger->logError("this is not a MusicXML score-partwise file", &_e);
             _e.skipCurrentElement();
-            return Score::FileError::FILE_BAD_FORMAT;
+            return Err::FileBadFormat;
         }
     }
 
     if (!found) {
         _logger->logError("this is not a MusicXML score-partwise file", &_e);
-        return Score::FileError::FILE_BAD_FORMAT;
+        return Err::FileBadFormat;
     }
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 
 //---------------------------------------------------------
@@ -1692,21 +1691,22 @@ void MusicXMLParserPass2::part()
     _hasDrumset = hasDrumset(instruments);
 
     // set the parts first instrument
-    setPartInstruments(_logger, &_e, _pass1.getPart(id), id, _score, _pass1.getInstrList(id), _pass1.getIntervals(id), instruments);
+    Part* part = _pass1.getPart(id);
+    setPartInstruments(_logger, &_e, part, id, _score, _pass1.getInstrList(id), _pass1.getIntervals(id), instruments);
 
     // set the part name
     auto mxmlPart = _pass1.getMusicXmlPart(id);
-    _pass1.getPart(id)->setPartName(mxmlPart.getName());
+    part->setPartName(mxmlPart.getName());
     if (mxmlPart.getPrintName()) {
-        _pass1.getPart(id)->setLongName(mxmlPart.getName());
+        part->setLongName(mxmlPart.getName());
     }
     if (mxmlPart.getPrintAbbr()) {
-        _pass1.getPart(id)->setPlainShortName(mxmlPart.getAbbr());
+        part->setPlainShortName(mxmlPart.getAbbr());
     }
     // try to prevent an empty track name
-    if (_pass1.getPart(id)->partName() == "") {
+    if (part->partName() == "") {
         QString instrId = _pass1.getInstrList(id).instrument(Fraction(0, 1));
-        _pass1.getPart(id)->setPartName(instruments[instrId].name);
+        part->setPartName(instruments[instrId].name);
     }
 
 #ifdef DEBUG_VOICE_MAPPER
@@ -1738,10 +1738,10 @@ void MusicXMLParserPass2::part()
     }
 
     // stop all remaining extends for this part
-    Measure* lm = _pass1.getPart(id)->score()->lastMeasure();
+    Measure* lm = part->score()->lastMeasure();
     if (lm) {
         track_idx_t strack = _pass1.trackForPart(id);
-        track_idx_t etrack = strack + _pass1.getPart(id)->nstaves() * VOICES;
+        track_idx_t etrack = strack + part->nstaves() * VOICES;
         Fraction lastTick = lm->endTick();
         for (track_idx_t trk = strack; trk < etrack; trk++) {
             _extendedLyrics.setExtend(-1, trk, lastTick);
@@ -1777,8 +1777,18 @@ void MusicXMLParserPass2::part()
         // set staff type to percussion if incorrectly imported as pitched staff
         // Note: part has been read, staff type already set based on clef type and staff-details
         // but may be incorrect for a percussion staff that does not use a percussion clef
-        setStaffTypePercussion(_pass1.getPart(id), drumset);
+        setStaffTypePercussion(part, drumset);
     }
+
+    bool showPart = false;
+    for (Staff* staff : part->staves()) {
+        if (staff->visible()) {
+            showPart = true;
+            break;
+        }
+    }
+
+    part->setShow(showPart);
 
     addError(checkAtEndElement(_e, "part"));
 }
@@ -2328,6 +2338,13 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
         t->setFrets(25);      // sensible default
     }
 
+    QString visible = _e.attributes().value("print-object").toString();
+    if (visible == "no") {
+        _score->staff(staffIdx)->setVisible(false);
+    } else if (!visible.isEmpty() && visible != "yes") {
+        _logger->logError(QString("print-object should be \"yes\" or \"no\""));
+    }
+
     int staffLines = 0;
     while (_e.readNextStartElement()) {
         if (_e.name() == "staff-lines") {
@@ -2851,22 +2868,22 @@ static Jump* findJump(const QString& repeat, Score* score)
     Jump* jp = 0;
     if (repeat == "daCapo") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DC);
+        jp->setJumpType(JumpType::DC);
     } else if (repeat == "daCapoAlCoda") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DC_AL_CODA);
+        jp->setJumpType(JumpType::DC_AL_CODA);
     } else if (repeat == "daCapoAlFine") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DC_AL_FINE);
+        jp->setJumpType(JumpType::DC_AL_FINE);
     } else if (repeat == "dalSegno") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DS);
+        jp->setJumpType(JumpType::DS);
     } else if (repeat == "dalSegnoAlCoda") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DS_AL_CODA);
+        jp->setJumpType(JumpType::DS_AL_CODA);
     } else if (repeat == "dalSegnoAlFine") {
         jp = Factory::createJump(score->dummy()->measure());
-        jp->setJumpType(Jump::Type::DS_AL_FINE);
+        jp->setJumpType(JumpType::DS_AL_FINE);
     }
     return jp;
 }
@@ -2887,16 +2904,16 @@ static Marker* findMarker(const QString& repeat, Score* score)
         // note: Marker::read() also contains code to set text style based on type
         // avoid duplicated code
         // apparently this MUST be after setTextStyle
-        m->setMarkerType(Marker::Type::SEGNO);
+        m->setMarkerType(MarkerType::SEGNO);
     } else if (repeat == "coda") {
         m = Factory::createMarker(score->dummy());
-        m->setMarkerType(Marker::Type::CODA);
+        m->setMarkerType(MarkerType::CODA);
     } else if (repeat == "fine") {
         m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
-        m->setMarkerType(Marker::Type::FINE);
+        m->setMarkerType(MarkerType::FINE);
     } else if (repeat == "toCoda") {
         m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
-        m->setMarkerType(Marker::Type::TOCODA);
+        m->setMarkerType(MarkerType::TOCODA);
     }
     return m;
 }
@@ -2996,11 +3013,11 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
         }
 
         if (lineType == "solid") {
-            b->setLineStyle(mu::draw::PenStyle::SolidLine);
+            b->setLineStyle(LineType::SOLID);
         } else if (lineType == "dashed") {
-            b->setLineStyle(mu::draw::PenStyle::DashLine);
+            b->setLineStyle(LineType::DASHED);
         } else if (lineType == "dotted") {
-            b->setLineStyle(mu::draw::PenStyle::DotLine);
+            b->setLineStyle(LineType::DOTTED);
         } else {
             _logger->logError(QString("unsupported line-type: %1").arg(lineType.toString()), &_e);
         }
@@ -3041,7 +3058,7 @@ void MusicXMLParserDirection::dashes(const QString& type, const int number,
 
         b->setBeginHookType(HookType::NONE);
         b->setEndHookType(HookType::NONE);
-        b->setLineStyle(mu::draw::PenStyle::DashLine);
+        b->setLineStyle(LineType::DASHED);
         // TODO brackets and dashes now share the same storage
         // because they both use ElementType::TEXTLINE
         // use mxml specific type instead
@@ -4149,13 +4166,14 @@ NoteType graceNoteType(const TDuration duration, const bool slash)
     NoteType nt = NoteType::APPOGGIATURA;
     if (slash) {
         nt = NoteType::ACCIACCATURA;
-    }
-    if (duration.type() == DurationType::V_QUARTER) {
-        nt = NoteType::GRACE4;
-    } else if (duration.type() == DurationType::V_16TH) {
-        nt = NoteType::GRACE16;
-    } else if (duration.type() == DurationType::V_32ND) {
-        nt = NoteType::GRACE32;
+    } else {
+        if (duration.type() == DurationType::V_QUARTER) {
+            nt = NoteType::GRACE4;
+        } else if (duration.type() == DurationType::V_16TH) {
+            nt = NoteType::GRACE16;
+        } else if (duration.type() == DurationType::V_32ND) {
+            nt = NoteType::GRACE32;
+        }
     }
     return nt;
 }

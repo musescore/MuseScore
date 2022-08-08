@@ -23,8 +23,8 @@
 #define MU_UI_IINTERACTIVEPROVIDER_H
 
 #include "modularity/imoduleexport.h"
-#include "uri.h"
-#include "retval.h"
+#include "types/uri.h"
+#include "types/retval.h"
 
 #include "iinteractive.h"
 
@@ -47,11 +47,13 @@ public:
                              int defBtn = int(framework::IInteractive::Button::NoButton),
                              const framework::IInteractive::Options& options = {}) = 0;
 
-    virtual RetVal<Val> warning(const std::string& title, const std::string& text, const framework::IInteractive::ButtonDatas& buttons,
+    virtual RetVal<Val> warning(const std::string& title, const framework::IInteractive::Text& text,
+                                const framework::IInteractive::ButtonDatas& buttons,
                                 int defBtn = int(framework::IInteractive::Button::NoButton),
                                 const framework::IInteractive::Options& options = {}) = 0;
 
-    virtual RetVal<Val> error(const std::string& title, const std::string& text, const framework::IInteractive::ButtonDatas& buttons,
+    virtual RetVal<Val> error(const std::string& title, const framework::IInteractive::Text& text,
+                              const framework::IInteractive::ButtonDatas& buttons,
                               int defBtn = int(framework::IInteractive::Button::NoButton),
                               const framework::IInteractive::Options& options = {}) = 0;
 

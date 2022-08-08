@@ -36,7 +36,7 @@ typedef std::vector<int> noteList;
 
 struct BagpipeEmbellishmentInfo {
     const char* name;
-    QString notes;
+    AsciiStringView notes;
 };
 
 //---------------------------------------------------------
@@ -45,7 +45,7 @@ struct BagpipeEmbellishmentInfo {
 //---------------------------------------------------------
 
 struct BagpipeNoteInfo {
-    QString name;
+    AsciiStringView name;
     int line;
     int pitch;
 };
@@ -60,24 +60,24 @@ struct BEDrawingDataY;
 
 class BagpipeEmbellishment final : public EngravingItem
 {
-    int _embelType;
-    void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&, SymId, const qreal x, const bool drawFlag) const;
+    OBJECT_ALLOCATOR(engraving, BagpipeEmbellishment)
+
+    EmbellishmentType _embelType;
+    void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&, SymId, const double x, const bool drawFlag) const;
 
 public:
     BagpipeEmbellishment(EngravingItem* parent)
-        : EngravingItem(ElementType::BAGPIPE_EMBELLISHMENT, parent), _embelType(0) { }
+        : EngravingItem(ElementType::BAGPIPE_EMBELLISHMENT, parent), _embelType(EmbellishmentType(0)) { }
 
     BagpipeEmbellishment* clone() const override { return new BagpipeEmbellishment(*this); }
 
-    int embelType() const { return _embelType; }
-    void setEmbelType(int val) { _embelType = val; }
-    qreal mag() const override;
+    EmbellishmentType embelType() const { return _embelType; }
+    void setEmbelType(EmbellishmentType val) { _embelType = val; }
+    double mag() const override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
     void layout() override;
     void draw(mu::draw::Painter*) const override;
-    static BagpipeEmbellishmentInfo BagpipeEmbellishmentList[];
-    static int nEmbellishments();
     static BagpipeNoteInfo BagpipeNoteInfoList[];
     noteList getNoteList() const;
 };

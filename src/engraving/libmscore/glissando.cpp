@@ -32,12 +32,13 @@ NICE-TO-HAVE TODO:
 #include "glissando.h"
 
 #include <cmath>
+#include <algorithm>
 
-#include "translation.h"
 #include "draw/fontmetrics.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -47,7 +48,7 @@ NICE-TO-HAVE TODO:
 #include "note.h"
 #include "notedot.h"
 #include "score.h"
-#include "scorefont.h"
+#include "symbolfont.h"
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
@@ -66,13 +67,8 @@ static const ElementStyle glissandoElementStyle {
     { Sid::glissandoText,      Pid::GLISS_TEXT },
 };
 
-static constexpr qreal GLISS_PALETTE_WIDTH = 4.0;
-static constexpr qreal GLISS_PALETTE_HEIGHT = 4.0;
-
-const std::array<const char*, 2> Glissando::glissandoTypeNames = {
-    QT_TRANSLATE_NOOP("Palette", "Straight glissando"),
-    QT_TRANSLATE_NOOP("Palette", "Wavy glissando")
-};
+static constexpr double GLISS_PALETTE_WIDTH = 4.0;
+static constexpr double GLISS_PALETTE_HEIGHT = 4.0;
 
 //=========================================================
 //   GlissandoSegment
@@ -93,7 +89,7 @@ void GlissandoSegment::layout()
         setMag(staff()->staffMag(tick()));
     }
     RectF r = RectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
-    qreal lw = glissando()->lineWidth() * .5;
+    double lw = glissando()->lineWidth() * .5;
     setbbox(r.adjusted(-lw, -lw, lw, lw));
 }
 
@@ -106,7 +102,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
     painter->save();
-    qreal _spatium = spatium();
+    double _spatium = spatium();
 
     Pen pen(curColor(visible(), glissando()->lineColor()));
     pen.setWidthF(glissando()->lineWidth());
@@ -114,30 +110,30 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
     painter->setPen(pen);
 
     // rotate painter so that the line become horizontal
-    qreal w     = pos2().x();
-    qreal h     = pos2().y();
-    qreal l     = sqrt(w * w + h * h);
-    qreal wi    = asin(-h / l) * 180.0 / M_PI;
+    double w     = pos2().x();
+    double h     = pos2().y();
+    double l     = sqrt(w * w + h * h);
+    double wi    = asin(-h / l) * 180.0 / M_PI;
     painter->rotate(-wi);
 
     if (glissando()->glissandoType() == GlissandoType::STRAIGHT) {
         painter->drawLine(LineF(0.0, 0.0, l, 0.0));
     } else if (glissando()->glissandoType() == GlissandoType::WAVY) {
         RectF b = symBbox(SymId::wiggleTrill);
-        qreal a  = symAdvance(SymId::wiggleTrill);
+        double a  = symAdvance(SymId::wiggleTrill);
         int n    = static_cast<int>(l / a);          // always round down (truncate) to avoid overlap
-        qreal x  = (l - n * a) * 0.5;     // centre line in available space
+        double x  = (l - n * a) * 0.5;     // centre line in available space
         SymIdList ids;
         for (int i = 0; i < n; ++i) {
             ids.push_back(SymId::wiggleTrill);
         }
 
-        score()->scoreFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)));
+        score()->symbolFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)));
     }
 
     if (glissando()->showText()) {
         mu::draw::Font f(glissando()->fontFace());
-        f.setPointSizeF(glissando()->fontSize() * MScore::pixelRatio * _spatium / SPATIUM20);
+        f.setPointSizeF(glissando()->fontSize() * _spatium / SPATIUM20);
         f.setBold(glissando()->fontStyle() & FontStyle::Bold);
         f.setItalic(glissando()->fontStyle() & FontStyle::Italic);
         f.setUnderline(glissando()->fontStyle() & FontStyle::Underline);
@@ -147,11 +143,15 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
 
         // if text longer than available space, skip it
         if (r.width() < l) {
-            qreal yOffset = r.height() + r.y();             // find text descender height
+            double yOffset = r.height() + r.y();             // find text descender height
             // raise text slightly above line and slightly more with WAVY than with STRAIGHT
             yOffset += _spatium * (glissando()->glissandoType() == GlissandoType::WAVY ? 0.4 : 0.1);
-            painter->setFont(f);
-            qreal x = (l - r.width()) * 0.5;
+
+            mu::draw::Font scaledFont(f);
+            scaledFont.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            painter->setFont(scaledFont);
+
+            double x = (l - r.width()) * 0.5;
             painter->drawText(PointF(x, -yOffset), glissando()->text());
         }
     }
@@ -218,9 +218,9 @@ Glissando::Glissando(const Glissando& g)
     _fontStyle      = g._fontStyle;
 }
 
-QString Glissando::glissandoTypeName() const
+const TranslatableString& Glissando::glissandoTypeName() const
 {
-    return qtrc("Palette", glissandoTypeNames[int(glissandoType())]);
+    return TConv::userName(glissandoType());
 }
 
 //---------------------------------------------------------
@@ -241,7 +241,7 @@ LineSegment* Glissando::createLineSegment(System* parent)
 
 void Glissando::layout()
 {
-    qreal _spatium = spatium();
+    double _spatium = spatium();
 
     if (score()->isPaletteScore() || !startElement() || !endElement()) {    // for use in palettes or while dragging
         if (spannerSegments().empty()) {
@@ -286,7 +286,7 @@ void Glissando::layout()
     // on TAB's, glissando are by necessity on the same string, this gives an horizontal glissando line;
     // make bottom end point lower and top ending point higher
     if (cr1->staff()->isTabStaff(cr1->tick())) {
-        qreal yOff = cr1->staff()->lineDistance(cr1->tick()) * 0.4 * _spatium;
+        double yOff = cr1->staff()->lineDistance(cr1->tick()) * 0.4 * _spatium;
         offs1.ry() += yOff * upDown;
         offs2.ry() -= yOff * upDown;
     }
@@ -317,7 +317,7 @@ void Glissando::layout()
         // but in practice we are not (and would be difficult to get right in current layout algorithms)
         // so, a compromise is to at least use the available space to the left -
         // the default layout for lines left a margin after the header
-        segm2->rxpos() -= _spatium;
+        segm2->movePosX(-_spatium);
         segm2->rxpos2()+= _spatium;
     }
 
@@ -326,16 +326,16 @@ void Glissando::layout()
     // to be needed for anything else than Glissando, though
 
     // get total x-width and total y-height of all segments
-    qreal xTot = 0.0;
+    double xTot = 0.0;
     for (SpannerSegment* segm : spannerSegments()) {
         xTot += segm->ipos2().x();
     }
-    qreal y0   = segm1->ipos().y();
-    qreal yTot = segm2->ipos().y() + segm2->ipos2().y() - y0;
-    qreal ratio = yTot / xTot;
+    double y0   = segm1->ipos().y();
+    double yTot = segm2->ipos().y() + segm2->ipos2().y() - y0;
+    double ratio = yTot / xTot;
     // interpolate y-coord of intermediate points across total width and height
-    qreal xCurr = 0.0;
-    qreal yCurr;
+    double xCurr = 0.0;
+    double yCurr;
     for (unsigned i = 0; i + 1 < spannerSegments().size(); i++) {
         SpannerSegment* segm = segmentAt(i);
         xCurr += segm->ipos2().x();
@@ -344,40 +344,22 @@ void Glissando::layout()
         // next segment shall start where this segment stopped
         segm = segmentAt(i + 1);
         segm->rypos2() += segm->ipos().y() - yCurr;          // adjust next segm. vertical length
-        segm->rypos() = yCurr;                               // position next segm. start point at yCurr
+        segm->setPosY(yCurr);                                // position next segm. start point at yCurr
     }
 
-    // STAY CLEAR OF NOTE APPENDAGES
-
-    // initial note dots / ledger line / notehead
-    offs1 *= -1.0;            // discount changes already applied
-    int dots = static_cast<int>(anchor1->dots().size());
-    LedgerLine* ledLin = cr1->ledgerLines();
-
-    // If TAB: completely zero first offset since it was already applied as right edge of first note
-    if (cr1->staff()->isTabStaff(cr1->tick())) {
-        offs1.rx() = 0.0;
+    // KEEP CLEAR OF ALL ELEMENTS OF THE CHORD
+    // Remove offset already applied
+    offs1 *= -1.0;
+    offs2 *= -1.0;
+    // Look at chord shapes
+    offs1.rx() += cr1->shape().right() - anchor1->pos().x();
+    if (!cr2->staff()->isTabStaff(cr2->tick())) {
+        offs2.rx() -= cr2->shape().left() + anchor2->pos().x();
     }
-    // if dots, start at right of last dot
-    // if no dots, from right of ledger line, if any; from right of notehead, if no ledger line
-    else {
-        offs1.rx() += (dots && anchor1->dot(dots - 1) ? anchor1->dot(dots - 1)->pos().x() + anchor1->dot(dots - 1)->width()
-                       : (ledLin ? ledLin->pos().x() + ledLin->width() : anchor1->headWidth()));
-    }
-
-    // final note arpeggio / accidental / ledger line / accidental / arpeggio (i.e. from outermost to innermost)
-    offs2 *= -1.0;            // discount changes already applied
-    if (Arpeggio* ap = cr2->arpeggio()) {
-        offs2.rx() += ap->pos().x() + ap->offset().x();
-    } else if (Accidental* ac = anchor2->accidental()) {
-        offs2.rx() += ac->pos().x() + ac->offset().x();
-    } else if ((ledLin = cr2->ledgerLines()) != nullptr) {
-        offs2.rx() += ledLin->pos().x();
-    }
-
-    // add another a quarter spatium of 'air'
-    offs1.rx() += _spatium * 0.25;
-    offs2.rx() -= _spatium * 0.25;
+    // Add note distance
+    const double glissNoteDist = 0.25 * spatium(); // TODO: style
+    offs1.rx() += glissNoteDist;
+    offs2.rx() -= glissNoteDist;
 
     // apply offsets: shorten first segment by x1 (and proportionally y) and adjust its length accordingly
     offs1.ry() = segm1->ipos2().y() * offs1.x() / segm1->ipos2().x();
@@ -402,8 +384,32 @@ void Glissando::layout()
 
     PointF anchor2SystPos = anchor2PagePos - system2PagePos;
     RectF r = RectF(anchor2SystPos - segm2->pos(), anchor2SystPos - segm2->pos() - segm2->pos2()).normalized();
-    qreal lw = lineWidth() * .5;
+    double lw = lineWidth() * .5;
     setbbox(r.adjusted(-lw, -lw, lw, lw));
+
+    addLineAttachPoints();
+}
+
+void Glissando::addLineAttachPoints()
+{
+    auto seg = toGlissandoSegment(frontSegment());
+    Note* startNote = nullptr;
+    Note* endNote = nullptr;
+    if (startElement() && startElement()->isNote()) {
+        startNote = toNote(startElement());
+    }
+    if (endElement() && endElement()->isNote()) {
+        endNote = toNote(endElement());
+    }
+    if (!seg || !startNote || !endNote || (startNote->findMeasure() != endNote->findMeasure())) {
+        return;
+    }
+    double startX = seg->ipos().x();
+    double endX = seg->pos2().x() + seg->ipos().x(); // because pos2 is relative to ipos
+    // Here we don't pass y() because its value is unreliable during the first stages of layout.
+    // The y() is irrelevant anyway for horizontal spacing.
+    startNote->addLineAttachPoint(PointF(startX, 0.0), this);
+    endNote->addLineAttachPoint(PointF(endX, 0.0), this);
 }
 
 //---------------------------------------------------------
@@ -450,7 +456,7 @@ void Glissando::read(XmlReader& e)
             _showText = true;
             readProperty(e, Pid::GLISS_TEXT);
         } else if (tag == "subtype") {
-            _glissandoType = GlissandoType(e.readInt());
+            _glissandoType = TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT);
         } else if (tag == "glissandoStyle") {
             readProperty(e, Pid::GLISS_STYLE);
         } else if (tag == "easeInSpin") {
@@ -575,7 +581,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
 //    Returns:    the top note in a suitable following chord or nullptr if none found
 //---------------------------------------------------------
 
-Note* Glissando::guessFinalNote(Chord* chord)
+Note* Glissando::guessFinalNote(Chord* chord, Note* startNote)
 {
     switch (chord->noteType()) {
 //            case NoteType::INVALID:
@@ -654,7 +660,12 @@ Note* Glissando::guessFinalNote(Chord* chord)
                 if (graces.size() > 0) {
                     return graces.front()->upNote();
                 }
-                return target->upNote();              // if no grace before, return top note
+                // normal case: try to return the note in the next chord that is in the
+                // same position as the start note relative to the end chord
+                auto startNoteIter = find(chord->notes().begin(), chord->notes().end(), startNote);
+                int startNoteIdx = std::distance(chord->notes().begin(), startNoteIter);
+                int endNoteIdx = std::min(startNoteIdx, int(target->notes().size()) - 1);
+                return target->notes().at(endNoteIdx);
             }
         }
         segm = segm->next1();
@@ -707,7 +718,7 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
         setGlissandoType(GlissandoType(v.toInt()));
         break;
     case Pid::GLISS_TEXT:
-        setText(v.toString());
+        setText(v.value<String>());
         break;
     case Pid::GLISS_SHOW_TEXT:
         setShowText(v.toBool());
@@ -725,7 +736,7 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
         setPlayGlissando(v.toBool());
         break;
     case Pid::FONT_FACE:
-        setFontFace(v.toString());
+        setFontFace(v.value<String>());
         break;
     case Pid::FONT_SIZE:
         setFontSize(v.toReal());
@@ -765,17 +776,5 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
         break;
     }
     return SLine::propertyDefault(propertyId);
-}
-
-//---------------------------------------------------------
-//   Glissando::propertyId
-//---------------------------------------------------------
-
-Pid Glissando::propertyId(const QStringRef& name) const
-{
-    if (name == propertyName(Pid::GLISS_TYPE)) {
-        return Pid::GLISS_TYPE;
-    }
-    return SLine::propertyId(name);
 }
 }

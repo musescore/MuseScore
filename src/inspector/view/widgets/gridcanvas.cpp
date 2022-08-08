@@ -26,7 +26,7 @@
 #include <QPalette>
 #include <cmath>
 
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 
 #include "log.h"
 
@@ -35,7 +35,7 @@ using namespace mu::ui;
 using namespace mu::engraving;
 
 GridCanvas::GridCanvas(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : uicomponents::QuickPaintedView(parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
 }

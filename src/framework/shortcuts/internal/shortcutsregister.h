@@ -25,6 +25,7 @@
 #include "../ishortcutsregister.h"
 #include "modularity/ioc.h"
 #include "ishortcutsconfiguration.h"
+#include "ui/iuiactionsregister.h"
 #include "async/asyncable.h"
 #include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
@@ -40,6 +41,7 @@ class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
     INJECT(shortcuts, io::IFileSystem, fileSystem)
     INJECT(shortcuts, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(shortcuts, ui::IUiActionsRegister, uiactionsRegister)
 
 public:
     ShortcutsRegister() = default;

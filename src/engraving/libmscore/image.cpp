@@ -25,8 +25,10 @@
 #include "io/file.h"
 #include "io/fileinfo.h"
 
-#include "draw/pixmap.h"
-#include "draw/transform.h"
+#include "draw/iimageprovider.h"
+
+#include "draw/types/pixmap.h"
+#include "draw/types/transform.h"
 #include "draw/svgrenderer.h"
 #include "rw/xml.h"
 
@@ -220,7 +222,7 @@ bool Image::isImageFramed() const
 //   imageAspectRatio
 //---------------------------------------------------------
 
-qreal Image::imageAspectRatio() const
+double Image::imageAspectRatio() const
 {
     return _size.width() / _size.height();
 }
@@ -229,9 +231,9 @@ qreal Image::imageAspectRatio() const
 //   setImageHeight
 //---------------------------------------------------------
 
-void Image::updateImageHeight(const qreal& height)
+void Image::updateImageHeight(const double& height)
 {
-    qreal aspectRatio = imageAspectRatio();
+    double aspectRatio = imageAspectRatio();
 
     _size.setHeight(height);
 
@@ -244,9 +246,9 @@ void Image::updateImageHeight(const qreal& height)
 //   setImageWidth
 //---------------------------------------------------------
 
-void Image::updateImageWidth(const qreal& width)
+void Image::updateImageWidth(const double& width)
 {
-    qreal aspectRatio = imageAspectRatio();
+    double aspectRatio = imageAspectRatio();
 
     _size.setWidth(width);
 
@@ -259,7 +261,7 @@ void Image::updateImageWidth(const qreal& width)
 //   imageHeight
 //---------------------------------------------------------
 
-qreal Image::imageHeight() const
+double Image::imageHeight() const
 {
     return _size.height();
 }
@@ -268,7 +270,7 @@ qreal Image::imageHeight() const
 //   imageWidth
 //---------------------------------------------------------
 
-qreal Image::imageWidth() const
+double Image::imageWidth() const
 {
     return _size.width();
 }
@@ -284,20 +286,20 @@ void Image::write(XmlWriter& xml) const
     // TODO : on Save As, score()->fileInfo() still contains the old path and fname
     //          if the Save As path is different, image relative path will be wrong!
     //
-    QString relativeFilePath= QString();
+    String relativeFilePath;
     if (!_linkPath.isEmpty() && _linkIsValid) {
         FileInfo fi(_linkPath);
         // score()->fileInfo()->canonicalPath() would be better
         // but we are saving under a temp file name and the 'final' file
         // might not exist yet, so canonicalFilePath() may return only "/"
         // OTOH, the score 'final' file name is practically always canonical, at this point
-        QString scorePath = score()->masterScore()->fileInfo()->absoluteDirPath().toQString();
-        QString imgFPath  = fi.canonicalFilePath();
+        String scorePath = score()->masterScore()->fileInfo()->absoluteDirPath().toString();
+        String imgFPath  = fi.canonicalFilePath();
         // if imgFPath is in (or below) the directory of scorePath
-        if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
+        if (imgFPath.startsWith(scorePath, mu::CaseSensitive)) {
             // relative img path is the part exceeding scorePath
             imgFPath.remove(0, scorePath.size());
-            if (imgFPath.startsWith('/')) {
+            if (imgFPath.startsWith(u'/')) {
                 imgFPath.remove(0, 1);
             }
             relativeFilePath = imgFPath;
@@ -308,13 +310,13 @@ void Image::write(XmlWriter& xml) const
             fi = FileInfo(scorePath);
             scorePath = fi.path();
             // if imgFPath is in (or below) the directory up the score directory
-            if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
+            if (imgFPath.startsWith(scorePath, mu::CaseSensitive)) {
                 // relative img path is the part exceeding new scorePath plus "../"
                 imgFPath.remove(0, scorePath.size());
-                if (!imgFPath.startsWith('/')) {
-                    imgFPath.prepend('/');
+                if (!imgFPath.startsWith(u'/')) {
+                    imgFPath.prepend(u'/');
                 }
-                imgFPath.prepend("..");
+                imgFPath.prepend(u"..");
                 relativeFilePath = imgFPath;
             }
         }
@@ -378,7 +380,7 @@ void Image::read(XmlReader& e)
     // once all paths are read, load img or retrieve it from store
     // loading from file is tried first to update the stored image, if necessary
 
-    QString path;
+    io::path_t path;
     bool loaded = false;
     // if a store path is given, attempt to get the image from the store
     if (!_storePath.isEmpty()) {
@@ -399,7 +401,7 @@ void Image::read(XmlReader& e)
         path = _linkPath;
     }
 
-    if (path.endsWith(".svg", Qt::CaseInsensitive)) {
+    if (path.withSuffix("svg")) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -412,21 +414,20 @@ void Image::read(XmlReader& e)
 //    return true on success
 //---------------------------------------------------------
 
-bool Image::load(const QString& ss)
+bool Image::load(const io::path_t& ss)
 {
-    LOGD("Image::load <%s>", qPrintable(ss));
-    QString path(ss);
+    io::path_t path(ss);
     // if file path is relative, prepend score path
     FileInfo fi(path);
     if (fi.isRelative()) {
-        path.prepend(masterScore()->fileInfo()->absoluteDirPath().toQString() + "/");
+        path = masterScore()->fileInfo()->absoluteDirPath() + '/' + path;
         fi = FileInfo(path);
     }
 
     _linkIsValid = false;                       // assume link fname is invalid
     File f(path);
     if (!f.open(IODevice::ReadOnly)) {
-        LOGD("Image::load<%s> failed", qPrintable(path));
+        LOGD() << "failed load file: " << path;
         return false;
     }
     ByteArray ba = f.readAll();
@@ -436,7 +437,7 @@ bool Image::load(const QString& ss)
     _linkPath = fi.canonicalFilePath();
     _storeItem = imageStore.add(_linkPath, ba);
     _storeItem->reference(this);
-    if (path.endsWith(".svg", Qt::CaseInsensitive)) {
+    if (path.withSuffix("svg")) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -450,15 +451,13 @@ bool Image::load(const QString& ss)
 //    return true on success
 //---------------------------------------------------------
 
-bool Image::loadFromData(const QString& ss, const ByteArray& ba)
+bool Image::loadFromData(const path_t& name, const ByteArray& ba)
 {
-    LOGD("Image::loadFromData <%s>", qPrintable(ss));
-
     _linkIsValid = false;
-    _linkPath = "";
-    _storeItem = imageStore.add(ss, ba);
+    _linkPath = u"";
+    _storeItem = imageStore.add(name, ba);
     _storeItem->reference(this);
-    if (ss.endsWith(".svg", Qt::CaseInsensitive)) {
+    if (name.withSuffix("svg")) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -484,11 +483,11 @@ void Image::startEditDrag(EditData& data)
 
 void Image::editDrag(EditData& ed)
 {
-    qreal ratio = _size.width() / _size.height();
-    qreal dx = ed.delta.x();
-    qreal dy = ed.delta.y();
+    double ratio = _size.width() / _size.height();
+    double dx = ed.delta.x();
+    double dy = ed.delta.y();
     if (_sizeIsSpatium) {
-        qreal _spatium = spatium();
+        double _spatium = spatium();
         dx /= _spatium;
         dy /= _spatium;
     } else {
@@ -566,11 +565,11 @@ void Image::layout()
     // if autoscale && inside a box, scale to box relevant size
     if (autoScale() && explicitParent() && ((explicitParent()->isHBox() || explicitParent()->isVBox()))) {
         if (_lockAspectRatio) {
-            qreal f = _sizeIsSpatium ? spatium() : DPMM;
+            double f = _sizeIsSpatium ? spatium() : DPMM;
             SizeF size(imageSize());
-            qreal ratio = size.width() / size.height();
-            qreal w = parentItem()->width();
-            qreal h = parentItem()->height();
+            double ratio = size.width() / size.height();
+            double w = parentItem()->width();
+            double h = parentItem()->height();
             if ((w / h) < ratio) {
                 _size.setWidth(w / f);
                 _size.setHeight((w / ratio) / f);

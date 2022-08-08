@@ -31,7 +31,6 @@
 #include "../inotationconfiguration.h"
 
 namespace mu::engraving {
-class MScore;
 class Score;
 }
 
@@ -44,7 +43,7 @@ class Notation : virtual public INotation, public IGetScore, public async::Async
     INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
-    explicit Notation(mu::engraving::Score* score = nullptr);
+    explicit Notation(engraving::Score* score = nullptr);
     ~Notation() override;
 
     static void init();
@@ -61,10 +60,11 @@ public:
     void setIsOpen(bool open) override;
     async::Notification openChanged() const override;
 
-    void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
+    void setViewMode(const ViewMode& viewMode) override;
 
     INotationPaintingPtr painting() const override;
+    INotationViewStatePtr viewState() const override;
     INotationInteractionPtr interaction() const override;
     INotationMidiInputPtr midiInput() const override;
     INotationUndoStackPtr undoStack() const override;
@@ -90,12 +90,13 @@ private:
     friend class NotationInteraction;
     friend class NotationPainting;
 
-    mu::engraving::Score* m_score = nullptr;
+    engraving::Score* m_score = nullptr;
     async::Notification m_scoreInited;
 
     async::Notification m_openChanged;
 
     INotationPaintingPtr m_painting = nullptr;
+    INotationViewStatePtr m_viewState = nullptr;
     INotationInteractionPtr m_interaction = nullptr;
     INotationStylePtr m_style = nullptr;
     INotationMidiInputPtr m_midiInput = nullptr;

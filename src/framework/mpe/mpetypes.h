@@ -32,9 +32,8 @@
 #include <set>
 #include <vector>
 
-#include "log.h"
-#include "sharedhashmap.h"
-#include "sharedmap.h"
+#include "types/sharedhashmap.h"
+#include "types/sharedmap.h"
 
 #include "soundid.h"
 
@@ -104,6 +103,21 @@ struct ValuesCurve : public SharedMap<duration_percentage_t, T>
     {
         return this->empty() ? 0 : this->rbegin()->first - amplitudeValuePoint().first;
     }
+
+    float velocityFraction() const
+    {
+        auto amplitudePoint = amplitudeValuePoint();
+        duration_percentage_t duration = amplitudePoint.first;
+        T amplitude = amplitudePoint.second;
+
+        if (duration == 0) {
+            return 1.f;
+        }
+
+        float factor = log10f(amplitude / static_cast<float>(duration));
+
+        return (factor + 1.f) / 2.f;
+    }
 };
 
 // Pitch
@@ -146,9 +160,10 @@ constexpr inline pitch_level_t pitchLevelDiff(const PitchClass fClass, const oct
     return pitchLevel(fClass, fOctave) - pitchLevel(sClass, sOctave);
 }
 
-constexpr inline int pitchStepsCount(const pitch_level_t pitchRange)
+constexpr inline size_t pitchStepsCount(const pitch_level_t pitchRange)
 {
-    return static_cast<int>(pitchRange / PITCH_LEVEL_STEP) + 1;
+    size_t range = pitchRange > 0 ? pitchRange : -pitchRange;
+    return range / PITCH_LEVEL_STEP + 1;
 }
 
 // Expression
@@ -666,6 +681,19 @@ struct ArticulationMap : public SharedHashMap<ArticulationType, ArticulationAppl
             return;
         }
 
+        if (size() == 1) {
+            const ArticulationPatternSegment& segment = cbegin()->second.appliedPatternSegment;
+
+            m_averageDurationFactor = segment.arrangementPattern.durationFactor;
+            m_averageTimestampOffset = segment.arrangementPattern.timestampOffset;
+            m_averageMaxAmplitudeLevel = segment.expressionPattern.maxAmplitudeLevel();
+            m_averagePitchRange = cbegin()->second.occupiedPitchChangesRange;
+            m_averageDynamicRange = cbegin()->second.occupiedDynamicChangesRange;
+            m_averageDynamicOffsetMap = segment.expressionPattern.dynamicOffsetMap;
+            m_averagePitchOffsetMap = segment.pitchPattern.pitchOffsetMap;
+            return;
+        }
+
         resetData();
 
         for (auto it = cbegin(); it != cend(); ++it) {
@@ -683,10 +711,22 @@ private:
         auto segmentDynamicOffsetIt = segment.expressionPattern.dynamicOffsetMap.cbegin();
         auto segmentPitchOffsetIt = segment.pitchPattern.pitchOffsetMap.cbegin();
 
+        bool hasMeaningDynamicOffset = segment.expressionPattern.maxAmplitudeLevel() != dynamicLevelFromType(DynamicType::Natural);
+        bool hasMeaningPitchOffset = segment.pitchPattern.maxAmplitudeLevel() != 0;
+
+        if (!hasMeaningDynamicOffset && !hasMeaningPitchOffset) {
+            return;
+        }
+
         while (segmentDynamicOffsetIt != segment.expressionPattern.dynamicOffsetMap.cend()
                && segmentPitchOffsetIt != segment.pitchPattern.pitchOffsetMap.cend()) {
-            averageDynamicOffsetIt->second += segmentDynamicOffsetIt->second;
-            averagePitchOffsetIt->second += segmentPitchOffsetIt->second;
+            if (hasMeaningDynamicOffset) {
+                averageDynamicOffsetIt->second += segmentDynamicOffsetIt->second;
+            }
+
+            if (hasMeaningPitchOffset) {
+                averagePitchOffsetIt->second += segmentPitchOffsetIt->second;
+            }
 
             ++averageDynamicOffsetIt;
             ++averagePitchOffsetIt;

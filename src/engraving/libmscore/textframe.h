@@ -35,6 +35,7 @@ class Text;
 
 class TBox : public VBox
 {
+    OBJECT_ALLOCATOR(engraving, TBox)
 public:
     TBox(System* parent);
     TBox(const TBox&);
@@ -57,7 +58,7 @@ public:
     void remove(EngravingItem* el) override;
 
     void layout() override;
-    QString accessibleExtraInfo() const override;
+    String accessibleExtraInfo() const override;
 
     int gripsCount() const override;
     Grip initialEditModeGrip() const override;

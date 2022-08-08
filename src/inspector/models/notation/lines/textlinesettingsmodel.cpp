@@ -38,6 +38,7 @@ TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepository
 {
     setModelType(InspectorModelType::TYPE_TEXT_LINE);
     setTitle(qtrc("inspector", "Text line"));
+    setIcon(ui::IconCode::Code::TEXT_BELOW_STAFF);
 
     static const QList<HookTypeInfo> endHookTypes {
         { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
@@ -296,7 +297,7 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
     m_lineStyle->setIsEnabled(isLineAvailable);
 
     auto currentStyle = static_cast<LineTypes::LineStyle>(m_lineStyle->value().toInt());
-    bool areDashPropertiesAvailable = currentStyle == LineTypes::LineStyle::LINE_STYLE_CUSTOM;
+    bool areDashPropertiesAvailable = currentStyle == LineTypes::LineStyle::LINE_STYLE_DASHED;
 
     m_dashLineLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
     m_dashGapLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
@@ -316,4 +317,9 @@ void TextLineSettingsModel::setPossibleStartHookTypes(const QList<HookTypeInfo>&
 void TextLineSettingsModel::setPossibleEndHookTypes(const QList<HookTypeInfo>& types)
 {
     m_possibleEndHookTypes = hookTypesToObjList(types);
+}
+
+void TextLineSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadProperties();
 }

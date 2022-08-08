@@ -22,7 +22,7 @@
 #ifndef MU_MIDI_MIDIERRORS_H
 #define MU_MIDI_MIDIERRORS_H
 
-#include "ret.h"
+#include "types/ret.h"
 
 namespace mu::midi {
 enum class Err {

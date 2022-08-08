@@ -130,7 +130,7 @@ RepeatList::RepeatList(Score* s)
 
 RepeatList::~RepeatList()
 {
-    qDeleteAll(*this);
+    DeleteAll(*this);
 }
 
 //---------------------------------------------------------
@@ -174,12 +174,12 @@ void RepeatList::updateTempo()
     const TempoMap* tl = _score->tempomap();
 
     int utick = 0;
-    qreal t  = 0;
+    double t  = 0;
 
     for (RepeatSegment* s : *this) {
         s->utick      = utick;
         s->utime      = t;
-        qreal ct      = tl->tick2time(s->tick);
+        double ct      = tl->tick2time(s->tick);
         s->timeOffset = t - ct;
         utick        += s->len();
         t            += tl->tick2time(s->tick + s->len()) - ct;
@@ -207,7 +207,7 @@ int RepeatList::utick2tick(int tick) const
         }
     }
 
-    ASSERT_X(QString::asprintf("tick %d not found in RepeatList", tick));
+    ASSERT_X(String(u"tick %1 not found in RepeatList").arg(tick));
     return 0;
 }
 
@@ -232,14 +232,14 @@ int RepeatList::tick2utick(int tick) const
 //   utick2utime
 //---------------------------------------------------------
 
-qreal RepeatList::utick2utime(int tick) const
+double RepeatList::utick2utime(int tick) const
 {
     size_t n = size();
     unsigned ii = (idx1 < n) && (tick >= at(idx1)->utick) ? idx1 : 0;
     for (unsigned i = ii; i < n; ++i) {
         if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i + 1)->utick))) {
             int t     = tick - (at(i)->utick - at(i)->tick);
-            qreal tt = _score->tempomap()->tick2time(t) + at(i)->timeOffset;
+            double tt = _score->tempomap()->tick2time(t) + at(i)->timeOffset;
             return tt;
         }
     }
@@ -250,7 +250,7 @@ qreal RepeatList::utick2utime(int tick) const
 //   utime2utick
 //---------------------------------------------------------
 
-int RepeatList::utime2utick(qreal secs) const
+int RepeatList::utime2utick(double secs) const
 {
     size_t repeatSegmentsCount = size();
     unsigned ii = (idx2 < repeatSegmentsCount) && (secs >= at(idx2)->utime) ? idx2 : 0;
@@ -261,7 +261,7 @@ int RepeatList::utime2utick(qreal secs) const
         }
     }
 
-    ASSERT_X(QString::asprintf("time %f not found in RepeatList", secs));
+    ASSERT_X(String(u"time %1 not found in RepeatList").arg(secs));
     return 0;
 }
 
@@ -283,7 +283,7 @@ std::vector<RepeatSegment*>::const_iterator RepeatList::findRepeatSegmentFromUTi
 
 void RepeatList::flatten()
 {
-    qDeleteAll(*this);
+    DeleteAll(*this);
     clear();
 
     Measure* m = _score->firstMeasure();
@@ -358,7 +358,7 @@ void RepeatList::collectRepeatListElements()
 
     // Clear out previous listing
     for (const RepeatListElementList& srle : _rlElements) {
-        qDeleteAll(srle);
+        DeleteAll(srle);
     }
     _rlElements.clear();
 
@@ -531,7 +531,7 @@ void RepeatList::collectRepeatListElements()
                             ) {
                             // Decrease position
                             // This should always be possible as the list always starts with a REPEAT_START element
-                            Q_ASSERT(insertionIt != sectionRLElements.begin());
+                            assert(insertionIt != sectionRLElements.begin());
                             --insertionIt;
                         } else {
                             // Found location after which we should go
@@ -614,7 +614,7 @@ void RepeatList::collectRepeatListElements()
 ///         "end" will result in end of current section
 ///
 std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementList::const_iterator> RepeatList::findMarker(
-    QString label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
+    String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
     RepeatListElementList::const_iterator referenceRepeatListElementIt) const
 {
     bool found = false;
@@ -759,7 +759,7 @@ void RepeatList::performJump(std::vector<RepeatListElementList>::const_iterator 
 ///
 void RepeatList::unwind()
 {
-    qDeleteAll(*this);
+    DeleteAll(*this);
     clear();
     _jumpsTaken.clear();
 
@@ -1018,7 +1018,7 @@ void RepeatList::unwind()
         // Inform the last RepeatSegment that the Section Break pause property should be honored now
         rs = this->back();
         repeatListElementIt = sectionIt->cend() - 1;
-        Q_ASSERT((*repeatListElementIt)->repeatListElementType == RepeatListElementType::SECTION_BREAK);
+        assert((*repeatListElementIt)->repeatListElementType == RepeatListElementType::SECTION_BREAK);
 
         LayoutBreak const* const layoutBreak = toMeasureBase((*repeatListElementIt)->element)->sectionBreakElement();
         if (layoutBreak != nullptr) {

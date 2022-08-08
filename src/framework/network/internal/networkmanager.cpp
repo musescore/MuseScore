@@ -33,7 +33,6 @@
 using namespace mu;
 using namespace mu::network;
 using namespace mu::framework;
-using namespace mu::io;
 
 static constexpr int NET_TIMEOUT_MS = 60000;
 
@@ -79,13 +78,13 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
                                 const RequestHeaders& headers)
 {
     if (outgoingData && outgoingData->device()) {
-        if (!openDevice(outgoingData->device(), Device::ReadOnly)) {
+        if (!openDevice(outgoingData->device(), QIODevice::ReadOnly)) {
             return make_ret(Err::FiledOpenIODeviceRead);
         }
     }
 
     if (incomingData) {
-        if (!openDevice(incomingData, Device::WriteOnly)) {
+        if (!openDevice(incomingData, QIODevice::WriteOnly)) {
             return make_ret(Err::FiledOpenIODeviceWrite);
         }
         m_incomingData = incomingData;
@@ -101,6 +100,8 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
         request.setRawHeader(rawHeader, headers.rawHeaders[rawHeader]);
     }
 
+    m_progress.started.notify();
+
     QNetworkReply* reply = receiveReply(requestType, request, outgoingData);
 
     if (outgoingData) {
@@ -115,6 +116,8 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
     if (!ret) {
         LOGE() << ret.toString();
     }
+
+    m_progress.finished.send(ret);
 
     if (outgoingData && outgoingData->device()) {
         closeDevice(outgoingData->device());
@@ -153,9 +156,9 @@ QNetworkReply* NetworkManager::receiveReply(RequestType requestType, const QNetw
     return nullptr;
 }
 
-ProgressChannel NetworkManager::progressChannel() const
+Progress NetworkManager::progress() const
 {
-    return m_progressCh;
+    return m_progress;
 }
 
 void NetworkManager::abort()
@@ -163,11 +166,12 @@ void NetworkManager::abort()
     if (m_reply) {
         m_reply->abort();
     }
+
     m_isAborted = true;
-    emit aborted();
+    m_progress.finished.send(make_ret(Err::Abort));
 }
 
-bool NetworkManager::openDevice(Device* device, Device::OpenModeFlag flags)
+bool NetworkManager::openDevice(QIODevice* device, QIODevice::OpenModeFlag flags)
 {
     IF_ASSERT_FAILED(device) {
         return false;
@@ -180,7 +184,7 @@ bool NetworkManager::openDevice(Device* device, Device::OpenModeFlag flags)
     return device->open(flags);
 }
 
-void NetworkManager::closeDevice(Device* device)
+void NetworkManager::closeDevice(QIODevice* device)
 {
     if (device && device->isOpen()) {
         device->close();
@@ -196,7 +200,7 @@ void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* i
 {
     if (incomingData) {
         connect(reply, &QNetworkReply::downloadProgress, this, [this](const qint64 curr, const qint64 total) {
-            m_progressCh.send(Progress(curr, total));
+            m_progress.progressChanged.send(curr, total, "");
         });
 
         connect(reply, &QNetworkReply::readyRead, this, [this]() {
@@ -217,7 +221,7 @@ void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* i
 void NetworkManager::prepareReplyTransmit(QNetworkReply* reply)
 {
     connect(reply, &QNetworkReply::uploadProgress, [this](const qint64 curr, const qint64 total) {
-        m_progressCh.send(Progress(curr, total));
+        m_progress.progressChanged.send(curr, total, "");
     });
 }
 

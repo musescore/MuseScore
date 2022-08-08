@@ -39,6 +39,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/beam.h
     ${CMAKE_CURRENT_LIST_DIR}/bend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bend.h
+    ${CMAKE_CURRENT_LIST_DIR}/stretchedbend.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stretchedbend.h
     ${CMAKE_CURRENT_LIST_DIR}/box.cpp
     ${CMAKE_CURRENT_LIST_DIR}/box.h
     ${CMAKE_CURRENT_LIST_DIR}/bracket.cpp
@@ -84,6 +86,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/easeInOut.cpp
     ${CMAKE_CURRENT_LIST_DIR}/easeInOut.h
     ${CMAKE_CURRENT_LIST_DIR}/edit.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editdata.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editdata.h
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.h
     ${CMAKE_CURRENT_LIST_DIR}/elementmap.cpp
@@ -229,16 +233,10 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/repeatlist.h
     ${CMAKE_CURRENT_LIST_DIR}/rest.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rest.h
-    ${CMAKE_CURRENT_LIST_DIR}/revisions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/revisions.h
     ${CMAKE_CURRENT_LIST_DIR}/rootitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rootitem.h
     ${CMAKE_CURRENT_LIST_DIR}/score.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scorediff.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scorediff.h
     ${CMAKE_CURRENT_LIST_DIR}/scorefile.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scorefont.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scorefont.h
     ${CMAKE_CURRENT_LIST_DIR}/scoreorder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreorder.h
     ${CMAKE_CURRENT_LIST_DIR}/score.h
@@ -257,8 +255,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/sig.h
     ${CMAKE_CURRENT_LIST_DIR}/skyline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/skyline.h
-    ${CMAKE_CURRENT_LIST_DIR}/slide.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/slide.h
     ${CMAKE_CURRENT_LIST_DIR}/slur.cpp
     ${CMAKE_CURRENT_LIST_DIR}/slur.h
     ${CMAKE_CURRENT_LIST_DIR}/slurtie.cpp
@@ -332,6 +328,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tremolo.h
     ${CMAKE_CURRENT_LIST_DIR}/trill.cpp
     ${CMAKE_CURRENT_LIST_DIR}/trill.h
+    ${CMAKE_CURRENT_LIST_DIR}/tripletfeel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tripletfeel.h
     ${CMAKE_CURRENT_LIST_DIR}/tuplet.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tuplet.h
     ${CMAKE_CURRENT_LIST_DIR}/tupletmap.h
@@ -351,4 +349,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.h
     ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.h
+    ${CMAKE_CURRENT_LIST_DIR}/swing.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/swing.h
 )

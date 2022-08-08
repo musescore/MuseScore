@@ -58,12 +58,33 @@ enum class AccidentalType;
 
 static constexpr int MAX_DOTS = 4;
 
+//--------------------------------------------------------------------------------
+// LINE ATTACHMENT POINT
+// Represents the attachment point of any line (tie, slur, glissando...)
+// with respect to the note. Each note can hold a vector of line attach points, which
+// it may use to make spacing decision with the surrounding items.
+//--------------------------------------------------------------------------------
+class LineAttachPoint
+{
+private:
+    EngravingItem* _line = nullptr;
+    PointF _pos = PointF(0.0, 0.0);
+
+public:
+    LineAttachPoint(EngravingItem* l, double x, double y)
+        : _line(l), _pos(PointF(x, y)) {}
+
+    const EngravingItem* line() const { return _line; }
+    const PointF pos() const { return _pos; }
+};
+
 //---------------------------------------------------------
 //   @@ NoteHead
 //---------------------------------------------------------
 
 class NoteHead final : public Symbol
 {
+    OBJECT_ALLOCATOR(engraving, NoteHead)
 public:
 
     NoteHead(Note* parent = 0);
@@ -132,6 +153,7 @@ static const int INVALID_LINE = -10000;
 
 class Note final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Note)
 public:
     enum class SlideType {
         Undefined = 0,
@@ -175,6 +197,7 @@ private:
     bool _play = true;           ///< note is not played if false
     mutable bool _mark = false;  ///< for use in sequencer
     bool _fixed = false;         ///< for slash notation
+    StretchedBend* m_bend = nullptr;
 
     DirectionH _userMirror = DirectionH::AUTO;        ///< user override of mirror
     DirectionV _userDotPosition = DirectionV::AUTO;   ///< user override of dot position
@@ -199,7 +222,7 @@ private:
 
     int _veloOffset = 0;    ///< velocity user offset in percent, or absolute velocity for this note
     int _fixedLine = 0;     ///< fixed line number if _fixed == true
-    qreal _tuning = 0.0;    ///< pitch offset in cent, playable only by internal synthesizer
+    double _tuning = 0.0;    ///< pitch offset in cent, playable only by internal synthesizer
 
     Accidental* _accidental = nullptr;
 
@@ -225,7 +248,7 @@ private:
     SymId _cachedNoteheadSym;   // use in draw to avoid recomputing at every update
     SymId _cachedSymNull;   // additional symbol for some transparent notehead
 
-    QString _fretString;
+    String _fretString;
 
     friend class Factory;
     Note(Chord* ch = 0);
@@ -248,13 +271,17 @@ private:
 
     void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
 
-    static QString tpcUserName(int tpc, int pitch, bool explicitAccidental);
+    static String tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full = false);
 
     bool sameVoiceKerningLimited() const override { return true; }
+
+    std::vector<LineAttachPoint> _lineAttachPoints;
 
 public:
 
     ~Note();
+
+    std::vector<const Note*> compoundNotes() const;
 
     double computePadding(const EngravingItem* nextItem) const override;
 
@@ -270,7 +297,7 @@ public:
 
     void undoUnlink() override;
 
-    qreal mag() const override;
+    double mag() const override;
     EngravingItem* elementBase() const override;
 
     void layout() override;
@@ -283,17 +310,17 @@ public:
     int playTicks() const;
     Fraction playTicksFraction() const;
 
-    qreal headWidth() const;
-    qreal headHeight() const;
-    qreal tabHeadWidth(const StaffType* tab = 0) const;
-    qreal tabHeadHeight(const StaffType* tab = 0) const;
+    double headWidth() const;
+    double headHeight() const;
+    double tabHeadWidth(const StaffType* tab = 0) const;
+    double tabHeadHeight(const StaffType* tab = 0) const;
     mu::PointF stemDownNW() const;
     mu::PointF stemUpSE() const;
-    qreal bboxXShift() const;
-    qreal noteheadCenterX() const;
-    qreal bboxRightPos() const;
-    qreal headBodyWidth() const;
-    qreal outsideTieAttachX(bool up) const;
+    double bboxXShift() const;
+    double noteheadCenterX() const;
+    double bboxRightPos() const;
+    double headBodyWidth() const;
+    double outsideTieAttachX(bool up) const;
 
     NoteHeadScheme headScheme() const { return _headScheme; }
     void updateHeadGroup(const NoteHeadGroup headGroup);
@@ -304,7 +331,7 @@ public:
     void setHeadType(NoteHeadType t);
 
     int subtype() const override { return int(_headGroup); }
-    QString subtypeName() const override;
+    TranslatableString subtypeUserName() const override;
 
     void setPitch(int val);
     void setPitch(int pitch, int tpc1, int tpc2);
@@ -314,8 +341,8 @@ public:
     int epitch() const;             ///< effective pitch
     int octave() const;
     int playingOctave() const;
-    qreal tuning() const { return _tuning; }
-    void setTuning(qreal v) { _tuning = v; }
+    double tuning() const { return _tuning; }
+    void setTuning(double v) { _tuning = v; }
     void undoSetTpc(int v);
     int transposition() const;
     bool fixed() const { return _fixed; }
@@ -326,7 +353,7 @@ public:
     int tpc() const;
     int tpc1() const { return _tpc[0]; }                  // non transposed tpc
     int tpc2() const { return _tpc[1]; }                  // transposed tpc
-    QString tpcUserName(bool explicitAccidental = false) const;
+    String tpcUserName(bool explicitAccidental = false, bool full = false) const;
 
     void setTpc(int v);
     void setTpc1(int v) { _tpc[0] = v; }
@@ -402,7 +429,7 @@ public:
     void setDotsHidden(bool val) { _dotsHidden = val; }
 
     NoteType noteType() const;
-    QString  noteTypeUserName() const;
+    String  noteTypeUserName() const;
 
     ElementList& el() { return _el; }
     const ElementList& el() const { return _el; }
@@ -463,7 +490,7 @@ public:
 
     void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 
-    void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
@@ -487,9 +514,9 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
-    QString accessibleInfo() const override;
-    QString screenReaderInfo() const override;
-    QString accessibleExtraInfo() const override;
+    String accessibleInfo() const override;
+    String screenReaderInfo() const override;
+    String accessibleExtraInfo() const override;
 
     Shape shape() const override;
     std::vector<Note*> tiedNotes() const;
@@ -515,6 +542,8 @@ public:
 
     void relateSlide(Note& start) { _relatedSlide = &start._attachedSlide; }
 
+    StretchedBend* bend() const { return m_bend; }
+
     bool isHammerOn() const { return _isHammerOn; }
     void setIsHammerOn(bool hammerOn) { _isHammerOn = hammerOn; }
 
@@ -522,6 +551,12 @@ public:
     bool harmonic() const { return _harmonic; }
 
     bool isGrace() const { return noteType() != NoteType::NORMAL; }
+
+    void addLineAttachPoint(mu::PointF point, EngravingItem* line);
+    std::vector<LineAttachPoint>& lineAttachPoints() { return _lineAttachPoints; }
+    const std::vector<LineAttachPoint>& lineAttachPoints() const { return _lineAttachPoints; }
+
+    mu::PointF posInStaffCoordinates();
 };
 } // namespace mu::engraving
 #endif

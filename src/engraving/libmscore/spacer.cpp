@@ -21,7 +21,7 @@
  */
 
 #include "spacer.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "score.h"
 #include "staff.h"
@@ -74,12 +74,12 @@ void Spacer::draw(mu::draw::Painter* painter) const
 
 void Spacer::layout0()
 {
-    qreal _spatium = spatium();
+    double _spatium = spatium();
 
     path    = PainterPath();
-    qreal w = _spatium;
-    qreal b = w * .5;
-    qreal h = explicitParent() ? _gap : qMin(_gap.val(), spatium() * 4.0);      // limit length for palette
+    double w = _spatium;
+    double b = w * .5;
+    double h = explicitParent() ? _gap : std::min(_gap.val(), spatium() * 4.0);      // limit length for palette
 
     switch (spacerType()) {
     case SpacerType::DOWN:
@@ -108,7 +108,7 @@ void Spacer::layout0()
         path.lineTo(w, h);
         break;
     }
-    qreal lw = _spatium * 0.4;
+    double lw = _spatium * 0.4;
     RectF bb(0, 0, w, h);
     bb.adjust(-lw, -lw, lw, lw);
     setbbox(bb);
@@ -128,7 +128,7 @@ void Spacer::setGap(Millimetre sp)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void Spacer::spatiumChanged(qreal ov, qreal nv)
+void Spacer::spatiumChanged(double ov, double nv)
 {
     _gap = (_gap / ov) * nv;
     layout0();
@@ -150,7 +150,7 @@ void Spacer::startEditDrag(EditData& ed)
 
 void Spacer::editDrag(EditData& ed)
 {
-    qreal s = ed.delta.y();
+    double s = ed.delta.y();
 
     switch (spacerType()) {
     case SpacerType::DOWN:
@@ -174,7 +174,7 @@ void Spacer::editDrag(EditData& ed)
 
 std::vector<mu::PointF> Spacer::gripsPositions(const EditData&) const
 {
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     PointF p;
     switch (spacerType()) {
     case SpacerType::DOWN:

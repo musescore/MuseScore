@@ -54,6 +54,10 @@ public:
         None, ma15, va8, vb8, mb15
     };
 
+    enum class HarmonicMarkType {
+        None, Artificial, Pinch, Tap, Semi, FeedBack
+    };
+
     struct Tremolo {
         int numerator{ -1 };
         int denominator{ -1 };
@@ -79,6 +83,15 @@ public:
     std::pair<int, GPRhythm::RhytmType> lenth() const;
     GPRhythm::Tuplet tuplet() const;
 
+    void setLetRing(bool letRing) { _letRing = letRing; }
+    bool letRing() const { return _letRing; }
+
+    void setPalmMute(bool palmMute) { _palmMute = palmMute; }
+    bool palmMute() const { return _palmMute; }
+
+    void setHarmonicMarkType(HarmonicMarkType type) { _harmonicMarkType = type; }
+    HarmonicMarkType harmonicMarkType() const { return _harmonicMarkType; }
+
     void setSlapped(bool s) { _slapped = s; }
     bool slapped() const { return _slapped; }
 
@@ -97,8 +110,8 @@ public:
     void setGraceNotes(GraceNotes gn) { _graceNotes = gn; }
     GraceNotes graceNotes() const { return _graceNotes; }
 
-    void setFreeText(const QString& s) { _freeText = s; }
-    const QString& freeText() const { return _freeText; }
+    void setFreeText(const String& s) { _freeText = s; }
+    const String& freeText() const { return _freeText; }
 
     void setTime(int t) { _time = t; }
     int time() const { return _time; }
@@ -197,26 +210,29 @@ public:
     }
 
 private:
-    int _id{ -1 };
+    int _id = -1;
     std::vector<std::shared_ptr<GPNote> > _notes;
     std::map<Key, std::string> _lyrics;
     std::map<Key, int> _diagramIdx;
     std::shared_ptr<GPRhythm> _rhythm;
-    DynamicType _dynamic{ DynamicType::MF };
-    LegatoType _legato{ LegatoType::None };
+    DynamicType _dynamic = DynamicType::MF;
+    LegatoType _legato = LegatoType::None;
     OttavaType _ottavaType = OttavaType::None;
-    bool _slapped{ false };
-    bool _popped{ false };
-    Arpeggio _arpeggio{ Arpeggio::None };
-    Brush _brush{ Brush::None };
-    GraceNotes _graceNotes{ GraceNotes::None };
-    int _time{ -1 };
-    QString _freeText;
+    bool _letRing = false;
+    bool _palmMute = false;
+    HarmonicMarkType _harmonicMarkType = HarmonicMarkType::None;
+    bool _slapped = false;
+    bool _popped = false;
+    Arpeggio _arpeggio = Arpeggio::None;
+    Brush _brush = Brush::None;
+    GraceNotes _graceNotes = GraceNotes::None;
+    int _time = -1;
+    String _freeText;
     VibratoWTremBar _vibrato{ VibratoWTremBar::None };
-    Fadding _fadding{ Fadding::None };
-    Hairpin _hairpin{ Hairpin::None };
-    Rasgueado _rasgueado{ Rasgueado::None };
-    PickStroke _pickStroke{ PickStroke::None };
+    Fadding _fadding = Fadding::None;
+    Hairpin _hairpin = Hairpin::None;
+    Rasgueado _rasgueado = Rasgueado::None;
+    PickStroke _pickStroke = PickStroke::None;
     Tremolo _tremolo;
     Wah _wah = Wah::None;
     Golpe m_golpe = Golpe::None;

@@ -22,7 +22,7 @@
 
 #include "lasso.h"
 #include "score.h"
-#include "draw/brush.h"
+#include "draw/types/brush.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -48,7 +48,7 @@ void Lasso::draw(mu::draw::Painter* painter) const
     using namespace mu::draw;
     painter->setBrush(Brush(engravingConfiguration()->lassoColor()));
     // always 2 pixel width
-    qreal w = 2.0 / painter->worldTransform().m11() * engravingConfiguration()->guiScaling();
+    double w = 2.0 / painter->worldTransform().m11() * engravingConfiguration()->guiScaling();
     painter->setPen(Pen(engravingConfiguration()->selectionColor(), w));
     painter->drawRect(bbox());
 }

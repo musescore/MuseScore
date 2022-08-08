@@ -110,7 +110,7 @@ Column {
 
         model: [
             { text: qsTrc("inspector", "None"), value: TextTypes.FRAME_TYPE_NONE, titleRole: qsTrc("inspector", "None") },
-            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE, titleRole: qsTrc("inspector", "Square") },
+            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE, titleRole: qsTrc("inspector", "Rectangle") },
             { iconCode: IconCode.FRAME_CIRCLE, value: TextTypes.FRAME_TYPE_CIRCLE, titleRole: qsTrc("inspector", "Circle") }
         ]
     }
@@ -146,11 +146,11 @@ Column {
             navigationPanel: root.navigationPanel
             navigationRowStart: borderColorSection.navigationRowEnd + 1
 
-            visible: root.model ? root.model.frameHighlightColor.isEnabled : false
+            visible: root.model ? root.model.frameFillColor.isEnabled : false
             height: visible ? implicitHeight : 0
 
-            titleText: qsTrc("inspector", "Highlight")
-            propertyItem: root.model ? root.model.frameHighlightColor : null
+            titleText: qsTrc("inspector", "Fill color")
+            propertyItem: root.model ? root.model.frameFillColor : null
         }
     }
 

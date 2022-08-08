@@ -18,6 +18,7 @@ MuseScore {
 	description: "Takes a selection of notes and reverses them."
 	version: "1.0"
     categoryCode: "composing-arranging-tools"
+    thumbnailName: "retrograde.png"
 
     function retrogradeSelection() {
 		var cursor = curScore.newCursor(); // get the selection

@@ -23,8 +23,6 @@
 #include "utils.h"
 
 #include <cmath>
-#include <QtMath>
-#include <QRegularExpression>
 #include <map>
 
 #include "containers.h"
@@ -77,7 +75,7 @@ Measure* Score::tick2measure(const Fraction& tick) const
     Measure* lm = 0;
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         if (tick < m->tick()) {
-            Q_ASSERT(lm);
+            assert(lm);
             return lm;
         }
         lm = m;
@@ -108,7 +106,7 @@ Measure* Score::tick2measureMM(const Fraction& t) const
 
     for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
         if (tick < m->tick()) {
-            Q_ASSERT(lm);
+            assert(lm);
             return lm;
         }
         lm = m;
@@ -278,7 +276,7 @@ int getStaff(System* system, const PointF& p)
 {
     PointF pp = p - system->page()->pos() - system->pos();
     for (size_t i = 0; i < system->page()->score()->nstaves(); ++i) {
-        qreal sp = system->spatium();
+        double sp = system->spatium();
         RectF r = system->bboxStaff(static_cast<int>(i)).adjusted(0.0, -sp, 0.0, sp);
         if (r.contains(pp)) {
             return static_cast<int>(i);
@@ -442,7 +440,7 @@ int pitchKeyAdjust(int step, Key key)
 //   y2pitch
 //---------------------------------------------------------
 
-int y2pitch(qreal y, ClefType clef, qreal _spatium)
+int y2pitch(double y, ClefType clef, double _spatium)
 {
     int l = lrint(y / _spatium * 2.0);
     return line2pitch(l, clef, Key::C);
@@ -486,33 +484,33 @@ int quantizeLen(int len, int raster)
     return int(((float)len / raster) + 0.5) * raster;   //round to the closest multiple of raster
 }
 
-static const char* vall[] = {
-    QT_TRANSLATE_NOOP("utils", "c"),
-    QT_TRANSLATE_NOOP("utils", "c♯"),
-    QT_TRANSLATE_NOOP("utils", "d"),
-    QT_TRANSLATE_NOOP("utils", "d♯"),
-    QT_TRANSLATE_NOOP("utils", "e"),
-    QT_TRANSLATE_NOOP("utils", "f"),
-    QT_TRANSLATE_NOOP("utils", "f♯"),
-    QT_TRANSLATE_NOOP("utils", "g"),
-    QT_TRANSLATE_NOOP("utils", "g♯"),
-    QT_TRANSLATE_NOOP("utils", "a"),
-    QT_TRANSLATE_NOOP("utils", "a♯"),
-    QT_TRANSLATE_NOOP("utils", "b")
+static const char16_t* vall[] = {
+    u"c",
+    u"c♯",
+    u"d",
+    u"d♯",
+    u"e",
+    u"f",
+    u"f♯",
+    u"g",
+    u"g♯",
+    u"a",
+    u"a♯",
+    u"b"
 };
-static const char* valu[] = {
-    QT_TRANSLATE_NOOP("utils", "C"),
-    QT_TRANSLATE_NOOP("utils", "C♯"),
-    QT_TRANSLATE_NOOP("utils", "D"),
-    QT_TRANSLATE_NOOP("utils", "D♯"),
-    QT_TRANSLATE_NOOP("utils", "E"),
-    QT_TRANSLATE_NOOP("utils", "F"),
-    QT_TRANSLATE_NOOP("utils", "F♯"),
-    QT_TRANSLATE_NOOP("utils", "G"),
-    QT_TRANSLATE_NOOP("utils", "G♯"),
-    QT_TRANSLATE_NOOP("utils", "A"),
-    QT_TRANSLATE_NOOP("utils", "A♯"),
-    QT_TRANSLATE_NOOP("utils", "B")
+static const char16_t* valu[] = {
+    u"C",
+    u"C♯",
+    u"D",
+    u"D♯",
+    u"E",
+    u"F",
+    u"F♯",
+    u"G",
+    u"G♯",
+    u"A",
+    u"A♯",
+    u"B"
 };
 
 /*!
@@ -527,16 +525,16 @@ static const char* valu[] = {
  * @return
  *  The string representation of the note.
  */
-QString pitch2string(int v)
+String pitch2string(int v)
 {
     if (v < 0 || v > 127) {
-        return QString("----");
+        return String(u"----");
     }
     int octave = (v / 12) - 1;
-    QString o;
-    o = QString::asprintf("%d", octave);
+    String o;
+    o = String::number(octave);
     int i = v % 12;
-    return qtrc("utils", octave < 0 ? valu[i] : vall[i]) + o;
+    return (octave < 0 ? valu[i] : vall[i]) + o;
 }
 
 /*!
@@ -652,17 +650,15 @@ static int _majorVersion, _minorVersion, _patchVersion;
 
 int version()
 {
-    QRegularExpression versionRegEx("(\\d+)\\.(\\d+)\\.(\\d+)");
-    QRegularExpressionMatch versionMatch = versionRegEx.match(VERSION);
-    if (versionMatch.hasMatch()) {
-        QStringList versionStringList = versionMatch.capturedTexts();
-        if (versionStringList.size() == 4) {
-            _majorVersion = versionStringList[1].toInt();
-            _minorVersion = versionStringList[2].toInt();
-            _patchVersion = versionStringList[3].toInt();
-            return _majorVersion * 10000 + _minorVersion * 100 + _patchVersion;
-        }
+    StringList l = String::fromAscii(VERSION).split(u'.');
+    if (l.size() > 2) {
+        _majorVersion = l.at(0).toInt();
+        _minorVersion = l.at(1).toInt();
+        _patchVersion = l.at(2).toInt();
+
+        return _majorVersion * 10000 + _minorVersion * 100 + _patchVersion;
     }
+
     LOGD() << "Could not parse version:" << VERSION;
     return 0;
 }
@@ -1031,9 +1027,9 @@ Segment* skipTuplet(Tuplet* tuplet)
 //    replace ascii with bravura symbols
 //---------------------------------------------------------
 
-SymIdList timeSigSymIdsFromString(const QString& string)
+SymIdList timeSigSymIdsFromString(const String& string)
 {
-    static const std::map<QChar, SymId> dict = {
+    static const std::map<Char, SymId> dict = {
         { 43,    SymId::timeSigPlusSmall },             // '+'
         { 48,    SymId::timeSig0 },                     // '0'
         { 49,    SymId::timeSig1 },                     // '1'
@@ -1065,8 +1061,8 @@ SymIdList timeSigSymIdsFromString(const QString& string)
     };
 
     SymIdList list;
-    for (const QChar& c : string) {
-        SymId sym = mu::value(dict, c, SymId::noSym);
+    for (size_t i = 0; i < string.size(); ++i) {
+        SymId sym = mu::value(dict, string.at(i), SymId::noSym);
         if (sym != SymId::noSym) {
             list.push_back(sym);
         }

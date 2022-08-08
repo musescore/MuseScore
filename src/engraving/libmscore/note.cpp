@@ -28,12 +28,11 @@
 #include "note.h"
 
 #include <assert.h>
-#include <QtMath>
 
 #include "translation.h"
-#include "draw/brush.h"
+#include "draw/types/brush.h"
 #include "rw/xml.h"
-#include "accessibility/accessiblenote.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "accidental.h"
@@ -43,6 +42,7 @@
 #include "bagpembell.h"
 #include "bend.h"
 #include "chord.h"
+#include "chordline.h"
 #include "clef.h"
 #include "drumset.h"
 #include "factory.h"
@@ -60,7 +60,7 @@
 #include "part.h"
 #include "pitchspelling.h"
 #include "score.h"
-#include "scorefont.h"
+#include "symbolfont.h"
 #include "segment.h"
 #include "slur.h"
 #include "spanner.h"
@@ -76,6 +76,11 @@
 #include "undo.h"
 #include "utils.h"
 #include "hook.h"
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+#include "accessibility/accessibleitem.h"
+#include "accessibility/accessibleroot.h"
+#endif
 
 #include "config.h"
 #include "log.h"
@@ -565,11 +570,45 @@ Note::Note(Chord* ch)
 Note::~Note()
 {
     delete _accidental;
-    qDeleteAll(_el);
-    delete _tieFor;
-    qDeleteAll(_dots);
+    DeleteAll(_el);
+
+    if (_tieFor && _tieFor->parent() == this) {
+        delete _tieFor;
+    }
+
+    DeleteAll(_dots);
     _leftParenthesis = nullptr;
     _rightParenthesis = nullptr;
+}
+
+std::vector<const Note*> Note::compoundNotes() const
+{
+    std::vector<const Note*> elements;
+    if (const Note* note = firstTiedNote()) {
+        elements.push_back(note);
+    }
+
+    if (const Note* note = lastTiedNote()) {
+        elements.push_back(note);
+    }
+
+    for (Spanner* e : _spannerFor) {
+        elements.push_back(toNote(e->endElement()));
+    }
+    for (Spanner* e : _spannerBack) {
+        elements.push_back(toNote(e->startElement()));
+    }
+
+    Beam* beam = chord()->beam();
+    if (beam) {
+        for (EngravingItem* e : beam->elements()) {
+            if (e && e->isNote() && e != this) {
+                elements.push_back(toNote(e));
+            }
+        }
+    }
+
+    return elements;
 }
 
 Note::Note(const Note& n, bool link)
@@ -668,17 +707,23 @@ inline int Note::concertPitchIdx() const
 
 void Note::setPitch(int val)
 {
-    Q_ASSERT(pitchIsValid(val));
+    assert(pitchIsValid(val));
     if (_pitch != val) {
         _pitch = val;
         score()->setPlaylistDirty();
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+        if (m_accessible) {
+            m_accessible->accessibleRoot()->notifyAboutFocuedElemntNameChanged();
+        }
+#endif
     }
 }
 
 void Note::setPitch(int pitch, int tpc1, int tpc2)
 {
-    Q_ASSERT(tpcIsValid(tpc1));
-    Q_ASSERT(tpcIsValid(tpc2));
+    assert(tpcIsValid(tpc1));
+    assert(tpcIsValid(tpc2));
     _tpc[0] = tpc1;
     _tpc[1] = tpc2;
     setPitch(pitch);
@@ -748,8 +793,8 @@ void Note::setTpcFromPitch()
         v.flip();
         _tpc[1] = mu::engraving::transposeTpc(_tpc[0], v, true);
     }
-    Q_ASSERT(tpcIsValid(_tpc[0]));
-    Q_ASSERT(tpcIsValid(_tpc[1]));
+    assert(tpcIsValid(_tpc[0]));
+    assert(tpcIsValid(_tpc[1]));
 }
 
 //---------------------------------------------------------
@@ -758,8 +803,8 @@ void Note::setTpcFromPitch()
 
 void Note::setTpc(int v)
 {
-    if (!tpcIsValid(v)) {
-        ASSERT_X(QString::asprintf("Note::setTpc: bad tpc %d", v));
+    IF_ASSERT_FAILED(tpcIsValid(v)) {
+        return;
     }
     _tpc[concertPitchIdx()] = v;
 }
@@ -795,24 +840,28 @@ int Note::tpc() const
 //   tpcUserName
 //---------------------------------------------------------
 
-QString Note::tpcUserName(const int tpc, const int pitch, const bool explicitAccidental)
+String Note::tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full)
 {
-    const auto pitchStr
-        = qtrc("InspectorAmbitus",
-               tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental).replace("b", "♭").replace("#",
-                                                                                                                           "♯").toUtf8().constData());
-    const auto octaveStr = QString::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
+    String pitchStr = tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental, full);
+    if (!explicitAccidental) {
+        pitchStr.replace(u"b", u"♭");
+        pitchStr.replace(u"#", u"♯");
+    }
 
-    return pitchStr + (explicitAccidental ? " " : "") + octaveStr;
+    pitchStr = mtrc("engraving", pitchStr);
+
+    const String octaveStr = String::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
+
+    return pitchStr + (explicitAccidental ? u" " : u"") + octaveStr;
 }
 
 //---------------------------------------------------------
 //   tpcUserName
 //---------------------------------------------------------
 
-QString Note::tpcUserName(const bool explicitAccidental) const
+String Note::tpcUserName(const bool explicitAccidental, bool full) const
 {
-    QString pitchName = tpcUserName(tpc(), epitch() + ottaveCapoFret(), explicitAccidental);
+    String pitchName = tpcUserName(tpc(), epitch() + ottaveCapoFret(), explicitAccidental, full);
 
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         // see Note::accessibleInfo(), but we return what we have
@@ -827,14 +876,16 @@ QString Note::tpcUserName(const bool explicitAccidental) const
         return pitchName;
     }
 
-    QString pitchOffset;
+    String pitchOffset;
     if (tuning() != 0) {
-        pitchOffset = QString::asprintf("%+.3f", tuning());
+        char buffer[50];
+        sprintf(buffer, "%+.3f", tuning());
+        pitchOffset = String::fromAscii(buffer);
     }
 
     if (!concertPitch() && transposition()) {
-        QString soundingPitch = tpcUserName(tpc1(), ppitch(), explicitAccidental);
-        return QObject::tr("%1 (sounding as %2%3)").arg(pitchName, soundingPitch, pitchOffset);
+        String soundingPitch = tpcUserName(tpc1(), ppitch(), explicitAccidental);
+        return mtrc("engraving", "%1 (sounding as %2%3)").arg(pitchName, soundingPitch, pitchOffset);
     }
     return pitchName + pitchOffset;
 }
@@ -936,9 +987,9 @@ SymId Note::noteHead() const
 //
 //    returns the x of the symbol bbox. It is different from headWidth() because zero point could be different from leftmost bbox position.
 //---------------------------------------------------------
-qreal Note::bboxRightPos() const
+double Note::bboxRightPos() const
 {
-    const auto& bbox = score()->scoreFont()->bbox(noteHead(), magS());
+    const auto& bbox = score()->symbolFont()->bbox(noteHead(), magS());
     return bbox.right();
 }
 
@@ -947,7 +998,7 @@ qreal Note::bboxRightPos() const
 //
 //    returns the width of the notehead "body". It is actual for slashed noteheads like -O-, where O is body.
 //---------------------------------------------------------
-qreal Note::headBodyWidth() const
+double Note::headBodyWidth() const
 {
     return headWidth() + 2 * bboxXShift();
 }
@@ -957,9 +1008,9 @@ qreal Note::headBodyWidth() const
 //
 //    returns the X-position for tie attachment for this particular notehead
 //---------------------------------------------------------
-qreal Note::outsideTieAttachX(bool up) const
+double Note::outsideTieAttachX(bool up) const
 {
-    qreal xo = 0;
+    double xo = 0;
 
     // tab staff notes just use center of bounding box
     if (staffType()->isTabStaff()) {
@@ -985,16 +1036,16 @@ qreal Note::outsideTieAttachX(bool up) const
     */
     // try for average of cutouts
     if (up) {
-        qreal xNE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNE).x();
-        qreal xNW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNW).x();
+        double xNE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNE).x();
+        double xNW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNW).x();
         xo = ((xNE + xNW) / 2) * mag();
         if (xNE < xNW) {
             // musejazz is busted
             xo = 0;
         }
     } else {
-        qreal xSE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSE).x();
-        qreal xSW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSW).x();
+        double xSE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSE).x();
+        double xSW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSW).x();
         xo = ((xSE + xSW) / 2) * mag();
         if (xSE < xSW) {
             xo = 0;
@@ -1042,7 +1093,7 @@ void Note::updateHeadGroup(const NoteHeadGroup headGroup)
 //    or the width of the string representation of the fret mark
 //---------------------------------------------------------
 
-qreal Note::headWidth() const
+double Note::headWidth() const
 {
     return symWidth(noteHead());
 }
@@ -1052,9 +1103,9 @@ qreal Note::headWidth() const
 //
 //    returns the x shift of the notehead bounding box
 //---------------------------------------------------------
-qreal Note::bboxXShift() const
+double Note::bboxXShift() const
 {
-    const auto& bbox = score()->scoreFont()->bbox(noteHead(), magS());
+    const auto& bbox = score()->symbolFont()->bbox(noteHead(), magS());
     return bbox.bottomLeft().x();
 }
 
@@ -1063,18 +1114,18 @@ qreal Note::bboxXShift() const
 //
 //    returns the x coordinate of the notehead center related to the basepoint of the notehead bbox
 //---------------------------------------------------------
-qreal Note::noteheadCenterX() const
+double Note::noteheadCenterX() const
 {
-    return score()->scoreFont()->width(noteHead(), magS()) / 2 + bboxXShift();
+    return score()->symbolFont()->width(noteHead(), magS()) / 2 + bboxXShift();
 }
 
 //---------------------------------------------------------
 //   tabHeadWidth
 //---------------------------------------------------------
 
-qreal Note::tabHeadWidth(const StaffType* tab) const
+double Note::tabHeadWidth(const StaffType* tab) const
 {
-    qreal val;
+    double val;
     if (tab && tab->isTabStaff() && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
         mu::draw::Font f    = tab->fretFont();
         f.setPointSizeF(tab->fretFontSize());
@@ -1092,7 +1143,7 @@ qreal Note::tabHeadWidth(const StaffType* tab) const
 //    or the height of the string representation of the fret mark
 //---------------------------------------------------------
 
-qreal Note::headHeight() const
+double Note::headHeight() const
 {
     return symHeight(noteHead());
 }
@@ -1101,7 +1152,7 @@ qreal Note::headHeight() const
 //   tabHeadHeight
 //---------------------------------------------------------
 
-qreal Note::tabHeadHeight(const StaffType* tab) const
+double Note::tabHeadHeight(const StaffType* tab) const
 {
     if (tab && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
         return tab->fretBoxH() * magS();
@@ -1144,6 +1195,10 @@ int Note::playTicks() const
 
 Fraction Note::playTicksFraction() const
 {
+    if (!_tieBack && !_tieFor && chord()) {
+        return chord()->actualTicks();
+    }
+
     Fraction stick = firstTiedNote()->chord()->tick();
     const Note* note = lastTiedNote();
     return note->chord()->tick() + note->chord()->actualTicks() - stick;
@@ -1203,6 +1258,9 @@ void Note::add(EngravingItem* e)
     case ElementType::NOTEDOT:
         _dots.push_back(toNoteDot(e));
         break;
+    case ElementType::STRETCHED_BEND:
+        m_bend = toStretchedBend(e);
+    // fallthrough
     case ElementType::FINGERING:
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
@@ -1248,6 +1306,9 @@ void Note::remove(EngravingItem* e)
         _dots.pop_back();
         break;
 
+    case ElementType::STRETCHED_BEND:
+        m_bend = nullptr;
+    // fallthrough
     case ElementType::TEXT:
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
@@ -1324,14 +1385,14 @@ void Note::draw(mu::draw::Painter* painter) const
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
         if (tieBack() && !tab->showBackTied()) {
-            if (chord()->measure()->system() == tieBack()->startNote()->chord()->measure()->system() && el().empty()) {
+            if (chord()->measure() == tieBack()->startNote()->chord()->measure() && el().empty()) {
                 // fret should be hidden, so return without drawing it
                 return;
             }
         }
         // draw background, if required (to hide a segment of string line or to show a fretting conflict)
         if (!tab->linesThrough() || fretConflict()) {
-            qreal d  = spatium() * .1;
+            double d  = spatium() * .1;
             RectF bb = RectF(bbox().x() - d, tab->fretMaskY() * magS(), bbox().width() + 2 * d, tab->fretMaskH() * magS());
             // we do not know which viewer did this draw() call
             // so update all:
@@ -1355,7 +1416,7 @@ void Note::draw(mu::draw::Painter* painter) const
         f.setPointSizeF(f.pointSizeF() * magS() * MScore::pixelRatio);
         painter->setFont(f);
         painter->setPen(c);
-        painter->drawText(PointF(bbox().x(), tab->fretFontYOffset()), _fretString);
+        painter->drawText(PointF(bbox().x(), tab->fretFontYOffset() * magS()), _fretString);
     }
     // NOT tablature
     else {
@@ -1436,6 +1497,12 @@ void Note::write(XmlWriter& xml) const
     }
     for (Spanner* e : _spannerBack) {
         e->writeSpannerEnd(xml, this, track());
+    }
+
+    for (EngravingItem* e : chord()->el()) {
+        if (e->isChordLine() && toChordLine(e)->note() && toChordLine(e)->note() == this) {
+            toChordLine(e)->write(xml);
+        }
     }
 
     xml.endElement();
@@ -1642,6 +1709,11 @@ bool Note::readProperties(XmlReader& e)
         }
     } else if (tag == "offset") {
         EngravingItem::readProperties(e);
+    } else if (tag == "ChordLine") {
+        ChordLine* cl = Factory::createChordLine(chord());
+        cl->setNote(this);
+        cl->read(e);
+        chord()->add(cl);
     } else if (EngravingItem::readProperties(e)) {
     } else {
         return false;
@@ -1723,6 +1795,7 @@ int Note::transposition() const
 
 class NoteEditData : public ElementEditData
 {
+    OBJECT_ALLOCATOR(engraving, NoteEditData)
 public:
     enum EditMode {
         EditMode_ChangePitch = 0,
@@ -1739,10 +1812,10 @@ public:
 
     static constexpr double MODE_TRANSITION_LIMIT_DEGREES = 15.0;
 
-    static inline EditMode editModeByDragDirection(const qreal& deltaX, const qreal& deltaY)
+    static inline EditMode editModeByDragDirection(const double& deltaX, const double& deltaY)
     {
-        qreal x = qAbs(deltaX);
-        qreal y = qAbs(deltaY);
+        double x = std::abs(deltaX);
+        double y = std::abs(deltaY);
 
         mu::PointF normalizedVector(x, y);
 
@@ -1750,7 +1823,7 @@ public:
 
         float radians = PointF::dotProduct(normalizedVector, PointF(1, 0));
 
-        qreal degrees = (qAcos(radians) * 180.0) / M_PI;
+        double degrees = (std::acos(radians) * 180.0) / M_PI;
 
         LOGD() << "NOTE DRAG DEGREES " << degrees;
 
@@ -1808,12 +1881,12 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE16_AFTER)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE32_AFTER)
            || (noteType() == NoteType::NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_START)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_MID)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_NONE)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_32)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_64)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_AUTO)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_NONE)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_LEFT)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_INNER_8TH)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BREAK_INNER_16TH)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_JOIN)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::PARENTHESES)
            || (type == ElementType::SYMBOL)
            || (type == ElementType::CLEF)
@@ -1823,6 +1896,7 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::STAFF_TEXT)
            || (type == ElementType::PLAYTECH_ANNOTATION)
            || (type == ElementType::SYSTEM_TEXT)
+           || (type == ElementType::TRIPLET_FEEL)
            || (type == ElementType::STICKING)
            || (type == ElementType::TEMPO_TEXT)
            || (type == ElementType::BEND)
@@ -1935,12 +2009,12 @@ EngravingItem* Note::drop(EditData& data)
         case ActionIconType::GRACE32_AFTER:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, Constants::division / 8);
             break;
-        case ActionIconType::BEAM_START:
-        case ActionIconType::BEAM_MID:
-        case ActionIconType::BEAM_NONE:
-        case ActionIconType::BEAM_BEGIN_32:
-        case ActionIconType::BEAM_BEGIN_64:
         case ActionIconType::BEAM_AUTO:
+        case ActionIconType::BEAM_NONE:
+        case ActionIconType::BEAM_BREAK_LEFT:
+        case ActionIconType::BEAM_BREAK_INNER_8TH:
+        case ActionIconType::BEAM_BREAK_INNER_16TH:
+        case ActionIconType::BEAM_JOIN:
             return ch->drop(data);
             break;
         case ActionIconType::PARENTHESES:
@@ -1988,7 +2062,7 @@ EngravingItem* Note::drop(EditData& data)
 
     case ElementType::GLISSANDO:
     {
-        for (auto ee : qAsConst(_spannerFor)) {
+        for (auto ee : _spannerFor) {
             if (ee->type() == ElementType::GLISSANDO) {
                 LOGD("there is already a glissando");
                 delete e;
@@ -1997,7 +2071,7 @@ EngravingItem* Note::drop(EditData& data)
         }
 
         // this is the glissando initial note, look for a suitable final note
-        Note* finalNote = Glissando::guessFinalNote(chord());
+        Note* finalNote = Glissando::guessFinalNote(chord(), this);
         if (finalNote) {
             // init glissando data
             Glissando* gliss = toGlissando(e);
@@ -2034,7 +2108,7 @@ EngravingItem* Note::drop(EditData& data)
         nval.pitch = n->pitch();
         nval.headGroup = n->headGroup();
         ChordRest* cr = nullptr;
-        if (data.modifiers & Qt::ShiftModifier) {
+        if (data.modifiers & ShiftModifier) {
             // add note to chord
             score()->addNote(ch, nval);
         } else {
@@ -2049,6 +2123,10 @@ EngravingItem* Note::drop(EditData& data)
         delete e;
     }
     break;
+
+    case ElementType::CHORDLINE:
+        toChordLine(e)->setNote(this);
+        return ch->drop(data);
 
     default:
         Spanner* spanner;
@@ -2103,7 +2181,7 @@ void Note::setHeadHasParentheses(bool hasParentheses)
 void Note::setDotY(DirectionV pos)
 {
     bool onLine = false;
-    qreal y = 0;
+    double y = 0;
 
     if (staff()->isTabStaff(chord()->tick())) {
         // with TAB's, dotPosX is not set:
@@ -2164,9 +2242,9 @@ void Note::setDotY(DirectionV pos)
             score()->undoRemoveElement(_dots.back());
         }
     }
-    for (NoteDot* dot : qAsConst(_dots)) {
+    for (NoteDot* dot : _dots) {
         dot->layout();
-        dot->rypos() = y;
+        dot->setPosY(y);
     }
 }
 
@@ -2184,7 +2262,7 @@ void Note::layout()
 
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
-        qreal mags = magS();
+        double mags = magS();
         bool parenthesis = false;
         if (tieBack()) {
             if (chord()->measure() != tieBack()->startNote()->chord()->measure() || !el().empty()) {
@@ -2196,19 +2274,19 @@ void Note::layout()
         }
         // not complete but we need systems to be laid out to add parenthesis
         if (_fixed) {
-            _fretString = "/";
+            _fretString = u"/";
         } else {
             _fretString = tab->fretString(_fret, _string, _deadNote);
             if (m_displayFret == DisplayFretOption::ArtificialHarmonic) {
-                _fretString = QString("%1 <%2>").arg(_fretString, QString::number(m_harmonicFret));
+                _fretString = String(u"%1 <%2>").arg(_fretString, String::number(m_harmonicFret));
             } else if (m_displayFret == DisplayFretOption::NaturalHarmonic) {
-                _fretString = QString("<%1>").arg(QString::number(m_harmonicFret));
+                _fretString = String(u"<%1>").arg(String::number(m_harmonicFret));
             }
         }
         if (parenthesis) {
-            _fretString = QString("(%1)").arg(_fretString);
+            _fretString = String(u"(%1)").arg(_fretString);
         }
-        qreal w = tabHeadWidth(tab);     // !! use _fretString
+        double w = tabHeadWidth(tab);     // !! use _fretString
         bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
     } else {
         if (_deadNote) {
@@ -2245,15 +2323,15 @@ void Note::layout2()
 
     int dots = chord()->dots();
     if (dots) {
-        qreal d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * mag();
-        qreal dd = score()->point(score()->styleS(Sid::dotDotDistance)) * mag();
-        qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
+        double d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * mag();
+        double dd = score()->point(score()->styleS(Sid::dotDotDistance)) * mag();
+        double x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
         // adjust dot distance for hooks
         if (chord()->hook() && chord()->up()) {
-            qreal hookRight = chord()->hook()->width() + chord()->hook()->x() + chord()->pos().x();
-            qreal hookBottom = chord()->hook()->height() + chord()->hook()->y() + chord()->pos().y() + (0.25 * spatium());
+            double hookRight = chord()->hook()->width() + chord()->hook()->x() + chord()->pos().x();
+            double hookBottom = chord()->hook()->height() + chord()->hook()->y() + chord()->pos().y() + (0.25 * spatium());
             // the top dot in the chord, not the dot for this particular note:
-            qreal dotY = chord()->notes().back()->y() + chord()->notes().back()->dots().front()->pos().y();
+            double dotY = chord()->notes().back()->y() + chord()->notes().back()->dots().front()->pos().y();
             if (chord()->dotPosX() < hookRight && dotY < hookBottom) {
                 d = chord()->hook()->width();
             }
@@ -2274,9 +2352,9 @@ void Note::layout2()
             }
         }
         // apply to dots
-        qreal xx = x + d;
-        for (NoteDot* dot : qAsConst(_dots)) {
-            dot->rxpos() = xx;
+        double xx = x + d;
+        for (NoteDot* dot : _dots) {
+            dot->setPosX(xx);
             xx += dd;
         }
     }
@@ -2288,7 +2366,7 @@ void Note::layout2()
         }
         if (e->isSymbol()) {
             e->setMag(mag());
-            qreal w = headWidth();
+            double w = headWidth();
             Symbol* sym = toSymbol(e);
             e->layout();
             if (sym->sym() == SymId::noteheadParenthesisRight) {
@@ -2297,9 +2375,9 @@ void Note::layout2()
                     const StaffType* tab = st->staffTypeForElement(this);
                     w = tabHeadWidth(tab);
                 }
-                e->rxpos() += w;
+                e->movePosX(w);
             } else if (sym->sym() == SymId::noteheadParenthesisLeft) {
-                e->rxpos() -= symWidth(SymId::noteheadParenthesisLeft);
+                e->movePosX(-symWidth(SymId::noteheadParenthesisLeft));
             }
         } else if (e->isFingering()) {
             // don't set mag; fingerings should not scale with note
@@ -2440,23 +2518,23 @@ NoteType Note::noteType() const
 //   noteTypeUserName
 //---------------------------------------------------------
 
-QString Note::noteTypeUserName() const
+String Note::noteTypeUserName() const
 {
     switch (noteType()) {
     case NoteType::ACCIACCATURA:
-        return QObject::tr("Acciaccatura");
+        return mtrc("engraving", "Acciaccatura");
     case NoteType::APPOGGIATURA:
-        return QObject::tr("Appoggiatura");
+        return mtrc("engraving", "Appoggiatura");
     case NoteType::GRACE8_AFTER:
     case NoteType::GRACE16_AFTER:
     case NoteType::GRACE32_AFTER:
-        return QObject::tr("Grace note after");
+        return mtrc("engraving", "Grace note after");
     case NoteType::GRACE4:
     case NoteType::GRACE16:
     case NoteType::GRACE32:
-        return QObject::tr("Grace note before");
+        return mtrc("engraving", "Grace note before");
     default:
-        return QObject::tr("Note");
+        return mtrc("engraving", "Note");
     }
 }
 
@@ -2541,9 +2619,9 @@ void Note::reset()
 //   mag
 //---------------------------------------------------------
 
-qreal Note::mag() const
+double Note::mag() const
 {
-    qreal m = chord() ? chord()->mag() : 1.0;
+    double m = chord() ? chord()->mag() : 1.0;
     if (m_isSmall) {
         m *= score()->styleD(Sid::smallNoteMag);
     }
@@ -2583,7 +2661,7 @@ int Note::line() const
 void Note::setString(int val)
 {
     _string = val;
-    rypos() = _string * spatium() * 1.5;
+    setPosY(_string * spatium() * 1.5);
 }
 
 //---------------------------------------------------------
@@ -2604,7 +2682,7 @@ void Note::setHeadScheme(NoteHeadScheme val)
 
 void Note::setHeadGroup(NoteHeadGroup val)
 {
-    Q_ASSERT(int(val) >= 0 && int(val) < int(NoteHeadGroup::HEAD_GROUPS));
+    assert(int(val) >= 0 && int(val) < int(NoteHeadGroup::HEAD_GROUPS));
     _headGroup = val;
 }
 
@@ -2671,7 +2749,7 @@ int Note::octave() const
 
 int Note::playingOctave() const
 {
-    return ((ppitch() - static_cast<int>(tpc2alter(tpc1()))) / PITCH_DELTA_OCTAVE) - 1;
+    return mu::engraving::playingOctave(ppitch(), tpc1());
 }
 
 //---------------------------------------------------------
@@ -2765,7 +2843,7 @@ void Note::editDrag(EditData& editData)
     Chord* ch = chord();
     Segment* seg = ch->segment();
 
-    if (editData.modifiers & Qt::ShiftModifier) {
+    if (editData.modifiers & ShiftModifier) {
         const Spatium deltaSp = Spatium(editData.delta.x() / spatium());
         seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
     } else if (ch->notes().size() == 1) {
@@ -2797,9 +2875,9 @@ void Note::verticalDrag(EditData& ed)
 
     NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this).get());
 
-    qreal _spatium      = spatium();
+    double _spatium      = spatium();
     bool tab            = st->isTabStaff();
-    qreal step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
+    double step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
     int lineOffset      = lrint(ed.moveDelta.y() / step);
 
     if (tab) {
@@ -2845,11 +2923,11 @@ void Note::normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned)
     Segment* previous = seg->prev();
 
     if (previous) {
-        qreal minDist = previous->minHorizontalCollidingDistance(seg);
+        double minDist = previous->minHorizontalCollidingDistance(seg);
 
-        qreal diff = (ed.pos.x()) - (previous->pageX() + minDist);
+        double diff = (ed.pos.x()) - (previous->pageX() + minDist);
 
-        qreal distanceBetweenSegments = (previous->pageX() + minDist) - seg->pageX();
+        double distanceBetweenSegments = (previous->pageX() + minDist) - seg->pageX();
 
         if (diff < 0) {
             ned->delta.setX(distanceBetweenSegments);
@@ -2857,11 +2935,11 @@ void Note::normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned)
     } else {
         Measure* measure = seg->measure();
 
-        qreal minDist = score()->styleMM(Sid::barNoteDistance);
+        double minDist = score()->styleMM(Sid::barNoteDistance);
 
-        qreal diff = (ed.pos.x()) - (measure->pageX() + minDist);
+        double diff = (ed.pos.x()) - (measure->pageX() + minDist);
 
-        qreal distanceBetweenSegments = (measure->pageX() + minDist) - seg->pageX();
+        double distanceBetweenSegments = (measure->pageX() + minDist) - seg->pageX();
 
         if (diff < 0) {
             ned->delta.setX(distanceBetweenSegments);
@@ -2907,7 +2985,7 @@ void Note::updateRelLine(int relLine, bool undoable)
         return;
     }
     // int idx      = staffIdx() + chord()->staffMove();
-    Q_ASSERT(staffIdx() == chord()->staffIdx());
+    assert(staffIdx() == chord()->staffIdx());
     staff_idx_t idx      = chord()->vStaffIdx();
 
     const Staff* staff  = score()->staff(idx);
@@ -2935,8 +3013,8 @@ void Note::updateRelLine(int relLine, bool undoable)
     }
 
     int off  = st->stepOffset();
-    qreal ld = st->lineDistance().val();
-    rypos()  = (_line + off * 2.0) * spatium() * .5 * ld;
+    double ld = st->lineDistance().val();
+    setPosY((_line + off * 2.0) * spatium() * .5 * ld);
 }
 
 //---------------------------------------------------------
@@ -2990,7 +3068,7 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
 //   localSpatiumChanged
 //---------------------------------------------------------
 
-void Note::localSpatiumChanged(qreal oldValue, qreal newValue)
+void Note::localSpatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::localSpatiumChanged(oldValue, newValue);
     for (EngravingItem* e : dots()) {
@@ -3240,7 +3318,7 @@ void Note::setScore(Score* s)
     if (_accidental) {
         _accidental->setScore(s);
     }
-    for (NoteDot* dot : qAsConst(_dots)) {
+    for (NoteDot* dot : _dots) {
         dot->setScore(s);
     }
     for (EngravingItem* el : _el) {
@@ -3252,88 +3330,97 @@ void Note::setScore(Score* s)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Note::accessibleInfo() const
+String Note::accessibleInfo() const
 {
     if (!chord() || !staff()) {
-        return QString();
+        return String();
     }
 
-    QString duration = chord()->durationUserName();
-    QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-    QString pitchName;
-    QString onofftime;
+    String duration = chord()->durationUserName();
+    String voice = mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1);
+    String pitchName;
+    String onofftime;
     if (!_playEvents.empty()) {
         int on = _playEvents[0].ontime();
         int off = _playEvents[0].offtime();
         if (on != 0 || off != NoteEvent::NOTE_LENGTH) {
-            onofftime = QObject::tr(" (on %1‰ off %2‰)").arg(on).arg(off);
+            onofftime = mtrc("engraving", " (on %1‰ off %2‰)").arg(on, off);
         }
     }
 
     const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
-        pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
+        pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = qtrc("drumset", drumset->name(pitch()));
+        pitchName = drumset->translatedName(pitch());
     } else if (staff()->isTabStaff(tick())) {
-        pitchName
-            = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false), QString::number(string() + 1), QString::number(fret()));
+        pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
+                    .arg(tpcUserName(false), String::number(string() + 1), String::number(fret()));
     } else {
         pitchName = tpcUserName(false);
     }
 
-    return QObject::tr("%1; Pitch: %2; Duration: %3%4%5").arg(noteTypeUserName(), pitchName, duration, onofftime,
-                                                              (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+    return mtrc("engraving", "%1; Pitch: %2; Duration: %3%4%5")
+           .arg(noteTypeUserName(), pitchName, duration, onofftime, (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
 }
 
 //---------------------------------------------------------
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString Note::screenReaderInfo() const
+String Note::screenReaderInfo() const
 {
-    QString duration = chord()->durationUserName();
+    String duration = chord()->durationUserName();
     Measure* m = chord()->measure();
     bool voices = m ? m->hasVoices(staffIdx()) : false;
-    QString voice = voices ? QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1)) : "";
-    QString pitchName;
+    String voice = voices ? mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1) : u"";
+    String pitchName;
     const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
-        pitchName = chord()->noStem() ? QObject::tr("Beat Slash") : QObject::tr("Rhythm Slash");
+        pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = qtrc("drumset", drumset->name(pitch()));
+        pitchName = drumset->translatedName(pitch());
     } else if (staff()->isTabStaff(tick())) {
-        pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(true), QString::number(string() + 1), QString::number(fret()));
+        pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
+                    .arg(tpcUserName(true, true), String::number(string() + 1), String::number(fret()));
     } else {
-        pitchName = tpcUserName(true);
+        pitchName = _headGroup == NoteHeadGroup::HEAD_NORMAL
+                    ? tpcUserName(true, true)
+                    //: head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).
+                    : mtrc("engraving", "%1 head %2").arg(translatedSubtypeUserName()).arg(tpcUserName(true));
+        if (chord()->staffMove() < 0) {
+            duration += u"; " + mtrc("engraving", "Cross-staff above");
+        } else if (chord()->staffMove() > 0) {
+            duration += u"; " + mtrc("engraving", "Cross-staff below");
+        }
     }
-    return QString("%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+    return String(u"%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
 }
 
 //---------------------------------------------------------
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString Note::accessibleExtraInfo() const
+String Note::accessibleExtraInfo() const
 {
-    QString rez = "";
+    String rez;
     if (accidental()) {
-        rez = QString("%1 %2").arg(rez, accidental()->screenReaderInfo());
+        rez = String(u"%1 %2").arg(rez, accidental()->screenReaderInfo());
     }
     if (!el().empty()) {
         for (EngravingItem* e : el()) {
             if (!score()->selectionFilter().canSelect(e)) {
                 continue;
             }
-            rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
+            rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
         }
     }
     if (tieFor()) {
-        rez = QObject::tr("%1 Start of %2").arg(rez, tieFor()->screenReaderInfo());
+        rez += u" " + mtrc("engraving", "Start of %1").arg(tieFor()->screenReaderInfo());
     }
 
     if (tieBack()) {
-        rez = QObject::tr("%1 End of %2").arg(rez, tieBack()->screenReaderInfo());
+        rez += u" " + mtrc("engraving", "End of %1").arg(tieBack()->screenReaderInfo());
     }
 
     if (!spannerFor().empty()) {
@@ -3341,7 +3428,7 @@ QString Note::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(s)) {
                 continue;
             }
-            rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
+            rez += u" " + mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
         }
     }
     if (!spannerBack().empty()) {
@@ -3349,14 +3436,14 @@ QString Note::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(s)) {
                 continue;
             }
-            rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
+            rez += u" " + mtrc("engraving", "End of %1").arg(s->screenReaderInfo());
         }
     }
 
     // only read extra information for top note of chord
     // (it is reached directly on next/previous element)
     if (this == chord()->upNote()) {
-        rez = QString("%1 %2").arg(rez, chord()->accessibleExtraInfo());
+        rez = String(u"%1 %2").arg(rez, chord()->accessibleExtraInfo());
     }
 
     return rez;
@@ -3389,12 +3476,12 @@ int Note::qmlDotsCount()
 }
 
 //---------------------------------------------------------
-//   subtypeName
+//   subtypeUserName
 //---------------------------------------------------------
 
-QString Note::subtypeName() const
+TranslatableString Note::subtypeUserName() const
 {
-    return TConv::toUserName(_headGroup);
+    return TConv::userName(_headGroup);
 }
 
 //---------------------------------------------------------
@@ -3461,7 +3548,7 @@ EngravingItem* Note::nextElement()
         } else if (tieValid(_tieFor)) {
             return _tieFor->frontSegment();
         } else if (!_spannerFor.empty()) {
-            for (auto i : qAsConst(_spannerFor)) {
+            for (auto i : _spannerFor) {
                 if (i->type() == ElementType::GLISSANDO) {
                     return i->spannerSegments().front();
                 }
@@ -3472,7 +3559,7 @@ EngravingItem* Note::nextElement()
 
     case ElementType::TIE_SEGMENT:
         if (!_spannerFor.empty()) {
-            for (auto i : qAsConst(_spannerFor)) {
+            for (auto i : _spannerFor) {
                 if (i->type() == ElementType::GLISSANDO) {
                     return i->spannerSegments().front();
                 }
@@ -3491,7 +3578,7 @@ EngravingItem* Note::nextElement()
             return _tieFor->frontSegment();
         }
         if (!_spannerFor.empty()) {
-            for (auto i : qAsConst(_spannerFor)) {
+            for (auto i : _spannerFor) {
                 if (i->isGlissando()) {
                     return i->spannerSegments().front();
                 }
@@ -3507,7 +3594,7 @@ EngravingItem* Note::nextElement()
             return _tieFor->frontSegment();
         }
         if (!_spannerFor.empty()) {
-            for (auto i : qAsConst(_spannerFor)) {
+            for (auto i : _spannerFor) {
                 if (i->isGlissando()) {
                     return i->spannerSegments().front();
                 }
@@ -3571,7 +3658,7 @@ EngravingItem* Note::prevElement()
 EngravingItem* Note::lastElementBeforeSegment()
 {
     if (!_spannerFor.empty()) {
-        for (auto i : qAsConst(_spannerFor)) {
+        for (auto i : _spannerFor) {
             if (i->type() == ElementType::GLISSANDO) {
                 return i->spannerSegments().front();
             }
@@ -3859,10 +3946,46 @@ double Note::computePadding(const EngravingItem* nextItem) const
     }
     // Main-to-grace
     if (!isGrace() && nextItem->isNote() && toNote(nextItem)->isGrace()) {
-        qDebug() << nextItem->typeName();
         padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToMainNoteDist)));
     }
 
+    if (nextItem->isNote()) {
+        // This is where space for minTieLength and minGlissandoLength is allocated by making sure
+        // there is enough distance between the attach points
+        double minEndPointsDistance = 0.0;
+        const double minGlissandoLength = 1.2 * spatium(); // TODO: style settings
+        for (LineAttachPoint thisLAP : lineAttachPoints()) {
+            for (LineAttachPoint nextLAP : toNote(nextItem)->lineAttachPoints()) {
+                if (thisLAP.line() != nextLAP.line()) {
+                    continue;
+                }
+                if (thisLAP.line()->isTie()) {
+                    minEndPointsDistance = score()->styleMM(Sid::MinTieLength);
+                }
+                if (thisLAP.line()->isGlissando()) {
+                    minEndPointsDistance = minGlissandoLength;
+                }
+                double lapPadding = (thisLAP.pos().x() - headWidth()) + minEndPointsDistance - nextLAP.pos().x();
+                lapPadding *= scaling;
+                padding = std::max(padding, lapPadding);
+            }
+        }
+    }
+
     return padding;
+}
+
+mu::PointF Note::posInStaffCoordinates()
+{
+    double X = x() + chord()->x() + chord()->segment()->x() + chord()->measure()->x() + headWidth() / 2;
+    return mu::PointF(X, y());
+}
+
+void Note::addLineAttachPoint(PointF point, EngravingItem* line)
+{
+    // IMPORTANT: the point is expected in *staff* coordinates
+    // We transform into note coordinates by subtracting the note position in staff coordinates
+    point -= posInStaffCoordinates();
+    _lineAttachPoints.push_back(LineAttachPoint(line, point.x(), point.y()));
 }
 }

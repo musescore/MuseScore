@@ -23,7 +23,7 @@
 #ifndef __BEND_H__
 #define __BEND_H__
 
-#include "infrastructure/draw/font.h"
+#include "draw/types/font.h"
 #include "style/style.h"
 
 #include "engravingitem.h"
@@ -45,10 +45,12 @@ enum class BendType {
     CUSTOM
 };
 
-class Bend final : public EngravingItem
+class Bend : public EngravingItem // TODO: bring back "final" keyword
 {
-    M_PROPERTY(QString,    fontFace,  setFontFace)
-    M_PROPERTY(qreal,      fontSize,  setFontSize)
+    OBJECT_ALLOCATOR(engraving, Bend)
+
+    M_PROPERTY(String,     fontFace,  setFontFace)
+    M_PROPERTY(double,      fontSize,  setFontSize)
     M_PROPERTY(FontStyle,  fontStyle, setFontStyle)
     M_PROPERTY(Millimetre, lineWidth, setLineWidth)
 
@@ -70,11 +72,11 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-private:
+protected: /// TODO: bring back "private" keyword after removing StretchedBend class
     friend class Factory;
-    Bend(Note* parent);
+    Bend(Note* parent, ElementType type = ElementType::BEND);
 
-    mu::draw::Font font(qreal) const;
+    mu::draw::Font font(double) const;
     BendType parseBendTypeFromCurve() const;
     void updatePointsByBendType(const BendType bendType);
 
@@ -82,7 +84,8 @@ private:
     PitchValues m_points;
 
     mu::PointF m_notePos;
-    qreal m_noteWidth;
+    double m_noteWidth = 0;
+    double m_noteHeight = 0;
 };
 } // namespace mu::engraving
 #endif

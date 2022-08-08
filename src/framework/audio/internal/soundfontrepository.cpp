@@ -42,7 +42,7 @@ void SoundFontRepository::loadSoundFontPaths()
 
     m_soundFontPaths.clear();
 
-    static const QStringList filters = { "*.sf2",  "*.sf3" };
+    static const std::vector<std::string> filters = { "*.sf2",  "*.sf3" };
     io::paths_t dirs = configuration()->soundFontDirectories();
 
     for (const io::path_t& dir : dirs) {
@@ -86,10 +86,12 @@ mu::Ret SoundFontRepository::addSoundFont(const SoundFontPath& path)
     }
 
     if (fileSystem()->exists(newPath.val)) {
-        title = qtrc("audio", "File \"%1\" already exists.")
-                .arg(newPath.val.toQString()).toStdString();
+        title = trc("audio", "File already exists. Do you want to overwrite it?");
 
-        btn = interactive()->question(title, trc("audio", "Do you want to overwrite it?"), {
+        std::string body = qtrc("audio", "File path: %1")
+                           .arg(newPath.val.toQString()).toStdString();
+
+        btn = interactive()->question(title, body, {
             IInteractive::Button::No,
             IInteractive::Button::Yes
         }, IInteractive::Button::Yes, IInteractive::WithIcon).standardButton();

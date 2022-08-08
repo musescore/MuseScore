@@ -45,7 +45,7 @@ XmlReader::~XmlReader()
 
 PointF XmlReader::readPoint()
 {
-    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
+    assert(tokenType() == XmlStreamReader::StartElement);
 #ifndef NDEBUG
     if (!hasAttribute("x")) {
         LOGD("XmlReader::readPoint: x attribute missing: %s", name().ascii());
@@ -56,8 +56,8 @@ PointF XmlReader::readPoint()
         unknown();
     }
 #endif
-    qreal x = doubleAttribute("x", 0.0);
-    qreal y = doubleAttribute("y", 0.0);
+    double x = doubleAttribute("x", 0.0);
+    double y = doubleAttribute("y", 0.0);
     readNext();
     return PointF(x, y);
 }
@@ -68,7 +68,7 @@ PointF XmlReader::readPoint()
 
 mu::draw::Color XmlReader::readColor()
 {
-    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
+    assert(tokenType() == XmlStreamReader::StartElement);
     draw::Color c;
     c.setRed(intAttribute("r"));
     c.setGreen(intAttribute("g"));
@@ -84,7 +84,7 @@ mu::draw::Color XmlReader::readColor()
 
 SizeF XmlReader::readSize()
 {
-    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
+    assert(tokenType() == XmlStreamReader::StartElement);
     SizeF p;
     p.setWidth(doubleAttribute("w", 0.0));
     p.setHeight(doubleAttribute("h", 0.0));
@@ -94,7 +94,7 @@ SizeF XmlReader::readSize()
 
 ScaleF XmlReader::readScale()
 {
-    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
+    assert(tokenType() == XmlStreamReader::StartElement);
     ScaleF p;
     p.setWidth(doubleAttribute("w", 0.0));
     p.setHeight(doubleAttribute("h", 0.0));
@@ -108,7 +108,7 @@ ScaleF XmlReader::readScale()
 
 RectF XmlReader::readRect()
 {
-    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
+    assert(tokenType() == XmlStreamReader::StartElement);
     RectF p;
     p.setLeft(doubleAttribute("x", 0.0));
     p.setTop(doubleAttribute("y", 0.0));
@@ -127,17 +127,18 @@ RectF XmlReader::readRect()
 
 Fraction XmlReader::readFraction()
 {
-    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
+    assert(tokenType() == XmlStreamReader::StartElement);
     int z = intAttribute("z", 0);
     int n = intAttribute("n", 1);
-    const QString& s(readText());
-    if (!s.isEmpty()) {
-        int i = s.indexOf('/');
-        if (i == -1) {
+    AsciiStringView s = readAsciiText();
+    if (!s.empty()) {
+        size_t i = s.indexOf('/');
+        if (i == mu::nidx) {
             return Fraction::fromTicks(s.toInt());
         } else {
-            z = s.leftRef(i).toInt();
-            n = s.midRef(i + 1).toInt();
+            String str = String::fromAscii(s.ascii());
+            z = str.left(i).toInt();
+            n = str.mid(i + 1).toInt();
         }
     }
     return Fraction(z, n);
@@ -151,12 +152,13 @@ Fraction XmlReader::readFraction()
 void XmlReader::unknown()
 {
     if (XmlStreamReader::error()) {
-        LOGD("%s ", qPrintable(errorString()));
+        LOGD("%s ", muPrintable(errorString()));
     }
-    if (!docName.isEmpty()) {
-        LOGD("tag in <%s> line %ld col %lld: %s", qPrintable(docName), lineNumber() + _offsetLines, columnNumber(), name().ascii());
+    if (!m_docName.isEmpty()) {
+        LOGD("tag in <%s> line %ld col %lld: %s", muPrintable(m_docName), lineNumber() + m_offsetLines,
+             columnNumber(), name().ascii());
     } else {
-        LOGD("line %lld col %ld: %s", lineNumber() + _offsetLines, columnNumber(), name().ascii());
+        LOGD("line %lld col %ld: %s", lineNumber() + m_offsetLines, columnNumber(), name().ascii());
     }
     skipCurrentElement();
 }
@@ -218,12 +220,6 @@ void XmlReader::htmlToString(int level, String* s)
 
 String XmlReader::readXml()
 {
-    static int count = 0;
-    ++count;
-    if (count == 6) {
-        int k = -1;
-    }
-
     String s;
     int level = 1;
     for (XmlStreamReader::TokenType t = readNext(); t != XmlStreamReader::EndElement; t = readNext()) {
@@ -246,7 +242,6 @@ String XmlReader::readXml()
             return s;
         }
     }
-    LOGI() << count << "| " << s;
     return s;
 }
 

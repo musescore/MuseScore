@@ -32,13 +32,14 @@ namespace mu::engraving {
 
 class Text final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, Text)
 public:
 
     Text* clone() const override { return new Text(*this); }
     void read(XmlReader&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    static QString readXmlText(XmlReader& r, Score* score);
+    static String readXmlText(XmlReader& r, Score* score);
 
 private:
     friend class Factory;

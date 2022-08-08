@@ -27,7 +27,7 @@
 #include <vector>
 
 #include "engravingitem.h"
-#include "infrastructure/draw/color.h"
+#include "draw/types/color.h"
 #include "changeMap.h"
 #include "pitch.h"
 #include "cleflist.h"
@@ -59,8 +59,10 @@ enum class Key;
 //---------------------------------------------------------
 
 struct SwingParameters {
-    int swingUnit;
-    int swingRatio;
+    int swingUnit = 0;
+    int swingRatio = 0;
+
+    bool isOn() const { return swingUnit != 0; }
 };
 
 //---------------------------------------------------------
@@ -70,6 +72,7 @@ struct SwingParameters {
 
 class Staff final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Staff)
 public:
     enum class HideMode {
         AUTO, ALWAYS, NEVER, INSTRUMENT
@@ -118,7 +121,11 @@ private:
     void fillBrackets(size_t idx);
     void cleanBrackets();
 
-    qreal staffMag(const StaffType*) const;
+    double staffMag(const StaffType*) const;
+
+    friend class Excerpt;
+    void setVoiceVisible(voice_idx_t voice, bool visible);
+    void updateVisibilityVoices(Staff* masterStaff, const TracksMap& tracks);
 
 public:
 
@@ -129,13 +136,13 @@ public:
     void initFromStaffType(const StaffType* staffType);
     void init(const Staff*);
 
-    ID id() const;
+    const ID& id() const;
     void setId(const ID& id);
 
     void setScore(Score* score) override;
 
     bool isTop() const;
-    QString partName() const;
+    String partName() const;
     staff_idx_t rstaff() const;
     staff_idx_t idx() const;
     void read(XmlReader&) override;
@@ -164,7 +171,7 @@ public:
     Fraction nextClefTick(const Fraction&) const;
     Fraction currentClefTick(const Fraction&) const;
 
-    QString staffName() const;
+    String staffName() const;
 
     void setClef(Clef*);
     void removeClef(const Clef*);
@@ -210,7 +217,7 @@ public:
     void setBarLineSpan(int val) { _barLineSpan = val; }
     void setBarLineFrom(int val) { _barLineFrom = val; }
     void setBarLineTo(int val) { _barLineTo = val; }
-    qreal height() const override;
+    double height() const override;
 
     int channel(const Fraction&, voice_idx_t voice) const;
 
@@ -235,6 +242,8 @@ public:
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;
     const StaffType* constStaffType(const Fraction&) const;
     const StaffType* staffTypeForElement(const EngravingItem*) const;
+    bool isStaffTypeStartFrom(const Fraction& = Fraction(0, 1)) const;
+    void moveStaffType(const Fraction& from, const Fraction& to);
     StaffType* staffType(const Fraction&);
     StaffType* setStaffType(const Fraction&, const StaffType&);
     void removeStaffType(const Fraction&);
@@ -246,7 +255,7 @@ public:
 
     int lines(const Fraction&) const;
     void setLines(const Fraction&, int lines);
-    qreal lineDistance(const Fraction&) const;
+    double lineDistance(const Fraction&) const;
 
     bool isLinesInvisible(const Fraction&) const;
     void setIsLinesInvisible(const Fraction&, bool val);
@@ -255,10 +264,10 @@ public:
     int middleLine(const Fraction&) const;
     int bottomLine(const Fraction&) const;
 
-    qreal staffMag(const Fraction&) const;
-    qreal staffMag(const EngravingItem* element) const;
-    qreal spatium(const Fraction&) const;
-    qreal spatium(const EngravingItem*) const;
+    double staffMag(const Fraction&) const;
+    double staffMag(const EngravingItem* element) const;
+    double spatium(const Fraction&) const;
+    double spatium(const EngravingItem*) const;
     //===========
 
     ChangeMap& velocities() { return _velocities; }
@@ -275,7 +284,7 @@ public:
     Millimetre userDist() const { return _userDist; }
     void setUserDist(Millimetre val) { _userDist = val; }
 
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
     void setLocalSpatium(double oldVal, double newVal, Fraction tick);
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;
@@ -298,9 +307,7 @@ public:
 
     std::array<bool, VOICES> visibilityVoices() const;
     bool isVoiceVisible(voice_idx_t voice) const;
-    void setVoiceVisible(voice_idx_t voice, bool visible);
     bool canDisableVoice() const;
-    void updateVisibilityVoices(Staff* masterStaff);
 
 #ifndef NDEBUG
     void dumpClefs(const char* title) const;

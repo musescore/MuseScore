@@ -45,8 +45,8 @@ void StaffSettingsModel::load(const QString& staffId)
     m_type = staff->staffType()->type();
 
     m_voicesVisibility.clear();
-    for (const QVariant& voice: staff->visibilityVoices()) {
-        m_voicesVisibility << voice.toBool();
+    for (const bool& voice : staff->visibilityVoices()) {
+        m_voicesVisibility << voice;
     }
 
     emit cutawayEnabledChanged();
@@ -214,7 +214,10 @@ void StaffSettingsModel::createLinkedStaff()
     }
 
     Staff* linkedStaff = sourceStaff->clone();
-    masterNotationParts()->appendLinkedStaff(linkedStaff, sourceStaff->id(), sourceStaff->part()->id());
+    if (!masterNotationParts()->appendLinkedStaff(linkedStaff, sourceStaff->id(), sourceStaff->part()->id())) {
+        linkedStaff->unlink();
+        delete linkedStaff;
+    }
 }
 
 INotationPartsPtr StaffSettingsModel::notationParts() const

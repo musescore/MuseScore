@@ -49,7 +49,7 @@ struct SpannerValues {
 };
 
 struct TextStyleMap {
-    QString name;
+    String name;
     TextStyleType ss;
 };
 
@@ -69,13 +69,13 @@ public:
     void setIgnoreVersionError(bool arg);
     bool ignoreVersionError() const;
 
-    QString mscoreVersion() const;
+    String mscoreVersion() const;
     int mscVersion() const;
 
     int fileDivision() const;
     int fileDivision(int t) const;
 
-    qreal spatium() const;
+    double spatium() const;
 
     compat::DummyElement* dummy() const;
 
@@ -147,8 +147,8 @@ public:
     std::map<int, LinkedObjects*>& linkIds() { return _elinks; }
     TracksMap& tracks() { return _tracks; }
 
-    TextStyleType addUserTextStyle(const QString& name);
-    TextStyleType lookupUserTextStyle(const QString& name) const;
+    TextStyleType addUserTextStyle(const String& name);
+    TextStyleType lookupUserTextStyle(const String& name) const;
     void clearUserTextStyles() { userTextStyles.clear(); }
 
     std::list<std::pair<EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }

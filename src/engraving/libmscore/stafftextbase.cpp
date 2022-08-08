@@ -58,7 +58,7 @@ void StaffTextBase::write(XmlWriter& xml) const
 
     for (const ChannelActions& s : _channelActions) {
         int channel = s.channel;
-        for (const QString& name : qAsConst(s.midiActionNames)) {
+        for (const String& name : s.midiActionNames) {
             xml.tag("MidiAction", { { "channel", channel }, { "name", name } });
         }
     }
@@ -119,7 +119,7 @@ bool StaffTextBase::readProperties(XmlReader& e)
 
     if (tag == "MidiAction") {
         int channel = e.intAttribute("channel", 0);
-        QString name = e.attribute("name");
+        String name = e.attribute("name");
         bool found = false;
         size_t n = _channelActions.size();
         for (size_t i = 0; i < n; ++i) {

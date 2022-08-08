@@ -24,7 +24,7 @@
 
 #include "../engravingerrors.h"
 #include "xml.h"
-#include "../infrastructure/io/mscreader.h"
+#include "infrastructure/mscreader.h"
 #include "readcontext.h"
 #include "../libmscore/masterscore.h"
 

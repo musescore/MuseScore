@@ -32,14 +32,23 @@ using namespace mu::async;
 static const std::string_view COMPONENT_STATE_KEY = "componentState";
 static const std::string_view CONTROLLER_STATE_KEY = "controllerState";
 
-VstPlugin::VstPlugin(PluginModulePtr module)
-    : m_module(std::move(module)), m_componentHandlerPtr(new VstComponentHandler())
+VstPlugin::VstPlugin(const audio::AudioResourceId& resourceId)
+    : m_resourceId(resourceId), m_componentHandlerPtr(new VstComponentHandler())
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
     m_componentHandlerPtr->pluginParamsChanged().onNotify(this, [this]() {
         rescanParams();
     });
+}
+
+const audio::AudioResourceId& VstPlugin::resourceId() const
+{
+    ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    return m_resourceId;
 }
 
 const std::string& VstPlugin::name() const
@@ -62,6 +71,16 @@ void VstPlugin::load()
         ONLY_MAIN_THREAD(threadSecurer);
 
         std::lock_guard lock(m_mutex);
+
+        m_module = modulesRepo()->pluginModule(m_resourceId);
+        if (!m_module) {
+            modulesRepo()->addPluginModule(m_resourceId);
+            m_module = modulesRepo()->pluginModule(m_resourceId);
+        }
+
+        if (!m_module) {
+            return;
+        }
 
         const auto& factory = m_module->getFactory();
 
@@ -202,12 +221,20 @@ void VstPlugin::updatePluginConfig(const audio::AudioUnitConfig& config)
         return;
     }
 
-    stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
-    component->setState(&m_componentStateBuffer);
-    controller->setComponentState(&m_componentStateBuffer);
+    try {
+        stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
+        component->setState(&m_componentStateBuffer);
+        controller->setComponentState(&m_componentStateBuffer);
+    } catch (...) {
+        LOGW() << "Unexpected VST plugin exception";
+    }
 
-    stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(controllerState->second.data()), controllerState->second.size());
-    controller->setState(&m_controllerStateBuffer);
+    try {
+        stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(controllerState->second.data()), controllerState->second.size());
+        controller->setState(&m_controllerStateBuffer);
+    } catch (...) {
+        LOGW() << "Unexpected VST plugin exception";
+    }
 }
 
 void VstPlugin::refreshConfig()

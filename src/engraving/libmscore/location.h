@@ -25,7 +25,7 @@
 
 #include <climits>
 
-#include "property/propertyvalue.h"
+#include "types/propertyvalue.h"
 
 namespace mu::engraving {
 class EngravingItem;

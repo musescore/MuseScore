@@ -36,10 +36,11 @@ class Rest;
 
 class NoteDot final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, NoteDot)
 public:
 
     NoteDot* clone() const override { return new NoteDot(*this); }
-    qreal mag() const override;
+    double mag() const override;
 
     void draw(mu::draw::Painter*) const override;
     void read(XmlReader&) override;

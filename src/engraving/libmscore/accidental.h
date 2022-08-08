@@ -28,12 +28,10 @@
  Definition of class Accidental
 */
 
-#include <QString>
 #include <vector>
-#include <QVariant>
 
-#include "config.h"
 #include "engravingitem.h"
+#include "config.h"
 
 namespace mu::engraving {
 class Factory;
@@ -57,9 +55,9 @@ enum class AccidentalBracket : char {
 
 struct SymElement {
     SymId sym;
-    qreal x;
-    qreal y;
-    SymElement(SymId _sym, qreal _x, qreal _y)
+    double x;
+    double y;
+    SymElement(SymId _sym, double _x, double _y)
         : sym(_sym), x(_x), y(_y) {}
 };
 
@@ -71,6 +69,8 @@ struct SymElement {
 
 class Accidental final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Accidental)
+
     std::vector<SymElement> el;
     AccidentalType _accidentalType { AccidentalType::NONE };
     bool m_isSmall                    { false };
@@ -88,8 +88,8 @@ public:
     // Score Tree functions
     EngravingObject* scanParent() const override;
 
-    QString subtypeUserName() const;
-    void setSubtype(const mu::AsciiStringView& s);
+    TranslatableString subtypeUserName() const override;
+    void setSubtype(const AsciiStringView& s);
     void setAccidentalType(AccidentalType t) { _accidentalType = t; }
 
     AccidentalType accidentalType() const { return _accidentalType; }
@@ -125,7 +125,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
     static AccidentalVal subtype2value(AccidentalType);               // return effective pitch offset
     static SymId subtype2symbol(AccidentalType);
@@ -134,12 +133,14 @@ public:
     static AccidentalType name2subtype(const mu::AsciiStringView&);
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::AccidentalRole);
+#endif
 
 #endif

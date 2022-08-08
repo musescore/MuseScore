@@ -3,20 +3,8 @@
 #include <iostream>
 #include <cassert>
 
-#ifdef HAW_LOGGER_QT_SUPPORT
-    #define USE_QT_DIR
-    #include <QDir>
-#else
-//    #if __has_include(<filesystem>)
-//        #include <filesystem>
-//        namespace fs = std::filesystem;
-//    #elif __has_include(<experimental/filesystem>)
-//        #include <experimental/filesystem>
-//        namespace fs = std::experimental::filesystem;
-//    #else
-//        #error compiler must either support c++17
-//    #endif
-#error At moment supported only with Qt
+#ifdef _WIN32
+#include <Windows.h>
 #endif
 
 using namespace haw::logger;
@@ -87,5 +75,12 @@ std::string ConsoleLogDest::name() const
 
 void ConsoleLogDest::write(const LogMsg& logMsg)
 {
-    std::clog << m_layout.output(logMsg) << std::endl;
+    #ifdef _WIN32
+    std::string stemp = m_layout.output(logMsg);
+    std::wstring temp = std::wstring(stemp.begin(), stemp.end());
+    OutputDebugString(temp.c_str());
+    OutputDebugString(L"\n");
+    #else
+    std::cout << m_layout.output(logMsg) << std::endl;
+    #endif
 }

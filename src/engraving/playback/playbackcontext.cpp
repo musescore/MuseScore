@@ -73,9 +73,10 @@ void PlaybackContext::update(const ID partId, const Score* score)
                 handleAnnotations(partId, segment, segmentStartTick);
             }
         }
-    }
 
-    handleSpanners(partId, score);
+        handleSpanners(partId, score, repeatSegment->tick,
+                       repeatSegment->tick + repeatSegment->len(), tickPositionOffset);
+    }
 }
 
 void PlaybackContext::clear()
@@ -157,10 +158,17 @@ void PlaybackContext::applyDynamicToNextSegment(const Segment* currentSegment, c
     m_dynamicsMap[nextSegmentPositionTick] = dynamicLevel;
 }
 
-void PlaybackContext::handleSpanners(const ID partId, const Score* score)
+void PlaybackContext::handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
+                                     const int tickPositionOffset)
 {
-    for (const auto& pair : score->spanner()) {
-        const Spanner* spanner = pair.second;
+    const SpannerMap& spannerMap = score->spannerMap();
+    if (spannerMap.empty()) {
+        return;
+    }
+
+    auto intervals = spannerMap.findOverlapping(segmentStartTick, segmentEndTick);
+    for (const auto& interval : intervals) {
+        const Spanner* spanner = interval.value;
 
         if (!spanner->isHairpin()) {
             continue;
@@ -170,7 +178,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score)
             continue;
         }
 
-        int spannerFrom = score->repeatList().tick2utick(spanner->tick().ticks());
+        int spannerFrom = spanner->tick().ticks();
         int spannerTo = spannerFrom + std::abs(spanner->ticks().ticks());
 
         int spannerDurationTicks = spannerTo - spannerFrom;
@@ -184,8 +192,8 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score)
         DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
         DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
 
-        dynamic_level_t nominalLevelFrom = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(spannerFrom));
-        dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevel(spannerTo));
+        dynamic_level_t nominalLevelFrom = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(spannerFrom + tickPositionOffset));
+        dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevel(spannerTo + tickPositionOffset));
 
         dynamic_level_t overallDynamicRange = dynamicLevelRangeByTypes(dynamicTypeFrom,
                                                                        dynamicTypeTo,
@@ -199,7 +207,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score)
                                                                    hairpin->veloChangeMethod());
 
         for (const auto& pair : dynamicsCurve) {
-            m_dynamicsMap.insert_or_assign(spannerFrom + pair.first, nominalLevelFrom + pair.second);
+            m_dynamicsMap.insert_or_assign(spannerFrom + pair.first + tickPositionOffset, nominalLevelFrom + pair.second);
         }
     }
 }
@@ -224,6 +232,10 @@ void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment,
             updatePlayTechMap(toPlayTechAnnotation(annotation), segmentPositionTick);
             return;
         }
+    }
+
+    if (m_dynamicsMap.empty()) {
+        m_dynamicsMap.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
     }
 }
 

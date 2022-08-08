@@ -20,10 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "string.h"
+
+#include <algorithm>
 #include <cstring>
 #include <cstdlib>
 #include <locale>
 #include <cctype>
+#include <iomanip>
 
 #include "global/thirdparty/utfcpp-3.2.1/utf8.h"
 
@@ -33,18 +36,25 @@ using namespace mu;
 
 // Helpers
 
-static int toInt_helper(const char* str, bool* ok, int base)
+static long int toInt_helper(const char* str, bool* ok, int base)
 {
-    if (!str) {
+    if (!str || std::strlen(str) == 0) {
+        if (ok) {
+            *ok = false;
+        }
         return 0;
     }
     const char* currentLoc = setlocale(LC_NUMERIC, "C");
     char* end = nullptr;
     long int v = static_cast<int>(std::strtol(str, &end, base));
     setlocale(LC_NUMERIC, currentLoc);
+    bool myOk = std::strlen(end) == 0;
+    if (!myOk) {
+        v = 0;
+    }
+
     if (ok) {
-        size_t sz = std::strlen(end);
-        *ok = sz != std::strlen(str);
+        *ok = myOk;
     }
     return v;
 }
@@ -90,27 +100,79 @@ static void trim_helper(std::u16string& s)
 // ============================
 char Char::toAscii(char16_t c, bool* ok)
 {
-    if (c > 0xff) {
-        if (ok) {
-            *ok = false;
-        }
-        return '?';
-    } else {
+    if (isAscii(c)) {
         if (ok) {
             *ok = true;
         }
         return static_cast<char>(c);
+    } else {
+        if (ok) {
+            *ok = false;
+        }
+        return '?';
     }
 }
 
-char16_t Char::fromAscii(char c)
+bool Char::isLetter(char16_t c)
 {
-    return static_cast<char16_t>(c);
+    //! TODO
+#ifndef NO_QT_SUPPORT
+    return QChar::isLetter(c);
+#else
+    return std::isalpha(static_cast<unsigned char>(c));
+#endif
 }
 
-char Char::toAscii(bool* ok) const
+bool Char::isSpace(char16_t c)
 {
-    return toAscii(m_ch);
+    //! TODO
+#ifndef NO_QT_SUPPORT
+    return QChar::isSpace(c);
+#else
+    return std::isspace(static_cast<unsigned char>(c));
+#endif
+}
+
+bool Char::isDigit(char16_t c)
+{
+    return c >= u'0' && c <= u'9';
+}
+
+int Char::digitValue() const
+{
+    if (!isDigit()) {
+        return -1;
+    }
+    return m_ch - '0';
+}
+
+bool Char::isPunct(char16_t ch)
+{
+#ifndef NO_QT_SUPPORT
+    return QChar::isPunct(ch);
+#else
+    return std::ispunct(static_cast<unsigned char>(ch));
+#endif
+}
+
+char16_t Char::toLower(char16_t ch)
+{
+    //! TODO
+#ifndef NO_QT_SUPPORT
+    return QChar::toLower(ch);
+#else
+    return std::tolower(static_cast<unsigned char>(ch));
+#endif
+}
+
+char16_t Char::toUpper(char16_t ch)
+{
+    //! TODO
+#ifndef NO_QT_SUPPORT
+    return QChar::toUpper(ch);
+#else
+    return std::toupper(static_cast<unsigned char>(ch));
+#endif
 }
 
 // ============================
@@ -126,6 +188,16 @@ void UtfCodec::utf16to8(std::u16string_view src, std::string& dst)
     utf8::utf16to8(src.begin(), src.end(), std::back_inserter(dst));
 }
 
+void UtfCodec::utf8to32(std::string_view src, std::u32string& dst)
+{
+    utf8::utf8to32(src.begin(), src.end(), std::back_inserter(dst));
+}
+
+void UtfCodec::utf32to8(std::u32string_view src, std::string& dst)
+{
+    utf8::utf32to8(src.begin(), src.end(), std::back_inserter(dst));
+}
+
 // ============================
 // String
 // ============================
@@ -137,24 +209,64 @@ String::String()
 
 String::String(const char16_t* str)
 {
-    m_data = std::make_shared<std::u16string>(str);
+    m_data = std::make_shared<std::u16string>(str ? str : u"");
+#ifdef STRING_DEBUG_HACK
+    updateDebugView();
+#endif
 }
 
 String::String(const Char& ch)
 {
     m_data = std::make_shared<std::u16string>();
     *m_data.get() += ch.unicode();
+#ifdef STRING_DEBUG_HACK
+    updateDebugView();
+#endif
 }
+
+String::String(const Char* unicode, size_t size)
+{
+    if (!unicode) {
+        m_data = std::make_shared<std::u16string>();
+        return;
+    }
+
+    static_assert(sizeof(Char) == sizeof(char16_t));
+    const char16_t* str = reinterpret_cast<const char16_t*>(unicode);
+    if (size == mu::nidx) {
+        m_data = std::make_shared<std::u16string>(str);
+    } else {
+        m_data = std::make_shared<std::u16string>(str, size);
+    }
+
+#ifdef STRING_DEBUG_HACK
+    updateDebugView();
+#endif
+}
+
+#ifdef STRING_DEBUG_HACK
+void String::updateDebugView()
+{
+    try {
+        dview = toStdString();
+    }  catch (const std::exception& e) {
+        dview = "exception: " + std::string(e.what());
+    }
+}
+
+#endif
 
 const std::u16string& String::constStr() const
 {
     return *m_data.get();
 }
 
-std::u16string& String::mutStr()
+String::Mutator String::mutStr(bool do_detach)
 {
-    detach();
-    return *m_data.get();
+    if (do_detach) {
+        detach();
+    }
+    return Mutator(*m_data.get(), this);
 }
 
 void String::reserve(size_t i)
@@ -176,6 +288,27 @@ bool String::operator ==(const AsciiStringView& s) const
     return true;
 }
 
+bool String::operator ==(const char* s) const
+{
+    if (!s) {
+        return false;
+    }
+
+    std::string_view v(s);
+    if (size() != v.size()) {
+        return false;
+    }
+
+    for (size_t i = 0; i < v.size(); ++i) {
+        IF_ASSERT_FAILED(Char::isAscii(v.at(i))) {
+        }
+        if (at(i).toAscii() != v.at(i)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void String::detach()
 {
     if (!m_data) {
@@ -191,7 +324,7 @@ void String::detach()
 
 String& String::operator=(const char16_t* str)
 {
-    m_data = std::make_shared<std::u16string>(str);
+    mutStr() = str;
     return *this;
 }
 
@@ -199,6 +332,16 @@ String& String::operator +=(const char16_t* s)
 {
     mutStr() += s;
     return *this;
+}
+
+char16_t String::operator [](size_t i) const
+{
+    return constStr()[i];
+}
+
+char16_t& String::operator [](size_t i)
+{
+    return mutStr()[i];
 }
 
 String& String::append(Char ch)
@@ -227,26 +370,30 @@ String& String::prepend(const String& s)
 
 String String::fromUtf8(const char* str)
 {
+    if (!str) {
+        return String();
+    }
     String s;
-    UtfCodec::utf8to16(std::string_view(str), *s.m_data.get());
+    UtfCodec::utf8to16(std::string_view(str), s.mutStr());
     return s;
 }
 
 ByteArray String::toUtf8() const
 {
-    std::string str;
-    UtfCodec::utf16to8(std::u16string_view(*m_data.get()), str);
-    return ByteArray(reinterpret_cast<const uint8_t*>(str.c_str()), str.size());
+    ByteArray ba;
+    std::u16string_view v(constStr());
+    utf8::utf16to8(v.begin(), v.end(), std::back_inserter(ba));
+    return ba;
 }
 
-String String::fromAscii(const char* str)
+String String::fromAscii(const char* str, size_t size)
 {
-    size_t sz = std::strlen(str);
+    size = (size == mu::nidx) ? std::strlen(str) : size;
     String s;
-    s.m_data->resize(sz);
-    std::u16string& data = *s.m_data.get();
-    for (size_t i = 0; i < sz; ++i) {
-        data[i] = Char::fromAscii(str[i]);
+    std::u16string& data = s.mutStr();
+    data.resize(size);
+    for (size_t i = 0; i < size; ++i) {
+        data[i] = Char::fromAscii(str[i]).unicode();
     }
     return s;
 }
@@ -262,7 +409,7 @@ ByteArray String::toAscii(bool* ok) const
 
     for (size_t i = 0; i < size(); ++i) {
         bool cok = false;
-        char ch = Char::toAscii(m_data->at(i), &cok);
+        char ch = Char::toAscii(constStr().at(i), &cok);
         if (!cok && ok) {
             *ok = false;
         }
@@ -274,17 +421,49 @@ ByteArray String::toAscii(bool* ok) const
 String String::fromStdString(const std::string& str)
 {
     String s;
-    UtfCodec::utf8to16(std::string_view(str), *s.m_data.get());
+    UtfCodec::utf8to16(std::string_view(str), s.mutStr());
     return s;
 }
 
 std::string String::toStdString() const
 {
     std::string s;
-    UtfCodec::utf16to8(std::u16string_view(*m_data.get()), s);
+    UtfCodec::utf16to8(std::u16string_view(constStr()), s);
     return s;
 }
 
+std::u16string String::toStdU16String() const
+{
+    return constStr();
+}
+
+String String::fromUcs4(const char32_t* str, size_t size)
+{
+    std::u32string_view v32;
+    if (size == mu::nidx) {
+        v32 = std::u32string_view(str);
+    } else {
+        v32 = std::u32string_view(str, size);
+    }
+
+    std::string s8;
+    UtfCodec::utf32to8(v32, s8);
+
+    String s;
+    UtfCodec::utf8to16(s8, s.mutStr());
+    return s;
+}
+
+std::u32string String::toStdU32String() const
+{
+    std::string s;
+    UtfCodec::utf16to8(constStr(), s);
+    std::u32string s32;
+    UtfCodec::utf8to32(s, s32);
+    return s32;
+}
+
+#ifndef NO_QT_SUPPORT
 String String::fromQString(const QString& str)
 {
     const QChar* qu = str.unicode();
@@ -292,30 +471,32 @@ String String::fromQString(const QString& str)
     const char16_t* u = reinterpret_cast<const char16_t*>(qu);
 
     String s;
-    s.m_data.reset(new std::u16string(u, u + str.size()));
+    s.mutStr() = std::u16string(u, u + str.size());
     return s;
 }
 
 QString String::toQString() const
 {
-    const char16_t* u = &m_data->front();
+    const char16_t* u = &constStr().front();
     static_assert(sizeof(QChar) == sizeof(char16_t));
     return QString(reinterpret_cast<const QChar*>(u), static_cast<int>(size()));
 }
 
+#endif
+
 size_t String::size() const
 {
-    return m_data->size();
+    return constStr().size();
 }
 
 bool String::empty() const
 {
-    return m_data->empty();
+    return constStr().empty();
 }
 
 void String::clear()
 {
-    m_data->clear();
+    mutStr().clear();
 }
 
 Char String::at(size_t i) const
@@ -323,7 +504,7 @@ Char String::at(size_t i) const
     IF_ASSERT_FAILED(i < size()) {
         return Char();
     }
-    return Char(m_data->at(i));
+    return Char(constStr().at(i));
 }
 
 bool String::contains(const Char& ch) const
@@ -331,19 +512,70 @@ bool String::contains(const Char& ch) const
     return constStr().find(ch.unicode()) != std::u16string::npos;
 }
 
-bool String::startsWith(const AsciiStringView& str, CaseSensitivity cs) const
+bool String::contains(const String& str, CaseSensitivity cs) const
+{
+    if (cs == CaseSensitivity::CaseSensitive) {
+        return constStr().find(str.constStr()) != std::u16string::npos;
+    } else {
+        std::u16string self = constStr();
+        std::transform(self.begin(), self.end(), self.begin(), [](char16_t c){ return Char::toLower(c); });
+        std::u16string other = str.constStr();
+        std::transform(other.begin(), other.end(), other.begin(), [](char16_t c){ return Char::toLower(c); });
+        return self.find(other) != std::u16string::npos;
+    }
+}
+
+int String::count(const Char& ch) const
+{
+    int count = 0;
+    for (size_t i = 0; i < constStr().size(); ++i) {
+        if (constStr().at(i) == ch.unicode()) {
+            ++count;
+        }
+    }
+    return count;
+}
+
+size_t String::indexOf(const Char& ch, size_t from) const
+{
+    for (size_t i = from; i < constStr().size(); ++i) {
+        if (constStr().at(i) == ch.unicode()) {
+            return i;
+        }
+    }
+    return mu::nidx;
+}
+
+size_t String::indexOf(const char16_t* str, size_t from) const
+{
+    return constStr().find(str, from);
+}
+
+size_t String::lastIndexOf(const Char& ch, size_t from) const
+{
+    from = std::min(from, constStr().size() - 1);
+
+    for (int i = static_cast<int>(from); i >= 0; --i) {
+        if (constStr().at(i) == ch.unicode()) {
+            return i;
+        }
+    }
+    return mu::nidx;
+}
+
+bool String::startsWith(const String& str, CaseSensitivity cs) const
 {
     if (str.size() > size()) {
         return false;
     }
 
     for (size_t i = 0; i < str.size(); ++i) {
-        if (Char(m_data->at(i)).toAscii() == str.at(i).ascii()) {
+        if (Char(constStr().at(i)) == str.at(i)) {
             continue;
         }
 
         if (cs == CaseInsensitive) {
-            if (AsciiChar::toLower(Char(m_data->at(i)).toAscii()) == AsciiChar::toLower(str.at(i).ascii())) {
+            if (Char::toLower(constStr().at(i)) == Char::toLower(str.constStr().at(i))) {
                 continue;
             }
         }
@@ -354,7 +586,26 @@ bool String::startsWith(const AsciiStringView& str, CaseSensitivity cs) const
     return true;
 }
 
-bool String::endsWith(const AsciiStringView& str, CaseSensitivity cs) const
+bool String::startsWith(char16_t ch, CaseSensitivity cs) const
+{
+    if (empty()) {
+        return false;
+    }
+
+    if (constStr().front() == ch) {
+        return true;
+    }
+
+    if (cs == CaseInsensitive) {
+        if (Char::toLower(constStr().front()) == Char::toLower(ch)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool String::endsWith(const String& str, CaseSensitivity cs) const
 {
     if (str.size() > size()) {
         return false;
@@ -362,12 +613,12 @@ bool String::endsWith(const AsciiStringView& str, CaseSensitivity cs) const
 
     size_t start = size() - str.size();
     for (size_t i = 0; i < str.size(); ++i) {
-        if (Char(m_data->at(start + i)).toAscii() == str.at(i).ascii()) {
+        if (constStr().at(start + i) == str.at(i)) {
             continue;
         }
 
         if (cs == CaseInsensitive) {
-            if (AsciiChar::toLower(Char(m_data->at(start + i)).toAscii()) == AsciiChar::toLower(str.at(i).ascii())) {
+            if (Char::toLower(constStr().at(start + i)) == Char::toLower(str.constStr().at(i))) {
                 continue;
             }
         }
@@ -378,38 +629,293 @@ bool String::endsWith(const AsciiStringView& str, CaseSensitivity cs) const
     return true;
 }
 
-StringList String::split(const Char& ch) const
+bool String::endsWith(char16_t ch, CaseSensitivity cs) const
+{
+    if (empty()) {
+        return false;
+    }
+
+    if (constStr().back() == ch) {
+        return true;
+    }
+
+    if (cs == CaseInsensitive) {
+        if (Char::toLower(constStr().back()) == Char::toLower(ch)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+StringList String::split(const Char& ch, SplitBehavior behavior) const
 {
     StringList out;
     std::size_t current, previous = 0;
     current = constStr().find(ch.unicode());
     while (current != std::string::npos) {
         String sub = mid(previous, current - previous);
-        out.push_back(std::move(sub));
+        if (behavior == SplitBehavior::SkipEmptyParts && sub.empty()) {
+            // skip
+        } else {
+            out.push_back(std::move(sub));
+        }
         previous = current + 1;
         current = constStr().find(ch.unicode(), previous);
     }
     String sub = mid(previous, current - previous);
-    out.push_back(std::move(sub));
+    if (behavior == SplitBehavior::SkipEmptyParts && sub.empty()) {
+        // skip
+    } else {
+        out.push_back(std::move(sub));
+    }
+
+    return out;
+}
+
+StringList String::split(const String& str, SplitBehavior behavior) const
+{
+    StringList out;
+    std::size_t current, previous = 0;
+    current = constStr().find(str.constStr());
+    while (current != std::string::npos) {
+        String sub = mid(previous, current - previous);
+        if (behavior == SplitBehavior::SkipEmptyParts && sub.empty()) {
+            // skip
+        } else {
+            out.push_back(std::move(sub));
+        }
+        previous = current + str.size();
+        current = constStr().find(str.constStr(), previous);
+    }
+    String sub = mid(previous, current - previous);
+    if (behavior == SplitBehavior::SkipEmptyParts && sub.empty()) {
+        // skip
+    } else {
+        out.push_back(std::move(sub));
+    }
+
+    return out;
+}
+
+StringList String::split(const std::regex& re, SplitBehavior behavior) const
+{
+    std::string originU8;
+    UtfCodec::utf16to8(std::u16string_view(constStr()), originU8);
+    std::sregex_token_iterator iter(originU8.begin(), originU8.end(), re, -1);
+    std::sregex_token_iterator end;
+    std::vector<std::string> vec = { iter, end };
+
+    StringList out;
+    for (const std::string& s : vec) {
+        if (behavior == SplitBehavior::SkipEmptyParts && s.empty()) {
+            // skip
+            continue;
+        }
+
+        String sub;
+        UtfCodec::utf8to16(s, sub.mutStr());
+        out.push_back(std::move(sub));
+    }
 
     return out;
 }
 
 String& String::replace(const String& before, const String& after)
 {
+    Mutator h = mutStr();
+    std::u16string& str = h.s;
     size_t start_pos = 0;
-    while ((start_pos = m_data->find(before.constStr(), start_pos)) != std::string::npos) {
-        m_data->replace(start_pos, before.size(), after.constStr());
+    while ((start_pos = str.find(before.constStr(), start_pos)) != std::string::npos) {
+        str.replace(start_pos, before.size(), after.constStr());
         start_pos += after.size(); // Handles case where 'after' is a substring of 'before'
     }
     return *this;
 }
 
+String& String::replace(char16_t before, char16_t after)
+{
+    Mutator h = mutStr();
+    std::u16string& str = h.s;
+    for (size_t i = 0; i < str.size(); ++i) {
+        if (str.at(i) == before) {
+            str[i] = after;
+        }
+    }
+    return *this;
+}
+
+String& String::replace(const std::regex& re, const String& after)
+{
+    std::string afterU8;
+    UtfCodec::utf16to8(std::u16string_view(after.constStr()), afterU8);
+
+    std::string originU8;
+    UtfCodec::utf16to8(std::u16string_view(constStr()), originU8);
+    std::string replasedU8 = std::regex_replace(originU8, re, afterU8);
+
+    Mutator h = mutStr();
+    std::u16string& sefl = h.s;
+    sefl.clear();
+    UtfCodec::utf8to16(std::string_view(replasedU8), sefl);
+    return *this;
+}
+
+String& String::insert(size_t position, const String& str)
+{
+    mutStr().insert(position, str.constStr());
+    return *this;
+}
+
+String& String::remove(const Char& ch)
+{
+    return remove(ch.unicode());
+}
+
+String& String::remove(char16_t ch)
+{
+    auto it = constStr().find(ch);
+    if (it != std::u16string::npos) {
+        mutStr().erase(it, 1);
+    }
+    return *this;
+}
+
+String& String::remove(size_t position, size_t n)
+{
+    mutStr().erase(position, n);
+    return *this;
+}
+
+void String::chop(size_t n)
+{
+    if (n >= size()) {
+        n = size();
+    }
+
+    remove(size() - n);
+}
+
+void String::truncate(size_t position)
+{
+    mutStr().resize(position);
+}
+
+static constexpr bool is1To9(char16_t chr)
+{
+    return u'1' <= chr && chr <= '9';
+}
+
+void String::doArgs(std::u16string& out, const std::vector<std::u16string_view>& args) const
+{
+    const std::u16string& str = constStr();
+    const std::u16string_view view(str);
+    std::vector<std::u16string_view> parts;
+
+    {
+        std::size_t current = view.find(u'%'), previousCut = 0, previousPercent = 0;
+
+        while (current != std::string::npos) {
+            std::u16string_view sub = view.substr(previousCut, current - previousCut);
+            std::size_t next = current + 1;
+            if (next < view.size() && is1To9(view.at(next))) {
+                parts.push_back(std::move(sub));
+                previousCut = next;
+            }
+            previousPercent = next;
+            current = view.find(u'%', previousPercent);
+        }
+
+        std::u16string_view sub = view.substr(previousCut);
+        parts.push_back(std::move(sub));
+    }
+
+    {
+        for (const std::u16string_view& p : parts) {
+            if (p.empty()) {
+                continue;
+            }
+
+            char16_t first = p.at(0);
+            if (!is1To9(first)) {
+                out += p;
+            } else {
+                size_t idx = first - u'1';
+                if (idx < args.size()) {
+                    out += args.at(idx);
+                    out.append(p.cbegin() + 1, p.cend());
+                } else {
+                    out.push_back(u'%');
+                    out.push_back(first - 1);
+                    out.append(p.cbegin() + 1, p.cend());
+                }
+            }
+        }
+    }
+}
+
+String String::arg(const String& val) const
+{
+    String s;
+    doArgs(s.mutStr(), { std::u16string_view(val.constStr()) });
+    return s;
+}
+
+String String::arg(const String& val1, const String& val2) const
+{
+    String s;
+    doArgs(s.mutStr(), { std::u16string_view(val1.constStr()), std::u16string_view(val2.constStr()) });
+    return s;
+}
+
+String String::arg(const String& val1, const String& val2, const String& val3) const
+{
+    String s;
+    doArgs(s.mutStr(), { std::u16string_view(val1.constStr()),
+                         std::u16string_view(val2.constStr()),
+                         std::u16string_view(val3.constStr()) });
+    return s;
+}
+
+String String::arg(const String& val1, const String& val2, const String& val3, const String& val4) const
+{
+    String s;
+    doArgs(s.mutStr(), { std::u16string_view(val1.constStr()),
+                         std::u16string_view(val2.constStr()),
+                         std::u16string_view(val3.constStr()),
+                         std::u16string_view(val4.constStr()) });
+    return s;
+}
+
+String String::arg(const String& val1, const String& val2, const String& val3, const String& val4, const String& val5) const
+{
+    String s;
+    doArgs(s.mutStr(), { std::u16string_view(val1.constStr()),
+                         std::u16string_view(val2.constStr()),
+                         std::u16string_view(val3.constStr()),
+                         std::u16string_view(val4.constStr()),
+                         std::u16string_view(val5.constStr()) });
+    return s;
+}
+
 String String::mid(size_t pos, size_t count) const
 {
     String s;
+    if (pos > size()) {
+        return s;
+    }
     s.mutStr() = constStr().substr(pos, count);
     return s;
+}
+
+String String::left(size_t n) const
+{
+    return mid(0, n);
+}
+
+String String::right(size_t n) const
+{
+    return mid(size() - n);
 }
 
 String String::trimmed() const
@@ -417,6 +923,16 @@ String String::trimmed() const
     String s = *this;
     trim_helper(s.mutStr());
     return s;
+}
+
+String String::simplified() const
+{
+    //! TODO
+#ifndef NO_QT_SUPPORT
+    return String::fromQString(toQString().simplified());
+#else
+    return *this;
+#endif
 }
 
 String String::toXmlEscaped(char16_t c)
@@ -455,10 +971,96 @@ String String::toXmlEscaped() const
     return toXmlEscaped(*this);
 }
 
+String String::toLower() const
+{
+    //! TODO
+#ifndef NO_QT_SUPPORT
+    QString qs = toQString();
+    return String::fromQString(qs.toLower());
+#else
+    String s = *this;
+    std::u16string& us = s.mutStr();
+    std::transform(us.begin(), us.end(), us.begin(), [](char16_t c){ return Char::toLower(c); });
+    return s;
+#endif
+}
+
+String String::toUpper() const
+{
+    //! TODO
+#ifndef NO_QT_SUPPORT
+    QString qs = toQString();
+    return String::fromQString(qs.toUpper());
+#else
+    String s = *this;
+    std::u16string& us = s.mutStr();
+    std::transform(us.begin(), us.end(), us.begin(), [](char16_t c){ return Char::toUpper(c); });
+    return s;
+#endif
+}
+
 int String::toInt(bool* ok, int base) const
 {
     ByteArray ba = toUtf8();
-    return toInt_helper(ba.constChar(), ok, base);
+    return static_cast<int>(toInt_helper(ba.constChar(), ok, base));
+}
+
+unsigned int String::toUInt(bool* ok, int base) const
+{
+    ByteArray ba = toUtf8();
+    return static_cast<unsigned int>(toInt_helper(ba.constChar(), ok, base));
+}
+
+String String::number(int n, int base)
+{
+    std::stringstream stream;
+    if (base == 16) {
+        stream << std::hex;
+    }
+    stream << n;
+    std::string s = stream.str();
+    return fromAscii(s.c_str(), s.size());
+}
+
+String String::number(int64_t n)
+{
+    std::string s = std::to_string(n);
+    return fromAscii(s.c_str());
+}
+
+String String::number(size_t n)
+{
+    std::string s = std::to_string(n);
+    return fromAscii(s.c_str());
+}
+
+String String::number(double n, int prec)
+{
+    std::stringstream stream;
+    stream << std::fixed << std::setprecision(prec) << n;
+    std::string s = stream.str();
+
+    // remove extra '0'
+    size_t correctedIdx = s.size() - 1;
+    if (s.back() == '0') {
+        for (int i = static_cast<int>(s.size() - 1); i > 0; --i) {
+            if (s.at(i) != '0') {
+                correctedIdx = i;
+                break;
+            }
+        }
+    }
+
+    if (s.at(correctedIdx) == '.') {
+        --correctedIdx;
+    }
+
+    return fromAscii(s.c_str(), correctedIdx + 1);
+}
+
+float String::toFloat(bool* ok) const
+{
+    return static_cast<float>(toDouble(ok));
 }
 
 double String::toDouble(bool* ok) const
@@ -468,7 +1070,83 @@ double String::toDouble(bool* ok) const
 }
 
 // ============================
-// AsciiStringView
+// StringList
+// ============================
+StringList& StringList::append(const StringList& l)
+{
+    for (const String& s : l) {
+        push_back(s);
+    }
+    return *this;
+}
+
+StringList StringList::filter(const String& str) const
+{
+    StringList result;
+    for (const String& s : *this) {
+        if (s.contains(str)) {
+            result << s;
+        }
+    }
+    return result;
+}
+
+String StringList::join(const String& sep) const
+{
+    String res;
+    for (size_t i = 0; i < size(); ++i) {
+        if (i) {
+            res += sep;
+        }
+        res += at(i);
+    }
+    return res;
+}
+
+void StringList::insert(size_t idx, const String& str)
+{
+    std::vector<String>::insert(begin() + idx, str);
+}
+
+void StringList::replace(size_t idx, const String& str)
+{
+    this->operator [](idx) = str;
+}
+
+bool StringList::removeAll(const String& str)
+{
+    size_t origSize = size();
+    erase(std::remove(begin(), end(), str), end());
+    return origSize != size();
+}
+
+void StringList::removeAt(size_t i)
+{
+    erase(begin() + i);
+}
+
+#ifndef NO_QT_SUPPORT
+StringList::StringList(const QStringList& l)
+{
+    reserve(l.size());
+    for (const QString& s : l) {
+        push_back(String::fromQString(s));
+    }
+}
+
+QStringList StringList::toQStringList() const
+{
+    QStringList l;
+    l.reserve(static_cast<int>(size()));
+    for (size_t i = 0; i < size(); ++i) {
+        l << at(i).toQString();
+    }
+    return l;
+}
+
+#endif
+// ============================
+// AsciiChar
 // ============================
 
 char AsciiChar::toLower(char ch)
@@ -509,12 +1187,17 @@ AsciiChar AsciiStringView::at(size_t i) const
 
 bool AsciiStringView::contains(char ch) const
 {
+    return indexOf(ch) != mu::nidx;
+}
+
+size_t AsciiStringView::indexOf(char ch) const
+{
     for (size_t i = 0; i < m_size; ++i) {
         if (m_data[i] == ch) {
-            return true;
+            return i;
         }
     }
-    return false;
+    return mu::nidx;
 }
 
 int AsciiStringView::toInt(bool* ok, int base) const

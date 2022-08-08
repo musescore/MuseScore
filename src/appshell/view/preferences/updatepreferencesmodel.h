@@ -43,7 +43,7 @@ public:
     bool needCheckForNewAppVersion() const;
 
     Q_INVOKABLE bool isAppUpdatable() const;
-    Q_INVOKABLE QVariantMap museScorePrivacyPolicyUrl() const;
+    Q_INVOKABLE QString museScorePrivacyPolicyUrl() const;
 
 public slots:
     void setNeedCheckForNewAppVersion(bool value);

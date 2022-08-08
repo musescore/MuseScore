@@ -21,10 +21,11 @@
  */
 #include "projectmigrator.h"
 
+#include "engraving/infrastructure/symbolfont.h"
+
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/excerpt.h"
 #include "engraving/libmscore/part.h"
-#include "engraving/libmscore/scorefont.h"
 #include "engraving/libmscore/undo.h"
 
 #include "rw/compat/readstyle.h"
@@ -77,10 +78,6 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
     MigrationOptions migrationOptions = configuration()->migrationOptions(migrationType);
     if (migrationOptions.isAskAgain) {
         Ret ret = askAboutMigration(migrationOptions, project->appVersion(), migrationType);
-
-        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-            return make_ok();
-        }
 
         if (!ret) {
             return ret;
@@ -177,11 +174,10 @@ void ProjectMigrator::resetStyleSettings(mu::engraving::MasterScore* score)
     endBarDistance -= (style->styleMM(mu::engraving::Sid::barWidth) + style->styleMM(mu::engraving::Sid::endBarWidth)) / 2;
     style->set(mu::engraving::Sid::endBarDistance, endBarDistance / sp);
     qreal repeatBarlineDotSeparation = style->styleMM(mu::engraving::Sid::repeatBarlineDotSeparation);
-    qreal dotWidth = score->scoreFont()->width(mu::engraving::SymId::repeatDot, 1.0);
+    qreal dotWidth = score->symbolFont()->width(mu::engraving::SymId::repeatDot, 1.0);
     repeatBarlineDotSeparation -= (style->styleMM(mu::engraving::Sid::barWidth) + dotWidth) / 2;
     style->set(mu::engraving::Sid::repeatBarlineDotSeparation, repeatBarlineDotSeparation / sp);
     score->resetStyleValue(mu::engraving::Sid::measureSpacing);
-    score->setResetDefaults();
 }
 
 Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt)
@@ -213,13 +209,13 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         fixInstrumentIds(score);
     }
     if (ok && score->mscVersion() != mu::engraving::MSCVERSION) {
-        score->undo(new mu::engraving::ChangeMetaText(score, "mscVersion", MSC_VERSION));
+        score->undo(new mu::engraving::ChangeMetaText(score, u"mscVersion", String::fromAscii(MSC_VERSION)));
     }
 
     if (ok && m_resetStyleSettings) {
         resetStyleSettings(score);
     }
-
+    score->setResetDefaults(); // some defaults need to be reset on first layout
     score->endCmd();
 
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);

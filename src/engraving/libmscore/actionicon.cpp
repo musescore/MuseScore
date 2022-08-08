@@ -35,7 +35,7 @@ namespace mu::engraving {
 ActionIcon::ActionIcon(EngravingItem* score)
     : EngravingItem(ElementType::ACTION_ICON, score)
 {
-    m_iconFont = Font(QString::fromStdString(engravingConfiguration()->iconsFontFamily()));
+    m_iconFont = Font(engravingConfiguration()->iconsFontFamily());
     m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
 }
 
@@ -65,12 +65,12 @@ void ActionIcon::setAction(const std::string& actionCode, char16_t icon)
     m_icon = icon;
 }
 
-qreal ActionIcon::fontSize() const
+double ActionIcon::fontSize() const
 {
     return m_iconFont.pointSizeF();
 }
 
-void ActionIcon::setFontSize(qreal size)
+void ActionIcon::setFontSize(double size)
 {
     m_iconFont.setPointSizeF(size);
 }
@@ -102,32 +102,32 @@ void ActionIcon::read(XmlReader& e)
 void ActionIcon::layout()
 {
     FontMetrics fontMetrics(m_iconFont);
-    setbbox(fontMetrics.boundingRect(QChar(m_icon)));
+    setbbox(fontMetrics.boundingRect(Char(m_icon)));
 }
 
 void ActionIcon::draw(Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     painter->setFont(m_iconFont);
-    painter->drawText(bbox(), Qt::AlignCenter, QChar(m_icon));
+    painter->drawText(bbox(), draw::AlignCenter, Char(m_icon));
 }
 
 engraving::PropertyValue ActionIcon::getProperty(Pid pid) const
 {
     switch (pid) {
     case Pid::ACTION:
-        return QString::fromStdString(actionCode());
+        return String::fromStdString(actionCode());
     default:
         break;
     }
     return EngravingItem::getProperty(pid);
 }
 
-bool ActionIcon::setProperty(Pid pid, const engraving::PropertyValue& v)
+bool ActionIcon::setProperty(Pid pid, const PropertyValue& v)
 {
     switch (pid) {
     case Pid::ACTION:
-        m_actionCode = v.toString().toStdString();
+        m_actionCode = v.value<String>().toStdString();
         triggerLayout();
         break;
     default:

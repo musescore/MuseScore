@@ -483,8 +483,8 @@ class ExportBrailleImpl
     void resetOctaves();
     void resetOctave(size_t stave);
 
-    void credits(io::Device& device);
-    void instruments(io::Device& device);
+    void credits(QIODevice& device);
+    void instruments(QIODevice& device);
 
     //utils. should we move these in libmscore?
     int computeInterval(Note* rootNote, Note* note, bool ignoreOctaves);
@@ -547,7 +547,7 @@ public:
         }
     }
 
-    bool write(io::Device& device);
+    bool write(QIODevice& device);
 };
 
 ExportBraille::ExportBraille(Score* score)
@@ -560,7 +560,7 @@ ExportBraille::~ExportBraille()
     delete m_impl;
 }
 
-bool ExportBraille::write(io::Device& device)
+bool ExportBraille::write(QIODevice& device)
 {
     return m_impl->write(device);
 }
@@ -577,7 +577,7 @@ void ExportBrailleImpl::resetOctaves()
     }
 }
 
-void ExportBrailleImpl::credits(io::Device& device)
+void ExportBrailleImpl::credits(QIODevice& device)
 {
     QTextStream out(&device);
     // find the vboxes in every page and write their elements as credit-words
@@ -605,14 +605,14 @@ void ExportBrailleImpl::credits(io::Device& device)
             out << TextToUEBBraille().braille(QString("%1 %2").arg(type).arg(creator)).toUtf8() << Qt::endl;
         }
     }
-    if (!score->metaTag("copyright").isEmpty()) {
-        out << TextToUEBBraille().braille(QString("© %2").arg(score->metaTag("copyright"))).toUtf8() << Qt::endl;
+    if (!score->metaTag(u"copyright").isEmpty()) {
+        out << TextToUEBBraille().braille(QString("© %2").arg(score->metaTag(u"copyright"))).toUtf8() << Qt::endl;
     }
     out << Qt::endl;
     out.flush();
 }
 
-void ExportBrailleImpl::instruments(io::Device& device)
+void ExportBrailleImpl::instruments(QIODevice& device)
 {
     //Print staff number to instrument mapping.
     QTextStream out(&device);
@@ -623,7 +623,7 @@ void ExportBrailleImpl::instruments(io::Device& device)
     out.flush();
 }
 
-bool ExportBrailleImpl::write(io::Device& device)
+bool ExportBrailleImpl::write(QIODevice& device)
 {
     credits(device);
     instruments(device);
@@ -1351,9 +1351,9 @@ QString ExportBrailleImpl::brailleNote(const QString& pitchName, DurationType du
 
 QString ExportBrailleImpl::brailleChordRootNote(Chord* chord, Note* rootNote)
 {
-    QString pitchName;
-    QString accidental; //TODO, do we need this for anything?
-    QString octaveBraille = QString();
+    String pitchName;
+    String accidental; //TODO, do we need this for anything?
+    String octaveBraille;
     tpc2name(rootNote->tpc(), NoteSpellingType::STANDARD, NoteCaseType::UPPER, pitchName, accidental);
     QString noteBraille = brailleNote(pitchName, chord->durationType().type(), chord->dots());
 
@@ -1409,9 +1409,9 @@ int ExportBrailleImpl::computeInterval(Note* note1, Note* note2, bool ignoreOcta
         initNotes << "G" << "F" << "E" << "D" << "C" << "B" << "A";
     }
 
-    QString note1PitchName;
-    QString note2PitchName;
-    QString accidental; //We don't need this, but tpc2name requires it
+    String note1PitchName;
+    String note2PitchName;
+    String accidental; //We don't need this, but tpc2name requires it
     tpc2name(note1->tpc(), NoteSpellingType::STANDARD, NoteCaseType::UPPER, note1PitchName, accidental);
     tpc2name(note2->tpc(), NoteSpellingType::STANDARD, NoteCaseType::UPPER, note2PitchName, accidental);
 
@@ -2085,7 +2085,8 @@ QString ExportBrailleImpl::brailleFingeringAfter(Fingering* fingering)
     QString result = QString();
     if (fingering->textStyleType() == TextStyleType::FINGERING
         || fingering->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
-        for (QChar c : fingering->plainText()) {
+        QString plainText = fingering->plainText();
+        for (QChar c : plainText) {
             if (c == QChar('0')) {
                 result += BRAILLE_FINGERING_OPEN;
             }
@@ -2145,7 +2146,7 @@ QString ExportBrailleImpl::brailleVolta(Measure* measure, Volta* volta, int staf
 
     // 17.1.1. Page 121. Music Braille Code 2015.
     resetOctave(staffCount);
-    QStringList voltaNumbers = volta->text().split(QRegularExpression("(,|\\.| )"));
+    QStringList voltaNumbers = volta->text().toQString().split(QRegularExpression("(,|\\.| )"));
     QString result = QString();
     for (QString voltaNumber : voltaNumbers) {
         if (voltaNumber.isEmpty()) {
@@ -2471,20 +2472,20 @@ QString ExportBrailleImpl::brailleFermata(Fermata* fermata)
 QString ExportBrailleImpl::brailleMarker(Marker* marker)
 {
     switch (marker->markerType()) {
-    case Marker::Type::SEGNO:
-    case Marker::Type::VARSEGNO:
+    case MarkerType::SEGNO:
+    case MarkerType::VARSEGNO:
         return BRAILLE_SEGNO;
-    case Marker::Type::CODA:
-    case Marker::Type::VARCODA:
-    case Marker::Type::CODETTA:
+    case MarkerType::CODA:
+    case MarkerType::VARCODA:
+    case MarkerType::CODETTA:
         return BRAILLE_CODA;
-    case Marker::Type::FINE:
+    case MarkerType::FINE:
         return BRAILLE_FINE;
-    case Marker::Type::TOCODA:
-    case Marker::Type::TOCODASYM:
+    case MarkerType::TOCODA:
+    case MarkerType::TOCODASYM:
         return BRAILLE_TOCODA;
-    case Marker::Type::USER:
-        return QString(">") + TextToUEBBraille().braille(marker->plainText().toLower()) + QString("> ");
+    case MarkerType::USER:
+        return QString(">") + TextToUEBBraille().braille(marker->plainText().toQString().toLower()) + QString("> ");
     }
     return QString();
 }
@@ -2492,28 +2493,28 @@ QString ExportBrailleImpl::brailleMarker(Marker* marker)
 QString ExportBrailleImpl::brailleJump(Jump* jump)
 {
     switch (jump->jumpType()) {
-    case Jump::Type::DC:
+    case JumpType::DC:
         return BRAILLE_DA_CAPO;
-    case Jump::Type::DC_AL_FINE:
+    case JumpType::DC_AL_FINE:
         return BRAILLE_DA_CAPO_AL_FINE;
-    case Jump::Type::DC_AL_CODA:
+    case JumpType::DC_AL_CODA:
         return BRAILLE_DA_CAPO_AL_CODA;
-    case Jump::Type::DS_AL_CODA:
+    case JumpType::DS_AL_CODA:
         return BRAILLE_DAL_SEGNO_AL_CODA;
-    case Jump::Type::DS_AL_FINE:
+    case JumpType::DS_AL_FINE:
         return BRAILLE_DAL_SEGNO_AL_FINE;
-    case Jump::Type::DS:
+    case JumpType::DS:
         return BRAILLE_DAL_SEGNO;
-    case Jump::Type::USER:
-        return QString(">") + TextToUEBBraille().braille(jump->plainText().toLower()) + QString("> ");
-    case Jump::Type::DC_AL_DBLCODA:
-    case Jump::Type::DS_AL_DBLCODA:
-    case Jump::Type::DSS:
-    case Jump::Type::DSS_AL_CODA:
-    case Jump::Type::DSS_AL_DBLCODA:
-    case Jump::Type::DSS_AL_FINE:
-    case Jump::Type::DCODA:
-    case Jump::Type::DDBLCODA:
+    case JumpType::USER:
+        return QString(">") + TextToUEBBraille().braille(jump->plainText().toQString().toLower()) + QString("> ");
+    case JumpType::DC_AL_DBLCODA:
+    case JumpType::DS_AL_DBLCODA:
+    case JumpType::DSS:
+    case JumpType::DSS_AL_CODA:
+    case JumpType::DSS_AL_DBLCODA:
+    case JumpType::DSS_AL_FINE:
+    case JumpType::DCODA:
+    case JumpType::DDBLCODA:
         break;
     }
     return QString();

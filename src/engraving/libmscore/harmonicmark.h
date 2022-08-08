@@ -34,6 +34,7 @@ class HarmonicMark;
 
 class HarmonicMarkSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOCATOR(engraving, HarmonicMarkSegment)
 public:
     HarmonicMarkSegment(HarmonicMark* sp, System* parent);
 
@@ -52,6 +53,7 @@ public:
 
 class HarmonicMark final : public ChordTextLineBase
 {
+    OBJECT_ALLOCATOR(engraving, HarmonicMark)
 public:
     HarmonicMark(EngravingItem* parent);
 
@@ -65,7 +67,7 @@ public:
 
 private:
 
-    QString m_text;
+    String m_text;
 };
 } // namespace mu::engraving
 #endif

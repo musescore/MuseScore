@@ -24,8 +24,8 @@
 #define MU_PLUGINS_IPLUGINSSERVICE_H
 
 #include "pluginstypes.h"
-#include "retval.h"
-#include "global/progress.h"
+#include "types/retval.h"
+#include "types/translatablestring.h"
 
 #include "modularity/imoduleexport.h"
 
@@ -45,7 +45,7 @@ public:
     virtual RetVal<PluginInfoMap> plugins(PluginsStatus status = All) const = 0;
     virtual async::Notification pluginsChanged() const = 0;
 
-    using CategoryInfoMap = std::map<std::string /*code*/, std::string /*title*/>;
+    using CategoryInfoMap = std::map<std::string /*code*/, TranslatableString /*title*/>;
     virtual CategoryInfoMap categories() const = 0;
 
     virtual Ret setEnable(const CodeKey& codeKey, bool enable) = 0;

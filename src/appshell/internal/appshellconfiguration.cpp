@@ -234,20 +234,20 @@ void AppShellConfiguration::rollbackSettings()
     settings()->rollbackTransaction();
 }
 
-void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings) const
+void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges) const
 {
-    settings()->reset(keepDefaultSettings);
+    settings()->reset(keepDefaultSettings, notifyAboutChanges);
 }
 
 mu::io::paths_t AppShellConfiguration::sessionProjectsPaths() const
 {
-    RetVal<QByteArray> retVal = readSessionState();
+    RetVal<ByteArray> retVal = readSessionState();
     if (!retVal.ret) {
         LOGE() << retVal.ret.toString();
         return {};
     }
 
-    return parseSessionProjectsPaths(retVal.val);
+    return parseSessionProjectsPaths(retVal.val.toQByteArrayNoCopy());
 }
 
 mu::Ret AppShellConfiguration::setSessionProjectsPaths(const mu::io::paths_t& paths)
@@ -270,7 +270,7 @@ std::string AppShellConfiguration::utmParameters(const std::string& utmMedium) c
 
 std::string AppShellConfiguration::sha() const
 {
-    return "sha=" + notationConfiguration()->notationRevision();
+    return "sha=" MUSESCORE_REVISION;
 }
 
 std::string AppShellConfiguration::currentLanguageCode() const
@@ -291,7 +291,7 @@ mu::io::path_t AppShellConfiguration::sessionFilePath() const
     return sessionDataPath() + SESSION_FILE;
 }
 
-mu::RetVal<QByteArray> AppShellConfiguration::readSessionState() const
+mu::RetVal<mu::ByteArray> AppShellConfiguration::readSessionState() const
 {
     mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), SESSION_RESOURCE_NAME);
     return fileSystem()->readFile(sessionFilePath());
@@ -300,7 +300,7 @@ mu::RetVal<QByteArray> AppShellConfiguration::readSessionState() const
 mu::Ret AppShellConfiguration::writeSessionState(const QByteArray& data)
 {
     mi::WriteResourceLockGuard lock_guard(multiInstancesProvider(), SESSION_RESOURCE_NAME);
-    return fileSystem()->writeToFile(sessionFilePath(), data);
+    return fileSystem()->writeFile(sessionFilePath(), ByteArray::fromQByteArrayNoCopy(data));
 }
 
 mu::io::paths_t AppShellConfiguration::parseSessionProjectsPaths(const QByteArray& json) const

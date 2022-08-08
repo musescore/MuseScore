@@ -34,15 +34,16 @@
 #include <QResizeEvent>
 #include <QToolTip>
 
+#include "translation.h"
 #include "types/bytearray.h"
-#include "serialization/internal/qzipreader_p.h"
-#include "serialization/internal/qzipwriter_p.h"
+#include "global/deprecated/qzipreader_p.h"
+#include "global/deprecated/qzipwriter_p.h"
 
 #include "actions/actiontypes.h"
 #include "commonscene/commonscenetypes.h"
 
-#include "engraving/infrastructure/draw/color.h"
-#include "engraving/infrastructure/draw/pen.h"
+#include "draw/types/color.h"
+#include "draw/types/pen.h"
 #include "engraving/rw/xml.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/chord.h"
@@ -61,7 +62,6 @@
 #include "internal/palettecelliconengine.h"
 
 #include "log.h"
-#include "translation.h"
 
 using namespace mu;
 using namespace mu::io;
@@ -153,9 +153,10 @@ ElementPtr PaletteWidget::elementForCellAt(int idx) const
     return cell ? cell->element : nullptr;
 }
 
-PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const QString& name, qreal mag, const QString& tag)
+PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const QString& name, qreal mag, const QPointF offset,
+                                            const QString& tag)
 {
-    PaletteCellPtr cell = m_palette->insertElement(idx, element, name, mag, tag);
+    PaletteCellPtr cell = m_palette->insertElement(idx, element, name, mag, offset, tag);
 
     update();
     updateGeometry();
@@ -163,9 +164,9 @@ PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const Q
     return cell;
 }
 
-PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& name, qreal mag, const QString& tag)
+PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF offset, const QString& tag)
 {
-    PaletteCellPtr cell = m_palette->appendElement(element, name, mag, tag);
+    PaletteCellPtr cell = m_palette->appendElement(element, name, mag, offset, tag);
 
     setFixedHeight(heightForWidth(width()));
     updateGeometry();

@@ -40,6 +40,7 @@ using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
 using PlaybackEventsMap = std::map<msecs_t, PlaybackEventList>;
 using PlaybackEventsChanges = async::Channel<PlaybackEventsMap>;
+using DynamicLevelChanges = async::Channel<DynamicLevelMap>;
 
 struct ArrangementContext
 {
@@ -195,7 +196,7 @@ private:
         float patternUnitRatio = PITCH_LEVEL_STEP / static_cast<float>(ONE_PERCENT);
 
         for (auto& pair : m_pitchCtx.pitchCurve) {
-            pair.second = RealRound(static_cast<float>(pair.second) * ratio * patternUnitRatio, 0);
+            pair.second = static_cast<pitch_level_t>(RealRound(static_cast<float>(pair.second) * ratio * patternUnitRatio, 0));
         }
     }
 
@@ -224,7 +225,7 @@ private:
         float ratio = static_cast<float>(actualDynamicLevel) / static_cast<float>(articulationDynamicLevel);
 
         for (auto& pair : m_expressionCtx.expressionCurve) {
-            pair.second = RealRound(static_cast<float>(pair.second) * ratio, 0);
+            pair.second = static_cast<pitch_level_t>(RealRound(static_cast<float>(pair.second) * ratio, 0));
         }
     }
 
@@ -303,7 +304,7 @@ struct PlaybackData {
     PlaybackEventsChanges mainStream;
     PlaybackEventsChanges offStream;
     DynamicLevelMap dynamicLevelMap;
-    async::Channel<DynamicLevelMap> dynamicLevelChanges;
+    DynamicLevelChanges dynamicLevelChanges;
 
     bool operator==(const PlaybackData& other) const
     {

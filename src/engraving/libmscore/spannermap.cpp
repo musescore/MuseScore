@@ -57,7 +57,7 @@ void SpannerMap::update() const
 //   findContained
 //---------------------------------------------------------
 
-const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained(int start, int stop)
+const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained(int start, int stop) const
 {
     if (dirty) {
         update();
@@ -71,7 +71,7 @@ const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained
 //   findOverlapping
 //---------------------------------------------------------
 
-const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findOverlapping(int start, int stop)
+const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findOverlapping(int start, int stop) const
 {
     if (dirty) {
         update();

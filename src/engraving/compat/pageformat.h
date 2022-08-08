@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_READPAGEFORMAT_H
 #define MU_ENGRAVING_READPAGEFORMAT_H
 
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
 class MStyle;
@@ -37,47 +37,47 @@ namespace mu::engraving::compat {
 class PageFormat
 {
     mu::SizeF _size;
-    qreal _printableWidth;          // _width - left margin - right margin
-    qreal _evenLeftMargin;          // values in inch
-    qreal _oddLeftMargin;
-    qreal _evenTopMargin;
-    qreal _evenBottomMargin;
-    qreal _oddTopMargin;
-    qreal _oddBottomMargin;
+    double _printableWidth;          // _width - left margin - right margin
+    double _evenLeftMargin;          // values in inch
+    double _oddLeftMargin;
+    double _evenTopMargin;
+    double _evenBottomMargin;
+    double _oddTopMargin;
+    double _oddBottomMargin;
     bool _twosided;
 
 public:
     PageFormat() {}
 
     const SizeF& size() const { return _size; } // size in inch
-    qreal width() const { return _size.width(); }
-    qreal height() const { return _size.height(); }
+    double width() const { return _size.width(); }
+    double height() const { return _size.height(); }
     void setSize(const SizeF& s) { _size = s; }
 
     void read206(XmlReader&);
 
-    qreal evenLeftMargin() const { return _evenLeftMargin; }
-    qreal oddLeftMargin() const { return _oddLeftMargin; }
-    qreal evenTopMargin() const { return _evenTopMargin; }
-    qreal evenBottomMargin() const { return _evenBottomMargin; }
-    qreal oddTopMargin() const { return _oddTopMargin; }
-    qreal oddBottomMargin() const { return _oddBottomMargin; }
-    qreal printableWidth() const { return _printableWidth; }
+    double evenLeftMargin() const { return _evenLeftMargin; }
+    double oddLeftMargin() const { return _oddLeftMargin; }
+    double evenTopMargin() const { return _evenTopMargin; }
+    double evenBottomMargin() const { return _evenBottomMargin; }
+    double oddTopMargin() const { return _oddTopMargin; }
+    double oddBottomMargin() const { return _oddBottomMargin; }
+    double printableWidth() const { return _printableWidth; }
 
-    void setEvenLeftMargin(qreal val) { _evenLeftMargin = val; }
-    void setOddLeftMargin(qreal val) { _oddLeftMargin = val; }
-    void setEvenTopMargin(qreal val) { _evenTopMargin = val; }
-    void setEvenBottomMargin(qreal val) { _evenBottomMargin = val; }
-    void setOddTopMargin(qreal val) { _oddTopMargin = val; }
-    void setOddBottomMargin(qreal val) { _oddBottomMargin = val; }
-    void setPrintableWidth(qreal val) { _printableWidth = val; }
+    void setEvenLeftMargin(double val) { _evenLeftMargin = val; }
+    void setOddLeftMargin(double val) { _oddLeftMargin = val; }
+    void setEvenTopMargin(double val) { _evenTopMargin = val; }
+    void setEvenBottomMargin(double val) { _evenBottomMargin = val; }
+    void setOddTopMargin(double val) { _oddTopMargin = val; }
+    void setOddBottomMargin(double val) { _oddBottomMargin = val; }
+    void setPrintableWidth(double val) { _printableWidth = val; }
 
     bool twosided() const { return _twosided; }
     void setTwosided(bool val) { _twosided = val; }
 
     // convenience functions
-    qreal evenRightMargin() const { return _size.width() - _printableWidth - _evenLeftMargin; }
-    qreal oddRightMargin() const { return _size.width() - _printableWidth - _oddLeftMargin; }
+    double evenRightMargin() const { return _size.width() - _printableWidth - _evenLeftMargin; }
+    double oddRightMargin() const { return _size.width() - _printableWidth - _oddLeftMargin; }
 };
 
 void readPageFormat206(MStyle* style, XmlReader& e);

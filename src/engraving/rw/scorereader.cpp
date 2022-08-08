@@ -32,7 +32,6 @@
 #include "../libmscore/excerpt.h"
 #include "../libmscore/imageStore.h"
 #include "../libmscore/audio.h"
-#include "../libmscore/revisions.h"
 
 #include "log.h"
 
@@ -74,8 +73,8 @@ Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, 
     // Read images
     {
         if (!MScore::noImages) {
-            std::vector<QString> images = mscReader.imageFileNames();
-            for (const QString& name : images) {
+            std::vector<String> images = mscReader.imageFileNames();
+            for (const String& name : images) {
                 imageStore.add(name, mscReader.readImageFile(name));
             }
         }
@@ -89,7 +88,7 @@ Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, 
     // Read score
     {
         ByteArray scoreData = mscReader.readScoreFile();
-        QString docName = masterScore->fileInfo()->fileName().toQString();
+        String docName = masterScore->fileInfo()->fileName().toString();
 
         compat::ReadStyleHook styleHook(masterScore, scoreData, docName);
 
@@ -102,8 +101,8 @@ Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, 
 
     // Read excerpts
     if (masterScore->mscVersion() >= 400) {
-        std::vector<QString> excerptNames = mscReader.excerptNames();
-        for (const QString& excerptName : excerptNames) {
+        std::vector<String> excerptNames = mscReader.excerptNames();
+        for (const String& excerptName : excerptNames) {
             Score* partScore = masterScore->createScore();
 
             compat::ReadStyleHook::setupDefaultStyle(partScore);
@@ -151,8 +150,8 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            const QString& version = e.attribute("version");
-            QStringList sl = version.split('.');
+            const String& version = e.attribute("version");
+            StringList sl = version.split('.');
             score->setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
 
             if (!ctx.ignoreVersionError()) {
@@ -178,14 +177,11 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
 
             Err err = Err::NoError;
             if (score->mscVersion() <= 114) {
-                Score::FileError error = compat::Read114::read114(score, e, ctx);
-                err = scoreFileErrorToErr(error);
+                err = compat::Read114::read114(score, e, ctx);
             } else if (score->mscVersion() <= 207) {
-                Score::FileError error = compat::Read206::read206(score, e, ctx);
-                err = scoreFileErrorToErr(error);
+                err = compat::Read206::read206(score, e, ctx);
             } else if (score->mscVersion() < 400 || MScore::testMode) {
-                Score::FileError error = compat::Read302::read302(score, e, ctx);
-                err = scoreFileErrorToErr(error);
+                err = compat::Read302::read302(score, e, ctx);
             } else {
                 //! NOTE: make sure we have a chord list
                 //! Load the default chord list otherwise
@@ -218,14 +214,12 @@ Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Score") {
             if (!Read400::readScore400(score, e, ctx)) {
                 if (e.error() == XmlStreamReader::CustomError) {
-                    return Err::FileCriticalCorrupted;
+                    return Err::FileCriticallyCorrupted;
                 }
                 return Err::FileBadFormat;
             }
         } else if (tag == "Revision") {
-            Revision* revision = new Revision;
-            revision->read(e);
-            score->revisions()->add(revision);
+            e.skipCurrentElement();
         }
     }
 

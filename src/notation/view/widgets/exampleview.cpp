@@ -40,6 +40,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::draw;
 using namespace mu::notation;
 using namespace mu::engraving;
 
@@ -47,7 +48,6 @@ ExampleView::ExampleView(QWidget* parent)
     : QFrame(parent)
 {
     m_score = nullptr;
-    setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     resetMatrix();
     m_backgroundPixmap = nullptr;
@@ -100,7 +100,7 @@ void ExampleView::resetMatrix()
 {
     qreal _spatium = SPATIUM20 * m_defaultScaling;
     // example would normally be 10sp from top of page; this leaves 3sp margin above
-    m_matrix = mu::Transform(m_defaultScaling, 0.0, 0.0, m_defaultScaling, _spatium, -_spatium * 7.0);
+    m_matrix = Transform(m_defaultScaling, 0.0, 0.0, m_defaultScaling, _spatium, -_spatium * 7.0);
 }
 
 void ExampleView::layoutChanged()
@@ -191,163 +191,14 @@ void ExampleView::paintEvent(QPaintEvent* event)
     drawElements(painter, ell);
 }
 
-void ExampleView::dragEnterEvent(QDragEnterEvent* event)
-{
-    const QMimeData* d = event->mimeData();
-    if (d->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
-        event->acceptProposedAction();
-
-        QByteArray a = d->data(mu::commonscene::MIME_SYMBOL_FORMAT);
-
-// LOGD("ExampleView::dragEnterEvent Symbol: <%s>", a.data());
-
-        XmlReader e(ByteArray::fromQByteArrayNoCopy(a));
-        PointF dragOffset;
-        Fraction duration;      // dummy
-        ElementType type = EngravingItem::readType(e, &dragOffset, &duration);
-
-        m_dragElement = Factory::createItem(type, m_score->dummy());
-        if (m_dragElement) {
-            m_dragElement->resetExplicitParent();
-            m_dragElement->read(e);
-            m_dragElement->layout();
-        }
-        return;
-    }
-}
-
-void ExampleView::dragLeaveEvent(QDragLeaveEvent*)
-{
-    if (m_dragElement) {
-        delete m_dragElement;
-        m_dragElement = 0;
-    }
-    setDropTarget(0);
-}
-
-struct MoveContext
-{
-    PointF pos;
-    mu::engraving::Score* score = nullptr;
-};
-
-static void moveElement(void* data, EngravingItem* e)
-{
-    MoveContext* ctx = (MoveContext*)data;
-    ctx->score->addRefresh(e->canvasBoundingRect());
-    e->setPos(ctx->pos);
-    ctx->score->addRefresh(e->canvasBoundingRect());
-}
-
-void ExampleView::dragMoveEvent(QDragMoveEvent* event)
-{
-    event->acceptProposedAction();
-
-    if (!m_dragElement || m_dragElement->isActionIcon()) {
-        return;
-    }
-
-    PointF position = m_matrix.inverted().map(PointF::fromQPointF(event->posF()));
-    std::vector<EngravingItem*> el = elementsAt(position);
-    bool found = false;
-    for (const EngravingItem* e : el) {
-        if (e->type() == ElementType::NOTE) {
-            setDropTarget(const_cast<EngravingItem*>(e));
-            found = true;
-            break;
-        }
-    }
-    if (!found) {
-        setDropTarget(0);
-    }
-
-    MoveContext ctx{ position, m_score };
-    m_dragElement->scanElements(&ctx, moveElement, false);
-    m_score->update();
-    return;
-}
-
-void ExampleView::setDropTarget(const EngravingItem* el)
-{
-    if (m_dropTarget != el) {
-        if (m_dropTarget) {
-            m_dropTarget->setDropTarget(false);
-            m_dropTarget = 0;
-        }
-        m_dropTarget = el;
-        if (m_dropTarget) {
-            m_dropTarget->setDropTarget(true);
-        }
-    }
-    if (!m_dropAnchor.isNull()) {
-        QRectF r;
-        r.setTopLeft(m_dropAnchor.p1());
-        r.setBottomRight(m_dropAnchor.p2());
-        m_dropAnchor = QLineF();
-    }
-    if (m_dropRectangle.isValid()) {
-        m_dropRectangle = QRectF();
-    }
-    update();
-}
-
-void ExampleView::dropEvent(QDropEvent* event)
-{
-    PointF position = m_matrix.inverted().map(PointF::fromQPointF(event->posF()));
-
-    if (!m_dragElement) {
-        return;
-    }
-
-    if (m_dragElement->isActionIcon()) {
-        delete m_dragElement;
-        m_dragElement = 0;
-        return;
-    }
-
-    foreach (EngravingItem* e, elementsAt(position)) {
-        if (e->type() == ElementType::NOTE) {
-            ActionIcon* icon = static_cast<ActionIcon*>(m_dragElement);
-            Chord* chord = static_cast<Note*>(e)->chord();
-            emit beamPropertyDropped(chord, icon);
-            switch (icon->actionType()) {
-            case ActionIconType::BEAM_START:
-                chord->setBeamMode(BeamMode::BEGIN);
-                break;
-            case ActionIconType::BEAM_MID:
-                chord->setBeamMode(BeamMode::AUTO);
-                break;
-            case ActionIconType::BEAM_BEGIN_32:
-                chord->setBeamMode(BeamMode::BEGIN32);
-                break;
-            case ActionIconType::BEAM_BEGIN_64:
-                chord->setBeamMode(BeamMode::BEGIN64);
-                break;
-            default:
-                break;
-            }
-            score()->doLayout();
-            break;
-        }
-    }
-
-    event->acceptProposedAction();
-    delete m_dragElement;
-    m_dragElement = nullptr;
-    setDropTarget(nullptr);
-}
-
 void ExampleView::mousePressEvent(QMouseEvent* event)
 {
-    PointF position = m_matrix.inverted().map(PointF::fromQPointF(event->pos()));
-    m_moveStartPoint = position;
+    m_moveStartPoint = toLogical(event->pos());
+}
 
-    foreach (EngravingItem* e, elementsAt(position)) {
-        if (e->type() == ElementType::NOTE) {
-            emit noteClicked(static_cast<Note*>(e));
-            break;
-        }
-    }
+PointF ExampleView::toLogical(const QPointF& point)
+{
+    return m_matrix.inverted().map(PointF::fromQPointF(point));
 }
 
 QSize ExampleView::sizeHint() const

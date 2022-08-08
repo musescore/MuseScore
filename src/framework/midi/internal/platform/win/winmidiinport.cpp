@@ -73,6 +73,8 @@ void WinMidiInPort::init()
     m_devicesListener.devicesChanged().onNotify(this, [this]() {
         m_devicesChanged.notify();
     });
+
+    AbstractMidiInPort::init();
 }
 
 MidiDeviceList WinMidiInPort::devices() const
@@ -128,7 +130,7 @@ void WinMidiInPort::doProcess(uint32_t message, tick_t timing)
 {
     auto e = Event::fromMIDI10Package(message).toMIDI20();
     if (e) {
-        m_eventReceived.send(timing, e);
+        doEventsRecived({ { timing, e } });
     }
 }
 
@@ -208,9 +210,4 @@ void WinMidiInPort::stop()
 
     midiInStop(m_win->midiIn);
     m_running = false;
-}
-
-mu::async::Channel<tick_t, Event> WinMidiInPort::eventReceived() const
-{
-    return m_eventReceived;
 }

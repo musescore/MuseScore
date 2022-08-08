@@ -90,6 +90,8 @@ public:
 
 class Clef final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Clef)
+
     SymId symId;
     bool _showCourtesy = true;
     bool m_isSmall = false;
@@ -105,7 +107,7 @@ class Clef final : public EngravingItem
 public:
 
     Clef* clone() const override { return new Clef(*this); }
-    qreal mag() const override;
+    double mag() const override;
 
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
@@ -139,7 +141,7 @@ public:
     void setConcertClef(ClefType val);
     void setTransposingClef(ClefType val);
     void setClefType(const ClefTypeList& ctl) { _clefTypes = ctl; }
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
+    void spatiumChanged(double oldValue, double newValue) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -147,7 +149,7 @@ public:
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
     void clear();
 };
 } // namespace mu::engraving

@@ -79,7 +79,7 @@ void RealizedHarmony::setLiteral(bool literal)
 //---------------------------------------------------
 const RealizedHarmony::PitchMap& RealizedHarmony::notes() const
 {
-    Q_ASSERT(!_dirty);
+    assert(!_dirty);
     //with the way that the code is currently structured, there should be no way to
     //get to this function with dirty flag set although in the future it may be
     //better to just update if dirty here
@@ -210,7 +210,7 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
     //otherwise checked by RealizedHarmony. This saves us 3 ints of space, but
     //has the added risk
     if (!_dirty) {
-        Q_ASSERT(
+        assert(
             _harmony->harmonyType() != HarmonyType::STANDARD
             || (_notes.begin()->second == rootTpc || _notes.begin()->second == bassTpc));
         return;
@@ -305,9 +305,9 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
     PitchMap ret;
 
     const ParsedChord* p = _harmony->parsedForm();
-    QString quality = p->quality();
+    String quality = p->quality();
     int ext = p->extension().toInt();
-    const QStringList& modList = p->modifierList();
+    const StringList& modList = p->modifierList();
 
     int omit = 0;   //omit flags for which notes to omit (for notes that are altered
                     //or specified to be omitted as a modification) so that they
@@ -315,26 +315,26 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
     bool alt5 = false;   //altered 5
 
     //handle modifiers
-    for (QString s : modList) {
+    for (const String& s : modList) {
         //find number, split up mods
         bool modded = false;
-        for (int c = 0; c < s.length(); ++c) {
-            if (s[c].isDigit()) {
+        for (size_t c = 0; c < s.size(); ++c) {
+            if (s.at(c).isDigit()) {
                 int alter = 0;
-                int cutoff = c;
-                int deg = s.rightRef(s.length() - c).toInt();
+                size_t cutoff = c;
+                int deg = s.right(s.size() - c).toInt();
                 //account for if the flat/sharp is stuck to the end of add
                 if (c) {
-                    if (s[c - 1] == '#') {
+                    if (s.at(c - 1) == u'#') {
                         cutoff -= 1;
                         alter = +1;
-                    } else if (s[c - 1] == 'b') {
+                    } else if (s.at(c - 1) == u'b') {
                         cutoff -= 1;
                         alter = -1;
                     }
                 }
 
-                QString extType = s.left(cutoff);
+                String extType = s.left(cutoff);
                 if (extType == "" || extType == "major") {         //alteration
                     if (deg == 9) {
                         ret.insert({ step2pitchInterval(deg, alter) + RANK_MULT * RANK_9TH, tpcInterval(rootTpc, deg, alter) });
@@ -495,13 +495,13 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
     Harmony* next = _harmony->findNext();
     if (!literal && next && tpcIsValid(next->rootTpc())) {
         //jazz interpretation
-        QString qNext = next->parsedForm()->quality();
+        String qNext = next->parsedForm()->quality();
         //pitch from current to next harmony normalized to a range between 0 and 12
         //add PITCH_DELTA_OCTAVE before modulo so that we can ensure arithmetic mod rather than computer mod
         //int keyTpc = int(next->staff()->key(next->tick())) + 14; //tpc of key (ex. F# major would be Tpc::F_S)
         //int keyTpcMinor = keyTpc + 3;
         int pitchBetween = (tpc2pitch(next->rootTpc()) + PITCH_DELTA_OCTAVE - tpc2pitch(rootTpc)) % PITCH_DELTA_OCTAVE;
-        bool maj7 = qNext == "major" && next->parsedForm()->extension() >= 7;     //whether or not the next chord has major 7
+        bool maj7 = qNext == "major" && next->parsedForm()->extension().toInt() >= 7;     //whether or not the next chord has major 7
 
         //commented code: dont add 9 for diminished chords
         if (!(omit & (1 << 9))) {    // && !(alt5 && (quality == "minor" || quality == "diminished" || quality == "half-diminished"))) {

@@ -31,6 +31,7 @@ class Score;
 
 class RootItem : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, RootItem)
 public:
     RootItem(Score* score);
     ~RootItem() override;
@@ -46,7 +47,9 @@ public:
 
 private:
 
-    AccessibleItem* createAccessible() override;
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 
     Score* m_score = nullptr;
     compat::DummyElement* m_dummy = nullptr;

@@ -25,7 +25,7 @@
 #include <string>
 
 namespace mu {
-std::string pitchToString(int pitch);
+std::string pitchToString(int pitch, bool addoctave=true);
 }
 
 #endif // MU_FRAMEWORK_GLOBAL_H

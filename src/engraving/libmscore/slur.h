@@ -25,6 +25,8 @@
 
 #include "slurtie.h"
 
+#include "global/allocator.h"
+
 namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ SlurSegment
@@ -33,9 +35,12 @@ namespace mu::engraving {
 
 class SlurSegment final : public SlurTieSegment
 {
+    OBJECT_ALLOCATOR(engraving, SlurSegment)
 protected:
-    qreal _extraHeight = 0.0;
+    double _extraHeight = 0.0;
     void changeAnchor(EditData&, EngravingItem*) override;
+    PointF _endPointOff1 = PointF(0.0, 0.0);
+    PointF _endPointOff2 = PointF(0.0, 0.0);
 
 public:
     SlurSegment(System* parent);
@@ -48,12 +53,16 @@ public:
     void layoutSegment(const mu::PointF& p1, const mu::PointF& p2);
 
     bool isEdited() const;
+    bool isEndPointsEdited() const;
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
+
+    void editDrag(EditData& ed) override;
 
     Slur* slur() const { return toSlur(spanner()); }
     void adjustEndpoints();
     void computeBezier(mu::PointF so = mu::PointF()) override;
+    void avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p4, mu::draw::Transform& toSystemCoordinates, double& slurAngle);
 };
 
 //---------------------------------------------------------
@@ -62,6 +71,8 @@ public:
 
 class Slur final : public SlurTie
 {
+    OBJECT_ALLOCATOR(engraving, Slur)
+
     void slurPosChord(SlurPos*);
     int _sourceStemArrangement = -1;
 
@@ -87,6 +98,8 @@ public:
     const SlurSegment* backSegment() const { return toSlurSegment(Spanner::backSegment()); }
     SlurSegment* segmentAt(int n) { return toSlurSegment(Spanner::segmentAt(n)); }
     const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n)); }
+
+    bool isCrossStaff();
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 };

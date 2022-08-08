@@ -95,23 +95,41 @@ BeamMode Groups::endBeam(const ChordRest* cr, const ChordRest* prev)
     if (cr->isGrace() || cr->beamMode() != BeamMode::AUTO) {
         return cr->beamMode();
     }
-    Q_ASSERT(cr->staff());
+    assert(cr->staff());
 
-    TDuration d      = cr->durationType();
-    const Groups& g  = cr->staff()->group(cr->tick());
+    // we need to figure out the longest note value beat upon which cr falls in the measure
+    int maxTickLen = std::max(cr->ticks().ticks(), prev ? prev->ticks().ticks() : 0);
+    int smallestTickLen = Fraction(1, 8).ticks(); // start with 8th
+    int tickLenLimit = Fraction(1, 32).ticks(); // only check up to 32nds because that's all thats available
+                                                // in timesig properties
+    while (smallestTickLen > maxTickLen || cr->tick().ticks() % smallestTickLen != 0) {
+        smallestTickLen /= 2; // proceed to 16th, 32nd, etc
+        if (smallestTickLen < tickLenLimit) {
+            smallestTickLen = cr->ticks().ticks();
+            break;
+        }
+    }
+    DurationType bigBeatDuration = TDuration(Fraction::fromTicks(smallestTickLen)).type();
+
+    TDuration crDuration = cr->durationType();
+    const Groups& g = cr->staff()->group(cr->tick());
     Fraction stretch = cr->staff()->timeStretch(cr->tick());
-    Fraction tick    = cr->rtick() * stretch;
+    Fraction tick = cr->rtick() * stretch;
 
-    BeamMode val = g.beamMode(tick.ticks(), d.type());
+    // We can choose to break beams based on its place in the measure, or by its duration. These
+    // can be consolidated mostly, with bias towards its duration.
+    BeamMode byType = g.beamMode(tick.ticks(), crDuration.type());
+    BeamMode byPos = g.beamMode(tick.ticks(), bigBeatDuration);
+    BeamMode val = byType == BeamMode::AUTO ? byPos : byType;
 
     // context-dependent checks
     if (val == BeamMode::AUTO && tick.isNotZero()) {
         // if current or previous cr is in tuplet (but not both in same tuplet):
         // consider it as if this were next shorter duration
-        if (prev && (cr->tuplet() != prev->tuplet()) && (d == prev->durationType())) {
-            if (d >= DurationType::V_EIGHTH) {
+        if (prev && (cr->tuplet() != prev->tuplet()) && (crDuration == prev->durationType())) {
+            if (crDuration >= DurationType::V_EIGHTH) {
                 val = g.beamMode(tick.ticks(), DurationType::V_16TH);
-            } else if (d == DurationType::V_16TH) {
+            } else if (crDuration == DurationType::V_16TH) {
                 val = g.beamMode(tick.ticks(), DurationType::V_32ND);
             } else {
                 val = g.beamMode(tick.ticks(), DurationType::V_64TH);

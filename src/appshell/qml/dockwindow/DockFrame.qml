@@ -124,7 +124,7 @@ Rectangle {
 
         onTabBarCppChanged: {
             if (Boolean(tabBarCpp)) {
-                tabBarCpp.redirectMouseEvents(dragMouseArea)
+                tabBarCpp.setDraggableMouseArea(dragMouseArea)
                 tabBarCpp.tabBarQmlItem = this
             }
         }

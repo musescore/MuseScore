@@ -30,7 +30,7 @@
 #include "mitypes.h"
 #include "async/notification.h"
 #include "async/channel.h"
-#include "val.h"
+#include "types/val.h"
 
 namespace mu::mi {
 class IMultiInstancesProvider : MODULE_EXPORT_INTERFACE
@@ -68,6 +68,7 @@ public:
 
     // Quit for all
     virtual void quitForAll() = 0;
+    virtual void quitAllAndRestartLast() = 0;
 };
 }
 

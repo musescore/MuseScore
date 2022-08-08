@@ -98,9 +98,6 @@ Column {
         Loader {
             id: buttonLoader
 
-            width: 20
-            height: width
-
             active: visible
             sourceComponent: root.isStyled ? menuButtonComponent : resetButtonComponent
 
@@ -108,7 +105,8 @@ Column {
                 id: resetButtonComponent
 
                 FlatButton {
-                    anchors.fill: parent
+                    width: 20
+                    height: width
 
                     navigation.name: root.navigationName + "Reset"
                     navigation.panel: root.navigationPanel
@@ -130,8 +128,8 @@ Column {
                 id: menuButtonComponent
 
                 MenuButton {
-                    id: menuButton
-                    anchors.fill: parent
+                    width: 20
+                    height: width
 
                     navigation.name: root.navigationName + " Menu Button"
                     navigation.panel: root.navigationPanel

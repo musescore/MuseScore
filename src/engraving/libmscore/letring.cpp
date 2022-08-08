@@ -26,6 +26,7 @@
 #include "measure.h"
 #include "chordrest.h"
 #include "score.h"
+#include "stafftype.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -47,7 +48,8 @@ static const ElementStyle letRingStyle {
     { Sid::letRingHookHeight,                    Pid::BEGIN_HOOK_HEIGHT },
     { Sid::letRingHookHeight,                    Pid::END_HOOK_HEIGHT },
     { Sid::letRingLineStyle,                     Pid::LINE_STYLE },
-    { Sid::letRingBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET },
+    { Sid::letRingDashLineLen,                   Pid::DASH_LINE_LEN },
+    { Sid::letRingDashGapLen,                    Pid::DASH_GAP_LEN },
     { Sid::letRingEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::letRingLineWidth,                     Pid::LINE_WIDTH },
     { Sid::letRingPlacement,                     Pid::PLACEMENT },
@@ -65,6 +67,13 @@ LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
 
 void LetRingSegment::layout()
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }

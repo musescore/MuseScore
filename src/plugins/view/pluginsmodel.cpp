@@ -89,9 +89,8 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
     case rDescription:
         return plugin.description;
     case rThumbnailUrl:
-        //! TODO
         if (plugin.thumbnailUrl.isEmpty()) {
-            return "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder.jpeg";
+            return "qrc:/qml/MuseScore/Plugins/internal/resources/placeholder.png";
         }
 
         return plugin.thumbnailUrl;
@@ -106,6 +105,7 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
             return shortcuts::sequencesToNativeText(shortcuts::Shortcut::sequencesFromString(plugin.shortcuts));
         }
 
+        //: No keyboard shortcut is assigned to this plugin.
         return qtrc("plugins", "Not defined");
     }
 
@@ -144,7 +144,7 @@ void PluginsModel::editShortcut(QString codeKey)
 
     QVariantMap params;
     params["shortcutCodeKey"] = codeKey;
-    uri.addParam("params", Val(params));
+    uri.addParam("params", Val::fromQVariant(params));
 
     RetVal<Val> retVal = interactive()->open(uri);
 
@@ -165,7 +165,7 @@ QVariantList PluginsModel::categories() const
     for (const auto& category: service()->categories()) {
         QVariantMap obj;
         obj["code"] = QString::fromStdString(category.first);
-        obj["title"] = QString::fromStdString(category.second);
+        obj["title"] = category.second.qTranslated();
 
         result << obj;
     }

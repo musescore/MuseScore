@@ -92,8 +92,8 @@ public:
     int defaultZoom() const override;
     void setDefaultZoom(int zoomPercentage) override;
 
-    ValCh<int> currentZoom() const override;
-    void setCurrentZoom(int zoomPercentage) override;
+    qreal scalingFromZoomPercentage(int zoomPercentage) const override;
+    int zoomPercentageFromScaling(qreal scaling) const override;
 
     QList<int> possibleZoomPercentageList() const override;
 
@@ -131,9 +131,6 @@ public:
 
     double guiScaling() const override;
     double notationScaling() const override;
-
-    std::string notationRevision() const override;
-    int notationDivision() const override;
 
     ValCh<framework::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(framework::Orientation orientation) override;
@@ -199,7 +196,6 @@ private:
 
     async::Notification m_backgroundChanged;
     async::Notification m_foregroundChanged;
-    ValCh<int> m_currentZoomPercentage;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
     async::Channel<io::path_t> m_userStylesPathChanged;
     async::Notification m_instrumentListPathsChanged;

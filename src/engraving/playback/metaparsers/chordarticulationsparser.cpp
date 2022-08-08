@@ -30,6 +30,7 @@
 #include "libmscore/chordline.h"
 
 #include "playback/utils/arrangementutils.h"
+#include "playback/filters/chordfilter.h"
 #include "internal/spannersmetaparser.h"
 #include "internal/symbolsmetaparser.h"
 #include "internal/annotationsmetaparser.h"
@@ -75,38 +76,44 @@ void ChordArticulationsParser::doParse(const EngravingItem* item, const Renderin
     const Chord* chord = toChord(item);
 
     parseSpanners(chord, ctx, result);
-    parseArticulationSymbols(chord, ctx, result);
     parseAnnotations(chord, ctx, result);
     parseTremolo(chord, ctx, result);
     parseArpeggio(chord, ctx, result);
     parseGraceNotes(chord, ctx, result);
     parseChordLine(chord, ctx, result);
+
+    parseArticulationSymbols(chord, ctx, result);
 }
 
 void ChordArticulationsParser::parseSpanners(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
     const Score* score = chord->score();
 
-    const std::multimap<int, Spanner*>& spannerMap = score->spanner();
-    auto startIt = spannerMap.lower_bound(ctx.nominalPositionStartTick);
-    auto endIt = spannerMap.upper_bound(ctx.nominalPositionEndTick);
-    for (auto it = startIt; it != endIt; ++it) {
-        Spanner* spanner = it->second;
+    const SpannerMap& spannerMap = score->spannerMap();
 
-        if (spanner->staffIdx() != chord->staffIdx()) {
+    if (spannerMap.empty()) {
+        return;
+    }
+
+    auto intervals = spannerMap.findOverlapping(ctx.nominalPositionStartTick, ctx.nominalPositionEndTick);
+
+    for (const auto& interval : intervals) {
+        Spanner* spanner = interval.value;
+
+        if (spanner->part() != chord->part()) {
             continue;
         }
 
-        int spannerFrom = spanner->startUniqueTicks();
-        int spannerTo = spanner->endUniqueTicks();
+        int spannerFrom = interval.start;
+        int spannerTo = interval.stop;
         int spannerDurationTicks = spannerTo - spannerFrom;
 
-        if (spannerDurationTicks == 0) {
+        if (spannerDurationTicks == 0 || spannerTo < ctx.nominalPositionStartTick) {
             continue;
         }
 
         RenderingContext spannerContext = ctx;
-        spannerContext.nominalTimestamp = timestampFromTicks(score, spannerFrom);
+        spannerContext.nominalTimestamp = timestampFromTicks(score, spannerFrom + ctx.positionTickOffset);
         spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
         spannerContext.nominalPositionStartTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
@@ -120,6 +127,8 @@ void ChordArticulationsParser::parseArticulationSymbols(const Chord* chord, cons
     for (const Articulation* articulation : chord->articulations()) {
         SymbolsMetaParser::parse(articulation, ctx, result);
     }
+
+    ChordFilter::validateArticulations(chord, result);
 }
 
 void ChordArticulationsParser::parseAnnotations(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)

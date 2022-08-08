@@ -4,6 +4,7 @@
 #include <ctime>
 #include <algorithm>
 #include <cassert>
+#include <cstdarg>
 
 #include "logdefdest.h"
 #include "helpful.h"

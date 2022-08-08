@@ -36,7 +36,9 @@ namespace mu::engraving {
 
 class StaffLines final : public EngravingItem
 {
-    qreal lw { 0.0 };
+    OBJECT_ALLOCATOR(engraving, StaffLines)
+
+    double lw { 0.0 };
     std::vector<mu::LineF> lines;
 
     friend class Factory;
@@ -55,9 +57,9 @@ public:
 
     std::vector<mu::LineF>& getLines() { return lines; }
     Measure* measure() const { return (Measure*)explicitParent(); }
-    qreal y1() const;
-    void layoutForWidth(qreal width);
-    void layoutPartialWidth(qreal w, qreal wPartial, bool alignLeft);
+    double y1() const;
+    void layoutForWidth(double width);
+    void layoutPartialWidth(double w, double wPartial, bool alignLeft);
 };
 }
 

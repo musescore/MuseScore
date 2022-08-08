@@ -25,11 +25,11 @@
 
 #include "stringutils.h"
 
-#include "serialization/internal/qzipreader_p.h"
-#include "serialization/internal/qzipwriter_p.h"
+#include "global/deprecated/qzipreader_p.h"
+#include "global/deprecated/qzipwriter_p.h"
 
-#include "global/xmlreader.h"
-#include "global/xmlwriter.h"
+#include "global/deprecated/xmlreader.h"
+#include "global/deprecated/xmlwriter.h"
 
 #include "workspaceerrors.h"
 
@@ -49,13 +49,14 @@ mu::io::path_t WorkspaceFile::filePath() const
 
 mu::Ret WorkspaceFile::load()
 {
-    RetVal<QByteArray> data = fileSystem()->readFile(m_filePath);
+    RetVal<ByteArray> data = fileSystem()->readFile(m_filePath);
     if (!data.ret) {
         LOGE() << "failed read file, err: " << data.ret.toString();
         return data.ret;
     }
 
-    QBuffer buf(&data.val);
+    QByteArray ba = data.val.toQByteArrayNoCopy();
+    QBuffer buf(&ba);
     buf.open(QIODevice::ReadOnly);
     MQZipReader zip(&buf);
 
@@ -117,7 +118,7 @@ mu::Ret WorkspaceFile::save()
 
     zip.close();
 
-    Ret ret = fileSystem()->writeToFile(m_filePath, data);
+    Ret ret = fileSystem()->writeFile(m_filePath, ByteArray::fromQByteArrayNoCopy(data));
     if (!ret) {
         LOGE() << "failed write to file, err: " << ret.toString();
     }

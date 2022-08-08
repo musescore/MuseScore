@@ -1,14 +1,15 @@
 #ifndef FONTPROVIDERSTUB_H
 #define FONTPROVIDERSTUB_H
 
-#include "engraving/infrastructure/draw/ifontprovider.h"
+#include "engraving/draw/ifontprovider.h"
 
 namespace mu::draw {
 class FontProviderStub : public IFontProvider
 {
 public:
 
-    int addApplicationFont(const QString& family, const QString& path) override;
+    int addSymbolFont(const QString& family, const io::path_t& path) override;
+    int addTextFont(const io::path_t& path) override;
     void insertSubstitution(const QString& familyName, const QString& substituteName) override;
 
     qreal lineSpacing(const Font& f) const override;

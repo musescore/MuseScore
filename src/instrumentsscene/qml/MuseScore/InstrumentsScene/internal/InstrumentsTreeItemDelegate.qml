@@ -29,14 +29,16 @@ import MuseScore.InstrumentsScene 1.0
 FocusableControl {
     id: root
 
+    property var item: null
     property var treeView: undefined
     property var index: styleData.index
     property string filterKey
-    property int type: InstrumentsTreeItemType.UNDEFINED
-    property bool isSelected: false
-    property bool isDragAvailable: false
-    property alias isExpandable: expandButton.visible
-    property alias isEditable: settingsButton.visible
+
+    readonly property int type: item ? item.type : InstrumentsTreeItemType.UNDEFINED
+    readonly property bool isSelected: item && item.isSelected
+    readonly property bool isDragAvailable: item && item.isSelectable
+    readonly property bool isExpandable: item && item.isExpandable
+    readonly property bool isEditable: item && item.isEditable
 
     property int sideMargin: 0
 
@@ -218,12 +220,18 @@ FocusableControl {
                 id: expandButton
                 anchors.left: parent.left
 
+                visible: root.isExpandable
+
                 objectName: "ExpandBtnInstrument"
                 enabled: expandButton.visible
                 navigation.panel: root.navigation.panel
                 navigation.row: root.navigation.row
                 navigation.column: 2
-                navigation.accessible.name: qsTrc("instruments", "Expand")
+                navigation.accessible.name: styleData.isExpanded
+                                            //: Collapse a tree item
+                                            ? qsTrc("global", "Collapse")
+                                            //: Expand a tree item
+                                            : qsTrc("global", "Expand")
 
                 transparent: true
                 icon: styleData.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
@@ -265,6 +273,8 @@ FocusableControl {
 
             Layout.alignment: Qt.AlignRight
             Layout.preferredWidth: width
+
+            visible: root.isEditable
 
             objectName: "SettingsBtnInstrument"
             enabled: root.visible

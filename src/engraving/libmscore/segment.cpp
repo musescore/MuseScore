@@ -22,7 +22,9 @@
 
 #include "segment.h"
 
+#include "translation.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "mscore.h"
 #include "engravingitem.h"
@@ -52,6 +54,10 @@
 #include "hook.h"
 #include "factory.h"
 #include "masterscore.h"
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+#include "accessibility/accessibleitem.h"
+#endif
 
 #include "log.h"
 
@@ -141,8 +147,8 @@ Segment::Segment(Measure* m, SegmentType st, const Fraction& t)
     : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
     setParent(m);
-//      Q_ASSERT(t >= Fraction(0,1));
-//      Q_ASSERT(t <= m->ticks());
+//      assert(t >= Fraction(0,1));
+//      assert(t <= m->ticks());
     _segmentType = st;
     _tick = t;
     init();
@@ -187,7 +193,7 @@ void Segment::setParent(Measure* parent)
 
 void Segment::setSegmentType(SegmentType t)
 {
-    Q_ASSERT(_segmentType != SegmentType::Clef || t != SegmentType::ChordRest);
+    assert(_segmentType != SegmentType::Clef || t != SegmentType::ChordRest);
     _segmentType = t;
 }
 
@@ -224,8 +230,16 @@ Segment::~Segment()
         delete e;
     }
 
-    qDeleteAll(_annotations);
+    DeleteAll(_annotations);
 }
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+AccessibleItemPtr Segment::createAccessible()
+{
+    return std::make_shared<AccessibleItem>(this, AccessibleItem::Group);
+}
+
+#endif
 
 //---------------------------------------------------------
 //   init
@@ -559,9 +573,9 @@ void Segment::add(EngravingItem* el)
     }
 
     track_idx_t track = el->track();
-    Q_ASSERT(track != mu::nidx);
-    Q_ASSERT(el->score() == score());
-    Q_ASSERT(score()->nstaves() * VOICES == _elist.size());
+    assert(track != mu::nidx);
+    assert(el->score() == score());
+    assert(score()->nstaves() * VOICES == _elist.size());
     // make sure offset is correct for staff
     if (el->isStyled(Pid::OFFSET)) {
         el->setOffset(el->propertyDefault(Pid::OFFSET).value<PointF>());
@@ -580,6 +594,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::FRET_DIAGRAM:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
@@ -611,7 +626,7 @@ void Segment::add(EngravingItem* el)
     }
 
     case ElementType::CLEF:
-        Q_ASSERT(_segmentType == SegmentType::Clef || _segmentType == SegmentType::HeaderClef);
+        assert(_segmentType == SegmentType::Clef || _segmentType == SegmentType::HeaderClef);
         checkElement(el, track);
         _elist[track] = el;
         if (!el->generated()) {
@@ -621,7 +636,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::TIMESIG:
-        Q_ASSERT(segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce);
+        assert(segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce);
         checkElement(el, track);
         _elist[track] = el;
         el->staff()->addTimeSig(toTimeSig(el));
@@ -629,7 +644,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::KEYSIG:
-        Q_ASSERT(_segmentType == SegmentType::KeySig || _segmentType == SegmentType::KeySigAnnounce);
+        assert(_segmentType == SegmentType::KeySig || _segmentType == SegmentType::KeySigAnnounce);
         checkElement(el, track);
         _elist[track] = el;
         if (!el->generated()) {
@@ -641,7 +656,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::CHORD:
     case ElementType::REST:
     case ElementType::MMREST:
-        Q_ASSERT(_segmentType == SegmentType::ChordRest);
+        assert(_segmentType == SegmentType::ChordRest);
         {
             if (track % VOICES) {
                 bool v;
@@ -682,14 +697,14 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::AMBITUS:
-        Q_ASSERT(_segmentType == SegmentType::Ambitus);
+        assert(_segmentType == SegmentType::Ambitus);
         checkElement(el, track);
         _elist[track] = el;
         setEmpty(false);
         break;
 
     default:
-        ASSERT_X(QString::asprintf("Segment::add() unknown %s", el->typeName()));
+        ASSERT_X(String(u"Segment::add() unknown %1").arg(String::fromAscii(el->typeName())));
         return;
     }
 
@@ -748,6 +763,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::REHEARSAL_MARK:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::SYMBOL:
     case ElementType::TAB_DURATION_SYMBOL:
@@ -782,7 +798,7 @@ void Segment::remove(EngravingItem* el)
         break;
 
     case ElementType::KEYSIG:
-        Q_ASSERT(_elist[track] == el);
+        assert(_elist[track] == el);
 
         _elist[track] = 0;
         if (!el->generated()) {
@@ -806,7 +822,7 @@ void Segment::remove(EngravingItem* el)
         break;
 
     default:
-        ASSERT_X(QString::asprintf("Segment::remove() unknown %s", el->typeName()));
+        ASSERT_X(String(u"Segment::remove() unknown %1").arg(String::fromAscii(el->typeName())));
         return;
     }
     triggerLayout();
@@ -840,7 +856,7 @@ SegmentType Segment::segmentType(ElementType type)
     case ElementType::BREATH:
         return SegmentType::Breath;
     default:
-        LOGD("Segment:segmentType():  bad type: <%s>", Factory::name(type));
+        LOGD("Segment:segmentType():  bad type: <%s>", TConv::toXml(type));
         return SegmentType::Invalid;
     }
 }
@@ -872,11 +888,13 @@ void Segment::sortStaves(std::vector<staff_idx_t>& dst)
         static const std::set<ElementType> allowedTypes {
             ElementType::REHEARSAL_MARK,
             ElementType::SYSTEM_TEXT,
+            ElementType::TRIPLET_FEEL,
             ElementType::PLAYTECH_ANNOTATION,
             ElementType::JUMP,
             ElementType::MARKER,
             ElementType::TEMPO_TEXT,
             ElementType::VOLTA,
+            ElementType::GRADUAL_TEMPO_CHANGE,
             ElementType::TEXTLINE
         };
         if (!e->systemFlag() || (e->isLinked() && (allowedTypes.find(et) != allowedTypes.end()))) {
@@ -1034,10 +1052,10 @@ bool Segment::setProperty(Pid propertyId, const PropertyValue& v)
 //   widthInStaff
 //---------------------------------------------------------
 
-qreal Segment::widthInStaff(staff_idx_t staffIdx, SegmentType t) const
+double Segment::widthInStaff(staff_idx_t staffIdx, SegmentType t) const
 {
-    const qreal segX = x();
-    qreal nextSegX = segX;
+    const double segX = x();
+    double nextSegX = segX;
 
     Segment* nextSeg = nextInStaff(staffIdx, t);
     if (nextSeg) {
@@ -1181,7 +1199,7 @@ bool Segment::allElementsInvisible() const
     }
 
     for (EngravingItem* e : _elist) {
-        if (e && e->visible() && !qFuzzyCompare(e->width(), 0.0)) {
+        if (e && e->visible() && !RealIsEqual(e->width(), 0.0)) {
             return false;
         }
     }
@@ -1779,6 +1797,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
@@ -1921,6 +1940,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
@@ -1980,7 +2000,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::ARPEGGIO:
     case ElementType::TREMOLO: {
         EngravingItem* el = this->element(e->track());
-        Q_ASSERT(el->type() == ElementType::CHORD);
+        assert(el->type() == ElementType::CHORD);
         return toChord(el)->prevElement();
     }
     default: {
@@ -2139,11 +2159,11 @@ EngravingItem* Segment::lastInPrevSegments(staff_idx_t activeStaff)
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString Segment::accessibleExtraInfo() const
+String Segment::accessibleExtraInfo() const
 {
-    QString rez = "";
+    String rez;
     if (!annotations().empty()) {
-        QString temp = "";
+        String temp;
         for (const EngravingItem* a : annotations()) {
             if (!score()->selectionFilter().canSelect(a)) {
                 continue;
@@ -2153,16 +2173,16 @@ QString Segment::accessibleExtraInfo() const
                 //they are added in the chordrest, because they are for only one staff
                 break;
             default:
-                temp = temp + " " + a->accessibleInfo();
+                temp = temp + u' ' + a->accessibleInfo();
             }
         }
         if (!temp.isEmpty()) {
-            rez = rez + QObject::tr("Annotations:") + temp;
+            rez = rez + mtrc("engraving", "Annotations:") + temp;
         }
     }
 
-    QString startSpanners = "";
-    QString endSpanners = "";
+    String startSpanners;
+    String endSpanners;
 
     auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), tick().ticks());
     for (auto interval : spanners) {
@@ -2183,7 +2203,7 @@ QString Segment::accessibleExtraInfo() const
         }
 
         if (s->tick() == tick()) {
-            startSpanners += QObject::tr("Start of %1").arg(s->accessibleInfo());
+            startSpanners += u" " + mtrc("engraving", "Start of %1").arg(s->accessibleInfo());
         }
 
         const Segment* seg = 0;
@@ -2198,10 +2218,11 @@ QString Segment::accessibleExtraInfo() const
         }
 
         if (seg && s->tick2() == seg->tick()) {
-            endSpanners += QObject::tr("End of %1").arg(s->accessibleInfo());
+            endSpanners += u" " + mtrc("engraving", "End of %1").arg(s->accessibleInfo());
         }
     }
-    return rez + " " + startSpanners + " " + endSpanners;
+
+    return rez + startSpanners + endSpanners;
 }
 
 //---------------------------------------------------------
@@ -2277,9 +2298,9 @@ void Segment::createShape(staff_idx_t staffIdx)
         if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
             toHarmony(e)->layout1();
-            const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;
-            qreal x1 = e->bbox().x() - margin + e->pos().x();
-            qreal x2 = e->bbox().x() + e->bbox().width() + margin + e->pos().x();
+            const double margin = styleP(Sid::minHarmonyDistance) * 0.5;
+            double x1 = e->bbox().x() - margin + e->pos().x();
+            double x2 = e->bbox().x() + e->bbox().width() + margin + e->pos().x();
             s.addHorizontalSpacing(e, x1, x2);
         } else if (!e->isRehearsalMark()
                    && !e->isFretDiagram()
@@ -2290,6 +2311,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isSymbol()
                    && !e->isFSymbol()
                    && !e->isSystemText()
+                   && !e->isTripletFeel()
                    && !e->isInstrumentChange()
                    && !e->isArticulation()
                    && !e->isFermata()
@@ -2311,11 +2333,7 @@ void Segment::addPreAppendedToShape(int staffIdx, Shape& s)
             continue;
         }
         EngravingItem* item = _preAppendedItems[track];
-        item->layout();
-        Shape itemShape = item->shape();
-        double offset = -itemShape.minHorizontalDistance(s, score());
-        s.add(itemShape.translated(mu::PointF(offset, 0.0)));
-        item->setPos(offset, 0.0);
+        s.add(item->shape().translated(item->pos()));
     }
 }
 
@@ -2324,11 +2342,11 @@ void Segment::addPreAppendedToShape(int staffIdx, Shape& s)
 //    calculate minimum distance needed to the right
 //---------------------------------------------------------
 
-qreal Segment::minRight() const
+double Segment::minRight() const
 {
-    qreal distance = 0.0;
+    double distance = 0.0;
     for (const Shape& sh : shapes()) {
-        distance = qMax(distance, sh.right());
+        distance = std::max(distance, sh.right());
     }
     if (isClefType()) {
         distance += score()->styleMM(Sid::clefBarlineDistance);
@@ -2345,11 +2363,11 @@ qreal Segment::minRight() const
 //    sl. Sl is the same for all staves.
 //---------------------------------------------------------
 
-qreal Segment::minLeft(const Shape& sl) const
+double Segment::minLeft(const Shape& sl) const
 {
-    qreal distance = 0.0;
+    double distance = 0.0;
     for (const Shape& sh : shapes()) {
-        qreal d = sl.minHorizontalDistance(sh, score());
+        double d = sl.minHorizontalDistance(sh, score());
         if (d > distance) {
             distance = d;
         }
@@ -2357,11 +2375,11 @@ qreal Segment::minLeft(const Shape& sl) const
     return distance;
 }
 
-qreal Segment::minLeft() const
+double Segment::minLeft() const
 {
-    qreal distance = 0.0;
+    double distance = 0.0;
     for (const Shape& sh : shapes()) {
-        qreal l = sh.left();
+        double l = sh.left();
         if (l > distance) {
             distance = l;
         }
@@ -2369,7 +2387,7 @@ qreal Segment::minLeft() const
     return distance;
 }
 
-std::pair<qreal, qreal> Segment::computeCellWidth(const std::vector<int>& visibleParts) const
+std::pair<double, double> Segment::computeCellWidth(const std::vector<int>& visibleParts) const
 {
     if (!this->enabled()) {
         return { 0, 0 };
@@ -2474,12 +2492,12 @@ ChordRest* Segment::ChordRestWithMinDuration(const Segment* seg, const std::vect
     return chordRestWithMinDuration;
 }
 
-void Segment::setSpacing(qreal val)
+void Segment::setSpacing(double val)
 {
     m_spacing = val;
 }
 
-qreal Segment::spacing() const
+double Segment::spacing() const
 {
     return m_spacing;
 }
@@ -2489,17 +2507,17 @@ qreal Segment::spacing() const
 //    calculate the minimum distance to ns avoiding collisions
 //---------------------------------------------------------
 
-qreal Segment::minHorizontalCollidingDistance(Segment* ns) const
+double Segment::minHorizontalCollidingDistance(Segment* ns) const
 {
-    qreal w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
+    double w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
-        qreal d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx), score());
-        w       = qMax(w, d);
+        double d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx), score());
+        w       = std::max(w, d);
     }
     return w;
 }
 
-qreal Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
+double Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
 {
     System* segmentSystem = measure()->system();
     SysStaff* staffSystem = segmentSystem ? segmentSystem->staff(staffIndex) : nullptr;
@@ -2532,7 +2550,7 @@ qreal Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
     return topOffset;
 }
 
-qreal Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
+double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 {
     System* segmentSystem = measure()->system();
     SysStaff* staffSystem = segmentSystem ? segmentSystem->staff(staffIndex) : nullptr;
@@ -2579,9 +2597,9 @@ bool Segment::isMMRestSegment() const
 //    calculate the minimum layout distance to Segment ns
 //---------------------------------------------------------
 
-qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
+double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 {
-    qreal ww = -1000000.0;          // can remain negative
+    double ww = -1000000.0;          // can remain negative
     double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
         if (!isMMRestSegment() && !ns->isMMRestSegment()) {
@@ -2592,11 +2610,11 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
         // first chordrest of a staff should clear the widest header for any staff
         // so make sure segment is as wide as it needs to be
         if (systemHeaderGap) {
-            d = qMax(d, staffShape(staffIdx).right());
+            d = std::max(d, staffShape(staffIdx).right());
         }
-        ww      = qMax(ww, d);
+        ww      = std::max(ww, d);
     }
-    qreal w = qMax(ww, 0.0);        // non-negative
+    double w = std::max(ww, 0.0);        // non-negative
 
     if (isClefType() && ns && ns->isChordRestType()) {
         w = std::max(w, double(score()->styleMM(Sid::clefKeyRightMargin)));
@@ -2617,6 +2635,28 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
         double diff = w - minRight() - ns->minLeft();
         if (diff < absoluteMinHeaderDist) {
             w += absoluteMinHeaderDist - diff;
+        }
+    }
+
+    // Allocate space to ensure minimum length of "dangling" ties at start of system
+    if (systemHeaderGap && ns && ns->isChordRestType()) {
+        for (EngravingItem* e : ns->elist()) {
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            double headerTieMargin = score()->styleMM(Sid::HeaderToLineStartDistance);
+            for (Note* note : toChord(e)->notes()) {
+                if (!note->tieBack() || note->lineAttachPoints().empty()) {
+                    continue;
+                }
+                double tieStartPointX = minRight() + headerTieMargin;
+                double notePosX = w + note->pos().x() + toChord(e)->pos().x() + note->headWidth() / 2;
+                double tieEndPointX = notePosX + note->lineAttachPoints().at(0).pos().x();
+                double tieLength = tieEndPointX - tieStartPointX;
+                if (tieLength < score()->styleMM(Sid::MinTieLength)) {
+                    w += score()->styleMM(Sid::MinTieLength) - tieLength;
+                }
+            }
         }
     }
 

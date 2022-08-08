@@ -28,7 +28,7 @@
 using namespace mu::notation;
 
 NotationNavigator::NotationNavigator(QQuickItem* parent)
-    : NotationPaintView(parent)
+    : AbstractNotationPaintView(parent)
 {
     setReadonly(true);
 }
@@ -44,7 +44,7 @@ void NotationNavigator::load()
         update();
     });
 
-    NotationPaintView::load();
+    AbstractNotationPaintView::load();
 }
 
 bool NotationNavigator::isVerticalOrientation() const
@@ -235,7 +235,7 @@ void NotationNavigator::paint(QPainter* painter)
 
     TRACEFUNC;
 
-    NotationPaintView::paint(painter);
+    AbstractNotationPaintView::paint(painter);
 
     paintPageNumbers(painter);
     paintCursor(painter);

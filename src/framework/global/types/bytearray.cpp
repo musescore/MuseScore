@@ -27,72 +27,62 @@
 using namespace mu;
 
 ByteArray::ByteArray()
-    : m_size(0)
 {
+    m_data = std::make_shared<Data>();
+    m_data->resize(1);
+    m_data->operator [](0) = 0;
 }
 
 ByteArray::ByteArray(const uint8_t* data, size_t size)
-    : m_size(size)
 {
-    m_data.reset(new uint8_t[m_size + 1]);
-    m_data.get()[m_size] = 0;
-    std::memcpy(m_data.get(), data, m_size);
+    m_data = std::make_shared<Data>();
+    m_data->resize(size + 1);
+    m_data->operator [](size) = 0;
+    std::memcpy(&m_data->operator [](0), data, size);
 }
 
-ByteArray::ByteArray(const char* str)
+ByteArray::ByteArray(const char* str, size_t size)
 {
-    m_size = std::strlen(str);
-    m_data.reset(new uint8_t[m_size + 1]);
-    m_data.get()[m_size] = 0;
-    std::memcpy(m_data.get(), str, m_size);
+    size = (size == static_cast<size_t>(-1)) ? std::strlen(str) : size;
+    m_data = std::make_shared<Data>();
+    m_data->resize(size + 1);
+    m_data->operator [](size) = 0;
+    std::memcpy(&m_data->operator [](0), str, size);
 }
 
 ByteArray::ByteArray(size_t size)
-    : m_size(size)
 {
-    m_data.reset(new uint8_t[m_size + 1]);
-    m_data.get()[m_size] = 0;
+    m_data = std::make_shared<Data>();
+    m_data->resize(size + 1);
+    m_data->operator [](size) = 0;
 }
 
 ByteArray ByteArray::fromRawData(const uint8_t* data, size_t size)
 {
     ByteArray ba;
-    ba.m_size = size;
-    ba.m_rawData = data;
+    ba.m_raw.size = size;
+    ba.m_raw.data = data;
     return ba;
 }
 
-void ByteArray::detachRawDataIfNeed()
+ByteArray ByteArray::fromRawData(const char* data, size_t size)
 {
-    if (m_rawData) {
-        m_data.reset(new uint8_t[m_size + 1]);
-        m_data.get()[m_size] = 0;
-        std::memcpy(m_data.get(), m_rawData, m_size);
-        m_rawData = nullptr;
-    }
-}
-
-bool ByteArray::operator==(const ByteArray& other) const
-{
-    if (m_size != other.m_size) {
-        return false;
-    }
-    return std::memcmp(constData(), other.constData(), m_size) == 0;
+    return fromRawData(reinterpret_cast<const uint8_t*>(data), size);
 }
 
 uint8_t* ByteArray::data()
 {
-    detachRawDataIfNeed();
-    return m_data.get();
+    detach();
+    return m_data->empty() ? nullptr : &m_data->operator [](0);
 }
 
 const uint8_t* ByteArray::constData() const
 {
-    if (m_rawData) {
-        return m_rawData;
+    if (m_raw.data) {
+        return m_raw.data;
     }
 
-    return m_data.get();
+    return m_data->empty() ? nullptr : &m_data->operator [](0);
 }
 
 const char* ByteArray::constChar() const
@@ -102,7 +92,40 @@ const char* ByteArray::constChar() const
 
 size_t ByteArray::size() const
 {
-    return m_size;
+    if (m_raw.data) {
+        return m_raw.size;
+    }
+
+    return m_data->empty() ? 0 : (m_data->size() - 1);
+}
+
+void ByteArray::detach()
+{
+    if (!m_data) {
+        return;
+    }
+
+    if (m_raw.data) {
+        m_data->resize(m_raw.size + 1);
+        m_data->operator [](m_raw.size) = 0;
+        std::memcpy(&m_data->operator [](0), m_raw.data, m_raw.size);
+        m_raw.data = nullptr;
+        return;
+    }
+
+    if (m_data.use_count() == 1) {
+        return;
+    }
+
+    m_data = std::make_shared<Data>(*m_data);
+}
+
+bool ByteArray::operator==(const ByteArray& other) const
+{
+    if (size() != other.size()) {
+        return false;
+    }
+    return std::memcmp(constData(), other.constData(), size()) == 0;
 }
 
 bool ByteArray::empty() const
@@ -110,27 +133,31 @@ bool ByteArray::empty() const
     return size() == 0;
 }
 
-void ByteArray::resize(size_t nsize)
+void ByteArray::reserve(size_t nsize)
 {
-    if (nsize == m_size) {
+    if (nsize <= size()) {
         return;
     }
 
-    detachRawDataIfNeed();
+    detach();
+    m_data->reserve(nsize + 1);
+    m_data->operator [](nsize) = 0;
+}
 
-    uint8_t* nbyte = new uint8_t[nsize + 1];
-    nbyte[nsize] = 0;
-    if (m_data) {
-        size_t min = nsize < m_size ? nsize : m_size;
-        std::memcpy(nbyte, m_data.get(), min);
+void ByteArray::resize(size_t nsize)
+{
+    if (nsize == size()) {
+        return;
     }
-    m_size = nsize;
-    m_data.reset(nbyte);
+
+    detach();
+    m_data->resize(nsize + 1);
+    m_data->operator [](nsize) = 0;
 }
 
 void ByteArray::truncate(size_t pos)
 {
-    if (pos >= m_size) {
+    if (pos >= size()) {
         return;
     }
     resize(pos);
@@ -143,57 +170,31 @@ void ByteArray::clear()
 
 ByteArray& ByteArray::insert(size_t pos, uint8_t b)
 {
-    if (pos > m_size) {
+    if (pos > size()) {
         return *this;
     }
 
-    detachRawDataIfNeed();
-
-    if (!m_data && pos == 0) {
-        if (m_buffer_size == 0) {
-            m_buffer_size = 128;
-            m_data.reset(new uint8_t[m_buffer_size]);
-        }
-        m_size = 1;
-        m_data.get()[0] = b;
-        m_data.get()[1] = 0;
-        return *this;
-    }
-
-    if (m_size + 2 > m_buffer_size) {
-        m_buffer_size *= 2;
-        uint8_t* ndata = new uint8_t[m_buffer_size];
-        std::memcpy(ndata, m_data.get(), m_size + 1);
-        m_data.reset(ndata);
-    }
-
-    if (pos != m_size) {
-        std::memmove(&m_data.get()[pos + 1], &m_data.get()[pos], m_size - pos + 1);
-        m_data.get()[pos] = b;
-    } else {
-        m_data.get()[pos] = b;
-        m_data.get()[pos + 1] = 0;
-    }
-
-    m_size += 1;
+    detach();
+    m_data->insert(m_data->begin() + pos, b);
     return *this;
 }
 
 void ByteArray::push_back(uint8_t b)
 {
-    insert(m_size, b);
+    insert(size(), b);
 }
 
 void ByteArray::push_back(const uint8_t* b, size_t len)
 {
-    detachRawDataIfNeed();
-
-    uint8_t* nbyte = new uint8_t[m_size + len + 1];
-    nbyte[m_size + len] = 0;
-    std::memcpy(nbyte, m_data.get(), m_size);
-    std::memcpy(&nbyte[m_size], b, len);
-    m_data.reset(nbyte);
-    m_size += len;
+    detach();
+    size_t start = size();
+    size_t nsize = start + len;
+    Data& data = *m_data.get();
+    data.resize(nsize + 1);
+    m_data->operator [](nsize) = 0;
+    for (size_t i = 0; i < len; ++i) {
+        data[start + i] = b[i];
+    }
 }
 
 void ByteArray::push_back(const ByteArray& ba)
@@ -201,22 +202,27 @@ void ByteArray::push_back(const ByteArray& ba)
     push_back(ba.constData(), ba.size());
 }
 
-uint8_t ByteArray::operator[](size_t pos) const
+uint8_t ByteArray::at(size_t pos) const
 {
-    assert(pos < m_size);
-    if (pos < m_size) {
+    assert(pos < size());
+    if (pos < size()) {
         return constData()[pos];
     }
     return 0;
 }
 
+uint8_t ByteArray::operator[](size_t pos) const
+{
+    return at(pos);
+}
+
 uint8_t& ByteArray::operator[](size_t pos)
 {
-    detachRawDataIfNeed();
+    detach();
 
-    assert(pos < m_size);
-    if (pos < m_size) {
-        return m_data.get()[pos];
+    assert(pos < size());
+    if (pos < size()) {
+        return m_data->operator [](pos);
     }
 
     static uint8_t dummy;
@@ -225,10 +231,10 @@ uint8_t& ByteArray::operator[](size_t pos)
 
 ByteArray ByteArray::left(size_t len) const
 {
-    return ByteArray(m_data.get(), len);
+    return ByteArray(constData(), len);
 }
 
 ByteArray ByteArray::right(size_t len) const
 {
-    return ByteArray(&(m_data.get()[m_size - len]), len);
+    return ByteArray(&(constData()[size() - len]), len);
 }

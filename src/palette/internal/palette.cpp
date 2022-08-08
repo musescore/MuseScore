@@ -31,7 +31,7 @@
 #include "translation.h"
 #include "mimedatautils.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 #include "engraving/rw/xml.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/articulation.h"
@@ -101,14 +101,15 @@ Palette::Type Palette::contentType() const
     return t;
 }
 
-PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QString& name, qreal mag, const QString& tag)
+PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QString& name, qreal mag, const QPointF& offset,
+                                      const QString& tag)
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
         element->layout();
     }
 
-    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, tag, this);
+    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, offset, tag, this);
 
     auto cellHandler = cellHandlerByPaletteType(m_type);
     if (cellHandler) {
@@ -119,14 +120,20 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QStr
     return cell;
 }
 
-PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QString& tag)
+PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const TranslatableString& name, qreal mag,
+                                      const QPointF& offset, const QString& tag)
+{
+    return insertElement(idx, element, name.str, mag, offset, tag);
+}
+
+PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF& offset, const QString& tag)
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
         element->layout();
     }
 
-    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, tag, this);
+    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, offset, tag, this);
 
     auto cellHandler = cellHandlerByPaletteType(m_type);
     if (cellHandler) {
@@ -137,13 +144,21 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, q
     return cell;
 }
 
-PaletteCellPtr Palette::appendActionIcon(mu::engraving::ActionIconType type, actions::ActionCode code)
+PaletteCellPtr Palette::appendElement(ElementPtr element, const TranslatableString& name, qreal mag, const QPointF& offset,
+                                      const QString& tag)
+{
+    return appendElement(element, name.str, mag, offset, tag);
+}
+
+PaletteCellPtr Palette::appendActionIcon(ActionIconType type, actions::ActionCode code)
 {
     const ui::UiAction& action = actionsRegister()->action(code);
+    QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslated();
     auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
     icon->setActionType(type);
     icon->setAction(code, static_cast<char16_t>(action.iconCode));
-    return appendElement(icon, action.title);
+
+    return appendElement(icon, name);
 }
 
 bool Palette::insertCell(size_t idx, PaletteCellPtr cell)
@@ -307,12 +322,12 @@ bool Palette::read(XmlReader& e)
 
 QByteArray Palette::toMimeData() const
 {
-    return mu::engraving::toMimeData(this);
+    return ::toMimeData(this);
 }
 
 void Palette::write(XmlWriter& xml) const
 {
-    xml.startElement("Palette", { { "name", XmlWriter::xmlString(m_name) } });
+    xml.startElement("Palette", { { "name", m_name } });
     xml.tag("type", QMetaEnum::fromType<Type>().valueToKey(int(m_type)));
     xml.tag("gridWidth", m_gridSize.width());
     xml.tag("gridHeight", m_gridSize.height());
@@ -344,7 +359,7 @@ void Palette::write(XmlWriter& xml) const
 
 PalettePtr Palette::fromMimeData(const QByteArray& data)
 {
-    return mu::engraving::fromMimeData<Palette>(data, "Palette");
+    return ::fromMimeData<Palette>(data, "Palette");
 }
 
 bool Palette::readFromFile(const QString& p)
@@ -397,7 +412,7 @@ bool Palette::readFromFile(const QString& p)
     // load images
     //
     for (const QString& s : images) {
-        imageStore.add(s, f.fileData(s));
+        imageStore.add(s, f.fileData(s.toStdString()));
     }
 
     if (rootfile.isEmpty()) {
@@ -405,7 +420,7 @@ bool Palette::readFromFile(const QString& p)
         return false;
     }
 
-    ba = f.fileData(rootfile);
+    ba = f.fileData(rootfile.toStdString());
     e.setData(ba);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -445,7 +460,7 @@ bool Palette::writeToFile(const QString& p) const
     }
 
     ZipWriter f(path);
-    if (f.status() != ZipWriter::NoError) {
+    if (f.hasError()) {
         showWritingPaletteError(path);
         return false;
     }
@@ -472,7 +487,7 @@ bool Palette::writeToFile(const QString& p) const
     // save images
     for (ImageStoreItem* ip : images) {
         QString ipath = QString("Pictures/") + ip->hashName();
-        f.addFile(ipath, ip->buffer());
+        f.addFile(ipath.toStdString(), ip->buffer());
     }
     {
         Buffer cbuf1;
@@ -486,7 +501,7 @@ bool Palette::writeToFile(const QString& p) const
         f.addFile("palette.xml", cbuf1.data());
     }
     f.close();
-    if (f.status() != ZipWriter::NoError) {
+    if (f.hasError()) {
         showWritingPaletteError(path);
         return false;
     }
@@ -497,8 +512,8 @@ bool Palette::writeToFile(const QString& p) const
 
 void Palette::showWritingPaletteError(const QString& path) const
 {
-    std::string title = trc("palette", "Writing Palette File");
-    std::string message = qtrc("palette", "Writing Palette File\n%1\nfailed: ").arg(path).toStdString();
+    std::string title = trc("palette", "Writing Palette file");
+    std::string message = qtrc("palette", "Writing Palette file\n%1\nfailed.").arg(path).toStdString();
     interactive()->error(title, message);
 }
 

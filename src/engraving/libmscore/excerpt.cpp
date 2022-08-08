@@ -22,7 +22,6 @@
 
 #include "excerpt.h"
 
-#include <QRegularExpression>
 #include <list>
 
 #include "containers.h"
@@ -84,6 +83,26 @@ Excerpt::~Excerpt()
     delete m_excerptScore;
 }
 
+bool Excerpt::inited() const
+{
+    return m_inited;
+}
+
+void Excerpt::setInited(bool inited)
+{
+    m_inited = inited;
+}
+
+const ID& Excerpt::initialPartId() const
+{
+    return m_initialPartId;
+}
+
+void Excerpt::setInitialPartId(const ID& id)
+{
+    m_initialPartId = id;
+}
+
 void Excerpt::setExcerptScore(Score* s)
 {
     m_excerptScore = s;
@@ -134,8 +153,19 @@ bool Excerpt::isEmpty() const
     return excerptScore() ? excerptScore()->parts().empty() : true;
 }
 
+TracksMap& Excerpt::tracksMapping()
+{
+    updateTracksMapping();
+
+    return m_tracksMapping;
+}
+
 void Excerpt::setTracksMapping(const TracksMap& tracksMapping)
 {
+    if (m_tracksMapping == tracksMapping) {
+        return;
+    }
+
     m_tracksMapping = tracksMapping;
 
     for (Staff* staff : excerptScore()->staves()) {
@@ -143,14 +173,29 @@ void Excerpt::setTracksMapping(const TracksMap& tracksMapping)
         if (!masterStaff) {
             continue;
         }
-        staff->updateVisibilityVoices(masterStaff);
+        staff->updateVisibilityVoices(masterStaff, m_tracksMapping);
     }
 }
 
-void Excerpt::updateTracksMapping()
+void Excerpt::updateTracksMapping(bool voicesVisibilityChanged)
 {
+    Score* score = excerptScore();
+    if (!score) {
+        return;
+    }
+
     TracksMap tracks;
-    for (Staff* staff : excerptScore()->staves()) {
+
+    static std::vector<Staff*> staves;
+    if (staves == score->staves() && !voicesVisibilityChanged) {
+        return;
+    }
+
+    TRACEFUNC;
+
+    staves = score->staves();
+
+    for (Staff* staff : staves) {
         Staff* masterStaff = masterScore()->staffById(staff->id());
         if (!masterStaff) {
             continue;
@@ -189,7 +234,7 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
 
     // update tracks
     staff->setVoiceVisible(voiceIndex, visible);
-    updateTracksMapping();
+    updateTracksMapping(true /*voicesVisibilityChanged*/);
 
     // clone staff
     Staff* staffCopy = Factory::createStaff(staff->part());
@@ -227,19 +272,6 @@ void Excerpt::read(XmlReader& e)
     }
 }
 
-bool Excerpt::operator==(const Excerpt& other) const
-{
-    return m_masterScore == other.m_masterScore
-           && m_name == other.m_name
-           && m_parts == other.m_parts
-           && m_tracksMapping == other.m_tracksMapping;
-}
-
-bool Excerpt::operator!=(const Excerpt& other) const
-{
-    return !(*this == other);
-}
-
 void Excerpt::createExcerpt(Excerpt* excerpt)
 {
     MasterScore* masterScore = excerpt->masterScore();
@@ -255,7 +287,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
     score->setCurrentLayer(masterScore->currentLayer());
     score->layer().clear();
-    foreach (const Layer& l, masterScore->layer()) {
+    for (const Layer& l : masterScore->layer()) {
         score->layer().push_back(l);
     }
 
@@ -290,27 +322,34 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
     cloneStaves(masterScore, score, srcStaves, excerpt->tracksMapping());
 
-    // create excerpt title and title frame for all scores if not already there
-    MeasureBase* measure = masterScore->first();
+    MeasureBase* scoreMeasure = score->first();
 
-    if (!measure || !measure->isVBox()) {
-        LOGD("original score has no header frame");
-        masterScore->insertMeasure(ElementType::VBOX, measure);
-        measure = masterScore->first();
+    if (!scoreMeasure || !scoreMeasure->isVBox()) {
+        Score::InsertMeasureOptions options;
+        options.addToAllScores = false;
+
+        score->insertMeasure(ElementType::VBOX, scoreMeasure, options);
+        scoreMeasure = score->first();
     }
-    VBox* titleFrameScore = toVBox(measure);
 
-    measure = score->first();
-    Q_ASSERT(measure->isVBox());
+    VBox* titleFrameScore = toVBox(scoreMeasure);
 
-    VBox* titleFramePart = toVBox(measure);
-    titleFramePart->copyValues(titleFrameScore);
+    MeasureBase* masterMeasure = masterScore->first();
+    if (titleFrameScore && masterMeasure && masterMeasure->isVBox()) {
+        VBox* titleFrameMaster = toVBox(masterMeasure);
+
+        titleFrameScore->copyValues(titleFrameMaster);
+    }
+
     String partLabel = excerpt->name();
     if (!partLabel.empty()) {
-        Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
-        txt->setPlainText(partLabel);
-        measure->add(txt);
-        score->setMetaTag("partName", partLabel.toQString());
+        if (titleFrameScore) {
+            Text* txt = Factory::createText(titleFrameScore, TextStyleType::INSTRUMENT_EXCERPT);
+            txt->setPlainText(partLabel);
+            titleFrameScore->add(txt);
+        }
+
+        score->setMetaTag(u"partName", partLabel);
     }
 
     // initial layout of score
@@ -395,7 +434,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
 void MasterScore::deleteExcerpt(Excerpt* excerpt)
 {
-    Q_ASSERT(excerpt->masterScore() == this);
+    assert(excerpt->masterScore() == this);
     Score* partScore = excerpt->excerptScore();
 
     if (!partScore) {
@@ -448,21 +487,86 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
 
 void MasterScore::initAndAddExcerpt(Excerpt* excerpt, bool fakeUndo)
 {
-    Score* score = new Score(masterScore());
-    excerpt->setExcerptScore(score);
-    score->style().set(Sid::createMultiMeasureRests, true);
+    initExcerpt(excerpt);
+
     auto excerptCmd = new AddExcerpt(excerpt);
     if (fakeUndo) {
         excerptCmd->redo(nullptr);
     } else {
-        score->undo(excerptCmd);
+        excerpt->excerptScore()->undo(excerptCmd);
     }
+}
+
+void MasterScore::initExcerpt(Excerpt* excerpt)
+{
+    if (excerpt->inited()) {
+        excerpt->excerptScore()->doLayout();
+        return;
+    }
+
+    Score* score = new Score(masterScore());
+    excerpt->setExcerptScore(score);
+    score->style().set(Sid::createMultiMeasureRests, true);
+    initParts(excerpt);
+
     Excerpt::createExcerpt(excerpt);
+    excerpt->setInited(true);
+}
+
+void MasterScore::initParts(Excerpt* excerpt)
+{
+    int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
+    std::set<ID> assignedStavesIds;
+    for (Staff* excerptStaff : excerpt->excerptScore()->staves()) {
+        const LinkedObjects* ls = excerptStaff->links();
+        if (ls == 0) {
+            continue;
+        }
+
+        for (auto le : *ls) {
+            if (le->score() != this) {
+                continue;
+            }
+
+            Staff* linkedMasterStaff = toStaff(le);
+            if (mu::contains(assignedStavesIds, linkedMasterStaff->id())) {
+                continue;
+            }
+
+            Part* excerptPart = excerptStaff->part();
+            Part* masterPart = linkedMasterStaff->part();
+
+            //! NOTE: parts/staves of excerpt must have the same ID as parts/staves of the master score
+            //! In fact, excerpts are just viewers for the master score
+            excerptStaff->setId(linkedMasterStaff->id());
+            excerptPart->setId(masterPart->id());
+
+            assignedStavesIds.insert(linkedMasterStaff->id());
+
+            // For instruments with multiple staves, every staff will point to the
+            // same part. To prevent adding the same part several times to the excerpt,
+            // add only the part of the first staff pointing to the part.
+            if (!(--nstaves)) {
+                excerpt->parts().push_back(linkedMasterStaff->part());
+                nstaves = static_cast<int>(linkedMasterStaff->part()->nstaves());
+            }
+            break;
+        }
+    }
+
+    if (excerpt->tracksMapping().empty()) {   // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
+        excerpt->updateTracksMapping();
+    }
 }
 
 void MasterScore::initEmptyExcerpt(Excerpt* excerpt)
 {
+    if (excerpt->inited()) {
+        return;
+    }
+
     Excerpt::cloneMeasures(this, excerpt->excerptScore());
+    excerpt->setInited(true);
 }
 
 static bool scoreContainsSpanner(const Score* score, Spanner* spanner)
@@ -480,8 +584,8 @@ static bool scoreContainsSpanner(const Score* score, Spanner* spanner)
 
 static void cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_idx_t dstTrack2)
 {
-    // don’t clone voltas for track != 0
-    if (((s->isVolta() || s->isTextLine()) && s->systemFlag()) && s->track() != 0) {
+    // don’t clone system lines for track != 0
+    if (isSystemTextLine(s) && s->track() != 0) {
         return;
     }
 
@@ -529,6 +633,12 @@ static void cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_i
             LOGD("clone Slur: no end element");
         }
     }
+
+    if (!ns->startElement() && !ns->endElement()) {
+        delete ns;
+        return;
+    }
+
     score->undo(new AddElement(ns));
 }
 
@@ -697,7 +807,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                 // this staff is within span
                                 // calculate adjusted span for excerpt
                                 int oSpan = oSpan2 - oIdx;
-                                adjustedBarlineSpan = qMin(oSpan, static_cast<int>(score->nstaves()));
+                                adjustedBarlineSpan = std::min(oSpan, static_cast<int>(score->nstaves()));
                             } else {
                                 // this staff is not within span
                                 oe = nullptr;
@@ -953,7 +1063,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
         track_idx_t dstTrack  = mu::nidx;
         track_idx_t dstTrack2 = mu::nidx;
 
-        if ((s->isVolta() || s->isTextLine()) && s->systemFlag()) {
+        if (isSystemTextLine(s)) {
             //always export voltas to first staff in part
             dstTrack  = 0;
             dstTrack2 = 0;
@@ -1066,12 +1176,12 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
                     // remove lyrics from chord
                     // since only one set of lyrics is used with linked staves
-                    foreach (Lyrics* l, ncr->lyrics()) {
+                    for (Lyrics* l : ncr->lyrics()) {
                         if (l) {
                             l->unlink();
                         }
                     }
-                    qDeleteAll(ncr->lyrics());
+                    DeleteAll(ncr->lyrics());
                     ncr->lyrics().clear();
 
                     for (EngravingItem* e : seg->annotations()) {
@@ -1090,6 +1200,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                         // this should be same list excluded in Score::undoAddElement()
                         case ElementType::STAFF_TEXT:
                         case ElementType::SYSTEM_TEXT:
+                        case ElementType::TRIPLET_FEEL:
                         case ElementType::PLAYTECH_ANNOTATION:
                         case ElementType::FRET_DIAGRAM:
                         case ElementType::HARMONY:
@@ -1191,7 +1302,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
         staff_idx_t staffIdx = s->staffIdx();
         track_idx_t dstTrack = mu::nidx;
         track_idx_t dstTrack2 = mu::nidx;
-        if (!((s->isVolta() || s->isTextLine()) && s->systemFlag())) {
+        if (!isSystemTextLine(s)) {
             //export other spanner if staffidx matches
             if (srcStaffIdx == staffIdx) {
                 dstTrack = dstStaffIdx * VOICES + s->voice();
@@ -1333,6 +1444,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         // this should be same list excluded in Score::undoAddElement()
                         case ElementType::STAFF_TEXT:
                         case ElementType::SYSTEM_TEXT:
+                        case ElementType::TRIPLET_FEEL:
                         case ElementType::PLAYTECH_ANNOTATION:
                         case ElementType::FRET_DIAGRAM:
                         case ElementType::HARMONY:
@@ -1392,9 +1504,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         track_idx_t dstTrack = mu::nidx;
         track_idx_t dstTrack2 = mu::nidx;
 
-        bool isSystemLine = (s->isVolta() || (s->isTextLine() && s->systemFlag()));
-
-        if (isSystemLine) {
+        if (isSystemTextLine(s)) {
             if (!scoreContainsSpanner(score, s)) {
                 dstTrack = s->track();
                 dstTrack2 = s->track2();
@@ -1427,8 +1537,10 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
             excerpt->tracksMapping().insert({ i, j });
         }
 
-        QString name = formatName(part->partName(), result);
+        String name = formatName(part->partName(), result);
         excerpt->setName(name);
+        excerpt->setInitialPartId(part->id());
+
         result.push_back(excerpt);
     }
 
@@ -1443,27 +1555,29 @@ Excerpt* Excerpt::createExcerptFromPart(Part* part)
     return excerpt;
 }
 
-QString Excerpt::formatName(const QString& partName, const std::vector<Excerpt*>& excerptList)
+String Excerpt::formatName(const String& partName, const std::vector<Excerpt*>& excerptList)
 {
-    QString name = partName.simplified();
+    String name = partName.simplified();
     int count = 0;      // no of occurrences of partName
 
     for (Excerpt* e : excerptList) {
         // if <partName> already exists, change <partName> to <partName 1>
-        QString excName = e->name().toQString();
-        if (excName.compare(name) == 0) {
-            e->setName(excName + " 1");
+        String excName = e->name();
+        if (excName == name) {
+            e->setName(excName + u" 1");
         }
 
-        QRegularExpression regex("^(.+)\\s\\d+$");
-        QRegularExpressionMatch match = regex.match(excName);
-        if (match.hasMatch() && match.capturedTexts()[1] == name) {
+        std::string excNameU8 = excName.toStdString();
+        std::regex regex("^(.+)\\s\\d+$");
+        std::smatch match;
+        std::regex_search(excNameU8, match, regex);
+        if (!match.empty() && match[0].str() == name.toStdString()) {
             count++;
         }
     }
 
     if (count > 0) {
-        name += QString(" %1").arg(count + 1);
+        name += String(u" %1").arg(count + 1);
     }
 
     return name;

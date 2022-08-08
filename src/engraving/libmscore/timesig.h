@@ -51,8 +51,10 @@ enum class TimeSigType : char {
 
 class TimeSig final : public EngravingItem
 {
-    QString _numeratorString;       // calculated from actualSig() if !customText
-    QString _denominatorString;
+    OBJECT_ALLOCATOR(engraving, TimeSig)
+
+    String _numeratorString;       // calculated from actualSig() if !customText
+    String _denominatorString;
 
     SymIdList ns;
     SymIdList ds;
@@ -79,8 +81,8 @@ public:
 
     void setParent(Segment* parent);
 
-    QString ssig() const;
-    void setSSig(const QString&);
+    String ssig() const;
+    void setSSig(const String&);
 
     TimeSig* clone() const override { return new TimeSig(*this); }
 
@@ -89,7 +91,7 @@ public:
     bool operator==(const TimeSig&) const;
     bool operator!=(const TimeSig& ts) const { return !(*this == ts); }
 
-    qreal mag() const override;
+    double mag() const override;
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
@@ -114,11 +116,11 @@ public:
     bool showCourtesySig() const { return _showCourtesySig; }
     void setShowCourtesySig(bool v) { _showCourtesySig = v; }
 
-    QString numeratorString() const { return _numeratorString; }
-    void setNumeratorString(const QString&);
+    String numeratorString() const { return _numeratorString; }
+    void setNumeratorString(const String&);
 
-    QString denominatorString() const { return _denominatorString; }
-    void setDenominatorString(const QString&);
+    String denominatorString() const { return _denominatorString; }
+    void setDenominatorString(const String&);
 
     void setLargeParentheses(bool v) { _largeParentheses = v; }
 
@@ -129,7 +131,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
 
     const Groups& groups() const { return _groups; }
     void setGroups(const Groups& e) { _groups = e; }
@@ -141,7 +142,7 @@ public:
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 
 protected:
     void added() override;

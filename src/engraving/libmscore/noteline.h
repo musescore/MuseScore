@@ -34,6 +34,8 @@ class Note;
 
 class NoteLine final : public TextLineBase
 {
+    OBJECT_ALLOCATOR(engraving, NoteLine)
+
     Note* _startNote;
     Note* _endNote;
 

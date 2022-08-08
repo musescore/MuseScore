@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_CHORDLIST_H
 
 #include <functional>
-#include <QString>
+#include "types/string.h"
 
 namespace mu::engraving {
 class XmlReader;
@@ -42,7 +42,7 @@ public:
 private:
     Score* m_score = nullptr;
     bool m_chordListTag = false;
-    QString m_oldChordDescriptionFile;
+    String m_oldChordDescriptionFile;
 };
 }
 

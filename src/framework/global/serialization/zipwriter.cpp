@@ -21,10 +21,8 @@
  */
 #include "zipwriter.h"
 
-#include <QBuffer>
-
+#include "internal/zipcontainer.h"
 #include "io/file.h"
-#include "internal/qzipwriter_p.h"
 
 #include "log.h"
 
@@ -32,9 +30,7 @@ using namespace mu;
 
 struct ZipWriter::Impl
 {
-    MQZipWriter* zip = nullptr;
-    QByteArray data;
-    QBuffer buf;
+    ZipContainer* zip = nullptr;
     bool isClosed = false;
 };
 
@@ -47,18 +43,14 @@ ZipWriter::ZipWriter(const io::path_t& filePath)
     }
 
     m_impl = new Impl();
-    m_impl->buf.setBuffer(&m_impl->data);
-    m_impl->buf.open(QIODevice::WriteOnly);
-    m_impl->zip = new MQZipWriter(&m_impl->buf);
+    m_impl->zip = new ZipContainer(m_device);
 }
 
 ZipWriter::ZipWriter(io::IODevice* device)
 {
     m_device = device;
     m_impl = new Impl();
-    m_impl->buf.setBuffer(&m_impl->data);
-    m_impl->buf.open(QIODevice::WriteOnly);
-    m_impl->zip = new MQZipWriter(&m_impl->buf);
+    m_impl->zip = new ZipContainer(m_device);
 }
 
 ZipWriter::~ZipWriter()
@@ -75,10 +67,6 @@ ZipWriter::~ZipWriter()
 
 void ZipWriter::flush()
 {
-    if (m_device) {
-        m_device->seek(0);
-        m_device->write(m_impl->data);
-    }
 }
 
 void ZipWriter::close()
@@ -96,13 +84,13 @@ void ZipWriter::close()
     m_impl->isClosed = true;
 }
 
-ZipWriter::Status ZipWriter::status() const
+bool ZipWriter::hasError() const
 {
-    return static_cast<Status>(m_impl->zip->status());
+    return m_impl->zip->status() != ZipContainer::NoError;
 }
 
-void ZipWriter::addFile(const QString& fileName, const ByteArray& data)
+void ZipWriter::addFile(const std::string& fileName, const ByteArray& data)
 {
-    m_impl->zip->addFile(fileName, data.toQByteArrayNoCopy());
+    m_impl->zip->addFile(fileName, data);
     flush();
 }

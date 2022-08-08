@@ -24,22 +24,26 @@
 
 #include <cstdint>
 #include <memory>
+#include <vector>
 
-//#ifndef NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
 #include <QByteArray>
-//#endif
+#endif
 
 namespace mu {
 class ByteArray
 {
 public:
+    typedef uint8_t value_type;
+
     ByteArray();
     ByteArray(const uint8_t* data, size_t size);
-    ByteArray(const char* str);
+    ByteArray(const char* str, size_t size = static_cast<size_t>(-1));
     ByteArray(size_t size);
 
     //! NOTE Not coped!!!
     static ByteArray fromRawData(const uint8_t* data, size_t size);
+    static ByteArray fromRawData(const char* data, size_t size);
 
     bool operator==(const ByteArray& other) const;
     bool operator!=(const ByteArray& other) const { return !operator==(other); }
@@ -54,9 +58,12 @@ public:
     void push_back(uint8_t b);
     void push_back(const uint8_t* b, size_t len);
     void push_back(const ByteArray& ba);
+
+    uint8_t at(size_t pos) const;
     uint8_t operator[](size_t pos) const;
     uint8_t& operator[](size_t pos);
 
+    void reserve(size_t nsize);
     void resize(size_t nsize);
     void truncate(size_t pos);
     void clear();
@@ -64,7 +71,7 @@ public:
     ByteArray left(size_t len) const;
     ByteArray right(size_t len) const;
 
-//#ifndef NO_QT_SUPPORT
+#ifndef NO_QT_SUPPORT
     static ByteArray fromQByteArray(const QByteArray& ba)
     {
         return ByteArray(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
@@ -85,16 +92,19 @@ public:
         return QByteArray::fromRawData(reinterpret_cast<const char*>(constData()), static_cast<int>(size()));
     }
 
-//#endif
+#endif
 
 private:
+    using Data = std::vector<uint8_t>;
+    struct RawData {
+        const uint8_t* data = nullptr;
+        size_t size = 0;
+    };
 
-    void detachRawDataIfNeed();
+    void detach();
 
-    std::shared_ptr<uint8_t> m_data;
-    const uint8_t* m_rawData = nullptr;
-    size_t m_size = 0;
-    size_t m_buffer_size = 0;
+    std::shared_ptr<Data> m_data;
+    RawData m_raw;
 };
 }
 

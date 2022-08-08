@@ -138,6 +138,7 @@ static const QList<mu::engraving::ElementType> TEXT_ELEMENT_TYPES = {
     mu::engraving::ElementType::TEXT,
     mu::engraving::ElementType::STAFF_TEXT,
     mu::engraving::ElementType::SYSTEM_TEXT,
+    mu::engraving::ElementType::TRIPLET_FEEL,
     mu::engraving::ElementType::DYNAMIC,
     mu::engraving::ElementType::FIGURED_BASS,
     mu::engraving::ElementType::FINGERING,
@@ -150,7 +151,8 @@ static const QList<mu::engraving::ElementType> TEXT_ELEMENT_TYPES = {
     mu::engraving::ElementType::REHEARSAL_MARK,
     mu::engraving::ElementType::STICKING,
     mu::engraving::ElementType::TEMPO_TEXT,
-    mu::engraving::ElementType::TUPLET
+    mu::engraving::ElementType::TUPLET,
+    mu::engraving::ElementType::PLAYTECH_ANNOTATION
 };
 }
 

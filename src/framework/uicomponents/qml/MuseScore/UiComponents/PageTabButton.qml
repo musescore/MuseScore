@@ -30,6 +30,7 @@ RadioDelegate {
 
     property Component iconComponent: null
     property string title: ""
+    property bool iconOnly: false
 
     property int orientation: Qt.Vertical
     readonly property bool isVertical: orientation === Qt.Vertical
@@ -148,6 +149,8 @@ RadioDelegate {
                 horizontalAlignment: Text.AlignLeft
                 font: root.normalStateFont
                 text: root.title
+
+                visible: !root.iconOnly
             }
         }
     }

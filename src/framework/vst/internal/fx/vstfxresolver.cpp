@@ -77,13 +77,11 @@ void VstFxResolver::refresh()
 
 VstFxPtr VstFxResolver::createMasterFx(const audio::AudioFxParams& fxParams) const
 {
-    PluginModulePtr modulePtr = pluginModulesRepo()->pluginModule(fxParams.resourceMeta.id);
-
-    IF_ASSERT_FAILED(modulePtr) {
+    if (!pluginModulesRepo()->exists(fxParams.resourceMeta.id)) {
         return nullptr;
     }
 
-    VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(modulePtr);
+    VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(fxParams.resourceMeta.id);
     pluginsRegister()->registerMasterFxPlugin(fxParams.resourceMeta.id, fxParams.chainOrder, pluginPtr);
 
     pluginPtr->load();
@@ -96,16 +94,14 @@ VstFxPtr VstFxResolver::createMasterFx(const audio::AudioFxParams& fxParams) con
 
 VstFxPtr VstFxResolver::createTrackFx(const audio::TrackId trackId, const audio::AudioFxParams& fxParams) const
 {
-    PluginModulePtr modulePtr = pluginModulesRepo()->pluginModule(fxParams.resourceMeta.id);
-
-    if (!modulePtr) {
+    if (!pluginModulesRepo()->exists(fxParams.resourceMeta.id)) {
         LOGE() << "Unable to create VST plugin"
                << ", pluginId: " << fxParams.resourceMeta.id
                << ", trackId: " << trackId;
         return nullptr;
     }
 
-    VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(modulePtr);
+    VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(fxParams.resourceMeta.id);
     pluginsRegister()->registerFxPlugin(trackId, fxParams.resourceMeta.id, fxParams.chainOrder, pluginPtr);
 
     pluginPtr->load();

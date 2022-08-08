@@ -23,11 +23,10 @@
 #ifndef __INSTRUMENT_H__
 #define __INSTRUMENT_H__
 
-#include <QtGlobal>
-#include <QString>
 #include <list>
 
 #include "containers.h"
+#include "types/string.h"
 
 #include "stringdata.h"
 #include "mscore.h"
@@ -53,19 +52,22 @@ class Synthesizer;
 
 class StaffName
 {
-    QString _name;      // html string
+    String _name;      // html string
     int _pos = 0;       // even number -> between staves
 
 public:
-    StaffName() {}
-    StaffName(const QString& s, int p=0);
+    StaffName() = default;
+    StaffName(const String& xmlText, int pos = 0);
+
+    String toPlainText() const;
+    static StaffName fromPlainText(const String& plainText, int pos = 0);
 
     bool operator==(const StaffName&) const;
-    QString toString() const;
+    String toString() const;
     void read(XmlReader&);
     void write(XmlWriter& xml, const char* name) const;
     int pos() const { return _pos; }
-    QString name() const { return _name; }
+    String name() const { return _name; }
 };
 
 //---------------------------------------------------------
@@ -74,9 +76,10 @@ public:
 
 class StaffNameList : public std::list<StaffName>
 {
+    OBJECT_ALLOCATOR(engraving, StaffNameList)
 public:
     void write(XmlWriter& xml, const char* name) const;
-    std::list<QString> toStringList() const;
+    std::list<String> toStringList() const;
 };
 
 //---------------------------------------------------------
@@ -98,15 +101,15 @@ struct NamedEventList {
 //---------------------------------------------------------
 
 struct MidiArticulation {
-    QString name;
-    QString descr;
+    String name;
+    String descr;
     int velocity = 0;         // velocity change: -100% - +100%
     int gateTime = 0;         // gate time change: -100% - +100%
     void write(XmlWriter&) const;
     void read(XmlReader&);
 
     MidiArticulation() {}
-    MidiArticulation(const QString& n, const QString& d, int v, int g)
+    MidiArticulation(const String& n, const String& d, int v, int g)
         : name(n), descr(d), velocity(v), gateTime(g) {}
     bool operator==(const MidiArticulation& i) const;
 };
@@ -119,13 +122,12 @@ class InstrChannel
 {
     // this are the indexes of controllers which are always present in
     // Channel init EventList (maybe zero)
-    QString _name;
-    QString _descr;
+    String _name;
 
     static const int DEFAULT_COLOR = 0x3399ff;
     int _color;    //rgb
 
-    QString _synti;
+    String _synti;
 
     char _volume;
     char _pan;
@@ -160,7 +162,7 @@ public:
     };
 
     enum class Prop : char {
-        VOLUME, PAN, CHORUS, REVERB, NAME, DESCR, PROGRAM, BANK, COLOR,
+        VOLUME, PAN, CHORUS, REVERB, NAME, PROGRAM, BANK, COLOR,
         SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL, USER_BANK_CONTROL
     };
 
@@ -171,12 +173,10 @@ private:
 public:
     std::vector<MidiCoreEvent>& initList() const;
 
-    QString name() const { return _name; }
-    void setName(const QString& value);
-    QString descr() const { return _descr; }
-    void setDescr(const QString& value);
-    QString synti() const { return _synti; }
-    void setSynti(const QString& value);
+    String name() const { return _name; }
+    void setName(const String& value);
+    String synti() const { return _synti; }
+    void setSynti(const String& value);
     int color() const { return _color; }
     void setColor(int value);
 
@@ -207,7 +207,7 @@ public:
     bool userBankController() const { return _userBankController; }
     void setUserBankController(bool val);
 
-    bool isHarmonyChannel() const { return _name == InstrChannel::HARMONY_NAME; }
+    bool isHarmonyChannel() const { return _name == String::fromUtf8(InstrChannel::HARMONY_NAME); }
 
     std::list<NamedEventList> midiActions;
     std::vector<MidiArticulation> articulation;
@@ -231,6 +231,7 @@ public:
 
 class ChannelListener : public Listener<InstrChannel::Prop>
 {
+    OBJECT_ALLOCATOR(engraving, ChannelListener)
 public:
     virtual void propertyChanged(InstrChannel::Prop property) = 0;
     void setNotifier(InstrChannel* ch)
@@ -294,7 +295,7 @@ enum class TraitType
 
 struct Trait
 {
-    QString name;
+    String name;
 
     TraitType type = TraitType::Unknown;
 
@@ -312,15 +313,15 @@ class Instrument
 {
     StaffNameList _longNames;
     StaffNameList _shortNames;
-    QString _trackName;
-    QString _id;
+    String _trackName;
+    String _id;
 
     int _minPitchA = 0;
     int _maxPitchA = 0;
     int _minPitchP = 0;
     int _maxPitchP = 0;
     Interval _transpose;
-    QString _instrumentId;
+    String _instrumentId;
 
     bool _useDrumset = false;
     Drumset* _drumset = nullptr;
@@ -336,21 +337,21 @@ class Instrument
     Trait _trait;
 
 public:
-    Instrument(QString id = "");
+    Instrument(String id = String());
     Instrument(const Instrument&);
     ~Instrument();
 
     void read(XmlReader&, Part* part);
     bool readProperties(XmlReader&, Part*, bool* customDrumset);
     void write(XmlWriter& xml, const Part* part) const;
-    NamedEventList* midiAction(const QString& s, int channel) const;
-    int channelIdx(const QString& s) const;
-    void updateVelocity(int* velocity, int channel, const QString& name);
-    qreal getVelocityMultiplier(const QString& name);
-    void updateGateTime(int* gateTime, int channelIdx, const QString& name);
+    NamedEventList* midiAction(const String& s, int channel) const;
+    int channelIdx(const String& s) const;
+    void updateVelocity(int* velocity, int channel, const String& name);
+    double getVelocityMultiplier(const String& name);
+    void updateGateTime(int* gateTime, int channelIdx, const String& name);
 
-    QString recognizeInstrumentId() const;
-    QString recognizeId() const;
+    String recognizeInstrumentId() const;
+    String recognizeId() const;
     int recognizeMidiProgram() const;
 
     void operator=(const Instrument&);
@@ -359,17 +360,17 @@ public:
 
     bool isDifferentInstrument(const Instrument& i) const;
 
-    QString id() const { return _id; }
-    QString family() const;
-    void setId(const QString& id) { _id = id; }
+    String id() const { return _id; }
+    String family() const;
+    void setId(const String& id) { _id = id; }
     void setMinPitchP(int v) { _minPitchP = v; }
     void setMaxPitchP(int v) { _maxPitchP = v; }
     void setMinPitchA(int v) { _minPitchA = v; }
     void setMaxPitchA(int v) { _maxPitchA = v; }
     Interval transpose() const { return _transpose; }
     void setTranspose(const Interval& v) { _transpose = v; }
-    QString instrumentId() { return _instrumentId; }
-    void setInstrumentId(const QString& instrumentId) { _instrumentId = instrumentId; }
+    String instrumentId() { return _instrumentId; }
+    void setInstrumentId(const String& instrumentId) { _instrumentId = instrumentId; }
 
     void setDrumset(const Drumset* ds);
     const Drumset* drumset() const { return _drumset; }
@@ -399,8 +400,8 @@ public:
     const StringData* stringData() const { return &_stringData; }
     void setStringData(const StringData& d) { _stringData.set(d); }
 
-    void setLongName(const QString& f);
-    void setShortName(const QString& f);
+    void setLongName(const String& f);
+    void setShortName(const String& f);
 
     void addLongName(const StaffName& f);
     void addShortName(const StaffName& f);
@@ -409,17 +410,19 @@ public:
     int maxPitchP() const;
     int minPitchA() const;
     int maxPitchA() const;
-    QString instrumentId() const;
+    String instrumentId() const;
 
     const std::list<StaffName>& longNames() const;
     const std::list<StaffName>& shortNames() const;
     std::list<StaffName>& longNames();
     std::list<StaffName>& shortNames();
 
-    QString trackName() const;
-    void setTrackName(const QString& s);
-    QString name() const;
-    QString abbreviature() const;
+    String trackName() const;
+    void setTrackName(const String& s);
+    String nameAsXmlText() const;
+    String nameAsPlainText() const;
+    String abbreviatureAsXmlText() const;
+    String abbreviatureAsPlainText() const;
     static Instrument fromTemplate(const InstrumentTemplate* t);
 
     Trait trait() const;
@@ -440,6 +443,8 @@ public:
 
 class InstrumentList : public std::map<const int, Instrument*>
 {
+    OBJECT_ALLOCATOR(engraving, InstrumentList)
+
     static Instrument defaultInstrument;
 
 public:

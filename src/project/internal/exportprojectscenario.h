@@ -31,9 +31,10 @@
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "io/ifilesystem.h"
+#include "async/asyncable.h"
 
 namespace mu::project {
-class ExportProjectScenario : public IExportProjectScenario
+class ExportProjectScenario : public IExportProjectScenario, public async::Asyncable
 {
     INJECT(project, IProjectConfiguration, configuration)
     INJECT(project, framework::IInteractive, interactive)
@@ -47,6 +48,10 @@ public:
 
     bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
                       project::INotationWriter::UnitType unitType, bool openDestinationFolderOnExport = false) const override;
+
+    framework::Progress progress() const override;
+
+    void abort() override;
 
 private:
     enum class FileConflictPolicy {
@@ -66,11 +71,14 @@ private:
     bool shouldReplaceFile(const QString& filename) const;
     bool askForRetry(const QString& filename) const;
 
-    bool doExportLoop(const io::path_t& path, std::function<bool(io::Device&)> exportFunction) const;
+    bool doExportLoop(const io::path_t& path, std::function<bool(QIODevice&)> exportFunction) const;
+
+    void showExportProgressIfNeed() const;
 
     void openFolder(const io::path_t& path) const;
 
     mutable FileConflictPolicy m_fileConflictPolicy;
+    mutable INotationWriterPtr m_currentWriter;
 };
 }
 

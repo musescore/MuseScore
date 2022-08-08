@@ -21,6 +21,7 @@
  */
 #include "measurerw.h"
 
+#include "translation.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
 
@@ -46,6 +47,7 @@
 #include "../libmscore/keysig.h"
 #include "../libmscore/stafftext.h"
 #include "../libmscore/ambitus.h"
+#include "../libmscore/textlinebase.h"
 #include "../libmscore/dynamic.h"
 
 #include "../libmscore/score.h"
@@ -61,7 +63,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
         return;
     }
 
-    qreal _spatium = measure->spatium();
+    double _spatium = measure->spatium();
     ctx.setCurrentMeasure(measure);
     int nextTrack = staffIdx * VOICES;
     ctx.setTrack(nextTrack);
@@ -82,11 +84,12 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
         if (sl.size() == 2) {
             measure->_len = Fraction(sl.at(0).toInt(), sl.at(1).toInt());
         } else {
-            LOGD("illegal measure size <%s>", qPrintable(e.attribute("len")));
+            LOGD("illegal measure size <%s>", muPrintable(e.attribute("len")));
         }
         irregular = true;
         if (measure->_len.numerator() <= 0 || measure->_len.denominator() <= 0 || measure->_len.denominator() > 128) {
-            e.raiseError(QObject::tr("MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(measure->_len.toString()));
+            e.raiseError(mtrc("engraving",
+                              "MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(measure->_len.toString()));
             return;
         }
         ctx.sigmap()->add(measure->tick().ticks(), SigEvent(measure->_len, measure->m_timesig));
@@ -550,7 +553,7 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
 {
     if (MScore::debugMode) {
         const int mno = measure->no() + 1;
-        xml.comment(QString("Measure %1").arg(mno));
+        xml.comment(String(u"Measure %1").arg(mno));
     }
     if (measure->_len != measure->m_timesig) {
         // this is an irregular measure
@@ -578,7 +581,7 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
         measure->writeProperty(xml, Pid::NO_OFFSET);
         measure->writeProperty(xml, Pid::MEASURE_NUMBER_MODE);
     }
-    qreal _spatium = measure->spatium();
+    double _spatium = measure->spatium();
     MStaff* mstaff = measure->m_mstaves[staff];
     if (mstaff->noText() && !mstaff->noText()->generated()) {
         mstaff->noText()->write(xml);
@@ -615,29 +618,32 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
         if (e->generated()) {
             continue;
         }
+
         bool writeSystem = writeSystemElements;
         if (e->systemFlag()) {
             ElementType et = e->type();
             if ((et == ElementType::REHEARSAL_MARK)
                 || (et == ElementType::SYSTEM_TEXT)
+                || (et == ElementType::TRIPLET_FEEL)
                 || (et == ElementType::PLAYTECH_ANNOTATION)
                 || (et == ElementType::JUMP)
                 || (et == ElementType::MARKER)
                 || (et == ElementType::TEMPO_TEXT)
-                || (et == ElementType::VOLTA)
-                || (et == ElementType::TEXTLINE && e->systemFlag())) {
+                || isSystemTextLine(e)) {
                 writeSystem = (e->staffIdx() == staff); // always show these on appropriate staves
             }
         }
+
         if (e->staffIdx() != staff) {
-            if (e->systemFlag() && !writeSystem) {
+            if (!e->systemFlag() || (e->systemFlag() && !writeSystem)) {
                 continue;
             }
         }
+
         e->write(xml);
     }
-    Q_ASSERT(measure->first());
-    Q_ASSERT(measure->last());
+    assert(measure->first());
+    assert(measure->last());
     if (measure->first() && measure->last()) {
         measure->score()->writeSegments(xml, strack, etrack, measure->first(), measure->last()->next1(), writeSystemElements, forceTimeSig);
     }

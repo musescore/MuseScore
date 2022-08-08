@@ -23,6 +23,7 @@
 #ifndef __CONNECTOR_H__
 #define __CONNECTOR_H__
 
+#include "global/allocator.h"
 #include "location.h"
 #include "types.h"
 
@@ -44,6 +45,8 @@ class XmlWriter;
 
 class ConnectorInfo
 {
+    OBJECT_ALLOCATOR(engraving, ConnectorInfo)
+
     const EngravingItem* _current    { 0 };
     bool _currentUpdated       { false };
     const Score* _score;
@@ -75,6 +78,7 @@ protected:
 public:
     ConnectorInfo(const EngravingItem* current, int track = -1, Fraction = { -1, 1 });
     ConnectorInfo(const Score* score, const Location& currentLocation);
+    virtual ~ConnectorInfo() = default;
 
     ConnectorInfo* prev() const { return _prev; }
     ConnectorInfo* next() const { return _next; }
@@ -105,6 +109,8 @@ public:
 
 class ConnectorInfoReader final : public ConnectorInfo
 {
+    OBJECT_ALLOCATOR(engraving, ConnectorInfoReader)
+
     XmlReader* _reader;
     EngravingItem* _connector;
     EngravingObject* _connectorReceiver;
@@ -139,6 +145,8 @@ public:
 
 class ConnectorInfoWriter : public ConnectorInfo
 {
+    OBJECT_ALLOCATOR(engraving, ConnectorInfoWriter)
+
     XmlWriter* _xml;
 
 protected:
@@ -148,6 +156,7 @@ protected:
 
 public:
     ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* current, const EngravingItem* connector, int track = -1, Fraction = { -1, 1 });
+    virtual ~ConnectorInfoWriter() = default;
 
     ConnectorInfoWriter* prev() const { return static_cast<ConnectorInfoWriter*>(_prev); }
     ConnectorInfoWriter* next() const { return static_cast<ConnectorInfoWriter*>(_next); }

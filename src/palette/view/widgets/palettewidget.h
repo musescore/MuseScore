@@ -89,8 +89,10 @@ public:
     PaletteCellPtr cellAt(size_t index) const;
     mu::engraving::ElementPtr elementForCellAt(int idx) const;
 
-    PaletteCellPtr insertElement(int idx, mu::engraving::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
-    PaletteCellPtr appendElement(mu::engraving::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
+    PaletteCellPtr insertElement(int idx, mu::engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
+                                 const QPointF offset = QPointF(), const QString& tag = "");
+    PaletteCellPtr appendElement(mu::engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
+                                 const QPointF offset = QPointF(), const QString& tag = "");
     PaletteCellPtr appendActionIcon(mu::engraving::ActionIconType type, actions::ActionCode code);
 
     void clear();

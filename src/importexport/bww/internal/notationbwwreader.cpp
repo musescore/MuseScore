@@ -28,11 +28,11 @@ using namespace mu::iex::bww;
 using namespace mu::engraving;
 
 namespace mu::iex::bww {
-extern Score::FileError importBww(MasterScore*, const QString& name);
+extern Err importBww(MasterScore*, const QString& name);
 }
 
 mu::Ret NotationBwwReader::read(MasterScore* score, const io::path_t& path, const Options&)
 {
-    Score::FileError err = importBww(score, path.toQString());
-    return scoreFileErrorToRet(err, path);
+    Err err = importBww(score, path.toQString());
+    return make_ret(err, path);
 }

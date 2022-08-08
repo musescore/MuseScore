@@ -22,6 +22,7 @@ namespace mu::engraving {
 class GPDomModel
 {
 public:
+
     GPDomModel() = default;
     virtual ~GPDomModel() = default;
 

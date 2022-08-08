@@ -26,7 +26,7 @@
 #include "async/notification.h"
 #include "async/channel.h"
 #include "async/notifylist.h"
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::notation {
 class INotationParts
@@ -69,8 +69,8 @@ public:
     virtual void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) = 0;
     virtual void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) = 0;
 
-    virtual void appendStaff(Staff* staff, const ID& destinationPartId) = 0;
-    virtual void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) = 0;
+    virtual bool appendStaff(Staff* staff, const ID& destinationPartId) = 0;
+    virtual bool appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) = 0;
 
     virtual void insertPart(Part* part, size_t index) = 0;
 

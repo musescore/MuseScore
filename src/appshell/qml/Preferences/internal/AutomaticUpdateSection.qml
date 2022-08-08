@@ -27,11 +27,11 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Automatic update check")
+    title: qsTrc("appshell/preferences", "Automatic update check")
 
     property bool isAppUpdatable: true
     property alias needCheckForNewAppVersion: needCheckBox.checked
-    property var museScorePrivacyPolicyUrl: null
+    property string museScorePrivacyPolicyUrl
 
     signal needCheckForNewAppVersionChangeRequested(bool check)
 
@@ -39,7 +39,7 @@ BaseSection {
         id: needCheckBox
         width: parent.width
 
-        text: qsTrc("appshell", "Check to see if a new version of MuseScore is available")
+        text: qsTrc("appshell/preferences", "Check to see if a new version of MuseScore is available")
 
         visible: root.isAppUpdatable
 
@@ -54,14 +54,11 @@ BaseSection {
 
     StyledTextLabel {
         width: parent.width
-        text: {
-            var message = qsTrc("appshell", "Update checking requires network access. In order to protect your privacy, MuseScore \
-                          does not store any personal information. See our %1 for more info.")
-            var museScorePrivacyPolicyUrl = root.museScorePrivacyPolicyUrl
-            return message
-            .arg("<a href='" + museScorePrivacyPolicyUrl.url + "'>" + museScorePrivacyPolicyUrl.displayName + "</a>")
-            .replace("\n", "<br>")
-        }
+
+        text: qsTrc("appshell/preferences", "Update checking requires network access. In order to protect your privacy, MuseScore does not store any personal information. See our <a href=\"%1\">privacy policy</a> for more info.")
+              .arg(root.museScorePrivacyPolicyUrl)
+              .replace("\n", "<br>")
+
         horizontalAlignment: Qt.AlignLeft
         wrapMode: Text.WordWrap
         maximumLineCount: 3

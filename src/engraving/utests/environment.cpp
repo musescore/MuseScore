@@ -24,22 +24,29 @@
 
 #include "engraving/engravingmodule.h"
 #include "engraving/libmscore/engravingitem.h"
-#include "framework/fonts/fontsmodule.h"
+#include "fonts/fontsmodule.h"
+#include "draw/drawmodule.h"
 
-#include "libmscore/masterscore.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
 #include "mocks/engravingconfigurationmock.h"
+
+#include "utils/scorerw.h"
 
 #include "log.h"
 
 static mu::testing::SuiteEnvironment engraving_se(
 {
+    new mu::draw::DrawModule(),
     new mu::fonts::FontsModule(),
     new mu::engraving::EngravingModule()
 },
     []() {
     LOGI() << "engraving tests suite post init";
+
+    mu::engraving::ScoreRW::setRootPath(mu::String::fromUtf8(engraving_utests_DATA_ROOT));
+
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::noGui = true;
 

@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_MASTERSCORE_H
 #define MU_ENGRAVING_MASTERSCORE_H
 
-#include "infrastructure/io/ifileinfoprovider.h"
+#include "infrastructure/ifileinfoprovider.h"
 
 #include "score.h"
 #include "instrument.h"
@@ -76,6 +76,8 @@ public:
 
 class MasterScore : public Score
 {
+    OBJECT_ALLOCATOR(engraving, MasterScore)
+
     UndoStack* _undoStack = nullptr;
     TimeSigMap* _sigmap;
     TempoMap* _tempomap;
@@ -86,7 +88,6 @@ class MasterScore : public Score
     std::vector<Excerpt*> _excerpts;
     std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
     Score* _playbackScore = nullptr;
-    Revisions* _revisions;
 
     bool _readOnly = false;
 
@@ -95,15 +96,15 @@ class MasterScore : public Score
     Fraction _pos[3];                      ///< 0 - current, 1 - left loop, 2 - right loop
 
     int _midiPortCount = 0;                           // A count of ALSA midi out ports
-    QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
+//    QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
     std::list<MidiInputEvent> _activeMidiPitches;     // MIDI keys currently being held down
     std::vector<MidiMapping> _midiMapping;
     bool isSimpleMidiMapping = false;                 // midi mapping is simple if all ports and channels
                                                       // don't decrease and don't have gaps
-    QSet<int> occupiedMidiChannels;                   // each entry is port*16+channel, port range: 0-inf, channel: 0-15
+    std::set<int> occupiedMidiChannels;               // each entry is port*16+channel, port range: 0-inf, channel: 0-15
     unsigned int searchMidiMappingFrom = 0;           // makes getting next free MIDI mapping faster
 
-    qreal m_widthOfSegmentCell = 3;
+    double m_widthOfSegmentCell = 3;
 
     std::weak_ptr<EngravingProject> m_project;
 
@@ -131,6 +132,8 @@ class MasterScore : public Score
 
     bool writeMscz(MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
     bool exportPart(MscWriter& mscWriter, Score* partScore);
+
+    void initParts(Excerpt*);
 
 public:
 
@@ -161,7 +164,7 @@ public:
 
     std::vector<Excerpt*>& excerpts() { return _excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return _excerpts; }
-    QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
+    //   QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
     std::list<MidiInputEvent>& activeMidiPitches() override { return _activeMidiPitches; }
 
     void setUpdateAll() override;
@@ -179,8 +182,6 @@ public:
     bool excerptsChanged() const { return _cmdState._excerptsChanged; }
     bool instrumentsChanged() const { return _cmdState._instrumentsChanged; }
 
-    Revisions* revisions() { return _revisions; }
-
     void setTempomap(TempoMap* tm);
 
     int midiPortCount() const { return _midiPortCount; }
@@ -196,7 +197,7 @@ public:
     bool exportMidiMapping() { return !isSimpleMidiMapping; }
     int getNextFreeMidiMapping(int p = -1, int ch = -1);
     int getNextFreeDrumMidiMapping();
-    void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
+//    void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
     void rebuildAndUpdateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth, bool expressive, bool force = false);
@@ -211,6 +212,7 @@ public:
     void deleteExcerpt(Excerpt*);
 
     void initAndAddExcerpt(Excerpt*, bool);
+    void initExcerpt(Excerpt*);
     void initEmptyExcerpt(Excerpt*);
 
     void setPlaybackScore(Score*);
@@ -230,10 +232,10 @@ public:
     bool autosaveDirty() const;
     void setAutosaveDirty(bool v);
 
-    QString name() const override;
+    String name() const override;
 
-    void setWidthOfSegmentCell(qreal val) { m_widthOfSegmentCell = val; }
-    qreal widthOfSegmentCell() const { return m_widthOfSegmentCell; }
+    void setWidthOfSegmentCell(double val) { m_widthOfSegmentCell = val; }
+    double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
 };
 
 extern MasterScore* gpaletteScore;

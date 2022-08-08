@@ -50,7 +50,7 @@ public:
 private:
     static void convert(const mpe::ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result);
 
-    static int alterationsNumberByTempo(const qreal beatsPerSeconds, const int principalNoteDurationTicks);
+    static int alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks);
 
     static void createEvents(const mpe::ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
                              const int availableDurationTicks, const int overallDurationTicks,

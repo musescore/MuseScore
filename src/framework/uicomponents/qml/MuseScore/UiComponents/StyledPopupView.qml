@@ -41,7 +41,7 @@ PopupView {
 
     property alias animationEnabled: content.animationEnabled
 
-    property alias isCloseByEscape: content.isCloseByEscape
+    property alias closeOnEscape: content.closeOnEscape
     property alias navigationSection: content.navigationSection
 
     property int contentWidth: 240

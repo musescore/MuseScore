@@ -38,7 +38,7 @@
 #include "libmscore/stafflines.h"
 #include "libmscore/factory.h"
 
-#include "engraving/infrastructure/draw/painter.h"
+#include "draw/painter.h"
 
 using namespace mu::notation;
 
@@ -182,18 +182,18 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             // Find maximum width for the staff name
             std::list<mu::engraving::StaffName>& staffNamesLong
                 = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->longNames();
-            QString staffName = staffNamesLong.empty() ? " " : staffNamesLong.front().name();
+            QString staffName = staffNamesLong.empty() ? u" " : staffNamesLong.front().name();
             if (staffName == "") {
                 std::list<mu::engraving::StaffName>& staffNamesShort
                     = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->shortNames();
-                staffName = staffNamesShort.empty() ? "" : staffNamesShort.front().name();
+                staffName = staffNamesShort.empty() ? u"" : staffNamesShort.front().name();
             }
 
             mu::engraving::Text* newName = engraving::Factory::createText(parent, mu::engraving::TextStyleType::DEFAULT,
                                                                           ACCESSIBILITY_DISABLED);
             newName->setXmlText(staffName);
             newName->setTrack(e->track());
-            newName->setFamily("FreeSans");
+            newName->setFamily(u"FreeSans");
             newName->setSizeIsSpatiumDependent(true);
             newName->layout();
             newName->setPlainText(newName->plainText());
@@ -321,7 +321,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
         score->dummy(), mu::engraving::TextStyleType::DEFAULT, ACCESSIBILITY_DISABLED);
     newElement->setFlag(mu::engraving::ElementFlag::MOVABLE, false);
     newElement->setXmlText(text);
-    newElement->setFamily("FreeSans");
+    newElement->setFamily(u"FreeSans");
     newElement->setSizeIsSpatiumDependent(true);
     newElement->setColor(color);
     newElement->layout1();
@@ -372,11 +372,11 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             // Draw the current staff name
             std::list<mu::engraving::StaffName>& staffNamesLong
                 = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->longNames();
-            QString staffName = staffNamesLong.empty() ? " " : staffNamesLong.front().name();
+            QString staffName = staffNamesLong.empty() ? u" " : staffNamesLong.front().name();
             if (staffName == "") {
                 std::list<mu::engraving::StaffName>& staffNamesShort
                     = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->shortNames();
-                staffName = staffNamesShort.empty() ? "" : staffNamesShort.front().name();
+                staffName = staffNamesShort.empty() ? u"" : staffNamesShort.front().name();
             }
 
             mu::engraving::Text* newName = engraving::Factory::createText(parent, mu::engraving::TextStyleType::DEFAULT,
@@ -384,7 +384,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             newName->setXmlText(staffName);
             newName->setTrack(e->track());
             newName->setColor(color);
-            newName->setFamily("FreeSans");
+            newName->setFamily(u"FreeSans");
             newName->setSizeIsSpatiumDependent(true);
             newName->layout();
             newName->setPlainText(newName->plainText());

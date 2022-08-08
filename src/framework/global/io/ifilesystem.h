@@ -22,12 +22,12 @@
 #ifndef MU_SYSTEM_IFILESYSTEM_H
 #define MU_SYSTEM_IFILESYSTEM_H
 
-#include <QDateTime>
-
 #include "modularity/imoduleexport.h"
-#include "retval.h"
-#include "path.h"
 #include "types/bytearray.h"
+#include "types/datetime.h"
+#include "types/retval.h"
+#include "path.h"
+#include "ioenums.h"
 
 namespace mu::io {
 class IFileSystem : MODULE_EXPORT_INTERFACE
@@ -47,13 +47,7 @@ public:
 
     virtual RetVal<uint64_t> fileSize(const io::path_t& path) const = 0;
 
-    enum class ScanMode {
-        FilesInCurrentDir,
-        FilesAndFoldersInCurrentDir,
-        FilesInCurrentDirAndSubdirs
-    };
-
-    virtual RetVal<io::paths_t> scanFiles(const io::path_t& rootDir, const QStringList& filters,
+    virtual RetVal<io::paths_t> scanFiles(const io::path_t& rootDir, const std::vector<std::string>& filters,
                                           ScanMode mode = ScanMode::FilesInCurrentDirAndSubdirs) const = 0;
 
     enum class Attribute {
@@ -63,17 +57,16 @@ public:
     virtual void setAttribute(const io::path_t& path, Attribute attribute) const = 0;
     virtual bool setPermissionsAllowedForAll(const io::path_t& path) const = 0;
 
-    virtual RetVal<QByteArray> readFile(const io::path_t& filePath) const = 0;
-    virtual Ret writeToFile(const io::path_t& filePath, const QByteArray& data) const = 0;
-
+    virtual RetVal<ByteArray> readFile(const io::path_t& filePath) const = 0;
     virtual bool readFile(const io::path_t& filePath, ByteArray& data) const = 0;
-    virtual bool writeFile(const io::path_t& filePath, const ByteArray& data) const = 0;
+    virtual Ret writeFile(const io::path_t& filePath, const ByteArray& data) const = 0;
 
     //! NOTE File info
     virtual io::path_t canonicalFilePath(const io::path_t& filePath) const = 0;
     virtual io::path_t absolutePath(const io::path_t& filePath) const = 0;
-    virtual QDateTime birthTime(const io::path_t& filePath) const = 0;
-    virtual QDateTime lastModified(const io::path_t& filePath) const = 0;
+    virtual io::path_t absoluteFilePath(const io::path_t& filePath) const = 0;
+    virtual DateTime birthTime(const io::path_t& filePath) const = 0;
+    virtual DateTime lastModified(const io::path_t& filePath) const = 0;
     virtual bool isWritable(const io::path_t& filePath) const = 0;
 };
 }

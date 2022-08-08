@@ -47,16 +47,15 @@ static const ElementStyle pedalStyle {
     { Sid::pedalTextAlign,                     Pid::END_TEXT_ALIGN },
     { Sid::pedalHookHeight,                    Pid::BEGIN_HOOK_HEIGHT },
     { Sid::pedalHookHeight,                    Pid::END_HOOK_HEIGHT },
-    { Sid::pedalBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET },
-    { Sid::pedalBeginTextOffset,               Pid::CONTINUE_TEXT_OFFSET },
-    { Sid::pedalBeginTextOffset,               Pid::END_TEXT_OFFSET },
     { Sid::pedalLineWidth,                     Pid::LINE_WIDTH },
+    { Sid::pedalDashLineLen,                   Pid::DASH_LINE_LEN },
+    { Sid::pedalDashGapLen,                    Pid::DASH_GAP_LEN },
     { Sid::pedalPlacement,                     Pid::PLACEMENT },
     { Sid::pedalPosBelow,                      Pid::OFFSET },
 };
 
-const QString Pedal::PEDAL_SYMBOL = "<sym>keyboardPedalPed</sym>";
-const QString Pedal::STAR_SYMBOL = "<sym>keyboardPedalUp</sym>";
+const String Pedal::PEDAL_SYMBOL = u"<sym>keyboardPedalPed</sym>";
+const String Pedal::STAR_SYMBOL = u"<sym>keyboardPedalUp</sym>";
 
 PedalSegment::PedalSegment(Pedal* sp, System* parent)
     : TextLineBaseSegment(ElementType::PEDAL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
@@ -228,8 +227,8 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 
 PointF Pedal::linePos(Grip grip, System** sys) const
 {
-    qreal x = 0.0;
-    qreal nhw = score()->noteHeadWidth();
+    double x = 0.0;
+    double nhw = score()->noteHeadWidth();
     System* s = nullptr;
     if (grip == Grip::START) {
         ChordRest* c = toChordRest(startElement());

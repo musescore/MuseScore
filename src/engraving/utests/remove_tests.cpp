@@ -31,11 +31,12 @@
 
 #include "log.h"
 
-static const QString REMOVE_DATA_DIR("remove_data/");
-
+using namespace mu;
 using namespace mu::engraving;
 
-class RemoveTests : public ::testing::Test
+static const String REMOVE_DATA_DIR("remove_data/");
+
+class Engraving_RemoveTests : public ::testing::Test
 {
 };
 
@@ -88,9 +89,9 @@ static bool staffHasElements(Score* score, staff_idx_t staffIdx)
 //    belonging to it are not removed in excerpts.
 //---------------------------------------------------------
 
-TEST_F(RemoveTests, removeStaff)
+TEST_F(Engraving_RemoveTests, removeStaff)
 {
-    MasterScore* score = ScoreRW::readScore(REMOVE_DATA_DIR + "remove_staff.mscx");
+    MasterScore* score = ScoreRW::readScore(REMOVE_DATA_DIR + u"remove_staff.mscx");
     EXPECT_TRUE(score);
 
     // Remove the second staff and see what happens

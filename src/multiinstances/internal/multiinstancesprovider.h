@@ -80,6 +80,7 @@ public:
 
     // Quit for all
     void quitForAll() override;
+    void quitAllAndRestartLast() override;
 
 private:
 

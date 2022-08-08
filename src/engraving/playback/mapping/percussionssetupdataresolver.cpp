@@ -25,20 +25,6 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-bool PercussionsSetupDataResolver::supportsInstrument(const Instrument* instrument)
-{
-    static const std::unordered_set<std::string> PERCUSSION_FAMILY_SET = {
-        "timpani", "roto-toms", "tubaphones", "steel-drums",
-        "keyboard-percussion", "pitched-metal-percussion",
-        "orff-percussion", "flexatones", "musical-saws",
-        "glass-percussion", "kalimbas", "drums", "unpitched-metal-percussion",
-        "unpitched-wooden-percussion", "other-percussion",
-        "batterie", "body-percussion"
-    };
-
-    return PERCUSSION_FAMILY_SET.find(instrument->family().toStdString()) != PERCUSSION_FAMILY_SET.cend();
-}
-
 const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Instrument* instrument)
 {
     static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
@@ -204,6 +190,9 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Instrumen
         { "hand-clap", { SoundId::Clap, SoundCategory::Percussions, { SoundSubCategory::Hand }, {} } },
         { "slap", { SoundId::Slap, SoundCategory::Percussions, { SoundSubCategory::Hand }, {} } },
         { "stamp", { SoundId::Stamp, SoundCategory::Percussions, { SoundSubCategory::Foot }, {} } },
+
+        { "percussion-synthesizer", { SoundId::Synthesizer, SoundCategory::Percussions, { SoundSubCategory::Electric,
+                                                                                          SoundSubCategory::Percussive }, {} } },
     };
 
     auto search = SETUP_DATA_MAP.find(instrument->id().toStdString());

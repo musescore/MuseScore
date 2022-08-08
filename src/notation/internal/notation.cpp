@@ -27,12 +27,12 @@
 #include "log.h"
 
 #include "libmscore/masterscore.h"
-#include "libmscore/scorefont.h"
 #include "libmscore/page.h"
 #include "libmscore/rendermidi.h"
-#include "engraving/paint/paint.h"
+#include "engraving/infrastructure/paint.h"
 
 #include "notationpainting.h"
+#include "notationviewstate.h"
 #include "notationinteraction.h"
 #include "notationplayback.h"
 #include "notationundostack.h"
@@ -42,13 +42,14 @@
 #include "notationmidiinput.h"
 #include "notationparts.h"
 #include "notationtypes.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 
 using namespace mu::notation;
 
 Notation::Notation(mu::engraving::Score* score)
 {
     m_painting = std::make_shared<NotationPainting>(this);
+    m_viewState = std::make_shared<NotationViewState>(this);
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
@@ -142,12 +143,12 @@ mu::async::Notification Notation::scoreInited() const
 
 QString Notation::name() const
 {
-    return m_score ? m_score->name() : QString();
+    return m_score ? m_score->name().toQString() : QString();
 }
 
 QString Notation::projectName() const
 {
-    return m_score ? m_score->masterScore()->name() : QString();
+    return m_score ? m_score->masterScore()->name().toQString() : QString();
 }
 
 QString Notation::projectNameAndPartName() const
@@ -158,7 +159,7 @@ QString Notation::projectNameAndPartName() const
 
     QString result = m_score->masterScore()->name();
     if (!m_score->isMaster()) {
-        result += " - " + m_score->name();
+        result += " - " + m_score->name().toQString();
     }
 
     return result;
@@ -170,7 +171,7 @@ QString Notation::workTitle() const
         return QString();
     }
 
-    QString workTitle = m_score->metaTag("workTitle");
+    QString workTitle = m_score->metaTag(u"workTitle");
     if (workTitle.isEmpty()) {
         return m_score->masterScore()->name();
     }
@@ -184,7 +185,7 @@ QString Notation::projectWorkTitle() const
         return QString();
     }
 
-    QString workTitle = m_score->masterScore()->metaTag("workTitle");
+    QString workTitle = m_score->masterScore()->metaTag(u"workTitle");
     if (workTitle.isEmpty()) {
         return m_score->masterScore()->name();
     }
@@ -213,7 +214,7 @@ bool Notation::isOpen() const
 
 void Notation::setIsOpen(bool open)
 {
-    if (this->isOpen() == open) {
+    if (isOpen() == open) {
         return;
     }
 
@@ -244,6 +245,11 @@ ViewMode Notation::viewMode() const
 INotationPaintingPtr Notation::painting() const
 {
     return m_painting;
+}
+
+INotationViewStatePtr Notation::viewState() const
+{
+    return m_viewState;
 }
 
 INotationInteractionPtr Notation::interaction() const

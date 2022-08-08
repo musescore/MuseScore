@@ -25,18 +25,17 @@
 #include <memory>
 #include <thread>
 
-#include "async/asyncable.h"
-#include "imidiinport.h"
+#include "../../abstractmidiinport.h"
 #include "internal/midideviceslistener.h"
 
 namespace mu::midi {
-class AlsaMidiInPort : public IMidiInPort, public async::Asyncable
+class AlsaMidiInPort : public AbstractMidiInPort
 {
 public:
     AlsaMidiInPort() = default;
     ~AlsaMidiInPort() override;
 
-    void init();
+    void init() override;
 
     MidiDeviceList devices() const override;
     async::Notification devicesChanged() const override;
@@ -45,8 +44,6 @@ public:
     void disconnect() override;
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
-
-    async::Channel<tick_t, Event> eventReceived() const override;
 
 private:
     Ret run();
@@ -62,7 +59,6 @@ private:
     MidiDeviceID m_deviceID;
     std::shared_ptr<std::thread> m_thread;
     std::atomic<bool> m_running{ false };
-    async::Channel<tick_t, Event> m_eventReceived;
 
     async::Notification m_devicesChanged;
     MidiDevicesListener m_devicesListener;

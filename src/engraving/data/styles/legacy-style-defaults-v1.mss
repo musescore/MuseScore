@@ -104,7 +104,6 @@
     <timesigBarlineDistance>0.5</timesigBarlineDistance>
     <stemWidth>0.13</stemWidth>
     <shortenStem>1</shortenStem>
-    <shortStemProgression>0.25</shortStemProgression>
     <shortestStem>2.25</shortestStem>
     <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
     <minNoteDistance>0.4</minNoteDistance>
@@ -126,9 +125,9 @@
     <dotNoteDistance>0.35</dotNoteDistance>
     <dotRestDistance>0.25</dotRestDistance>
     <dotDotDistance>0.5</dotDotDistance>
-    <propertyDistanceHead>1</propertyDistanceHead>
+    <propertyDistanceHead>0.5</propertyDistanceHead>
     <propertyDistanceStem>0.5</propertyDistanceStem>
-    <propertyDistance>1</propertyDistance>
+    <propertyDistance>0.5</propertyDistance>
     <articulationMag>1</articulationMag>
     <articulationPosAbove x="0" y="0"/>
     <articulationAnchorDefault>2</articulationAnchorDefault>

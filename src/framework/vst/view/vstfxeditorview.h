@@ -32,8 +32,6 @@ class VstFxEditorView : public AbstractVstEditorView
 
     Q_PROPERTY(int chainOrder READ chainOrder WRITE setChainOrder NOTIFY chainOrderChanged)
 
-    DECLARE_FUNKNOWN_METHODS
-
 public:
     explicit VstFxEditorView(QWidget* parent = nullptr);
 

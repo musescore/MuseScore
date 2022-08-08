@@ -22,17 +22,14 @@
 
 #include "instrumentsonscorelistmodel.h"
 
+#include "types/translatablestring.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::uicomponents;
 using namespace mu::async;
 using namespace mu::notation;
-
-static const QString PART_ID_KEY("partId");
-static const QString IS_SOLOIST_KEY("isSoloist");
-static const QString IS_EXISTING_PART_KEY("isExistingPart");
-static const QString INSTRUMENT_TEMPLATE_KEY("instrumentTemplate");
 
 namespace mu::instrumentsscene {
 class InstrumentsOnScoreListModel::InstrumentItem : public SelectableItemListModel::Item
@@ -118,7 +115,7 @@ QStringList InstrumentsOnScoreListModel::orders() const
     QStringList result;
 
     for (const ScoreOrder& order: m_scoreOrders) {
-        result << order.getName();
+        result << order.getName().qTranslated();
     }
 
     return result;
@@ -161,24 +158,26 @@ void InstrumentsOnScoreListModel::loadOrders()
     TRACEFUNC;
 
     m_scoreOrders = repository()->orders();
-    if (m_scoreOrders.isEmpty() || !m_scoreOrders.contains(customOrder())) {
-        m_scoreOrders.append(customOrder());
+
+    const ScoreOrder& custom = customOrder();
+    if (m_scoreOrders.empty() || !mu::contains(m_scoreOrders, custom)) {
+        m_scoreOrders.push_back(custom);
     }
 
     INotationPtr notation = context()->currentNotation();
     ScoreOrder currentOrder = notation ? notation->parts()->scoreOrder() : m_scoreOrders[0];
     bool orderCustomized = currentOrder.customized;
 
-    if (!m_scoreOrders.contains(currentOrder)) {
+    if (!mu::contains(m_scoreOrders, currentOrder)) {
         currentOrder.customized = false;
-        m_scoreOrders.append(currentOrder);
+        m_scoreOrders.push_back(currentOrder);
     }
 
     emit ordersChanged();
 
-    for (int i = 0; i < m_scoreOrders.size(); ++i) {
+    for (size_t i = 0; i < m_scoreOrders.size(); ++i) {
         if (m_scoreOrders[i].id == currentOrder.id) {
-            doSetCurrentOrderIndex(i);
+            doSetCurrentOrderIndex(static_cast<int>(i));
             break;
         }
     }
@@ -199,19 +198,20 @@ int InstrumentsOnScoreListModel::resolveInstrumentSequenceNumber(const String& i
     return templates.size();
 }
 
-void InstrumentsOnScoreListModel::addInstruments(const QVariantList& instruments)
+void InstrumentsOnScoreListModel::addInstruments(const QStringList& instrumentIdList)
 {
     TRACEFUNC;
 
     ItemList items = this->items();
 
-    for (const QVariant& obj : instruments) {
-        if (obj.isNull()) {
+    for (const QString& id : instrumentIdList) {
+        const InstrumentTemplate& templ = repository()->instrumentTemplate(id.toStdString());
+        if (!templ.isValid()) {
             continue;
         }
 
-        InstrumentTemplate templ = obj.toMap()[INSTRUMENT_TEMPLATE_KEY].value<InstrumentTemplate>();
         InstrumentItem* instrument = new InstrumentItem(this);
+
         instrument->id = templ.id;
         instrument->name = formatInstrumentTitle(templ.trackName, templ.trait);
         instrument->familyId = templ.familyId();
@@ -226,7 +226,13 @@ void InstrumentsOnScoreListModel::addInstruments(const QVariantList& instruments
 
 QVariant InstrumentsOnScoreListModel::currentOrder() const
 {
-    return QVariant::fromValue(currentScoreOrder());
+    const ScoreOrder& order = currentScoreOrder();
+
+    QVariantMap map;
+    map["id"] = order.id.toQString();
+    map["customized"] = order.customized;
+
+    return map;
 }
 
 QVariantList InstrumentsOnScoreListModel::instruments() const
@@ -242,10 +248,10 @@ QVariantList InstrumentsOnScoreListModel::instruments() const
         }
 
         QVariantMap obj;
-        obj[PART_ID_KEY] = instrument->partId.toQString();
-        obj[IS_SOLOIST_KEY] = instrument->isSoloist;
-        obj[IS_EXISTING_PART_KEY] = instrument->isExistingPart;
-        obj[INSTRUMENT_TEMPLATE_KEY] = QVariant::fromValue(instrument->instrumentTemplate);
+        obj["partId"] = instrument->partId.toQString();
+        obj["isSoloist"] = instrument->isSoloist;
+        obj["isExistingPart"] = instrument->isExistingPart;
+        obj["instrumentId"] = instrument->isExistingPart ? instrument->id : instrument->instrumentTemplate.id.toQString();
 
         result << obj;
     }
@@ -317,7 +323,7 @@ InstrumentsOnScoreListModel::InstrumentItem* InstrumentsOnScoreListModel::modelI
 
 const ScoreOrder& InstrumentsOnScoreListModel::currentScoreOrder() const
 {
-    if (m_currentOrderIndex < 0 || m_currentOrderIndex >= m_scoreOrders.size()) {
+    if (m_currentOrderIndex < 0 || m_currentOrderIndex >= static_cast<int>(m_scoreOrders.size())) {
         static ScoreOrder dummy;
         return dummy;
     }
@@ -353,7 +359,7 @@ bool InstrumentsOnScoreListModel::matchesScoreOrder() const
 
 void InstrumentsOnScoreListModel::verifyScoreOrder()
 {
-    const ScoreOrder currentOrder = currentScoreOrder();
+    const ScoreOrder& currentOrder = currentScoreOrder();
     bool matchingScoreOrder = matchesScoreOrder();
 
     if (matchingScoreOrder == currentOrder.customized) {
@@ -370,7 +376,7 @@ int InstrumentsOnScoreListModel::createCustomizedScoreOrder(const ScoreOrder& or
     ScoreOrder customizedOrder = order.clone();
     customizedOrder.customized = true;
     int customizedIndex = m_currentOrderIndex + 1;
-    m_scoreOrders.insert(customizedIndex, customizedOrder);
+    m_scoreOrders.insert(m_scoreOrders.begin() + customizedIndex, customizedOrder);
 
     emit ordersChanged();
 
@@ -383,13 +389,13 @@ void InstrumentsOnScoreListModel::removeCustomizedScoreOrder(const ScoreOrder& o
         return;
     }
 
-    for (int i = 0; i < m_scoreOrders.size(); ++i) {
+    for (size_t i = 0; i < m_scoreOrders.size(); ++i) {
         if (!m_scoreOrders[i].customized && (m_scoreOrders[i].id == order.id)) {
-            doSetCurrentOrderIndex(i);
-            m_scoreOrders.removeAt(i + 1);
+            doSetCurrentOrderIndex(static_cast<int>(i));
+
+            m_scoreOrders.erase(m_scoreOrders.begin() + i + 1);
 
             emit ordersChanged();
-
             break;
         }
     }

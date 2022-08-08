@@ -31,8 +31,6 @@ public:
     std::string moduleName() const override;
 
     void registerResources() override;
-
-    void onInit(const framework::IApplication::RunMode&) override;
 };
 }
 

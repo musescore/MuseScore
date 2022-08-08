@@ -21,16 +21,16 @@
  */
 #include "read302.h"
 
+#include "translation.h"
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
+#include "infrastructure/symbolfonts.h"
 
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
-#include "libmscore/revisions.h"
 #include "libmscore/part.h"
 #include "libmscore/page.h"
-#include "libmscore/scorefont.h"
 #include "libmscore/audio.h"
 #include "libmscore/sig.h"
 #include "libmscore/barline.h"
@@ -60,9 +60,9 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     // with different default values for older vs newer scores
     // note: older templates get the default values for older scores
     // these can be forced back in MuseScore::getNewFile() if necessary
-    QString programVersion = score->masterScore()->mscoreVersion();
+    String programVersion = score->masterScore()->mscoreVersion();
     bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;
-    if (!programVersion.isEmpty() && programVersion < "3.5" && disableHarmonyPlay) {
+    if (!programVersion.isEmpty() && programVersion < u"3.5" && disableHarmonyPlay) {
         score->style().set(Sid::harmonyPlay, false);
     }
 
@@ -82,8 +82,8 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
             score->_playMode = PlayMode(e.readInt());
         } else if (tag == "LayerTag") {
             int id = e.intAttribute("id");
-            const QString& t = e.attribute("tag");
-            QString val(e.readText());
+            const String& t = e.attribute("tag");
+            String val(e.readText());
             if (id >= 0 && id < 32) {
                 score->_layerTags[id] = t;
                 score->_layerTagComments[id] = val;
@@ -91,7 +91,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Layer") {
             Layer layer;
             layer.name = e.attribute("name");
-            layer.tags = static_cast<uint>(e.intAttribute("mask"));
+            layer.tags = static_cast<unsigned int>(e.intAttribute("mask"));
             score->_layer.push_back(layer);
             e.readNext();
         } else if (tag == "currentLayer") {
@@ -113,7 +113,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "markIrregularMeasures") {
             score->_markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
-            qreal sp = score->style().value(Sid::spatium).toReal();
+            double sp = score->style().value(Sid::spatium).toReal();
 
             ReadStyleHook::readStyleTag(score, e);
 
@@ -123,21 +123,21 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
                 // float mode
                 score->style().set(Sid::spatium, sp);
             }
-            score->_scoreFont = ScoreFont::fontByName(score->style().value(Sid::MusicalSymbolFont).toString());
+            score->m_symbolFont = SymbolFonts::fontByName(score->style().styleSt(Sid::MusicalSymbolFont));
         } else if (tag == "copyright" || tag == "rights") {
-            score->setMetaTag("copyright", Text::readXmlText(e, score));
+            score->setMetaTag(u"copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
-            score->setMetaTag("movementNumber", e.readText());
+            score->setMetaTag(u"movementNumber", e.readText());
         } else if (tag == "movement-title") {
-            score->setMetaTag("movementTitle", e.readText());
+            score->setMetaTag(u"movementTitle", e.readText());
         } else if (tag == "work-number") {
-            score->setMetaTag("workNumber", e.readText());
+            score->setMetaTag(u"workNumber", e.readText());
         } else if (tag == "work-title") {
-            score->setMetaTag("workTitle", e.readText());
+            score->setMetaTag(u"workTitle", e.readText());
         } else if (tag == "source") {
-            score->setMetaTag("source", e.readText());
+            score->setMetaTag(u"source", e.readText());
         } else if (tag == "metaTag") {
-            QString name = e.attribute("name");
+            String name = e.attribute("name");
             score->setMetaTag(name, e.readText());
         } else if (tag == "Order") {
             ScoreOrder order;
@@ -206,18 +206,18 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
                 m->addExcerpt(ex);
             }
         } else if (tag == "name") {
-            QString n = e.readText();
+            String n = e.readText();
             if (!score->isMaster()) {     //ignore the name if it's not a child score
                 score->excerpt()->setName(n);
             }
         } else if (tag == "layoutMode") {
-            QString s = e.readText();
+            String s = e.readText();
             if (s == "line") {
                 score->setLayoutMode(LayoutMode::LINE);
             } else if (s == "system") {
                 score->setLayoutMode(LayoutMode::SYSTEM);
             } else {
-                LOGD("layoutMode: %s", qPrintable(s));
+                LOGD("layoutMode: %s", muPrintable(s));
             }
         } else {
             e.unknown();
@@ -225,13 +225,11 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     }
     e.context()->reconnectBrokenConnectors();
     if (e.error() != XmlStreamReader::NoError) {
-        LOGD("%s: xml read error at line %lld col %lld: %s",
-             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
         if (e.error() == XmlStreamReader::CustomError) {
-            MScore::lastError = e.errorString();
+            LOGE() << e.errorString();
         } else {
-            MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
-                e.name().toQLatin1String());
+            LOGE() << String(u"XML read error at line %1, column %2: %3").arg(e.lineNumber(), e.columnNumber())
+                .arg(String::fromAscii(e.name().ascii()));
         }
         return false;
     }
@@ -250,7 +248,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->setUpTempoMap();
 
-    for (Part* p : qAsConst(score->_parts)) {
+    for (Part* p : score->_parts) {
         p->updateHarmonyChannels(false);
     }
 
@@ -265,7 +263,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Score::FileError Read302::read302(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
+Err Read302::read302(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -276,16 +274,14 @@ Score::FileError Read302::read302(MasterScore* masterScore, XmlReader& e, ReadCo
         } else if (tag == "Score") {
             if (!readScore302(masterScore, e, ctx)) {
                 if (e.error() == XmlStreamReader::CustomError) {
-                    return Score::FileError::FILE_CRITICALLY_CORRUPTED;
+                    return Err::FileCriticallyCorrupted;
                 }
-                return Score::FileError::FILE_BAD_FORMAT;
+                return Err::FileBadFormat;
             }
         } else if (tag == "Revision") {
-            Revision* revision = new Revision;
-            revision->read(e);
-            masterScore->revisions()->add(revision);
+            e.skipCurrentElement();
         }
     }
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }

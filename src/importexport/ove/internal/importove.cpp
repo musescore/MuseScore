@@ -22,7 +22,10 @@
 
 #include "ove.h"
 
+#include <QFile>
 #include <QtMath>
+
+#include "engraving/engravingerrors.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/sig.h"
@@ -372,14 +375,14 @@ void OveToMScore::convertHeader()
     QList<QString> titles = m_ove->getTitles();
     if (!titles.empty() && !titles[0].isEmpty()) {
         QString title = titles[0];
-        m_score->setMetaTag("movementTitle", title);
+        m_score->setMetaTag(u"movementTitle", title);
         ove::addText(vbox, m_score, title, TextStyleType::TITLE);
     }
 
     QList<QString> copyrights = m_ove->getCopyrights();
     if (!copyrights.empty() && !copyrights[0].isEmpty()) {
         QString copyright = copyrights[0];
-        m_score->setMetaTag("copyright", copyright);
+        m_score->setMetaTag(u"copyright", copyright);
     }
 
     QList<QString> annotates = m_ove->getAnnotates();
@@ -391,7 +394,7 @@ void OveToMScore::convertHeader()
     QList<QString> writers = m_ove->getWriters();
     if (!writers.empty()) {
         QString composer = writers[0];
-        m_score->setMetaTag("composer", composer);
+        m_score->setMetaTag(u"composer", composer);
         ove::addText(vbox, m_score, composer, TextStyleType::COMPOSER);
     }
 
@@ -2185,49 +2188,49 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
         switch (type) {
         case ovebase::RepeatType::Segno: {
             Marker* marker = Factory::createMarker(measure);
-            marker->setMarkerType(Marker::Type::SEGNO);
+            marker->setMarkerType(MarkerType::SEGNO);
             e = marker;
             break;
         }
         case ovebase::RepeatType::Coda: {
             Marker* marker = Factory::createMarker(measure);
-            marker->setMarkerType(Marker::Type::CODA);
+            marker->setMarkerType(MarkerType::CODA);
             e = marker;
             break;
         }
         case ovebase::RepeatType::DSAlCoda: {
             Jump* jp = Factory::createJump(measure);
-            jp->setJumpType(Jump::Type::DS_AL_CODA);
+            jp->setJumpType(JumpType::DS_AL_CODA);
             e = jp;
             break;
         }
         case ovebase::RepeatType::DSAlFine: {
             Jump* jp = Factory::createJump(measure);
-            jp->setJumpType(Jump::Type::DS_AL_FINE);
+            jp->setJumpType(JumpType::DS_AL_FINE);
             e = jp;
             break;
         }
         case ovebase::RepeatType::DCAlCoda: {
             Jump* jp = Factory::createJump(measure);
-            jp->setJumpType(Jump::Type::DC_AL_CODA);
+            jp->setJumpType(JumpType::DC_AL_CODA);
             e = jp;
             break;
         }
         case ovebase::RepeatType::DCAlFine: {
             Jump* jp = Factory::createJump(measure);
-            jp->setJumpType(Jump::Type::DC_AL_FINE);
+            jp->setJumpType(JumpType::DC_AL_FINE);
             e = jp;
             break;
         }
         case ovebase::RepeatType::ToCoda: {
             Marker* m = Factory::createMarker(measure);
-            m->setMarkerType(Marker::Type::TOCODA);
+            m->setMarkerType(MarkerType::TOCODA);
             e = m;
             break;
         }
         case ovebase::RepeatType::Fine: {
             Marker* m = Factory::createMarker(measure);
-            m->setMarkerType(Marker::Type::FINE);
+            m->setMarkerType(MarkerType::FINE);
             e = m;
             break;
         }
@@ -2503,25 +2506,25 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
     }
 }
 
-Score::FileError importOve(MasterScore* score, const QString& name)
+Err importOve(MasterScore* score, const QString& name)
 {
     ovebase::IOVEStreamLoader* oveLoader = ovebase::createOveStreamLoader();
     ovebase::OveSong oveSong;
 
     QFile oveFile(name);
     if (!oveFile.exists()) {
-        return Score::FileError::FILE_NOT_FOUND;
+        return Err::FileNotFound;
     }
     if (!oveFile.open(QFile::ReadOnly)) {
         // messageOutString(QString("can't read file!"));
-        return Score::FileError::FILE_OPEN_ERROR;
+        return Err::FileOpenError;
     }
 
     QByteArray buffer = oveFile.readAll();
 
     oveFile.close();
 
-    oveSong.setTextCodecName(QString::fromStdString(ove::configuration()->importOvertuneCharset()));
+    oveSong.setTextCodecName(QString::fromStdString(ove::configuration()->importOvertureCharset()));
     oveLoader->setOve(&oveSong);
     oveLoader->setFileStream((unsigned char*)buffer.data(), buffer.size());
     bool result = oveLoader->load();
@@ -2534,5 +2537,5 @@ Score::FileError importOve(MasterScore* score, const QString& name)
         // score->connectSlurs();
     }
 
-    return result ? Score::FileError::FILE_NO_ERROR : Score::FileError::FILE_ERROR;
+    return result ? Err::NoError : Err::FileUnknownError;
 }

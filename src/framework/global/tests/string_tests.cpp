@@ -22,6 +22,8 @@
 #include <gtest/gtest.h>
 
 #include <QString>
+#include <QRegularExpression>
+#include <regex>
 
 #include "types/string.h"
 
@@ -33,6 +35,25 @@ class Global_Types_StringTests : public ::testing::Test
 {
 public:
 };
+
+TEST_F(Global_Types_StringTests, Char_Digit)
+{
+    {
+        //! GIVEN Some string
+        Char ch(u'2');
+        //! CHECK
+        EXPECT_TRUE(ch.isDigit());
+        EXPECT_EQ(ch.digitValue(), 2);
+    }
+
+    {
+        //! GIVEN Some string
+        Char ch(u'a');
+        //! CHECK
+        EXPECT_FALSE(ch.isDigit());
+        EXPECT_EQ(ch.digitValue(), -1);
+    }
+}
 
 TEST_F(Global_Types_StringTests, String_Construct)
 {
@@ -206,9 +227,27 @@ TEST_F(Global_Types_StringTests, String_Replace)
         //! CHECK
         EXPECT_EQ(str, u"123de456de");
     }
+
+    {
+        //! GIVEN Some String
+        String str = u"123abc456abc";
+        //! DO
+        str.replace(u'a', u'x');
+        //! CHECK
+        EXPECT_EQ(str, u"123xbc456xbc");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"abc123def678";
+        //! DO
+        str.replace(std::regex("[0-9]"), u"");
+        //! CHECK
+        EXPECT_EQ(str, u"abcdef");
+    }
 }
 
-TEST_F(Global_Types_StringTests, String_Modify)
+TEST_F(Global_Types_StringTests, String_PlusAssign)
 {
     {
         //! GIVEN Some String
@@ -226,6 +265,18 @@ TEST_F(Global_Types_StringTests, String_Modify)
         str += u"Пыф";
         //! CHECK
         EXPECT_EQ(str, u"123abcПыф");
+    }
+}
+
+TEST_F(Global_Types_StringTests, String_Truncate)
+{
+    {
+        //! GIVEN Some String
+        String str = u"123abc";
+        //! DO
+        str.truncate(3);
+        //! CHECK
+        EXPECT_EQ(str, u"123");
     }
 }
 
@@ -247,6 +298,24 @@ TEST_F(Global_Types_StringTests, String_SubStr)
         String newStr = str.mid(2);
         //! CHECK
         EXPECT_EQ(newStr, u"3abc");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"123abc";
+        //! DO
+        String newStr = str.left(2);
+        //! CHECK
+        EXPECT_EQ(newStr, u"12");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"123abc";
+        //! DO
+        String newStr = str.right(2);
+        //! CHECK
+        EXPECT_EQ(newStr, u"bc");
     }
 }
 
@@ -293,6 +362,31 @@ TEST_F(Global_Types_StringTests, String_Split)
         EXPECT_EQ(list.at(1), u"gggg");
         EXPECT_EQ(list.at(2), u"ыыыы");
     }
+
+    {
+        //! GIVEN Some String
+        String str = u"wwww = gggg = ыыыы";
+        //! DO
+        StringList list = str.split(u" = ");
+        //! CHECK
+        EXPECT_EQ(list.size(), 3);
+        EXPECT_EQ(list.at(0), u"wwww");
+        EXPECT_EQ(list.at(1), u"gggg");
+        EXPECT_EQ(list.at(2), u"ыыыы");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"first|second:ыыыы,цццц";
+        //! DO
+        StringList list = str.split(std::regex("[|:,]"));
+        //! CHECK
+        EXPECT_EQ(list.size(), 4);
+        EXPECT_EQ(list.at(0), u"first");
+        EXPECT_EQ(list.at(1), u"second");
+        EXPECT_EQ(list.at(2), u"ыыыы");
+        EXPECT_EQ(list.at(3), u"цццц");
+    }
 }
 
 TEST_F(Global_Types_StringTests, String_StartEndWith)
@@ -301,11 +395,168 @@ TEST_F(Global_Types_StringTests, String_StartEndWith)
         //! GIVEN Some String
         String str = u"123abc";
         //! CHECK
-        EXPECT_TRUE(str.startsWith("12"));
-        EXPECT_FALSE(str.startsWith("13"));
+        EXPECT_TRUE(str.startsWith(u"12"));
+        EXPECT_FALSE(str.startsWith(u"13"));
         //! CHECK
-        EXPECT_TRUE(str.endsWith("bc"));
-        EXPECT_FALSE(str.endsWith("ac"));
+        EXPECT_TRUE(str.endsWith(u"bc"));
+        EXPECT_FALSE(str.endsWith(u"ac"));
+    }
+}
+
+TEST_F(Global_Types_StringTests, String_Args)
+{
+    {
+        //! GIVEN Some String
+        String str = u"{%1}, [%2]";
+        //! DO
+        String newStr = str.arg(u"123").arg(u"abc");
+        //! CHECK
+        EXPECT_EQ(newStr, u"{123}, [abc]");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"{%1}, [%2], {%1}";
+        //! DO
+        String newStr = str.arg(u"123").arg(u"abc");
+        //! CHECK
+        EXPECT_EQ(newStr, u"{123}, [abc], {123}");
+    }
+
+    {
+        //! GIVEN Some String
+        String str = u"{%1}, [%2]";
+        //! DO
+        String newStr = str.arg(u"123", u"abc");
+        //! CHECK
+        EXPECT_EQ(newStr, u"{123}, [abc]");
+    }
+
+    {
+        //! GIVEN Some String containing a % character not followed by 1-9
+        String str = u"%1%";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100%");
+    }
+
+    {
+        //! GIVEN Some String containing a % character not followed by 1-9
+        String str = u"%1%a";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100%a");
+    }
+
+    {
+        //! GIVEN Some String containing a % character not followed by 1-9
+        String str = u"%1%0";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100%0");
+    }
+
+    {
+        //! GIVEN Some String containing multiple %1s in succession
+        String str = u"%1%1";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100100");
+    }
+
+    {
+        //! GIVEN Some String containing multiple %1s in succession and a % character not followed by 1-9
+        String str = u"%1%1%";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100100%");
+    }
+
+    {
+        //! GIVEN Some String containing a % character followed by another % character
+        String str = u"%1%%1% %1%%%1%%";
+        //! DO
+        String newStr = str.arg(100);
+        //! CHECK
+        EXPECT_EQ(newStr, u"100%100% 100%%100%%");
+    }
+}
+
+TEST_F(Global_Types_StringTests, String_Number)
+{
+    {
+        //! GIVEN Some double
+        double v = 2.0;
+        //! DO
+        String str = String::number(v);
+        //! CHECK
+        EXPECT_EQ(str, u"2");
+    }
+
+    {
+        //! GIVEN Some double
+        double v = 2.1;
+        //! DO
+        String str = String::number(v);
+        //! CHECK
+        EXPECT_EQ(str, u"2.1");
+    }
+
+    {
+        //! GIVEN Some double
+        double v = 2.01;
+        //! DO
+        String str = String::number(v);
+        //! CHECK
+        EXPECT_EQ(str, u"2.01");
+    }
+
+    {
+        //! GIVEN Some double
+        double v = 2.1231231;
+        //! DO
+        String str = String::number(v);
+        //! CHECK
+        EXPECT_EQ(str, u"2.123123");
+    }
+
+    {
+        //! GIVEN Some double
+        double v = 2.1231231;
+        //! DO
+        String str = String::number(v, 2);
+        //! CHECK
+        EXPECT_EQ(str, u"2.12");
+    }
+}
+
+TEST_F(Global_Types_StringTests, String_ToInt)
+{
+    {
+        //! GIVEN Some string
+        String s("2");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_EQ(v, 2);
+    }
+
+    {
+        //! GIVEN Some string
+        String s("2abc");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_FALSE(ok);
+        EXPECT_EQ(v, 0);
     }
 }
 
@@ -475,4 +726,20 @@ TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
         EXPECT_FALSE(ok);
         EXPECT_DOUBLE_EQ(v, 0.0);
     }
+}
+
+TEST_F(Global_Types_StringTests, String_Remove)
+{
+    //! GIVEN Some String
+    String str("123abc");
+    //! DO
+    size_t size = str.size();
+    //! CHECK
+    EXPECT_EQ(size, 6);
+
+    //! DO
+    const String s = str.remove(u'2');
+
+    //! CHECK
+    EXPECT_EQ(s, "13abc");
 }

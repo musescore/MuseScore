@@ -27,7 +27,7 @@
 #include "defer.h"
 #include "notation/notationerrors.h"
 #include "projectconfiguration.h"
-#include "engraving/infrastructure/io/mscio.h"
+#include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
 
 #include "log.h"
@@ -184,12 +184,18 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
 
     Ret ret = project->load(loadPath, "" /*stylePath*/, false /*forceMode*/, format);
 
-    if (!ret && checkCanIgnoreError(ret, filePath)) {
-        ret = project->load(loadPath, "" /*stylePath*/, true /*forceMode*/, format);
-    }
-
     if (!ret) {
-        return ret;
+        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+            return ret;
+        }
+
+        if (checkCanIgnoreError(ret, filePath)) {
+            ret = project->load(loadPath, "" /*stylePath*/, true /*forceMode*/, format);
+        }
+
+        if (!ret) {
+            return ret;
+        }
     }
 
     if (hasUnsavedChanges) {
@@ -484,9 +490,8 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
 
     projectData->open(QIODevice::ReadOnly);
 
-    ProgressChannel progressCh = uploadingService()->progressChannel();
-    progressCh.onReceive(this, [](const Progress& progress) {
-        LOGD() << "Uploading progress: " << progress.current << "/" << progress.total;
+    uploadingService()->uploadProgress().progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+        LOGD() << "Uploading progress: " << current << "/" << total;
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
     async::Channel<QUrl> sourceUrlCh = uploadingService()->sourceUrlReceived();
@@ -525,7 +530,8 @@ bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::pat
         engraving::Err::FileOld300Format
     };
 
-    std::string title = trc("project", "Open Error");
+    //: an error that occurred while opening a file
+    std::string title = trc("project", "Open error");
     std::string body = ret.text();
 
     if (body.empty()) {
@@ -597,20 +603,20 @@ io::path_t ProjectActionsController::selectScoreOpeningFile()
                      "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
 
     QStringList filter;
-    filter << QObject::tr("All Supported Files") + " (" + allExt + ")"
-           << QObject::tr("MuseScore File") + " (*.mscz)"
-           << QObject::tr("MusicXML Files") + " (*.mxl *.musicxml *.xml)"
-           << QObject::tr("MIDI Files") + " (*.mid *.midi *.kar)"
-           << QObject::tr("MuseData Files") + " (*.md)"
-           << QObject::tr("Capella Files") + " (*.cap *.capx)"
-           << QObject::tr("BB Files (experimental)") + " (*.mgu *.sgu)"
-           << QObject::tr("Overture / Score Writer Files (experimental)") + " (*.ove *.scw)"
-           << QObject::tr("Bagpipe Music Writer Files (experimental)") + " (*.bmw *.bww)"
-           << QObject::tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
-           << QObject::tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
-           << QObject::tr("MuseScore Unpack Files") + " (*.mscx)"
-           << QObject::tr("MuseScore Dev Files") + " (*.mscs)"
-           << QObject::tr("MuseScore Backup Files") + " (*.mscz~)";
+    filter << qtrc("project", "All supported files") + " (" + allExt + ")"
+           << qtrc("project", "MuseScore files") + " (*.mscz)"
+           << qtrc("project", "MusicXML files") + " (*.mxl *.musicxml *.xml)"
+           << qtrc("project", "MIDI files") + " (*.mid *.midi *.kar)"
+           << qtrc("project", "MuseData files") + " (*.md)"
+           << qtrc("project", "Capella files") + " (*.cap *.capx)"
+           << qtrc("project", "BB files (experimental)") + " (*.mgu *.sgu)"
+           << qtrc("project", "Overture / Score Writer files (experimental)") + " (*.ove *.scw)"
+           << qtrc("project", "Bagpipe Music Writer files (experimental)") + " (*.bmw *.bww)"
+           << qtrc("project", "Guitar Pro files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
+           << qtrc("project", "Power Tab Editor files (experimental)") + " (*.ptb)"
+           << qtrc("project", "Uncompressed MuseScore folders (experimental)") + " (*.mscx)"
+           << qtrc("project", "MuseScore developer files") + " (*.mscs)"
+           << qtrc("project", "MuseScore backup files") + " (*.mscz~)";
 
     io::path_t defaultDir = configuration()->lastOpenedProjectsPath();
 
@@ -618,7 +624,7 @@ io::path_t ProjectActionsController::selectScoreOpeningFile()
         defaultDir = configuration()->defaultProjectsPath();
     }
 
-    io::path_t filePath = interactive()->selectOpeningFile(qtrc("project", "Score"), defaultDir, filter.join(";;"));
+    io::path_t filePath = interactive()->selectOpeningFile(qtrc("project", "Open"), defaultDir, filter.join(";;"));
 
     if (!filePath.empty()) {
         configuration()->setLastOpenedProjectsPath(io::dirpath(filePath));

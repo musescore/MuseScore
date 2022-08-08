@@ -41,6 +41,7 @@ struct RenderingContext {
     int nominalPositionStartTick = 0;
     int nominalPositionEndTick = 0;
     int nominalDurationTicks = 0;
+    int positionTickOffset = 0;
 
     BeatsPerSecond beatsPerSecond = 0;
     TimeSigFrac timeSignatureFraction;
@@ -55,6 +56,7 @@ struct RenderingContext {
                               const mpe::duration_t duration,
                               const mpe::dynamic_level_t dynamicLevel,
                               const int posTick,
+                              const int posTickOffset,
                               const int durationTicks,
                               const BeatsPerSecond& bps,
                               const TimeSigFrac& timeSig,
@@ -67,6 +69,7 @@ struct RenderingContext {
         nominalPositionStartTick(posTick),
         nominalPositionEndTick(posTick + durationTicks),
         nominalDurationTicks(durationTicks),
+        positionTickOffset(posTickOffset),
         beatsPerSecond(bps),
         timeSignatureFraction(timeSig),
         persistentArticulation(persistentArticulationType),
@@ -99,8 +102,7 @@ inline bool isNotePlayable(const Note* note)
         const Chord* firstChord = tie->startNote()->chord();
         const Chord* lastChord = tie->endNote()->chord();
 
-        return !firstChord->containsEqualArticulations(lastChord)
-               || !firstChord->containsEqualTremolo(lastChord);
+        return !firstChord->containsEqualTremolo(lastChord);
     }
 
     return true;

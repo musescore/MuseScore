@@ -40,6 +40,7 @@ extern LineSegment* voltaDebug;
 
 class VoltaSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOCATOR(engraving, VoltaSegment)
 public:
     VoltaSegment(Volta*, System* parent);
 
@@ -58,6 +59,8 @@ public:
 
 class Volta final : public TextLineBase
 {
+    OBJECT_ALLOCATOR(engraving, Volta)
+
     std::vector<int> _endings;
     static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
 
@@ -85,8 +88,8 @@ public:
     std::vector<int> endings() const { return _endings; }
     std::vector<int>& endings() { return _endings; }
     void setEndings(const std::vector<int>& l);
-    void setText(const QString& s);
-    QString text() const;
+    void setText(const String& s);
+    String text() const;
 
     bool hasEnding(int repeat) const;
     int firstEnding() const;
@@ -98,10 +101,12 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 };
 } // namespace mu::engraving
 
+#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::Volta::Type);
+#endif
 
 #endif

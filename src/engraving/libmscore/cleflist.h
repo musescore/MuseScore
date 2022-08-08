@@ -35,6 +35,7 @@ class Score;
 
 class ClefList : public std::map<int, ClefTypeList>
 {
+    OBJECT_ALLOCATOR(engraving, ClefList)
 public:
     ClefList() {}
     ClefTypeList clef(int tick) const;

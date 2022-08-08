@@ -22,7 +22,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Sample</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -90,7 +90,7 @@ Vocals</longName>
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -115,10 +115,11 @@ Vocals</longName>
           <linesThrough>0</linesThrough>
           <minimStyle>1</minimStyle>
           <onLines>1</onLines>
-          <showRests>0</showRests>
+          <showRests>1</showRests>
           <stemsDown>1</stemsDown>
           <stemsThrough>0</stemsThrough>
           <upsideDown>0</upsideDown>
+          <showTabFingering>1</showTabFingering>
           <useNumbers>1</useNumbers>
           </StaffType>
         </Staff>
@@ -218,7 +219,7 @@ Gtr. 1</shortName>
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="3">
       <Staff id="4">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -242,10 +243,11 @@ Gtr. 1</shortName>
           <linesThrough>0</linesThrough>
           <minimStyle>1</minimStyle>
           <onLines>1</onLines>
-          <showRests>0</showRests>
+          <showRests>1</showRests>
           <stemsDown>1</stemsDown>
           <stemsThrough>0</stemsThrough>
           <upsideDown>0</upsideDown>
+          <showTabFingering>1</showTabFingering>
           <useNumbers>1</useNumbers>
           </StaffType>
         </Staff>
@@ -345,7 +347,7 @@ Gtr. 2</shortName>
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="4">
       <Staff id="6">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -368,10 +370,11 @@ Gtr. 2</shortName>
           <linesThrough>0</linesThrough>
           <minimStyle>1</minimStyle>
           <onLines>1</onLines>
-          <showRests>0</showRests>
+          <showRests>1</showRests>
           <stemsDown>1</stemsDown>
           <stemsThrough>0</stemsThrough>
           <upsideDown>0</upsideDown>
+          <showTabFingering>1</showTabFingering>
           <useNumbers>1</useNumbers>
           </StaffType>
         </Staff>
@@ -457,7 +460,7 @@ Gtr.</shortName>
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="5">
       <Staff id="8">
         <StaffType group="pitched">
           <name>stdNormal</name>

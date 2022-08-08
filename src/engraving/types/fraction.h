@@ -26,7 +26,7 @@
 #include <cstdint>
 #include <numeric>
 
-#include <QString>
+#include "types/string.h"
 
 #include "constants.h"
 
@@ -89,7 +89,7 @@ public:
 
     Fraction absValue() const
     {
-        return Fraction(static_cast<int>(qAbs(m_numerator)), static_cast<int>(m_denominator));
+        return Fraction(static_cast<int>(std::abs(m_numerator)), static_cast<int>(m_denominator));
     }
 
     Fraction inverse() const
@@ -253,11 +253,11 @@ public:
     // A very small fraction, corresponds to 1 MIDI tick
     static Fraction eps() { return Fraction(1, Constants::division * 4); }
 
-    QString toString() const { return QString("%1/%2").arg(m_numerator).arg(m_denominator); }
-    static Fraction fromString(const QString& str)
+    String toString() const { return String(u"%1/%2").arg(m_numerator, m_denominator); }
+    static Fraction fromString(const String& str)
     {
-        const int i = str.indexOf('/');
-        return (i == -1) ? Fraction(str.toInt(), 1) : Fraction(str.leftRef(i).toInt(), str.midRef(i + 1).toInt());
+        const size_t i = str.indexOf(u'/');
+        return (i == mu::nidx) ? Fraction(str.toInt(), 1) : Fraction(str.left(i).toInt(), str.mid(i + 1).toInt());
     }
 };
 

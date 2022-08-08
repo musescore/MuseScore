@@ -23,7 +23,6 @@
 #ifndef MU_NOTATION_EXAMPLEVIEW_H
 #define MU_NOTATION_EXAMPLEVIEW_H
 
-#include <QTransform>
 #include <QStateMachine>
 #include <QPaintEvent>
 #include <QFrame>
@@ -34,13 +33,11 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
+#include "draw/types/transform.h"
 
 namespace mu::engraving {
 class EngravingItem;
 class Score;
-class Note;
-class Chord;
-class ActionIcon;
 }
 
 namespace mu::notation {
@@ -69,31 +66,21 @@ public:
     void dragExampleView(QMouseEvent* ev);
     const Rect geometry() const override { return Rect(QFrame::geometry()); }
 
-signals:
-    void noteClicked(Note*);
-    void beamPropertyDropped(Chord*, engraving::ActionIcon*);
+protected:
+    void mousePressEvent(QMouseEvent*) override;
+
+    PointF toLogical(const QPointF& point);
 
 private:
     void drawElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& el);
-    void setDropTarget(const EngravingItem* el) override;
-
     void paintEvent(QPaintEvent*) override;
-    void dragEnterEvent(QDragEnterEvent*) override;
-    void dragLeaveEvent(QDragLeaveEvent*) override;
-    void dragMoveEvent(QDragMoveEvent*) override;
     void wheelEvent(QWheelEvent*) override;
-    void dropEvent(QDropEvent*) override;
-    void mousePressEvent(QMouseEvent*) override;
     void constraintCanvas(int* dxx);
     QSize sizeHint() const override;
 
-    mu::Transform m_matrix;
+    mu::draw::Transform m_matrix;
     QColor m_backgroundColor;
     QPixmap* m_backgroundPixmap;
-    EngravingItem* m_dragElement = 0;
-    const EngravingItem* m_dropTarget = 0; ///< current drop target during dragMove
-    QRectF m_dropRectangle;                ///< current drop rectangle during dragMove
-    QLineF m_dropAnchor;                   ///< line to current anchor point during dragMove
 
     QStateMachine* m_stateMachine;
     mu::PointF m_moveStartPoint;

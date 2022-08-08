@@ -30,13 +30,17 @@ namespace mu::engraving {
 //   SystemText
 //---------------------------------------------------------
 
-class SystemText final : public StaffTextBase
+class SystemText : public StaffTextBase
 {
+    OBJECT_ALLOCATOR(engraving, SystemText)
+
     void layout() override;
+
+protected:
     PropertyValue propertyDefault(Pid id) const override;
 
 public:
-    SystemText(Segment* parent, TextStyleType = TextStyleType::SYSTEM);
+    SystemText(Segment* parent, TextStyleType = TextStyleType::SYSTEM, ElementType type = ElementType::SYSTEM_TEXT);
 
     SystemText* clone() const override { return new SystemText(*this); }
     Segment* segment() const { return (Segment*)explicitParent(); }

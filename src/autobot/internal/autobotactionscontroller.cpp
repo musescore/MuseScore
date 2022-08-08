@@ -21,7 +21,7 @@
  */
 #include "autobotactionscontroller.h"
 
-#include "uri.h"
+#include "types/uri.h"
 
 using namespace mu::autobot;
 
