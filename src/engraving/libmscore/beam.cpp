@@ -611,13 +611,13 @@ int Beam::getMaxSlope() const
         maxSlope = _maxSlopes[1];
     } else if (beamWidth < 5.0) {
         maxSlope = _maxSlopes[2];
-    } else if (beamWidth < 8.0) {
+    } else if (beamWidth < 7.5) {
         maxSlope = _maxSlopes[3];
-    } else if (beamWidth < 13.0) {
+    } else if (beamWidth < 10.0) {
         maxSlope = _maxSlopes[4];
-    } else if (beamWidth < 21.0) {
+    } else if (beamWidth < 15.0) {
         maxSlope = _maxSlopes[5];
-    } else if (beamWidth < 34.0) {
+    } else if (beamWidth < 20.0) {
         maxSlope = _maxSlopes[6];
     } else {
         maxSlope = _maxSlopes[7];
@@ -1194,8 +1194,9 @@ void Beam::extendStem(Chord* chord, double addition)
 
 bool Beam::isBeamInsideStaff(int yPos, int staffLines, bool isDictator) const
 {
-    int aboveStaff = isDictator ? -3 : -2;
-    int belowStaff = (staffLines - 1) * 4 + (isDictator ? 3 : 2);
+    UNUSED(isDictator); // we can use isDictator to determine custom distances outside the staff for pointer/dictator
+    int aboveStaff = -3;
+    int belowStaff = (staffLines - 1) * 4 + 3;
     return yPos > aboveStaff && yPos < belowStaff;
 }
 
