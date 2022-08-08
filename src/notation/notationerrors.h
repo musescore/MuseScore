@@ -56,7 +56,8 @@ inline Ret make_ret(Err err)
                + "\n" + trc("notation", "Please select a note or figured bass and retry");
         break;
     case Err::MeasureIsNotSelected:
-        text = trc("notation", "No measure selected: Please select a measure and retry");
+        text = trc("notation", "No measure selected")
+               + "\n" + trc("notation", "Please select a measure and retry");
         break;
     case Err::SelectCompleteTupletOrTremolo:
         text = trc("notation", "Please select the complete tuplet/tremolo and retry the command");
