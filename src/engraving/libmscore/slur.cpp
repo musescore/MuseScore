@@ -1438,7 +1438,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
             }
             Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
             Chord* c2 = endCR()->isChord() ? toChord(endCR()) : 0;
-            if (startCR()->measure()->system() != endCR()->measure()->system()) {
+            if (c2 && startCR()->measure()->system() != endCR()->measure()->system()) {
                 // If the end chord is in a different system its direction may
                 // have never been computed, so we need to compute it here.
                 c2->computeUp();
@@ -1538,9 +1538,11 @@ SpannerSegment* Slur::layoutSystem(System* system)
                 && sc->notes()[0]->tieBack()->up() == up()) {
                 // there is a tie that ends on this chordrest
                 tie = sc->notes()[0]->tieBack();
-                endPoint = tie->segmentAt(static_cast<int>(tie->nsegments()) - 1)->ups(Grip::END).pos();
-                if (abs(endPoint.y() - p1.y()) < tieClearance) {
-                    p1.rx() += horizontalTieClearance;
+                if (!tie->segmentsEmpty()) {
+                    endPoint = tie->segmentAt(static_cast<int>(tie->nsegments()) - 1)->ups(Grip::END).pos();
+                    if (abs(endPoint.y() - p1.y()) < tieClearance) {
+                        p1.rx() += horizontalTieClearance;
+                    }
                 }
             }
         }
@@ -1616,7 +1618,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                 tie = nullptr;
             }
             bool adjustedVertically = false;
-            if (tie) {
+            if (tie && !tie->segmentsEmpty()) {
                 endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
                 if (_up && tie->up()) {
                     if (endPoint.y() - p2.y() < tieClearance) {
