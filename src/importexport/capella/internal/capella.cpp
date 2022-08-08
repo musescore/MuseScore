@@ -1211,7 +1211,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     Part* part = 0;
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         CapStaffLayout* cl = cap->staffLayout(staffIdx);
-        // LOGD("Midi staff %d program %d", staffIdx, cl->sound);
+        // LOGD("MIDI staff %d program %d", staffIdx, cl->sound);
 
         // create a new part if necessary
         if (needPart(midiPatch, cl->sound, staffIdx, cap->brackets)) {

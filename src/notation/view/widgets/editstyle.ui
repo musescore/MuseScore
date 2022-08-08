@@ -4512,7 +4512,7 @@ By default, they will be placed such as that their right end are at the same lev
                <item row="1" column="0">
                 <widget class="QLabel" name="label_11">
                  <property name="text">
-                  <string>Spacing curve:</string>
+                  <string>Spacing ratio:</string>
                  </property>
                  <property name="buddy">
                   <cstring>measureSpacing</cstring>
@@ -5385,7 +5385,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="1" column="3" colspan="2">
             <widget class="QCheckBox" name="mmRestNumberMaskHBar">
              <property name="text">
-              <string>Mask H-bar around number</string>
+              <string>Break H-bar if it collides with number</string>
              </property>
             </widget>
            </item>
@@ -6645,7 +6645,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="3" column="0" colspan="3">
             <widget class="QCheckBox" name="arpeggioHiddenInStdIfTab">
              <property name="text">
-              <string>Do not show arpeggio in standard notation when displayed in tablature</string>
+              <string>Do not show arpeggios in standard notation when displayed in tablature</string>
              </property>
             </widget>
            </item>
@@ -11843,7 +11843,7 @@ By default, they will be placed such as that their right end are at the same lev
                <item>
                 <widget class="QLabel" name="label">
                  <property name="text">
-                  <string> Select the elements you would like displayed in common and simple tablature staves</string>
+                  <string>Select the elements you would like displayed in common and simple tablature staves</string>
                  </property>
                  <property name="margin">
                   <number>0</number>
