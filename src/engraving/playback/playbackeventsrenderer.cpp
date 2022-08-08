@@ -29,6 +29,8 @@
 #include "libmscore/note.h"
 #include "libmscore/sig.h"
 #include "libmscore/harmony.h"
+#include "libmscore/staff.h"
+#include "libmscore/swing.h"
 
 #include "utils/arrangementutils.h"
 #include "metaparsers/chordarticulationsparser.h"
@@ -303,6 +305,16 @@ bool PlaybackEventsRenderer::renderChordArticulations(const Chord* chord, const 
 
 void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const
 {
+    Swing::ChordDurationAdjustment swingDurationAdjustment;
+
+    if (!chord->tuplet()) {
+        SwingParameters swing = chord->staff()->swing(chord->tick());
+
+        if (swing.isOn()) {
+            swingDurationAdjustment = Swing::applySwing(chord, swing);
+        }
+    }
+
     for (const Note* note : chord->notes()) {
         if (!isNotePlayable(note)) {
             continue;
@@ -311,6 +323,11 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const R
         NominalNoteCtx noteCtx(note, ctx);
 
         NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
+
+        if (!swingDurationAdjustment.isNull()) {
+            noteCtx.timestamp = noteCtx.timestamp + noteCtx.duration * swingDurationAdjustment.remainingDurationMultiplier;
+            noteCtx.duration = noteCtx.duration * swingDurationAdjustment.durationMultiplier;
+        }
 
         if (note->tieFor()) {
             const Note* lastTiedNote = note->lastTiedNote();

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -67,6 +67,7 @@
 #include "utils.h"
 #include "synthesizerstate.h"
 #include "easeInOut.h"
+#include "swing.h"
 
 #include "masterscore.h"
 
@@ -1272,62 +1273,6 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
     }
 }
 
-//--------------------------------------------------------
-//   swingAdjustParams
-//--------------------------------------------------------
-
-void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swingUnit, int swingRatio)
-{
-    Fraction tick = chord->rtick();
-    // adjust for anacrusis
-    Measure* cm     = chord->measure();
-    MeasureBase* pm = cm->prev();
-    ElementType pt  = pm ? pm->type() : ElementType::INVALID;
-    if (!pm || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
-        || pt == ElementType::VBOX || pt == ElementType::HBOX
-        || pt == ElementType::FBOX || pt == ElementType::TBOX) {
-        Fraction offset = cm->timesig() - cm->ticks();
-        if (offset > Fraction(0, 1)) {
-            tick += offset;
-        }
-    }
-
-    int swingBeat           = swingUnit * 2;
-    double ticksDuration     = (double)chord->actualTicks().ticks();
-    double swingTickAdjust   = ((double)swingBeat) * (((double)(swingRatio - 50)) / 100.0);
-    double swingActualAdjust = (swingTickAdjust / ticksDuration) * 1000.0;
-    ChordRest* ncr          = nextChordRest(chord);
-
-    //Check the position of the chord to apply changes accordingly
-    if (tick.ticks() % swingBeat == swingUnit) {
-        if (!isSubdivided(chord, swingUnit)) {
-            ontime = ontime + swingActualAdjust;
-        }
-    }
-    int endTick = tick.ticks() + ticksDuration;
-    if ((endTick % swingBeat == swingUnit) && (!isSubdivided(ncr, swingUnit))) {
-        gateTime = gateTime + (swingActualAdjust / 10);
-    }
-}
-
-//---------------------------------------------------------
-//   isSubdivided
-//   Check for subdivided beat
-//---------------------------------------------------------
-
-bool Score::isSubdivided(ChordRest* chord, int swingUnit)
-{
-    if (!chord) {
-        return false;
-    }
-    ChordRest* prev = prevChordRest(chord);
-    if (chord->actualTicks().ticks() < swingUnit || (prev && prev->actualTicks().ticks() < swingUnit)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 const Drumset* getDrumset(const Chord* chord)
 {
     if (chord->staff() && chord->staff()->isDrumStaff(chord->tick())) {
@@ -2332,11 +2277,9 @@ void Score::createPlayEvents(Chord* chord)
     createGraceNotesPlayEvents(tick, chord, ontime, trailtime);   // ontime and trailtime are modified by this call depending on grace notes before and after
 
     SwingParameters st = chord->staff()->swing(tick);
-    int unit           = st.swingUnit;
-    int ratio          = st.swingRatio;
     // Check if swing needs to be applied
-    if (unit && !chord->tuplet()) {
-        swingAdjustParams(chord, gateTime, ontime, unit, ratio);
+    if (st.swingUnit && !chord->tuplet()) {
+        Swing::swingAdjustParams(chord, st, ontime, gateTime);
     }
     //
     //    render normal (and articulated) chords

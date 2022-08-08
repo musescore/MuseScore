@@ -552,12 +552,26 @@ void StaffTextPropertiesDialog::saveValues()
         m_staffText->setCapo(0);
     }
 
+    INotationUndoStackPtr stack = undoStack();
+    IF_ASSERT_FAILED(stack) {
+        return;
+    }
+
     Score* score = m_originStaffText->score();
     StaffTextBase* nt = toStaffTextBase(m_staffText->clone());
     nt->setScore(score);
+
+    stack->prepareChanges();
     score->undoChangeElement(m_originStaffText, nt);
     score->masterScore()->updateChannel();
     score->updateCapo();
     score->updateSwing();
     score->setPlaylistDirty();
+    stack->commitChanges();
+}
+
+INotationUndoStackPtr StaffTextPropertiesDialog::undoStack() const
+{
+    INotationPtr notation = globalContext()->currentNotation();
+    return notation ? notation->undoStack() : nullptr;
 }

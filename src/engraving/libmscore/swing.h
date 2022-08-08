@@ -20,14 +20,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __NAVIGATE_H__
-#define __NAVIGATE_H__
+#ifndef MU_ENGRAVING_SWING_H
+#define MU_ENGRAVING_SWING_H
 
 namespace mu::engraving {
-class ChordRest;
+class Chord;
+struct SwingParameters;
 
-extern int pitch2y(int pitch, int enh, int clefOffset, int key, int& prefix, const char* tversatz);
-extern ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
-extern ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
-} // namespace mu::engraving
-#endif
+class Swing
+{
+public:
+    struct ChordDurationAdjustment
+    {
+        double remainingDurationMultiplier = 0.;
+        double durationMultiplier = 0.;
+
+        bool isNull() const;
+    };
+
+    static ChordDurationAdjustment applySwing(const Chord* chord, const SwingParameters& params);
+    static void swingAdjustParams(const Chord* chord, const SwingParameters& params, int& onTime, int& gateTime);
+};
+}
+
+#endif // MU_ENGRAVING_SWING_H

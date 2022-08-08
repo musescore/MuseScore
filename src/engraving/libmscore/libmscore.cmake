@@ -349,4 +349,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.h
     ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.h
+    ${CMAKE_CURRENT_LIST_DIR}/swing.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/swing.h
 )
