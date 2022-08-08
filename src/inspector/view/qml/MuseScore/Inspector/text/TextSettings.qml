@@ -110,7 +110,7 @@ Column {
 
         model: [
             { text: qsTrc("inspector", "None"), value: TextTypes.FRAME_TYPE_NONE, titleRole: qsTrc("inspector", "None") },
-            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE, titleRole: qsTrc("inspector", "Square") },
+            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE, titleRole: qsTrc("inspector", "Rectangle") },
             { iconCode: IconCode.FRAME_CIRCLE, value: TextTypes.FRAME_TYPE_CIRCLE, titleRole: qsTrc("inspector", "Circle") }
         ]
     }

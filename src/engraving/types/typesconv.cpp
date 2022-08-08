@@ -1162,13 +1162,41 @@ struct AccidentalUnicodeItem {
 };
 
 static const std::vector<AccidentalUnicodeItem> ACCIDENTALS_NAMES = {
-    { AccidentalVal::SHARP3, QT_TRANSLATE_NOOP("engraving", "triple ♯"), QT_TRANSLATE_NOOP("engraving", "triple sharp") },
-    { AccidentalVal::SHARP2, QT_TRANSLATE_NOOP("engraving", "double ♯"), QT_TRANSLATE_NOOP("engraving", "double sharp") },
-    { AccidentalVal::SHARP, QT_TRANSLATE_NOOP("engraving", "♯"), QT_TRANSLATE_NOOP("engraving", "sharp") },
-    { AccidentalVal::NATURAL, QT_TRANSLATE_NOOP("engraving", "natural") },
-    { AccidentalVal::FLAT, QT_TRANSLATE_NOOP("engraving", "♭"), QT_TRANSLATE_NOOP("engraving", "flat") },
-    { AccidentalVal::FLAT2, QT_TRANSLATE_NOOP("engraving", "double ♭"), QT_TRANSLATE_NOOP("engraving", "double flat") },
-    { AccidentalVal::FLAT3, QT_TRANSLATE_NOOP("engraving", "triple ♭"), QT_TRANSLATE_NOOP("engraving", "triple flat") }
+    { AccidentalVal::SHARP3,
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "triple ♯"),
+      //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
+      QT_TRANSLATE_NOOP("engraving", "triple sharp") },
+    { AccidentalVal::SHARP2,
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "double ♯"),
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "double sharp") },
+    { AccidentalVal::SHARP,
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "♯"),
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "sharp") },
+    { AccidentalVal::NATURAL,
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "♮"),
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "natural") },
+    { AccidentalVal::FLAT,
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "♭"),
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "flat") },
+    { AccidentalVal::FLAT2,
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "double ♭"),
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "double flat") },
+    { AccidentalVal::FLAT3,
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "triple ♭"),
+      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      QT_TRANSLATE_NOOP("engraving", "triple flat") }
 };
 
 const char* TConv::userName(AccidentalVal accidental, bool full)
