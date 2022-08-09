@@ -215,7 +215,7 @@ void AbstractNotationPaintView::onCurrentNotationChanged()
 
 void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 {
-    if (!m_notation->viewState()->isMatrixInited()) {
+    if (viewport().isValid() && !m_notation->viewState()->isMatrixInited()) {
         m_inputController->initZoom();
     }
 
