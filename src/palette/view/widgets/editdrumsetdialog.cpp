@@ -148,14 +148,16 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
         m_instrumentKey.instrumentId = instrument->id();
         m_instrumentKey.partId = context.staff->part()->id();
         m_instrumentKey.tick = measure->tick();
-        m_editedDrumset = *instrument->drumset();
+        m_originDrumset = *instrument->drumset();
     } else {
         NoteInputState state = m_notation->interaction()->noteInput()->state();
         const Staff* staff = m_notation->elements()->msScore()->staff(track2staff(state.currentTrack));
         m_instrumentKey.instrumentId = staff ? staff->part()->instrumentId().toQString() : QString();
         m_instrumentKey.partId = staff ? staff->part()->id() : ID();
-        m_editedDrumset = state.drumset ? *state.drumset : Drumset();
+        m_originDrumset = state.drumset ? *state.drumset : Drumset();
     }
+
+    m_editedDrumset = m_originDrumset;
 
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -406,17 +408,22 @@ void EditDrumsetDialog::bboxClicked(QAbstractButton* button)
     case QDialogButtonBox::AcceptRole:
         apply();
         break;
+    case QDialogButtonBox::RejectRole:
+        cancel();
+        break;
     default:
         break;
     }
 }
 
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
 void EditDrumsetDialog::apply()
 {
     valueChanged();    //save last changes in name
+}
+
+void EditDrumsetDialog::cancel()
+{
+    m_notation->parts()->replaceDrumset(m_instrumentKey, m_originDrumset);
 }
 
 //---------------------------------------------------------
