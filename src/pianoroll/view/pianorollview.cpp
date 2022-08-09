@@ -23,7 +23,7 @@
 #include "pianorollview.h"
 
 #include "libmscore/measure.h"
-#include "libmscore/fraction.h"
+#include "types/fraction.h"
 #include "libmscore/pos.h"
 #include "libmscore/noteevent.h"
 #include "libmscore/note.h"
@@ -1238,7 +1238,7 @@ QString PianorollView::serializeSelectedNotes()
             int voice = note->voice();
 
             int veloOff = note->veloOffset();
-            Ms::Note::ValueType veloType = note->veloType();
+            Ms::VeloType veloType = note->veloType();
 
             xml.writeStartElement("note");
             xml.writeAttribute("startN", QString::number(startTick.numerator()));
@@ -1248,7 +1248,7 @@ QString PianorollView::serializeSelectedNotes()
             xml.writeAttribute("pitch", QString::number(pitch));
             xml.writeAttribute("voice", QString::number(voice));
             xml.writeAttribute("veloOff", QString::number(veloOff));
-            xml.writeAttribute("veloType", veloType == Ms::Note::ValueType::OFFSET_VAL ? "o" : "u");
+            xml.writeAttribute("veloType", veloType == Ms::VeloType::OFFSET_VAL ? "o" : "u");
 
             for (Ms::NoteEvent& evt : note->playEvents()) {
                 int ontime = evt.ontime();
@@ -1363,7 +1363,7 @@ void PianorollView::pasteNotes(const QString& copiedNotes, Ms::Fraction pasteSta
 
                 int veloOff = xml.attributes().value("veloOff").toString().toInt();
                 QString veloTypeStrn = xml.attributes().value("veloType").toString();
-                Ms::Note::ValueType veloType = veloTypeStrn == "o" ? Ms::Note::ValueType::OFFSET_VAL : Ms::Note::ValueType::USER_VAL;
+                Ms::VeloType veloType = veloTypeStrn == "o" ? Ms::VeloType::OFFSET_VAL : Ms::VeloType::USER_VAL;
 
                 int track = staff->idx() * VOICES + voice;
 

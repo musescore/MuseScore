@@ -28,11 +28,11 @@ double AutomationVelocityAbs::value(Ms::Staff* staff, NoteEventBlock& block)
     Ms::Note* note = block.note;
 
     //Change velocity to equivalent in new metric
-    switch (Ms::Note::ValueType(note->veloType())) {
-    case Ms::Note::ValueType::USER_VAL:
+    switch (Ms::VeloType(note->veloType())) {
+    case Ms::VeloType::USER_VAL:
         return note->veloOffset();
     default:
-    case Ms::Note::ValueType::OFFSET_VAL: {
+    case Ms::VeloType::OFFSET_VAL: {
         int dynamicsVel = staff->velocities().val(note->tick());
         return static_cast<int>(dynamicsVel * (1 + note->veloOffset() / 100.0));
     }
@@ -46,16 +46,16 @@ void AutomationVelocityAbs::setValue(Ms::Staff* staff, NoteEventBlock& block, do
 
     score->startCmd();
 
-    switch (Ms::Note::ValueType(note->veloType())) {
-    case Ms::Note::ValueType::USER_VAL:
-        score->undo(new Ms::ChangeVelocity(note, Ms::Note::ValueType::USER_VAL, value));
+    switch (Ms::VeloType(note->veloType())) {
+    case Ms::VeloType::USER_VAL:
+        score->undo(new Ms::ChangeVelocity(note, Ms::VeloType::USER_VAL, value));
         break;
     default:
-    case Ms::Note::ValueType::OFFSET_VAL: {
+    case Ms::VeloType::OFFSET_VAL: {
         int dynamicsVel = staff->velocities().val(note->tick());
         int newVelocity = static_cast<int>((value / (qreal)dynamicsVel - 1) * 100);
 
-        score->undo(new Ms::ChangeVelocity(note, Ms::Note::ValueType::OFFSET_VAL, newVelocity));
+        score->undo(new Ms::ChangeVelocity(note, Ms::VeloType::OFFSET_VAL, newVelocity));
         break;
     }
     }

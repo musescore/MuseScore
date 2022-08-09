@@ -254,6 +254,26 @@ public:
     // A very small fraction, corresponds to 1 MIDI tick
     static Fraction eps() { return Fraction(1, Constants::division * 4); }
 
+    static Fraction fromFloat(float ticks)
+    {
+        return Fraction((int)(ticks * Constants::division * 4), Constants::division * 4).reduced();
+    }
+
+    static Fraction fromDouble(double ticks)
+    {
+        return Fraction((int)(ticks * Constants::division * 4), Constants::division * 4).reduced();
+    }
+
+    float toFloat()
+    {
+        return m_numerator / (float)m_denominator;
+    }
+
+    double toDouble()
+    {
+        return m_numerator / (double)m_denominator;
+    }
+
     String toString() const { return String(u"%1/%2").arg(m_numerator, m_denominator); }
     static Fraction fromString(const String& str)
     {

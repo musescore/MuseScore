@@ -29,7 +29,7 @@
 #include "notation/notationtypes.h"
 #include "audio/audiotypes.h"
 #include "actions/actiontypes.h"
-#include "libmscore/fraction.h"
+#include "types/fraction.h"
 
 namespace mu::pianoroll {
 class IPianorollController : MODULE_EXPORT_INTERFACE
