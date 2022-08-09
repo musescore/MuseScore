@@ -319,25 +319,6 @@ void EditDrumsetDialog::updatePitchesList()
     pitchList->sortItems(3, Qt::SortOrder::DescendingOrder);
 }
 
-//---------------------------------------------------------
-//   refreshPitchesList
-//---------------------------------------------------------
-void EditDrumsetDialog::refreshPitchesList()
-{
-    for (int i = 0; i < pitchList->topLevelItemCount(); ++i) {
-        QTreeWidgetItem* item = pitchList->topLevelItem(i);
-        int pitch = item->data(0, Qt::UserRole).toInt();
-        if (m_editedDrumset.shortcut(pitch) == 0) {
-            item->setText(Column::SHORTCUT, "");
-        } else {
-            QString s(QChar(m_editedDrumset.shortcut(pitch)));
-            item->setText(Column::SHORTCUT, s);
-        }
-        item->setText(Column::NAME,  m_editedDrumset.translatedName(i));
-        item->setData(0, Qt::UserRole, pitch);
-    }
-}
-
 void EditDrumsetDialog::setEnabledPitchControls(bool enable)
 {
     customGbox->setEnabled(enable);
@@ -413,7 +394,6 @@ void EditDrumsetDialog::shortcutChanged()
             item->setText(Column::SHORTCUT, shortcut->currentText());
         }
     }
-    refreshPitchesList();
 }
 
 //---------------------------------------------------------
