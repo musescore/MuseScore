@@ -34,14 +34,14 @@
 namespace mu::engraving {
 inline mpe::timestamp_t timestampFromTicks(const Score* score, const int tick)
 {
-    return score->repeatList().utick2utime(tick) * 1000;
+    return score->repeatList().utick2utime(tick) * 1000000;
 }
 
 inline mpe::duration_t durationFromTicks(const double beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::division)
 {
     float beatsNumber = static_cast<float>(durationTicks) / static_cast<float>(ticksPerBeat);
 
-    return (beatsNumber / beatsPerSecond) * 1000;
+    return (beatsNumber / beatsPerSecond) * 1000000;
 }
 
 static constexpr int CROTCHET_TICKS = Constants::division;
