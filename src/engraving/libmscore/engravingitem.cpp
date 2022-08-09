@@ -806,8 +806,7 @@ bool EngravingItem::intersects(const RectF& rr) const
 
 AnimationTrack* EngravingItem::getAnimationTrack(const QString& propertyName)
 {
-    if (_animationTracks.contains(propertyName))
-    {
+    if (_animationTracks.contains(propertyName)) {
         return _animationTracks[propertyName];
     }
     return nullptr;
@@ -819,8 +818,7 @@ AnimationTrack* EngravingItem::getAnimationTrack(const QString& propertyName)
 
 AnimationTrack* EngravingItem::createAnimationTrack(const QString& propertyName)
 {
-    if (_animationTracks.contains(propertyName))
-    {
+    if (_animationTracks.contains(propertyName)) {
         return _animationTracks[propertyName];
     }
 
@@ -836,8 +834,7 @@ AnimationTrack* EngravingItem::createAnimationTrack(const QString& propertyName)
 
 void EngravingItem::removeAnimationTrack(const QString& propertyName)
 {
-    if (_animationTracks.contains(propertyName))
-    {
+    if (_animationTracks.contains(propertyName)) {
         AnimationTrack* track = _animationTracks[propertyName];
         _animationTracks.remove(propertyName);
         delete track;
