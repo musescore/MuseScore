@@ -321,17 +321,17 @@ TEST_F(Engraving_PlaybackModelTests, Pizz_To_Arco_Technique)
     EXPECT_TRUE(firstNoteEvent.expressionCtx().articulations.contains(ArticulationType::Staccatissimo));
 
     // [THEN] The second note has only Pizzicato articulation applied
-    const mu::mpe::NoteEvent& secondNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(500).at(0));
+    const mu::mpe::NoteEvent& secondNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(500000).at(0));
     EXPECT_EQ(secondNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(secondNoteEvent.expressionCtx().articulations.contains(ArticulationType::Pizzicato));
 
     // [THEN] The third note has only Standard articulation applied
-    const mu::mpe::NoteEvent& thirdNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(1000).at(0));
+    const mu::mpe::NoteEvent& thirdNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(1000000).at(0));
     EXPECT_EQ(thirdNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(thirdNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
 
     // [THEN] The fourth note has only Standard articulation applied
-    const mu::mpe::NoteEvent& fourthNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(1500).at(0));
+    const mu::mpe::NoteEvent& fourthNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(1500000).at(0));
     EXPECT_EQ(fourthNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(fourthNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
 }
@@ -587,7 +587,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
 
     size_t expectedNoteCount = 3;
     int thirdChordPositionTick = 480 * 2;
-    timestamp_t thirdChordTimestamp = 500 * 2;
+    timestamp_t thirdChordTimestamp = 500000 * 2;
 
     const Chord* thirdChord = firstMeasure->findChord(Fraction::fromTicks(thirdChordPositionTick), 0);
     ASSERT_TRUE(thirdChord);
