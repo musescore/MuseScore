@@ -64,7 +64,7 @@ private slots:
 private:
     void apply();
     void cancel();
-    void updatePitchesList();
+    void loadPitchesList();
     void updateExample();
 
     void fillCustomNoteheadsDataFromComboboxes(int pitch);
