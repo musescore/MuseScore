@@ -35,10 +35,10 @@ using namespace mu::engraving;
 using namespace mu::mpe;
 
 static const String PLAYBACK_EVENTS_RENDERING_DIR("playbackeventsrenderer_data/");
-static constexpr duration_t QUARTER_NOTE_DURATION = 500; // duration in msecs for 4/4 120BPM
-static constexpr duration_t QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 2; // duration in msecs for 4/4 120BPM
-static constexpr duration_t SEMI_QUAVER_NOTE_DURATION = QUAVER_NOTE_DURATION / 2; // duration in msecs for 4/4 120BPM
-static constexpr duration_t DEMI_SEMI_QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 8; // duration in msecs for 4/4 120BPM
+static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in microseconds for 4/4 120BPM
+static constexpr duration_t QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 2; // duration in microseconds for 4/4 120BPM
+static constexpr duration_t SEMI_QUAVER_NOTE_DURATION = QUAVER_NOTE_DURATION / 2; // duration in microseconds for 4/4 120BPM
+static constexpr duration_t DEMI_SEMI_QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 8; // duration in microseconds for 4/4 120BPM
 
 class Engraving_PlaybackEventsRendererTests : public ::testing::Test
 {
@@ -372,7 +372,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Regular)
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 4;
     duration_t expectedSubNoteDuration = QUAVER_NOTE_DURATION / expectedSubNotesCount;
-    duration_t expectedPrincipalNoteDuration = 312;
+    duration_t expectedPrincipalNoteDuration = 312500;
 
     std::vector<duration_t> expectedDurations = { expectedSubNoteDuration,
                                                   expectedSubNoteDuration,
@@ -444,7 +444,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 4;
     duration_t expectedSubNoteDuration = QUAVER_NOTE_DURATION / expectedSubNotesCount;
-    duration_t expectedPrincipalNoteDuration = 312;
+    duration_t expectedPrincipalNoteDuration = 312500;
 
     std::vector<duration_t> expectedDurations = { expectedSubNoteDuration,
                                                   expectedSubNoteDuration,
@@ -517,7 +517,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Var
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 4;
     duration_t expectedSubNoteDuration = QUAVER_NOTE_DURATION / expectedSubNotesCount;
-    duration_t expectedPrincipalNoteDuration = 312;
+    duration_t expectedPrincipalNoteDuration = 312500;
 
     std::vector<duration_t> expectedDurations = { expectedSubNoteDuration,
                                                   expectedSubNoteDuration,
@@ -921,7 +921,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Acciaccatura)
 
     std::vector<duration_t> expectedDurations = {
         DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
-        469
+        QUARTER_NOTE_DURATION - (DEMI_SEMI_QUAVER_NOTE_DURATION / 2)
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
@@ -989,7 +989,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
     std::vector<duration_t> expectedDurations = {
         DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
         DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
-        438
+        QUARTER_NOTE_DURATION - DEMI_SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
