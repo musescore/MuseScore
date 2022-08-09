@@ -98,18 +98,18 @@ BeamMode Groups::endBeam(const ChordRest* cr, const ChordRest* prev)
     assert(cr->staff());
 
     // we need to figure out the longest note value beat upon which cr falls in the measure
-    int maxTickLen = std::max(cr->ticks().ticks(), prev ? prev->ticks().ticks() : 0);
-    int smallestTickLen = Fraction(1, 8).ticks(); // start with 8th
-    int tickLenLimit = Fraction(1, 32).ticks(); // only check up to 32nds because that's all thats available
-                                                // in timesig properties
-    while (smallestTickLen > maxTickLen || cr->tick().ticks() % smallestTickLen != 0) {
+    Fraction maxTickLen = std::max(cr->ticks(), prev ? prev->ticks() : Fraction());
+    Fraction smallestTickLen = Fraction(1, 8); // start with 8th
+    Fraction tickLenLimit = Fraction(1, 32); // only check up to 32nds because that's all thats available
+                                             // in timesig properties
+    while (smallestTickLen > maxTickLen || cr->tick().ticks() % smallestTickLen.ticks() != 0) {
         smallestTickLen /= 2; // proceed to 16th, 32nd, etc
         if (smallestTickLen < tickLenLimit) {
-            smallestTickLen = cr->ticks().ticks();
+            smallestTickLen = cr->ticks();
             break;
         }
     }
-    DurationType bigBeatDuration = TDuration(Fraction::fromTicks(smallestTickLen)).type();
+    DurationType bigBeatDuration = TDuration(smallestTickLen).type();
 
     TDuration crDuration = cr->durationType();
     const Groups& g = cr->staff()->group(cr->tick());
