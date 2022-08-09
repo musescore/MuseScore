@@ -63,7 +63,7 @@ private:
     msecs_t m_timeLoopStart = 0;
     msecs_t m_timeLoopEnd = 0;
 
-    async::Channel<msecs_t> m_timeChanged;
+    async::Channel<msecs_t> m_timeChangedInMilliSecs;
     async::Notification m_seekOccurred;
 };
 }
