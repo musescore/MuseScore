@@ -63,6 +63,7 @@ private slots:
 
 private:
     void apply();
+    void cancel();
     void updatePitchesList();
     void updateExample();
 
@@ -74,6 +75,8 @@ private:
 
     notation::INotationPtr m_notation;
     notation::InstrumentKey m_instrumentKey;
+
+    engraving::Drumset m_originDrumset;
     engraving::Drumset m_editedDrumset;
 };
 }
