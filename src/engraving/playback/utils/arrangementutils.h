@@ -23,6 +23,7 @@
 #ifndef MU_ENGRAVING_ARRANGEMENTUTILS_H
 #define MU_ENGRAVING_ARRANGEMENTUTILS_H
 
+#include "global/realfn.h"
 #include "mpe/mpetypes.h"
 
 #include "libmscore/score.h"
@@ -48,14 +49,14 @@ static constexpr int QUAVER_TICKS = Constants::division / 2;
 static constexpr int SEMIQUAVER_TICKS = Constants::division / 4;
 static constexpr int DEMISEMIQUAVER_TICKS = Constants::division / 8;
 
-static constexpr double PRESTISSIMO_BPS_BOUND = 200 /*bpm*/ / 60.f /*secs*/;
-static constexpr double PRESTO_BPS_BOUND = 168 /*bpm*/ / 60.f /*secs*/;
-static constexpr double ALLEGRO_BPS_BOUND = 120 /*bpm*/ / 60.f /*secs*/;
-static constexpr double MODERATO_BPS_BOUND = 108 /*bpm*/ / 60.f /*secs*/;
-static constexpr double ANDANTE_BPS_BOUND = 76 /*bpm*/ / 60.f /*secs*/;
-static constexpr double ADAGIO_BPS_BOUND = 66 /*bpm*/ / 60.f /*secs*/;
-static constexpr double LENTO_BPS_BOUND = 40 /*bpm*/ / 60.f /*secs*/;
-static constexpr double GRAVE_BPS_BOUND = 20 /*bpm*/ / 60.f /*secs*/;
+static const double PRESTISSIMO_BPS_BOUND = RealRound(200 /*bpm*/ / 60.f /*secs*/, 2);
+static const double PRESTO_BPS_BOUND = RealRound(168 /*bpm*/ / 60.f /*secs*/, 2);
+static const double ALLEGRO_BPS_BOUND = RealRound(120 /*bpm*/ / 60.f /*secs*/, 2);
+static const double MODERATO_BPS_BOUND = RealRound(108 /*bpm*/ / 60.f /*secs*/, 2);
+static const double ANDANTE_BPS_BOUND = RealRound(76 /*bpm*/ / 60.f /*secs*/, 2);
+static const double ADAGIO_BPS_BOUND = RealRound(66 /*bpm*/ / 60.f /*secs*/, 2);
+static const double LENTO_BPS_BOUND = RealRound(40 /*bpm*/ / 60.f /*secs*/, 2);
+static const double GRAVE_BPS_BOUND = RealRound(20 /*bpm*/ / 60.f /*secs*/, 2);
 }
 
 #endif // MU_ENGRAVING_ARRANGEMENTUTILS_H

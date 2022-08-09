@@ -38,9 +38,10 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*prefixPitchOffsets*/ {},
             /*isAlterationsRepeatAllowed*/ true,
             /*alterationStepPitchOffsets*/ { 0, PITCH_LEVEL_STEP },
-            /*suffixDurationTicks*/ DEMISEMIQUAVER_TICKS* 2,
-            /*suffixPitchOffsets*/ { 0, PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*suffixDurationTicks*/ 0,
+            /*suffixPitchOffsets*/ {},
+            /*minSupportedNoteDurationTicks*/ { QUAVER_TICKS / 10.f, DEMISEMIQUAVER_TICKS,
+                                                SEMIQUAVER_TICKS }
         }
     },
     {
@@ -52,7 +53,8 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ DEMISEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { QUAVER_TICKS / 10.f, DEMISEMIQUAVER_TICKS,
+                                                SEMIQUAVER_TICKS }
         }
     },
     {
@@ -64,7 +66,7 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ DEMISEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS, DEMISEMIQUAVER_TICKS, DEMISEMIQUAVER_TICKS }
         }
     },
     {
@@ -76,7 +78,7 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ SEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS, DEMISEMIQUAVER_TICKS, DEMISEMIQUAVER_TICKS }
         }
     },
     {
@@ -88,7 +90,7 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ SEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -100,7 +102,7 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS / 2.f, DEMISEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -112,19 +114,19 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS / 2.f, DEMISEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
         ArticulationType::UpperMordentBaroque,
         {
-            /*prefixDurationTicks*/ DEMISEMIQUAVER_TICKS * 3,
+            /*prefixDurationTicks*/ DEMISEMIQUAVER_TICKS* 3,
             /*prefixPitchOffsets*/ { PITCH_LEVEL_STEP, 0, PITCH_LEVEL_STEP },
             /*isAlterationsRepeatAllowed*/ false,
             /*alterationStepPitchOffsets*/ { 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS / 2.f, DEMISEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -136,7 +138,7 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -148,7 +150,7 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ SEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -160,7 +162,7 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ SEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -172,31 +174,31 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ SEMIQUAVER_TICKS* 4,
             /*suffixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0, 0, 0 },
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
         ArticulationType::Turn,
         {
-            /*prefixDurationTicks*/ DEMISEMIQUAVER_TICKS * 3,
+            /*prefixDurationTicks*/ DEMISEMIQUAVER_TICKS* 3,
             /*prefixPitchOffsets*/ { PITCH_LEVEL_STEP, 0, -PITCH_LEVEL_STEP },
             /*isAlterationsRepeatAllowed*/ false,
             /*alterationStepPitchOffsets*/ { 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS / 2.f, DEMISEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
         ArticulationType::InvertedTurn,
         {
-            /*prefixDurationTicks*/ 0,
-            /*prefixPitchOffsets*/ {},
+            /*prefixDurationTicks*/ DEMISEMIQUAVER_TICKS* 3,
+            /*prefixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0, PITCH_LEVEL_STEP },
             /*isAlterationsRepeatAllowed*/ false,
-            /*alterationStepPitchOffsets*/ { -PITCH_LEVEL_STEP, 0, PITCH_LEVEL_STEP, 0 },
+            /*alterationStepPitchOffsets*/ { 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ 0
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS / 2.f, DEMISEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -208,7 +210,7 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -220,7 +222,7 @@ static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0, -PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
 };
@@ -267,64 +269,59 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
         NominalNoteCtx noteCtx(note, context);
         NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.chordCtx.commonArticulations);
 
-        convert(preferredType, nominalPattern.buildActualPattern(note), std::move(noteCtx), result);
+        convert(preferredType, nominalPattern.buildActualPattern(note, context.beatsPerSecond.val), std::move(noteCtx), result);
     }
 }
 
-void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePattern& patern, NominalNoteCtx&& noteCtx,
+void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
                                 mpe::PlaybackEventList& result)
 {
-    if (noteCtx.chordCtx.nominalDurationTicks <= patern.minSupportedNoteDurationTicks) {
+    if (noteCtx.chordCtx.nominalDurationTicks <= pattern.boundaries.lowTempoDurationTicks) {
         result.push_back(buildNoteEvent(std::move(noteCtx)));
         return;
     }
 
     // convert prefix
-    if (!patern.prefixPitchOffsets.empty()) {
-        createEvents(type, noteCtx, 1, patern.prefixDurationTicks,
-                     noteCtx.chordCtx.nominalDurationTicks, patern.prefixPitchOffsets, result);
+    if (!pattern.prefixPitchOffsets.empty()) {
+        createEvents(type, noteCtx, 1, pattern.prefixDurationTicks,
+                     noteCtx.chordCtx.nominalDurationTicks, pattern.prefixPitchOffsets, result);
     }
 
     // convert body
-    if (!patern.alterationStepPitchOffsets.empty()) {
+    if (!pattern.alterationStepPitchOffsets.empty()) {
         int alterationsCount = 1;
 
-        if (patern.isAlterationsRepeatAllowed) {
-            alterationsCount = alterationsNumberByTempo(noteCtx.chordCtx.beatsPerSecond.val, noteCtx.chordCtx.nominalDurationTicks);
+        if (pattern.isAlterationsRepeatAllowed) {
+            alterationsCount = alterationsNumberByTempo(noteCtx.chordCtx.beatsPerSecond.val,
+                                                        noteCtx.chordCtx.nominalDurationTicks,
+                                                        pattern);
         }
 
-        createEvents(type, noteCtx, alterationsCount,
-                     noteCtx.chordCtx.nominalDurationTicks - patern.prefixDurationTicks - patern.suffixDurationTicks,
-                     noteCtx.chordCtx.nominalDurationTicks,
-                     patern.alterationStepPitchOffsets, result);
+        if (alterationsCount == 0) {
+            result.push_back(buildNoteEvent(std::move(noteCtx)));
+        } else {
+            createEvents(type, noteCtx, alterationsCount,
+                         noteCtx.chordCtx.nominalDurationTicks - pattern.prefixDurationTicks - pattern.suffixDurationTicks,
+                         noteCtx.chordCtx.nominalDurationTicks,
+                         pattern.alterationStepPitchOffsets, result);
+        }
     }
 
     // convert suffix
-    if (!patern.suffixPitchOffsets.empty()) {
+    if (!pattern.suffixPitchOffsets.empty()) {
         createEvents(type, noteCtx, 1,
-                     patern.suffixDurationTicks,
+                     pattern.suffixDurationTicks,
                      noteCtx.chordCtx.nominalDurationTicks,
-                     patern.suffixPitchOffsets, result);
+                     pattern.suffixPitchOffsets, result);
     }
 }
 
-int OrnamentsRenderer::alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks)
+int OrnamentsRenderer::alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks,
+                                                const DisclosurePattern& pattern)
 {
-    float ratio = static_cast<float>(principalNoteDurationTicks) / static_cast<float>(CROTCHET_TICKS);
+    float subNotesCount = principalNoteDurationTicks / pattern.subNoteDurationTicks(beatsPerSeconds);
 
-    if (RealIsEqualOrMore(beatsPerSeconds, PRESTISSIMO_BPS_BOUND)) {
-        return 0 * ratio;
-    }
-
-    if (RealIsEqualOrMore(beatsPerSeconds, PRESTO_BPS_BOUND)) {
-        return 1 * ratio;
-    }
-
-    if (RealIsEqualOrMore(beatsPerSeconds, MODERATO_BPS_BOUND)) {
-        return 2 * ratio;
-    }
-
-    return 3 * ratio;
+    return static_cast<int>(std::max(subNotesCount / 2, 0.f));
 }
 
 void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
@@ -352,13 +349,31 @@ void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx
     }
 }
 
-DisclosurePattern DisclosurePattern::buildActualPattern(const Note* note) const
+float DisclosurePattern::subNoteDurationTicks(const double bps) const
+{
+    if (RealIsEqualOrMore(bps, PRESTISSIMO_BPS_BOUND)) {
+        return boundaries.highTempoDurationTicks;
+    }
+
+    if (RealIsEqualOrMore(bps, MODERATO_BPS_BOUND)) {
+        return boundaries.mediumTempoDurationTicks;
+    }
+
+    return boundaries.lowTempoDurationTicks;
+}
+
+DisclosurePattern DisclosurePattern::buildActualPattern(const Note* note, const double bps) const
 {
     DisclosurePattern result = *this;
 
     result.updatePitchOffsets(note, result.prefixPitchOffsets);
     result.updatePitchOffsets(note, result.alterationStepPitchOffsets);
     result.updatePitchOffsets(note, result.suffixPitchOffsets);
+
+    float subNoteTicks = subNoteDurationTicks(bps);
+
+    result.prefixDurationTicks = RealRound(prefixPitchOffsets.size() * subNoteTicks, 0);
+    result.suffixDurationTicks = RealRound(suffixPitchOffsets.size() * subNoteTicks, 0);
 
     return result;
 }

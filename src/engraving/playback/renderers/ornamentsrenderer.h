@@ -40,9 +40,16 @@ struct DisclosurePattern {
     int suffixDurationTicks = 0;
     std::vector<mpe::pitch_level_t> suffixPitchOffsets;
 
-    int minSupportedNoteDurationTicks = 0;
+    struct DurationBoundaries {
+        float lowTempoDurationTicks = 0.f;
+        float mediumTempoDurationTicks = 0.f;
+        float highTempoDurationTicks = 0.f;
+    };
 
-    DisclosurePattern buildActualPattern(const Note* note) const;
+    DurationBoundaries boundaries;
+
+    float subNoteDurationTicks(const double bps) const;
+    DisclosurePattern buildActualPattern(const Note* note, const double bps) const;
 
 private:
     void updatePitchOffsets(const Note* note, std::vector<mpe::pitch_level_t>& pitchOffsets);
@@ -57,10 +64,11 @@ public:
                          mpe::PlaybackEventList& result);
 
 private:
-    static void convert(const mpe::ArticulationType type, const DisclosurePattern& patern, NominalNoteCtx&& noteCtx,
+    static void convert(const mpe::ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
                         mpe::PlaybackEventList& result);
 
-    static int alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks);
+    static int alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks,
+                                        const DisclosurePattern& pattern);
 
     static void createEvents(const mpe::ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
                              const int availableDurationTicks, const int overallDurationTicks,
