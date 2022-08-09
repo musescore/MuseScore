@@ -401,6 +401,9 @@ enum class Pid {
     TEMPO_EASING_METHOD,
     TEMPO_CHANGE_FACTOR,
 
+    PAN,
+    EXPRESSION,
+
     END
 };
 
@@ -413,6 +416,9 @@ extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
 extern Pid propertyId(const AsciiStringView& name);
 extern String propertyUserName(Pid);
+extern QVariant propertyMaxValue(Pid id);
+extern QVariant propertyMinValue(Pid id);
+extern QVariant propertyDefaultValue(Pid id);
 } // namespace mu::engraving
 
 #endif
