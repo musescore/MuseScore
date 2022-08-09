@@ -33,12 +33,11 @@ using namespace mu::shortcuts;
 using namespace mu::framework;
 using namespace mu::async;
 
-constexpr std::string_view SHORTCUTS_TAG("Shortcuts");
-constexpr std::string_view SHORTCUT_TAG("SC");
-constexpr std::string_view ACTION_CODE_TAG("key");
-constexpr std::string_view STANDARD_KEY_TAG("std");
-constexpr std::string_view SEQUENCE_TAG("seq");
-constexpr std::string_view CONTEXT_TAG("ctx");
+static constexpr std::string_view SHORTCUTS_TAG("Shortcuts");
+static constexpr std::string_view SHORTCUT_TAG("SC");
+static constexpr std::string_view ACTION_CODE_TAG("key");
+static constexpr std::string_view STANDARD_KEY_TAG("std");
+static constexpr std::string_view SEQUENCE_TAG("seq");
 
 static const std::string SHORTCUTS_RESOURCE_NAME("SHORTCUTS");
 
