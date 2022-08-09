@@ -209,7 +209,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Modern)
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected trill disclosure
-    int expectedTrillSubNotesCount = 7;
+    int expectedTrillSubNotesCount = 8;
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
@@ -303,7 +303,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected trill disclosure
-    int expectedTrillSubNotesCount = 6;
+    int expectedTrillSubNotesCount = 10;
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::TrillBaroque, m_dummyPattern);
@@ -371,7 +371,19 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Regular)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 4;
-    duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
+    duration_t expectedSubNoteDuration = QUAVER_NOTE_DURATION / expectedSubNotesCount;
+    duration_t expectedPrincipalNoteDuration = 312;
+
+    std::vector<duration_t> expectedDurations = { expectedSubNoteDuration,
+                                                  expectedSubNoteDuration,
+                                                  expectedSubNoteDuration,
+                                                  expectedPrincipalNoteDuration };
+
+    std::vector<timestamp_t> expectedTimestamps = { 0,
+                                                    expectedSubNoteDuration,
+                                                    expectedSubNoteDuration* 2,
+                                                    expectedSubNoteDuration* 3 };
+
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
     pitch_level_t plus = nominalPitchLevel + 2 * PITCH_LEVEL_STEP;
     pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
@@ -400,8 +412,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Regular)
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Turn));
 
             // [THEN] We expect that each sub-note in Regular Turn articulation will be equal to 0.25 of the principal note
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<duration_t>(i) * expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations[i]);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps[i]);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
@@ -431,7 +443,19 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 4;
-    duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
+    duration_t expectedSubNoteDuration = QUAVER_NOTE_DURATION / expectedSubNotesCount;
+    duration_t expectedPrincipalNoteDuration = 312;
+
+    std::vector<duration_t> expectedDurations = { expectedSubNoteDuration,
+                                                  expectedSubNoteDuration,
+                                                  expectedSubNoteDuration,
+                                                  expectedPrincipalNoteDuration };
+
+    std::vector<timestamp_t> expectedTimestamps = { 0,
+                                                    expectedSubNoteDuration,
+                                                    expectedSubNoteDuration* 2,
+                                                    expectedSubNoteDuration* 3 };
+
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
     pitch_level_t plus = nominalPitchLevel + 2 * PITCH_LEVEL_STEP;
     pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
@@ -460,8 +484,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::InvertedTurn));
 
             // [THEN] We expect that each sub-note in Inverted Turn articulation will be equal to 0.25 of the principal note
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<duration_t>(i) * expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations[i]);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps[i]);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
@@ -492,7 +516,19 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Var
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 4;
-    duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
+    duration_t expectedSubNoteDuration = QUAVER_NOTE_DURATION / expectedSubNotesCount;
+    duration_t expectedPrincipalNoteDuration = 312;
+
+    std::vector<duration_t> expectedDurations = { expectedSubNoteDuration,
+                                                  expectedSubNoteDuration,
+                                                  expectedSubNoteDuration,
+                                                  expectedPrincipalNoteDuration };
+
+    std::vector<timestamp_t> expectedTimestamps = { 0,
+                                                    expectedSubNoteDuration,
+                                                    expectedSubNoteDuration* 2,
+                                                    expectedSubNoteDuration* 3 };
+
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
     pitch_level_t plus = nominalPitchLevel + 2 * PITCH_LEVEL_STEP;
     pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
@@ -521,8 +557,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Var
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::InvertedTurn));
 
             // [THEN] We expect that each sub-note in Inverted Turn articulation will be equal to 0.25 of the principal note
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<duration_t>(i) * expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations[i]);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps[i]);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
