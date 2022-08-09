@@ -328,6 +328,13 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::dontHideStavesInFirstSystem, e.readBool());
         } else if (tag == "beamDistance") { // beamDistance maps to useWideBeams in 4.0
             set(Sid::useWideBeams, e.readDouble() > 0.75);
+        } else if ((tag == "articulationMinDistance"
+                    || tag == "propertyDistanceHead"
+                    || tag == "propertyDistanceStem"
+                    || tag == "propertyDistance")
+                   && defaultStyleVersion() < 400) {
+            // Ignoring pre-4.0 articulation style settings. Using the new defaults instead
+            e.skipCurrentElement();
         } else if (!readProperties(e)) {
             e.unknown();
         }
