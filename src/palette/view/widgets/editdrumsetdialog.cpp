@@ -166,7 +166,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     drumNote->setDrawGrid(false);
     drumNote->setReadOnly(true);
 
-    updatePitchesList();
+    loadPitchesList();
 
     for (auto g : noteHeadNames) {
         noteHead->addItem(TConv::translatedUserName(g), int(g));
@@ -298,13 +298,12 @@ void EditDrumsetDialog::customGboxToggled(bool checked)
     }
 }
 
-//---------------------------------------------------------
-//   updatePitchesList
-//---------------------------------------------------------
-
-void EditDrumsetDialog::updatePitchesList()
+void EditDrumsetDialog::loadPitchesList()
 {
+    pitchList->blockSignals(true);
     pitchList->clear();
+    pitchList->blockSignals(false);
+
     for (int i = 0; i < 128; ++i) {
         QTreeWidgetItem* item = new EditDrumsetTreeWidgetItem(pitchList);
         item->setText(Column::PITCH, QString("%1").arg(i));
@@ -661,7 +660,8 @@ void EditDrumsetDialog::load()
         }
     }
     fp.close();
-    updatePitchesList();
+    loadPitchesList();
+    pitchList->setCurrentItem(pitchList->topLevelItem(0));
 }
 
 //---------------------------------------------------------
@@ -672,7 +672,7 @@ void EditDrumsetDialog::save()
 {
     QString filter = mu::qtrc("palette", "MuseScore drumset file") + " (*.drm)";
     mu::io::path_t dir = notationConfiguration()->userStylesPath();
-    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Save drumset"), dir, filter);
+    mu::io::path_t fname = interactive()->selectSavingFile(mu::qtrc("palette", "Save drumset"), dir, filter);
 
     if (fname.empty()) {
         return;
