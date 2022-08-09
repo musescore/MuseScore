@@ -38,6 +38,19 @@ ColumnLayout {
     property double m_centerX: 0
     property double m_wholeNoteWidth: 20
 
+    enum Shape {
+        //Note event tweaks
+        Velocity,
+        VelocityAbs,
+        Duration,
+        DurationMult,
+        Position,
+
+        //Automation curves
+        Expression,
+        Pan
+    }
+
     RowLayout {
         spacing: 0
         Layout.fillWidth: true
@@ -53,23 +66,56 @@ ColumnLayout {
                 valueRole: "value"
 
                 model: [
-                    { text: qsTr("Velocity Relative"), value: PianorollAutomationNote.VELOCITY },
-                    { text: qsTr("Velocity Absolute"), value: PianorollAutomationNote.VELOCITY_ABS },
-                    { text: qsTr("On Time"), value: PianorollAutomationNote.POSITION },
-                    { text: qsTr("Duration Offset"), value: PianorollAutomationNote.DURATION },
-                    { text: qsTr("Duration Scale"), value: PianorollAutomationNote.DURATION_MULT },
-                    { text: qsTr("Expression"), value: PianorollAutomationNote.EXPRESSION },
-                    { text: qsTr("Pan"), value: PianorollAutomationNote.PAN }
+                    { text: qsTr("Velocity Absolute"), value: PianorollAutomationRow.Shape.VelocityAbs },
+                    { text: qsTr("On Time"), value: PianorollAutomationRow.Shape.Position },
+                    { text: qsTr("Duration Offset"), value: PianorollAutomationRow.Shape.Duration },
+                    { text: qsTr("Duration Scale"), value: PianorollAutomationRow.Shape.DurationMult },
+                    { text: qsTr("Expression"), value: PianorollAutomationRow.Shape.Expression },
+                    { text: qsTr("Pan"), value: PianorollAutomationRow.Shape.Pan }
                 ]
 
                 onActivated: {
-                    automationNotes.automationType = currentValue
-                    //pianoView.tuplet = currentValue
-                    if (currentValue === PianorollAutomationNote.VELOCITY
-                            || currentValue === PianorollAutomationNote.VELOCITY_ABS
-                            || currentValue === PianorollAutomationNote.POSITION
-                            || currentValue === PianorollAutomationNote.DURATION
-                            || currentValue === PianorollAutomationNote.DURATION_MULT) {
+                    var noteTweak = false;
+
+                    switch (currentValue) {
+                    case PianorollAutomationRow.Shape.VelocityAbs:
+                    {
+                        noteTweak = true;
+                        automationNotes.automationType = PianorollAutomationNote.VELOCITY_ABS;
+                        break;
+                    }
+                    case PianorollAutomationRow.Shape.Position:
+                    {
+                        noteTweak = true;
+                        automationNotes.automationType = PianorollAutomationNote.POSITION;
+                        break;
+                    }
+                    case PianorollAutomationRow.Shape.Duration:
+                    {
+                        noteTweak = true;
+                        automationNotes.automationType = PianorollAutomationNote.DURATION;
+                        break;
+                    }
+                    case PianorollAutomationRow.Shape.DurationMult:
+                    {
+                        noteTweak = true;
+                        automationNotes.automationType = PianorollAutomationNote.DURATION_MULT;
+                        break;
+                    }
+                    case PianorollAutomationRow.Shape.Expression:
+                    {
+                        automationCurves.propertyName = "expression";
+                        break;
+                    }
+                    case PianorollAutomationRow.Shape.Pan:
+                    {
+                        automationCurves.propertyName = "pan";
+                        break;
+                    }
+                    }
+
+                    if (noteTweak)
+                    {
                         automationNotes.visible = true
                         automationCurves.visible = false
                     }
