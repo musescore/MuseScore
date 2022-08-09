@@ -285,6 +285,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FIGURED_BASS_ITEM:
     case ElementType::TREMOLO:
     case ElementType::DUMMY:
+    case ElementType::ANIMATION_KEY:
+    case ElementType::ANIMATION_TRACK:
         break;
     }
 
