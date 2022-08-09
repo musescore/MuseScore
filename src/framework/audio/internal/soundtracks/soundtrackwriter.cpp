@@ -44,7 +44,7 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
         return;
     }
 
-    samples_t totalSamplesNumber = (totalDuration / 1000.f) * sizeof(float) * format.sampleRate;
+    samples_t totalSamplesNumber = (totalDuration / 1000000.f) * sizeof(float) * format.sampleRate;
     m_inputBuffer.resize(totalSamplesNumber);
     m_intermBuffer.resize(INTERNAL_BUFFER_SIZE);
 

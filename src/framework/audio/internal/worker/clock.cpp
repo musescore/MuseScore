@@ -68,7 +68,7 @@ void Clock::setCurrentTime(msecs_t time)
     }
 
     m_currentTime = time;
-    m_timeChanged.send(m_currentTime);
+    m_timeChangedInMilliSecs.send(m_currentTime / 1000);
 }
 
 void Clock::start()
@@ -144,7 +144,7 @@ bool Clock::isRunning() const
 
 async::Channel<msecs_t> Clock::timeChanged() const
 {
-    return m_timeChanged;
+    return m_timeChangedInMilliSecs;
 }
 
 async::Notification Clock::seekOccurred() const

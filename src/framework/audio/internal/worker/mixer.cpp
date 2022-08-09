@@ -117,7 +117,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     ONLY_AUDIO_WORKER_THREAD;
 
     for (IClockPtr clock : m_clocks) {
-        clock->forward((samplesPerChannel * 1000) / m_sampleRate);
+        clock->forward((samplesPerChannel * 1000000) / m_sampleRate);
     }
 
     std::fill(outBuffer, outBuffer + samplesPerChannel * audioChannelsCount(), 0.f);

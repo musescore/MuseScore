@@ -130,7 +130,7 @@ audio::msecs_t AbstractSynthesizer::samplesToMsecs(const samples_t samplesPerCha
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return samplesPerChannel * 1000 / sampleRate;
+    return samplesPerChannel * 1000000 / sampleRate;
 }
 
 msecs_t AbstractSynthesizer::actualPlaybackPositionStart() const
