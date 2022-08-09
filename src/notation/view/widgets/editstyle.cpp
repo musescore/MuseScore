@@ -28,6 +28,7 @@
 #include <QSignalMapper>
 
 #include "translation.h"
+#include "types/translatablestring.h"
 
 #include "alignSelect.h"
 #include "colorlabel.h"
@@ -172,13 +173,13 @@ public:
     QList<QWidget*> dashSpecificWidgets;
 };
 
-static constexpr const char* lineStyles[] = {
+static const TranslatableString lineStyles[] = {
     //: line style
-    QT_TRANSLATE_NOOP("notation/editstyle", "Continuous"),
+    TranslatableString("notation/editstyle", "Continuous"),
     //: line style
-    QT_TRANSLATE_NOOP("notation/editstyle", "Dashed"),
+    TranslatableString("notation/editstyle", "Dashed"),
     //: line style
-    QT_TRANSLATE_NOOP("notation/editstyle", "Dotted"),
+    TranslatableString("notation/editstyle", "Dotted"),
 };
 
 static void fillDirectionComboBox(QComboBox* comboBox)
@@ -635,8 +636,8 @@ EditStyle::EditStyle(QWidget* parent)
         lineStyleSelect->lineStyleComboBox->clear();
 
         int idx = 0;
-        for (const char* p : lineStyles) {
-            lineStyleSelect->lineStyleComboBox->addItem(qtrc("notation", p), idx);
+        for (const TranslatableString& lineStyle : lineStyles) {
+            lineStyleSelect->lineStyleComboBox->addItem(lineStyle.qTranslated(), idx);
             ++idx;
         }
     }
@@ -1066,8 +1067,8 @@ void EditStyle::retranslate()
 
     for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
         int idx = 0;
-        for (const char* p : lineStyles) {
-            lineStyleSelect->lineStyleComboBox->setItemText(idx, qtrc("notation", p));
+        for (const TranslatableString& lineStyle : lineStyles) {
+            lineStyleSelect->lineStyleComboBox->setItemText(idx, lineStyle.qTranslated());
             ++idx;
         }
     }
