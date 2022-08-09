@@ -374,6 +374,8 @@ public:
 
         TEMPO_CHANGE = 0xF43F,
 
+        PLUGIN = 0xF440,
+
         NONE = 0xFFFF
     };
 
