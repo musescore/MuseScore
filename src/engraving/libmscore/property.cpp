@@ -661,10 +661,9 @@ double propertyMaxValue(Pid id)
     case Pid::EXPRESSION:
         return 1;
     default:
-        qFatal("unhandled PID type");
-        break;
+        //Unhandled PID type
+        return 0;
     }
-    return 0;
 }
 
 //---------------------------------------------------------
@@ -679,10 +678,9 @@ double propertyMinValue(Pid id)
     case Pid::EXPRESSION:
         return -1;
     default:
-        qFatal("unhandled PID type");
-        break;
+        //Unhandled PID type
+        return 0;
     }
-    return 0;
 }
 
 //---------------------------------------------------------
@@ -697,9 +695,8 @@ double propertyDefaultValue(Pid id)
     case Pid::EXPRESSION:
         return 0;
     default:
-        qFatal("unhandled PID type");
-        break;
+        //Unhandled PID type
+        return 0;
     }
-    return 0;
 }
 }
