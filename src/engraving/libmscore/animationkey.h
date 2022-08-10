@@ -31,8 +31,9 @@ class AnimationTrack;
 
 class AnimationKey
 {
-    float _value;
+    float _value = 0;
     Fraction _tick;
+    AnimationTrack* _parent;
 
 public:
     AnimationKey(AnimationTrack* parent);

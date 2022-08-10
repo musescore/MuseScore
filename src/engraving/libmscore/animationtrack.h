@@ -34,7 +34,7 @@ class AnimationTrack
 {
     std::string _propertyName;
 
-    QList<AnimationKey*> _keys;
+    std::vector<AnimationKey*> _keys;
 
 public:
     AnimationTrack(EngravingItem* parent);
@@ -46,8 +46,8 @@ public:
     std::string propertyName() const { return _propertyName; }
     void setPropertyName(std::string value);
 
-    const QList<AnimationKey*>& keys() const { return _keys; }
-    QList<AnimationKey*>& keys() { return _keys; }
+    const std::vector<AnimationKey*>& keys() const { return _keys; }
+    std::vector<AnimationKey*>& keys() { return _keys; }
 //    void addKey(AnimationKey* vertex);
     void addKey(Fraction tick, float value);
     void removeKey(Fraction tick);
