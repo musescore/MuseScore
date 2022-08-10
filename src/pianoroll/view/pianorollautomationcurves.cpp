@@ -294,8 +294,8 @@ AnimationKey* PianorollAutomationCurves::pickKey(QPointF point)
         id = propertyId(m_propertyName.toStdString());
     }
 
-    double pMax = propertyMaxValue(id).toDouble();
-    double pMin = propertyMinValue(id).toDouble();
+    double pMax = propertyMaxValue(id);
+    double pMin = propertyMinValue(id);
 
     AnimationTrack* track = getAnimationTrack();
     if (!track) {
@@ -332,8 +332,8 @@ void PianorollAutomationCurves::mouseDoubleClickEvent(QMouseEvent* event)
     if (id == Pid::END) {
         return;
     }
-    double pMax = propertyMaxValue(id).toDouble();
-    double pMin = propertyMinValue(id).toDouble();
+    double pMax = propertyMaxValue(id);
+    double pMin = propertyMinValue(id);
 
     //Visible area we are rendering to
     Measure* lm = curScore->lastMeasure();
@@ -395,8 +395,8 @@ void PianorollAutomationCurves::finishDrag()
     if (id == Pid::END) {
         return;
     }
-    double pMax = propertyMaxValue(id).toDouble();
-    double pMin = propertyMinValue(id).toDouble();
+    double pMax = propertyMaxValue(id);
+    double pMin = propertyMinValue(id);
 
     //Visible area we are rendering to
     Measure* lm = curScore->lastMeasure();
@@ -528,9 +528,9 @@ void PianorollAutomationCurves::paint(QPainter* p)
         return;
     }
 
-    double pMax = propertyMaxValue(id).toDouble();
-    double pMin = propertyMinValue(id).toDouble();
-    double pDef = propertyDefaultValue(id).toDouble();
+    double pMax = propertyMaxValue(id);
+    double pMin = propertyMinValue(id);
+    double pDef = propertyDefaultValue(id);
 
     const QPen penDataLine = QPen(m_colorDataLine, 1.0, Qt::SolidLine);
     p->setPen(penDataLine);

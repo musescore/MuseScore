@@ -653,7 +653,7 @@ String propertyToString(Pid id, const PropertyValue& value, bool mscx)
 //   propertyMaxValue
 //---------------------------------------------------------
 
-QVariant propertyMaxValue(Pid id)
+double propertyMaxValue(Pid id)
 {
     switch (id) {
     case Pid::PAN:
@@ -664,14 +664,14 @@ QVariant propertyMaxValue(Pid id)
         qFatal("unhandled PID type");
         break;
     }
-    return QVariant();
+    return 0;
 }
 
 //---------------------------------------------------------
 //   propertyMinValue
 //---------------------------------------------------------
 
-QVariant propertyMinValue(Pid id)
+double propertyMinValue(Pid id)
 {
     switch (id) {
     case Pid::PAN:
@@ -682,14 +682,14 @@ QVariant propertyMinValue(Pid id)
         qFatal("unhandled PID type");
         break;
     }
-    return QVariant();
+    return 0;
 }
 
 //---------------------------------------------------------
 //   propertyMinValue
 //---------------------------------------------------------
 
-QVariant propertyDefaultValue(Pid id)
+double propertyDefaultValue(Pid id)
 {
     switch (id) {
     case Pid::PAN:
@@ -700,6 +700,6 @@ QVariant propertyDefaultValue(Pid id)
         qFatal("unhandled PID type");
         break;
     }
-    return QVariant();
+    return 0;
 }
 }

@@ -107,7 +107,7 @@ float AnimationTrack::evaluate(Fraction tick)
     int index = keyIndexForTick(tick);
     if (index == -1) {
         Pid id = propertyId(_propertyName);
-        double defaultValue = propertyDefaultValue(id).toDouble();
+        double defaultValue = propertyDefaultValue(id);
         return defaultValue;
     }
 
