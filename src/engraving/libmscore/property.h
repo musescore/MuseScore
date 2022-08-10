@@ -416,9 +416,9 @@ extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
 extern Pid propertyId(const AsciiStringView& name);
 extern String propertyUserName(Pid);
-extern QVariant propertyMaxValue(Pid id);
-extern QVariant propertyMinValue(Pid id);
-extern QVariant propertyDefaultValue(Pid id);
+extern double propertyMaxValue(Pid id);
+extern double propertyMinValue(Pid id);
+extern double propertyDefaultValue(Pid id);
 } // namespace mu::engraving
 
 #endif
