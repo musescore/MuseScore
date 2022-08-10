@@ -73,7 +73,7 @@ void AnimationTrack::addKey(Fraction tick, float value)
         AnimationKey* key = new AnimationKey(this);
         key->setValue(value);
         key->setTick(tick);
-        _keys.push_front(key);
+        _keys.emplace(_keys.begin(), key);
         return;
     }
 
@@ -85,7 +85,7 @@ void AnimationTrack::addKey(Fraction tick, float value)
     AnimationKey* key = new AnimationKey(this);
     key->setValue(value);
     key->setTick(tick);
-    _keys.insert(index + 1, key);
+    _keys.emplace(_keys.begin() + index + 1, key);
 }
 
 void AnimationTrack::removeKey(Fraction tick)
@@ -97,7 +97,7 @@ void AnimationTrack::removeKey(Fraction tick)
 
     AnimationKey* key = _keys[index];
     if (key->tick() == tick) {
-        _keys.removeAt(index);
+        _keys.erase(_keys.begin() + index);
         delete key;
     }
 }
@@ -111,7 +111,7 @@ float AnimationTrack::evaluate(Fraction tick)
         return defaultValue;
     }
 
-    if (index == _keys.length() - 1) {
+    if (index == _keys.size() - 1) {
         AnimationKey* k0 = _keys[index];
         return k0->value();
     }
