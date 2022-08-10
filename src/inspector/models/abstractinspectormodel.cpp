@@ -137,6 +137,11 @@ void AbstractInspectorModel::setupCurrentNotationChangedConnection()
 
             m_updatePropertiesAllowed = true;
         });
+
+        onStyleChanged();
+        notation->style()->styleChanged().onNotify(this, [this]() {
+            onStyleChanged();
+        });
     };
 
     listenNotationChanged();
@@ -147,6 +152,10 @@ void AbstractInspectorModel::setupCurrentNotationChangedConnection()
 }
 
 void AbstractInspectorModel::updatePropertiesOnNotationChanged()
+{
+}
+
+void AbstractInspectorModel::onStyleChanged()
 {
 }
 

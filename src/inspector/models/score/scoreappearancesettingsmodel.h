@@ -52,15 +52,18 @@ public:
     Q_INVOKABLE void showPageSettings();
     Q_INVOKABLE void showStyleSettings();
 
-    virtual void createProperties() override { }
-    virtual void requestElements() override { }
-    virtual void loadProperties() override { }
-    virtual void resetProperties() override { }
-
     bool isEmpty() const override;
 
 signals:
     void styleChanged();
+
+private:
+    void createProperties() override { }
+    void requestElements() override { }
+    void loadProperties() override { }
+    void resetProperties() override { }
+
+    void onStyleChanged() override;
 };
 }
 
