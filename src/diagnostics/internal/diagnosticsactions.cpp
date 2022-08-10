@@ -35,31 +35,37 @@ const UiActionList DiagnosticsActions::m_actions = {
              TranslatableString("action", "Save diagnostic files")
              ),
     UiAction("diagnostic-show-paths",
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Show p&aths…")
              ),
     UiAction("diagnostic-show-profiler",
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Show pr&ofiler…")
              ),
     UiAction("diagnostic-show-navigation-tree",
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Show &navigation tree…")
              ),
     UiAction("diagnostic-show-accessible-tree",
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Show &accessible tree…")
              ),
     UiAction("diagnostic-accessible-tree-dump",
+             ActionCategory::Accessibility,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString::untranslatable("Accessible &dump")
              ),
     UiAction("diagnostic-show-engraving-elements",
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Engraving &elements")

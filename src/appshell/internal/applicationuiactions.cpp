@@ -37,17 +37,20 @@ const ActionCode TOGGLE_NAVIGATOR_ACTION_CODE("toggle-navigator");
 
 const UiActionList ApplicationUiActions::m_actions = {
     UiAction("quit",
+             ActionCategory::Application,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Quit"),
              TranslatableString("action", "Quit")
              ),
     UiAction("restart",
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Restart")
              ),
     UiAction("fullscreen",
+             ActionCategory::Application,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Full screen"),
@@ -55,32 +58,38 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("about-musescore",
+             ActionCategory::Application,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&About MuseScore…")
              ),
     UiAction("about-qt",
+             ActionCategory::Application,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "About &Qt…")
              ),
     UiAction("about-musicxml",
+             ActionCategory::Application,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "About &MusicXML…")
              ),
     UiAction("online-handbook",
+             ActionCategory::Application,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Online &handbook"),
              TranslatableString("action", "Open online handbook")
              ),
     UiAction("ask-help",
+             ActionCategory::Application,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "As&k for help")
              ),
     UiAction("revert-factory",
+             ActionCategory::Application,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Revert to &factory settings"),
@@ -89,6 +98,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Docking
     UiAction("dock-restore-default-layout",
+             ActionCategory::Layoutformatting,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Restore the &default layout"),
@@ -97,6 +107,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Toolbars
     UiAction("toggle-transport",
+             ActionCategory::Playback,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Playback controls"),
@@ -104,6 +115,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-noteinput",
+             ActionCategory::Dialogspanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Note input"),
@@ -113,6 +125,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Vertical panels
     UiAction("toggle-palettes",
+             ActionCategory::Dialogspanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Palettes"),
@@ -120,6 +133,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-instruments",
+             ActionCategory::Dialogspanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Instr&uments"),
@@ -127,6 +141,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("inspector",
+             ActionCategory::Dialogspanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Propert&ies"),
@@ -134,6 +149,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-selection-filter",
+             ActionCategory::Dialogspanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Se&lection filter"),
@@ -143,6 +159,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Navigator
     UiAction("toggle-navigator",
+             ActionCategory::Dialogspanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Navigator"),
@@ -152,6 +169,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Horizontal panels
     UiAction("toggle-timeline",
+             ActionCategory::Dialogspanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Tim&eline"),
@@ -159,6 +177,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-mixer",
+             ActionCategory::Dialogspanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Mixer"),
@@ -167,6 +186,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-piano-keyboard",
+             ActionCategory::Dialogspanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Piano &keyboard"),
@@ -174,6 +194,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-scorecmp-tool",
+             ActionCategory::Undefined,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Score comparison tool"),
@@ -182,6 +203,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Status bar
     UiAction("toggle-statusbar",
+             ActionCategory::Dialogspanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Status bar"),
@@ -190,6 +212,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
 
     UiAction("preference-dialog",
+             ActionCategory::Dialogspanels,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Preferences"),
