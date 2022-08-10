@@ -56,6 +56,10 @@ void UiContextResolver::init()
                 notifyAboutContextChanged();
             });
 
+            notation->interaction()->textEditingEnded().onNotify(this, [this]() {
+                notifyAboutContextChanged();
+            });
+
             notation->undoStack()->stackChanged().onNotify(this, [this]() {
                 notifyAboutContextChanged();
             });
