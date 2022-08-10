@@ -181,6 +181,7 @@ private:
     void clear();
     void initBackground();
     void initNavigatorOrientation();
+    void initPosition();
 
     bool canReceiveAction(const actions::ActionCode& actionCode) const override;
     void onCurrentNotationChanged();

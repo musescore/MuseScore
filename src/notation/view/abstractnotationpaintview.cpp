@@ -119,6 +119,35 @@ void AbstractNotationPaintView::initNavigatorOrientation()
     });
 }
 
+void AbstractNotationPaintView::initPosition()
+{
+    const PointF center        = this->canvasCenter();
+    const ViewMode currentMode = notation()->viewMode();
+    constexpr float margin     = 150.0;
+
+    // Multiple pages (default mode)
+    if (currentMode == ViewMode::PAGE) {
+        PageList pages = notation()->elements()->pages();
+
+        // More than 1 page: align it in the top-left with margin
+        if (pages.size() > 1) {
+            doMoveCanvas(margin, margin);
+        }
+        // 1 page: center it
+        else {
+            doMoveCanvas(center.x(), margin);
+        }
+    }
+    // Horizontal continuous: center vertically, small margin on the left
+    else if (currentMode == ViewMode::LINE) {
+        doMoveCanvas(margin, center.y());
+    }
+    // Other modes: center horizontally, small margin on the top
+    else {
+        doMoveCanvas(center.x(), margin);
+    }
+}
+
 void AbstractNotationPaintView::moveCanvasToCenter()
 {
     TRACEFUNC;
@@ -217,6 +246,8 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 {
     if (viewport().isValid() && !m_notation->viewState()->isMatrixInited()) {
         m_inputController->initZoom();
+        // Center view
+        initPosition();
     }
 
     if (publishMode()) {
@@ -337,6 +368,9 @@ void AbstractNotationPaintView::onViewSizeChanged()
 
     if (viewport().isValid() && !notation()->viewState()->isMatrixInited()) {
         m_inputController->initZoom();
+
+        // Center view
+        initPosition();
     }
 
     ensureViewportInsideScrollableArea();
@@ -572,6 +606,11 @@ std::pair<qreal, qreal> AbstractNotationPaintView::constraintCanvas(qreal dx, qr
     TRACEFUNC;
     RectF scrollableArea = scrollableAreaRect();
     RectF viewport = this->viewport();
+
+    // Ignore if viewport is not fully loaded to prevent content from being brought back to (0, 0)
+    if (!viewport.isValid()) {
+        return { 0, 0 };
+    }
 
     // horizontal
     {
