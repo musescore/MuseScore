@@ -288,6 +288,16 @@ void PlaybackToolBarModel::setBeatNumber(int beatNumber)
     rewindToBeat(measureBeat);
 }
 
+void PlaybackToolBarModel::setTempoMultiplier(qreal multiplier)
+{
+    if (multiplier == tempoMultiplier()) {
+        return;
+    }
+
+    playbackController()->setTempoMultiplier(multiplier);
+    emit tempoChanged();
+}
+
 int PlaybackToolBarModel::maxBeatNumber() const
 {
     return measureBeat().maxBeatIndex + 1;
@@ -303,4 +313,9 @@ QVariant PlaybackToolBarModel::tempo() const
     obj["value"] = tempo.valueBpm;
 
     return obj;
+}
+
+qreal PlaybackToolBarModel::tempoMultiplier() const
+{
+    return playbackController()->tempoMultiplier();
 }

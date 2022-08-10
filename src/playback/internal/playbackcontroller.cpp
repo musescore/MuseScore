@@ -1081,6 +1081,19 @@ msecs_t PlaybackController::beatToMilliseconds(int measureIndex, int beatIndex) 
     return tickToMsecs(tick);
 }
 
+double PlaybackController::tempoMultiplier() const
+{
+    INotationPlaybackPtr playback = notationPlayback();
+    return playback ? playback->tempoMultiplier() : 1.0;
+}
+
+void PlaybackController::setTempoMultiplier(double multiplier)
+{
+    if (INotationPlaybackPtr playback = notationPlayback()) {
+        playback->setTempoMultiplier(multiplier);
+    }
+}
+
 mu::framework::Progress PlaybackController::loadingProgress() const
 {
     return m_loadingProgress;

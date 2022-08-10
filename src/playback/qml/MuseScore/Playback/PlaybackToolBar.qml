@@ -81,5 +81,15 @@ Item {
                 playbackModel.playPosition = value
             }
         }
+
+        TempoSlider {
+            width: playbackActions.width - 12
+            visible: root.floating
+            value: playbackModel.tempoMultiplier
+
+            onMoved: function(newValue) {
+                playbackModel.tempoMultiplier = newValue
+            }
+        }
     }
 }

@@ -2779,7 +2779,7 @@ Err Read114::read114(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
         } else if (tag == "tempolist") {
             // store the tempo list to create invisible tempo text later
             double tempo = e.doubleAttribute("fix", 2.0);
-            tm.setRelTempo(tempo);
+            tm.setTempoMultiplier(tempo);
             while (e.readNextStartElement()) {
                 if (e.name() == "tempo") {
                     int tick   = e.attribute("tick").toInt();

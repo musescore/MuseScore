@@ -93,6 +93,9 @@ public:
     notation::MeasureBeat currentBeat() const override;
     audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
 
+    double tempoMultiplier() const override;
+    void setTempoMultiplier(double multiplier) override;
+
     framework::Progress loadingProgress() const override;
 
 private:
