@@ -60,6 +60,10 @@ QQuickItem* PopupViewCloseController::parentItem() const
 
 void PopupViewCloseController::setParentItem(QQuickItem* parentItem)
 {
+    if (m_parentItem) {
+        m_parentItem->disconnect(this);
+    }
+
     m_parentItem = parentItem;
 
     connect(m_parentItem, &QQuickItem::visibleChanged, this, [this]() {
