@@ -835,7 +835,7 @@ TEST_F(Musicxml_Tests, tempo4) {
 TEST_F(Musicxml_Tests, tempo5) {
     mxmlIoTest("testTempo5");
 }
-TEST_F(Musicxml_Tests, DISABLED_tempoOverlap) {
+TEST_F(Musicxml_Tests, tempoOverlap) {
     mxmlIoTestRef("testTempoOverlap");
 }
 TEST_F(Musicxml_Tests, tempoPrecision) {
