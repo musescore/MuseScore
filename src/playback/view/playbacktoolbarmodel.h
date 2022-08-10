@@ -47,6 +47,7 @@ class PlaybackToolBarModel : public uicomponents::AbstractMenuModel
     Q_PROPERTY(int maxBeatNumber READ maxBeatNumber NOTIFY playPositionChanged)
 
     Q_PROPERTY(QVariant tempo READ tempo NOTIFY tempoChanged)
+    Q_PROPERTY(qreal tempoMultiplier READ tempoMultiplier WRITE setTempoMultiplier NOTIFY tempoChanged)
 
 public:
     explicit PlaybackToolBarModel(QObject* parent = nullptr);
@@ -64,6 +65,7 @@ public:
     int maxBeatNumber() const;
 
     QVariant tempo() const;
+    qreal tempoMultiplier() const;
 
     Q_INVOKABLE void load() override;
 
@@ -73,6 +75,7 @@ public slots:
     void setPlayTime(const QDateTime& time);
     void setMeasureNumber(int measureNumber);
     void setBeatNumber(int beatNumber);
+    void setTempoMultiplier(qreal multiplier);
 
 signals:
     void isToolbarFloatingChanged(bool floating);

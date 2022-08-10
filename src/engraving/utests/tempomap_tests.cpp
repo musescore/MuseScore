@@ -118,6 +118,44 @@ TEST_F(Engraving_TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
 }
 
 /**
+ * @brief TempoMapTests_TEMPO_MULTIPLIER
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 80 bpm, Treble Cleff)
+ *          There is a tempo marking (80 BPM) on the very first measure. The 4-th measure marked by 120BPM tempo
+ *          Then we apply a global multiplier to all tempo marks
+ */
+TEST_F(Engraving_TempoMapTests, TEMPO_MULTIPLIER)
+{
+    // [GIVEN] Simple piece of score (Violin, 4/4, 80 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(
+        TEMPOMAP_TEST_FILES_DIR + "absolute_tempo_80_to_120_bpm/absolute_tempo_80_to_120_bpm.mscx");
+
+    ASSERT_TRUE(score);
+
+    // [WHEN] Apply a global tempo multiplier to all tempo marks
+    TempoMap* tempoMap = score->tempomap();
+
+    constexpr double multiplier = 2.2;
+    tempoMap->setTempoMultiplier(multiplier);
+
+    // [GIVEN] Expected tempomap
+    std::map<int, BeatsPerSecond> expectedTempoMap = {
+        { 0, BeatsPerSecond::fromBPM(BeatsPerMinute(80.0)) }, // first measure
+        { 4 * 4 * Constants::division, BeatsPerSecond::fromBPM(BeatsPerMinute(120.0)) } // 4-th measure
+    };
+
+    // [WHEN] We request score's tempomap its size matches with our expectations
+    EXPECT_EQ(tempoMap->size(), expectedTempoMap.size());
+
+    // [THEN] Applied tempo matches with our expectations
+    for (int tick : mu::keys(*tempoMap)) {
+        double expectedBps = expectedTempoMap[tick].val;
+
+        EXPECT_TRUE(RealIsEqual(RealRound(tempoMap->tempo(tick).val, 2), RealRound(expectedBps * multiplier, 2)));
+        EXPECT_TRUE(RealIsEqual(RealRound(tempoMap->at(tick).tempo.val, 2), RealRound(expectedBps, 2)));
+    }
+}
+
+/**
  * @brief TempoMapTests_GRADUAL_TEMPO_CHANGE_ACCELERANDO
  * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 120 bpm, Treble Cleff)
  *          There is a tempo marking (120 BPM) on the very first measure. Additionally, there is "accelerando" tempo annotation

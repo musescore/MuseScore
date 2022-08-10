@@ -86,6 +86,10 @@ void PlaybackModel::load(Score* score)
         notifyAboutChanges(oldTracks, trackChanges);
     });
 
+    m_score->tempomap()->tempoMultiplierChanged().onNotify(this, [this]() {
+        reload();
+    });
+
     update(0, m_score->lastMeasure()->endTick().ticks(), 0, m_score->ntracks());
 
     for (const auto& pair : m_playbackDataMap) {
