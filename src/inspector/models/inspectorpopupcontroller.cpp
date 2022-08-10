@@ -72,6 +72,10 @@ void InspectorPopupController::setVisualControl(QQuickItem* control)
         return;
     }
 
+    if (m_visualControl) {
+        m_visualControl->disconnect(this);
+    }
+
     m_visualControl = control;
 
     if (m_visualControl) {
@@ -95,6 +99,10 @@ void InspectorPopupController::setPopup(PopupView* popup)
 {
     if (m_popup == popup) {
         return;
+    }
+
+    if (m_popup) {
+        m_popup->disconnect(this);
     }
 
     m_popup = popup;
