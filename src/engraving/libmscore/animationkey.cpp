@@ -27,7 +27,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 AnimationKey::AnimationKey(AnimationTrack* parent)
 {
 }

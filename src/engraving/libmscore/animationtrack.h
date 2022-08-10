@@ -26,13 +26,13 @@
 #include "engravingitem.h"
 #include "mscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Staff;
 class AnimationKey;
 
 class AnimationTrack
 {
-    QString _propertyName;
+    std::string _propertyName;
 
     QList<AnimationKey*> _keys;
 
@@ -43,8 +43,8 @@ public:
 
     AnimationTrack& operator=(const BarLine&) = delete;
 
-    QString propertyName() const { return _propertyName; }
-    void setPropertyName(QString value);
+    std::string propertyName() const { return _propertyName; }
+    void setPropertyName(std::string value);
 
     const QList<AnimationKey*>& keys() const { return _keys; }
     QList<AnimationKey*>& keys() { return _keys; }

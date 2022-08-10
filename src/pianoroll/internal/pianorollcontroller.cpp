@@ -43,6 +43,7 @@
 
 #include <qdebug.h>
 
+using namespace mu::engraving;
 using namespace mu::pianoroll;
 using namespace mu::midi;
 using namespace mu::notation;
@@ -65,25 +66,25 @@ int PianorollController::getNotes() const
     return 49;
 }
 
-Ms::Measure* PianorollController::lastMeasure()
+Measure* PianorollController::lastMeasure()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
         return nullptr;
     }
 
-    Ms::Score* score = notation->elements()->msScore();
+    Score* score = notation->elements()->msScore();
     return score->lastMeasure();
 }
 
-Ms::Score* PianorollController::score()
+Score* PianorollController::score()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
         return nullptr;
     }
 
-    Ms::Score* score = notation->elements()->msScore();
+    Score* score = notation->elements()->msScore();
     return score;
 }
 
@@ -168,17 +169,17 @@ void PianorollController::addChord(Chord* chrd, int voice)
     //}
 }
 
-Ms::Fraction PianorollController::widthInBeats()
+Fraction PianorollController::widthInBeats()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
-        return Ms::Fraction();
+        return Fraction();
     }
 
-    Ms::Score* score = notation->elements()->msScore();
+    Score* score = notation->elements()->msScore();
 
-    Ms::Measure* lm = score->lastMeasure();
-    Ms::Fraction beats = lm->tick() + lm->ticks();
+    Measure* lm = score->lastMeasure();
+    Fraction beats = lm->tick() + lm->ticks();
     return beats;
 }
 

@@ -23,8 +23,6 @@
 #define MU_PIANOROLL_IPIANOROLLCONFIGURATION_H
 
 #include "modularity/imoduleexport.h"
-#include "retval.h"
-//#include "playbacktypes.h"
 
 namespace mu::pianoroll {
 class IPianorollConfiguration : MODULE_EXPORT_INTERFACE

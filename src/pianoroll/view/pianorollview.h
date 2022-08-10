@@ -65,7 +65,7 @@ struct BarPattern
 
 struct NoteBlock
 {
-    Ms::Note* note;
+    engraving::Note* note;
     int voice;
     int staffIdx;
 };
@@ -125,8 +125,8 @@ public:
     double displayObjectHeight() const { return m_displayObjectHeight; }
     void setDisplayObjectHeight(double value);
 
-    Ms::Fraction playbackPosition() { return m_playbackPosition; }
-    void setPlaybackPosition(Ms::Fraction value);
+    engraving::Fraction playbackPosition() { return m_playbackPosition; }
+    void setPlaybackPosition(engraving::Fraction value);
 
     void paint(QPainter*) override;
     void keyReleaseEvent(QKeyEvent* event) override;
@@ -135,7 +135,7 @@ public:
     void mouseMoveEvent(QMouseEvent* event) override;
     void hoverMoveEvent(QHoverEvent* event) override;
 
-    int wholeNoteToPixelX(Ms::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
+    int wholeNoteToPixelX(engraving::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
     int wholeNoteToPixelX(double tick) const;
     double pixelXToWholeNote(int pixelX) const;
     int pitchToPixelY(double pitch) const;
@@ -164,16 +164,16 @@ private:
     void onCurrentNotationChanged();
     void onSelectionChanged();
     void updateBoundingSize();
-    QRect boundingRect(Ms::Note* note, bool applyEvents = false);
-    QRect boundingRect(Ms::Note* note, Ms::NoteEvent* evt, bool applyEvents = false);
+    QRect boundingRect(engraving::Note* note, bool applyEvents = false);
+    QRect boundingRect(engraving::Note* note, engraving::NoteEvent* evt, bool applyEvents = false);
     QString serializeSelectedNotes();
 
     void buildNoteData();
-    void addChord(Ms::Chord* chrd, int voice, int staffIdx);
+    void addChord(engraving::Chord* chrd, int voice, int staffIdx);
 
     void drawNoteBlock(QPainter* p, NoteBlock* block);
     void drawDraggedNotes(QPainter* painter);
-    void drawDraggedNote(QPainter* painter, Ms::Fraction startTick, Ms::Fraction frac, int pitch, int track, QColor color);
+    void drawDraggedNote(QPainter* painter, engraving::Fraction startTick, engraving::Fraction frac, int pitch, int track, QColor color);
 
     NoteBlock* pickNote(int pixX, int pixY);
     bool intersects(NoteBlock* block, int pixX, int pixY);
@@ -182,20 +182,20 @@ private:
     void insertNote(int modifiers);
     void cutChord(const QPointF& pos);
     void eraseNote(const QPointF& pos);
-    Ms::Fraction roundToSubdivision(double wholeNote, bool down = true);
+    engraving::Fraction roundToSubdivision(double wholeNote, bool down = true);
 
-    void pasteNotes(const QString& copiedNotes, Ms::Fraction pasteStartTick, Ms::Fraction lengthOffset, int pitchOffset, bool xIsOffset);
-    std::vector<Ms::Note*> addNote(Ms::Fraction startTick, Ms::Fraction duration, int pitch, int track);
-    bool cutChordRest(Ms::ChordRest* targetCr, int track, Ms::Fraction cutTick, Ms::ChordRest*& cr0, Ms::ChordRest*& cr1);
-    std::vector<Ms::Note*> getSegmentNotes(Ms::Segment* seg, int track);
+    void pasteNotes(const QString& copiedNotes, engraving::Fraction pasteStartTick, engraving::Fraction lengthOffset, int pitchOffset, bool xIsOffset);
+    std::vector<engraving::Note*> addNote(engraving::Fraction startTick, engraving::Fraction duration, int pitch, int track);
+    bool cutChordRest(engraving::ChordRest* targetCr, int track, engraving::Fraction cutTick, engraving::ChordRest*& cr0, engraving::ChordRest*& cr1);
+    std::vector<engraving::Note*> getSegmentNotes(engraving::Segment* seg, int track);
 
-    static void append(std::vector<Ms::Note*>& a, const std::vector<Ms::Note*>& b)
+    static void append(std::vector<engraving::Note*>& a, const std::vector<engraving::Note*>& b)
     {
         a.insert(a.end(), b.begin(), b.end());
     }
 
-    Ms::Score* score();
-    Ms::Staff* activeStaff();
+    engraving::Score* score();
+    engraving::Staff* activeStaff();
 
     notation::INotationPtr m_notation;
 
@@ -217,7 +217,7 @@ private:
     int m_barPattern = 0;
 
     int m_editNoteVoice = 0;  //Voice to use when adding notes
-    Ms::Fraction m_editNoteLength = Ms::Fraction(1, 4);  //Length of note used when adding notes
+    engraving::Fraction m_editNoteLength = engraving::Fraction(1, 4);  //Length of note used when adding notes
 
     bool m_mouseDown;
     bool m_dragStarted;
@@ -227,12 +227,12 @@ private:
     QPointF m_popupMenuPos;
     DragStyle m_dragStyle;
     int m_dragStartPitch;
-    Ms::Fraction m_dragStartTick;
-    Ms::Fraction m_dragEndTick;
+    engraving::Fraction m_dragStartTick;
+    engraving::Fraction m_dragEndTick;
     int m_dragNoteLengthMargin = 4;
     bool m_inProgressUndoEvent;
 
-    Ms::Fraction m_playbackPosition;
+    engraving::Fraction m_playbackPosition;
 
     QColor m_colorBackground = Qt::gray;
     QColor m_colorKeyWhite = QColor(0xffffff);

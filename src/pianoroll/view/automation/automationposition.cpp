@@ -3,6 +3,7 @@
 #include "libmscore/undo.h"
 
 using namespace mu::pianoroll;
+using namespace mu::engraving;
 
 AutomationPosition::AutomationPosition()
 {
@@ -23,24 +24,24 @@ double AutomationPosition::minValue()
     return -1000;
 }
 
-double AutomationPosition::value(Ms::Staff* staff, NoteEventBlock& block)
+double AutomationPosition::value(Staff* staff, NoteEventBlock& block)
 {
-    Ms::Note* note = block.note;
-    Ms::NoteEvent* evt = &(note->playEvents()[0]);
+    Note* note = block.note;
+    NoteEvent* evt = &(note->playEvents()[0]);
 
     return evt->ontime();
 }
 
-void AutomationPosition::setValue(Ms::Staff* staff, NoteEventBlock& block, double value)
+void AutomationPosition::setValue(Staff* staff, NoteEventBlock& block, double value)
 {
-    Ms::Note* note = block.note;
-    Ms::NoteEvent* evt = &(note->playEvents()[0]);
-    Ms::Score* score = staff->score();
+    Note* note = block.note;
+    NoteEvent* evt = &(note->playEvents()[0]);
+    Score* score = staff->score();
 
-    Ms::NoteEvent ne = *evt;
+    NoteEvent ne = *evt;
     ne.setOntime(value);
 
     score->startCmd();
-    score->undo(new Ms::ChangeNoteEvent(note, evt, ne));
+    score->undo(new ChangeNoteEvent(note, evt, ne));
     score->endCmd();
 }

@@ -35,8 +35,8 @@ public:
 
     double maxValue() override;
     double minValue() override;
-    double value(Ms::Staff* staff, NoteEventBlock& block) override;
-    void setValue(Ms::Staff* staff, NoteEventBlock& block, double value) override;
+    double value(engraving::Staff* staff, NoteEventBlock& block) override;
+    void setValue(engraving::Staff* staff, NoteEventBlock& block, double value) override;
 };
 }
 

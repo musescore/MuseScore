@@ -66,8 +66,8 @@ public:
     void setTuplet(int value);
     int subdivision() const { return m_subdivision; }
     void setSubdivision(int value);
-    Ms::Fraction playbackPosition() { return m_playbackPosition; }
-    void setPlaybackPosition(Ms::Fraction value);
+    engraving::Fraction playbackPosition() { return m_playbackPosition; }
+    void setPlaybackPosition(engraving::Fraction value);
     QString propertyName() { return m_propertyName; }
     void setPropertyName(QString value);
 
@@ -78,12 +78,12 @@ public:
     void mouseMoveEvent(QMouseEvent* e) override;
     void mouseDoubleClickEvent(QMouseEvent* event) override;
 
-    int wholeNoteToPixelX(Ms::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
+    int wholeNoteToPixelX(engraving::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
     int wholeNoteToPixelX(double tick) const;
     double pixelXToWholeNote(int pixelX) const;
 
-    Ms::Score* score();
-    Ms::Staff* activeStaff();
+    engraving::Score* score();
+    engraving::Staff* activeStaff();
 
 signals:
     void wholeNoteWidthChanged();
@@ -106,8 +106,8 @@ private:
     double pixYToValue(double pixY, double valMin, double valMax);
     double valueToPixY(double value, double valMin, double valMax);
 
-    Ms::AnimationTrack* getAnimationTrack();
-    Ms::AnimationKey* pickKey(QPointF point);
+    engraving::AnimationTrack* getAnimationTrack();
+    engraving::AnimationKey* pickKey(QPointF point);
 
     int m_activeStaff;
     std::vector<int> m_selectedStaves;
@@ -118,7 +118,7 @@ private:
 
     bool m_mouseDown = false;
     bool m_dragging = false;
-    Ms::AnimationKey* m_draggedKey = nullptr;
+    engraving::AnimationKey* m_draggedKey = nullptr;
     QPoint m_mouseDownPos;
     QPoint m_lastMousePos;
     int m_pickRadius = 4;
@@ -132,7 +132,7 @@ private:
     int m_tuplet = 1;
     int m_subdivision = 0;
 
-    Ms::Fraction m_playbackPosition;
+    engraving::Fraction m_playbackPosition;
 
     const int m_vertexRadius = 3;
 
