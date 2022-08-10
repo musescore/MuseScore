@@ -131,18 +131,12 @@ PropertyItem* StemSettingsModel::stemDirection() const
 
 bool StemSettingsModel::useStraightNoteFlags() const
 {
-    return context()->currentNotation()->style()->styleValue(mu::engraving::Sid::useStraightNoteFlags).toBool();
+    return styleValue(mu::engraving::Sid::useStraightNoteFlags).toBool();
 }
 
 void StemSettingsModel::setUseStraightNoteFlags(bool use)
 {
-    if (use == useStraightNoteFlags()) {
-        return;
-    }
-
-    context()->currentNotation()->undoStack()->prepareChanges();
-    context()->currentNotation()->style()->setStyleValue(mu::engraving::Sid::useStraightNoteFlags, use);
-    context()->currentNotation()->undoStack()->commitChanges();
+    updateStyleValue(mu::engraving::Sid::useStraightNoteFlags, use);
 }
 
 void StemSettingsModel::onStemDirectionChanged(mu::engraving::DirectionV newDirection)

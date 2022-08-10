@@ -191,6 +191,7 @@ protected:
     notation::INotationSelectionPtr selection() const;
 
     virtual void updatePropertiesOnNotationChanged();
+    virtual void onStyleChanged();
 
     IElementRepositoryService* m_repository = nullptr;
 
