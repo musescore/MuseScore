@@ -477,9 +477,8 @@ String String::fromQString(const QString& str)
 
 QString String::toQString() const
 {
-    const char16_t* u = &constStr().front();
     static_assert(sizeof(QChar) == sizeof(char16_t));
-    return QString(reinterpret_cast<const QChar*>(u), static_cast<int>(size()));
+    return QString(reinterpret_cast<const QChar*>(constStr().data()), static_cast<int>(size()));
 }
 
 #endif

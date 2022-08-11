@@ -107,7 +107,23 @@ TEST_F(Global_Types_StringTests, String_Convert)
         //! DO
         String str = String::fromQString(qstr_origin);
         //! CHECK
+        EXPECT_EQ(str, String(u"123abcПыф"));
         EXPECT_EQ(str.size(), qstr_origin.size()); // both utf16, so size is equal
+
+        //! DO back
+        QString qstr = str.toQString();
+        //! CHECK
+        EXPECT_EQ(qstr, qstr_origin);
+    }
+
+    {
+        //! GIVEN Empty QString
+        QString qstr_origin;
+        //! DO
+        String str = String::fromQString(qstr_origin);
+        //! CHECK
+        EXPECT_EQ(str, String());
+        EXPECT_EQ(str.size(), qstr_origin.size());
 
         //! DO back
         QString qstr = str.toQString();
