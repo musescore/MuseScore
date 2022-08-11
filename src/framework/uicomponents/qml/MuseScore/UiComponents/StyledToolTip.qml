@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -37,41 +38,38 @@ StyledPopupView {
     openPolicy: PopupView.NoActivateFocus
 
     function calculateSize() {
-        x = (root.parent.width / 2) - ((content.width + padding * 2 + margins * 2) / 2)
-        y = root.parent.height
+        contentWidth = Math.min(content.implicitWidth, 300 - margins * 2)
+        contentHeight = content.implicitHeight
 
-        contentWidth = Math.min(content.width, 300 - margins * 2)
-        contentHeight = content.height
+        x = root.parent.width / 2 - (contentWidth + padding * 2 + margins * 2) / 2
+        y = root.parent.height
     }
 
-    Column {
+    ColumnLayout {
         id: content
 
-        width: Math.max(row.width, descriptionLabel.width)
-        height: row.height + (descriptionLabel.visible ? descriptionLabel.height + spacing : 0)
-
+        anchors.fill: parent
         spacing: 4
 
-        Row {
+        RowLayout {
             id: row
 
             spacing: 6
 
-            width: titleLabel.width + (shortcutLabel.visible ? shortcutLabel.width + spacing : 0)
-            height: titleLabel.height
-
             StyledTextLabel {
                 id: titleLabel
+                Layout.fillWidth: true
 
                 font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
+                wrapMode: Text.Wrap
             }
 
             StyledTextLabel {
                 id: shortcutLabel
 
                 text: "(" + root.shortcut + ")"
-                horizontalAlignment: Text.AlignLeft
+                horizontalAlignment: Text.AlignRight
                 opacity: 0.8
 
                 visible: Boolean(root.shortcut)
@@ -80,8 +78,10 @@ StyledPopupView {
 
         StyledTextLabel {
             id: descriptionLabel
+            Layout.fillWidth: true
 
             horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.Wrap
 
             visible: Boolean(root.description)
         }
