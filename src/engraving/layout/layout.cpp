@@ -356,9 +356,12 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
     ctx.tick = Fraction(0, 1);
     LayoutMeasure::getNextMeasure(options, ctx);
 
-    static constexpr Fraction minTicks = Fraction(1, 16); // In continuous view, we cannot look fot the shortest note
+    static constexpr Fraction minTicks = Fraction(1, 16);
+    static constexpr Fraction maxTicks = Fraction(4, 4);
+    // CAUTION: In continuous view, we cannot look fot the shortest (or longest) note
     // of the system (as we do in page view), because the whole music is a single big system. Therefore,
-    // we simply assume a shortest note of 1/16. This ensures perfect spacing consistency.
+    // we simply assume a shortest note of 1/16 and longest of 4/4. This ensures perfect spacing consistency,
+    // even if the actual values may be be different.
 
     while (ctx.curMeasure) {
         double ww = 0.0;
@@ -399,7 +402,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
                     m->stretchMeasureInPracticeMode(ww);
                 } else {
                     m->createEndBarLines(false);
-                    m->computeWidth(minTicks, 1);
+                    m->computeWidth(minTicks, maxTicks, 1);
                     ww = m->width();
                     m->layoutMeasureElements();
                 }
