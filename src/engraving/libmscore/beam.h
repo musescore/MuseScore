@@ -118,6 +118,7 @@ class Beam final : public EngravingItem
     void createBeamletSegment(ChordRest* chord, bool isBefore, int level);
     void createBeamSegments(const std::vector<ChordRest*>& chordRests);
     void layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
+    bool layout2Cross(const std::vector<ChordRest*>& chordRests, int frag);
     void addChordRest(ChordRest* a);
     void removeChordRest(ChordRest* a);
 
