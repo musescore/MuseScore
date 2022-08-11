@@ -44,6 +44,11 @@ Item {
             }
         }
 
+        onLoaded: {
+            var toolTip = toolTipLoader.item
+            toolTip.calculateSize()
+        }
+
         function loadToolTip() {
             toolTipLoader.active = true
         }
