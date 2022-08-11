@@ -613,13 +613,13 @@ int Beam::getMaxSlope() const
         maxSlope = _maxSlopes[1];
     } else if (beamWidth < 5.0) {
         maxSlope = _maxSlopes[2];
-    } else if (beamWidth < 7.5) {
+    } else if (beamWidth < 8.0) {
         maxSlope = _maxSlopes[3];
-    } else if (beamWidth < 10.0) {
+    } else if (beamWidth < 13.0) {
         maxSlope = _maxSlopes[4];
-    } else if (beamWidth < 15.0) {
+    } else if (beamWidth < 21.0) {
         maxSlope = _maxSlopes[5];
-    } else if (beamWidth < 20.0) {
+    } else if (beamWidth < 34.0) {
         maxSlope = _maxSlopes[6];
     } else {
         maxSlope = _maxSlopes[7];
@@ -719,22 +719,10 @@ PointF Beam::chordBeamAnchor(const ChordRest* cr, ChordBeamAnchorType anchorType
 
 void Beam::createBeamSegment(ChordRest* startCr, ChordRest* endCr, int level)
 {
-    Chord* startChord = nullptr;
-    Chord* endChord = nullptr;
-    for (ChordRest* cr : _elements) {
-        if (!startChord && cr->isChord()) {
-            startChord = toChord(cr);
-        } else if (!endChord && cr->isChord()) {
-            endChord = toChord(cr);
-        }
-    }
-    if (!endChord) {
-        endChord = startChord;
-    }
     const bool isFirstSubgroup = startCr == _elements.front();
     const bool isLastSubgroup = endCr == _elements.back();
-    const bool firstUp = startChord->up();
-    const bool lastUp = endChord->up();
+    const bool firstUp = startCr->up();
+    const bool lastUp = endCr->up();
     bool overallUp = _up;
     if (isFirstSubgroup == isLastSubgroup) {
         // this subgroup is either the only one in the beam, or in the middle
@@ -1156,14 +1144,16 @@ void Beam::offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, in
     Chord* startChord = nullptr;
     Chord* endChord = nullptr;
     for (ChordRest* cr : chordRests) {
-        if (!startChord && cr->isChord()) {
-            startChord = toChord(cr);
-        } else if (!endChord && cr->isChord()) {
+        if (cr->isChord()) {
             endChord = toChord(cr);
+            if (!startChord) {
+                startChord = toChord(cr);
+            }
         }
     }
-    if (!endChord) {
-        endChord = startChord;
+    if (!startChord) {
+        // beam full of only rests, don't adjust this
+        return;
     }
     // min stem lengths according to how many beams there are (starting with 1)
     static const int minStemLengths[] = { 11, 13, 15, 18, 21 };
@@ -1233,8 +1223,8 @@ void Beam::extendStem(Chord* chord, double addition)
 
 bool Beam::isBeamInsideStaff(int yPos, int staffLines, bool isDictator) const
 {
-    int aboveStaff = -3;
-    int belowStaff = (staffLines - 1) * 4 + 3;
+    int aboveStaff = isDictator ? -3 : -2;
+    int belowStaff = (staffLines - 1) * 4 + (isDictator ? 3 : 2);
     return yPos > aboveStaff && yPos < belowStaff;
 }
 
@@ -1412,8 +1402,9 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
             toChord(chordRest)->layoutStem();
         }
     }
-    IF_ASSERT_FAILED(startChord) {
+    if (!startChord) {
         // we were passed a vector of only rests. we don't support beams across only rests
+        // this beam will be deleted in LayoutBeams
         return;
     }
     if (_distribute) {
@@ -2395,4 +2386,17 @@ void Beam::startDrag(EditData& editData)
 {
     initBeamEditData(editData);
 }
+}
+
+//---------------------------------------------------------
+//   containsChord
+//---------------------------------------------------------
+bool Beam::hasAllRests()
+{
+    for (ChordRest* cr : _elements) {
+        if (cr && cr->isChord()) {
+            return false;
+        }
+    }
+    return true;
 }

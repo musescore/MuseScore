@@ -235,6 +235,8 @@ public:
     bool isMovable() const override;
     void startDrag(EditData&) override;
 
+    bool hasAllRests();
+
 private:
     void initBeamEditData(EditData& ed);
 
