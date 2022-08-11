@@ -59,7 +59,7 @@ FocusScope {
     }
 
     QtObject {
-        id: privateProperties
+        id: prv
 
         function pad(value) {
             var str = value.toString()
@@ -81,7 +81,9 @@ FocusScope {
     }
 
     onValueChanged: {
-        textField.text = privateProperties.pad(value)
+        if (textField.textAsInt() >= root.minValue) {
+            textField.text = prv.pad(root.value)
+        }
     }
 
     NavigationControl {
@@ -107,14 +109,18 @@ FocusScope {
         padding: 0
 
         readOnly: root.maxValue === 0
-        text: privateProperties.pad(root.value)
+        text: prv.pad(root.value)
+
+        function textAsInt() {
+             return textField.text.length > 0 ? parseInt(textField.text) : 0
+        }
 
         onTextEdited: {
-            var currentValue = text.length > 0 ? parseInt(text) : 0
+            var currentValue = textField.textAsInt()
             var str = currentValue.toString()
             var newValue = 0
 
-            if (str.length > privateProperties.displayedNumberLength || currentValue > root.maxValue) {
+            if (str.length > root.displayedNumberLength || currentValue > root.maxValue) {
                 var lastDigit = str.charAt(str.length - 1)
                 newValue = parseInt(lastDigit)
             } else {
@@ -122,9 +128,19 @@ FocusScope {
             }
 
             newValue = Math.min(newValue, root.maxValue)
-            text = privateProperties.pad(newValue)
+
+            //! NOTE: displayed text can have a value less than minValue
+            // to allow the user to easily enter a new value
+            textField.text = prv.pad(newValue)
+            newValue = Math.max(newValue, root.minValue)
 
             root.valueEdited(newValue)
+        }
+
+        onActiveFocusChanged: {
+            if (!activeFocus) {
+                textField.text = prv.pad(root.value)
+            }
         }
 
         background: Rectangle {
