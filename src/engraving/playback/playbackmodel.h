@@ -91,6 +91,7 @@ private:
     };
 
     InstrumentTrackId idKey(const EngravingItem* item) const;
+    InstrumentTrackId idKey(const std::vector<const EngravingItem*>& items) const;
     InstrumentTrackId idKey(const ID& partId, const std::string& instrumentId) const;
 
     void update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
@@ -116,6 +117,8 @@ private:
     TickBoundaries tickBoundaries(const ScoreChangesRange& changesRange) const;
 
     const RepeatList& repeatList() const;
+
+    std::vector<const EngravingItem*> filterPlaybleItems(const std::vector<const EngravingItem*>& items) const;
 
     Score* m_score = nullptr;
     bool m_expandRepeats = true;

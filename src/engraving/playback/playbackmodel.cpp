@@ -171,16 +171,14 @@ const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, co
 
 void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items)
 {
-    InstrumentTrackId trackId;
+    std::vector<const EngravingItem*> playableItems = filterPlaybleItems(items);
+    if (playableItems.empty()) {
+        return;
+    }
 
-    for (const EngravingItem* item : items) {
-        InstrumentTrackId itemTrackId = idKey(item);
-        if (trackId.isValid() && trackId != itemTrackId) {
-            LOGE() << "Triggering events for elements with different tracks";
-            return;
-        }
-
-        trackId = itemTrackId;
+    InstrumentTrackId trackId = idKey(playableItems);
+    if (!trackId.isValid()) {
+        return;
     }
 
     auto trackPlaybackData = m_playbackDataMap.find(trackId);
@@ -194,15 +192,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
     duration_t actualDuration = MScore::defaultPlayDuration;
 
-    for (const EngravingItem* item : items) {
-        IF_ASSERT_FAILED(item) {
-            continue;
-        }
-
-        if (!item->isPlayable()) {
-            continue;
-        }
-
+    for (const EngravingItem* item : playableItems) {
         if (item->isHarmony()) {
             const Harmony* chordSymbol = toHarmony(item);
 
@@ -607,6 +597,25 @@ const RepeatList& PlaybackModel::repeatList() const
     return m_score->repeatList();
 }
 
+std::vector<const EngravingItem*> PlaybackModel::filterPlaybleItems(const std::vector<const EngravingItem*>& items) const
+{
+    std::vector<const EngravingItem*> result;
+
+    for (const EngravingItem* item : items) {
+        IF_ASSERT_FAILED(item) {
+            continue;
+        }
+
+        if (!item->isPlayable()) {
+            continue;
+        }
+
+        result.push_back(item);
+    }
+
+    return result;
+}
+
 InstrumentTrackId PlaybackModel::idKey(const EngravingItem* item) const
 {
     if (item->isHarmony()) {
@@ -615,6 +624,23 @@ InstrumentTrackId PlaybackModel::idKey(const EngravingItem* item) const
 
     return { item->part()->id(),
              item->part()->instrumentId(item->tick()).toStdString() };
+}
+
+InstrumentTrackId PlaybackModel::idKey(const std::vector<const EngravingItem*>& items) const
+{
+    InstrumentTrackId result;
+
+    for (const EngravingItem* item : items) {
+        InstrumentTrackId itemTrackId = idKey(item);
+        if (result.isValid() && result != itemTrackId) {
+            LOGE() << "Triggering events for elements with different tracks";
+            return InstrumentTrackId();
+        }
+
+        result = itemTrackId;
+    }
+
+    return result;
 }
 
 InstrumentTrackId PlaybackModel::idKey(const ID& partId, const std::string& instrumentId) const
