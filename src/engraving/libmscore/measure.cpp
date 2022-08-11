@@ -3649,7 +3649,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
             LOGD("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && system()) {   // recompute the width only if necessary
-            computeWidth(system()->minSysTicks(), layoutStretch());
+            computeWidth(system()->minSysTicks(), system()->maxSysTicks(), layoutStretch());
         }
         if (seg) {
             Segment* s1;
@@ -3672,7 +3672,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
     Segment* s = seg->prevActive();
     if (s) {
         double x = s->xpos();
-        computeWidth(s, x, false, system()->minSysTicks(), layoutStretch());
+        computeWidth(s, x, false, system()->minSysTicks(), system()->maxSysTicks(), layoutStretch());
     }
 
     return width() - oldWidth;
@@ -4054,7 +4054,7 @@ void Measure::removeSystemTrailer()
     }
     setTrailer(false);
     if (system() && changed) {
-        computeWidth(system()->minSysTicks(), layoutStretch());
+        computeWidth(system()->minSysTicks(), system()->maxSysTicks(), layoutStretch());
     }
 }
 
@@ -4118,7 +4118,7 @@ static bool hasAccidental(Segment* s)
 //      on its duration with respect to the shortest one.
 //      Three different options proposed (see documentation).
 //---------------------------------------------------------
-float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
+float Measure::durationStretch(Fraction curTicks, const Fraction minTicks, const Fraction maxTicks) const
 {
     double slope = score()->styleD(Sid::measureSpacing);
 
@@ -4141,7 +4141,7 @@ float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
     //------------------------------------------------------------------------
     static constexpr double maxRatio = 32.0;
     double minSysTicks = double(minTicks.ticks());
-    double maxSysTicks = double(system()->maxSysTicks().ticks());
+    double maxSysTicks = double(maxTicks.ticks());
     double maxSysRatio = maxSysTicks / minSysTicks;
     if ((maxSysTicks / minSysTicks >= 2) && minSysTicks < longNoteThreshold) {
         /* HACK: we trick the system to ignore the shortest note and use the "next"
@@ -4184,7 +4184,7 @@ float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
 //   to compute the minimum non-collision distance between elements.
 //---------------------------------------------------------
 
-void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, double stretchCoeff)
+void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks, double stretchCoeff)
 {
     Segment* fs = firstEnabled();
     if (!fs->visible()) {           // first enabled could be a clef change on invisible staff
@@ -4242,14 +4242,16 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
                 // the note with respect to the shortest note *of the system*.
                 if (s->isChordRestType()) {
                     if (hasAdjacent || isMMRest()) { // Normal segments
-                        durStretch = durationStretch(s->ticks(), minTicks);
+                        durStretch = durationStretch(s->ticks(), minTicks, maxTicks);
                     } else { // The following calculations are key to correct spacing of polyrythms
                         Fraction curTicks = s->shortestChordRest();
                         Fraction prevTicks = ps ? ps->shortestChordRest() : Fraction(0, 1);
                         if (ps && !prevHasAdjacent && prevTicks < curTicks) {
-                            durStretch = durationStretch(prevTicks, minTicks) * (double(s->ticks().ticks()) / double(prevTicks.ticks()));
+                            durStretch
+                                = durationStretch(prevTicks, minTicks, maxTicks) * (double(s->ticks().ticks()) / double(prevTicks.ticks()));
                         } else {
-                            durStretch = durationStretch(curTicks, minTicks) * (double(s->ticks().ticks()) / double(curTicks.ticks()));
+                            durStretch
+                                = durationStretch(curTicks, minTicks, maxTicks) * (double(s->ticks().ticks()) / double(curTicks.ticks()));
                         }
                     }
                     double minStretchedWidth = minNoteSpace * durStretch * usrStretch * stretchCoeff;
@@ -4350,7 +4352,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
     setWidth(x);
 }
 
-void Measure::computeWidth(Fraction minTicks, double stretchCoeff)
+void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchCoeff)
 {
     Segment* s;
 
@@ -4392,26 +4394,46 @@ void Measure::computeWidth(Fraction minTicks, double stretchCoeff)
     bool isSystemHeader = s->header();
 
     _squeezableSpace = 0;
-    computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
+    computeWidth(s, x, isSystemHeader, minTicks, maxTicks, stretchCoeff);
 
     // Check against minimum width and increase if needed
-    double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
-    double maxWidth = system()->width() - system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
-
-    // System width may not yet be available for the linear mode (e.g. continuous view)
-    // Will use the minimum width from the style in this case
-    if (maxWidth <= 0) {
-        maxWidth = minWidth;
-    }
-
-    minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
-
+    double minWidth = computeMinMeasureWidth();
     if (width() < minWidth) {
         setWidthToTargetValue(s, x, isSystemHeader, minTicks, stretchCoeff, minWidth);
         setWidthLocked(true);
     } else {
         setWidthLocked(false);
     }
+}
+
+double Measure::computeMinMeasureWidth() const
+{
+    double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
+    double maxWidth = system()->width() - system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
+    if (maxWidth <= 0) {
+        // System width may not yet be available for the linear mode (e.g. continuous view)
+        // Will use the minimum width from the style in this case
+        maxWidth = minWidth;
+    }
+    minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
+    Segment* firstCRSegment = findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    if (!firstCRSegment) {
+        return minWidth;
+    }
+    if (firstCRSegment == firstEnabled()) {
+        return minWidth;
+    }
+    // If there is a header, don't count the width of the header.
+    // Start counting from the "virtual" position of the preceding barline if there wasn't the header.
+    double startPosition = firstCRSegment->x() - firstCRSegment->minLeft();
+    if (firstCRSegment->hasAccidentals()) {
+        startPosition -= score()->styleMM(Sid::barAccidentalDistance);
+    } else {
+        startPosition -= score()->styleMM(Sid::barNoteDistance);
+    }
+    minWidth += startPosition;
+    minWidth = std::min(minWidth, maxWidth);
+    return minWidth;
 }
 
 void Measure::setWidthToTargetValue(Segment* s, double x, bool isSystemHeader, Fraction minTicks, double stretchCoeff, double targetWidth)
@@ -4428,7 +4450,7 @@ void Measure::setWidthToTargetValue(Segment* s, double x, bool isSystemHeader, F
     int iter = 0;
     for (double rest = targetWidth - width(); abs(rest) > epsilon && iter < maxIter; rest = targetWidth - width()) {
         stretchCoeff *= (1 + multiplier * rest / width());
-        computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
+        computeWidth(s, x, isSystemHeader, minTicks, system()->maxSysTicks(), stretchCoeff);
         iter++;
     }
 }

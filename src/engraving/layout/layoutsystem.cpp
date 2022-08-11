@@ -84,18 +84,20 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     double layoutSystemMinWidth = 0;
     bool firstMeasure = true;
     bool createHeader = false;
-    double systemWidth = score->styleD(Sid::pagePrintableWidth) * DPI;
-    system->setWidth(systemWidth);
+    double targetSystemWidth = score->styleD(Sid::pagePrintableWidth) * DPI;
+    system->setWidth(targetSystemWidth);
 
     // save state of measure
     bool curHeader = ctx.curMeasure->header();
     bool curTrailer = ctx.curMeasure->trailer();
     MeasureBase* breakMeasure = nullptr;
 
-    Fraction minTicks = Fraction::max(); // Initializing this variable at an arbitrary high value.
-    // In principle, it just needs to be longer than any possible note.
+    Fraction minTicks = Fraction::max(); // Initializing at highest possible value
     Fraction prevMinTicks = Fraction(1, 1);
-    bool changeMinSysTicks = false;
+    bool minSysTicksChanged = false;
+    Fraction maxTicks = Fraction(0, 1); // Initializing at lowest possible value
+    Fraction prevMaxTicks = Fraction(1, 1);
+    bool maxSysTicksChanged = false;
     double oldStretch = 1;
     System* oldSystem = nullptr;
 
@@ -109,23 +111,34 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // we need to recompute the layout of the previous measures. When updating the width of these
         // measures, curSysWidth must be updated accordingly.
         if (ctx.curMeasure->isMeasure()) {
-            if (toMeasure(ctx.curMeasure)->shortestChordRest() < minTicks) {
+            Fraction curMinTicks = toMeasure(ctx.curMeasure)->shortestChordRest();
+            Fraction curMaxTicks = toMeasure(ctx.curMeasure)->maxTicks();
+            if (curMinTicks < minTicks) {
                 prevMinTicks = minTicks; // We save the previous value in case we need to restore it (see later)
-                minTicks = toMeasure(ctx.curMeasure)->shortestChordRest();
-                changeMinSysTicks = true;
+                minTicks = curMinTicks;
+                minSysTicksChanged = true;
+            } else {
+                minSysTicksChanged = false;
+            }
+            if (curMaxTicks > maxTicks) {
+                prevMaxTicks = maxTicks;
+                maxTicks = curMaxTicks;
+                maxSysTicksChanged = true;
+            } else {
+                maxSysTicksChanged = false;
+            }
+            if (minSysTicksChanged || maxSysTicksChanged) {
                 for (MeasureBase* mb : system->measures()) {
                     if (mb == ctx.curMeasure) {
                         break; // Cause I want to change only previous measures, not current one
                     }
                     if (mb->isMeasure()) {
                         double prevWidth = toMeasure(mb)->width();
-                        toMeasure(mb)->computeWidth(minTicks, 1);
+                        toMeasure(mb)->computeWidth(minTicks, maxTicks, 1);
                         double newWidth = toMeasure(mb)->width();
                         curSysWidth += newWidth - prevWidth;
                     }
                 }
-            } else {
-                changeMinSysTicks = false;
             }
         }
 
@@ -161,7 +174,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             } else {
                 m->addSystemTrailer(m->nextMeasure());
             }
-            m->computeWidth(minTicks, 1);
+            m->computeWidth(minTicks, maxTicks, 1);
             ww = m->width();
         } else if (ctx.curMeasure->isHBox()) {
             ctx.curMeasure->computeMinWidth();
@@ -178,7 +191,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // collect at least one measure and the break
         static constexpr double squeezability = 0.3; // We may consider exposing in Style settings (M.S.)
         double acceptanceRange = squeezability * system->squeezableSpace();
-        bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > systemWidth + acceptanceRange);
+        bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > targetSystemWidth + acceptanceRange);
         /* acceptanceRange allows some systems to be initially slightly larger than the margins and be
          * justified by squeezing instead of stretching. Allows to make much better choices of how many
          * measures to fit per system. */
@@ -203,12 +216,17 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             }
             // If the last appended measure caused a re-layout of the previous measures, now that we are
             // removing it we need to re-layout the previous measures again.
-            if (changeMinSysTicks) {
+            if (minSysTicksChanged) {
                 minTicks = prevMinTicks; // If the last measure caused it to change, now we need to restore it!
+            }
+            if (maxSysTicksChanged) {
+                maxTicks = prevMaxTicks;
+            }
+            if (minSysTicksChanged || maxSysTicksChanged) {
                 for (MeasureBase* mb : system->measures()) {
                     if (mb->isMeasure()) {
                         double prevWidth = toMeasure(mb)->width();
-                        toMeasure(mb)->computeWidth(minTicks, 1);
+                        toMeasure(mb)->computeWidth(minTicks, maxTicks, 1);
                         double newWidth = toMeasure(mb)->width();
                         curSysWidth += newWidth - prevWidth;
                     }
@@ -242,7 +260,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     Segment* s = m1->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
-                        m1->computeWidth(minTicks, 1);
+                        m1->computeWidth(minTicks, maxTicks, 1);
                         ww = m1->width();
                     }
                 }
@@ -337,7 +355,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     } else {
                         m->removeSystemTrailer();
                     }
-                    m->computeWidth(m->system()->minSysTicks(), oldStretch);
+                    m->computeWidth(m->system()->minSysTicks(), m->system()->maxSysTicks(), oldStretch);
                     m->layoutMeasureElements();
                     LayoutBeams::restoreBeams(m);
                     if (m == nm || !m->noBreak()) {
@@ -381,50 +399,17 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             double w = lm->width();
             lm->addSystemTrailer(nm);
             if (lm->trailer()) {
-                lm->computeWidth(minTicks, 1);
+                lm->computeWidth(minTicks, maxTicks, 1);
             }
             curSysWidth += lm->width() - w;
         }
     }
 
-    // BRING THE WIDTH OF THE SYSTEM TO THE DESIRED VALUE
-    // Gradient descent method: calls the computeWidth() function with a stretch parameter
-    // proportional to the difference between the current length and the target length.
-    // After few iterations, the length will converge to the target length.
-    double newRest = systemWidth - curSysWidth;
-    if ((ctx.curMeasure == 0 || (lm && lm->sectionBreak()))
-        && ((curSysWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
-        // We do not stretch last system of a section (or the last of the piece) if curSysWidth is <= lastSystemFillLimit
-        newRest = 0;
-    }
-    if (MScore::noHorizontalStretch) { // Debug feature
-        newRest = 0;
-    }
-    double stretchCoeff = 1;
-    double prevWidth = 0;
-    int iter = 0;
-    double epsilon = score->spatium() * 0.05; // For reference: this is smaller than the width of a note stem
-    static constexpr float multiplier = 1.4f; // Empirically optimized value which allows the fastest convergence of the following algorithm.
-    static constexpr int maxIter = 100;
-    // Different systems need different numbers of iterations of the following loop to reach the target width.
-    // The average is less than 3 iterations, and the maximum I've ever seen (very rare) is 30-40 iterations.
-    // maxIter just serves as a safety exit to not get stuck in the loop in case a system can't be justified
-    // (which can only happen if errors are made before getting here). It's set to a very high value to make
-    // sure that the system really can't be justified, and it isn't just a "tricky" one needing more iterations.
-    while (abs(newRest) > epsilon && iter < maxIter) {
-        stretchCoeff *= (1 + multiplier * newRest / curSysWidth);
-        for (MeasureBase* mb : system->measures()) {
-            if (mb->isMeasure()) {
-                Measure* m = toMeasure(mb);
-                if (!(m->isWidthLocked() && stretchCoeff < m->layoutStretch())) { // It would be pointless to re-compute the layout of a measure
-                    prevWidth = m->width();                                       // that is already widthLocked to a larger value.
-                    m->computeWidth(minTicks, stretchCoeff);
-                    curSysWidth += m->width() - prevWidth;
-                }
-            }
-        }
-        newRest = systemWidth - curSysWidth;
-        iter++;
+    // JUSTIFY SYSTEM
+    if (!((ctx.curMeasure == 0 || (lm && lm->sectionBreak()))
+          && ((curSysWidth / targetSystemWidth) <= score->styleD(Sid::lastSystemFillLimit))) // Do not justify last system of a section if curSysWidth is <= lastSystemFillLimit
+        && !MScore::noHorizontalStretch) {     // debug feature
+        justifySystem(system, curSysWidth, targetSystemWidth);
     }
 
     // LAYOUT MEASURES
@@ -480,6 +465,67 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     }
 
     return system;
+}
+
+/***********************************************************************
+ * justifySystem()
+ * runs a bisection algorithm which adjusts the stretch coefficient
+ * of all measures until the width of the system coincides with the
+ * desidered one, within a given tolerance.
+ * ********************************************************************/
+
+void LayoutSystem::justifySystem(System* system, double curSysWidth, double targetSystemWidth)
+{
+    double rest = targetSystemWidth - curSysWidth;
+    double tolerance = system->score()->spatium() * 0.05; // For reference: this is smaller than the width of a note stem
+    if (abs(rest) < tolerance) {
+        return;
+    }
+    // Find longest and shortest note/rest of the system
+    Fraction minTicks = system->minSysTicks();
+    Fraction maxTicks = system->maxSysTicks();
+    // Define upper and lower bounds for stretchCoeff
+    double lowerBound, upperBound;
+    if (rest < 0) {
+        lowerBound = 0;
+        upperBound = 1;
+    } else {
+        lowerBound = 1;
+        upperBound = 0; // intentionally invalid value: needs to be defined later
+    }
+    // Begin binary search
+    double stretchCoeff = 1;
+    double prevWidth = 0;
+    int iter = 0;
+    static constexpr double multiplier = 1.5; // empirical value which optimizes convergence of the algorithm
+    static constexpr int maxIter = 50;
+    while (abs(rest) > tolerance && iter < maxIter) {
+        if (!upperBound) {
+            stretchCoeff *= multiplier;
+        } else {
+            stretchCoeff = (upperBound + lowerBound) / 2;
+        }
+        for (MeasureBase* mb : system->measures()) {
+            if (mb->isMeasure()) {
+                Measure* m = toMeasure(mb);
+                if (!(m->isWidthLocked() && stretchCoeff < m->layoutStretch())) { // It would be pointless to re-compute the layout of a measure
+                    prevWidth = m->width();                                       // that is already widthLocked to a larger value.
+                    m->computeWidth(minTicks, maxTicks, stretchCoeff);
+                    curSysWidth += m->width() - prevWidth;
+                }
+            }
+        }
+        rest = targetSystemWidth - curSysWidth;
+        if (rest > 0) {
+            lowerBound = stretchCoeff;
+        } else {
+            upperBound = stretchCoeff;
+        }
+        iter++;
+    }
+    if (iter == maxIter) {
+        LOGE() << "**************** CAUTION: System may not be well justified ***************** ";
+    }
 }
 
 //---------------------------------------------------------
