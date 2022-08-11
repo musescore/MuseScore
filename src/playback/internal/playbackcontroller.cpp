@@ -950,8 +950,11 @@ void PlaybackController::setupSequencePlayer()
             return;
         }
 
-        tick_t tick = notationPlayback()->secToTick(msecs / 1000.);
+        if (!isPlaying()) {
+            return;
+        }
 
+        tick_t tick = notationPlayback()->secToTick(msecs / 1000.);
         setCurrentTick(tick);
         m_tickPlayed.send(std::move(tick));
     });
@@ -1089,8 +1092,23 @@ double PlaybackController::tempoMultiplier() const
 
 void PlaybackController::setTempoMultiplier(double multiplier)
 {
-    if (INotationPlaybackPtr playback = notationPlayback()) {
-        playback->setTempoMultiplier(multiplier);
+    INotationPlaybackPtr playback = notationPlayback();
+    if (!playback) {
+        return;
+    }
+
+    tick_t tick = m_currentTick;
+    bool playing = isPlaying();
+
+    if (playing) {
+        pause();
+    }
+
+    playback->setTempoMultiplier(multiplier);
+    seek(tick);
+
+    if (playing) {
+        resume();
     }
 }
 
