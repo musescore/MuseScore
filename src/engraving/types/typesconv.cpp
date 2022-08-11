@@ -1170,32 +1170,32 @@ static const std::vector<AccidentalUnicodeItem> ACCIDENTALS_NAMES = {
     { AccidentalVal::SHARP2,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
       QT_TRANSLATE_NOOP("engraving", "double ♯"),
-      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "double sharp") },
     { AccidentalVal::SHARP,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
       QT_TRANSLATE_NOOP("engraving", "♯"),
-      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "sharp") },
     { AccidentalVal::NATURAL,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
       QT_TRANSLATE_NOOP("engraving", "♮"),
-      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "natural") },
     { AccidentalVal::FLAT,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
       QT_TRANSLATE_NOOP("engraving", "♭"),
-      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "flat") },
     { AccidentalVal::FLAT2,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
       QT_TRANSLATE_NOOP("engraving", "double ♭"),
-      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "double flat") },
     { AccidentalVal::FLAT3,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
       QT_TRANSLATE_NOOP("engraving", "triple ♭"),
-      //: Visible text in the UI. Please preserve the accidental symbol in the translation
+      //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "triple flat") }
 };
 
