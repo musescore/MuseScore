@@ -148,14 +148,16 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
         m_instrumentKey.instrumentId = instrument->id();
         m_instrumentKey.partId = context.staff->part()->id();
         m_instrumentKey.tick = measure->tick();
-        m_editedDrumset = *instrument->drumset();
+        m_originDrumset = *instrument->drumset();
     } else {
         NoteInputState state = m_notation->interaction()->noteInput()->state();
         const Staff* staff = m_notation->elements()->msScore()->staff(track2staff(state.currentTrack));
         m_instrumentKey.instrumentId = staff ? staff->part()->instrumentId().toQString() : QString();
         m_instrumentKey.partId = staff ? staff->part()->id() : ID();
-        m_editedDrumset = state.drumset ? *state.drumset : Drumset();
+        m_originDrumset = state.drumset ? *state.drumset : Drumset();
     }
+
+    m_editedDrumset = m_originDrumset;
 
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -164,7 +166,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     drumNote->setDrawGrid(false);
     drumNote->setReadOnly(true);
 
-    updatePitchesList();
+    loadPitchesList();
 
     for (auto g : noteHeadNames) {
         noteHead->addItem(TConv::translatedUserName(g), int(g));
@@ -296,13 +298,12 @@ void EditDrumsetDialog::customGboxToggled(bool checked)
     }
 }
 
-//---------------------------------------------------------
-//   updatePitchesList
-//---------------------------------------------------------
-
-void EditDrumsetDialog::updatePitchesList()
+void EditDrumsetDialog::loadPitchesList()
 {
+    pitchList->blockSignals(true);
     pitchList->clear();
+    pitchList->blockSignals(false);
+
     for (int i = 0; i < 128; ++i) {
         QTreeWidgetItem* item = new EditDrumsetTreeWidgetItem(pitchList);
         item->setText(Column::PITCH, QString("%1").arg(i));
@@ -317,25 +318,6 @@ void EditDrumsetDialog::updatePitchesList()
         item->setData(Column::PITCH, Qt::UserRole, i);
     }
     pitchList->sortItems(3, Qt::SortOrder::DescendingOrder);
-}
-
-//---------------------------------------------------------
-//   refreshPitchesList
-//---------------------------------------------------------
-void EditDrumsetDialog::refreshPitchesList()
-{
-    for (int i = 0; i < pitchList->topLevelItemCount(); ++i) {
-        QTreeWidgetItem* item = pitchList->topLevelItem(i);
-        int pitch = item->data(0, Qt::UserRole).toInt();
-        if (m_editedDrumset.shortcut(pitch) == 0) {
-            item->setText(Column::SHORTCUT, "");
-        } else {
-            QString s(QChar(m_editedDrumset.shortcut(pitch)));
-            item->setText(Column::SHORTCUT, s);
-        }
-        item->setText(Column::NAME,  m_editedDrumset.translatedName(i));
-        item->setData(0, Qt::UserRole, pitch);
-    }
 }
 
 void EditDrumsetDialog::setEnabledPitchControls(bool enable)
@@ -413,7 +395,6 @@ void EditDrumsetDialog::shortcutChanged()
             item->setText(Column::SHORTCUT, shortcut->currentText());
         }
     }
-    refreshPitchesList();
 }
 
 //---------------------------------------------------------
@@ -426,17 +407,22 @@ void EditDrumsetDialog::bboxClicked(QAbstractButton* button)
     case QDialogButtonBox::AcceptRole:
         apply();
         break;
+    case QDialogButtonBox::RejectRole:
+        cancel();
+        break;
     default:
         break;
     }
 }
 
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
 void EditDrumsetDialog::apply()
 {
     valueChanged();    //save last changes in name
+}
+
+void EditDrumsetDialog::cancel()
+{
+    m_notation->parts()->replaceDrumset(m_instrumentKey, m_originDrumset);
 }
 
 //---------------------------------------------------------
@@ -674,7 +660,8 @@ void EditDrumsetDialog::load()
         }
     }
     fp.close();
-    updatePitchesList();
+    loadPitchesList();
+    pitchList->setCurrentItem(pitchList->topLevelItem(0));
 }
 
 //---------------------------------------------------------
@@ -685,7 +672,7 @@ void EditDrumsetDialog::save()
 {
     QString filter = mu::qtrc("palette", "MuseScore drumset file") + " (*.drm)";
     mu::io::path_t dir = notationConfiguration()->userStylesPath();
-    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Save drumset"), dir, filter);
+    mu::io::path_t fname = interactive()->selectSavingFile(mu::qtrc("palette", "Save drumset"), dir, filter);
 
     if (fname.empty()) {
         return;
