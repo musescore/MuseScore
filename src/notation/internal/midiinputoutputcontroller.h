@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_MIDIINPUTCONTROLLER_H
-#define MU_NOTATION_MIDIINPUTCONTROLLER_H
+#ifndef MU_NOTATION_MIDIINPUTOUTOUTCONTROLLER_H
+#define MU_NOTATION_MIDIINPUTOUTOUTCONTROLLER_H
 
 #include "modularity/ioc.h"
 #include "midi/imidiinport.h"
@@ -32,7 +32,7 @@
 #include "async/asyncable.h"
 
 namespace mu::notation {
-class MidiInputController : public async::Asyncable
+class MidiInputOutputController : public async::Asyncable
 {
     INJECT(notation, midi::IMidiInPort, midiInPort)
     INJECT(notation, midi::IMidiOutPort, midiOutPort)
@@ -45,11 +45,17 @@ public:
     void init();
 
 private:
-    void connectCurrentInputDevice();
-    void connectCurrentOutputDevice();
+    void checkInputConnection();
+    void checkOutputConnection();
+
+    void checkConnection(const midi::MidiDeviceID& preferredDeviceId, const midi::MidiDeviceID& currentDeviceId,
+                         const midi::MidiDeviceList& availableDevices, const std::function<Ret(
+                                                                                               const midi::MidiDeviceID&)>& connectCallback);
 
     void onMidiEventsReceived(const std::vector<std::pair<midi::tick_t, midi::Event> >& events);
+
+    midi::MidiDeviceID firstAvailableDeviceId(const midi::MidiDeviceList& devices) const;
 };
 }
 
-#endif // MU_NOTATION_MIDIINPUTCONTROLLER_H
+#endif // MU_NOTATION_MIDIINPUTOUTOUTCONTROLLER_H
