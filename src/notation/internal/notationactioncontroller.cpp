@@ -302,11 +302,14 @@ void NotationActionController::init()
                    &Controller::noteOrRestSelected);
     registerAction("add-noteline", &Interaction::addAnchoredLineToSelectedNotes);
 
+    registerAction("add-image", [this]() { addImage(); });
+
     registerAction("title-text", [this]() { addText(TextStyleType::TITLE); });
     registerAction("subtitle-text", [this]() { addText(TextStyleType::SUBTITLE); });
     registerAction("composer-text", [this]() { addText(TextStyleType::COMPOSER); });
     registerAction("poet-text", [this]() { addText(TextStyleType::POET); });
     registerAction("part-text", [this]() { addText(TextStyleType::INSTRUMENT_EXCERPT); });
+    registerAction("frame-text", [this]() { addText(TextStyleType::FRAME); });
 
     registerAction("system-text", [this]() { addText(TextStyleType::SYSTEM); });
     registerAction("staff-text", [this]() { addText(TextStyleType::STAFF); });
@@ -1082,7 +1085,17 @@ void NotationActionController::addText(TextStyleType type)
         return;
     }
 
-    Ret ret = interaction->canAddText(type);
+    EngravingItem* item = contextItem(interaction);
+
+    if (isVerticalBoxTextStyle(type)) {
+        if (!item || !item->isVBox()) {
+            interaction->addTextToTopFrame(type);
+            return;
+        }
+    }
+
+    Ret ret = interaction->canAddTextToItem(type, item);
+
     if (!ret) {
         if (configuration()->needToShowAddTextErrorMessage()) {
             IInteractive::Result result = showErrorMessage(ret.text());
@@ -1094,7 +1107,28 @@ void NotationActionController::addText(TextStyleType type)
         return;
     }
 
-    interaction->addText(type);
+    interaction->addTextToItem(type, item);
+}
+
+void NotationActionController::addImage()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    EngravingItem* item = contextItem(interaction);
+    if (!interaction->canAddImageToItem(item)) {
+        return;
+    }
+
+    QString filter = qtrc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png);;"
+                     + qtrc("notation", "Scalable Vector Graphics") + " (*.svg);;"
+                     + qtrc("notation", "JPEG") + " (*.jpg *.jpeg);;"
+                     + qtrc("notation", "PNG Bitmap Graphic") + " (*.png)";
+
+    io::path_t path = interactive()->selectOpeningFile(qtrc("notation", "Insert Image"), "", filter);
+    interaction->addImageToItem(path, item);
 }
 
 void NotationActionController::addFiguredBass()
