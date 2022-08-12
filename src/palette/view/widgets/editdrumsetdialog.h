@@ -63,8 +63,8 @@ private slots:
 
 private:
     void apply();
-    void updatePitchesList();
-    void refreshPitchesList();
+    void cancel();
+    void loadPitchesList();
     void updateExample();
 
     void fillCustomNoteheadsDataFromComboboxes(int pitch);
@@ -75,6 +75,8 @@ private:
 
     notation::INotationPtr m_notation;
     notation::InstrumentKey m_instrumentKey;
+
+    engraving::Drumset m_originDrumset;
     engraving::Drumset m_editedDrumset;
 };
 }
