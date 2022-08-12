@@ -43,6 +43,8 @@ public:
     virtual void padNote(const Pad& pad)  = 0;
     virtual void putNote(const PointF& pos, bool replace, bool insert) = 0;
     virtual void removeNote(const PointF& pos) = 0;
+    virtual async::Notification noteInputStarted() const = 0;
+    virtual async::Notification noteInputEnded() const = 0;
 
     virtual void addTuplet(const TupletOptions& options) = 0;
 
