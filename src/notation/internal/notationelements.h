@@ -38,6 +38,7 @@ public:
 
     Measure* measure(const int measureIndex) const override;
     PageList pages() const override;
+    const Page* pageByPoint(const PointF& point) const override;
 
 private:
     mu::engraving::Score* score() const;

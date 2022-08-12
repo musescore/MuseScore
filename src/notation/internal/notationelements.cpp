@@ -132,6 +132,11 @@ PageList NotationElements::pages() const
     return result;
 }
 
+const Page* NotationElements::pageByPoint(const PointF& point) const
+{
+    return score()->searchPage(point);
+}
+
 mu::engraving::Page* NotationElements::page(const int pageIndex) const
 {
     if (pageIndex < 0 || size_t(pageIndex) >= score()->pages().size()) {

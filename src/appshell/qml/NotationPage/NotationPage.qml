@@ -419,7 +419,7 @@ DockPage {
         name: "MainNotationView"
 
         isNavigatorVisible: pageModel.isNavigatorVisible
-        isAccessibilityEnabled: true
+        isMainView: true
 
         Component.onCompleted: {
             root.notationView = notationView

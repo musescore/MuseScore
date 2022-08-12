@@ -262,6 +262,8 @@ public:
     void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) override;
     async::Channel<ShowItemRequest> showItemRequested() const override;
 
+    void setGetViewRectFunc(const std::function<RectF()>& func) override;
+
 private:
     mu::engraving::Score* score() const;
     void onScoreInited();

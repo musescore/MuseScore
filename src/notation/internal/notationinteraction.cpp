@@ -5244,6 +5244,11 @@ mu::async::Channel<NotationInteraction::ShowItemRequest> NotationInteraction::sh
     return m_showItemRequested;
 }
 
+void NotationInteraction::setGetViewRectFunc(const std::function<RectF()>& func)
+{
+    static_cast<NotationNoteInput*>(m_noteInput.get())->setGetViewRectFunc(func);
+}
+
 namespace mu::notation {
 EngravingItem* contextItem(INotationInteractionPtr interaction)
 {
