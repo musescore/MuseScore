@@ -77,8 +77,9 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
 
 AbstractNotationPaintView::~AbstractNotationPaintView()
 {
-    if (m_notation && accessibilityEnabled()) {
+    if (m_notation && isMainView()) {
         m_notation->accessibility()->setMapToScreenFunc(nullptr);
+        m_notation->interaction()->setGetViewRectFunc(nullptr);
     }
 }
 
@@ -262,7 +263,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         updateLoopMarkers();
     });
 
-    if (accessibilityEnabled()) {
+    if (isMainView()) {
         connect(this, &QQuickPaintedItem::focusChanged, this, [this](bool focused) {
             if (notation()) {
                 notation()->accessibility()->setEnabled(focused);
@@ -278,6 +279,10 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
             res = RectF(PointF::fromQPointF(mapToGlobal(res.topLeft().toQPointF())), SizeF(res.width(), res.height()));
 
             return res;
+        });
+
+        notation()->interaction()->setGetViewRectFunc([this]() {
+            return viewport();
         });
     }
 
@@ -296,8 +301,9 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     interaction->noteInput()->stateChanged().resetOnNotify(this);
     interaction->selectionChanged().resetOnNotify(this);
 
-    if (accessibilityEnabled()) {
+    if (isMainView()) {
         m_notation->accessibility()->setMapToScreenFunc(nullptr);
+        m_notation->interaction()->setGetViewRectFunc(nullptr);
     }
 }
 
@@ -1206,7 +1212,7 @@ bool AbstractNotationPaintView::needAdjustCanvasVerticallyWhilePlayback(const Re
         return true;
     }
 
-    const Page* page = pointToPage(cursorRect.topRight());
+    const Page* page = pageByPoint(cursorRect.topRight());
     if (!page) {
         return false;
     }
@@ -1222,26 +1228,10 @@ bool AbstractNotationPaintView::needAdjustCanvasVerticallyWhilePlayback(const Re
     return nonEmptySystemCount > 1;
 }
 
-const Page* AbstractNotationPaintView::pointToPage(const PointF& point) const
+const Page* AbstractNotationPaintView::pageByPoint(const PointF& point) const
 {
-    TRACEFUNC;
-
-    if (!notationElements()) {
-        return nullptr;
-    }
-
-    PageList pages = notationElements()->pages();
-    if (notation()->viewMode() == engraving::LayoutMode::LINE) {
-        return pages.empty() ? nullptr : pages.front();
-    }
-
-    for (const Page* page: pages) {
-        if (page->bbox().translated(page->pos()).contains(point)) {
-            return page;
-        }
-    }
-
-    return nullptr;
+    INotationElementsPtr elements = notationElements();
+    return elements ? elements->pageByPoint(point) : nullptr;
 }
 
 PointF AbstractNotationPaintView::alignToCurrentPageBorder(const RectF& showRect, const PointF& pos) const
@@ -1249,7 +1239,7 @@ PointF AbstractNotationPaintView::alignToCurrentPageBorder(const RectF& showRect
     TRACEFUNC;
 
     PointF result = pos;
-    const Page* page = pointToPage(showRect.topLeft());
+    const Page* page = pageByPoint(showRect.topLeft());
     if (!page) {
         return result;
     }
@@ -1285,17 +1275,17 @@ void AbstractNotationPaintView::setPublishMode(bool arg)
     emit publishModeChanged();
 }
 
-bool AbstractNotationPaintView::accessibilityEnabled() const
+bool AbstractNotationPaintView::isMainView() const
 {
-    return m_accessibilityEnabled;
+    return m_isMainView;
 }
 
-void AbstractNotationPaintView::setAccessibilityEnabled(bool accessibilityEnabled)
+void AbstractNotationPaintView::setIsMainView(bool isMainView)
 {
-    if (m_accessibilityEnabled == accessibilityEnabled) {
+    if (m_isMainView == isMainView) {
         return;
     }
 
-    m_accessibilityEnabled = accessibilityEnabled;
-    emit accessibilityEnabledChanged(m_accessibilityEnabled);
+    m_isMainView = isMainView;
+    emit isMainViewChanged(m_isMainView);
 }

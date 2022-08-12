@@ -71,7 +71,7 @@ class AbstractNotationPaintView : public uicomponents::QuickPaintedView, public 
 
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
 
-    Q_PROPERTY(bool accessibilityEnabled READ accessibilityEnabled WRITE setAccessibilityEnabled NOTIFY accessibilityEnabledChanged)
+    Q_PROPERTY(bool isMainView READ isMainView WRITE setIsMainView NOTIFY isMainViewChanged)
 
 public:
     explicit AbstractNotationPaintView(QQuickItem* parent = nullptr);
@@ -130,8 +130,8 @@ public:
     bool publishMode() const;
     void setPublishMode(bool arg);
 
-    bool accessibilityEnabled() const;
-    void setAccessibilityEnabled(bool accessibilityEnabled);
+    bool isMainView() const;
+    void setIsMainView(bool isMainView);
 
 signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
@@ -146,7 +146,7 @@ signals:
 
     void activeFocusRequested();
 
-    void accessibilityEnabledChanged(bool accessibilityEnabled);
+    void isMainViewChanged(bool isMainView);
 
 protected:
     INotationPtr notation() const;
@@ -224,7 +224,7 @@ private:
 
     void updateLoopMarkers();
 
-    const Page* pointToPage(const PointF& point) const;
+    const Page* pageByPoint(const PointF& point) const;
     PointF alignToCurrentPageBorder(const RectF& showRect, const PointF& pos) const;
 
     void paintBackground(const RectF& rect, draw::Painter* painter);
@@ -247,7 +247,7 @@ private:
 
     bool m_publishMode = false;
     int m_lastAcceptedKey = -1;
-    bool m_accessibilityEnabled = false;
+    bool m_isMainView = false;
 
     bool m_autoScrollEnabled = true;
     QTimer m_enableAutoScrollTimer;

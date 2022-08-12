@@ -266,6 +266,8 @@ public:
 
     virtual void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) = 0;
     virtual async::Channel<ShowItemRequest> showItemRequested() const = 0;
+
+    virtual void setGetViewRectFunc(const std::function<RectF()>& func) = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
