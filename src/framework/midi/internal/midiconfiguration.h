@@ -35,12 +35,18 @@ public:
 
     MidiDeviceID midiInputDeviceId() const override;
     void setMidiInputDeviceId(const MidiDeviceID& deviceId) override;
+    async::Notification midiInputDeviceIdChanged() const override;
 
     MidiDeviceID midiOutputDeviceId() const override;
     void setMidiOutputDeviceId(const MidiDeviceID& deviceId) override;
+    async::Notification midiOutputDeviceIdChanged() const override;
 
     bool useMIDI20Output() const override;
     void setUseMIDI20Output(bool use) override;
+
+private:
+    async::Notification m_midiInputDeviceIdChanged;
+    async::Notification m_midiOutputDeviceIdChanged;
 };
 }
 
