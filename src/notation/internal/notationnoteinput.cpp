@@ -135,6 +135,7 @@ void NotationNoteInput::startNoteInput()
         break;
     }
 
+    notifyAboutNoteInputStarted();
     notifyAboutStateChanged();
 
     m_interaction->showItem(el);
@@ -202,6 +203,7 @@ void NotationNoteInput::endNoteInput()
         is.setSlur(0);
     }
 
+    notifyAboutNoteInputEnded();
     updateInputState();
 }
 
@@ -270,6 +272,16 @@ void NotationNoteInput::removeNote(const PointF& pos)
     apply();
 
     notifyAboutStateChanged();
+}
+
+Notification NotationNoteInput::noteInputStarted() const
+{
+    return m_noteInputStarted;
+}
+
+Notification NotationNoteInput::noteInputEnded() const
+{
+    return m_noteInputEnded;
 }
 
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)
@@ -510,6 +522,16 @@ void NotationNoteInput::notifyAboutStateChanged()
 void NotationNoteInput::notifyNoteAddedChanged()
 {
     m_noteAdded.notify();
+}
+
+void NotationNoteInput::notifyAboutNoteInputStarted()
+{
+    m_noteInputStarted.notify();
+}
+
+void NotationNoteInput::notifyAboutNoteInputEnded()
+{
+    m_noteInputEnded.notify();
 }
 
 std::set<SymbolId> NotationNoteInput::articulationIds() const

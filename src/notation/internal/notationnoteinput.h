@@ -57,6 +57,8 @@ public:
     void padNote(const Pad& pad) override;
     void putNote(const PointF& pos, bool replace, bool insert) override;
     void removeNote(const PointF& pos) override;
+    async::Notification noteInputStarted() const override;
+    async::Notification noteInputEnded() const override;
 
     void addTuplet(const TupletOptions& options) override;
 
@@ -91,6 +93,8 @@ private:
     void updateInputState();
     void notifyAboutStateChanged();
     void notifyNoteAddedChanged();
+    void notifyAboutNoteInputStarted();
+    void notifyAboutNoteInputEnded();
 
     std::set<SymbolId> articulationIds() const;
 
@@ -100,6 +104,8 @@ private:
 
     async::Notification m_stateChanged;
     async::Notification m_noteAdded;
+    async::Notification m_noteInputStarted;
+    async::Notification m_noteInputEnded;
 
     ScoreCallbacks* m_scoreCallbacks = nullptr;
 };
