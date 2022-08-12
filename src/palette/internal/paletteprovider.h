@@ -191,11 +191,8 @@ public:
     void removeSelection(const QModelIndexList&, const QModelIndex& parent = QModelIndex()) override;
 
     void editPaletteProperties(const QModelIndex& index) override;
-    Q_INVOKABLE void applyPaletteCellProperties(const QModelIndex& index);
 
     void editCellProperties(const QModelIndex& index) override;
-
-    void modifyCellfromConfig(const mu::palette::PaletteCellPtr& cell, const mu::palette::IPaletteConfiguration::PaletteCellConfig& config);
 
     bool userEditable() const { return _userEditable; }
     void setUserEditable(bool val) { _userEditable = val; }
@@ -273,6 +270,8 @@ public:
 
     bool isSinglePalette() const;
     bool isSingleClickToOpenPalette() const;
+
+    void savePalette() const;
 
 signals:
     void userPaletteChanged();

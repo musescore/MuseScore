@@ -242,7 +242,7 @@ void ShortcutsModel::applySequenceToCurrentShortcut(const QString& newSequence, 
     notifyAboutShortcutChanged(currIndex);
 }
 
-void ShortcutsModel::applySequenceToPalette(QString action, const QString& newSequence, QModelIndex cellIdx, int conflictShortcutIndex)
+void ShortcutsModel::applySequenceToPalette(QString action, const QString& newSequence, int conflictShortcutIndex)
 {
     int i = 0;
     LOGE() << "prev size:" << m_shortcuts.size();

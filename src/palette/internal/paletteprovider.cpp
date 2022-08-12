@@ -528,13 +528,6 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
     interactive()->open(uri.toStdString());
 }
 
-void UserPaletteController::applyPaletteCellProperties(const QModelIndex& index)
-{
-    auto srcindex = convertProxyIndex(index, _userPalette);
-    _userPalette->itemDataChanged(srcindex);
-    _userPalette->itemDataChanged(srcindex.parent());
-}
-
 void UserPaletteController::editCellProperties(const QModelIndex& index)
 {
     if (!canEdit(index)) {
@@ -555,7 +548,6 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
 
         if (!writeRequired) {
             _userPalette->itemDataChanged(srcIndex);
-            //_userPalette->itemDataChanged(srcIndex.parent());
             return;
         }
 
@@ -566,7 +558,6 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
         cell->yoffset = config.yOffset;
         cell->shortcut = config.shortcut;
         _userPalette->itemDataChanged(srcIndex);
-        //_userPalette->itemDataChanged(srcIndex.parent());
     });
 
     QVariantMap properties;
@@ -585,17 +576,6 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
                   .arg(QString(document.toJson()));
 
     interactive()->open(uri.toStdString());
-}
-
-void UserPaletteController::modifyCellfromConfig(const mu::palette::PaletteCellPtr& cell,
-                                                 const mu::palette::IPaletteConfiguration::PaletteCellConfig& config)
-{
-    cell->name = config.name;
-    cell->mag = config.scale;
-    cell->drawStaff = config.drawStaff;
-    cell->xoffset = config.xOffset;
-    cell->yoffset = config.yOffset;
-    cell->shortcut = config.shortcut;
 }
 
 bool UserPaletteController::canEdit(const QModelIndex& index) const
@@ -675,6 +655,20 @@ bool PaletteProvider::isSingleClickToOpenPalette() const
     return configuration()->isSingleClickToOpenPalette().val;
 }
 
+void PaletteProvider::savePalette() const
+{
+    PaletteTreePtr tree = userPaletteTree();
+
+    Buffer buf;
+    buf.open(IODevice::WriteOnly);
+
+    mu::engraving::XmlWriter writer(&buf);
+    tree->write(writer);
+
+    QByteArray newData = buf.data().toQByteArray();
+    workspacesDataProvider()->setRawData(mu::workspace::DataKey::Palettes, newData);
+}
+
 QAbstractItemModel* PaletteProvider::mainPaletteModel()
 {
     if (m_isSearching) {
@@ -712,18 +706,11 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
             LOGE() << "Initial OnReceive for ID: " + cell->id + " with writeToFile: " << config.writeToFile;
             if (config.writeToFile) {
                 LOGE() << "Why is this running?";
-                PaletteTreePtr tree = userPaletteTree();
-
-                Buffer buf;
-                buf.open(IODevice::WriteOnly);
-
-                mu::engraving::XmlWriter writer(&buf);
-                tree->write(writer);
-
-                QByteArray newData = buf.data().toQByteArray();
-                workspacesDataProvider()->setRawData(mu::workspace::DataKey::Palettes, newData);
+                savePalette();
             }
         });
+
+
         QString ac_name = cell->action;
         ctr++;
         actionToItem[ac_name] = cell->element.get();
