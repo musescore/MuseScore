@@ -191,8 +191,13 @@ public:
     virtual void changeSelectedNotesVoice(int voiceIndex) = 0;
     virtual void addAnchoredLineToSelectedNotes() = 0;
 
-    virtual Ret canAddText(TextStyleType type) const = 0;
-    virtual void addText(TextStyleType type) = 0;
+    virtual void addTextToTopFrame(TextStyleType type) = 0;
+
+    virtual Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const = 0;
+    virtual void addTextToItem(TextStyleType type, EngravingItem* item) = 0;
+
+    virtual Ret canAddImageToItem(const EngravingItem* item) const = 0;
+    virtual void addImageToItem(const io::path_t& imagePath, EngravingItem* item) = 0;
 
     virtual Ret canAddFiguredBass() const = 0;
     virtual void addFiguredBass() = 0;

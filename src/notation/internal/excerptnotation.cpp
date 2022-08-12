@@ -84,7 +84,7 @@ void ExcerptNotation::fillWithDefaultInfo()
         TextBase* textItem = score->getText(textType);
 
         if (!textItem) {
-            textItem = score->addText(textType, false /*addToAllScores*/);
+            textItem = score->addText(textType, nullptr /*destinationElement*/, false /*addToAllScores*/);
         }
 
         if (textItem) {

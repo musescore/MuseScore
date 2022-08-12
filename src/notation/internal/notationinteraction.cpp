@@ -3786,55 +3786,133 @@ void NotationInteraction::addAnchoredLineToSelectedNotes()
     apply();
 }
 
-mu::Ret NotationInteraction::canAddText(TextStyleType type) const
+void NotationInteraction::addTextToTopFrame(TextStyleType type)
 {
-    static const std::vector<TextStyleType> needSelectedNoteOrRestTypes {
+    addText(type);
+}
+
+mu::Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingItem* item) const
+{
+    if (!item) {
+        return false;
+    }
+
+    if (isVerticalBoxTextStyle(type)) {
+        return item->isVBox();
+    }
+
+    if (type == TextStyleType::FRAME) {
+        return item->isBox();
+    }
+
+    static const std::set<TextStyleType> needSelectNoteOrRestTypes {
         TextStyleType::SYSTEM,
         TextStyleType::STAFF,
         TextStyleType::EXPRESSION,
         TextStyleType::REHEARSAL_MARK,
         TextStyleType::INSTRUMENT_CHANGE,
         TextStyleType::FINGERING,
+        TextStyleType::LH_GUITAR_FINGERING,
+        TextStyleType::RH_GUITAR_FINGERING,
+        TextStyleType::STRING_NUMBER,
         TextStyleType::STICKING,
         TextStyleType::HARMONY_A,
         TextStyleType::HARMONY_ROMAN,
         TextStyleType::HARMONY_NASHVILLE,
         TextStyleType::LYRICS_ODD,
-        TextStyleType::TEMPO
+        TextStyleType::TEMPO,
     };
 
-    if (std::find(needSelectedNoteOrRestTypes.cbegin(), needSelectedNoteOrRestTypes.cend(), type) != needSelectedNoteOrRestTypes.cend()) {
-        bool isNoteOrRestSelected = elementsSelected({ ElementType::NOTE, ElementType::REST,
-                                                       ElementType::MEASURE_REPEAT, ElementType::CHORD });
+    if (mu::contains(needSelectNoteOrRestTypes, type)) {
+        static const std::set<ElementType> requiredElementTypes {
+            ElementType::NOTE,
+            ElementType::REST,
+            ElementType::MEASURE_REPEAT,
+            ElementType::CHORD,
+        };
+
+        bool isNoteOrRestSelected = mu::contains(requiredElementTypes, item->type());
         return isNoteOrRestSelected ? make_ok() : make_ret(Err::NoteOrRestIsNotSelected);
     }
 
     return make_ok();
 }
 
-void NotationInteraction::addText(TextStyleType type)
+void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
 {
     if (!scoreHasMeasure()) {
         LOGE() << "Need to create measure";
         return;
     }
 
+    addText(type, item);
+}
+
+void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
+{
     if (m_noteInput->isNoteInputMode()) {
         m_noteInput->endNoteInput();
     }
 
     startEdit();
-    mu::engraving::TextBase* textBox = score()->addText(type);
-    apply();
+    mu::engraving::TextBase* textBox = score()->addText(type, item);
 
-    if (textBox) {
-        startEditText(textBox);
+    if (!textBox) {
+        rollback();
+        return;
     }
+
+    apply();
+    startEditText(textBox);
+}
+
+mu::Ret NotationInteraction::canAddImageToItem(const EngravingItem* item) const
+{
+    return item && item->isMeasureBase();
+}
+
+void NotationInteraction::addImageToItem(const io::path_t& imagePath, EngravingItem* item)
+{
+    if (imagePath.empty() || !item) {
+        return;
+    }
+
+    static std::map<io::path_t, ImageType> suffixToType {
+        { "svg", ImageType::SVG },
+        { "jpg", ImageType::RASTER },
+        { "jpeg", ImageType::RASTER },
+        { "png", ImageType::RASTER },
+    };
+
+    io::path_t suffix = io::suffix(imagePath);
+
+    ImageType type = mu::value(suffixToType, suffix, ImageType::NONE);
+    if (type == ImageType::NONE) {
+        return;
+    }
+
+    Image* image = Factory::createImage(item);
+    image->setImageType(type);
+
+    if (!image->load(imagePath)) {
+        delete image;
+        return;
+    }
+
+    startEdit();
+    score()->undoAddElement(image);
+    apply();
 }
 
 mu::Ret NotationInteraction::canAddFiguredBass() const
 {
-    bool isNoteOrRestSelected = elementsSelected({ ElementType::NOTE, ElementType::FIGURED_BASS, ElementType::REST });
+    static const std::set<ElementType> requiredTypes {
+        ElementType::NOTE,
+        ElementType::FIGURED_BASS,
+        ElementType::REST
+    };
+
+    bool isNoteOrRestSelected = elementsSelected(requiredTypes);
     return isNoteOrRestSelected ? make_ok() : make_ret(Err::NoteOrFiguredBassIsNotSelected);
 }
 
@@ -4116,10 +4194,10 @@ void NotationInteraction::resetHitElementContext()
     setHitElementContext(HitElementContext());
 }
 
-bool NotationInteraction::elementsSelected(const std::vector<ElementType>& elementsTypes) const
+bool NotationInteraction::elementsSelected(const std::set<ElementType>& elementsTypes) const
 {
     const EngravingItem* element = selection()->element();
-    return element && std::find(elementsTypes.cbegin(), elementsTypes.cend(), element->type()) != elementsTypes.cend();
+    return element && mu::contains(elementsTypes, element->type());
 }
 
 void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
@@ -4844,7 +4922,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         // but it pre-fills the text
         // would be better to create empty tempo element
         if (type != ElementType::TEMPO_TEXT) {
-            addText(textStyleType);
+            addTextToItem(textStyleType, selection()->element());
         }
     }
 }

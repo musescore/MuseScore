@@ -193,8 +193,13 @@ public:
     void changeSelectedNotesVoice(int voiceIndex) override;
     void addAnchoredLineToSelectedNotes() override;
 
-    Ret canAddText(TextStyleType type) const override;
-    void addText(TextStyleType type) override;
+    void addTextToTopFrame(TextStyleType type) override;
+
+    Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const override;
+    void addTextToItem(TextStyleType type, EngravingItem* item) override;
+
+    Ret canAddImageToItem(const EngravingItem* item) const override;
+    void addImageToItem(const io::path_t& imagePath, EngravingItem* item) override;
 
     Ret canAddFiguredBass() const override;
     void addFiguredBass() override;
@@ -302,6 +307,8 @@ private:
     mu::engraving::Harmony* createHarmony(mu::engraving::Segment* segment, engraving::track_idx_t track,
                                           mu::engraving::HarmonyType type) const;
 
+    void addText(TextStyleType type, EngravingItem* item = nullptr);
+
     void startEditText(mu::engraving::TextBase* text);
     bool needEndTextEdit() const;
 
@@ -347,7 +354,7 @@ private:
     void resetGripEdit();
     void resetHitElementContext();
 
-    bool elementsSelected(const std::vector<ElementType>& elementsTypes) const;
+    bool elementsSelected(const std::set<ElementType>& elementsTypes) const;
 
     template<typename P>
     void execute(void (mu::engraving::Score::* function)(P), P param);
