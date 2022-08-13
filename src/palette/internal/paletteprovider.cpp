@@ -705,7 +705,6 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
 
             LOGE() << "Initial OnReceive for ID: " + cell->id + " with writeToFile: " << config.writeToFile;
             if (config.writeToFile) {
-                LOGE() << "Why is this running?";
                 savePalette();
             }
         });

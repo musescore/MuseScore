@@ -68,7 +68,7 @@ public:
     Q_INVOKABLE void exportShortcutsToFile();
 
     Q_INVOKABLE void applySequenceToCurrentShortcut(const QString& newSequence, int conflictShortcutIndex = -1);
-    Q_INVOKABLE void applySequenceToPalette(QString cellID, const QString& newSequence, int conflictShortcutIndex = -1);
+    Q_INVOKABLE void applySequenceToAction(QString cellID, const QString& newSequence, int conflictShortcutIndex = -1);
 
     Q_INVOKABLE void clearSequenceOfShortcut(QString action);
     Q_INVOKABLE void clearSelectedShortcuts();

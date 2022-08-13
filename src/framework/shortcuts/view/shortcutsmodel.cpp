@@ -242,7 +242,7 @@ void ShortcutsModel::applySequenceToCurrentShortcut(const QString& newSequence, 
     notifyAboutShortcutChanged(currIndex);
 }
 
-void ShortcutsModel::applySequenceToPalette(QString action, const QString& newSequence, int conflictShortcutIndex)
+void ShortcutsModel::applySequenceToAction(QString action, const QString& newSequence, int conflictShortcutIndex)
 {
     int i = 0;
     LOGE() << "prev size:" << m_shortcuts.size();
@@ -292,8 +292,7 @@ void ShortcutsModel::clearSequenceOfShortcut(QString action)
     int i = 0;
     for (Shortcut& shortcut : m_shortcuts) {
         if (action == QString::fromStdString(shortcut.action)) {
-            shortcut.sequences.clear();
-            shortcut.standardKey = QKeySequence::StandardKey::UnknownKey;
+            shortcut.clear();
             notifyAboutShortcutChanged(index(i));
             return;
         }

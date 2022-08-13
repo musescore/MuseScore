@@ -217,7 +217,7 @@ StyledGridView {
 
         onApplySequenceRequested: function(newSequence, conflictShortcutIndex, shortcutAction) {
             console.log("Applying to " + shortcutAction + " with " + newSequence)
-            shortcutsModel.applySequenceToPalette(shortcutAction, newSequence, conflictShortcutIndex)
+            shortcutsModel.applySequenceToAction(shortcutAction, newSequence, conflictShortcutIndex)
         }
 
         property bool canEditCurrentShortcut: Boolean(shortcutsModel.currentShortcut)
