@@ -709,7 +709,6 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
             }
         });
 
-
         QString ac_name = cell->action;
         ctr++;
         actionToItem[ac_name] = cell->element.get();

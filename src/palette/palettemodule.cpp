@@ -182,12 +182,13 @@ void PaletteModule::registerCellActions()
     std::unordered_set <QString> allowedCells;
 
     // TODO Begin moving the below for loop to this one
-    for (int paletteIt = 0; paletteIt < s_paletteProvider->userPaletteModel()->rowCount(); paletteIt++)
-    {
-        for (int cellIt = 0; cellIt < s_paletteProvider->userPaletteModel()->rowCount(s_paletteProvider->userPaletteModel()->index(paletteIt, 0)); cellIt++)
-        {
+    for (int paletteIt = 0; paletteIt < s_paletteProvider->userPaletteModel()->rowCount(); paletteIt++) {
+        for (int cellIt = 0;
+             cellIt < s_paletteProvider->userPaletteModel()->rowCount(s_paletteProvider->userPaletteModel()->index(paletteIt, 0));
+             cellIt++) {
             auto it = s_paletteProvider->userPaletteModel()->index(cellIt, 0, s_paletteProvider->userPaletteModel()->index(paletteIt, 0));
-            const PaletteCell* cell = s_paletteProvider->userPaletteModel()->data(it, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
+            const PaletteCell* cell = s_paletteProvider->userPaletteModel()->data(it,
+                                                                                  PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
             allowedCells.insert(cell->id);
         }
     }
@@ -216,8 +217,13 @@ void PaletteModule::registerCellActions()
 
     for (int ii = 0; ii < s_paletteProvider->userPaletteModel()->rowCount(); ii++) {
         LOGE() <<
-            s_paletteProvider->userPaletteModel()->data(s_paletteProvider->userPaletteModel()->index(ii, 0), Qt::DisplayRole).toString() << ": " << s_paletteProvider->userPaletteModel()->data(s_paletteProvider->userPaletteModel()->index(ii, 0), PaletteTreeModel::PaletteTreeModelRoles::VisibleRole).toBool() << " with number of cells:" << s_paletteProvider->userPaletteModel()->rowCount(s_paletteProvider->userPaletteModel()->index(ii, 0));
-
+            s_paletteProvider->userPaletteModel()->data(s_paletteProvider->userPaletteModel()->index(ii, 0),
+                                                        Qt::DisplayRole).toString() << ": " <<
+            s_paletteProvider->userPaletteModel()->data(s_paletteProvider->userPaletteModel()->index(ii,
+                                                                                                     0),
+                                                        PaletteTreeModel::PaletteTreeModelRoles::VisibleRole).toBool() <<
+            " with number of cells:" <<
+            s_paletteProvider->userPaletteModel()->rowCount(s_paletteProvider->userPaletteModel()->index(ii, 0));
     }
     //assert(false);
 

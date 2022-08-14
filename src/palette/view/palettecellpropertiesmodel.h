@@ -29,7 +29,6 @@
 
 #include "ipaletteconfiguration.h"
 
-
 namespace mu::palette {
 class PaletteCellPropertiesModel : public QObject
 {

@@ -328,7 +328,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
         config.xOffset = cell->xoffset;
         config.yOffset = cell->yoffset;
         config.scale = cell->mag;
-        
+
         for (auto shrtct : PaletteShortcuts) {
             std::string cellId = "";
 
@@ -348,7 +348,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
             }
 
             config.shortcut = shrtct;
-            
+
             LOGE() << "Shortcut before setting at palette cell:" << shrtct.sequencesAsString();
 
             paletteConfiguration()->setPaletteCellConfig(cell->id, config);

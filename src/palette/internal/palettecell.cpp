@@ -238,7 +238,7 @@ bool PaletteCell::read(XmlReader& e)
 
     action = QString::fromStdString(shortcut.action);
     PaletteCell::allActions.push_back(shortcut);
-  
+
     //LOGE() << PaletteCell::allActions.size() << " is the size and the addr is " << pointerAddr.str();
 
     return add && element;

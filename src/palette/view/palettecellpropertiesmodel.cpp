@@ -98,7 +98,6 @@ void PaletteCellPropertiesModel::setName(const QString& name)
 
     m_currentConfig.name = name;
     setConfig(m_currentConfig);
-
 }
 
 void PaletteCellPropertiesModel::setXOffset(double xOffset)
