@@ -220,8 +220,7 @@ static bool isEquivalent(const EngravingItem& e1, const EngravingItem& e2)
 
 int Palette::indexOfCell(const PaletteCell& cell, bool matchName) const
 {
-    const EngravingItem* el = cell.element.get();
-    if (!el) {
+    if (!cell.element) {
         return -1;
     }
 
@@ -231,8 +230,11 @@ int Palette::indexOfCell(const PaletteCell& cell, bool matchName) const
             continue;
         }
 
-        const EngravingItem* exElement = localCell.element.get();
-        if (exElement && !isEquivalent(*exElement, *el)) {
+        if (cell.untranslatedElement) {
+            if (!localCell.untranslatedElement || !isEquivalent(*localCell.untranslatedElement, *cell.untranslatedElement)) {
+                continue;
+            }
+        } else if (!localCell.element || !isEquivalent(*localCell.element, *cell.element)) {
             continue;
         }
 
