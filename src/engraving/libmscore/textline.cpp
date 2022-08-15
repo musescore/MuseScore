@@ -24,10 +24,8 @@
 #include "rw/xml.h"
 
 #include "score.h"
-#include "staff.h"
 #include "system.h"
 #include "undo.h"
-#include "musescoreCore.h"
 
 using namespace mu;
 

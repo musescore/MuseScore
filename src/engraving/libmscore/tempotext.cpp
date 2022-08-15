@@ -30,14 +30,9 @@
 #include "types/typesconv.h"
 #include "types/constants.h"
 
-#include "measure.h"
-#include "musescoreCore.h"
 #include "score.h"
-#include "staff.h"
-#include "system.h"
-#include "tempo.h"
+#include "segment.h"
 #include "tempotext.h"
-#include "undo.h"
 
 using namespace mu;
 using namespace mu::engraving;

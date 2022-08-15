@@ -25,11 +25,13 @@
 
 #include <variant>
 
-#include "draw/fontmetrics.h"
-
-#include "draw/types/color.h"
 #include "engravingitem.h"
 #include "property.h"
+#include "types.h"
+
+#include "draw/fontmetrics.h"
+#include "draw/types/color.h"
+
 #include "style/style.h"
 
 namespace mu::engraving {
