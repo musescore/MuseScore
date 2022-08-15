@@ -469,6 +469,10 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
     int capoFret = chord->staff()->part()->capoFret();
 
     for (Note* note : chord->notes()) {
+        if (note->displayFret() != Note::DisplayFretOption::NoHarmonic) {
+            continue;
+        }
+
         int string = note->string();
         int fret = note->fret();
 
