@@ -23,24 +23,23 @@
 
 #include "types/datetime.h"
 #include "io/buffer.h"
-#include "infrastructure/mscreader.h"
-#include "infrastructure/mscwriter.h"
-#include "rw/xml.h"
-#include "rw/writecontext.h"
-#include "style/defaultstyle.h"
+
 #include "compat/writescorehook.h"
+#include "infrastructure/mscwriter.h"
 #include "rw/scorereader.h"
+#include "rw/xml.h"
+#include "style/defaultstyle.h"
 
 #include "engravingproject.h"
 
-#include "repeatlist.h"
-#include "undo.h"
-#include "imageStore.h"
 #include "audio.h"
-#include "utils.h"
 #include "excerpt.h"
+#include "imageStore.h"
 #include "part.h"
-#include "linkedobjects.h"
+#include "repeatlist.h"
+#include "sig.h"
+#include "tempo.h"
+#include "undo.h"
 
 #include "log.h"
 

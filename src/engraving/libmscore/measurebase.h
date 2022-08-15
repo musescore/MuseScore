@@ -29,12 +29,12 @@
 */
 
 #include "engravingitem.h"
-#include "layoutbreak.h"
 
 namespace mu::engraving {
+class LayoutBreak;
+class Measure;
 class Score;
 class System;
-class Measure;
 
 //---------------------------------------------------------
 //   Repeat
