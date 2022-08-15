@@ -21,18 +21,17 @@
  */
 #include "read400.h"
 
-#include "translation.h"
 #include "rw/xml.h"
 
-#include "libmscore/score.h"
-#include "libmscore/masterscore.h"
 #include "libmscore/audio.h"
-#include "libmscore/text.h"
-#include "libmscore/part.h"
-#include "libmscore/spanner.h"
 #include "libmscore/excerpt.h"
-#include "libmscore/staff.h"
 #include "libmscore/factory.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/part.h"
+#include "libmscore/score.h"
+#include "libmscore/spanner.h"
+#include "libmscore/staff.h"
+#include "libmscore/text.h"
 
 #include "staffrw.h"
 

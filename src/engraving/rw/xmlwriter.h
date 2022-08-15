@@ -25,7 +25,6 @@
 #include <map>
 #include <unordered_map>
 
-#include "containers.h"
 #include "io/iodevice.h"
 #include "serialization/xmlstreamwriter.h"
 

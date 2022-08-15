@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_XMLREADER_H
 
 #include <map>
-#include "containers.h"
+
 #include "serialization/xmlstreamreader.h"
 
 #include "draw/types/color.h"

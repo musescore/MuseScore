@@ -25,21 +25,26 @@
 
 #include <map>
 
-#include "libmscore/mscore.h"
-#include "libmscore/location.h"
+#include "types/types.h"
+
 #include "libmscore/connector.h"
 #include "libmscore/interval.h"
-#include "compat/dummyelement.h"
+#include "libmscore/location.h"
 #include "linksindexer.h"
 
+namespace mu::engraving::compat {
+class DummyElement;
+}
+
 namespace mu::engraving {
-class Score;
-class TimeSigMap;
-class Staff;
-class Spanner;
+class Beam;
+class EngravingObject;
 class LinkedObjects;
 class Measure;
-class Beam;
+class Score;
+class Spanner;
+class Staff;
+class TimeSigMap;
 class Tuplet;
 
 struct SpannerValues {

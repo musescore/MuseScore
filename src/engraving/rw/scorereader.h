@@ -23,9 +23,11 @@
 #define MU_ENGRAVING_SCOREREADER_H
 
 #include "../engravingerrors.h"
-#include "xml.h"
+
 #include "infrastructure/mscreader.h"
 #include "readcontext.h"
+#include "xml.h"
+
 #include "../libmscore/masterscore.h"
 
 namespace mu::engraving {
