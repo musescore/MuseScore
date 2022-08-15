@@ -651,7 +651,15 @@ void PopupView::updateContentPosition()
 
         QPointF parentTopLeft = parent->mapToGlobal(QPoint(0, 0));
 
-        setArrowX(parentTopLeft.x() + (parent->width() / 2) - m_globalPos.x());
+        QRect viewGeometry = this->viewGeometry();
+        QPointF viewTopLeft = QPointF(viewGeometry.x(), viewGeometry.y());
+        QPointF viewTopRight = QPointF(viewGeometry.x() + viewGeometry.width(), viewGeometry.y());
+
+        if (parentTopLeft.x() < viewTopLeft.x() || parentTopLeft.x() > viewTopRight.x()) {
+            setArrowX(viewGeometry.width() / 2);
+        } else {
+            setArrowX(parentTopLeft.x() + (parent->width() / 2) - m_globalPos.x());
+        }
     } else {
         if (opensUpward()) {
             contentItem()->setY(padding());
