@@ -42,7 +42,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/noteheadtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ornamenttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/linetypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/stemtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/directiontypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/texttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/commontypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolobartypes.h
