@@ -23,13 +23,9 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
-#include "global/types/string.h"
 #include "global/containers.h"
-#include "draw/types/color.h"
 
 #include "engraving/types/types.h"
-
-#include "config.h"
 
 namespace mu::engraving {
 #define MSC_VERSION     "4.00"
@@ -81,8 +77,6 @@ static constexpr int MSCVERSION = 400;
 //    4.00 (Version 4.0)
 //       - The style is stored in a separate file (inside mscz)
 //       - The ChordList is stored in a separate file (inside mscz)
-
-enum class HairpinType : signed char;
 
 static constexpr size_t VOICES = 4;
 
@@ -283,19 +277,10 @@ public:
 };
 
 //---------------------------------------------------------
-//   center
-//---------------------------------------------------------
-
-static constexpr double center(double x1, double x2)
-{
-    return x1 + (x2 - x1) * .5;
-}
-
-//---------------------------------------------------------
 //   limit
 //---------------------------------------------------------
 
-static constexpr int limit(int val, int min, int max)
+constexpr int limit(int val, int min, int max)
 {
     if (val > max) {
         return max;

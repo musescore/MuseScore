@@ -20,12 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "excerpt.h"
 #include "instrument.h"
-#include "part.h"
-
 #include "masterscore.h"
+#include "part.h"
+#include "score.h"
 
 #include "log.h"
 

@@ -24,7 +24,7 @@
 #define __MEASUREREPEAT_H__
 
 #include "rest.h"
-#include "text.h"
+
 #include "utils.h"
 
 namespace mu::engraving {
@@ -50,7 +50,7 @@ public:
     void setNumberPos(double d) { m_numberPos = d; }
     double numberPos() const { return m_numberPos; }
 
-    Measure* firstMeasureOfGroup() const { return measure()->firstOfMeasureRepeatGroup(staffIdx()); }
+    Measure* firstMeasureOfGroup() const;
 
     void draw(mu::draw::Painter*) const override;
     void layout() override;

@@ -22,11 +22,11 @@
 
 #include "marker.h"
 
-#include "types/typesconv.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
-#include "score.h"
 #include "measure.h"
+#include "score.h"
 
 #include "log.h"
 
