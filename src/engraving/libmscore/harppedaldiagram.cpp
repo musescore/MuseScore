@@ -68,6 +68,34 @@ static const ElementStyle harpPedalTextDiagramStyle {
 };
 
 // HarpPedalDiagram
+void HarpPedalDiagram::setPlayablePitches()
+{
+    std::set<int> playablePitches;
+    static const std::map<HarpStringType, int> string2pitch = {
+        { HarpStringType::C, 0 },
+        { HarpStringType::D, 2 },
+        { HarpStringType::E, 4 },
+        { HarpStringType::F, 5 },
+        { HarpStringType::G, 7 },
+        { HarpStringType::A, 9 },
+        { HarpStringType::B, 11 }
+    };
+    static const std::map<PedalPosition, int> position2delta = {
+        { PedalPosition::FLAT, -1 },
+        { PedalPosition::NATURAL, 0 },
+        { PedalPosition::SHARP, 1 }
+    };
+
+    for (int i = 0; i < _pedalState.size(); i++) {
+        int stringPitch = string2pitch.at(HarpStringType(i));
+        int delta = position2delta.at(_pedalState[i]);
+        int resPitch = (stringPitch + delta + 12) % 12;
+        playablePitches.insert(resPitch);
+    }
+
+    _playablePitches = playablePitches;
+}
+
 HarpPedalDiagram::HarpPedalDiagram(Segment* parent)
     : TextBase(ElementType::HARP_DIAGRAM, parent, TextStyleType::HARP_PEDAL_DIAGRAM, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
@@ -75,6 +103,7 @@ HarpPedalDiagram::HarpPedalDiagram(Segment* parent)
     _pedalState
         = std::array<PedalPosition, 7> { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL,
                                          PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL };
+    setPlayablePitches();
 }
 
 HarpPedalDiagram::HarpPedalDiagram(const HarpPedalDiagram& h)
@@ -82,6 +111,7 @@ HarpPedalDiagram::HarpPedalDiagram(const HarpPedalDiagram& h)
 {
     _pedalState = h._pedalState;
     _isDiagram = h._isDiagram;
+    setPlayablePitches();
 }
 
 void HarpPedalDiagram::layout()
@@ -94,6 +124,7 @@ void HarpPedalDiagram::layout()
 void HarpPedalDiagram::setPedalState(std::array<PedalPosition, 7> state)
 {
     _pedalState = state;
+    setPlayablePitches();
 }
 
 void HarpPedalDiagram::setIsDiagram(bool diagram)
@@ -113,6 +144,7 @@ void HarpPedalDiagram::setIsDiagram(bool diagram)
 void HarpPedalDiagram::setPedal(HarpStringType harpString, PedalPosition pedal)
 {
     _pedalState.at(harpString) = pedal;
+    setPlayablePitches();
 }
 
 String HarpPedalDiagram::createDiagramText()
@@ -218,12 +250,7 @@ void HarpPedalDiagram::updateDiagramText()
 
 bool HarpPedalDiagram::isPitchPlayable(int pitch)
 {
-    pitch = pitch % 12;
-
-    if (std::find(_playablePitches.begin(), _playablePitches.end(), pitch) != _playablePitches.end()) {
-        return true;
-    }
-    return false;
+    return _playablePitches.find(pitch % 12) != _playablePitches.cend();
 }
 
 void HarpPedalDiagram::read(XmlReader& xml)
@@ -243,6 +270,7 @@ void HarpPedalDiagram::read(XmlReader& xml)
                     xml.unknown();
                 }
             }
+            setPlayablePitches();
         } else if (!TextBase::readProperties(xml)) {
             xml.unknown();
         }

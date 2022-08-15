@@ -25,6 +25,7 @@
 
 #include "pitchspelling.h"
 #include "textbase.h"
+#include "pitchspelling.h"
 
 using namespace mu;
 //using namespace mu::engraving;
@@ -47,9 +48,11 @@ class HarpPedalDiagram final : public TextBase
 {
     std::array<PedalPosition, 7> _pedalState;
 
-    std::vector<int> _playablePitches;
+    std::set<int> _playablePitches;
 
     bool _isDiagram = true;
+
+    void setPlayablePitches();
 
 public:
     HarpPedalDiagram(Segment* parent);
