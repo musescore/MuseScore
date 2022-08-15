@@ -33697,6 +33697,11 @@ az ütem nem üres</translation>
         <translation>Rövid cezúra</translation>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="3759"/>
+        <source>Single stroke caesura</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3760"/>
         <source>Thick caesura</source>
         <translation>Vastag cezúra</translation>

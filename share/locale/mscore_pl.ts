@@ -33733,6 +33733,11 @@ Takt nie jest pusty.</translation>
         <translation>Krótka cezura</translation>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="3759"/>
+        <source>Single stroke caesura</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3760"/>
         <source>Thick caesura</source>
         <translation>Gruba cezura</translation>

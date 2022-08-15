@@ -3756,7 +3756,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       QT_TRANSLATE_NOOP("symUserNames", "Caesura"),
       QT_TRANSLATE_NOOP("symUserNames", "Curved caesura"),
       QT_TRANSLATE_NOOP("symUserNames", "Short caesura"),
-      "Single stroke caesura",
+      QT_TRANSLATE_NOOP("symUserNames", "Single stroke caesura"),
       QT_TRANSLATE_NOOP("symUserNames", "Thick caesura"),
       "Accentus above",
       "Accentus below",

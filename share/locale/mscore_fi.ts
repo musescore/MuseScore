@@ -33570,6 +33570,11 @@ tahti ei ole tyhjä</translation>
         <translation>Lyhyt kesuura</translation>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="3759"/>
+        <source>Single stroke caesura</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3760"/>
         <source>Thick caesura</source>
         <translation>Paksu kesuura</translation>

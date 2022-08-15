@@ -33696,6 +33696,11 @@ Measure is not empty</source>
         <translation>短いカエスーラ</translation>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="3759"/>
+        <source>Single stroke caesura</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3760"/>
         <source>Thick caesura</source>
         <translation>太いカエスーラ</translation>

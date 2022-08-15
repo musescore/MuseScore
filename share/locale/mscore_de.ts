@@ -33757,6 +33757,11 @@ Takt ist nicht leer</translation>
         <translation>Kurze Zäsur</translation>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="3759"/>
+        <source>Single stroke caesura</source>
+        <translation>Einzelstrich-Zäsur</translation>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3760"/>
         <source>Thick caesura</source>
         <translation>Dicke Zäsur</translation>

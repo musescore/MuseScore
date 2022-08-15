@@ -33753,6 +33753,11 @@ Bar is not empty</translation>
         <translation>Short caesura</translation>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="3759"/>
+        <source>Single stroke caesura</source>
+        <translation>Single stroke caesura</translation>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3760"/>
         <source>Thick caesura</source>
         <translation>Thick caesura</translation>
