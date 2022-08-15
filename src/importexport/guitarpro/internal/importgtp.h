@@ -202,6 +202,13 @@ protected:
     static const int SLIDE_IN_ABOVE = 16;
     static const int SLIDE_IN_BELOW = 32;
 
+    // harmonic mark types
+    static const int HARMONIC_MARK_NATURAL = 1;
+    static const int HARMONIC_MARK_ARTIFICIAL = 2;
+    static const int HARMONIC_MARK_TAP = 3;
+    static const int HARMONIC_MARK_PINCH = 4;
+    static const int HARMONIC_MARK_SEMI = 5;
+
     static const int MAX_PITCH = 127;
     static const char* const errmsg[];
     int version;
