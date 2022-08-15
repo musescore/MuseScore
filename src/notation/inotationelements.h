@@ -41,6 +41,7 @@ public:
     virtual Measure* measure(const int measureIndex) const = 0;
 
     virtual PageList pages() const = 0;
+    virtual const Page* pageByPoint(const PointF& point) const = 0;
 };
 
 using INotationElementsPtr = std::shared_ptr<INotationElements>;

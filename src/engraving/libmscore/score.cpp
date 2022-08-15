@@ -1107,13 +1107,18 @@ void Score::spell(Note* note)
 
 Page* Score::searchPage(const PointF& p) const
 {
-    for (Page* page : pages()) {
+    if (layoutMode() == LayoutMode::LINE) {
+        return _pages.empty() ? nullptr : _pages.front();
+    }
+
+    for (Page* page : _pages) {
         RectF r = page->bbox().translated(page->pos());
         if (r.contains(p)) {
             return page;
         }
     }
-    return 0;
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
