@@ -23,7 +23,7 @@
 #ifndef __TESTUTILS_H__
 #define __TESTUTILS_H__
 
-#include "libmscore/engravingitem.h"
+#include <QString>
 
 namespace mu::engraving {
 class MScore;
