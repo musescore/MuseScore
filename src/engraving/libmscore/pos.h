@@ -25,13 +25,13 @@
 
 #include "global/allocator.h"
 #include "types/string.h"
-#include "sig.h"
 
 namespace mu::engraving {
+class SigEvent;
 class TempoMap;
 class TimeSigMap;
-class XmlWriter;
 class XmlReader;
+class XmlWriter;
 
 enum class TType : char {
     TICKS, FRAMES
