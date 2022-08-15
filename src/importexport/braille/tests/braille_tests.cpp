@@ -30,12 +30,6 @@
 #include "libmscore/masterscore.h"
 #include "importexport/braille/internal/exportbraille.h"
 
-// start includes required for fixupScore()
-#include "libmscore/measure.h"
-#include "libmscore/staff.h"
-#include "libmscore/keysig.h"
-// end includes required for fixupScore()
-
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::iex::braille;
@@ -111,8 +105,9 @@ TEST_F(Braille_Tests, notes) {
     brailleSaveTest("testNotes_Example_2.1_MBC2015");
 }
 TEST_F(Braille_Tests, octavesNoChords) {
+    // TODO a,b,c section names not exported
     brailleSaveTest("testOctavesNoChords_Example_3.2.2.1_MBC2015");
-}                                                   // TODO a,b,c section names not exported
+}
 TEST_F(Braille_Tests, clefs) {
     brailleSaveTest("testClefs_Example_4.2_MBC2015");
 }
@@ -126,8 +121,9 @@ TEST_F(Braille_Tests, quarterAccidentals) {
     brailleSaveTest("testQToneAccidentals_Example_6.3_MBC2015");
 }
 TEST_F(Braille_Tests, keySigs) {
+    // a bit changed. the second key sig does not have naturals
     brailleSaveTest("testKeySig_Example_6.5_MBC2015");
-}                                                   // a bit changed. the second key sig does not have naturals
+}
 TEST_F(Braille_Tests, timeSignature) {
     brailleSaveTest("testTimeSig_Example_7.1_MBC2015");
 }
@@ -135,8 +131,9 @@ TEST_F(Braille_Tests, chords1) {
     brailleSaveTest("testChords_Example_9.1.MBC2015");
 }
 TEST_F(Braille_Tests, chords2) {
+// TODO 9.1.1.d octave mark in unison intervals
     brailleSaveTest("testChords_Example_9.1.1_MBC2015");
-}                                                    // TODO 9.1.1.d octave mark in unison intervals
+}
 TEST_F(Braille_Tests, chords3) {
     brailleSaveTest("testChords_Example_9.2.1_MBC2015");
 }
@@ -179,12 +176,12 @@ TEST_F(Braille_Tests, slursShort) {
 TEST_F(Braille_Tests, slursLong) {
     brailleSaveTest("testSlur_Example_13.3.b_MBC2015");
 }
-// the Braille ref does not use part measure repeats
 TEST_F(Braille_Tests, slursWithRest) {
+    // the Braille ref does not use part measure repeats
     brailleSaveTest("testSlur_Example_13.3.2_MBC2015");
 }
-// the Braille ref uses bracket slurs even if layered instead of doubled-slur
 TEST_F(Braille_Tests, slursLayered) {
+    // the Braille ref uses bracket slurs even if layered instead of doubled-slur
     brailleSaveTest("testSlur_Example_13.3.3_MBC2015");
 }
 TEST_F(Braille_Tests, slursShortConvergence) {
@@ -208,8 +205,8 @@ TEST_F(Braille_Tests, fingering1) {
 TEST_F(Braille_Tests, fingering2) {
     brailleSaveTest("testFingering_Example_15.2.1_MBC2015");
 }
-// TODO: last measure with doubling grace mark for >4 grace notes
 TEST_F(Braille_Tests, graceNotes) {
+    // TODO: last measure with doubling grace mark for >4 grace notes
     brailleSaveTest("testGrace_Example_16.2.1_MBC2015");
 }
 TEST_F(Braille_Tests, graceChords) {
@@ -242,8 +239,8 @@ TEST_F(Braille_Tests, breath) {
 TEST_F(Braille_Tests, articulations) {
     brailleSaveTest("testArticulations_Example_22.1_MBC2015");
 }
-// removed the 4th measure from the example as MuseScore does not have a representations for mordents with accidentals
 TEST_F(Braille_Tests, hairpins) {
+    // removed the 4th measure from the example as MuseScore does not have a representations for mordents with accidentals
     brailleSaveTest("testHairpins_Example_22.3.3.2_MBC2015");
 }
 TEST_F(Braille_Tests, sectionBreak) {

@@ -22,16 +22,15 @@
 
 #include "exportmidi.h"
 
-#include "libmscore/masterscore.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/tempo.h"
-#include "libmscore/sig.h"
 #include "libmscore/key.h"
-#include "libmscore/text.h"
-#include "libmscore/measure.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/note.h"
+#include "libmscore/part.h"
 #include "libmscore/repeatlist.h"
+#include "libmscore/sig.h"
+#include "libmscore/staff.h"
 #include "libmscore/synthesizerstate.h"
+#include "libmscore/tempo.h"
 
 #include "engraving/compat/midi/event.h"
 
