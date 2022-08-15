@@ -327,7 +327,7 @@ void PlaybackController::onNotationChanged()
     });
 
     notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
-        setLoop(notationPlayback()->loopBoundaries());
+        updateLoop();
     });
 
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
@@ -345,7 +345,7 @@ void PlaybackController::onSelectionChanged()
 
     if (!isRangeSelection) {
         if (selectionTypeChanged) {
-            setLoop(notationPlayback()->loopBoundaries());
+            updateLoop();
             updateMuteStates();
         }
 
@@ -577,11 +577,13 @@ void PlaybackController::addLoopBoundaryToTick(LoopBoundaryType type, int tick)
     }
 }
 
-void PlaybackController::setLoop(const LoopBoundaries& boundaries)
+void PlaybackController::updateLoop()
 {
-    IF_ASSERT_FAILED(playback()) {
+    IF_ASSERT_FAILED(notationPlayback() && playback()) {
         return;
     }
+
+    const LoopBoundaries& boundaries = notationPlayback()->loopBoundaries();
 
     if (!boundaries.visible) {
         hideLoop();
@@ -1106,6 +1108,7 @@ void PlaybackController::setTempoMultiplier(double multiplier)
 
     playback->setTempoMultiplier(multiplier);
     seek(tick);
+    updateLoop();
 
     if (playing) {
         resume();

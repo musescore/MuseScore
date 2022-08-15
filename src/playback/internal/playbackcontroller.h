@@ -142,8 +142,7 @@ private:
 
     void addLoopBoundary(notation::LoopBoundaryType type);
     void addLoopBoundaryToTick(notation::LoopBoundaryType type, int tick);
-
-    void setLoop(const notation::LoopBoundaries& boundaries);
+    void updateLoop();
 
     void showLoop();
     void hideLoop();
