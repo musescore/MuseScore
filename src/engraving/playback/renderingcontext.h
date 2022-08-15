@@ -25,10 +25,10 @@
 
 #include "mpe/events.h"
 
-#include "libmscore/note.h"
 #include "libmscore/chord.h"
-#include "libmscore/tie.h"
+#include "libmscore/note.h"
 #include "libmscore/sig.h"
+#include "libmscore/tie.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/utils/pitchutils.h"
