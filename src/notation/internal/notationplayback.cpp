@@ -344,3 +344,15 @@ tick_t NotationPlayback::beatToTick(int measureIndex, int beatIndex) const
 {
     return score() ? score()->sigmap()->bar2tick(measureIndex, beatIndex) : 0;
 }
+
+double NotationPlayback::tempoMultiplier() const
+{
+    return score() ? score()->tempomap()->tempoMultiplier().val : 1.0;
+}
+
+void NotationPlayback::setTempoMultiplier(double multiplier)
+{
+    if (score()) {
+        score()->tempomap()->setTempoMultiplier(multiplier);
+    }
+}
