@@ -93,6 +93,9 @@ public:
     notation::MeasureBeat currentBeat() const override;
     audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
 
+    double tempoMultiplier() const override;
+    void setTempoMultiplier(double multiplier) override;
+
     framework::Progress loadingProgress() const override;
 
 private:
@@ -139,8 +142,7 @@ private:
 
     void addLoopBoundary(notation::LoopBoundaryType type);
     void addLoopBoundaryToTick(notation::LoopBoundaryType type, int tick);
-
-    void setLoop(const notation::LoopBoundaries& boundaries);
+    void updateLoop();
 
     void showLoop();
     void hideLoop();

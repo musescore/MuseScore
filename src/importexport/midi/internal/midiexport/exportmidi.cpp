@@ -187,14 +187,14 @@ void ExportMidi::writeHeader()
     //--------------------------------------------
 
     TempoMap* tempomap = m_pauseMap.tempomapWithPauses;
-    BeatsPerSecond relTempo = tempomap->relTempo();
+    BeatsPerSecond tempoMultiplier = tempomap->tempoMultiplier();
     for (auto it = tempomap->cbegin(); it != tempomap->cend(); ++it) {
         MidiEvent ev;
         ev.setType(ME_META);
         //
         // compute midi tempo: microseconds / quarter note
         //
-        int tempo = lrint((1.0 / it->second.tempo.val * relTempo.val) * 1000000.0);
+        int tempo = lrint((1.0 / it->second.tempo.val * tempoMultiplier.val) * 1000000.0);
 
         ev.setMetaType(META_TEMPO);
         ev.setLen(3);
@@ -389,7 +389,7 @@ void ExportMidi::PauseMap::calculate(const Score* s)
     this->insert(std::pair<const int, int>(0, 0));    // can't start with a pause
 
     tempomapWithPauses = new TempoMap();
-    tempomapWithPauses->setRelTempo(tempomap->relTempo());
+    tempomapWithPauses->setTempoMultiplier(tempomap->tempoMultiplier());
 
     for (const RepeatSegment* rs : s->repeatList()) {
         int startTick  = rs->tick;
