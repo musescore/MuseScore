@@ -21,9 +21,9 @@
  */
 #include "stemsettingsmodel.h"
 
-#include "types/stemtypes.h"
-#include "dataformatter.h"
+#include "engraving/libmscore/beam.h"
 
+#include "dataformatter.h"
 #include "translation.h"
 #include "log.h"
 
