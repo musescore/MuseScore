@@ -24,10 +24,11 @@
 
 #include "accidental.h"
 #include "articulation.h"
-#include "drumset.h"
 #include "hook.h"
+#include "measure.h"
 #include "rest.h"
 #include "score.h"
+#include "stafftype.h"
 
 #include "draw/types/pen.h"
 
@@ -189,7 +190,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
             double y = sp2 * (i - m_lineIndex);
             painter->drawLine(LineF(x1, y, x2, y));
         }
-        int l = staff()->lines(tick()) * 2; // first ledger line below staff
+        int l = staffType()->lines() * 2; // first ledger line below staff
         for (int i = l; i <= m_lineIndex; i += 2) {
             double y = sp2 * (i - m_lineIndex);
             painter->drawLine(LineF(x1, y, x2, y));
@@ -332,7 +333,7 @@ void ShadowNote::layout()
         for (int i = -2; i >= m_lineIndex; i -= 2) {
             newBbox |= r.translated(PointF(0, _spatium * .5 * (i - m_lineIndex)));
         }
-        int l = staff()->lines(tick()) * 2; // first ledger line below staff
+        int l = staffType()->lines() * 2; // first ledger line below staff
         for (int i = l; i <= m_lineIndex; i += 2) {
             newBbox |= r.translated(PointF(0, _spatium * .5 * (i - m_lineIndex)));
         }

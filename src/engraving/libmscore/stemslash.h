@@ -24,9 +24,10 @@
 #define __STEMSLASH_H__
 
 #include "engravingitem.h"
-#include "stem.h"
 
 namespace mu::engraving {
+class Chord;
+
 //---------------------------------------------------------
 //   @@ StemSlash
 ///    used for grace notes of type acciaccatura

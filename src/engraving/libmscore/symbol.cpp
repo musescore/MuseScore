@@ -23,16 +23,12 @@
 #include "symbol.h"
 
 #include "draw/fontmetrics.h"
+#include "infrastructure/symbolfonts.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
-#include "infrastructure/symbolfonts.h"
 
-#include "system.h"
-#include "staff.h"
-#include "measure.h"
-#include "page.h"
-#include "score.h"
 #include "image.h"
+#include "staff.h"
 
 #include "log.h"
 

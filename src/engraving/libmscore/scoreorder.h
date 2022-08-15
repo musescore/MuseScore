@@ -24,6 +24,7 @@
 
 #include <map>
 
+#include "types/string.h"
 #include "types/translatablestring.h"
 
 namespace mu::engraving {

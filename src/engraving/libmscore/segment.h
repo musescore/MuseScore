@@ -24,8 +24,9 @@
 #define __SEGMENT_H__
 
 #include "engravingitem.h"
+
 #include "shape.h"
-#include "mscore.h"
+#include "types.h"
 
 namespace mu::engraving {
 class Factory;

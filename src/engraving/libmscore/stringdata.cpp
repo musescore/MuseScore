@@ -29,10 +29,8 @@
 #include "chord.h"
 #include "note.h"
 #include "part.h"
-#include "score.h"
-#include "staff.h"
-#include "undo.h"
 #include "segment.h"
+#include "staff.h"
 
 using namespace mu;
 
