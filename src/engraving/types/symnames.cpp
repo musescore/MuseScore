@@ -3809,7 +3809,7 @@ constexpr const std::array<const char*, size_t(SymId::lastSym) + 1> SymNames::s_
     QT_TRANSLATE_NOOP("engraving/sym", "Caesura"),
     QT_TRANSLATE_NOOP("engraving/sym", "Curved caesura"),
     QT_TRANSLATE_NOOP("engraving/sym", "Short caesura"),
-    "Single stroke caesura",
+    QT_TRANSLATE_NOOP("engraving/sym", "Single stroke caesura"),
     QT_TRANSLATE_NOOP("engraving/sym", "Thick caesura"),
     "Accentus above",
     "Accentus below",

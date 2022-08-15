@@ -47,6 +47,7 @@ const std::vector<BreathType> Breath::breathList {
     { SymId::caesuraShort,         true,  2.0 },
     { SymId::caesuraThick,         true,  2.0 },
     { SymId::chantCaesura,         true,  2.0 },
+    { SymId::caesuraSingleStroke,  true,  2.0 },
 };
 
 //---------------------------------------------------------

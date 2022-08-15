@@ -991,21 +991,11 @@ QString ExportBrailleImpl::brailleBreath(Breath* breath)
         return QString();
     }
 
-    switch (breath->symId()) {
-    case SymId::breathMarkTick:
-    case SymId::breathMarkComma:
-    case SymId::breathMarkUpbow:
-    case SymId::breathMarkSalzedo:
-        return BRAILLE_BREATH;
-    case SymId::caesura:
-    case SymId::caesuraShort:
-    case SymId::caesuraThick:
-    case SymId::caesuraCurved:
+    if (breath->isCaesura()) {
         return BRAILLE_CAESURA;
-    default:
-        break;
+    } else {
+        return BRAILLE_BREATH;
     }
-    return QString();
 }
 
 BarLine* ExportBrailleImpl::lastBarline(Measure* measure, track_idx_t track)

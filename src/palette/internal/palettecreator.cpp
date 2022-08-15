@@ -971,7 +971,7 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
     }
 
     for (BreathType breath : Breath::breathList) {
-        if (breath.id == SymId::chantCaesura && defaultPalette) {
+        if ((breath.id == SymId::chantCaesura || breath.id == SymId::caesuraSingleStroke) && defaultPalette) {
             continue;
         }
         auto a = Factory::makeBreath(gpaletteScore->dummy()->segment());
