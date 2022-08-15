@@ -22,11 +22,10 @@
 
 #include <gtest/gtest.h>
 
+#include "libmscore/breath.h"
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
-#include "libmscore/measure.h"
-#include "libmscore/breath.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
