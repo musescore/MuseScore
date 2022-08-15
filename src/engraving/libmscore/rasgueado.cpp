@@ -21,12 +21,12 @@
  */
 
 #include "rasgueado.h"
+
 #include "rw/xml.h"
-#include "system.h"
-#include "measure.h"
-#include "chordrest.h"
+
 #include "score.h"
 #include "stafftype.h"
+#include "system.h"
 
 using namespace mu;
 using namespace mu::engraving;

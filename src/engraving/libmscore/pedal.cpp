@@ -21,13 +21,13 @@
  */
 
 #include "pedal.h"
-#include "rw/xml.h"
-#include "system.h"
-#include "measure.h"
-#include "chordrest.h"
-#include "staff.h"
 
+#include "rw/xml.h"
+
+#include "chordrest.h"
+#include "measure.h"
 #include "score.h"
+#include "system.h"
 
 using namespace mu;
 

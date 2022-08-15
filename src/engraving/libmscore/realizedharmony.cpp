@@ -21,12 +21,11 @@
  */
 
 #include "realizedharmony.h"
-#include "pitchspelling.h"
-#include "staff.h"
+
 #include "chordlist.h"
 #include "harmony.h"
+#include "pitchspelling.h"
 #include "segment.h"
-#include "chordrest.h"
 
 using namespace mu;
 
