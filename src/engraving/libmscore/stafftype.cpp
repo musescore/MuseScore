@@ -24,7 +24,6 @@
 
 #include "translation.h"
 #include "io/file.h"
-#include "io/fileinfo.h"
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "rw/xml.h"

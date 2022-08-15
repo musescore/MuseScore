@@ -21,13 +21,12 @@
  */
 
 #include "staffstate.h"
+
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "score.h"
-#include "instrtemplate.h"
-#include "segment.h"
-#include "staff.h"
+
 #include "part.h"
+#include "score.h"
 
 #include "log.h"
 

@@ -23,9 +23,10 @@
 #ifndef __SELECT_H__
 #define __SELECT_H__
 
-#include "pitchspelling.h"
-#include "mscore.h"
 #include "durationtype.h"
+#include "mscore.h"
+#include "pitchspelling.h"
+#include "types.h"
 
 namespace mu::engraving {
 class Score;

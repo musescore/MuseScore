@@ -26,13 +26,14 @@
 #include "rw/xml.h"
 #include "draw/types/brush.h"
 
-#include "staff.h"
+#include "beam.h"
 #include "chord.h"
-#include "score.h"
-#include "stafftype.h"
 #include "hook.h"
-#include "tremolo.h"
 #include "note.h"
+#include "score.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "tremolo.h"
 
 using namespace mu;
 using namespace mu::draw;

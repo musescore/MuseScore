@@ -24,15 +24,21 @@
 #define __STAFFTYPE_H__
 
 #include "draw/types/color.h"
+#include "draw/types/font.h"
+
 #include "engravingitem.h"
 #include "mscore.h"
-#include "durationtype.h"
-#include "note.h"
+
+#include "types/types.h"
+
+#include "modularity/ioc.h"
+#include "iengravingconfiguration.h"
 
 namespace mu::engraving {
 class Chord;
 class ChordRest;
 class Staff;
+class XmlReader;
 class XmlWriter;
 
 // all in spatium units

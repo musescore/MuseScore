@@ -21,10 +21,8 @@
  */
 
 #include "shape.h"
-#include "segment.h"
-#include "chord.h"
+
 #include "score.h"
-#include "system.h"
 
 #include "draw/painter.h"
 

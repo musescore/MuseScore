@@ -21,13 +21,12 @@
  */
 
 #include "stafftextbase.h"
+
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
-#include "system.h"
+#include "segment.h"
 #include "staff.h"
-#include "score.h"
-#include "measure.h"
 
 #include "log.h"
 

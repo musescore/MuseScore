@@ -29,24 +29,18 @@
 */
 
 #include "engravingitem.h"
-#include "symbol.h"
+
 #include "skyline.h"
 
 namespace mu::engraving {
-class LayoutContext;
-class Staff;
-class StaffLines;
-class Clef;
-class Page;
+class Box;
 class Bracket;
-class Lyrics;
-class Segment;
-class MeasureBase;
-class Text;
 class InstrumentName;
+class MeasureBase;
+class Page;
 class SpannerSegment;
-class VBox;
-class BarLine;
+
+class LayoutContext;
 
 //---------------------------------------------------------
 //   SysStaff

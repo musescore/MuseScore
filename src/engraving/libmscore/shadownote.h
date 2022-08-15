@@ -25,9 +25,9 @@
 
 #include "engravingitem.h"
 #include "durationtype.h"
-#include "staff.h"
-#include "iengravingconfiguration.h"
+
 #include "modularity/ioc.h"
+#include "iengravingconfiguration.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
