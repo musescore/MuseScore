@@ -30,7 +30,7 @@
 
 #include "clef.h"
 #include "interval.h"
-#include "notifier.hpp"
+#include "notifier.h"
 #include "stringdata.h"
 
 #include "compat/midi/midicoreevent.h"
