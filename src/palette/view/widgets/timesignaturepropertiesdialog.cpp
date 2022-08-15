@@ -24,14 +24,12 @@
 
 #include <QRegularExpression>
 
-#include "engraving/libmscore/timesig.h"
-#include "engraving/libmscore/mcursor.h"
-#include "engraving/libmscore/durationtype.h"
-#include "engraving/libmscore/score.h"
-#include "engraving/libmscore/chord.h"
-#include "engraving/libmscore/measure.h"
-#include "engraving/libmscore/part.h"
 #include "engraving/infrastructure/symbolfont.h"
+
+#include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/measure.h"
+#include "engraving/libmscore/score.h"
+#include "engraving/libmscore/timesig.h"
 
 #include "ui/view/musicalsymbolcodes.h"
 #include "ui/view/widgetstatestore.h"

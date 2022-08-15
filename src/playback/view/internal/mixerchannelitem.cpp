@@ -24,6 +24,8 @@
 
 #include "translation.h"
 
+#include "log.h"
+
 using namespace mu::playback;
 using namespace mu::audio;
 

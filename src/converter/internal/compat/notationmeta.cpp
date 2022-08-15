@@ -28,6 +28,7 @@
 #include <QJsonDocument>
 
 #include "libmscore/tempotext.h"
+#include "libmscore/text.h"
 
 #include "log.h"
 #include "global/deprecated/xmlwriter.h"
