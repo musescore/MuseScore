@@ -25,32 +25,17 @@
 
 #include "types/types.h"
 
-#include "mscore.h"
 #include "interval.h"
 
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {
-enum class Key;
-
-//---------------------------------------------------------
-//   cycles
-//---------------------------------------------------------
-
-/*static inline unsigned long long cycles()
-      {
-      unsigned long long rv;
-      __asm__ __volatile__("rdtsc" : "=A" (rv));
-      return rv;
-      }*/
-
-class Measure;
+class Note;
 class Segment;
 class System;
-class EngravingItem;
-class Note;
 class Tuplet;
-class BarLine;
+
+enum class Key;
 
 extern mu::RectF handleRect(const mu::PointF& pos);
 

@@ -25,7 +25,6 @@
 #include <algorithm>
 #include <vector>
 
-#include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
@@ -35,7 +34,6 @@
 #include "staff.h"
 #include "system.h"
 #include "tempo.h"
-#include "text.h"
 
 #include "log.h"
 
