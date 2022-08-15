@@ -2252,7 +2252,6 @@ void InsertRemoveMeasures::removeMeasures()
                 sp->removeUnmanaged();
             }
         }
-        score->connectTies(true);       // ??
     }
 
     // remove empty systems
