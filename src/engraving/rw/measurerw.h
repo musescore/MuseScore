@@ -24,6 +24,10 @@
 
 #include "readcontext.h"
 
+namespace mu::engraving {
+class Measure;
+}
+
 namespace mu::engraving::rw {
 class MeasureRW
 {

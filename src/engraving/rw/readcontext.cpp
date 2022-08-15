@@ -22,10 +22,11 @@
 
 #include "readcontext.h"
 
-#include "libmscore/score.h"
-#include "libmscore/undo.h"
+#include "libmscore/beam.h"
 #include "libmscore/linkedobjects.h"
+#include "libmscore/score.h"
 #include "libmscore/tuplet.h"
+#include "libmscore/undo.h"
 
 #include "log.h"
 
