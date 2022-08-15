@@ -22,6 +22,8 @@
 
 #include "saveprojectscenario.h"
 
+#include "engraving/infrastructure/mscio.h"
+
 using namespace mu;
 using namespace mu::framework;
 using namespace mu::project;

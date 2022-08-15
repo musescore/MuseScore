@@ -23,8 +23,10 @@
 #ifndef __PLUGIN_API_PLAYEVENT_H__
 #define __PLUGIN_API_PLAYEVENT_H__
 
+#include <QQmlEngine>
+#include <QQmlListProperty>
+
 #include "libmscore/noteevent.h"
-#include "elements.h"
 
 namespace mu::engraving {
 namespace PluginAPI {
