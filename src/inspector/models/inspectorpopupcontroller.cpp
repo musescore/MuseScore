@@ -90,6 +90,10 @@ void InspectorPopupController::setVisualControl(QQuickItem* control)
                 closePopup();
             }
         });
+
+        connect(m_visualControl, &QQuickItem::destroyed, this, [this]() {
+            setVisualControl(nullptr);
+        });
     }
 
     emit visualControlChanged();
@@ -114,6 +118,10 @@ void InspectorPopupController::setPopup(PopupView* popup)
             if (m_popup && !m_popup->isOpened()) {
                 setPopup(nullptr);
             }
+        });
+
+        connect(m_popup, &PopupView::destroyed, this, [this]() {
+            setPopup(nullptr);
         });
     } else {
         qApp->removeEventFilter(this);
