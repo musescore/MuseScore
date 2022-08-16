@@ -222,7 +222,7 @@ Item {
 
         onClosed: {
             prv.resetSelectedPlugin()
-            Qt.callLater(resetNavigationFocus)
+            resetNavigationFocus()
         }
 
         function resetNavigationFocus() {
