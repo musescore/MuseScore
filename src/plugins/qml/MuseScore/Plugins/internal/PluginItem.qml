@@ -32,6 +32,8 @@ Item {
     property alias thumbnailUrl: thumbnail.source
     property bool selected: false
 
+    property real radius: 10
+
     signal clicked()
 
     property NavigationControl navigation: NavigationControl {
@@ -56,7 +58,7 @@ Item {
         height: 144
 
         color: "transparent"
-        radius: 10
+        radius: root.radius + border.width
 
         border.color: ui.theme.fontPrimaryColor
         border.width: root.selected ? 2 : 0
@@ -70,7 +72,7 @@ Item {
             id: thumbnail
 
             anchors.fill: parent
-            anchors.margins: 4 //! NOTE: it is necessary to simplify understanding of which element the user is on when navigating
+            anchors.margins: 4 //! NOTE: makes it easier to distinguish the focused item when using keyboard navigation
 
             fillMode: Image.PreserveAspectCrop
 
@@ -79,7 +81,7 @@ Item {
                 maskSource: Rectangle {
                     width: thumbnail.width
                     height: thumbnail.height
-                    radius: 10
+                    radius: root.radius
                 }
             }
         }
