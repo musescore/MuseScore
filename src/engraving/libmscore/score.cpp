@@ -3833,6 +3833,10 @@ void Score::setScoreOrder(ScoreOrder order)
 
 void Score::updateBracesAndBarlines(Part* part, size_t newIndex)
 {
+    if (part->nstaves() == 0) {
+        return;
+    }
+
     bool noBracesFound = true;
     for (size_t indexInPart = 0; indexInPart < part->nstaves(); ++indexInPart) {
         size_t indexInScore = part->staves()[indexInPart]->idx();
@@ -3868,8 +3872,8 @@ void Score::updateBracesAndBarlines(Part* part, size_t newIndex)
                 undoAddBracket(part->staves()[0], 0, tp->bracket[0], part->nstaves());
             }
         }
-    } else {
-        updateBracketSpan(newIndex, newIndex - 1);
+    } else if (newIndex == 1) {
+        updateBracketSpan(1, 0);
     }
 }
 
