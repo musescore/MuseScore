@@ -29,8 +29,14 @@ Rectangle {
     property NavigationControl navigationCtrl: null
     property bool drawOutsideParent: true
 
+    //! NOTE: sometimes, the contrast between the item and the navigation focus
+    //! border might be very low, for example when the item is an image.
+    //! Therefore, we sometimes add some padding between the item and the border,
+    //! to keep the border easily distinguishable.
+    property real padding: 0
+
     anchors.fill: parent
-    anchors.margins: drawOutsideParent ? -border.width : 0
+    anchors.margins: drawOutsideParent ? -border.width - padding : 0
 
     visible: navigationCtrl ? navigationCtrl.highlight : false
 
@@ -39,6 +45,6 @@ Rectangle {
     border.color: ui.theme.fontPrimaryColor
     border.width: ui.theme.navCtrlBorderWidth
     radius: Number(parent.radius) > 0
-            ? (drawOutsideParent ? parent.radius + root.border.width : parent.radius)
+            ? parent.radius - anchors.margins
             : 0
 }

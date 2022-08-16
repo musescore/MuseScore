@@ -102,9 +102,7 @@ Item {
 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: root.sideMargin
         anchors.bottom: panel.visible ? panel.top : parent.bottom
 
         contentWidth: width
@@ -113,20 +111,12 @@ Item {
         topMargin: topGradient.height
         bottomMargin: 24
 
-        ScrollBar.vertical: StyledScrollBar {
-            parent: flickable.parent
-
-            anchors.top: parent.top
-            anchors.bottom: panel.visible ? panel.top : parent.bottom
-            anchors.right: parent.right
-
-            visible: flickable.contentHeight > flickable.height
-            z: 1
-        }
-
         Column {
             id: column
+
             anchors.fill: parent
+            anchors.leftMargin: root.sideMargin
+            anchors.rightMargin: root.sideMargin
 
             spacing: 24
 
