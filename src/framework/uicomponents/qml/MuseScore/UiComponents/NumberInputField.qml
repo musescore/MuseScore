@@ -81,7 +81,7 @@ FocusScope {
     }
 
     onValueChanged: {
-        if (textField.textAsInt() >= root.minValue) {
+        if (root.value >= root.minValue) {
             textField.text = prv.pad(root.value)
         }
     }
