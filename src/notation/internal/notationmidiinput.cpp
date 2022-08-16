@@ -28,6 +28,7 @@
 #include "libmscore/tie.h"
 #include "libmscore/score.h"
 #include "libmscore/note.h"
+#include "libmscore/factory.h"
 
 #include "notationtypes.h"
 
@@ -118,7 +119,7 @@ void NotationMidiInput::doProcessEvents()
 
     for (size_t i = 0; i < m_eventsQueue.size(); ++i) {
         const midi::Event& event = m_eventsQueue.at(i);
-        Note* note = onAddNote(event);
+        Note* note = isNoteInputMode() ? addNoteToScore(event) : makeNote(event);
         if (note) {
             notes.push_back(note);
         }
@@ -140,7 +141,7 @@ void NotationMidiInput::doProcessEvents()
     m_processTimer.stop();
 }
 
-Note* NotationMidiInput::onAddNote(const midi::Event& e)
+Note* NotationMidiInput::addNoteToScore(const midi::Event& e)
 {
     mu::engraving::Score* sc = score();
     if (!sc) {
@@ -201,6 +202,35 @@ Note* NotationMidiInput::onAddNote(const midi::Event& e)
     sc->activeMidiPitches().push_back(inputEv);
 
     m_notationInteraction->showItem(is.cr());
+
+    return note;
+}
+
+Note* NotationMidiInput::makeNote(const midi::Event& e)
+{
+    if (e.opcode() == midi::Event::Opcode::NoteOff || e.velocity() == 0) {
+        return nullptr;
+    }
+
+    mu::engraving::Score* score = this->score();
+    if (!score) {
+        return nullptr;
+    }
+
+    if (score->selection().isNone()) {
+        return nullptr;
+    }
+
+    const mu::engraving::InputState& inputState = score->inputState();
+    Chord* chord = engraving::Factory::createChord(inputState.lastSegment());
+    chord->setParent(inputState.lastSegment());
+
+    Note* note = engraving::Factory::createNote(chord);
+    note->setParent(chord);
+    note->setStaffIdx(engraving::track2staff(inputState.cr()->track()));
+
+    engraving::NoteVal nval = score->noteVal(e.note());
+    note->setNval(nval);
 
     return note;
 }
