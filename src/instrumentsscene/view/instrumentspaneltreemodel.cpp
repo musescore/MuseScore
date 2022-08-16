@@ -661,7 +661,6 @@ void InstrumentsPanelTreeModel::updateRemovingAvailability()
         if (item && static_cast<ItemType>(item->type()) == ItemType::STAFF) {
             const AbstractInstrumentsPanelTreeItem* parentItem = item->parentItem();
             if (parentItem) {
-
                 // The selected staff is the only one
                 if (parentItem->childCount() == 2) {
                     isRemovingAvailable = false;
@@ -676,7 +675,6 @@ void InstrumentsPanelTreeModel::updateRemovingAvailability()
                             && childItem != item
                             && static_cast<ItemType>(childItem->type()) == ItemType::STAFF
                             && !childItem->isSelected()) {
-
                             hasUnselectedStaff = true;
                             break;
                         }
