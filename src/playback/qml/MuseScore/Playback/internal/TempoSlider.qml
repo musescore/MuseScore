@@ -56,6 +56,8 @@ RowLayout {
         minValue: root.from * 100
         maxValue: root.to * 100
 
+        live: false
+
         addLeadingZeros: false
         font: ui.theme.largeBodyFont
 
