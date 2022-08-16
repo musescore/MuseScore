@@ -218,6 +218,8 @@ void InstrumentsPanelTreeModel::setupStavesConnections(const ID& stavesPartId)
         beginInsertRows(partIndex, partItem->childCount() - 1, partItem->childCount() - 1);
         partItem->insertChild(staffItem, partItem->childCount() - 1);
         endInsertRows();
+
+        updateRemovingAvailability();
     });
 }
 
@@ -376,7 +378,7 @@ void InstrumentsPanelTreeModel::moveSelectedRowsDown()
 
 void InstrumentsPanelTreeModel::removeSelectedRows()
 {
-    if (!m_selectionModel) {
+    if (!m_selectionModel || !m_isRemovingAvailable) {
         return;
     }
 
@@ -647,9 +649,42 @@ void InstrumentsPanelTreeModel::updateRemovingAvailability()
 {
     bool isRemovingAvailable = m_selectionModel->hasSelection();
 
-    for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
+    QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+    for (const QModelIndex& index : selectedIndexes) {
         const AbstractInstrumentsPanelTreeItem* item = modelIndexToItem(index);
         isRemovingAvailable &= (item && item->isRemovable());
+        if (!isRemovingAvailable) {
+            break;
+        }
+
+        // Don't allow to delete the last staff
+        if (item && static_cast<ItemType>(item->type()) == ItemType::STAFF) {
+            const AbstractInstrumentsPanelTreeItem* parentItem = item->parentItem();
+            if (parentItem) {
+
+                // The selected staff is the only one
+                if (parentItem->childCount() == 2) {
+                    isRemovingAvailable = false;
+                    break;
+                }
+                // Several selected staves: ensure that not all staves of a part are selected
+                else if (selectedIndexes.count() > 1) {
+                    bool hasUnselectedStaff = false;
+                    for (int i = 0; i < parentItem->childCount() - 1; ++i) {
+                        const AbstractInstrumentsPanelTreeItem* childItem = parentItem->childAtRow(i);
+                        if (childItem
+                            && childItem != item
+                            && static_cast<ItemType>(childItem->type()) == ItemType::STAFF
+                            && !childItem->isSelected()) {
+
+                            hasUnselectedStaff = true;
+                            break;
+                        }
+                    }
+                    isRemovingAvailable &= hasUnselectedStaff;
+                }
+            }
+        }
     }
 
     setIsRemovingAvailable(isRemovingAvailable);
