@@ -1477,11 +1477,7 @@ Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
     return n;
 }
 
-//---------------------------------------------------------
-//  addMidiPitch
-//---------------------------------------------------------
-
-Note* Score::addMidiPitch(int pitch, bool addFlag)
+NoteVal Score::noteVal(int pitch) const
 {
     NoteVal nval(pitch);
     Staff* st = staff(inputState().track() / VOICES);
@@ -1494,6 +1490,17 @@ Note* Score::addMidiPitch(int pitch, bool addFlag)
     // let addPitch calculate tpc values from pitch
     //Key key   = st->key(inputState().tick());
     //nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+
+    return nval;
+}
+
+//---------------------------------------------------------
+//  addMidiPitch
+//---------------------------------------------------------
+
+Note* Score::addMidiPitch(int pitch, bool addFlag)
+{
+    NoteVal nval = noteVal(pitch);
     return addPitch(nval, addFlag);
 }
 
